@@ -12,6 +12,13 @@
             </div>
             <span class="vip-user__name">{{ user.nickname }}</span>
           </div>
+          <div class="vip-info">
+            <div class="vip-info__detail">
+              <img class="vip-info__icon" :src="item.icon" />
+              <span class="vip-info__name">{{ item.name }}</span>
+            </div>
+            <div class="vip-info__status">{{ item | getVipStatus }}</div>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -65,6 +72,11 @@ export default {
   },
   created() {
     this.getVipDetail();
+  },
+  filters: {
+    getVipStatus(value) {
+      return '您还不是会员，开通享特权';
+    },
   },
   methods: {
     getVipDetail() {
