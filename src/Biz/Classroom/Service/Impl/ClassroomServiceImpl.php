@@ -1572,7 +1572,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['teacher'],
             'remark' => '',
             'createdTime' => TimeMachine::time(),
