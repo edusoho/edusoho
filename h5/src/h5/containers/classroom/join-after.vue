@@ -234,26 +234,26 @@ export default {
         this.callConfirm(errorMessage, confirmCallback);
         return;
       }
-      const vipName = this.details.vipLevel.name;
+      const vipName = this.details.vipLevel ? this.details.vipLevel.name : '';
       const vipStatus = {
         // 用户会员服务已过期
         'vip.member_expired': {
-          message: `您的会员已到期，会员课程已无法学习，请续费会员，或退出后重新购买课程。`,
+          message: `您的会员已到期，会员班级已无法学习，请续费会员，或退出后重新购买班级。`,
           confirmButtonText: '续费会员',
         },
         // 当前用户并不是vip
         'vip.not_member': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该课程学习。或退出后重新购买课程。`,
+          message: `您已不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
           confirmButtonText: '购买会员',
         },
         // 用户会员等级过低
         'vip.level_low': {
-          message: `很抱歉，该课程已升级为${vipName}课程，请升到${vipName}进行学习。或退出后重新购买课程。`,
+          message: `很抱歉，该班级已升级为${vipName}班级，请升到${vipName}进行学习。或退出后重新购买班级。`,
           confirmButtonText: '升级会员',
         },
         // 会员等级无效
         'vip.level_not_exist': {
-          message: `很抱歉，会员被删除，您的会员身份已被取消，请退出后重新购买课程。`,
+          message: `很抱歉，会员被删除，您的会员身份已被取消，请退出后重新购买班级。`,
           showConfirmButton: false,
         },
       };
@@ -339,7 +339,7 @@ export default {
         ...config,
         title: '',
         confirmButtonColor: '#1895E7',
-        cancelButtonText: '退出课程',
+        cancelButtonText: '退出班级',
         cancelButtonColor: '#FD4852',
         messageAlign: 'left',
         beforeClose: this.beforeClose,
