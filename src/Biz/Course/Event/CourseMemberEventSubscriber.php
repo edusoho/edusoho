@@ -190,12 +190,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $taskResult = $event->getSubject();
         $this->getCourseService()->recountLearningData($taskResult['courseId'], $taskResult['userId']);
-        $finishTime = $this->getCourseFinishTime($taskResult);
-
-        $this->getCourseMemberService()->updateMembers(
-            ['courseId' => $taskResult['courseId'], 'userId' => $taskResult['userId']],
-            ['lastLearnTime' => time(), 'finishedTime' => $finishTime]
-        );
+        $this->getCourseMemberService()->refreshMemberFinishData($taskResult['courseId'], $taskResult['userId']);
     }
 
     public function onLessonOptionalChange(Event $event)
@@ -214,20 +209,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $task = $event->getSubject();
         $this->getCourseMemberService()->recountLearningDataByCourseId($task['courseId']);
-    }
-
-    private function getCourseFinishTime($taskResult)
-    {
-        $student = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
-        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-        if (0 == $course['compulsoryTaskNum']) {
-            $isFinished = false;
-        } else {
-            $isFinished = intval($student['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1 ? true : false;
-        }
-        $finishTime = $isFinished ? time() : 0;
-
-        return $finishTime;
     }
 
     protected function getWelcomeMessageBody($user, $course)

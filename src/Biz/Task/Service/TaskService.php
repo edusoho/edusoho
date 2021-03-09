@@ -239,4 +239,6 @@ interface TaskService
     public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange);
 
     public function canStartTask($taskId);
+
+    public function searchTasksWithStatistics(array $conditions, $orderBy, $start, $limit);
 }
