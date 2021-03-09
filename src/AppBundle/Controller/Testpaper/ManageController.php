@@ -78,7 +78,7 @@ class ManageController extends BaseController
         );
         $tasks = $this->getTaskService()->searchTasks(
             $conditions,
-            ['seq' => 'ASC'],
+            ['seq' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
