@@ -234,7 +234,7 @@ export default {
         this.callConfirm(errorMessage, confirmCallback);
         return;
       }
-      const vipName = this.details.vipLevel.name;
+      const vipName = this.details.vipLevel ? this.details.vipLevel.name : '';
       const vipStatus = {
         // 用户会员服务已过期
         'vip.member_expired': {
