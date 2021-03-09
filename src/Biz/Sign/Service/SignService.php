@@ -21,4 +21,8 @@ interface SignService
     public function searchSignUserLog(array $conditions, $orderBy, $start, $limit, array $columns = []);
 
     public function countSignUserLog(array $conditions);
+
+    public function countSignUserStatistics(array $conditions);
+
+    public function searchSignUserStatistics(array $conditions, $orderBy, $start, $limit, array $columns = []);
 }

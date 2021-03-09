@@ -1063,6 +1063,7 @@ class ClassroomManageController extends BaseController
         );
 
         $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+
         foreach ($members as &$member) {
             if (!empty($member['lastSignTime']) && $member['lastSignTime'] > strtotime(date('y-n-d 0:0:0'))) {
                 $member['todaySignTime'] = $member['lastSignTime'];

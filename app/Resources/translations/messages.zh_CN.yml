@@ -11567,14 +11567,20 @@ classroom.manage.sign_statictics.item: 详情
 classroom.manage.sign_statictics.name_placeholder: 请输入用户名
 classroom.manage.sign_statictics.search_btn: 搜索
 classroom.manage.sign_statictics.role.all: 全部角色
-classroom.manage.sign_statictics.role.header_teacher: 班主任
+classroom.manage.sign_statictics.role.head_teacher: 班主任
 classroom.manage.sign_statictics.role.teacher: 老师
 classroom.manage.sign_statictics.role.assistant: 助教
-classroom.manage.sign_statictics.role.student: 学员
+classroom.manage.sign_statictics.role.student: 正式学员
 classroom.manage.sign_statictics.role.auditor: 旁听生
 classroom.manage.sign_statictics.modal_title: %nickname%签到详情
 classroom.manage.sign_statictics.sign_type: 行为记录
 classroom.manage.sign_statictics.sign_time: 签到时间
+classroom.manage.sign_statictics.nickname_th: 用户名
+classroom.manage.sign_statictics.role_th: 角色
+classroom.manage.sign_statictics.join_time_th: 加入班级时间
+
+
+
 
 admin.classroom_manage.statistics.creator_placeholder: 创建者
 admin.classroom_manage.statistics.name_th: 班级名称
@@ -11619,3 +11625,4 @@ classroom.manage.data_statistics.overview.finished_num: 完成人数
 classroom.manage.data_statistics.overview.sumtime: 累加学习时长(分)
 classroom.manage.data_statistics.overview.average_time: 人均学习时长(分)
 classroom.manage.data_statistics.overview.finished_num_tips: 取班级中所有课时任务学习进度均为100%的人数，若班级中新增了课程或课时，则完成人数会随之变更。
+

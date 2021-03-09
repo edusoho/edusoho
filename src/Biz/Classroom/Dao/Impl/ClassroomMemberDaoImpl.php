@@ -156,26 +156,15 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
 
         $conditions['classroomId'] = empty($conditions['classroomId']) ? $classroomId : $conditions['classroomId'];
         $userIdsMarks = implode(',', array_column($userIds, 'userId'));
-        $startTime = strtotime(date('y-n-d 0:0:0', strtotime('-1 days')));
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$this->table}.*, 
                 IF(m.signDays, m.signDays, 0) AS signDays, 
-                IF(m.keepDays, m.keepDays, 0) AS keepDays, 
-                IF(m.lastSignTime, m.lastSignTime, 0) AS lastSignTime 
+                IF(m.keepDays, m.keepDays, 0) AS keepDays,
+                IF(m.lastSignTime, m.lastSignTime, 0) AS lastSignTime
             ")->leftJoin(
                 $this->table,
-                "(
-                    SELECT 
-                        sus.userId, m.signDays, m.lastSignTime, 
-                        IF(m.lastSignTime >= {$startTime}, sus.keepDays, 0) AS keepDays 
-                    FROM sign_user_statistics sus LEFT JOIN (
-                        SELECT sul.userId, count(sul.id) AS signDays, max(sul.createdTime) AS lastSignTime 
-                        FROM sign_user_log sul 
-                        WHERE sul.userId IN ({$userIdsMarks}) AND sul.targetType = 'classroom_sign' AND sul.targetId = {$classroomId} 
-                        GROUP BY sul.userId
-                    ) AS m ON sus.userId = m.userId WHERE sus.targetType = 'classroom_sign' AND sus.targetId = {$classroomId} AND sus.userId IN ({$userIdsMarks})
-                )",
+                "(SELECT * FROM sign_user_statistics WHERE userId IN ({$userIdsMarks}) AND targetType = 'classroom_sign' AND targetId = {$classroomId})",
                 'm',
                 "m.userId = {$this->table}.userId"
             )->setFirstResult($start)

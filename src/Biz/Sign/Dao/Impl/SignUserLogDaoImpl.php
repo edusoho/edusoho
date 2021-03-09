@@ -17,6 +17,8 @@ class SignUserLogDaoImpl extends GeneralDaoImpl implements SignUserLogDao
                 'userId = :userId',
                 'targetType = :targetType',
                 'targetId = :targetId',
+                'userId IN (:userIds)',
+                'createdTime >= createdTime_GT',
             ],
         ];
     }

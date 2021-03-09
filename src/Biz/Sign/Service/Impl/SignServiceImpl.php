@@ -35,8 +35,8 @@ class SignServiceImpl extends BaseService implements SignService
 
         $sign = $this->getSignUserLogDao()->create($sign);
         $statistics = $this->targetSignedNumIncrease($targetType, $targetId, date('Ymd', time()));
-        $this->getSignUserLogDao()->update($sign['id'], ['_rank' => $statistics['signedNum']]);
-        $this->refreshKeepDays($userId, $targetType, $targetId);
+        $sign = $this->getSignUserLogDao()->update($sign['id'], ['_rank' => $statistics['signedNum']]);
+        $this->refreshSignUserStatistics($userId, $targetType, $targetId, $sign);
 
         $this->dispatchEvent('class.signed', new Event($sign));
 
@@ -99,22 +99,39 @@ class SignServiceImpl extends BaseService implements SignService
         return $this->getSignUserLogDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    protected function refreshKeepDays($userId, $targetType, $targetId)
+    public function countSignUserStatistics(array $conditions)
+    {
+        return $this->getSignUserStatisticsDao()->count($conditions);
+    }
+
+    public function searchSignUserStatistics(array $conditions, $orderBy, $start, $limit, array $columns = [])
+    {
+        return $this->getSignUserStatisticsDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    protected function refreshSignUserStatistics($userId, $targetType, $targetId, array $lastSign = [])
     {
         $statistics = $this->getSignUserStatisticsDao()->getStatisticsByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 
         if ($statistics) {
-            if ($this->isYesterdaySigned($userId, $targetType, $targetId)) {
-                $this->getSignUserStatisticsDao()->update($statistics['id'], ['keepDays' => $statistics['keepDays'] + 1]);
-            } else {
-                $this->getSignUserStatisticsDao()->update($statistics['id'], ['keepDays' => 1]);
-            }
+            $updateFields = [
+                'keepDays' => $this->isYesterdaySigned($userId, $targetType, $targetId) ? $statistics['keepDays'] + 1 : 1,
+                'signDays' => $statistics['signDays'] + 1,
+                'lastSignTime' => $lastSign['createdTime'],
+            ];
+
+            $statistics = $this->getSignUserStatisticsDao()->update($statistics['id'], $updateFields);
         } else {
-            $statistics['userId'] = $userId;
-            $statistics['targetType'] = $targetType;
-            $statistics['targetId'] = $targetId;
-            $statistics['keepDays'] = 1;
-            $statistics['createdTime'] = time();
+            $statistics = [
+                'userId' => $userId,
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+                'keepDays' => 1,
+                'signDays' => 1,
+                'createdTime' => time(),
+                'lastSignTime' => $lastSign['createdTime'],
+            ];
+
             $statistics = $this->getSignUserStatisticsDao()->create($statistics);
         }
 

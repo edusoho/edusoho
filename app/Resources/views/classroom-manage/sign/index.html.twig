@@ -12,10 +12,11 @@
 		</div>
 		<div class="panel-body">
 			<form class="form-inline well well-sm" id="sign-statistics" action="{{ path('classroom_sign_statistics', {id: classroom.id, order:order|default('signDays'), sort:sort|default('ASC')}) }}" method=" get" novalidate="">
+				<input type="hidden" name="classroomId" value="{{classroom.id}}">
 				<input class="form-control" type="text" placeholder="{{ 'classroom.manage.sign_statictics.name_placeholder'|trans }}" name="nameLike" value="{{ app.request.query.get('nameLike', null) }}">
 				<select class="form-control" name="role">
-					<option value="" {% if 'headerTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.all'|trans }}</option>
-					<option value="headerTeacher" {% if 'headerTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.header_teacher'|trans }}</option>
+					<option value="" {% if '' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.all'|trans }}</option>
+					<option value="headerTeacher" {% if 'headerTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }}</option>
 					<option value="teacher" {% if 'teacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.teacher'|trans }}</option>
 					<option value="assistant" {% if 'assistant' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.assistant'|trans }}</option>
 					<option value="student" {% if 'student' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.student'|trans }}</option>
@@ -24,9 +25,10 @@
 				<button type="submit" class="cd-btn cd-btn-primary">{{ 'classroom.manage.sign_statictics.search_btn'|trans }}</button>
 				{% include 'export/export-btn.html.twig' with
             {
-              'exportFileName' : 'course-overview-csv-task-detail',
-              'targetFormId': 'sign-statistics',
-              'exportClass': 'cd-btn mhs pull-right cd-btn-success'
+              exportFileName: 'classroom-sign-statistics',
+              targetFormId: 'sign-statistics',
+              exportClass: 'cd-btn mhs pull-right cd-btn-success',
+              exportWebpack: 'ture'
             }
           %}
 				<div class="clearfix"></div>
@@ -57,16 +59,18 @@
 							<td>
 								{% if user %}
 									{{ user.nickname }}
-									{% if 'headerTeacher' in member.role %}
-										({{ 'classroom.manage.sign_statictics.role.header_teacher'|trans }})
-									{% elseif 'teacher' in member.role%}
-										({{ 'classroom.manage.sign_statictics.role.teacher'|trans }})
-									{% elseif 'assistant' in member.role%}
-										({{ 'classroom.manage.sign_statictics.role.assistant'|trans }})
-									{% elseif 'auditor' in member.role%}
-										({{ 'classroom.manage.sign_statictics.role.auditor'|trans }})
+									<span class="text-muted text-sm">
+										{% if 'headTeacher' in member.role %}
+											({{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }})
+										{% elseif 'teacher' in member.role%}
+											({{ 'classroom.manage.sign_statictics.role.teacher'|trans }})
+										{% elseif 'assistant' in member.role%}
+											({{ 'classroom.manage.sign_statictics.role.assistant'|trans }})
+										{% elseif 'auditor' in member.role%}
+											({{ 'classroom.manage.sign_statictics.role.auditor'|trans }})
+										{% endif %}
 									{% endif %}
-								{% endif %}
+								</span>
 							</td>
 							<td>{{ member.signDays|default(0) }}</td>
 							<td>{{ member.keepDays }}</td>
