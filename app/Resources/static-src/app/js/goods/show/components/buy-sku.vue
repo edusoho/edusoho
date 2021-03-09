@@ -147,12 +147,12 @@
                     } else {
                         this.needBuyVip = 1;
                         this.buyViewText = sku.displayPrice == 0 ? Translator.trans('goods.show_page.free_join_btn') : Translator.trans('goods.show_page.buy_btn');
-                        if (sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq){
-                            this.needBuyVipText = Translator.trans('goods.show_page.vip_upgrade',{vipName:sku.vipLevelInfo.name});
-                            this.needBuyVipUrl = "/vip/upgrade?targetId=" + sku.vipLevelInfo.id;
-                        }else if (!sku.vipUser || parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()){
+                        if (!sku.vipUser || (sku.vipUser && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime())){
                             this.needBuyVipText = Translator.trans('goods.show_page.vip_buy',{vipName:sku.vipLevelInfo.name});
                             this.needBuyVipUrl = "/vip/buy?level=" + sku.vipLevelInfo.id;
+                        }else if (sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq){
+                            this.needBuyVipText = Translator.trans('goods.show_page.vip_upgrade',{vipName:sku.vipLevelInfo.name});
+                            this.needBuyVipUrl = "/vip/upgrade?targetId=" + sku.vipLevelInfo.id;
                         }
                     }
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
