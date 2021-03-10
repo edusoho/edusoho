@@ -40,14 +40,17 @@
         </div>
       </div>
       <div class="vip-open">
-        <template v-for="item in currentVipInfo.sellModes">
-          <price-item
-            :key="item.id"
-            :item="item"
-            :activePriceId="activePriceId"
-            @click="clickPriceItem(item.id)"
-          />
-        </template>
+        <swiper :options="vipOpenSwiperOption">
+          <template v-for="item in currentVipInfo.sellModes">
+            <swiper-slide :key="item.id">
+              <price-item
+                :item="item"
+                :activePriceId="activePriceId"
+                @click="clickPriceItem(item.id)"
+              />
+            </swiper-slide>
+          </template>
+        </swiper>
       </div>
     </div>
   </div>
@@ -83,6 +86,9 @@ export default {
             this.getActivePriceId();
           },
         },
+      },
+      vipOpenSwiperOption: {
+        slidesPerView: 3.1,
       },
       user: {
         avatar: {},
