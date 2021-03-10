@@ -221,7 +221,7 @@ class ResultServiceImpl extends BaseService implements ResultService
             $collectedDataItems = $this->getResultItemDao()->search([
                 'eventId' => $conditions['eventId'],
                 'code' => $keywordType,
-                'value' => $conditions[$conditions['keywordType']]
+                'value' => $conditions[$conditions['keywordType']],
             ], [], 0, PHP_INT_MAX);
 
             $conditions['ids'] = empty($collectedDataItems) ? [-1] : ArrayToolkit::column($collectedDataItems, 'resultId');
@@ -246,6 +246,8 @@ class ResultServiceImpl extends BaseService implements ResultService
 
     public function count($conditions)
     {
+        $conditions = $this->_prepareConditions($conditions);
+
         return $this->getResultDao()->count($conditions);
     }
 
