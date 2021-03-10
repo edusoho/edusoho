@@ -1,80 +1,80 @@
 <div class="cd-sidebar locked js-sidenav">
-	<ul class="cd-sidebar__list">
-		<div class="js-sidenav-course-menu">
-			{% if canManage %}
-				<li class="cd-sidebar__item {% if side_nav == 'main' %}active{% endif %}">
-					<a href="{{ path('classroom_manage', {id: classroom.id}) }}">
-						{{ '基础设置'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'courses' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_courses', {id: classroom.id}) }}">
-						{{ 'classroom.course_manage'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'announcements' %}active{% endif %}">
-					<a href="{{ path('announcement_list', {targetId: classroom.id, targetType: 'classroom'}) }}">
-						{{ 'classroom.announcement_manage'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__heading">
-					<hr class="mt0 mb0 mh10 bg-border-color">
-				</li>
+  <ul class="cd-sidebar__list">
+    <div class="js-sidenav-course-menu">
+      {% if canManage %}
+        <li class="cd-sidebar__item {% if side_nav == 'main' %}active{% endif %}">
+          <a href="{{ path('classroom_manage', {id: classroom.id}) }}">
+            {{ '基础设置'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'courses' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_courses', {id: classroom.id}) }}">
+            {{ 'classroom.course_manage'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'announcements' %}active{% endif %}">
+          <a href="{{ path('announcement_list', {targetId: classroom.id, targetType: 'classroom'}) }}">
+            {{ 'classroom.announcement_manage'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color">
+        </li>
 
-				<li class="cd-sidebar__item {% if side_nav == 'headTeacher' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_headteacher', {id: classroom.id}) }}">
-						{{ 'classroom.set_head_teacher'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'teachers' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_teachers', {id: classroom.id}) }}">
-						{{ 'classroom.set_teachers'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'assistant' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_assistants', {id: classroom.id}) }}">
-						{{ 'classroom.set_assistant'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'students' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_students', {id: classroom.id}) }}">
-						{{ 'classroom.student_manage'|trans }}
-					</a>
-				</li>
-			{% endif %}
+        <li class="cd-sidebar__item {% if side_nav == 'headTeacher' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_headteacher', {id: classroom.id}) }}">
+            {{ 'classroom.set_head_teacher'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'teachers' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_teachers', {id: classroom.id}) }}">
+            {{ 'classroom.set_teachers'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'assistant' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_assistants', {id: classroom.id}) }}">
+            {{ 'classroom.set_assistant'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'students' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_students', {id: classroom.id}) }}">
+            {{ 'classroom.student_manage'|trans }}
+          </a>
+        </li>
+      {% endif %}
 
-			{% if canHandle %}
-				<li class="cd-sidebar__heading">
-					<hr class="mt0 mb0 mh10 bg-border-color">
-				</li>
+      {% if canHandle %}
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color">
+        </li>
 
-				<li class="cd-sidebar__item {% if side_nav == 'testpaper-check' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_testpaper', {id: classroom.id}) }}">
-						{{ 'classroom.testpaper_check'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'homework-check' %}active{% endif %}">
-					<a href="{{ path('classroom_manage_homework', {id: classroom.id}) }}">
-						{{ 'classroom.homework_check'|trans }}
-					</a>
-				</li>
-			{% endif %}
+        <li class="cd-sidebar__item {% if side_nav == 'testpaper-check' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_testpaper', {id: classroom.id}) }}">
+            {{ 'classroom.testpaper_check'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'homework-check' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_homework', {id: classroom.id}) }}">
+            {{ 'classroom.homework_check'|trans }}
+          </a>
+        </li>
+      {% endif %}
 
-			{% if canManage %}
-				<li class="cd-sidebar__heading">
-					<hr class="mt0 mb0 mh10 bg-border-color">
-				</li>
+      {% if canManage %}
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color">
+        </li>
 
-				<li class="cd-sidebar__item {% if side_nav == 'data-statistics' %}active{% endif %}">
-					<a href="{{ path('classroom_data_statistics', {id: classroom.id}) }}">
-						{{ 'classroom.manage.data_statictics'|trans }}
-					</a>
-				</li>
-				<li class="cd-sidebar__item {% if side_nav == 'sign-statistics' %}active{% endif %}">
-					<a href="{{ path('classroom_sign_statistics', {id: classroom.id}) }}">
-						{{ 'classroom.manage.sign_statictics'|trans }}
-					</a>
-				</li>
-			{% endif %}
-		</ul>
-	</div>
+        <li class="cd-sidebar__item {% if side_nav == 'data-statistics' %}active{% endif %}">
+          <a href="{{ path('classroom_data_statistics', {id: classroom.id}) }}">
+            {{ 'classroom.manage.data_statictics'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'sign-statistics' %}active{% endif %}">
+          <a href="{{ path('classroom_sign_statistics', {id: classroom.id}) }}">
+            {{ 'classroom.manage.sign_statictics'|trans }}
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>

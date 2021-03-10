@@ -10316,6 +10316,13 @@ classroom.manage.sign_statictics.role.teacher: Teacher
 classroom.manage.sign_statictics.role.assistant: Assistant
 classroom.manage.sign_statictics.role.student: Student
 classroom.manage.sign_statictics.role.auditor: Auditor
+classroom.manage.sign_statictics.modal_title: %nickname%Item
+classroom.manage.sign_statictics.sign_type: Sign Type
+classroom.manage.sign_statictics.sign_time: Sign Time
+classroom.manage.sign_statictics.nickname_th: Nickname
+classroom.manage.sign_statictics.role_th: Role
+classroom.manage.sign_statictics.join_time_th: Join Time
+
 admin.classroom_manage.statistics.creator_placeholder: Creator
 admin.classroom_manage.statistics.name_th: Classroom
 admin.classroom_manage.statistics.course_number_th: Course Number
