@@ -10854,6 +10854,7 @@ editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统�
 
 #coupon
 coupon.usage_detail_title: 优惠券使用详情
+coupon.generate_log_title: 优惠券生成记录
 coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
 
 coupon.id: 编号
