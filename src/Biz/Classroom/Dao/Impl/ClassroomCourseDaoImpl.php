@@ -124,6 +124,20 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $result;
     }
 
+    public function countTaskNumByClassroomIds($classroomIds)
+    {
+        if (empty($classroomIds)) {
+            return [];
+        }
+
+        $builder = $this->createQueryBuilder(['classroomIds' => $classroomIds])
+            ->select("{$this->table}.classroomId, IF(SUM(c.compulsoryTaskNum), SUM(c.compulsoryTaskNum), 0) AS compulsoryTaskNum, IF(SUM(c.electiveTaskNum), SUM(c.electiveTaskNum), 0) AS electiveTaskNum")
+            ->innerJoin($this->table, 'course_v8', 'c', "{$this->table}.courseId = c.id")
+            ->groupBy("{$this->table}.classroomId");
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
@@ -133,6 +147,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
                 'courseId = :courseId',
                 'disabled = :disabled',
                 'courseId IN (:courseIds)',
+                'classroomId IN (:classroomIds)',
             ],
         ];
     }

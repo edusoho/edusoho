@@ -37,6 +37,16 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
         return $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIds($courseIds);
     }
 
+    public function sumLearnedTimeGroupByUserId(array $conditions)
+    {
+        return $this->getCoursePlanLearnDailyDao()->sumLearnedTimeGroupByUserId($conditions);
+    }
+
+    public function sumLearnedTimeByConditions(array $conditions)
+    {
+        return $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByConditions($conditions);
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

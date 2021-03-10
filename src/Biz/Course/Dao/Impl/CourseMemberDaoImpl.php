@@ -509,6 +509,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'finishedTime > :finishedTime_GT',
                 'lastLearnTime <= :lastLearnTime_LE',
                 'deadlineNotified = :deadlineNotified',
+                'classroomId IN (:classroomIds)',
             ],
         ];
     }

@@ -11,4 +11,8 @@ interface CoursePlanLearnDataDailyStatisticsService
     public function sumLearnedTimeByCourseId($courseId);
 
     public function sumLearnedTimeByCourseIds($courseIds);
+
+    public function sumLearnedTimeGroupByUserId(array $conditions);
+
+    public function sumLearnedTimeByConditions(array $conditions);
 }

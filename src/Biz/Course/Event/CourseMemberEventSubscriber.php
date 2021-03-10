@@ -191,7 +191,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $taskResult = $event->getSubject();
         $this->getCourseService()->recountLearningData($taskResult['courseId'], $taskResult['userId']);
         $this->getCourseMemberService()->refreshMemberFinishData($taskResult['courseId'], $taskResult['userId']);
-
     }
 
     public function onLessonOptionalChange(Event $event)

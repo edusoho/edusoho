@@ -5,10 +5,16 @@ namespace AppBundle\Controller\AdminV2\Teach;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomController extends BaseController
@@ -289,6 +295,104 @@ class ClassroomController extends BaseController
         ]);
     }
 
+    public function statisticsAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions = $this->fillOrgCode($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->countClassrooms($conditions),
+            20
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassroomsWithStatistics(
+            $conditions,
+            ['createdTime' => 'desc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin-v2/teach/classroom/classroom-statistics.html.twig', [
+            'classrooms' => $classrooms,
+            'paginator' => $paginator,
+        ]);
+    }
+
+    public function memberStatisticsAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->getClassroomStudentCount($id),
+            20
+        );
+
+        $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $totalLearnedTime = empty($classroomCourses) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id')]);
+
+        $usersLearnedTime = [];
+        if (!empty($users) && !empty($classroomCourses)) {
+            $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeGroupByUserId([
+                'userIds' => array_column($members, 'userId'), 'courseIds' => array_column($classroomCourses, 'id'),
+            ]);
+            $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
+        }
+
+        foreach ($members as &$member) {
+            $member['learnedTime'] = empty($usersLearnedTime[$member['userId']]) ? 0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1);
+        }
+
+        return $this->render('admin-v2/teach/classroom/classroom-member-statistics.html.twig', [
+            'classroom' => $classroom,
+            'members' => $members,
+            'totalLearnedTime' => round($totalLearnedTime / 60, 1),
+            'users' => $users,
+            'paginator' => $paginator,
+        ]);
+    }
+
+    public function courseStatisticsAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->getClassroomStudentCount($id),
+            20
+        );
+
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courseId = $request->query->get('courseId');
+
+        if (empty($courseId)) {
+            $course = reset($classroomCourses);
+            $courseId = $course['id'];
+        }
+
+        $tasks = empty($courseId) ? [] : $this->getTaskService()->searchTasksWithStatistics(['courseId' => $courseId], ['id' => 'ASC'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        foreach ($tasks as &$task) {
+            if ('video' == $task['type']) {
+                $task['length'] = round($task['length'] / 60, 1);
+            }
+        }
+
+        $totalLearnedTime = empty($courseId) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
+
+        return $this->render(
+            'admin-v2/teach/classroom/classroom-course-statistics.html.twig',
+            [
+                'classroom' => $classroom,
+                'tasks' => $tasks,
+                'courses' => $classroomCourses,
+                'totalLearnedTime' => round($totalLearnedTime / 60, 1),
+                'courseId' => $courseId,
+                'paginator' => $paginator,
+            ]
+        );
+    }
+
     private function renderClassroomTr($id, $classroom)
     {
         $coinPrice = 0;
@@ -355,5 +459,53 @@ class ClassroomController extends BaseController
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return ActivityLearnDataService
+     */
+    protected function getActivityLearnDataService()
+    {
+        return $this->createService('Visualization:ActivityLearnDataService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }
