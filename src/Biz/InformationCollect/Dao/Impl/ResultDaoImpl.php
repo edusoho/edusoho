@@ -37,6 +37,7 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
             ],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'eventId IN (:eventIds)',
                 'userId = :userId',
                 'userId IN ( :userIds )',

@@ -5375,7 +5375,6 @@ admin.information_collect.action.buy_before: 'Course/class merchandise before pa
 admin.information_collect.status.open: '<div class="green-circle"></div>Is collecting'
 admin.information_collect.status.close: '<div class="red-circle"></div>Stop to collect'
 admin.information_collect.creator: 'Creator'
-admin.information_collect.user.mobile: 'Mobile'
 admin.information_collect.collected_num: %collectedNum% copies
 admin.information_collect.detail: <a class="color-black-title" href="%listUrl%">User Information Collection</a> > Deatil
 admin.information_collect.basic_info: Basic Information

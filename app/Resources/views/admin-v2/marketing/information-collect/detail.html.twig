@@ -21,10 +21,9 @@
       <form class="form-inline pull-right padding-no hidden-xs" action="{{path('admin_v2_information_collect_detail', {id:event.id})}}" method="get" novalidate>
         <div class="form-group">
           <select class="form-control" name="keywordType">
-            {% set options = information_collect_select(labels) %}
-            {{ select_options(options, request.get('keywordType')) }}
+            {{ select_options(information_collect_detail_select(event.id|default(0)), app.request.query.get('keywordType')) }}
           </select>
-          <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{ 'form.placeholder.keyword'|trans }}">
+          <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="{{ 'form.placeholder.keyword'|trans }}">
         </div>
         <span class="panel-title">{{ 'admin.information_collect.collected_time'|trans }}：</span>
         <div class="form-group ">

@@ -6362,7 +6362,6 @@ admin.information_collect.collected_time: 采集时间
 admin.information_collect.export_btn: 导出查询结果
 admin.information_collect.form_user_infomation: (来自个人资料)
 admin.information_collect.creator: 创建人
-admin.information_collect.user.mobile: 手机号
 
 #账户明细
 admin.money_records.content_title: 账户明细

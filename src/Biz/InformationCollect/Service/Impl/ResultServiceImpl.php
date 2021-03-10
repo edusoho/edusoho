@@ -194,17 +194,6 @@ class ResultServiceImpl extends BaseService implements ResultService
             $conditions['endDate'] = strtotime($conditions['endDate']);
         }
 
-        if (isset($conditions[$keywordType]) && in_array($keywordType, ['mobile', 'truename', 'idcard'])) {
-            $userProfiles = $this->getUserService()->searchUserProfiles(
-                [$keywordType => $conditions[$keywordType]],
-                [],
-                0,
-                PHP_INT_MAX
-            );
-
-            $conditions['userIds'] = ArrayToolkit::column($userProfiles, 'id');
-        }
-
         if (!empty($conditions['nickname'])) {
             $users = $this->getUserService()->searchUsers(
                 ['nickname' => $conditions['nickname']],
@@ -213,7 +202,29 @@ class ResultServiceImpl extends BaseService implements ResultService
                 PHP_INT_MAX
             );
 
-            $conditions['userIds'] = ArrayToolkit::column($users, 'id');
+            $conditions['userIds'] = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
+        }
+
+        // mobile来自个人资料
+        if (!empty($conditions['mobile'])) {
+            $userProfiles = $this->getUserService()->searchUserProfiles(
+                ['mobile' => $conditions['mobile']],
+                [],
+                0,
+                PHP_INT_MAX
+            );
+
+            $conditions['userIds'] = empty($userProfiles) ? [-1] : ArrayToolkit::column($userProfiles, 'id');
+        }
+
+        if (in_array($keywordType, ['name', 'idcard'])) {
+            $collectedDataItems = $this->getResultItemDao()->search([
+                'eventId' => $conditions['eventId'],
+                'code' => $keywordType,
+                'value' => $conditions[$conditions['keywordType']]
+            ], [], 0, PHP_INT_MAX);
+
+            $conditions['ids'] = empty($collectedDataItems) ? [-1] : ArrayToolkit::column($collectedDataItems, 'resultId');
         }
 
         return $conditions;
