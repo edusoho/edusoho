@@ -156,6 +156,8 @@
 // }
 
 .vip-detail {
+	padding-bottom: vw(16);
+
 	.vip-swiper {
 		box-sizing: border-box;
 		width: 100%;
@@ -409,6 +411,15 @@
 					font-size: vw(12);
 				}
 			}
+		}
+	}
+
+	.vip-introduce {
+		margin-top: vw(16);
+		padding: 0 vw(16);
+
+		img {
+			max-width: 100%;
 		}
 	}
 }

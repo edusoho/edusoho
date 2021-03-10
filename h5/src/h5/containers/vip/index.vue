@@ -116,7 +116,10 @@
           <span class="style style--third"></span>
         </div>
       </div>
-      <div class="vip-introduce"></div>
+      <div
+        class="vip-introduce"
+        v-html="currentVipInfo.description || '暂无介绍'"
+      />
     </div>
   </div>
 </template>
