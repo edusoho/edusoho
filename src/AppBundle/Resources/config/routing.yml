@@ -2673,6 +2673,10 @@ classroom_data_statistics_student_detail:
   path: /classroom/{id}/manage/statistics/student/detail
   defaults: {_controller: AppBundle:Classroom/ClassroomManage:studentDetailList }
 
+classroom_data_statistics_student_detail_modal:
+  path:  /classroom/{classroomId}/manage/statistics/student/{userId}/detail
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDetailModal }
+
 classroom_data_statistics_course_detail:
   path: /classroom/{id}/manage/statistics/course/detail
   defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailList }

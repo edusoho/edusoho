@@ -73,6 +73,16 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $members;
     }
 
+    public function getStudentDetail($classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $courseMembers = ArrayToolkit::index($this->getCourseMemberService()->findCourseMembersByUserIdAndClassroomId($userId, $classroomId), 'courseId');
+        $member['courseMembers'] = $courseMembers;
+
+        return $member;
+    }
+
     public function getStudentDetailCount($classroomId, $filterConditions)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);

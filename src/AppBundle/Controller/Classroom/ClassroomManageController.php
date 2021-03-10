@@ -789,6 +789,7 @@ class ClassroomManageController extends BaseController
         );
 
         $courses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($id), 'id');
+        $courses = array_slice($courses, 0, 20);
         $userIds = ArrayToolkit::column($membersDetail, 'userId');
 
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
@@ -800,6 +801,23 @@ class ClassroomManageController extends BaseController
             'members' => $membersDetail,
             'classroomCourses' => $courses,
         ]);
+    }
+
+    public function studentDetailModalAction(Request $request, $classroomId, $userId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $member = $this->getReportService()->getStudentDetail($classroomId, $userId);
+        $user = $this->getUserService()->getUser($userId);
+        $classroomCourses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($classroomId), 'id');
+
+        return $this->render('classroom-manage/statistics/student-detail/student-data-modal.html.twig',
+            [
+                'classroom' => $classroom,
+                'user' => $user,
+                'classroomCourses' => $classroomCourses,
+                'member' => $member,
+            ]
+        );
     }
 
     public function courseDetailListAction(Request $request, $id)

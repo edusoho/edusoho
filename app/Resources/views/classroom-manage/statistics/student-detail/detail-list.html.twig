@@ -21,11 +21,11 @@
             <span class="color-gray">
                 {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}
             </span>
-      {% if count(classroomCourses) > 20 %}
+      {% if count(classroomCourses) > 2 %}
         <a class="js-task-chart-detail more"
            data-toggle="modal"
            data-target="#modal"
-{#           data-url="{{ path('course_manage_student_learn_detail_modal',{courseId:course.id, userId:user.id}) }}"#}
+           data-url="{{ path('classroom_data_statistics_student_detail_modal',{classroomId:classroom.id, userId:user.id}) }}"
            href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
       {% endif %}
     </div>
@@ -38,7 +38,7 @@
 {% endif %}
 
 {% if classroomCourses %}
-  <div class="pull-right mtm">
+  <div class="mtm">
     {{ web_macro.paginator(paginator) }}
   </div>
 {% endif %}

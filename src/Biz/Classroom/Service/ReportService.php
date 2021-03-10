@@ -10,6 +10,8 @@ interface ReportService
 
     public function getStudentDetailList($classroomId, $filterConditions, $sort, $start, $limit);
 
+    public function getStudentDetail($classroomId, $userId);
+
     public function getStudentDetailCount($classroomId, $filterConditions);
 
     public function getCourseDetailList($classroomId, $filterConditions, $start, $limit);
