@@ -39,6 +39,13 @@ class ResultServiceImpl extends BaseService implements ResultService
         return $result;
     }
 
+    public function findResultsByUserIdsAndEventId($userIds, $eventId)
+    {
+        $results = $this->getResultDao()->findByUserIdsAndEventId($userIds, $eventId);
+
+        return $results;
+    }
+
     public function submitForm($userId, $eventId, $form)
     {
         $this->validateSubmitForm($userId, $eventId, $form);
@@ -158,10 +165,6 @@ class ResultServiceImpl extends BaseService implements ResultService
     {
         $conditions = $this->_prepareConditions($conditions);
 
-        if (isset($conditions['userIds']) && empty($conditions['userIds'])) {
-            return [];
-        }
-
         return $this->getResultDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -205,7 +208,7 @@ class ResultServiceImpl extends BaseService implements ResultService
             $conditions['userIds'] = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
         }
 
-        // mobile来自个人资料
+        // 查询 mobile 来自个人资料 (个人指信息填写者)
         if (!empty($conditions['mobile'])) {
             $userProfiles = $this->getUserService()->searchUserProfiles(
                 ['mobile' => $conditions['mobile']],
@@ -214,20 +217,44 @@ class ResultServiceImpl extends BaseService implements ResultService
                 PHP_INT_MAX
             );
 
-            $conditions['userIds'] = empty($userProfiles) ? [-1] : ArrayToolkit::column($userProfiles, 'id');
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
+            // userIds 转换为采集事件的 resultIds
+            $results = $this->findResultsByUserIdsAndEventId($userIds, $conditions['eventId']);
+            $conditions['ids'] = empty($results) ? [-1] : ArrayToolkit::column($results, 'id');
         }
 
-        if (in_array($keywordType, ['name', 'idcard'])) {
-            $collectedDataItems = $this->getResultItemDao()->search([
-                'eventId' => $conditions['eventId'],
-                'code' => $keywordType,
-                'value' => $conditions[$conditions['keywordType']],
-            ], [], 0, PHP_INT_MAX);
+        if (in_array($keywordType, ['mobile', 'name', 'idcard']) && !empty($conditions['keyword'])) {
+            $itemsConditions = $this->_prepareItemsConditions($conditions);
+            $collectedDataItems = $this->getResultItemDao()->search($itemsConditions, [], 0, PHP_INT_MAX);
 
-            $conditions['ids'] = empty($collectedDataItems) ? [-1] : ArrayToolkit::column($collectedDataItems, 'resultId');
+            $eventItemResultIds = empty($collectedDataItems) ? [-1] : ArrayToolkit::column($collectedDataItems, 'resultId');
+            // 合并 mobile 查出下来的 resultIds
+            $conditions['ids'] = empty($conditions['ids']) ? $eventItemResultIds : array_merge($conditions['ids'], $eventItemResultIds);
         }
 
         return $conditions;
+    }
+
+    // todo
+    private function _prepareItemsConditions($conditions)
+    {
+        $itemsConditions = [];
+        $itemsConditions['eventId'] = $conditions['eventId'];
+        $itemsConditions['code'] = $conditions['keywordType'];
+        $itemsConditions['value'] = $conditions['keyword'];
+
+        // 手机号码编码转换 (信息采集可选字段)
+        if ('mobile' == $itemsConditions['code']) {
+            $itemsConditions['code'] = 'phone';
+        }
+
+        // 姓名模糊搜索,手机号码和身份证号精确查找 (信息采集可选字段)
+        if ('name' == $itemsConditions['code']) {
+            $itemsConditions['likeValue'] = $itemsConditions['value'];
+            unset($itemsConditions['value']);
+        }
+
+        return $itemsConditions;
     }
 
     public function findResultDataByResultIds($resultIds)

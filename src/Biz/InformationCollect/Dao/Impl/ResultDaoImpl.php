@@ -14,6 +14,17 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
         return $this->getByFields(['userId' => $userId, 'eventId' => $eventId]) ?: null;
     }
 
+    public function findByUserIdsAndEventId($userIds, $eventId)
+    {
+        if (empty($userIds)) {
+            return [];
+        }
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE eventId = ? AND userId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, array_merge([$eventId], $userIds)) ?: [];
+    }
+
     public function countGroupByEventId($eventIds)
     {
         $builder = $this->createQueryBuilder(['eventIds' => $eventIds])
@@ -38,10 +49,10 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
             'conditions' => [
                 'id = :id',
                 'id IN (:ids)',
+                'eventId = :eventId',
                 'eventId IN (:eventIds)',
                 'userId = :userId',
                 'userId IN ( :userIds )',
-                'eventId = :eventId',
                 'createdTime >= :startDate',
                 'createdTime < :endDate',
             ],
