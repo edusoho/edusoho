@@ -205,7 +205,7 @@ class InformationCollectController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getResultService()->count($conditions),
-            1
+            20
         );
 
         $collectedData = $this->getResultService()->searchCollectedData(
