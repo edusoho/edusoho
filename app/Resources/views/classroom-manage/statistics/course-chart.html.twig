@@ -14,7 +14,7 @@
   }
 %}
 <div id="task-data-chart"
-     data-url=""
+     data-url="{{ path('classroom_data_statistics_course_detail', {id: classroom.id}) }}"
      data-form=".js-task-detail"
      class="mtl detail-chart-container chart-container text-sm">
 </div>

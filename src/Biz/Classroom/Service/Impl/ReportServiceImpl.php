@@ -5,11 +5,13 @@ namespace Biz\Classroom\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\SimpleValidator;
 use Biz\BaseService;
+use Biz\Classroom\Dao\ClassroomCourseDao;
 use Biz\Classroom\DateTimeRange;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\MemberService;
 use Biz\Classroom\Service\ReportService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use Biz\User\Service\UserService;
 
 class ReportServiceImpl extends BaseService implements ReportService
@@ -82,6 +84,57 @@ class ReportServiceImpl extends BaseService implements ReportService
         ]);
 
         return $this->getClassroomService()->searchMemberCount($conditions);
+    }
+
+    public function getCourseDetailList($classroomId, $filterConditions, $start, $limit)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (!empty($filterConditions['nameLike'])) {
+            $courses = $this->getCourseService()->searchCourses([
+                'courseSetTitleLike' => $filterConditions['nameLike'],
+                'classroomId' => $classroom['id'],
+            ], ['id' => 'DESC'], $start, $limit);
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $classroomCourses = $this->getClassroomCourseDao()->search(['courseIds' => $courseIds], ['seq' => 'ASC'], $start, $limit);
+        } else {
+            $classroomCourses = $this->getClassroomCourseDao()->search(['classroomId' => $classroom['id']], ['seq' => 'ASC'], $start, $limit);
+            $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+            $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'id');
+        }
+
+        $courseList = [];
+
+        foreach ($classroomCourses as $classroomCourse) {
+            $course = empty($courses[$classroomCourse['courseId']]) ? [] : $courses[$classroomCourse['courseId']];
+            if (empty($course)) {
+                $course['finishedNum'] = $course['learnNum'] = $course['notStartedNum'] = $course['rate'] = 0;
+                continue;
+            }
+            $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['isLearned' => 1]);
+            $course['learnNum'] = $this->getCourseMemberService()->countMembers(['startLearnTime_GT' => 0]);
+            $course['notStartedNum'] = $course['studentNum'] - $course['finishedNum'] - $course['learnNum'];
+            $course['rate'] = $this->getPercent($course['finishedNum'], $course['studentNum']);
+            $courseList[] = $course;
+        }
+
+        return $courseList;
+    }
+
+    public function getCourseDetailCount($classroomId, $filterConditions)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (!empty($filterConditions['nameLike'])) {
+            $courses = $this->getCourseService()->searchCourses([
+                'courseSetTitleLike' => $filterConditions['nameLike'],
+                'classroomId' => $classroom['id'],
+            ], ['id' => 'DESC'], 0, PHP_INT_MAX);
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $classroomCoursesCount = $this->getClassroomCourseDao()->count(['courseIds' => $courseIds]);
+        } else {
+            $classroomCoursesCount = $this->getClassroomCourseDao()->count(['classroomId' => $classroom['id']]);
+        }
+
+        return $classroomCoursesCount;
     }
 
     /**
@@ -166,6 +219,13 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $orderBy;
     }
 
+    private function getPercent($count, $total)
+    {
+        $percent = 0 === (int) $total ? 0 : round($count * 100 / $total, 3);
+
+        return $percent > 100 ? 100 : $percent;
+    }
+
     /**
      * @return ClassroomService
      */
@@ -196,5 +256,21 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomCourseDao
+     */
+    protected function getClassroomCourseDao()
+    {
+        return $this->biz->dao('Classroom:ClassroomCourseDao');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }

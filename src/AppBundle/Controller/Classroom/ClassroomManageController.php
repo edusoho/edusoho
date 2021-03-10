@@ -802,6 +802,27 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
+    public function courseDetailListAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions['titleLike'] = $request->query->get('nameLike');
+
+        $count = $this->getReportService()->getCourseDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $courseDetailList = $this->getReportService()->getCourseDetailList($id, $conditions, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        return $this->render('classroom-manage/statistics/course-detail/task-chart-data.html.twig', [
+            'classroom' => $classroom,
+            'paginator' => $paginator,
+            'tasks' => $courseDetailList,
+        ]);
+    }
+
     public function courseItemsSortAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
