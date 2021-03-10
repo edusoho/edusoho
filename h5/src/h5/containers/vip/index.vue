@@ -121,6 +121,44 @@
         v-html="currentVipInfo.description || '暂无介绍'"
       />
     </div>
+
+    <!-- 专属特权 -->
+    <div class="vip-sec">
+      <div class="vip-sec__title">
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+        <span class="vip-sec__text">专属特权</span>
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+      </div>
+      <div class="vip-privilege">
+        <!-- 会员免费课程 -->
+        <e-course-list
+          v-if="courseData"
+          :course-list="courseData"
+          :vip-name="currentVipInfo.name"
+          :more-type="'vip'"
+          :level-id="Number(currentVipInfo.id)"
+          :type-list="'course_list'"
+        />
+
+        <!-- 会员免费班级 -->
+        <e-course-list
+          v-if="classroomData"
+          :more-type="'vip'"
+          :level-id="Number(currentVipInfo.id)"
+          :course-list="classroomData"
+          :vip-name="currentVipInfo.name"
+          :type-list="'classroom_list'"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -133,12 +171,14 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
 
 import PriceItem from './price-item';
+import ECourseList from '&/components/e-course-list/e-course-list';
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
     PriceItem,
+    ECourseList,
   },
   data() {
     return {
@@ -188,6 +228,32 @@ export default {
 
     vipBuyStatu() {
       return '续费12个月会员特权';
+    },
+
+    courseData() {
+      const data = this.currentVipInfo.courses.data;
+      if (data.length == 0) return false;
+      const dataFormat = {
+        items: [],
+        title: '会员课程',
+        source: {},
+        limit: 4,
+      };
+      dataFormat.items = data;
+      return dataFormat;
+    },
+
+    classroomData() {
+      const data = this.currentVipInfo.classrooms.data;
+      if (data.length == 0) return false;
+      const dataFormat = {
+        items: [],
+        title: '会员班级',
+        source: {},
+        limit: 4,
+      };
+      dataFormat.items = data;
+      return dataFormat;
     },
   },
   created() {
