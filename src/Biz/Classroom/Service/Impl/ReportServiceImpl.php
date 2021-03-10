@@ -110,8 +110,8 @@ class ReportServiceImpl extends BaseService implements ReportService
                 $course['finishedNum'] = $course['learnNum'] = $course['notStartedNum'] = $course['rate'] = 0;
                 continue;
             }
-            $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['isLearned' => 1]);
-            $course['learnNum'] = $this->getCourseMemberService()->countMembers(['startLearnTime_GT' => 0]);
+            $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'isLearned' => 1]);
+            $course['learnNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'startLearnTime_GT' => 0, 'isLearned' => 1]);
             $course['notStartedNum'] = $course['studentNum'] - $course['finishedNum'] - $course['learnNum'];
             $course['rate'] = $this->getPercent($course['finishedNum'], $course['studentNum']);
             $courseList[] = $course;
