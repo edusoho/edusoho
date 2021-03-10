@@ -74,7 +74,7 @@
       <div class="vip-interest">
         <div
           class="vip-interest__item"
-          v-if="currentVipInfo.courses.paging.total > 0"
+          v-if="currentVipInfo.courses.data.length"
         >
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_course.png" />
@@ -87,7 +87,7 @@
         </div>
         <div
           class="vip-interest__item"
-          v-if="currentVipInfo.classrooms.paging.total > 0"
+          v-if="currentVipInfo.classrooms.data.length"
         >
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_classroom.png" />
