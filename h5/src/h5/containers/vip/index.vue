@@ -39,6 +39,16 @@
           <span class="style style--third"></span>
         </div>
       </div>
+      <div class="vip-open">
+        <template v-for="item in currentVipInfo.sellModes">
+          <price-item
+            :key="item.id"
+            :item="item"
+            :activePriceId="activePriceId"
+            @click="clickPriceItem(item.id)"
+          />
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -51,10 +61,13 @@ import * as types from '@/store/mutation-types';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
 
+import PriceItem from './price-item';
+
 export default {
   components: {
     Swiper,
     SwiperSlide,
+    PriceItem,
   },
   data() {
     return {
@@ -67,6 +80,7 @@ export default {
         on: {
           slideChange: () => {
             this.activeIndex = this.$refs.mySwiper.$swiper.activeIndex;
+            this.getActivePriceId();
           },
         },
       },
@@ -85,6 +99,7 @@ export default {
         },
       ],
       activeIndex: 0,
+      activePriceId: 0,
     };
   },
   computed: {
@@ -92,6 +107,10 @@ export default {
     ...mapState({
       userInfo: state => state.user,
     }),
+
+    currentVipInfo() {
+      return this.levels[this.activeIndex];
+    },
   },
   created() {
     this.getVipDetail();
@@ -135,6 +154,7 @@ export default {
       });
       this.activeIndex = vipIndex || 0;
       this.initSwiperActiveIndex();
+      this.getActivePriceId();
     },
 
     // 首次进入，切换到对应会员
@@ -142,6 +162,16 @@ export default {
       this.$nextTick(() => {
         this.$refs.mySwiper.$swiper.slideTo(this.activeIndex, 1000);
       });
+    },
+
+    // 开通时长默认选中第一个
+    getActivePriceId() {
+      const { sellModes } = this.levels[this.activeIndex];
+      this.activePriceId = sellModes.length > 0 ? sellModes[0].id : 0;
+    },
+
+    clickPriceItem(value) {
+      this.activePriceId = value;
     },
   },
 };
