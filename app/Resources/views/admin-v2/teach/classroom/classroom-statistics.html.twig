@@ -23,22 +23,22 @@
 		{% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-statistics', targetFormId: 'message-search-form', exportClass: 'cd-btn-success pull-right'} %}
 	</form>
 
-	<table class="table table-striped table-hover" id="classroom-table">
+	<table class="table table-bordered table-hover text-center" id="classroom-table">
 		<thead>
-			<tr>
-				<th width="22%">{{ 'admin.classroom_manage.statistics.name_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.course_number_th'|trans }}</th>
-				<th>
+			<tr class="active">
+				<td width="22%">{{ 'admin.classroom_manage.statistics.name_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.course_number_th'|trans }}</td>
+				<td>
 					{{ 'admin.classroom_manage.statistics.task_number_th'|trans }}
 					<span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.task_num_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
-				</th>
-				<th>{{ 'admin.classroom_manage.statistics.student_number_th'|trans }}</th>
-				<th>
+				</td>
+				<td>{{ 'admin.classroom_manage.statistics.student_number_th'|trans }}</td>
+				<td>
 					{{ 'admin.classroom_manage.statistics.finish_number_th'|trans }}
 					<span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.finish_number_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
-				</th>
-				<th>{{ 'admin.classroom_manage.statistics.income_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.operation_th'|trans }}</th>
+				</td>
+				<td>{{ 'admin.classroom_manage.statistics.income_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.operation_th'|trans }}</td>
 			</tr>
 		</thead>
 		<tbody>

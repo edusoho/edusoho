@@ -5121,7 +5121,7 @@ admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括�
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.name: 任务名称
 admin.course_manage.statistics.data.task_type: 任务类型
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
