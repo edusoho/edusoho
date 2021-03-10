@@ -841,6 +841,10 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
+    public function courseDetailModal(Request $request, $id)
+    {
+    }
+
     public function courseItemsSortAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
