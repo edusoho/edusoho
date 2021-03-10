@@ -22,6 +22,7 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use VipPlugin\Biz\Marketing\Service\VipSellModeService;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class AssetSettingController extends BaseController
@@ -375,7 +376,7 @@ class AssetSettingController extends BaseController
             }
         } elseif ('vip' === $type) {
             foreach ($data as $key => $value) {
-                $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
+                $this->getVipSellModeService()->updateLevelSellModesRate($key, $value);
             }
         } elseif ('exercise' === $type) {
             foreach ($data as $key => $value) {
@@ -454,6 +455,14 @@ class AssetSettingController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipSellModeService
+     */
+    protected function getVipSellModeService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipSellModeService');
     }
 
     /**

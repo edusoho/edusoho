@@ -446,7 +446,7 @@ finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
-finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_rate: 虚拟币最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
