@@ -9576,7 +9576,7 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 editor.iframe_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 #coupon
 coupon.usage_detail_title: Coupon usage details
-coupon.generate_log_title: Coupon generate details
+coupon.generate_log_title: Coupon generate logs
 coupon.enable_hint: The coupon is not open. Please enable it in <a href="%path%"> System - Operational Settings - Coupon </a>
 
 coupon.id: Coupon id
