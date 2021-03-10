@@ -14,6 +14,7 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
+use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -767,6 +768,40 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function studentDetailListAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions = $request->query->all();
+        $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $studentDetailCount,
+            20
+        );
+
+        $membersDetail = $this->getReportService()->getStudentDetailList(
+            $id,
+            $conditions,
+            $conditions['orderBy'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($id), 'id');
+        $userIds = ArrayToolkit::column($membersDetail, 'userId');
+
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+
+        return $this->render('classroom-manage/statistics/student-detail/detail-list.html.twig', [
+            'paginator' => $paginator,
+            'classroom' => $classroom,
+            'users' => $users,
+            'members' => $membersDetail,
+            'classroomCourses' => $courses,
+        ]);
+    }
+
     public function courseItemsSortAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -1272,5 +1307,13 @@ class ClassroomManageController extends BaseController
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->getBiz()->service('Classroom:ReportService');
     }
 }

@@ -1048,15 +1048,40 @@ class MemberServiceImpl extends BaseService implements MemberService
         return true;
     }
 
+    /**
+     * @param $userId
+     * @param $courseIds
+     *
+     * @return array
+     *
+     * @deprecated 名称上不合适，返回值为courseMembers 但是命名为返回Course，替代函数为@findCourseMembersByUserIdAndCourseIds
+     */
     public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
-        if (empty($courseIds) || 0 == count($courseIds)) {
+        if (empty($courseIds) || 0 === count($courseIds)) {
             return [];
         }
 
-        $courseMembers = $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+        return $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+    }
 
-        return $courseMembers;
+    public function findCourseMembersByUserIdAndCourseIds($userId, $courseIds)
+    {
+        if (empty($courseIds) || 0 === count($courseIds)) {
+            return [];
+        }
+
+        return $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+    }
+
+    public function findCourseMembersByUserIdAndClassroomId($userId, $classroomId)
+    {
+        return $this->getMemberDao()->findByUserIdAndClassroomId($userId, $classroomId);
+    }
+
+    public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId)
+    {
+        return $this->getMemberDao()->findByUserIdsAndClassroomId($userIds, $classroomId);
     }
 
     public function becomeStudentByClassroomJoined($courseId, $userId)

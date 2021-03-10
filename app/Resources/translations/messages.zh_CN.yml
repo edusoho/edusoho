@@ -11567,3 +11567,11 @@ classroom.manage.data_statistics.overview.finished_num_tips: 取班级中所有�
 classroom.manage.data_statistics.student_trendency: 学员趋势
 classroom.manage.data_statistics.student_trendency.select_seven_days: 7天
 classroom.manage.data_statistics.student_trendency.select_thrity_days: 30天
+classroom.manage.data_statistics.student_detail_list.title: 学员详情
+classroom.manage.data_statistics.course_detail_list.title: 课程详情
+classroom.manage.data_statistics.student_detail_list.select_finish_rate: 完成率
+classroom.manage.data_statistics.student_detail_list.select_all: 全部
+classroom.manage.data_statistics.student_detail_list.select_un_finished: 未完成
+classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: 7天未学
+classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
+

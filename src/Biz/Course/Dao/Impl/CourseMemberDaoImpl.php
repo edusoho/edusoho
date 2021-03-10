@@ -107,6 +107,21 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array_merge([$studentId], $courseIds));
     }
 
+    public function findByUserIdAndClassroomId($userId, $classroomId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId = ?;";
+
+        return $this->db()->fetchAll($sql, [$userId, $classroomId]);
+    }
+
+    public function findByUserIdsAndClassroomId($userIds, $classroomId)
+    {
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$classroomId], $userIds));
+    }
+
     public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";

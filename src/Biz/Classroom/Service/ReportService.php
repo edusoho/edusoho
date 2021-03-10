@@ -9,4 +9,6 @@ interface ReportService
     public function getStudentTrend($classroomId, DateTimeRange $timeRange);
 
     public function getStudentDetailList($classroomId, $filterConditions, $sort, $start, $limit);
+
+    public function getStudentDetailCount($classroomId, $filterConditions);
 }

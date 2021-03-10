@@ -165,7 +165,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'teacherIds' => 'json',
                 'service' => 'json',
             ],
-            'orderbys' => ['name', 'createdTime', 'updatedTime', 'id', 'deadline'],
+            'orderbys' => ['name', 'createdTime', 'updatedTime', 'id', 'deadline', 'learnedCompulsoryTaskNum', 'lastLearnTime'],
             'conditions' => [
                 'userId = :userId',
                 'classroomId = :classroomId',
@@ -181,6 +181,15 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'updatedTime >= :updatedTime_GE',
                 'userId NOT IN ( :excludeUserIds )',
                 'isFinished = :isFinished',
+                'lastLearnTime >= :lastLearnTime_GTE',
+                'lastLearnTime <= :lastLearnTime_LTE',
+                'lastLearnTime > :lastLearnTime_GT',
+                'lastLearnTime < :lastLearnTime_LT',
+                'learnedCompulsoryTaskNum = :learnedCompulsoryTaskNum',
+                'learnedCompulsoryTaskNum > :learnedCompulsoryTaskNum_GT',
+                'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNum_LT',
+                'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNum_GTE',
+                'learnedCompulsoryTaskNum <= :learnedCompulsoryTaskNum_LTE',
             ],
         ];
     }
