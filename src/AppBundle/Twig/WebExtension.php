@@ -208,6 +208,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
+            new \Twig_SimpleFunction('information_collect_detail_select', [$this, 'informationCollectDetailSelect']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
         ];
     }
@@ -2118,6 +2119,30 @@ class WebExtension extends \Twig_Extension
         }
 
         return $items;
+    }
+
+    public function informationCollectDetailSelect($eventId = 0)
+    {
+        // 支持的编码
+        $codes = ['nickname', 'mobile', 'name', 'idcard'];
+        // 默认支持
+        $options = [
+            'nickname' => $this->trans('user.fields.username_label'),
+            'mobile' => $this->trans('user.fields.mobile_label'),
+        ];
+
+        if (!$eventId) {
+            return $options;
+        }
+
+        $items = $this->getEventService()->findItemsByEventId($eventId);
+        foreach ($items as $item) {
+            if (in_array($item['code'], $codes)) {
+                $options[$item['code']] = FormItemFectory::create($item['code'])->getData()['title'];
+            }
+        }
+
+        return $options;
     }
 
     /**

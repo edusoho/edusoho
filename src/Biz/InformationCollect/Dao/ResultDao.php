@@ -8,5 +8,7 @@ interface ResultDao extends AdvancedDaoInterface
 {
     public function getByUserIdAndEventId($userId, $eventId);
 
+    public function findByUserIdsAndEventId($userIds, $eventId);
+
     public function countGroupByEventId($eventIds);
 }
