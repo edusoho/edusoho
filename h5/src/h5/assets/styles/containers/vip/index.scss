@@ -161,7 +161,7 @@
 		width: 100%;
 		height: vw(180);
 		padding-top: vw(16);
-		background-image: url($baseUrl+'static/images/vip_bg.png');
+		background-image: url($baseUrl+'static/images/vip/vip_bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% vw(146);
 
@@ -294,7 +294,7 @@
 	}
 
 	.vip-open {
-		margin: vw(16) 0 vw(14);
+		margin-top: vw(16);
 		padding: 0 vw(8);
 
 		.vip-price-item {
@@ -359,6 +359,56 @@
 			text-align: center;
 			background-image: linear-gradient(#ffe8a5, #ffe8a5);
 			border-radius: vw(20);
+		}
+	}
+
+	.vip-interest {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		height: vw(116);
+		margin-top: vw(16);
+		padding: 0 vw(16);
+
+		.vip-interest__item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+			box-sizing: border-box;
+			width: vw(124);
+			height: vw(116);
+			padding: vw(4) 0;
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+
+			.vip-interest__item__img {
+				width: vw(40);
+				height: vw(40);
+
+				img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+
+			.vip-interest__item__title {
+				color: #333;
+				font-size: vw(14);
+				line-height: vw(20);
+			}
+
+			.vip-interest__item__total {
+				color: #ff7e0f;
+				font-weight: 500;
+				font-size: vw(18);
+
+				.company {
+					color: #333;
+					font-size: vw(12);
+				}
+			}
 		}
 	}
 }

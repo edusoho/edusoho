@@ -55,6 +55,69 @@
         <div class="vip-open__buy" @click="clickVipBuy">{{ vipBuyStatu }}</div>
       </div>
     </div>
+
+    <!-- 专属权益 -->
+    <div class="vip-sec">
+      <div class="vip-sec__title">
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+        <span class="vip-sec__text">专属权益</span>
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+      </div>
+      <div class="vip-interest">
+        <div
+          class="vip-interest__item"
+          v-if="currentVipInfo.courses.paging.total > 0"
+        >
+          <div class="vip-interest__item__img">
+            <img src="static/images/vip/vip_course.png" />
+          </div>
+          <div class="vip-interest__item__title">会员课程</div>
+          <div class="vip-interest__item__total">
+            {{ currentVipInfo.courses.paging.total }}
+            <span class="company">个</span>
+          </div>
+        </div>
+        <div
+          class="vip-interest__item"
+          v-if="currentVipInfo.classrooms.paging.total > 0"
+        >
+          <div class="vip-interest__item__img">
+            <img src="static/images/vip/vip_classroom.png" />
+          </div>
+          <div class="vip-interest__item__title">会员班级</div>
+          <div class="vip-interest__item__total">
+            {{ currentVipInfo.classrooms.paging.total }}
+            <span class="company">个</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 专属介绍 -->
+    <div class="vip-sec">
+      <div class="vip-sec__title">
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+        <span class="vip-sec__text">专属介绍</span>
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+      </div>
+      <div class="vip-introduce"></div>
+    </div>
   </div>
 </template>
 
