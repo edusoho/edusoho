@@ -3,7 +3,7 @@
     <e-loading v-if="isLoading" />
 
     <div class="vip-swiper">
-      <swiper class="swiper" :options="swiperOption">
+      <swiper class="swiper" ref="mySwiper" :options="swiperOption">
         <swiper-slide v-for="(item, index) in levels" :key="index">
           <img class="vip-swiper__img" :src="item.background" />
           <div class="vip-user" v-if="user">
@@ -46,6 +46,11 @@ export default {
         slidesPerView: 1.28,
         observer: true,
         observeParents: true,
+        on: {
+          slideChange: () => {
+            this.activeIndex = this.$refs.mySwiper.$swiper.activeIndex;
+          },
+        },
       },
       user: {
         avatar: {},
@@ -61,7 +66,7 @@ export default {
           },
         },
       ],
-      currentLevelIndex: 0,
+      activeIndex: 0,
     };
   },
   computed: {
@@ -103,13 +108,22 @@ export default {
     },
 
     getVipIndex(levelId, levels) {
-      // currentLevelIndex 要放在 levels 数据之后
-      const vipIndex = levels.find((level, index) => {
+      let vipIndex = 0;
+      levels.find((level, index) => {
         if (level.id === levelId) {
-          return index;
+          vipIndex = index;
+          return level;
         }
       });
-      this.currentLevelIndex = vipIndex;
+      this.activeIndex = vipIndex || 0;
+      this.initSwiperActiveIndex();
+    },
+
+    // 首次进入，切换到对于会员
+    initSwiperActiveIndex() {
+      this.$nextTick(() => {
+        this.$refs.mySwiper.$swiper.slideTo(this.activeIndex, 1000);
+      });
     },
   },
 };
