@@ -45,8 +45,9 @@ class AssessmentExerciseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
-        array_multisort(ArrayToolkit::column($assessmentExercises, 'assessmentId'), SORT_ASC, $assessments);
+        $assessmentIds = ArrayToolkit::column($assessmentExercises, 'assessmentId');
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($assessmentIds);
+        $assessments = ArrayToolkit::orderByArray($assessments, $assessmentIds);
 
         return $this->render('item-bank-exercise-manage/assessment-exercise/index.html.twig', [
             'exercise' => $exercise,

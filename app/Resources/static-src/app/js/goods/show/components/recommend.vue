@@ -5,7 +5,7 @@
       <div v-if="recommendGoods.length">
           <div class="learn-info-item learn clearfix" @click="onClickGoods(item)"  v-for="item in recommendGoods" :key="item.id">
               <div class="learn-img pull-left">
-                  <img :src="item.images.small" alt="">
+                  <img :src="item.images.middle" alt="">
               </div>
               <div class="learn-text pull-right">
                   <p class="learn-text__title">{{ item.title }}</p>
