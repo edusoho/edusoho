@@ -294,7 +294,6 @@
 	}
 
 	.vip-open {
-		height: vw(76);
 		margin: vw(16) 0 vw(14);
 		padding: 0 vw(8);
 
@@ -349,6 +348,17 @@
 				font-size: vw(16);
 				line-height: 20px;
 			}
+		}
+
+		.vip-open__buy {
+			height: vw(45);
+			margin: vw(14) vw(6) 0;
+			color: #926200;
+			font-size: vw(16);
+			line-height: vw(45);
+			text-align: center;
+			background-image: linear-gradient(#ffe8a5, #ffe8a5);
+			border-radius: vw(20);
 		}
 	}
 }

@@ -51,6 +51,8 @@
             </swiper-slide>
           </template>
         </swiper>
+
+        <div class="vip-open__buy" @click="clickVipBuy">{{ vipBuyStatu }}</div>
       </div>
     </div>
   </div>
@@ -117,6 +119,10 @@ export default {
     currentVipInfo() {
       return this.levels[this.activeIndex];
     },
+
+    vipBuyStatu() {
+      return '续费12个月会员特权';
+    },
   },
   created() {
     this.getVipDetail();
@@ -178,6 +184,11 @@ export default {
 
     clickPriceItem(value) {
       this.activePriceId = value;
+    },
+
+    // 购买 vip
+    clickVipBuy() {
+      console.log('购买 vip');
     },
   },
 };
