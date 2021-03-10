@@ -2,6 +2,7 @@
   <div class="vip-detail">
     <e-loading v-if="isLoading" />
 
+    <!-- 轮播图 -->
     <div class="vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
         <swiper-slide v-for="(item, index) in levels" :key="index">
@@ -21,6 +22,23 @@
           </div>
         </swiper-slide>
       </swiper>
+    </div>
+
+    <!-- 开通会员 -->
+    <div class="vip-sec">
+      <div class="vip-sec__title">
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+        <span class="vip-sec__text">选择开通时长</span>
+        <div class="vip-sec__style">
+          <span class="style style--first"></span>
+          <span class="style style--second"></span>
+          <span class="style style--third"></span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -119,7 +137,7 @@ export default {
       this.initSwiperActiveIndex();
     },
 
-    // 首次进入，切换到对于会员
+    // 首次进入，切换到对应会员
     initSwiperActiveIndex() {
       this.$nextTick(() => {
         this.$refs.mySwiper.$swiper.slideTo(this.activeIndex, 1000);
