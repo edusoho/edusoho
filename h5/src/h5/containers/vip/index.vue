@@ -146,6 +146,7 @@
           :more-type="'vip'"
           :level-id="Number(currentVipInfo.id)"
           :type-list="'course_list'"
+          class="vip-course-list"
         />
 
         <!-- 会员免费班级 -->
@@ -156,6 +157,7 @@
           :course-list="classroomData"
           :vip-name="currentVipInfo.name"
           :type-list="'classroom_list'"
+          class="vip-course-list"
         />
       </div>
     </div>
@@ -231,28 +233,28 @@ export default {
     },
 
     courseData() {
-      const data = this.currentVipInfo.courses.data;
+      const { data, paging } = this.currentVipInfo.courses;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: '会员课程',
+        title: `会员课程(${paging.total})`,
         source: {},
         limit: 4,
       };
-      dataFormat.items = data;
+      dataFormat.items = data.slice(0, 3);
       return dataFormat;
     },
 
     classroomData() {
-      const data = this.currentVipInfo.classrooms.data;
+      const { data, paging } = this.currentVipInfo.classrooms;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: '会员班级',
+        title: `会员班级(${paging.total})`,
         source: {},
         limit: 4,
       };
-      dataFormat.items = data;
+      dataFormat.items = data.slice(0, 3);
       return dataFormat;
     },
   },
