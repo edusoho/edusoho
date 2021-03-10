@@ -7,8 +7,6 @@ use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomSignStatisticsExporter extends Exporter
 {
-    protected $classroomId;
-
     protected $orderBy;
 
     //定义导出标题
@@ -27,7 +25,7 @@ class ClassroomSignStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $members = $this->getClassroomService()->searchMembersSignStatistics(
-            $this->classroomId,
+            $this->conditions['classroomId'],
             $this->conditions,
             [],
             $start,
@@ -65,11 +63,11 @@ class ClassroomSignStatisticsExporter extends Exporter
     //下载权限判断
     public function canExport()
     {
-        if (empty($this->classroomId)) {
+        if (empty($this->conditions['classroomId'])) {
             return false;
         }
 
-        if ($this->getClassroomService()->canManageClassroom($this->classroomId)) {
+        if ($this->getClassroomService()->canManageClassroom($this->conditions['classroomId'])) {
             return true;
         }
 
@@ -79,32 +77,12 @@ class ClassroomSignStatisticsExporter extends Exporter
     //获得导出总条数
     public function getCount()
     {
-        return $this->getClassroomService()->countClassrooms($this->conditions);
+        return $this->getClassroomService()->searchMemberCount($this->conditions);
     }
 
     //构建查询条件
     public function buildCondition($conditions)
     {
-        $this->classroomId = $conditions['classroomId'];
-
-        return $conditions;
-    }
-
-    protected function fillOrgCode($conditions)
-    {
-        if ($this->getSettingService()->node('magic.enable_org')) {
-            if (!isset($conditions['orgCode'])) {
-                $conditions['likeOrgCode'] = $this->getUser()->getSelectOrgCode();
-            } else {
-                $conditions['likeOrgCode'] = $conditions['orgCode'];
-                unset($conditions['orgCode']);
-            }
-        } else {
-            if (isset($conditions['orgCode'])) {
-                unset($conditions['orgCode']);
-            }
-        }
-
         return $conditions;
     }
 

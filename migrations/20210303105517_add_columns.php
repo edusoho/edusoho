@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class addColumns extends Migration
+class AddColumns extends Migration
 {
     /**
      * Do the migration

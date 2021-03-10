@@ -96,8 +96,8 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
         $conditions = ['classroomId' => 1];
         $this->mockBiz('Classroom:ClassroomService', [
             [
-                'functionName' => 'countClassrooms',
-                'withParams' => [$conditions],
+                'functionName' => 'getClassroomStudentCount',
+                'withParams' => [$conditions['classroomId']],
                 'returnValue' => 10,
             ],
         ]);
