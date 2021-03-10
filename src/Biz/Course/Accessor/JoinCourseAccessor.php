@@ -3,6 +3,7 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
+use Biz\Course\Service\CourseSetService;
 
 class JoinCourseAccessor extends AccessorAdapter
 {
@@ -12,11 +13,12 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.not_found');
         }
 
-        if ('draft' === $course['status']) {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ('draft' === $course['status'] || 'draft' == $courseSet['status']) {
             return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
-        if ('closed' === $course['status']) {
+        if ('closed' === $course['status'] || 'closed' == $courseSet['status']) {
             return $this->buildResult('course.closed', array('courseId' => $course['id']));
         }
 
@@ -49,5 +51,13 @@ class JoinCourseAccessor extends AccessorAdapter
         }
 
         return false;
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 }

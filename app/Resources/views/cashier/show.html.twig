@@ -5,15 +5,20 @@
 
 {% set step = '2' %}
 {% block order_body %}
-  {% if not product.productEnable %}
+  {% set message = slot('cashier.product.warn_message', {'product': product}) %}
+  {% if message %}
+    <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+      {{ message }}
+    </div>
+  {% elseif product.productEnable %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ ('pay_center.'~product.targetType~'.close')|trans }}
     </div>
-    {% elseif unablePay %}
+  {% elseif unablePay %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ 'pay_center.pay.unable_pay.tips'|trans }}
     </div>
-    {% else %}
+  {% else %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ 'pay_center.pay.submit_tips'|trans }}
     </div>
