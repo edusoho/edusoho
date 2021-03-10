@@ -21,18 +21,7 @@
       <form class="form-inline pull-right padding-no hidden-xs" action="{{path('admin_v2_information_collect_detail', {id:event.id})}}" method="get" novalidate>
         <div class="form-group">
           <select class="form-control" name="keywordType">
-            {% set options = {
-              nickname: 'user.fields.username_label'|trans,
-              mobile: 'admin.information_collect.user.mobile'|trans,
-            } %}
-            {% for label in labels if labels|default('') %}
-              {% if 'name' == label.code %}
-                {% set options = options|merge({ 'truename': 'user.fields.truename_label'|trans}) %}
-              {% endif %}
-              {% if 'idcard' == label.code %}
-                {% set options = options|merge({ 'idcard': 'user.fields.idcard_label'|trans}) %}
-              {% endif %}
-            {% endfor %}
+            {% set options = information_collect_select(labels) %}
             {{ select_options(options, request.get('keywordType')) }}
           </select>
           <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{ 'form.placeholder.keyword'|trans }}">
