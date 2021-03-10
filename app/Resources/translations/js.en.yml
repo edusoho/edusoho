@@ -1805,4 +1805,4 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 vip_setting.auto_component_show.auto_tip: The member module will be automatically displayed on the home page of PC/APP/H5, and the created member level will be displayed in the member module on the home page
 vip_setting.auto_component_show.non_auto_tip: In the management of backstage - operation - network school decoration configuration member function in the PC/APP/H5 terminal exposed
-vip_setting.submit_tip: Turning off the membership function switch will affect all ongoing membership activities and will result in the closure of the published membership level. All members will be cancelled and cannot enjoy the membership benefits."Member module", "member center" and other pages will be hidden on the student side.Do you want to continue?
+vip_setting.submit_tip: When the member function is turned off, pages such as "member module" and "member center" will be hidden in the student side, and students cannot see the member area.Members may continue to enjoy the benefits of membership until their membership expires.
