@@ -366,7 +366,7 @@ finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
-finance.max_deduction_rate: 'Maximum deduction rate'
+finance.max_deduction_rate: 'Maximum coin deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
@@ -593,7 +593,7 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
-pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.course.close: The course in this order has been closed.
 pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
 pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
