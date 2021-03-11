@@ -1802,7 +1802,3 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">Do not open more tasks to learn at the same time</p>
   <p class="kick-each-other">Don’t multitask !</p>
-
-vip_setting.auto_component_show.auto_tip: The member module will be automatically displayed on the home page of PC/APP/H5, and the created member level will be displayed in the member module on the home page
-vip_setting.auto_component_show.non_auto_tip: In the management of backstage - operation - network school decoration configuration member function in the PC/APP/H5 terminal exposed
-vip_setting.submit_tip: Turning off the membership function switch will affect all ongoing membership activities and will result in the closure of the published membership level. All members will be cancelled and cannot enjoy the membership benefits."Member module", "member center" and other pages will be hidden on the student side.Do you want to continue?
