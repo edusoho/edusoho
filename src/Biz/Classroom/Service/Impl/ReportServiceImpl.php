@@ -186,7 +186,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             switch ($filterConditions['filter']) {
                 case 'unLearnedSevenDays':
                     $startTime = strtotime(date('Y-m-d', strtotime('-7 days')));
-                    $conditions['lastLearnTime_GTE'] = $startTime;
+                    $conditions['lastLearnTime_LT'] = $startTime;
                     $conditions['learnedCompulsoryTaskNum_LT'] = $classroom['compulsoryTaskNum'];
                     break;
                 case 'unFinished':

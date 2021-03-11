@@ -843,6 +843,7 @@ class ClassroomManageController extends BaseController
 
     public function courseDetailModal(Request $request, $id)
     {
+//        $course = $this->getReportService()
     }
 
     public function courseItemsSortAction(Request $request, $id)
