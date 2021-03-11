@@ -12,11 +12,11 @@ class DataLabController extends BaseController
 {
     public function dataAction(Request $request)
     {
-        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array(), $request->isSecure());
+        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', [], $request->isSecure());
 
-        return $this->render('admin-v2/cloud-center/data-lab/data.html.twig', array(
+        return $this->render('admin-v2/cloud-center/data-lab/data.html.twig', [
             'url' => $url,
-        ));
+        ]);
     }
 
     public function setttingAction(Request $request)
@@ -48,24 +48,24 @@ class DataLabController extends BaseController
 
     private function setSiteTrace($enable)
     {
-        $siteTraceSetting = $this->getSettingService()->get('siteTrace', array());
+        $siteTraceSetting = $this->getSettingService()->get('siteTrace', []);
 
         $biz = $this->getBiz();
-        $siteSetting = $this->getSettingService()->get('site', array());
-        $result = $biz['qiQiuYunSdk.esOp']->getTraceScript(array(
+        $siteSetting = $this->getSettingService()->get('site', []);
+        $result = $biz['qiQiuYunSdk.esOp']->getTraceScript([
             'site_name' => empty($siteSetting['name']) ? 'EDUSOHO测试站' : $siteSetting['name'],
             'domain' => $this->container->get('request_stack')->getCurrentRequest()->getHost(),
             'enable' => $enable,
-        ));
+        ]);
 
-        $magic = $this->getSettingService()->get('magic', array());
+        $magic = $this->getSettingService()->get('magic', []);
 
         $enable = isset($magic['site_trace_enable']) ? $magic['site_trace_enable'] : $enable;
 
-        $siteTraceSetting = array(
+        $siteTraceSetting = [
             'enabled' => $enable,
             'script' => $result['script'],
-        );
+        ];
 
         $this->getSettingService()->set('siteTrace', $siteTraceSetting);
     }
@@ -76,15 +76,15 @@ class DataLabController extends BaseController
         $xapiSdkValue = 0 === $enable ? false : true;
         $xapiSdk->setting('xapiUpload', $xapiSdkValue);
 
-        $xapiSetting = $this->getSettingService()->get('xapi', array());
+        $xapiSetting = $this->getSettingService()->get('xapi', []);
         $xapiSetting['enabled'] = $enable;
         $xapiSetting = $this->getSettingService()->set('xapi', $xapiSetting);
 
         $user = $this->getUser();
         $logText = $xapiSdkValue ? 'xapi的设置上报开启' : 'xapi的上报关闭';
-        $this->getLogService()->info('datalab', 'set_xapi_setting', $logText, array('enabled' => $enable, 'userId' => $user['id']));
+        $this->getLogService()->info('datalab', 'set_xapi_setting', $logText, ['enabled' => $enable, 'userId' => $user['id']]);
 
-        return $this->createJsonResponse(array('success' => 1));
+        return $this->createJsonResponse(['success' => 1]);
     }
 
     /**
