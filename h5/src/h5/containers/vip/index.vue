@@ -26,19 +26,7 @@
 
     <!-- 开通会员 -->
     <div class="vip-sec">
-      <div class="vip-sec__title">
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-        <span class="vip-sec__text">选择开通时长</span>
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-      </div>
+      <module-title title="选择开通时长" />
       <div class="vip-open">
         <swiper :options="vipOpenSwiperOption">
           <template v-for="item in currentVipInfo.sellModes">
@@ -58,19 +46,7 @@
 
     <!-- 专属权益 -->
     <div class="vip-sec">
-      <div class="vip-sec__title">
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-        <span class="vip-sec__text">专属权益</span>
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-      </div>
+      <module-title title="专属权益" />
       <div class="vip-interest">
         <div
           class="vip-interest__item"
@@ -103,19 +79,7 @@
 
     <!-- 专属介绍 -->
     <div class="vip-sec">
-      <div class="vip-sec__title">
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-        <span class="vip-sec__text">专属介绍</span>
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-      </div>
+      <module-title title="专属介绍" />
       <div
         class="vip-introduce"
         v-html="currentVipInfo.description || '暂无介绍'"
@@ -124,19 +88,7 @@
 
     <!-- 专属特权 -->
     <div class="vip-sec">
-      <div class="vip-sec__title">
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-        <span class="vip-sec__text">专属特权</span>
-        <div class="vip-sec__style">
-          <span class="style style--first"></span>
-          <span class="style style--second"></span>
-          <span class="style style--third"></span>
-        </div>
-      </div>
+      <module-title title="专属特权" />
       <div class="vip-privilege">
         <!-- 会员免费课程 -->
         <e-course-list
@@ -172,6 +124,7 @@ import * as types from '@/store/mutation-types';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
 
+import ModuleTitle from './module-title';
 import PriceItem from './price-item';
 import ECourseList from '&/components/e-course-list/e-course-list';
 
@@ -179,6 +132,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
+    ModuleTitle,
     PriceItem,
     ECourseList,
   },
