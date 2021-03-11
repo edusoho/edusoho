@@ -1755,7 +1755,3 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">请勿同时多开任务学习</p>
   <p class="kick-each-other">不要一心多用哦！</p>
-
-vip_setting.auto_component_show.auto_tip: 在PC/APP/H5首页自动露出会员模块，并将创建好的会员等级在首页会员模块中展示
-vip_setting.auto_component_show.non_auto_tip: 在管理后台-运营-网校装修下配置会员功能在PC/APP/H5端的露出
-vip_setting.submit_tip: 会员功能关闭后，学员侧将隐藏「会员模块」「会员中心」等页面，学员无法看到会员专区。会员身份的学员可继续享受会员权益，直到会员身份到期。
