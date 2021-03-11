@@ -10,7 +10,7 @@
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ message }}
     </div>
-  {% elseif product.productEnable %}
+  {% elseif not product.productEnable %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ ('pay_center.'~product.targetType~'.close')|trans }}
     </div>
