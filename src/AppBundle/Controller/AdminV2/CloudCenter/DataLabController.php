@@ -54,7 +54,7 @@ class DataLabController extends BaseController
         $siteSetting = $this->getSettingService()->get('site', array());
         $result = $biz['qiQiuYunSdk.esOp']->getTraceScript(array(
             'site_name' => empty($siteSetting['name']) ? 'EDUSOHO测试站' : $siteSetting['name'],
-            'domain' => $this->getRequest()->getHost(),
+            'domain' => $this->container->get('request_stack')->getCurrentRequest()->getHost(),
             'enable' => $enable,
         ));
 
