@@ -273,7 +273,7 @@ export default {
         case 'member.not_found':
           return '用户未加入班级';
         case 'member.auditor':
-          return '用户是旁听生';
+          return '用户是旁听生，请前往商品页购买';
         case 'member.expired':
           return '班级已过期';
         case 'vip.vip_closed':
