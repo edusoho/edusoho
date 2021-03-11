@@ -172,6 +172,7 @@ class ThemeController extends BaseController
             $template,
             array(
                 'config' => $config,
+                'code' => $code,
             )
         );
     }

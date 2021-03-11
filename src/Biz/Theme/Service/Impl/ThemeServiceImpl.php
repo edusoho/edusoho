@@ -2,11 +2,12 @@
 
 namespace Biz\Theme\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\System;
 use Biz\BaseService;
 use Biz\Theme\Service\ThemeService;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
-use AppBundle\System;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThemeServiceImpl extends BaseService implements ThemeService
 {
@@ -46,7 +47,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             return false;
         }
 
-        if (in_array($currentTheme['name'], array($this->themeName))) {
+        if (in_array($currentTheme['name'], [$this->themeName])) {
             return true;
         }
 
@@ -55,13 +56,13 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     public function createThemeConfig($name, $config)
     {
-        return $this->getThemeConfigDao()->create(array(
+        return $this->getThemeConfigDao()->create([
             'name' => $name,
             'config' => $config,
             'updatedTime' => time(),
             'createdTime' => time(),
             'updatedUserId' => $this->getCurrentUser()->id,
-        ));
+        ]);
     }
 
     public function editThemeConfig($name, $config)
@@ -70,6 +71,23 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $config['updatedUserId'] = $this->getCurrentUser()->id;
 
         return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
+    }
+
+    public function putAwayVipComponent()
+    {
+        $currentTheme = $this->getCurrentThemeConfig();
+        $confirmConfig = ArrayToolkit::index($currentTheme['confirmConfig']['blocks']['left'], 'id');
+
+        if (!isset($confirmConfig['VipComponent'])) {
+            $defaultConfig = ArrayToolkit::index($this->defaultConfig['blocks']['left'], 'id');
+            $vipConfig = isset($defaultConfig['VipComponent']) ? $defaultConfig['VipComponent'] : [];
+            if ($vipConfig) {
+                $currentTheme['config']['blocks']['left'] = array_merge($currentTheme['config']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
+                $currentTheme['confirmConfig']['blocks']['left'] = array_merge($currentTheme['confirmConfig']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
+                $this->editThemeConfig($currentTheme['name'], ['confirmConfig' => $currentTheme['confirmConfig']]);
+                $this->editThemeConfig($currentTheme['name'], ['config' => $currentTheme['config']]);
+            }
+        }
     }
 
     public function getThemeConfigByName($name)
@@ -129,18 +147,18 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             return $this->createThemeConfig($currentTheme['name'], $config);
         }
 
-        return $this->editThemeConfig($currentTheme['name'], array(
+        return $this->editThemeConfig($currentTheme['name'], [
             'config' => $config,
-        ));
+        ]);
     }
 
     public function saveConfirmConfig()
     {
         $currentTheme = $this->getCurrentThemeConfig();
 
-        return $this->editThemeConfig($currentTheme['name'], array(
+        return $this->editThemeConfig($currentTheme['name'], [
             'confirmConfig' => $currentTheme['config'],
-        ));
+        ]);
     }
 
     public function resetConfig()
@@ -205,8 +223,8 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $code = empty($currentTheme['code']) ? '' : $currentTheme['code'];
         $parameters = $rootDir."/web/themes/{$code}/config/parameter.json";
         if (!is_file($parameters)) {
-            $this->defaultConfig = array();
-            $this->allConfig = array();
+            $this->defaultConfig = [];
+            $this->allConfig = [];
             $this->themeName = null;
         } else {
             $parameters = file_get_contents($parameters);
