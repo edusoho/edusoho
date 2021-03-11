@@ -33,7 +33,7 @@ class ReportServiceTest extends BaseTestCase
 
         $member1 = $this->getClassroomService()->becomeStudent($classroom['id'], $user1['id'], []);
         $member2 = $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id'], []);
-        $member1JoinTime = strtotime('yesterday');
+        $member1JoinTime = strtotime('-1day');
         $member2JoinTime = strtotime('-5days');
         $this->getClassroomMemberDao()->update($member1['id'], ['createdTime' => $member1JoinTime]);
         $this->getClassroomMemberDao()->update($member2['id'], ['createdTime' => $member2JoinTime]);
