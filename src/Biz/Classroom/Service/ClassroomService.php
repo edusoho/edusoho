@@ -13,10 +13,11 @@ interface ClassroomService
      * @param $orderBy
      * @param $start
      * @param $limit
+     * @param $columns
      *
      * @return mixed
      */
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBy, $start, $limit, array $columns = []);
 
     public function findClassroomsByIds(array $ids);
 
@@ -286,6 +287,8 @@ interface ClassroomService
     public function appendHasCertificate(array $classrooms);
 
     public function hasCertificate($classroomId);
+
+    public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit);
 
     public function updateClassroomMembersFinishedStatus($classroomId);
 

@@ -45,7 +45,9 @@
             </td>
             <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
             <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
-            <td>{{'admin.course_manage.statistics.income_RMB'|trans}}</td>
+            {% if filter != 'classroom' %}
+              <td>{{'admin.course_manage.statistics.income_RMB'|trans}}</td>
+            {% endif %}
             <td>{{'admin.course_manage.operater'|trans}}</td>
           </tr>
           
@@ -69,7 +71,9 @@
               <td>{{courseSet.compulsorTaskCount|default()}}{% if courseSet.electiveTaskNum %}（{{courseSet.electiveTaskNum}}）{% endif %}</td>
               <td>{{courseSet.studentNum|default()}}</td>
               <td>{{courseSet.isLearnedNum|default(0)}}</td>
-              <td>{{courseSet.income|default()}}</td>
+              {% if filter != 'classroom' %}
+                <td>{{courseSet.income|default()}}</td>
+              {% endif %}
               <td>
                 <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'admin.course_manage.statistics.watch_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
               </td>

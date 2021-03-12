@@ -127,13 +127,17 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getSubject();
 
         $specs = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
+        if (empty($specs)) {
+            return;
+        }
+
         $conditions = [
             'target_id' => $specs['id'],
             'target_type' => 'course',
             'statuses' => ['paid', 'success', 'finished'],
         ];
 
-        $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
+        $income = $this->getOrderFacadeService()->sumOrderPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);
 
         $this->getCourseDao()->update($course['id'], ['income' => $income]);

@@ -68,7 +68,7 @@ class ClassroomMemberStatisticsExporter extends Exporter
     //获得导出总条数
     public function getCount()
     {
-        return $this->getClassroomService()->countClassrooms($this->conditions);
+        return $this->getClassroomService()->getClassroomStudentCount($this->conditions['classroomId']);
     }
 
     //构建查询条件

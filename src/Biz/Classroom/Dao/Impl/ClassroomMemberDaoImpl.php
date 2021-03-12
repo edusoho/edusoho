@@ -146,6 +146,39 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         return $builder->execute()->fetchAll() ?: [];
     }
 
+    public function searchSignStatisticsByClassroomId($classroomId, array $conditions, array $orderBys, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $userIds = $this->db()->fetchAll("SELECT userId FROM {$this->table} WHERE classroomId = ?", [$classroomId]);
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $conditions['classroomId'] = empty($conditions['classroomId']) ? $classroomId : $conditions['classroomId'];
+        $userIdsMarks = implode(',', array_column($userIds, 'userId'));
+
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("{$this->table}.*, 
+                IF(m.signDays, m.signDays, 0) AS signDays, 
+                IF(m.keepDays, m.keepDays, 0) AS keepDays,
+                IF(m.lastSignTime, m.lastSignTime, 0) AS lastSignTime
+            ")->leftJoin(
+                $this->table,
+                "(SELECT * FROM sign_user_statistics WHERE userId IN ({$userIdsMarks}) AND targetType = 'classroom_sign' AND targetId = {$classroomId})",
+                'm',
+                "m.userId = {$this->table}.userId"
+            )->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        foreach ($orderBys as $sort => $order) {
+            if (in_array($sort, ['keepDays', 'signDays'])) {
+                $builder->addOrderBy($sort, $order);
+            }
+        }
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function findDailyIncreaseDataByClassroomIdAndRoleWithTimeRange($classroomId, $role, $startTime, $endTime, $format = '%Y-%m-%d')
     {
         $sql = "SELECT count(*) as count, from_unixtime(createdTime, '{$format}') as date
@@ -172,7 +205,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'noteNum > :noteNumGreaterThan',
                 'role LIKE :role',
                 'role IN (:roles)',
-                'userId IN ( :userIds)',
+                "{$this->table}.userId IN ( :userIds)",
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LTE',

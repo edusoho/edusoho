@@ -43,11 +43,11 @@ use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit, array $columns = [])
     {
         $conditions = $this->_prepareConditions($conditions);
 
-        return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function findClassroomsByIds(array $ids)
@@ -2296,6 +2296,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             unset($conditions['categoryId']);
         }
 
+        if (!empty($conditions['nameLike'])) {
+            $users = $this->getUserService()->searchUsers(['nickname' => "%{$conditions['nameLike']}%"], [], 0, PHP_INT_MAX, ['id']);
+            $conditions['userIds'] = empty($users) ? [-1] : array_column($users, 'id');
+        }
+
         return $conditions;
     }
 
@@ -2414,6 +2419,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return !$vipNonExpired;
+    }
+
+    public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit)
+    {
+        if (!isset($conditions['classroomId'])) {
+            $conditions['classroomId'] = $classroomId;
+        }
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->searchSignStatisticsByClassroomId($classroomId, $conditions, $orderBy, $start, $limit);
     }
 
     public function appendHasCertificate(array $classrooms)
