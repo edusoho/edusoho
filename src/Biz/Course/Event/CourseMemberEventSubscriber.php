@@ -133,7 +133,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'statuses' => ['paid', 'success', 'finished'],
         ];
 
-        $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
+        $income = $this->getOrderFacadeService()->sumOrderPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);
 
         $this->getCourseDao()->update($course['id'], ['income' => $income]);

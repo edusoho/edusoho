@@ -17,7 +17,7 @@ interface OrderFacadeService
 
     public function isOrderPaid($orderId);
 
-    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade');
+    public function createSpecialOrder(Product $product, $userId, $params = [], $type = 'OrderFacade');
 
     /**
      * @param $targetType
@@ -30,6 +30,8 @@ interface OrderFacadeService
     public function getOrderProductByOrderItem($orderItem);
 
     public function checkOrderBeforePay($sn, $params);
+
+    public function sumOrderPayAmount($conditions);
 
     public function sumOrderItemPayAmount($conditions);
 
