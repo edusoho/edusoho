@@ -5,7 +5,6 @@ namespace Biz\OrderFacade\Service\Impl;
 use AppBundle\Common\MathToolkit;
 use Biz\BaseService;
 use Biz\Order\OrderException;
-use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -204,6 +203,14 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function sumOrderItemPayAmount($conditions)
     {
         return $this->getOrderService()->sumOrderItemPayAmount($conditions);
+    }
+
+    public function sumOrderPayAmount($conditions)
+    {
+        $orderItems = $this->getOrderService()->searchOrderItems($conditions, [], 0, PHP_INT_MAX, ['order_id']);
+        $paidAmount = empty($orderItems) ? 0 : $this->getOrderService()->sumPaidAmount(['ids' => array_column($orderItems, 'order_id')]);
+
+        return empty($paidAmount['payAmount']) ? 0 : $paidAmount['payAmount'];
     }
 
     public function checkOrderBeforePay($sn, $params)

@@ -100,7 +100,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             'statuses' => ['paid', 'success', 'finished'],
         ];
 
-        $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
+        $income = $this->getOrderFacadeService()->sumOrderPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);
 
         $this->getClassroomDao()->update($classroom['id'], ['income' => $income]);
