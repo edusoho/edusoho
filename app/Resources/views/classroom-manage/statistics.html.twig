@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 {% block title %}{{'classroom.manage.data_statictics'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'data-statistics' %}
-{#{% do script(['app/js/classroom-manage/set-assistants/index.js']) %}#}
+{% do script(['libs/echarts.js', 'app/js/classroom-manage/statistics/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default">
@@ -10,6 +10,8 @@
     <div class="panel-body">
       <div class="classroom-manage-statistics">
         {% include 'classroom-manage/statistics/overview.html.twig' %}
+        {% include 'classroom-manage/statistics/student-trend.html.twig' %}
+        {% include 'classroom-manage/statistics/student-and-course-data.html.twig' %}
       </div>
     </div>
   </div>

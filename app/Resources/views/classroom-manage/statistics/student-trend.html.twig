@@ -1,0 +1,15 @@
+<!-- 学员趋势 -->
+<div class="statistics-body" id="js-student-trendency" data-classroom-id="{{ classroom.id }}">
+  <div class="statistics-header">
+    {{ 'course.dashboard.student_trend'|trans}}
+  </div>
+  <div id="date-range-picker">
+    <span class="select-content">
+      <input class="select-time-input js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
+      <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <a href="javascript:;" class="date-change is-date-change js-quick-day-pick week" data-days="7">{{ 'classroom.manage.data_statistics.student_trendency.select_seven_days'|trans }}</a>
+    <a href="javascript:;" class="date-change is-date-change js-quick-day-pick month" data-days="30">{{ 'classroom.manage.data_statistics.student_trendency.select_thrity_days'|trans }}</a>
+  </div>
+  <div class="stu-chart-container chart-container mtl" id="js-student-trendency-chart"></div>
+</div>

@@ -146,6 +146,15 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         return $builder->execute()->fetchAll() ?: [];
     }
 
+    public function findDailyIncreaseDataByClassroomIdAndRoleWithTimeRange($classroomId, $role, $startTime, $endTime, $format = '%Y-%m-%d')
+    {
+        $sql = "SELECT count(*) as count, from_unixtime(createdTime, '{$format}') as date
+                FROM {$this->table} WHERE `classroomId` = ? AND `role` LIKE ? AND createdTime > ? AND createdTime <= ? 
+                GROUP BY date ASC;";
+
+        return $this->db()->fetchAll($sql, [$classroomId, "%|{$role}|%", $startTime, $endTime]);
+    }
+
     public function declares()
     {
         return [
@@ -156,7 +165,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'teacherIds' => 'json',
                 'service' => 'json',
             ],
-            'orderbys' => ['name', 'createdTime', 'updatedTime', 'id', 'deadline'],
+            'orderbys' => ['name', 'createdTime', 'updatedTime', 'id', 'deadline', 'learnedCompulsoryTaskNum', 'lastLearnTime'],
             'conditions' => [
                 'userId = :userId',
                 'classroomId = :classroomId',
@@ -166,10 +175,21 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'userId IN ( :userIds)',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
+                'createdTime <= :createdTime_LTE',
+                'createdTime < :createdTime_LT',
                 'createdTime < :startTimeLessThan',
                 'updatedTime >= :updatedTime_GE',
                 'userId NOT IN ( :excludeUserIds )',
                 'isFinished = :isFinished',
+                'lastLearnTime >= :lastLearnTime_GTE',
+                'lastLearnTime <= :lastLearnTime_LTE',
+                'lastLearnTime > :lastLearnTime_GT',
+                'lastLearnTime < :lastLearnTime_LT',
+                'learnedCompulsoryTaskNum = :learnedCompulsoryTaskNum',
+                'learnedCompulsoryTaskNum > :learnedCompulsoryTaskNum_GT',
+                'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNum_LT',
+                'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNum_GTE',
+                'learnedCompulsoryTaskNum <= :learnedCompulsoryTaskNum_LTE',
             ],
         ];
     }

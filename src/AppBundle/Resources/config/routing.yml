@@ -2669,6 +2669,14 @@ classroom_data_statistics:
   path:  /classroom/{id}/manage/data/statistics
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:statistics }
 
+classroom_data_statistics_student_detail:
+  path: /classroom/{id}/manage/statistics/student/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:studentDetailList }
+
+classroom_data_statistics_course_detail:
+  path: /classroom/{id}/manage/statistics/course/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailList }
+
 classroom_manage_students_defined_show:
     path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }

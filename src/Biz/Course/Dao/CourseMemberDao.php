@@ -101,6 +101,10 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findByUserIdAndCourseIds($userId, $courseIds);
 
+    public function findByUserIdAndClassroomId($userId, $classroomId);
+
+    public function findByUserIdsAndClassroomId($userIds, $classroomId);
+
     public function findByCourseId($courseId);
 
     public function findUserIdsByCourseId($courseId);
