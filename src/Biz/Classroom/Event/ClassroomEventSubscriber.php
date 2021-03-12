@@ -4,6 +4,8 @@ namespace Biz\Classroom\Event;
 
 use AppBundle\Common\StringToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\MemberService;
+use Biz\Course\Service\CourseService;
 use Biz\Review\Service\ReviewService;
 use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\NotificationService;
@@ -16,15 +18,45 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return [
+            'course.statistics.update' => 'onCourseStatisticsUpdate',
             'classroom.delete' => 'onClassroomDelete',
             'classroom.course.create' => 'onClassroomCourseChange',
             'classroom.course.delete' => 'onClassroomCourseChange',
             'classroom.course.update' => 'onClassroomCourseChange',
-
             'review.create' => 'onReviewChanged',
             'review.update' => 'onReviewChanged',
             'review.delete' => 'onReviewChanged',
         ];
+    }
+
+    public function onCourseStatisticsUpdate(Event $event)
+    {
+        $course = $event->getSubject();
+        if ($course['parentId'] > 0) {
+            $needFields = [
+                'compulsoryTaskNum',
+                'electiveTaskNum',
+                'lessonNum',
+            ];
+            $updatedFields = $event->getArgument('updatedFields');
+            $arr = array_intersect($needFields, $updatedFields);
+            if (!empty($arr)) {
+//                $this->getClassroomService()->updateClassroomMembersFinishedStatus()
+            }
+        }
+    }
+
+    public function onCourseTaskDelete(Event $event)
+    {
+        $task = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if (empty($course)) {
+            return;
+        }
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
+        }
     }
 
     public function onClassroomDelete(Event $event)
@@ -118,5 +150,21 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getReviewService()
     {
         return $this->getBiz()->service('Review:ReviewService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getClassroomMemberService()
+    {
+        return $this->getBiz()->service('Classroom:MemberService');
     }
 }

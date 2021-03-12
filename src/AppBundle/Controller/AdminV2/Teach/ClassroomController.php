@@ -27,7 +27,7 @@ class ClassroomController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->countClassrooms($conditions),
-            10
+            20
         );
 
         $classroomInfo = $this->getClassroomService()->searchClassrooms(
