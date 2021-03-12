@@ -357,11 +357,6 @@ class ClassroomController extends BaseController
     public function courseStatisticsAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassroomService()->getClassroomStudentCount($id),
-            20
-        );
 
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
         $courseId = $request->query->get('courseId');
@@ -370,6 +365,12 @@ class ClassroomController extends BaseController
             $course = reset($classroomCourses);
             $courseId = $course['id'];
         }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            empty($courseId) ? 0 : $this->getTaskService()->countTasks(['courseId' => $courseId]),
+            20
+        );
 
         $tasks = empty($courseId) ? [] : $this->getTaskService()->searchTasksWithStatistics(['courseId' => $courseId], ['id' => 'ASC'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         foreach ($tasks as &$task) {
