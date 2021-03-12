@@ -972,6 +972,7 @@ class ClassroomServiceTest extends BaseTestCase
                         [],
                         0,
                         5,
+                        [],
                     ],
                 ],
             ]

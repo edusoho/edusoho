@@ -5121,7 +5121,7 @@ admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括�
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.name: 任务名称
 admin.course_manage.statistics.data.task_type: 任务类型
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
@@ -11556,6 +11556,28 @@ exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
 exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
 exam_bank.analysis.data_large_loading_btn: 强制刷新
 activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准
+
+classroom.manage.sign_statictics: 签到统计
+classroom.manage.sign_statictics.user_th: 用户
+classroom.manage.sign_statictics.sign_days_th: 签到总天数
+classroom.manage.sign_statictics.keep_days_th: 连续签到天数
+classroom.manage.sign_statictics.sign_today_th: 今日签到时间
+classroom.manage.sign_statictics.operate_th: 操作
+classroom.manage.sign_statictics.item: 详情
+classroom.manage.sign_statictics.name_placeholder: 请输入用户名
+classroom.manage.sign_statictics.search_btn: 搜索
+classroom.manage.sign_statictics.role.all: 全部角色
+classroom.manage.sign_statictics.role.head_teacher: 班主任
+classroom.manage.sign_statictics.role.teacher: 老师
+classroom.manage.sign_statictics.role.assistant: 助教
+classroom.manage.sign_statictics.role.student: 正式学员
+classroom.manage.sign_statictics.role.auditor: 旁听生
+classroom.manage.sign_statictics.modal_title: %nickname%签到详情
+classroom.manage.sign_statictics.sign_type: 行为记录
+classroom.manage.sign_statictics.sign_time: 签到时间
+classroom.manage.sign_statictics.nickname_th: 用户名
+classroom.manage.sign_statictics.role_th: 角色
+classroom.manage.sign_statictics.join_time_th: 加入班级时间
 
 admin.classroom_manage.statistics.creator_placeholder: 创建者
 admin.classroom_manage.statistics.name_th: 班级名称

@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class ClassroomMemberAddColumns extends Migration
+class AlterClassroomMember extends Migration
 {
     /**
      * Do the migration

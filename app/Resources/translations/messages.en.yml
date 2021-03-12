@@ -10301,6 +10301,28 @@ exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because
 exam_bank.analysis.data_large_loading_btn: Force refresh
 activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
 
+classroom.manage.sign_statictics: Sign Statistics
+classroom.manage.sign_statictics.user_th: Username
+classroom.manage.sign_statictics.sign_days_th: Sign Days
+classroom.manage.sign_statictics.keep_days_th: Keep Days
+classroom.manage.sign_statictics.sign_today_th: Sign Today
+classroom.manage.sign_statictics.operate_th: Operate
+classroom.manage.sign_statictics.item: Item
+classroom.manage.sign_statictics.name_placeholder: Please enter username
+classroom.manage.sign_statictics.search_btn: Search
+classroom.manage.sign_statictics.role.all: All
+classroom.manage.sign_statictics.role.header_teacher: Header Teacher
+classroom.manage.sign_statictics.role.teacher: Teacher
+classroom.manage.sign_statictics.role.assistant: Assistant
+classroom.manage.sign_statictics.role.student: Student
+classroom.manage.sign_statictics.role.auditor: Auditor
+classroom.manage.sign_statictics.modal_title: %nickname%Item
+classroom.manage.sign_statictics.sign_type: Sign Type
+classroom.manage.sign_statictics.sign_time: Sign Time
+classroom.manage.sign_statictics.nickname_th: Nickname
+classroom.manage.sign_statictics.role_th: Role
+classroom.manage.sign_statictics.join_time_th: Join Time
+
 admin.classroom_manage.statistics.creator_placeholder: Creator
 admin.classroom_manage.statistics.name_th: Classroom
 admin.classroom_manage.statistics.course_number_th: Course Number
