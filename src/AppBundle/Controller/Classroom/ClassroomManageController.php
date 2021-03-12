@@ -14,6 +14,7 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
+use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -29,6 +30,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -738,15 +740,25 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
             'role' => 'student',
         ]);
         $overview['auditorCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
             'role' => 'auditor',
         ]);
 
-        $overview['finishedStudentNum'] = 20;
-        $overview['sumLearnedTime'] = 1000;
-        $overview['averageLearnedTime'] = 100;
+        $overview['finishedStudentNum'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
+            'role' => 'student',
+            'isFinished' => 1,
+        ]);
+
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $overview['sumLearnedTime'] = empty($overview['studentCount']) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIds($courseIds);
+        $overview['averageLearnedTime'] = empty($overview['studentCount']) ? 0 : $overview['sumLearnedTime'] / $overview['studentCount'];
 
         return $this->render(
             'classroom-manage/statistics.html.twig',
@@ -755,6 +767,85 @@ class ClassroomManageController extends BaseController
                 'overview' => $overview,
             ]
         );
+    }
+
+    public function studentDetailListAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions = $request->query->all();
+        $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $studentDetailCount,
+            20
+        );
+
+        $membersDetail = $this->getReportService()->getStudentDetailList(
+            $id,
+            $conditions,
+            $conditions['orderBy'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($id), 'id');
+        $courses = array_slice($courses, 0, 20);
+        $userIds = ArrayToolkit::column($membersDetail, 'userId');
+
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+
+        return $this->render('classroom-manage/statistics/student-detail/detail-list.html.twig', [
+            'paginator' => $paginator,
+            'classroom' => $classroom,
+            'users' => $users,
+            'members' => $membersDetail,
+            'classroomCourses' => $courses,
+        ]);
+    }
+
+    public function studentDetailModalAction(Request $request, $classroomId, $userId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $member = $this->getReportService()->getStudentDetail($classroomId, $userId);
+        $user = $this->getUserService()->getUser($userId);
+        $classroomCourses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($classroomId), 'id');
+
+        return $this->render(
+            'classroom-manage/statistics/student-detail/student-data-modal.html.twig',
+            [
+                'classroom' => $classroom,
+                'user' => $user,
+                'classroomCourses' => $classroomCourses,
+                'member' => $member,
+            ]
+        );
+    }
+
+    public function courseDetailListAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions['titleLike'] = $request->query->get('nameLike');
+
+        $count = $this->getReportService()->getCourseDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $courseDetailList = $this->getReportService()->getCourseDetailList($id, $conditions, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        return $this->render('classroom-manage/statistics/course-detail/task-chart-data.html.twig', [
+            'classroom' => $classroom,
+            'paginator' => $paginator,
+            'tasks' => $courseDetailList,
+        ]);
+    }
+
+    public function courseDetailModal(Request $request, $id)
+    {
+        //        $course = $this->getReportService()
     }
 
     public function courseItemsSortAction(Request $request, $id)
@@ -1326,5 +1417,21 @@ class ClassroomManageController extends BaseController
     protected function getSignService()
     {
         return $this->createService('Sign:SignService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->getBiz()->service('Classroom:ReportService');
     }
 }

@@ -6,7 +6,9 @@ use AppBundle\Common\Exception\UnexpectedValueException;
 use AppBundle\Component\Export\Classroom\ClassroomCourseStatisticsExporter;
 use AppBundle\Component\Export\Classroom\ClassroomMemberStatisticsExporter;
 use AppBundle\Component\Export\Classroom\ClassroomSignStatisticsExporter;
+use AppBundle\Component\Export\Classroom\ClassroomStatisticsCoursesLearnExporter;
 use AppBundle\Component\Export\Classroom\ClassroomStatisticsExporter;
+use AppBundle\Component\Export\Classroom\ClassroomStatisticsStudentsLearnExporter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Factory
@@ -56,6 +58,8 @@ class Factory
             'classroom-member-statistics' => ClassroomMemberStatisticsExporter::class,
             'classroom-course-statistics' => ClassroomCourseStatisticsExporter::class,
             'classroom-sign-statistics' => ClassroomSignStatisticsExporter::class,
+            'classroom-statistics-students-learn' => ClassroomStatisticsStudentsLearnExporter::class,
+            'classroom-statistics-course-learn' => ClassroomStatisticsCoursesLearnExporter::class,
         ];
 
         $names = explode(':', $name);

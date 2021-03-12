@@ -114,7 +114,13 @@ interface MemberService
 
     public function batchCreateMembers($members);
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+    public function findCoursesByStudentIdAndCourseIds($userId, $courseIds);
+
+    public function findCourseMembersByUserIdAndCourseIds($userId, $courseIds);
+
+    public function findCourseMembersByUserIdAndClassroomId($userId, $classroomId);
+
+    public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId);
 
     public function becomeStudentByClassroomJoined($courseId, $userId);
 

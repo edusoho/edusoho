@@ -290,6 +290,10 @@ interface ClassroomService
 
     public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit);
 
+    public function updateClassroomMembersFinishedStatus($classroomId);
+
+    public function updateClassroomMemberFinishedStatus($classroomId, $userId);
+
     public function searchClassroomsWithStatistics($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);

@@ -10366,3 +10366,11 @@ classroom.manage.data_statistics.overview.finished_num: Finished Num
 classroom.manage.data_statistics.overview.sumtime: Sum LearnTime (minute)
 classroom.manage.data_statistics.overview.average_time: Average LearnTime (minute)
 classroom.manage.data_statistics.overview.finished_num_tips: Take the number of people who have reached 100% of the learning progress of all class hours in the class. If new courses or class hours are added to the class, the number of people who have completed the tasks will change accordingly.
+classroom.manage.data_statistics.student_trendency: Student trendency
+classroom.manage.data_statistics.student_trendency.select_seven_days: Seven Days
+classroom.manage.data_statistics.student_trendency.select_thrity_days: Thrity Days
+classroom.manage.data_statistics.student_detail_list.title: Student Detail
+classroom.manage.data_statistics.course_detail_list.title: Course Detail
+classroom.manage.data_statistics.student_detail_list.select_all: All
+classroom.manage.data_statistics.student_detail_list.select_un_finished: UnFinished
+classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: UnLearn Seven Days

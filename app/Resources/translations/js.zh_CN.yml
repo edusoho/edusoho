@@ -1761,3 +1761,6 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">请勿同时多开任务学习</p>
   <p class="kick-each-other">不要一心多用哦！</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
+classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生

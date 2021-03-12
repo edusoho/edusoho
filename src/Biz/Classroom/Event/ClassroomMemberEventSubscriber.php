@@ -15,20 +15,39 @@ class ClassroomMemberEventSubscriber extends EventSubscriber implements EventSub
             'course.task.finish' => 'onTaskFinish',
             'course_member.finished' => 'onCourseMemberFinished',
             'course.members.finish_data_refresh' => 'onCourseMembersFinishedRefresh',
+            'classroom.course.delete' => 'onClassroomCourseDelete',
         ];
+    }
+
+    public function onClassroomCourseDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
     }
 
     public function onCourseMembersFinishedRefresh(Event $event)
     {
         $course = $event->getSubject();
         $updatedMembers = $event->getArgument('updatedMembers');
+        if (!empty($course['parentId'])) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            if (empty($classroom)) {
+                return;
+            }
+            $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
+        }
     }
 
     public function onCourseMemberFinished(Event $event)
     {
         $member = $event->getSubject();
         $course = $event->getArgument('course');
-        if (empty($course['parentId'])) {
+        if (!empty($course['parentId'])) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            if (empty($classroom)) {
+                return;
+            }
+            $this->getClassroomService()->updateClassroomMemberFinishedStatus($classroom['id'], $member['userId']);
         }
     }
 

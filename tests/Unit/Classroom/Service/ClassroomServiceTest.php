@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Classroom\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\TimeMachine;
@@ -52,6 +53,36 @@ class ClassroomServiceTest extends BaseTestCase
         ]);
 
         $this->assertEquals(true, $this->getClassroomService()->hasCertificate(1));
+    }
+
+    public function testAppendSpecsInfo()
+    {
+        $classroom1 = [
+            'title' => '测试班级1',
+            'status' => 'draft',
+        ];
+
+        $classroom2 = [
+            'title' => '测试班级2',
+            'status' => 'draft',
+        ];
+        $classroom1 = $this->getClassroomService()->addClassroom($classroom1);
+        $classroom2 = $this->getClassroomService()->addClassroom($classroom2);
+        $classrooms = ArrayToolkit::index($this->getClassroomService()->appendSpecsInfo([$classroom1, $classroom2]), 'id');
+        self::assertCount(2, $classrooms);
+        self::assertNotEmpty($classrooms[$classroom1['id']]['spec']);
+        self::assertNotEmpty($classrooms[$classroom2['id']]['spec']);
+    }
+
+    public function testAppendSpecInfo()
+    {
+        $classroom1 = [
+            'title' => '测试班级1',
+            'status' => 'draft',
+        ];
+        $classroom1 = $this->getClassroomService()->addClassroom($classroom1);
+        $classroom1 = $this->getClassroomService()->appendSpecInfo($classroom1);
+        self::assertNotEmpty($classroom1['spec']);
     }
 
     public function testUpdateMemberDeadlineByMemberId()

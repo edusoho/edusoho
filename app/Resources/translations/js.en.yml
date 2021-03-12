@@ -1808,3 +1808,6 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">Do not open more tasks to learn at the same time</p>
   <p class="kick-each-other">Don’t multitask !</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
+classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement

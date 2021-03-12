@@ -146,6 +146,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
                 'classroomId =:classroomId',
                 'courseId = :courseId',
                 'disabled = :disabled',
+                'courseId IN (:courseIds)',
                 'classroomId IN (:classroomIds)',
             ],
         ];
