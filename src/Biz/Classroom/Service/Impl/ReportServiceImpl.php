@@ -68,9 +68,20 @@ class ReportServiceImpl extends BaseService implements ReportService
         $groupCourseMembers = ArrayToolkit::groupIndex($this->getCourseMemberService()->findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId), 'userId', 'courseId');
         foreach ($members as &$member) {
             $member['courseMembers'] = empty($groupCourseMembers[$member['userId']]) ? [] : $groupCourseMembers[$member['userId']];
+            $member['rate'] = empty($classroom['compulsoryTaskNum']) ? 0 : $this->getPercent($member['learnedCompulsoryTaskNum'], $classroom['compulsoryTaskNum']);
         }
 
         return $members;
+    }
+
+    public function getStudentDetail($classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $courseMembers = ArrayToolkit::index($this->getCourseMemberService()->findCourseMembersByUserIdAndClassroomId($userId, $classroomId), 'courseId');
+        $member['courseMembers'] = $courseMembers;
+
+        return $member;
     }
 
     public function getStudentDetailCount($classroomId, $filterConditions)
@@ -176,7 +187,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             switch ($filterConditions['filter']) {
                 case 'unLearnedSevenDays':
                     $startTime = strtotime(date('Y-m-d', strtotime('-7 days')));
-                    $conditions['lastLearnTime_GTE'] = $startTime;
+                    $conditions['lastLearnTime_LT'] = $startTime;
                     $conditions['learnedCompulsoryTaskNum_LT'] = $classroom['compulsoryTaskNum'];
                     break;
                 case 'unFinished':

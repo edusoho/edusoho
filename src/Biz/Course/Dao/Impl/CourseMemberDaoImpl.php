@@ -45,6 +45,9 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function findLastLearnTimeRecordStudents($userIds)
     {
+        if (empty($userIds)) {
+            return [];
+        }
         $marks = str_repeat('?,', count($userIds) - 1).'?';
 
         $childSql = "SELECT userId, max(lastLearnTime) as maxLastLearnTime FROM course_member  WHERE role = ? AND userId IN ($marks) AND finishedTime = 0 group by userId";
@@ -101,6 +104,10 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
+        if (empty($courseIds)) {
+            return [];
+        }
+
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
 
@@ -116,6 +123,9 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function findByUserIdsAndClassroomId($userIds, $classroomId)
     {
+        if (empty($userIds)) {
+            return [];
+        }
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId IN ({$marks});";
 
