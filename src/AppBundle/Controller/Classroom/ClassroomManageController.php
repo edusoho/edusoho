@@ -757,7 +757,7 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $overview['sumLearnedTime'] = empty($overview['studentCount']) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIds($courseIds);
-        $overview['averageLearnedTime'] = empty($overview['studentCount']) ? 0 : empty($overview['studentCount']) / $overview['studentCount'];
+        $overview['averageLearnedTime'] = empty($overview['studentCount']) ? 0 : $overview['sumLearnedTime'] / $overview['studentCount'];
 
         return $this->render(
             'classroom-manage/statistics.html.twig',

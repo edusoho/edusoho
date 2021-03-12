@@ -176,8 +176,6 @@ check env:
   only:
     refs:
       - develop
-      - project/classroom-data
-      - feature/73801
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

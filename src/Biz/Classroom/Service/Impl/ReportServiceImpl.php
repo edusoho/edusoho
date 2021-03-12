@@ -68,6 +68,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $groupCourseMembers = ArrayToolkit::groupIndex($this->getCourseMemberService()->findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId), 'userId', 'courseId');
         foreach ($members as &$member) {
             $member['courseMembers'] = empty($groupCourseMembers[$member['userId']]) ? [] : $groupCourseMembers[$member['userId']];
+            $member['rate'] = empty($classroom['compulsoryTaskNum']) ? 0 : $this->getPercent($member['learnedCompulsoryTaskNum'], $classroom['compulsoryTaskNum']);
         }
 
         return $members;

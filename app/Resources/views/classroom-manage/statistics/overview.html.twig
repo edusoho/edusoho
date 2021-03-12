@@ -26,14 +26,14 @@
 
   <div class="col-xs-3 item bottom-border">
     <span class="number">
-      {{ overview.sumLearnedTime }}
+      {{ (overview.sumLearnedTime / 60)|round }}
     </span>
     <div class="title">{{ 'classroom.manage.data_statistics.overview.sumtime'|trans }}</div>
   </div>
 
   <div class="col-xs-3 item bottom-border">
     <span class="number">
-      {{ overview.averageLearnedTime }}
+      {{ (overview.averageLearnedTime /  60)|round }}
     </span>
     <div class="title">{{ 'classroom.manage.data_statistics.overview.average_time'|trans }}</div>
   </div>
