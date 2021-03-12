@@ -24,6 +24,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         return [
             'classroom.join' => 'onClassroomJoin',
             'classroom.auditor_join' => 'onClassroomGuest',
+            'classroom.quit' => 'onClassroomQuit',
         ];
     }
 
@@ -45,6 +46,13 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->publishJoinStatus($classroom, $userId, 'become_auditor');
         //add user to classroom courses
         // $this->syncCourseStudents($classroom, $userId);
+    }
+
+    public function onClassroomQuit(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->countClassroomIncome($classroom);
     }
 
     private function simplifyClassroom($classroom)

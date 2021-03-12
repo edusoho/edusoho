@@ -127,6 +127,10 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getSubject();
 
         $specs = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
+        if (empty($specs)) {
+            return;
+        }
+
         $conditions = [
             'target_id' => $specs['id'],
             'target_type' => 'course',
