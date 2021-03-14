@@ -782,7 +782,8 @@ class ClassroomController extends BaseController
 
     public function memberAccessAction(Request $request, $classroomId, $memberId)
     {
-        $memberAccessCode = $request->query->get('code');
+        $user = $this->getCurrentUser();
+        $memberAccessCode = $this->getVipService()->checkUserVipRight($user['id'], 'classroom', $classroomId);
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
         $vipRightLevel = $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 

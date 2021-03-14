@@ -3,14 +3,14 @@
 {% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
-    {% if code == 'vip.not_member' %}
-      {{ code|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': '班级'})|raw }}
-    {% elseif code == 'vip.member_expired' %}
-      {{ code|trans({'%type%': '班级', '%typeName%': '班级'})|raw }}
-    {% elseif code == 'vip.level_not_exist' %}
-      {{ code|trans({'%type%': '班级', '%typeName%': '班级'}) }}
-    {% elseif code == 'vip.level_low' %}
-      {{ code|trans({'%typeName%': '班级','%vipName%':vipRightLevel.name|default(''),'%type%': '班级','%vipLevelName%':vipRightLevel.name|default('')}) }}
+    {% if code == 'not_member' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': '班级'})|raw }}
+    {% elseif code == 'member_expired' %}
+      {{ 'vip.member_expired'|trans({'%type%': '班级', '%typeName%': '班级'})|raw }}
+    {% elseif code == 'level_not_exist' %}
+      {{ 'vip.level_not_exist'|trans({'%type%': '班级', '%typeName%': '班级'}) }}
+    {% elseif code == 'level_low' %}
+      {{ 'vip.level_low'|trans({'%typeName%': '班级','%vipName%':vipRightLevel.name|default(''),'%type%': '班级','%vipLevelName%':vipRightLevel.name|default('')}) }}
     {% endif %}
   </div>
 {% endblock %}
@@ -19,11 +19,11 @@
   <a href="{{ path('classroom_exit_no_reason', {id:classroom.id}) }}" class="btn btn-default">
     {{'course.member.classroom_member.classroom_exit_btn'|trans }}
   </a>
-  {% if code == 'vip.not_member' %}
+  {% if code == 'not_member' %}
     <a href="{{ path('vip_buy', {level:vipRightLevel.id}) }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
-  {% elseif code == 'vip.member_expired' %}
+  {% elseif code == 'member_expired' %}
     <a href="{{ path('vip_buy', {level:vipRightLevel.id}) }}" class="btn btn-danger">{{'vip.to_renew'|trans }}</a>
-  {% elseif code == 'vip.level_low' %}
-    <a href="{{ path('vip_upgrade', {targetId:vipRightLevel.id}) }}" class="btn btn-danger">{{'vip.to_grade'|trans }}</a>
+  {% elseif code == 'level_low' %}
+    <a href="{{ path('vip_upgrade', {targetId:vipRightLevel.id|default(0)}) }}" class="btn btn-danger">{{'vip.to_grade'|trans }}</a>
   {% endif %}
 {% endblock %}
