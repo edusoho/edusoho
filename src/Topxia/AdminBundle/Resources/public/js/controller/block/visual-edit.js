@@ -261,6 +261,16 @@ define(function(require, exports, module) {
     bindHtmlUpLoader(htmlSelf);
   });
 
+  var $table = $('#vipLevelTable');
+  $('.vipOrder').on('change', function () {
+    $.get($table.data('url'), {seq:$(this).val()}, function (res) {
+      $table.find('tr').remove();
+      for (let i = 0; i < res.length; i++) {
+        $table.append('<tr style="border: 1px solid #ddd;"><td style="padding: 10px 0 10px 5px">'+res[i].name+'</td></tr>');
+      }
+    })
+  });
+
   function bindImgUpLoader(self){
     var uploader = new EduWebUploader({
       element : self,

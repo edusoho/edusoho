@@ -124,6 +124,9 @@ class BlockController extends BaseController
         if ('POST' == $request->getMethod()) {
             $condation = $request->request->all();
             $block['data'] = $condation['data'];
+            if ($condation['code'] == 'turing:turing_vip'){
+                $block['data']['vip'] = ArrayToolkit::index($block['data']['vip'], 'label');
+            }
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
             $fields = array(
