@@ -89,8 +89,6 @@
               </div>
             </div>
           {% endif %}
-
-
           {% if memberDeadline != 0 %}
             {% if 'student' in member.role or 'member' in member.role %}
               <div class="cd-text-xs hidden-sm cd-mb16">
@@ -99,11 +97,6 @@
               </div>
             {% endif %}
           {% endif %}
-
-{#          <div class="class-info__serve class-serve hidden-sm hidden-xs">#}
-{#            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>#}
-{#            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}#}
-{#          </div>#}
           {% if "student" in member.role %}
             <div class="my-course-item__progress cd-mt32 cd-clearfix">
               <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
