@@ -189,11 +189,11 @@ export default {
 
     vipBuyStatu() {
       const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
-      const { seq, title } = this.currentLevel;
+      const { seq, name } = this.currentLevel;
 
       if (userSeq === seq) {
         return {
-          text: `续费${title}特权`,
+          text: `续费${name}特权`,
           status: true,
           type: '续费',
         };
