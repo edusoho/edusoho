@@ -11,7 +11,7 @@
                     {% if courseMember.startLearnTime|default() %}
                         {{ '开始时间'|trans }} : {{ courseMember.startLearnTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}
-                    {% if taskResult.finishedTime|default() %}
+                    {% if courseMember.finishedTime|default() %}
                         {{ '完成时间'|trans }} : {{ courseMember.finishedTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}
                     </div>">
