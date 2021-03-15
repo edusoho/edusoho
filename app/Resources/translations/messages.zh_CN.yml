@@ -11634,4 +11634,5 @@ classroom.manage.data_statistics.student_detail_list.select_un_finished: 未完�
 classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: 7天未学
 classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
+classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 
