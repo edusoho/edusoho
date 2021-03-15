@@ -278,6 +278,16 @@ export default {
 
     // 购买 vip
     clickVipBuy() {
+      // 未登录跳转到登录
+      if (!this.user) {
+        this.$router.push({
+          path: '/login',
+          query: {
+            redirect: '/vip',
+          },
+        });
+        return;
+      }
       console.log('购买 vip');
     },
   },
