@@ -26,7 +26,11 @@ export default {
   },
   computed: {
     price() {
-      return this.item.price.amount;
+      const { currency, amount, coinAmount, coinName } = this.item.price;
+      if (currency == 'RMB') {
+        return `${amount}元`;
+      }
+      return `${coinAmount}${coinName}`;
     },
 
     isActive() {

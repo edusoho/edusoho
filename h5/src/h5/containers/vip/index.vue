@@ -195,17 +195,20 @@ export default {
         return {
           text: '续费12个月会员特权',
           status: true,
+          type: '续费',
         };
       }
       if (seq > currentVipSeq) {
         return {
           text: '等级低于已购会员',
           status: false,
+          type: '低于已购会员',
         };
       }
       return {
         text: '升级为当前会员特权',
         status: true,
+        type: '升级',
       };
     },
 
@@ -333,6 +336,7 @@ export default {
           id: this.currentLevel.id,
           unit: this.activePrice.specUnit,
           num: this.activePrice.duration,
+          type: this.vipBuyStatu.type,
         },
         query: {
           targetType: 'vip',
