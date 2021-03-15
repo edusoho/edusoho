@@ -115,10 +115,10 @@
               <div class="cd-progress cd-progress-sm" style="position: relative;margin-bottom: 0;">
                 <div class="progress-bar" style="width: 90%;">
                   <div class="progress-outer">
-                    <div class="progress-inner" style="width: {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }};"></div>
+                    <div class="progress-inner" style="width: {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }};height:10px"></div>
                   </div>
                 </div>
-                <div class="progress-text"  style="width: 40px;">{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}</div>
+                <div class="progress-text"  style="width: 40px;margin-bottom: 8px;">{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}</div>
               </div>
             </div>
           {% endif %}
