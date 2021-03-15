@@ -45,7 +45,7 @@
         <tr>
           <td>{{ user.nickname|default('--') }}</td>
           <td>
-            {% if member.learnStatus == 'unlearn' %}
+            {% if member.learnStatus == 'unLearn' %}
               <span class="cd-text-gray">{{ '未学'|trans }}</span>
             {% elseif member.learnStatus == 'learning' %}
               <span class="cd-text-warning">{{ '学习中'|trans }}</span>
