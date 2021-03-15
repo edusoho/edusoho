@@ -8,7 +8,7 @@
         <swiper-slide v-for="(item, index) in levels" :key="index">
           <img class="vip-swiper__img" :src="item.background" />
           <div class="vip-user" v-if="user">
-            <div class="vip-user__img">
+            <div class="vip-user__img" v-if="user.avatar">
               <img :src="user.avatar.large" />
             </div>
             <span class="vip-user__name">{{ user.nickname }}</span>
@@ -146,7 +146,7 @@ export default {
         observeParents: true,
         on: {
           slideChange: () => {
-            this.activeIndex = this.$refs.mySwiper.$swiper.activeIndex;
+            this.activeIndex = this.swiper.activeIndex;
             this.getActivePriceId();
           },
         },
@@ -154,9 +154,7 @@ export default {
       vipOpenSwiperOption: {
         slidesPerView: 3.1,
       },
-      user: {
-        avatar: {},
-      },
+      user: {},
       vipInfo: null,
       levels: [
         {
@@ -177,6 +175,10 @@ export default {
     ...mapState({
       userInfo: state => state.user,
     }),
+
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    },
 
     currentVipInfo() {
       return this.levels[this.activeIndex];
@@ -227,10 +229,10 @@ export default {
         const { levels, vipUser } = res;
 
         this.levels = levels;
-        this.user = vipUser.user;
+        this.user = vipUser ? vipUser.user : null;
         this.vipInfo = vipUser.vip;
 
-        const { vip } = vipUser;
+        const vip = vipUser ? vipUser.vip : null;
         // 更新用户会员数据
         const userInfo = this.userInfo;
         userInfo.vip = vip;
@@ -260,7 +262,7 @@ export default {
     // 首次进入，切换到对应会员
     initSwiperActiveIndex() {
       this.$nextTick(() => {
-        this.$refs.mySwiper.$swiper.slideTo(this.activeIndex, 1000);
+        this.swiper.slideTo(this.activeIndex, 1000);
       });
     },
 
