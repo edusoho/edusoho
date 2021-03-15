@@ -429,6 +429,8 @@ export default {
         targetId: this.targetId,
         num: this.targetNum,
         unit: this.targetUnit,
+        platform: 'h5',
+        platform_version: this.$version,
       };
       Api.confirmOrder({
         data: data,
@@ -509,6 +511,8 @@ export default {
           couponCode: this.itemData ? this.itemData.code : '',
           unit: this.targetUnit,
           num: this.targetNum,
+          platform: 'h5',
+          platform_version: this.$version,
         },
       })
         .then(res => {
