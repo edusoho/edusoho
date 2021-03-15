@@ -256,7 +256,6 @@ export default {
 
     // 轮播图 vip 状态
     vipStatus(data) {
-      // 用户不是会员
       if (!this.vipInfo) {
         return '您还不是会员，开通享特权';
       }
@@ -266,6 +265,10 @@ export default {
       if (seq === currentVipSeq) {
         return `会员有效期至：${this.$moment(deadline).format('YYYY/MM/DD')}`;
       }
+      if (seq > currentVipSeq) {
+        return '等级低于已购会员';
+      }
+      return '您还不是该等级会员请升级';
     },
 
     // 首次进入，切换到对应会员
