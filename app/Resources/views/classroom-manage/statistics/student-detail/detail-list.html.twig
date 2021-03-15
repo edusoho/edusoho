@@ -3,8 +3,11 @@
   <div class="col-10">
     {{ 'site.default.student'|trans }}
   </div>
-  <div class="col-80">
+  <div class="col-65">
     {% include 'classroom-manage/statistics/student-detail/chart-data-legend.html.twig' %}
+  </div>
+  <div class="col-15">
+    {{ '累加学习时长(分)' }}
   </div>
   <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
 </div>
@@ -14,19 +17,22 @@
     <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ user.nickname }}">
       {{ user.nickname }}
     </div>
-    <ul class="col-80 student-detail">
+    <ul class="col-65 student-detail">
       {% include 'classroom-manage/statistics/student-detail/student-chart-item.html.twig' %}
+    </ul>
+    <ul class="col-15 text-center">
+      {{ (member.learnedTime / 60)|round }}
     </ul>
     <div class="col-10">
             <span class="color-gray">
                 {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}
             </span>
-      {% if count(classroomCourses) > 2 %}
+      {% if classroom.courseNum > 20 %}
         <a class="js-task-chart-detail more"
            data-toggle="modal"
            data-target="#modal"
            data-url="{{ path('classroom_data_statistics_student_detail_modal',{classroomId:classroom.id, userId:user.id}) }}"
-           href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
+           href="javascript:;" >{{ 'site.default.more'|trans }}</a>
       {% endif %}
     </div>
   </div>

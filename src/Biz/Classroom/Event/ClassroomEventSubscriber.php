@@ -79,10 +79,15 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $classroom = $event->getSubject();
         $classroomId = $classroom['id'];
         $courseNum = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
-        $taskNum = $this->getClassroomService()->countCourseTasksByClassroomId($classroomId);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $this->getClassroomService()->updateClassroom($classroom['id'], [
+            'courseNum' => $courseNum,
+            'lessonNum' => array_sum(ArrayToolkit::column($courses, 'lessonNum')),
+            'compulsoryTaskNum' => array_sum(ArrayToolkit::column($courses, 'compulsoryTaskNum')),
+            'electiveTaskNum' => array_sum(ArrayToolkit::column($courses, 'electiveTaskNum')),
+        ]);
+        $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
 
-        $fields = ['courseNum' => $courseNum, 'lessonNum' => $taskNum];
-        $this->getClassroomService()->updateClassroom($classroomId, $fields);
         $this->getClassroomService()->updateClassroomTeachers($classroomId);
     }
 

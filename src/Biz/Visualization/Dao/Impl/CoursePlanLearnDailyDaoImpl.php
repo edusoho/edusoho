@@ -36,6 +36,9 @@ class CoursePlanLearnDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanL
 
     public function sumLearnedTimeByCourseIds($courseIds)
     {
+        if (empty($courseIds)) {
+            return 0;
+        }
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql = "SELECT sum(`sumTime`) AS learnedTime FROM `{$this->table}` WHERE `courseId` IN ({$marks});";
         $res = $this->db()->fetchAssoc($sql, $courseIds);

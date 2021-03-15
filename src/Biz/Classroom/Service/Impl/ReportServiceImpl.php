@@ -13,6 +13,7 @@ use Biz\Classroom\Service\ReportService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\User\Service\UserService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -66,9 +67,13 @@ class ReportServiceImpl extends BaseService implements ReportService
         $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, $start, $limit);
         $userIds = ArrayToolkit::column($members, 'userId');
         $groupCourseMembers = ArrayToolkit::groupIndex($this->getCourseMemberService()->findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId), 'userId', 'courseId');
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
+
         foreach ($members as &$member) {
             $member['courseMembers'] = empty($groupCourseMembers[$member['userId']]) ? [] : $groupCourseMembers[$member['userId']];
             $member['rate'] = empty($classroom['compulsoryTaskNum']) ? 0 : $this->getPercent($member['learnedCompulsoryTaskNum'], $classroom['compulsoryTaskNum']);
+            $member['learnedTime'] = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => $courseIds, 'userId' => $member['userId']]);
         }
 
         return $members;
@@ -349,5 +354,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->biz->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

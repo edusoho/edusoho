@@ -6,15 +6,15 @@
          data-placement="top"
          data-html="true"
          data-delay="100"
-         data-content="">
-{#                    <div><p class='mbs'>{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }} : {{ task.title }}</p>#}
-{#                    {% if taskResult.createdTime|default() %}#}
-{#                        {{ 'course.task.start_time'|trans }} : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>#}
-{#                    {% endif %}#}
-{#                    {% if taskResult.finishedTime|default() %}#}
-{#                        {{ 'course.task.finish_time'|trans }} : {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}<br/>#}
-{#                    {% endif %}#}
-{#                    </div>">#}
+         data-content="
+                    <div><p class='mbs'>课程名称 : {{ course.courseSetTitle }} （{{ percent(courseMember.learnedCompulsoryTaskNum|default(0), course.compulsoryTaskNum) }}）</p>
+                    {% if courseMember.startLearnTime|default() %}
+                        {{ '开始时间'|trans }} : {{ courseMember.startLearnTime|date('Y-m-d H:i:s') }}<br/>
+                    {% endif %}
+                    {% if taskResult.finishedTime|default() %}
+                        {{ '完成时间'|trans }} : {{ courseMember.finishedTime|date('Y-m-d H:i:s') }}<br/>
+                    {% endif %}
+                    </div>">
         {% if courseMember %}
             {% if courseMember.isLearned %}
               {% set colorClass = 'finish-color' %}

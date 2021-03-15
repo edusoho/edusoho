@@ -109,16 +109,20 @@
 {#            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>#}
 {#            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}#}
 {#          </div>#}
-        </div>
-        <div class="class-info">
-          <div class="class-progress">
-            <div class="cricle-progress" id="freeprogress" data-percent="{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}">
-              <span class="percent"></span>
+          {% if "student" in member.role %}
+            <div class="my-course-item__progress cd-mt32 cd-clearfix">
+              <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+              <div class="cd-progress cd-progress-sm" style="position: relative;margin-bottom: 0;">
+                <div class="progress-bar" style="width: 90%;">
+                  <div class="progress-outer">
+                    <div class="progress-inner" style="width: {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }};"></div>
+                  </div>
+                </div>
+                <div class="progress-text"  style="width: 40px;">{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}</div>
+              </div>
             </div>
-          </div>
+          {% endif %}
         </div>
-
-
         <div class="class-operation">
           {# 班级过了有效期的提示 #}
           {% if (memberDeadline != 0 and date(memberDeadline) < date()) and ('student' in member.role or 'member' in member.role) %}

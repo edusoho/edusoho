@@ -21,7 +21,7 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $membersResult = $this->getReportService()->getStudentDetailList($this->conditions['classroomId'], $this->conditions, $this->parameter['orderBy'], $start, $limit);
+        $membersResult = $this->getReportService()->getStudentDetailList($this->conditions['classroomId'], $this->conditions, $this->conditions['orderBy'], $start, $limit);
         $userIds = ArrayToolkit::column($membersResult, 'userId');
 
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
@@ -30,9 +30,9 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
             $user = empty($users[$memberResult['userId']]) ? [] : $users[$memberResult['userId']];
             $content[] = [
                 empty($user) ? '--' : $user['nickname'],
-                date('Y-m-d H:i', $membersResult['createdTime']),
-                empty($memberResult['learnedTime']) ? 0 : $memberResult['learnedTime'],
-                $membersResult['rate'].'%',
+                date('Y-m-d H:i', $memberResult['createdTime']),
+                empty($memberResult['learnedTime']) ? 0 : round($memberResult['learnedTime'] / 60),
+                $memberResult['rate'].'%',
             ];
         }
 

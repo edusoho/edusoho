@@ -32,8 +32,8 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         ];
 
         $progress['finishedCount'] = $learnedNum > $progress['total'] ? $progress['total'] : $learnedNum;
-        $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
-        $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
+        $progress['percent'] = $progress['finishedCount'] ? (int) ($progress['finishedCount'] / $progress['total'] * 100) : 0;
+        $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2, PHP_ROUND_HALF_DOWN) : 0;
         $progress['percent'] = $progress['percent'] > 100 ? 100 : $progress['percent'];
         $progress['decimal'] = $progress['decimal'] > 1 ? 1 : $progress['decimal'];
 
