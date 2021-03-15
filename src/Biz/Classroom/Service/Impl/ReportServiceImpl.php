@@ -204,7 +204,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                     $conditions['lastLearnTime_GT'] = 0;
                     $conditions['isLearned'] = 0;
                     break;
-                case 'finished':
+                case 'learned':
                     $conditions['isLearned'] = 1;
                     $conditions['finishedTime_GT'] = 0;
                     break;
