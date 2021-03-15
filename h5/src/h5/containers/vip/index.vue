@@ -40,10 +40,15 @@
           </template>
         </swiper>
 
-        <div class="vip-open__buy" @click="clickVipBuy">{{ vipBuyStatu }}</div>
+        <div
+          class="vip-open__buy"
+          :class="{ disabled: !vipBuyStatu.status }"
+          @click="clickVipBuy"
+        >
+          {{ vipBuyStatu.text }}
+        </div>
       </div>
     </div>
-
     <!-- 专属权益 -->
     <div class="vip-sec">
       <module-title title="专属权益" />
@@ -185,7 +190,25 @@ export default {
     },
 
     vipBuyStatu() {
-      return '续费12个月会员特权';
+      const { seq } = this.vipInfo;
+      const currentVipSeq = this.currentVipInfo.seq;
+
+      if (seq === currentVipSeq) {
+        return {
+          text: '续费12个月会员特权',
+          status: true,
+        };
+      }
+      if (seq > currentVipSeq) {
+        return {
+          text: '等级低于已购会员',
+          status: false,
+        };
+      }
+      return {
+        text: '升级为当前会员特权',
+        status: true,
+      };
     },
 
     courseData() {

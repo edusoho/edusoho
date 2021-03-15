@@ -204,6 +204,10 @@
 			text-align: center;
 			background-image: linear-gradient(#ffe8a5, #ffe8a5);
 			border-radius: vw(20);
+
+			&.disabled {
+				background-image: linear-gradient(rgba(255, 232, 165, 0.5), rgba(247, 204, 118, 0.5));
+			}
 		}
 	}
 
