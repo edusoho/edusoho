@@ -5,7 +5,7 @@
     @click="clickPrice()"
   >
     <span class="vip-price-item__new" v-if="item.type === 'first'">
-      新客优享
+      {{ item.tag }}
     </span>
     <div class="vip-price-item__title">{{ item.title }}</div>
     <div class="vip-price-item__price">{{ price }}</div>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     clickPrice() {
-      this.$emit('clickPriceItem', this.item.id);
+      this.$emit('clickPriceItem', this.item);
     },
   },
 };

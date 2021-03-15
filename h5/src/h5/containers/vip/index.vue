@@ -29,11 +29,11 @@
       <module-title title="选择开通时长" />
       <div class="vip-open">
         <swiper :options="vipOpenSwiperOption">
-          <template v-for="item in currentVipInfo.sellModes">
+          <template v-for="item in currentLevel.sellModes">
             <swiper-slide :key="item.id">
               <price-item
                 :item="item"
-                :activePriceId="activePriceId"
+                :activePriceId="activePrice.id"
                 @clickPriceItem="clickPriceItem"
               />
             </swiper-slide>
@@ -54,29 +54,26 @@
     <div class="vip-sec">
       <module-title title="专属权益" />
       <div class="vip-interest">
-        <div
-          class="vip-interest__item"
-          v-if="currentVipInfo.courses.data.length"
-        >
+        <div class="vip-interest__item" v-if="currentLevel.courses.data.length">
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_course.png" />
           </div>
           <div class="vip-interest__item__title">会员课程</div>
           <div class="vip-interest__item__total">
-            {{ currentVipInfo.courses.paging.total }}
+            {{ currentLevel.courses.paging.total }}
             <span class="company">个</span>
           </div>
         </div>
         <div
           class="vip-interest__item"
-          v-if="currentVipInfo.classrooms.data.length"
+          v-if="currentLevel.classrooms.data.length"
         >
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_classroom.png" />
           </div>
           <div class="vip-interest__item__title">会员班级</div>
           <div class="vip-interest__item__total">
-            {{ currentVipInfo.classrooms.paging.total }}
+            {{ currentLevel.classrooms.paging.total }}
             <span class="company">个</span>
           </div>
         </div>
@@ -88,7 +85,7 @@
       <module-title title="专属介绍" />
       <div
         class="vip-introduce"
-        v-html="currentVipInfo.description || '暂无介绍'"
+        v-html="currentLevel.description || '暂无介绍'"
       />
     </div>
 
@@ -100,9 +97,9 @@
         <e-course-list
           v-if="courseData"
           :course-list="courseData"
-          :vip-name="currentVipInfo.name"
+          :vip-name="currentLevel.name"
           :more-type="'vip'"
-          :level-id="Number(currentVipInfo.id)"
+          :level-id="Number(currentLevel.id)"
           :type-list="'course_list'"
           class="vip-course-list"
         />
@@ -111,9 +108,9 @@
         <e-course-list
           v-if="classroomData"
           :more-type="'vip'"
-          :level-id="Number(currentVipInfo.id)"
+          :level-id="Number(currentLevel.id)"
           :course-list="classroomData"
-          :vip-name="currentVipInfo.name"
+          :vip-name="currentLevel.name"
           :type-list="'classroom_list'"
           class="vip-course-list"
         />
@@ -153,7 +150,7 @@ export default {
         on: {
           slideChange: () => {
             this.activeIndex = this.swiper.activeIndex;
-            this.getActivePriceId();
+            this.getActivePrice();
           },
         },
       },
@@ -173,7 +170,7 @@ export default {
         },
       ],
       activeIndex: 0,
-      activePriceId: 0,
+      activePrice: null,
     };
   },
   computed: {
@@ -186,13 +183,13 @@ export default {
       return this.$refs.mySwiper.$swiper;
     },
 
-    currentVipInfo() {
+    currentLevel() {
       return this.levels[this.activeIndex];
     },
 
     vipBuyStatu() {
       const seq = this.vipInfo ? this.vipInfo.seq : 0;
-      const currentVipSeq = this.currentVipInfo.seq;
+      const currentVipSeq = this.currentLevel.seq;
 
       if (seq === currentVipSeq) {
         return {
@@ -213,7 +210,7 @@ export default {
     },
 
     courseData() {
-      const { data, paging } = this.currentVipInfo.courses;
+      const { data, paging } = this.currentLevel.courses;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
@@ -226,7 +223,7 @@ export default {
     },
 
     classroomData() {
-      const { data, paging } = this.currentVipInfo.classrooms;
+      const { data, paging } = this.currentLevel.classrooms;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
@@ -275,7 +272,7 @@ export default {
       });
       this.activeIndex = vipIndex || 0;
       this.initSwiperActiveIndex();
-      this.getActivePriceId();
+      this.getActivePrice();
     },
 
     // 轮播图 vip 状态
@@ -303,13 +300,13 @@ export default {
     },
 
     // 开通时长默认选中第一个
-    getActivePriceId() {
+    getActivePrice() {
       const { sellModes } = this.levels[this.activeIndex];
-      this.activePriceId = sellModes.length > 0 ? sellModes[0].id : 0;
+      this.activePrice = sellModes.length > 0 ? sellModes[0] : null;
     },
 
     clickPriceItem(value) {
-      this.activePriceId = value;
+      this.activePrice = value;
     },
 
     clickVipBuy() {
@@ -322,9 +319,25 @@ export default {
         });
         return;
       }
+
       if (!this.vipBuyStatu.status) return;
 
-      console.log('fasf');
+      // 没有价格选项，不能创建订单
+      if (!this.activePrice) {
+        return;
+      }
+
+      this.$router.push({
+        name: 'order',
+        params: {
+          id: this.currentLevel.id,
+          unit: this.activePrice.specUnit,
+          num: this.activePrice.duration,
+        },
+        query: {
+          targetType: 'vip',
+        },
+      });
     },
   },
 };
