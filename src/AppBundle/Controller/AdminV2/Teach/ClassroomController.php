@@ -329,9 +329,10 @@ class ClassroomController extends BaseController
         );
 
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
-        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-        $totalLearnedTime = empty($classroomCourses) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id')]);
+
+        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $totalLearnedTime = empty($classroomCourses) || empty($members) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id'), 'userIds' => array_column($members, 'userId')]);
 
         $usersLearnedTime = [];
         if (!empty($users) && !empty($classroomCourses)) {
