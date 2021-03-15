@@ -36,8 +36,10 @@ class ClassroomStatisticsCourseLearnDetailExporter extends Exporter
             } else {
                 $statusText = '未学';
             }
+            $nickname = empty($user['nickname']) ? '--' : $user['nickname'];
+
             $content[] = [
-                empty($user['nickname']) ? '--' : $user['nickname'],
+                is_numeric($nickname) ? $nickname."\t" : $nickname,
                 $statusText,
                 $result['finishRate'].'%',
                 $result['isLearned'] ? date('Y-m-d H:i:s', $result['finishedTime']) : '--',

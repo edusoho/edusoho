@@ -40,8 +40,9 @@ class ClassroomMemberStatisticsExporter extends Exporter
 
         $content = [];
         foreach ($members as $member) {
+            $nickname = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $content[] = [
-                empty($users[$member['userId']]) ? '' : $users[$member['userId']]['nickname'],
+                is_numeric($nickname) ? $nickname."\t" : $nickname,
                 date('Y-m-d H:i:s', $member['createdTime']),
                 empty($member['finishedTime']) ? '--' : date('Y-m-d H:i:s', $member['finishedTime']),
                 empty($usersLearnedTime[$member['userId']]) ? 0.0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1),
