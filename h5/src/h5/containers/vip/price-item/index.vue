@@ -1,5 +1,9 @@
 <template>
-  <div class="vip-price-item" :class="{ active: isActive }">
+  <div
+    class="vip-price-item"
+    :class="{ active: isActive }"
+    @click="clickPrice()"
+  >
     <span class="vip-price-item__new">新客优享</span>
     <div class="vip-price-item__title">{{ item.title }}</div>
     <div class="vip-price-item__price">{{ price }}</div>
@@ -25,6 +29,11 @@ export default {
 
     isActive() {
       return this.item.id == this.activePriceId;
+    },
+  },
+  methods: {
+    clickPrice() {
+      this.$emit('clickPriceItem', this.item.id);
     },
   },
 };

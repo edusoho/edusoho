@@ -34,7 +34,7 @@
               <price-item
                 :item="item"
                 :activePriceId="activePriceId"
-                @click="clickPriceItem(item.id)"
+                @clickPriceItem="clickPriceItem"
               />
             </swiper-slide>
           </template>
@@ -191,7 +191,7 @@ export default {
     },
 
     vipBuyStatu() {
-      const { seq } = this.vipInfo;
+      const seq = this.vipInfo ? this.vipInfo.seq : 0;
       const currentVipSeq = this.currentVipInfo.seq;
 
       if (seq === currentVipSeq) {
