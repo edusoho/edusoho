@@ -18,7 +18,7 @@
               <img class="vip-info__icon" :src="item.icon" />
               <span class="vip-info__name">{{ item.name }}</span>
             </div>
-            <div class="vip-info__status">{{ item | getVipStatus }}</div>
+            <div class="vip-info__status">{{ vipStatus(item) }}</div>
           </div>
         </swiper-slide>
       </swiper>
@@ -217,11 +217,6 @@ export default {
   created() {
     this.getVipDetail();
   },
-  filters: {
-    getVipStatus(value) {
-      return '您还不是会员，开通享特权';
-    },
-  },
   methods: {
     getVipDetail() {
       const queryId = this.$route.query.id;
@@ -257,6 +252,20 @@ export default {
       this.activeIndex = vipIndex || 0;
       this.initSwiperActiveIndex();
       this.getActivePriceId();
+    },
+
+    // 轮播图 vip 状态
+    vipStatus(data) {
+      // 用户不是会员
+      if (!this.vipInfo) {
+        return '您还不是会员，开通享特权';
+      }
+      const { seq, deadline } = this.vipInfo;
+      const currentVipSeq = data.seq;
+
+      if (seq === currentVipSeq) {
+        return `会员有效期至：${this.$moment(deadline).format('YYYY/MM/DD')}`;
+      }
     },
 
     // 首次进入，切换到对应会员

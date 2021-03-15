@@ -11,6 +11,7 @@ import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
 import wapSdk from 'wap-sdk';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -109,6 +110,9 @@ Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;
+
+Vue.prototype.$moment = moment;
+
 Api.getSettings({
   query: {
     type: 'wap',
