@@ -67,15 +67,9 @@
               </span>
             </span>
           </h2>
-          <div class="metas class-info__metas mb0">
-{#            {% if setting('classroom.show_review', '1') == 1 %}#}
-{#              <div class="score">#}
-{#                {{ web_macro.star(classroom.rating) }}#}
-{#                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>#}
-{#              </div>#}
-{#            {% endif %}#}
 
-            {% if 'auditor' in member.role %}
+          {% if 'auditor' in member.role %}
+            <div class="metas class-info__metas mb0">
               <div class="price">
                 {{ 'classroom.price'|trans }}：<span>
                   {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -93,8 +87,9 @@
                   {% endif %}
                 </span>
               </div>
-            {% endif %}
-          </div>
+            </div>
+          {% endif %}
+
 
           {% if memberDeadline != 0 %}
             {% if 'student' in member.role or 'member' in member.role %}
