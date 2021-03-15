@@ -197,16 +197,16 @@ class ReportServiceImpl extends BaseService implements ReportService
         if (!empty($filterConditions['filter'])) {
             switch ($filterConditions['filter']) {
                 case 'unLearn':
-                    $conditions['lastLearnTime'] = 0;
-                    $conditions['isLearned'] = 0;
+                    $conditions['lastLearnTime'] = '0';
+                    $conditions['isLearned'] = '0';
                     break;
                 case 'learning':
-                    $conditions['lastLearnTime_GT'] = 0;
-                    $conditions['isLearned'] = 0;
+                    $conditions['lastLearnTime_GT'] = '0';
+                    $conditions['isLearned'] = '0';
                     break;
                 case 'learned':
-                    $conditions['isLearned'] = 1;
-                    $conditions['finishedTime_GT'] = 0;
+                    $conditions['isLearned'] = '1';
+                    $conditions['finishedTime_GT'] = '0';
                     break;
             }
         }
