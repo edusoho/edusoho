@@ -1,6 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{classroom.title}} - {{ parent() }}{% endblock %}
-{% do script(['app/js/classroom/index.js']) %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js',
+  'libs/excanvas-compiled.js','libs/jquery-countdown.js','app/js/classroom/index.js']) %}
 
 {% block top_content %}
   {{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}

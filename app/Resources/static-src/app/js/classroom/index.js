@@ -29,3 +29,20 @@ if ($('.icon-vip').length > 0) {
     }, 100);
   });
 }
+let colorPrimary = $('.color-primary').css('color');
+$('#freeprogress').easyPieChart({
+  easing: 'easeOutBounce',
+  trackColor: '#ebebeb',
+  barColor: colorPrimary,
+  scaleColor: false,
+  lineWidth: 14,
+  size: 145,
+  onStep: function(from, to, percent) {
+    $('canvas').css('height', '146px');
+    $('canvas').css('width', '146px');
+    if (Math.round(percent) == 100) {
+      $(this.el).addClass('done');
+    }
+    $(this.el).find('.percent').html(Translator.trans('course_set.learn_progress') + '<br><span class="num">' + Math.round(percent) + '%</span>');
+  }
+});

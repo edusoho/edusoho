@@ -17,4 +17,8 @@ interface ReportService
     public function getCourseDetailList($classroomId, $filterConditions, $start, $limit);
 
     public function getCourseDetailCount($classroomId, $filterConditions);
+
+    public function getCourseLearnDetail($classroomId, $courseId, $filterConditions, $start, $limit);
+
+    public function getCourseLearnDetailCount($classroomId, $courseId, $filterConditions);
 }

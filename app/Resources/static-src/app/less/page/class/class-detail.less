@@ -313,3 +313,44 @@
     }
   }
 }
+
+.class-progress {
+  position: relative;
+  top:5px;
+  left: 5px;
+  width: 160px;
+  height: 160px;
+  .border-radius(50%);
+  background-color: #fff;
+  .box-shadow(0 0 18px 2px rgba(41,94,64,0.1));
+  @media (max-width: @screen-sm-max) {
+    position: relative;
+    margin: 20px auto 40px;
+    left: 0;
+  }
+  .cricle-progress {
+    position: absolute;
+    left: 7.5px;
+    top:7.5px;
+    width: 145px;
+    height: 145px;
+    .percent {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: @gray;
+      .num {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 30px;
+        line-height: 1;
+        font-weight: bold;
+        color: @brand-primary;
+      }
+    }
+  }
+}
