@@ -2155,10 +2155,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     break;
                 }
             }
-
+            $finishedTimes = ArrayToolkit::column($coursesMembers, 'finishedTime');
+            $finishedTime = count($finishedTimes) > 0 ? max($finishedTimes) : 0;
             $this->updateMember($classroomMember['id'], [
                 'isFinished' => $finished,
-                'finishedTime' => $finished ? max(ArrayToolkit::column($coursesMembers, 'finishedTime')) : 0,
+                'finishedTime' => $finished ? $finishedTime : 0,
                 'learnedCompulsoryTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedCompulsoryTaskNum')),
                 'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
             ]);
