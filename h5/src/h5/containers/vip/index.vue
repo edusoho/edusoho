@@ -333,7 +333,7 @@ export default {
       this.$router.push({
         name: 'order',
         params: {
-          id: this.currentLevel.id,
+          id: this.activePrice.id,
           unit: this.activePrice.specUnit,
           num: this.activePrice.duration,
           type: this.vipBuyStatu.type,
