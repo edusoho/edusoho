@@ -4,7 +4,7 @@
       <router-link to="/settings">
         <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
       </router-link>
-      <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
+      <div class="user-middle">
         <div class="user-name">{{ user.nickname }}</div>
       </div>
       <router-link to="/settings" class="user-setting">
@@ -32,7 +32,7 @@
               </span>
             </router-link>
           </div>
-          <div v-else class="user-vip-open">
+          <div v-else class="user-vip user-vip-open">
             <router-link to="/vip" class="clearfix">
               <span>您还不是会员，开通会员享特权</span>
               <span class="pull-right">
