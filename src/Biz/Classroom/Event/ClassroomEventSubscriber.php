@@ -2,6 +2,7 @@
 
 namespace Biz\Classroom\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\MemberService;
@@ -39,9 +40,23 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
                 'lessonNum',
             ];
             $updatedFields = $event->getArgument('updatedFields');
-            $arr = array_intersect($needFields, $updatedFields);
+            $arr = array_intersect($needFields, array_keys($updatedFields));
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $this->getClassroomService()->updateClassroom($classroom['id'], [
+                'lessonNum' => array_sum(ArrayToolkit::column($courses, 'lessonNum')),
+                'compulsoryTaskNum' => array_sum(ArrayToolkit::column($courses, 'compulsoryTaskNum')),
+                'electiveTaskNum' => array_sum(ArrayToolkit::column($courses, 'electiveTaskNum')),
+            ]);
+            $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
             if (!empty($arr)) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+                $this->getClassroomService()->updateClassroom($classroom['id'], [
+                    'lessonNum' => array_sum(ArrayToolkit::column($courses, 'lessonNum')),
+                    'compulsoryTaskNum' => array_sum(ArrayToolkit::column($courses, 'compulsoryTaskNum')),
+                    'electiveTaskNum' => array_sum(ArrayToolkit::column($courses, 'electiveTaskNum')),
+                ]);
                 $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
             }
         }

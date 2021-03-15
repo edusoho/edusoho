@@ -479,6 +479,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'studentNum',
             'courseNum',
             'lessonNum',
+            'electiveTaskNum',
+            'compulsoryTaskNum',
             'threadNum',
             'postNum',
             'income',
