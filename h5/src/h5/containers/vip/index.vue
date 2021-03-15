@@ -188,17 +188,17 @@ export default {
     },
 
     vipBuyStatu() {
-      const seq = this.vipInfo ? this.vipInfo.seq : 0;
-      const currentVipSeq = this.currentLevel.seq;
+      const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
+      const { seq, title } = this.currentLevel;
 
-      if (seq === currentVipSeq) {
+      if (userSeq === seq) {
         return {
-          text: '续费12个月会员特权',
+          text: `续费${title}特权`,
           status: true,
           type: '续费',
         };
       }
-      if (seq > currentVipSeq) {
+      if (userSeq > seq) {
         return {
           text: '等级低于已购会员',
           status: false,

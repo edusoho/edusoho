@@ -112,6 +112,7 @@ Vue.use(wapSdk);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
+Vue.prototype.$version = require('../../package.json').version;
 
 Api.getSettings({
   query: {
