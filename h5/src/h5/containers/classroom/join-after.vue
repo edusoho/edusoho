@@ -253,7 +253,12 @@ export default {
         },
         // 会员等级无效
         'vip.level_not_exist': {
-          message: `很抱歉，会员被删除，您的会员身份已被取消，请退出后重新购买班级。`,
+          message: `您已不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
+          confirmButtonText: '购买会员',
+        },
+        // 课程会员被删除
+        'vip.vip_right_not_exist': {
+          message: `很抱歉，该课程已不属于会员权益，请退出后重新购买。`,
           showConfirmButton: false,
         },
       };
