@@ -37,6 +37,7 @@ class ClassroomStatisticsExporter extends Exporter
 
         $content = [];
         foreach ($classrooms as $classroom) {
+            $nickname = empty($creators[$classroom['creator']]) ? '' : $creators[$classroom['creator']]['nickname'];
             $content[] = [
                 $classroom['title'],
                 $classroom['courseNum'],
@@ -45,7 +46,7 @@ class ClassroomStatisticsExporter extends Exporter
                 $classroom['finishedMemberCount'],
                 $classroom['income'],
                 (string) date('Y-m-d H:i:s', $classroom['createdTime']),
-                empty($creators[$classroom['creator']]) ? '' : $creators[$classroom['creator']]['nickname'],
+                is_numeric($nickname) ? $nickname."\t" : $nickname,
             ];
         }
 

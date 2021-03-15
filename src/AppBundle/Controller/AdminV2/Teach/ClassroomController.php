@@ -322,16 +322,19 @@ class ClassroomController extends BaseController
     public function memberStatisticsAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
+        $memberCount = $this->getClassroomService()->getClassroomStudentCount($id);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getClassroomService()->getClassroomStudentCount($id),
+            $memberCount,
             20
         );
 
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
-        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-        $totalLearnedTime = empty($classroomCourses) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id')]);
+        $classroomMembers = $this->getClassroomService()->searchMembers(['classroomId' => $classroom['id'], 'role' => 'student'], [], 0, $memberCount, ['userId']);
+
+        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $totalLearnedTime = empty($classroomCourses) || empty($classroomMembers) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id'), 'userIds' => array_column($classroomMembers, 'userId')]);
 
         $usersLearnedTime = [];
         if (!empty($users) && !empty($classroomCourses)) {

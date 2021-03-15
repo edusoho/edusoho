@@ -48,8 +48,10 @@ class ClassroomSignStatisticsExporter extends Exporter
             } else {
                 $role = $this->container->get('translator')->trans('classroom.manage.sign_statictics.role.student');
             }
+
+            $nickname = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $content[] = [
-                empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'],
+                is_numeric($nickname) ? $nickname."\t" : $nickname,
                 $role,
                 date('Y-m-d H:i:s', $member['createdTime']),
                 $member['signDays'],

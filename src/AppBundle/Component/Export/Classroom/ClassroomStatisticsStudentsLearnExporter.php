@@ -28,8 +28,9 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
         $content = [];
         foreach ($membersResult as $memberResult) {
             $user = empty($users[$memberResult['userId']]) ? [] : $users[$memberResult['userId']];
+            $nickname = empty($user) ? '--' : $user['nickname'];
             $content[] = [
-                empty($user) ? '--' : $user['nickname'],
+                is_numeric($nickname) ? $nickname."\t" : $nickname,
                 date('Y-m-d H:i', $memberResult['createdTime']),
                 empty($memberResult['learnedTime']) ? 0 : round($memberResult['learnedTime'] / 60),
                 $memberResult['rate'].'%',
