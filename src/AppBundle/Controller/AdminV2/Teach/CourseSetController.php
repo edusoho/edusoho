@@ -759,7 +759,7 @@ class CourseSetController extends BaseController
         foreach ($students as $key => $student) {
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
-            $exportMember['nickname'] = $user['nickname'];
+            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
