@@ -7,32 +7,40 @@ use AppBundle\Component\Export\Exporter;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\ReportService;
 
-class ClassroomStatisticsStudentsLearnExporter extends Exporter
+class ClassroomStatisticsCourseLearnDetailExporter extends Exporter
 {
     public function getTitles()
     {
         return [
             '用户名',
-            '加入班级时间',
-            '课程累加学习时长（分）',
-            '完课率',
+            '学习情况',
+            '学习进度',
+            '完成时间',
         ];
     }
 
     public function getContent($start, $limit)
     {
-        $membersResult = $this->getReportService()->getStudentDetailList($this->conditions['classroomId'], $this->conditions, $this->parameter['orderBy'], $start, $limit);
-        $userIds = ArrayToolkit::column($membersResult, 'userId');
+        $results = $this->getReportService()->getCourseLearnDetail($this->conditions['classroomId'], $this->conditions['courseId'], ['filter' => 'all'], $start, $limit);
+        $userIds = ArrayToolkit::column($results, 'userId');
 
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
         $content = [];
-        foreach ($membersResult as $memberResult) {
-            $user = empty($users[$memberResult['userId']]) ? [] : $users[$memberResult['userId']];
+
+        foreach ($results as $result) {
+            $user = empty($users[$result['userId']]) ? [] : $users[$result['userId']];
+            if ($result['isLearned']) {
+                $statusText = '已完成';
+            } elseif ($result['lastLearnTime'] > 0) {
+                $statusText = '学习中';
+            } else {
+                $statusText = '未学';
+            }
             $content[] = [
-                empty($user) ? '--' : $user['nickname'],
-                date('Y-m-d H:i', $membersResult['createdTime']),
-                empty($memberResult['learnedTime']) ? 0 : $memberResult['learnedTime'],
-                $membersResult['rate'].'%',
+                empty($user['nickname']) ? '--' : $user['nickname'],
+                $statusText,
+                $result['finishRate'].'%',
+                $result['isLearned'] ? date('Y-m-d H:i:s', $result['finishedTime']) : '--',
             ];
         }
 
@@ -52,15 +60,11 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getReportService()->getStudentDetailCount($this->conditions['classroomId'], $this->conditions);
+        return $this->getReportService()->getCourseLearnDetailCount($this->conditions['classroomId'], $this->conditions['courseId'], ['filter' => 'all']);
     }
 
     public function buildCondition($conditions)
     {
-        if (!empty($conditions['range'])) {
-            $conditions['filter'] = $conditions['range'];
-        }
-
         return $conditions;
     }
 

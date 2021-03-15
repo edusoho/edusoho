@@ -843,9 +843,29 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
-    public function courseDetailModal(Request $request, $id)
+    public function courseDetailModalAction(Request $request, $id, $courseId)
     {
-        //        $course = $this->getReportService()
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $filter = $request->query->get('filter', 'all');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $count = $this->getReportService()->getCourseLearnDetailCount($classroom['id'], $courseId, ['filter' => $filter]);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+        $membersDataList = $this->getReportService()->getCourseLearnDetail($classroom['id'], $courseId, ['filter' => $filter], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $userIds = ArrayToolkit::column($membersDataList, 'userId');
+
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+
+        return $this->render('classroom-manage/statistics/course-detail/course-members-learn-modal.html.twig', [
+            'paginator' => $paginator,
+            'classroom' => $classroom,
+            'course' => $course,
+            'members' => $membersDataList,
+            'users' => $users,
+        ]);
     }
 
     public function courseItemsSortAction(Request $request, $id)

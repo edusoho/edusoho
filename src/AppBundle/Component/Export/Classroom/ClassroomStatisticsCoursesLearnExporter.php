@@ -22,7 +22,7 @@ class ClassroomStatisticsCoursesLearnExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $results = $this->getReportService()->getCourseDetailList($this->parameter['classroomId'], $this->conditions, $start, $limit);
+        $results = $this->getReportService()->getCourseDetailList($this->conditions['classroomId'], $this->conditions, $start, $limit);
 
         $content = [];
 
@@ -42,17 +42,18 @@ class ClassroomStatisticsCoursesLearnExporter extends Exporter
 
     public function canExport()
     {
-        return true;
-        if ($this->getClassroomService()->canManageClassroom($this->parameter['classroomId'])) {
-            return true;
+        try {
+            $this->getClassroomService()->tryManageClassroom($this->conditions['classroomId']);
+        } catch (\Exception $e) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public function getCount()
     {
-        return $this->getReportService()->getCourseDetailCount($this->parameter['classroomId'], $this->conditions);
+        return $this->getReportService()->getCourseDetailCount($this->conditions['classroomId'], $this->conditions);
     }
 
     public function buildCondition($conditions)

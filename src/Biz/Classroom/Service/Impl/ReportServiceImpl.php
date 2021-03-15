@@ -55,7 +55,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetailList($classroomId, $filterConditions, $sort, $start, $limit)
     {
-        $this->getClassroomService()->tryManageClassroom($classroomId);
+//        $this->getClassroomService()->tryManageClassroom($classroomId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $conditions = $this->prepareStudentDetailFilterConditions($filterConditions, $classroom);
         $conditions = array_merge($conditions, [
@@ -76,7 +76,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetail($classroomId, $userId)
     {
-        $this->getClassroomService()->tryManageClassroom($classroomId);
+//        $this->getClassroomService()->tryManageClassroom($classroomId);
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
         $courseMembers = ArrayToolkit::index($this->getCourseMemberService()->findCourseMembersByUserIdAndClassroomId($userId, $classroomId), 'courseId');
         $member['courseMembers'] = $courseMembers;
@@ -86,7 +86,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetailCount($classroomId, $filterConditions)
     {
-        $this->getClassroomService()->tryManageClassroom($classroomId);
+//        $this->getClassroomService()->tryManageClassroom($classroomId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $conditions = $this->prepareStudentDetailFilterConditions($filterConditions, $classroom);
         $conditions = array_merge($conditions, [
@@ -148,6 +148,72 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $classroomCoursesCount;
     }
 
+    public function getCourseLearnDetail($classroomId, $courseId, $filterConditions, $start, $limit)
+    {
+//        $this->getClassroomService()->tryManageClassroom($classroomId, null);
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return [];
+        }
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return [];
+        }
+        $conditions = array_merge($this->prepareCourseLearnDetailFilterConditions($filterConditions), ['courseId' => $courseId, 'role' => 'student']);
+        $courseMembers = $this->getCourseMemberService()->searchMembers($conditions, ['id' => 'ASC'], $start, $limit);
+        foreach ($courseMembers as &$courseMember) {
+            $courseMember['finishRate'] = $this->getPercent($courseMember['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
+            if (empty($courseMember['lastLearnTime'])) {
+                $courseMember['learnStatus'] = 'unLearn';
+            } elseif (empty($courseMember['isLearned'])) {
+                $courseMember['learnStatus'] = 'learning';
+            } else {
+                $courseMember['learnStatus'] = 'learned';
+            }
+        }
+
+        return $courseMembers;
+    }
+
+    public function getCourseLearnDetailCount($classroomId, $courseId, $filterConditions)
+    {
+//        $this->getClassroomService()->tryManageClassroom($classroomId, null);
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return 0;
+        }
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return 0;
+        }
+        $conditions = array_merge($this->prepareCourseLearnDetailFilterConditions($filterConditions), ['courseId' => $courseId, 'role' => 'student']);
+
+        return $this->getCourseMemberService()->countMembers($conditions) ?: 0;
+    }
+
+    protected function prepareCourseLearnDetailFilterConditions($filterConditions)
+    {
+        $conditions = [];
+        if (!empty($filterConditions['filter'])) {
+            switch ($filterConditions['filter']) {
+                case 'unLearn':
+                    $conditions['lastLearnTime'] = 0;
+                    $conditions['isLearned'] = 0;
+                    break;
+                case 'learning':
+                    $conditions['lastLearnTime_GT'] = 0;
+                    $conditions['isLearned'] = 0;
+                    break;
+                case 'finished':
+                    $conditions['isLearned'] = 1;
+                    $conditions['finishedTime_GT'] = 0;
+                    break;
+            }
+        }
+
+        return $conditions;
+    }
+
     /**
      * @param $filterConditions array
      * [
@@ -161,14 +227,14 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function prepareStudentDetailFilterConditions($filterConditions, $classroom)
     {
         $conditions = [];
-        if (!empty($filterConditions['nicknameOrMobileLike'])) {
-            $mobile = SimpleValidator::mobile($filterConditions['nicknameOrMobileLike']);
+        if (!empty($filterConditions['nameOrMobile'])) {
+            $mobile = SimpleValidator::mobile($filterConditions['nameOrMobile']);
             if ($mobile) {
-                $user = $this->getUserService()->getUserByVerifiedMobile($filterConditions['nicknameOrMobileLike']);
+                $user = $this->getUserService()->getUserByVerifiedMobile($filterConditions['nameOrMobile']);
                 $users = empty($user) ? [] : [$user];
             } else {
                 $users = $this->getUserService()->searchUsers(
-                    ['nickname' => $filterConditions['nicknameOrMobileLike']],
+                    ['nickname' => $filterConditions['nameOrMobile']],
                     [],
                     0,
                     PHP_INT_MAX

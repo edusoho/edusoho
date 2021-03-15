@@ -2681,6 +2681,10 @@ classroom_data_statistics_course_detail:
   path: /classroom/{id}/manage/statistics/course/detail
   defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailList }
 
+classroom_data_statistics_course_detail_modal:
+  path: /classroom/{id}/manage/statistics/course/{courseId}/detail/modal
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailModal }
+
 classroom_manage_students_defined_show:
     path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }
@@ -2704,7 +2708,7 @@ classroom_sign_statistics:
 classroom_sign_user_detail:
     path:  /classroom/{id}/manage/sign/user/{userId}/detail
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:signDetail }
-    # 
+    #
 
 classroom_manage_member_deadline_check_day:
     path: /classroom/{classroomId}/manage/member/day/check

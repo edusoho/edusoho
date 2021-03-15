@@ -110,6 +110,14 @@
 {#            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}#}
 {#          </div>#}
         </div>
+        <div class="class-info">
+          <div class="class-progress">
+            <div class="cricle-progress" id="freeprogress" data-percent="{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </div>
+
 
         <div class="class-operation">
           {# 班级过了有效期的提示 #}
