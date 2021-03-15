@@ -2113,10 +2113,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courses = $this->findCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($courses, 'id');
         $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $courseIds), 'courseId');
-        $finished = true;
+        $finished = '1';
         foreach ($courses as $course) {
             if (empty($coursesMembers[$course['id']]) || !$coursesMembers[$course['id']]['isLearned']) {
-                $finished = false;
+                $finished = '0';
                 break;
             }
         }
@@ -2146,10 +2146,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($classroomMembers as $classroomMember) {
             $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($classroomMember['userId'], $courseIds), 'courseId');
-            $finished = 1;
+            $finished = '1';
             foreach ($courses as $course) {
                 if (empty($coursesMembers[$course['id']]) || !$coursesMembers[$course['id']]['isLearned']) {
-                    $finished = 0;
+                    $finished = '0';
                     break;
                 }
             }

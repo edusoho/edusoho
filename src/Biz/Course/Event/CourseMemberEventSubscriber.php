@@ -36,6 +36,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.delete' => ['onCourseDelete', -100],
             'course.task.finish' => 'onTaskFinish',
             'course.lesson.setOptional' => 'onLessonOptionalChange',
+            'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.lesson.delete' => ['onCourseLessonDelete', -100],
             'course.task.delete' => ['onCourseTaskDelete', -100],
@@ -95,6 +96,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     }
 
     public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->getCourseMemberService()->recountLearningDataByCourseId($copiedTask['courseId']);
+        }
+    }
+
+    public function onTaskCreateSync(Event $event)
     {
         $task = $event->getSubject();
 

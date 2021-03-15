@@ -1421,6 +1421,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'id' => $member['id'],
                 'learnedNum' => $learnedNum,
                 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+                'isLearned' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? '1' : '0',
                 'finishedTime' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? $member['lastLearnTime'] : 0,
             ];
             // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断

@@ -41,7 +41,8 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             $updatedFields = $event->getArgument('updatedFields');
             $arr = array_intersect($needFields, $updatedFields);
             if (!empty($arr)) {
-//                $this->getClassroomService()->updateClassroomMembersFinishedStatus()
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
             }
         }
     }
