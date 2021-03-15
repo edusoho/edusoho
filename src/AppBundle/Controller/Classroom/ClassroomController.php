@@ -790,7 +790,8 @@ class ClassroomController extends BaseController
         return $this->render('classroom/member-access-modal.html.twig',
             [
                 'code' => $memberAccessCode,
-                'vipRightLevel' => $vipRightLevel,
+                'userLevel' => $vipRightLevel,
+                'vipRightLevel' => empty($vipRight) ? [] : $this->getLevelService()->getLevel($vipRight['vipLevelId']),
                 'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             ]);
     }

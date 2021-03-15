@@ -141,7 +141,7 @@
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
                 } else if (sku.vipLevelInfo) {
                     this.buyViewMode = 'btn';
-                    if (sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
+                    if (sku.vipUser && sku.canVipJoin && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
                         this.buyViewText = Translator.trans('goods.show_page.vip_free_learn_new');
                         this.needBuyVip = 0;
                     } else {
@@ -150,7 +150,7 @@
                         if (!sku.vipUser || (sku.vipUser && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime())){
                             this.needBuyVipText = Translator.trans('goods.show_page.vip_buy',{vipName:sku.vipLevelInfo.name});
                             this.needBuyVipUrl = "/vip/buy?level=" + sku.vipLevelInfo.id;
-                        }else if (sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq){
+                        }else if (sku.vipUser){
                             this.needBuyVipText = Translator.trans('goods.show_page.vip_upgrade',{vipName:sku.vipLevelInfo.name});
                             this.needBuyVipUrl = "/vip/upgrade?targetId=" + sku.vipLevelInfo.id;
                         }

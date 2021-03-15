@@ -1741,8 +1741,8 @@ site.manage: 管理
 goods.show_page.goto_learn: 去学习
 goods.show_page.vip_free_learn: 会员免费学
 goods.show_page.vip_free_learn_new: 会员免费兑换
-goods.show_page.vip_buy: %vipName%会员免费
-goods.show_page.vip_upgrade: 升级为%vipName%会员免费
+goods.show_page.vip_buy: %vipName%免费
+goods.show_page.vip_upgrade: 升级为%vipName%免费
 goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
 goods.show_page.not_buyable_tips: 抱歉，该商品为限制商品，请联系客服
 goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服
