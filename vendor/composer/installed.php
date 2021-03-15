@@ -1,12 +1,13 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'dev-develop',
-    'version' => 'dev-develop',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
+      0 => '2.8.x-dev',
     ),
-    'reference' => '8cd1582381300c69542caef7aaf4da6a02a70857',
+    'reference' => '77a550227cdb2f760f1d60483731682369706712',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -98,9 +99,8 @@
       'version' => 'dev-master',
       'aliases' => 
       array (
-        0 => '9999999-dev',
       ),
-      'reference' => 'ee271315e4b71ec86d2cc167eb52f47326029eca',
+      'reference' => '99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3',
     ),
     'codeages/biz-order-pay' => 
     array (
@@ -108,8 +108,9 @@
       'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '9999999-dev',
       ),
-      'reference' => '014aaa9de94616364c32247e794479a0374fae34',
+      'reference' => 'c2328cf3f6c317c368e85983825da6ac97fc105f',
     ),
     'codeages/biz-rate-limiter' => 
     array (
@@ -155,7 +156,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '6a438ba947bcceefeff9bd7808e9314bd70d648f',
+      'reference' => '3c3b7f003d24f87571a941bc7dcc31b1c6012648',
     ),
     'codeages/plumber2' => 
     array (
@@ -1733,12 +1734,13 @@
     ),
     'topxia/edusoho' => 
     array (
-      'pretty_version' => 'dev-develop',
-      'version' => 'dev-develop',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '2.8.x-dev',
       ),
-      'reference' => '8cd1582381300c69542caef7aaf4da6a02a70857',
+      'reference' => '77a550227cdb2f760f1d60483731682369706712',
     ),
     'twig/twig' => 
     array (

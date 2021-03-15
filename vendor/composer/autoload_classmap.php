@@ -28,6 +28,7 @@ return array(
     'Codeception\\Util\\JsonType' => $vendorDir . '/codeception/module-rest/src/Codeception/Util/JsonType.php',
     'Codeception\\Util\\Shared\\Asserts' => $vendorDir . '/codeception/lib-asserts/src/Codeception/Util/Shared/Asserts.php',
     'Collator' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Collator.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'DivisionByZeroError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
     'Docopt' => $vendorDir . '/docopt/docopt/src/docopt.php',
     'Docopt\\Argument' => $vendorDir . '/docopt/docopt/src/docopt.php',

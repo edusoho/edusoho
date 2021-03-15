@@ -2,9 +2,9 @@
 
 namespace Codeages\Biz\Order\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface OrderItemDao extends GeneralDaoInterface
+interface OrderItemDao extends AdvancedDaoInterface
 {
     public function findByOrderId($orderId);
 

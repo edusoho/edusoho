@@ -762,6 +762,7 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Codeception\\Util\\JsonType' => __DIR__ . '/..' . '/codeception/module-rest/src/Codeception/Util/JsonType.php',
         'Codeception\\Util\\Shared\\Asserts' => __DIR__ . '/..' . '/codeception/lib-asserts/src/Codeception/Util/Shared/Asserts.php',
         'Collator' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Collator.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'Docopt' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
         'Docopt\\Argument' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
