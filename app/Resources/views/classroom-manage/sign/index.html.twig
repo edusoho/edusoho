@@ -16,7 +16,7 @@
         <input class="form-control" type="text" placeholder="{{ 'classroom.manage.sign_statictics.name_placeholder'|trans }}" name="nameLike" value="{{ app.request.query.get('nameLike', null) }}">
         <select class="form-control" name="role">
           <option value="" {% if '' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.all'|trans }}</option>
-          <option value="headerTeacher" {% if 'headerTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }}</option>
+          <option value="headTeacher" {% if 'headTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }}</option>
           <option value="teacher" {% if 'teacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.teacher'|trans }}</option>
           <option value="assistant" {% if 'assistant' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.assistant'|trans }}</option>
           <option value="student" {% if 'student' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.student'|trans }}</option>
