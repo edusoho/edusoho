@@ -514,6 +514,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'lastLearnTime = :lastLearnTime',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
                 'lastLearnTime < :lastLearnTimeLessThen',
+                'lastLearnTime > lastLearnTime_GT',
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',

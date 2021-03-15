@@ -12,6 +12,7 @@ class CourseMemberAddStartLearnTime extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec("ALTER TABLE `course_member` ADD COLUMN `startLearnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始学习时间' AFTER `isLearned`;");
         $biz['db']->exec("ALTER TABLE `classroom_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';");
+        $biz['db']->exec("ALTER TABLE `course_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';");
     }
 
     /**
