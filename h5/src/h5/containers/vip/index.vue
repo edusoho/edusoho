@@ -49,6 +49,7 @@
         </div>
       </div>
     </div>
+
     <!-- 专属权益 -->
     <div class="vip-sec">
       <module-title title="专属权益" />
@@ -311,9 +312,7 @@ export default {
       this.activePriceId = value;
     },
 
-    // 购买 vip
     clickVipBuy() {
-      // 未登录跳转到登录
       if (!this.user) {
         this.$router.push({
           path: '/login',
@@ -323,7 +322,9 @@ export default {
         });
         return;
       }
-      console.log('购买 vip');
+      if (!this.vipBuyStatu.status) return;
+
+      console.log('fasf');
     },
   },
 };
