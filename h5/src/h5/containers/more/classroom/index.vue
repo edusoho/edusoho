@@ -224,6 +224,11 @@ export default {
     },
 
     isSelectedDataSame(selectedData) {
+      const oldLength = Object.keys(selectedData).length;
+      const newLength = Object.keys(this.selectedData).length;
+
+      if (oldLength != newLength) return false;
+
       for (const key in this.selectedData) {
         if (this.selectedData[key] != selectedData[key]) {
           return false;
