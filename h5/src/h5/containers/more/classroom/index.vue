@@ -3,7 +3,7 @@
     <van-dropdown-menu active-color="#1989fa">
       <template v-for="(item, index) in dropdownData" @change="change">
         <van-dropdown-item
-          v-if="item.type === 'vip' ? vipSwitch : true"
+          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
           :key="index"
           v-model="item.value"
           :options="item.options"
