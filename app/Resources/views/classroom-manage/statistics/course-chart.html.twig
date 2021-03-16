@@ -1,6 +1,18 @@
 <span class="select-content">
   <form class="js-task-detail" id="overview-task-list">
-    <input class="select-time-input" type="text" name="titleLike" placeholder="{{ 'course.dashboard.study_detail.name'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
+    <span class="select-content bottom-border">
+        <select name="orderBy" class="select-time-select">
+          <option value="CompletionRateDesc">{{ 'classroom.manage.data_statistics.student_detail_list.select_finish_rate'|trans }} ↓</option>
+          <option value="CompletionRateAsc">{{ 'classroom.manage.data_statistics.student_detail_list.select_finish_rate'|trans }} ↑</option>
+        </select>
+        <select name="filter" class="select-time-select">
+          <option value="all">{{ '全部课程'|trans }}</option>
+          <option value="finishedCourses">{{ '已完成课程'|trans }}</option>
+          <option value="unFinishedCourses">{{ '未完成课程'|trans }} </option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <input class="select-time-input" type="text" name="titleLike" placeholder="{{ '课程名称'|trans }}">
     <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
     <input type="hidden" name="classroomId" value="{{ classroom.id }}">
   </form>

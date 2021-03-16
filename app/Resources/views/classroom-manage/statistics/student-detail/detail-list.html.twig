@@ -9,7 +9,12 @@
   <div class="col-15">
     {{ '累加学习时长(分)' }}
   </div>
-  <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
+  <div class="col-10">{{ 'course.task.rate.finish'|trans }}
+    <span class="link-medium es-icon es-icon-help ml5"
+          data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+          data-content="{{ '班级中已完成的课时/班级中所有课时=完课率（不包含选修课时）'|trans }}">
+    </span>
+  </div>
 </div>
 {% for member in members if classroomCourses %}
   {% set user = users[member.userId] %}

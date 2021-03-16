@@ -825,7 +825,7 @@ class ClassroomManageController extends BaseController
     public function courseDetailListAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $conditions['titleLike'] = $request->query->get('nameLike');
+        $conditions['nameLike'] = $request->query->get('titleLike');
 
         $count = $this->getReportService()->getCourseDetailCount($id, $conditions);
         $paginator = new Paginator(

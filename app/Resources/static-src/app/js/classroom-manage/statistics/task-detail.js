@@ -8,6 +8,9 @@ export default class StudentDetail extends BaseChart{
 
   chartEvent(){
     let self = this;
+    this.$form.find('select').change(function(){
+      self.update();
+    });
     let $jsSearchBtn = this.$form.find('.js-task-detail-search');
     $jsSearchBtn.prev().on('keypress',function(event){
       if (13 === event.keyCode) {

@@ -2,19 +2,22 @@
 <div class="row">
     <div class="legend clearfix">
         <div class="col-10">
-            {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
+            {{ '课程名称' }}
         </div>
         <div class="col-80">
             {% include 'classroom-manage/statistics/course-detail/chart-data-legend.html.twig' %}
         </div>
-        <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
+        <div class="col-10">{{ 'course.task.rate.finish'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                data-content="{{ '课程中已完成的课时/课程中所有课时=完课率（不包含选修课时）'|trans }}">
+          </span>
+        </div>
     </div>
     {% for task in tasks %}
         <div class="chart-item clearfix">
-            <div class="col-10 color-gray">
-                {% if task %}
-                    {{ task.courseSetTitle }}
-                {% endif %}
+            <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ task.courseSetTitle }}">
+              {{ task.courseSetTitle }}
             </div>
             <div class="col-80">
                 <div class="progress"

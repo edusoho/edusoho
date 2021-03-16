@@ -106,10 +106,10 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if (!empty($filterConditions['nameLike'])) {
-            $courses = $this->getCourseService()->searchCourses([
+            $courses = ArrayToolkit::index($this->getCourseService()->searchCourses([
                 'courseSetTitleLike' => $filterConditions['nameLike'],
                 'classroomId' => $classroom['id'],
-            ], ['id' => 'DESC'], $start, $limit);
+            ], ['id' => 'DESC'], $start, $limit), 'id');
             $courseIds = ArrayToolkit::column($courses, 'id');
             $classroomCourses = $this->getClassroomCourseDao()->search(['courseIds' => $courseIds], ['seq' => 'ASC'], $start, $limit);
         } else {
@@ -128,8 +128,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             }
             $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'isLearned' => 1]);
             $course['learnNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'startLearnTime_GT' => 0, 'isLearned' => 1]);
+
+            $members = $this->getCourseMemberService()->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX, ['learnedCompulsoryTaskNum']);
+            $finishedTasksNum = empty($members) ? 0 : array_sum(ArrayToolkit::column($members, 'learnedCompulsoryTaskNum'));
             $course['notStartedNum'] = $course['studentNum'] - $course['finishedNum'] - $course['learnNum'];
-            $course['rate'] = $this->getPercent($course['finishedNum'], $course['studentNum']);
+            $course['rate'] = $this->getPercent($course['finishedNum'], $finishedTasksNum * $course['compulsoryTaskNum']);
             $courseList[] = $course;
         }
 
