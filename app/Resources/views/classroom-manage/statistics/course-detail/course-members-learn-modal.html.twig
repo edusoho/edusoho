@@ -13,11 +13,11 @@
       <select style="width:200px;margin-right:15px" class="form-control pull-left" name="filter" tabindex="-1" id="status-select">
         <option value="all" {% if app.request.get('filter')|default('all') == 'all' %} selected {% endif %}
                 data-url="{{ path('classroom_data_statistics_course_detail_modal', {id:classroom.id, courseId: course.id, filter: 'all'}) }}">{{ '全部' }}</option>
-        <option value="all" {% if app.request.get('filter')|default('all') == 'unLearn' %} selected {% endif %}
+        <option value="unLearn" {% if app.request.get('filter')|default('all') == 'unLearn' %} selected {% endif %}
                 data-url="{{ path('classroom_data_statistics_course_detail_modal', {id:classroom.id, courseId: course.id, filter: 'unLearn'}) }}">{{ '未学' }}</option>
-        <option value="all" {% if app.request.get('filter')|default('all') == 'learning' %} selected {% endif %}
+        <option value="learning" {% if app.request.get('filter')|default('all') == 'learning' %} selected {% endif %}
                 data-url="{{ path('classroom_data_statistics_course_detail_modal', {id:classroom.id, courseId: course.id, filter: 'learning'}) }}">{{ '学习中' }}</option>
-        <option value="all" {% if app.request.get('filter')|default('all') == 'learned' %} selected {% endif %}
+        <option value="learned" {% if app.request.get('filter')|default('all') == 'learned' %} selected {% endif %}
                 data-url="{{ path('classroom_data_statistics_course_detail_modal', {id:classroom.id, courseId: course.id, filter: 'learned'}) }}">{{ '已学完' }}</option>
       </select>
     </form>

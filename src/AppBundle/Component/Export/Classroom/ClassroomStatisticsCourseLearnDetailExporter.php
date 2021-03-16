@@ -21,7 +21,7 @@ class ClassroomStatisticsCourseLearnDetailExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $results = $this->getReportService()->getCourseLearnDetail($this->conditions['classroomId'], $this->conditions['courseId'], ['filter' => 'all'], $start, $limit);
+        $results = $this->getReportService()->getCourseLearnDetail($this->conditions['classroomId'], $this->conditions['courseId'], ['filter' => $this->conditions['filter']], $start, $limit);
         $userIds = ArrayToolkit::column($results, 'userId');
 
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
