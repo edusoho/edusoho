@@ -51,7 +51,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'alterTables',
+            'registerJob',
+            'refreshClassroomIncome'
         );
 
         $funcNames = array();
@@ -84,6 +85,41 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function registerJob()
+    {
+        $this->getSchedulerService()->register(array(
+            'name' => 'RefreshUserSignKeepDaysJob',
+            'expression' => '15 0 * * *',
+            'class' => 'Biz\Sign\Job\RefreshUserSignKeepDaysJob',
+            'args' => [],
+            'misfire_threshold' => 300,
+            'misfire_policy' => 'executing',
+        ));
+
+        return 1;
+    }
+
+    public function refreshClassroomIncome()
+    {
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT g.targetId AS id, IF(c.income, TRUNCATE(c.income/100, 2), 0) AS income 
+            FROM goods_specs g INNER JOIN (
+                SELECT m.target_id AS targetId, sum(o.pay_amount) AS income 
+                FROM biz_order o INNER JOIN (
+                    SELECT target_id, order_id FROM biz_order_item WHERE target_type = 'classroom'
+                ) AS m ON m.order_id = o.id GROUP BY targetId
+            ) AS c ON c.targetId = g.id;
+        ");
+
+        if (empty($updateFields)) {
+            return 1;
+        }
+
+        $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+
+        return 1;
     }
 
     public function alterTables($page)
@@ -263,6 +299,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getClassroomDao()
+    {
+        return $this->createDao('Classroom:ClassroomDao');
     }
 }
 
