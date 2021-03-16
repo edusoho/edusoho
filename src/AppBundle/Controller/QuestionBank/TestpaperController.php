@@ -426,7 +426,7 @@ class TestpaperController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['id' => 'ASC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -473,7 +473,7 @@ class TestpaperController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
