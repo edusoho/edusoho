@@ -43,7 +43,7 @@
       {% for member in members %}
         {% set user = users[member.userId]|default([]) %}
         <tr>
-          <td>{{ user.nickname|default('--') }} <span class="text-muted">({{ member.remark|trans }})</span> </td>
+          <td>{{ user.nickname|default('--') }} <span class="text-muted">{% if member.remark %}({{ member.remark|trans }}){% endif %}</span> </td>
           <td>
             {% if member.learnStatus == 'unLearn' %}
               <span class="cd-text-gray">{{ '未学'|trans }}</span>
