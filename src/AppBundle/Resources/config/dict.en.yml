@@ -205,8 +205,9 @@ boughtType:
     new: Purchase
     renew: Renew
     upgrade: Upgrade
-    edit: Edit
+    admin: Add
     cancel: Cancel
+    edit: Edit
 
 userKeyWordType:
     nickname: Nickname
