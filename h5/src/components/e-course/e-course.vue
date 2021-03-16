@@ -71,7 +71,7 @@ export default {
       default: 'course_list',
     },
     duration: {
-      type: Number,
+      type: [Number, String],
       default: 0,
     },
     vipOrderType: {
