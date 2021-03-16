@@ -100,16 +100,24 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function openGroup($id)
     {
-        return $this->updateGroup($id, [
+        $group = $this->updateGroup($id, [
             'status' => 'open',
         ]);
+
+        $this->dispatchEvent('group.open', $group);
+
+        return $group;
     }
 
     public function closeGroup($id)
     {
-        return $this->updateGroup($id, [
+        $group = $this->updateGroup($id, [
             'status' => 'close',
         ]);
+
+        $this->dispatchEvent('group.close', $group);
+
+        return $group;
     }
 
     public function changeGroupImg($id, $field, $data)

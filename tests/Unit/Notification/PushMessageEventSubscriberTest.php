@@ -81,7 +81,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         $subscriber->onArticleDelete($this->getArticleEvent());
         $this->assertArrayEquals(
             [
-                'type' => 'update',
+                'type' => 'delete',
                 'args' => [
                     'category' => 'article',
                 ],
