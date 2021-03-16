@@ -83,6 +83,7 @@ class OrderInfo extends AbstractResource
             'coinName' => '',
             'cashRate' => '1',
             'buyType' => '',
+            'subtitle' => '',
             'priceType' => 'CNY' === $currency->isoCode ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
             'fullCoinPayable' => 0,
@@ -97,6 +98,7 @@ class OrderInfo extends AbstractResource
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
+            $orderInfo['subtitle'] = empty($extra['subtitle']) ? '' : $extra['subtitle'];
         }
 
         if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
