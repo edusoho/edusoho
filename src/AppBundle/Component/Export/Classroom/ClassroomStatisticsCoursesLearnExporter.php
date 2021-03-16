@@ -58,6 +58,10 @@ class ClassroomStatisticsCoursesLearnExporter extends Exporter
 
     public function buildCondition($conditions)
     {
+        if (!empty($conditions['titleLike'])) {
+            $conditions['nameLike'] = $conditions['titleLike'];
+        }
+
         return $conditions;
     }
 
