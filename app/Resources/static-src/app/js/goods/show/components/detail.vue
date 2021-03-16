@@ -16,9 +16,9 @@
                 </li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'"
-                           :title="goods.title"
+                           :title="goods.title|removeHtml"
                            :summary="goods.summary|removeHtml"
-                           :message="`我正在学习《${goods.title}》，收获巨大哦，一起来学习吧！`"
+                           :message="`我正在学习《${goods.title|removeHtml}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
                            :type="'courseSet'">{{ 'site.share'|trans }}
@@ -31,8 +31,8 @@
 
         <div class="product-detail__right detail-right pull-right">
             <div class="detail-right__box">
-                <p class="detail-right__title">{{ goods.title }}</p>
-                <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
+                <p class="detail-right__title">{{ goods.title|removeHtml }}</p>
+                <p class="detail-right__subtitle">{{ goods.subtitle|removeHtml }}</p>
                 <a v-if="goods.canManage" class="detail-right__manage_btn" @click="manageUrl(goods)">
                     <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.manage'|trans }}
                 </a>
@@ -241,6 +241,7 @@
                     .replace(/&ldquo;/g, '\"')
                     .replace(/&mdash;/g, '-')
                     .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
                     .replace(/&gt;/g, '>')
                     .replace(/&lt;/g, '<')
                     .replace(/<[\w\s"':=\/]*/, '');

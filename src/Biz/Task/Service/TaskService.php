@@ -241,4 +241,6 @@ interface TaskService
     public function canStartTask($taskId);
 
     public function searchTasksWithStatistics(array $conditions, $orderBy, $start, $limit);
+    
+    public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds);
 }

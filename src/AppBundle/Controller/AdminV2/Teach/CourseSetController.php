@@ -38,7 +38,7 @@ class CourseSetController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['excludeTypes'] = ['reservation'];
-        $filter = empty($conditions['filter']) ? 'normal' : $conditions['filter'];
+        $filter = empty($conditions['filter']) ? 'all' : $conditions['filter'];
         unset($conditions['filter']);
         $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
@@ -813,16 +813,21 @@ class CourseSetController extends BaseController
 
     protected function filterCourseSetConditions($filter, $conditions)
     {
-        if ('classroom' == $filter) {
-            $conditions['isClassroomRef'] = 1;
-        } elseif ('vip' == $filter) {
-            $conditions['isVip'] = 1;
-            $conditions['parentId'] = 0;
-            $conditions['isClassroomRef'] = 0;
-        } else {
-            $conditions['parentId'] = 0;
-            $conditions['isClassroomRef'] = 0;
-            $conditions = $this->filterCourseSetType($conditions);
+        switch ($filter) {
+            case 'all':
+                break;
+            case 'classroom':
+                $conditions['isClassroomRef'] = 1;
+                break;
+            case 'vip':
+                $conditions['isVip'] = 1;
+                $conditions['parentId'] = 0;
+                $conditions['isClassroomRef'] = 0;
+                break;
+            default:
+                $conditions['parentId'] = 0;
+                $conditions['isClassroomRef'] = 0;
+                $conditions = $this->filterCourseSetType($conditions);
         }
 
         $conditions = $this->fillOrgCode($conditions);

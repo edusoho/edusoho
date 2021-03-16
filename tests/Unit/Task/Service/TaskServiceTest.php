@@ -1077,6 +1077,14 @@ class TaskServiceTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
+    public function testFindTasksByCopyIdAndLockedCourseIds()
+    {
+        $this->getTaskService()->createTask($this->mockTask());
+        $tasks = $this->getTaskService()->findTasksByCopyIdAndLockedCourseIds(0, ['2']);
+
+        $this->assertCount(1, $tasks);
+    }
+
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
     {
         $taskFields = [

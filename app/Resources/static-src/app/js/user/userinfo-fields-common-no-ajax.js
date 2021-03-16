@@ -77,5 +77,4 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
     });
     this.getCustomFields();
   }
-
 }

@@ -555,12 +555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3"
+                "reference": "01459fffd77d28458d3b1b7c5c13a0d20353333b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3",
-                "reference": "99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/01459fffd77d28458d3b1b7c5c13a0d20353333b",
+                "reference": "01459fffd77d28458d3b1b7c5c13a0d20353333b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -583,7 +583,8 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^5|^6"
             },
-            "time": "2021-02-05T10:30:07+00:00",
+            "time": "2021-03-15T06:31:04+00:00",
+            "default-branch": true,
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -596,6 +597,10 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
+            "support": {
+                "issues": "https://github.com/codeages/biz-item-bank/issues",
+                "source": "https://github.com/codeages/biz-item-bank/tree/master"
+            },
             "install-path": "../codeages/biz-item-bank"
         },
         {

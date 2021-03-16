@@ -10,7 +10,10 @@ class CommonController extends BaseController
 {
     public function getCategoryChoicesAction(Request $request, $type = 'course')
     {
-        return $this->createJsonResponse($this->container->get('web.twig.extension')->getCategoryChoices($type));
+        $group = $this->getCategoryService()->getGroupByCode($type);
+        $categoryTree = $this->getCategoryService()->getCategoryStructureTree($group['id']);
+
+        return $this->createJsonResponse($categoryTree);
     }
 
     public function currentUserAction(Request $request)
@@ -52,5 +55,10 @@ class CommonController extends BaseController
         $datatag = ExtensionManager::instance()->getDataTag($name);
 
         return $this->createJsonResponse($datatag->getData($arguments));
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
