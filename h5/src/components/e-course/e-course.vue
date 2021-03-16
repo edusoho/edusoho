@@ -9,10 +9,10 @@
           v-if="type === 'confirmOrder'"
           class="e-course__title course-confirm-title"
         >
-          {{ title
-          }}<span v-if="typeList === 'vip'" class="grey-medium">
-            x {{ vipDuration }}</span
-          >
+          {{ title }}
+          <div v-if="typeList === 'vip'" class="grey-medium">
+            {{ vipOrderStatus }}
+          </div>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
@@ -74,6 +74,10 @@ export default {
       type: Number,
       default: 0,
     },
+    vipOrderType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -116,6 +120,26 @@ export default {
       if (this.order.unitType === 'month') return `${this.duration}个月`;
       if (this.order.unitType === 'year') return `${this.duration}年`;
       return `${this.duration}天`;
+    },
+
+    vipOrderStatus() {
+      let status = '';
+
+      switch (this.vipOrderType) {
+        case '开通':
+          status = `会员期限：${this.vipDuration}`;
+          break;
+        case '续费':
+          status = `会员续费：${this.vipDuration}`;
+          break;
+        case '升级':
+          status = `会员升级期限至：${this.$moment().format('YYYY/MM/DD')}`;
+          break;
+        default:
+          break;
+      }
+
+      return status;
     },
   },
   watch: {
