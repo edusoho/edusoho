@@ -139,16 +139,28 @@ class EduSohoUpgrade extends AbstractUpdater
             ],
             [
                 'table' => 'sign_user_statistics',
-
+                'column' => 'signDays',
+                'action' => 'add_column',
+                'sql' => "ALTER TABLE `sign_user_statistics` ADD COLUMN `signDays` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `targetId`;",
             ],
-
-
-
-            "ALTER TABLE `sign_user_statistics` ADD COLUMN `signDays` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `targetId`;",
-            "ALTER TABLE `sign_user_statistics` ADD COLUMN `lastSignTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `signDays`;",
-            "ALTER TABLE `classroom_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';",
-            "ALTER TABLE `course_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';"
-
+            [
+                'table' => 'sign_user_statistics',
+                'column' => 'lastSignTime',
+                'action' => 'add_column',
+                'sql' => "ALTER TABLE `sign_user_statistics` ADD COLUMN `lastSignTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `signDays`;",
+            ],
+            [
+                'table' => 'classroom_member',
+                'column' => 'lastLearnTime',
+                'action' => 'modify',
+                'sql' => "ALTER TABLE `classroom_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';",
+            ],
+            [
+                'table' => 'course_member',
+                'column' => 'lastLearnTime',
+                'action' => 'modify',
+                'sql' => "ALTER TABLE `course_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';"
+            ],
         ];
 
     }
