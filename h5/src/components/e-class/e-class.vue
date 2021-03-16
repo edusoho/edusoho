@@ -76,7 +76,7 @@ export default {
       default: false,
     },
     isVip: {
-      type: String,
+      type: [String, Number],
       default: '0',
     },
     showNumberData: {

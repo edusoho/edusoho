@@ -153,7 +153,7 @@ export default {
       const selectedData = {};
       this.dropdownData.forEach(item => {
         const { type, value } = item;
-        if (type === 'vipLevelId' && !this.vipSwitch) {
+        if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
           return;
         }
         selectedData[type] = value;
