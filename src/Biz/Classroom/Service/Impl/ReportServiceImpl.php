@@ -125,8 +125,8 @@ class ReportServiceImpl extends BaseService implements ReportService
                 $course['finishedNum'] = $course['learnNum'] = $course['notStartedNum'] = $course['rate'] = 0;
                 continue;
             }
-            $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'isLearned' => 1]);
-            $course['learnNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'startLearnTime_GT' => '0', 'isLearned' => '0']);
+            $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'role' => 'student', 'isLearned' => 1]);
+            $course['learnNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'],  'role' => 'student', 'startLearnTime_GT' => '0', 'isLearned' => '0']);
 
             $members = $this->getCourseMemberService()->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX, ['learnedCompulsoryTaskNum']);
             $finishedTasksNum = empty($members) ? 0 : array_sum(ArrayToolkit::column($members, 'learnedCompulsoryTaskNum'));
