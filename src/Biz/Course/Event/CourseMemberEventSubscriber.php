@@ -41,7 +41,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.lesson.delete' => ['onCourseLessonDelete', -100],
             'course.task.delete' => ['onCourseTaskDelete', -100],
-            'course.task.create' => 'onCourseTaskCreate',
+            'course.task.create' => ['onCourseTaskCreate', -100],
         ];
     }
 
