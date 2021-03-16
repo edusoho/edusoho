@@ -993,7 +993,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $learnedNum = $this->getTaskResultService()->countTaskResults(
             ['courseId' => $courseId, 'userId' => $userId, 'status' => 'finish']
         );
-        $lastLearnTime = ($learnedNum > 0) ? time() : null;
+        $lastLearnTime = ($learnedNum > 0) ? time() : 0;
 
         $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
