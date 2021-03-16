@@ -230,6 +230,7 @@ user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
+user.fields.profile_mobile_label: Phone(from personal data)
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
 user.fields.mobile_label.apple_tip: Please go to the APP for binding
@@ -456,6 +457,7 @@ order.buyer.username: Username
 order.buyer.true_name: True name
 order.buyer.email: Email
 order.buyer.contact: Contact
+order.buyer.mobile: Mobile
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
@@ -7173,7 +7175,7 @@ admin.cloud.app.upgrades.app: Application
 admin.cloud.app.upgrades.tips: 'During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.'
 admin.cloud.app.upgrades_danger.tips: Warning! you are currently using the test channel to upgrade this application, it is highly recommended that you give up to rise your current operation, other wise, site collapse and so on can't unexpected consequences, you need to take the consequences yourself.
 admin.cloud.app.upgrades.app_name: 'Application Name'
-admin.cloud.app.upgrades.app_version: 'Application Name'
+admin.cloud.app.upgrades.app_version: 'Application Version'
 admin.cloud.app.upgrades.backupDB: 'Backup Database'
 admin.cloud.app.upgrades.backupFile: 'Backup Files'
 admin.cloud.app.upgrades.backupStatus.yes: 'Yes'
@@ -7361,7 +7363,8 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
-
+course.homework_check.create.name: "Homework name"
+course.homework_check.homework_delete: "The homework has been deleted"
 
 course.question_marker_statistics: PopQuestion Statistics
 
@@ -9395,6 +9398,8 @@ exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
+exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
+exception.item_bank.assessment.not.exist: Test paper does not exist
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -9574,6 +9579,7 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 editor.iframe_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 #coupon
 coupon.usage_detail_title: Coupon usage details
+coupon.generate_log_title: Coupon generate logs
 coupon.enable_hint: The coupon is not open. Please enable it in <a href="%path%"> System - Operational Settings - Coupon </a>
 
 coupon.id: Coupon id
@@ -10278,6 +10284,7 @@ information_collect.title: Information Collect
 information_collect.form_items.confirm_submit: Submit
 information_collect.form_items.skip: Skip
 information_collect.select_placeholeder: Choose
+information_collect.detail: Information Collect Detail
 
 task.learn_data_detail.stay_total_time: 页面累加时长（分）
 task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）

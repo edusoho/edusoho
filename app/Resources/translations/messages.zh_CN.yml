@@ -298,6 +298,7 @@ user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
 user.fields.mobile_label: 手机号码
+user.fields.profile_mobile_label: 手机号码（来自个人资料）
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
 user.fields.mobile_label.apple_tip: 请前往APP端进行绑定
@@ -542,6 +543,7 @@ order.buyer.username: 用户名
 order.buyer.true_name: 真实姓名
 order.buyer.email: 邮箱
 order.buyer.contact: 联系电话
+order.buyer.mobile: 手机号
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
@@ -633,6 +635,7 @@ order.pay: 订单支付
 order.success: 订单完成
 order.refund.notify_admin: >
   用户%nickname%申请退款 <a href='%targetUrl%'>%title%</a>，请审核
+
 
 # 支付中心
 pay_center: 支付中心
@@ -1263,6 +1266,8 @@ course.homework_check.finish_check_submiting: 正在提交, 请稍等
 course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
+course.homework_check.create.name: 作业名称
+course.homework_check.homework_delete:  该作业已删除
 
 course.question_marker_statistics: 弹题统计
 
@@ -8578,7 +8583,7 @@ admin.cloud.app.upgrades.app: 应用
 admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
 admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
-admin.cloud.app.upgrades.app_version: 应用名称
+admin.cloud.app.upgrades.app_version: 应用版本
 admin.cloud.app.upgrades.backupDB: 备份数据库
 admin.cloud.app.upgrades.backupFile: 备份文件
 admin.cloud.app.upgrades.backupStatus.yes: 是
@@ -10656,6 +10661,8 @@ exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
+exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
+exception.item_bank.assessment.not.exist: 试卷不存在
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
@@ -10850,6 +10857,7 @@ editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统�
 
 #coupon
 coupon.usage_detail_title: 优惠券使用详情
+coupon.generate_log_title: 优惠券生成记录
 coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
 
 coupon.id: 编号
@@ -11549,6 +11557,7 @@ information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
+information_collect.detail: 用户信息采集详情
 course.task.notify_message.join_and_buy: 请先加入课程或购买课程
 course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
 exam_bank.analysis.data_large_loading: 数据量过大，正在刷新

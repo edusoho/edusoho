@@ -44,6 +44,7 @@
     "easy-pie-chart": "2.1.7",
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
+    "element-ui": "file:app/Resources/static-src/libs/element-ui",
     "es-ckeditor": "4.7.2-patch16",
     "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
@@ -59,7 +60,7 @@
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
     "intro.js": "2.4.0",
-    "item-bank": "1.0.18",
+    "item-bank": "^1.0.19",
     "jquery": "3.2.1",
     "jquery-base64": "^1.0.0",
     "jquery-blurr": "0.1.2",
@@ -92,8 +93,7 @@
     "vue": "^2.6.11",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
-    "weixin-js-sdk": "1.2.0",
-    "element-ui": "file:app/Resources/static-src/libs/element-ui"
+    "weixin-js-sdk": "1.2.0"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",

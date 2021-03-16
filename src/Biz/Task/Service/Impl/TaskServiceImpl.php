@@ -1207,6 +1207,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return true;
     }
 
+    public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    }
+
     /**
      * @return TaskDao
      */

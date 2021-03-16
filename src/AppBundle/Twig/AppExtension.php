@@ -3,11 +3,11 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Common\ServiceToolkit;
-use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\Course\Service\CourseSetService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AppExtension extends \Twig_Extension
@@ -31,29 +31,30 @@ class AppExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('currency', array($this, 'currency')),
-            new \Twig_SimpleFilter('json_encode_utf8', array($this, 'jsonEncodeUtf8')),
-        );
+        return [
+            new \Twig_SimpleFilter('currency', [$this, 'currency']),
+            new \Twig_SimpleFilter('json_encode_utf8', [$this, 'jsonEncodeUtf8']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('services', array($this, 'buildServiceTags')),
-            new \Twig_SimpleFunction('classroom_services', array($this, 'buildClassroomServiceTags')),
-            new \Twig_SimpleFunction('count', array($this, 'count')),
-            new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
-            new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
-            new \Twig_SimpleFunction('open_course_cover', array($this, 'openCourseCover')),
-            new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+        return [
+            new \Twig_SimpleFunction('services', [$this, 'buildServiceTags']),
+            new \Twig_SimpleFunction('classroom_services', [$this, 'buildClassroomServiceTags']),
+            new \Twig_SimpleFunction('count', [$this, 'count']),
+            new \Twig_SimpleFunction('course_count', [$this, 'courseCount']),
+            new \Twig_SimpleFunction('course_cover', [$this, 'courseCover']),
+            new \Twig_SimpleFunction('open_course_cover', [$this, 'openCourseCover']),
+            new \Twig_SimpleFunction('course_set_cover', [$this, 'courseSetCover']),
+            new \Twig_SimpleFunction('goods_cover', [$this, 'goodsCover']),
             //@deprecated 请勿使用，后续将删除  2017-03-30
             //@see WebExtension#avatarPath
-            new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
-            new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
-            new \Twig_SimpleFunction('log_trans', array($this, 'logTrans')),
-            new \Twig_SimpleFunction('is_new_classroom_cover_size', array($this, 'isNewClassroomCoverSize')),
-        );
+            new \Twig_SimpleFunction('user_avatar', [$this, 'userAvatar']),
+            new \Twig_SimpleFunction('course_price', [$this, 'coursePrice']),
+            new \Twig_SimpleFunction('log_trans', [$this, 'logTrans']),
+            new \Twig_SimpleFunction('is_new_classroom_cover_size', [$this, 'isNewClassroomCoverSize']),
+        ];
     }
 
     /*
@@ -94,7 +95,7 @@ class AppExtension extends \Twig_Extension
     public function logTrans($message, $data)
     {
         $translator = $this->container->get('translator');
-        $parameters = array();
+        $parameters = [];
 
         if (isset($data['context'])) {
             $data = $data['context'];
@@ -120,7 +121,7 @@ class AppExtension extends \Twig_Extension
     public function buildServiceTags($selectedTags)
     {
         $tags = ServiceToolkit::getServicesByCodes(
-            array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer')
+            ['homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer']
         );
 
         $tags = $this->transServiceTags($tags);
@@ -151,7 +152,7 @@ class AppExtension extends \Twig_Extension
     public function buildClassroomServiceTags($selectedTags)
     {
         $tags = ServiceToolkit::getServicesByCodes(
-            array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer', 'event', 'workAdvise')
+            ['homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer', 'event', 'workAdvise']
         );
 
         $tags = $this->transServiceTags($tags);
@@ -171,7 +172,7 @@ class AppExtension extends \Twig_Extension
 
     public function courseCount($courseSetId)
     {
-        return $this->getCourseService()->countCourses(array('courseSetId' => $courseSetId));
+        return $this->getCourseService()->countCourses(['courseSetId' => $courseSetId]);
     }
 
     public function courseCover($course, $type = 'middle')
@@ -224,6 +225,25 @@ class AppExtension extends \Twig_Extension
 
         if (empty($coverPath)) {
             $settings = $this->getSettingService()->get('default');
+            $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
+        }
+
+        return $coverPath;
+    }
+
+    public function goodsCover($goods, $type = 'middle')
+    {
+        $coverPath = null;
+        if (!empty($goods)) {
+            $cover = $goods['images'];
+            if (!empty($cover) && !empty($cover[$type])) {
+                $coverPath = $cover[$type];
+            }
+        }
+
+        if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            // todo:暂时使用自定义默认课程图片
             $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
         }
 

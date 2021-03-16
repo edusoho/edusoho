@@ -7,7 +7,7 @@
     array (
       0 => '2.8.x-dev',
     ),
-    'reference' => '77a550227cdb2f760f1d60483731682369706712',
+    'reference' => 'd891940a22523f97d808d5bbc87caf0f90864820',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -99,8 +99,9 @@
       'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '9999999-dev',
       ),
-      'reference' => '99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3',
+      'reference' => '01459fffd77d28458d3b1b7c5c13a0d20353333b',
     ),
     'codeages/biz-order-pay' => 
     array (
@@ -1740,7 +1741,7 @@
       array (
         0 => '2.8.x-dev',
       ),
-      'reference' => '77a550227cdb2f760f1d60483731682369706712',
+      'reference' => 'd891940a22523f97d808d5bbc87caf0f90864820',
     ),
     'twig/twig' => 
     array (

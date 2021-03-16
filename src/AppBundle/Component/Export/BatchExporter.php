@@ -162,8 +162,9 @@ class BatchExporter
     {
         $name = explode('_', $name);
         $translator = $this->container->get('translator');
+        $title = $translator->trans(ExportUtil::getExportCsvTitle($name[0]));
 
-        return $translator->trans(ExportUtil::getExportCsvTitle($name[0])).'.csv';
+        return sprintf($title.'-(%s).csv', date('Y-n-d'));
     }
 
     protected function writeCsv($fileName, $csvName)

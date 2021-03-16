@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Util\EdusohoLiveClient;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveOpenCourseController extends BaseOpenCourseController
@@ -21,22 +21,23 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('info', $result['message']);
         }
 
-        $params = array();
+        $params = [];
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $user = $this->getCurrentUser();
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
-        $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
+        $params['displayName'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
+        $params['nickname'] = $user->isLogin() ? $user['nickname'].'_'.$user['id'] : $this->getRandomNickname($request, $courseId, $lessonId);
         $params['isLogin'] = $user->isLogin();
         $params['startTime'] = $lesson['startTime'];
         $params['endTime'] = $lesson['endTime'];
         $this->createRefererLog($request, $course);
 
         return $this->forward('AppBundle:Liveroom:_entry',
-        array(
+        [
             'roomId' => $lesson['mediaId'],
-        ), $params);
+        ], $params);
     }
 
     protected function getMillisecond()
@@ -84,10 +85,10 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     public function verifyAction(Request $request)
     {
-        $result = array(
+        $result = [
             'code' => '0',
             'msg' => 'ok',
-        );
+        ];
 
         return $this->createJsonResponse($result);
     }
@@ -119,10 +120,10 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $lesson['isEnd'] = (int) (time() - $lesson['endTime']) > 0;
         $lesson['canRecord'] = $client->isAvailableRecord($lesson['mediaId']);
 
-        return $this->render('live-course-replay-manage/list-item.html.twig', array(
+        return $this->render('live-course-replay-manage/list-item.html.twig', [
             'course' => $course,
             'lesson' => $lesson,
-        ));
+        ]);
     }
 
     public function editLessonReplayAction(Request $request, $lessonId, $courseId)
@@ -136,31 +137,31 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         if ('POST' == $request->getMethod()) {
             $ids = $request->request->get('visibleReplaies');
-            $this->getLiveReplayService()->updateReplayByLessonId($lessonId, array('hidden' => 1), 'liveOpen');
+            $this->getLiveReplayService()->updateReplayByLessonId($lessonId, ['hidden' => 1], 'liveOpen');
 
             foreach ($ids as $id) {
-                $this->getLiveReplayService()->updateReplay($id, array('hidden' => 0));
+                $this->getLiveReplayService()->updateReplay($id, ['hidden' => 0]);
             }
 
-            return $this->redirect($this->generateUrl('live_open_course_manage_replay', array('id' => $courseId)));
+            return $this->redirect($this->generateUrl('live_open_course_manage_replay', ['id' => $courseId]));
         }
 
         $replayLessons = $this->getLiveReplayService()->searchReplays(
-            array(
+            [
                 'lessonId' => $lessonId,
                 'type' => 'liveOpen',
-            ),
-            array('replayId' => 'ASC'),
+            ],
+            ['replayId' => 'ASC'],
             0,
             PHP_INT_MAX
         );
 
-        return $this->render('live-course-replay-manage/replay-lesson-modal.html.twig', array(
+        return $this->render('live-course-replay-manage/replay-lesson-modal.html.twig', [
             'replayLessons' => $replayLessons,
             'lessonId' => $lessonId,
             'courseId' => $courseId,
             'lesson' => $lesson,
-        ));
+        ]);
     }
 
     public function updateReplayTitleAction(Request $request, $courseId, $lessonId, $replayId)
@@ -173,7 +174,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->createJsonResponse(false);
         }
 
-        $this->getLiveReplayService()->updateReplay($replayId, array('title' => $title));
+        $this->getLiveReplayService()->updateReplay($replayId, ['title' => $title]);
 
         return $this->createJsonResponse(true);
     }
@@ -191,13 +192,13 @@ class LiveOpenCourseController extends BaseOpenCourseController
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
 
-        $default = $this->getSettingService()->get('default', array());
+        $default = $this->getSettingService()->get('default', []);
 
-        return $this->render('live-course-replay-manage/index.html.twig', array(
+        return $this->render('live-course-replay-manage/index.html.twig', [
             'course' => $course,
             'items' => $lessons,
             'default' => $default,
-        ));
+        ]);
     }
 
     public function entryReplayAction(Request $request, $courseId, $lessonId, $replayId)
@@ -206,14 +207,14 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
         $this->createRefererLog($request, $course);
 
-        return $this->render('live-course/classroom.html.twig', array(
+        return $this->render('live-course/classroom.html.twig', [
             'lesson' => $lesson,
-            'url' => $this->generateUrl('live_open_course_live_replay_url', array(
+            'url' => $this->generateUrl('live_open_course_live_replay_url', [
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
                 'replayId' => $replayId,
-            )),
-        ));
+            ]),
+        ]);
     }
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $replayId)
@@ -226,18 +227,18 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $ssl);
 
         if (!empty($result) && !empty($result['resourceNo'])) {
-            $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
+            $result['url'] = $this->generateUrl('es_live_room_replay_show', [
                 'replayId' => $replayId,
                 'targetId' => $course['id'],
                 'targetType' => LiveroomController::LIVE_OPEN_COURSE_TYPE,
                 'lessonId' => $lesson['id'],
-            ));
+            ]);
         }
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'url' => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null,
-        ));
+        ]);
     }
 
     public function uploadModalAction(Request $request, $courseId, $lessonId)
@@ -250,7 +251,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             if (!empty($file)) {
                 $lesson['media'] = $file;
             } else {
-                $lesson['media'] = array('id' => 0, 'convertStatus' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '', 'length' => 0, 'fileSize' => 0);
+                $lesson['media'] = ['id' => 0, 'convertStatus' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '', 'length' => 0, 'fileSize' => 0];
             }
         }
 
@@ -261,18 +262,18 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->redirect(
                 $this->generateUrl(
                     'live_open_course_manage_replay',
-                    array(
+                    [
                         'id' => $courseId,
-                    )
+                    ]
                 )
             );
         }
 
-        return $this->render('live-course-replay-manage/upload-modal.html.twig', array(
+        return $this->render('live-course-replay-manage/upload-modal.html.twig', [
             'course' => $course,
             'lesson' => $lesson,
             'targetType' => 'opencourselesson',
-        ));
+        ]);
     }
 
     protected function getLiveReplayMedia($lesson)

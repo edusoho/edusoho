@@ -30,7 +30,7 @@
       </td>
       <td>
         <a class="pull-left mr5 link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
-          <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}" width="100">
+          <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title|raw }}" width="100">
         </a>
         <div class="mlm">
           <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>

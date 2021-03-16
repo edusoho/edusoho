@@ -55,7 +55,7 @@
             {% for courseSet in courseSets %}
             <tr>
               <td>
-                <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{courseSet.title}}</a>
+                <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{ courseSet.title|raw }}</a>
               </td>
               {% if filter == 'classroom' %}
               <td>

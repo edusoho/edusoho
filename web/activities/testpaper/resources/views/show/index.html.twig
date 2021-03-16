@@ -33,7 +33,11 @@
                 {% endif %}
               </div>
               <div class="text-right mtl">
-                {% if not activity.startTime or (activity.startTime and activity.startTime <= "now"|date("U")) %}
+                {#
+                # @deprecated activity.startTime
+                # @refactor with answerScene.start_time
+                #}
+                {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= "now"|date("U")) %}
                   <a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId: testpaper.id})}}">{{'course.plan_task.activity_manage.testpaper.start_exam'|trans}}</a>
                 {% endif %}
               </div>

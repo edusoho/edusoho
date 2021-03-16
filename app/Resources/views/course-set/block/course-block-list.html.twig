@@ -24,14 +24,14 @@
                           <span class="tag-live"></span>
                         </span>
                       {% endif %}
-                      {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+                      {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title|raw) }}
                     </a>
                   </div>
                   <div class="course-info">
                     <div class="title">
                       <a class="link-dark" {% if ref|default() %} href="{{ path('course_show', {id: courseSet.defaultCourseId,ref:ref}) }}" {% else %} href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" {% endif %}
                        target="_blank">
-                        {{ courseSet.title }}
+                        {{ courseSet.title|raw }}
                       </a>
                     </div>
                     <div class="metas clearfix">

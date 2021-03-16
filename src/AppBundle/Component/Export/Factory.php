@@ -62,6 +62,7 @@ class Factory
             'classroom-statistics-students-learn' => ClassroomStatisticsStudentsLearnExporter::class,
             'classroom-statistics-course-learn' => ClassroomStatisticsCoursesLearnExporter::class,
             'classroom-statistics-course-learn-detail' => ClassroomStatisticsCourseLearnDetailExporter::class,
+            'information-collect-detail' => 'AppBundle\Component\Export\InformationCollect\InformationCollectDetailExporter',
         ];
 
         $names = explode(':', $name);
