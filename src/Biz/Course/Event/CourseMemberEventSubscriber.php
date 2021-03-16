@@ -41,7 +41,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.lesson.delete' => ['onCourseLessonDelete', -100],
             'course.task.delete' => ['onCourseTaskDelete', -100],
+            'course.task.create' => 'onCourseTaskCreate',
         ];
+    }
+
+    public function onCourseTaskCreate(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->getCourseMemberService()->recountLearningDataByCourseId($task['courseId']);
     }
 
     public function onCourseDelete(Event $event)
