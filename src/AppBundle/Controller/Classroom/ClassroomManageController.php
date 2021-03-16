@@ -826,7 +826,7 @@ class ClassroomManageController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
         $conditions['nameLike'] = $request->query->get('titleLike');
-
+        $conditions['orderBy'] = $request->query->get('orderBy');
         $count = $this->getReportService()->getCourseDetailCount($id, $conditions);
         $paginator = new Paginator(
             $request,

@@ -108,12 +108,11 @@ class ReportServiceImpl extends BaseService implements ReportService
         if (!empty($filterConditions['nameLike'])) {
             $courses = ArrayToolkit::index($this->getCourseService()->searchCourses([
                 'courseSetTitleLike' => $filterConditions['nameLike'],
-                'classroomId' => $classroom['id'],
-            ], ['id' => 'DESC'], $start, $limit), 'id');
+            ], ['id' => 'DESC'], 0, PHP_INT_MAX), 'id');
             $courseIds = ArrayToolkit::column($courses, 'id');
-            $classroomCourses = $this->getClassroomCourseDao()->search(['courseIds' => $courseIds], ['seq' => 'ASC'], $start, $limit);
+            $classroomCourses = $this->getClassroomCourseDao()->search(['courseIds' => $courseIds, 'classroomId' => $classroom['id']], ['seq' => 'ASC'], 0, PHP_INT_MAX);
         } else {
-            $classroomCourses = $this->getClassroomCourseDao()->search(['classroomId' => $classroom['id']], ['seq' => 'ASC'], $start, $limit);
+            $classroomCourses = $this->getClassroomCourseDao()->search(['classroomId' => $classroom['id']], ['seq' => 'ASC'], 0, PHP_INT_MAX);
             $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
             $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'id');
         }
@@ -135,8 +134,14 @@ class ReportServiceImpl extends BaseService implements ReportService
             $course['rate'] = $this->getPercent($course['finishedNum'], $finishedTasksNum * $course['compulsoryTaskNum']);
             $courseList[] = $course;
         }
+        if ('CompletionRateDesc' === $filterConditions['orderBy']) {
+            $ascending = false;
+        } else {
+            $ascending = true;
+        }
+        $courseList = ArrayToolkit::sortPerArrayValue($courseList, 'rate', $ascending);
 
-        return $courseList;
+        return array_slice($courseList, $start, $limit);
     }
 
     public function getCourseDetailCount($classroomId, $filterConditions)
