@@ -14,7 +14,7 @@ class AlterClassroomMember extends Migration
         $biz['db']->exec("ALTER TABLE `classroom_member` ADD COLUMN `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成课程时间' AFTER `isFinished`;");
         $biz['db']->exec("ALTER TABLE `classroom_member` ADD COLUMN `learnedCompulsoryTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习的必修课任务数量' AFTER `learnedNum`;");
         $biz['db']->exec("ALTER TABLE `classroom_member` ADD COLUMN `learnedElectiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习的选修课任务数量' AFTER `learnedCompulsoryTaskNum`;");
-        $biz['db']->exec("ALTER TABLE `classroom_member` ADD `questionNum` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '提问数' AFTER `threadNum`;");
+        $biz['db']->exec("ALTER TABLE `classroom_member` ADD COLUMN `questionNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '提问数' AFTER `threadNum`;");
     }
 
     /**

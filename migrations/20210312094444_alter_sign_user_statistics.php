@@ -10,8 +10,8 @@ class AlterSignUserStatistics extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `sign_user_statistics` ADD `signDays` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '签到总天数' AFTER `targetId`;");
-        $biz['db']->exec("ALTER TABLE `sign_user_statistics` ADD `lastSignTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '签到总天数';");
+        $biz['db']->exec("ALTER TABLE `sign_user_statistics` ADD COLUMN `signDays` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `targetId`;");
+        $biz['db']->exec("ALTER TABLE `sign_user_statistics` ADD COLUMN `lastSignTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `signDays`;");
     }
 
     /**

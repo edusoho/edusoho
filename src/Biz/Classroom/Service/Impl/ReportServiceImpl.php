@@ -149,10 +149,9 @@ class ReportServiceImpl extends BaseService implements ReportService
         if (!empty($filterConditions['nameLike'])) {
             $courses = $this->getCourseService()->searchCourses([
                 'courseSetTitleLike' => $filterConditions['nameLike'],
-                'classroomId' => $classroom['id'],
             ], ['id' => 'DESC'], 0, PHP_INT_MAX);
             $courseIds = ArrayToolkit::column($courses, 'id');
-            $classroomCoursesCount = $this->getClassroomCourseDao()->count(['courseIds' => $courseIds]);
+            $classroomCoursesCount = $this->getClassroomCourseDao()->count(['courseIds' => $courseIds, 'classroomId' => $classroom['id']]);
         } else {
             $classroomCoursesCount = $this->getClassroomCourseDao()->count(['classroomId' => $classroom['id']]);
         }
