@@ -109,15 +109,19 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $certificates = [];
         foreach ($courses as $course) {
             if (empty($course['parentId'])) {
-                $certificates[] = $this->getCertificateService()->findByTargetIdAndTargetType($course['id'], 'course');
+                $courseCertificates = $this->getCertificateService()->findByTargetIdAndTargetType($course['id'], 'course');
+                $certificates = array_merge($certificates, $courseCertificates);
             } else {
                 $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomIdsByCourseId($course['id']), 'classroomId');
                 if (empty($classroomIds)) {
                     return true;
                 }
-                $certificates[] = $this->getCertificateService()->findByTargetIdAndTargetType($classroomIds[0], 'classroom');
+                $classroomCertificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroomIds[0], 'classroom');
+                $certificates = array_merge($certificates, $classroomCertificates);
             }
         }
+
+        $certificates = $this->getCertificateService()->findByIds(ArrayToolkit::column($certificates, 'id'));
 
         foreach ($certificates as $certificate) {
             $this->getSchedulerService()->register([
