@@ -59,6 +59,10 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             'classroom.update' => 'onClassroomUpdate',
 
+            //小组开启/关闭（云搜索支持小组话题搜索）
+            'group.open' => 'onGroupOpen',
+            'group.close' => 'onGroupClose',
+
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create' => 'onThreadCreate',
             'thread.update' => 'onThreadUpdate',
@@ -194,7 +198,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $args = [
                 'category' => 'article',
             ];
-            $this->createSearchJob('update', $args);
+            $this->createSearchJob('delete', $args);
         }
     }
 
@@ -647,6 +651,54 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             ];
 
             $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    /**
+     * Group相关
+     */
+    // 小组开启,组内开启话题全部更新
+    public function onGroupOpen(Event $event)
+    {
+        $group = $event->getSubject();
+        $groupThreads = $this->getThreadService('group')->searchThreads(
+            ['groupId' => $group['id'], 'status' => 'open'],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        if ($this->isCloudSearchEnabled()) {
+            foreach ($groupThreads as $thread) {
+                $thread = $this->convertThread($thread, 'group.thread.update');
+                $args = [
+                    'category' => 'thread',
+                ];
+                $this->createSearchJob('update', $args);
+            }
+        }
+    }
+
+    // 小组关闭,组内话题全部删除
+    public function onGroupClose(Event $event)
+    {
+        $group = $event->getSubject();
+        $groupThreads = $this->getThreadService('group')->searchThreads(
+            ['groupId' => $group['id']],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        if ($this->isCloudSearchEnabled()) {
+            foreach ($groupThreads as $thread) {
+                $thread = $this->convertThread($thread, 'group.thread.close');
+                $args = [
+                    'category' => 'thread',
+                    'id' => $thread['target']['type'].'_'.$thread['id'],
+                ];
+                $this->createSearchJob('delete', $args);
+            }
         }
     }
 
