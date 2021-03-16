@@ -127,11 +127,10 @@ class ReportServiceImpl extends BaseService implements ReportService
             }
             $course['finishedNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'], 'role' => 'student', 'isLearned' => 1]);
             $course['learnNum'] = $this->getCourseMemberService()->countMembers(['courseId' => $course['id'],  'role' => 'student', 'startLearnTime_GT' => '0', 'isLearned' => '0']);
-
-            $members = $this->getCourseMemberService()->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX, ['learnedCompulsoryTaskNum']);
+            $members = $this->getCourseMemberService()->searchMembers(['courseId' => $course['id'], 'role' => 'student'], [], 0, PHP_INT_MAX, ['learnedCompulsoryTaskNum']);
             $finishedTasksNum = empty($members) ? 0 : array_sum(ArrayToolkit::column($members, 'learnedCompulsoryTaskNum'));
             $course['notStartedNum'] = $course['studentNum'] - $course['finishedNum'] - $course['learnNum'];
-            $course['rate'] = $this->getPercent($course['finishedNum'], $finishedTasksNum * $course['compulsoryTaskNum']);
+            $course['rate'] = $this->getPercent($finishedTasksNum, $course['studentNum'] * $course['compulsoryTaskNum']);
             $courseList[] = $course;
         }
         if ('CompletionRateDesc' === $filterConditions['orderBy']) {

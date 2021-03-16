@@ -35,7 +35,7 @@
                         <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
                     </div>">
 
-                    <div class="progress-bar finish-color" style="width: {{ task.rate}}%">
+                    <div class="progress-bar finish-color" style="width: {{ percent(task.finishedNum, classroom.studentNum) }}">
                     </div>
                     <div class="progress-bar start-color" style="width: {{ percent(task.learnNum, classroom.studentNum) }}">
                     </div>
