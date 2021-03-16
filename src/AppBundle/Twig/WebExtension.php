@@ -23,6 +23,7 @@ use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
+use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
@@ -32,6 +33,7 @@ use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -215,7 +217,40 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
             new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
             new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
+            new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
         ];
+    }
+
+    public function isShowNewMembers()
+    {
+        $theme = $this->getSetting('theme.uri');
+        if (in_array($theme, ['jianmo', 'graceful']) ){
+            $name = $theme == 'jianmo' ? '简墨' : '雅致简洁（商业主题）';
+            $config = $this->getThemeService()->getThemeConfigByName($name);
+            $config = ArrayToolkit::index($config['confirmConfig']['blocks']['left'], 'id');
+
+            return isset($config['vip']) && $config['vip']['vipList'] == 'show';
+        }elseif ($theme == 'turing'){
+            $config = $this->getBlockService()->getBlockTemplateByCode( 'turing:turing_vip');
+
+            return $config ? $config['data']['vip']['vipList']['value'] == 'show' : false;
+        }
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return BlockService
+     */
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
     }
 
     public function vipLevelList($config, $slice = 1)

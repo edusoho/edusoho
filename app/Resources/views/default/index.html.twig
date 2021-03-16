@@ -23,7 +23,7 @@
               {% if code != 'course-grid-with-condition-index' %}
                   {% cache 'jianmo/default/' ~ code 600 %}
                     {% if code == 'vip' %}
-                      {% if is_plugin_installed('Vip') and setting('vip.enabled') and setting('vip.putaway') %}
+                      {% if is_plugin_installed('Vip') and setting('vip.enabled', 1) %}
                         {% include 'default/' ~ code ~ '.html.twig' with {config:config} %}
                       {% endif %}
                     {% else %}

@@ -446,7 +446,7 @@ finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
-finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_rate: 虚拟币最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
@@ -682,7 +682,7 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
-pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.course.close: 该课程已被关闭
 pay_center.classroom.close: 该班级已关闭，请谨慎支付
 pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 

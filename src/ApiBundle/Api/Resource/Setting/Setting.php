@@ -304,6 +304,7 @@ class Setting extends AbstractResource
 
         return [
             'enabled' => empty($vipSetting['enabled']) ? false : true,
+            'h5Enabled' => empty($vipSetting['enabled']) ? false : true,
             'buyType' => 'year_and_month', //兼容会员营销重构2.0
             'upgradeMinDay' => '30', //兼容会员营销重构2.0
             'defaultBuyYears' => '1', //兼容会员营销重构2.0
