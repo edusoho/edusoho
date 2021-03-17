@@ -47,6 +47,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_cover', [$this, 'courseCover']),
             new \Twig_SimpleFunction('open_course_cover', [$this, 'openCourseCover']),
             new \Twig_SimpleFunction('course_set_cover', [$this, 'courseSetCover']),
+            new \Twig_SimpleFunction('classroom_cover', [$this, 'classroomCover']),
             new \Twig_SimpleFunction('goods_cover', [$this, 'goodsCover']),
             //@deprecated 请勿使用，后续将删除  2017-03-30
             //@see WebExtension#avatarPath
@@ -224,6 +225,17 @@ class AppExtension extends \Twig_Extension
         }
 
         if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
+        }
+
+        return $coverPath;
+    }
+
+    public function classroomCover($classroomCover)
+    {
+        $coverPath = null;
+        if (empty($classroomCover)) {
             $settings = $this->getSettingService()->get('default');
             $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
         }
