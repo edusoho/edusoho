@@ -58,6 +58,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'refreshClassroomIncome',
             'refreshClassroomTaskNums',
             'refreshSignUserStatistics',
+            'refreshClassroomMemberNoteNum',
+            'refreshClassroomMemberQuestionNum',
+            'refreshClassroomMemberThreadNum',
         );
 
         $funcNames = array();
@@ -146,6 +149,96 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
 
+        return 1;
+    }
+
+    public function refreshClassroomMemberNoteNum($page)
+    {
+        $this->getConnection()->exec("
+            UPDATE classroom_member clm INNER JOIN (
+                SELECT classroomId, userId, sum(noteNum) AS noteNum 
+                FROM course_member 
+                WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId
+            ) AS cm ON clm.classroomId = cm.classroomId AND clm.userId = cm.userId 
+            SET clm.noteNum = cm.noteNum;
+        ");
+
+        return 1;
+    }
+
+    public function refreshClassroomMemberQuestionNum($page)
+    {
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT cm.id AS id, cm.userId AS userId, m.questionNum AS questionNum FROM classroom_member cm INNER JOIN (
+                SELECT cc.classroomId AS classroomId, ct.userId AS userId, count(*) AS questionNum FROM course_thread ct INNER JOIN classroom_courses cc 
+                ON cc.courseId = ct.courseId AND ct.type = 'question' 
+                GROUP BY cc.classroomId, ct.userId
+            ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId;
+        ");
+
+        if (!empty($updateFields)) {
+            $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+            $marks = implode(',', array_column($updateFields, 'userId'));
+            $this->getConnection()->exec("
+                UPDATE classroom_member cm INNER JOIN (
+                    SELECT targetId AS classroomId, userId, count(*) AS questionNum 
+                    FROM thread 
+                    WHERE targetType = 'classroom'  AND type = 'question' GROUP BY targetId, userId
+                ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId
+                SET cm.questionNum = CASE
+                    WHEN cm.userId IN ({$marks}) THEN cm.questionNum + m.questionNum
+                    ELSE m.questionNum
+                END;
+            ");
+        } else {
+            $this->getConnection()->exec("
+                UPDATE classroom_member cm INNER JOIN (
+                    SELECT targetId AS classroomId, userId, count(*) AS questionNum 
+                    FROM thread 
+                    WHERE targetType = 'classroom'  AND type = 'question' GROUP BY targetId, userId
+                ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId 
+                SET cm.questionNum = m.questionNum;
+            ");
+        }
+       
+        return 1;
+    }
+
+    public function refreshClassroomMemberThreadNum($page)
+    {
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT cm.id AS id, cm.userId AS userId, m.threadNum AS threadNum FROM classroom_member cm INNER JOIN (
+                SELECT cc.classroomId AS classroomId, ct.userId AS userId, count(*) AS threadNum FROM course_thread ct INNER JOIN classroom_courses cc 
+                ON cc.courseId = ct.courseId AND ct.type = 'discussion' 
+                GROUP BY cc.classroomId, ct.userId
+            ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId;
+        ");
+
+        if (!empty($updateFields)) {
+            $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+            $marks = implode(',', array_column($updateFields, 'userId'));
+            $this->getConnection()->exec("
+                UPDATE classroom_member cm INNER JOIN (
+                    SELECT targetId AS classroomId, userId, count(*) AS threadNum 
+                    FROM thread 
+                    WHERE targetType = 'classroom'  AND type = 'discussion' GROUP BY targetId, userId
+                ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId
+                SET cm.threadNum = CASE
+                    WHEN cm.userId IN ({$marks}) THEN cm.threadNum + m.threadNum
+                    ELSE m.threadNum
+                END;
+            ");
+        } else {
+            $this->getConnection()->exec("
+                UPDATE classroom_member cm INNER JOIN (
+                    SELECT targetId AS classroomId, userId, count(*) AS threadNum 
+                    FROM thread 
+                    WHERE targetType = 'classroom'  AND type = 'discussion' GROUP BY targetId, userId
+                ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId 
+                SET cm.threadNum = m.threadNum;
+            ");
+        }
+       
         return 1;
     }
 
@@ -385,6 +478,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getSignUserStatisticsDao()
     {
         return $this->createDao('Sign:SignUserStatisticsDao');
+    }
+
+    protected function getClassroomMemberDao()
+    {
+        return $this->createDao('Classroom:ClassroomMemberDao');
     }
 }
 
