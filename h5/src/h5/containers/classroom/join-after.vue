@@ -83,6 +83,8 @@
     >
       去商品页
     </e-footer>
+
+    <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
 </template>
 
@@ -130,6 +132,7 @@ export default {
         targetId: this.details.classId,
       },
       showNumberData: '',
+      show: false,
     };
   },
   mixins: [collectUserInfo],
@@ -345,6 +348,7 @@ export default {
     },
 
     vipCallConfirm(config) {
+      this.show = true;
       Dialog.confirm({
         ...config,
         title: '',
@@ -352,8 +356,14 @@ export default {
         cancelButtonText: '退出班级',
         cancelButtonColor: '#FD4852',
         messageAlign: 'left',
+        overlay: false,
         beforeClose: this.beforeClose,
       });
+    },
+
+    clickCloseOverlay() {
+      this.show = false;
+      Dialog.close();
     },
 
     beforeClose(action, done) {
@@ -366,6 +376,7 @@ export default {
         });
         done();
       } else {
+        if (!this.show) return;
         const params = { id: this.details.classId };
         Api.deleteClassroom({ query: params }).then(res => {
           if (res.success) {

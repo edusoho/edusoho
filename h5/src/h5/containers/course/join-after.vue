@@ -71,6 +71,8 @@
     >
       去商品页
     </e-footer>
+
+    <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
 </template>
 <script>
@@ -113,6 +115,7 @@ export default {
         targetType: 'course',
         targetId: this.details.id,
       },
+      show: false,
     };
   },
   mixins: [collectUserInfo],
@@ -335,6 +338,7 @@ export default {
         .catch(() => {});
     },
     vipCallConfirm(config) {
+      this.show = true;
       Dialog.confirm({
         ...config,
         title: '',
@@ -342,9 +346,16 @@ export default {
         cancelButtonText: '退出课程',
         cancelButtonColor: '#FD4852',
         messageAlign: 'left',
+        overlay: false,
         beforeClose: this.beforeClose,
       });
     },
+
+    clickCloseOverlay() {
+      this.show = false;
+      Dialog.close();
+    },
+
     beforeClose(action, done) {
       if (action === 'confirm') {
         this.$router.push({
@@ -355,6 +366,7 @@ export default {
         });
         done();
       } else {
+        if (!this.show) return;
         const params = { id: this.details.id };
         Api.deleteCourse({ query: params }).then(res => {
           if (res.success) {
