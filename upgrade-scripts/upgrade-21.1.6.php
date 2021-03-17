@@ -55,7 +55,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'freshClassroomMemberLastLearnTimeData',
             'freshCourseMemberLastLearnTimeData',
             'registerJob',
-//            'refreshClassroomIncome'
+            'refreshClassroomIncome',
+            'refreshClassroomTaskNums',
+
         );
 
         $funcNames = array();
@@ -92,6 +94,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function registerJob()
     {
+        if (!empty($this->getSchedulerService()->getJobByName('RefreshUserSignKeepDaysJob'))) {
+            return 1;
+        }
+
         $this->getSchedulerService()->register(array(
             'name' => 'RefreshUserSignKeepDaysJob',
             'expression' => '15 0 * * *',
@@ -111,9 +117,27 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM goods_specs g INNER JOIN (
                 SELECT m.target_id AS targetId, sum(o.pay_amount) AS income 
                 FROM biz_order o INNER JOIN (
-                    SELECT target_id, order_id FROM biz_order_item WHERE target_type = 'classroom'
+                    SELECT target_id, order_id FROM biz_order_item WHERE target_type = 'classroom' AND status IN ('success', 'finished', 'paid')
                 ) AS m ON m.order_id = o.id GROUP BY targetId
-            ) AS c ON c.targetId = g.id;
+            ) AS c ON c.targetId = g.id AND g.goodsId IN (SELECT id FROM goods WHERE type = 'classroom');
+        ");
+
+        if (empty($updateFields)) {
+            return 1;
+        }
+
+        $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+
+        return 1;
+    }
+
+    public function refreshClassroomTaskNums($page)
+    {
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT cc.classroomId AS id, SUM(c.compulsoryTaskNum) AS compulsoryTaskNum, SUM(electiveTaskNum) AS electiveTaskNum 
+            FROM course_v8 c INNER JOIN (
+                SELECT classroomId, courseId FROM classroom_courses
+            ) AS cc ON cc.courseId = c.id GROUP BY cc.classroomId;
         ");
 
         if (empty($updateFields)) {
