@@ -2,13 +2,13 @@
 
 namespace Biz\Course\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 /**
  * Interface CourseMemberDao
  * TODO course2.0 所有的api 需要重构，很多的api可以合并，还有名字不规范.
  */
-interface CourseMemberDao extends GeneralDaoInterface
+interface CourseMemberDao extends AdvancedDaoInterface
 {
     const TABLE_NAME = 'course_member';
 
