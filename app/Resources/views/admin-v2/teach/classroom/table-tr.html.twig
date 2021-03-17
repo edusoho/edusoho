@@ -5,7 +5,7 @@
 
     <td>
     <strong>
-      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
+      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title|raw }}</a>
     </strong>
     <br>
     <span class="text-muted text-sm">{{'admin.classroom_manage.manage.category'|trans}}：{{ category.name|default('--') }}</span>
