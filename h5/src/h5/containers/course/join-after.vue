@@ -136,6 +136,9 @@ export default {
     isClassCourse() {
       return Number(this.details.parentId);
     },
+    currentTypeText() {
+      return this.details.classroom ? '班级' : '课程';
+    },
   },
   watch: {
     selectedPlanId: function(val, oldVal) {
@@ -209,11 +212,7 @@ export default {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
-    replaceGoodsPage() {
-      this.$router.replace({
-        path: `/goods/${this.details.goodsId}/show`,
-      });
-    },
+
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
@@ -262,28 +261,33 @@ export default {
       const vipStatus = {
         // 用户会员服务已过期
         'vip.member_expired': {
-          message: `您的会员已到期，会员课程已无法学习，请续费会员，或退出后重新购买课程。`,
+          message: `您的会员已到期，会员${this.currentTypeText}已无法学习，请续费会员，或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '续费会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 当前用户并不是vip
         'vip.not_member': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该课程学习。或退出后重新购买课程。`,
+          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 用户会员等级过低
         'vip.level_low': {
-          message: `很抱歉，该课程已升级为${vipName}课程，请升到${vipName}进行学习。或退出后重新购买课程。`,
+          message: `很抱歉，该${this.currentTypeText}已升级为${vipName}${this.currentTypeText}，请升到${vipName}进行学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '升级会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 会员等级无效
         'vip.level_not_exist': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该课程学习。或退出后重新购买课程。`,
+          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 课程会员被删除
         'vip.vip_right_not_exist': {
-          message: `很抱歉，该课程已不属于会员权益，请退出后重新购买。`,
+          message: `很抱歉，该${this.currentTypeText}已不属于会员权益，请退出后重新购买。`,
           showConfirmButton: false,
+          cancelButtonText: `退出${this.currentTypeText}`,
         },
       };
 
@@ -343,7 +347,6 @@ export default {
         ...config,
         title: '',
         confirmButtonColor: '#1895E7',
-        cancelButtonText: '退出课程',
         cancelButtonColor: '#FD4852',
         messageAlign: 'left',
         overlay: false,
@@ -365,17 +368,44 @@ export default {
           },
         });
         done();
+        return;
+      }
+
+      if (!this.show) return;
+
+      if (this.currentTypeText == '班级') {
+        this.deleteClassroom(done);
       } else {
-        if (!this.show) return;
-        const params = { id: this.details.id };
-        Api.deleteCourse({ query: params }).then(res => {
-          if (res.success) {
-            this.replaceGoodsPage();
-            done();
-          }
-        });
+        this.deleteCourse(done);
       }
     },
+
+    deleteClassroom(done) {
+      const { id, goodsId } = this.details.classroom;
+      const params = { id };
+      Api.deleteClassroom({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+          });
+          done();
+        }
+      });
+    },
+
+    deleteCourse(done) {
+      const { id, goodsId } = this.details;
+      const params = { id };
+      Api.deleteCourse({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+          });
+          done();
+        }
+      });
+    },
+
     handleScroll() {
       const SWIPER = document.getElementById('swiper-directory');
       const DOCUMENTHEIGHT = document.documentElement.scrollHeight;

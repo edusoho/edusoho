@@ -57,7 +57,7 @@
           :disable-mask="true"
           title="班级课程"
           defaul-value="暂无课程"
-          @click.native="showDialog"
+          @click.native="showDialog('click')"
         />
       </div>
     </div>
@@ -209,9 +209,16 @@ export default {
         path: `/goods/${this.details.goodsId}/show`,
       });
     },
-    showDialog() {
+    showDialog(value) {
       let code = '';
       let errorMessage = '';
+
+      // 点击班级课程
+      if (value) {
+        this.errorMsg = '';
+        return;
+      }
+
       let confirmCallback = function() {};
 
       if (!this.details.member) return;
