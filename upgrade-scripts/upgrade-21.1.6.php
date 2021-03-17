@@ -101,6 +101,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function registerJob()
     {
         if (!empty($this->getSchedulerService()->getJobByName('RefreshUserSignKeepDaysJob'))) {
+            $this->logger('info', "刷新连续签到天数的定时任务已存在，直接跳过");
             return 1;
         }
 
@@ -113,11 +114,16 @@ class EduSohoUpgrade extends AbstractUpdater
             'misfire_policy' => 'executing',
         ));
 
+        $this->logger('info', "创建刷新连续签到天数的定时任务");
+
         return 1;
     }
 
     public function refreshClassroomIncome()
     {
+        // g: goods_specs
+        // c: 联表查询biz_order、biz_order_item出来的临时表: targetId, income
+        // m: 根据条件筛选查询biz_order_item出来的临时表: target_id, orderId
         $updateFields = $this->getConnection()->fetchAll("
             SELECT g.targetId AS id, IF(c.income, TRUNCATE(c.income/100, 2), 0) AS income 
             FROM goods_specs g INNER JOIN (
@@ -129,16 +135,21 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         if (empty($updateFields)) {
+            $this->logger('info', "没有班级收入需要刷新，直接跳过");
             return 1;
         }
 
         $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        $total = count($updateFields);
+        $this->logger('info', "批量刷新{$total}个班级收入");
 
         return 1;
     }
 
     public function refreshClassroomTaskNums($page)
     {
+        // c: course_v8
+        // cc: classroom_courses
         $updateFields = $this->getConnection()->fetchAll("
             SELECT cc.classroomId AS id, SUM(c.compulsoryTaskNum) AS compulsoryTaskNum, SUM(electiveTaskNum) AS electiveTaskNum 
             FROM course_v8 c INNER JOIN (
@@ -147,16 +158,21 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         if (empty($updateFields)) {
+            $this->logger('info', "没有班级必修课时数或选修课时数需要刷新，直接跳过");
             return 1;
         }
 
         $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        $total = count($updateFields);
+        $this->logger('info', "批量刷新{$total}个班级必修课时数与选修课时数");
 
         return 1;
     }
 
     public function refreshClassroomMemberNoteNum($page)
     {
+        // clm: classroom_member
+        // cm: group筛选查询course_member出来的临时表: classroomId, userId, noteNum
         $this->getConnection()->exec("
             UPDATE classroom_member clm INNER JOIN (
                 SELECT classroomId, userId, sum(noteNum) AS noteNum 
@@ -166,14 +182,19 @@ class EduSohoUpgrade extends AbstractUpdater
             SET clm.noteNum = cm.noteNum;
         ");
 
+        $this->logger('info', "批量刷新所有班级成员noteNum");
         return 1;
     }
 
     public function refreshClassroomMemberQuestionNum($page)
     {
+        // cm: classroom_member
+        // m: group联表查询classroom_courses、course_thread出来的临时表: classroomId, userId, questionNum
         $updateFields = $this->getConnection()->fetchAll("
             SELECT cm.id AS id, cm.userId AS userId, m.questionNum AS questionNum FROM classroom_member cm INNER JOIN (
-                SELECT cc.classroomId AS classroomId, ct.userId AS userId, count(*) AS questionNum FROM course_thread ct INNER JOIN classroom_courses cc 
+                SELECT cc.classroomId AS classroomId, ct.userId AS userId, count(*) AS questionNum 
+                FROM course_thread ct 
+                INNER JOIN classroom_courses cc 
                 ON cc.courseId = ct.courseId AND ct.type = 'question' 
                 GROUP BY cc.classroomId, ct.userId
             ) AS m ON cm.classroomId = m.classroomId AND cm.userId = m.userId;
@@ -182,6 +203,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!empty($updateFields)) {
             $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
             $marks = implode(',', array_column($updateFields, 'userId'));
+            // cm: classroom_member
+            // m: 筛选查询thread出来的临时表: classroomId, userId, questionNum
             $this->getConnection()->exec("
                 UPDATE classroom_member cm INNER JOIN (
                     SELECT targetId AS classroomId, userId, count(*) AS questionNum 
@@ -194,6 +217,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 END;
             ");
         } else {
+            // cm: classroom_member
+            // m: 筛选查询thread出来的临时表: classroomId, userId, questionNum
             $this->getConnection()->exec("
                 UPDATE classroom_member cm INNER JOIN (
                     SELECT targetId AS classroomId, userId, count(*) AS questionNum 
@@ -204,11 +229,14 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        $this->logger('info', "批量刷新所有班级成员QuestionNum");
         return 1;
     }
 
     public function refreshClassroomMemberThreadNum($page)
     {
+        // cm: classroom_member
+        // m: group联表查询classroom_courses、course_thread出来的临时表: classroomId, userId, threadNum
         $updateFields = $this->getConnection()->fetchAll("
             SELECT cm.id AS id, cm.userId AS userId, m.threadNum AS threadNum FROM classroom_member cm INNER JOIN (
                 SELECT cc.classroomId AS classroomId, ct.userId AS userId, count(*) AS threadNum FROM course_thread ct INNER JOIN classroom_courses cc 
@@ -220,6 +248,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!empty($updateFields)) {
             $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
             $marks = implode(',', array_column($updateFields, 'userId'));
+            // cm: classroom_member
+            // m: 筛选查询thread出来的临时表: classroomId, userId, threadNum
             $this->getConnection()->exec("
                 UPDATE classroom_member cm INNER JOIN (
                     SELECT targetId AS classroomId, userId, count(*) AS threadNum 
@@ -232,6 +262,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 END;
             ");
         } else {
+            // cm: classroom_member
+            // m: 筛选查询thread出来的临时表: classroomId, userId, threadNum
             $this->getConnection()->exec("
                 UPDATE classroom_member cm INNER JOIN (
                     SELECT targetId AS classroomId, userId, count(*) AS threadNum 
@@ -242,11 +274,15 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        $this->logger('info', "批量刷新所有班级成员threadNum");
+
         return 1;
     }
 
     public function refreshSignUserStatistics($page)
     {
+        // sus: sign_user_statistics
+        // sul: group筛选查询sign_user_log出来的临时表: targetType, targetId, userId, lastSignTime
         $updateFields = $this->getConnection()->fetchAll("
             SELECT sus.id AS id, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
             FROM sign_user_statistics sus INNER JOIN (
@@ -256,11 +292,13 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         if (empty($updateFields)) {
+            $this->logger('info', "没有用户的最后签到时间数据需要刷新，直接跳过");
             return 1;
         }
 
         $this->getSignUserStatisticsDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
-
+        $total = count($updateFields);
+        $this->logger('info', "批量刷新{$total}个用户最后签到时间");
         return 1;
     }
 
