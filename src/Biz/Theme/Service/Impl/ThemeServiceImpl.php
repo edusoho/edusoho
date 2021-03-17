@@ -2,7 +2,6 @@
 
 namespace Biz\Theme\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\System;
 use Biz\BaseService;
 use Biz\Theme\Service\ThemeService;
