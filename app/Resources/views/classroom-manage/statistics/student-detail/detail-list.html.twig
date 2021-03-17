@@ -7,7 +7,11 @@
     {% include 'classroom-manage/statistics/student-detail/chart-data-legend.html.twig' %}
   </div>
   <div class="col-15">
-    {{ '累加学习时长(分)' }}
+    {{ 'classroom.manage.data_statistics.overview.sumtime'|trans }}
+    <span class="link-medium es-icon es-icon-help ml5"
+        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+        data-content="{{ 'classroom.manage.data_statistics.overview.sum_time_tips'|trans()}}">
+    </span>
   </div>
   <div class="col-10">{{ 'classroom.manage.data_statistics.course_detail.rate.finish'|trans }}
     <span class="link-medium es-icon es-icon-help ml5"
