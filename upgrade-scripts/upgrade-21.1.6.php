@@ -51,13 +51,15 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'alterTables',
-            'freshClassroomMemberLastLearnTimeData',
-            'freshCourseMemberLastLearnTimeData',
-            'registerJob',
-            'refreshClassroomIncome',
-            'refreshClassroomTaskNums',
-            'refreshSignUserStatistics',
+            'alterTables', //更新数据库字段
+            'freshClassroomMemberLastLearnTimeData', //更新classroom_member.lastLearnTime字段为NULL的内容
+            'freshCourseMemberLastLearnTimeData', //更新course_member.lastLearnTime字段为NULL的内容
+            'registerJob', //注册签到的统计JOB
+            'refreshClassroomIncome', //更新班级的收入数据
+            'refreshClassroomTaskNums', //更新班级的任务数据
+            'refreshSignUserStatistics', //更新签到统计数据
+            'refreshCourseMemberStartLearnTime', //更新course_member.startLearnTime
+
         );
 
         $funcNames = array();
@@ -166,6 +168,43 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSignUserStatisticsDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
 
         return 1;
+    }
+
+    public function refreshCourseMemberStartLearnTime($page)
+    {
+        $perPageCount = 2;
+        $totalCount = $this->getConnection()->fetchColumn("SELECT count(id) FROM `course_member`;");
+        $start = ($page - 1) * $perPageCount;
+        if ($start >= $totalCount) {
+            return 1;
+        }
+        $ids = array_column($this->getConnection()->fetchAll("SELECT id FROM `course_member` ORDER BY id ASC LIMIT {$start},{$perPageCount};"), 'id');
+        if (empty($ids)) {
+            return $page + 1;
+        }
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        /**
+         * cmo: course_member origin
+         * cmn: course_member new
+         */
+        $sql = "SELECT cmo.id, cmn.startLearnTime AS startLearnTime FROM course_member cmo INNER JOIN 
+                    (SELECT 
+                        (CASE min(ctr.createdTime) IS NULL
+                        WHEN TRUE 
+                        THEN 0
+                        ELSE min(ctr.createdTime)
+                        END) AS startLearnTime, cm.userId AS userId, cm.courseId AS courseId
+                    FROM `course_member` cm 
+                    LEFT JOIN course_task_result ctr 
+                    ON ctr.courseId = cm.courseId AND ctr.userId = cm.userId 
+                    WHERE cm.id IN ({$marks}) 
+                    GROUP BY cm.courseId, cm.userId) cmn 
+                ON cmo.courseId = cmn.courseId AND cmo.userId = cmn.userId;";
+        $updateFields = $this->getConnection()->fetchAll($sql, $ids);
+        $this->getCourseMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        $idsString = json_encode($ids);
+        $this->logger('info', "更新course_member的startLearnTime, 分页：{$page}，此次更新的id有： {$idsString}");
+        return $page + 1;
     }
 
     public function alterTables($page)
@@ -380,6 +419,14 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');
+    }
+
+    /**
+     * @return \Biz\Course\Dao\CourseMemberDao
+     */
+    protected function getCourseMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     protected function getSignUserStatisticsDao()
