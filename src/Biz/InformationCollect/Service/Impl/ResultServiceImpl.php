@@ -181,7 +181,7 @@ class ResultServiceImpl extends BaseService implements ResultService
 
         $keywordType = '';
         if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
             $keywordType = $conditions['keywordType'];
         }
 
