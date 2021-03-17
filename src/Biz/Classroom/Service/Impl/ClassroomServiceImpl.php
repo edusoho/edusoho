@@ -2472,10 +2472,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $taskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds($classroomIds);
         $taskNums = array_column($taskNums, null, 'classroomId');
         foreach ($classrooms as &$classroom) {
-            $classroom = array_merge($classroom, [
-                'compulsoryTaskNum' => empty($taskNums[$classroom['id']]) ? 0 : $taskNums[$classroom['id']]['compulsoryTaskNum'],
-                'electiveTaskNum' => empty($taskNums[$classroom['id']]) ? 0 : $taskNums[$classroom['id']]['electiveTaskNum'],
-            ]);
             if ($withMemberInfo) {
                 $classroom['finishedMemberCount'] = $this->getClassroomMemberDao()->count(['classroomId' => $classroom['id'], 'isFinished' => 1]);
             }
