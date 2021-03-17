@@ -57,7 +57,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'registerJob',
             'refreshClassroomIncome',
             'refreshClassroomTaskNums',
-
+            'refreshSignUserStatistics',
         );
 
         $funcNames = array();
@@ -145,6 +145,25 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->getClassroomDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+
+        return 1;
+    }
+
+    public function refreshSignUserStatistics($page)
+    {
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT sus.id AS id, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
+            FROM sign_user_statistics sus INNER JOIN (
+                SELECT userId, targetType, targetId, MAX(createdTime) AS lastSignTime 
+                FROM sign_user_log GROUP BY userId, targetType, targetId
+            ) AS sul ON sul.userId = sus.userId AND sul.targetType = sus.targetType AND sul.targetId = sus.targetId;
+        ");
+
+        if (empty($updateFields)) {
+            return 1;
+        }
+
+        $this->getSignUserStatisticsDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
 
         return 1;
     }
@@ -361,6 +380,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');
+    }
+
+    protected function getSignUserStatisticsDao()
+    {
+        return $this->createDao('Sign:SignUserStatisticsDao');
     }
 }
 
