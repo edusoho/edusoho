@@ -196,6 +196,11 @@ export default {
     ...mapMutations('classroom', {
       setCurrentJoin: types.SET_CURRENT_JOIN_CLASS,
     }),
+    replaceGoodsPage() {
+      this.$router.replace({
+        path: `/goods/${this.details.goodsId}/show`,
+      });
+    },
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
@@ -364,7 +369,7 @@ export default {
         const params = { id: this.details.classId };
         Api.deleteClassroom({ query: params }).then(res => {
           if (res.success) {
-            this.gotoGoodsPage();
+            this.replaceGoodsPage();
             done();
           }
         });

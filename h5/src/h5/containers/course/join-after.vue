@@ -206,6 +206,11 @@ export default {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
+    replaceGoodsPage() {
+      this.$router.replace({
+        path: `/goods/${this.details.goodsId}/show`,
+      });
+    },
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
@@ -353,7 +358,7 @@ export default {
         const params = { id: this.details.id };
         Api.deleteCourse({ query: params }).then(res => {
           if (res.success) {
-            this.gotoGoodsPage();
+            this.replaceGoodsPage();
             done();
           }
         });
