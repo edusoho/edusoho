@@ -54,6 +54,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'alterTables', //更新数据库字段
             'freshClassroomMemberLastLearnTimeData', //更新classroom_member.lastLearnTime字段为NULL的内容
             'freshCourseMemberLastLearnTimeData', //更新course_member.lastLearnTime字段为NULL的内容
+            'freshCourseMemberIsLearned0Data', //更新course_member学习的状态，isLearned = 0
+            'freshCourseMemberIsLearned1Data', //更新course_member学习的状态，isLearned = 1
             'registerJob', //注册签到的统计JOB
             'refreshClassroomIncome', //更新班级的收入数据
             'refreshClassroomTaskNums', //更新班级的任务数据
@@ -201,7 +203,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 SET cm.questionNum = m.questionNum;
             ");
         }
-       
+
         return 1;
     }
 
@@ -239,7 +241,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 SET cm.threadNum = m.threadNum;
             ");
         }
-       
+
         return 1;
     }
 
@@ -405,6 +407,20 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE `course_member` SET lastLearnTime = '0' WHERE lastLearnTime IS NULL;";
         $this->getConnection()->exec($sql);
         $this->logger('info', "执行数据升级脚本，行为：「freshCourseMemberLastLearnTimeData」, 语句： 「{$sql}」");
+        return 1;
+    }
+
+    public function freshCourseMemberIsLearned0Data()
+    {
+        $sql = "UPDATE `course_member` SET isLearned = 1 WHERE finishedTime > 0 AND isLearned = 0;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function freshCourseMemberIsLearned1Data()
+    {
+        $sql = "UPDATE `course_member` SET isLearned = 0 WHERE finishedTime = 0 AND isLearned = 1;";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
