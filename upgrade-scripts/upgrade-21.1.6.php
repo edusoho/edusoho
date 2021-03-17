@@ -51,8 +51,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'alterTables',
+            'freshClassroomMemberLastLearnTimeData',
+            'freshCourseMemberLastLearnTimeData',
             'registerJob',
-            'refreshClassroomIncome'
+//            'refreshClassroomIncome'
         );
 
         $funcNames = array();
@@ -198,7 +201,37 @@ class EduSohoUpgrade extends AbstractUpdater
                 'sql' => "ALTER TABLE `course_member` CHANGE `lastLearnTime` `lastLearnTime` int(10)  DEFAULT '0' COMMENT '最后学习时间';"
             ],
         ];
+        if (isset($sqls[$page - 1])) {
+            $sql = $sqls[$page - 1];
+            if ($sql['action'] === 'add_column') {
+                if (!$this->isFieldExist($sql['table'], $sql['column'])) {
+                    $this->getConnection()->exec($sql['sql']);
+                }
+            }
 
+            if($sql['action'] === 'modify') {
+                $this->getConnection()->exec($sql['sql']);
+            }
+            $this->logger('info', "执行数据库字段升级脚本，行为：「{$sql['action']}」, 语句： 「{$sql['sql']}」");
+            return $page + 1;
+        }
+        return 1;
+    }
+
+    public function freshClassroomMemberLastLearnTimeData()
+    {
+        $sql = "UPDATE `classroom_member` SET lastLearnTime = '0' WHERE lastLearnTime IS NULL;";
+        $this->getConnection()->exec($sql);
+        $this->logger('info', "执行数据升级脚本，行为：「freshClassroomMemberLastLearnTimeData」, 语句： 「{$sql}」");
+        return 1;
+    }
+
+    public function freshCourseMemberLastLearnTimeData()
+    {
+        $sql = "UPDATE `course_member` SET lastLearnTime = '0' WHERE lastLearnTime IS NULL;";
+        $this->getConnection()->exec($sql);
+        $this->logger('info', "执行数据升级脚本，行为：「freshCourseMemberLastLearnTimeData」, 语句： 「{$sql}」");
+        return 1;
     }
 
     /**
