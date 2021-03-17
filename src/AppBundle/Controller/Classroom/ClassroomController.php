@@ -499,6 +499,27 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
 
+    public function exitForNoReasonAction(request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+
+        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+
+        if (empty($member)) {
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
+        }
+
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
+            $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
+        }
+
+        $this->getClassroomService()->removeStudent(
+            $id,
+            $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
+    }
+
     public function becomeAuditorAction($id)
     {
         $user = $this->getCurrentUser();
@@ -761,17 +782,16 @@ class ClassroomController extends BaseController
 
     public function memberAccessAction(Request $request, $classroomId, $memberId)
     {
-        $memberAccessCode = $request->query->get('code');
-        $vip = $this->getVipService()->getMemberByUserId($memberId);
-        $vipLevel = $this->getLevelService()->getLevel($vip['levelId']);
+        $user = $this->getCurrentUser();
+        $memberAccessCode = $this->getVipService()->checkUserVipRight($user['id'], 'classroom', $classroomId);
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
         $vipRightLevel = $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 
         return $this->render('classroom/member-access-modal.html.twig',
             [
                 'code' => $memberAccessCode,
-                'vipLevel' => $vipLevel,
-                'vipRightLevel' => $vipRightLevel,
+                'userLevel' => $vipRightLevel,
+                'vipRightLevel' => empty($vipRight) ? [] : $this->getLevelService()->getLevel($vipRight['vipLevelId']),
                 'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             ]);
     }

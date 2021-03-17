@@ -1572,7 +1572,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['teacher'],
             'remark' => '',
             'createdTime' => TimeMachine::time(),
@@ -2307,7 +2306,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $vipNonExpired = true;
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             // 会员加入的情况下
             $vipNonExpired = $this->isVipMemberNonExpired($classroom, $member);
         }
@@ -2326,16 +2325,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * 会员到期后、会员被取消后、课程会员等级被提高均为过期
      *
-     * @param  $course
+     * @param  $classroom
      * @param  $member
      *
      * @return bool 会员加入的学员是否已到期
      */
     protected function isVipMemberNonExpired($classroom, $member)
     {
-        $vipApp = $this->getAppService()->getAppByCode('vip');
-
-        if (empty($vipApp)) {
+        if (!$this->isPluginInstalled('Vip')) {
             return false;
         }
 

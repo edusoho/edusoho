@@ -336,9 +336,10 @@ class CourseExtension extends \Twig_Extension
             $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             if (!empty($classroomRef)) {
                 $user = $this->biz['user'];
+                $classroom = $this->getClassroomService()->getClassroom($classroomRef['classroomId']);
                 $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
 
-                return $member['deadline'] > 0 && $member['deadline'] < time();
+                return !$this->getClassroomService()->isMemberNonExpired($classroom, $member);
             }
         }
 
