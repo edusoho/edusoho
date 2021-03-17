@@ -4,8 +4,7 @@
   {% endif %}
   <div class="class-img-wrap">
     <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
-            {{ lazy_img(filepath(classroom_cover(classroom.middlePicture), 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-      {#      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}#}
+      {{ lazy_img(filepath(classroom_cover(classroom.middlePicture), 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
     </a>
     <div class="mask">
       {% set classroomMember = data('ClassroomMember', {classroomId:classroom.id, userId: app.user.id|default(0)}) %}
