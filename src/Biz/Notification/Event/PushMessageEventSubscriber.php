@@ -197,6 +197,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($this->isCloudSearchEnabled()) {
             $args = [
                 'category' => 'article',
+                'id' => $article['id'],
             ];
             $this->createSearchJob('delete', $args);
         }
