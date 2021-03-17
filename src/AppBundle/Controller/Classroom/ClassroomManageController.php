@@ -858,7 +858,7 @@ class ClassroomManageController extends BaseController
         $userIds = ArrayToolkit::column($membersDataList, 'userId');
 
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
-;
+
         return $this->render('classroom-manage/statistics/course-detail/course-members-learn-modal.html.twig', [
             'paginator' => $paginator,
             'classroom' => $classroom,
