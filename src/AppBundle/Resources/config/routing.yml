@@ -1253,12 +1253,6 @@ vip:
 vip_buy:
     path: /vip/buy
 
-vip_renew:
-    path: /vip/renew
-
-vip_upgrade:
-    path: /vip/upgrade
-
 edu_cloud_sms_send:
     path:  /edu_cloud/sms_send
     defaults: { _controller: AppBundle:EduCloud:smsSend }
