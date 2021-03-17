@@ -373,6 +373,9 @@ class EduSohoUpgrade extends AbstractUpdater
                     GROUP BY cm.courseId, cm.userId) cmn 
                 ON cmo.courseId = cmn.courseId AND cmo.userId = cmn.userId;";
         $updateFields = $this->getConnection()->fetchAll($sql, $ids);
+        if (empty($updateFields)) {
+            return $page + 1;
+        }
         $this->getCourseMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
         $idsString = json_encode($ids);
         $this->logger('info', "更新course_member的startLearnTime, 分页：{$page}，此次更新的id有： {$idsString}");
