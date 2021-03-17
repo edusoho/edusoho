@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentResponseFilter;
 use Biz\Common\CommonException;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class ContinueAnswer extends AbstractResource
 {
