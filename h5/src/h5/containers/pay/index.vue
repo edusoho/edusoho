@@ -146,8 +146,7 @@ export default {
       const returnUrl =
         window.location.origin +
         window.location.pathname +
-        window.location.hash +
-        `pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
+        `#/pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
       Api.createTrade({
         data: {
           gateway: this.payWay,
