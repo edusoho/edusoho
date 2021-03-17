@@ -2,9 +2,9 @@
 
 namespace Biz\Sign\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface SignUserStatisticsDao extends GeneralDaoInterface
+interface SignUserStatisticsDao extends AdvancedDaoInterface
 {
     public function getStatisticsByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 }

@@ -3,9 +3,9 @@
 namespace Biz\Sign\Dao\Impl;
 
 use Biz\Sign\Dao\SignUserStatisticsDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class SignUserStatisticsDaoImpl extends GeneralDaoImpl implements SignUserStatisticsDao
+class SignUserStatisticsDaoImpl extends AdvancedDaoImpl implements SignUserStatisticsDao
 {
     protected $table = 'sign_user_statistics';
 
