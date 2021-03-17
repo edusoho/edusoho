@@ -304,7 +304,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshCourseMemberStartLearnTime($page)
     {
-        $perPageCount = 2;
+        $perPageCount = 20000;
         $totalCount = $this->getConnection()->fetchColumn("SELECT count(id) FROM `course_member`;");
         $start = ($page - 1) * $perPageCount;
         if ($start >= $totalCount) {
