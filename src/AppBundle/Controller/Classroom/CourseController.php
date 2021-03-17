@@ -135,7 +135,7 @@ class CourseController extends BaseController
             return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
         if ($this->isPluginInstalled('Vip')) {
-            $member['access'] = $this->getClassroomMemberAccess($classroomId, $member['userId']);
+            $member['access'] = $this->getClassroomService()->canLearnClassroom($classroomId);
         }
 
         $layout = 'classroom/layout.html.twig';
@@ -165,20 +165,6 @@ class CourseController extends BaseController
                 'isCourseMember' => $isCourseMember,
             ]
         );
-    }
-
-    private function getClassroomMemberAccess($classroomId, $memberId)
-    {
-        $access = $this->getClassroomService()->canLearnClassroom($classroomId);
-        $vip = $this->getVipService()->getMemberByUserId($memberId);
-        $vipLevel = $this->getVipLevelService()->getLevel($vip['levelId']);
-        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
-        $vipRightLevel = $this->getVipLevelService()->getLevel($vipRight['vipLevelId']);
-        if ('vip.level_not_exist' == $access['code'] && !empty($vipLevel) && empty($vipRightLevel)) {
-            $access['code'] = 'vip.level_low';
-        }
-
-        return $access;
     }
 
     /**

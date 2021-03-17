@@ -73,24 +73,6 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
     }
 
-    public function putAwayVipComponent()
-    {
-        $currentTheme = $this->getCurrentThemeConfig();
-        $confirmConfig = ArrayToolkit::index($currentTheme['confirmConfig']['blocks']['left'], 'id');
-
-        if (!isset($confirmConfig['vip'])) {
-            $defaultConfig = ArrayToolkit::index($this->defaultConfig['blocks']['left'], 'id');
-            $vipConfig = isset($defaultConfig['vip']) ? $defaultConfig['vip'] : [];
-
-            if ($vipConfig) {
-                $currentTheme['config']['blocks']['left'] = array_merge($currentTheme['config']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
-                $currentTheme['confirmConfig']['blocks']['left'] = array_merge($currentTheme['confirmConfig']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
-                $this->editThemeConfig($currentTheme['name'], ['confirmConfig' => $currentTheme['confirmConfig']]);
-                $this->editThemeConfig($currentTheme['name'], ['config' => $currentTheme['config']]);
-            }
-        }
-    }
-
     public function getThemeConfigByName($name)
     {
         $config = $this->getThemeConfigDao()->getThemeConfigByName($name);

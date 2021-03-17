@@ -22,7 +22,6 @@ class OrderInfoFilter extends Filter
             'cover' => $data['cover'],
             'totalPrice' => strval($data['totalPrice']),
             'title' => $data['title'],
-            'subtitle' => $data['subtitle'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
             'verifiedMobile' => empty($data['verifiedMobile']) ? '' : $data['verifiedMobile'],

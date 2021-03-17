@@ -15,16 +15,13 @@
                        @click="buySku">
                         <slot>{{ buyViewText }}</slot>
                     </a>
-                    <span class="product-detail__disable_btn goods-btn-hover pull-right"
-                          v-if="isShow && needBuyVip"
-                          data-container=".product-detail__disable_btn"
-                          data-toggle="popover"
-                          data-placement="top"
-                          data-trigger="hover"
-                          data-html="true"
-                          :data-content="vipBtnTips(sku)">
-                        <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
-                    </span>
+                    <a :class="btnClass"
+                       v-if="isShow && needBuyVip"
+                       class="goods-btn-hover pull-right"
+                       :href="needBuyVipUrl"
+                       >
+                        <slot>{{ needBuyVipText|trans({'%vipName%': sku.vipLevelInfo.name}) }}</slot>
+                    </a>
                     <span v-if="!sku.isMember && goods.type === 'classroom' && parseInt(sku.buyable) && isShow">
                         <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
                     </span>
@@ -55,6 +52,8 @@
                 buyViewMode : '', //btn text
                 buyViewText : '',
                 needBuyVip : 0,
+                needBuyVipText: '',
+                needBuyVipUrl: '',
             }
         },
         props: {
@@ -142,12 +141,19 @@
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
                 } else if (sku.vipLevelInfo) {
                     this.buyViewMode = 'btn';
-                    if (sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
-                        this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
+                    if (sku.vipUser && sku.canVipJoin && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
+                        this.buyViewText = Translator.trans('goods.show_page.vip_free_learn_new');
                         this.needBuyVip = 0;
                     } else {
                         this.needBuyVip = 1;
                         this.buyViewText = sku.displayPrice == 0 ? Translator.trans('goods.show_page.free_join_btn') : Translator.trans('goods.show_page.buy_btn');
+                        if (!sku.vipUser || (sku.vipUser && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime())){
+                            this.needBuyVipText = Translator.trans('goods.show_page.vip_buy',{vipName:sku.vipLevelInfo.name});
+                            this.needBuyVipUrl = "/vip/buy?level=" + sku.vipLevelInfo.id;
+                        }else if (sku.vipUser){
+                            this.needBuyVipText = Translator.trans('goods.show_page.vip_upgrade',{vipName:sku.vipLevelInfo.name});
+                            this.needBuyVipUrl = "/vip/upgrade?targetId=" + sku.vipLevelInfo.id;
+                        }
                     }
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
                     this.buyViewMode = 'text';
