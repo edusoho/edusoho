@@ -11631,7 +11631,13 @@ classroom.manage.data_statistics.overview.finished_num: 完成人数
 classroom.manage.data_statistics.overview.sumtime: 累加学习时长(分)
 classroom.manage.data_statistics.overview.average_time: 人均学习时长(分)
 classroom.manage.data_statistics.overview.finished_num_tips: 取班级中所有课时任务学习进度均为100%的人数，若班级中新增了课程或课时，则完成人数会随之变更。
-
+classroom.manage.data_statistics.course_detail.course_name: 课程名称
+classroom.manage.data_statistics.course_detail.task_num: 任务数
+classroom.manage.data_statistics.course_detail.learn_conditions: 学习情况
+classroom.manage.data_statistics.course_detail.learn_conditions_detail: 《%courseSetTitle%》学习情况详情
+classroom.manage.data_statistics.course_detail.finish_rate_tips: 课程中已完成的课时/课程中所有课时=完课率（不包含选修课时）
+classroom.manage.data_statistics.course_detail.rate.finish: 完课率
+classroom.manage.data_statistics.student_detail.finished_rate_tips: 班级中已完成的课时/班级中所有课时=完课率（不包含选修课时）
 classroom.manage.data_statistics.student_trendency: 学员趋势
 classroom.manage.data_statistics.student_trendency.select_seven_days: 7天
 classroom.manage.data_statistics.student_trendency.select_thrity_days: 30天

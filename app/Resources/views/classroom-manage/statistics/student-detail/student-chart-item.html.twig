@@ -7,7 +7,7 @@
          data-html="true"
          data-delay="100"
          data-content="
-                    <div><p class='mbs'>课程名称 : {{ course.courseSetTitle }} （{{ percent(courseMember.learnedCompulsoryTaskNum|default(0), course.compulsoryTaskNum) }}）</p>
+                    <div><p class='mbs'>{{'classroom.manage.data_statistics.course_detail.course_name'|trans}} : {{ course.courseSetTitle }} （{{ percent(courseMember.learnedCompulsoryTaskNum|default(0), course.compulsoryTaskNum) }}）</p>
                     {% if courseMember.startLearnTime|default() %}
                         {{ '开始时间'|trans }} : {{ courseMember.startLearnTime|date('Y-m-d H:i:s') }}<br/>
                     {% endif %}

@@ -2,15 +2,15 @@
 <div class="row">
     <div class="legend clearfix">
         <div class="col-10">
-            {{ '课程名称' }}
+            {{ 'classroom.manage.data_statistics.course_detail.course_name'|trans }}
         </div>
         <div class="col-80">
             {% include 'classroom-manage/statistics/course-detail/chart-data-legend.html.twig' %}
         </div>
-        <div class="col-10">{{ 'course.task.rate.finish'|trans }}
+        <div class="col-10">{{ 'classroom.manage.data_statistics.course_detail.rate.finish'|trans }}
           <span class="link-medium es-icon es-icon-help ml5"
                 data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                data-content="{{ '课程中已完成的课时/课程中所有课时=完课率（不包含选修课时）'|trans }}">
+                data-content="{{ 'classroom.manage.data_statistics.course_detail.finish_rate_tips'|trans }}">
           </span>
         </div>
     </div>
@@ -27,9 +27,9 @@
                      data-html="true"
                      data-delay="100"
                      data-content="
-                        <div><p class='mbs'>课程名称 : {{ task.courseSetTitle }}</p>
-                        <p class='mbs'>任务数 : {{ task.compulsoryTaskNum }}</p>
-                        <p class='mbs'>学习情况 : </p>
+                        <div><p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.course_name'|trans  }} : {{ task.courseSetTitle }}</p>
+                        <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.task_num'|trans }} : {{ task.compulsoryTaskNum }}</p>
+                        <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.learn_conditions'|trans }} : </p>
                         <span class='legend-icon finish'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
                         <span class='legend-icon start'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
                         <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
