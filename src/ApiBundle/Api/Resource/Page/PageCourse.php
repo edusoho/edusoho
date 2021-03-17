@@ -10,6 +10,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class PageCourse extends AbstractResource
@@ -57,11 +58,18 @@ class PageCourse extends AbstractResource
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            empty($classroom) || $course['classroom'] = $this->getClassroomService()->appendSpecInfo($classroom);
+        }
+
         if ($this->isPluginInstalled('vip')) {
-            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
-            if (!empty($vipRight)) {
-                $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
+            if (!empty($course['classroom'])) {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $course['classroom']['id']);
+            } else {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
             }
+            empty($vipRight) || $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
         }
 
         $course['reviews'] = $this->searchCourseReviews($course);
@@ -176,5 +184,10 @@ class PageCourse extends AbstractResource
     private function getVipRightService()
     {
         return $this->service('VipPlugin:Marketing:VipRightService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }
