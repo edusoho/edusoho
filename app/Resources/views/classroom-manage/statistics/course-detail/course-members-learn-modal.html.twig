@@ -3,7 +3,7 @@
 {% set modalSize = 'large' %}
 
 {% block title %}
-  {{'classroom.manage.data_statistics.course_detail.learn_conditions_detail'|trans({'%courseSetTitle%':course.courseSetTitle})}}
+  {{'classroom.manage.data_statistics.course_detail.learn_conditions_detail'|trans({'%courseSetTitle%':course.courseSetTitle})|raw}}
 {% endblock %}
 {% block body %}
   <div class="js-course-learn-data">

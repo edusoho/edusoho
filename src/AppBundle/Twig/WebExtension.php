@@ -1244,7 +1244,7 @@ class WebExtension extends \Twig_Extension
     {
         $imgpath = $path = $this->container->get('assets.packages')->getUrl('assets/img/default/'.$img);
 
-        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, htmlspecialchars($alt), $class, $src);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
     public function loadScript($js)

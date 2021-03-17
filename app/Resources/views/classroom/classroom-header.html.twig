@@ -16,7 +16,7 @@
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
       {% endfor %}
-      <li class="active">{{ classroom.title }}</li>
+      <li class="active">{{ classroom.title|raw }}</li>
     </ol>
 
     <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">

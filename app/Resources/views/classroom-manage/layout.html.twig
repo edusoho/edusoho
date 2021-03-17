@@ -11,7 +11,7 @@
               {{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
             </a></li>
           <li class="text-overflow">
-            <a class="active" title="{{ classroom.title }}">{{ classroom.title }}</a>
+            <a class="active" title="{{ classroom.title|raw }}">{{ classroom.title|raw }}</a>
           </li>
         </ul>
 
