@@ -64,6 +64,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'refreshClassroomMemberNoteNum',    //更新classroom_member.noteNum
             'refreshClassroomMemberQuestionNum',    //更新classroom_member.questionNum
             'refreshClassroomMemberThreadNum',  //更新classroom_member.threadNum
+            'refreshClassroomMemberLearnedTaskNums',    //更新classroom_member: learnedCompulsoryTaskNum, learnedElectiveTaskNum
         );
 
         $funcNames = array();
@@ -300,6 +301,45 @@ class EduSohoUpgrade extends AbstractUpdater
         $total = count($updateFields);
         $this->logger('info', "批量刷新{$total}个用户最后签到时间");
         return 1;
+    }
+
+    public function refreshClassroomMemberLearnedTaskNums($page)
+    {
+        $total = $this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `classroom_member`;");
+        $limit = 1;
+        $start = ($page - 1) * $limit;
+        if ($start >= $total) {
+            return 1;
+        }
+
+        $classroomMembers = $this->getConnection()->fetchAll("SELECT id, classroomId, userId FROM `classroom_member` ORDER BY id ASC LIMIT {$start}, {$limit}");
+        $marks = str_repeat('?,', count($classroomMembers) - 1).'?';
+        $userIds = array_column($classroomMembers, 'userId');
+        $classroomIds = array_column($classroomMembers, 'classroomId');
+        $ids = array_column($classroomMembers, 'id');
+        $updateFields = $this->getConnection()->fetchAll("
+            SELECT clm.id AS id, clm.classroomId AS classroomId, clm.userId AS userId, 
+            cm.learnedCompulsoryTaskNum AS learnedCompulsoryTaskNum, cm.learnedElectiveTaskNum AS learnedElectiveTaskNum
+            FROM classroom_member clm 
+            INNER JOIN (
+                SELECT classroomId, userId, 
+                SUM(learnedCompulsoryTaskNum) AS learnedCompulsoryTaskNum, 
+                SUM(learnedElectiveTaskNum) AS learnedElectiveTaskNum 
+                FROM course_member 
+                WHERE classroomId IN ({$marks}) AND userId IN ({$marks}) 
+                GROUP BY classroomId, userId
+            ) cm ON clm.classroomId = cm.classroomId AND clm.userId = cm.userId AND clm.id IN ({$marks});
+        ", array_merge($classroomIds, $userIds, $ids));
+
+
+        if (!empty($updateFields)) {
+            $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        }
+
+        $idsString = empty($updateFields) ? '' :json_encode(array_column($updateFields, 'id'));
+        $this->logger('info', "更新classroom_member的learnedCompulsoryTaskNum、learnedCompulsoryTaskNum, 分页：{$page}，此次更新的id有： {$idsString}");
+
+        return $page + 1;
     }
 
     public function refreshCourseMemberStartLearnTime($page)
