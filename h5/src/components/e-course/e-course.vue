@@ -11,7 +11,7 @@
         >
           {{ title }}
           <div v-if="typeList === 'vip'" class="grey-medium">
-            {{ vipOrderStatus }}
+            x {{ vipDuration }}
           </div>
         </div>
         <div v-else>
@@ -74,10 +74,6 @@ export default {
       type: [Number, String],
       default: 0,
     },
-    vipOrderType: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
@@ -120,26 +116,6 @@ export default {
       if (this.order.unitType === 'month') return `${this.duration}个月`;
       if (this.order.unitType === 'year') return `${this.duration}年`;
       return `${this.duration}天`;
-    },
-
-    vipOrderStatus() {
-      let status = '';
-
-      switch (this.vipOrderType) {
-        case '开通':
-          status = `会员期限：${this.vipDuration}`;
-          break;
-        case '续费':
-          status = `会员续费：${this.vipDuration}`;
-          break;
-        case '升级':
-          status = `会员升级期限至：${this.$moment().format('YYYY/MM/DD')}`;
-          break;
-        default:
-          break;
-      }
-
-      return status;
     },
   },
   watch: {

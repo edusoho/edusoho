@@ -6,7 +6,6 @@
       <e-course
         v-if="Object.keys(course).length > 0"
         :type-list="targetType"
-        :vip-order-type="vipOrderType"
         :duration="course.duration"
         :order="course"
         :course="course"
