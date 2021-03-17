@@ -258,7 +258,7 @@ export default {
         },
         // 课程会员被删除
         'vip.vip_right_not_exist': {
-          message: `很抱歉，该课程已不属于会员权益，请退出后重新购买。`,
+          message: `很抱歉，该班级已不属于会员权益，请退出后重新购买。`,
           showConfirmButton: false,
         },
       };
