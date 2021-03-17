@@ -67,7 +67,7 @@ class ClassroomManageController extends BaseController
                     'ownerId' => $id,
                 ]), 'name'),
                 'vipInstalled' => $this->isPluginInstalled('Vip'),
-                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
+                'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
                 'coursePrice' => $coursePrice,
                 'courseNum' => $courseNum,
             ]
