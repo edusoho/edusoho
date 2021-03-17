@@ -186,14 +186,20 @@ class CourseController extends CourseBaseController
             if (!empty($classroomRef)) {
                 $user = $this->getCurrentUser();
                 $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
-                if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-                    return $this->render(
-                        'course/member/classroom-course-expired.html.twig',
-                        [
-                            'course' => $course,
-                            'member' => $member,
-                        ]
-                    );
+                $classroom = $this->getClassroomService()->getClassroom($classroomRef['classroomId']);
+                $isNonExpired = $this->getClassroomService()->isMemberNonExpired($classroom, $member);
+                if (!$isNonExpired) {
+                    if ('vip_join' == $member['joinedChannel']) {
+                        return $this->forward('AppBundle:Classroom/Classroom:memberAccess', ['classroomId' => $classroomRef['classroomId'], 'memberId' => $member['id']]);
+                    } else {
+                        return $this->render(
+                            'course/member/classroom-course-expired.html.twig',
+                            [
+                                'course' => $course,
+                                'member' => $member,
+                            ]
+                        );
+                    }
                 }
 
                 return $this->createJsonResponse(true);

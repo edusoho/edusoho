@@ -1,27 +1,31 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% do script(['app/js/classroom/member-access/index.js'])%}
 
 {% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
-    {% if code == 'vip.not_member' %}
-      {{ code|trans({'%vipLevelName%':vipRightLevel.name, '%path%':path('vip_buy', {level: vipRightLevel.id})})|raw }}
-    {% elseif code == 'vip.member_expired' %}
-      {{ code|trans({'%path%':path('vip_renew')})|raw }}
-    {% elseif code == 'vip.level_not_exist' %}
-      {{ code|trans({'%classroomName%':classroom.title}) }}
-    {% elseif code == 'vip.level_low' %}
-      {{ code|trans({'%vipLevelName%':vipLevel.name, '%href%':path('vip')})|raw }}
+    {% if code == 'not_member' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':userLevel.name,'%vipName%':userLevel.name, '%type%': 'site.default.classroom'|trans})|raw }}
+    {% elseif code == 'member_expired' %}
+      {{ 'vip.member_expired'|trans({'%type%': 'site.default.classroom'|trans, '%typeName%': 'site.default.classroom'|trans})|raw }}
+    {% elseif code == 'level_not_exist' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': 'site.default.classroom'|trans}) }}
+    {% elseif code == 'vip_right_not_exist' %}
+      {{ 'vip.level_not_exist'|trans({'%type%': 'site.default.classroom'|trans, '%typeName%': 'site.default.classroom'|trans}) }}
+    {% elseif code == 'level_low' %}
+      {{ 'vip.level_low'|trans({'%typeName%': 'site.default.classroom'|trans,'%vipName%':userLevel.name|default(''),'%type%': 'site.default.classroom'|trans,'%vipLevelName%':userLevel.name|default('')}) }}
     {% endif %}
   </div>
 {% endblock %}
 
 {% block footer %}
-  <a id="member-access" href="#modal" data-toggle="modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroom.id})}) }}" class="btn btn-primary">
-    {% if code == 'vip.level_not_exist' %}
-      {{'course.member.classroom_member.classroom_exit_btn'|trans }}
-    {% else %}
-      {{'course.member.classroom_member.exit_btn'|trans }}
-    {% endif %}
+  <a href="{{ path('classroom_exit_no_reason', {id:classroom.id}) }}" class="btn btn-default">
+    {{'course.member.classroom_member.classroom_exit_btn'|trans }}
   </a>
+  {% if code == 'not_member' %}
+    <a href="{{ path('vip_buy', {level:userLevel.id}) }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
+  {% elseif code == 'member_expired' %}
+    <a href="{{ path('vip_buy', {level:userLevel.id}) }}" class="btn btn-danger">{{'vip.to_renew'|trans }}</a>
+  {% elseif code == 'level_low' %}
+    <a href="{{ path('vip_upgrade', {targetId:userLevel.id|default(0)}) }}" class="btn btn-danger">{{'vip.to_grade'|trans }}</a>
+  {% endif %}
 {% endblock %}
