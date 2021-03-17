@@ -265,6 +265,7 @@ t.add("activity.video_manage.media_error_hint", "\u8bf7\u4e0a\u4f20\u6216\u9009\
 t.add("activity.video.try_watch_finish_hint", "\u514d\u8d39\u8bd5\u770b\u7ed3\u675f\uff0c\u8d2d\u4e70\u540e\u53ef\u5b8c\u6574\u89c2\u770b", "js", "zh_CN");
 t.add("activity.manage.choose_teacher_hint", "\u8bf7\u9009\u62e9\u8001\u5e08", "js", "zh_CN");
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">\u606d\u559c\uff01\u4f60\u5df2\u5b8c\u6210\u8be5\u4efb\u52a1<\/span>\n", "js", "zh_CN");
+t.add("announcement.create_datetime.error.hint", "\u516c\u544a\u53d1\u5e03\u65f6\u95f4\u4e0d\u80fd\u665a\u4e8e\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("announcement.delete_hint", "\u771f\u7684\u8981\u5220\u9664\u8be5\u516c\u544a\u5417?", "js", "zh_CN");
 t.add("auth.login_bind_choose.service_agreement_hint", "\u52fe\u9009\u540c\u610f\u6b64\u670d\u52a1\u534f\u8bae\uff0c\u624d\u80fd\u7ee7\u7eed\u6ce8\u518c\uff01", "js", "zh_CN");
 t.add("auth.login_bind_choose.login_success_hint", "\u767b\u5f55\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c\u81f3\u9996\u9875\uff01", "js", "zh_CN");
@@ -652,6 +653,9 @@ t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6"
 t.add("validate.check_password_low.message", "5-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_middle.message", "8-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u81f3\u5c11\u5305\u542b\u4e24\u79cd\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_high.message", "8-32\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u540c\u65f6\u5305\u542b\u82f1\u6587\u5927\u5199\u3001\u5c0f\u5199\u3001\u6570\u5b57\u548c\u7b26\u53f7", "js", "zh_CN");
+t.add("validate.custom_integer.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u6574\u6570", "js", "zh_CN");
+t.add("validate.int.message", "\u6700\u591a9\u4f4d\u6574\u6570", "js", "zh_CN");
+t.add("validate.float.message", "\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");
@@ -1550,5 +1554,7 @@ t.add("course.base.title.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u6807\u98
 t.add("course.unname_title", "\u672a\u547d\u540d\u8ba1\u5212", "js", "zh_CN");
 t.add("course.task.out_focus_mask.continue_studying", "\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">\u5b66\u7d2f\u4e86\u53ef\u4ee5\u4f11\u606f\u4e00\u4f1a :D<\/p>\n", "js", "zh_CN");
-t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>", "js", "zh_CN");
+t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
+t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
+t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
 })(Translator);
