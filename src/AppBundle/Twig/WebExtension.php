@@ -224,18 +224,19 @@ class WebExtension extends \Twig_Extension
     public function isShowNewMembers()
     {
         $theme = $this->getSetting('theme.uri');
-        if (in_array($theme, ['jianmo', 'graceful']) ){
-            $name = $theme == 'jianmo' ? '简墨' : '雅致简洁（商业主题）';
+        if (in_array($theme, ['jianmo', 'graceful'])) {
+            $name = 'jianmo' == $theme ? '简墨' : '雅致简洁（商业主题）';
             $config = $this->getThemeService()->getThemeConfigByName($name);
             $config = ArrayToolkit::index($config['confirmConfig']['blocks']['left'], 'id');
 
-            return isset($config['vip']) && $config['vip']['vipList'] == 'show';
-        }elseif ($theme == 'turing'){
-            $template = $this->getBlockService()->getBlockTemplateByCode( 'turing:turing_vip');
-            if ($template){
+            return isset($config['vip']) && 'show' == $config['vip']['vipList'];
+        } elseif ('turing' == $theme) {
+            $template = $this->getBlockService()->getBlockTemplateByCode('turing:turing_vip');
+            if ($template) {
                 $block = $this->getBlockService()->getBlockByCode('turing:turing_vip');
-                return $block ? $block['data']['vip']['vipList']['value'] == 'show' : $template['data']['vip']['vipList']['value'] == 'show';
-            }else{
+
+                return $block ? 'show' == $block['data']['vip']['vipList']['value'] : 'show' == $template['data']['vip']['vipList']['value'];
+            } else {
                 return false;
             }
         }
@@ -259,7 +260,7 @@ class WebExtension extends \Twig_Extension
 
     public function vipLevelList($config, $slice = 1)
     {
-        $count = $slice != 1 ? PHP_INT_MAX : $config['count'];
+        $count = 1 != $slice ? PHP_INT_MAX : $config['count'];
         $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $count);
 
         return $levels;
