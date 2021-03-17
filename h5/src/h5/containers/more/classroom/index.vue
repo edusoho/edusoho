@@ -3,7 +3,7 @@
     <van-dropdown-menu active-color="#1989fa">
       <template v-for="(item, index) in dropdownData" @change="change">
         <van-dropdown-item
-          v-if="item.type === 'vip' ? vipSwitch : true"
+          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
           :key="index"
           v-model="item.value"
           :options="item.options"
@@ -153,7 +153,7 @@ export default {
       const selectedData = {};
       this.dropdownData.forEach(item => {
         const { type, value } = item;
-        if (type === 'vip' && !this.vipSwitch) {
+        if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
           return;
         }
         selectedData[type] = value;
@@ -224,6 +224,11 @@ export default {
     },
 
     isSelectedDataSame(selectedData) {
+      const oldLength = Object.keys(selectedData).length;
+      const newLength = Object.keys(this.selectedData).length;
+
+      if (oldLength != newLength) return false;
+
       for (const key in this.selectedData) {
         if (this.selectedData[key] != selectedData[key]) {
           return false;

@@ -188,28 +188,43 @@ export default {
     },
 
     vipBuyStatu() {
+      let status = '';
       const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
-      const { seq, title } = this.currentLevel;
-
-      if (userSeq === seq) {
-        return {
-          text: `续费${title}特权`,
+      const { seq, name } = this.currentLevel;
+      const actions = {
+        opening: {
+          text: `立即开通${name}特权`,
+          status: true,
+          type: '开通',
+        },
+        renew: {
+          text: `续费${name}特权`,
           status: true,
           type: '续费',
-        };
-      }
-      if (userSeq > seq) {
-        return {
+        },
+        upgrade: {
+          text: '升级为当前会员特权',
+          status: true,
+          type: '升级',
+        },
+        low: {
           text: '等级低于已购会员',
           status: false,
-          type: '低于已购会员',
-        };
-      }
-      return {
-        text: '升级为当前会员特权',
-        status: true,
-        type: '升级',
+          type: '低于',
+        },
       };
+
+      if (userSeq === 0) {
+        status = 'opening';
+      } else if (userSeq === seq) {
+        status = 'renew';
+      } else if (userSeq < seq) {
+        status = 'upgrade';
+      } else {
+        status = 'low';
+      }
+
+      return actions[status];
     },
 
     courseData() {

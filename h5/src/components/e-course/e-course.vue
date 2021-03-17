@@ -9,10 +9,10 @@
           v-if="type === 'confirmOrder'"
           class="e-course__title course-confirm-title"
         >
-          {{ title
-          }}<span v-if="typeList === 'vip'" class="grey-medium">
-            x {{ vipDuration }}</span
-          >
+          {{ title }}
+          <div v-if="typeList === 'vip'" class="grey-medium">
+            x {{ vipDuration }}
+          </div>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
@@ -71,7 +71,7 @@ export default {
       default: 'course_list',
     },
     duration: {
-      type: Number,
+      type: [Number, String],
       default: 0,
     },
   },
