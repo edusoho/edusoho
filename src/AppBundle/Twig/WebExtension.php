@@ -231,9 +231,14 @@ class WebExtension extends \Twig_Extension
 
             return isset($config['vip']) && 'show' == $config['vip']['vipList'];
         } elseif ('turing' == $theme) {
-            $config = $this->getBlockService()->getBlockTemplateByCode('turing:turing_vip');
+            $template = $this->getBlockService()->getBlockTemplateByCode('turing:turing_vip');
+            if ($template) {
+                $block = $this->getBlockService()->getBlockByCode('turing:turing_vip');
 
-            return $config ? 'show' == $config['data']['vip']['vipList']['value'] : false;
+                return $block ? 'show' == $block['data']['vip']['vipList']['value'] : 'show' == $template['data']['vip']['vipList']['value'];
+            } else {
+                return false;
+            }
         }
     }
 
