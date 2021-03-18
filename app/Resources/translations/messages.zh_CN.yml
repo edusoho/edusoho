@@ -8530,6 +8530,14 @@ admin.app_upgrades.agreement.content.21.1.2: >
   <p class="agreement-content-title">Edusoho主系统V21.1.2版本中包含了旧版后台升级为新版后台。</p>
   <p class="agreement-content-title cd-mt16">升级新版后台</p>
   <p>&nbsp&nbsp&nbsp&nbsp此版本仅支持在新版后台使用。若同意升级，<b>代表您同意将后台升级为新版后台，且知悉升级后不支持再切换回旧版后台。</b></p>
+admin.app_upgrades.agreement.content.21.1.7: >
+  <p class="agreement-content-title">Edusoho主系统V21.1.7版本中对会员营销插件做了功能优化。</p>
+  <p class="agreement-content-title cd-mt16"></p>
+  <p>1.支持自定义设置会员售卖的时间和价格，售卖方式更加灵活。</p>
+  <p>2.增加新客优享，刺激非会员用户以更低门槛享受会员权益试用。</p>
+  <p>3.会员组件默认在用户端首页露出，减少开启会员功能后的操作配置。</p>
+  <p>4.会员中心页面重构，会员介绍和引导更加清晰。</p>
+  <p><b>主系统升级到会员营销最新版本后，用户端APP也需升级到最新版本APP V4.10.0，否则可能导致会员无法在旧版APP上购买。</b></p>
 admin.app_upgrades.agreement.agree: 已阅读并同意升级服务协议
 admin.app_upgrades.agreement.btn: 升级
 admin.cloud_license.info: 授权信息

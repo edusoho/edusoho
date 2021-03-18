@@ -7130,6 +7130,13 @@ admin.app_upgrades.agreement.content.21.1.2: >
   <p class="agreement-content-title">Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</p>
   <p class="agreement-content-title cd-mt16">Upgrade new version of back office</p>
   <p>&nbsp&nbsp&nbsp&nbsp This version can only be used in the new version of backend. If you agree to upgrade, <b>you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</b></p>
+admin.app_upgrades.agreement.content.21.1.7: >
+  <p class="agreement-content-title">The Edusoho Master System V21.1.7 version has functional optimization of the Member Marketing Plugin.</p>
+  <p>1.Support custom setting of time and price for member selling, more flexible selling method.</p>
+  <p>2.Add new customer privileges to stimulate non-member users to enjoy membership benefits trial with a lower threshold.</p>
+  <p>3.The member component is exposed on the user side home page by default to reduce the operation configuration after opening the member function.</p>
+  <p>4.The Member Center page is reorganized, with clearer member introduction and guidance.</p>
+  <p><b>After the main system is upgraded to the latest version of membership marketing, the user-side APP also needs to be upgraded to the latest version of APP V4.10.0, otherwise it may result in members not being able to purchase on the old version of APP.</b></p>
 admin.app_upgrades.agreement.agree: 'Have read and agree to the upgrade service agreement'
 admin.app_upgrades.agreement.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
