@@ -307,7 +307,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function refreshClassroomMemberLearnedTaskNums($page)
     {
         $total = $this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `classroom_member`;");
-        $limit = 1;
+        $limit = 10000;
         $start = ($page - 1) * $limit;
         if ($start >= $total) {
             return 1;
