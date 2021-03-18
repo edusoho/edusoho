@@ -74,6 +74,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'group.thread.open' => 'onGroupThreadOpen',
             'group.thread.update' => 'onGroupThreadUpdate',
             'group.thread.delete' => 'onGroupThreadDelete',
+            'group.thread.close' => 'onGroupThreadClose',
             'course.thread.elite' => 'onCourseThreadElite',
             'course.thread.unelite' => 'onCourseThreadUnelite',
             'course.thread.stick' => 'onCourseThreadStick',
