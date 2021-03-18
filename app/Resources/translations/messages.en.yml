@@ -10383,3 +10383,25 @@ classroom.manage.data_statistics.student_detail_list.select_un_finished: UnFinis
 classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: UnLearn Seven Days
 classroom.manage.sign_statictics.sign_type.classroom_sign: Classroom Sign
 classroom.manage.sign_statictics.empty: No Sign Data
+
+classroom.manage.data_statistics.overview.sum_time_tips: The cumulative learning duration is the data of yesterday and before
+classroom.manage.data_statistics.course_detail.course_name: Course Name
+classroom.manage.data_statistics.course_detail.task_num: Task Number
+classroom.manage.data_statistics.course_detail.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.course_detail.learn_conditions_detail: 《%courseSetTitle%》Learn Detail
+classroom.manage.data_statistics.course_detail.finish_rate_tips: Completed class hours in the course / all class hours in the course = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.course_detail.rate.finish: Finished Rate
+classroom.manage.data_statistics.course_detail.learn_progress: Learn Progress
+classroom.manage.data_statistics.student_detail.finished_rate_tips: Completed class hours / all class hours = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.header.user: UserName
+classroom.manage.data_statistics.header.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.header.learn_progress: Learn Progress
+classroom.manage.data_statistics.header.finished_time: FinushedTime
+classroom.manage.data_statistics.start_time: Start Time
+classroom.manage.data_statistics.finished_time: FinishedTime
+classroom.manage.data_statistics.finish_status.unlearn: UnLearn
+classroom.manage.data_statistics.finish_status.learning: Learning
+classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
+classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
+classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses

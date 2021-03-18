@@ -183,7 +183,8 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
     {
         $sql = "SELECT count(*) as count, from_unixtime(createdTime, '{$format}') as date
                 FROM {$this->table} WHERE `classroomId` = ? AND `role` LIKE ? AND createdTime > ? AND createdTime <= ? 
-                GROUP BY date ASC;";
+                ORDER BY date ASC
+                GROUP BY date;";
 
         return $this->db()->fetchAll($sql, [$classroomId, "%|{$role}|%", $startTime, $endTime]);
     }

@@ -13,6 +13,7 @@ class ClassroomMemberEventSubscriberTest extends BaseTestCase
             'course.task.finish' => 'onTaskFinish',
             'course_member.finished' => 'onCourseMemberFinished',
             'course.members.finish_data_refresh' => 'onCourseMembersFinishedRefresh',
+            'classroom.course.delete' => 'onClassroomCourseDelete',
         ], ClassroomMemberEventSubscriber::getSubscribedEvents());
     }
 }
