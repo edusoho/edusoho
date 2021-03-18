@@ -3081,7 +3081,7 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomDao()->create(['title' => 'test classroom title', 'hotSeq' => 10, 'status' => 'published', 'income' => '100']);
         $this->mockBiz('OrderFacade:OrderFacadeService', [
             [
-                'functionName' => 'sumOrderItemPayAmount',
+                'functionName' => 'sumOrderPayAmount',
                 'returnValue' => $classroom['income'],
             ],
         ]);
@@ -3165,14 +3165,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testsearchClassroomsWithStatistics()
     {
-        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10]);
-        $this->mockBiz('Classroom:ClassroomCourseDao', [
-            [
-                'functionName' => 'countTaskNumByClassroomIds',
-                'withParams' => [[$classroom['id']]],
-                'returnValue' => [['classroomId' => $classroom['id'], 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]],
-            ],
-        ]);
+        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10, 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]);
 
         $this->mockBiz('Classroom:ClassroomMemberDao', [
             [
@@ -3193,14 +3186,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testCalClassroomsTaskNums()
     {
-        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10]);
-        $this->mockBiz('Classroom:ClassroomCourseDao', [
-            [
-                'functionName' => 'countTaskNumByClassroomIds',
-                'withParams' => [[$classroom['id']]],
-                'returnValue' => [['classroomId' => $classroom['id'], 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]],
-            ],
-        ]);
+        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10, 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]);
 
         $this->mockBiz('Classroom:ClassroomMemberDao', [
             [
