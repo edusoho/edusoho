@@ -173,19 +173,26 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshClassroomMemberNoteNum($page)
     {
+
+        $courseMembersCount = $this->getConnection()->fetchAll("SELECT count(*) FROM course_member WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId;");
+        $count = count($courseMembersCount);
+        $perPageCount = 1000;
+        $start = ($page -1) * $perPageCount;
+        if ($start >= $count) {
+            return 1;
+        }
         // clm: classroom_member
         // cm: group筛选查询course_member出来的临时表: classroomId, userId, noteNum
         $this->getConnection()->exec("
-            UPDATE classroom_member clm INNER JOIN (
+            UPDATE classroom_member clm  INNER JOIN (
                 SELECT classroomId, userId, sum(noteNum) AS noteNum 
                 FROM course_member 
-                WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId
+                WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId ORDER BY classroomId, userId limit {$start},{$perPageCount}
             ) AS cm ON clm.classroomId = cm.classroomId AND clm.userId = cm.userId 
             SET clm.noteNum = cm.noteNum;
         ");
 
-        $this->logger('info', "批量刷新所有班级成员noteNum");
-        return 1;
+        return $page + 1;
     }
 
     public function refreshClassroomMemberQuestionNum($page)
@@ -350,7 +357,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshCourseMemberStartLearnTime($page)
     {
-        $perPageCount = 20000;
+        $perPageCount = 10000;
         $totalCount = $this->getConnection()->fetchColumn("SELECT count(id) FROM `course_member`;");
         $start = ($page - 1) * $perPageCount;
         if ($start >= $totalCount) {
@@ -392,6 +399,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sqls = [
             [
+                'table' => 'classroom',
+                'column' => 'compulsoryTaskNum',
+                'action' => 'add_column',
+                'sql' => "ALTER TABLE `classroom` ADD COLUMN `compulsoryTaskNum` int(10) DEFAULT '0' COMMENT '班级下所有课程的必修任务数' AFTER `lessonNum`;",
+            ],
+            [
+                'table' => 'classroom',
+                'column' => 'electiveTaskNum',
+                'action' => 'add_column',
+                'sql' => "ALTER TABLE `classroom` ADD COLUMN `electiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级下所有课程的选修任务数' AFTER `compulsoryTaskNum`;",
+            ],
+            [
                 "table" => "classroom_member",
                 "column" => "isFinished",
                 "action" => "add_column",
@@ -422,24 +441,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 'sql' => "ALTER TABLE `classroom_member` ADD COLUMN `questionNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '提问数' AFTER `threadNum`;",
             ],
             [
-                'table' => 'classroom',
-                'column' => 'compulsoryTaskNum',
-                'action' => 'add_column',
-                'sql' => "ALTER TABLE `classroom` ADD COLUMN `compulsoryTaskNum` int(10) DEFAULT '0' COMMENT '班级下所有课程的必修任务数' AFTER `lessonNum`;",
-            ],
-            [
-                'table' => 'classroom',
-                'column' => 'electiveTaskNum',
-                'action' => 'add_column',
-                'sql' => "ALTER TABLE `classroom` ADD COLUMN `electiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级下所有课程的选修任务数' AFTER `compulsoryTaskNum`;",
-            ],
-            [
-                'table' => 'course_member',
-                'column' => 'startLearnTime',
-                'action' => 'add_column',
-                'sql' => "ALTER TABLE `course_member` ADD COLUMN `startLearnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始学习时间' AFTER `isLearned`;",
-            ],
-            [
                 'table' => 'sign_user_statistics',
                 'column' => 'signDays',
                 'action' => 'add_column',
@@ -450,6 +451,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 'column' => 'lastSignTime',
                 'action' => 'add_column',
                 'sql' => "ALTER TABLE `sign_user_statistics` ADD COLUMN `lastSignTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到总天数' AFTER `signDays`;",
+            ],
+            [
+                'table' => 'course_member',
+                'column' => 'startLearnTime',
+                'action' => 'add_column',
+                'sql' => "ALTER TABLE `course_member` ADD COLUMN `startLearnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始学习时间' AFTER `isLearned`;",
             ],
             [
                 'table' => 'classroom_member',
