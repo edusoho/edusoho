@@ -46,8 +46,9 @@
         </swiper>
 
         <div class="vip-upgrade" v-else>
-          <span class="vip-upgrade__deadline">会员升级期限至：2023/03/13</span>
-          <span class="vip-upgrade__price">360元</span>
+          <span class="vip-upgrade__deadline">
+            会员升级期限至：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
+          </span>
         </div>
 
         <div
