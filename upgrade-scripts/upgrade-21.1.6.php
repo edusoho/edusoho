@@ -286,9 +286,9 @@ class EduSohoUpgrade extends AbstractUpdater
         // sus: sign_user_statistics
         // sul: group筛选查询sign_user_log出来的临时表: targetType, targetId, userId, lastSignTime
         $updateFields = $this->getConnection()->fetchAll("
-            SELECT sus.id AS id, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
+            SELECT sus.id AS id, IF(sul.signDays, sul.signDays, 0) AS signDays, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
             FROM sign_user_statistics sus INNER JOIN (
-                SELECT userId, targetType, targetId, MAX(createdTime) AS lastSignTime 
+                SELECT userId, targetType, targetId, COUNT(*) AS signDays, MAX(createdTime) AS lastSignTime 
                 FROM sign_user_log GROUP BY userId, targetType, targetId
             ) AS sul ON sul.userId = sus.userId AND sul.targetType = sus.targetType AND sul.targetId = sus.targetId;
         ");
