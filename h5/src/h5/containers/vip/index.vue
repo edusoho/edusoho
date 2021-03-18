@@ -26,9 +26,14 @@
 
     <!-- 开通会员 -->
     <div class="vip-sec">
-      <module-title title="选择开通时长" />
+      <module-title
+        :title="userLevelStatus == 'upgrade' ? '会员升级' : '选择开通时长'"
+      />
       <div class="vip-open">
-        <swiper :options="vipOpenSwiperOption">
+        <swiper
+          v-if="userLevelStatus != 'upgrade'"
+          :options="vipOpenSwiperOption"
+        >
           <template v-for="item in currentLevel.sellModes">
             <swiper-slide :key="item.id">
               <price-item
@@ -39,6 +44,12 @@
             </swiper-slide>
           </template>
         </swiper>
+
+        <div class="vip-upgrade" v-else>
+          <span class="vip-upgrade__deadline">
+            会员升级期限至：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
+          </span>
+        </div>
 
         <div
           class="vip-open__buy"
@@ -187,10 +198,24 @@ export default {
       return this.levels[this.activeIndex];
     },
 
-    vipBuyStatu() {
-      let status = '';
+    userLevelStatus() {
       const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
-      const { seq, name } = this.currentLevel;
+      const { seq } = this.currentLevel;
+
+      if (userSeq === 0) {
+        return 'opening';
+      }
+      if (userSeq === seq) {
+        return 'renew';
+      }
+      if (userSeq < seq) {
+        return 'upgrade';
+      }
+      return 'low';
+    },
+
+    vipBuyStatu() {
+      const { name } = this.currentLevel;
       const actions = {
         opening: {
           text: `立即开通${name}特权`,
@@ -214,17 +239,7 @@ export default {
         },
       };
 
-      if (userSeq === 0) {
-        status = 'opening';
-      } else if (userSeq === seq) {
-        status = 'renew';
-      } else if (userSeq < seq) {
-        status = 'upgrade';
-      } else {
-        status = 'low';
-      }
-
-      return actions[status];
+      return actions[this.userLevelStatus];
     },
 
     courseData() {

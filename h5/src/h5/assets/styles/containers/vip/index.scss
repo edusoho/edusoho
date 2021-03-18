@@ -211,6 +211,22 @@
 		}
 	}
 
+	.vip-upgrade {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: vw(52);
+		padding: 0 vw(16);
+		background: #fff2cf;
+		border-radius: vw(8);
+
+		.vip-upgrade__deadline {
+			color: #333;
+			font-weight: 600;
+			font-size: vw(14);
+		}
+	}
+
 	.vip-interest {
 		display: flex;
 		align-items: center;

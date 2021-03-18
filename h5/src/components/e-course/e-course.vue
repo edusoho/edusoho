@@ -10,9 +10,6 @@
           class="e-course__title course-confirm-title"
         >
           {{ title }}
-          <div v-if="typeList === 'vip'" class="grey-medium">
-            x {{ vipDuration }}
-          </div>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
@@ -111,11 +108,6 @@ export default {
     imgClass() {
       if (this.typeList === 'vip') return 'e-vip__img';
       return 'e-course__img';
-    },
-    vipDuration() {
-      if (this.order.unitType === 'month') return `${this.duration}个月`;
-      if (this.order.unitType === 'year') return `${this.duration}年`;
-      return `${this.duration}天`;
     },
   },
   watch: {
