@@ -23,7 +23,7 @@
 				<td>{{ classroom.id }}</td>
 				<td>
 					<a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-						<strong>{{ classroom.title }}</strong>
+						<strong>{{ classroom.title|raw }}</strong>
 					</a>
 					<br>
 					<span class="text-muted text-sm">{{ 'admin.classroom_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>

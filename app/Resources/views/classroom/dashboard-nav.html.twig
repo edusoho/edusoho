@@ -1,5 +1,11 @@
 <div class="nav-btn-tab">
   <ul class="nav nav-tabs" role="tablist">
+    <li>
+      <a href="{{ path('classroom_introductions', {id:classroom.id}) }}"
+         class="btn btn-link">
+        {{ 'goods.description'|trans }}
+      </a>
+    </li>
     {% set classroomSetting = setting('classroom') %}
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
@@ -27,12 +33,6 @@
     {% if can_obtain_certificates(classroom.id, 'classroom') %}
       <li role="presentation" class="{% if nav == 'certificates' %}active{% endif %}"><a href="{{ path('classroom_certificates', {classroomId:classroom.id}) }}">{{ 'classroom.certificates'|trans }}</a></li>
     {% endif %}
-    <div class="btnbar">
-      <a href="{{ path('classroom_introductions', {id:classroom.id}) }}"
-         class="btn btn-link">
-        {{ 'goods.description'|trans ~ ' >' }}
-      </a>
-    </div>
   </ul>
 
 {#  {% if canManageClassroom %}#}
