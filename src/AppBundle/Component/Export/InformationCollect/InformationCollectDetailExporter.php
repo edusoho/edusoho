@@ -60,6 +60,20 @@ class InformationCollectDetailExporter extends Exporter
 
         $resultItems = $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($results, 'id'));
 
+        $collectItems = $this->getEventService()->findItemsByEventId($this->parameter['eventId']);
+        $itemLabelCodes = ArrayToolkit::column($collectItems, 'code');
+
+        $exportData = [];
+        foreach ($resultItems as $key => $resultItem) {
+            foreach ($itemLabelCodes as $itemLabelCode) {
+                if (!empty($resultItem[$itemLabelCode])) {
+                    $exportData[$key][$itemLabelCode] = $resultItem[$itemLabelCode];
+                } else {
+                    $exportData[$key][$itemLabelCode] = ['value' => ''];
+                }
+            }
+        }
+
         $contents = [];
         foreach ($results as $result) {
             $data = [];
@@ -67,12 +81,12 @@ class InformationCollectDetailExporter extends Exporter
             $data[] = $userProfiles[$result['userId']]['mobile'];
             $data[] = date('Y-n-d H:i:s', $result['createdTime']);
 
-            if (empty($resultItems[$result['id']])) {
+            if (empty($exportData[$result['id']])) {
                 $contents[] = $data;
                 continue;
             }
 
-            $resultItemValues = ArrayToolkit::column($resultItems[$result['id']], 'value');
+            $resultItemValues = ArrayToolkit::column($exportData[$result['id']], 'value');
             foreach ($resultItemValues as $value) {
                 $data[] = $value;
             }
