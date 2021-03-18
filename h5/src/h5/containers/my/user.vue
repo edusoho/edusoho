@@ -15,22 +15,35 @@
       <div class="user-member-style">
         <div class="user-member-text">
           <img src="static/images/vip_enter.png" />
-          <div v-if="user.vip" class="user-vip">
+          <div
+            v-if="user.vip"
+            class="user-vip"
+            :class="{ 'user-vip-open': vipDated }"
+          >
             <router-link
               :to="{ path: '/vip', query: { id: user.vip.levelId } }"
               class="clearfix"
             >
-              <span class="pull-left">
-                <p>{{ user.vip.vipName }}</p>
-                <p style="font-size: 12px; margin-top: 2px;">
-                  会员到期时间：
-                  {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
-                </p>
-              </span>
-              <span class="pull-right" style="margin-top: 10px;">
-                续费/升级
-                <van-icon name="arrow" />
-              </span>
+              <template v-if="!vipDated">
+                <span class="pull-left">
+                  <p>{{ user.vip.vipName }}</p>
+                  <p style="font-size: 12px; margin-top: 2px;">
+                    会员到期时间：
+                    {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
+                  </p>
+                </span>
+                <span class="pull-right" style="margin-top: 10px;">
+                  续费/升级
+                  <van-icon name="arrow" />
+                </span>
+              </template>
+              <template v-else>
+                <span>您的会员已过期</span>
+                <span class="pull-right">
+                  立即续费
+                  <van-icon name="arrow" />
+                </span>
+              </template>
             </router-link>
           </div>
           <div v-else class="user-vip user-vip-open">
@@ -53,12 +66,12 @@ import { mapState, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapState(['user', 'vipSwitch']),
-    // vipDated() {
-    //   if (!this.user.vip) return false;
-    //   const deadLineStamp = new Date(this.user.vip.deadline).getTime();
-    //   const nowStamp = new Date().getTime();
-    //   return nowStamp > deadLineStamp;
-    // },
+
+    vipDated() {
+      const deadLineStamp = new Date(this.user.vip.deadline).getTime();
+      const nowStamp = new Date().getTime();
+      return nowStamp > deadLineStamp;
+    },
   },
   created() {
     this.getUserInfo();
