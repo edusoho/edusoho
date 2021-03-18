@@ -376,7 +376,7 @@ class AssetSettingController extends BaseController
             }
         } elseif ('vip' === $type) {
             foreach ($data as $key => $value) {
-                $this->getVipSellModeService()->updateLevelSellModesRate($key, $value);
+                $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
             }
         } elseif ('exercise' === $type) {
             foreach ($data as $key => $value) {
