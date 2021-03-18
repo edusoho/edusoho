@@ -82,19 +82,19 @@ class ReportServiceTest extends BaseTestCase
             'isFinished' => 1,
             'lastLearnTime' => time() - (86400 * 2),
         ]);
-        $res0 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nicknameOrMobileLike' => 'user'], 'CompletionRateDesc', 0, 20), 'id');
+        $res0 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nameOrMobile' => 'user'], 'CompletionRateDesc', 0, 20), 'id');
         self::assertCount(2, $res0);
         self::assertEquals(5, $res0[$member1['id']]['learnedNum']);
         self::assertEquals(11, $res0[$member2['id']]['learnedNum']);
 
-        $res = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nicknameOrMobileLike' => 'user', 'filter' => 'unLearnedSevenDays'], 'CompletionRateDesc', 0, 20), 'id');
+        $res = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nameOrMobile' => 'user', 'filter' => 'unLearnedSevenDays'], 'CompletionRateDesc', 0, 20), 'id');
         self::assertCount(1, $res);
         self::assertEquals(5, $res[$member1['id']]['learnedNum']);
 
-        $res1 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nicknameOrMobileLike' => 'userB', 'filter' => 'unLearnedSevenDays'], 'CompletionRateDesc', 0, 20), 'id');
+        $res1 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nameOrMobile' => 'userB', 'filter' => 'unLearnedSevenDays'], 'CompletionRateDesc', 0, 20), 'id');
         self::assertEmpty($res1);
 
-        $res2 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nicknameOrMobileLike' => '18989492142', 'filter' => 'unFinished'], 'CompletionRateAsc', 0, 20), 'id');
+        $res2 = ArrayToolkit::index($this->getReportService()->getStudentDetailList($classroom['id'], ['nameOrMobile' => '18989492142', 'filter' => 'unFinished'], 'CompletionRateAsc', 0, 20), 'id');
         self::assertEmpty($res2);
     }
 
