@@ -2467,17 +2467,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return [];
         }
 
-        $classroomIds = array_column($classrooms, 'id');
-        $classrooms = array_column($classrooms, null, 'id');
-        $taskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds($classroomIds);
-        $taskNums = array_column($taskNums, null, 'classroomId');
         foreach ($classrooms as &$classroom) {
             if ($withMemberInfo) {
                 $classroom['finishedMemberCount'] = $this->getClassroomMemberDao()->count(['classroomId' => $classroom['id'], 'isFinished' => 1]);
             }
         }
 
-        return $classrooms;
+        return array_column($classrooms, null, 'id');
     }
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields)
