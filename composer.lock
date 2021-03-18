@@ -468,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "01459fffd77d28458d3b1b7c5c13a0d20353333b"
+                "reference": "e59934b9846e423f6d3c4a80bf0a6e438768bd77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/01459fffd77d28458d3b1b7c5c13a0d20353333b",
-                "reference": "01459fffd77d28458d3b1b7c5c13a0d20353333b",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/e59934b9846e423f6d3c4a80bf0a6e438768bd77",
+                "reference": "e59934b9846e423f6d3c4a80bf0a6e438768bd77",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -496,7 +496,6 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^5|^6"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -508,11 +507,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "support": {
-                "issues": "https://github.com/codeages/biz-item-bank/issues",
-                "source": "https://github.com/codeages/biz-item-bank/tree/master"
-            },
-            "time": "2021-03-15T06:31:04+00:00"
+            "time": "2021-03-17T09:07:01+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -543,7 +538,6 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "4.8.36"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -557,10 +551,6 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "support": {
-                "issues": "https://github.com/codeages/biz-order-pay/issues",
-                "source": "https://github.com/codeages/biz-order-pay/tree/master"
-            },
             "time": "2021-03-12T08:57:55+00:00"
         },
         {
@@ -9215,6 +9205,5 @@
         "php": ">=5.6.0",
         "ext-json": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": []
 }
