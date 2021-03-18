@@ -174,23 +174,28 @@ class EduSohoUpgrade extends AbstractUpdater
     public function refreshClassroomMemberNoteNum($page)
     {
 
-        $courseMembersCount = $this->getConnection()->fetchAll("SELECT count(*) FROM course_member WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId;");
-        $count = count($courseMembersCount);
-        $perPageCount = 1000;
-        $start = ($page -1) * $perPageCount;
+        $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM classroom_member;");
+        $start = ($page -1) * 5000;
         if ($start >= $count) {
             return 1;
         }
-        // clm: classroom_member
-        // cm: group筛选查询course_member出来的临时表: classroomId, userId, noteNum
-        $this->getConnection()->exec("
-            UPDATE classroom_member clm  INNER JOIN (
-                SELECT classroomId, userId, sum(noteNum) AS noteNum 
-                FROM course_member 
-                WHERE joinedType = 'classroom' AND classroomId > 0 GROUP BY classroomId, userId ORDER BY classroomId, userId limit {$start},{$perPageCount}
-            ) AS cm ON clm.classroomId = cm.classroomId AND clm.userId = cm.userId 
-            SET clm.noteNum = cm.noteNum;
-        ");
+        $classroomMemberIds = array_column($this->getConnection()->fetchAll("SELECT id FROM classroom_member ORDER BY ID ASC limit {$start}, 5000 ;"), 'id');
+        if (empty($classroomMemberIds)) {
+            return $page + 1;
+        }
+        $marks = str_repeat('?,', count($classroomMemberIds) - 1).'?';
+        $updateFields = $this->getConnection()->fetchAll("select max(clm.id) as id, sum(cm.noteNum) AS noteNum  
+            from classroom_member clm 
+            inner join course_member cm 
+            on clm.classroomId = cm.classroomId AND clm.userId = cm.userId 
+            where clm.id in ({$marks}) group by clm.classroomId,clm.userId ORDER BY clm.classroomId,clm.userId;", $classroomMemberIds);
+
+        if (!empty($updateFields)) {
+            $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        }
+
+        $idsString = empty($updateFields) ? '' :json_encode(array_column($updateFields, 'id'));
+        $this->logger('info', "更新classroom_member的noteNum, 分页：{$page}，此次更新的id有： {$idsString}");
 
         return $page + 1;
     }
@@ -303,7 +308,7 @@ class EduSohoUpgrade extends AbstractUpdater
             SELECT sus.id AS id, IF(sul.signDays, sul.signDays, 0) AS signDays, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
             FROM sign_user_statistics sus INNER JOIN (
                 SELECT userId, targetType, targetId, COUNT(*) AS signDays, MAX(createdTime) AS lastSignTime 
-                FROM sign_user_log GROUP BY userId, targetType, targetId limit {$start},{$perPageCount} ORDER BY userId, targetType, targetId
+                FROM sign_user_log GROUP BY userId, targetType, targetId ORDER BY userId, targetType, targetId LIMIT {$start},{$perPageCount}
             ) AS sul ON sul.userId = sus.userId AND sul.targetType = sus.targetType AND sul.targetId = sus.targetId;
         ");
 
@@ -319,7 +324,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function refreshClassroomMemberLearnedTaskNums($page)
     {
         $total = $this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `classroom_member`;");
-        $limit = 10000;
+        $limit = 1000;
         $start = ($page - 1) * $limit;
         if ($start >= $total) {
             return 1;
@@ -357,13 +362,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshCourseMemberStartLearnTime($page)
     {
-        $perPageCount = 10000;
-        $totalCount = $this->getConnection()->fetchColumn("SELECT count(id) FROM `course_member`;");
-        $start = ($page - 1) * $perPageCount;
-        if ($start >= $totalCount) {
+        if (!empty($this->getCacheService()->get('course_member_start_learn_num_update'))) {
             return 1;
         }
-        $ids = array_column($this->getConnection()->fetchAll("SELECT id FROM `course_member` ORDER BY id ASC LIMIT {$start},{$perPageCount};"), 'id');
+        $perPageCount = 10000;
+        $totalCount = $this->getConnection()->fetchColumn("SELECT count(id) FROM `course_member` WHERE startLearnTime = 0;");
+        $start = ($page - 1) * $perPageCount;
+        if ($start >= $totalCount) {
+            $this->getCacheService()->set('course_member_start_learn_num_update', 1);
+            return 1;
+        }
+        $ids = array_column($this->getConnection()->fetchAll("SELECT id FROM `course_member` WHERE startLearnTime = 0 ORDER BY id ASC LIMIT {$start},{$perPageCount};"), 'id');
         if (empty($ids)) {
             return $page + 1;
         }
@@ -520,7 +529,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshClassroomMemberFinishedData($page)
     {
-        $perPageCount = 10000;
+        $perPageCount = 500;
         $classroomMembersCount = $this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `classroom_member` WHERE role LIKE '%|student|%';");
         $start =($page - 1) * $perPageCount;
         if ($start >= $classroomMembersCount) {
