@@ -283,25 +283,30 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function refreshSignUserStatistics($page)
     {
+        $perPageCount = 1000;
+        $signUserLogsCount = $this->getConnection()->fetchAll("SELECT count(*) FROM sign_user_log GROUP BY userId, targetType, targetId;");
+        $count = count($signUserLogsCount);
+        $start = ($page -1) *  1000;
+        if ($start >= $count) {
+            return 1;
+        }
         // sus: sign_user_statistics
         // sul: group筛选查询sign_user_log出来的临时表: targetType, targetId, userId, lastSignTime
         $updateFields = $this->getConnection()->fetchAll("
             SELECT sus.id AS id, IF(sul.signDays, sul.signDays, 0) AS signDays, IF(sul.lastSignTime, sul.lastSignTime, 0) AS lastSignTime 
             FROM sign_user_statistics sus INNER JOIN (
                 SELECT userId, targetType, targetId, COUNT(*) AS signDays, MAX(createdTime) AS lastSignTime 
-                FROM sign_user_log GROUP BY userId, targetType, targetId
+                FROM sign_user_log GROUP BY userId, targetType, targetId limit {$start},{$perPageCount} ORDER BY userId, targetType, targetId
             ) AS sul ON sul.userId = sus.userId AND sul.targetType = sus.targetType AND sul.targetId = sus.targetId;
         ");
 
         if (empty($updateFields)) {
             $this->logger('info', "没有用户的最后签到时间数据需要刷新，直接跳过");
-            return 1;
+            return $page + 1;
         }
 
         $this->getSignUserStatisticsDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
-        $total = count($updateFields);
-        $this->logger('info', "批量刷新{$total}个用户最后签到时间");
-        return 1;
+        return $page + 1;
     }
 
     public function refreshClassroomMemberLearnedTaskNums($page)
