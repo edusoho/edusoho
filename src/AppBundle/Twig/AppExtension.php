@@ -234,10 +234,11 @@ class AppExtension extends \Twig_Extension
 
     public function classroomCover($classroom, $type = 'middlePicture')
     {
-        $coverPath = null;
         if (empty($classroom[$type])) {
             $settings = $this->getSettingService()->get('default');
             $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
+        } else {
+            $coverPath = $classroom[$type];
         }
 
         return $coverPath;
