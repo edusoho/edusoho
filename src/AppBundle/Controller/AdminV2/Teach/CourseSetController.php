@@ -38,7 +38,7 @@ class CourseSetController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['excludeTypes'] = ['reservation'];
-        $filter = empty($conditions['filter']) ? 'all' : $conditions['filter'];
+        $filter = empty($conditions['filter']) ? 'normal' : $conditions['filter'];
         unset($conditions['filter']);
         $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
