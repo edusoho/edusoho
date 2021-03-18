@@ -31,7 +31,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
 
     public function getUnDstroyedUserByNickNameOrVerifiedMobile($value)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE `nickName` = {$value} OR `verifiedMobile` = {$value} AND `destroyed` = 0;";
+        $sql = "SELECT * FROM {$this->table} WHERE `nickName` = '{$value}' OR `verifiedMobile` = '{$value}' AND `destroyed` = 0;";
 
         return $this->db()->fetchAssoc($sql);
     }
