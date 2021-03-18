@@ -387,6 +387,9 @@ export default {
         if (res.success) {
           this.$router.replace({
             path: `/goods/${goodsId}/show`,
+            query: {
+              backUrl: '/',
+            },
           });
           done();
         }
