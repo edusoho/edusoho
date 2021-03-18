@@ -42,11 +42,11 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
 
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
-            throw new AssessmentException('Assessment not found.', ErrorCode::ASSESSMENT_NOTFOUND);
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         if (AssessmentService::OPEN != $assessment['status']) {
-            throw new AssessmentException('Assessment not open.', ErrorCode::ASSESSMENT_NOTOPEN);
+            throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
 
         $answerRecord['begin_time'] = time();
