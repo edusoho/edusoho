@@ -65,7 +65,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'refreshClassroomMemberQuestionNum',    //更新classroom_member.questionNum
             'refreshClassroomMemberThreadNum',  //更新classroom_member.threadNum
             'refreshClassroomMemberLearnedTaskNums',    //更新classroom_member: learnedCompulsoryTaskNum, learnedElectiveTaskNum
-            'refreshClassroomMemberFinishedData',
+            'refreshClassroomMemberFinishedData', //更新classroom_member的finished信息
         );
 
         $funcNames = array();
