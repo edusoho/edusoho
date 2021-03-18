@@ -522,13 +522,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "SELECT cmo.id as id, cmn.isFinished AS isFinished, cmn.finishedTime AS finishedTime FROM `classroom_member` cmo INNER JOIN 
                     (SELECT cm.`classroomId` AS classroomId, 
                         cm.`userId` AS userId,
-                        (CASE min(coursem.`isLearned`) = '0' WHEN TRUE THEN 0 ELSE 1 END) AS isFinished, 
-                        (CASE min(coursem.`isLearned`) = '1' WHEN TRUE THEN max(coursem.`finishedTime`) ELSE 0 END) AS finishedTime 
+                        (CASE min(coursem.`isLearned`) = 0 WHEN TRUE THEN 0 ELSE 1 END) AS isFinished, 
+                        (CASE min(coursem.`isLearned`) = 1 WHEN TRUE THEN max(coursem.`finishedTime`) ELSE 0 END) AS finishedTime 
                     FROM `classroom_member` cm 
                     INNER JOIN `classroom_courses` cc 
                     ON cm.`classroomId` = cc.`classroomId` 
                     INNER JOIN `course_member` coursem 
-                    ON cc.`courseId` = coursem.`courseId` 
+                    ON cc.`courseId` = coursem.`courseId` AND cm.`userId` = coursem.`userId`
                     WHERE cm.`role` LIKE '%|student|%' AND cm.`id` IN ({$marks})
                     GROUP BY cm.`classroomId`,cm.userId) cmn
                 ON cmo.classroomId = cmn.classroomId AND cmo.userId = cmn.userId WHERE cmo.`role` LIKE '%|student|%';";
