@@ -68,7 +68,7 @@
                     <div class="plan-title pull-left">{{ 'site.course_plan'|trans }}</div>
                     <div class="plan-btns pull-right">
                         <span class="plan-btns__item" v-for="plan in goods.specs" :key="plan.id"
-                            :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title|transSpecsTitle(goods.type) }}</span>
+                            :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title|transSpecsTitle(goods.type)|removeHtml }}</span>
                     </div>
                 </div>
 

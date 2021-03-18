@@ -15,7 +15,7 @@
 
     {% if classroom|default(null) %}
       <div class="my-course-item__classroom text-overflow">
-        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-assist" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-assist" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title|raw }}</a></span>
       </div>
     {% endif %}
 
@@ -39,7 +39,7 @@
       <ul class="dropdown-menu" role="menu">
         {% for course in currentCourses %}
           {% set member = members[course.id]|default(null) %}
-          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}"><span class="pull-right">{{ member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-dark-assist">/{{ course.compulsoryTaskNum }}</span></span>{{ course.title|sub_text(10) }}</a></li>
+          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}"><span class="pull-right">{{ member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-dark-assist">/{{ course.compulsoryTaskNum }}</span></span>{{ course.title|sub_text(10)|raw }}</a></li>
         {% endfor %}
       </ul>
     </div>
