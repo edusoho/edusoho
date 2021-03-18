@@ -65,6 +65,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'refreshClassroomMemberQuestionNum',    //更新classroom_member.questionNum
             'refreshClassroomMemberThreadNum',  //更新classroom_member.threadNum
             'refreshClassroomMemberLearnedTaskNums',    //更新classroom_member: learnedCompulsoryTaskNum, learnedElectiveTaskNum
+            'refreshClassroomMemberFinishedData',
         );
 
         $funcNames = array();
@@ -377,7 +378,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return $page + 1;
         }
         $this->getCourseMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
-        $idsString = json_encode($ids);
+        $idsString = json_encode(array_column($updateFields, 'id'));
         $this->logger('info', "更新course_member的startLearnTime, 分页：{$page}，此次更新的id有： {$idsString}");
         return $page + 1;
     }
@@ -505,6 +506,43 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    public function refreshClassroomMemberFinishedData($page)
+    {
+        $perPageCount = 10000;
+        $classroomMembersCount = $this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `classroom_member` WHERE role LIKE '%|student|%';");
+        $start =($page - 1) * $perPageCount;
+        if ($start >= $classroomMembersCount) {
+            return 1;
+        }
+        $classroomMemberIds = array_column($this->getConnection()->fetchAll("SELECT id FROM `classroom_member` WHERE role LIKE '%|student|%' ORDER BY id ASC LIMIT {$start},{$perPageCount};"), 'id');
+        if (empty($classroomMemberIds)) {
+            return $page + 1;
+        }
+        $marks = str_repeat('?,', count($classroomMemberIds) - 1).'?';
+        $sql = "SELECT cmo.id as id, cmn.isFinished AS isFinished, cmn.finishedTime AS finishedTime FROM `classroom_member` cmo INNER JOIN 
+                    (SELECT cm.`classroomId` AS classroomId, 
+                        cm.`userId` AS userId,
+                        (CASE min(coursem.`isLearned`) = '0' WHEN TRUE THEN 0 ELSE 1 END) AS isFinished, 
+                        (CASE min(coursem.`isLearned`) = '1' WHEN TRUE THEN max(coursem.`finishedTime`) ELSE 0 END) AS finishedTime 
+                    FROM `classroom_member` cm 
+                    INNER JOIN `classroom_courses` cc 
+                    ON cm.`classroomId` = cc.`classroomId` 
+                    INNER JOIN `course_member` coursem 
+                    ON cc.`courseId` = coursem.`courseId` 
+                    WHERE cm.`role` LIKE '%|student|%' AND cm.`id` IN ({$marks})
+                    GROUP BY cm.`classroomId`,cm.userId) cmn
+                ON cmo.classroomId = cmn.classroomId AND cmo.userId = cmn.userId WHERE cmo.`role` LIKE '%|student|%';";
+
+        $updateFields = $this->getConnection()->fetchAll($sql, $classroomMemberIds);
+        if (empty($updateFields)) {
+            return $page + 1;
+        }
+        $this->getClassroomMemberDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields, 'id');
+        $idsString = json_encode(array_column($updateFields, 'id'));
+        $this->logger('info', "更新classroom_member的finishedData, 分页：{$page}，此次更新的id有： {$idsString}");
+        return $page + 1;
+    }
+
     /**
      * @return \Biz\System\Service\CacheService
      */
@@ -623,6 +661,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->createDao('Sign:SignUserStatisticsDao');
     }
 
+    /**
+     * @return \Biz\Classroom\Dao\ClassroomMemberDao
+     */
     protected function getClassroomMemberDao()
     {
         return $this->createDao('Classroom:ClassroomMemberDao');
