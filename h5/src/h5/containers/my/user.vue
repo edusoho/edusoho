@@ -23,7 +23,8 @@
               <span class="pull-left">
                 <p>{{ user.vip.vipName }}</p>
                 <p style="font-size: 12px; margin-top: 2px;">
-                  会员到期时间：{{ user.vip.deadline.slice(0, 10) }}
+                  会员到期时间：
+                  {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
                 </p>
               </span>
               <span class="pull-right" style="margin-top: 10px;">
