@@ -671,8 +671,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         );
 
         if ($this->isCloudSearchEnabled()) {
-            foreach ($groupThreads as $thread) {
-                $thread = $this->convertThread($thread, 'group.thread.update');
+            if (!empty($groupThreads)) {
+                // 小组话题一个通知即可
                 $args = [
                     'category' => 'thread',
                 ];
