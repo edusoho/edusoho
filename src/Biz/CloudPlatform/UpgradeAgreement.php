@@ -18,7 +18,7 @@ class UpgradeAgreement
             ],
             self::VIP_VERSION => [
                 'trans' => 'admin.app_upgrades.agreement.content.21.1.7',
-            ]
+            ],
         ];
 
         return empty($agreements[$version]) || !$this->isAgreementShow($version, $code) ? [] : $agreements[$version];
