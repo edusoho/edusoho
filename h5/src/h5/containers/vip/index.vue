@@ -199,20 +199,19 @@ export default {
     },
 
     userLevelStatus() {
-      let status = '';
       const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
       const { seq } = this.currentLevel;
 
       if (userSeq === 0) {
-        status = 'opening';
-      } else if (userSeq === seq) {
-        status = 'renew';
-      } else if (userSeq < seq) {
-        status = 'upgrade';
-      } else {
-        status = 'low';
+        return 'opening';
       }
-      return status;
+      if (userSeq === seq) {
+        return 'renew';
+      }
+      if (userSeq < seq) {
+        return 'upgrade';
+      }
+      return 'low';
     },
 
     vipBuyStatu() {
