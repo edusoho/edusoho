@@ -20,4 +20,20 @@ class ClassroomStatisticsCoursesLearnExporterTest extends BaseTestCase
             '完课率',
         ], $exporter->getTitles());
     }
+
+    public function testGetContent()
+    {
+        self::getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsCoursesLearnExporter(self::getContainer(), []);
+        $resEmpty = $exporter->getContent(0, 1);
+        self::assertEmpty($resEmpty);
+    }
+
+    public function testGetCount()
+    {
+        self::getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsCoursesLearnExporter(self::getContainer(), []);
+        $resEmpty = $exporter->getCount();
+        self::assertEmpty($resEmpty);
+    }
 }

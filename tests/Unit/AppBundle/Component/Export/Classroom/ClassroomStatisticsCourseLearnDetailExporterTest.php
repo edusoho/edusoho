@@ -21,5 +21,17 @@ class ClassroomStatisticsCourseLearnDetailExporterTest extends BaseTestCase
 
     public function testGetContent()
     {
+        self::getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsCourseLearnDetailExporter(self::getContainer(), []);
+        $resEmpty = $exporter->getContent(0, 1);
+        self::assertEmpty($resEmpty);
+    }
+
+    public function testGetCount()
+    {
+        self::getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsCourseLearnDetailExporter(self::getContainer(), []);
+        $resEmpty = $exporter->getCount();
+        self::assertEmpty($resEmpty);
     }
 }
