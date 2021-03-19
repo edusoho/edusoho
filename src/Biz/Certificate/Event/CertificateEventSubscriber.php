@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Crontab\SystemCrontabInitializer;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -24,6 +25,8 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
             'certificate.publish' => 'onCertificatePublish',
             'classroom.course.delete' => 'onClassroomCourseDelete',
             'course.task.delete' => 'onCourseTaskDelete',
+            'course.lesson.setOptional' => 'onLessonSetOptional',
+            'course.task.update.sync' => 'onCourseTaskUpdateSync',
         ];
     }
 
@@ -48,16 +51,33 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     {
         $taskResult = $event->getSubject();
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $this->processCourseCertificate($courseSet, $course, $taskResult);
-        $this->processClassroomCertificate($course, $taskResult['userId']);
+        $this->processCourseCertificate($course, [$taskResult['userId']]);
+        $this->processClassroomCertificate($course, [$taskResult['userId']]);
+    }
+
+    public function onLessonSetOptional(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $students = $this->getCourseMemberService()->searchMembers(
+            ['courseId' => $course['id'], 'role' => 'student'],
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
+        $userIds = ArrayToolkit::column($students, 'userId');
+
+        $this->processCourseCertificate($course, $userIds);
+        $this->processClassroomCertificate($course, $userIds);
     }
 
     public function onCourseTaskDelete(Event $event)
     {
         $task = $event->getSubject();
         $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $certificates = [];
         if (empty($course['parentId'])) {
             $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
         } else {
@@ -67,6 +87,42 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
             }
             $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroomIds[0], 'classroom');
         }
+
+        foreach ($certificates as $certificate) {
+            $this->getSchedulerService()->register([
+                'name' => 'issue_certificate_job'.$certificate['id'],
+                'pool' => 'dedicated',
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => (int) time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Certificate\Job\IssueCertificateJob',
+                'args' => ['certificateId' => $certificate['id']],
+            ]);
+        }
+    }
+
+    public function onCourseTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+
+        $certificates = [];
+        foreach ($courses as $course) {
+            if (empty($course['parentId'])) {
+                $courseCertificates = $this->getCertificateService()->findByTargetIdAndTargetType($course['id'], 'course');
+                $certificates = array_merge($certificates, $courseCertificates);
+            } else {
+                $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomIdsByCourseId($course['id']), 'classroomId');
+                if (empty($classroomIds)) {
+                    return true;
+                }
+                $classroomCertificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroomIds[0], 'classroom');
+                $certificates = array_merge($certificates, $classroomCertificates);
+            }
+        }
+
+        $certificates = $this->getCertificateService()->findByIds(ArrayToolkit::column($certificates, 'id'));
+
         foreach ($certificates as $certificate) {
             $this->getSchedulerService()->register([
                 'name' => 'issue_certificate_job'.$certificate['id'],
@@ -98,20 +154,29 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         ]);
     }
 
-    protected function processCourseCertificate($courseSet, $course, $taskResult)
+    protected function processCourseCertificate($course, $userIds)
     {
-        $student = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
-
-        if (empty($student['finishedTime']) || $student['learnedCompulsoryTaskNum'] != $course['compulsoryTaskNum']) {
-            return;
+        $students = $this->getCourseMemberService()->searchMembers(
+            ['courseId' => $course['id'], 'userIds' => $userIds],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($students as $key => $student) {
+            if (empty($student['finishedTime']) || $student['learnedCompulsoryTaskNum'] != $course['compulsoryTaskNum']) {
+                unset($students[$key]);
+            }
         }
+
+        $userIds = ArrayToolkit::column($students, 'userId');
+
         $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($course['id'], 'course');
         foreach ($certificates as $certificate) {
-            $this->getRecordService()->autoIssueCertificates($certificate['id'], [$taskResult['userId']]);
+            $this->getRecordService()->autoIssueCertificates($certificate['id'], $userIds);
         }
     }
 
-    protected function processClassroomCertificate($course, $userId)
+    protected function processClassroomCertificate($course, $userIds)
     {
         $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
         $classroomIds = ArrayToolkit::column($classroomCourse, 'classroomId');
@@ -127,15 +192,17 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         }
 
         $courseIds = ArrayToolkit::column($courses, 'id');
-        $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
+        foreach ($userIds as $key => $userId) {
+            $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
 
-        //没有全部完成忽略
-        if ($memberCounts < count($courseIds) || empty($memberCounts)) {
-            return true;
+            //没有全部完成忽略
+            if ($memberCounts < count($courseIds) || empty($memberCounts)) {
+                unset($userIds[$key]);
+            }
         }
 
         foreach ($certificates as $certificate) {
-            $this->getRecordService()->autoIssueCertificates($certificate['id'], [$userId]);
+            $this->getRecordService()->autoIssueCertificates($certificate['id'], $userIds);
         }
     }
 
@@ -193,5 +260,13 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     private function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

@@ -230,6 +230,7 @@ user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
+user.fields.profile_mobile_label: Phone(from personal data)
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
 user.fields.mobile_label.apple_tip: Please go to the APP for binding
@@ -456,6 +457,7 @@ order.buyer.username: Username
 order.buyer.true_name: True name
 order.buyer.email: Email
 order.buyer.contact: Contact
+order.buyer.mobile: Mobile
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
@@ -7128,6 +7130,13 @@ admin.app_upgrades.agreement.content.21.1.2: >
   <p class="agreement-content-title">Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</p>
   <p class="agreement-content-title cd-mt16">Upgrade new version of back office</p>
   <p>&nbsp&nbsp&nbsp&nbsp This version can only be used in the new version of backend. If you agree to upgrade, <b>you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</b></p>
+admin.app_upgrades.agreement.content.21.1.7: >
+  <p class="agreement-content-title">The Edusoho Master System V21.1.7 version has functional optimization of the Member Marketing Plugin.</p>
+  <p>1.Support custom setting of time and price for member selling, more flexible selling method.</p>
+  <p>2.Add new customer privileges to stimulate non-member users to enjoy membership benefits trial with a lower threshold.</p>
+  <p>3.The member component is exposed on the user side home page by default to reduce the operation configuration after opening the member function.</p>
+  <p>4.The Member Center page is reorganized, with clearer member introduction and guidance.</p>
+  <p><b>After the main system is upgraded to the latest version of membership marketing, the user-side APP also needs to be upgraded to the latest version of APP V4.10.0, otherwise it may result in members not being able to purchase on the old version of APP.</b></p>
 admin.app_upgrades.agreement.agree: 'Have read and agree to the upgrade service agreement'
 admin.app_upgrades.agreement.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
@@ -7173,7 +7182,7 @@ admin.cloud.app.upgrades.app: Application
 admin.cloud.app.upgrades.tips: 'During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.'
 admin.cloud.app.upgrades_danger.tips: Warning! you are currently using the test channel to upgrade this application, it is highly recommended that you give up to rise your current operation, other wise, site collapse and so on can't unexpected consequences, you need to take the consequences yourself.
 admin.cloud.app.upgrades.app_name: 'Application Name'
-admin.cloud.app.upgrades.app_version: 'Application Name'
+admin.cloud.app.upgrades.app_version: 'Application Version'
 admin.cloud.app.upgrades.backupDB: 'Backup Database'
 admin.cloud.app.upgrades.backupFile: 'Backup Files'
 admin.cloud.app.upgrades.backupStatus.yes: 'Yes'
@@ -7361,7 +7370,8 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
-
+course.homework_check.create.name: "Homework name"
+course.homework_check.homework_delete: "The homework has been deleted"
 
 course.question_marker_statistics: PopQuestion Statistics
 
@@ -9395,6 +9405,8 @@ exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
+exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
+exception.item_bank.assessment.not.exist: Test paper does not exist
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -9574,6 +9586,7 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 editor.iframe_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 #coupon
 coupon.usage_detail_title: Coupon usage details
+coupon.generate_log_title: Coupon generate logs
 coupon.enable_hint: The coupon is not open. Please enable it in <a href="%path%"> System - Operational Settings - Coupon </a>
 
 coupon.id: Coupon id
@@ -10278,6 +10291,7 @@ information_collect.title: Information Collect
 information_collect.form_items.confirm_submit: Submit
 information_collect.form_items.skip: Skip
 information_collect.select_placeholeder: Choose
+information_collect.detail: Information Collect Detail
 
 task.learn_data_detail.stay_total_time: 页面累加时长（分）
 task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
@@ -10300,3 +10314,101 @@ exam_bank.analysis.data_large_loading_finish: Data loading finish
 exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
 exam_bank.analysis.data_large_loading_btn: Force refresh
 activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
+
+classroom.manage.sign_statictics: Sign Statistics
+classroom.manage.sign_statictics.user_th: Username
+classroom.manage.sign_statictics.sign_days_th: Sign Days
+classroom.manage.sign_statictics.keep_days_th: Keep Days
+classroom.manage.sign_statictics.sign_today_th: Sign Today
+classroom.manage.sign_statictics.operate_th: Operate
+classroom.manage.sign_statictics.item: Item
+classroom.manage.sign_statictics.name_placeholder: Please enter username
+classroom.manage.sign_statictics.search_btn: Search
+classroom.manage.sign_statictics.role.all: All
+classroom.manage.sign_statictics.role.header_teacher: Header Teacher
+classroom.manage.sign_statictics.role.teacher: Teacher
+classroom.manage.sign_statictics.role.assistant: Assistant
+classroom.manage.sign_statictics.role.student: Student
+classroom.manage.sign_statictics.role.auditor: Auditor
+classroom.manage.sign_statictics.modal_title: %nickname%Item
+classroom.manage.sign_statictics.sign_type: Sign Type
+classroom.manage.sign_statictics.sign_time: Sign Time
+classroom.manage.sign_statictics.nickname_th: Nickname
+classroom.manage.sign_statictics.role_th: Role
+classroom.manage.sign_statictics.join_time_th: Join Time
+
+admin.classroom_manage.statistics.creator_placeholder: Creator
+admin.classroom_manage.statistics.name_th: Classroom
+admin.classroom_manage.statistics.course_number_th: Course Number
+admin.classroom_manage.statistics.task_number_th: Task Number
+admin.classroom_manage.statistics.student_number_th: Student Number
+admin.classroom_manage.statistics.finish_number_th: Finish Number
+admin.classroom_manage.statistics.income_th: Income
+admin.classroom_manage.statistics.operation_th: Operate
+admin.classroom_manage.statistics.create_time_th: Create Time
+admin.classroom_manage.statistics.creator_th: Creator
+admin.classroom_manage.statistics.student_operation_btn: Student Operation
+admin.classroom_manage.statistics.course_operation_btn: Course Operation
+admin.classroom_manage.statistics.task_num_tips: Only count the number of required class hours and tasks, the numbers in parentheses are the number of optional class hours and tasks
+admin.classroom_manage.statistics.finish_number_tips: Take the number of people whose learning progress is 100% in all class hours. If new courses or hours are added to the class, the number of people completed will change accordingly.
+admin.classroom_manage.statistics.member_modal_title: <%classroom%> data from the student's perspective
+admin.classroom_manage.statistics.member_modal_title_tips: >
+  <span style='font-size:14px'>
+    1.Cumulative study time (minutes):accumulate all study time generated by the user under the class-course.<br/>
+    2.Among them, the statistical dimension of video lesson learning time (playing active time or page active time) is subject to the system-course settings-video lesson learning configuration.<br/>
+    3.Statistics are for yesterday and before.<br/>
+  </span>
+admin.classroom_manage.statistics.member.total_learn_time: 'All courses in the class are accumulated learning time (minutes): %mins%'
+admin.classroom_manage.statistics.member.nickname_th: Username
+admin.classroom_manage.statistics.member.create_time_th: Join Time
+admin.classroom_manage.statistics.member.finish_time_th: Finish Time
+admin.classroom_manage.statistics.member.learn_time_th: Learned Time
+admin.classroom_manage.statistics.member.question_num_th: Question Number
+admin.classroom_manage.statistics.member.note_num_th: Note Number
+admin.classroom_manage.statistics.course.title: <%classroom%> Course Data
+admin.classroom_manage.statistics.course.title_tips: >
+  <span style='font-size:14px'>
+    1.The data of the accumulated learning time and per capita learning time of the task are statistics of yesterday and before.<br/>
+    2.Other statistical data items are real-time data.<br/>
+  </span>
+admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+
+classroom.manage.data_statictics: Data Statistics
+classroom.manage.data_statistics.overview.student_num: Student Number
+classroom.manage.data_statistics.overview.auditor_num: Auditor
+classroom.manage.data_statistics.overview.finished_num: Finished Num
+classroom.manage.data_statistics.overview.sumtime: Sum LearnTime (minute)
+classroom.manage.data_statistics.overview.average_time: Average LearnTime (minute)
+classroom.manage.data_statistics.overview.finished_num_tips: Take the number of people who have reached 100% of the learning progress of all class hours in the class. If new courses or class hours are added to the class, the number of people who have completed the tasks will change accordingly.
+classroom.manage.data_statistics.student_trendency: Student trendency
+classroom.manage.data_statistics.student_trendency.select_seven_days: Seven Days
+classroom.manage.data_statistics.student_trendency.select_thrity_days: Thrity Days
+classroom.manage.data_statistics.student_detail_list.title: Student Detail
+classroom.manage.data_statistics.course_detail_list.title: Course Detail
+classroom.manage.data_statistics.student_detail_list.select_all: All
+classroom.manage.data_statistics.student_detail_list.select_un_finished: UnFinished
+classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: UnLearn Seven Days
+classroom.manage.sign_statictics.sign_type.classroom_sign: Classroom Sign
+classroom.manage.sign_statictics.empty: No Sign Data
+
+classroom.manage.data_statistics.overview.sum_time_tips: The cumulative learning duration is the data of yesterday and before
+classroom.manage.data_statistics.course_detail.course_name: Course Name
+classroom.manage.data_statistics.course_detail.task_num: Task Number
+classroom.manage.data_statistics.course_detail.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.course_detail.learn_conditions_detail: 《%courseSetTitle%》Learn Detail
+classroom.manage.data_statistics.course_detail.finish_rate_tips: Completed class hours in the course / all class hours in the course = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.course_detail.rate.finish: Finished Rate
+classroom.manage.data_statistics.course_detail.learn_progress: Learn Progress
+classroom.manage.data_statistics.student_detail.finished_rate_tips: Completed class hours / all class hours = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.header.user: UserName
+classroom.manage.data_statistics.header.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.header.learn_progress: Learn Progress
+classroom.manage.data_statistics.header.finished_time: FinushedTime
+classroom.manage.data_statistics.start_time: Start Time
+classroom.manage.data_statistics.finished_time: FinishedTime
+classroom.manage.data_statistics.finish_status.unlearn: UnLearn
+classroom.manage.data_statistics.finish_status.learning: Learning
+classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
+classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
+classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses

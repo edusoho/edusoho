@@ -7,7 +7,7 @@
     <th>{{ 'order.product_price'|trans }} </th>
     <th>{{ 'order.discount_amount'|trans }}</th>
     <th>{{ 'order.price'|trans }}</th>
-    <th width="10%">{{'order.buyers'|trans }}</th>
+    <th width="12%">{{'order.buyers'|trans }}</th>
     <th>
       {{ 'order.payment_pattern'|trans }}
     </th>
@@ -52,6 +52,7 @@
       {% if has_permission('admin_v2_user_manage') %}
         <td>
           <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+          <p class="color-gray">{{ buyer.verifiedMobile|default('--') }}</p>
         </td>
       {% else %}
         <td>

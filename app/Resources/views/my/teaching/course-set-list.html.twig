@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block coursesetTitle %}
-  <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title }}</a>
+  <a class="cd-link-major" target="_blank" href="{{ courseSet.redirect_path }}">{{ courseSet.title|raw }}</a>
 {% endblock %}
 
 {% block courseTitle %}

@@ -6,7 +6,7 @@
   {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
   {% set testpaper = testpapers[task.testId]|default(null) %}
   {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
-  {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId} %}
+  {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId,type:type} %}
 {% else %}
   <div class="empty">{{'course.testpaper_check.empty'|trans}}</div>
 {% endfor %}

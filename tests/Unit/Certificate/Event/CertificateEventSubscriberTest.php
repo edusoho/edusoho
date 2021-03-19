@@ -25,8 +25,8 @@ class CertificateEventSubscriberTest extends BaseTestCase
 
         $this->mockBiz('Course:MemberService', [
             [
-                'functionName' => 'getCourseMember',
-                'returnValue' => ['id' => 1, 'finishedTime' => time(), 'learnedCompulsoryTaskNum' => 1],
+                'functionName' => 'searchMembers',
+                'returnValue' => [['id' => 1, 'finishedTime' => time(), 'learnedCompulsoryTaskNum' => 1]],
             ],
         ]);
 
@@ -95,8 +95,8 @@ class CertificateEventSubscriberTest extends BaseTestCase
                 'returnValue' => 1,
             ],
             [
-                'functionName' => 'getCourseMember',
-                'returnValue' => ['id' => 1, 'finishedTime' => 0, 'learnedCompulsoryTaskNum' => 0],
+                'functionName' => 'searchMembers',
+                'returnValue' => [['id' => 1, 'finishedTime' => 0, 'learnedCompulsoryTaskNum' => 0]],
             ],
         ]);
 
@@ -114,6 +114,6 @@ class CertificateEventSubscriberTest extends BaseTestCase
             ]
         );
         $subscriber->onCourseTaskFinish($event);
-        $recordService->shouldHaveReceived('autoIssueCertificates')->times(1);
+        $recordService->shouldHaveReceived('autoIssueCertificates')->times(2);
     }
 }

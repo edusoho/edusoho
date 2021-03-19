@@ -35,11 +35,20 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'classroom.course.copy' => 'onClassroomCourseCopy',
             'course.delete' => ['onCourseDelete', -100],
             'course.task.finish' => 'onTaskFinish',
+            'course.task.start' => 'onTaskStart',
             'course.lesson.setOptional' => 'onLessonOptionalChange',
+            'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.lesson.delete' => ['onCourseLessonDelete', -100],
             'course.task.delete' => ['onCourseTaskDelete', -100],
+            'course.task.create' => ['onCourseTaskCreate', -100],
         ];
+    }
+
+    public function onCourseTaskCreate(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->getCourseMemberService()->recountLearningDataByCourseId($task['courseId']);
     }
 
     public function onCourseDelete(Event $event)
@@ -104,6 +113,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->getCourseMemberService()->recountLearningDataByCourseId($copiedTask['courseId']);
+        }
+    }
+
     private function getCopiedTasks($task)
     {
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
@@ -127,13 +146,17 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getSubject();
 
         $specs = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
+        if (empty($specs)) {
+            return;
+        }
+
         $conditions = [
             'target_id' => $specs['id'],
             'target_type' => 'course',
             'statuses' => ['paid', 'success', 'finished'],
         ];
 
-        $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
+        $income = $this->getOrderFacadeService()->sumOrderPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);
 
         $this->getCourseDao()->update($course['id'], ['income' => $income]);
@@ -190,12 +213,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $taskResult = $event->getSubject();
         $this->getCourseService()->recountLearningData($taskResult['courseId'], $taskResult['userId']);
-        $finishTime = $this->getCourseFinishTime($taskResult);
+        $this->getCourseMemberService()->refreshMemberFinishData($taskResult['courseId'], $taskResult['userId']);
+    }
 
-        $this->getCourseMemberService()->updateMembers(
-            ['courseId' => $taskResult['courseId'], 'userId' => $taskResult['userId']],
-            ['lastLearnTime' => time(), 'finishedTime' => $finishTime]
-        );
+    public function onTaskStart(Event $event)
+    {
+        $taskResult = $event->getSubject();
+        $member = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
+        if (empty($member['startLearnTime'])) {
+            $this->getCourseMemberService()->updateMember($member['id'], ['startLearnTime' => $taskResult['createdTime']]);
+        }
     }
 
     public function onLessonOptionalChange(Event $event)
@@ -214,20 +241,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $task = $event->getSubject();
         $this->getCourseMemberService()->recountLearningDataByCourseId($task['courseId']);
-    }
-
-    private function getCourseFinishTime($taskResult)
-    {
-        $student = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
-        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-        if (0 == $course['compulsoryTaskNum']) {
-            $isFinished = false;
-        } else {
-            $isFinished = intval($student['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1 ? true : false;
-        }
-        $finishTime = $isFinished ? time() : 0;
-
-        return $finishTime;
     }
 
     protected function getWelcomeMessageBody($user, $course)

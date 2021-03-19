@@ -28,7 +28,7 @@
               <div class="courseset-manage-header-info__title text-overflow"
                    {% if classroom.title|length > 21 %}data-toggle="tooltip" title="{{ classroom.title }}"
                    data-container="body" {% endif %}>
-                <span class="cd-dark-major">{{ classroom.title }}</span>
+                <span class="cd-dark-major">{{ classroom.title|raw }}</span>
               </div>
 
               <div class="courseset-manage-header-info__price color-danger">

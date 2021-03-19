@@ -16,7 +16,7 @@ interface CloudFileService extends FilePlayerInterface
 
     public function batchDelete($globalIds);
 
-    public function download($globalId);
+    public function download($globalId, $ssl = false);
 
     public function reconvert($globalId, $options);
 

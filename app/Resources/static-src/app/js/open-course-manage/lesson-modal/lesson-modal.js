@@ -96,6 +96,7 @@ class LessonModal {
 
     this.$element.on('click', '.js-choose-trigger', (event) => {
       FileChooser.openUI();
+      window.dispatchEvent(new CustomEvent("resize"))
       $('[name="mediaSource').val(null);
     });
 

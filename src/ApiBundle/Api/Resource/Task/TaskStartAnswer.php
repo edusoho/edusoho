@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class TaskStartAnswer extends AbstractResource
 {
@@ -29,6 +30,13 @@ class TaskStartAnswer extends AbstractResource
         $answerRecord = $this->$method($task, $activity);
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        if (empty($assessment)) {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        if ('open' !== $assessment['status']) {
+            throw AssessmentException::ASSESSMENT_NOTOPEN();
+        }
+
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 

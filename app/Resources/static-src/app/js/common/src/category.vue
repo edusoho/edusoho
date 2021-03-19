@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <div v-show="categoryChoices">
         <el-select v-model="category" v-on:change="updateCategory">
             <el-option value="0" :label="'category'|trans"></el-option>
             <el-option
-                v-for="(label,value) in categoryChoices"
-                :key="value"
-                :label="label|trim"
-                :value="value">
-                {{ label }}
+                v-for="choice in categoryChoices"
+                :key="choice.id"
+                :label="choice.name|trim"
+                :value="choice.id">
+                <span :style="{ 'padding-left': (choice.depth - 1) * 8 + 'px' }">{{ choice.name|trim }}</span>
             </el-option>
         </el-select>
     </div>
@@ -22,7 +22,7 @@
             category: '0',
         },
         filters: {
-            trim: function (value) {
+            trim: function (value = '') {
                 return value.trim();
             }
         },
@@ -30,19 +30,43 @@
             getCategoryChoices() {
                 let type = this.type ? this.type : 'course';
                 this.$axios.get('/category/choices/' + type).then((response) => {
-                    this.categoryChoices = response.data;
-                });
+                     this.categoryChoices = this.parseChoicesData(response.data)
+                }).catch(error => {
+                    this.categoryChoices = this.categoryChoices || []
+                })
             },
             updateCategory(value) {
                 this.$emit('update:category', value);
+            },
+            parseChoicesData (data = []) {
+                const choicesList = []
+
+                data.forEach(item => {
+                    this.getChoiceChildren(choicesList, item)
+                })
+
+                return choicesList
+            },
+            getChoiceChildren (choicesList, data) {
+                const { name, id, depth, children } = data
+                
+                choicesList.push({ name, depth, id })
+                
+                if (Array.isArray(children) && children.length > 0) {
+                    children.forEach(item => {
+                        this.getChoiceChildren(choicesList, item)
+                    })
+                }
             }
         },
         data() {
-            this.getCategoryChoices();
             return {
-                categoryChoices: {},
+                categoryChoices: null,
                 category: '0',
             };
+        },
+        created() {
+            this.getCategoryChoices();
         }
     }
 </script>

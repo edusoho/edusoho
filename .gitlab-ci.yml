@@ -176,7 +176,6 @@ check env:
   only:
     refs:
       - develop
-      - project/data-visualization
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

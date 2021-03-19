@@ -8,7 +8,7 @@
 <tr id="course-tr-{{ courseSet.id }}" data-sort="{{ courseSet.recommendedSeq }}">
   <td>{{ courseSet.recommendedSeq }}</td>
   <td>
-    <a href="{{ showUrl }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+    <a href="{{ showUrl }}" target="_blank"><strong>{{ courseSet.title|raw }}</strong></a>
     <br>
     <span class="text-muted text-sm">{{'admin.course_manage.recommend.category'|trans}}：{{ category.name|default('--') }}</span>
   </td>

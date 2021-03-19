@@ -298,6 +298,7 @@ user.fields.idcard_label: 身份证号
 user.fields.idcard_front_title: 上传身份证正面照
 user.fields.idcard_back_title: 上传身份证反面照
 user.fields.mobile_label: 手机号码
+user.fields.profile_mobile_label: 手机号码（来自个人资料）
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
 user.fields.mobile_label.apple_tip: 请前往APP端进行绑定
@@ -542,6 +543,7 @@ order.buyer.username: 用户名
 order.buyer.true_name: 真实姓名
 order.buyer.email: 邮箱
 order.buyer.contact: 联系电话
+order.buyer.mobile: 手机号
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
@@ -633,6 +635,7 @@ order.pay: 订单支付
 order.success: 订单完成
 order.refund.notify_admin: >
   用户%nickname%申请退款 <a href='%targetUrl%'>%title%</a>，请审核
+
 
 # 支付中心
 pay_center: 支付中心
@@ -1263,6 +1266,8 @@ course.homework_check.finish_check_submiting: 正在提交, 请稍等
 course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
+course.homework_check.create.name: 作业名称
+course.homework_check.homework_delete:  该作业已删除
 
 course.question_marker_statistics: 弹题统计
 
@@ -5121,7 +5126,7 @@ admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括�
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.name: 任务名称
 admin.course_manage.statistics.data.task_type: 任务类型
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
@@ -8525,6 +8530,14 @@ admin.app_upgrades.agreement.content.21.1.2: >
   <p class="agreement-content-title">Edusoho主系统V21.1.2版本中包含了旧版后台升级为新版后台。</p>
   <p class="agreement-content-title cd-mt16">升级新版后台</p>
   <p>&nbsp&nbsp&nbsp&nbsp此版本仅支持在新版后台使用。若同意升级，<b>代表您同意将后台升级为新版后台，且知悉升级后不支持再切换回旧版后台。</b></p>
+admin.app_upgrades.agreement.content.21.1.7: >
+  <p class="agreement-content-title">Edusoho主系统V21.1.7版本中对会员营销插件做了功能优化。</p>
+  <p class="agreement-content-title cd-mt16"></p>
+  <p>1.支持自定义设置会员售卖的时间和价格，售卖方式更加灵活。</p>
+  <p>2.增加新客优享，刺激非会员用户以更低门槛享受会员权益试用。</p>
+  <p>3.会员组件默认在用户端首页露出，减少开启会员功能后的操作配置。</p>
+  <p>4.会员中心页面重构，会员介绍和引导更加清晰。</p>
+  <p><b>主系统升级到会员营销最新版本后，用户端APP也需升级到最新版本APP V4.10.0，否则可能导致会员无法在旧版APP上购买。</b></p>
 admin.app_upgrades.agreement.agree: 已阅读并同意升级服务协议
 admin.app_upgrades.agreement.btn: 升级
 admin.cloud_license.info: 授权信息
@@ -8578,7 +8591,7 @@ admin.cloud.app.upgrades.app: 应用
 admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
 admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
-admin.cloud.app.upgrades.app_version: 应用名称
+admin.cloud.app.upgrades.app_version: 应用版本
 admin.cloud.app.upgrades.backupDB: 备份数据库
 admin.cloud.app.upgrades.backupFile: 备份文件
 admin.cloud.app.upgrades.backupStatus.yes: 是
@@ -10656,6 +10669,8 @@ exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
+exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
+exception.item_bank.assessment.not.exist: 试卷不存在
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
@@ -10850,6 +10865,7 @@ editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统�
 
 #coupon
 coupon.usage_detail_title: 优惠券使用详情
+coupon.generate_log_title: 优惠券生成记录
 coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
 
 coupon.id: 编号
@@ -11549,6 +11565,7 @@ information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
+information_collect.detail: 用户信息采集详情
 course.task.notify_message.join_and_buy: 请先加入课程或购买课程
 course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
 exam_bank.analysis.data_large_loading: 数据量过大，正在刷新
@@ -11556,3 +11573,101 @@ exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
 exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
 exam_bank.analysis.data_large_loading_btn: 强制刷新
 activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准
+
+classroom.manage.sign_statictics: 签到统计
+classroom.manage.sign_statictics.user_th: 用户
+classroom.manage.sign_statictics.sign_days_th: 签到总天数
+classroom.manage.sign_statictics.keep_days_th: 连续签到天数
+classroom.manage.sign_statictics.sign_today_th: 今日签到时间
+classroom.manage.sign_statictics.operate_th: 操作
+classroom.manage.sign_statictics.item: 详情
+classroom.manage.sign_statictics.name_placeholder: 请输入用户名
+classroom.manage.sign_statictics.search_btn: 搜索
+classroom.manage.sign_statictics.role.all: 全部角色
+classroom.manage.sign_statictics.role.head_teacher: 班主任
+classroom.manage.sign_statictics.role.teacher: 老师
+classroom.manage.sign_statictics.role.assistant: 助教
+classroom.manage.sign_statictics.role.student: 正式学员
+classroom.manage.sign_statictics.role.auditor: 旁听生
+classroom.manage.sign_statictics.modal_title: %nickname%签到详情
+classroom.manage.sign_statictics.sign_type: 行为记录
+classroom.manage.sign_statictics.sign_time: 签到时间
+classroom.manage.sign_statictics.nickname_th: 用户名
+classroom.manage.sign_statictics.role_th: 角色
+classroom.manage.sign_statictics.join_time_th: 加入班级时间
+
+admin.classroom_manage.statistics.creator_placeholder: 创建者
+admin.classroom_manage.statistics.name_th: 班级名称
+admin.classroom_manage.statistics.course_number_th: 课程数
+admin.classroom_manage.statistics.task_number_th: 任务数
+admin.classroom_manage.statistics.student_number_th: 正式学员数
+admin.classroom_manage.statistics.finish_number_th: 完成人数
+admin.classroom_manage.statistics.income_th: 班级收入（元）
+admin.classroom_manage.statistics.operation_th: 操作
+admin.classroom_manage.statistics.create_time_th: 班级创建时间
+admin.classroom_manage.statistics.creator_th: 创建者
+admin.classroom_manage.statistics.student_operation_btn: 学员视角详情
+admin.classroom_manage.statistics.course_operation_btn: 教学内容详情
+admin.classroom_manage.statistics.task_num_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
+admin.classroom_manage.statistics.finish_number_tips: 取班级中所有课时任务学习进度均为100%的人数。若班级中新增了课程或课时，则完成人数会随之变更。
+admin.classroom_manage.statistics.member.title: 《%classroom%》学员视角的班级数据
+admin.classroom_manage.statistics.member.title_tips: >
+  <span style='font-size:14px'>
+    1.累加学习时长（分）：为用户在班级-课程下产生的所有学习时长累加。<br/>
+    2.其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br/>
+    3.数据统计为昨日及之前数据。<br/>
+  </span>
+admin.classroom_manage.statistics.member.total_learn_time: 班级中所有课程被累加学习时长（分）：%mins%
+admin.classroom_manage.statistics.member.nickname_th: 用户名
+admin.classroom_manage.statistics.member.create_time_th: 加入时间
+admin.classroom_manage.statistics.member.finish_time_th: 完成时间
+admin.classroom_manage.statistics.member.learn_time_th: 累加学习时长（分）
+admin.classroom_manage.statistics.member.question_num_th: 提问数
+admin.classroom_manage.statistics.member.note_num_th: 笔记数
+admin.classroom_manage.statistics.course.title: 《%classroom%》教学内容视角的班级数据
+admin.classroom_manage.statistics.course.title_tips: >
+  <span style='font-size:14px'>
+    1.任务被累加学习时长、人均学习时长的数据统计为昨日及之前数据。<br/>
+    2.其他统计数据项均为实时数据。<br/>
+  </span>
+admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+
+classroom.manage.data_statictics: 数据概览
+classroom.manage.data_statistics.overview.student_num: 正式学员总数
+classroom.manage.data_statistics.overview.auditor_num: 旁听生
+classroom.manage.data_statistics.overview.finished_num: 完成人数
+classroom.manage.data_statistics.overview.sumtime: 累加学习时长(分)
+classroom.manage.data_statistics.overview.average_time: 人均学习时长(分)
+classroom.manage.data_statistics.overview.finished_num_tips: 取班级中所有课时任务学习进度均为100%的人数，若班级中新增了课程或课时，则完成人数会随之变更。
+classroom.manage.data_statistics.overview.sum_time_tips: 累加学习时长统计为昨日及之前数据
+classroom.manage.data_statistics.course_detail.course_name: 课程名称
+classroom.manage.data_statistics.course_detail.task_num: 任务数
+classroom.manage.data_statistics.course_detail.learn_conditions: 学习情况
+classroom.manage.data_statistics.course_detail.learn_conditions_detail: 《%courseSetTitle%》学习情况详情
+classroom.manage.data_statistics.course_detail.finish_rate_tips: 课程中已完成的课时/课程中所有课时=完课率（不包含选修课时）
+classroom.manage.data_statistics.course_detail.rate.finish: 完课率
+classroom.manage.data_statistics.course_detail.learn_progress: 学习进度
+classroom.manage.data_statistics.student_detail.finished_rate_tips: 班级中已完成的课时/班级中所有课时=完课率（不包含选修课时）
+classroom.manage.data_statistics.header.user: 用户名
+classroom.manage.data_statistics.header.learn_conditions: 学习情况
+classroom.manage.data_statistics.header.learn_progress: 学习进度
+classroom.manage.data_statistics.header.finished_time: 完成时间
+classroom.manage.data_statistics.student_trendency: 学员趋势
+classroom.manage.data_statistics.start_time: 开始时间
+classroom.manage.data_statistics.finished_time: 完成时间
+classroom.manage.data_statistics.finish_status.unlearn: 未学
+classroom.manage.data_statistics.finish_status.learning: 学习中
+classroom.manage.data_statistics.finish_status.learned: 已学完
+classroom.manage.data_statistics.student_trendency.select_seven_days: 7天
+classroom.manage.data_statistics.student_trendency.select_thrity_days: 30天
+classroom.manage.data_statistics.student_detail_list.title: 学员详情
+classroom.manage.data_statistics.course_detail_list.title: 课程详情
+classroom.manage.data_statistics.student_detail_list.select_finish_rate: 完课率
+classroom.manage.data_statistics.student_detail_list.select_all: 全部
+classroom.manage.data_statistics.student_detail_list.select_un_finished: 未完成
+classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: 7天未学
+classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
+classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
+classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
+classroom.manage.sign_statictics.empty: 暂无签到记录
+

@@ -166,9 +166,10 @@ class CloudFileController extends BaseController
         ]);
     }
 
-    public function downloadAction($globalId)
+    public function downloadAction(Request $request, $globalId)
     {
-        $download = $this->getCloudFileService()->download($globalId);
+        $ssl = $request->isSecure() ? true : false;
+        $download = $this->getCloudFileService()->download($globalId, $ssl);
 
         return $this->redirect($download['url']);
     }
@@ -199,7 +200,8 @@ class CloudFileController extends BaseController
         $files = $this->getUploadFileService()->searchFiles(
             ['globalIds' => $globalIds],
             ['createdTime' => 'desc'],
-            0, PHP_INT_MAX
+            0,
+            PHP_INT_MAX
         );
 
         $materials = [];

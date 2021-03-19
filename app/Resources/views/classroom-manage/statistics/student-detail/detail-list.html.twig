@@ -1,0 +1,59 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="legend clearfix">
+  <div class="col-10">
+    {{ 'site.default.student'|trans }}
+  </div>
+  <div class="col-65">
+    {% include 'classroom-manage/statistics/student-detail/chart-data-legend.html.twig' %}
+  </div>
+  <div class="col-15">
+    {{ 'classroom.manage.data_statistics.overview.sumtime'|trans }}
+    <span class="link-medium es-icon es-icon-help ml5"
+        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+        data-content="{{ 'classroom.manage.data_statistics.overview.sum_time_tips'|trans()}}">
+    </span>
+  </div>
+  <div class="col-10">{{ 'classroom.manage.data_statistics.course_detail.rate.finish'|trans }}
+    <span class="link-medium es-icon es-icon-help ml5"
+          data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+          data-content="{{ 'classroom.manage.data_statistics.student_detail.finished_rate_tips'|trans }}">
+    </span>
+  </div>
+</div>
+{% for member in members if classroomCourses %}
+  {% set user = users[member.userId] %}
+  <div class="chart-item clearfix">
+    <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ user.nickname }}">
+      {{ user.nickname }}
+    </div>
+    <ul class="col-65 student-detail">
+      {% include 'classroom-manage/statistics/student-detail/student-chart-item.html.twig' %}
+    </ul>
+    <ul class="col-15 text-center">
+      {{ (member.learnedTime / 60)|round }}
+    </ul>
+    <div class="col-10">
+            <span class="color-gray">
+                {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}
+            </span>
+      {% if classroom.courseNum > 20 %}
+        <a class="js-task-chart-detail more"
+           data-toggle="modal"
+           data-target="#modal"
+           data-url="{{ path('classroom_data_statistics_student_detail_modal',{classroomId:classroom.id, userId:user.id}) }}"
+           href="javascript:;" >{{ 'site.default.more'|trans }}</a>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+{% if not members or not classroomCourses %}
+  <div class="empty">
+    {{ 'site.datagrid.empty'|trans }}
+  </div>
+{% endif %}
+
+{% if classroomCourses %}
+  <div class="mtm">
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endif %}

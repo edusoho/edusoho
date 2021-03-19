@@ -11,10 +11,10 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['createdTime', 'recommendedSeq', 'studentNum', 'hitNum'],
+            'conditions' => [
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
@@ -24,29 +24,29 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
                 'token = :token',
                 'ip = :ip',
                 'createdTime <= :endTime',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
     {
-        $parameters = array($targetType, $targetType);
-        $sql = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount
-                    FROM (SELECT targetId FROM {$this->table} WHERE targetType = ?
-                GROUP BY targetId) AS a LEFT JOIN (SELECT targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
-                WHERE targetType = ?";
+        $parameters = [$targetType, $targetType];
+        $sql = "SELECT a.targetId AS targetId, b.hitNum AS hitNum, b.orderCount AS orderCount 
+                FROM (SELECT targetId FROM {$this->table} WHERE targetType = ? 
+                GROUP BY targetId) AS a LEFT JOIN (SELECT targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount 
+                FROM {$this->table} WHERE targetType = ?";
 
         if (!empty($startTime)) {
-            $sql .= 'AND createdTime >= ?';
+            $sql .= ' AND createdTime >= ?';
             $parameters[] = $startTime;
         }
 
         if (!empty($endTime)) {
-            $sql .= 'and createdTime <= ?';
+            $sql .= ' AND createdTime <= ?';
             $parameters[] = $endTime;
         }
-        $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC";
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql .= " GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]}, targetId DESC";
+        $sql = $this->sql($sql, [], $start, $limit);
 
         return $this->db()->fetchAll($sql, $parameters);
     }
@@ -58,7 +58,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
             ->select('refererName, count(targetId) as count, sum(orderCount) as orderCount')
             ->addOrderBy('count', 'DESC');
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
@@ -70,7 +70,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
             ->setMaxResults($limit)
             ->addOrderBy('count', 'DESC');
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function countDistinctLogsByField($conditions, $field)

@@ -8,41 +8,41 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('classroomId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $testCondition = array(
-            array(
-                'condition' => array(),
+        $expected = [];
+        $expected[] = $this->mockDataObject(['classroomId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $testCondition = [
+            [
+                'condition' => [],
                 'expectedResults' => $expected,
                 'expectedCount' => 2,
-                ),
-            array(
-                'condition' => array('classroomId' => 2),
-                'expectedResults' => array($expected[0]),
+            ],
+            [
+                'condition' => ['classroomId' => 2],
+                'expectedResults' => [$expected[0]],
                 'expectedCount' => 1,
-                ),
-            array(
-                'condition' => array('courseId' => 2),
-                'expectedResults' => array($expected[1]),
+            ],
+            [
+                'condition' => ['courseId' => 2],
+                'expectedResults' => [$expected[1]],
                 'expectedCount' => 1,
-                ),
-            );
+            ],
+        ];
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
     public function testUpdateByParam()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $res = $this->getDao()->updateByParam(array('courseId' => 1), array('parentCourseId' => 3));
-        $expected[] = $this->mockDataObject(array('parentCourseId' => 3));
+        $res = $this->getDao()->updateByParam(['courseId' => 1], ['parentCourseId' => 3]);
+        $expected[] = $this->mockDataObject(['parentCourseId' => 3]);
         $this->assertEquals(1, $res);
     }
 
     public function testDeleteByClassroomIdAndCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
         $res = $this->getDao()->deleteByClassroomIdAndCourseId(1, 1);
         $this->assertEquals(1, $res);
@@ -50,33 +50,33 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindClassroomIdsByCourseId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('classroomId' => 1));
-        $expected[] = $this->mockDataObject(array('classroomId' => 2));
-        $expected[] = $this->mockDataObject(array('classroomId' => 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['classroomId' => 1]);
+        $expected[] = $this->mockDataObject(['classroomId' => 2]);
+        $expected[] = $this->mockDataObject(['classroomId' => 3]);
         $res = $this->getDao()->findClassroomIdsByCourseId(1);
-        $this->assertArrayEquals(array(array('classroomId' => '1'), array('classroomId' => '2'), array('classroomId' => '3')), $res);
+        $this->assertArrayEquals([['classroomId' => '1'], ['classroomId' => '2'], ['classroomId' => '3']], $res);
     }
 
     public function testGetClassroomIdByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
         $res = $this->getDao()->getClassroomIdByCourseId(1);
-        $this->assertArrayEquals(array('classroomId' => '1'), $res);
+        $this->assertArrayEquals(['classroomId' => '1'], $res);
     }
 
     public function testGetByCourseSetId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseSetId' => 11));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseSetId' => 11]);
         $res = $this->getDao()->getByCourseSetId(11);
-        $this->assertArrayEquals(array('classroomId' => '1'), $res);
+        $this->assertArrayEquals(['classroomId' => '1'], $res);
     }
 
     public function testGetByClassroomIdAndCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
         $res = $this->getDao()->getByClassroomIdAndCourseId(1, 1);
         $this->assertArrayEquals($expected[0], $res, $this->getCompareKeys());
@@ -84,7 +84,7 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testDeleteByClassroomId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
         $res = $this->getDao()->deleteByClassroomId(1);
         $this->assertEquals(1, $res);
@@ -92,11 +92,11 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindByClassroomIdAndCourseIds()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
-        $res = $this->getDao()->findByClassroomIdAndCourseIds(1, array(1, 2, 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
+        $res = $this->getDao()->findByClassroomIdAndCourseIds(1, [1, 2, 3]);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
             $this->assertArrayEquals($expected[$key], $result, $testFields);
@@ -105,10 +105,10 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindByClassroomId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
         $res = $this->getDao()->findByClassroomId(1);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
@@ -118,11 +118,11 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindByCoursesIds()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
-        $res = $this->getDao()->findByCoursesIds(array(1, 2, 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
+        $res = $this->getDao()->findByCoursesIds([1, 2, 3]);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
             $this->assertArrayEquals($expected[$key], $result, $testFields);
@@ -131,10 +131,10 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindByCourseSetIds()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseSetId' => 11));
-        $expected[] = $this->mockDataObject(array('courseSetId' => 22));
-        $res = $this->getDao()->findByCourseSetIds(array(11, 22));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseSetId' => 11]);
+        $expected[] = $this->mockDataObject(['courseSetId' => 22]);
+        $res = $this->getDao()->findByCourseSetIds([11, 22]);
         $testFields = $this->getCompareKeys();
 
         foreach ($res as $key => $result) {
@@ -144,11 +144,11 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindEnabledByCoursesIds()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1, 'disabled' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
-        $res = $this->getDao()->findEnabledByCoursesIds(array(1, 2, 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1, 'disabled' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
+        $res = $this->getDao()->findEnabledByCoursesIds([1, 2, 3]);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
             $this->assertArrayEquals($expected[$key + 1], $result, $testFields);
@@ -157,10 +157,10 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
     public function testFindActiveCoursesByClassroomId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1, 'disabled' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1, 'disabled' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
         $res = $this->getDao()->findActiveCoursesByClassroomId(1);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
@@ -174,23 +174,42 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
 
         $this->assertEquals(0, $result1);
 
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1));
-        $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $course1 = $this->getCourseDao()->create(array('taskNum' => 3, 'courseSetId' => 1));
-        $course2 = $this->getCourseDao()->create(array('taskNum' => 4, 'courseSetId' => 1));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1]);
+        $expected[] = $this->mockDataObject(['courseId' => 2]);
+        $course1 = $this->getCourseDao()->create(['taskNum' => 3, 'courseSetId' => 1]);
+        $course2 = $this->getCourseDao()->create(['taskNum' => 4, 'courseSetId' => 1]);
         $result2 = $this->getDao()->countCourseTasksByClassroomId(1);
 
         $this->assertEquals(7, $result2);
     }
 
+    public function testCountTaskNumByClassroomIds()
+    {
+        $course1 = $this->getCourseDao()->create(['taskNum' => 3, 'courseSetId' => 3, 'compulsoryTaskNum' => 2, 'electiveTaskNum' => 1]);
+        $course2 = $this->getCourseDao()->create(['taskNum' => 4, 'courseSetId' => 4, 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]);
+        $course3 = $this->getCourseDao()->create(['taskNum' => 5, 'courseSetId' => 5, 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]);
+
+        $classroomCourse1 = $this->getDao()->create(['classroomId' => 1, 'courseId' => $course1['id'], 'parentCourseId' => 1]);
+        $classroomCourse1 = $this->getDao()->create(['classroomId' => 1, 'courseId' => $course2['id'], 'parentCourseId' => 1]);
+        $classroomCourse1 = $this->getDao()->create(['classroomId' => 2, 'courseId' => $course3['id'], 'parentCourseId' => 1]);
+
+        $result = $this->getDao()->countTaskNumByClassroomIds([1]);
+
+        $this->assertEquals([[
+            'classroomId' => '1',
+            'compulsoryTaskNum' => '5',
+            'electiveTaskNum' => '2',
+        ]], $result);
+    }
+
     protected function getDefaultMockFields()
     {
-        return array(
+        return [
             'classroomId' => 1,
             'courseId' => 1,
             'parentCourseId' => 2,
-            );
+        ];
     }
 
     /**

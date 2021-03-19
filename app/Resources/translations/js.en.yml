@@ -373,6 +373,7 @@ activity.manage.choose_teacher_hint: Please choose a teacher
 activity.manage.finished_tips: >
   <span class="color-primary">Congratulations! You have completed this task</span>
 
+announcement.create_datetime.error.hint: The announcement start time cannot be later than the end time
 announcement.delete_hint: Really want to delete the announcement?
 
 auth.login_bind_choose.service_agreement_hint: Check to agree to this service agreement before continue to register!
@@ -832,6 +833,9 @@ validate.have_spaces: Password can't have spaces
 validate.check_password_low.message: 5-20 letters or numbers, case sensitive
 validate.check_password_middle.message: 8-20 letters or numbers, including at least two, case sensitive
 validate.check_password_high.message: 8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols
+validate.custom_integer.message: Please enter the correct integer
+validate.int.message: up to 9 integers
+validate.float.message: up to two decimal places, and the integer digits should not exceed 8 digits!
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -1808,3 +1812,6 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">Do not open more tasks to learn at the same time</p>
   <p class="kick-each-other">Don’t multitask !</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
+classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement

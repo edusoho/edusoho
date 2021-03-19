@@ -21,13 +21,17 @@
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           <span class="text-overflow">
-            {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+              {% if 'testpaper' == type|default('') %}
+                {% if testpaper %}{{ 'course.testpaper_manage.create.name'|trans }}： {{ testpaper.name|default('') }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+              {% elseif 'homework' == type|default('') %}
+                {% if testpaper %}{{ 'course.homework_check.create.name'|trans }}： {{ testpaper.name|default('') }}{% else %}{{ 'course.homework_check.homework_delete'|trans }}{% endif %}
+              {% endif %}
           </span>
           {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
               <span class="mrl text-overflow">{{'user.orders.target_course'|trans}}：
                 {% set course=data('Course',{'courseId':task.courseId}) %}
-                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('')|plain_text(8) }}{% endif %}
+                {{ courseSets[task.fromCourseSetId].title|default('')|raw}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('')|plain_text(8)|raw }}{% endif %}
               </span>
             </div>
           {% endif %}
