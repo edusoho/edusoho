@@ -1,0 +1,12 @@
+<div class="btn-group">
+  <a href=" {{ path('admin_v2_course_set', {filter: 'all'}) }}" type="button"
+     class="btn btn-default btn-sm {% if filter == 'all' %}btn-primary{% endif %}">{{ 'search.all_courses'|trans }}</a>
+  <a href=" {{ path('admin_v2_course_set', {filter: 'normal'}) }}" type="button"
+     class="btn btn-default btn-sm {% if filter == 'normal' %}btn-primary{% endif %}">{{ 'admin.course_manage.manage.normal_course'|trans }}</a>
+  <a href=" {{ path('admin_v2_course_set', {filter: 'classroom'}) }}" type="button"
+     class="btn btn-default btn-sm {% if filter == 'classroom' %}btn-primary{% endif %}">{{ 'classroom.courses'|trans }}</a>
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+    <a href=" {{ path('admin_v2_course_set', {filter: 'vip'}) }}" type="button"
+       class="btn btn-default btn-sm {% if filter == 'vip' %}btn-primary{% endif %}">{{ 'search.vip_courses'|trans }}</a>
+  {% endif %}
+</div>

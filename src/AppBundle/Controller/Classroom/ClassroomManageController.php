@@ -14,10 +14,12 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
+use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Review\Service\ReviewService;
+use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -28,6 +30,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -137,7 +140,7 @@ class ClassroomManageController extends BaseController
         }
     }
 
-    public function aduitorAction(Request $request, $id, $role = 'auditor')
+    public function auditorAction(Request $request, $id, $role = 'auditor')
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -732,6 +735,139 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function statisticsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
+            'role' => 'student',
+        ]);
+        $overview['auditorCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
+            'role' => 'auditor',
+        ]);
+
+        $overview['finishedStudentNum'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
+            'role' => 'student',
+            'isFinished' => 1,
+        ]);
+
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $overview['sumLearnedTime'] = empty($overview['studentCount']) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIds($courseIds);
+        $overview['averageLearnedTime'] = empty($overview['studentCount']) ? 0 : $overview['sumLearnedTime'] / $overview['studentCount'];
+
+        return $this->render(
+            'classroom-manage/statistics.html.twig',
+            [
+                'classroom' => $classroom,
+                'overview' => $overview,
+            ]
+        );
+    }
+
+    public function studentDetailListAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions = $request->query->all();
+        $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $studentDetailCount,
+            20
+        );
+
+        $membersDetail = $this->getReportService()->getStudentDetailList(
+            $id,
+            $conditions,
+            $conditions['orderBy'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($id), 'id');
+        $courses = array_slice($courses, 0, 20);
+        $userIds = ArrayToolkit::column($membersDetail, 'userId');
+
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+
+        return $this->render('classroom-manage/statistics/student-detail/detail-list.html.twig', [
+            'paginator' => $paginator,
+            'classroom' => $classroom,
+            'users' => $users,
+            'members' => $membersDetail,
+            'classroomCourses' => $courses,
+        ]);
+    }
+
+    public function studentDetailModalAction(Request $request, $classroomId, $userId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $member = $this->getReportService()->getStudentDetail($classroomId, $userId);
+        $user = $this->getUserService()->getUser($userId);
+        $classroomCourses = ArrayToolkit::index($this->getClassroomService()->findCoursesByClassroomId($classroomId), 'id');
+
+        return $this->render(
+            'classroom-manage/statistics/student-detail/student-data-modal.html.twig',
+            [
+                'classroom' => $classroom,
+                'user' => $user,
+                'classroomCourses' => $classroomCourses,
+                'member' => $member,
+            ]
+        );
+    }
+
+    public function courseDetailListAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions['nameLike'] = $request->query->get('titleLike');
+        $conditions['orderBy'] = $request->query->get('orderBy');
+        $count = $this->getReportService()->getCourseDetailCount($id, $conditions);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $courseDetailList = $this->getReportService()->getCourseDetailList($id, $conditions, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        return $this->render('classroom-manage/statistics/course-detail/task-chart-data.html.twig', [
+            'classroom' => $classroom,
+            'paginator' => $paginator,
+            'tasks' => $courseDetailList,
+        ]);
+    }
+
+    public function courseDetailModalAction(Request $request, $id, $courseId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $filter = $request->query->get('filter', 'all');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $count = $this->getReportService()->getCourseLearnDetailCount($classroom['id'], $courseId, ['filter' => $filter]);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+        $membersDataList = $this->getReportService()->getCourseLearnDetail($classroom['id'], $courseId, ['filter' => $filter], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $userIds = ArrayToolkit::column($membersDataList, 'userId');
+
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+
+        return $this->render('classroom-manage/statistics/course-detail/course-members-learn-modal.html.twig', [
+            'paginator' => $paginator,
+            'classroom' => $classroom,
+            'course' => $course,
+            'members' => $membersDataList,
+            'users' => $users,
+        ]);
+    }
+
     public function courseItemsSortAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -1017,6 +1153,70 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
+    public function signStatisticsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions = array_merge(['classroomId' => $id], $request->query->all());
+
+        $paginator = new Paginator(
+            $request,
+            $this->getClassroomService()->searchMemberCount($conditions),
+            20
+        );
+
+        $members = $this->getClassroomService()->searchMembersSignStatistics(
+            $id,
+            $conditions,
+            [$request->query->get('order', 'signDays') => $request->query->get('sort', 'DESC')],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+
+        foreach ($members as &$member) {
+            if (!empty($member['lastSignTime']) && $member['lastSignTime'] > strtotime(date('y-n-d 0:0:0'))) {
+                $member['todaySignTime'] = $member['lastSignTime'];
+            }
+        }
+
+        return $this->render('classroom-manage/sign/index.html.twig', [
+            'classroom' => $classroom,
+            'members' => $members,
+            'users' => $users,
+            'paginator' => $paginator,
+            'order' => $request->query->get('order', 'signDays'),
+            'sort' => $request->query->get('sort', 'DESC'),
+        ]);
+    }
+
+    public function signDetailAction(Request $request, $id, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $user = $this->getUserService()->getUser($userId);
+        $conditions = ['targetType' => 'classroom_sign', 'targetId' => $classroom['id'], 'userId' => $userId];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getSignService()->countSignUserLog($conditions),
+            20
+        );
+
+        return $this->render('classroom-manage/sign/log-modal.html.twig', [
+            'classroom' => $classroom,
+            'user' => $user,
+            'logs' => $this->getSignService()->searchSignUserLog(
+                $conditions,
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            ),
+            'paginator' => $paginator,
+        ]);
+    }
+
     protected function getRedirectRoute($mode, $type)
     {
         $routes = [
@@ -1229,5 +1429,29 @@ class ClassroomManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return SignService
+     */
+    protected function getSignService()
+    {
+        return $this->createService('Sign:SignService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->getBiz()->service('Classroom:ReportService');
     }
 }

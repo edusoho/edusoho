@@ -5269,10 +5269,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.18:
-  version "1.0.18"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.18.tgz#c7979c9681b277d498373abc64b6cd7630bb9431"
-  integrity sha1-x5ecloGyd9SYNzq8ZLbNdjC7lDE=
+item-bank@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.19.tgz#bd8c7a7dd19294a85a18016384480e4aac19f87d"
+  integrity sha1-vYx6fdGSlKhaGAFjhEgOSqwZ+H0=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"

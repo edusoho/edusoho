@@ -320,6 +320,7 @@ activity.manage.choose_teacher_hint: 请选择老师
 activity.manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 
+announcement.create_datetime.error.hint: 公告发布时间不能晚于结束时间
 announcement.delete_hint: 真的要删除该公告吗?
 
 auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
@@ -776,6 +777,10 @@ validate.have_spaces: 密码不能有空格哦
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
 validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+validate.custom_integer.message: 请输入正确的整数
+validate.int.message: 最多9位整数
+validate.float.message: 最多两位小数，整数位不超过8位！
+
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -1761,3 +1766,6 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">请勿同时多开任务学习</p>
   <p class="kick-each-other">不要一心多用哦！</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
+classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生

@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentResponseFilter;
 use Biz\Common\CommonException;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class ContinueAnswer extends AbstractResource
 {
@@ -20,6 +21,13 @@ class ContinueAnswer extends AbstractResource
         $answerRecord = $this->getAnswerService()->continueAnswer($request->request->get('answer_record_id'));
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        if (empty($assessment)) {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        if ('open' !== $assessment['status']) {
+            throw AssessmentException::ASSESSMENT_NOTOPEN();
+        }
+
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 

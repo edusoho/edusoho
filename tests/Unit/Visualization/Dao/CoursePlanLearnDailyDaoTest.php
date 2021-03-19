@@ -43,6 +43,32 @@ class CoursePlanLearnDailyDaoTest extends BaseTestCase
         $this->assertEquals(150, $results[0]['learnedTime']);
     }
 
+    public function testSumLearnedTimeGroupByUserId()
+    {
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 300, 'pureTime' => 50, 'dayTime' => 40]);
+
+        $results = $this->getCoursePlanLearnDailyDao()->sumLearnedTimeGroupByUserId(['userIds' => [1, 2]]);
+
+        $this->assertEquals([
+            ['userId' => '1', 'learnedTime' => '300'],
+            ['userId' => '2', 'learnedTime' => '400'],
+        ], $results);
+    }
+
+    public function testSumLearnedTimeByConditions()
+    {
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 300, 'pureTime' => 50, 'dayTime' => 40]);
+
+        $result = $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByConditions(['userIds' => [1, 2]]);
+        $this->assertEquals(700, $result);
+    }
+
     public function testGet()
     {
         $defaultMockFields = $this->getDefaultMockFields();

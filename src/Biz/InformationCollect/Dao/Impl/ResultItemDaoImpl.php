@@ -37,6 +37,9 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
                 'id = :id',
                 'eventId = :eventId',
                 'resultId IN (:resultIds)',
+                'code = :code',
+                'value = :value',
+                'value like :likeValue',
             ],
         ];
     }

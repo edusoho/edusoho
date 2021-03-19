@@ -9,61 +9,62 @@ class ChaosThreads extends BaseProvider
 {
     public function get(Request $request)
     {
-        $threads = array();
+        $threads = [];
         $conditions = $request->query->all();
 
-        $cursors = isset($conditions['cursor']) ? explode(',', $conditions['cursor']) : array(0, 0, 0);
-        $starts = isset($conditions['start']) ? explode(',', $conditions['start']) : array(0, 0, 0);
+        $cursors = isset($conditions['cursor']) ? explode(',', $conditions['cursor']) : [0, 0, 0];
+        $starts = isset($conditions['start']) ? explode(',', $conditions['start']) : [0, 0, 0];
 
         $limit = $request->query->get('limit', 20);
 
         // thread表的话题
-        $conditions = array(
+        $conditions = [
             'status' => 'open',
             'updateTime_GE' => isset($cursors[0]) ? $cursors[0] : 0,
-        );
+        ];
         $start = isset($starts[0]) ? $starts[0] : 0;
-        $commonThreads = $this->getThreadService()->searchThreads($conditions, array('updateTime' => 'ASC'), $start, $limit);
+        $commonThreads = $this->getThreadService()->searchThreads($conditions, ['updateTime' => 'ASC'], $start, $limit);
         $commonThreads = $this->normalizeCommonThreads($commonThreads);
 
         $commonNext = $this->nextCursorPaging($conditions['updateTime_GE'], $start, $limit, $commonThreads);
         $threads = array_merge($threads, $this->filterCommonThreads($commonThreads));
 
         // course_thread表的话题
-        $conditions = array(
+        $conditions = [
             'private' => 0,
             'updatedTime_GE' => isset($cursors[1]) ? $cursors[1] : 0,
-        );
+        ];
         $start = isset($starts[1]) ? $starts[1] : 0;
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $courseNext = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $courseThreads);
         $threads = array_merge($threads, $this->filterCourseThreads($courseThreads));
 
         // group_thread表的话题
-        $conditions = array(
+        $conditions = [
+            'status' => 'open', // 仅获取已发布
             'updatedTime_GE' => isset($cursors[2]) ? $cursors[2] : 0,
-        );
+        ];
         $start = isset($starts[2]) ? $starts[2] : 0;
-        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $groupNext = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $groupThreads);
         $threads = array_merge($threads, $this->filterGroupThreads($groupThreads));
 
-        $next = array(
-            'cursor' => implode(',', array($commonNext['cursor'], $courseNext['cursor'], $groupNext['cursor'])),
-            'start' => implode(',', array($commonNext['start'], $courseNext['start'], $groupNext['start'])),
+        $next = [
+            'cursor' => implode(',', [$commonNext['cursor'], $courseNext['cursor'], $groupNext['cursor']]),
+            'start' => implode(',', [$commonNext['start'], $courseNext['start'], $groupNext['start']]),
             'limit' => $limit,
             'eof' => ($commonNext['eof'] && $courseNext['eof'] && $groupNext['eof']) ? true : false,
-        );
+        ];
 
         return $this->wrap($threads, $next);
     }
 
     protected function filterGroupThreads($groupThreads)
     {
-        $threads = array();
+        $threads = [];
 
         foreach ($groupThreads as $thread) {
-            $threads[] = array(
+            $threads[] = [
                 'id' => $thread['id'],
                 'title' => $thread['title'],
                 'content' => $thread['content'],
@@ -74,7 +75,7 @@ class ChaosThreads extends BaseProvider
                 'targetType' => 'group',
                 'createdTime' => date('c', $thread['createdTime']),
                 'updatedTime' => date('c', $thread['updatedTime']),
-            );
+            ];
         }
 
         return $threads;
@@ -82,10 +83,10 @@ class ChaosThreads extends BaseProvider
 
     protected function filterCourseThreads($courseThreads)
     {
-        $threads = array();
+        $threads = [];
 
         foreach ($courseThreads as $thread) {
-            $threads[] = array(
+            $threads[] = [
                 'id' => $thread['id'],
                 'title' => $thread['title'],
                 'content' => $thread['content'],
@@ -96,7 +97,7 @@ class ChaosThreads extends BaseProvider
                 'targetType' => 'course',
                 'createdTime' => date('c', $thread['createdTime']),
                 'updatedTime' => date('c', $thread['updatedTime']),
-            );
+            ];
         }
 
         return $threads;
@@ -114,10 +115,10 @@ class ChaosThreads extends BaseProvider
 
     protected function filterCommonThreads($commonThreads)
     {
-        $threads = array();
+        $threads = [];
 
         foreach ($commonThreads as $thread) {
-            $threads[] = array(
+            $threads[] = [
                 'id' => $thread['id'],
                 'title' => $thread['title'],
                 'content' => $thread['content'],
@@ -128,7 +129,7 @@ class ChaosThreads extends BaseProvider
                 'targetType' => $thread['targetType'],
                 'createdTime' => date('c', $thread['createdTime']),
                 'updatedTime' => date('c', $thread['updatedTime']),
-            );
+            ];
         }
 
         return $threads;

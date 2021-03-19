@@ -8,6 +8,7 @@
             <el-form-item :label="'classroom.title_label'|trans" prop="title">
                 <el-col span="18">
                     <el-input ref="title" v-model="form.title" auto-complete="off"></el-input>
+
                 </el-col>
             </el-form-item>
             <el-form-item :label="'classroom.subtitle_label'|trans" prop="subtitle">
@@ -136,6 +137,17 @@
 
                 return this.form;
             },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
+            }
         },
         data() {
             this.initUploaderAndEditor();
@@ -143,7 +155,7 @@
             return {
                 uploadImageTemplate: '',
                 form: {
-                    title: this.classroom.title,
+                    title: this.removeHtml(this.classroom.title),
                     subtitle: this.classroom.subtitle ? this.classroom.subtitle : null,
                     about: this.classroom.about,
                     tags: this.tags,

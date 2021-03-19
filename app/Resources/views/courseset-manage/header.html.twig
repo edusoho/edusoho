@@ -34,9 +34,9 @@
     {% endif %}
 
     <div class="courseset-manage-header-info">
-      <div class="courseset-manage-header-info__title text-overflow" {% if courseSet.title|length > 21 %}data-toggle="tooltip" title="{{ courseSet.title }}" data-container="body" {% endif %}>
+      <div class="courseset-manage-header-info__title text-overflow" {% if courseSet.title|length > 21 %}data-toggle="tooltip" title="{{ courseSet.title|raw }}" data-container="body" {% endif %}>
         {% block coursesetTitle %}
-          <span class="cd-dark-major">{{ courseSet.title }}</span>
+          <span class="cd-dark-major">{{ courseSet.title|raw }}</span>
         {% endblock %}
       </div>
       {% block courseType %}

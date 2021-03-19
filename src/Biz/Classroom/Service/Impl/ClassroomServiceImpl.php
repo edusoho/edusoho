@@ -16,9 +16,11 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Course\Dao\CourseNoteDao;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService as CourseThreadService;
 use Biz\Exception\UnableJoinException;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Mediator\ClassroomGoodsMediator;
@@ -31,6 +33,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Taxonomy\TagOwnerManager;
+use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -40,11 +43,11 @@ use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit, array $columns = [])
     {
         $conditions = $this->_prepareConditions($conditions);
 
-        return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function findClassroomsByIds(array $ids)
@@ -134,6 +137,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return $classrooms;
+    }
+
+    public function searchClassroomsWithStatistics($conditions, $orderBy, $start, $limit, $columns = [])
+    {
+        $orderBy = $this->getOrderBys($orderBy);
+        $conditions = $this->_prepareClassroomConditions($conditions);
+
+        $classrooms = $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit, $columns);
+
+        return $this->calClassroomsTaskNums($classrooms, true);
     }
 
     public function appendSpecsInfo($classrooms)
@@ -466,6 +479,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'studentNum',
             'courseNum',
             'lessonNum',
+            'electiveTaskNum',
+            'compulsoryTaskNum',
             'threadNum',
             'postNum',
             'income',
@@ -2073,13 +2088,82 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'status' => 'finish',
         ];
         $userLearnCount = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $fields['lastLearnTime'] = time();
-        $fields['learnedNum'] = $userLearnCount;
-
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
+        $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $courseIds), 'courseId');
+        $fields = [
+            'lastLearnTime' => time(),
+            'learnedNum' => $userLearnCount,
+            'learnedCompulsoryTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedCompulsoryTaskNum')),
+            'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
+        ];
 
         return $this->updateMember($classroomMember['id'], $fields);
+    }
+
+    public function updateClassroomMemberFinishedStatus($classroomId, $userId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return;
+        }
+        $classroomMember = $this->getClassroomMember($classroomId, $userId);
+
+        if (empty($classroomMember)) {
+            return;
+        }
+
+        $courses = $this->findCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $courseIds), 'courseId');
+        $finished = '1';
+        foreach ($courses as $course) {
+            if (empty($coursesMembers[$course['id']]) || !$coursesMembers[$course['id']]['isLearned']) {
+                $finished = '0';
+                break;
+            }
+        }
+
+        return $this->updateMember($classroomMember['id'], [
+            'isFinished' => $finished,
+            'finishedTime' => $finished ? max(ArrayToolkit::column($coursesMembers, 'finishedTime')) : 0,
+            'learnedCompulsoryTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedCompulsoryTaskNum')),
+            'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
+        ]);
+    }
+
+    public function updateClassroomMembersFinishedStatus($classroomId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return;
+        }
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        $classroomMembers = $this->findClassroomStudents($classroomId, 0, $classroomMembersCount);
+
+        $courses = $this->findCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        foreach ($classroomMembers as $classroomMember) {
+            $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($classroomMember['userId'], $courseIds), 'courseId');
+            $finished = '1';
+            foreach ($courses as $course) {
+                if (empty($coursesMembers[$course['id']]) || !$coursesMembers[$course['id']]['isLearned']) {
+                    $finished = '0';
+                    break;
+                }
+            }
+            $finishedTimes = ArrayToolkit::column($coursesMembers, 'finishedTime');
+            $finishedTime = count($finishedTimes) > 0 ? max($finishedTimes) : 0;
+            $this->updateMember($classroomMember['id'], [
+                'isFinished' => $finished,
+                'finishedTime' => $finished ? $finishedTime : 0,
+                'learnedCompulsoryTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedCompulsoryTaskNum')),
+                'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
+            ]);
+        }
     }
 
     public function countCoursesByClassroomId($classroomId)
@@ -2215,6 +2299,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             unset($conditions['categoryId']);
         }
 
+        if (!empty($conditions['nameLike'])) {
+            $users = $this->getUserService()->searchUsers(['nickname' => "%{$conditions['nameLike']}%"], [], 0, PHP_INT_MAX, ['id']);
+            $conditions['userIds'] = empty($users) ? [-1] : array_column($users, 'id');
+        }
+
         return $conditions;
     }
 
@@ -2335,6 +2424,88 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !$vipNonExpired;
     }
 
+    public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit)
+    {
+        if (!isset($conditions['classroomId'])) {
+            $conditions['classroomId'] = $classroomId;
+        }
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->searchSignStatisticsByClassroomId($classroomId, $conditions, $orderBy, $start, $limit);
+    }
+
+    public function appendHasCertificate(array $classrooms)
+    {
+        $conditions = [
+            'targetType' => 'classroom',
+            'targetIds' => ArrayToolkit::column($classrooms, 'id'),
+            'status' => 'published',
+        ];
+
+        $certificates = ArrayToolkit::index($this->getCertificateService()->search($conditions, [], 0, PHP_INT_MAX, ['targetId']), 'targetId');
+        foreach ($classrooms as &$classroom) {
+            $classroom['hasCertificate'] = !empty($certificates[$classroom['id']]);
+        }
+
+        return $classrooms;
+    }
+
+    public function hasCertificate($classroomId)
+    {
+        $conditions = [
+            'targetType' => 'classroom',
+            'targetId' => $classroomId,
+            'status' => 'published',
+        ];
+
+        return !empty($this->getCertificateService()->count($conditions));
+    }
+
+    public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false)
+    {
+        if (empty($classrooms)) {
+            return [];
+        }
+
+        foreach ($classrooms as &$classroom) {
+            if ($withMemberInfo) {
+                $classroom['finishedMemberCount'] = $this->getClassroomMemberDao()->count(['classroomId' => $classroom['id'], 'isFinished' => 1]);
+            }
+        }
+
+        return array_column($classrooms, null, 'id');
+    }
+
+    public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields)
+    {
+        if (empty($fields)) {
+            return;
+        }
+
+        $updateFields = [];
+        $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $classroomCourseIds = array_column($classroomCourses, 'courseId');
+        $classroomMember = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroomId, $userId);
+
+        foreach ($fields as $field) {
+            if ('noteNum' === $field) {
+                $updateFields['noteNum'] = $this->getCourseNoteService()->countCourseNotes(['courseIds' => $classroomCourseIds, 'userId' => $userId]);
+            } elseif ('threadNum' === $field) {
+                $courseThreadNum = $this->getCourseThreadService()->countThreads(['courseIds' => $classroomCourseIds, 'userId' => $userId, 'type' => 'discussion']);
+                $threadNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'discussion']);
+                $updateFields['threadNum'] = $courseThreadNum + $threadNum;
+            } elseif ('questionNum' === $field) {
+                $courseQuestionNum = $this->getCourseThreadService()->countThreads(['courseIds' => $classroomCourseIds, 'userId' => $userId, 'type' => 'question']);
+                $questionNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'question']);
+                $updateFields['questionNum'] = $courseQuestionNum + $questionNum;
+            }
+        }
+
+        if (!empty($updateFields)) {
+            $this->getClassroomMemberDao()->update($classroomMember['id'], $updateFields);
+        }
+    }
+
     /**
      * 会员到期后、会员被取消后、课程会员等级被提高均为过期
      *
@@ -2354,6 +2525,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
 
         return 'ok' === $status;
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**
@@ -2531,33 +2710,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->biz['goods.mediator.classroom'];
     }
 
-    public function appendHasCertificate(array $classrooms)
-    {
-        $conditions = [
-            'targetType' => 'classroom',
-            'targetIds' => ArrayToolkit::column($classrooms, 'id'),
-            'status' => 'published',
-        ];
-
-        $certificates = ArrayToolkit::index($this->getCertificateService()->search($conditions, [], 0, PHP_INT_MAX, ['targetId']), 'targetId');
-        foreach ($classrooms as &$classroom) {
-            $classroom['hasCertificate'] = !empty($certificates[$classroom['id']]);
-        }
-
-        return $classrooms;
-    }
-
-    public function hasCertificate($classroomId)
-    {
-        $conditions = [
-            'targetType' => 'classroom',
-            'targetId' => $classroomId,
-            'status' => 'published',
-        ];
-
-        return !empty($this->getCertificateService()->count($conditions));
-    }
-
     /**
      * @return CertificateService
      */
@@ -2574,5 +2726,26 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $biz = $this->biz;
 
         return $biz['goods.entity.factory'];
+    }
+
+    protected function getCourseMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
+    }
+
+    /**
+     * @return CourseThreadService
+     */
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Thread:ThreadService');
     }
 }

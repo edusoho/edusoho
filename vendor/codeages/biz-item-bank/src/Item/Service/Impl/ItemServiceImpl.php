@@ -62,7 +62,6 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function importItems($items, $bankId)
     {
         $savedItems = [];
-        $items = array_reverse($items);
 
         try {
             $this->beginTransaction();

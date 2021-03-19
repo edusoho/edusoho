@@ -325,6 +325,7 @@ t.add("activity.video_manage.media_error_hint", "Please upload or select a video
 t.add("activity.video.try_watch_finish_hint", "Free trial end, purchase and watch the complete video", "js", "en");
 t.add("activity.manage.choose_teacher_hint", "Please choose a teacher", "js", "en");
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">Congratulations! You have completed this task<\/span>\n", "js", "en");
+t.add("announcement.create_datetime.error.hint", "The announcement start time cannot be later than the end time", "js", "en");
 t.add("announcement.delete_hint", "Really want to delete the announcement?", "js", "en");
 t.add("auth.login_bind_choose.service_agreement_hint", "Check to agree to this service agreement before continue to register!", "js", "en");
 t.add("auth.login_bind_choose.login_success_hint", "Log in successfully, redirecting to the homepage!", "js", "en");
@@ -707,6 +708,9 @@ t.add("validate.have_spaces", "Password can't have spaces", "js", "en");
 t.add("validate.check_password_low.message", "5-20 letters or numbers, case sensitive", "js", "en");
 t.add("validate.check_password_middle.message", "8-20 letters or numbers, including at least two, case sensitive", "js", "en");
 t.add("validate.check_password_high.message", "8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols", "js", "en");
+t.add("validate.custom_integer.message", "Please enter the correct integer", "js", "en");
+t.add("validate.int.message", "up to 9 integers", "js", "en");
+t.add("validate.float.message", "up to two decimal places, and the integer digits should not exceed 8 digits!", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");
@@ -1599,5 +1603,7 @@ t.add("course.base.title.placeholder", "Please insert course title", "js", "en")
 t.add("course.unname_title", "Unnamed plan", "js", "en");
 t.add("course.task.out_focus_mask.continue_studying", "Continue studying", "js", "en");
 t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">You can take a break after studying hard :D<\/p>\n", "js", "en");
-t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>", "js", "en");
+t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>\n", "js", "en");
+t.add("classroom.manage.data_statistics.echarts.student_increase_num", "Student Increasement", "js", "en");
+t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "Auditor Increasement", "js", "en");
 })(Translator);

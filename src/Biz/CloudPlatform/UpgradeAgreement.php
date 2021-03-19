@@ -6,13 +6,18 @@ use Topxia\Service\Common\ServiceKernel;
 
 class UpgradeAgreement
 {
-    const VERSION = '21.1.1';
+    const BACKSTAGE_VERSION = '21.1.1';
+
+    const VIP_VERSION = '21.1.6';
 
     public function getAgreement($version, $code = 'MAIN')
     {
         $agreements = [
-            self::VERSION => [
+            self::BACKSTAGE_VERSION => [
                 'trans' => 'admin.app_upgrades.agreement.content.21.1.2',
+            ],
+            self::VIP_VERSION => [
+                'trans' => 'admin.app_upgrades.agreement.content.21.1.7',
             ],
         ];
 
@@ -21,12 +26,16 @@ class UpgradeAgreement
 
     protected function isAgreementShow($version, $code)
     {
-        if (self::VERSION == $version && 'MAIN' == $code) {
+        if (self::BACKSTAGE_VERSION == $version && 'MAIN' == $code) {
             $backstage = $this->getSettingService()->get('backstage', ['is_v2' => 1]);
             if (empty($backstage['allow_show_switch_btn']) && !empty($backstage['is_v2'])) {
                 return false;
             }
 
+            return true;
+        }
+
+        if (self::VIP_VERSION == $version && 'MAIN' == $code) {
             return true;
         }
 

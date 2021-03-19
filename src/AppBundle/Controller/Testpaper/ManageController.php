@@ -78,7 +78,7 @@ class ManageController extends BaseController
         );
         $tasks = $this->getTaskService()->searchTasks(
             $conditions,
-            ['seq' => 'ASC'],
+            ['seq' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -96,6 +96,7 @@ class ManageController extends BaseController
             'resultStatusNum' => $resultStatusNum,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'type' => $type,
         ]);
     }
 
@@ -166,9 +167,10 @@ class ManageController extends BaseController
             10
         );
 
+        $orderBy = in_array($status, ['reviewing', 'finished']) ? ['end_time' => 'ASC'] : ['updated_time' => 'DESC'];
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            [],
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

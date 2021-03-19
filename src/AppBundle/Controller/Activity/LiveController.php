@@ -114,6 +114,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $params['id'] = $user['id'];
+        /*
+         * displayName 用于直播间用户名展示
+         */
+        $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         /**

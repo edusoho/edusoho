@@ -1,11 +1,11 @@
 <div class="my-course-item cd-mb16 clearfix">
 	<a class="my-course-item__link" href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
-		{{ lazy_img(filepath(goods.images.large|default(null), 'courseSet.png'), 'my-course-item__picture', goods.title) }}
+		{{ lazy_img(filepath(goods_cover(goods, 'large'), 'courseSet.png'), 'my-course-item__picture', goods.title) }}
 	</a>
 
 	<div class="my-course-item__info">
 		<div class="my-course-item__title text-overflow">
-			<a class="cd-link-major" href="{{ path('goods_show', {id: goods.id}) }}">{{ goods.title }}</a>
+			<a class="cd-link-major" href="{{ path('goods_show', {id: goods.id}) }}">{{ goods.title|raw }}</a>
 		</div>
 
 		<div class="my-course-item__status">

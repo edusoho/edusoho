@@ -36,7 +36,7 @@
                   <span class="tag-live"></span>
                 </span>
               {% endif %}
-                <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
+                <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title|raw }}">
               </a>
               <button class="close course-close-btn js-delete-btn mrl mts mll"
                       data-role="item-delete" type="button"
@@ -76,9 +76,9 @@
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
+                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title|raw }}</a>
 
-                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20)|raw }}</div>{% endif %}
                     </h4>
                     <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
 

@@ -1,0 +1,79 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['app/js/admin-v2/teach/classroom/statistics/course/index.js']) %}
+
+{% set modal_class = 'modal-lg' %}
+{% set hide_footer = true %}
+
+{% block title %}
+  {{ 'admin.classroom_manage.statistics.course.title'|trans({'%classroom%': classroom.title }) }}
+  <span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.course.title_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
+{% endblock %}
+{% block body %}
+  <form id="course-search-form" class="hidden">
+    <input name="classroomId" value="{{ classroom.id }}">
+    <input name="courseId" value="{{ courseId }}">
+  </form>
+  <div class="clearfix mbl">
+    {% if courses|default()|length > 1 %}
+      <select style="width:200px;margin-right:15px" class="form-control pull-left" name="categoryId" tabindex="-1" id="course-select">
+        {% for course in courses %}
+          <option value="{{course.id}}" {% if courseId == course.id %} selected {% endif %} data-url="{{ path('admin_v2_classroom_statistics_course',{id:classroom.id,courseId:course.id}) }}">{{course.courseSetTitle}}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
+    <div class="pull-left" style="line-height:32px;">{{ 'admin.classroom_manage.statistics.course.total_learn_time'|trans({'%mins%':totalLearnedTime|default(0)|number_format(1)}) }}</div>
+    {% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-course-statistics', targetFormId: 'course-search-form', exportClass: 'cd-btn-success cd-btn-sm pull-right js-modal-export-btn', exportWebpack: true} %}
+  </div>
+  <table class="table table-bordered text-center" id="classroom-table">
+    <thead>
+      <tr class="active">
+        <td>{{'admin.course_manage.statistics.data.name'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.task_type'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.video_length'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.study_number'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.finished_number'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.task_sum_study_time'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.average_study_time'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data.average_score'|trans}}</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+        <tr>
+          <td>{{ task.title }}
+            {% if task.isOptional %}【{{'admin.course_manage.statistics.optional_task'|trans}}】
+            {% endif %}
+          </td>
+          <td>{{ ('course.activity.'~task.type)|trans }}</td>
+          <td>
+            {% if task.type == 'video' %}
+              {{ task.length|default(0)|number_format(1) }}
+            {% else %}
+              --
+            {% endif %}
+          </td>
+          <td>{{task.studentNum|default() }}</td>
+          <td>{{task.finishedNum|default() }}</td>
+          <td>{{task.sumLearnedTime|default(0)|number_format(1)}}</td>
+          <td>{{task.avgLearnedTime|default(0)|number_format(1)}}</td>
+          <td>
+            {% if task.type in ['testpaper'] %}
+              {{ task.score|default('0') }}
+            {% else %}
+              --
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ admin_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

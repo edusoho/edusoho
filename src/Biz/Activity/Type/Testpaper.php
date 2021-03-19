@@ -131,11 +131,6 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        //引用传递，当考试时间设置改变时，时间值也改变
-        if (0 == $fields['doTimes']) {
-            $fields['startTime'] = 0;
-        }
-
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -248,6 +243,14 @@ class Testpaper extends Activity
 
         if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
             $filterFields['testMode'] = 'normal';
+        }
+
+        /* #73707
+        *不限考试次数时,即:无考试开始时间限制,且startTime默认置0.
+        *单次考试次数时,且不限考试开始时间,即:startTime补充置0.
+        */
+        if ((isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) || (isset($filterFields['testMode']) && 'normal' == $filterFields['testMode'])) {
+            $filterFields['startTime'] = 0;
         }
 
         $filterFields['mediaId'] = $filterFields['testpaperId'];
