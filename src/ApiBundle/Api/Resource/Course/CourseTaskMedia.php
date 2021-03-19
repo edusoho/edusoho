@@ -390,8 +390,7 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $live = $config->get($activity['mediaId']);
         if ($live['roomCreated']) {
-            if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus'])
-            {
+            if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus']) {
                 $file = $this->getUploadFileService()->getFullFile($live['mediaId']);
                 $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
             }
