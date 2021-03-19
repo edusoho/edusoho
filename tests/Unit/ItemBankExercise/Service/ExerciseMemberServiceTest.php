@@ -242,10 +242,10 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'remark' => 'aaa',
             ]
         );
-
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']], ['updateType' => 'deadline', 'deadline' => time()]);
+        $deadline = time();
+        $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [$user['id']], ['updateType' => 'deadline', 'deadline' => $deadline]);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals(time(), (int) $result['deadline']);
+        $this->assertEquals($deadline, (int) $result['deadline']);
     }
 
     public function testCheckUpdateDeadline()

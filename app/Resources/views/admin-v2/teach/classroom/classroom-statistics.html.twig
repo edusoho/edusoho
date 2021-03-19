@@ -1,0 +1,91 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/teach/classroom/statistics/index.js']) %}
+
+{% set menu = 'admin_v2_classroom_statistics' %}
+
+{% block main %}
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    <div class="form-group">
+      <select style="max-width:150px;" class="form-control" name="categoryId">
+        {{ select_options(category_choices('classroom'), app.request.query.get('categoryId'), 'admin.classroom_manage.chooser.category'|trans) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{ 'admin.classroom_manage.manage.name_placeholder'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}" name="titleLike" value="{{ app.request.get('titleLike') }}">
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{ 'admin.classroom_manage.statistics.creator_placeholder'|trans }}" name="nickname" value="{{ app.request.get('nickname', '') }}">
+    </div>
+
+    <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+    {% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-statistics', targetFormId: 'message-search-form', exportClass: 'cd-btn-success pull-right'} %}
+  </form>
+
+  <table class="table table-bordered table-hover text-center" id="classroom-table">
+    <thead>
+      <tr class="active">
+        <td width="22%">{{ 'admin.classroom_manage.statistics.name_th'|trans }}</td>
+        <td>{{ 'admin.classroom_manage.statistics.course_number_th'|trans }}</td>
+        <td>
+          {{ 'admin.classroom_manage.statistics.task_number_th'|trans }}
+          <span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.task_num_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
+        </td>
+        <td>{{ 'admin.classroom_manage.statistics.student_number_th'|trans }}</td>
+        <td>
+          {{ 'admin.classroom_manage.statistics.finish_number_th'|trans }}
+          <span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.finish_number_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
+        </td>
+        <td>{{ 'admin.classroom_manage.statistics.income_th'|trans }}</td>
+        <td>{{ 'admin.classroom_manage.statistics.operation_th'|trans }}</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for classroom in classrooms %}
+        <tr id="classroom-tr-{{ classroom.id }}">
+          <td>
+            <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank">
+              <strong>{{ classroom.title }}</strong>
+            </a>
+          </td>
+          <td>{{ classroom.courseNum|default(0) }}</td>
+          <td>
+            {{ classroom.compulsoryTaskNum|default(0) }}
+            {% if classroom.electiveTaskNum|default(0) %}（{{ classroom.electiveTaskNum }}）
+            {% endif %}
+          </td>
+          <td>{{ classroom.studentNum|default(0) }}</td>
+          <td>{{ classroom.finishedMemberCount|default(0) }}</td>
+          <td>{{ classroom.income|default(0) }}</td>
+
+          <td>
+            <div class="btn-group">
+              <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_classroom_statistics_member', {id:classroom.id}) }}">
+                {{'admin.classroom_manage.statistics.student_operation_btn'|trans}}
+              </a>
+              <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu pull-right">
+                <li>
+                  <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_classroom_statistics_course', {id:classroom.id}) }}">
+                    {{'admin.classroom_manage.statistics.course_operation_btn'|trans}}</a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ admin_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}
+  {{ 'classroom.manage.sign_statictics'|trans }}
+  -
+  {{ parent() }}
+{% endblock %}
+{% set side_nav = 'sign-statistics' %}
+
+{% block main %}
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'classroom.manage.sign_statictics'|trans}}
+    </div>
+    <div class="panel-body">
+      <form class="form-inline well well-sm" id="sign-statistics" action="{{ path('classroom_sign_statistics', {id: classroom.id, order:order|default('signDays'), sort:sort|default('ASC')}) }}" method=" get" novalidate="">
+        <input type="hidden" name="classroomId" value="{{classroom.id}}">
+        <input class="form-control" type="text" placeholder="{{ 'classroom.manage.sign_statictics.name_placeholder'|trans }}" name="nameLike" value="{{ app.request.query.get('nameLike', null) }}">
+        <select class="form-control" name="role">
+          <option value="" {% if '' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.all'|trans }}</option>
+          <option value="headTeacher" {% if 'headTeacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }}</option>
+          <option value="teacher" {% if 'teacher' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.teacher'|trans }}</option>
+          <option value="assistant" {% if 'assistant' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.assistant'|trans }}</option>
+          <option value="student" {% if 'student' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.student'|trans }}</option>
+          <option value="auditor" {% if 'auditor' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.auditor'|trans }}</option>
+        </select>
+        <button type="submit" class="cd-btn cd-btn-primary">{{ 'classroom.manage.sign_statictics.search_btn'|trans }}</button>
+        {% include 'export/export-btn.html.twig' with
+            {
+              exportFileName: 'classroom-sign-statistics',
+              targetFormId: 'sign-statistics',
+              exportClass: 'cd-btn mhs pull-right cd-btn-success',
+              exportWebpack: 'ture'
+            }
+          %}
+        <div class="clearfix"></div>
+
+      </form>
+
+      <table class="table table-striped" id="course-student-list">
+        <thead>
+          <tr>
+            <th>{{ 'classroom.manage.sign_statictics.user_th'|trans }}</th>
+            <th>
+              {{ 'classroom.manage.sign_statictics.sign_days_th'|trans }}
+              <a href="{{ path('classroom_sign_statistics', {id: classroom.id, order:'signDays', sort:'ASC'}) }}" class="cd-btn cd-btn-sm pr0 {% if 'signDays' == order and 'ASC' == sort %} text-success {% else %} text-muted {% endif %}">↑</a>
+              <a href="{{ path('classroom_sign_statistics', {id: classroom.id, order:'signDays', sort:'DESC'}) }}" class="cd-btn cd-btn-sm pl0 {% if 'signDays' == order and 'DESC' == sort %} text-success {% else %} text-muted {% endif %}">↓</a>
+            </th>
+            <th>{{ 'classroom.manage.sign_statictics.keep_days_th'|trans }}
+              <a href="{{ path('classroom_sign_statistics', {id: classroom.id, order:'keepDays', sort:'ASC'}) }}" class="cd-btn cd-btn-sm pr0 {% if 'keepDays' == order and 'ASC' == sort %} text-success {% else %} text-muted {% endif %}">↑</a>
+              <a href="{{ path('classroom_sign_statistics', {id: classroom.id, order:'keepDays', sort:'DESC'}) }}" class="cd-btn cd-btn-sm pl0 {% if 'keepDays' == order and 'DESC' == sort %} text-success {% else %} text-muted {% endif %}">↓</a>
+            </th>
+            <th>{{ 'classroom.manage.sign_statictics.sign_today_th'|trans }}</th>
+            <th>{{ 'classroom.manage.sign_statictics.operate_th'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+            {% set user = users[member.userId]|default(null) %}
+            <tr>
+              <td>
+                {% if user %}
+                  {{ user.nickname }}
+                  <span class="text-muted text-sm">
+                    {% if 'headTeacher' in member.role %}
+                      ({{ 'classroom.manage.sign_statictics.role.head_teacher'|trans }})
+                    {% elseif 'teacher' in member.role%}
+                      ({{ 'classroom.manage.sign_statictics.role.teacher'|trans }})
+                    {% elseif 'assistant' in member.role%}
+                      ({{ 'classroom.manage.sign_statictics.role.assistant'|trans }})
+                    {% elseif 'auditor' in member.role%}
+                      ({{ 'classroom.manage.sign_statictics.role.auditor'|trans }})
+                    {% endif %}
+                  {% endif %}
+                </span>
+              </td>
+              <td>{{ member.signDays|default(0) }}</td>
+              <td>{{ member.keepDays }}</td>
+              <td>
+                {% if member.todaySignTime|default(0) %}
+                  {{ member.todaySignTime|date('Y-m-d H:i:s') }}
+                {% else %}
+                  --
+                {% endif %}
+              </td>
+              <td>
+                <a href="javascript:;" class="btn btn-sm" data-url="{{ path('classroom_sign_user_detail', { id:classroom.id, userId: user.id|default(0) }) }}" data-toggle="modal" data-target="#modal">
+                  {{ 'classroom.manage.sign_statictics.item'|trans }}
+                </a>
+              </td>
+            </tr>
+          {% else %}
+            <tr class="empty">
+              <td colspan="20">{{'classroom.manage.sign_statictics.empty'|trans}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}

@@ -10,7 +10,7 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class VisitorProcessor extends AbstractLiveStatisticsProcessor
 {
-    private $teacherIds = array();
+    private $teacherIds = [];
 
     public function handlerResult($result)
     {
@@ -33,13 +33,13 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
     {
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         if (empty($liveActivity)) {
-            return array();
+            return [];
         }
 
         $activity = $this->getActivityService()->getByMediaIdAndMediaTypeAndCopyId($liveActivity['id'], 'live', 0);
 
         if (empty($activity)) {
-            return array();
+            return [];
         }
 
         $teachers = $this->getCourseMemberService()->findCourseTeachers($activity['fromCourseId']);
@@ -50,10 +50,10 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
     private function handleData($data)
     {
         if (empty($data)) {
-            return array('success' => 1);
+            return ['success' => 1];
         }
 
-        $result = array();
+        $result = [];
         $totalLearnTime = 0;
         try {
             foreach ($data as $user) {
@@ -68,32 +68,36 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
         } catch (ServiceException $e) {
             $this->getLogService()->info('course', 'live', 'handle visitor data error: ', json_encode($data));
 
-            return array(
+            return [
                 'totalLearnTime' => 0,
                 'success' => 0,
-                'detail' => array(),
-            );
+                'detail' => [],
+            ];
         }
 
-        return array(
+        return [
             'totalLearnTime' => $totalLearnTime,
             'success' => 1,
             'detail' => $result,
-        );
+        ];
     }
 
     private function handleUser($user)
     {
-        $userId = $this->splitUserIdFromNickName($user['nickName']);
-        if (empty($userId)) {
-            throw new ServiceException('user not found');
+        if (!empty($user['studentId'])) {
+            $userId = $user['studentId'];
+        } else {
+            $userId = $this->splitUserIdFromNickName($user['nickName']);
+            if (empty($userId)) {
+                throw new ServiceException('user not found');
+            }
         }
 
         $existUser = $this->getUserService()->getUser($userId);
         $nickname = empty($existUser['nickname']) ? $user['nickName'] : $existUser['nickname'];
 
         if (in_array($userId, $this->teacherIds)) {
-            return array();
+            return [];
         }
 
         $user['userId'] = $userId;
@@ -108,21 +112,21 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
     {
         $userId = $user['userId'];
         if (empty($result[$userId])) {
-            $result[$userId] = array(
+            $result[$userId] = [
                 'userId' => $userId,
                 'nickname' => $user['nickname'],
                 'firstJoin' => $user['joinTime'],
                 'lastLeave' => $user['leaveTime'],
                 'learnTime' => $user['leaveTime'] - $user['joinTime'],
-            );
+            ];
         } else {
-            $result[$userId] = array(
+            $result[$userId] = [
                 'userId' => $userId,
                 'nickname' => $user['nickname'],
                 'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
                 'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
                 'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
-            );
+            ];
         }
 
         return $result;

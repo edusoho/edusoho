@@ -6,6 +6,7 @@ use Codeages\PluginBundle\DependencyInjection\Compiler\EventSubscriberPass;
 use Codeages\PluginBundle\Event\LazyDispatcher;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class CodeagesPluginBundle extends Bundle
 {
@@ -13,6 +14,11 @@ class CodeagesPluginBundle extends Bundle
     {
         $biz = $this->container->get('biz');
         $container = $this->container;
+
+        if ($biz->offsetExists('dispatcher') && $biz['dispatcher'] instanceof EventDispatcher) {
+            $biz->offsetUnset('dispatcher');
+        }
+
         $biz['dispatcher'] = function () use ($container) {
             return new LazyDispatcher($container);
         };

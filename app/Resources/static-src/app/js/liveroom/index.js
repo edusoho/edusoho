@@ -20,6 +20,7 @@ class Live {
 
   init() {
     this.isLiveRoomOpened = false;
+    let role = $('#entry').data('role');
     let intervalId = 0;
     let tryCount = 1;
     let directUrl = $('#entry').data('directUrl');
@@ -53,7 +54,10 @@ class Live {
         });
       }, 3000);
     }
-    this.triggerLiveEvent();
+    if (role === 'student' && this.taskId != 0) {
+      this.triggerLiveEvent();
+    }
+
   }
 
   entryRoom(roomUrl) {

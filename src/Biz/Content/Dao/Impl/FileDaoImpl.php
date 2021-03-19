@@ -11,14 +11,14 @@ class FileDaoImpl extends GeneralDaoImpl implements FileDao
 
     public function declares()
     {
-        return array(
-            'orderbys' => array(
+        return [
+            'orderbys' => [
                 'createdTime',
-            ),
-            'conditions' => array(
+            ],
+            'conditions' => [
                 'groupId = :groupId',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findByIds(array $ids)
@@ -29,10 +29,10 @@ class FileDaoImpl extends GeneralDaoImpl implements FileDao
     public function find($start, $limit)
     {
         return $this->search(
-            array(),
-            array(
+            [],
+            [
                 'createdTime' => 'DESC',
-            ),
+            ],
             $start,
             $limit
         );
@@ -40,18 +40,18 @@ class FileDaoImpl extends GeneralDaoImpl implements FileDao
 
     public function countAll()
     {
-        return $this->count(array());
+        return $this->count([]);
     }
 
     public function findByGroupId($groupId, $start, $limit)
     {
         return $this->search(
-            array(
+            [
                 'groupId' => $groupId,
-            ),
-            array(
+            ],
+            [
                 'createdTime' => 'DESC',
-            ),
+            ],
             $start,
             $limit
         );
@@ -59,13 +59,18 @@ class FileDaoImpl extends GeneralDaoImpl implements FileDao
 
     public function countByGroupId($groupId)
     {
-        return $this->count(array(
+        return $this->count([
             'groupId' => $groupId,
-        ));
+        ]);
     }
 
     public function deleteByUri($uri)
     {
-        return $this->db()->delete($this->table, array('uri' => $uri));
+        return $this->db()->delete($this->table, ['uri' => $uri]);
+    }
+
+    public function findByUris(array $uris)
+    {
+        return $this->findInField('uri', $uris);
     }
 }

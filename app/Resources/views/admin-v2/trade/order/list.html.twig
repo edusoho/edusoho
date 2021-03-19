@@ -44,7 +44,8 @@
           {% set options = {
             sn: 'order.id'|trans,
             buyer:'admin.order.buyer'|trans,
-            title_like: 'admin.order.title'|trans}
+            title_like: 'admin.order.title'|trans,
+            mobile: 'order.buyer.mobile'|trans}
           %}
           {{ select_options(options, request.get('keywordType')) }}
         </select>

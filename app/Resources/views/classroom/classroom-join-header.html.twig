@@ -11,7 +11,7 @@
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
       {% endfor %}
-      <li class="active">{{ classroom.title }}</li>
+      <li class="active">{{ classroom.title|raw }}</li>
     </ol>
 
     {% if member.locked|default("0") == "1" %}
@@ -46,15 +46,9 @@
               </span>
             </span>
           </h2>
-          <div class="metas class-info__metas mb0">
-{#            {% if setting('classroom.show_review', '1') == 1 %}#}
-{#              <div class="score">#}
-{#                {{ web_macro.star(classroom.rating) }}#}
-{#                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>#}
-{#              </div>#}
-{#            {% endif %}#}
 
-            {% if 'auditor' in member.role %}
+          {% if 'auditor' in member.role %}
+            <div class="metas class-info__metas mb0">
               <div class="price">
                 {{ 'classroom.price'|trans }}：<span>
                   {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -72,9 +66,8 @@
                   {% endif %}
                 </span>
               </div>
-            {% endif %}
-          </div>
-
+            </div>
+          {% endif %}
           {% if memberDeadline != 0 %}
             {% if 'student' in member.role or 'member' in member.role %}
               <div class="cd-text-xs hidden-sm cd-mb16">
@@ -83,13 +76,20 @@
               </div>
             {% endif %}
           {% endif %}
-
-{#          <div class="class-info__serve class-serve hidden-sm hidden-xs">#}
-{#            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>#}
-{#            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}#}
-{#          </div>#}
+          {% if "student" in member.role %}
+            <div class="my-course-item__progress cd-mt32 cd-clearfix">
+              <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+              <div class="cd-progress cd-progress-sm" style="position: relative;margin-bottom: 0;">
+                <div class="progress-bar" style="width: 90%;">
+                  <div class="progress-outer">
+                    <div class="progress-inner" style="width: {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }};height:10px"></div>
+                  </div>
+                </div>
+                <div class="progress-text"  style="width: 40px;margin-bottom: 8px;">{{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}</div>
+              </div>
+            </div>
+          {% endif %}
         </div>
-
         <div class="class-operation">
           {# 班级过了有效期的提示 #}
           {% if (memberDeadline != 0 and date(memberDeadline) < date()) and ('student' in member.role or 'member' in member.role) %}

@@ -177,6 +177,21 @@ class ResultServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['id']);
     }
 
+    public function testFindResultsByUserIdsAndEventIdd()
+    {
+        $this->getInformationCollectResultDao()->batchCreate([
+            ['id' => 1, 'formTitle' => '测试表单', 'userId' => 1, 'eventId' => 1],
+            ['id' => 2, 'formTitle' => '测试表单', 'userId' => 2, 'eventId' => 1],
+            ['id' => 3, 'formTitle' => '测试表单', 'userId' => 3, 'eventId' => 1],
+            ['id' => 4, 'formTitle' => '测试表单', 'userId' => 4, 'eventId' => 1],
+            ['id' => 5, 'formTitle' => '测试表单', 'userId' => 5, 'eventId' => 1],
+        ]);
+
+        $results = $this->getInformationCollectResultService()->findResultsByUserIdsAndEventId([1, 2], 1);
+
+        $this->assertEquals(2, count($results));
+    }
+
     public function testFindResultItemsByResultId()
     {
         $this->getInformationCollectResultItemDao()->batchCreate([

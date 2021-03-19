@@ -509,9 +509,10 @@ raw_password_update:
     path: /raw/password/update
     defaults: { _controller: AppBundle:PasswordReset:changeRawPassword }
 
-password_reset_check_mobile:
-    path:  /password/reset/check/mobile
-    defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
+# 73172 漏洞修复-防止网校被爆破枚举用户手机号
+# password_reset_check_mobile:
+#     path:  /password/reset/check/mobile
+#     defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
 
 browser_upgrade:
     path:  /browser/upgrade
@@ -1860,6 +1861,21 @@ course_manage_lesson_delete:
     path:  /course/{courseId}/manage/lesson/{lessonId}/delete
     defaults: { _controller: AppBundle:Course/LessonManage:delete }
 
+course_manage_lesson_batch_delete:
+    path:  /course/{courseId}/manage/lesson/batch_delete
+    defaults: { _controller: AppBundle:Course/LessonManage:batchDelete }
+    methods: [POST]
+
+course_manage_lesson_batch_unpublish:
+    path:  /course/{courseId}/manage/lesson/batch_unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:batchUnpublish }
+    methods: [POST]
+
+course_manage_lesson_batch_publish:
+    path:  /course/{courseId}/manage/lesson/batch_publish
+    defaults: { _controller: AppBundle:Course/LessonManage:batchPublish }
+    methods: [POST]
+
 course_manage_lesson_set_optional:
     path:  /course/{courseId}/manage/lesson/{lessonId}/setoptional
     defaults: { _controller: AppBundle:Course/LessonManage:setOptional }
@@ -2544,8 +2560,8 @@ classroom_manage_students:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:students }
 
 classroom_manage_aduitor:
-    path: /classroom/{id}/manage/aduitor
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+    path: /classroom/{id}/manage/auditor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:auditor }
 
 classroom_manage_record:
     path: /classroom/{id}/manage/record/{type}
@@ -2647,6 +2663,26 @@ classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
+classroom_data_statistics:
+  path:  /classroom/{id}/manage/data/statistics
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:statistics }
+
+classroom_data_statistics_student_detail:
+  path: /classroom/{id}/manage/statistics/student/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:studentDetailList }
+
+classroom_data_statistics_student_detail_modal:
+  path:  /classroom/{classroomId}/manage/statistics/student/{userId}/detail
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDetailModal }
+
+classroom_data_statistics_course_detail:
+  path: /classroom/{id}/manage/statistics/course/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailList }
+
+classroom_data_statistics_course_detail_modal:
+  path: /classroom/{id}/manage/statistics/course/{courseId}/detail/modal
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailModal }
+
 classroom_manage_students_defined_show:
     path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }
@@ -2662,6 +2698,15 @@ classroom_manage_member_deadline:
 classroom_manage_member_deadline_check_deadline:
     path: /classroom/{classroomId}/manage/member/deadline/check
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDeadline }
+
+classroom_sign_statistics:
+    path:  /classroom/{id}/manage/sign/statistics
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:signStatistics }
+
+classroom_sign_user_detail:
+    path:  /classroom/{id}/manage/sign/user/{userId}/detail
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:signDetail }
+    #
 
 classroom_manage_member_deadline_check_day:
     path: /classroom/{classroomId}/manage/member/day/check

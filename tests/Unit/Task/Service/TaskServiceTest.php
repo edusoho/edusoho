@@ -91,6 +91,16 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNull($savedTask);
     }
 
+    public function testFindTasksByCategoryIds()
+    {
+        $task = $this->mockTask();
+        $this->getTaskService()->createTask($task);
+
+        $result = $this->getTaskService()->findTasksByCategoryIds(['1']);
+
+        $this->assertCount(1, $result);
+    }
+
     public function testFindTasksByCourseId()
     {
         $task = $this->mockTask();
@@ -1065,6 +1075,14 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskService()->updateTasksOptionalByLessonId(1, 1);
 
         $this->assertTrue(true);
+    }
+
+    public function testFindTasksByCopyIdAndLockedCourseIds()
+    {
+        $this->getTaskService()->createTask($this->mockTask());
+        $tasks = $this->getTaskService()->findTasksByCopyIdAndLockedCourseIds(0, ['2']);
+
+        $this->assertCount(1, $tasks);
     }
 
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)

@@ -2,10 +2,10 @@
 
 namespace Codeages\Biz\Order\Dao\Impl;
 
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Order\Dao\OrderItemDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
+class OrderItemDaoImpl extends AdvancedDaoImpl implements OrderItemDao
 {
     protected $table = 'biz_order_item';
 

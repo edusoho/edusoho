@@ -5,10 +5,10 @@
       <div v-if="recommendGoods.length">
           <div class="learn-info-item learn clearfix" @click="onClickGoods(item)"  v-for="item in recommendGoods" :key="item.id">
               <div class="learn-img pull-left">
-                  <img :src="item.images.small" alt="">
+                  <img :src="item.images.middle" alt="">
               </div>
               <div class="learn-text pull-right">
-                  <p class="learn-text__title">{{ item.title }}</p>
+                  <p class="learn-text__title">{{ item.title|removeHtml }}</p>
 <!--                  <span v-if="item.minPrice == item.maxPrice" class="learn-text__price">{{ item.minPrice }}</span>-->
 <!--                  <span v-if="item.minPrice != item.maxPrice" class="learn-text__price">{{ item.minPrice }}起</span>-->
                   <p class="text-overflow learn-text__p">
@@ -59,6 +59,19 @@
         },
         onClickGotoSchool() {
             window.open(`/`, '_blank');
+        }
+    },
+    filters: {
+        removeHtml(input) {
+            return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                .replace(/(&rdquo;)/g, '\"')
+                .replace(/&ldquo;/g, '\"')
+                .replace(/&mdash;/g, '-')
+                .replace(/&nbsp;/g, '')
+                .replace(/&amp;/g, '&')
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<')
+                .replace(/<[\w\s"':=\/]*/, '');
         }
     },
     mounted() {

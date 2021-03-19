@@ -361,7 +361,7 @@
                             <a style="margin-top: 6px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
                           {% endif %}
                           <div class="course-title">
-                            {{ courseSet.title }}
+                            {{ courseSet.title|raw }}
                           </div>
                         </div>
                       </a>
@@ -468,7 +468,7 @@
               {% if can_obtain_certificates(course.id, 'course') %}
                 <a style="margin: 10px -6px 0 10px;" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
               {% endif %}
-              <span class="title">{{ courseSet.title }}</span>
+              <span class="title">{{ courseSet.title|raw }}</span>
 
               {% if mode in ['default', 'teach'] %}
 

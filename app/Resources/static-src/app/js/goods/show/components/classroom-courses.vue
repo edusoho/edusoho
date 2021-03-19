@@ -5,7 +5,7 @@
         <img :src="course.courseSet.cover.middle" alt="">
       </div>
       <div class="task-content">
-        <p class="task-content__title text-overflow">{{ course.courseSet.title }}</p>
+        <p class="task-content__title text-overflow">{{ course.courseSet.title | removeHtml }}</p>
         <p class="task-content__plan text-overflow">
           {{ 'classroom.courses.plan'|trans }}：{{ course.displayedTitle }}
           <span>{{ 'classroom.courses.lesson_num'|trans({num:course.compulsoryTaskNum}) }}</span>
@@ -52,7 +52,7 @@
                 this.page += 1;
             },
             clickCourse: function(course) {
-                window.open('/my/course/'+course.id);
+                window.open('/course/'+course.id);
             }
         },
         filters: {
@@ -60,6 +60,18 @@
                 if (!value) return '';
                 return Translator.trans(value, params);
             },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
+          }
+
         },
         watch: {
             classroomCourses: {

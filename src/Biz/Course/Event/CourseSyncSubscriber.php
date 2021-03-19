@@ -10,6 +10,7 @@ use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LessonService;
 use Biz\Sync\Service\AbstractSychronizer;
 use Biz\Sync\Service\SyncService;
 use Biz\System\Service\LogService;
@@ -396,5 +397,13 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getSyncService()
     {
         return $this->getBiz()->service('Sync:SyncService');
+    }
+
+    /**
+     * @return LessonService
+     */
+    protected function getCourseLessonService()
+    {
+        return $this->getBiz()->service('Course:LessonService');
     }
 }

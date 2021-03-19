@@ -67,8 +67,8 @@ export default class Video {
           required: Translator.trans('activity.video_manage.length_required_error_hint'),
         },
         second: {
-          required: Translator.trans('activity.video_manage.length_unsigned_integer_error_hint'),
-          second_range: Translator.trans('activity.video_manage.second_range_error_hint'),
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
+          second_range: Translator.trans('activity.video_manage.length_required_error_hint'),
         },
         'ext[mediaSource]': Translator.trans('activity.video_manage.media_error_hint'),
       }

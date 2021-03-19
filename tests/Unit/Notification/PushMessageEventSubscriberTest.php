@@ -81,7 +81,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         $subscriber->onArticleDelete($this->getArticleEvent());
         $this->assertArrayEquals(
             [
-                'type' => 'update',
+                'type' => 'delete',
                 'args' => [
                     'category' => 'article',
                 ],
@@ -654,6 +654,113 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                 'source' => 'notification',
             ],
             $result['body']
+        );
+    }
+
+    public function testOnGroupOpen()
+    {
+        $group = [
+            'id' => 1,
+            'title' => 'group',
+            'about' => 'group about',
+            'status' => 'open',
+            'memberNum' => 1,
+            'threadNum' => 2,
+            'postNum' => 10,
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        ];
+
+        $thread1 = [
+            'id' => 1,
+            'title' => 'title',
+            'content' => 'thread content 1',
+            'userId' => 2,
+            'groupId' => 1,
+            'status' => 'open',
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        ];
+        $this->getGroupThreadDao()->create($thread1);
+
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onGroupOpen(new Event($group));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            [
+                'category' => 'thread',
+            ],
+            $result['args']
+        );
+    }
+
+    public function testOnGroupClose()
+    {
+        $group = [
+            'id' => 1,
+            'title' => 'group',
+            'about' => 'group about',
+            'status' => 'close',
+            'memberNum' => 1,
+            'threadNum' => 2,
+            'postNum' => 10,
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        ];
+
+        $thread1 = [
+            'id' => 1,
+            'title' => 'title',
+            'content' => 'thread content 1',
+            'userId' => 2,
+            'groupId' => 1,
+            'status' => 'open',
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        ];
+        $this->getGroupThreadDao()->create($thread1);
+
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onGroupClose(new Event($group));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            [
+                'category' => 'thread',
+                'id' => 'group_1',
+            ],
+            $result['args']
+        );
+    }
+
+
+    public function testOnGroupThreadClose()
+    {
+        $thread = [
+            'id' => 1,
+            'title' => 'title',
+            'content' => 'classroom thread content',
+            'userId' => 2,
+            'targetId' => 1,
+            'targetType' => 'classroom',
+            'type' => 'question',
+            'groupId' => 1,
+            'postNum' => 1,
+            'hitNum' => 1,
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        ];
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onGroupThreadClose(new Event($thread));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            [
+                'category' => 'thread',
+                'id' => 'group_1',
+            ],
+            $result['args']
         );
     }
 
@@ -1947,5 +2054,10 @@ class PushMessageEventSubscriberTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getGroupThreadDao()
+    {
+        return $this->createDao('Group:ThreadDao');
     }
 }

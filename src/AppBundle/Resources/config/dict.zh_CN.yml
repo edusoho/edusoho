@@ -40,9 +40,8 @@ couponType:
 
 couponStatus:
     used: 已使用
-    using: 使用中
-    unused: 未使用
     receive: 已领取
+    unused: 未使用
 
 fileType:
     video: 视频

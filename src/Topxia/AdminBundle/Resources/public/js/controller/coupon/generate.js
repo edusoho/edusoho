@@ -139,7 +139,8 @@ define(function(require, exports, module) {
         
         validator.addItem({
             element: '#name',
-            required: true
+            required: true,
+            rule: 'maxlength{max:50}',
         });
 
         validator.addItem({

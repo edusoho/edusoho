@@ -1,0 +1,44 @@
+<div class="my-course-item cd-mb16 clearfix">
+	<a class="my-course-item__link" href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
+		{{ lazy_img(filepath(goods_cover(goods, 'large'), 'courseSet.png'), 'my-course-item__picture', goods.title) }}
+	</a>
+
+	<div class="my-course-item__info">
+		<div class="my-course-item__title text-overflow">
+			<a class="cd-link-major" href="{{ path('goods_show', {id: goods.id}) }}">{{ goods.title|raw }}</a>
+		</div>
+
+		<div class="my-course-item__status">
+			<span class="course-price-widget">
+				<span class="{% if goods.maxPrice == 0 %} free {% else %} price {% endif %}">
+					{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+						{% if goods.maxPrice > 0 %}
+							{% if goods.minPrice == goods.maxPrice %}
+								{{ 'goods.origin_price.unit'|trans({'%price%': goods.minPrice * setting('coin.cash_rate'), '%unit%': setting('coin.coin_name')|trans}) }}
+							{% else %}
+								{{ 'goods.minimum_price.unit'|trans({'%price%': goods.minPrice * setting('coin.cash_rate'), '%unit%': setting('coin.coin_name')|trans}) }}
+							{% endif %}
+						{% else %}
+							{{ 'course.price.free'|trans }}
+						{% endif %}
+					{% else %}
+						{% if goods.maxPrice > 0 %}
+							{% if goods.minPrice == goods.maxPrice  %}
+								{{ 'goods.origin_price.unit'|trans({'%price%': goods.minPrice, '%unit%': 'site.currency.CNY'|trans}) }}
+							{% else %}
+								{{ 'course.minimum_price.unit'|trans({'%price%': goods.minPrice, '%unit%': 'site.currency.CNY'|trans}) }}
+							{% endif %}
+						{% else %}
+							{{ 'course.price.free'|trans }}
+						{% endif %}
+					{% endif %}
+				</span>
+			</span>
+		</div>
+	</div>
+
+	<div class="my-course-item__btn">
+		<a class="btn cd-btn cd-btn-primary" href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+	</div>
+
+</div>

@@ -1395,7 +1395,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $params = [];
 
         $params['email'] = 'live-'.$user['id'].'@edusoho.net';
-        $params['nickname'] = $user['nickname'];
+        $params['displayName'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
         $params['sign'] .= 's'.$this->makeSign($params['sign']);

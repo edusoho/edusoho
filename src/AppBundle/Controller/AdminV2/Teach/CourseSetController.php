@@ -756,13 +756,12 @@ class CourseSetController extends BaseController
             $limit
         );
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
-        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
-            $exportMember['nickname'] = $user['nickname'];
+            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -775,9 +774,6 @@ class CourseSetController extends BaseController
 
             $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? round($learnTime / 60, 1) : '--';
-
-            $pureLearnTime = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
-            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? round($pureLearnTime / 60, 1) : '--';
 
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
@@ -795,7 +791,6 @@ class CourseSetController extends BaseController
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),
             $this->trans('admin.course_manage.statistics.data_detail.study_time'),
-            $this->trans('admin.course_manage.statistics.data_detail.pure_study_time'),
             $this->trans('admin.course_manage.statistics.data_detail.question_number'),
             $this->trans('admin.course_manage.statistics.data_detail.note_number'),
         ];
@@ -820,16 +815,21 @@ class CourseSetController extends BaseController
 
     protected function filterCourseSetConditions($filter, $conditions)
     {
-        if ('classroom' == $filter) {
-            $conditions['isClassroomRef'] = 1;
-        } elseif ('vip' == $filter) {
-            $conditions['isVip'] = 1;
-            $conditions['parentId'] = 0;
-            $conditions['isClassroomRef'] = 0;
-        } else {
-            $conditions['parentId'] = 0;
-            $conditions['isClassroomRef'] = 0;
-            $conditions = $this->filterCourseSetType($conditions);
+        switch ($filter) {
+            case 'all':
+                break;
+            case 'classroom':
+                $conditions['isClassroomRef'] = 1;
+                break;
+            case 'vip':
+                $conditions['isVip'] = 1;
+                $conditions['parentId'] = 0;
+                $conditions['isClassroomRef'] = 0;
+                break;
+            default:
+                $conditions['parentId'] = 0;
+                $conditions['isClassroomRef'] = 0;
+                $conditions = $this->filterCourseSetType($conditions);
         }
 
         $conditions = $this->fillOrgCode($conditions);

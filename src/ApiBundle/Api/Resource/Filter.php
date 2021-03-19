@@ -92,6 +92,12 @@ abstract class Filter
     protected function convertAbsoluteUrl($html)
     {
         $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) {
+
+            // 因为众多路径放进了带有域名的URL，所以包含`//`的url一律按照不做处理
+            if (0 === strpos($matches[1], '/')) {
+                return "src=\"\/{$matches[1]}\"";
+            }
+
             $cdn = new CdnUrl();
             $cdnUrl = $cdn->get('content');
             if (!empty($cdnUrl)) {

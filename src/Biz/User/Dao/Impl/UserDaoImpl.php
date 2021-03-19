@@ -262,6 +262,8 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
             ],
             'conditions' => [
                 'mobile = :mobile',
+                'verifiedMobile IN (:verifiedMobiles)',
+                'email IN (:emails)',
                 'promoted = :promoted',
                 'roles LIKE :roles',
                 'roles = :role',

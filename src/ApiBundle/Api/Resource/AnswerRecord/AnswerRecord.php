@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
 {
@@ -20,6 +21,13 @@ class AnswerRecord extends AbstractResource
         $answerReportFilter->filter($answerReport);
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        if (empty($assessment)) {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        if ('open' !== $assessment['status']) {
+            throw AssessmentException::ASSESSMENT_NOTOPEN();
+        }
+
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 

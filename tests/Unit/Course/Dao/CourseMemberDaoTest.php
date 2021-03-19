@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Course\Dao;
 
+use AppBundle\Common\ArrayToolkit;
 use Tests\Unit\Base\BaseDaoTestCase;
 
 class CourseMemberDaoTest extends BaseDaoTestCase
@@ -274,8 +275,12 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = [];
         $res[] = $this->getDao()->searchMemberCountGroupByFields(['courseId' => 1], 'courseId', 0, 10);
-        $res[] = $this->getDao()->searchMemberCountGroupByFields(['courseId' => 1, 'userId' => 1], 'courseId', 0,
-            10);
+        $res[] = $this->getDao()->searchMemberCountGroupByFields(
+            ['courseId' => 1, 'userId' => 1],
+            'courseId',
+            0,
+            10
+        );
 
         $this->assertEquals([['courseId' => '1', 'count' => '2']], $res[0]);
         $this->assertEquals([['courseId' => '1', 'count' => '1']], $res[1]);
@@ -365,8 +370,10 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->searchMemberIds(['unique' => true], ['createdTime' => 'ASC'], 0, 10);
 
-        $this->assertEquals([['userId' => $expected[0]['userId']], ['userId' => $expected[1]['userId']]],
-            $res);
+        $this->assertEquals(
+            [['userId' => $expected[0]['userId']], ['userId' => $expected[1]['userId']]],
+            $res
+        );
     }
 
     public function testUpdateMembers()
@@ -398,8 +405,9 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         unset($tmp['stickyTime']);
 
         $res[] = $tmp;
-
-        $this->assertEquals($res[2]['courseId'], 2);
+        foreach ($res as $key => $val) {
+            $this->assertEquals($expected[$key], $val);
+        }
     }
 
     public function testCountUserLearnCourses()
@@ -563,6 +571,53 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(2, count($res));
     }
 
+    public function testFindByUserIdAndClassroomId()
+    {
+        $this->mockDataObject(['id' => 1, 'userId' => 1, 'role' => 'student', 'courseId' => 1, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 2, 'userId' => 2, 'role' => 'student', 'courseId' => 1, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 3, 'userId' => 1, 'role' => 'student', 'courseId' => 2, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 4, 'userId' => 2, 'role' => 'student', 'courseId' => 2, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 5, 'userId' => 1, 'role' => 'student', 'courseId' => 3, 'classroomId' => 2]);
+
+        $members1 = ArrayToolkit::index($this->getDao()->findByUserIdAndClassroomId(1, 1), 'id');
+        $members2 = ArrayToolkit::index($this->getDao()->findByUserIdAndClassroomId(2, 1), 'id');
+        $members3 = ArrayToolkit::index($this->getDao()->findByUserIdAndClassroomId(1, 2), 'id');
+
+        self::assertCount(2, $members1);
+        self::assertArrayHasKey(1, $members1);
+        self::assertArrayHasKey(3, $members1);
+
+        self::assertCount(2, $members2);
+        self::assertArrayHasKey(2, $members2);
+        self::assertArrayHasKey(4, $members2);
+
+        self::assertCount(1, $members3);
+        self::assertArrayHasKey(5, $members3);
+    }
+
+    public function testFindByUserIdsAndClassroomId()
+    {
+        $this->mockDataObject(['id' => 6, 'userId' => 1, 'role' => 'student', 'courseId' => 1, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 7, 'userId' => 2, 'role' => 'student', 'courseId' => 1, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 8, 'userId' => 1, 'role' => 'student', 'courseId' => 2, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 9, 'userId' => 2, 'role' => 'student', 'courseId' => 2, 'classroomId' => 1]);
+        $this->mockDataObject(['id' => 10, 'userId' => 1, 'role' => 'student', 'courseId' => 3, 'classroomId' => 2]);
+        $this->mockDataObject(['id' => 11, 'userId' => 2, 'role' => 'student', 'courseId' => 3, 'classroomId' => 2]);
+        $this->mockDataObject(['id' => 12, 'userId' => 3, 'role' => 'student', 'courseId' => 3, 'classroomId' => 2]);
+        $members1 = ArrayToolkit::index($this->getDao()->findByUserIdsAndClassroomId([1, 2], 1), 'id');
+        $members2 = ArrayToolkit::index($this->getDao()->findByUserIdsAndClassroomId([1, 2], 2), 'id');
+
+        self::assertCount(4, $members1);
+        self::assertArrayHasKey(6, $members1);
+        self::assertArrayHasKey(7, $members1);
+        self::assertArrayHasKey(8, $members1);
+        self::assertArrayHasKey(9, $members1);
+
+        self::assertCount(2, $members2);
+        self::assertArrayHasKey(10, $members2);
+        self::assertArrayHasKey(11, $members2);
+    }
+
     protected function getDefaultMockFields()
     {
         return [
@@ -591,6 +646,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'refundDeadline' => '0',
             'learnedCompulsoryTaskNum' => '0',
             'learnedElectiveTaskNum' => '0',
+            'startLearnTime' => '0',
         ];
     }
 

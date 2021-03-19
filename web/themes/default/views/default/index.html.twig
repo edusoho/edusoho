@@ -324,7 +324,7 @@
 
         <div class="course-body ellipsis">
 
-          <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+          <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
 
           </h4>
           <div class="course-price-info">
@@ -339,7 +339,7 @@
               {% endif %}
             </div>
           {% else %}
-            <div class="theme-default-course-about ellipsis">{{ courseSet.subtitle }}</div>
+            <div class="theme-default-course-about ellipsis">{{ courseSet.subtitle|raw }}</div>
           {% endif %}
 
           <div class="default-theme course-footer clearfix">

@@ -75,18 +75,26 @@ class DefaultController extends BaseController
 
     public function latestReviewsBlockAction($number)
     {
-        $reviews = $this->getReviewService()->searchReviews(['targetType' => 'course', 'parentId' => 0], ['createdTime' => 'DESC'], 0, $number);
+        $reviews = $this->getReviewService()->searchReviews(['targetType' => 'goods', 'parentId' => 0], ['createdTime' => 'DESC'], 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'targetId'));
+        $goodsIds = ArrayToolkit::column($reviews, 'targetId');
+        $goods = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
 
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        foreach ($reviews as &$review) {
+            if (!empty($users[$review['userId']])) {
+                $reviewUser = $users[$review['userId']];
+                unset($reviewUser['password']);
+                unset($reviewUser['salt']);
+                $review['user'] = $reviewUser;
+            }
+
+            if (!empty($goods[$review['targetId']])) {
+                $review['goods'] = $goods[$review['targetId']];
+            }
+        }
 
         return $this->render('default/latest-reviews-block.html.twig', [
             'reviews' => $reviews,
-            'users' => $users,
-            'courses' => $courses,
-            'courseSets' => $courseSets,
         ]);
     }
 
@@ -224,6 +232,14 @@ class DefaultController extends BaseController
         $result = $this->getMeCount();
 
         return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
     }
 
     /**

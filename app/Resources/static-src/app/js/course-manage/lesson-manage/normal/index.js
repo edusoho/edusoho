@@ -1,6 +1,7 @@
 import {hiddenUnpublishTask, addLesson} from './../header-util';
 import LessonIntro from './lesson-intro';
-import BaseManage from './../BaseManage';
+import BaseManage from '../BaseManage';
+import BatchManage from '../BatchManage'
 import {TaskListHeaderFixed} from 'app/js/course-manage/help';
 
 class NormalManage extends BaseManage {
@@ -65,7 +66,7 @@ class NormalManage extends BaseManage {
 
 
 new NormalManage('#sortable-list');
-
+new BatchManage('.js-lesson-manage');
 hiddenUnpublishTask();
 addLesson();
 TaskListHeaderFixed();

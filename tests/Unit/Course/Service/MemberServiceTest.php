@@ -1176,6 +1176,143 @@ class MemberServiceTest extends BaseTestCase
         $this->assertEquals($member['deadline'] + 24 * 60 * 60, $result['deadline']);
     }
 
+    /**
+     * findCourseMembersByUserIdAndCourseIds\findCoursesByStudentIdAndCourseIds
+     */
+    public function testFindCoursesByStudentIdAndCourseIds()
+    {
+        $member1 = [
+            'id' => 1,
+            'courseId' => 1,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member2 = [
+            'id' => 2,
+            'courseId' => 2,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member3 = [
+            'id' => 3,
+            'courseId' => 3,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $this->getMemberService()->batchCreateMembers([$member1, $member2, $member3]);
+        $res = ArrayToolkit::index($this->getMemberService()->findCoursesByStudentIdAndCourseIds(1, [1, 2]), 'id');
+        self::assertCount(2, $res);
+        self::assertArrayHasKey(1, $res);
+        self::assertArrayHasKey(2, $res);
+        self::assertArrayNotHasKey(3, $res);
+
+        $res1 = ArrayToolkit::index($this->getMemberService()->findCourseMembersByUserIdAndCourseIds(1, [1, 2]), 'id');
+        self::assertCount(2, $res1);
+        self::assertArrayHasKey(1, $res1);
+        self::assertArrayHasKey(2, $res1);
+        self::assertArrayNotHasKey(3, $res1);
+    }
+
+    public function testFindCourseMembersByUserIdAndClassroomId()
+    {
+        $member1 = [
+            'id' => 1,
+            'courseId' => 1,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'classroomId' => 1,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member2 = [
+            'id' => 2,
+            'courseId' => 2,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'classroomId' => 1,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member3 = [
+            'id' => 3,
+            'courseId' => 3,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'classroomId' => 2,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $this->getMemberService()->batchCreateMembers([$member1, $member2, $member3]);
+
+        $res = ArrayToolkit::index($this->getMemberService()->findCourseMembersByUserIdAndClassroomId(1, 1), 'id');
+
+        self::assertCount(2, $res);
+        self::assertArrayHasKey(1, $res);
+        self::assertArrayHasKey(2, $res);
+    }
+
+    public function testFindCourseMembersByUserIdsAndClassroomId()
+    {
+        $member1 = [
+            'id' => 1,
+            'courseId' => 1,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'classroomId' => 1,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member2 = [
+            'id' => 2,
+            'courseId' => 1,
+            'userId' => 2,
+            'courseSetId' => 1,
+            'classroomId' => 1,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $member3 = [
+            'id' => 3,
+            'courseId' => 3,
+            'userId' => 3,
+            'courseSetId' => 1,
+            'classroomId' => 2,
+            'joinedType' => 'classroom',
+            'role' => 'student',
+            'deadline' => time(),
+        ];
+
+        $this->getMemberService()->batchCreateMembers([$member1, $member2, $member3]);
+
+        $res = ArrayToolkit::index($this->getMemberService()->findCourseMembersByUserIdsAndClassroomId([1, 2], 1), 'id');
+
+        self::assertCount(2, $res);
+        self::assertArrayHasKey(1, $res);
+        self::assertArrayHasKey(2, $res);
+    }
+
     protected function mockNewCourseSet($fields = [])
     {
         $courseSetFields = [

@@ -1,0 +1,47 @@
+<div class="dashboard row">
+  <div class="col-xs-3 item bottom-border">
+    <span class="number">{{ overview.studentCount }}
+      <span class="sub-number">({{ overview.auditorCount|default(0) }})</span>
+    </span>
+    <div class="title">
+      {{ 'classroom.manage.data_statistics.overview.student_num'|trans }}
+      <span class="sub-title">
+        ({{ 'classroom.manage.data_statistics.overview.auditor_num'|trans }})
+      </span>
+    </div>
+  </div>
+
+  <div class="col-xs-3 item bottom-border">
+    <span class="number">
+      {{ overview.finishedStudentNum }}
+    </span>
+    <div class="title">
+      {{ 'classroom.manage.data_statistics.overview.finished_num'|trans }}
+      <span class="link-medium es-icon es-icon-help ml5"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ 'classroom.manage.data_statistics.overview.finished_num_tips'|trans()}}">
+      </span>
+    </div>
+  </div>
+
+  <div class="col-xs-3 item bottom-border">
+    <span class="number">
+      {{ (overview.sumLearnedTime / 60)|round }}
+    </span>
+    <div class="title">
+      {{ 'classroom.manage.data_statistics.overview.sumtime'|trans }}
+      <span class="link-medium es-icon es-icon-help ml5"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ 'classroom.manage.data_statistics.overview.sum_time_tips'|trans()}}">
+      </span>
+    </div>
+  </div>
+
+  <div class="col-xs-3 item bottom-border">
+    <span class="number">
+      {{ (overview.averageLearnedTime /  60)|round }}
+    </span>
+    <div class="title">{{ 'classroom.manage.data_statistics.overview.average_time'|trans }}</div>
+  </div>
+
+</div>
