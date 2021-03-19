@@ -734,7 +734,6 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
-
     public function testOnGroupThreadClose()
     {
         $thread = [
