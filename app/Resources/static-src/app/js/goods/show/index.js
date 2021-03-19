@@ -21,6 +21,7 @@ new Vue({
       goodsSetting: $('#show-product-page').data('goodsSetting'),
       timestamp: $('#js-hidden-current-timestamp').html(),
       drpRecruitSwitch: $('#show-product-page').data('drpRecruitSwitch'),
+      vipEnabled: $('#show-product-page').data('vipEnabled'),
     },
   })
 }).$mount('#show-product-page');

@@ -76,6 +76,10 @@
             isShow: {
                 type: Boolean,
                 default: true
+            },
+            vipEnabled: {
+                type: Number,
+                default: 1
             }
         },
         methods: {
@@ -139,7 +143,7 @@
                     this.buyViewMode = 'text';
                     console.log(new Date(parseInt(sku.usageEndTime)).getTime());
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
-                } else if (sku.vipLevelInfo) {
+                } else if (sku.vipLevelInfo && this.vipEnabled) {
                     this.buyViewMode = 'btn';
                     if (sku.vipUser && sku.canVipJoin && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
                         this.buyViewText = Translator.trans('goods.show_page.vip_free_learn_new');
