@@ -822,7 +822,7 @@ class CourseSetController extends BaseController
                 $conditions['isClassroomRef'] = 1;
                 break;
             case 'vip':
-                $conditions['isVip'] = 1;
+                $conditions = $this->getVipCourseSetConditions($conditions);
                 $conditions['parentId'] = 0;
                 $conditions['isClassroomRef'] = 0;
                 break;
@@ -845,6 +845,17 @@ class CourseSetController extends BaseController
             $conditions['tagIds'] = [$conditions['tagId']];
             $conditions = $this->getCourseConditionsByTags($conditions);
         }
+
+        return $conditions;
+    }
+
+    protected function getVipCourseSetConditions($conditions)
+    {
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCode('course');
+        $courseIds = ArrayToolkit::column($vipRights, 'uniqueCode');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $conditions['ids'] = ArrayToolkit::column($courses, 'courseSetId');
 
         return $conditions;
     }
