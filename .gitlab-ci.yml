@@ -176,6 +176,7 @@ check env:
   only:
     refs:
       - develop
+      - feature/20210319-unit-test
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
@@ -253,8 +254,6 @@ Api Test With 7.1:
     refs:
       - /^release/.*$/
       - develop
-      - feature/fix-api-test
-      - project/data-visualization
     variables:
       - $REPOSITORY == "main"
 # 5.5 with js-test-unit:

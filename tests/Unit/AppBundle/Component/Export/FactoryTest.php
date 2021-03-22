@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\Component\Export;
+namespace Tests\Unit\AppBundle\Component\Export;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\Export\Factory;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\Export\Factory;
+use Biz\BaseTestCase;
 
 class FactoryTest extends BaseTestCase
 {
-    private $map = array(
+    private $map = [
         'invite-records',
         'user-invite-records',
         'order',
@@ -19,7 +19,7 @@ class FactoryTest extends BaseTestCase
         'bill-cash-flow',
         'bill-coin-flow',
         'user-learn-statistics',
-    );
+    ];
 
     public function testCreate()
     {
@@ -37,13 +37,13 @@ class FactoryTest extends BaseTestCase
         $map = $this->map;
 
         foreach ($map as $value) {
-            $result = ReflectionUtils::invokeMethod($factory, 'exportMap', array($value));
+            $result = ReflectionUtils::invokeMethod($factory, 'exportMap', [$value]);
             $this->assertNotEmpty($result);
         }
 
         $faqPluginExport = 'faq:question-like';
         $container->set('faq_export_map', new ExportMap());
-        $result = ReflectionUtils::invokeMethod($factory, 'exportMap', array($faqPluginExport));
+        $result = ReflectionUtils::invokeMethod($factory, 'exportMap', [$faqPluginExport]);
         $this->assertEquals('FaqPlugin\Biz\Exporter\QuestionLikes', $result);
     }
 
@@ -56,7 +56,7 @@ class FactoryTest extends BaseTestCase
         $factory = new Factory($container);
         $faqPluginExport = 'faq:question-test';
         $container->set('faq_export_map', new ExportMap());
-        ReflectionUtils::invokeMethod($factory, 'exportMap', array($faqPluginExport));
+        ReflectionUtils::invokeMethod($factory, 'exportMap', [$faqPluginExport]);
     }
 }
 
@@ -64,8 +64,8 @@ class ExportMap
 {
     public function getMap()
     {
-        return array(
+        return [
             'faq:question-like' => 'FaqPlugin\Biz\Exporter\QuestionLikes',
-        );
+        ];
     }
 }
