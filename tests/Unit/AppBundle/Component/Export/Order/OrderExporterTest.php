@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Order;
+namespace Tests\Unit\AppBundle\Component\Export\Order;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\Export\Order\OrderExporter;
+use Biz\BaseTestCase;
 
 class OrderExporterTest extends BaseTestCase
 {
@@ -12,11 +12,11 @@ class OrderExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchOrders',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'id' => 1,
                             'sn' => 212,
                             'title' => '11',
@@ -30,48 +30,48 @@ class OrderExporterTest extends BaseTestCase
                             'source' => 'system',
                             'created_time' => 1111,
                             'pay_time' => 1222,
-                        ),
-                    ),
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findUsersByIds',
-                    'returnValue' => array(
-                            2 => array(
+                    'returnValue' => [
+                            2 => [
                                 'id' => 2,
                                 'nickname' => 'test',
                                 'email' => 'test@edusoho.com',
                                 'verifiedMobile' => '1303123',
-                            ),
-                        ),
-                    'withParams' => array(
-                    ),
-                ),
-               array(
+                            ],
+                        ],
+                    'withParams' => [
+                    ],
+                ],
+               [
                     'functionName' => 'findUserProfilesByIds',
-                    'returnValue' => array(
-                        2 => array(
+                    'returnValue' => [
+                        2 => [
                             'id' => 2,
                             'truename' => 'lalala',
-                        ),
-                    ),
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
-        $expoter = new OrderExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new OrderExporter(self::$appKernel->getContainer(), [
+        ]);
 
         $result = $expoter->getContent(0, 3);
-        $this->assertEquals(array(
+        $this->assertEquals([
             '212	',
             '11',
             'paid',
@@ -88,28 +88,28 @@ class OrderExporterTest extends BaseTestCase
             '1303123',
             '1970-1-01 08:18:31',
             '1970-1-01 08:20:22',
-        ), $result[0]);
+        ], $result[0]);
     }
 
     public function testCanExport()
     {
-        $expoter = new OrderExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new OrderExporter(self::$appKernel->getContainer(), [
+        ]);
         $this->assertEquals(true, $expoter->canExport());
 
         $biz = $this->getBiz();
         $user = $biz['user'];
-        $user->setPermissions(array());
+        $user->setPermissions([]);
 
         $this->assertEquals(false, $expoter->canExport());
     }
 
     public function testGetTitles()
     {
-        $expoter = new OrderExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new OrderExporter(self::$appKernel->getContainer(), [
+        ]);
 
-        $title = array('order.id', 'order.product_name', 'order.status', 'order.product_price', 'order.deduct_amount', 'order.price', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
+        $title = ['order.id', 'order.product_name', 'order.status', 'order.product_price', 'order.deduct_amount', 'order.price', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time'];
 
         $title = $expoter->getTitles();
 
@@ -121,20 +121,20 @@ class OrderExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUserByNickname',
-                    'returnValue' => array('id' => 3),
-                    'withParams' => array(
+                    'returnValue' => ['id' => 3],
+                    'withParams' => [
                         'lalal',
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
-        $expoter = new OrderExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new OrderExporter(self::$appKernel->getContainer(), [
+        ]);
 
-        $conditions = array(
+        $conditions = [
             'orderItemType' => 'course',
             'keywordType' => 'title',
             'keyword' => 'lala',
@@ -142,14 +142,14 @@ class OrderExporterTest extends BaseTestCase
             'endDateTime' => '2991-10-21',
             'buyer' => 'lalal',
             'displayStatus' => 'paid',
-        );
+        ];
 
         $result = $expoter->buildCondition($conditions);
         $this->assertEquals('course', $result['order_item_target_type']);
         $this->assertEquals('lala', $result['title']);
         $this->assertEquals('687974400', $result['start_time']);
         $this->assertEquals('32244969600', $result['end_time']);
-        $this->assertEquals(array('fail', 'paid', 'refunding', 'success'), $result['statuses']);
+        $this->assertEquals(['fail', 'paid', 'refunding', 'success'], $result['statuses']);
         $this->assertEquals(3, $result['user_id']);
     }
 }

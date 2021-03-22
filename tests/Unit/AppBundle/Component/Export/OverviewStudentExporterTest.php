@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export;
+namespace Tests\Unit\AppBundle\Component\Export;
 
 use AppBundle\Component\Export\Course\OverviewStudentExporter;
 use Biz\BaseTestCase;

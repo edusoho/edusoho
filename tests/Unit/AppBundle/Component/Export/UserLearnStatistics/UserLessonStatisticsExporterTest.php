@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export\UserLearnStatistics;
+namespace Tests\Unit\AppBundle\Component\Export\UserLearnStatistics;
 
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\UserLearnStatistics\UserLessonStatisticsExporter;
