@@ -96,7 +96,7 @@
                 </div>
             </div>
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -143,6 +143,10 @@
             drpRecruitSwitch: {
                 type: Number,
                 default: 0
+            },
+            vipEnabled: {
+                type: Number,
+                default: 1
             }
         },
         methods: {
