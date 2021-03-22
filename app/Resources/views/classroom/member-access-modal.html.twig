@@ -22,10 +22,10 @@
     {{'course.member.classroom_member.classroom_exit_btn'|trans }}
   </a>
   {% if code == 'not_member' %}
-    <a href="{{ path('vip') }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
+    <a href="{{ path('vip', {levelId: userLevel.id}) }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
   {% elseif code == 'member_expired' %}
-    <a href="{{ path('vip') }}" class="btn btn-danger">{{'vip.to_renew'|trans }}</a>
+    <a href="{{ path('vip', {levelId: userLevel.id}) }}" class="btn btn-danger">{{'vip.to_renew'|trans }}</a>
   {% elseif code == 'level_low' %}
-    <a href="{{ path('vip') }}" class="btn btn-danger">{{'vip.to_grade'|trans }}</a>
+    <a href="{{ path('vip', {levelId: userLevel.id|default(0)}) }}" class="btn btn-danger">{{'vip.to_grade'|trans }}</a>
   {% endif %}
 {% endblock %}

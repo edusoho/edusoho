@@ -36,7 +36,7 @@
 
         {% elseif checkMemberLevelResult == 'level_low' %}
           <a class="cd-btn cd-btn-primary btn-vip-free"
-            href="{{ path('vip') }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+            href="{{ path('vip', {levelId: classroomMemberLevel.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
 
         {% else %}
           {% if classroom.buyable == 1 %}
