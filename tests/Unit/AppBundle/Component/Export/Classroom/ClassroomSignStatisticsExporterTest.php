@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Classroom;
+namespace Tests\Unit\AppBundle\Component\Export\Classroom;
 
 use AppBundle\Component\Export\Classroom\ClassroomSignStatisticsExporter;
 use Biz\BaseTestCase;
