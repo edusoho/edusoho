@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -63,6 +64,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
 
         $review = $this->getReviewDao()->create($review);
+
+        $this->getCourseSetDao()->increaseRatingNum($review['targetId']);
+
         $this->dispatchEvent('review.create', new Event($review));
 
         return $review;
@@ -252,5 +256,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getItemBankExerciseService()
     {
         return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return CourseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 }

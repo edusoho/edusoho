@@ -21,4 +21,6 @@ interface CourseSetDao extends GeneralDaoInterface
     public function refreshHotSeq();
 
     public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit);
+
+    public function increaseRatingNum($id);
 }

@@ -150,4 +150,11 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
             'wave_cahceable_fields' => ['hitNum'],
         ];
     }
+
+    public function increaseRatingNum($id)
+    {
+        $sql = "UPDATE {$this->table} SET ratingNum = ratingNum + 1 WHERE id = ?";
+
+        return $this->db()->executeQuery($sql, [$id]);
+    }
 }
