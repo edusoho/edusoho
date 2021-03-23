@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Invite;
+namespace Tests\Unit\AppBundle\Component\Export\Invite;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\Export\Invite\InviteRecordsExporter;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\Export\Invite\InviteRecordsExporter;
+use Biz\BaseTestCase;
 
 class InviteRecordsExporterTest extends BaseTestCase
 {
@@ -13,53 +13,53 @@ class InviteRecordsExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:InviteRecordService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchRecords',
-                    'returnValue' => array(
-                       array(
+                    'returnValue' => [
+                       [
                             'inviteUserId' => 1,
                             'invitedUserId' => 2,
                             'amount' => 2,
                             'coinAmount' => 3,
                             'cashAmount' => 4,
                             'inviteTime' => 444,
-                        ),
-                        array(
+                        ],
+                        [
                             'inviteUserId' => 2,
                             'invitedUserId' => 1,
                             'amount' => 2,
                             'coinAmount' => 3,
                             'cashAmount' => 4,
                             'inviteTime' => 444,
-                        ),
-                    ),
-                    'withParams' => array(
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                    'withParams' => [
+                    ],
+                ],
+                [
                     'functionName' => 'getAllUsersByRecords',
-                    'returnValue' => array(
-                        '1' => array(
+                    'returnValue' => [
+                        '1' => [
                             'id' => 1,
                             'nickname' => 'wo',
                             'inviteCode' => 'wowowo',
-                        ),
-                        '2' => array(
+                        ],
+                        '2' => [
                             'id' => 2,
                             'nickname' => 'la',
                             'inviteCode' => 'lalala',
-                        ),
-                    ),
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
 
-        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array());
+        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), []);
         $content = $expoter->getContent(0, 10);
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'wo',
             'la',
             2,
@@ -67,9 +67,9 @@ class InviteRecordsExporterTest extends BaseTestCase
             4,
             'wowowo',
             '1970-01-01 08:07:24',
-        ), $content[0]);
+        ], $content[0]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'la',
             'wo',
             2,
@@ -77,7 +77,7 @@ class InviteRecordsExporterTest extends BaseTestCase
             4,
             'lalala',
             '1970-01-01 08:07:24',
-        ), $content[1]);
+        ], $content[1]);
     }
 
     public function testGetCount()
@@ -85,31 +85,31 @@ class InviteRecordsExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:InviteRecordService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countRecords',
                     'returnValue' => 10,
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
-        $conditions = array(
+        $conditions = [
             'nickname' => 'aa',
             'startDate' => '2014-1-1',
             'endDate' => '2014-1-12',
             'userId' => 1,
-        );
+        ];
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUserByNickname',
-                    'returnValue' => array('id' => 2),
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                    'returnValue' => ['id' => 2],
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
         $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), $conditions);
         $count = $expoter->getCount();
@@ -118,32 +118,32 @@ class InviteRecordsExporterTest extends BaseTestCase
 
     public function testExportDataByRecord()
     {
-        $record = array(
+        $record = [
             'inviteUserId' => 1,
             'invitedUserId' => 2,
             'amount' => 2,
             'coinAmount' => 3,
             'cashAmount' => 4,
             'inviteTime' => 444,
-        );
+        ];
 
-        $user = array(
-            '1' => array(
+        $user = [
+            '1' => [
                 'id' => 1,
                 'nickname' => 'wo',
                 'inviteCode' => 'wowowo',
-            ),
-            '2' => array(
+            ],
+            '2' => [
                 'id' => 2,
                 'nickname' => 'la',
                 'inviteCode' => 'lalala',
-            ),
-        );
+            ],
+        ];
 
-        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array());
-        $data = ReflectionUtils::invokeMethod($expoter, 'exportDataByRecord', array($record, $user));
+        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), []);
+        $data = ReflectionUtils::invokeMethod($expoter, 'exportDataByRecord', [$record, $user]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'wo',
             'la',
             2,
@@ -151,48 +151,48 @@ class InviteRecordsExporterTest extends BaseTestCase
             4,
             'wowowo',
             '1970-01-01 08:07:24',
-        ), $data);
+        ], $data);
     }
 
     public function testBuildCondition()
     {
-        $conditions = array(
+        $conditions = [
             'nickname' => 'aa',
             'startDate' => '2014-1-1',
             'endDate' => '2014-1-12',
             'userId' => 1,
-        );
+        ];
 
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUserByNickname',
-                    'returnValue' => array('id' => 2),
-                    'withParams' => array(
-                    ),
-                ),
-            )
+                    'returnValue' => ['id' => 2],
+                    'withParams' => [
+                    ],
+                ],
+            ]
         );
         $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), $conditions);
 
         $exportConditions = $expoter->buildCondition($conditions);
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'startDate' => '2014-1-1',
             'endDate' => '2014-1-12',
             'inviteUserId' => 2,
-        ), $exportConditions);
+        ], $exportConditions);
 
         $this->assertEquals(true, empty($exportConditions['nickname']));
     }
 
     public function testGetTitles()
     {
-        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), [
+        ]);
 
-        $title = array(
+        $title = [
             'admin.operation_invite.invite_code_owner',
             'admin.operation_invite.register_user',
             'admin.operation_invite.payingUserTotalPrice_th',
@@ -200,20 +200,20 @@ class InviteRecordsExporterTest extends BaseTestCase
             'admin.operation_invite.amountPrice_th',
             'user.register.invite_code_label',
             'user.account.my_invite_code.invite_time',
-        );
+        ];
 
         $this->assertArrayEquals($expoter->getTitles(), $title);
     }
 
     public function testCanExport()
     {
-        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), [
+        ]);
         $this->assertEquals(true, $expoter->canExport());
 
         $biz = $this->getBiz();
         $user = $biz['user'];
-        $user->setPermissions(array());
+        $user->setPermissions([]);
 
         $this->assertEquals(false, $expoter->canExport());
     }
