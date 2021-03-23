@@ -1380,6 +1380,25 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
+              # 合规经营与信息安全设置
+                admin_v2_operation_safety_group:
+                  name: admin_v2.operation.basic_group
+                  is_group: true
+                  children:
+                    # 经营资质
+                    admin_v2_management_setting:
+                      router_name: admin_v2_setting_management
+                      name: admin_v2.system.management_menu
+                      children:
+                        admin_v2_record:
+                          name: admin_v2.system.record_information_tab
+                          disable: true
+                          router_name: admin_v2_setting_management
+                        admin_v2_coin_settings:
+                          name: admin_v2.system.business_license_tab
+                          disable: true
+                          router_name: admin_v2_coin_settings
+
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center

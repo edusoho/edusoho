@@ -5698,6 +5698,8 @@ admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名
 admin.setting.site.icp: ICP备案号
 admin.setting.site.icp_url: ICP备案链接
 admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
+admin.setting.site.icp_record_information: ICP备案信息
+admin.setting.site.public_security_record_information: 公安备案信息
 admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>

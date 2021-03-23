@@ -128,7 +128,8 @@
           <div class="help-block">{{ 'admin.setting.site.copyright.help_block'|trans }}</div>
         </div>
       </div>
-
+{#当前页面隐藏注册信息#}
+      <div style="display: none;">
       <div class="form-group">
         <div class="col-md-2 control-label">
           <label for="icp">{{ 'admin.setting.site.icp'|trans }}</label>
@@ -187,6 +188,7 @@
                  value="{{ site.recordUrl|default('') }}">
           <p class="help-block">{{ 'admin.setting.site.recordUrl.help_block'|trans }}</p>
         </div>
+      </div>
       </div>
     </fieldset>
 

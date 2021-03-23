@@ -853,6 +853,14 @@ admin_v2.system.operation.message_send_tab: Message Send
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
 
+# 系统-合规经营与信息安全
+admin_v2.operation.basic_group: Operation Settings
+
+#系统-经营资质
+admin_v2.system.management_menu: Business qualification
+admin_v2.system.record_information_tab: Setting of filing information
+admin_v2.system.business_license_tab: Establishment of business license
+
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: Asset Setting
 admin_v2.system.asset.payment_tab: Payment
