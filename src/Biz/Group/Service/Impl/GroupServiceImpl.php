@@ -11,6 +11,7 @@ use Biz\Group\Dao\MemberDao;
 use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeception\Platform\Group;
 
 class GroupServiceImpl extends BaseService implements GroupService
 {
@@ -259,6 +260,22 @@ class GroupServiceImpl extends BaseService implements GroupService
     {
         $groupMemberNum = $this->getGroupMemberDao()->count(['groupId' => $groupId]);
         $this->getGroupDao()->update($groupId, ['memberNum' => $groupMemberNum]);
+    }
+
+    public function waveCheck($daoObject, $option, $tags, $diff)
+    {
+        switch ($daoObject) {
+            case 'GroupDao':
+                $data = $this->getGroupDao()->get($option);
+                break;
+            case 'GroupMemberDao':
+                $data = $this->getGroupMemberDao()->get($option);
+                break;
+            default:
+                $data['tags'] = 0;
+                break;
+        }
+       return $diff > $data[$tags] ? $data[$tags] : $diff;
     }
 
     public function waveGroup($id, $field, $diff)
