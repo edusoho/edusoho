@@ -128,6 +128,7 @@
                 return sku.vipUser && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime() ? `你还不是${sku.vipLevelInfo.name}，<a class='color-primary' href='/vip/upgrade?targetId=${sku.vipLevelInfo.id}' target='_blank'>升级会员</a>` : `你还不是${ sku.vipLevelInfo.name }，<a class='color-primary' href='/vip/buy?level=${sku.vipLevelInfo.id}' target='_blank'>购买会员</a>`;
             },
             mainBtnView(sku) {
+                this.needBuyVip = 0;
                 if (sku.status !== 'published') { //如果商品未发布
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.unpublished_tips');
