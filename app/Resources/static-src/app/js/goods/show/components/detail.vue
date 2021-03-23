@@ -208,7 +208,6 @@
                 return time;
             },
             getDrpInfo() {
-                console.log('getDrpInfo', this.currentSku)
                 axios.get(`/drp_info/${this.currentSku.targetId}/${this.goods.type}`).then(res => {
                         this.drpInfo = res.data;
                     });
