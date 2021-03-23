@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ManagementSettingController extends BaseController
 {
-    public function recordAction(Request $request)
+    public function qualificationAction(Request $request)
     {
         $qualifications = $this->getSettingService()->get('qualifications', []);
         $default = [
@@ -18,7 +18,7 @@ class ManagementSettingController extends BaseController
             'recordCode' => '',
             'recordUrl' => 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
         ];
-        $site = array_merge($default, $qualifications);
+        $qualifications = array_merge($default, $qualifications);
 
         return $this->render('admin-v2/system/management/index.html.twig', [
             'qualifications' => $qualifications,
@@ -31,7 +31,7 @@ class ManagementSettingController extends BaseController
         ]);
     }
 
-    public function saveSiteAction(Request $request)
+    public function saveQualificationAction(Request $request)
     {
         $qualifications = $request->request->all();
         $site = $this->getSettingService()->get('site', []);

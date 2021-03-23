@@ -857,8 +857,8 @@ admin_v2.transaction.basic_group: Transaction Settings
 admin_v2.operation.basic_group: Operation Settings
 
 #系统-经营资质
-admin_v2.system.management_menu: Business qualification
-admin_v2.system.record_information_tab: Setting of filing information
+admin_v2.system.business_management_menu: Business qualification
+admin_v2.system.business_qualification_tab: Setting of filing information
 admin_v2.system.management_qualifications.business_license_tab: Buiness License
 admin_v2.system.user_content_ctrl_tab: User Content Control
 admin_v2.system.user_content_ctrl.review: Review

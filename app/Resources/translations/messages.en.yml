@@ -4782,6 +4782,8 @@ admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
 admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If the violation is checked out by relevant departments, it will be fined more than 5,000 yuan and less than 10,000 yuan'
+admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="#" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="#" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
@@ -4802,6 +4804,8 @@ admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
+admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
+admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
