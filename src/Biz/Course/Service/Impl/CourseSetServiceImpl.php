@@ -1123,7 +1123,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $tagIds = ArrayToolkit::column($tags, 'id');
                 $fields['tags'] = $tagIds;
             }
-        }else{
+        } else {
             $fields['tags'] = [];
         }
         foreach ($fields as $key => $value) {
