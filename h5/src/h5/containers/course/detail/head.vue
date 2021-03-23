@@ -314,21 +314,28 @@ export default {
     getData() {
       Api.getMedia(this.getParams())
         .then(async res => {
-          if (res.mediaType === 'audio') {
+          const {
+            media: { resNo },
+            mediaType,
+          } = res;
+
+          if (resNo === '0') {
+            const media = await Api.getLocalMediaLive({
+              query: {
+                taskId: this.taskId,
+              },
+              params: {
+                hls_encryption: 1,
+              },
+            });
+            delete res.media.resNo;
+            res.media.url = media.mediaUri;
+          }
+          if (mediaType === 'audio') {
             this.formateAudioData(res);
-          } else if (res.mediaType === 'video') {
-            if (res.media.jsPlayer === 'local-video-player') {
-              const media = await Api.getLocalMediaLive({
-                query: {
-                  taskId: this.taskId,
-                },
-                params: {
-                  hls_encryption: 1,
-                },
-              });
-              delete res.media.resNo;
-              res.media.url = media.mediaUri;
-            }
+            return;
+          }
+          if (mediaType === 'video') {
             this.formateVedioData(res);
           }
         })
@@ -373,6 +380,7 @@ export default {
           height: 30,
         },
         rememberLastPos: true,
+        playlist: media.url,
       };
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
