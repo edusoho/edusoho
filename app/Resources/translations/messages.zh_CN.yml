@@ -8205,6 +8205,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
 admin.wap_setting.old: 旧版微网校
+admin.wap_setting.responsive: 响应式微网校
 admin.wap_setting.off: 关闭
 admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
 admin.wap_setting.edit.tip: 左侧为您的微网校首页预览效果，可点击【编辑微网校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微网校首页。
