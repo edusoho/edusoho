@@ -11,7 +11,6 @@ use Biz\Group\Dao\MemberDao;
 use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeception\Platform\Group;
 
 class GroupServiceImpl extends BaseService implements GroupService
 {
