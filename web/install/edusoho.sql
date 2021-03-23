@@ -2047,7 +2047,8 @@ CREATE TABLE `course_material_v8` (
   `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
   `courseSetId` int(10) unsigned NOT NULL DEFAULT '0',
   `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `lessonId_type` (`lessonId`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_member`;
@@ -2065,6 +2066,7 @@ CREATE TABLE `course_member` (
   `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户以会员的方式加入课程学员时的会员ID',
   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
   `learnedCompulsoryTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的必修任务数量',
+  `learnedElectiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的选修任务数量',
   `credit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员已获得的学分',
   `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
   `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',
@@ -2312,7 +2314,8 @@ CREATE TABLE `course_task_result` (
   KEY `courseTaskId_activityId` (`courseTaskId`,`activityId`),
   KEY `idx_userId_courseId` (`userId`,`courseId`),
   KEY `finishedTime` (`finishedTime`),
-  KEY `courseId` (`courseId`)
+  KEY `courseId` (`courseId`),
+  KEY `courseId_status` (`courseId`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_task_try_view`;
