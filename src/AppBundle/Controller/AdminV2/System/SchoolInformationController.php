@@ -47,7 +47,8 @@ class SchoolInformationController extends BaseController
             $helper = new HTMLHelper($this->getBiz());
             $site['analytics'] = $helper->closeTags($site['analytics']);
         }
-
+        $qualifications = $this->getSettingService()->get('qualifications', []);
+        $site = array_merge($site, $qualifications);
         $site['recordCode'] = trim($site['recordCode']);
         $this->getSettingService()->set('site', $site);
 
