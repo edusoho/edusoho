@@ -1982,6 +1982,10 @@ admin_v2_setting_management:
   defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:record }
   permissions: [admin_v2_record]
 
+admin_v2_setting_business_license:
+    path:  /setting/ugc/license
+    defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:license }
+
 # 系统-系统管理-系统优化
 admin_v2_optimize:
     path:  /setting/optimize
@@ -2875,3 +2879,19 @@ admin_v2_data_visualization_activity_learn_daily_statistics:
 admin_v2_data_visualization_course_plan_learn_daily_statistics:
   path: /data_visualization/action/course_plan_learn_daily_statistics
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
+
+admin_v2_user_content_control_review:
+    path: /setting/ugc/user_content_control/review
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
+
+admin_v2_user_content_control_note:
+    path: /setting/ugc/user_content_control/note
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:note }
+
+admin_v2_user_content_control_thread:
+    path: /setting/ugc/user_content_control/thread
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:thread }
+
+admin_v2_user_content_control_private_message:
+    path: /setting/ugc/user_content_control/private_message
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:privateMessage }

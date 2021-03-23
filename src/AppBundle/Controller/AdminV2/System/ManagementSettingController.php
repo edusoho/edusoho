@@ -55,6 +55,12 @@ class ManagementSettingController extends BaseController
         ]);
     }
 
+    public function licenseAction(Request $request)
+    {
+        return $this->render('admin-v2/system/management/license.html.twig', [
+        ]);
+    }
+
     public function refundAction(Request $request)
     {
         $refundSetting = $this->getSettingService()->get('refund', []);
