@@ -10107,6 +10107,7 @@ order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
 order.pay_check_msg.pay_password_not_set: 支付密码未设置
 order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
+order.pay_check_msg.goods_closed: 该商品已被关闭
 order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
 
 site.join_by_import: 导入
