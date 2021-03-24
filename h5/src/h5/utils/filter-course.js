@@ -34,6 +34,7 @@ const getDisplayStyle = (data, listObj) => {
       middle: {
         value: data.courseNum,
         html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`,
+        vipHtml: `<span class="e-course__count">共 ${data.courseNum} 门课程</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
       },
       bottom: {
         value: data.price || data.studentNum,
@@ -56,6 +57,7 @@ const getDisplayStyle = (data, listObj) => {
       html: `<div class="e-course__project text-overflow">
                   <span>${data.title}</span>
                 </div>`,
+      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
     },
     bottom: {
       value: data.price || data.studentNum,

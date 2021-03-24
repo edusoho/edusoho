@@ -62,6 +62,7 @@
             :is-vip="item.vipLevelId"
             :feedback="feedback"
             :showNumberData="showNumberData"
+            :vip-center="courseList.vipCenter"
           />
         </template>
         <!-- 一行一列  -->
@@ -85,6 +86,7 @@
             :is-vip="item.vipLevelId"
             :feedback="feedback"
             :showNumberData="showNumberData"
+            :vip-center="courseList.vipCenter"
           />
         </template>
         <!-- 一行两列   -->

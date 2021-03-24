@@ -251,6 +251,7 @@ export default {
         title: `会员课程(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
       dataFormat.items = data.slice(0, 3);
       return dataFormat;
@@ -264,6 +265,7 @@ export default {
         title: `会员班级(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
       dataFormat.items = data.slice(0, 3);
       return dataFormat;
