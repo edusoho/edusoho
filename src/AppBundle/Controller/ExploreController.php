@@ -23,6 +23,8 @@ class ExploreController extends BaseController
     public function courseSetsAction(Request $request, $category)
     {
         $conditions = $request->query->all();
+        $filter = $request->query->get('filter', '');
+        $currentLevelId = $filter ? $filter['currentLevelId'] : '';
 
         list($conditions, $filter) = $this->getFilter($conditions, 'course');
 
@@ -32,6 +34,10 @@ class ExploreController extends BaseController
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'course');
+        if (!empty($currentLevelId) && $currentLevelId != 'all' && isset($conditions['vipRightCount'])){
+            $vipRightCount = $conditions['vipRightCount'];
+            unset($conditions['vipRightCount']);
+        }
 
         unset($conditions['code']);
 
@@ -122,7 +128,7 @@ class ExploreController extends BaseController
         return $this->render(
             'course-set/explore.html.twig',
             [
-                'courseSets' => $this->getWebExtension()->filterCourseSetsVipRight($courseSets),
+                'courseSets' => !isset($vipRightCount) || $vipRightCount > 0 ? $this->getWebExtension()->filterCourseSetsVipRight($courseSets) : [],
                 'category' => $category,
                 'filter' => $filter,
                 'paginator' => $paginator,
@@ -236,6 +242,7 @@ class ExploreController extends BaseController
         }
 
         $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds($supplierCode, $vipLevelIds);
+        $conditions['vipRightCount'] = count(ArrayToolkit::column($vipRights, 'uniqueCode'));
         if ('course' == $supplierCode) {
             $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
         } else {
@@ -251,6 +258,8 @@ class ExploreController extends BaseController
     public function classroomAction(Request $request, $category)
     {
         $conditions = $request->query->all();
+        $filter = $request->query->get('filter', '');
+        $currentLevelId = $filter ? $filter['currentLevelId'] : '';
 
         $conditions['status'] = 'published';
         $conditions['showable'] = 1;
@@ -261,6 +270,10 @@ class ExploreController extends BaseController
         list($conditions, $filter) = $this->getFilter($conditions, 'classroom');
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'classroom');
+        if (!empty($currentLevelId) && $currentLevelId != 'all' && isset($conditions['vipRightCount'])){
+            $vipRightCount = $conditions['vipRightCount'];
+            unset($conditions['vipRightCount']);
+        }
 
         list($conditions, $orderBy) = $this->getClassroomSearchOrderBy($conditions);
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
@@ -282,7 +295,7 @@ class ExploreController extends BaseController
             'classroom/explore.html.twig',
             [
                 'paginator' => $paginator,
-                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
+                'classrooms' => !isset($vipRightCount) || $vipRightCount > 0 ? $this->getWebExtension()->filterClassroomsVipRight($classrooms) : [],
                 'category' => $category,
                 'categoryArray' => $categoryArray,
                 'categoryParent' => $categoryParent,
