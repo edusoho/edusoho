@@ -54,7 +54,5 @@ interface GroupService
 
     public function waveMember($groupId, $userId, $field, $diff);
 
-    public function waveGroupDaoCheck($id, $field, $compareData);
-
-    public function waveGroupMemberDaoCheck($groupId, $userId, $field, $compareData);
+    public function validateWaveFieldData($waveData, $field, $diff);
 }

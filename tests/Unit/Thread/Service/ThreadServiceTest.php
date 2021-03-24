@@ -460,6 +460,23 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $thread['postNum']);
     }
 
+    public function testDeletePostsByThreadId_wave_current()
+    {
+        $thread = $this->createGroupsThread();
+
+        $parentPost = $this->createGroupsThreadPost($thread);
+
+        $createdPost = $this->createTestPost($thread, array('parentId' => $parentPost['id']));
+
+        $this->getThreadService()->deletePostsByThreadId($createdPost['id']);
+
+        $post = $this->getThreadService()->getPost($createdPost['id']);
+        $this->assertNull($post);
+
+        $thread = $this->getThreadService()->getThread($createdPost['threadId']);
+        $this->assertEquals(1, $thread['postNum']);
+    }
+
     /**
      * @expectedException \Biz\Thread\ThreadException
      */
@@ -1017,6 +1034,49 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getThreadService()->createMember($fields);
     }
 
+    protected function createGroups()
+    {
+        $groups = array(
+            'id' => 1,
+            'title' => 'test group',
+            'about' => 'test group about',
+            'ownerId' => 1,
+        );
+        return $this->getGroupDao()->create($groups);
+    }
+
+    protected function createGroupsThread($groups)
+    {
+        $groupsThread = array(
+            'title' => 'test thread',
+            'content' => 'test groupId content',
+            'groupId'=> $groups['id'],
+            'userId' => 1
+        );
+        return $this->getThreadPostDao()->create($groupsThread);
+    }
+
+    protected function createGroupsMember($groups){
+        $groupsMember = array(
+            'title' => 'test thread',
+            'groupId'=> $groups['id'],
+            'userId' => 2,
+        );
+        return $this->getMemberDao()->create($groupsMember);
+    }
+
+    protected function createGroupsThreadPost($thread)
+    {
+        $threadPost = array(
+            'threadId' => $thread['id'],
+            'userId' => $thread['userId'],
+            'content' => 'group_thread_post',
+            'createdTime'=> time()
+        );
+
+        return $this->getThreadPostDao()->create($threadPost);
+    }
+
     /**
      * @return ThreadService
      */
@@ -1038,5 +1098,20 @@ class ThreadServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getGroupDao()
+    {
+        return $this->createDao('Group:GroupDao');
+    }
+
+    protected function getThreadPostDao()
+    {
+        return $this->createDao('Group:ThreadPostDao');
+    }
+
+    protected function getMemberDao()
+    {
+        return $this->createDao('Group:MemberDao');
     }
 }
