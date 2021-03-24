@@ -273,7 +273,7 @@ export default {
         },
         // 用户会员等级过低
         'vip.level_low': {
-          message: `很抱歉，该${this.currentTypeText}已升级为${vipName}${this.currentTypeText}，请升到${vipName}进行学习。或退出后重新购买${this.currentTypeText}。`,
+          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '升级会员',
           cancelButtonText: `退出${this.currentTypeText}`,
         },
