@@ -1291,6 +1291,46 @@ admin_v2:
                                     name: admin_v2.system.operation.message_send_tab
                                 admin_v2_message_open_set:
                                     name: admin_v2.system.operation.message_open_tab
+                # 合规经营与信息安全设置
+                admin_v2_operation_safety_group:
+                    name: admin_v2.operation.basic_group
+                    is_group: true
+                    children:
+                        # 经营资质
+                        admin_v2_management_setting:
+                            router_name: admin_v2_setting_management
+                            name: admin_v2.system.business_management_menu
+                            children:
+                                admin_v2_business_qualification:
+                                    name: admin_v2.system.business_qualification_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_management
+                                admin_v2_setting_business_license:
+                                    name: admin_v2.system.management_qualifications.business_license_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_business_license
+                        admin_v2_user_content_control:
+                            router_name: admin_v2_user_content_control
+                            name: admin_v2.system.user_content_ctrl_tab
+                            disable: true
+                            children:
+                                admin_v2_user_content_control_review:
+                                    name: admin_v2.system.user_content_ctrl.review
+                                    router_name: admin_v2_user_content_control_review
+                                    disable: true
+                                admin_v2_user_content_control_note:
+                                    name: admin_v2.system.user_content_ctrl.note
+                                    router_name: admin_v2_user_content_control_note
+                                    disable: true
+                                admin_v2_user_content_control_thread:
+                                    name: admin_v2.system.user_content_ctrl.thread
+                                    router_name: admin_v2_user_content_control_thread
+                                    disable: true
+                                admin_v2_user_content_control_private_message:
+                                    name: admin_v2.system.user_content_ctrl.private_message
+                                    router_name: admin_v2_user_content_control_private_message
+                                    disable: true
+
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
@@ -1380,6 +1420,7 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
+
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center

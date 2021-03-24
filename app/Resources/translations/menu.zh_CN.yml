@@ -862,6 +862,19 @@ admin_v2.system.operation.message_send_tab: 私信发送
 # 系统-交易设置
 admin_v2.transaction.basic_group: 交易设置
 
+# 系统-合规经营与信息安全
+admin_v2.operation.basic_group: 合规经营与信息安全
+
+#系统-经营资质
+admin_v2.system.business_management_menu: 经营资质
+admin_v2.system.business_qualification_tab: 备案信息设置
+admin_v2.system.management_qualifications.business_license_tab: 经营许可设置
+admin_v2.system.user_content_ctrl_tab: 用户内容设置
+admin_v2.system.user_content_ctrl.review: 评价
+admin_v2.system.user_content_ctrl.note: 笔记
+admin_v2.system.user_content_ctrl.thread: 话题问答
+admin_v2.system.user_content_ctrl.private_message: 私信
+
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置
 admin_v2.system.asset.payment_tab: 支付
