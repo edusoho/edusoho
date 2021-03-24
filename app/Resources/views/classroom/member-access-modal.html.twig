@@ -12,7 +12,7 @@
     {% elseif code == 'vip_right_not_exist' %}
       {{ 'vip.level_not_exist'|trans({'%type%': 'site.default.classroom'|trans, '%typeName%': 'site.default.classroom'|trans}) }}
     {% elseif code == 'level_low' %}
-      {{ 'vip.level_low'|trans({'%typeName%': 'site.default.classroom'|trans,'%vipName%':userLevel.name|default(''),'%type%': 'site.default.classroom'|trans,'%vipLevelName%':userLevel.name|default('')}) }}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': 'site.default.classroom'|trans}) }}
     {% endif %}
   </div>
 {% endblock %}
