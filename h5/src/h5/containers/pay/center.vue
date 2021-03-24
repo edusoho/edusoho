@@ -76,8 +76,12 @@ export default {
       });
     },
     toTarget() {
+      const path =
+        this.targetType === 'vip'
+          ? `/${this.targetType}`
+          : `/${this.targetType}/${this.targetId}`;
       this.$router.replace({
-        path: `/${this.targetType}/${this.targetId}`,
+        path,
       });
     },
   },

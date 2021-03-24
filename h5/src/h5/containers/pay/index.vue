@@ -118,8 +118,12 @@ export default {
             });
             return;
           }
+          const path =
+            this.targetType === 'vip'
+              ? `/${this.targetType}`
+              : `/${this.targetType}/${this.targetId}`;
           this.$router.push({
-            path: `/${this.targetType}/${targetId}`,
+            path,
           });
         }
         this.detail = Object.assign({}, res);
