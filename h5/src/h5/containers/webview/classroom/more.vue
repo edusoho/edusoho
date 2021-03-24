@@ -89,7 +89,7 @@ export default {
   },
   created() {
     window.scroll(0, 0);
-
+    this.setTitle();
     // vuex 中会员等级列表为空
     if (!this.vipLevels.length) {
       this.getVipLevels();
@@ -103,6 +103,13 @@ export default {
   methods: {
     ...mapActions('classroom', ['setClassRoomList']),
     ...mapActions('vip', ['getVipLevels']),
+
+    setTitle() {
+      window.postNativeMessage({
+        action: 'kuozhi_native_header',
+        data: { title: '所有班级' },
+      });
+    },
 
     async initDropdownData() {
       // 获取班级分类数据
