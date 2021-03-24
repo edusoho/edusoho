@@ -866,8 +866,8 @@ admin_v2.transaction.basic_group: 交易设置
 admin_v2.operation.basic_group: 合规经营与信息安全
 
 #系统-经营资质
-admin_v2.system.management_menu: 经营资质
-admin_v2.system.record_information_tab: 备案信息设置
+admin_v2.system.business_management_menu: 经营资质
+admin_v2.system.business_qualification_tab: 备案信息设置
 admin_v2.system.management_qualifications.business_license_tab: 经营许可设置
 admin_v2.system.user_content_ctrl_tab: 用户内容设置
 admin_v2.system.user_content_ctrl.review: 评价
