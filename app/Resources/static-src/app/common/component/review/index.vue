@@ -21,7 +21,7 @@
                         {{ review.createdTime | createdTime }}
                     </div>
                     <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
-                    <div class="reviews-text__content">{{ review.content }}</div>
+                    <div class="reviews-text__content" style="white-space: pre-wrap;">{{ review.content|removeHtml}}</div>
                     <div class="reviews-text__reply">
                         <a href="javascript:;"
                            v-if="canCreate"
@@ -400,6 +400,17 @@
             trans(value, params) {
                 if (!value) return '';
                 return Translator.trans(value, params);
+            },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
             },
             smart_time(value) {
                 let time = new Date(value);
