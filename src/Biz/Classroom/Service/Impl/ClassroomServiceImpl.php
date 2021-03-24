@@ -1141,10 +1141,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $member['role'] = ['student'];
                 $member['deadline'] = $deadline;
             }
-
-            $member = $this->getClassroomMemberDao()->update($member['id'], $member);
+            $member = $this->getClassroomMemberDao()->update($member['id'], array_merge($member, $this->getMemberHistoryData($member['userId'], $member['classroomId'])));
         } else {
-            $member = $this->getClassroomMemberDao()->create($fields);
+            $member = $this->getClassroomMemberDao()->create(array_merge($fields, $this->getMemberHistoryData($fields['userId'], $fields['classroomId'])));
         }
 
         $reason = $this->buildJoinReason($info, $order);
@@ -1173,6 +1172,52 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         return $member;
+    }
+
+    protected function getMemberHistoryData($userId, $classroomId)
+    {
+        $classroom = $this->getClassroomDao()->get($classroomId);
+        $courseIds = $this->getClassroomCourseDao()->search(['classroomId' => $classroomId], [], 0, PHP_INT_MAX, ['courseId']);
+        $courseIds = array_column($courseIds, 'courseId');
+        $recordCount = $this->getMemberOperationService()->countRecords([
+            'user_id' => $userId,
+            'target_type' => 'classroom',
+            'target_id' => $classroomId,
+            'operate_type' => 'join',
+        ]);
+
+        if (empty($recordCount) || empty($classroom) || empty($courseIds)) {
+            return [];
+        }
+
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            ['courseIds' => $courseIds, 'userId' => $userId, 'status' => 'finish']
+        );
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseIds($userId, $courseIds);
+        $courseMemberConditions = ['courseIds' => $courseIds, 'userId' => $userId];
+        $lastLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['updatedTime' => 'DESC'], 0, 1, ['updatedTime']);
+        $lastFinishedTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['finishedTime' => 'DESC'], 0, 1, ['finishedTime']);
+
+        $classroomTaskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds([$classroomId]);
+        $classroomTaskNums = empty($classroomTaskNums) ? [] : $classroomTaskNums[0];
+
+        $courseThreadNum = $this->getCourseThreadService()->countThreads(['courseIds' => $courseIds, 'userId' => $userId, 'type' => 'discussion']);
+        $threadNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'discussion']);
+
+        $courseQuestionNum = $this->getCourseThreadService()->countThreads(['courseIds' => $courseIds, 'userId' => $userId, 'type' => 'question']);
+        $questionNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'question']);
+
+        return [
+            'noteNum' => $this->getCourseNoteService()->countCourseNotes($courseMemberConditions),
+            'questionNum' => $courseQuestionNum + $questionNum,
+            'threadNum' => $courseThreadNum + $threadNum,
+            'isFinished' => $classroomTaskNums['compulsoryTaskNum'] - $learnedCompulsoryTaskNum ? 0 : 1,
+            'finishedTime' => empty($lastFinishedTaskResult) ? 0 : $lastFinishedTaskResult[0]['finishedTime'],
+            'learnedNum' => $learnedNum,
+            'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+            'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum ? $learnedNum - $learnedCompulsoryTaskNum : 0,
+            'lastLearnTime' => empty($lastLearnTaskResult) ? 0 : $lastLearnTaskResult[0]['updatedTime'],
+        ];
     }
 
     private function buildJoinReason($info, $order)

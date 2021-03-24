@@ -24,6 +24,7 @@ use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
@@ -1491,7 +1492,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         try {
             $this->beginTransaction();
-            $member = $this->getMemberDao()->create($member);
+            $member = $this->getMemberDao()->create(array_merge($member, $this->getMemberHistoryData($member['userId'], $member['courseId'])));
+
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'join', $reason);
             }
@@ -1502,6 +1504,41 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $member;
+    }
+
+    protected function getMemberHistoryData($userId, $courseId)
+    {
+        $course = $this->getCourseDao()->get($courseId);
+        $recordCount = $this->getMemberOperationService()->countRecords([
+            'user_id' => $userId,
+            'target_type' => 'course',
+            'target_id' => $courseId,
+            'operate_type' => 'join',
+        ]);
+
+        if (empty($recordCount) || empty($course)) {
+            return [];
+        }
+
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            ['courseId' => $courseId, 'userId' => $userId, 'status' => 'finish']
+        );
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
+        $courseMemberConditions = ['courseId' => $courseId, 'userId' => $userId];
+        $lastLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['updatedTime' => 'DESC'], 0, 1, ['updatedTime']);
+        $firstLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['createdTime' => 'ASC'], 0, 1, ['createdTime']);
+        $lastFinishedTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['finishedTime' => 'DESC'], 0, 1, ['finishedTime']);
+
+        return [
+            'noteNum' => $this->getCourseNoteService()->countCourseNotes($courseMemberConditions),
+            'isLearned' => $course['compulsoryTaskNum'] - $learnedCompulsoryTaskNum > 0 ? 0 : 1,
+            'startLearnTime' => empty($firstLearnTaskResult) ? 0 : $firstLearnTaskResult[0]['createdTime'],
+            'finishedTime' => empty($lastFinishedTaskResult) ? 0 : $lastFinishedTaskResult[0]['finishedTime'],
+            'learnedNum' => $learnedNum,
+            'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+            'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum ? $learnedNum - $learnedCompulsoryTaskNum : 0,
+            'lastLearnTime' => empty($lastLearnTaskResult) ? 0 : $lastLearnTaskResult[0]['updatedTime'],
+        ];
     }
 
     private function removeMember($member, $reason = [])
@@ -1702,5 +1739,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getProductService()
     {
         return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
