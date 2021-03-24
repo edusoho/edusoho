@@ -273,6 +273,16 @@ export default {
     },
   },
   created() {
+    // 未登录跳转登录页面
+    if (!this.$store.state.token) {
+      this.$router.replace({
+        name: 'login',
+        query: {
+          redirect: this.$route.fullPath,
+        },
+      });
+      return;
+    }
     this.isLoading = true;
     this.getVipDetail();
   },
