@@ -191,6 +191,15 @@ export default {
       userInfo: state => state.user,
     }),
 
+    vipDated() {
+      if (!this.vipInfo) {
+        return true;
+      }
+      const deadLineStamp = new Date(this.vipInfo.deadline).getTime();
+      const nowStamp = new Date().getTime();
+      return nowStamp > deadLineStamp;
+    },
+
     swiper() {
       return this.$refs.mySwiper.$swiper;
     },
@@ -203,7 +212,7 @@ export default {
       const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
       const { seq } = this.currentLevel;
 
-      if (userSeq === 0) {
+      if (userSeq === 0 || this.vipDated) {
         return 'opening';
       }
       if (userSeq === seq) {
@@ -216,7 +225,7 @@ export default {
     },
 
     vipBuyStatu() {
-      const { title } = this.activePrice;
+      const title = this.activePrice ? this.activePrice.title : '';
       const actions = {
         opening: {
           text: `立即开通${title}特权`,
