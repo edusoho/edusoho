@@ -3,7 +3,7 @@
 {% set menu = 'admin_v2_user_content_control_note' %}
 
 {% do script(['libs/jquery-validation.js', 'app/js/admin-v2/system/user-content-control/note/index.js']) %}
-
+{% do load_script('widget/tooltip-widget') %}
 {% block main %}
   <form class="form-horizontal" id="user_content_control_note" method="post" novalidate>
     <legend style="height: 50px;">
@@ -18,14 +18,14 @@
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label for="">
-          {{ 'admin_v2.system.user_content_control.course_note_manage'|trans }}
-          <a class="glyphicon glyphicon-question-sign text-muted pull-center"
-             data-toggle="tooltip"
-             data-placement="top"
-             href="javascript:"
-             data-original-title="{{ 'admin_v2.system.user_content_control.course_note_tooltips'|trans }}"
-          >
-          </a>
+          {{ 'admin_v2.system.user_content_control.course_note_manage'|trans }}&nbsp;
+          <div class="js-tooltip-twig-widget pull-right">
+            <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="top" href="javascript:;">
+            </span>
+            <div class="js-twig-widget-html" style="display:none;" >
+              <div style="width: 200px;">{{ 'admin_v2.system.user_content_control.course_note_tooltips'|trans }}</div>
+            </div>
+          </div>
         </label>
       </div>
       <div class="col-md-10 controls radios">
@@ -36,13 +36,14 @@
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label for="">
-          {{ 'admin_v2.system.user_content_control.classroom_note_manage'|trans }}
-          <a class="glyphicon glyphicon-question-sign text-muted pull-center"
-             data-toggle="tooltip"
-             data-placement="top"
-             href="javascript:"
-             data-original-title="{{ 'admin_v2.system.user_content_control.classroom_note_tooltips'|trans }}">
-          </a>
+          {{ 'admin_v2.system.user_content_control.classroom_note_manage'|trans }}&nbsp;
+          <div class="js-tooltip-twig-widget pull-right">
+            <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="top" href="javascript:;">
+            </span>
+            <div class="js-twig-widget-html" style="display:none;">
+              <div style="width: 200px;">{{ 'admin_v2.system.user_content_control.classroom_note_tooltips'|trans }}</div>
+            </div>
+          </div>
         </label>
       </div>
       <div class="col-md-10 controls radios">
@@ -57,6 +58,5 @@
         <a class="btn btn-primary mtl js-note-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
       </div>
     </div>
-
   </form>
 {% endblock %}

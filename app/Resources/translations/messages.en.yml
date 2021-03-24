@@ -10437,3 +10437,9 @@ admin_v2.system.user_content_control.goto_note_manage: Goto Note Manage>>
 admin_v2.system.user_content_control.classroom_note_manage: Classroom Note Manage
 admin_v2.system.user_content_control.course_note_manage: Course Note Manage
 admin_v2.system.user_content_control.pc_switch_tips: When it is turned on or off, it is only effective for PC terminal, and other terminals do not have this function
+admin_v2.system.user_content_control.course_note_tooltips: The course learning page notes display and class notes entry are controlled by this switch
+admin_v2.system.user_content_control.classroom_note_tooltips: The note display on the class learning page is controlled by this switch
+admin_v2.system.user_content_control.pc_app_switch_tips: When it is turned on or off, it only works for PC and app, and other terminals do not have this function
+admin_v2.system.user_content_control.goto_question_manage: Go to Q & a management>>
+admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
+admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
