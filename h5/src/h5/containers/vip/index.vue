@@ -216,7 +216,7 @@ export default {
 
     vipBuyStatu() {
       const { name } = this.currentLevel;
-      const { title } = this.activePrice;
+      const title = this.activePrice ? this.activePrice.title : '';
       const actions = {
         opening: {
           text: `立即开通${name}特权`,
