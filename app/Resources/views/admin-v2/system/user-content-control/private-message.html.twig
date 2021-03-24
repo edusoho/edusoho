@@ -11,6 +11,9 @@
         <div class="col-md-9 col-md-pull-1 controls radios">
           {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
         </div>
+        <span class="pull-right" style="padding-top: 5px;font-size: 14px;">
+          <a href="">{{ 'admin_v2.system.user_content_control.goto_private_message_manage'|trans }}</a>
+        </span>
       </div>
     </legend>
     <div class="form-group">

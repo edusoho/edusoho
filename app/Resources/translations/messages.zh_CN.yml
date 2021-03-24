@@ -11701,3 +11701,4 @@ admin_v2.system.user_content_control.pc_app_switch_tips: 开启或关闭后，�
 admin_v2.system.user_content_control.goto_question_manage: 前往问答管理>>
 admin_v2.system.user_content_control.goto_thread_manage: 前往话题管理>>
 admin_v2.system.user_content_control.goto_group_thread_manage: 前往小组话题管理>>
+admin_v2.system.user_content_control.goto_private_message_manage: 前往私信管理>>

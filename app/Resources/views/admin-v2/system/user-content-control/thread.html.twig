@@ -9,7 +9,7 @@
       <div class="row form-group">
         <div class="col-md-2 " style="padding-top: 5px;"><label>{{ 'admin_v2.system.user_content_control.thread_manage'|trans }}：</label></div>
         <div class="col-md-9 col-md-pull-1 controls radios">
-          {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+          {{ radios('show_note_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
         </div>
       </div>
     </legend>
@@ -18,7 +18,7 @@
         <label for="">{{ 'admin_v2.system.user_content_control.course_question_manage'|trans }}</label>
       </div>
       <div class="col-md-10 controls radios">
-        {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        {{ radios('show_note_question', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
         <label><a href="">{{ 'admin_v2.system.user_content_control.goto_question_manage'|trans }}</a></label>
       </div>
     </div>
@@ -27,7 +27,7 @@
         <label for="">{{ 'admin_v2.system.user_content_control.classroom_question_manage'|trans }}</label>
       </div>
       <div class="col-md-10 controls radios">
-        {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        {{ radios('show_note_classroom', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
       </div>
     </div>
     <div class="row form-group">

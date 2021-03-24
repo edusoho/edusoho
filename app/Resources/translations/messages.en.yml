@@ -10443,3 +10443,4 @@ admin_v2.system.user_content_control.pc_app_switch_tips: When it is turned on or
 admin_v2.system.user_content_control.goto_question_manage: Go to Q & a management>>
 admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
 admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
+admin_v2.system.user_content_control.goto_private_message_manage: Go to private message management>>
