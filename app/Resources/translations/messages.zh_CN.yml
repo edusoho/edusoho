@@ -11672,4 +11672,10 @@ classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
-
+admin_v2.system.user_content_control.review_manage: 评价内容管理
+admin_v2.system.user_content_control.course_review_manage: 课程评价模块
+admin_v2.system.user_content_control.classroom_review_manage: 班级评价模块
+admin_v2.system.user_content_control.question_bank_review_manage: 题库练习评价模块
+admin_v2.system.user_content_control.open_course_review_manage: 公开课评价模块
+admin_v2.system.user_content_control.article_review_manage: 资讯评价模块
+admin_v2.system.user_content_control.goto_review_manage: 前往评价管理>>
