@@ -216,6 +216,7 @@ export default {
 
     vipBuyStatu() {
       const { name } = this.currentLevel;
+      const { title } = this.activePrice;
       const actions = {
         opening: {
           text: `立即开通${name}特权`,
@@ -223,7 +224,7 @@ export default {
           type: '开通',
         },
         renew: {
-          text: `续费${name}特权`,
+          text: `续费${title}特权`,
           status: true,
           type: '续费',
         },
