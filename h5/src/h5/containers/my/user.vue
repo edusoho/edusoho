@@ -2,7 +2,15 @@
   <div class="user">
     <div class="user-section clearfix">
       <router-link to="/settings">
-        <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
+        <div class="user-img">
+          <img v-if="user.avatar" :src="user.avatar.large" />
+          <img
+            class="user-vip-icon"
+            v-if="user.vip && !vipDated"
+            :src="user.vip.icon"
+            alt=""
+          />
+        </div>
       </router-link>
       <div class="user-middle">
         <div class="user-name">{{ user.nickname }}</div>

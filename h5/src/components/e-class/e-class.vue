@@ -23,10 +23,18 @@
         </div>
         <!-- middle -->
         <div class="e-course__middle">
-          <div v-if="course.middle.value" v-html="course.middle.html" />
+          <div
+            v-if="course.middle.value && !vipCenter"
+            v-html="course.middle.html"
+          />
         </div>
         <!-- bottom -->
-        <div class="e-course__bottom" v-html="course.bottom.html" />
+        <div
+          class="e-course__bottom"
+          v-if="!vipCenter"
+          v-html="course.bottom.html"
+        />
+        <div class="e-course__bottom" v-else v-html="course.middle.vipHtml" />
       </div>
     </div>
   </div>
@@ -82,6 +90,10 @@ export default {
     showNumberData: {
       type: String,
       default: '',
+    },
+    vipCenter: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

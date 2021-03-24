@@ -216,6 +216,7 @@ export default {
 
     vipBuyStatu() {
       const { name } = this.currentLevel;
+      const title = this.activePrice ? this.activePrice.title : '';
       const actions = {
         opening: {
           text: `立即开通${name}特权`,
@@ -223,7 +224,7 @@ export default {
           type: '开通',
         },
         renew: {
-          text: `续费${name}特权`,
+          text: `续费${title}特权`,
           status: true,
           type: '续费',
         },
@@ -250,6 +251,7 @@ export default {
         title: `会员课程(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
       dataFormat.items = data.slice(0, 3);
       return dataFormat;
@@ -263,6 +265,7 @@ export default {
         title: `会员班级(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
       dataFormat.items = data.slice(0, 3);
       return dataFormat;

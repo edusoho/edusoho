@@ -175,7 +175,8 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import * as types from '@/store/mutation-types';
+import { mapState, mapMutations } from 'vuex';
 import coupon from '&/components/e-coupon/e-coupon.vue';
 import eCourse from '&/components/e-course/e-course.vue';
 import Api from '@/api';
@@ -219,6 +220,9 @@ export default {
     };
   },
   created() {
+    if (['开通', '续费', '升级'].includes(this.vipOrderType)) {
+      this.setNavbarTitle(`${this.vipOrderType}会员`);
+    }
     if (this.vipOrderType === '升级') {
       this.targetUnit = undefined;
       this.targetNum = undefined;
@@ -322,6 +326,9 @@ export default {
     next();
   },
   methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
+    }),
     shouldCollectUserInfo() {
       if (
         this.IsCollectUserInfoType &&

@@ -112,7 +112,7 @@ export default {
         data: res,
       });
       this.dataDefault[1].options = this.initOptions({
-        text: '会员课程',
+        text: '会员班级',
         data: this.vipLevels,
       });
 
