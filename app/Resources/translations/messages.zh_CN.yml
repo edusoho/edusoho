@@ -11694,3 +11694,10 @@ admin_v2.system.user_content_control.note_manage: 笔记内容管理
 admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
 admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
 admin_v2.system.user_content_control.course_note_manage: 课程笔记模块
+admin_v2.system.user_content_control.pc_switch_tips: 开启或关闭后，仅对PC端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.course_note_tooltips: 课程学习页笔记显示及课时笔记入口由此开关控制
+admin_v2.system.user_content_control.classroom_note_tooltips: 班级学习页的笔记显示由此开关控制
+admin_v2.system.user_content_control.pc_app_switch_tips: 开启或关闭后，仅对PC端和APP端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.goto_question_manage: 前往问答管理>>
+admin_v2.system.user_content_control.goto_thread_manage: 前往话题管理>>
+admin_v2.system.user_content_control.goto_group_thread_manage: 前往小组话题管理>>

@@ -44,6 +44,7 @@
     </div>
     <div class="col-md-10 controls radios">
       {{ radios('show_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+      <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
     </div>
   </div>
   <div class="row form-group">
@@ -52,13 +53,14 @@
     </div>
     <div class="col-md-10 controls radios">
       {{ radios('show_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+      <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
     </div>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   <div class="form-group">
     <div class="col-md-offset-2 col-md-8">
-      <a class="btn btn-primary mtl js-note-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}>{{ 'form.btn.submit'|trans }}</a>
+      <a class="btn btn-primary mtl js-note-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
     </div>
   </div>
 

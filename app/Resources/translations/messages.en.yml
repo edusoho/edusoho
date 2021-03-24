@@ -10430,9 +10430,10 @@ admin_v2.system.user_content_control.course_question_manage: Course Question Man
 admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
 admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
 admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
-admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
-admin_v2.system.user_content_control.private_message_manage: 私信内容管理
-admin_v2.system.user_content_control.note_manage: 笔记内容管理
-admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
-admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
-admin_v2.system.user_content_control.course_note_manage: 课程笔记模块
+admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
+admin_v2.system.user_content_control.private_message_manage: Private Message Manage
+admin_v2.system.user_content_control.note_manage: Note Manage
+admin_v2.system.user_content_control.goto_note_manage: Goto Note Manage>>
+admin_v2.system.user_content_control.classroom_note_manage: Classroom Note Manage
+admin_v2.system.user_content_control.course_note_manage: Course Note Manage
+admin_v2.system.user_content_control.pc_switch_tips: When it is turned on or off, it is only effective for PC terminal, and other terminals do not have this function

@@ -19,6 +19,7 @@
       </div>
       <div class="col-md-10 controls radios">
         {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        <label><a href="">{{ 'admin_v2.system.user_content_control.goto_question_manage'|trans }}</a></label>
       </div>
     </div>
     <div class="row form-group">
@@ -35,6 +36,8 @@
       </div>
       <div class="col-md-10 controls radios">
         {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        <label><a href="">{{ 'admin_v2.system.user_content_control.goto_thread_manage'|trans }}</a></label>
+        <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_app_switch_tips'|trans }}</div>
       </div>
     </div>
     <div class="row form-group">
@@ -43,6 +46,7 @@
       </div>
       <div class="col-md-10 controls radios">
         {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_app_switch_tips'|trans }}</div>
       </div>
     </div>
     <div class="row form-group">
@@ -51,6 +55,8 @@
       </div>
       <div class="col-md-10 controls radios">
         {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        <label><a href="">{{ 'admin_v2.system.user_content_control.goto_group_thread_manage'|trans }}</a></label>
+        <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
       </div>
     </div>
 
