@@ -182,10 +182,11 @@ export default {
       ],
       activeIndex: 0,
       activePrice: null,
+      isLoading: false,
     };
   },
   computed: {
-    ...mapState(['isLoading', 'vipSwitch']),
+    ...mapState(['vipSwitch']),
     ...mapState({
       userInfo: state => state.user,
     }),
@@ -272,12 +273,14 @@ export default {
     },
   },
   created() {
+    this.isLoading = true;
     this.getVipDetail();
   },
   methods: {
     getVipDetail() {
       const queryId = this.$route.query.id;
       Api.getVipDetail().then(res => {
+        this.isLoading = false;
         const { levels, vipUser } = res;
 
         this.levels = levels;
@@ -331,7 +334,7 @@ export default {
     // 首次进入，切换到对应会员
     initSwiperActiveIndex() {
       this.$nextTick(() => {
-        this.swiper.slideTo(this.activeIndex, 1000);
+        this.swiper.slideTo(this.activeIndex, 0);
       });
     },
 
