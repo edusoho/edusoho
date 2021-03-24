@@ -8,10 +8,24 @@
 	}
 
 	&-img {
+		position: relative;
 		float: left;
 		width: vw(86);
 		height: vw(86);
-		border-radius: vw(43);
+
+		img {
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+		}
+
+		.user-vip-icon {
+			position: absolute;
+			right: vw(5);
+			bottom: vw(5);
+			width: vw(20);
+			height: vw(20);
+		}
 	}
 
 	&-middle {
