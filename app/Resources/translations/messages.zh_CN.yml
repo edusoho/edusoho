@@ -11683,3 +11683,14 @@ admin_v2.system.user_content_control.question_bank_review_manage: 题库练习�
 admin_v2.system.user_content_control.open_course_review_manage: 公开课评价模块
 admin_v2.system.user_content_control.article_review_manage: 资讯评价模块
 admin_v2.system.user_content_control.goto_review_manage: 前往评价管理>>
+admin_v2.system.user_content_control.thread_manage: 话题问答内容管理
+admin_v2.system.user_content_control.course_question_manage: 课程问题(问答)模块
+admin_v2.system.user_content_control.classroom_question_manage: 班级问题(问答)模块
+admin_v2.system.user_content_control.course_thread_manage: 课程话题模块
+admin_v2.system.user_content_control.classroom_thread_manage:  班级话题模块
+admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
+admin_v2.system.user_content_control.private_message_manage: 私信内容管理
+admin_v2.system.user_content_control.note_manage: 笔记内容管理
+admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
+admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
+admin_v2.system.user_content_control.course_note_manage: 课程笔记模块

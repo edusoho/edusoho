@@ -3,4 +3,21 @@
 {% set menu = 'admin_v2_user_content_control_private_message' %}
 
 {% block main %}
+  <form class="form-horizontal" id="user_content_control_private_message" method="post" novalidate>
+    <legend style="height: 50px;">
+      <div class="row form-group">
+        <div class="col-md-2 " style="padding-top: 5px;"><label>{{ 'admin_v2.system.user_content_control.private_message_manage'|trans }}：</label></div>
+        <div class="col-md-9 col-md-pull-1 controls radios">
+          {{ radios('show_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        </div>
+      </div>
+    </legend>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-primary mtl js-private-message-setting-save-btn">{{ 'form.btn.submit'|trans }}</a>
+      </div>
+    </div>
+  </form>
 {% endblock %}

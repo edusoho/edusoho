@@ -10425,3 +10425,14 @@ admin_v2.system.user_content_control.question_bank_review_manage: QuestionBank R
 admin_v2.system.user_content_control.open_course_review_manage: OpenCourse Review Manage
 admin_v2.system.user_content_control.article_review_manage: Article Review Manage
 admin_v2.system.user_content_control.goto_review_manage: Goto Review Manage List>>
+admin_v2.system.user_content_control.thread_manage: Thread Manage
+admin_v2.system.user_content_control.course_question_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
+admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
+admin_v2.system.user_content_control.private_message_manage: 私信内容管理
+admin_v2.system.user_content_control.note_manage: 笔记内容管理
+admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
+admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
+admin_v2.system.user_content_control.course_note_manage: 课程笔记模块

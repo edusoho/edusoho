@@ -3,4 +3,39 @@
 {% set menu = 'admin_v2_user_content_control_note' %}
 
 {% block main %}
+  <form class="form-horizontal" id="user_content_control_note" method="post" novalidate>
+    <legend style="height: 50px;">
+      <div class="row form-group">
+        <div class="col-md-2 " style="padding-top: 5px;"><label>{{ 'admin_v2.system.user_content_control.note_manage'|trans }}：</label></div>
+        <div class="col-md-9 col-md-pull-1 controls radios">
+          {{ radios('show_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        </div>
+        <span class="pull-right" style="padding-top: 5px;"><a href="">{{ 'admin_v2.system.user_content_control.goto_note_manage'|trans }}</a></span>
+      </div>
+    </legend>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="">{{ 'admin_v2.system.user_content_control.course_note_manage'|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('show_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="">{{ 'admin_v2.system.user_content_control.classroom_note_manage'|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('show_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-primary mtl js-note-setting-save-btn">{{ 'form.btn.submit'|trans }}</a>
+      </div>
+    </div>
+
+  </form>
 {% endblock %}
