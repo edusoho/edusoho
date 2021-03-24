@@ -419,7 +419,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -$postCount);
 
-        $postCount = $this->getGroupService()->waveGroupMemberDaoCheck($thread['groupId'], 'postNum', $postCount);
+        $postCount = $this->getGroupService()->waveGroupMemberDaoCheck($thread['groupId'], $thread['userId'], 'postNum', $postCount);
 
         $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -$postCount);
 

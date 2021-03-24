@@ -261,18 +261,18 @@ class GroupServiceImpl extends BaseService implements GroupService
         $this->getGroupDao()->update($groupId, ['memberNum' => $groupMemberNum]);
     }
 
-    public function waveGroupDaoCheck($option, $tags, $diff)
+    public function waveGroupDaoCheck($id, $field, $compareData)
     {
-        $data = $this->getGroupDao()->get($option);
+        $groupData = $this->getGroupDao()->get($id);
 
-        return $diff > $data[$tags] ? $data[$tags] : $diff;
+        return $compareData > $groupData[$field] ? $groupData[$field] : $compareData;
     }
 
-    public function waveGroupMemberDaoCheck($option, $tags, $diff)
+    public function waveGroupMemberDaoCheck($groupId, $userId, $field, $compareData)
     {
-        $data = $this->getGroupMemberDao()->get($option);
+        $groupMemberData = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
 
-        return $diff > $data[$tags] ? $data[$tags] : $diff;
+        return $compareData > $groupMemberData[$field] ? $groupMemberData[$field] : $compareData;
     }
 
     public function waveGroup($id, $field, $diff)
