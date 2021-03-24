@@ -34,7 +34,7 @@ class ExploreController extends BaseController
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'course');
-        if (!empty($currentLevelId) && $currentLevelId != 'all' && isset($conditions['vipRightCount'])){
+        if (!empty($currentLevelId) && 'all' != $currentLevelId && isset($conditions['vipRightCount'])) {
             $vipRightCount = $conditions['vipRightCount'];
             unset($conditions['vipRightCount']);
         }
@@ -270,7 +270,7 @@ class ExploreController extends BaseController
         list($conditions, $filter) = $this->getFilter($conditions, 'classroom');
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'classroom');
-        if (!empty($currentLevelId) && $currentLevelId != 'all' && isset($conditions['vipRightCount'])){
+        if (!empty($currentLevelId) && 'all' != $currentLevelId && isset($conditions['vipRightCount'])) {
             $vipRightCount = $conditions['vipRightCount'];
             unset($conditions['vipRightCount']);
         }
