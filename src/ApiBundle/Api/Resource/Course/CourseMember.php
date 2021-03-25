@@ -42,10 +42,77 @@ class CourseMember extends AbstractResource
      */
     public function get(ApiRequest $request, $courseId, $userId)
     {
-        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
-        $this->getOCUtil()->single($courseMember, ['userId']);
+        $member = $this->getMemberService()->getCourseMember($courseId, $userId);
+        $member['expire'] = $this->getCourseMemberExpire($member);
+        $this->getOCUtil()->single($member, ['userId']);
 
-        return $courseMember;
+        return $member;
+    }
+
+    private function getCourseMemberExpire($member)
+    {
+        $course = $this->getCourseService()->getCourse($member['courseId']);
+        if (empty($course) || empty($member) || $course['status'] != 'published') {
+            return [
+                'status' => false,
+                'deadline' => 0
+            ];
+        }
+
+        if ($course['expiryMode'] == 'forever' && empty($member['levelId'])) {
+            return [
+                'status' => true,
+                'deadline' => $member['deadline']
+            ];
+        }
+
+        $deadline = $member['deadline'];
+
+        // 比较:学员有效期和课程有效期
+        $courseDeadline = $this->getCourseDeadline($course);
+        if ($courseDeadline) {
+            $deadline = $deadline < $courseDeadline ? $deadline : $courseDeadline;
+        }
+
+        // 会员加入情况下的有效期
+        if (!empty($member['levelId'])) {
+            $deadline = $this->getVipDeadline($course, $member, $deadline);
+        }
+
+        return [
+            'status' => $deadline < time() ? false : true,
+            'deadline' => $deadline
+        ];
+    }
+
+    private function getCourseDeadline($course)
+    {
+        $deadline = 0;
+        if ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
+            $deadline = $course['expiryEndDate'];
+        }
+
+        return $deadline;
+    }
+
+    private function getVipDeadline($course, $member, $deadline)
+    {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+        if (empty($vipApp)) {
+            return 0;
+        }
+
+        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        if ('ok' !== $status) {
+            return 0;
+        }
+
+        $vip = $this->getVipService()->getMemberByUserId($member['userId']);
+        if (!$deadline) {
+            return $vip['deadline'];
+        } else {
+            return $deadline < $vip['deadline'] ? $deadline : $vip['deadline'];
+        }
     }
 
     public function add(ApiRequest $request, $courseId)
@@ -109,5 +176,15 @@ class CourseMember extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    private function getAppService()
+    {
+        return $this->service('CloudPlatform:AppService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->service('VipPlugin:Vip:VipService');
     }
 }

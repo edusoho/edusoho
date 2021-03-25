@@ -13,6 +13,84 @@ use AppBundle\Common\ArrayToolkit;
 
 class ClassroomMember extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $classroomId, $userId)
+    {
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $member['expire'] = $this->getClassroomMemberExpire($member);
+        $this->getOCUtil()->single($member, ['userId']);
+
+        return $member;
+    }
+
+    private function getClassroomMemberExpire($member)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+        if (empty($classroom) || empty($member) || $classroom['status'] != 'published') {
+            return [
+                'status' => false,
+                'deadline' => 0
+            ];
+        }
+
+        if ($classroom['expiryMode'] == 'forever' && empty($member['levelId'])) {
+            return [
+                'status' => true,
+                'deadline' => $member['deadline']
+            ];
+        }
+
+        $deadline = $member['deadline'];
+
+        // 比较:学员有效期和班级有效期
+        $classroomDeadline = $this->getClassroomDeadline($classroom);
+        if ($classroomDeadline) {
+            $deadline = $deadline < $classroomDeadline ? $deadline : $classroomDeadline;
+        }
+
+        // 会员加入情况下的有效期
+        if (!empty($member['levelId'])) {
+            $deadline = $this->getVipDeadline($classroom, $member, $deadline);
+        }
+
+        return [
+            'status' => $deadline < time() ? false : true,
+            'deadline' => $deadline
+        ];
+    }
+
+    private function getClassroomDeadline($classroom)
+    {
+        $deadline = 0;
+        if ('date' == $classroom['expiryMode']) {
+            $deadline = $classroom['expiryEndDate'];
+        }
+
+        return $deadline;
+    }
+
+    private function getVipDeadline($classroom, $member, $deadline)
+    {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+        if (empty($vipApp)) {
+            return 0;
+        }
+
+        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        if ('ok' !== $status) {
+            return 0;
+        }
+
+        $vip = $this->getVipService()->getMemberByUserId($member['userId']);
+        if (!$deadline) {
+            return $vip['deadline'];
+        } else {
+            return $deadline < $vip['deadline'] ? $deadline : $vip['deadline'];
+        }
+    }
+
     public function add(ApiRequest $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -100,5 +178,15 @@ class ClassroomMember extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    private function getAppService()
+    {
+        return $this->service('CloudPlatform:AppService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->service('VipPlugin:Vip:VipService');
     }
 }

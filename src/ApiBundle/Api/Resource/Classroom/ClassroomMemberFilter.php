@@ -13,7 +13,7 @@ class ClassroomMemberFilter extends Filter
      * @TODO 下个大版本恢复simpleUser
      */
     protected $publicFields = array(
-        'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access', 'user', 'isOldUser',
+        'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access', 'user', 'isOldUser', 'expire',
     );
 
     protected function publicFields(&$data)
