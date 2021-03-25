@@ -6,7 +6,7 @@
 {% block main %}
   <form class="form-horizontal" id="license-form" method="post">
     <fieldset id="license_area">
-      <legend>{{ 'admin.setting.license.headline'|trans }}</legend>
+      <legend>{{ 'admin.setting.license.headline'|trans }} <span style="color: red;font-size: 13px;padding-left:2%">{{ 'admin.setting.license.prompt'|trans }}</span></legend>
       <div class="form-group">
         <div class="col-md-2 control-label">
           <label for="name">{{ 'admin.setting.license.name'|trans }}</label>
@@ -29,7 +29,7 @@
             <div class="image-upload-mask">
               <div class="image-upload-content">
                 <i
-                  class="cd-icon cd-icon-camera"></i>{{ 'admin_v2.operating.goods_leading.label_content.qecode_upload'|trans }}
+                  class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
               </div>
             </div>
             <label class="image-upload-label">
@@ -42,7 +42,7 @@
                  value="{{ license.license_picture|default() }}"
                  class="form-control">
           <div class="help-block">
-            {{ 'admin_v2.operating.goods_leading.label_content.qrcode_tips'|trans }}
+            {{ 'admin.setting.license.picture.help_block'|trans }}
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
       </div>
     </fieldset>
 
-    <legend>{{ 'admin.setting.permit.headline'|trans }}</legend>
+    <legend>{{ 'admin.setting.permit.headline'|trans }}<span style="color: red;font-size: 13px;padding-left:2%">{{ 'admin.setting.license.prompt'|trans }}</span></legend>
     <fieldset id="permit_area">
       {% for permit in license.permits %}
         <div class="setting_permit" id="settingPermit_{{ loop.index - 1 }}"><br>
@@ -96,7 +96,7 @@
                 <div class="image-upload-mask">
                   <div class="image-upload-content">
                     <i
-                      class="cd-icon cd-icon-camera"></i>{{ 'admin_v2.operating.goods_leading.label_content.qecode_upload'|trans }}
+                      class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
                   </div>
                 </div>
                 <label class="image-upload-label">
@@ -109,7 +109,7 @@
                      value="{{ permit.picture|default() }}"
                      class="permit_picture">
               <div class="help-block">
-                {{ 'admin_v2.operating.goods_leading.label_content.qrcode_tips'|trans }}
+                {{ 'admin.setting.permit.picture.help_block'|trans }}
               </div>
             </div>
           </div>

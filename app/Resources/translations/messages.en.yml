@@ -4856,8 +4856,10 @@ admin.setting.theme.manage.navigation_num_tips: >
 admin.setting.license.headline: Electronic business license configuration
 admin.setting.license.name: Electronic business license name
 admin.setting.license.picture: Electronic Business License Picture
+admin.setting.upload.license.photo: Upload license photo
 admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.license.url: Electronic business license link
+admin.setting.license.prompt: (The net school can request according to each place policy and net school actual business and decide)
 admin.setting.permit.headline: Operating license configuration
 admin.setting.permit.name: Business license name
 admin.setting.permit.record.number: Case number
