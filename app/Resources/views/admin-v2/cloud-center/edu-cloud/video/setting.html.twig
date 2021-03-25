@@ -396,6 +396,27 @@
     </div>
     <div class="row form-group">
       <div class="col-md-3 control-label">
+        <label>{{'admin.edu_cloud.edu_video.finger_print_content_label'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        {% set content = storageSetting.video_fingerprint_content|default([]) %}
+        <label class="checkbox-inline">
+          <input type="checkbox" name="video_fingerprint_content[]" value="domain" {% if 'domain' in content %} checked="checked" {% endif %}> {{ 'admin.edu_cloud.edu_video.finger_print_content_label.domain'|trans }}
+        </label>
+        <label class="checkbox-inline">
+          <input class="js-footprint-content" type="checkbox" name="video_fingerprint_content[]" value="nickname" {% if 'nickname' in content %} checked="checked" {% endif %}> {{ 'admin.edu_cloud.edu_video.finger_print_content_label.nickname'|trans }}
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" name="video_fingerprint_content[]" value="truename" {% if 'truename' in content %} checked="checked" {% endif %}> {{ 'admin.edu_cloud.edu_video.finger_print_content_label.realname'|trans }}
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" name="video_fingerprint_content[]" value="mobile" {% if 'mobile' in content %} checked="checked" {% endif %}> {{ 'admin.edu_cloud.edu_video.finger_print_content_label.mobile'|trans }}
+        </label>
+        <div class="text-muted mts">{{'admin.edu_cloud.edu_video.finger_print_content_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
         <label>{{'admin.edu_cloud.edu_video.finger_print_time_label'|trans}}</label>
       </div>
       <div class="controls col-md-8">

@@ -6855,8 +6855,14 @@ admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
-  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
-admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
+  开启后，将在视频播放中随机时间、随机位置显示云视频指纹信息。
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_content_label: 云视频指纹信息
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: 用户名
+admin.edu_cloud.edu_video.finger_print_content_label.realname: 真实姓名
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: 手机号
+admin.edu_cloud.edu_video.finger_print_content_label.domain: 网校域名
+admin.edu_cloud.edu_video.finger_print_content_tips: 为了用户体验效果更佳，建议最多组合2项信息显示。注意：若用户的真实姓名和手机号没有则显示为-
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：

@@ -10413,3 +10413,10 @@ classroom.manage.data_statistics.finish_status.learned: Finished
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
+admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: Mobile
+admin.edu_cloud.edu_video.finger_print_content_label.domain: Domain
+admin.edu_cloud.edu_video.finger_print_content_tips: For a better user experience, it is recommended to combine up to 2 information displays. Note: If the user's real name and mobile phone number are not available, it will be displayed as-
+admin.edu_cloud.edu_video.finger_print_embed_tips: After it is turned on, cloud video fingerprint information will be displayed at random times and locations during video playback.
