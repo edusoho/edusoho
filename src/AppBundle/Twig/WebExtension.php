@@ -218,7 +218,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_detail_select', [$this, 'informationCollectDetailSelect']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
             new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
-            new \Twig_SimpleFunction('filter_goods_vip_right', [$this, 'filterGoodsVipRight']),
             new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
             new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
             new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
@@ -303,17 +302,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $courseSets;
-    }
-
-    public function filterGoodsVipRight($goods)
-    {
-        if ($this->isPluginInstalled('Vip')) {
-            foreach ($goods as &$goodDetail){
-                $goodDetail['isVipRight'] = $this->isVipRight($goodDetail['targetId'], $goodDetail['goodsType']);
-            }
-        }
-
-        return $goods;
     }
 
     public function isVipRight($goodsId, $targetType)
