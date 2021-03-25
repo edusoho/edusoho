@@ -156,7 +156,7 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         }
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "SELECT COUNT(ctr.id) FROM course_task AS ct JOIN course_task_result ctr ON ct.id = ctr.courseTaskId where userId = ? AND ct.courseId IN ({$marks}) AND ctr.status = 'finish' AND ct.isOptional = 0";
+        $sql = "SELECT COUNT(ctr.id) FROM course_task AS ct INNER JOIN course_task_result ctr ON ct.id = ctr.courseTaskId where ctr.userId = ? AND ct.courseId IN ({$marks}) AND ctr.status = 'finish' AND ct.isOptional = 0";
 
         return $this->db()->fetchColumn($sql, array_merge([$userId], $courseIds)) ?: 0;
     }
