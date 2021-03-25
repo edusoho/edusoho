@@ -85,11 +85,6 @@ class Setting extends AbstractResource
             $storageSetting['video_fingerprint_time'] = strval($storageSetting['video_fingerprint_time']);
         }
 
-        if (isset($storageSetting['video_fingerprint_content'])) {
-            $fingerPrint = $this->getWebExtension()->getFingerprint();
-            $storageSetting['video_fingerprint_content'] = substr($fingerPrint, strpos($fingerPrint, '>') + 1, strrpos($fingerPrint, '<') - strlen($fingerPrint));
-        }
-
         if (isset($storageSetting['video_fingerprint_opacity'])) {
             $storageSetting['video_fingerprint_opacity'] = strval($storageSetting['video_fingerprint_opacity']);
         }
@@ -98,7 +93,6 @@ class Setting extends AbstractResource
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, [
                 'video_fingerprint',
                 'video_fingerprint_time',
-                'video_fingerprint_content',
                 'video_fingerprint_opacity',
             ]);
 
