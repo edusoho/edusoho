@@ -613,14 +613,13 @@ class WebExtension extends \Twig_Extension
         $magicSetting = $this->getSetting('magic.video_fingerprint');
         $request = $this->requestStack->getMasterRequest();
         $host = $request->getHttpHost();
+        $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
         if (!empty($magicSetting)) {
             $fingerprint = $this->parsePattern($magicSetting, $user);
         } else {
             $pattern = $this->getSetting('storage.video_fingerprint_content', ['nickname', 'domain']);
             $pattern = '{{'.implode('}} {{', $pattern).'}}';
-            $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
-
             $fingerprint = $this->parsePattern($pattern, $user, '-');
         }
 
