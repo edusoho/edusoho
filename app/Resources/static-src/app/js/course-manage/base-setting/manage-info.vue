@@ -141,7 +141,7 @@
                 );
 
                 for (let key in formData) {
-                    if (JSON.stringify(formData[key]) === '[]') {
+                    if (Array.isArray(formData[key]) && formData[key].length === 0) {
                         formData[key] = '';
                     }
                 }
