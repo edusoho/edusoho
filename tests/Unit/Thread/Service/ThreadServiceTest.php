@@ -460,7 +460,7 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $thread['postNum']);
     }
 
-    public function testDeletePostsByThreadId_wave_correct()
+    public function testDeletePostsByThreadId_Wave_Correct()
     {
         $groups = $this->createGroups();
 

@@ -54,5 +54,5 @@ interface GroupService
 
     public function waveMember($groupId, $userId, $field, $diff);
 
-    public function validateWaveFieldData($waveData, $field, $diff);
+    public function validateWaveField($waveData, $field, $diff);
 }
