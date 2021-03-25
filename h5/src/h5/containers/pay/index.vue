@@ -118,13 +118,19 @@ export default {
             });
             return;
           }
-          const path =
-            this.targetType === 'vip'
-              ? `/${this.targetType}`
-              : `/${this.targetType}/${this.targetId}`;
-          this.$router.replace({
-            path,
-          });
+
+          if (this.targetType === 'vip') {
+            this.$router.replace({
+              path: `/${this.targetType}`,
+              query: {
+                backUrl: '/my/orders',
+              },
+            });
+          } else {
+            this.$router.replace({
+              path: `/${this.targetType}/${this.targetId}`,
+            });
+          }
         }
         this.detail = Object.assign({}, res);
         this.isLoading = false;
@@ -194,7 +200,7 @@ export default {
             //   });
             //   return;
             // }
-            window.location.replace(res.paidSuccessUrlH5);
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {

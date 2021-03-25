@@ -551,7 +551,7 @@ export default {
             //   });
             //   return;
             // }
-            window.location.replace(res.paidSuccessUrlH5);
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {
