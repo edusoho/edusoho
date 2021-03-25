@@ -24,6 +24,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
 use Biz\Content\Service\BlockService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
@@ -43,6 +44,7 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class WebExtension extends \Twig_Extension
@@ -288,15 +290,22 @@ class WebExtension extends \Twig_Extension
     public function filterCourseSetsVipRight($courseSets)
     {
         if ($this->isPluginInstalled('Vip')) {
-            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column(ArrayToolkit::column($courseSets, 'course'), 'id')], [], 0, PHP_INT_MAX);
-            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
-
-            foreach ($courseSets as &$courseSet) {
-                $courseSet['course']['vipLevelId'] = isset($vipRights[$courseSet['course']['id']]['vipLevelId']) ? $vipRights[$courseSet['course']['id']]['vipLevelId'] : 0;
+            foreach ($courseSets as &$courseSet){
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes('course', ArrayToolkit::column($courses, 'id'));
+                $courseSet['course']['vipLevelId'] = empty($vipRights) ? 0 : 1;
             }
         }
 
         return $courseSets;
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     public function filterCoursesVipRight($courses)
@@ -327,6 +336,9 @@ class WebExtension extends \Twig_Extension
         return $classrooms;
     }
 
+    /**
+     * @return VipRightService
+     */
     protected function getVipRightService()
     {
         return $this->createService('VipPlugin:Marketing:VipRightService');
