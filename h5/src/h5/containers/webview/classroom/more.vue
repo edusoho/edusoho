@@ -12,7 +12,7 @@
       </template>
     </van-dropdown-menu>
 
-    <lazyLoading
+    <infiniteScroll
       :course-list="courseList"
       :is-all-data="true"
       :normal-tag-show="false"
@@ -24,26 +24,29 @@
       @needRequest="sendRequest"
       :showNumberData="showNumberData"
     />
-    <emptyCourse
+    <empty
       v-if="isEmptyCourse && isRequestCompile"
-      :has-button="false"
-      :type="'classroom_list'"
       text="暂无班级"
+      class="empty__couse"
     />
+
+    <back-top icon="icon-top" color="#20B573" />
   </div>
 </template>
 
 <script>
 import Api from '@/api';
-import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
-import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
+import infiniteScroll from '&/components/e-infinite-scroll/e-infinite-scroll.vue';
+import empty from '&/components/e-empty/e-empty.vue';
+import backTop from '&/components/e-back-top/e-back-top.vue';
 import { mapState, mapActions } from 'vuex';
 import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
   components: {
-    lazyLoading,
-    emptyCourse,
+    infiniteScroll,
+    empty,
+    backTop,
   },
   data() {
     return {
@@ -172,7 +175,7 @@ export default {
 
     setQuery(value) {
       this.$router.replace({
-        name: 'more_class',
+        name: 'more_class_new',
         query: value,
       });
     },
