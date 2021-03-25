@@ -359,7 +359,8 @@ class EduCloudController extends BaseController
             'video_fingerprint' => 0,
             'video_fingerprint_time' => 0.5,
             'video_fingerprint_opacity' => 1,
-            'video_header' => null,
+            'video_fingerprint_content' => ['domain', 'nickname'],
+            'video_header' => null, 
             'video_auto_play' => 'true',
         ];
 
