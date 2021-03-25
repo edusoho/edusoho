@@ -1,5 +1,8 @@
 <div class="course-item">
   <div class="course-img">
+    {% if is_plugin_installed('Vip') and setting('vip.enabled') and goods.isVipRight|default(0) != 0 %}
+      <span class="tag-vip-free"></span>
+    {% endif %}
     <a href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
       {{ lazy_img(filepath(goods_cover(goods, 'large'), 'courseSet.png'), 'img-responsive', goods.title|raw) }}
     </a>

@@ -233,6 +233,7 @@ class UserController extends BaseController
 
     public function favoritedAction(Request $request, $id)
     {
+        $targetType = $request->query->get('goodsType', 'course');
         $user = $this->tryGetUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
@@ -242,7 +243,7 @@ class UserController extends BaseController
         $conditions = [
             'userId' => $user['id'],
             'targetTypes' => ['goods'],
-            'goodsType' => $request->query->get('goodsType', 'course'),
+            'goodsType' => $targetType,
         ];
 
         if ('course' === $conditions['goodsType']) {
@@ -267,7 +268,7 @@ class UserController extends BaseController
 
         return $this->render('user/courses_favorited.html.twig', [
             'user' => $user,
-            'favorites' => $favorites,
+            'favorites' => $this->getWebExtension()->filterGoodsVipRight($favorites),
             'paginator' => $paginator,
             'type' => 'favorited',
         ]);
