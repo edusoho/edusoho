@@ -162,7 +162,11 @@
                     }
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
                     this.buyViewMode = 'text';
-                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
+                    if (this.goods.type == 'course'){
+                        this.buyViewText = Translator.trans('goods.show_page.course_not_buyable_tips');
+                    }else{
+                        this.buyViewText = Translator.trans('goods.show_page.classroom_not_buyable_tips');
+                    }
                 } else if (sku.displayPrice == 0) {
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.free_join_btn');
