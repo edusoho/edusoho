@@ -5,7 +5,7 @@ define(function (require, exports, module) {
   var Uploader = require('upload');
 
   exports.run = function () {
-    var $form = $('#site-form');
+    var $form = $('#business-form');
 
     var uploaderRecord = new WebUploader({
       element: '#record-picture-upload'

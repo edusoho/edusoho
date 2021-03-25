@@ -25,12 +25,6 @@ class ManagementSettingController extends BaseController
         ]);
     }
 
-    public function licenseAction(Request $request)
-    {
-        return $this->render('admin-v2/system/management/license.html.twig', [
-        ]);
-    }
-
     public function saveQualificationAction(Request $request)
     {
         $qualifications = $request->request->all();
@@ -44,6 +38,35 @@ class ManagementSettingController extends BaseController
 
         return $this->createJsonResponse([
             'message' => $this->trans('site.save.success'),
+        ]);
+    }
+
+    public function licenseAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $permits = $request->request->all();
+            foreach ($permits['permits'] as $key => $permit) {
+                if (empty($permit['name']) && empty($permit['record_number']) && empty($permit['picture']) && 0 != $key) {
+                    unset($permits['permits'][$key]);
+                }
+            }
+            $this->getSettingService()->set('license', $permits);
+            $this->getSettingService()->set('permit', $permits);
+        }
+        $default = [
+            'license_name' => '',
+            'license_picture' => '',
+            'license_url' => '',
+            'permits' => [
+                ['name' => '', 'record_number' => '', 'picture' => ''],
+            ],
+        ];
+        $permits = $this->getSettingService()->get('permit', []);
+
+        $permits = array_merge($default, $permits);
+
+        return $this->render('admin-v2/system/management/license.html.twig', [
+            'license' => $permits,
         ]);
     }
 
