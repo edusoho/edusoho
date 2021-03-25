@@ -66,7 +66,7 @@ function initCkeditor(validator) {
 function initDatetimePicker(validator) {
   var now = new Date();
   $('[name=startTime]').datetimepicker({
-    language: 'zh',
+    language: document.documentElement.lang,
     autoclose: true
   }).on('hide', function (ev) {
     validator.form();
@@ -79,7 +79,7 @@ function initDatetimePicker(validator) {
 
   $('[name=endTime]').datetimepicker({
     autoclose: true,
-    language: 'zh',
+    language: document.documentElement.lang,
   }).on('hide', function (ev) {
     validator.form();
   });
