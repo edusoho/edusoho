@@ -611,19 +611,16 @@ class WebExtension extends \Twig_Extension
 
         $user = $this->getUserService()->getUser($user['id']);
 
-        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
-        $pattern = $this->getSetting('magic.video_fingerprint');
+        $pattern = $this->getSetting('storage.video_fingerprint_content', ['nickname', 'domain']);
+        $pattern = '{{'.implode('}} {{', $pattern).'}}';
         $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
-        if ($pattern) {
-            $fingerprint = $this->parsePattern($pattern, $user);
-        } else {
-            $request = $this->requestStack->getMasterRequest();
-            $host = $request->getHttpHost();
-            $fingerprint = "<span style=\"opacity:{$opacity};\"> {$host} {$user['nickname']} </span>";
-        }
+        $fingerprint = $this->parsePattern($pattern, $user, '-');
 
-        return $fingerprint;
+        $request = $this->requestStack->getMasterRequest();
+        $host = $request->getHttpHost();
+
+        return "<span style=\"opacity:{$opacity}\";>".str_replace('{{domain}}', $host, $fingerprint).'</span>';
     }
 
     public function popRewardPointNotify()
@@ -641,7 +638,7 @@ class WebExtension extends \Twig_Extension
         return $message;
     }
 
-    protected function parsePattern($pattern, $user)
+    protected function parsePattern($pattern, $user, $default = null)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
@@ -653,7 +650,7 @@ class WebExtension extends \Twig_Extension
             }
         );
 
-        return $this->simpleTemplateFilter($pattern, $values);
+        return $this->simpleTemplateFilter($pattern, $values, $default);
     }
 
     public function subStr($text, $start, $length)
@@ -1547,9 +1544,10 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function simpleTemplateFilter($text, $variables)
+    public function simpleTemplateFilter($text, $variables, $default = null)
     {
         foreach ($variables as $key => $value) {
+            $value = (empty($value) && !empty($default)) ? $default : $value;
             $text = str_replace('{{'.$key.'}}', $value, $text);
         }
 
