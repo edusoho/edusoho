@@ -57,41 +57,6 @@ class SchoolInformationController extends BaseController
         ]);
     }
 
-    public function certificateAction(Request $request)
-    {
-        $license = $this->getSettingService()->get('license', []);
-
-        $default = [
-            'license_name' => '',
-            'license_picture' => '',
-            'license_url' => '',
-            'permits' => [
-                ['name' => '', 'record_number' => '', 'picture' => ''],
-            ],
-        ];
-        $license = array_merge($default, $license);
-
-        return $this->render('admin-v2/system/certificates-setting.html.twig', [
-            'license' => $license,
-        ]);
-    }
-
-    public function saveLicenseAction(Request $request)
-    {
-        $license = $request->request->all();
-
-        foreach ($license['permits'] as $key => $permit) {
-            if (empty($permit['name']) && empty($permit['record_number']) && empty($permit['picture']) && 0 != $key) {
-                unset($license['permits'][$key]);
-            }
-        }
-        $this->getSettingService()->set('license', $license);
-
-        return $this->createJsonResponse([
-            'message' => $this->trans('site.save.success'),
-        ]);
-    }
-
     /**
      * @return SettingService
      */

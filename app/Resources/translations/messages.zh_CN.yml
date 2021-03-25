@@ -5764,8 +5764,10 @@ admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设�
 admin.setting.license.headline: 电子营业执照配置
 admin.setting.license.name: 电子营业执照名称
 admin.setting.license.picture: 电子营业执照图片
+admin.setting.upload.license.photo: 上传证件图片
 admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校电子营业图片设置后将显示在首页底栏。
 admin.setting.license.url: 电子营业执照链接
+admin.setting.license.prompt: (网校可根据各地方政策要求及网校实际业务而定)
 admin.setting.permit.headline: 经营许可配置
 admin.setting.permit.name: 经营许可证名称
 admin.setting.permit.record.number: 备案号
