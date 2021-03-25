@@ -10,7 +10,7 @@
       <div class="row form-group">
         <div class="col-md-2 " style="padding-top: 5px;"><label>{{ 'admin_v2.system.user_content_control.note_manage'|trans }}：</label></div>
         <div class="col-md-9 col-md-pull-1 controls radios">
-          {{ radios('enable_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+          {{ radios('enable_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_note|default('1')) }}
         </div>
         <span class="pull-right" style="padding-top: 5px;font-size: 14px;">
           <a target="_blank" href="{{ path('admin_v2_course_note') }}">{{ 'admin_v2.system.user_content_control.goto_note_manage'|trans }}</a>
@@ -31,7 +31,7 @@
         </label>
       </div>
       <div class="col-md-10 controls radios">
-        {{ radios('enable_course_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        {{ radios('enable_course_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_course_note|default('1')) }}
         <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
       </div>
     </div>
@@ -49,7 +49,7 @@
         </label>
       </div>
       <div class="col-md-10 controls radios">
-        {{ radios('enable_classroom_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, userContentControl.show_review|default('1')) }}
+        {{ radios('enable_classroom_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_classroom_note|default('1')) }}
         <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
       </div>
     </div>
