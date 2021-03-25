@@ -1,7 +1,14 @@
 initUploadImg();
 
 let validator = $('#business-form').validate({
-  rules: {},
+  rules: {
+    icp: {
+      required: true,
+    },
+    icpUrl: {
+      required: true,
+    }
+  },
   ajax: true,
   submitSuccess(data) {
     cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
