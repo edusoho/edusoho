@@ -10410,6 +10410,7 @@ classroom.manage.data_statistics.finished_time: FinishedTime
 classroom.manage.data_statistics.finish_status.unlearn: UnLearn
 classroom.manage.data_statistics.finish_status.learning: Learning
 classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.course_detail_list.select_all: All
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
