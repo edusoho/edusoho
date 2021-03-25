@@ -78,7 +78,7 @@
                                         <span class="bullet">•</span>
                                         <span class="color-gray">{{post.createdTime|smart_time}} </span>
                                     </div>
-                                    <div class="editor-text">{{ post.content }}</div>
+                                    <div class="editor-text">{{ post.content|removeHtml }}</div>
                                     <div class="ptm pbl"></div>
                                 </div>
                             </li>
