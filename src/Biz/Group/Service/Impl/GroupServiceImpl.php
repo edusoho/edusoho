@@ -266,6 +266,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         if (!isset($waveData[$field])) {
             return 0;
         }
+
         return ($diff + $waveData[$field]) > 0 ? $diff : -$waveData[$field];
     }
 
@@ -283,7 +284,6 @@ class GroupServiceImpl extends BaseService implements GroupService
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
 
         if ($member) {
-
             $diff = $this->validateWaveField($member, $field, $diff);
 
             return $this->getGroupMemberDao()->wave([$member['id']], [$field => $diff]);
