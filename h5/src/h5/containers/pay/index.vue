@@ -122,7 +122,7 @@ export default {
             this.targetType === 'vip'
               ? `/${this.targetType}`
               : `/${this.targetType}/${this.targetId}`;
-          this.$router.push({
+          this.$router.replace({
             path,
           });
         }

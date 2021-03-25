@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     goToPay() {
-      this.$router.push({
+      this.$router.replace({
         path: '/pay',
         query: {
           id: this.order.id,

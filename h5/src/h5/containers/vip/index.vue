@@ -384,7 +384,7 @@ export default {
         return;
       }
 
-      this.$router.push({
+      this.$router.replace({
         name: 'order',
         params: {
           id: this.activePrice.id,
