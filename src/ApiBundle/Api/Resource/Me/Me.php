@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use Codeages\Biz\Pay\Service\AccountService;
+use Biz\System\Service\SettingService;
 
 class Me extends AbstractResource
 {
@@ -76,7 +77,7 @@ class Me extends AbstractResource
     }
 
     /**
-     * @return \Biz\System\Service\SettingService
+     * @return SettingService
      */
     private function getSettingService()
     {
