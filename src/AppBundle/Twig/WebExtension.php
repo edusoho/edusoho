@@ -308,9 +308,9 @@ class WebExtension extends \Twig_Extension
     {
         $goods = $this->getGoodsService()->getGoods($goodsId);
         $product = $this->getProductService()->getProduct($goods['productId']);
-        if ($targetType == 'classroom'){
+        if ('classroom' == $targetType) {
             $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode($targetType, $product['targetId']);
-        }else{
+        } else {
             $courses = $this->getCourseService()->findCoursesByCourseSetId($product['targetId']);
             $vipRight = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes($targetType, ArrayToolkit::column($courses, 'id'));
         }
