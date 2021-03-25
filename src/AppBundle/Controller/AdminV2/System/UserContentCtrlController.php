@@ -10,6 +10,7 @@ class UserContentCtrlController extends BaseController
     public function reviewAction(Request $request)
     {
         return $this->render('admin-v2/system/user-content-control/review.html.twig', [
+            'setting' => $request,
         ]);
     }
 
