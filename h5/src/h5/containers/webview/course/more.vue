@@ -19,6 +19,7 @@
       :is-request-compile="isRequestCompile"
       :vip-tag-show="true"
       :type-list="'course_list'"
+      :is-app-use="isAppUse"
       @needRequest="sendRequest"
       :showNumberData="showNumberData"
     />
@@ -45,6 +46,7 @@ export default {
   },
   data() {
     return {
+      isAppUse: true, // 是否被app调用
       selectedData: {},
       courseItemType: 'price',
       isRequestCompile: false,

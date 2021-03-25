@@ -20,6 +20,7 @@
       :course-item-type="courseItemType"
       :is-request-compile="isRequestCompile"
       :type-list="'classroom_list'"
+      :is-app-use="isAppUse"
       @needRequest="sendRequest"
       :showNumberData="showNumberData"
     />
@@ -46,6 +47,7 @@ export default {
   },
   data() {
     return {
+      isAppUse: true, // 是否被app调用
       selectedData: {},
       courseItemType: 'price',
       isRequestCompile: false,
