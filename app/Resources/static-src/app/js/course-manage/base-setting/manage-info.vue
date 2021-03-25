@@ -140,6 +140,12 @@
                     this.$refs.marketing.getFormData()
                 );
 
+                for (let key in formData) {
+                    if (JSON.stringify(formData[key]) === '[]') {
+                        formData[key] = '';
+                    }
+                }
+
                 this.$axios.post(this.courseManageUrl, this.$qs.stringify(formData), {emulateJSON: true}).then((res) => {
                     cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
                     window.location.reload();
