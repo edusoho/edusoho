@@ -263,11 +263,9 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function validateWaveField($waveData, $field, $diff)
     {
-        if (!isset($waveData[$field])) {
-            return 0;
+        if (isset($waveData[$field])) {
+            return ($diff + $waveData[$field]) > 0 ? $diff : -$waveData[$field];
         }
-
-        return ($diff + $waveData[$field]) > 0 ? $diff : -$waveData[$field];
     }
 
     public function waveGroup($id, $field, $diff)
