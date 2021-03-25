@@ -267,19 +267,19 @@ export default {
         },
         // 当前用户并不是vip
         'vip.not_member': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '购买会员',
           cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 用户会员等级过低
         'vip.level_low': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '升级会员',
           cancelButtonText: `退出${this.currentTypeText}`,
         },
         // 会员等级无效
         'vip.level_not_exist': {
-          message: `您已不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
           confirmButtonText: '购买会员',
           cancelButtonText: `退出${this.currentTypeText}`,
         },
