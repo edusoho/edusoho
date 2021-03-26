@@ -1261,10 +1261,6 @@ admin_v2:
                                     disable: true
                                     parent: admin_v2_setting_course_setting
                                     after: admin_v2_setting_live_course
-                                admin_v2_open_course_setting:
-                                    name: admin_v2.system.course.open_course_tab
-                                    disable: true
-                                    parent: admin_v2_setting_course_setting
                                 admin_v2_task_multiple_open_setting:
                                     name: admin_v2.system.course.task_multiple_open_tab
                                     disable: true
@@ -1287,10 +1283,10 @@ admin_v2:
                                     name: admin_v2.system.operation.group_tab
                                 admin_v2_invite_set:
                                     name: admin_v2.system.operation.invite_tab
-                                admin_v2_message_send_set:
-                                    name: admin_v2.system.operation.message_send_tab
-                                admin_v2_message_open_set:
-                                    name: admin_v2.system.operation.message_open_tab
+#                                admin_v2_message_send_set:
+#                                    name: admin_v2.system.operation.message_send_tab
+#                                admin_v2_message_open_set:
+#                                    name: admin_v2.system.operation.message_open_tab
                 # 合规经营与信息安全设置
                 admin_v2_operation_safety_group:
                     name: admin_v2.operation.basic_group
