@@ -238,12 +238,11 @@ class ExploreController extends BaseController
         $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds($supplierCode, $vipLevelIds);
         if ('course' == $supplierCode) {
             $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
+            $conditions = !empty($courses) ? $this->mergeConditionsByCourses($conditions, $courses) : array_merge($conditions, ['ids' => [-1]]);
         } else {
             $classroomIds = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
-            $conditions['classroomIds'] = empty($classroomIds) ? [] : ArrayToolkit::column($classroomIds, 'id');
+            $conditions['classroomIds'] = empty($classroomIds) ? [-1] : ArrayToolkit::column($classroomIds, 'id');
         }
-
-        $conditions = 'course' == $supplierCode && !empty($courses) ? $this->mergeConditionsByCourses($conditions, $courses) : $conditions;
 
         return $conditions;
     }
@@ -251,7 +250,6 @@ class ExploreController extends BaseController
     public function classroomAction(Request $request, $category)
     {
         $conditions = $request->query->all();
-
         $conditions['status'] = 'published';
         $conditions['showable'] = 1;
 
