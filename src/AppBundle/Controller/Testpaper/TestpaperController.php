@@ -73,11 +73,11 @@ class TestpaperController extends BaseController
             'answerRecord' => $answerRecord,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
-            'answerShow' => $this->getAnswerShowByAnswerSceneId($answerRecord['answer_scene_id'], $answerRecord['status'], $answerScene['pass_score'], $answerReport['score']),
+            'answerShow' => $this->getAnswerShow($answerRecord['answer_scene_id'], $answerRecord['status'], $answerScene['pass_score'], $answerReport['score']),
         ]);
     }
 
-    protected function getAnswerShowByAnswerSceneId($answerSceneId, $answerRecordStatus, $passScore, $score)
+    protected function getAnswerShow($answerSceneId, $answerRecordStatus, $passScore, $score)
     {
         $questionSetting = $this->getSettingService()->get('questions', []);
         $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];

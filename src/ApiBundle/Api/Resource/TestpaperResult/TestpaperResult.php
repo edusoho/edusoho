@@ -98,7 +98,7 @@ class TestpaperResult extends AbstractResource
         $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($testpaperRecord['answer_scene_id']);
 
-        if ('submitted' == $answerShowMode) {
+        if ('submitted' === $answerShowMode) {
             $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($scene['id']);
             if (0 == $testpaperActivity['doTimes'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
                 if ('finished' === $testpaperRecord['status'] && $answerReport['score'] >= $scene['pass_score']) {
