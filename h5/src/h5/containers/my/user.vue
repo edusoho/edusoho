@@ -6,7 +6,7 @@
           <img v-if="user.avatar" :src="user.avatar.large" />
           <img
             class="user-vip-icon"
-            v-if="user.vip && !vipDated"
+            v-if="user.vip && !vipDated && vipSwitch"
             :src="user.vip.icon"
             alt=""
           />
