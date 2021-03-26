@@ -84,15 +84,13 @@ class TestpaperController extends BaseController
         switch ($answerShowMode) {
             case 'hide':
                 return 'none';
-                break;
-
             case 'reviewed':
                 if ($this->getAnswerRecordService()->count(['answer_scene_id' => $answerSceneId, 'statusNeq' => 'finished'])) {
                     return 'none';
                 } else {
                     return 'show';
                 }
-                break;
+                // no break
             case 'submitted':
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
                 if (0 == $testpaperActivity['doTimes'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
@@ -101,9 +99,9 @@ class TestpaperController extends BaseController
                     } else {
                         return 'none';
                     }
-                    break;
                 }
-                // no break
+
+                return 'show';
             default:
                 return 'show';
                 break;
