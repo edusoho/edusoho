@@ -16,18 +16,19 @@
         </span>
       </div>
     </legend>
-    <div class="form-group">
-      <div class="col-md-2 control-label" style="padding-top:0 !important;">
-        <label for="">{{ 'admin.user_center.message_title_name'|trans }}</label>
-      </div>
-      <div class="controls col-md-10">
-        <label><input type="checkbox" name="sending_rules[student_to_student]" {% if privateMessageSetting.sending_rules.student_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
-        <label><input type="checkbox" name="sending_rules[student_to_teacher]" {% if privateMessageSetting.sending_rules.student_to_teacher|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
-        <label><input type="checkbox" name="sending_rules[teacher_to_student]" {% if privateMessageSetting.sending_rules.teacher_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
-        <p class="help-block">{{ 'admin.user_center.message.setting_tip'|trans }}</p>
+    <div class="js-sub-management {% if privateMessageSetting.enable_private_message|default('1') == '0' %}hidden{% endif %}">
+      <div class="form-group">
+        <div class="col-md-2 control-label" style="padding-top:0 !important;">
+          <label for="">{{ 'admin.user_center.message_title_name'|trans }}</label>
+        </div>
+        <div class="controls col-md-10">
+          <label><input type="checkbox" name="student_to_student" {% if privateMessageSetting.student_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
+          <label><input type="checkbox" name="student_to_teacher" {% if privateMessageSetting.student_to_teacher|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
+          <label><input type="checkbox" name="teacher_to_student" {% if privateMessageSetting.teacher_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
+          <p class="help-block">{{ 'admin.user_center.message.setting_tip'|trans }}</p>
+        </div>
       </div>
     </div>
-
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="form-group">
       <div class="col-md-offset-2 col-md-8">

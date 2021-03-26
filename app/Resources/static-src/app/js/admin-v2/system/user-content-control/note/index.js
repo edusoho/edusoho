@@ -13,3 +13,13 @@ $saveBtn.on('click', (event) => {
   $this.button('loading');
   $('#user_content_control_note').submit();
 });
+
+$('input[name="enable_note"]').change((event) => {
+  const $this = $(event.currentTarget);
+  const $subManagement = $('.js-sub-management');
+  if ($this.val() === '0') {
+    $subManagement.addClass('hidden');
+  } else if ($this.val() === '1') {
+    $subManagement.removeClass('hidden');
+  }
+});
