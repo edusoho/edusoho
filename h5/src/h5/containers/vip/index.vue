@@ -291,6 +291,15 @@ export default {
       });
       return;
     }
+    if (!this.vipSwitch) {
+      this.$router.push({
+        path: '/',
+        query: {
+          redirect: this.$route.fullPath,
+        },
+      });
+      return;
+    }
     this.isLoading = true;
     this.getVipDetail();
   },
