@@ -18,48 +18,52 @@
       </span>
     </div>
   </legend>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="enable_course_review">{{ 'admin_v2.system.user_content_control.course_review_manage'|trans }}</label>
+
+  <div class="js-sub-management {% if reviewSetting.enable_review|default('1') == '0' %}hidden{% endif %}">
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enable_course_review">{{ 'admin_v2.system.user_content_control.course_review_manage'|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('enable_course_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_course_review|default('1')) }}
+      </div>
     </div>
-    <div class="col-md-10 controls radios">
-      {{ radios('enable_course_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_course_review|default('1')) }}
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enable_classroom_review">{{ 'admin_v2.system.user_content_control.classroom_review_manage'|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('enable_classroom_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_classroom_review|default('1')) }}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enable_question_bank_review">{{ "admin_v2.system.user_content_control.question_bank_review_manage"|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('enable_question_bank_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_question_bank_review|default('1')) }}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enable_open_course_review">{{ "admin_v2.system.user_content_control.open_course_review_manage"|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('enable_open_course_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_open_course_review|default('1')) }}
+        <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enable_article_review">{{ "admin_v2.system.user_content_control.article_review_manage"|trans }}</label>
+      </div>
+      <div class="col-md-10 controls radios">
+        {{ radios('enable_article_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_article_review|default('1')) }}
+        <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
+      </div>
     </div>
   </div>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="enable_classroom_review">{{ 'admin_v2.system.user_content_control.classroom_review_manage'|trans }}</label>
-    </div>
-    <div class="col-md-10 controls radios">
-      {{ radios('enable_classroom_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_classroom_review|default('1')) }}
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="enable_question_bank_review">{{ "admin_v2.system.user_content_control.question_bank_review_manage"|trans }}</label>
-    </div>
-    <div class="col-md-10 controls radios">
-      {{ radios('enable_question_bank_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_question_bank_review|default('1')) }}
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="enable_open_course_review">{{ "admin_v2.system.user_content_control.open_course_review_manage"|trans }}</label>
-    </div>
-    <div class="col-md-10 controls radios">
-      {{ radios('enable_open_course_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_open_course_review|default('1')) }}
-      <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="enable_article_review">{{ "admin_v2.system.user_content_control.article_review_manage"|trans }}</label>
-    </div>
-    <div class="col-md-10 controls radios">
-      {{ radios('enable_article_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_article_review|default('1')) }}
-      <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
-    </div>
-  </div>
+
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   <div class="form-group">
