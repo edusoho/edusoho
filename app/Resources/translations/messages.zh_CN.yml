@@ -2118,6 +2118,8 @@ course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
 course.plan_task.activity_manage.testpaper.times.once: 单次
 course.plan_task.activity_manage.testpaper.times.always: 不限
+course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
+course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
@@ -7650,6 +7652,7 @@ admin.setting_course.questions_setting: 交卷后答案以及解析的显示
 admin.setting_course.questions_setting.hide: 不显示
 admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显示
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
+admin.setting_course.questions_setting.submitted_tips: 开启后，在考试任务中可设置分数合格后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
 admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
