@@ -33,7 +33,7 @@ function initUploadImg() {
 
     uploadImage(formData).then(function (data) {
       $target.attr('src', data.url);
-      $('input[name="license_picture"]').val(data.uri);
+      $('input[name="license_picture"]').val(data.url);
     });
   }).on('error', (code) => {
     $el.val('');
@@ -65,7 +65,7 @@ function initPermitsUploadImg($index=0) {
 
     uploadImage(formData).then(function (data) {
       $target.attr('src', data.url);
-      $('input[name="permits['+$index+'][picture]"]').val(data.uri);
+      $('input[name="permits['+$index+'][picture]"]').val(data.url);
     });
   }).on('error', (code) => {
     $el.val('');

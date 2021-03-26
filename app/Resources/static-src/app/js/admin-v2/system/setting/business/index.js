@@ -39,7 +39,7 @@ function initUploadImg() {
 
     uploadImage(formData).then(function (data) {
       $target.attr('src', data.url);
-      $('input[name="recordPicture"]').val(data.uri);
+      $('input[name="recordPicture"]').val(data.url);
     });
   }).on('error', (code) => {
     $el.val('');

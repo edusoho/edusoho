@@ -32,8 +32,8 @@
             </a>
           {% endif %}
           <a class="license-picture" style="padding-left: 40px;">
-            <img src="{% if setting('qualifications.recordPicture') %}{{ filepath(setting('qualifications.recordPicture')) }}
-                    {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
+            <img src="{% if setting('qualifications.recordPicture') %}{{ asset(setting('qualifications.recordPicture')) }}
+                    {% else %}{{ asset('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
           </a>
           <a class="mlm" {% if setting('qualifications.recordUrl') |default('') %}
             href="{{ setting('qualifications.recordUrl') }}"
@@ -47,13 +47,13 @@
       {% if setting('license.license_picture') and setting('license.license_name') %}
         {% if setting('license.license_url') %}
           <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">
-            <img src="{{ filepath(setting('license.license_picture')) }}">
+            <img src="{{ asset(setting('license.license_picture')) }}">
           </a>
           <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
             {{ setting('license.license_name') }}
           </a>
         {% else %}
-          <a id="license-picture"><img src="{{ filepath(setting('license.license_picture')) }}"></a>
+          <a id="license-picture"><img src="{{ asset(setting('license.license_picture')) }}"></a>
           <a>{{ setting('license.license_name') }}</a>
         {% endif %}
       {% endif %}
@@ -63,9 +63,9 @@
           {% if permit.name and permit.record_number %}
             {% if permit.picture %}
               <a class="mlm"
-                 href={{ fileurl(permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+                 href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
               <a class="mlm"
-                 href={{ fileurl(permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
+                 href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
             {% else %}
               <a class="mlm">{{ permit.name }}</a>
               <a class="mlm">{{ permit.record_number }}</a>
