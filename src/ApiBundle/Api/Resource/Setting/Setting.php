@@ -19,7 +19,7 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group',
+        'mail', 'openCourse', 'article', 'group', 'consult',
     ];
 
     /**
@@ -50,6 +50,24 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getConsult()
+    {
+        $consultSetting = $this->getSettingService()->get('consult', []);
+        if (1 == $consultSetting['enabled']) {
+            return [
+                'enabled' => $consultSetting['enabled'],
+                'qq' => $consultSetting['qq'],
+                'qqgroup' => $consultSetting['qqgroup'],
+                'phone' => $consultSetting['phone'],
+                'email' => $consultSetting['email'],
+            ];
+        }
+
+        return [
+            'enabled' => $consultSetting['enabled'],
+        ];
     }
 
     public function getGoods()
