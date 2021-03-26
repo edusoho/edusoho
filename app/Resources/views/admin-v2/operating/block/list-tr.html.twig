@@ -22,7 +22,7 @@
         {% endif %}
 
         {% if blockTemplate.mode == 'template' %}
-          {% if blockTemplate.title == '图灵会员专区' and setting('vip.enabled', 1) != 1 %}
+          {% if blockTemplate.code == 'turing:turing_vip' and setting('vip.enabled', 1) != 1 %}
             <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_v2_block_tip') }}" data-toggle="modal" data-target="#modal">{{'admin.block_manage.edit_content'|trans}}</button>
           {% else %}
             <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_v2_block_visual_edit', {blockTemplateId:blockTemplate.id,type:type}) }}">{{'admin.block_manage.edit_content'|trans}}</a>
