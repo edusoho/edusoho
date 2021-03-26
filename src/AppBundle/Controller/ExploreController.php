@@ -23,8 +23,6 @@ class ExploreController extends BaseController
     public function courseSetsAction(Request $request, $category)
     {
         $conditions = $request->query->all();
-        $filter = $request->query->get('filter', '');
-        $currentLevelId = $filter ? $filter['currentLevelId'] : '';
 
         list($conditions, $filter) = $this->getFilter($conditions, 'course');
 
@@ -34,10 +32,6 @@ class ExploreController extends BaseController
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'course');
-        if (!empty($currentLevelId) && 'all' != $currentLevelId && isset($conditions['vipRightCount'])) {
-            $vipRightCount = $conditions['vipRightCount'];
-            unset($conditions['vipRightCount']);
-        }
 
         unset($conditions['code']);
 
@@ -128,7 +122,7 @@ class ExploreController extends BaseController
         return $this->render(
             'course-set/explore.html.twig',
             [
-                'courseSets' => !isset($vipRightCount) || $vipRightCount > 0 ? $this->getWebExtension()->filterCourseSetsVipRight($courseSets) : [],
+                'courseSets' => $this->getWebExtension()->filterCourseSetsVipRight($courseSets),
                 'category' => $category,
                 'filter' => $filter,
                 'paginator' => $paginator,
@@ -242,15 +236,13 @@ class ExploreController extends BaseController
         }
 
         $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds($supplierCode, $vipLevelIds);
-        $conditions['vipRightCount'] = count(ArrayToolkit::column($vipRights, 'uniqueCode'));
         if ('course' == $supplierCode) {
             $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
+            $conditions = !empty($courses) ? $this->mergeConditionsByCourses($conditions, $courses) : array_merge($conditions, ['ids' => [-1]]);
         } else {
             $classroomIds = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
-            $conditions['classroomIds'] = empty($classroomIds) ? [] : ArrayToolkit::column($classroomIds, 'id');
+            $conditions['classroomIds'] = empty($classroomIds) ? [-1] : ArrayToolkit::column($classroomIds, 'id');
         }
-
-        $conditions = 'course' == $supplierCode && !empty($courses) ? $this->mergeConditionsByCourses($conditions, $courses) : $conditions;
 
         return $conditions;
     }
@@ -258,9 +250,6 @@ class ExploreController extends BaseController
     public function classroomAction(Request $request, $category)
     {
         $conditions = $request->query->all();
-        $filter = $request->query->get('filter', '');
-        $currentLevelId = $filter ? $filter['currentLevelId'] : '';
-
         $conditions['status'] = 'published';
         $conditions['showable'] = 1;
 
@@ -270,10 +259,6 @@ class ExploreController extends BaseController
         list($conditions, $filter) = $this->getFilter($conditions, 'classroom');
 
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId'], 'classroom');
-        if (!empty($currentLevelId) && 'all' != $currentLevelId && isset($conditions['vipRightCount'])) {
-            $vipRightCount = $conditions['vipRightCount'];
-            unset($conditions['vipRightCount']);
-        }
 
         list($conditions, $orderBy) = $this->getClassroomSearchOrderBy($conditions);
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
@@ -295,7 +280,7 @@ class ExploreController extends BaseController
             'classroom/explore.html.twig',
             [
                 'paginator' => $paginator,
-                'classrooms' => !isset($vipRightCount) || $vipRightCount > 0 ? $this->getWebExtension()->filterClassroomsVipRight($classrooms) : [],
+                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
                 'category' => $category,
                 'categoryArray' => $categoryArray,
                 'categoryParent' => $categoryParent,
