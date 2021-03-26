@@ -24,11 +24,14 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
 use Biz\Content\Service\BlockService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
@@ -43,6 +46,7 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class WebExtension extends \Twig_Extension
@@ -219,6 +223,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
             new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
             new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
+            new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
         ];
     }
 
@@ -299,6 +304,44 @@ class WebExtension extends \Twig_Extension
         return $courseSets;
     }
 
+    public function isVipRight($goodsId, $targetType)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        if ('classroom' == $targetType) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode($targetType, $product['targetId']);
+        } else {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($product['targetId']);
+            $vipRight = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes($targetType, ArrayToolkit::column($courses, 'id'));
+        }
+
+        return empty($vipRight) ? 0 : 1;
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
     public function filterCoursesVipRight($courses)
     {
         if ($this->isPluginInstalled('Vip')) {
@@ -327,6 +370,9 @@ class WebExtension extends \Twig_Extension
         return $classrooms;
     }
 
+    /**
+     * @return VipRightService
+     */
     protected function getVipRightService()
     {
         return $this->createService('VipPlugin:Marketing:VipRightService');
