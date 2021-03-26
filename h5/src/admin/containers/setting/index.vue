@@ -335,7 +335,7 @@ export default {
               cancelButtonText: '取消',
             })
               .then(() => {
-                window.open(window.location.origin + 'admin/v2/setting/vip');
+                window.open(window.location.origin + '/admin/v2/setting/vip');
               })
               .catch(() => {});
             return;
