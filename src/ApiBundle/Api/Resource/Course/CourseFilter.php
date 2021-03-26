@@ -12,6 +12,7 @@ use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -59,7 +60,8 @@ class CourseFilter extends Filter
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
 
-        if ($this->isPluginInstalled('Vip')) {
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
             $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
             $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
         }
@@ -68,7 +70,7 @@ class CourseFilter extends Filter
             $classroomFilter = new ClassroomFilter();
             $classroomFilter->setMode(Filter::SIMPLE_MODE);
             $classroomFilter->filter($data['classroom']);
-            if ($this->isPluginInstalled('Vip')) {
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
                 $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['classroom']['id']);
                 $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
             }
@@ -115,5 +117,13 @@ class CourseFilter extends Filter
     private function getVipRightService()
     {
         return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

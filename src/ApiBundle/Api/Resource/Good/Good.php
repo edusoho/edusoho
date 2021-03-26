@@ -97,7 +97,8 @@ class Good extends AbstractResource
                 ? $this->generateUrl('my_course_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL)
                 : $this->generateUrl('classroom_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL);
 
-            if ($this->isPluginInstalled('Vip')) {
+            $vipSetting = $this->getSettingService()->get('vip', []);
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
                 list($vipLevelInfo, $vipUser) = $goodsEntity->getVipInfo($goods, $spec, $user['id']);
                 $spec['vipLevelInfo'] = $vipLevelInfo;
                 $spec['vipUser'] = $vipUser;

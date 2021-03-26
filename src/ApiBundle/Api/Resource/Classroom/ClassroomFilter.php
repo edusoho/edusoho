@@ -9,6 +9,7 @@ use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -58,7 +59,8 @@ class ClassroomFilter extends Filter
             $specsFilter->filter($data['spec']);
         }
 
-        if ($this->isPluginInstalled('Vip')) {
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
             $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['id']);
             $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
         }
@@ -86,5 +88,13 @@ class ClassroomFilter extends Filter
     private function getVipRightService()
     {
         return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }
