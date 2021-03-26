@@ -26,6 +26,7 @@
           </div>
           <div class="col-md-8 controls">
             <input type="text" id="icpUrl" name="icpUrl" class="form-control" value="{{ qualifications.icpUrl }}">
+            <p class="help-block">{{ 'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()}) }}</p>
           </div>
         </div>
       <div class="form-group">
@@ -48,7 +49,7 @@
         </div>
         <div class="controls col-md-8">
           <div class="cd-image-upload" id="business-picture-container">
-            <img src="{% if qualifications.recordPicture|default() %}{{ filepath(qualifications.recordPicture) }}{% endif %}"
+            <img src="{% if qualifications.recordPicture|default() %}{{ asset(qualifications.recordPicture) }}{% endif %}"
                  alt=""
                  class="cd-avatar cd-avatar-square cd-avatar-lg" id="business-qrcode"/>
             <div class="image-upload-mask">

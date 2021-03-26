@@ -1,6 +1,6 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
-{% set menu = 'admin_v2_business_license' %}
+{% set menu = 'admin_v2_setting_business_license' %}
 {% do script(['libs/jquery-validation.js','app/js/admin-v2/system/setting/license/index.js']) %}
 
 {% block main %}
@@ -23,7 +23,7 @@
         </div>
         <div class="controls col-md-8">
           <div class="cd-image-upload" id="license-picture-container">
-            <img src="{% if license.license_picture|default() %}{{ filepath(license.license_picture) }}{% endif %}"
+            <img src="{% if license.license_picture|default() %}{{ asset(license.license_picture) }}{% endif %}"
                  alt=""
                  class="cd-avatar cd-avatar-square cd-avatar-lg" id="leading-qrcode"/>
             <div class="image-upload-mask">
@@ -90,7 +90,7 @@
             </div>
             <div class="controls col-md-8">
               <div class="cd-image-upload" id="permits-container">
-                <img src="{% if permit.picture|default() %}{{ filepath(permit.picture) }}{% endif %}"
+                <img src="{% if permit.picture|default() %}{{ asset(permit.picture) }}{% endif %}"
                      alt=""
                      class="cd-avatar cd-avatar-square cd-avatar-lg" id="permits-qrcode{{ loop.index - 1 }}"/>
                 <div class="image-upload-mask">
