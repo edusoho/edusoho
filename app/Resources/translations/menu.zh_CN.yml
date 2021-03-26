@@ -863,7 +863,7 @@ admin_v2.system.operation.message_send_tab: 私信发送
 admin_v2.transaction.basic_group: 交易设置
 
 # 系统-合规经营与信息安全
-admin_v2.operation.basic_group: 合规经营与信息安全
+admin_v2.operation.basic_group: 合规经营
 
 #系统-经营资质
 admin_v2.system.business_management_menu: 经营资质
