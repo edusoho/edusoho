@@ -334,7 +334,7 @@ export default {
 
     // 轮播图 vip 状态
     vipStatus(data) {
-      if (!this.vipInfo) {
+      if (this.vipDated) {
         return '您还不是会员，开通享特权';
       }
       const { seq, deadline } = this.vipInfo;
