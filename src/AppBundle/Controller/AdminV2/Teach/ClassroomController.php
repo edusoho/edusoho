@@ -80,11 +80,13 @@ class ClassroomController extends BaseController
     {
         $classroomSetting = $this->getSettingService()->get('classroom', []);
 
+        $threadEnabled = $this->getSettingService()->node('ugc_thread.enable_thread', '1');
+        $noteEnabled = $this->getSettingService()->node('ugc_note.enable_note', '1');
         $default = [
             'explore_default_orderBy' => 'createdTime',
             'show_review' => '1',
-            'show_thread' => '1',
-            'show_note' => '1',
+            'show_thread' => $threadEnabled ? $this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') : 0,
+            'show_note' => $noteEnabled ? $this->getSettingService()->node('ugc_note.enable_classroom_note', '1') : 0,
         ];
 
         $classroomSetting = array_merge($default, $classroomSetting);
@@ -94,7 +96,7 @@ class ClassroomController extends BaseController
 
             $classroomSetting = array_merge($classroomSetting, $set);
 
-            $this->getSettingService()->set('classroom', $set);
+            $this->getSettingService()->set('classroom', $classroomSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
