@@ -141,7 +141,7 @@
                 );
 
                 for (let key in formData) {
-                    if (Array.isArray(formData[key]) && formData[key].length === 0) {
+                    if (key === 'tags' && Array.isArray(formData[key]) && formData[key].length === 0) {
                         formData[key] = '';
                     }
                 }
