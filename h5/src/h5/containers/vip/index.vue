@@ -334,11 +334,18 @@ export default {
 
     // 轮播图 vip 状态
     vipStatus(data) {
-      if (this.vipDated) {
+      if (!this.vipInfo) {
         return '您还不是会员，开通享特权';
       }
-      const { seq, deadline } = this.vipInfo;
-      const currentVipSeq = data.seq;
+      const seq = Number(this.vipInfo.seq);
+      const deadline = this.vipInfo.deadline;
+      const currentVipSeq = Number(data.seq);
+
+      if (this.vipDated) {
+        return seq === currentVipSeq
+          ? '会员身份已到期'
+          : '您还不是会员，开通享特权';
+      }
 
       if (seq === currentVipSeq) {
         return `会员有效期至：${this.$moment(deadline).format('YYYY/MM/DD')}`;
