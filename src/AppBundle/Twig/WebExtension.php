@@ -293,11 +293,10 @@ class WebExtension extends \Twig_Extension
     public function filterCourseSetsVipRight($courseSets)
     {
         if ($this->isPluginInstalled('Vip')) {
-            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column(ArrayToolkit::column($courseSets, 'course'), 'id')], [], 0, PHP_INT_MAX);
-            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
-
             foreach ($courseSets as &$courseSet) {
-                $courseSet['course']['vipLevelId'] = isset($vipRights[$courseSet['course']['id']]['vipLevelId']) ? $vipRights[$courseSet['course']['id']]['vipLevelId'] : 0;
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes('course', ArrayToolkit::column($courses, 'id'));
+                $courseSet['course']['vipLevelId'] = empty($vipRights) ? 0 : 1;
             }
         }
 
