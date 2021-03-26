@@ -85,14 +85,13 @@ export default {
       this.requestCourses(setting);
     },
   },
-  created() {
+  async created() {
     window.scroll(0, 0);
 
     // vuex 中会员等级列表为空
     if (!this.vipLevels.length) {
-      this.getVipLevels();
+      await this.getVipLevels();
     }
-
     // 初始化下拉筛选数据
     this.initDropdownData();
 

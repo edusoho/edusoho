@@ -13,8 +13,15 @@ const mutations = {
 const actions = {
   // get vip levels
   getVipLevels({ commit }) {
-    Api.getVipLevels().then(res => {
-      commit('SET_VIP_LEVELS', res);
+    return new Promise((resolve, reject) => {
+      Api.getVipLevels()
+        .then(res => {
+          resolve(res);
+          commit('SET_VIP_LEVELS', res);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   },
 };
