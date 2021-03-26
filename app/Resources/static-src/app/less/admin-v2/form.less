@@ -6,3 +6,13 @@
   margin-bottom: 0;
   color: @brand-danger;
 }
+.control-label-required {
+  position: relative;
+  &:before {
+    content: "*";
+    color: @brand-warning;
+    position: absolute;
+    top: 4px;
+    left: -10px;
+  }
+}
