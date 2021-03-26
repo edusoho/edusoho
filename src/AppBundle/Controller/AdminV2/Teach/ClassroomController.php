@@ -85,7 +85,9 @@ class ClassroomController extends BaseController
         $default = [
             'explore_default_orderBy' => 'createdTime',
             'show_review' => '1',
-            'show_thread' => $threadEnabled ? $this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') : 0,
+            'show_thread' => $threadEnabled &&
+                ($this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') || $this->getSettingService()->node('ugc_thread.enable_classroom_question', '1'))
+                ? '1' : '0',
             'show_note' => $noteEnabled ? $this->getSettingService()->node('ugc_note.enable_classroom_note', '1') : 0,
         ];
 
