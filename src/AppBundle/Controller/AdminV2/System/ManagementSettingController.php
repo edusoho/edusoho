@@ -51,7 +51,7 @@ class ManagementSettingController extends BaseController
                 }
             }
             $this->getSettingService()->set('license', $permits);
-            $this->getSettingService()->set('permit', $permits);
+            $this->getSettingService()->set('permits', $permits);
         }
         $default = [
             'license_name' => '',
@@ -61,7 +61,7 @@ class ManagementSettingController extends BaseController
                 ['name' => '', 'record_number' => '', 'picture' => ''],
             ],
         ];
-        $permits = $this->getSettingService()->get('permit', []);
+        $permits = $this->getSettingService()->get('permits', []);
 
         $permits = array_merge($default, $permits);
 
