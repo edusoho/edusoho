@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\System\Service\SettingService;
@@ -94,9 +95,20 @@ class TestpaperResult extends AbstractResource
             $resultShow = false;
         }
 
-        $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
-
+        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($testpaperRecord['answer_scene_id']);
+
+        if ('submitted' == $answerShowMode) {
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($scene['id']);
+            if (0 == $testpaperActivity['doTimes'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
+                if ('finished' === $testpaperRecord['status'] && $answerReport['score'] >= $scene['pass_score']) {
+                    $resultShow = true;
+                } else {
+                    $resultShow = false;
+                }
+            }
+        }
+
         if ($testpaperRecord['user_id'] != $user['id']) {
             $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($scene['id']);
             $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
@@ -106,6 +118,8 @@ class TestpaperResult extends AbstractResource
         if (empty($course) && $testpaperRecord['user_id'] != $user['id']) {
             throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
+
+        $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($testpaperRecord['id']);
@@ -117,7 +131,6 @@ class TestpaperResult extends AbstractResource
         $items = ArrayToolkit::groupIndex($items, 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
         $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport);
 
         return [

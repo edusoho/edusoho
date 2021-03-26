@@ -1836,6 +1836,8 @@ course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
+course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.time: Time
@@ -6399,6 +6401,7 @@ admin.setting_course.questions_setting: 'Display answer and resolution after han
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
+admin.setting_course.questions_setting.submitted_tips: After it is turned on, the test task can be set to display the answer and analysis after the score is passed
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
 admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
