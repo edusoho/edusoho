@@ -32,8 +32,6 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
-use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
-use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
@@ -374,9 +372,9 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
             $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-            $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], 'classroom', $classroom['id']);
         } else {
-            $status = $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], 'course', $course['id']);
         }
 
         return 'ok' === $status;
