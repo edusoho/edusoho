@@ -20,7 +20,7 @@
         <label for="enable_course_question">{{ 'admin_v2.system.user_content_control.course_question_manage'|trans }}</label>
       </div>
       <div class="col-md-10 controls radios">
-        {{ radios('enable_course_question', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.show_review|default('1')) }}
+        {{ radios('enable_course_question', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_course_question|default('1')) }}
         <label><a target="_blank" href="{{ path('admin_v2_question', { postStatus: 'unPosted' }) }}">{{ 'admin_v2.system.user_content_control.goto_question_manage'|trans }}</a></label>
       </div>
     </div>

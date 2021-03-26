@@ -21,9 +21,9 @@
         <label for="">{{ 'admin.user_center.message_title_name'|trans }}</label>
       </div>
       <div class="controls col-md-10">
-        <label><input type="checkbox" name="sending_rules[student_to_student]" {% if privateMessageSetting.sending_rules.student_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
-        <label><input type="checkbox" name="sending_rules[student_to_teacher]" {% if privateMessageSetting.sending_rules.student_to_teacher|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
-        <label><input type="checkbox" name="sending_rules[teacher_to_student]" {% if privateMessageSetting.sending_rules.teacher_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
+        <label><input type="checkbox" name="student_to_student" {% if privateMessageSetting.student_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
+        <label><input type="checkbox" name="student_to_teacher" {% if privateMessageSetting.student_to_teacher|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
+        <label><input type="checkbox" name="teacher_to_student" {% if privateMessageSetting.teacher_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
         <p class="help-block">{{ 'admin.user_center.message.setting_tip'|trans }}</p>
       </div>
     </div>

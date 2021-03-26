@@ -13,8 +13,9 @@ class GoodsSettingController extends BaseController
         if ($request->isMethod('POST')) {
             $setting = $request->request->all();
             $reviewEnabled = $this->getSettingService()->node('ugc_review.enable_review', '1');
-            $setting['show_review'] = $reviewEnabled ?
-                $this->getSettingService()->node('ugc_review.enable_course_review', '1') :
+            $setting['show_review'] = $reviewEnabled && ($this->getSettingService()->node('ugc_review.enable_course_review', '1')
+                || $this->getSettingService()->node('ugc_review.enable_classroom_review', '1')) ?
+                1 :
                 0;
             $this->updateCourseAndClassroomSettingSetting($setting);
             $this->getSettingService()->set('goods_setting', $request->request->all());

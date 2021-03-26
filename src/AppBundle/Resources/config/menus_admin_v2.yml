@@ -1209,6 +1209,9 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
+                                admin_v2_certificate_setting:
+                                    name: admin_v2.system.site.license_tab
+                                    disable: true
                         # 用户设置
                         admin_v2_setting_user:
                             name: admin_v2.system.user_menu
@@ -1298,7 +1301,7 @@ admin_v2:
                                     name: admin_v2.system.business_qualification_tab
                                     disable: true
                                     router_name: admin_v2_setting_management
-                                admin_v2_business_license:
+                                admin_v2_setting_business_license:
                                     name: admin_v2.system.management_qualifications.business_license_tab
                                     disable: true
                                     router_name: admin_v2_setting_business_license
