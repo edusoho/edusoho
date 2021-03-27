@@ -29,13 +29,20 @@ define(function(require, exports, module) {
       function(options) {
         var element = options.element  ;
         if ($.trim(element.val()).length <= 0 )
-        { 
+        {
           return false;
         } else {
           return true;
         }
       },
       Translator.trans('validate_old.visible_character.message', {display:'{{display}}'})
+    ],
+    [
+      'check_space',
+      function(options) {
+        return $.trim(options.element.val()).length > 0
+      },
+      Translator.trans('validate_old.check_space.message', {display:'{{display}}'})
     ],
     [
       'chinese_limit',

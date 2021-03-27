@@ -921,6 +921,7 @@ validate_old.not_all_digital.message: %display% can not be all numbers
 validate_old.right_time_tip: Please input the time in right format
 validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
+validate_old.check_space.message: Please enter %display%
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
 validate_old.chinese.message: %display% must be Chinese
 validate_old.phone.message: Please enter a valid %display% (only mainland China phone number).
