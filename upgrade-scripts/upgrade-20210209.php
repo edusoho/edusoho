@@ -56,6 +56,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateCourseMemberJoinedChannel',
             'updateClassroomMemberJoinedChannel',
             'updatePlugin',
+            'updateThemeConfig'
         );
 
         $funcNames = array();
@@ -202,6 +203,41 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return $pluginList[$page - 1];
+    }
+
+    protected function updateThemeConfig()
+    {
+        $vipComponent = [
+            'title' => '会员',
+            'count' => 4,
+            'vipOrder' => 'DESC',
+            'vipList' => 'show',
+            'background' => '',
+            'code' => 'vip',
+            'defaultTitle' => '会员',
+            'subTitle' => '购买会员，享受更多会员权益',
+            'defaultSubTitle' => '购买会员，享受更多会员权益',
+            'id' => 'vip'
+        ];
+        $oldConfig = $this->getConnection()->fetchAssoc("select id,config,confirmConfig from `theme_config` where `name`='简墨';");
+        if ($oldConfig){
+            $oldConfig['confirmConfig'] = json_decode($oldConfig['confirmConfig'], true);
+            $oldConfig['config'] = json_decode($oldConfig['config'], true);
+
+            if (!isset($oldConfig['confirmConfig']['blocks']['left']['vip'])){
+                $oldConfig['confirmConfig']['blocks']['left']['vip'] = $vipComponent;
+            }
+            if (!isset($oldConfig['config']['blocks']['left']['vip'])){
+                $oldConfig['config']['blocks']['left']['vip'] = $vipComponent;
+            }
+
+            $oldConfig['confirmConfig'] = json_encode($oldConfig['confirmConfig']);
+            $oldConfig['config'] = json_encode($oldConfig['config']);
+
+            $this->getConnection()->exec("
+                UPDATE `theme_config` SET `config`='{$oldConfig['config']}',`confirmConfig`='{$oldConfig['confirmConfig']}' where id = {$oldConfig['id']};
+            ");
+        }
     }
 
     /**
