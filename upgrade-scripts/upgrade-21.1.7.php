@@ -194,7 +194,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginList = array(
             [
                 'Vip',
-                1990   //升级包ID未定，后续需要修改
+                2121   //升级包ID未定，后续需要修改
             ]
         );
 
