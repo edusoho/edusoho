@@ -200,6 +200,7 @@ memberLevel:
 duration_unit:
     month: Month
     year: Year
+    day: day
 
 boughtType:
     new: Purchase

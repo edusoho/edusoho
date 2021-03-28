@@ -219,6 +219,7 @@ memberLevel:
 duration_unit:
     month: 个月
     year: 年
+    day: 天
 
 boughtType:
     new: 购买
