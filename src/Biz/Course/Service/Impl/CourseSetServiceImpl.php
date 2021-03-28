@@ -959,6 +959,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
     }
 
+    public function waveCourseSet($id, $field, $diff)
+    {
+        return $this->getCourseSetDao()->wave([$id], [$field => $diff]);
+    }
+
     protected function getRelatedCourseSetDao()
     {
         return $this->createDao('Course:RelatedCourseSetDao');

@@ -21,7 +21,19 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.courses.sort' => 'onCourseSetCoursesSort',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
+            'review.create' => 'onReviewChanged',
         ];
+    }
+
+    public function onReviewChanged(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if (!isset($review['targetId'])) {
+            return true;
+        }
+
+        $this->getCourseSetService()->waveCourseSet($review['targetId'], 'ratingNum', +1);
     }
 
     public function onCourseStatusChange(Event $event)
