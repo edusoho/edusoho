@@ -118,6 +118,11 @@ class BlockController extends BaseController
         ]);
     }
 
+    public function blockTipAction(Request $request)
+    {
+        return $this->render('admin-v2/operating/block/block-tip-modal.html.twig');
+    }
+
     public function visualEditAction(Request $request, $blockTemplateId, $type)
     {
         $user = $this->getUser();

@@ -41,12 +41,21 @@ define(function(require, exports, module) {
       
       $componets.on("click", '.check-block', function(event){
         var $this = $(this);
-        if ($this.prop('checked') == true) {
-            $this.parents('li').find('.item-edit-btn,.item-set-btn').show();
+        if ($(this).data('pendantCode') == 'vip' && $(this).data('vipEnabled') != 1){
+          $.get($(this).data('url'), function(html){
+            $modal.html(html)
+            $modal.modal('show');
+          }).success(function () {
+            $('#vipTip').attr('checked', false);
+          });
         } else {
+          if ($this.prop('checked') == true) {
+            $this.parents('li').find('.item-edit-btn,.item-set-btn').show();
+          } else {
             $this.closest('li').find('.item-edit-btn,.item-set-btn').hide();
+          }
+          $themeEditContent.trigger('save_config', getConfig());
         }
-        $themeEditContent.trigger('save_config', getConfig());
       });
 
       $componets.on('click', '.item-edit-btn', function(event){
