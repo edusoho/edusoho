@@ -333,7 +333,7 @@ class ClassroomController extends BaseController
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
         $classroomMembers = $this->getClassroomService()->searchMembers(['classroomId' => $classroom['id'], 'role' => 'student'], [], 0, $memberCount, ['userId']);
 
-        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $users = empty($members) ? [] : $this->getUserService()->getUserAndProfileByIds(array_column($members, 'userId'));
         $totalLearnedTime = empty($classroomCourses) || empty($classroomMembers) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id'), 'userIds' => array_column($classroomMembers, 'userId')]);
 
         $usersLearnedTime = [];

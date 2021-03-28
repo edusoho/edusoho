@@ -13,6 +13,8 @@ class ClassroomMemberStatisticsExporter extends Exporter
     {
         return [
             'admin.classroom_manage.statistics.member.nickname_th',
+            'admin.classroom_manage.statistics.member.phone_number_th',
+            'admin.classroom_manage.statistics.member.id_number_th',
             'admin.classroom_manage.statistics.member.create_time_th',
             'admin.classroom_manage.statistics.member.finish_time_th',
             'admin.classroom_manage.statistics.member.learn_time_th',
@@ -27,7 +29,7 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $classroom = $this->getClassroomService()->getClassroom($this->conditions['classroomId']);
 
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $start, $limit);
-        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $users = $this->getUserService()->getUserAndProfileByIds(array_column($members, 'userId'));
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
         $usersLearnedTime = [];
@@ -43,6 +45,8 @@ class ClassroomMemberStatisticsExporter extends Exporter
             $nickname = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $content[] = [
                 is_numeric($nickname) ? $nickname."\t" : $nickname,
+                empty($users[$member['userId']]['mobile']) ? '--' : $users[$member['userId']]['mobile'] . "\t",
+                empty($users[$member['userId']]['idcard']) ? '--' : $users[$member['userId']]['idcard'] . "\t",
                 date('Y-m-d H:i:s', $member['createdTime']),
                 empty($member['finishedTime']) ? '--' : date('Y-m-d H:i:s', $member['finishedTime']),
                 empty($usersLearnedTime[$member['userId']]) ? 0.0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1),

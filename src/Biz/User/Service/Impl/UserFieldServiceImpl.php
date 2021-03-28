@@ -14,6 +14,15 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         return $this->getUserFieldDao()->get($id);
     }
 
+    public function findUsersProfileFieldByIds($ids)
+    {
+        $usersProfile = UserSerialize::unserializes(
+            $this->getUserProfileDao()->findByIds($ids)
+        );
+
+        return ArrayToolkit::index($usersProfile, 'id');
+    }
+
     public function addUserField($fields)
     {
         if (empty($fields['field_title'])) {
@@ -175,5 +184,10 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     protected function getUserFieldDao()
     {
         return $this->createDao('User:UserFieldDao');
+    }
+
+    protected function getUserProfileDao()
+    {
+        return $this->createDao('User:UserProfileDao');
     }
 }

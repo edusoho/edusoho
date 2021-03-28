@@ -339,8 +339,10 @@ class CourseSetController extends BaseController
         $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         foreach ($students as $key => &$student) {
-            $user = $this->getUserService()->getUser($student['userId']);
+            $user = $this->getUserService()->getUserAndProfile($student['userId']);
             $student['nickname'] = $user['nickname'];
+            $student['mobile'] = $user['mobile'];
+            $student['idcard'] = $user['idcard'];
 
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
@@ -758,8 +760,10 @@ class CourseSetController extends BaseController
         $exportMembers = [];
         foreach ($students as $key => $student) {
             $exportMember = [];
-            $user = $this->getUserService()->getUser($student['userId']);
+            $user = $this->getUserService()->getUserAndProfile($student['userId']);
             $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
+            $exportMember['mobile'] = is_numeric($user['mobile']) ? $user['mobile']."\t" : $user['mobile'];
+            $exportMember['idcard'] = is_numeric($user['idcard']) ? $user['idcard']."\t" : $user['idcard'];
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -785,6 +789,8 @@ class CourseSetController extends BaseController
 
         $titles = [
             $this->trans('admin.course_manage.statistics.data_detail.name'),
+            $this->trans('admin.course_manage.statistics.data_detail.phone_number'),
+            $this->trans('admin.course_manage.statistics.data_detail.id_number'),
             $this->trans('admin.course_manage.statistics.data_detail.join_time'),
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),

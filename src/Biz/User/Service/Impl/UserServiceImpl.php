@@ -34,6 +34,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\BlacklistService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
@@ -61,6 +62,24 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $user;
+    }
+
+    public function getUserAndProfileByIds($ids)
+    {
+        $users = $this->findUsersByIds($ids);
+        $usersProfile = [];
+
+        if (!empty($users)) {
+            $usersProfile = $this->getProfileService()->findUsersProfileFieldByIds($ids);
+        }
+
+        foreach ($users as $key => &$user) {
+            if (isset($usersProfile[$key])) {
+                $user = array_merge($user,$usersProfile[$key]);
+            }
+        }
+
+        return $users;
     }
 
     public function countUsers(array $conditions)
@@ -2369,6 +2388,14 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getIpBlacklistService()
     {
         return $this->createService('System:IpBlacklistService');
+    }
+
+    /**
+     * @return UserFieldService
+     */
+    protected function getProfileService()
+    {
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getPasswordEncoder()

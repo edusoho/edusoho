@@ -20,6 +20,8 @@
     <thead>
       <tr class="active">
         <td>{{ 'admin.classroom_manage.statistics.member.nickname_th'|trans }}</td>
+        <td>{{ 'admin.classroom_manage.statistics.member.phone_number_th'|trans }}</td>
+        <td>{{ 'admin.classroom_manage.statistics.member.id_number_th'|trans }}</td>
         <td>{{ 'admin.classroom_manage.statistics.member.create_time_th'|trans }}</td>
         <td>{{ 'admin.classroom_manage.statistics.member.finish_time_th'|trans }}</td>
         <td>{{ 'admin.classroom_manage.statistics.member.learn_time_th'|trans }}</td>
@@ -33,6 +35,20 @@
           <td>
             {% if users[member.userId] %}
               {{ users[member.userId].nickname|default('') }}
+            {% endif %}
+          </td>
+          <td>
+            {% if users[member.userId].mobile %}
+              {{ users[member.userId].mobile }}
+            {% else %}
+              ----
+            {% endif %}
+          </td>
+          <td>
+            {% if users[member.userId].idcard %}
+              {{ users[member.userId].idcard }}
+            {% else %}
+              --
             {% endif %}
           </td>
           <td>{{ member.createdTime|date('Y-m-d H:i:s') }}</td>
