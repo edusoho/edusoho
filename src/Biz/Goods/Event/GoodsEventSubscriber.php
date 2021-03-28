@@ -70,7 +70,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
      */
     private function getGoodsService()
     {
-        return $this->getBiz()->service('Goods:Goods');
+        return $this->getBiz()->service('Goods:GoodsService');
     }
 
     /**
