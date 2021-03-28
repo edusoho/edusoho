@@ -1836,6 +1836,8 @@ course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
+course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.time: Time
@@ -6401,6 +6403,7 @@ admin.setting_course.questions_setting: 'Display answer and resolution after han
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
+admin.setting_course.questions_setting.submitted_tips: After it is turned on, the test task can be set to display the answer and analysis after the score is passed
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
 admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
@@ -6866,6 +6869,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
+admin.wap_setting.responsive: Responsive
 admin.wap_setting.off: Off
 admin.wap_setting.tip: MicroSchool is an application that is opened through a browser and does not require a download. The link can be sent to students, or added to a push SMS, students can click on the link and immediately enter the micro-net school to study, purchase courses, course sharing, etc. The micro-net school is more suitable for the purpose of promoting student sharing, new promotion, and activation through marketing activities.
 admin.wap_setting.edit.tip: On the left side is a preview of the home page of your micro-net school, you can click "Edit Micro-net School" to enter the edit page. You can also select the appropriate theme application through the Theme Template. Build a personalized micro-net school home page through the free combination of components.
@@ -10413,6 +10417,14 @@ classroom.manage.data_statistics.finished_time: FinishedTime
 classroom.manage.data_statistics.finish_status.unlearn: UnLearn
 classroom.manage.data_statistics.finish_status.learning: Learning
 classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.course_detail_list.select_all: All
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
+admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: Mobile
+admin.edu_cloud.edu_video.finger_print_content_label.domain: Domain
+admin.edu_cloud.edu_video.finger_print_content_tips: For a better user experience, it is recommended to combine up to 2 information displays. Note: If the user's real name and mobile phone number are not available, it will be displayed as-
+admin.edu_cloud.edu_video.finger_print_embed_tips: After it is turned on, cloud video fingerprint information will be displayed at random times and locations during video playback.

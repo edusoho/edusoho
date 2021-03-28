@@ -75,7 +75,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         foreach ($users as $key => &$user) {
             if (isset($usersProfile[$key])) {
-                $user = array_merge($user,$usersProfile[$key]);
+                $user = array_merge($user, $usersProfile[$key]);
             }
         }
 
