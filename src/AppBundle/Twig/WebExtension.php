@@ -1453,11 +1453,13 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function subTextFilter($text, $length = null)
+    public function subTextFilter($text, $length = null, $line = false)
     {
         $text = strip_tags($text);
 
-        $text = str_replace(["\n", "\r", "\t"], '', $text);
+        if (!$line) {
+            $text = str_replace(["\n", "\r", "\t"], '', $text);
+        }
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
