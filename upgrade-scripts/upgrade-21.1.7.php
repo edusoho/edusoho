@@ -238,6 +238,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 UPDATE `theme_config` SET `config`='{$oldConfig['config']}',`confirmConfig`='{$oldConfig['confirmConfig']}' where id = {$oldConfig['id']};
             ");
         }
+
+        return 1;
     }
 
     /**
