@@ -31,7 +31,6 @@ export default class HeaderNav {
         window.location.reload();
       });
     }
-    this.deadlineDisplay();
   }
 
   initNotification() {
@@ -116,11 +115,5 @@ export default class HeaderNav {
     } else {
       location.href = '/';
     }
-  }
-
-  deadlineDisplay() {
-    $('.user-avatar-tip').on('mouseleave', function (){
-      $(this).css("display", "none");
-    });
   }
 }
