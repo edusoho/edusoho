@@ -33,6 +33,12 @@ class ClassroomFilter extends Filter
         $this->transformCover($data);
 
         $data['price2'] = Money::convert($data['price']);
+
+        if (!empty($data['spec'])) {
+            $specsFilter = new GoodSpecsFilter();
+            $specsFilter->setMode(Filter::PUBLIC_MODE);
+            $specsFilter->filter($data['spec']);
+        }
     }
 
     protected function publicFields(&$data)
@@ -53,7 +59,7 @@ class ClassroomFilter extends Filter
             $userFilter->filter($data['headTeacher']);
         }
 
-        if (empty($data['spec'])) {
+        if (!empty($data['spec'])) {
             $specsFilter = new GoodSpecsFilter();
             $specsFilter->setMode(Filter::SIMPLE_MODE);
             $specsFilter->filter($data['spec']);
