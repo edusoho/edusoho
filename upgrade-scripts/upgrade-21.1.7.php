@@ -219,27 +219,26 @@ class EduSohoUpgrade extends AbstractUpdater
             'defaultSubTitle' => '购买会员，享受更多会员权益',
             'id' => 'vip'
         ];
-        $oldConfig = $this->getConnection()->fetchAssoc("select id,config,confirmConfig from `theme_config` where `name`='简墨';");
+        $oldConfig = $this->getThemeService()->getThemeConfigByName('简墨');
         if ($oldConfig){
-            $oldConfig['confirmConfig'] = json_decode($oldConfig['confirmConfig'], true);
-            $oldConfig['config'] = json_decode($oldConfig['config'], true);
-
             if (!isset($oldConfig['confirmConfig']['blocks']['left']['vip'])){
                 $oldConfig['confirmConfig']['blocks']['left']['vip'] = $vipComponent;
             }
             if (!isset($oldConfig['config']['blocks']['left']['vip'])){
                 $oldConfig['config']['blocks']['left']['vip'] = $vipComponent;
             }
-
-            $oldConfig['confirmConfig'] = json_encode($oldConfig['confirmConfig']);
-            $oldConfig['config'] = json_encode($oldConfig['config']);
-
-            $this->getConnection()->exec("
-                UPDATE `theme_config` SET `config`='{$oldConfig['config']}',`confirmConfig`='{$oldConfig['confirmConfig']}' where id = {$oldConfig['id']};
-            ");
+            $this->getThemeService()->editThemeConfig('简墨', ['config' => $oldConfig['config'], 'confirmConfig' => $oldConfig['confirmConfig']]);
         }
 
         return 1;
+    }
+
+    /**
+     * @return \Biz\Theme\Service\ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
     }
 
     /**
