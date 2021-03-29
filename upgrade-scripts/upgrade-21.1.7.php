@@ -193,7 +193,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $pluginList = array(
             [
-                'Vip',
+                'vip',
                 2121
             ]
         );
