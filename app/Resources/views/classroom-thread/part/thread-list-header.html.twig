@@ -29,7 +29,7 @@
 
   <ul class="nav nav-pills nav-pills-sm">
     <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'all'})) }}">{{'classroom.thread.nav.all_btn'|trans}}</a></li>
-    {% if setting('ugc_thread.enable_classroom_question')|default('1') == '1' %}
+    {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_question')|default('1') == '1' %}
       <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'question'})) }}">{{'classroom.thread.nav.question_btn'|trans}}</a></li>
     {% endif %}
     <li{% if filters.type == 'nice' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'nice'})) }}">{{'classroom.thread.nav.nice_btn'|trans}}</a></li>
