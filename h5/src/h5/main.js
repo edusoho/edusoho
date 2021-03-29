@@ -209,3 +209,15 @@ Api.getSettings({
   script.innerHTML = funStr;
   scriptEle.parentNode.insertBefore(script, scriptEle);
 });
+
+Api.getSettings({
+  query: {
+    type: 'goods',
+  },
+})
+  .then(res => {
+    store.state.goods.show_review = res.show_review;
+  })
+  .catch(error => {
+    console.error(error);
+  });

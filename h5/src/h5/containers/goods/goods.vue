@@ -41,7 +41,7 @@
           <li @click="onActive(2, 'catalog')">
             <a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a>
           </li>
-          <li @click="onActive(3, 'evaluate')">
+          <li @click="onActive(3, 'evaluate')" v-if="show_review == 1">
             <a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a>
           </li>
         </ul>
@@ -82,7 +82,11 @@
         </section>
 
         <!-- 评价 -->
-        <section class="js-scroll-top goods-info__item" id="evaluate">
+        <section
+          class="js-scroll-top goods-info__item"
+          id="evaluate"
+          v-if="show_review == 1"
+        >
           <div class="goods-info__title">课程评价</div>
           <reviews
             v-if="goodsSetting.show_review == '1'"
@@ -157,6 +161,7 @@ export default {
       componentsInfo: {}, // 组件数据
       isLoading: true,
       goodsSetting: {},
+      show_review: this.$store.state.goods.show_review,
     };
   },
   components: {
