@@ -56,7 +56,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateCourseMemberJoinedChannel',
             'updateClassroomMemberJoinedChannel',
             'updatePlugin',
-            'updateThemeConfig'
+            'updateThemeConfig',
+            'updateUserVipRight',
         );
 
         $funcNames = array();
@@ -231,6 +232,50 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
+    }
+
+    // 执行时长问题，vip插件插入用户权益移至主程序升级脚本运行
+    protected function updateUserVipRight($page)
+    {
+        $pluginApp = $this->getAppService()->getAppByCode('vip');
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装vip');
+
+            return 1;
+        }
+
+        if ($page == 1) {
+            $this->getConnection()->exec("DELETE FROM vip_user_right;");
+        }
+
+        $levels = $this->getConnection()->fetchAll('SELECT * from vip_level order by seq ASC, createdTime DESC;');
+        if (empty($levels[$page - 1])) {
+            return 1;
+        }
+
+        $level = $levels[$page - 1];
+        $preLevels = $this->getConnection()->fetchAll('SELECT * from vip_level where seq < ?', [$level['seq']]);
+        $levelIds = empty($preLevels) ? [$level['id']] : array_merge([$level['id']], array_column($preLevels, 'id'));
+        $ids = implode(',', $levelIds);
+        $this->getConnection()->exec("INSERT INTO vip_user_right
+        (
+            userId,
+            vipLevelId,
+            supplierCode,
+            uniqueCode,
+            title,
+            createdTime
+        )
+        SELECT
+            v.userId,
+            v.levelId,
+            vr.supplierCode,
+            vr.uniqueCode,
+            vr.title,
+            unix_timestamp(now())
+        FROM vip_right vr , vip v where vr.vipLevelId in ({$ids}) and v.levelId = {$level['id']};");
+
+        return $page + 1;
     }
 
     /**
