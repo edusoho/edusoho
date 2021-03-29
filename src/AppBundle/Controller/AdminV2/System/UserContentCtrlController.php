@@ -40,12 +40,18 @@ class UserContentCtrlController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', []);
         $classroomSetting = $this->getSettingService()->get('classroom', []);
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+        $openCourseSetting = $this->getSettingService()->get('openCourse', []);
+        $articleSetting = $this->getSettingService()->get('article', []);
         $courseSetting['show_review'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review'])) ? '1' : '0';
         $classroomSetting['show_review'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review'])) ? '1' : '0';
         $goodsSetting['show_review'] = (!empty($courseSetting['show_review']) || !empty($classroomSetting['show_review'])) ? '1' : '0';
+        $openCourseSetting['show_comment'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_open_course_review'])) ? '1' : '0';
+        $articleSetting['show_comment'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_article_review'])) ? '1' : '0';
         $this->getSettingService()->set('course', $courseSetting);
         $this->getSettingService()->set('classroom', $classroomSetting);
         $this->getSettingService()->set('goods_setting', $goodsSetting);
+        $this->getSettingService()->set('openCourse', $openCourseSetting);
+        $this->getSettingService()->set('article', $articleSetting);
     }
 
     public function noteAction(Request $request)
