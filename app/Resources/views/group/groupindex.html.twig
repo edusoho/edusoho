@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block group_side %}
-  {% if is_groupmember != 0 and setting('ugc_thread.enable_group_thread')|default('1') == '1' %}
+  {% if is_groupmember != 0 and setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_group_thread')|default('1') == '1' %}
     <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.create_article'|trans}}</a>
     </div>
   {% endif %}
