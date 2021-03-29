@@ -49,8 +49,11 @@ class ManagementSettingController extends BaseController
             foreach ($permits['permits'] as $key => $permit) {
                 if (empty($permit['name']) && empty($permit['record_number']) && empty($permit['picture']) && 0 != $key) {
                     unset($permits['permits'][$key]);
+                    continue;
                 }
+                $permits['permits'][$key]['name'] = trim($permit['name']);
             }
+            $permits['license_name'] = trim($permits['license_name']);
             $this->getSettingService()->set('license', $permits);
             $this->getSettingService()->set('permits', $permits);
         }
