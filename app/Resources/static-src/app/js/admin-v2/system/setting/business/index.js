@@ -7,6 +7,10 @@ let validator = $('#business-form').validate({
     },
     icpUrl: {
       required: true,
+      url: true
+    },
+    recordUrl: {
+      url: true
     }
   },
   ajax: true,

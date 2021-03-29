@@ -4872,7 +4872,6 @@ admin.setting.record.code: Public Security Record Number
 admin.setting.record.url: Public security record number link
 admin.setting.record.picture.help_block: >
   The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
 admin.setting.record.code.help_block: >
   <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 

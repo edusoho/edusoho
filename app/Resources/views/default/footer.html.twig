@@ -18,29 +18,29 @@
       {% endif %}
 
       <a class="mlm" href="{{ path('course_set_archive') }}">{{ 'homepage.footer.archive'|trans }}</a>
-      <div class="mlm">
+      <div class="mts">
         {% if setting('site.copyright') %}
           {{ 'homepage.footer.course_copyright'|trans({'%copyRightUrl%':setting('site.copyright')})|raw }}
         {% endif %}
+        <a class="license-picture">
+          <img src="{% if setting('qualifications.recordPicture') %}{{ asset(setting('qualifications.recordPicture')) }}
+                    {% else %}{{ asset('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
+        </a>
+        <a class="mlm" {% if setting('qualifications.recordUrl') |default('') %}
+          href="{{ setting('qualifications.recordUrl') }}"
+        {% endif %}
+           target="_blank">
+          {{ setting('qualifications.recordCode') }}
+        </a>
       </div>
 
       {% if setting('qualifications.recordCode') |default('') %}
-        <div class="mts">
+        <div class="mlm">
           {% if setting('qualifications.icp') %}
             <a class="mlm" href={{ setting('qualifications.icpUrl')|default('https://beian.miit.gov.cn') }} target="_blank">
               {{ setting('qualifications.icp') }}
             </a>
           {% endif %}
-          <a class="license-picture" style="padding-left: 40px;">
-            <img src="{% if setting('qualifications.recordPicture') %}{{ asset(setting('qualifications.recordPicture')) }}
-                    {% else %}{{ asset('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
-          </a>
-          <a class="mlm" {% if setting('qualifications.recordUrl') |default('') %}
-            href="{{ setting('qualifications.recordUrl') }}"
-          {% endif %}
-             target="_blank">
-            {{ setting('qualifications.recordCode') }}
-          </a>
         </div>
       {% endif %}
 

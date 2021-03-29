@@ -2,7 +2,11 @@ initUploadImg();
 initPermit();
 permitSettingAction();
 let validator = $('#license-form').validate({
-  rules: {},
+  rules: {
+    license_url: {
+      url: true
+    }
+  },
   ajax: true,
   submitSuccess(data) {
     console.log(data)
