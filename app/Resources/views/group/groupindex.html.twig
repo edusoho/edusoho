@@ -110,11 +110,14 @@
             </p>
             <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.detail.my_group_btn'|trans}}</a>
           </div>
-          <hr>
+
+          {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_group_thread')|default('1') == '1' %}
+            <hr>
            <p class="group-message clearfix">
               <span><strong>{{userIsGroupMember.threadNum}}</strong>{{'group.detail.articles'|trans}}</span>
               <span><strong>{{userIsGroupMember.postNum}}</strong>{{'group.detail.replies'|trans}}</span>
             </p>
+          {% endif %}
         </div>
       </div>
     </div>
