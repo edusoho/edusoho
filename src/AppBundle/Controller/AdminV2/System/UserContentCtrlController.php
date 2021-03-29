@@ -40,9 +40,9 @@ class UserContentCtrlController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', []);
         $classroomSetting = $this->getSettingService()->get('classroom', []);
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
-        $courseSetting['show_review'] = !empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review']) ? '1' : '0';
-        $classroomSetting['show_review'] = !empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review']) ? '1' : '0';
-        $goodsSetting['show_review'] = !empty($courseSetting['show_review']) || !empty($classroomSetting['show_review']);
+        $courseSetting['show_review'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review'])) ? '1' : '0';
+        $classroomSetting['show_review'] = (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review'])) ? '1' : '0';
+        $goodsSetting['show_review'] = (!empty($courseSetting['show_review']) || !empty($classroomSetting['show_review'])) ? '1' : '0';
         $this->getSettingService()->set('course', $courseSetting);
         $this->getSettingService()->set('classroom', $classroomSetting);
         $this->getSettingService()->set('goods_setting', $goodsSetting);
@@ -74,8 +74,8 @@ class UserContentCtrlController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', []);
         $classroomSetting = $this->getSettingService()->get('classroom', []);
-        $courseSetting['show_note'] = !empty($noteSetting['enable_note']) && !empty($noteSetting['enable_course_note']) ? 1 : 0;
-        $classroomSetting['show_note'] = !empty($noteSetting['enable_note']) && !empty($noteSetting['enable_classroom_note']) ? 1 : 0;
+        $courseSetting['show_note'] = (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_course_note'])) ? 1 : 0;
+        $classroomSetting['show_note'] = (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_classroom_note'])) ? 1 : 0;
         $this->getSettingService()->set('course', $courseSetting);
         $this->getSettingService()->set('classroom', $classroomSetting);
     }
@@ -94,7 +94,7 @@ class UserContentCtrlController extends BaseController
         if ('POST' === $request->getMethod()) {
             $submitSetting = array_merge($defaultSetting, $this->filterThreadSetting($request->request->all()));
             $this->getSettingService()->set(SettingNames::UGC_USER_CONTENT_CONTROL_THREAD, $submitSetting);
-            $this->syncThreadSetting($threadSetting);
+            $this->syncThreadSetting($submitSetting);
 
             return $this->createJsonResponse(true);
         }
@@ -108,10 +108,10 @@ class UserContentCtrlController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', []);
         $classroomSetting = $this->getSettingService()->get('classroom', []);
-        $courseSetting['show_question'] = !empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_question']) ? '1' : '0';
-        $courseSetting['show_discussion'] = !empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_thread']) ? '1' : '0';
-        $classroomSetting['show_thread'] = !empty($threadSetting['enable_thread']) &&
-            (!empty($threadSetting['enable_classroom_question']) || !empty($threadSetting['enable_classroom_thread'])) ? '1' : '0';
+        $courseSetting['show_question'] = (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_question'])) ? '1' : '0';
+        $courseSetting['show_discussion'] = (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_thread'])) ? '1' : '0';
+        $classroomSetting['show_thread'] = (!empty($threadSetting['enable_thread']) &&
+            (!empty($threadSetting['enable_classroom_question']) || !empty($threadSetting['enable_classroom_thread']))) ? '1' : '0';
         $this->getSettingService()->set('course', $courseSetting);
         $this->getSettingService()->set('classroom', $classroomSetting);
     }
@@ -142,9 +142,9 @@ class UserContentCtrlController extends BaseController
     {
         $messageSetting = $this->getSettingService()->get('message', []);
         $messageSetting['showable'] = !empty($privateMessageSetting['enable_private_message']) ? '1' : '0';
-        $messageSetting['studentToStudent'] = !empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_student']) ? '1' : '0';
-        $messageSetting['studentToTeacher'] = !empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_teacher']) ? '1' : '0';
-        $messageSetting['teacherToStudent'] = !empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['teacher_to_student']) ? '1' : '0';
+        $messageSetting['studentToStudent'] = (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_student'])) ? '1' : '0';
+        $messageSetting['studentToTeacher'] = (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_teacher'])) ? '1' : '0';
+        $messageSetting['teacherToStudent'] = (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['teacher_to_student'])) ? '1' : '0';
         $this->getSettingService()->set('message', $messageSetting);
     }
 
