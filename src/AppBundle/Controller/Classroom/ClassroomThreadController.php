@@ -44,6 +44,23 @@ class ClassroomThreadController extends BaseController
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+        $typeExcludes = [];
+        if (empty($threadSetting['enable_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question', 'discussion']);
+        }
+        if (empty($threadSetting['enable_classroom_question'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question']);
+        }
+        if (empty($threadSetting['enable_classroom_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['discussion']);
+        }
+        $classroom['threadNum'] = $this->getThreadService()->searchThreadCount([
+            'targetType' => 'classroom',
+            'targetId' => $classroom['id'],
+            'typeExcludes' => $typeExcludes,
+        ]);
+
         return $this->render('classroom-thread/list.html.twig', [
             'classroom' => $classroom,
             'filters' => $this->getThreadSearchFilters($request),
