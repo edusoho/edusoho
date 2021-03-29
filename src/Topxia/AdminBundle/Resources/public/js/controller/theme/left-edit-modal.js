@@ -27,5 +27,14 @@ define(function(require, exports, module) {
             }
         })
       });
+
+      $('[name="vipList"]').on('change', function () {
+        if ($(this).val() == 'hidden'){
+          $('.vip-list-block').addClass('hidden');
+        }else{
+          $('.vip-list-block').removeClass('hidden')
+        }
+      });
+
     };
 });

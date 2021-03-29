@@ -11682,6 +11682,6 @@ classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
 
-admin_v2.vip_close.block_tip: 会员功能未开通
-admin_v2.vip_close.to_open_vip: 去开通
+admin_v2.vip_close.block_tip: 会员功能未开启
+admin_v2.vip_close.to_open_vip: 去开启
 

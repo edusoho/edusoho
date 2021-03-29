@@ -103,7 +103,7 @@
             <div class="col-sm-9 check-box radios pts">
               {% set radiosOptions = {'show' : 'admin.setting.theme.manage.modal.vip_list_show'|trans, 'hidden': 'admin.setting.theme.manage.modal.vip_list_hidden'|trans } %}
               {{ radios('vipList', radiosOptions, config.vipList|default("show")) }}
-              <div class="help-block">{{ 'admin.setting.theme.manage.modal.vip_list_tip'|trans }}</div>
+              <div class="vip-list-block help-block {% if config.vipList|default('show') == 'hidden' %}hidden{% endif %}">{{ 'admin.setting.theme.manage.modal.vip_list_tip'|trans }}</div>
             </div>
           </div>
         {% endblock %}
