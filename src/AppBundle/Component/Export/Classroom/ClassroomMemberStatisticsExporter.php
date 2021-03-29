@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export\Classroom;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
@@ -29,7 +30,9 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $classroom = $this->getClassroomService()->getClassroom($this->conditions['classroomId']);
 
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $start, $limit);
-        $users = $this->getUserService()->getUserAndProfileByIds(array_column($members, 'userId'));
+        $userIds = array_column($members, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
         $usersLearnedTime = [];
@@ -38,6 +41,20 @@ class ClassroomMemberStatisticsExporter extends Exporter
                 'userIds' => array_column($members, 'userId'), 'courseIds' => array_column($classroomCourses, 'id'),
             ]);
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
+        }
+
+        $userApprovals = $this->getUserService()->searchApprovals([
+            'userIds' => $userIds,
+            'status' => 'approved', ], [], 0, count($userIds));
+        $usersApproval = ArrayToolkit::index($userApprovals, 'userId');
+
+        foreach ($users as $key => &$user) {
+            if (isset($usersProfile[$key])) {
+                $user = array_merge($user, $usersProfile[$key]);
+            }
+            if (isset($usersApproval[$key])) {
+                $user = array_merge($user, $usersApproval[$key]);
+            }
         }
 
         $content = [];

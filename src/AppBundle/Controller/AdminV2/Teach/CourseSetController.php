@@ -335,14 +335,21 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
-        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
+        $studentIds = ArrayToolkit::column($students, 'userId');
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
+        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
+
+        $usersProfile = empty($students) ? [] : $this->getUserService()->findUserProfilesByIds($studentIds);
+
+        $usersApproval = $this->getUserService()->searchApprovals(
+            ['userIds' => $studentIds, 'status' => 'approved'], [], 0, count($studentIds)
+         );
+        $students = ArrayToolkit::index($students, 'id');
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
         foreach ($students as $key => &$student) {
-            $user = $this->getUserService()->getUserAndProfile($student['userId']);
+            $user = $this->getUserService()->getUser($student['userId']);
             $student['nickname'] = $user['nickname'];
-            $student['mobile'] = $user['mobile'];
-            $student['idcard'] = $user['idcard'];
 
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
@@ -357,6 +364,13 @@ class CourseSetController extends BaseController
 
             $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $student['pureLearnTime'] = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
+
+            if (isset($usersProfile[$key])) {
+                $student = array_merge($student, $usersProfile[$key]);
+            }
+            if (isset($usersApproval[$key])) {
+                $student = array_merge($student, $usersApproval[$key]);
+            }
         }
 
         $coursePlanSumLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
@@ -755,15 +769,26 @@ class CourseSetController extends BaseController
             $start,
             $limit
         );
-        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
+
+        $studentIds = ArrayToolkit::column($students, 'userId');
+
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
+
+        $usersProfile = empty($students) ? [] : $this->getUserService()->findUserProfilesByIds($studentIds);
+
+        $usersApproval = $this->getUserService()->searchApprovals(
+            ['userIds' => $studentIds, 'status' => 'approved'], [], 0, count($studentIds)
+        );
+        $students = ArrayToolkit::index($students, 'id');
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
             $exportMember = [];
-            $user = $this->getUserService()->getUserAndProfile($student['userId']);
+            $user = $this->getUserService()->getUser($student['userId']);
             $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
-            $exportMember['mobile'] = is_numeric($user['mobile']) ? $user['mobile']."\t" : $user['mobile'];
-            $exportMember['idcard'] = is_numeric($user['idcard']) ? $user['idcard']."\t" : $user['idcard'];
+            $exportMember['mobile'] = empty($usersProfile[$student['userId']]['mobile']) ? '--' : $usersProfile[$student['userId']]['mobile']."\t";
+            $exportMember['idcard'] = empty($usersApproval[$student['userId']]['idcard']) ? '--' : $usersApproval[$student['userId']]['idcard']."\t";
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {

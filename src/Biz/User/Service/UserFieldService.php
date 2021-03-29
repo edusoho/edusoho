@@ -17,6 +17,4 @@ interface UserFieldService
     public function updateField($id, $fields);
 
     public function dropField($id);
-
-    public function findUsersProfileFieldByIds($ids);
 }
