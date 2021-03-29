@@ -619,7 +619,7 @@ class WebExtension extends \Twig_Extension
             $fingerprint = $this->parsePattern($magicSetting, $user);
         } else {
             $pattern = $this->getSetting('storage.video_fingerprint_content', ['nickname', 'domain']);
-            $pattern = '{{'.implode('}} {{', $pattern).'}}';
+            $pattern = empty($pattern) ? '' : '{{'.implode('}} {{', $pattern).'}}';
             $fingerprint = $this->parsePattern($pattern, $user, '-');
         }
 
