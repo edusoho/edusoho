@@ -119,25 +119,19 @@ class GroupController extends BaseController
 
         $threadSetting = $this->getSettingService()->get('ugc_thread', []);
         if (empty($threadSetting['enable_thread']) || empty(($threadSetting['enable_group_thread']))) {
-            $paginator = new Paginator(
-                $this->get('request'),
-                0,
-                $conditions['num']
-            );
-            $threads = [];
-        } else {
-            $paginator = new Paginator(
-                $this->get('request'),
-                $this->getThreadService()->countThreads($conditions),
-                $conditions['num']
-            );
-            $threads = $this->getThreadService()->searchThreads(
-                $conditions,
-                $this->filterSort($filters['sort']),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
+            return $this->redirect($this->generateUrl('group_member', ['id' => $group['id']]));
         }
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getThreadService()->countThreads($conditions),
+            $conditions['num']
+        );
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            $this->filterSort($filters['sort']),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $ownerIds = ArrayToolkit::column($threads, 'userId');
 
