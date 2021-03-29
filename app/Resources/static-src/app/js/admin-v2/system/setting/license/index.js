@@ -2,7 +2,11 @@ initUploadImg();
 initPermit();
 permitSettingAction();
 let validator = $('#license-form').validate({
-  rules: {},
+  rules: {
+    license_url: {
+      url: true
+    }
+  },
   ajax: true,
   submitSuccess(data) {
     console.log(data)
@@ -113,9 +117,9 @@ function removePermitPicture($removeBtnArray, $permitIndex) {
     $("#" + permitPictureContainer).html('');
     $form.find("#" + permitPicture).val('');
     $btn.hide();
-    Notify.success(Translator.trans('admin.setting.delete_permit_picture_success_hint'));
+    cd.message({type: 'success', message: Translator.trans('admin.setting.delete_permit_picture_success_hint')});
   }).error(function () {
-    Notify.danger(Translator.trans('admin.setting.delete_permit_picture_fail_hint'));
+    cd.message({type: 'danger', message: Translator.trans('admin.setting.delete_permit_picture_fail_hint')});
   });
 };
 
@@ -136,7 +140,7 @@ function addSettingPermit($addSettingPermitBtnArray, $permitIndex) {
     if ($('.setting_permit').length < 10) {
       appendPermit("#settingPermit_", ++$permitIndex);
     } else {
-      Notify.warning(Translator.trans('admin.setting.delete_permit_setting_max_number'));
+      cd.message({type: 'danger', message: Translator.trans('admin.setting.delete_permit_setting_max_number')});
     }
   })
 };
