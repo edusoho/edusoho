@@ -4,7 +4,6 @@ namespace Tests\Unit\AppBundle\Component\Export\Classroom;
 
 use AppBundle\Component\Export\Classroom\ClassroomMemberStatisticsExporter;
 use Biz\BaseTestCase;
-use Biz\User\Service\UserService;
 
 class ClassroomMemberStatisticsExporterTest extends BaseTestCase
 {
@@ -15,6 +14,8 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
 
         $this->assertEquals([
             'admin.classroom_manage.statistics.member.nickname_th',
+            'admin.classroom_manage.statistics.member.phone_number_th',
+            'admin.classroom_manage.statistics.member.id_number_th',
             'admin.classroom_manage.statistics.member.create_time_th',
             'admin.classroom_manage.statistics.member.finish_time_th',
             'admin.classroom_manage.statistics.member.learn_time_th',
@@ -61,13 +62,19 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
                 'returnValue' => [['userId' => $member['userId'], 'learnedTime' => 60]],
             ],
         ]);
-        $user = $this->getUserService()->getUserAndProfileByIds([$member['userId']]);
+        $this->mockBiz('User:UserService', [
+            [
+                'functionName' => 'getUserAndProfileByIds',
+                'withParams' => [[$member['userId']]],
+                'returnValue' => [$member['userId'] => ['mobile' => $member['mobile'], 'idcard' => $member['idcard']]],
+            ],
+        ]);
         $this->getContainer()->set('biz', $this->getBiz());
         $exporter = new ClassroomMemberStatisticsExporter($this->getContainer(), $conditions);
         $expected = [[
-            'test name',
-            $user['mobile'],
-            $user['idcard'],
+            isset($member['nickname']) ? $member['nickname'] : null,
+            empty($member['mobile']) ? '--' : $member['mobile']."\t",
+            empty($member['idcard']) ? '--' : $member['idcard']."\t",
             date('Y-m-d H:i:s', $member['createdTime']),
             '--',
             1.0,
@@ -138,18 +145,12 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
     {
         return array_merge([
             'userId' => $this->getCurrentUser()->getId(),
+            'mobile' => '',
+            'idcard' => '',
             'createdTime' => time(),
             'finishedTime' => 0,
             'questionNum' => '2',
             'noteNum' => '1',
         ], $task);
-    }
-
-    /**
-     * @return UserService
-     */
-    public function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
     }
 }
