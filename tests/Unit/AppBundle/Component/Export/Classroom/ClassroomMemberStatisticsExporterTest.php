@@ -14,6 +14,8 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
 
         $this->assertEquals([
             'admin.classroom_manage.statistics.member.nickname_th',
+            'admin.classroom_manage.statistics.member.phone_number_th',
+            'admin.classroom_manage.statistics.member.id_number_th',
             'admin.classroom_manage.statistics.member.create_time_th',
             'admin.classroom_manage.statistics.member.finish_time_th',
             'admin.classroom_manage.statistics.member.learn_time_th',
