@@ -24,7 +24,9 @@
           </div>
           {% block detail_content %}
             {% if tab == 'reviews' %}
-              {{ render(controller('AppBundle:ItemBankExercise/Exercise:reviews', {previewAs:previewAs, id: exercise.id, member: member|default(null)})) }}
+              {% if setting('ugc_review.enable_question_bank_review')|default('1') == 1 %}
+                {{ render(controller('AppBundle:ItemBankExercise/Exercise:reviews', {previewAs:previewAs, id: exercise.id, member: member|default(null)})) }}
+              {% endif %}
             {% else %}
               {{ render(controller('AppBundle:ItemBankExercise/Exercise:module', {previewAs:previewAs, exerciseId: exercise.id, moduleId: moduleId})) }}
             {% endif %}
