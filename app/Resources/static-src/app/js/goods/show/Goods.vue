@@ -57,10 +57,11 @@
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage" :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
-                                 v-if="goodsSetting.show_review == 1"
+                                 v-if="ugcReviewSetting.enable_review == 1
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
                         >
                         </reviews>
-                        <div v-if="goodsSetting.show_review == 0" class="description-content"
+                        <div v-else class="description-content"
                              style="padding-left: 14px; padding-top: 10px;">{{ 'goods.show_page.tab.reviews_empty_tips'|trans }}</div>
                     </div>
                 </div>
@@ -130,6 +131,10 @@
                 default: null,
             },
             goodsSetting: {
+                type: Object,
+                default: null,
+            },
+            ugcReviewSetting: {
                 type: Object,
                 default: null,
             },
