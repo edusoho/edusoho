@@ -74,7 +74,7 @@ class BankEdit {
       },
       initSelection: function(element, callback) {
         let data = [];
-        let members =  JSON.parse(element.val());
+        let members =  JSON.parse(element[0].defaultValue);
         element.val('');
         $(members).each(function() {
           data.push({
