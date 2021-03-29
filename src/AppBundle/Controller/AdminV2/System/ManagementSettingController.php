@@ -32,6 +32,7 @@ class ManagementSettingController extends BaseController
         $site = array_replace($site, $qualifications);
 
         $site['recordCode'] = trim($site['recordCode']);
+        $qualifications['recordCode'] = trim($qualifications['recordCode']);
 
         $this->getSettingService()->set('qualifications', $qualifications);
         $this->getSettingService()->set('site', $site);
