@@ -28,7 +28,7 @@
           {{ web_macro.star(review.rating) }}
         </div>
         <div class="content">
-          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|sub_text(100,true) }}
+          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}
             {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}
           </div>
           <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}
