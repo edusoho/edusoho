@@ -49,12 +49,8 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $usersApproval = ArrayToolkit::index($userApprovals, 'userId');
 
         foreach ($users as $key => &$user) {
-            if (isset($usersProfile[$key])) {
-                $user = array_merge($user, $usersProfile[$key]);
-            }
-            if (isset($usersApproval[$key])) {
-                $user = array_merge($user, $usersApproval[$key]);
-            }
+            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
+            $user['idcard'] = isset($usersApproval[$key]['idcard']) ? $usersApproval[$key]['idcard'] : '';
         }
 
         $content = [];

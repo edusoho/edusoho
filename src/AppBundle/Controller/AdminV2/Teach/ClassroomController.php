@@ -348,15 +348,11 @@ class ClassroomController extends BaseController
         $userApprovals = $this->getUserService()->searchApprovals([
             'userIds' => $userIds,
             'status' => 'approved', ], [], 0, count($userIds));
-        $userApproval = ArrayToolkit::index($userApprovals, 'userId');
+        $userApprovals = ArrayToolkit::index($userApprovals, 'userId');
 
         foreach ($users as $key => &$user) {
-            if (isset($usersProfile[$key])) {
-                $user = array_merge($user, $usersProfile[$key]);
-            }
-            if (isset($userApproval[$key])) {
-                $user = array_merge($user, $userApproval[$key]);
-            }
+            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
+            $user['idcard'] = isset($userApprovals[$key]['idcard']) ? $userApprovals[$key]['idcard'] : '';
         }
 
         foreach ($members as &$member) {
