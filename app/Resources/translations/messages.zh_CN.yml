@@ -5780,7 +5780,6 @@ admin.setting.record.code: 公安备案号
 admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
     <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
