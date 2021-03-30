@@ -20,7 +20,10 @@ class GoodsDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('id参数缺失'));
         }
 
-        return $this->getGoodsService()->getGoods($arguments['id']);
+        $goods = $this->getGoodsService()->getGoods($arguments['id']);
+        $goods['isVipRight'] = $this->getWebExtension()->isVipRight($goods['id'], $goods['type']);
+
+        return $goods;
     }
 
     /**

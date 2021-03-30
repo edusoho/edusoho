@@ -2,9 +2,9 @@
 		{% if userVipStatus == 'not_login' %}
 			<a href="{{ path('login') }}" class="color-warning" >{{'course.header.vip'|trans}}</a>
 		{% elseif userVipStatus in ['not_member', 'member_expired'] %}
-			<a href="{{ path('vip_buy') }}" class="color-warning">{{'course.header.vip'|trans}}</a>
+			<a href="{{ path('vip') }}" class="color-warning">{{'course.header.vip'|trans}}</a>
 		{% elseif userVipStatus == 'level_low' %}
-			<a href="{{ path('vip_upgrade', {level:level.id}) }}" class="color-warning" >{{'course.header.vip'|trans}}</a>
+			<a href="{{ path('vip', {levelId: level.id}) }}" class="color-warning" >{{'course.header.vip'|trans}}</a>
 		{% elseif userVipStatus == 'ok' %}
 			<a href="javascript:;" class="color-warning">{{'course.header.vip'|trans}}</a>
 		{% endif %}

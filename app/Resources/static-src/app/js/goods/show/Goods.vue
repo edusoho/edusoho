@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title|removeHtml}}</div>
-        <detail :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
+        <detail :vip-enabled="vipEnabled" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -153,6 +153,10 @@
             drpRecruitSwitch: {
                 type: Number,
                 default: 0
+            },
+            vipEnabled: {
+                type: Number,
+                default: 1
             }
         },
         components: {

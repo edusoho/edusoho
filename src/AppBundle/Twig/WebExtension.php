@@ -23,15 +23,20 @@ use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
+use Biz\Content\Service\BlockService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -41,6 +46,8 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -210,7 +217,164 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
             new \Twig_SimpleFunction('information_collect_detail_select', [$this, 'informationCollectDetailSelect']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
+            new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
+            new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
+            new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
+            new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
+            new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
+            new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
+            new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
         ];
+    }
+
+    public function isShowNewMembers()
+    {
+        $theme = $this->getSetting('theme.uri');
+        if (in_array($theme, ['jianmo', 'graceful'])) {
+            $name = 'jianmo' == $theme ? '简墨' : '雅致简洁（商业主题）';
+            $config = $this->getThemeService()->getThemeConfigByName($name);
+            $config = ArrayToolkit::index($config['confirmConfig']['blocks']['left'], 'id');
+
+            return isset($config['vip']) && 'show' == $config['vip']['vipList'];
+        } elseif ('turing' == $theme) {
+            $template = $this->getBlockService()->getBlockTemplateByCode('turing:turing_vip');
+            if ($template) {
+                $block = $this->getBlockService()->getBlockByCode('turing:turing_vip');
+
+                return $block ? 'show' == $block['data']['vip']['vipList']['value'] : 'show' == $template['data']['vip']['vipList']['value'];
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return BlockService
+     */
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
+    }
+
+    public function vipLevelList($config, $slice = 1)
+    {
+        $count = 1 != $slice ? PHP_INT_MAX : $config['count'];
+        $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $count);
+
+        return $levels;
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    public function filterCourseVipRight($course)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCode' => $course['id']], [], 0, PHP_INT_MAX);
+            $course['vipLevelId'] = empty($vipRights) ? '0' : $vipRights[0]['vipLevelId'];
+        }
+
+        return $course;
+    }
+
+    public function filterCourseSetsVipRight($courseSets)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            foreach ($courseSets as &$courseSet) {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes('course', ArrayToolkit::column($courses, 'id'));
+                $courseSet['course']['vipLevelId'] = empty($vipRights) ? 0 : 1;
+            }
+        }
+
+        return $courseSets;
+    }
+
+    public function isVipRight($goodsId, $targetType)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        if ('classroom' == $targetType) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode($targetType, $product['targetId']);
+        } else {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($product['targetId']);
+            $vipRight = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes($targetType, ArrayToolkit::column($courses, 'id'));
+        }
+
+        return empty($vipRight) ? 0 : 1;
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    public function filterCoursesVipRight($courses)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column($courses, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($courses as &$course) {
+                $course['vipLevelId'] = isset($vipRights[$course['id']]['vipLevelId']) ? $vipRights[$course['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $courses;
+    }
+
+    public function filterClassroomsVipRight($classrooms)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom', 'uniqueCodes' => ArrayToolkit::column($classrooms, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($classrooms as &$classroom) {
+                $classroom['vipLevelId'] = isset($vipRights[$classroom['id']]['vipLevelId']) ? $vipRights[$classroom['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $classrooms;
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function makeLocalMediaFileToken($file)

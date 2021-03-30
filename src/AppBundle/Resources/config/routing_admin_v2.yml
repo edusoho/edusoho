@@ -868,6 +868,10 @@ admin_v2_block_update:
     path:  /block/{blockTemplateId}/update
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:edit }
 
+admin_v2_block_tip:
+    path: /block/tip
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockTip }
+
 admin_v2_block_template_edit:
     path:  /block/{blockTemplateId}/edit
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:editBlockTemplate }

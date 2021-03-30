@@ -367,7 +367,7 @@ finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
-finance.max_deduction_rate: 'Maximum deduction rate'
+finance.max_deduction_rate: 'Maximum coin deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
@@ -595,7 +595,7 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
-pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.course.close: The course in this order has been closed.
 pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
 pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
@@ -4069,6 +4069,9 @@ item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You c
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.course.exit_btn: 'Exit'
+course.member.classroom_member.exit_btn: 'Exit'
+course.member.classroom_member.classroom_exit_btn: 'Exit Classroom'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
@@ -4836,6 +4839,13 @@ admin.setting.theme.manage.modal.setting_course_num: 'Coures Number Setting'
 admin.setting.theme.manage.modal.setting_custom_category_count: 'Course Category Number Setting'
 admin.setting.theme.manage.modal.setting_count: Count
 admin.setting.theme.manage.modal.setting_custom_orderby: 'Sort Setting'
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 'Marshalling Sequence'
+admin.setting.theme.manage.modal.orderby_low_to_high: 'From Low To High'
+admin.setting.theme.manage.modal.orderby_high_to_low: 'From High To Low'
+admin.setting.theme.manage.modal.setting_custom_vip_list: 'Latest Membership List'
+admin.setting.theme.manage.modal.vip_list_show: 'Show'
+admin.setting.theme.manage.modal.vip_list_hidden: 'Hidden'
+admin.setting.theme.manage.modal.vip_list_tip: 'Display a list of newly joined members on the member center page'
 admin.setting.theme.manage.modal.setting_ustom_background_color: 'Background Color Setting'
 admin.setting.theme.manage.modal.color_gray: Gray
 admin.setting.theme.manage.modal.color_wihte: White
@@ -7837,6 +7847,7 @@ order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
 order.pay_check_msg.balance_not_enough: Your balance is insufficient
 order.pay_check_msg.pay_password_not_set: Pay password not set
 order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
+order.pay_check_msg.goods_closed: Goods is closed
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
@@ -10445,3 +10456,6 @@ admin_v2.system.user_content_control.goto_question_manage: Go to Q & a managemen
 admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
 admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
 admin_v2.system.user_content_control.goto_private_message_manage: Go to private message management>>
+
+admin_v2.vip_close.block_tip: Vip function is not activated.
+admin_v2.vip_close.to_open_vip: To open

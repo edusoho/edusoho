@@ -19,6 +19,8 @@ interface UserService
 
     public function getUnDstroyedUserByNickname($nickname);
 
+    public function getUnDstroyedUserByNickNameOrVerifiedMobile($value);
+
     public function getUserByType($type);
 
     public function getUserByUUID($uuid);

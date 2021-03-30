@@ -22,6 +22,7 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use VipPlugin\Biz\Marketing\Service\VipSellModeService;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class AssetSettingController extends BaseController
@@ -454,6 +455,14 @@ class AssetSettingController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipSellModeService
+     */
+    protected function getVipSellModeService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipSellModeService');
     }
 
     /**

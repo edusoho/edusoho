@@ -447,7 +447,7 @@ finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
-finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_rate: 虚拟币最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
@@ -685,7 +685,7 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
-pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.course.close: 该课程已被关闭
 pay_center.classroom.close: 该班级已关闭，请谨慎支付
 pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 
@@ -4785,6 +4785,9 @@ item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无�
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
 item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
+course.member.course.exit_btn: 退出课程
+course.member.classroom_member.exit_btn: 退出
+course.member.classroom_member.classroom_exit_btn: 退出班级
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
@@ -5748,6 +5751,13 @@ admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
 admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 排列顺序
+admin.setting.theme.manage.modal.orderby_low_to_high: 从低到高
+admin.setting.theme.manage.modal.orderby_high_to_low: 从高到低
+admin.setting.theme.manage.modal.setting_custom_vip_list: 最新会员列表
+admin.setting.theme.manage.modal.vip_list_show: 展示
+admin.setting.theme.manage.modal.vip_list_hidden: 不展示
+admin.setting.theme.manage.modal.vip_list_tip: 在会员中心页展示最新加入会员的用户列表
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
 admin.setting.theme.manage.modal.color_gray: 灰色
 admin.setting.theme.manage.modal.color_wihte: 白色
@@ -10104,6 +10114,7 @@ order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
 order.pay_check_msg.pay_password_not_set: 支付密码未设置
 order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
+order.pay_check_msg.goods_closed: 该商品已被关闭
 order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
 
 site.join_by_import: 导入
@@ -11703,3 +11714,6 @@ admin_v2.system.user_content_control.goto_question_manage: 前往问答管理>>
 admin_v2.system.user_content_control.goto_thread_manage: 前往话题管理>>
 admin_v2.system.user_content_control.goto_group_thread_manage: 前往小组话题管理>>
 admin_v2.system.user_content_control.goto_private_message_manage: 前往私信管理>>
+
+admin_v2.vip_close.block_tip: 会员功能未开启
+admin_v2.vip_close.to_open_vip: 去开启

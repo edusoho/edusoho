@@ -6,7 +6,7 @@
       <span class="glyphicon glyphicon-lock  edit-sort"></span>
     {% endif %}
     <label>
-      <input type="checkbox" data-component-id="{{ pendant.id }}" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}>
+      <input type="checkbox" data-component-id="{{ pendant.id }}" {% if pendant.code == 'vip'%}id="vipTip"{% endif%} data-url="{{ path('admin_v2_block_tip') }}" data-pendant-code="{{ pendant.code }}" data-vip-enabled="{{ setting('vip.enabled', 1) }}" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}>
       <span class="default-title">{{ orginAllConfig[key].defaultTitle|default('') }}</span>
     </label>
   </div>

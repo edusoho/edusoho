@@ -1217,7 +1217,7 @@ class ClassroomServiceTest extends BaseTestCase
             'VipPlugin:Vip:VipService',
             [
                 [
-                    'functionName' => 'checkUserInMemberLevel',
+                    'functionName' => 'checkUserVipRight',
                     'returnValue' => 'no',
                 ],
             ]

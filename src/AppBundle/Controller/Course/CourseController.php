@@ -186,14 +186,20 @@ class CourseController extends CourseBaseController
             if (!empty($classroomRef)) {
                 $user = $this->getCurrentUser();
                 $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
-                if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-                    return $this->render(
-                        'course/member/classroom-course-expired.html.twig',
-                        [
-                            'course' => $course,
-                            'member' => $member,
-                        ]
-                    );
+                $classroom = $this->getClassroomService()->getClassroom($classroomRef['classroomId']);
+                $isNonExpired = $this->getClassroomService()->isMemberNonExpired($classroom, $member);
+                if (!$isNonExpired) {
+                    if ('vip_join' == $member['joinedChannel']) {
+                        return $this->forward('AppBundle:Classroom/Classroom:memberAccess', ['classroomId' => $classroomRef['classroomId'], 'memberId' => $member['id']]);
+                    } else {
+                        return $this->render(
+                            'course/member/classroom-course-expired.html.twig',
+                            [
+                                'course' => $course,
+                                'member' => $member,
+                            ]
+                        );
+                    }
                 }
 
                 return $this->createJsonResponse(true);
@@ -504,7 +510,7 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render("course/task-list/{$type}-task-list.html.twig", [
-            'course' => $course,
+            'course' => $this->getWebExtension()->filterCourseVipRight($course),
             'member' => $member,
             'courseSet' => $courseSet,
             'courseItems' => $courseItems,
@@ -785,6 +791,19 @@ class CourseController extends CourseBaseController
             'reason' => $req['reason']['note'],
             'reason_type' => 'exit',
         ]);
+
+        return $this->redirect($this->generateUrl('course_show', ['id' => $id]));
+    }
+
+    public function exitForNoReasonAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        if (empty($member)) {
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
+        }
+
+        $user = $this->getCurrentUser();
+        $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->redirect($this->generateUrl('course_show', ['id' => $id]));
     }

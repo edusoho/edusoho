@@ -30,6 +30,10 @@ use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomController extends BaseController
 {
@@ -95,10 +99,11 @@ class ClassroomController extends BaseController
         }
 
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = empty($vipRight) ? null : $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 
             if ($user['id'] && $classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
@@ -129,7 +134,7 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId'] > 0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+            $vipChecked = $classroomMemberLevel && 'vip_join' == $member['joinedChannel'] ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
@@ -297,10 +302,11 @@ class ClassroomController extends BaseController
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
         if ($this->setting('vip.enabled') && $user['id']) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = !empty($vipRight) ? $this->getLevelService()->getLevel($vipRight['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
@@ -506,6 +512,27 @@ class ClassroomController extends BaseController
             $user['id'],
             ['reason' => $reason['note'], 'reason_type' => 'exit']
         );
+
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
+    }
+
+    public function exitForNoReasonAction(request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+
+        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+
+        if (empty($member)) {
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
+        }
+
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
+            $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
+        }
+
+        $this->getClassroomService()->removeStudent(
+            $id,
+            $user['id']);
 
         return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
@@ -768,6 +795,30 @@ class ClassroomController extends BaseController
             'classroom' => $classroom,
             'member' => $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null,
         ]);
+    }
+
+    public function memberAccessAction(Request $request, $classroomId, $memberId)
+    {
+        $user = $this->getCurrentUser();
+        $memberAccessCode = $this->getVipService()->checkUserVipRight($user['id'], 'classroom', $classroomId);
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
+        $vipRightLevel = $this->getLevelService()->getLevel($vipRight['vipLevelId']);
+
+        return $this->render('classroom/member-access-modal.html.twig',
+            [
+                'code' => $memberAccessCode,
+                'userLevel' => $vipRightLevel,
+                'vipRightLevel' => empty($vipRight) ? [] : $this->getLevelService()->getLevel($vipRight['vipLevelId']),
+                'classroom' => $this->getClassroomService()->getClassroom($classroomId),
+            ]);
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**
