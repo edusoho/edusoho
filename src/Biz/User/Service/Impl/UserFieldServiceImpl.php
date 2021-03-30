@@ -14,15 +14,6 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         return $this->getUserFieldDao()->get($id);
     }
 
-    public function findUsersProfileFieldByIds($ids)
-    {
-        $usersProfile = UserSerialize::unserializes(
-            $this->getUserProfileDao()->findByIds($ids)
-        );
-
-        return ArrayToolkit::index($usersProfile, 'id');
-    }
-
     public function addUserField($fields)
     {
         if (empty($fields['field_title'])) {

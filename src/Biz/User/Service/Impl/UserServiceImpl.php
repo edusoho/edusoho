@@ -2426,6 +2426,21 @@ class UserServiceImpl extends BaseService implements UserService
 
         return $type;
     }
+
+    public function findUserProfileAndApprovalByUserIds(array $userIds, array $condition)
+    {
+        $usersProfile = $this->findUserProfilesByIds($userIds);
+        $usersApproval = $this->searchApprovals(
+            $condition, [], 0, count($userIds)
+        );
+        $usersProfile = ArrayToolkit::index($usersProfile, 'id');
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
+
+        return [
+            'usersProfile' => $usersProfile,
+            'usersApproval' => $usersApproval,
+        ];
+    }
 }
 
 class UserSerialize

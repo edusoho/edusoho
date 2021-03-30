@@ -39,14 +39,14 @@
         </td>
         <td>
           {% if users[member.userId].mobile %}
-            {{ users[member.userId].mobile }}
+            {{ users[member.userId].mobile|default('') }}
           {% else %}
             ----
           {% endif %}
         </td>
         <td>
           {% if users[member.userId].idcard %}
-            {{ users[member.userId].idcard }}
+            {{ users[member.userId].idcard|default('') }}
           {% else %}
             ----
           {% endif %}

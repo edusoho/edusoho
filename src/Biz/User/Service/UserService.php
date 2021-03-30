@@ -413,4 +413,6 @@ interface UserService
     public function findUnLockedUsersByUserIds($userIds = []);
 
     public function updatePasswordChanged($id, $passwordChanged);
+
+    public function findUserProfileAndApprovalByUserIds(array $userIds, array $condition);
 }

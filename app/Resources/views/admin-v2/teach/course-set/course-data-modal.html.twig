@@ -51,14 +51,14 @@
             <td>{{ student.nickname }}</td>
             <td>
               {% if student.mobile %}
-                {{ student.mobile }}
+                {{ student.mobile|default('') }}
               {% else %}
                 ----
               {% endif %}
             </td>
             <td>
               {% if student.idcard %}
-                {{ student.idcard }}
+                {{ student.idcard|default('') }}
               {% else %}
                 ----
               {% endif %}

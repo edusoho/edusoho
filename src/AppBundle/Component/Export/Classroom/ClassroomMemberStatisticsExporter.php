@@ -2,7 +2,6 @@
 
 namespace AppBundle\Component\Export\Classroom;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
@@ -32,7 +31,6 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $start, $limit);
         $userIds = array_column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
         $usersLearnedTime = [];
@@ -43,14 +41,13 @@ class ClassroomMemberStatisticsExporter extends Exporter
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
         }
 
-        $userApprovals = $this->getUserService()->searchApprovals([
-            'userIds' => $userIds,
-            'status' => 'approved', ], [], 0, count($userIds));
-        $usersApproval = ArrayToolkit::index($userApprovals, 'userId');
+        $usersProfileAndApproval = $this->getUserService()->findUserProfileAndApprovalByUserIds(
+            $userIds, ['userIds' => $userIds, 'status' => 'approved']
+        );
 
         foreach ($users as $key => &$user) {
-            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
-            $user['idcard'] = isset($usersApproval[$key]['idcard']) ? $usersApproval[$key]['idcard'] : '';
+            $user['mobile'] = isset($usersProfileAndApproval['usersProfile'][$key]['mobile']) ? $usersProfileAndApproval['usersProfile'][$key]['mobile'] : '';
+            $user['idcard'] = isset($usersProfileAndApproval['usersApproval'][$key]['idcard']) ? $usersProfileAndApproval['usersApproval'][$key]['idcard'] : '';
         }
 
         $content = [];

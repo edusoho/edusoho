@@ -335,7 +335,6 @@ class ClassroomController extends BaseController
 
         $userIds = array_column($members, 'userId');
         $users = empty($members) ? [] : $this->getUserService()->findUsersByIds($userIds);
-        $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $totalLearnedTime = empty($classroomCourses) || empty($classroomMembers) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id'), 'userIds' => array_column($classroomMembers, 'userId')]);
 
         $usersLearnedTime = [];
@@ -345,14 +344,14 @@ class ClassroomController extends BaseController
             ]);
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
         }
-        $userApprovals = $this->getUserService()->searchApprovals([
-            'userIds' => $userIds,
-            'status' => 'approved', ], [], 0, count($userIds));
-        $userApprovals = ArrayToolkit::index($userApprovals, 'userId');
+
+        $usersProfileAndApproval = $this->getUserService()->findUserProfileAndApprovalByUserIds(
+            $userIds, ['userIds' => $userIds, 'status' => 'approved']
+        );
 
         foreach ($users as $key => &$user) {
-            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
-            $user['idcard'] = isset($userApprovals[$key]['idcard']) ? $userApprovals[$key]['idcard'] : '';
+            $user['mobile'] = isset($usersProfileAndApproval['usersProfile'][$key]['mobile']) ? $usersProfileAndApproval['usersProfile'][$key]['mobile'] : '';
+            $user['idcard'] = isset($usersProfileAndApproval['usersApproval'][$key]['idcard']) ? $usersProfileAndApproval['usersApproval'][$key]['idcard'] : '';
         }
 
         foreach ($members as &$member) {
