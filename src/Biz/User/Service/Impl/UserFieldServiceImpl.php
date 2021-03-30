@@ -176,9 +176,4 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     {
         return $this->createDao('User:UserFieldDao');
     }
-
-    protected function getUserProfileDao()
-    {
-        return $this->createDao('User:UserProfileDao');
-    }
 }
