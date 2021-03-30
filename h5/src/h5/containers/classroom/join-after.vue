@@ -264,7 +264,7 @@ export default {
         // 用户会员等级过低
         'vip.level_low': {
           message: `您不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
-          confirmButtonText: '升级会员',
+          confirmButtonText: '购买会员',
         },
         // 会员等级无效
         'vip.level_not_exist': {

@@ -22,6 +22,7 @@
         <vip
           v-if="currentSku.vipLevelInfo && vipSwitch"
           :currentSku="currentSku"
+          :type="goods.type"
         />
 
         <specs
