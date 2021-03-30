@@ -11117,7 +11117,7 @@ admin_v2.setting.navigation.foot.tips: >
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
-admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
+admin_v2.newcomer_task.helper_tip: 七步完成网校基础建设
 admin_v2.newcomer_task.collapse: 收起
 admin_v2.newcomer_task.todo: 前去完成
 admin_v2.newcomer_task.done: 已完成
