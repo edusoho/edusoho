@@ -31,11 +31,12 @@
       {% elseif data.label == 'vipList' %}
         <div class="col-md-3">
           <label class="checkbox-inline">
-            <input class="status-input" name="data[{{ type }}][{{ label }}][value]" type="radio" value="show" {% if data.value == 'show' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_show'|trans}}
+            <input class="status-input vip-list" name="data[{{ type }}][{{ label }}][value]" type="radio" value="show" {% if data.value == 'show' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_show'|trans}}
           </label>
           <label class="checkbox-inline">
-            <input class="status-input" name="data[{{ type }}][{{ label }}][value]" type="radio" value="hidden" {% if data.value == 'hidden' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_hidden'|trans}}
+            <input class="status-input vip-list" name="data[{{ type }}][{{ label }}][value]" type="radio" value="hidden" {% if data.value == 'hidden' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_hidden'|trans}}
           </label>
+          <div class="vip-list-block help-block {% if data.value|default('show') == 'hidden' %}hidden{% endif %}">{{ 'admin.setting.theme.manage.modal.vip_list_tip'|trans }}</div>
         </div>
       {% endif %}
       <input class="status-value" type="hidden" name="data[{{ type }}][{{ label }}][title]" value="{{ data.title }}">
