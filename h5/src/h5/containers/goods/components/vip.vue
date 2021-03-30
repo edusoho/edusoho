@@ -15,11 +15,16 @@ export default {
       type: Object,
       default: () => {},
     },
+    type: {
+      type: String,
+      default: 'course',
+    },
   },
 
   computed: {
     vipEntryContent() {
       const { vipLevelInfo, vipUser } = this.currentSku;
+      const type = this.type == 'course' ? '课程' : '班级';
 
       // 用户是会员，但会员等级不满足课程会员等级要求
       if (
@@ -27,10 +32,10 @@ export default {
         vipUser.level &&
         Number(vipUser.level.seq) < Number(vipLevelInfo.seq)
       ) {
-        return `升级为${vipLevelInfo.name}，免费学习此门课程`;
+        return `升级为${vipLevelInfo.name}，免费学习此门${type}`;
       }
 
-      return `加入${vipLevelInfo.name}，免费学习此门课程`;
+      return `加入${vipLevelInfo.name}，免费学习此门${type}`;
     },
   },
 
