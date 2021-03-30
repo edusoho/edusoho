@@ -20,8 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        '
-        ',
+        'consult',
     ];
 
     public static function convertUnderline($str)
@@ -64,6 +63,7 @@ class Setting extends AbstractResource
         return $result;
     }
 
+<<<<<<< HEAD
     public function getUgc()
     {
         return [
@@ -122,6 +122,23 @@ class Setting extends AbstractResource
             'student_to_student' => '',
             'student_to_teacher' => '',
             'teacher_to_student' => '',
+=======
+    public function getConsult()
+    {
+        $consultSetting = $this->getSettingService()->get('consult', []);
+        if (1 == $consultSetting['enabled']) {
+            return [
+                'enabled' => $consultSetting['enabled'],
+                'qq' => $consultSetting['qq'],
+                'qqgroup' => $consultSetting['qqgroup'],
+                'phone' => $consultSetting['phone'],
+                'email' => $consultSetting['email'],
+            ];
+        }
+
+        return [
+            'enabled' => $consultSetting['enabled'],
+>>>>>>> 15f2c46d502bf949e53ee03a8d78dce5d37e04dd
         ];
     }
 
