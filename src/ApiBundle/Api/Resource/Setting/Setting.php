@@ -63,7 +63,6 @@ class Setting extends AbstractResource
         return $result;
     }
 
-<<<<<<< HEAD
     public function getUgc()
     {
         return [
@@ -122,7 +121,9 @@ class Setting extends AbstractResource
             'student_to_student' => '',
             'student_to_teacher' => '',
             'teacher_to_student' => '',
-=======
+        ];
+    }
+
     public function getConsult()
     {
         $consultSetting = $this->getSettingService()->get('consult', []);
@@ -138,7 +139,6 @@ class Setting extends AbstractResource
 
         return [
             'enabled' => $consultSetting['enabled'],
->>>>>>> 15f2c46d502bf949e53ee03a8d78dce5d37e04dd
         ];
     }
 
