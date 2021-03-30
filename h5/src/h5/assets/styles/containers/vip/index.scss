@@ -231,9 +231,22 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
-		height: vw(116);
 		margin-top: vw(16);
 		padding: 0 vw(16);
+
+		.vip-interest__empty {
+			> img {
+				width: vw(96);
+				height: vw(97);
+			}
+
+			> p {
+				margin: vw(8) 0;
+				color: #999;
+				font-size: vw(14);
+				text-align: center;
+			}
+		}
 
 		.vip-interest__item {
 			display: flex;

@@ -88,6 +88,16 @@
             <span class="company">个</span>
           </div>
         </div>
+        <div
+          class="vip-interest__empty"
+          v-if="
+            !currentLevel.courses.data.length &&
+              !currentLevel.classrooms.data.length
+          "
+        >
+          <img src="static/images/vip/empty.png" alt="" />
+          <p>暂无专属权益</p>
+        </div>
       </div>
     </div>
 
