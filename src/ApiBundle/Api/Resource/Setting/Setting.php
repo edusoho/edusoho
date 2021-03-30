@@ -19,8 +19,18 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group',
+        'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'consult',
     ];
+
+    public static function convertUnderline($str)
+    {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $str);
+
+        return $str;
+    }
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -28,6 +38,7 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         $this->checkType($type);
+        $type = self::convertUnderline($type);
         $method = "get${type}";
 
         return $this->$method($request);
@@ -50,6 +61,85 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getUgc()
+    {
+        return [
+            'review' => $this->getUgcReview(),
+            'note' => $this->getUgcNote(),
+            'thread' => $this->getUgcThread(),
+            'private_message' => $this->getUgcPrivateMessage(),
+        ];
+    }
+
+    public function getUgcReview()
+    {
+        $reviewSetting = $this->getSettingService()->get('ugc_review', []);
+
+        return [
+            'enable' => '',
+            'course_enable' => '',
+            'classroom_enable' => '',
+            'question_bank_enable' => '',
+            'open_course_enable' => '',
+            'article_enable' => '',
+        ];
+    }
+
+    public function getUgcNote()
+    {
+        $noteSetting = $this->getSettingService()->get('ugc_note', []);
+
+        return [
+            'enable' => '',
+            'course_enable' => '',
+            'classroom_enable' => '',
+        ];
+    }
+
+    public function getUgcThread()
+    {
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+
+        return [
+            'enable' => '',
+            'course_question_enable' => '',
+            'course_thread_enable' => '',
+            'classroom_question_enable' => '',
+            'classroom_thread_enable' => '',
+            'group_thread_enable' => '',
+        ];
+    }
+
+    public function getUgcPrivateMessage()
+    {
+        $privateMessageSetting = $this->getSettingService()->get('ugc_private_message', []);
+
+        return [
+            'enable' => '',
+            'student_to_student' => '',
+            'student_to_teacher' => '',
+            'teacher_to_student' => '',
+        ];
+    }
+
+    public function getConsult()
+    {
+        $consultSetting = $this->getSettingService()->get('consult', []);
+        if (1 == $consultSetting['enabled']) {
+            return [
+                'enabled' => $consultSetting['enabled'],
+                'qq' => $consultSetting['qq'],
+                'qqgroup' => $consultSetting['qqgroup'],
+                'phone' => $consultSetting['phone'],
+                'email' => $consultSetting['email'],
+            ];
+        }
+
+        return [
+            'enabled' => $consultSetting['enabled'],
+        ];
     }
 
     public function getGoods()

@@ -4785,6 +4785,8 @@ admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
 admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
+admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
@@ -4797,12 +4799,16 @@ admin.setting.site.copyright.help_block: 'You can enter website name and company
 admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
+admin.setting.site.icp_record_information: 'ICP record information'
+admin.setting.site.public_security_record_information:  'Public security record information'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
+admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
+admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
@@ -4860,8 +4866,10 @@ admin.setting.theme.manage.navigation_num_tips: >
 admin.setting.license.headline: Electronic business license configuration
 admin.setting.license.name: Electronic business license name
 admin.setting.license.picture: Electronic Business License Picture
+admin.setting.upload.license.photo: Upload license photo
 admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.license.url: Electronic business license link
+admin.setting.license.prompt: (The net school can request according to each place policy and net school actual business and decide)
 admin.setting.permit.headline: Operating license configuration
 admin.setting.permit.name: Business license name
 admin.setting.permit.record.number: Case number
@@ -4874,7 +4882,6 @@ admin.setting.record.code: Public Security Record Number
 admin.setting.record.url: Public security record number link
 admin.setting.record.picture.help_block: >
   The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
 admin.setting.record.code.help_block: >
   <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 
@@ -10423,6 +10430,32 @@ classroom.manage.data_statistics.finish_status.learned: Finished
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+admin_v2.system.user_content_control.review_manage: Review Manage
+admin_v2.system.user_content_control.course_review_manage: Course Review Manage
+admin_v2.system.user_content_control.classroom_review_manage: Course Review Manage
+admin_v2.system.user_content_control.question_bank_review_manage: QuestionBank Review Manage
+admin_v2.system.user_content_control.open_course_review_manage: OpenCourse Review Manage
+admin_v2.system.user_content_control.article_review_manage: Article Review Manage
+admin_v2.system.user_content_control.goto_review_manage: Goto Review Manage List>>
+admin_v2.system.user_content_control.thread_manage: Thread Manage
+admin_v2.system.user_content_control.course_question_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
+admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
+admin_v2.system.user_content_control.private_message_manage: Private Message Manage
+admin_v2.system.user_content_control.note_manage: Note Manage
+admin_v2.system.user_content_control.goto_note_manage: Goto Note Manage>>
+admin_v2.system.user_content_control.classroom_note_manage: Classroom Note Manage
+admin_v2.system.user_content_control.course_note_manage: Course Note Manage
+admin_v2.system.user_content_control.pc_switch_tips: When it is turned on or off, it is only effective for PC terminal, and other terminals do not have this function
+admin_v2.system.user_content_control.course_note_tooltips: The course learning page notes display and class notes entry are controlled by this switch
+admin_v2.system.user_content_control.classroom_note_tooltips: The note display on the class learning page is controlled by this switch
+admin_v2.system.user_content_control.pc_app_switch_tips: When it is turned on or off, it only works for PC and app, and other terminals do not have this function
+admin_v2.system.user_content_control.goto_question_manage: Go to Q & a management>>
+admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
+admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
+admin_v2.system.user_content_control.goto_private_message_manage: Go to private message management>>
 
 admin_v2.vip_close.block_tip: Vip function is not activated.
 admin_v2.vip_close.to_open_vip: To open

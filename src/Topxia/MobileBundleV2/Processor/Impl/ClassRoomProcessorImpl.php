@@ -760,7 +760,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
         //老VIP加入接口加入进来的用户
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-        if (!empty($vipRight) && ((0 == $member['orderId'] && 'vip_join' != $member['joinedChannel']) || $member['joinedChannel'] == 'vip_join')) {
+        if (!empty($vipRight) && ((0 == $member['orderId'] && 'vip_join' != $member['joinedChannel']) || 'vip_join' == $member['joinedChannel'])) {
             $userVipStatus = $this->getVipService()->checkUserVipRight(
                 $member['userId'],
                 ClassroomVipRightSupplier::CODE,

@@ -9,13 +9,13 @@ use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseMemberFilter extends Filter
 {
-    protected $simpleFields = array(
+    protected $simpleFields = [
         'id', 'courseId', 'deadline', 'courseSetId',
-    );
+    ];
 
-    protected $publicFields = array(
+    protected $publicFields = [
         'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum',
-    );
+    ];
 
     protected function simpleFields(&$data)
     {

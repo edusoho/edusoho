@@ -49,10 +49,10 @@
             {% if student.isNotified %}{{'my.teaching.open_course.student_setting.whether_remind.yes'|trans}}{% else %}{{'my.teaching.open_course.student_setting.whether_remind.no'|trans}}{% endif %}
           </td>
         {% endif %}
-        
+
         <td style="vertical-align: middle;">
           <div class="btn-group">
-            {% if app.user.id != user.id %}
+            {% if app.user.id != user.id and can_send_message(user.id) %}
               <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'my.teaching.open_course.student_setting.send_message_btn'|trans}}</button>
             {% endif %}
             {% if app.user.isAdmin() %}

@@ -1737,16 +1737,6 @@ admin_v2_school_information_save:
     permissions: [admin_v2_school_information]
     methods: [POST]
 
-admin_v2_certificate_setting:
-    path:  /setting/certificate
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:certificate }
-    permissions: [admin_v2_school_information]
-
-admin_v2_setting_license_save:
-    path:  /setting/license/save
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveLicense }
-    permissions: [admin_v2_school_information]
-
 admin_v2_setting_license_picture_upload:
   path:  /setting/license_picture/upload
   defaults: { _controller: AppBundle:AdminV2/System/Setting:licensePictureUpload }
@@ -1979,6 +1969,22 @@ admin_v2_coin_model_ajax:
     path: /setting/coin/model/ajax
     defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinTableAjax}
     permissions: [admin_v2_coin_user_records]
+
+# 系统-合规经营与信息安全设置-经营资质设置
+admin_v2_setting_management:
+  path:  /setting/ugc/qualification
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:qualification }
+  permissions: [admin_v2_business_qualification]
+
+admin_v2_qualifications_information_save:
+  path:  /setting/ugc/qualifications/save
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:saveQualification }
+  permissions: [admin_v2_business_qualification]
+  methods: [POST]
+
+admin_v2_setting_business_license:
+  path:  /setting/ugc/license
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:license }
 
 # 系统-系统管理-系统优化
 admin_v2_optimize:
@@ -2873,3 +2879,19 @@ admin_v2_data_visualization_activity_learn_daily_statistics:
 admin_v2_data_visualization_course_plan_learn_daily_statistics:
   path: /data_visualization/action/course_plan_learn_daily_statistics
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
+
+admin_v2_user_content_control_review:
+    path: /setting/ugc/user_content_control/review
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
+
+admin_v2_user_content_control_note:
+    path: /setting/ugc/user_content_control/note
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:note }
+
+admin_v2_user_content_control_thread:
+    path: /setting/ugc/user_content_control/thread
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:thread }
+
+admin_v2_user_content_control_private_message:
+    path: /setting/ugc/user_content_control/private_message
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:privateMessage }

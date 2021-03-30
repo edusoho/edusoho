@@ -13,7 +13,6 @@ use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ThreadService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\Order\Service\OrderService;
@@ -22,6 +21,7 @@ use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\TokenService;
@@ -40,6 +40,23 @@ class ClassroomController extends BaseController
     public function dashboardAction($nav, $classroom, $member)
     {
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom['id']);
+
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+        $typeExcludes = [];
+        if (empty($threadSetting['enable_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question', 'discussion']);
+        }
+        if (empty($threadSetting['enable_classroom_question'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question']);
+        }
+        if (empty($threadSetting['enable_classroom_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['discussion']);
+        }
+        $classroom['threadNum'] = $this->getThreadService()->searchThreadCount([
+            'targetType' => 'classroom',
+            'targetId' => $classroom['id'],
+            'typeExcludes' => $typeExcludes,
+        ]);
 
         return $this->render('classroom/dashboard-nav.html.twig', [
             'canManageClassroom' => $canManageClassroom,

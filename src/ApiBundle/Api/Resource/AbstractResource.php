@@ -169,7 +169,6 @@ abstract class AbstractResource
         return null;
     }
 
-
     public function getClientIp()
     {
         return $this->container->get('request_stack')->getMasterRequest()->getClientIp();

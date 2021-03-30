@@ -2083,6 +2083,12 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        $messageSetting = $this->getSetting('ugc_private_message', []);
+
+        if (empty($messageSetting['enable_private_message'])) {
+            return false;
+        }
+
         if ($user['id'] == $toUser['id']) {
             return false;
         }
@@ -2095,17 +2101,15 @@ class WebExtension extends \Twig_Extension
             return true;
         }
 
-        $messageSetting = $this->getSetting('message', []);
-
-        if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+        if (empty($messageSetting['teacher_to_student']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
         }
 
-        if (empty($messageSetting['studentToStudent']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+        if (empty($messageSetting['student_to_student']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
         }
 
-        if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
+        if (empty($messageSetting['student_to_teacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
             return false;
         }
 
