@@ -78,12 +78,12 @@ class Setting extends AbstractResource
         $reviewSetting = $this->getSettingService()->get('ugc_review', []);
 
         return [
-            'enable' => '',
-            'course_enable' => '',
-            'classroom_enable' => '',
-            'question_bank_enable' => '',
-            'open_course_enable' => '',
-            'article_enable' => '',
+            'enable' => empty($reviewSetting['enable_review']) ? 0 : 1,
+            'course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review'])) ? 1 : 0,
+            'classroom_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review'])) ? 1 : 0,
+            'question_bank_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_question_bank_review'])) ? 1 : 0,
+            'open_course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_open_course_review'])) ? 1 : 0,
+            'article_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_article_review'])) ? 1 : 0,
         ];
     }
 
@@ -92,9 +92,9 @@ class Setting extends AbstractResource
         $noteSetting = $this->getSettingService()->get('ugc_note', []);
 
         return [
-            'enable' => '',
-            'course_enable' => '',
-            'classroom_enable' => '',
+            'enable' => empty($noteSetting['enable_note']) ? 0 : 1,
+            'course_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_course_note'])) ? 1 : 0,
+            'classroom_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_classroom_note'])) ? 1 : 0,
         ];
     }
 
@@ -103,12 +103,12 @@ class Setting extends AbstractResource
         $threadSetting = $this->getSettingService()->get('ugc_thread', []);
 
         return [
-            'enable' => '',
-            'course_question_enable' => '',
-            'course_thread_enable' => '',
-            'classroom_question_enable' => '',
-            'classroom_thread_enable' => '',
-            'group_thread_enable' => '',
+            'enable' => empty($threadSetting['enable_thread']) ? 0 : 1,
+            'course_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_question'])) ? 1 : 0,
+            'course_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_thread'])) ? 1 : 0,
+            'classroom_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_question'])) ? 1 : 0,
+            'classroom_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_thread'])) ? 1 : 0,
+            'group_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_group_thread'])) ? 1 : 0,
         ];
     }
 
@@ -117,10 +117,10 @@ class Setting extends AbstractResource
         $privateMessageSetting = $this->getSettingService()->get('ugc_private_message', []);
 
         return [
-            'enable' => '',
-            'student_to_student' => '',
-            'student_to_teacher' => '',
-            'teacher_to_student' => '',
+            'enable' => empty($privateMessageSetting['enable_private_message']) ? 0 : 1,
+            'student_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_student'])) ? 1 : 0,
+            'student_to_teacher' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_teacher'])) ? 1 : 0,
+            'teacher_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['teacher_to_student'])) ? 1 : 0,
         ];
     }
 
