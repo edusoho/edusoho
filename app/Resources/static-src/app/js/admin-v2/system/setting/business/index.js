@@ -4,6 +4,7 @@ let validator = $('#business-form').validate({
   rules: {
     icp: {
       required: true,
+      trim: true
     },
     icpUrl: {
       required: true,
