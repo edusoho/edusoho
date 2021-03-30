@@ -85,7 +85,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('wrap_sub_text', [$this, 'wrapAndSubTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -1489,32 +1488,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
-    }
-
-    public function wrapAndSubTextFilter($text, $line = 1 ,$length = null)
-    {
-        $text = strip_tags($text);
-        $text = str_replace('&nbsp;', ' ', $text);
-        $text = trim($text);
-
-        $text = str_replace(["\n", "\r", "\t"], '<br/>', $text);
-
-        $textExplode = explode('<br/>',$text);
-
-        $implode = [];
-        for ($i = 0; $i < $line; $i++) {
-            $implode[]= $textExplode[$i];
-        }
-        $newText = implode('<br/>',$implode);
-
-        $length = (int) $length;
-
-        if (($length > 0) && (mb_strlen($newText, 'utf-8') > $length)) {
-            $newText = mb_substr($text, 0, $length, 'UTF-8');
-            $newText .= '...';
-        }
-
-        return $newText;
     }
 
     public function getFileType($fileName, $string = null)
