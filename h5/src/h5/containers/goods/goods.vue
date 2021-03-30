@@ -6,21 +6,37 @@
         <div class="goods-detail__banner">
           <img :src="goods.images.large" />
         </div>
+
         <discount
           v-if="goods.discount"
           :currentSku="currentSku"
           :goods="goods"
         />
+
         <detail
           :goods="goods"
           :currentSku="currentSku"
           :goods-setting="goodsSetting"
         />
-        <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+
+        <vip
+          v-if="currentSku.vipLevelInfo && vipSwitch"
+          :currentSku="currentSku"
+          :type="goods.type"
+        />
+
+        <specs
+          v-if="goods.specs.length > 1 || currentSku.services.length"
+          :goods="goods"
+          :currentSku="currentSku"
+          @changeSku="changeSku"
+        />
+
         <certificate
           v-if="currentSku.hasCertificate"
           :selectedPlanId="currentSku.targetId"
         />
+
         <enter-learning
           v-if="
             componentsInfo.mpQrCode &&
@@ -133,6 +149,7 @@ import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
 import Certificate from './components/certificate';
+import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -146,7 +163,7 @@ import initShare from '@/utils/weiixn-share-sdk';
 
 import Api from '@/api';
 import { Toast } from 'vant';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -177,8 +194,11 @@ export default {
     ClassroomCourses,
     Certificate,
     EnterLearning,
+    Vip,
   },
   computed: {
+    ...mapState(['vipSwitch']),
+
     summary() {
       if (!this.goods.summary) return '暂无简介~';
       return this.goods.summary;

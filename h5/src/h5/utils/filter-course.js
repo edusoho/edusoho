@@ -1,20 +1,23 @@
 const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
-  if (listObj.showNumberData === 'join') {
+  const status = listObj.showNumberData;
+  if (status === 'join') {
     showStudentStr = `<span class="switch-box__state">
-            <p class="iconfont icon-people">${data.studentNum}</p>
-        </span>`;
-  } else if (listObj.showNumberData === 'visitor') {
+                        <p class="iconfont icon-people">${data.studentNum}</p>
+                      </span>`;
+  } else if (status === 'visitor') {
     showStudentStr = `<span class="switch-box__state">
-            <p class="iconfont icon-visibility">${data.hitNum}</p>
-        </span>`;
+                        <p class="iconfont icon-visibility">${data.hitNum}</p>
+                      </span>`;
   } else {
     showStudentStr = '';
   }
-  const price =
-    data.price === '0.00'
-      ? '<p style="color: #408FFB">免费</p>'
-      : `<p style="color: #ff5353">¥ ${data.price}</p>`;
+  // const price =
+  //   data.price === '0.00'
+  //     ? '<p style="color: #408FFB">免费</p>'
+  //     : `<p style="color: #ff5353">¥ ${data.price}</p>`;
+
+  const price = getPriceDisplay(data, 'h5');
 
   if (listObj.typeList === 'classroom_list') {
     return {
@@ -31,6 +34,7 @@ const getDisplayStyle = (data, listObj) => {
       middle: {
         value: data.courseNum,
         html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`,
+        vipHtml: `<span class="e-course__count">共 ${data.courseNum} 门课程</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
       },
       bottom: {
         value: data.price || data.studentNum,
@@ -53,6 +57,7 @@ const getDisplayStyle = (data, listObj) => {
       html: `<div class="e-course__project text-overflow">
                   <span>${data.title}</span>
                 </div>`,
+      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
     },
     bottom: {
       value: data.price || data.studentNum,
@@ -60,33 +65,38 @@ const getDisplayStyle = (data, listObj) => {
     },
   };
 };
+
 const getNewDisplayStyle = (data, listObj, platform) => {
   const price = getPriceDisplay(data, platform);
+  const type = listObj.typeList;
 
-  if (listObj.typeList === 'classroom_list') {
+  if (type === 'classroom_list') {
     return getClassRoomDisplay(data, listObj, price);
   }
-  if (listObj.typeList === 'item_bank_exercise') {
+  if (type === 'item_bank_exercise') {
     return getItemBankDisplay(data, listObj, price);
   }
   return getCourseDisplay(data, listObj, price);
 };
+
 const getPriceDisplay = (data, platform) => {
-  const dataPrice = Number(data.price2.amount);
+  const { amount, currency, coinAmount, coinName } = data.price2;
+  const dataPrice = Number(amount);
   const primaryColor = {
     app: '#20B573',
     h5: '#408FFB',
   };
   let price;
-  if (dataPrice > 0 && data.price2.currency === 'coin') {
-    price = `<span style="color: #ff5353">${data.price2.coinAmount} ${data.price2.coinName}</span>`;
-  } else if (dataPrice > 0 && data.price2.currency === 'RMB') {
-    price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`;
+  if (dataPrice > 0 && currency === 'coin') {
+    price = `<span style="color: #ff5353">${coinAmount} ${coinName}</span>`;
+  } else if (dataPrice > 0 && currency === 'RMB') {
+    price = `<span style="color: #ff5353">¥ ${amount}</span>`;
   } else {
     price = `<span style="color:${primaryColor[platform]}">免费</span>`;
   }
   return price;
 };
+
 const getClassRoomDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -110,6 +120,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
     },
   };
 };
+
 const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -132,6 +143,7 @@ const getCourseDisplay = (data, listObj, price) => {
     },
   };
 };
+
 const getItemBankDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -172,6 +184,7 @@ const getstudyItemBankDisplay = data => {
     },
   };
 };
+
 const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
   // h5和app用了新版ui,小程序还是用旧版ui
   switch (listObj.type) {
@@ -251,4 +264,5 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       return 'empty data';
   }
 };
+
 export default courseListData;

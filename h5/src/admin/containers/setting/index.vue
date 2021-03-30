@@ -330,12 +330,12 @@ export default {
             !this.vipSettings.enabled ||
             !this.vipSettings.h5Enabled
           ) {
-            this.$confirm('会员功能未开通', '提示', {
-              confirmButtonText: '去开通',
+            this.$confirm('会员功能未开启', '提示', {
+              confirmButtonText: '去开启',
               cancelButtonText: '取消',
             })
               .then(() => {
-                window.open(window.location.origin + '/admin/setting/vip');
+                window.open(window.location.origin + '/admin/v2/setting/vip');
               })
               .catch(() => {});
             return;

@@ -1,165 +1,185 @@
 <template>
   <div class="vip-detail">
     <e-loading v-if="isLoading" />
-    <div v-if="loaded" class="user-section gray-border-bottom clearfix">
-      <div v-if="user">
-        <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
-        <div class="user-middle">
-          <div class="user-name">{{ user.nickname }}</div>
-          <span v-if="vipInfo" class="user-vip vip-level text-overflow">
-            <img
-              v-if="vipInfo.icon"
-              :class="['vip-img', vipDated ? 'vip-expired' : '']"
-              :src="vipInfo.icon"
-            />
-            <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
-            <span v-else class="grey vip-name vip-name-short text-overflow"
-              >{{ vipInfo.vipName }}已过期</span
-            >
-          </span>
-          <span v-else class="user-vip">您还不是会员</span>
-        </div>
-        <div v-if="vipInfo" class="vip-status">
-          <div
-            v-if="btnStatus"
-            ref="joinBtnTop"
-            class="vip-status__btn"
-            @click="popShow"
-          >
-            {{ vipDated ? '重新开通' : btnStatus }}
+
+    <!-- 轮播图 -->
+    <div class="vip-swiper">
+      <swiper class="swiper" ref="mySwiper" :options="swiperOption">
+        <swiper-slide v-for="(item, index) in levels" :key="index">
+          <img class="vip-swiper__img" :src="item.background" />
+          <div class="vip-user" v-if="user">
+            <div class="vip-user__img" v-if="user.avatar">
+              <img :src="user.avatar.large" />
+            </div>
+            <span class="vip-user__name">{{ user.nickname }}</span>
           </div>
-          <div
-            v-if="vipDeadline"
-            :class="[
-              'vip-status__deadline',
-              btnStatus ? '' : 'deadline-middle',
-            ]"
-          >
-            {{ vipDeadline }} 到期
+          <div class="vip-info">
+            <div class="vip-info__detail">
+              <img class="vip-info__icon" :src="item.icon" />
+              <span class="vip-info__name">{{ item.name }}</span>
+            </div>
+            <div class="vip-info__status">{{ vipStatus(item) }}</div>
           </div>
-        </div>
-      </div>
-      <router-link v-else :to="{ path: '/login', query: { redirect: '/vip' } }">
-        <img class="user-img" src="static/images/avatar.png" />
-        <div class="user-middle single-middle">
-          <div :class="['user-vip', !user ? 'text-middle' : '']">
-            立即登录，查看会员权益
-          </div>
-        </div>
-      </router-link>
+        </swiper-slide>
+      </swiper>
     </div>
 
-    <!-- 会员轮播 -->
-    <vip-introduce
-      ref="joinBtnBottom"
-      :levels="levels"
-      :user="user"
-      :buy-type="buyType"
-      :is-vip="vipUser.vip"
-      :active-index.sync="currentLevelIndex"
-      @vipOpen="vipOpen"
-    />
+    <!-- 开通会员 -->
+    <div class="vip-sec">
+      <module-title
+        :title="userLevelStatus == 'upgrade' ? '会员升级' : '选择开通时长'"
+      />
+      <div class="vip-open">
+        <swiper
+          v-if="userLevelStatus != 'upgrade'"
+          :options="vipOpenSwiperOption"
+        >
+          <template v-for="item in currentLevel.sellModes">
+            <swiper-slide :key="item.id">
+              <price-item
+                :item="item"
+                :activePriceId="activePrice.id"
+                @clickPriceItem="clickPriceItem"
+              />
+            </swiper-slide>
+          </template>
+        </swiper>
 
-    <a v-if="isShowInviteUrl" :href="inviteUrl">
-      <div class="coupon-code-entrance">
-        邀请好友购买
-        <i class="van-icon van-icon-arrow pull-right" />
-        <i class="pull-right">赚 {{ drpSetting.minDirectRewardRatio }}%</i>
+        <div class="vip-upgrade" v-else>
+          <span class="vip-upgrade__deadline">
+            会员升级期限至：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
+          </span>
+        </div>
+
+        <div
+          class="vip-open__buy"
+          :class="{ disabled: !vipBuyStatu.status }"
+          @click="clickVipBuy"
+        >
+          {{ vipBuyStatu.text }}
+        </div>
       </div>
-    </a>
+    </div>
 
-    <!-- 会员免费课程 -->
-    <e-course-list
-      v-if="courseData"
-      :course-list="courseData"
-      :vip-name="levels[currentLevelIndex].name"
-      :more-type="'vip'"
-      :level-id="Number(levels[currentLevelIndex].id)"
-      :type-list="'course_list'"
-      class="gray-border-bottom"
-    />
-
-    <!-- 会员免费班级 -->
-    <e-course-list
-      v-if="classroomData"
-      :more-type="'vip'"
-      :level-id="Number(levels[currentLevelIndex].id)"
-      :course-list="classroomData"
-      :vip-name="levels[currentLevelIndex].name"
-      :type-list="'classroom_list'"
-      class="gray-border-bottom"
-    />
-
-    <!-- 加入会员 -->
-    <e-popup
-      v-if="priceItems[currentLevelIndex]"
-      :show.sync="vipPopShow"
-      :title="btnStatus + levels[currentLevelIndex].name"
-      class="vip-popup"
-      content-class="vip-popup__content"
-    >
-      <div class="vip-popup__header text-14">选择{{ btnStatus }}时长</div>
-      <div class="vip-popup__body">
-        <van-row gutter="20">
-          <van-col
-            v-for="(item, index) in priceItems[currentLevelIndex]"
-            :key="index"
-            span="8"
-          >
-            <price-item
-              :item="item"
-              :index="index"
-              :class="{ active: index === activePriceIndex }"
-              :vip-buy-type="vipSettings.buyType"
-              @selectItem="selectPriceItem($event, index)"
-            />
-          </van-col>
-        </van-row>
+    <!-- 专属权益 -->
+    <div class="vip-sec">
+      <module-title title="专属权益" />
+      <div class="vip-interest">
+        <div class="vip-interest__item" v-if="currentLevel.courses.data.length">
+          <div class="vip-interest__item__img">
+            <img src="static/images/vip/vip_course.png" />
+          </div>
+          <div class="vip-interest__item__title">会员课程</div>
+          <div class="vip-interest__item__total">
+            {{ currentLevel.courses.paging.total }}
+            <span class="company">个</span>
+          </div>
+        </div>
+        <div
+          class="vip-interest__item"
+          v-if="currentLevel.classrooms.data.length"
+        >
+          <div class="vip-interest__item__img">
+            <img src="static/images/vip/vip_classroom.png" />
+          </div>
+          <div class="vip-interest__item__title">会员班级</div>
+          <div class="vip-interest__item__total">
+            {{ currentLevel.classrooms.paging.total }}
+            <span class="company">个</span>
+          </div>
+        </div>
+        <div
+          class="vip-interest__empty"
+          v-if="
+            !currentLevel.courses.data.length &&
+              !currentLevel.classrooms.data.length
+          "
+        >
+          <img src="static/images/vip/empty.png" alt="" />
+          <p>暂无专属权益</p>
+        </div>
       </div>
+    </div>
+
+    <!-- 专属介绍 -->
+    <div class="vip-sec">
+      <module-title title="专属介绍" />
       <div
-        :class="{ disabled: activePriceIndex < 0 }"
-        class="btn-join-bottom"
-        @click="joinVip"
-      >
-        确认{{ btnStatus }}
-      </div>
-    </e-popup>
+        class="vip-introduce"
+        v-html="currentLevel.description || '暂无介绍'"
+      />
+    </div>
 
-    <div
-      v-if="bottomBtnShow && btnStatus && !vipDated"
-      class="btn-join-bottom"
-      @click="popShow"
-    >
-      立即{{ btnStatus }}
+    <!-- 专属特权 -->
+    <div class="vip-sec">
+      <module-title title="专属特权" />
+      <div class="vip-privilege">
+        <!-- 会员免费课程 -->
+        <e-course-list
+          v-if="courseData"
+          :course-list="courseData"
+          :vip-name="currentLevel.name"
+          :more-type="'vip'"
+          :level-id="Number(currentLevel.id)"
+          :type-list="'course_list'"
+          class="vip-course-list"
+        />
+
+        <!-- 会员免费班级 -->
+        <e-course-list
+          v-if="classroomData"
+          :more-type="'vip'"
+          :level-id="Number(currentLevel.id)"
+          :course-list="classroomData"
+          :vip-name="currentLevel.name"
+          :type-list="'classroom_list'"
+          class="vip-course-list"
+        />
+      </div>
     </div>
   </div>
 </template>
+
 <script>
-import EPopup from '@/components/popup';
 import Api from '@/api';
-import introduce from './introduce';
-import priceItem from './vip-price-item';
-import courseList from '&/components/e-course-list/e-course-list';
-import getPriceItems from '../../config/vip-price-config';
-import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
-import { Toast } from 'vant';
 import * as types from '@/store/mutation-types';
-import qs from 'qs';
+
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import 'swiper/css/swiper.css';
+
+import ModuleTitle from './module-title';
+import PriceItem from './price-item';
+import ECourseList from '&/components/e-course-list/e-course-list';
 
 export default {
   components: {
-    EPopup,
-    priceItem,
-    'vip-introduce': introduce,
-    'e-course-list': courseList,
+    Swiper,
+    SwiperSlide,
+    ModuleTitle,
+    PriceItem,
+    ECourseList,
   },
   data() {
     return {
-      loaded: false,
+      swiperOption: {
+        loop: false,
+        centeredSlides: true,
+        slidesPerView: 1.28,
+        observer: true,
+        observeParents: true,
+        on: {
+          slideChange: () => {
+            this.activeIndex = this.swiper.activeIndex;
+            this.getActivePrice();
+          },
+        },
+      },
+      vipOpenSwiperOption: {
+        slidesPerView: 3.1,
+      },
       user: {},
       vipInfo: null,
-      vipUser: {},
       levels: [
         {
           courses: {
@@ -170,269 +190,237 @@ export default {
           },
         },
       ],
-      currentLevelIndex: 0,
-      activePriceIndex: -1,
-      vipPopShow: false,
-      priceItems: [],
-      buyType: 'month',
-      bottomBtnShow: false,
-      orderParams: {
-        unit: 'month',
-        num: 0,
-      },
-      isShowInviteUrl: false, // 是否显示邀请链接
-      bindAgencyRelation: {}, // 分销代理商绑定信息
-      drpSetting: {},
+      activeIndex: 0,
+      activePrice: null,
+      isLoading: false,
     };
   },
   computed: {
-    ...mapState(['vipSettings', 'isLoading', 'vipSwitch', 'DrpSwitch']),
+    ...mapState(['vipSwitch']),
     ...mapState({
       userInfo: state => state.user,
     }),
+
     vipDated() {
-      if (!this.vipInfo) return false;
-      const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
+      if (!this.vipInfo) {
+        return true;
+      }
+      const deadLineStamp = new Date(this.vipInfo.deadline).getTime();
       const nowStamp = new Date().getTime();
-      return nowStamp > deadlineStamp;
+      return nowStamp > deadLineStamp;
     },
+
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    },
+
+    currentLevel() {
+      return this.levels[this.activeIndex];
+    },
+
+    userLevelStatus() {
+      const userSeq = this.vipInfo ? this.vipInfo.seq : 0;
+      const { seq } = this.currentLevel;
+
+      if (userSeq === 0 || this.vipDated) {
+        return 'opening';
+      }
+      if (userSeq === seq) {
+        return 'renew';
+      }
+      if (userSeq < seq) {
+        return 'upgrade';
+      }
+      return 'low';
+    },
+
+    vipBuyStatu() {
+      const title = this.activePrice ? this.activePrice.title : '';
+      const actions = {
+        opening: {
+          text: `立即开通${title}特权`,
+          status: true,
+          type: '开通',
+        },
+        renew: {
+          text: `续费${title}特权`,
+          status: true,
+          type: '续费',
+        },
+        upgrade: {
+          text: '升级为当前会员特权',
+          status: true,
+          type: '升级',
+        },
+        low: {
+          text: '等级低于已购会员',
+          status: false,
+          type: '低于',
+        },
+      };
+
+      return actions[this.userLevelStatus];
+    },
+
     courseData() {
-      const data = this.levels[this.currentLevelIndex].courses.data;
+      const { data, paging } = this.currentLevel.courses;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: '会员课程',
+        title: `会员课程(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
-      dataFormat.items = data;
+      dataFormat.items = data.slice(0, 3);
       return dataFormat;
     },
+
     classroomData() {
-      const data = this.levels[this.currentLevelIndex].classrooms.data;
+      const { data, paging } = this.currentLevel.classrooms;
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: '会员班级',
+        title: `会员班级(${paging.total})`,
         source: {},
         limit: 4,
+        vipCenter: true,
       };
-      dataFormat.items = data;
+      dataFormat.items = data.slice(0, 3);
       return dataFormat;
-    },
-    vipDeadline() {
-      if (!Object.values(this.vipInfo).length) return '';
-      const time = new Date(this.vipInfo.deadline);
-      return formatFullTime(time);
-    },
-    btnStatus() {
-      if (!this.vipInfo) return '开通';
-      const currentSeq = Number(this.levels[this.currentLevelIndex].seq);
-      const userSeq = this.vipInfo.seq;
-      if (userSeq > currentSeq) return '';
-      if (this.vipDated) return '开通';
-      return userSeq < currentSeq ? '升级' : '续费';
-    },
-    leftDays() {
-      if (!Object.values(this.vipInfo).length) return false;
-      const todayStamp = new Date().getTime();
-      const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
-      return getOffsetDays(todayStamp, deadlineStamp) + 1;
-    },
-    inviteUrl() {
-      const params = {
-        type: 'vip',
-        id: this.levels[this.currentLevelIndex].id,
-        merchant_id: this.drpSetting.merchantId,
-      };
-      return (
-        this.drpSetting.distributor_template_url + '?' + qs.stringify(params)
-      );
     },
   },
   created() {
-    if (!this.vipSwitch) {
-      this.$router.push({ name: 'find' });
+    // 未登录跳转登录页面
+    if (!this.$store.state.token) {
+      this.$router.replace({
+        name: 'login',
+        query: {
+          redirect: this.$route.fullPath,
+        },
+      });
       return;
     }
-    this.getVipLevels();
-    this.showInviteUrl();
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 100);
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll, true);
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll, true);
+    if (!this.vipSwitch) {
+      this.$router.push({
+        path: '/',
+        query: {
+          redirect: this.$route.fullPath,
+        },
+      });
+      return;
+    }
+    this.isLoading = true;
+    this.getVipDetail();
   },
   methods: {
-    getVipLevels() {
-      Api.getVipLevels({ disableLoading: false })
-        .then(res => {
-          if (!res.length) {
-            this.$router.push({ name: 'find' });
-            return;
-          }
-          const levelId = res[0].id;
-          this.getVipDetail(levelId);
-        })
-        .catch(err => {
-          Toast.fail(err.message);
-        });
-    },
-    getVipDetail(levelId) {
+    getVipDetail() {
       const queryId = this.$route.query.id;
-      Api.getVipDetail({
-        query: {
-          levelId: levelId,
-        },
-      }).then(res => {
-        this.vipUser = res.vipUser || {};
-        this.levels = res.levels;
-        this.vipInfo = this.vipUser.vip;
-        this.user = this.vipUser.user;
-        this.buyType = this.vipSettings.buyType;
+      Api.getVipDetail().then(res => {
+        this.isLoading = false;
+        const { levels, vipUser } = res;
+
+        this.levels = levels;
+        this.user = vipUser ? vipUser.user : null;
+        this.vipInfo = vipUser.vip;
+
+        const vip = vipUser ? vipUser.vip : null;
         // 更新用户会员数据
         const userInfo = this.userInfo;
-        userInfo.vip = this.vipInfo;
+        userInfo.vip = vip;
         this.$store.commit(types.USER_INFO, userInfo);
+
         // 路由传值vipId > 用户当前等级 > 最低会员等级
-        levelId = this.vipUser.vip
-          ? this.vipUser.vip.levelId
-          : res.levels[0].id;
+        let levelId = vip ? vip.levelId : levels[0].id;
         levelId = isNaN(queryId) ? levelId : queryId;
 
-        this.getPriceItems(res.levels);
-        this.getVipIndex(levelId, res.levels);
-
-        this.loaded = true;
+        this.getVipIndex(levelId, levels);
       });
     },
-    getPriceItems(levels) {
-      for (let i = 0; i < this.levels.length; i++) {
-        const item = levels[i];
-        this.priceItems = [
-          ...this.priceItems,
-          getPriceItems(
-            this.vipSettings.buyType,
-            item.monthPrice,
-            item.yearPrice,
-          ),
-        ];
-      }
-    },
+
     getVipIndex(levelId, levels) {
-      // currentLevelIndex要放在levels数据之后
       let vipIndex = 0;
-      const vipLevel = levels.find((level, index) => {
+      levels.find((level, index) => {
         if (level.id === levelId) {
           vipIndex = index;
           return level;
         }
       });
-      this.currentLevelIndex = vipIndex;
+      this.activeIndex = vipIndex || 0;
+      this.initSwiperActiveIndex();
+      this.getActivePrice();
     },
-    selectPriceItem(event, index) {
-      this.activePriceIndex = index;
-      this.orderParams.unit = event.unit;
-      this.orderParams.num = event.num;
+
+    // 轮播图 vip 状态
+    vipStatus(data) {
+      if (!this.vipInfo) {
+        return '您还不是会员，开通享特权';
+      }
+      const seq = Number(this.vipInfo.seq);
+      const deadline = this.vipInfo.deadline;
+      const currentVipSeq = Number(data.seq);
+
+      if (this.vipDated) {
+        return seq === currentVipSeq
+          ? '会员身份已到期'
+          : '您还不是会员，开通享特权';
+      }
+
+      if (seq === currentVipSeq) {
+        return `会员有效期至：${this.$moment(deadline).format('YYYY/MM/DD')}`;
+      }
+      if (seq > currentVipSeq) {
+        return '等级低于已购会员';
+      }
+      return '您还不是该等级会员请升级';
     },
-    joinVip() {
-      // 没有价格选项，不能创建订单
-      if (this.activePriceIndex < 0) {
+
+    // 首次进入，切换到对应会员
+    initSwiperActiveIndex() {
+      this.$nextTick(() => {
+        this.swiper.slideTo(this.activeIndex, 0);
+      });
+    },
+
+    // 开通时长默认选中第一个
+    getActivePrice() {
+      const { sellModes } = this.levels[this.activeIndex];
+      this.activePrice = sellModes.length > 0 ? sellModes[0] : null;
+    },
+
+    clickPriceItem(value) {
+      this.activePrice = value;
+    },
+
+    clickVipBuy() {
+      if (!this.user) {
+        this.$router.push({
+          path: '/login',
+          query: {
+            redirect: '/vip',
+          },
+        });
         return;
       }
 
-      this.$router.push({
+      if (!this.vipBuyStatu.status) return;
+
+      // 没有价格选项，不能创建订单
+      if (!this.activePrice) {
+        return;
+      }
+
+      this.$router.replace({
         name: 'order',
         params: {
-          id: this.levels[this.currentLevelIndex].id,
-          unit: this.orderParams.unit,
-          num: this.orderParams.num,
-          type: this.btnStatus,
+          id: this.activePrice.id,
+          unit: this.activePrice.specUnit,
+          num: this.activePrice.duration,
+          type: this.vipBuyStatu.type,
         },
         query: {
           targetType: 'vip',
         },
-      });
-    },
-    vipOpen() {
-      if (!this.user) {
-        this.$router.push({
-          path: '/login',
-          query: {
-            redirect: '/vip',
-          },
-        });
-        return;
-      }
-      this.vipPopShow = true;
-    },
-    handleScroll() {
-      // 执行函数
-      if (!this.btnStatus) return;
-      let topSize = '';
-      let num = 0;
-      if (!this.user || !this.vipUser.vip) {
-        topSize = this.$refs.joinBtnBottom.$el.getBoundingClientRect().bottom;
-        num = 45;
-      } else {
-        topSize = this.$refs.joinBtnTop.getBoundingClientRect().bottom;
-      }
-      this.bottomBtnShow = topSize < num;
-    },
-    popShow() {
-      if (!this.user) {
-        this.$router.push({
-          path: '/login',
-          query: {
-            redirect: '/vip',
-          },
-        });
-        return;
-      }
-
-      // 会员升级
-      if (this.btnStatus === '升级') {
-        const upgradeMinDay = this.vipSettings.upgradeMinDay;
-        if (this.leftDays <= upgradeMinDay) {
-          Toast(`会员剩余天数小于${upgradeMinDay}天，请先续费后再升级`);
-          return;
-        }
-        this.activePriceIndex = 0;
-        this.joinVip();
-        return;
-      }
-
-      // 会员续费
-      if (this.vipDated && this.vipInfo) {
-        this.getVipIndex(this.vipInfo.levelId, this.levels);
-      }
-      this.vipPopShow = true;
-    },
-    showInviteUrl() {
-      if (!this.DrpSwitch) {
-        this.isShowInviteUrl = false;
-        return;
-      }
-      this.getDrpSetting();
-      this.getAgencyBindRelation();
-    },
-    getAgencyBindRelation() {
-      Api.getAgencyBindRelation().then(data => {
-        if (!data.agencyId) {
-          this.isShowInviteUrl = false;
-          return;
-        }
-        this.bindAgencyRelation = data;
-        this.isShowInviteUrl = true;
-      });
-    },
-    getDrpSetting() {
-      Api.getDrpSetting().then(data => {
-        this.drpSetting = data;
       });
     },
   },

@@ -154,30 +154,16 @@
 		}
 
 		&__text {
-			display: flex;
-			align-items: center;
-			font-size: vw(14);
+			padding-left: vw(8);
+			font-size: vw(18);
 
 			.price {
-				padding-right: vw(10);
 				color: #fd4852;
-				font-size: vw(28);
 			}
 
 			.discount {
-				position: relative;
-				padding-left: vw(10);
 				color: #ffa91b;
-
-				&::after {
-					position: absolute;
-					top: vw(-3);
-					bottom: vw(-3);
-					left: 0;
-					width: vw(1);
-					background: #d8d8d8;
-					content: '';
-				}
+				font-size: vw(16);
 			}
 		}
 	}

@@ -118,9 +118,19 @@ export default {
             });
             return;
           }
-          this.$router.push({
-            path: `/${this.targetType}/${targetId}`,
-          });
+
+          if (this.targetType === 'vip') {
+            this.$router.replace({
+              path: `/${this.targetType}`,
+              query: {
+                backUrl: '/my/orders',
+              },
+            });
+          } else {
+            this.$router.replace({
+              path: `/${this.targetType}/${this.targetId}`,
+            });
+          }
         }
         this.detail = Object.assign({}, res);
         this.isLoading = false;
@@ -146,8 +156,7 @@ export default {
       const returnUrl =
         window.location.origin +
         window.location.pathname +
-        window.location.hash +
-        `pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
+        `#/pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
       Api.createTrade({
         data: {
           gateway: this.payWay,

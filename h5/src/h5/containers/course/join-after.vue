@@ -71,6 +71,8 @@
     >
       去商品页
     </e-footer>
+
+    <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
 </template>
 <script>
@@ -113,6 +115,7 @@ export default {
         targetType: 'course',
         targetId: this.details.id,
       },
+      show: false,
     };
   },
   mixins: [collectUserInfo],
@@ -132,6 +135,9 @@ export default {
     },
     isClassCourse() {
       return Number(this.details.parentId);
+    },
+    currentTypeText() {
+      return this.details.classroom ? '班级' : '课程';
     },
   },
   watch: {
@@ -206,6 +212,7 @@ export default {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
+
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
@@ -248,17 +255,47 @@ export default {
           });
         };
         this.callConfirm(errorMessage, confirmCallback);
-      } else if (errorCode === 'vip.member_expired') {
-        errorMessage = '会员已到期，请及时续费会员';
-        confirmCallback = () => {
-          this.$router.push({
-            path: `/vip`,
-          });
-        };
-        this.callConfirm(errorMessage, confirmCallback);
-      } else {
-        Toast.fail(this.errorMsg);
+        return;
       }
+      const vipName = this.details.vipLevel ? this.details.vipLevel.name : '';
+      const vipStatus = {
+        // 用户会员服务已过期
+        'vip.member_expired': {
+          message: `您的会员已到期，会员${this.currentTypeText}已无法学习，请续费会员，或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '续费会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 当前用户并不是vip
+        'vip.not_member': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 用户会员等级过低
+        'vip.level_low': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 会员等级无效
+        'vip.level_not_exist': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 课程会员被删除
+        'vip.vip_right_not_exist': {
+          message: `很抱歉，该${this.currentTypeText}已不属于会员权益，请退出后重新购买。`,
+          showConfirmButton: false,
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+      };
+
+      if (vipStatus[errorCode]) {
+        this.vipCallConfirm(vipStatus[errorCode]);
+        return;
+      }
+      Toast.fail(this.errorMsg);
     },
     getErrorMsg(code) {
       switch (code) {
@@ -304,6 +341,77 @@ export default {
         })
         .catch(() => {});
     },
+    vipCallConfirm(config) {
+      this.show = true;
+      Dialog.confirm({
+        ...config,
+        title: '',
+        confirmButtonColor: '#1895E7',
+        cancelButtonColor: '#FD4852',
+        messageAlign: 'left',
+        overlay: false,
+        beforeClose: this.beforeClose,
+      });
+    },
+
+    clickCloseOverlay() {
+      this.show = false;
+      Dialog.close();
+    },
+
+    beforeClose(action, done) {
+      if (action === 'confirm') {
+        this.$router.push({
+          path: `/vip`,
+          query: {
+            id: this.details.vipLevel.id,
+          },
+        });
+        done();
+        return;
+      }
+
+      if (!this.show) return;
+
+      if (this.currentTypeText == '班级') {
+        this.deleteClassroom(done);
+      } else {
+        this.deleteCourse(done);
+      }
+    },
+
+    deleteClassroom(done) {
+      const { id, goodsId } = this.details.classroom;
+      const params = { id };
+      Api.deleteClassroom({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+            query: {
+              backUrl: '/',
+            },
+          });
+          done();
+        }
+      });
+    },
+
+    deleteCourse(done) {
+      const { id, goodsId } = this.details;
+      const params = { id };
+      Api.deleteCourse({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+            query: {
+              targetId: id,
+            },
+          });
+          done();
+        }
+      });
+    },
+
     handleScroll() {
       const SWIPER = document.getElementById('swiper-directory');
       const DOCUMENTHEIGHT = document.documentElement.scrollHeight;

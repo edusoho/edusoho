@@ -37,20 +37,20 @@
         >
       </div>
 
-      <div class="plan-popup__other">
+      <div
+        class="plan-popup__other"
+        v-if="!(currentSku.services === null) && currentSku.services.length"
+      >
         <!-- 学习有效期 -->
-        <div class="popup-other clearfix">
+        <!-- <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">学习有效期</div>
           <div
             class="pull-left popup-other__right"
             v-html="buyableModeHtml"
           ></div>
-        </div>
+        </div> -->
         <!-- 承诺服务 -->
-        <div
-          class="popup-other clearfix"
-          v-if="!(currentSku.services === null) && currentSku.services.length"
-        >
+        <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">承诺服务</div>
           <div class="pull-left popup-other__right">
             <span
@@ -65,7 +65,7 @@
       <!--      <div class="plan-popup__buy">立即购买</div>-->
     </van-popup>
 
-    <div
+    <!-- <div
       v-if="currentSku.vipLevelInfo && vipSwitch"
       class="detail-plan__plan clearfix"
     >
@@ -79,12 +79,12 @@
           {{ currentSku.vipLevelInfo.name }}免费学</router-link
         >
       </div>
-    </div>
+    </div> -->
 
-    <div class="detail-plan__plan clearfix">
+    <!-- <div class="detail-plan__plan clearfix">
       <div class="pull-left plan-left">学习有效期</div>
       <div class="pull-left plan-right" v-html="buyableModeHtml"></div>
-    </div>
+    </div> -->
 
     <div
       class="detail-plan__plan clearfix"

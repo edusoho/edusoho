@@ -57,7 +57,7 @@
           :disable-mask="true"
           title="班级课程"
           defaul-value="暂无课程"
-          @click.native="showDialog"
+          @click.native="showDialog('click')"
         />
       </div>
     </div>
@@ -83,6 +83,8 @@
     >
       去商品页
     </e-footer>
+
+    <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
 </template>
 
@@ -130,6 +132,7 @@ export default {
         targetId: this.details.classId,
       },
       showNumberData: '',
+      show: false,
     };
   },
   mixins: [collectUserInfo],
@@ -196,14 +199,26 @@ export default {
     ...mapMutations('classroom', {
       setCurrentJoin: types.SET_CURRENT_JOIN_CLASS,
     }),
+    replaceGoodsPage() {
+      this.$router.replace({
+        path: `/goods/${this.details.goodsId}/show`,
+      });
+    },
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
       });
     },
-    showDialog() {
+    showDialog(value) {
       let code = '';
       let errorMessage = '';
+
+      // 点击班级课程
+      if (value) {
+        this.errorMsg = '';
+        return;
+      }
+
       let confirmCallback = function() {};
 
       if (!this.details.member) return;
@@ -232,17 +247,53 @@ export default {
           });
         };
         this.callConfirm(errorMessage, confirmCallback);
-      } else if (code === 'vip.member_expired') {
-        errorMessage = '会员已到期，请及时续费会员';
-        confirmCallback = () => {
-          this.$router.push({
-            path: `/vip`,
-          });
-        };
-        this.callConfirm(errorMessage, confirmCallback);
-      } else {
-        Toast.fail(this.getErrorMsg(code));
+        return;
       }
+      const vipName = this.details.vipLevel ? this.details.vipLevel.name : '';
+      const vipStatus = {
+        // 用户会员服务已过期
+        'vip.member_expired': {
+          message: `您的会员已到期，会员班级已无法学习，请续费会员，或退出后重新购买班级。`,
+          confirmButtonText: '续费会员',
+        },
+        // 当前用户并不是vip
+        'vip.not_member': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
+          confirmButtonText: '购买会员',
+        },
+        // 用户会员等级过低
+        'vip.level_low': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
+          confirmButtonText: '购买会员',
+        },
+        // 会员等级无效
+        'vip.level_not_exist': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该班级学习。或退出后重新购买班级。`,
+          confirmButtonText: '购买会员',
+        },
+        // 课程会员被删除
+        'vip.vip_right_not_exist': {
+          message: `很抱歉，该班级已不属于会员权益，请退出后重新购买。`,
+          showConfirmButton: false,
+        },
+      };
+      if (vipStatus[code]) {
+        this.vipCallConfirm(vipStatus[code]);
+        return;
+      }
+      Toast.fail(this.errorMsg);
+
+      // else if (code === 'vip.member_expired') {
+      //   errorMessage = '会员已到期，请及时续费会员';
+      //   confirmCallback = () => {
+      //     this.$router.push({
+      //       path: `/vip`,
+      //     });
+      //   };
+      //   this.callConfirm(errorMessage, confirmCallback);
+      // } else {
+      //   Toast.fail(this.getErrorMsg(code));
+      // }
     },
     handleScroll() {
       if (this.scrollFlag) {
@@ -302,6 +353,47 @@ export default {
         })
         .catch(() => {});
     },
+
+    vipCallConfirm(config) {
+      this.show = true;
+      Dialog.confirm({
+        ...config,
+        title: '',
+        confirmButtonColor: '#1895E7',
+        cancelButtonText: '退出班级',
+        cancelButtonColor: '#FD4852',
+        messageAlign: 'left',
+        overlay: false,
+        beforeClose: this.beforeClose,
+      });
+    },
+
+    clickCloseOverlay() {
+      this.show = false;
+      Dialog.close();
+    },
+
+    beforeClose(action, done) {
+      if (action === 'confirm') {
+        this.$router.push({
+          path: `/vip`,
+          query: {
+            id: this.details.vipLevel.id,
+          },
+        });
+        done();
+      } else {
+        if (!this.show) return;
+        const params = { id: this.details.classId };
+        Api.deleteClassroom({ query: params }).then(res => {
+          if (res.success) {
+            this.replaceGoodsPage();
+            done();
+          }
+        });
+      }
+    },
+
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
