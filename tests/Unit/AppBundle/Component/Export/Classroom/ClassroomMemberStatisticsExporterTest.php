@@ -55,8 +55,13 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
                 'returnValue' => [$member['userId'] => ['id' => $member['userId'], 'nickname' => 'test name']],
             ],
             [
-                'functionName' => 'findUserProfileAndApprovalByUserIds',
-                'withParams' => [[$member['userId']], ['userIds' => [$member['userId']], 'status' => 'approved']],
+                'functionName' => 'findUserProfilesByIds',
+                'withParams' => [[$member['userId']]],
+                'returnValue' => [$member['userId'] => ['mobile' => $member['mobile']]],
+            ],
+            [
+                'functionName' => 'searchApprovals',
+                'withParams' => [['userIds' => [$member['userId']], 'status' => 'approved'], [], 0, 1],
                 'returnValue' => [$member['userId'] => ['idcard' => $member['idcard']]],
             ],
         ]);
