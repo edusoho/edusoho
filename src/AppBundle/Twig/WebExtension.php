@@ -84,6 +84,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text', [$this, 'plainTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -1458,6 +1459,24 @@ class WebExtension extends \Twig_Extension
         $text = strip_tags($text);
 
         $text = str_replace(["\n", "\r", "\t"], '', $text);
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+
+        if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+            $text .= '...';
+        }
+
+        return $text;
+    }
+
+    public function wrapTextFilter($text, $length = null)
+    {
+        $text = strip_tags($text);
+
+        $text = str_replace(["\n", "\r", "\t"], '<br/>', $text);
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
