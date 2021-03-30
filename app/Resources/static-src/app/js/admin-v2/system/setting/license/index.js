@@ -59,7 +59,7 @@ $('.js-image-delete').on('click', function () {
   let $btn = $(this);
   let $recordContainer = $btn.closest('.cd-image-upload').find('.js-uploaded-image');
   $recordContainer.attr('src', '/assets/img/default/gif.png');
-  $('#business-form').find('[name="license_picture"]').val('');
+  $('[name="license_picture"]').val('');
   $btn.addClass('hidden');
 });
 
@@ -150,16 +150,12 @@ function initPermit($permitIndex=0) {
 
 function removePermitPicture($removeBtnArray, $permitIndex) {
   $($removeBtnArray[$permitIndex]).on('click', function () {
-    // let permitPictureContainer = 'cd-image-upload_' + $permitIndex;
-    let permitPicture = 'permit_picture_' + $permitIndex;
-    let $form = $('#license-form');
 
     let $btn = $(this);
     let $recordContainer = $btn.closest('.cd-image-upload').find('.js-uploaded-image');
     if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
 
-    // $('#' + permitPictureContainer).html('');
-    $form.find('#' + permitPicture).val('');
+    $('input[name="permits['+$permitIndex+'][picture]"]').val('');
     $recordContainer.attr('src', '/assets/img/default/gif.png');
     $btn.addClass('hidden');
     cd.message({type: 'success', message: Translator.trans('admin.setting.delete_permit_picture_success_hint')});
