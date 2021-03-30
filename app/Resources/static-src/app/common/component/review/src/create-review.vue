@@ -145,7 +145,7 @@
                         targetType: this.userReview.targetType,
                         targetId: this.userReview.targetId,
                         rating: parseInt(this.userReview.rating),
-                        content: this.userReview.content,
+                        content: this.removeHtml(this.userReview.content),
                     };
 
                     this.rating(this.form.rating - 1);
@@ -283,6 +283,17 @@
                     });
                     window.location.reload();
                 });
+            },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
             }
         }
     }
