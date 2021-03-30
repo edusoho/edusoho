@@ -1141,10 +1141,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $member['role'] = ['student'];
                 $member['deadline'] = $deadline;
             }
-
-            $member = $this->getClassroomMemberDao()->update($member['id'], $member);
+            $member = $this->getClassroomMemberDao()->update($member['id'], array_merge($member, $this->getMemberHistoryData($member['userId'], $member['classroomId'])));
         } else {
-            $member = $this->getClassroomMemberDao()->create($fields);
+            $member = $this->getClassroomMemberDao()->create(array_merge($fields, $this->getMemberHistoryData($fields['userId'], $fields['classroomId'])));
         }
 
         $reason = $this->buildJoinReason($info, $order);
@@ -1173,6 +1172,59 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         return $member;
+    }
+
+    protected function getMemberHistoryData($userId, $classroomId)
+    {
+        $recordCount = $this->getMemberOperationService()->countRecords([
+            'user_id' => $userId,
+            'target_type' => 'classroom',
+            'target_id' => $classroomId,
+            'operate_type' => 'join',
+        ]);
+        if (empty($recordCount)) {
+            return [];
+        }
+
+        $classroom = $this->getClassroomDao()->get($classroomId);
+        if (empty($classroom)) {
+            return [];
+        }
+
+        $courseIds = $this->getClassroomCourseDao()->search(['classroomId' => $classroomId], [], 0, PHP_INT_MAX, ['courseId']);
+        $courseIds = array_column($courseIds, 'courseId');
+        if (empty($courseIds)) {
+            return [];
+        }
+
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            ['courseIds' => $courseIds, 'userId' => $userId, 'status' => 'finish']
+        );
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseIds($userId, $courseIds);
+        $courseMemberConditions = ['courseIds' => $courseIds, 'userId' => $userId];
+        $lastLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['updatedTime' => 'DESC'], 0, 1, ['updatedTime']);
+        $lastFinishedTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['finishedTime' => 'DESC'], 0, 1, ['finishedTime']);
+
+        $classroomTaskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds([$classroomId]);
+        $classroomTaskNums = empty($classroomTaskNums) ? [] : $classroomTaskNums[0];
+
+        $courseThreadNum = $this->getCourseThreadService()->countThreads(['courseIds' => $courseIds, 'userId' => $userId, 'type' => 'discussion']);
+        $threadNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'discussion']);
+
+        $courseQuestionNum = $this->getCourseThreadService()->countThreads(['courseIds' => $courseIds, 'userId' => $userId, 'type' => 'question']);
+        $questionNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'question']);
+
+        return [
+            'noteNum' => $this->getCourseNoteService()->countCourseNotes($courseMemberConditions),
+            'questionNum' => $courseQuestionNum + $questionNum,
+            'threadNum' => $courseThreadNum + $threadNum,
+            'isFinished' => $classroomTaskNums['compulsoryTaskNum'] - $learnedCompulsoryTaskNum ? 0 : 1,
+            'finishedTime' => empty($lastFinishedTaskResult) ? 0 : $lastFinishedTaskResult[0]['finishedTime'],
+            'learnedNum' => $learnedNum,
+            'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+            'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum ? $learnedNum - $learnedCompulsoryTaskNum : 0,
+            'lastLearnTime' => empty($lastLearnTaskResult) ? 0 : $lastLearnTaskResult[0]['updatedTime'],
+        ];
     }
 
     private function buildJoinReason($info, $order)
@@ -2137,7 +2189,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($classroom)) {
             return;
         }
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
         if (empty($classroomMembersCount)) {
             return;
         }
@@ -2476,34 +2528,67 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_column($classrooms, null, 'id');
     }
 
+    public function updateClassroomMembersNoteAndThreadNums($classroomId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return;
+        }
+
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+
+        $classroomMembers = $this->searchMembers(['classroomId' => $classroomId], [], 0, $classroomMembersCount, ['id', 'userId']);
+        $classroomCourses = $this->findCoursesByClassroomId($classroomId);
+        $classroomCourseIds = array_column($classroomCourses, 'courseId');
+
+        foreach ($classroomMembers as $member) {
+            $this->getClassroomMemberDao()->update($member['id'], [
+                'noteNum' => empty($classroomCourseIds) ? 0 : $this->getCourseNoteService()->countCourseNotes(['courseIds' => $classroomCourseIds, 'userId' => $member['userId']]),
+                'threadNum' => $this->getClassroomMemberThreadNum($classroomId, $member['userId'], $classroomCourseIds, 'discussion'),
+                'questionNum' => $this->getClassroomMemberThreadNum($classroomId, $member['userId'], $classroomCourseIds, 'question'),
+            ]);
+        }
+    }
+
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields)
     {
         if (empty($fields)) {
             return;
         }
 
-        $updateFields = [];
+        $classroomMember = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroomId, $userId);
+        if (empty($classroomMember)) {
+            return;
+        }
+
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         $classroomCourseIds = array_column($classroomCourses, 'courseId');
-        $classroomMember = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroomId, $userId);
 
+        $updateFields = [];
         foreach ($fields as $field) {
             if ('noteNum' === $field) {
-                $updateFields['noteNum'] = $this->getCourseNoteService()->countCourseNotes(['courseIds' => $classroomCourseIds, 'userId' => $userId]);
+                $updateFields['noteNum'] = empty($classroomCourseIds) ? 0 : $this->getCourseNoteService()->countCourseNotes(['courseIds' => $classroomCourseIds, 'userId' => $userId]);
             } elseif ('threadNum' === $field) {
-                $courseThreadNum = $this->getCourseThreadService()->countThreads(['courseIds' => $classroomCourseIds, 'userId' => $userId, 'type' => 'discussion']);
-                $threadNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'discussion']);
-                $updateFields['threadNum'] = $courseThreadNum + $threadNum;
+                $updateFields['threadNum'] = $this->getClassroomMemberThreadNum($classroomId, $userId, $classroomCourseIds, 'discussion');
             } elseif ('questionNum' === $field) {
-                $courseQuestionNum = $this->getCourseThreadService()->countThreads(['courseIds' => $classroomCourseIds, 'userId' => $userId, 'type' => 'question']);
-                $questionNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => 'question']);
-                $updateFields['questionNum'] = $courseQuestionNum + $questionNum;
+                $updateFields['questionNum'] = $this->getClassroomMemberThreadNum($classroomId, $userId, $classroomCourseIds, 'question');
             }
         }
 
         if (!empty($updateFields)) {
             $this->getClassroomMemberDao()->update($classroomMember['id'], $updateFields);
         }
+    }
+
+    protected function getClassroomMemberThreadNum($classroomId, $userId, $classroomCourseIds, $threadType = 'discussion')
+    {
+        $courseThreadNum = empty($classroomCourseIds) ? 0 : $this->getCourseThreadService()->countThreads(['courseIds' => $classroomCourseIds, 'userId' => $userId, 'type' => $threadType]);
+        $threadNum = $this->getThreadService()->searchThreadCount(['targetType' => 'classroom', 'targetId' => $classroomId, 'userId' => $userId, 'type' => $threadType]);
+
+        return $courseThreadNum + $threadNum;
     }
 
     /**
