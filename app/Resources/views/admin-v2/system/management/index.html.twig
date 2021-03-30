@@ -49,10 +49,13 @@
         </div>
         <div class="controls col-md-8">
           <div class="cd-image-upload" id="business-picture-container">
-            <img src="{% if qualifications.recordPicture|default() %}{{ asset(qualifications.recordPicture) }}{% endif %}"
+            <img src="{% if qualifications.recordPicture|default() %}{{ asset(qualifications.recordPicture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
                  alt=""
-                 class="cd-avatar cd-avatar-square cd-avatar-lg" id="business-qrcode"/>
+                 class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="business-qrcode"/>
             <div class="image-upload-mask">
+              <div class="image-delete-tip js-image-delete {% if not qualifications.recordPicture|default() %}hidden{% endif %}">
+                <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+              </div>
               <div class="image-upload-content">
                 <i
                   class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}

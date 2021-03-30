@@ -23,17 +23,20 @@
         </div>
         <div class="controls col-md-8">
           <div class="cd-image-upload" id="license-picture-container">
-            <img src="{% if license.license_picture|default() %}{{ asset(license.license_picture) }}{% endif %}"
+            <img src="{% if license.license_picture|default() %}{{ asset(license.license_picture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
                  alt=""
-                 class="cd-avatar cd-avatar-square cd-avatar-lg" id="leading-qrcode"/>
+                 class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="leading-qrcode"/>
             <div class="image-upload-mask">
+              <div class="image-delete-tip js-image-delete {% if not license.license_picture|default() %}hidden{% endif %}">
+                <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+              </div>
               <div class="image-upload-content">
                 <i
                   class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
               </div>
             </div>
             <label class="image-upload-label">
-              <input id="license_picture" type="file" name="license-picture" class="cd-hide" data-target="#leading-qrcode"
+              <input id="license-picture" type="file" name="license-picture" class="cd-hide" data-target="#leading-qrcode"
                      accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
                      data-token="{{ upload_token('default', 'image') }}"/>
             </label>
@@ -90,10 +93,14 @@
             </div>
             <div class="controls col-md-8">
               <div class="cd-image-upload" id="permits-container">
-                <img src="{% if permit.picture|default() %}{{ asset(permit.picture) }}{% endif %}"
+                <img src="{% if permit.picture|default() %}{{ asset(permit.picture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
                      alt=""
-                     class="cd-avatar cd-avatar-square cd-avatar-lg" id="permits-qrcode{{ loop.index - 1 }}"/>
+                     class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="permits-qrcode{{ loop.index - 1 }}"/>
                 <div class="image-upload-mask">
+
+                    <div id="js-image-delete-{{ loop.index - 1 }}" class="image-delete-tip {% if not permit.picture|default() %}hidden{% endif %}">
+                      <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+                    </div>
                   <div class="image-upload-content">
                     <i
                       class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}

@@ -30,6 +30,16 @@ $('#save-business').on('click', (event) => {
   }
 });
 
+$('.js-image-delete').on('click', function () {
+  if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
+  let $btn = $(this);
+  let $recordContainer = $('.js-uploaded-image');
+  $recordContainer.attr('src', '/assets/img/default/gif.png');
+  $('#business-form').find('[name=recordPicture]').val('');
+  $btn.addClass('hidden');
+  $btn.hide();
+});
+
 function initUploadImg() {
   cd.upload({
     el: '#recordPicture',
@@ -45,6 +55,7 @@ function initUploadImg() {
     uploadImage(formData).then(function (data) {
       $target.attr('src', data.url);
       $('input[name="recordPicture"]').val(data.url);
+      $this.closest('.cd-image-upload').find('.js-image-delete').removeClass('hidden');
     });
   }).on('error', (code) => {
     $el.val('');
