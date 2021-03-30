@@ -865,7 +865,7 @@ validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
 validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
-validate_old.visible_character.message: %display%请输入可见性字符
+validate_old.visible_character.message: 请输入%display%
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
 validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
