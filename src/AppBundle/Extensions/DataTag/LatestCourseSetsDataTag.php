@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
+
 class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -19,10 +21,10 @@ class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
-        $conditions = array(
+        $conditions = [
             'status' => 'published',
             'parentId' => 0,
-        );
+        ];
         $conditions = $this->getCourseService()->appendReservationConditions($conditions);
 
         if (!empty($arguments['categoryId'])) {
@@ -48,6 +50,21 @@ class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             0,
             $arguments['count']
         );
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $goods = $this->getGoodsService()->searchGoods(
+            ['productIds' => $courseSetIds, 'type' => 'course'],
+            [], 0,
+            $arguments['count']
+        );
+        $goods = ArrayToolkit::index($goods, 'productId');
+
+        foreach ($courseSets as $key => &$courseSet) {
+            $courseSet['ratingNum'] = isset($goods[$key]['ratingNum']) ? $goods[$key]['ratingNum'] : $courseSet['ratingNum'];
+        }
 
         return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
     }
