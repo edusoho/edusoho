@@ -20,6 +20,7 @@ class OrderPayCheckException extends AbstractException
     const INSTANCE_ERROR = 5002610;
     const UNABLE_PAY = 5002611;
     const GOODS_CLOSED = 5002612;
+    const VIP_APP_UPGRADE = 5002613;
 
     public $messages = [
         5002601 => 'order.pay_check_msg.coin_amount_error',
@@ -34,5 +35,6 @@ class OrderPayCheckException extends AbstractException
         5002610 => 'exception.order_pay_check.instance_error',
         5002611 => 'exception.order_pay_check.unable_pay',
         5002612 => 'order.pay_check_msg.goods_closed',
+        5002613 => 'exception.order_pay_check.vip.app_upgrade',
     ];
 }

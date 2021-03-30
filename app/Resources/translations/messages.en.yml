@@ -9382,6 +9382,7 @@ exception.reward_point.account.error_pay_password_format: The new payment passwo
 exception.question_marker.not_found: The question marker does not exist
 exception.order_pay_check.instance_error: Not a ProductDealerService instance
 exception.order_pay_check.unable_pay: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
+exception.order_pay_check.vip.app_upgrade: Please upgrade to the latest version to see the membership price
 exception.live_replay.not_found: Live replay does not exist
 exception.cloud_file.not_found: Cloud file does not exist
 exception.cloud_file.not_found_player: Cloud player does not exist

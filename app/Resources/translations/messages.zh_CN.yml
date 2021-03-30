@@ -10649,6 +10649,7 @@ exception.reward_point.account.error_pay_password_format: 新支付密码不可�
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.order_pay_check.unable_pay: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
+exception.order_pay_check.vip.app_upgrade: 请升级至最新版本，查看会员售价
 exception.live_replay.not_found: 直播回放不存在
 exception.cloud_file.not_found: 云文件不存在
 exception.cloud_file.not_found_player: 云播放器不存在
