@@ -239,12 +239,17 @@ class Testpaper {
 
   showRedoInterval(event) {
     let $this = $(event.currentTarget);
+    if ($('input[name="showAnswerMode"]:checked').length) {
+      $('input[name="showAnswerMode"]:checked').prop('checked', false);
+    } 
     if ($this.val() == 1) {
       $('#lesson-redo-interval-field').closest('.form-group').hide();
       $('.starttime-check-div').show();
+      $('.js-show-answer-mode').length > 0 && $('.js-show-answer-mode').hide();
     } else {
       $('#lesson-redo-interval-field').closest('.form-group').show();
       $('.starttime-check-div').hide();
+      $('.js-show-answer-mode').length > 0 && $('.js-show-answer-mode').show();
     }
   }
 
