@@ -107,7 +107,7 @@
                           {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('goods_show', {id: goods.id }),'%courseTitle%':goods.title|plain_text(10) })|raw }}
                         </div>
                         <div class="content gray-darker" style="white-space: pre-wrap;">
-                          {{ review.content|raw|wrap_text(30) }}
+                          {{ review.content|raw|wrap_sub_text(2,30) }}
                         </div>
                         <span class="date">{{review.createdTime|smart_time}}</span>
                       </div>
