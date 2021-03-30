@@ -16,6 +16,9 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Testpaper extends Activity
 {
+    // 考试及格后显示答案
+    const ANSWER_MODE_PASSED = 1;
+
     protected function registerListeners()
     {
         return [
@@ -65,6 +68,7 @@ class Testpaper extends Activity
                 'requireCredit' => empty($fields['requireCredit']) ? 0 : $fields['requireCredit'],
                 'answerSceneId' => $answerScene['id'],
                 'finishCondition' => $fields['finishCondition'],
+                'answerMode' => $fields['answerMode'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -97,6 +101,7 @@ class Testpaper extends Activity
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
             'finishCondition' => $testpaperActivity['finishCondition'],
+            'answerMode' => $testpaperActivity['answerMode'],
         ];
 
         return $this->create($newExt);
@@ -119,6 +124,7 @@ class Testpaper extends Activity
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
         $ext['finishCondition'] = $sourceExt['finishCondition'];
+        $ext['answerMode'] = $sourceExt['answerMode'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -151,6 +157,7 @@ class Testpaper extends Activity
                 'checkType' => empty($filterFields['checkType']) ? '' : $filterFields['checkType'],
                 'requireCredit' => empty($filterFields['requireCredit']) ? 0 : $filterFields['requireCredit'],
                 'finishCondition' => $filterFields['finishCondition'],
+                'answerMode' => $filterFields['answerMode'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -233,6 +240,7 @@ class Testpaper extends Activity
                 'startTime',
                 'passScore',
                 'enable_facein',
+                'answerMode',
             ]
         );
 
@@ -243,6 +251,9 @@ class Testpaper extends Activity
 
         if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
             $filterFields['testMode'] = 'normal';
+            $filterFields['answerMode'] = isset($fields['answerMode']) ? $fields['answerMode'] : 0;
+        } else {
+            $filterFields['answerMode'] = 0;
         }
 
         /* #73707
