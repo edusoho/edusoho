@@ -37,7 +37,6 @@ $('.js-image-delete').on('click', function () {
   $recordContainer.attr('src', '/assets/img/default/gif.png');
   $('#business-form').find('[name=recordPicture]').val('');
   $btn.addClass('hidden');
-  $btn.hide();
 });
 
 function initUploadImg() {
