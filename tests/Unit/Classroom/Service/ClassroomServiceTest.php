@@ -1200,7 +1200,7 @@ class ClassroomServiceTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' => ['status' => 'closed'],
+                    'returnValue' => ['status' => 'closed', 'expiryMode' => 'forever', 'expiryValue' => 0],
                 ],
             ]
         );
