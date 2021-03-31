@@ -29,13 +29,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->getBiz()->service('Course:CourseSetService');
     }
 
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('Goods:GoodsService');
-    }
 
     /**
      * @return MemberService
