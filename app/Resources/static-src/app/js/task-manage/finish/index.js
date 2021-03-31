@@ -58,8 +58,7 @@ let validate = $('#step3-form').validate({
     },
   }
 });
-
-if ($('#conditions-time').css('display') != 'none') {
+if (!$('#conditions-time').is(':hidden')) {
   $('#watchTime').rules('add', {
     required: true,
     positive_integer: true,

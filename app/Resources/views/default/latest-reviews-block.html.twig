@@ -14,7 +14,7 @@
 			  	{{ web_macro.user_link(author, 'author-nickname')}}
 
 			  	<span class="color-gray">{{'homepage.reviewer_comment_course'|trans}}</span> <br>
-			  	<div class="review-content">{{ review.content|plain_text(50) }}</div>
+			  	<div class="review-content">{{ review.content|raw|wrap_text(30) }}</div>
 
 				  <div class="review-footer">
 					  <a href="{{ path('goods_show', {id: goods.id}) }}" class="course-title"> 《 {{ goods.title }} 》</a>

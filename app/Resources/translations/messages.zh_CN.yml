@@ -5141,6 +5141,8 @@ admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
+admin.course_manage.statistics.data_detail.phone_number: 手机号
+admin.course_manage.statistics.data_detail.id_number: 身份证号
 admin.course_manage.statistics.data_detail.join_time: 加入时间
 admin.course_manage.statistics.data_detail.finished_time: 完成时间
 admin.course_manage.statistics.data_detail.study_days: 学习天数
@@ -5149,6 +5151,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长�
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
 admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1.学员重新加入课程可能导致学员的学习天数清零<br/>
+  2.新增课时任务学员产生学习行为后，学员的学习天数将会刷新<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.该页面为实时数据。<br/>
@@ -5776,7 +5781,7 @@ admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
   <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
-    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -11629,6 +11634,8 @@ admin.classroom_manage.statistics.member.title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 班级中所有课程被累加学习时长（分）：%mins%
 admin.classroom_manage.statistics.member.nickname_th: 用户名
+admin.classroom_manage.statistics.member.phone_number_th: 手机号
+admin.classroom_manage.statistics.member.id_number_th: 身份证号
 admin.classroom_manage.statistics.member.create_time_th: 加入时间
 admin.classroom_manage.statistics.member.finish_time_th: 完成时间
 admin.classroom_manage.statistics.member.learn_time_th: 累加学习时长（分）
@@ -11681,4 +11688,3 @@ classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
-

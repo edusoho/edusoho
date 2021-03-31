@@ -4339,6 +4339,8 @@ admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Tim
 admin.course_manage.statistics.optional_task: Optional
 
 admin.course_manage.statistics.data_detail.name: 'User Name'
+admin.course_manage.statistics.data_detail.phone_number: 'Phone Number'
+admin.course_manage.statistics.data_detail.id_number: 'ID Number'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
@@ -4347,6 +4349,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 'Pure Learned Time(m
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.course_manage.statistics.data_detail.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1. Re-joining the course by the student may cause the student’s study days to be cleared<br/>
+  2. The number of learning days of the students will be refreshed after the students have learned behaviors in the new class time task<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.This page is real-time data.<br/>
@@ -10364,6 +10369,8 @@ admin.classroom_manage.statistics.member_modal_title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 'All courses in the class are accumulated learning time (minutes): %mins%'
 admin.classroom_manage.statistics.member.nickname_th: Username
+admin.classroom_manage.statistics.member.phone_number_th: Phone Number
+admin.classroom_manage.statistics.member.id_number_th: ID Number
 admin.classroom_manage.statistics.member.create_time_th: Join Time
 admin.classroom_manage.statistics.member.finish_time_th: Finish Time
 admin.classroom_manage.statistics.member.learn_time_th: Learned Time
