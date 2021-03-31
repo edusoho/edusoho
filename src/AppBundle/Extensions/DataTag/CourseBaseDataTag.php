@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Goods\Service\GoodsService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -28,7 +27,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     {
         return $this->getServiceKernel()->getBiz()->service('Course:CourseSetService');
     }
-
 
     /**
      * @return MemberService
