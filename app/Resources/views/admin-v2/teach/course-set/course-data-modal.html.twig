@@ -35,6 +35,8 @@
     <table class="table table-bordered" style="word-break:break-all;text-align:center;">
       <tr class="active">
         <td>{{ 'admin.course_manage.statistics.data_detail.name'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.phone_number'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.id_number'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.join_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.finished_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.study_days'|trans }}</td>
@@ -47,6 +49,20 @@
         {% for student in students %}
           <tr>
             <td>{{ student.nickname }}</td>
+            <td>
+              {% if student.mobile|default() %}
+                {{ student.mobile }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              {% if student.idcard|default() %}
+                {{ student.idcard }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
             <td>{{ student.createdTime|date('Y-m-d H:i:s') }}</td>
             <td>{% if student.finishedTime|default(null) %}{{ student.finishedTime|date('Y-m-d H:i:s') }}{% else %}----{% endif %}</td>
             <td>{{ student.fininshDay|default() }}</td>
