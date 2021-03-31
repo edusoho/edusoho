@@ -294,5 +294,5 @@ interface CourseSetService
      */
     public function resetParentIdByCourseId($courseId);
 
-    public function waveCourseSet($id, $field, $diff);
+    public function searchCourseSetAdoptProductWithGoods($conditions, $orderBys, $start, $limit);
 }

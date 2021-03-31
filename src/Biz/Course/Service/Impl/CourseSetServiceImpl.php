@@ -179,6 +179,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
+        var_dump($preparedCondtions);
+        die();
         $courseSets = $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
 
         if ($withMarketingInfo) {
@@ -959,9 +961,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
     }
 
-    public function waveCourseSet($id, $field, $diff)
+    public function searchCourseSetAdoptProductWithGoods($conditions, $orderBys, $start, $limit)
     {
-        return $this->getCourseSetDao()->wave([$id], [$field => $diff]);
+        if (!is_array($conditions) || empty($conditions)) {
+            return [];
+        }
+        $orderBys = $this->getOrderBys($orderBys);
+        $preparedConditions = $this->prepareConditions($conditions);
+
+        return $this->getCourseSetDao()->searchCourseSetAdoptProductWithGoods($preparedConditions, $orderBys, $start, $limit);
     }
 
     protected function getRelatedCourseSetDao()

@@ -4,13 +4,13 @@
   {% set categoryId = config.categoryId|default(0) %}
   {% set orderBy = config.orderBy|default('latest') %}
   {% if orderBy == 'latest' %}
-    {% set courseSets = data('LatestCourseSets',{'count':count, 'categoryId':categoryId}) %}
+    {% set courseSets = data('CourseSetsWithGoods',{'count':count, 'categoryId':categoryId, 'orderBy':'createdTime'}) %}
   {% elseif orderBy == 'recommendedSeq' %}
-    {% set courseSets = data('RecommendCourseSets',{'count':count, 'categoryId':categoryId}) %}
+    {% set courseSets = data('CourseSetsWithGoods',{'count':count, 'categoryId':categoryId, 'orderBy':'recommendedSeq'}) %}
   {% elseif orderBy == 'studentNum' %}
-    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
+    {% set courseSets = data('CourseSetsWithGoods',{'count':count, 'categoryId':categoryId, 'orderBy':'studentNum'}) %}
   {% elseif orderBy == 'hotSeq' %}
-    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'hotSeq'}) %}
+    {% set courseSets = data('CourseSetsWithGoods',{'count':count, 'categoryId':categoryId,'orderBy':'hotSeq'}) %}
   {% endif %}
   {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
   {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
