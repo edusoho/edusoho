@@ -221,11 +221,13 @@ Api.getSettings({
 
 Api.getSettings({
   query: {
-    type: 'goods',
+    type: 'ugc',
   },
 })
   .then(res => {
-    store.state.goods.show_review = res.show_review;
+    store.state.goods.show_review = res.review.enable;
+    store.state.goods.show_course_review = res.review.course_enable;
+    store.state.goods.show_classroom_review = res.review.classroom_enable;
   })
   .catch(error => {
     console.error(error);
