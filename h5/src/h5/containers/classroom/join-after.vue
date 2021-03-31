@@ -42,7 +42,7 @@
         <div class="segmentation" />
 
         <!-- 评价 -->
-        <reviews :details="details" />
+        <reviews :details="details" v-if="show_classroom_review" />
         <div class="segmentation" />
         <div class="segmentation" />
         <div class="segmentation" />
@@ -133,6 +133,7 @@ export default {
       },
       showNumberData: '',
       show: false,
+      show_classroom_review: this.$store.state.goods.show_classroom_review,
     };
   },
   mixins: [collectUserInfo],
