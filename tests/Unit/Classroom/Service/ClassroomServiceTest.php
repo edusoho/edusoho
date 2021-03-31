@@ -1787,7 +1787,6 @@ class ClassroomServiceTest extends BaseTestCase
                             'classroomId' => 1,
                             'userId' => 3,
                             'orderId' => 0,
-                            'levelId' => 0,
                             'role' => ['teacher'],
                             'remark' => '',
                             'createdTime' => TimeMachine::time(),

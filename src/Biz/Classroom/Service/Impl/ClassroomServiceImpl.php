@@ -1137,7 +1137,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member['refundDeadline'] = $fields['refundDeadline'];
             if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
-                $member['levelId'] = $fields['levelId'];
                 $member['remark'] = $fields['remark'];
             } else {
                 $member['role'] = ['student'];
