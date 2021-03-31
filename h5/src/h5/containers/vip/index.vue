@@ -292,6 +292,8 @@ export default {
     },
   },
   async created() {
+    this.isLoading = true;
+
     // 未登录跳转登录页面
     if (!this.$store.state.token) {
       this.$router.replace({
@@ -313,7 +315,6 @@ export default {
       });
       return;
     }
-    this.isLoading = true;
     this.getVipDetail();
   },
   methods: {
