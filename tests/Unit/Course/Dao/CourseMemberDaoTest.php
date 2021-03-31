@@ -406,7 +406,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res[] = $tmp;
         foreach ($res as $key => $val) {
-            $this->assertEquals($expected[$key], $val);
+            $this->assertEquals($expected[$key]['userId'], $val['userId']);
+            $this->assertEquals($expected[$key]['courseId'], $val['courseId']);
         }
     }
 
