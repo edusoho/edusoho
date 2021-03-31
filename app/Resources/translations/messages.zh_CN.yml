@@ -5151,6 +5151,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长�
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
 admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1.学员重新加入课程可能导致学员的学习天数清零<br/>
+  2.新增课时任务学员产生学习行为后，学员的学习天数将会刷新<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.该页面为实时数据。<br/>

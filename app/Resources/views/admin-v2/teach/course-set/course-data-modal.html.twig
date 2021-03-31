@@ -39,7 +39,10 @@
         <td>{{ 'admin.course_manage.statistics.data_detail.id_number'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.join_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.finished_time'|trans }}</td>
-        <td>{{ 'admin.course_manage.statistics.data_detail.study_days'|trans }}</td>
+        <td>
+          {{ 'admin.course_manage.statistics.data_detail.study_days'|trans }}
+          <span data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-html="true" data-content="{{ 'admin.course_manage.statistics.data_detail.study_days_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
+        </td>
         <td>{{ 'admin.course_manage.statistics.data_detail.study_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.question_number'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.note_number'|trans }}</td>
