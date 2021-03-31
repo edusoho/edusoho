@@ -10,6 +10,7 @@ use Biz\BaseTestCase;
 use Biz\Classroom\Dao\ClassroomDao;
 use Biz\Classroom\Dao\ClassroomMemberDao;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -1304,6 +1305,82 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], 10, ['price' => 0, 'remark' => 'remark', 'isNotify' => 1]);
+    }
+
+    public function testBecomeStudent_whenHasJoinRecord_thenJoinSuccess()
+    {
+        $textClassroom = [
+            'title' => 'test066',
+        ];
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $course = $this->createCourse('Test Course 1');
+        $course = $this->getCourseDao()->update($course['id'], ['compulsoryTaskNum' => 3]);
+        $courseIds = [$course['id']];
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $user = $this->getUserService()->register([
+            'id' => 2,
+            'nickname' => 'admin4',
+            'email' => 'admin4@admin.com',
+            'password' => 'admin123',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER'],
+        ]);
+        $time = time();
+
+        $this->mockBiz('MemberOperation:MemberOperationService', [
+            [
+                'functionName' => 'countRecords',
+                'returnValue' => 1,
+            ],
+            [
+                'functionName' => 'getJoinReasonByOrderId',
+                'returnValue' => ['reason' => 'site.join_by_import', 'reason_type' => 'import_join'],
+            ],
+            [
+                'functionName' => 'createRecord',
+                'returnValue' => [],
+            ],
+        ]);
+
+        $this->mockBiz('Task:TaskResultService', [
+            [
+                'functionName' => 'countTaskResults',
+                'returnValue' => 4,
+            ],
+            [
+                'functionName' => 'countFinishedCompulsoryTasksByUserIdAndCourseIds',
+                'returnValue' => 3,
+            ],
+            [
+                'functionName' => 'countFinishedCompulsoryTasksByUserIdAndCourseId',
+                'returnValue' => 3,
+            ],
+            [
+                'functionName' => 'searchTaskResults',
+                'returnValue' => [['createdTime' => $time, 'updatedTime' => $time, 'finishedTime' => $time]],
+            ],
+        ]);
+
+        $this->mockBiz('Course:ThreadService', [
+            [
+                'functionName' => 'countThreads',
+                'returnValue' => 1,
+            ],
+        ]);
+
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $result = $this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id']);
+        $member = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroom['id'], $user['id']);
+
+        $this->assertEquals('3', $member['learnedCompulsoryTaskNum']);
+        $this->assertEquals('1', $member['learnedElectiveTaskNum']);
+        $this->assertEquals('1', $member['isFinished']);
+        $this->assertEquals($time, $member['finishedTime']);
+        $this->assertEquals('1', $member['questionNum']);
+        $this->assertEquals(true, $result);
     }
 
     public function testRemoveStudent()
@@ -3396,5 +3473,13 @@ class ClassroomServiceTest extends BaseTestCase
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

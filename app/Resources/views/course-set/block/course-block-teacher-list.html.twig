@@ -43,7 +43,7 @@
                     <div class="title">
                       <a class="link-dark" {% if ref|default() %} href="{{ path('course_show', {id: courseSet.defaultCourseId,ref:ref}) }}" {% else %} href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" {% endif %}
                        target="_blank">
-                        {{ courseSet.title }}
+                        {{ courseSet.title|raw|nl2br }}
                       </a>
                     </div>
                     <div class="metas clearfix">

@@ -38,6 +38,8 @@ interface TaskResultDao extends AdvancedDaoInterface
 
     public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
+    public function countFinishedCompulsoryTasksByUserIdAndCourseIds($userId, array $courseIds);
+
     public function findTaskresultsByTaskId($taskId);
 
     public function findByUserId($userId);
