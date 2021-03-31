@@ -43,7 +43,7 @@
         <div class="segmentation" />
 
         <!-- 评价 -->
-        <reviews :details="details" />
+        <reviews :details="details" v-if="show_course_review == 1" />
         <div class="segmentation" />
         <div class="segmentation" />
         <div class="segmentation" />
@@ -116,6 +116,7 @@ export default {
         targetId: this.details.id,
       },
       show: false,
+      show_course_review: this.$store.state.goods.show_course_review,
     };
   },
   mixins: [collectUserInfo],
