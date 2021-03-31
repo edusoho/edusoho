@@ -21,6 +21,16 @@ class ClassroomMemberFilter extends Filter
         if ($data['deadline']) {
             $data['deadline'] = date('c', $data['deadline']);
         }
+
+        // 去掉长期有效
+        if (isset($data['expire']['deadline']) && $data['expire']['deadline'] == 0) {
+            unset($data['expire']['deadline']);
+        }
+
+        if (!empty($data['expire']['deadline'])) {
+            $data['expire']['deadline'] = date('c', $data['expire']['deadline']);
+        }
+
         if (!empty($data['user'])) {
             $userFilter = new UserFilter();
             $userFilter->filter($data['user']);

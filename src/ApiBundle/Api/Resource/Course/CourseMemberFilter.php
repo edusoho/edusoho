@@ -29,6 +29,15 @@ class CourseMemberFilter extends Filter
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
         $data['lastViewTime'] = date('c', $data['lastViewTime']);
 
+        // 去掉长期有效
+        if (isset($data['expire']['deadline']) && $data['expire']['deadline'] == 0) {
+            unset($data['expire']['deadline']);
+        }
+
+        if (!empty($data['expire']['deadline'])) {
+            $data['expire']['deadline'] = date('c', $data['expire']['deadline']);
+        }
+
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
     }
