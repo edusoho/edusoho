@@ -4347,6 +4347,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 'Pure Learned Time(m
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.course_manage.statistics.data_detail.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1. Re-joining the course by the student may cause the student’s study days to be cleared<br/>
+  2. The number of learning days of the students will be refreshed after the students have learned behaviors in the new class time task<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.This page is real-time data.<br/>
