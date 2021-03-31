@@ -662,16 +662,16 @@ class MemberServiceTest extends BaseTestCase
             ['functionName' => 'getAppByCode', 'returnValue' => true],
         ]);
         $this->mockBiz('Classroom:ClassroomService', [
-            ['functionName' => 'getClassroom', 'returnValue' => ['vipLevelId' => 3]],
+            ['functionName' => 'getClassroom', 'returnValue' => ['id' => 1, 'vipLevelId' => 3]],
         ]);
         $this->mockBiz('VipPlugin:Vip:VipService', [
-            ['functionName' => 'checkUserVipRight', 'returnValue' => 'ok', 'withParams' => [1, 'classroom', 3]],
-            ['functionName' => 'checkUserVipRight', 'returnValue' => 'no', 'withParams' => [1, 'classroom', 2]],
+            ['functionName' => 'checkUserVipRight', 'returnValue' => 'ok', 'withParams' => [1, 'classroom', 1]],
+            ['functionName' => 'checkUserVipRight', 'returnValue' => 'no', 'withParams' => [1, 'course', 1]],
         ]);
 
         $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', [['vipLevelId' => 2], ['joinedType' => 'classroom', 'userId' => 1, 'classroomId' => 1]]);
         $this->assertTrue($result);
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', [['vipLevelId' => 2], ['joinedType' => 'course', 'userId' => 1, 'classroomId' => 1]]);
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', [['id' => 1, 'vipLevelId' => 2], ['joinedType' => 'course', 'userId' => 1, 'classroomId' => 1]]);
         $this->assertFalse($result);
     }
 
