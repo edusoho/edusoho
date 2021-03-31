@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'updateSetting',
             'addJoinedChannel',
             'updateCourseMemberJoinedChannel',
             'updateClassroomMemberJoinedChannel',
@@ -140,9 +141,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (empty($this->getSettingService()->get('ugc_private_message'))) {
             $this->getSettingService()->set('ugc_private_message', $ugcPrivateMessageSetting);
         }
-        return 1;
 
-//        $siteSetting = $this->getSettingService()->get('site', []);
+        $siteSetting = $this->getSettingService()->get('site', []);
 //
 //        $licenseSetting = [
 //            'license_name' => '',
@@ -152,13 +152,15 @@ class EduSohoUpgrade extends AbstractUpdater
 //        $permitsSetting = [
 //            ['name' => '', 'record_number' => '', 'picture' => ''],
 //        ];
-//        $qualificationsSetting = [
-//            'icp' => '',
-//            'icpUrl' => 'https://beian.miit.gov.cn',
-//            'recordPicture' => '',
-//            'recordCode' => '',
-//            'recordUrl' => 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
-//        ];
+        $qualificationsSetting = [
+            'icp' => isset($siteSetting['icp']) ? $siteSetting['icp'] : '',
+            'icpUrl' => isset($siteSetting['icpUrl']) ? $siteSetting['icpUrl'] : 'https://beian.miit.gov.cn',
+            'recordPicture' => isset($siteSetting['recordPicture']) ? $siteSetting['recordPicture'] : '',
+            'recordCode' => isset($siteSetting['recordCode']) ? $siteSetting['recordCode'] : '',
+            'recordUrl' => isset($siteSetting['recordUrl']) ? $siteSetting['recordUrl'] : 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
+        ];
+        $this->getSettingService()->set('qualifications', $qualificationsSetting);
+        return 1;
     }
 
     public function addJoinedChannel()
