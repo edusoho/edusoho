@@ -66,12 +66,18 @@ export default {
       });
     },
     toWxNotify() {
-      const paidUrl =
-        window.location.origin + `/#/${this.targetType}/${this.targetId}`;
+      let paidUrl = `${window.location.origin}/#/`;
+      if (this.targetType === 'vip') {
+        paidUrl = paidUrl + `${this.targetType}`;
+      } else {
+        paidUrl = paidUrl + `${this.targetType}/${this.targetId}`;
+      }
+
       this.$router.replace({
         path: '/pay_success',
         query: {
           paidUrl,
+          backUrl: paidUrl,
         },
       });
     },
