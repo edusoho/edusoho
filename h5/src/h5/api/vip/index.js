@@ -20,4 +20,10 @@ export default [
     method: 'GET',
     disableLoading: true,
   },
+  {
+    name: 'getVipOpenStatus',
+    url: '/settings/vip',
+    method: 'GET',
+    disableLoading: true,
+  },
 ];

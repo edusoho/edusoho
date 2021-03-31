@@ -47,9 +47,18 @@ export default {
         window.location.href = this.paidUrl;
         return;
       }
-      this.$router.replace({
-        path: `/${this.targetType}/${this.targetId}`,
-      });
+      if (this.targetType === 'vip') {
+        this.$router.replace({
+          path: `/${this.targetType}`,
+          query: {
+            backUrl: '/my/orders',
+          },
+        });
+      } else {
+        this.$router.replace({
+          path: `/${this.targetType}/${this.targetId}`,
+        });
+      }
     },
   },
 };
