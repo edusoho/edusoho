@@ -76,7 +76,10 @@ export default {
       });
     },
     toTarget() {
+      alert('toTarget');
+
       if (this.targetType === 'vip') {
+        alert(this.targetType);
         this.$router.replace({
           path: `/${this.targetType}`,
           query: {
