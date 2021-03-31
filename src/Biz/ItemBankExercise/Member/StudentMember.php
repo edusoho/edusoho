@@ -7,6 +7,7 @@ use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\OrderFacade\Product\ItemBankExerciseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -48,6 +49,12 @@ class StudentMember extends Member
 
     protected function afterAdd($member, $exercise, $info)
     {
+        if ($member['orderId'] > 0) {
+            $order = $this->getOrderService()->getOrder($member['orderId']);
+            if ('outside' == $order['source'] && !empty($info['reason']) && OperateReason::JOIN_BY_PURCHASE == $info['reason']) {
+                return;
+            }
+        }
         $this->recordOperation($member, $info);
 
         $this->recordLog($member, $exercise, $info);
@@ -68,7 +75,7 @@ class StudentMember extends Member
             'orderId' => $member['orderId'],
             'title' => $exercise['title'],
             'reason' => empty($info['reason']) ? '' : $info['reason'],
-            'reasonType' => empty($info['reason_type']) ? '' : $info['reason_type'],
+            'reasonType' => empty($info['reasonType']) ? '' : $info['reasonType'],
         ];
 
         return $this->getMemberOperationRecordService()->create($record);
@@ -154,6 +161,11 @@ class StudentMember extends Member
     protected function getOrderFacadeService()
     {
         return $this->biz->service('OrderFacade:OrderFacadeService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 
     /**

@@ -17,7 +17,9 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
+use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -355,6 +357,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseSetIds($courseSetIds);
     }
 
+    public function findTasksByCategoryIds($categoryIds)
+    {
+        if (empty($categoryIds)) {
+            return [];
+        }
+
+        return $this->getTaskDao()->findByCategoryIds($categoryIds);
+    }
+
     public function findTasksByCourseIds($courseIds)
     {
         return $this->getTaskDao()->findByCourseIds($courseIds);
@@ -532,6 +543,35 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    // 搜索课时任务及相关数据统计
+    public function searchTasksWithStatistics(array $conditions, $orderBy, $start, $limit)
+    {
+        $tasks = $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+        if (empty($tasks)) {
+            return $tasks;
+        }
+        $sumlearnedTimeGroupByTaskIds = $this->getActivityLearnDataService()->sumLearnedTimeGroupByTaskIds(ArrayToolkit::column($tasks, 'id'));
+        $activities = $this->getActivityService()->findActivities(array_column($tasks, 'activityId'), true, 0);
+        $activities = array_column($activities, null, 'id');
+        foreach ($tasks as &$task) {
+            $task['finishedNum'] = $this->getTaskResultService()->countTaskResults(
+                ['status' => 'finish', 'courseTaskId' => $task['id']]
+            );
+            $task['studentNum'] = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
+            $sumLearnedTime = empty($sumlearnedTimeGroupByTaskIds[$task['id']]) ? 0 : $sumlearnedTimeGroupByTaskIds[$task['id']]['learnedTime'];
+            $task['sumLearnedTime'] = round($sumLearnedTime / 60, 1);
+            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : round($sumLearnedTime / $task['studentNum'] / 60, 1);
+            $task['activity'] = empty($activities[$task['activityId']]) ? [] : $activities[$task['activityId']];
+            if ('testpaper' === $task['type'] && !empty($task['activity'])) {
+                $activity = $task['activity'];
+                $score = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
+                $task['score'] = $score['avg_score'];
+            }
+        }
+
+        return $tasks;
     }
 
     public function countTasks($conditions)
@@ -1167,6 +1207,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return true;
     }
 
+    public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    }
+
     /**
      * @return TaskDao
      */
@@ -1368,5 +1413,21 @@ class TaskServiceImpl extends BaseService implements TaskService
             $chapter = $this->getCourseService()->getChapter($task['courseId'], $task['categoryId']);
             $this->getTaskDao()->update($actualTask['id'], ['title' => $chapter['title']]);
         }
+    }
+
+    /**
+     * @return ActivityLearnDataService
+     */
+    protected function getActivityLearnDataService()
+    {
+        return $this->createService('Visualization:ActivityLearnDataService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

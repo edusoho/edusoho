@@ -24,7 +24,6 @@ use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
@@ -347,7 +346,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return $vipNonExpired;
         }
 
-        if ($member['deadline'] > time()) {
+        if ($member['deadline'] > time() && $course['expiryStartDate'] < time()) {
             return $vipNonExpired;
         } else {
             return false;
@@ -904,12 +903,22 @@ class MemberServiceImpl extends BaseService implements MemberService
             'nickname' => $removeMember['nickname'],
         ];
 
-        $this->getLogService()->info(
-            'course',
-            'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
-            $infoData
-        );
+        if (isset($reason['reason_type']) && ('exit' === $reason['reason_type'] || 'classroom_exit' === $reason['reason_type'])) {
+            $this->getLogService()->info(
+                'course',
+                'exit_course',
+                "学员({$removeMember['nickname']})(#{$member['id']})退出了教学计划《{$course['title']}》(#{$course['id']})",
+                $infoData
+            );
+        } else {
+            $this->getLogService()->info(
+                'course',
+                'remove_student',
+                "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
+                $infoData
+            );
+        }
+
         $this->dispatchEvent(
             'course.quit',
             $course,
@@ -984,7 +993,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $learnedNum = $this->getTaskResultService()->countTaskResults(
             ['courseId' => $courseId, 'userId' => $userId, 'status' => 'finish']
         );
-        $lastLearnTime = ($learnedNum > 0) ? time() : null;
+        $lastLearnTime = ($learnedNum > 0) ? time() : 0;
 
         $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
@@ -1039,15 +1048,40 @@ class MemberServiceImpl extends BaseService implements MemberService
         return true;
     }
 
+    /**
+     * @param $userId
+     * @param $courseIds
+     *
+     * @return array
+     *
+     * @deprecated 名称上不合适，返回值为courseMembers 但是命名为返回Course，替代函数为@findCourseMembersByUserIdAndCourseIds
+     */
     public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
-        if (empty($courseIds) || 0 == count($courseIds)) {
+        if (empty($courseIds) || 0 === count($courseIds)) {
             return [];
         }
 
-        $courseMembers = $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+        return $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+    }
 
-        return $courseMembers;
+    public function findCourseMembersByUserIdAndCourseIds($userId, $courseIds)
+    {
+        if (empty($courseIds) || 0 === count($courseIds)) {
+            return [];
+        }
+
+        return $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
+    }
+
+    public function findCourseMembersByUserIdAndClassroomId($userId, $classroomId)
+    {
+        return $this->getMemberDao()->findByUserIdAndClassroomId($userId, $classroomId);
+    }
+
+    public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId)
+    {
+        return $this->getMemberDao()->findByUserIdsAndClassroomId($userIds, $classroomId);
     }
 
     public function becomeStudentByClassroomJoined($courseId, $userId)
@@ -1341,11 +1375,34 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function recountLearningDataByCourseId($courseId)
     {
+        $this->refreshCourseMembersFinishData($courseId);
+    }
+
+    public function refreshMemberFinishData($courseId, $userId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMember($course['id'], $userId);
+        if (empty($course['compulsoryTaskNum'])) {
+            $isFinished = false;
+        } else {
+            $isFinished = (int) ($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
+        }
+        $finishTime = $isFinished ? time() : 0;
+        $this->updateMembers(
+            ['courseId' => $course['id'], 'userId' => $userId],
+            ['lastLearnTime' => time(), 'finishedTime' => $finishTime, 'isLearned' => $isFinished ? 1 : 0]
+        );
+        if ($isFinished) {
+            $this->dispatchEvent('course_member.finished', new Event($member, ['course' => $course]));
+        }
+    }
+
+    public function refreshCourseMembersFinishData($courseId)
+    {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
             return;
         }
-
         $members = ArrayToolkit::index(
             $this->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['id', 'userId', 'lastLearnTime']),
             'userId'
@@ -1364,6 +1421,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'id' => $member['id'],
                 'learnedNum' => $learnedNum,
                 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+                'isLearned' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? '1' : '0',
                 'finishedTime' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? $member['lastLearnTime'] : 0,
             ];
             // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断
@@ -1374,6 +1432,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
+
+        $this->dispatchEvent('course.members.finish_data_refresh', new Event($course, ['updatedMembers' => $updateMembers]));
     }
 
     protected function createOrder($goodsSpecsId, $userId, $data)
@@ -1609,7 +1669,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @return TaskService
+     * @return TaskResultService
      */
     protected function getTaskResultService()
     {

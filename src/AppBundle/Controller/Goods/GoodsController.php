@@ -45,8 +45,7 @@ class GoodsController extends BaseController
             $params['user'] = $userInfo;
         }
 
-        return $this->render(
-            'buy-flow/'.$request->query->get('template').'-modal.html.twig', $params);
+        return $this->render('buy-flow/'.$request->query->get('template').'-modal.html.twig', $params);
     }
 
     /**

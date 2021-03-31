@@ -63,6 +63,8 @@ interface TaskService
 
     public function findTasksByCourseSetId($courseSetId);
 
+    public function findTasksByCategoryIds($categoryIds);
+
     public function findTasksByCourseIds($courseIds);
 
     public function countTasksByCourseId($courseId);
@@ -237,4 +239,8 @@ interface TaskService
     public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange);
 
     public function canStartTask($taskId);
+
+    public function searchTasksWithStatistics(array $conditions, $orderBy, $start, $limit);
+
+    public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds);
 }

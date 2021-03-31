@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
   exports.run = function (options) {
     var $table = $('#exercise-table');
-    $table.on('click', '.cancel-recommend-exercise', function () {
+    $('.cancel-recommend-exercise').on('click', function () {
       $.post($(this).data('url'), function (html) {
         Notify.success(Translator.trans('admin.item_bank_exercise.exercise.cancel_recommend_success_hint'));
         window.location.reload();

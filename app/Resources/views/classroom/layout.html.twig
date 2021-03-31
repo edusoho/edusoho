@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ classroom.title }} - {{ parent() }}{% endblock %}
-{% block keywords %} {{classroom.title}} {% endblock %}
+{% block title %}{{ classroom.title|raw }} - {{ parent() }}{% endblock %}
+{% block keywords %} {{classroom.title|raw}} {% endblock %}
 
 {% do script(['app/js/classroom/index.js']) %}
 

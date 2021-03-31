@@ -15,7 +15,7 @@ site.save_error_hint: 保存失败
 site.searching_hint: 搜索中...
 site.search_hint: 搜索
 site.choose_gender_hint: 请选择性别
-site.captcha_code.required: 请输入验证码
+site.captcha_code.required: 请拖动图形验证码
 site.data.create: 添加
 site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
@@ -216,9 +216,7 @@ activity.live.started_tip: 直播已经开始
 activity.live.started_or_ended_notice: 直播已经开始或者结束,无法编辑
 
 
-activity.audio_manage.length_required_error_hint: 请输入时长
-activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
-activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
+activity.audio_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
 activity.document_manage.media_error_hint: 请上传或选择文档
@@ -314,14 +312,15 @@ activity.video_manage.true_address_input: 请输入正确的视频网址
 activity.video_manage.video_validate_error_hint: 读取视频页面信息失败，请检查您输入的页面地址后重试
 activity.video_manage.finish_detail: 学习到最后
 activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频)
-activity.video_manage.length_required_error_hint: 请输入时长
-activity.video_manage.length_unsigned_integer_error_hint: 请输入时长
-activity.video_manage.second_range_error_hint: 秒数只能在0-59之间
+activity.video_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
 
 activity.manage.choose_teacher_hint: 请选择老师
+activity.manage.finished_tips: >
+  <span class="color-primary">恭喜！你已完成该任务</span>
 
+announcement.create_datetime.error.hint: 公告发布时间不能晚于结束时间
 announcement.delete_hint: 真的要删除该公告吗?
 
 auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
@@ -478,7 +477,9 @@ course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
+course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任务将一并被删除。未发布状态下的课时将会被删除，已发布状态下的课时需取消发布后再删除。此次删除%length%课时，是否继续？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
+course.manage.chapter_batch_delete_hint: 已选中%length%个章节，是否确定删除？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
@@ -716,8 +717,8 @@ validate.trim.message: 请输入%display%
 validate.idcard_number_input.message: 请正确输入您的身份证号码
 validate.visible_character_input.message: 请输入可见性字符
 validate.positive_integer.message: 请输入正整数
-validate.unsigned_integer.message: 请输入非负整数
-validate.second_range.message: 秒只能填写0-59之间的数字
+validate.unsigned_integer.message: 请输入非负整数，其中秒数只能在0-59之间
+validate.second_range.message: 请输入非负整数，其中秒数只能在0-59之间
 validate.course_title.message: 不支持输入<、>字符
 validate.float_input.message: 请输入正确的小数,只保留到两位小数
 validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
@@ -756,6 +757,7 @@ validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【教学】-【分类标签】-【标签管理】进行设置。
+validate.tag_number_exceeds_limit: 你只能添加%limit%个项目
 validate.title_required_hint: 请输入标题，不能为空。
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -775,6 +777,10 @@ validate.have_spaces: 密码不能有空格哦
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
 validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+validate.custom_integer.message: 请输入正确的整数
+validate.int.message: 最多9位整数
+validate.float.message: 最多两位小数，整数位不超过8位！
+
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -1251,6 +1257,9 @@ admin.site.upload_favicon_success_hint: 上传网站浏览器图标成功！
 admin.site.delete_favicon_success_hint: 删除网站浏览器图标成功！
 admin.site.delete_favicon_fail_hint: 删除网站浏览器图标失败！
 admin.site.delete_hint: 确认要删除吗？
+admin.site.upload_record_picture_success_hint: 上传公安备案图标成功！
+admin.site.delete_record_picture_success_hint: 删除公安备案图标成功！
+admin.site.delete_record_picture_fail_hint: 删除公安备案图标失败！
 admin.setting.upload_license_picture_success_hint: 上传电子营业执照图片成功！
 admin.setting.delete_license_picture_success_hint: 删除电子营业执照图片成功！
 admin.setting.delete_license_picture_fail_hint: 删除电子营业执照图片失败！
@@ -1365,10 +1374,14 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 
 admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
+admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
+
+exercise.manage.student_delete_hint: 是否确定移除该学员
 
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
@@ -1623,11 +1636,12 @@ user.fields.gender_label: 性别
 information_collect.form.check_age_invalid: 年龄不在正常范围内
 information_collect.form.check_format_invalid: %display%格式错误
 
-admin_v2.video_effective_time_setting.cancel.hint: 视频课时学习时长统计维度变更后，全站数据统计中将按新的统计规则生成，变更规则前已产生的学习时长统计不会随新的规则更改。建议您不要频繁改动数据统计维度。<br/>本次是否确认更改学习时长统计维度？
+admin_v2.video_effective_time_setting.cancel.hint: 统计维度变更后，将按新的维度生成数据。可能导致数据有较大幅度变动，属正常现象。如无必要，不建议您频繁更改配置。如若需要，建议您晚上更改，更改后预计3小时完成更新。<br/>是否确认更改学习时长统计维度？
 admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
 admin_v2.video_effective_time_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: 以实际播放时长作为学习时长统计
 admin_v2.video_effective_time_setting.statistical_dimension.page.help_block: 以页面停留时长作为学习时长统计
+admin_v2.video_effective_time_setting.refreshing_hint: 数据更新中，请勿频繁更改配置
 
 course.marketing_setup: 营销设置
 site.currency.CNY: 元
@@ -1752,3 +1766,6 @@ course.task.out_focus_mask.stop.tips: >
 course.task.out_focus_mask.anti_brush.tips: >
   <p class="kick-each-other">请勿同时多开任务学习</p>
   <p class="kick-each-other">不要一心多用哦！</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
+classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生

@@ -29,23 +29,24 @@ class OpenCourseLiveTicket extends AbstractResource
 
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
 
-        $params = array();
+        $params = [];
 
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
             if (empty($member)) {
-                $this->getOpenCourseService()->createMember(array(
+                $this->getOpenCourseService()->createMember([
                     'courseId' => $lesson['courseId'],
                     'ip' => $request->getHttpRequest()->getClientIp(),
                     'lastEnterTime' => time(),
-                ));
+                ]);
             }
         }
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
         $params['id'] = $user->isLogin() ? $user['id'] : (int) ($this->getMillisecond()) * 1000 + rand(0, 999);
-        $params['nickname'] = $user->isLogin() ? $user['nickname'] : '游客'.$this->getRandomString(8);
+        $params['displayName'] = $user->isLogin() ? $user['nickname'] : '游客'.$this->getRandomString(8);
+        $params['nickname'] = $user->isLogin() ? $user['nickname'].'_'.$user['id'] : '游客'.$this->getRandomString(8);
         $params['isLogin'] = $user->isLogin();
         $params['startTime'] = $lesson['startTime'];
         $params['endTime'] = $lesson['endTime'];

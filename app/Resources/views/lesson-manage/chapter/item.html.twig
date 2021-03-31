@@ -6,6 +6,12 @@
     {% set colon = '：' %}
   {% endif %}
   <div class="item-content">
+    <label 
+      class="cd-checkbox chapter-operation js-chapter-operation hidden" 
+      data-id="{{chapter.id}}"
+      data-type="{{chapter.type}}">
+      <input type="checkbox" value="1" data-toggle="cd-checkbox">
+    </label>
     <a class="js-toggle-show js-toggle-{{ chapter.type }} cd-link-assist" href="javascript:;">
       <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i></a>{{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%colon%':colon|default(), '%title%':chapter.title|sub_text(30)})|raw }}
   </div>

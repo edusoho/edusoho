@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export;
+namespace Tests\Unit\AppBundle\Component\Export\UserLearnStatistics;
 
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter;
@@ -21,7 +21,6 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             'user.learn.statistics.exit.course.num',
             'user.learn.statistics.finished.task.num',
             'user.learn.statistics.sum_learn_time',
-            'user.learn.statistics.pure_learn_time',
             'user.learn.statistics.actual.amount',
         ];
 
@@ -128,7 +127,6 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             '35',
             '13',
             '23',
-            '0',
             '0',
             '1',
         ], $data[0]);

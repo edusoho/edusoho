@@ -24,7 +24,7 @@ interface OrderService
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time');
 
-    public function searchOrderItems($conditions, $orderBy, $start, $limit);
+    public function searchOrderItems($conditions, $orderBy, $start, $limit, array $columns = []);
 
     public function countOrderItems($conditions);
 

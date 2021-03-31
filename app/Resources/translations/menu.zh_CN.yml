@@ -90,6 +90,7 @@ admin.course.basic.basic_tab.delete_submit_btn: 删除课程
 ##班级管理模块
 admin.course.classroom.basic_tab: 班级管理
 admin.course.classroom.recommend_tab: 班级推荐
+admin_v2.teach.classroom.statistics_tab: 班级统计
 
 admin.course.classroom.basic_tab.create_btn: 创建班级
 admin.course.classroom.basic_tab.manage_btn: 管理班级

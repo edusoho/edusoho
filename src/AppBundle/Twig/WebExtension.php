@@ -208,6 +208,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
+            new \Twig_SimpleFunction('information_collect_detail_select', [$this, 'informationCollectDetailSelect']),
+            new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
         ];
     }
 
@@ -1242,7 +1244,7 @@ class WebExtension extends \Twig_Extension
     {
         $imgpath = $path = $this->container->get('assets.packages')->getUrl('assets/img/default/'.$img);
 
-        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, htmlspecialchars($alt), $class, $src);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
     public function loadScript($js)
@@ -2038,6 +2040,14 @@ class WebExtension extends \Twig_Extension
         return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
     }
 
+    public function mailSetting()
+    {
+        $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
+    }
+
     protected function makeToken($type, $fileId, $context = [])
     {
         $fields = [
@@ -2109,6 +2119,30 @@ class WebExtension extends \Twig_Extension
         }
 
         return $items;
+    }
+
+    public function informationCollectDetailSelect($eventId = 0)
+    {
+        // 支持的编码
+        $codes = ['nickname', 'mobile', 'name', 'idcard'];
+        // 默认支持
+        $options = [
+            'nickname' => $this->trans('user.fields.username_label'),
+            'mobile' => $this->trans('user.fields.mobile_label'),
+        ];
+
+        if (!$eventId) {
+            return $options;
+        }
+
+        $items = $this->getEventService()->findItemsByEventId($eventId);
+        foreach ($items as $item) {
+            if (in_array($item['code'], $codes)) {
+                $options[$item['code']] = FormItemFectory::create($item['code'])->getData()['title'];
+            }
+        }
+
+        return $options;
     }
 
     /**

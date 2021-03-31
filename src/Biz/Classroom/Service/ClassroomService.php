@@ -13,10 +13,11 @@ interface ClassroomService
      * @param $orderBy
      * @param $start
      * @param $limit
+     * @param $columns
      *
      * @return mixed
      */
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBy, $start, $limit, array $columns = []);
 
     public function findClassroomsByIds(array $ids);
 
@@ -179,7 +180,7 @@ interface ClassroomService
 
     public function remarkStudent($classroomId, $userId, $remark);
 
-    public function removeStudent($classroomId, $userId);
+    public function removeStudent($classroomId, $userId, $info = []);
 
     public function removeStudents($classroomId, $userIds, $info);
 
@@ -217,6 +218,8 @@ interface ClassroomService
     public function getClassroomCourse($classroomId, $courseId);
 
     public function findCoursesByClassroomId($classroomId);
+
+    public function getClassroomStudentCount($classroomId);
 
     public function findClassroomStudents($classroomId, $start, $limit);
 
@@ -284,4 +287,16 @@ interface ClassroomService
     public function appendHasCertificate(array $classrooms);
 
     public function hasCertificate($classroomId);
+
+    public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit);
+
+    public function updateClassroomMembersFinishedStatus($classroomId);
+
+    public function updateClassroomMemberFinishedStatus($classroomId, $userId);
+
+    public function searchClassroomsWithStatistics($conditions, $orderBy, $start, $limit, $columns = []);
+
+    public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
+
+    public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields);
 }

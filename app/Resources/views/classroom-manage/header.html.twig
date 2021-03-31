@@ -29,7 +29,7 @@
 
     <h1 class="title text-overflow mr0">
       <a href="{{ path('classroom_show',{id:classroom.id}) }}">
-        {{ classroom.title }}
+        {{ classroom.title|raw }}
       </a>
 
     </h1>
@@ -87,7 +87,7 @@
   <div class="pull-right prl mrl mtl">
     <div class="pull-right pll prl">
       <span class="cd-text-medium">{{ 'classroom.member_number'|trans }}</span>
-      <div class="mtm cd-dark-major text-center"><span class="">{{ studentCount|default(0) }} </span></div>
+      <div class="mtm cd-dark-major text-center"><span class="">{{ classroom.studentNum|default(0) }} </span></div>
     </div>
     <div class="pull-right pll prl">
       <span class="cd-text-medium ">{{ 'classroom.courses'|trans }}</span>

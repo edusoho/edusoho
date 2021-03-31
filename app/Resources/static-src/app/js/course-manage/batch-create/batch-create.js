@@ -35,6 +35,7 @@ class BatchCreate {
 
     this.uploader.on('file.finish', (file) => {
       this.files.push(file);
+      this.fileIds.push(file.fileId);
     });
 
     this.uploader.on('error', (error) => {

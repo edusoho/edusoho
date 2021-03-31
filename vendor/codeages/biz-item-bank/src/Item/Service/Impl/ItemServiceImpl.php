@@ -62,17 +62,15 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function importItems($items, $bankId)
     {
         $savedItems = [];
-        $groupItems = ArrayToolkit::group($items, 'type');
 
         try {
             $this->beginTransaction();
-            foreach ($groupItems as $group) {
-                foreach ($group as $item) {
-                    $item['bank_id'] = $bankId;
-                    $savedItem = $this->createItem($item, true);
-                    $savedItems[] = array_merge($savedItems, $savedItem);
-                }
+            foreach ($items as $item) {
+                $item['bank_id'] = $bankId;
+                $savedItem = $this->createItem($item, true);
+                $savedItems[] = array_merge($savedItems, $savedItem);
             }
+
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
             $this->dispatch('item.import', $savedItems);

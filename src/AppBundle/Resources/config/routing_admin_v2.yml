@@ -188,6 +188,18 @@ admin_v2_classroom_chooser:
     path: /classroom/chooser
     defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:chooser }
 
+admin_v2_classroom_statistics:
+    path: /classroom/statistics
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:statistics }
+
+admin_v2_classroom_statistics_member:
+    path: /classroom/{id}/statistics/member
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:memberStatistics }
+
+admin_v2_classroom_statistics_course:
+    path: /classroom/{id}/statistics/course
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:courseStatistics }
+
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}
@@ -1312,7 +1324,7 @@ admin_v2_groupThread_batch_delete:
 admin_v2_group_thread_cancel_elite:
     path:  /group/thread/{threadId}/removeElite
     defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeElite }
-    permissions: [admin_v2operation_group_manage]
+    permissions: [admin_v2_operation_group_manage]
 
 admin_v2_group_thread_set_elite:
     path:  /group/thread/{threadId}/setElite
@@ -1767,6 +1779,12 @@ admin_v2_setting_favicon_remove:
     methods: [POST]
     permissions: [admin_v2_school_information]
 
+admin_v2_setting_record_upload:
+  path: /setting/record/upload
+  defaults: { _controller: AppBundle:AdminV2/System/Setting:recordPictureUpload }
+  methods: [POST]
+  permissions: [admin_v2_school_information]
+
 #系统-通用管理-用户设置
 admin_v2_setting_auth:
     path:  /setting/auth
@@ -1865,6 +1883,11 @@ admin_v2_task_multiple_open_setting:
 admin_v2_video_task_setting:
   path:  /setting/video-task-setting
   defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:videoEffectiveLearningTimeSetting }
+  permissions: [admin_v2_video_task_setting]
+
+admin_v2_video_task_setting_job_check:
+  path:  /setting/video_task_setting/job_check
+  defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:refreshJobCheck }
   permissions: [admin_v2_video_task_setting]
 
 # 系统-通用管理-运营设置
@@ -2521,6 +2544,11 @@ admin_v2_setting_cloud_key_copyright:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
     methods: [POST]
     permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_app_package_update_agreement:
+    path:  /app/package_update/{id}/agreement
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:agreement }
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal

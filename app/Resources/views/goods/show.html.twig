@@ -2,7 +2,7 @@
 
 {% do script(['libs/vue.js', 'libs/jquery-countdown.js', 'app/js/goods/show/index.js', 'app/js/courseset/show/tasks/index.js']) %}
 
-{% block title %}{{ goods.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}
   <div id="show-product-page" class="" style=""
        data-goods="{{ goods|json_encode }}"
@@ -39,4 +39,13 @@
   </div>
 
   <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
+
+  {% 
+    include 'common/weixin-share.html.twig' with {
+      'title': goods.title,
+      'desc': goods.summary|striptags|purify_and_trim_html,
+      'link': app.request.uri,
+      'imgUrl': fileurl(goods.images.large|default(),'course.png'),
+    }
+  %}
 {% endblock %}

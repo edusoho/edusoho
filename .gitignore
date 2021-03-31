@@ -69,3 +69,4 @@ yarn-error.log
 /edusoho-h5
 /app/config/plumber.php
 .package-lock.json
+/js-sdk

@@ -22,7 +22,7 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
     private function handleData($data)
     {
         if (empty($data)) {
-            return array('success' => 1);
+            return ['success' => 1];
         }
 
         try {
@@ -32,25 +32,29 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
         } catch (ServiceException $e) {
             $this->getLogService()->info('course', 'live', 'handle checkin data error: ', json_encode($data));
 
-            return array(
-                'time' => intval($data[0]['time'] / 1000),
+            return [
+                'time' => (int) ($data[0]['time'] / 1000),
                 'success' => 0,
-                'detail' => array(),
-            );
+                'detail' => [],
+            ];
         }
 
-        return array(
-            'time' => intval($data[0]['time'] / 1000),
+        return [
+            'time' => (int) ($data[0]['time'] / 1000),
             'success' => 1,
             'detail' => $data[0]['users'],
-        );
+        ];
     }
 
     private function handleUser($user)
     {
-        $userId = $this->splitUserIdFromNickName($user['nickName']);
-        if (empty($userId)) {
-            throw new ServiceException('user not found');
+        if (!empty($user['studentId'])) {
+            $userId = $user['studentId'];
+        } else {
+            $userId = $this->splitUserIdFromNickName($user['nickName']);
+            if (empty($userId)) {
+                throw new ServiceException('user not found');
+            }
         }
 
         $existUser = $this->getUserService()->getUser($userId);

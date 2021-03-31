@@ -11,6 +11,7 @@ class ClassroomThreadEventProcessor extends EventSubscriber
     {
         $thread = $event->getSubject();
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'threadNum', +1);
+        $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($thread['targetId'], $thread['userId'], ['threadNum', 'questionNum']);
     }
 
     public function onThreadDelete(Event $event)
@@ -18,6 +19,7 @@ class ClassroomThreadEventProcessor extends EventSubscriber
         $thread = $event->getSubject();
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'threadNum', -1);
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'postNum', 0 - $thread['postNum']);
+        $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($thread['targetId'], $thread['userId'], ['threadNum', 'questionNum']);
     }
 
     public function onPostCreate(Event $event)
@@ -38,10 +40,10 @@ class ClassroomThreadEventProcessor extends EventSubscriber
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', 0 - $event->getArgument('deleted'));
 
-        $adoptedPostCount = $this->getThreadService()->searchPostsCount(array(
+        $adoptedPostCount = $this->getThreadService()->searchPostsCount([
             'threadId' => $post['threadId'],
             'adopted' => 1,
-        ));
+        ]);
 
         if (empty($adoptedPostCount)) {
             $this->getThreadService()->cancelThreadSolved($post['threadId']);

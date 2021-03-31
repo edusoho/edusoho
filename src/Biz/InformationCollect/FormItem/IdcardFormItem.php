@@ -24,7 +24,7 @@ class IdcardFormItem extends FormItem
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '[0-9]{17}[0-9xX]{1}', 'message' => self::TITLE.'格式错误'],
+                ['pattern' => '^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }

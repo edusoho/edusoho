@@ -15,4 +15,8 @@ class OperateReason
     const JOIN_BY_PURCHASE_TYPE = 'buy_join';
 
     const JOIN_BY_IMPORT_TYPE = 'import_join';
+
+    const EXIT_REMOVE_BY_MANUAL = 'site.remove_by_manual';
+
+    const EXIT_REMOVE_TYPE = 'remove';
 }

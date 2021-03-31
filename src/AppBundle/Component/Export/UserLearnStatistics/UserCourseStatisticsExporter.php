@@ -21,7 +21,6 @@ class UserCourseStatisticsExporter extends Exporter
             'course.name',
             'user.learn.statistics.course',
             'user.learn.statistics.sum_learn_time',
-            'user.learn.statistics.pure_learn_time',
             'user.learn.statistics.task_num',
             'user.learn.statistics.finish_task_num',
             'user.learn.statistics.finish_rate',
@@ -69,7 +68,6 @@ class UserCourseStatisticsExporter extends Exporter
                 $member[] = $data['courseSetName'];
                 $member[] = $data['courseName'];
                 $member[] = $data['sumTime'];
-                $member[] = $data['pureTime'];
                 $member[] = $data['taskNum'];
                 $member[] = $data['finishTaskNum'];
                 $member[] = $data['finishRate'].'%';
@@ -96,7 +94,7 @@ class UserCourseStatisticsExporter extends Exporter
                 [],
                 0,
                 PHP_INT_MAX,
-                ['userId', 'courseId', 'courseSetId', 'sumTime', 'pureTime']
+                ['userId', 'courseId', 'courseSetId', 'sumTime']
             );
             $statistics = ArrayToolkit::group($statistics, 'courseId');
             foreach ($members as $member) {
@@ -111,7 +109,6 @@ class UserCourseStatisticsExporter extends Exporter
                     'courseSetName' => $courseSets[$member['courseSetId']]['title'],
                     'courseName' => empty($course['title']) ? $courseSets[$member['courseSetId']]['title'] : $course['title'],
                     'sumTime' => empty($statistics[$member['courseId']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$member['courseId']], 'sumTime')) / 60, 1),
-                    'pureTime' => empty($statistics[$member['courseId']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$member['courseId']], 'pureTime')) / 60, 1),
                     'taskNum' => $course['compulsoryTaskNum'],
                     'finishTaskNum' => $member['learnedCompulsoryTaskNum'],
                     'finishRate' => empty($course['compulsoryTaskNum']) ? 1 : round($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum'], 2) * 100,

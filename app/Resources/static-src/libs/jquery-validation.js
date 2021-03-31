@@ -213,6 +213,14 @@ $.validator.addMethod('unsigned_integer', function(value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, Translator.trans('validate.unsigned_integer.message'));
 
+$.validator.addMethod('custom_integer', function(value, element) {
+  if (value.indexOf('.') > -1) return false
+
+  value = Number(value.trim())
+
+  return this.optional(element) || Number.isSafeInteger(value);
+}, Translator.trans('validate.custom_integer.message'));
+
 // jQuery.validator.addMethod("unsigned_integer", function (value, element) {
 //   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 // }, "时长必须为非负整数");

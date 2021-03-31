@@ -85,8 +85,14 @@ class CourseTaskMedia extends AbstractResource
             if (!$user->isLogin()) {
                 throw UserException::UN_LOGIN();
             }
+
+            // 班级课程必须加入才能预览资源
             if ($course['parentId'] > 0) {
-                throw ClassroomException::UN_JOIN();
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                $classroomMember = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+                if (empty($classroomMember)) {
+                    throw ClassroomException::UN_JOIN();
+                }
             }
 
             if (!$this->getCourseMemberService()->isCourseMember($course['id'], $user['id'])) {
@@ -384,8 +390,7 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $live = $config->get($activity['mediaId']);
         if ($live['roomCreated']) {
-            if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus'])
-            {
+            if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus']) {
                 $file = $this->getUploadFileService()->getFullFile($live['mediaId']);
                 $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
             }
@@ -533,5 +538,10 @@ class CourseTaskMedia extends AbstractResource
     protected function getResourceFacadeService()
     {
         return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

@@ -10,6 +10,7 @@ use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Biz\CloudPlatform\Dao\CloudAppDao;
 use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
+use Biz\CloudPlatform\UpgradeAgreement;
 use Biz\CloudPlatform\UpgradeLock;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
@@ -86,6 +87,13 @@ class AppServiceImpl extends BaseService implements AppService
         $app = $this->getAppDao()->getByCode('MAIN');
 
         return $app['version'];
+    }
+
+    public function getAgreement($code)
+    {
+        $upgradeAgreement = new UpgradeAgreement();
+
+        return $upgradeAgreement->getAgreement($this->getMainVersion(), $code);
     }
 
     public function registerApp($app)
@@ -212,6 +220,10 @@ class AppServiceImpl extends BaseService implements AppService
         UpgradeLock::lock();
 
         $errors = [];
+
+        if (PHP_VERSION_ID < 50600) {
+            $errors[] = 'EduSoho要求PHP版本为5.6.0以上，您当前的PHP版本为'.PHP_VERSION.',请先升级您的PHP版本';
+        }
 
         if (!class_exists('ZipArchive')) {
             $errors[] = 'php_zip扩展未激活';

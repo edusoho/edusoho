@@ -114,19 +114,14 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $params['id'] = $user['id'];
+        /*
+         * displayName 用于直播间用户名展示
+         */
+        $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         /**
-         * @var int
-         *          last record: 2017-12-12
-         *          '1'=>'vhall',
-         *          '2'=>'soooner',
-         *          '3'=>'sanmang',
-         *          '4'=>'gensee',
-         *          '5'=>'longinus',
-         *          '6'=>'training',
-         *          '7'=>'talkFun',
-         *          '8'=>'athena', //ES直播
+         * provider code in wiki
          */
         $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
         $this->freshTaskLearnStat($request, $activity['id']);
@@ -154,10 +149,19 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function liveReplayAction($courseId, $activityId)
     {
+        $user = $this->getUser();
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
 
         return $this->render('activity/live/replay-player.html.twig', [
             'courseId' => $courseId,
@@ -165,6 +169,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             'taskId' => $task['id'],
             'live' => $live,
             'mediaId' => $live['mediaId'],
+            'role' => $role,
         ]);
     }
 
@@ -231,13 +236,25 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
+        $user = $this->getUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $isTeacher = false;
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+            $isTeacher = $this->getUser()->isTeacher();
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
 
         return $this->render('live-course/entry.html.twig', [
             'courseId' => $courseId,
             'replayId' => $replayId,
             'activityId' => $activityId,
             'task' => $task,
+            'isTeacher' => $isTeacher,
+            'role' => $role,
         ]);
     }
 
@@ -279,8 +296,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
-        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
-            $request->isSecure());
+        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [

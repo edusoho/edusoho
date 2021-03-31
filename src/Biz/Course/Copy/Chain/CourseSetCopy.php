@@ -7,14 +7,14 @@ use Biz\Course\Dao\CourseSetDao;
 
 class CourseSetCopy extends AbstractEntityCopy
 {
-    protected function copyEntity($source, $config = array())
+    protected function copyEntity($source, $config = [])
     {
         return $this->doCopyCourseSet($source);
     }
 
     protected function getFields()
     {
-        return array(
+        return [
             'type',
             'title',
             'subtitle',
@@ -30,7 +30,7 @@ class CourseSetCopy extends AbstractEntityCopy
             'discount',
             'orgId',
             'orgCode',
-        );
+        ];
     }
 
     private function doCopyCourseSet($courseSet)
@@ -42,6 +42,7 @@ class CourseSetCopy extends AbstractEntityCopy
         $newCourseSet['creator'] = $this->biz['user']['id'];
         $newCourseSet['locked'] = 1; // 默认锁定
         $newCourseSet['discountId'] = 0; // 商品打折不影响班级内的课程
+        $newCourseSet['isClassroomRef'] = 1;
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }

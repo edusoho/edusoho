@@ -12,6 +12,7 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
@@ -28,17 +29,16 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
-use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class Login extends AbstractResource
 {
-    private $supportLoginTypes = array(
+    private $supportLoginTypes = [
         'sms', 'token',
-    );
+    ];
 
-    private $supportClients = array(
+    private $supportClients = [
         'app', 'miniProgram', 'h5',
-    );
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -59,7 +59,7 @@ class Login extends AbstractResource
 
     public function loginByToken(ApiRequest $request)
     {
-        $mobile = $this->getSettingService()->get('mobile', array());
+        $mobile = $this->getSettingService()->get('mobile', []);
         if (empty($mobile['enabled'])) {
             throw SettingException::APP_CLIENT_CLOSED();
         }
@@ -86,19 +86,19 @@ class Login extends AbstractResource
 
         $this->afterLogin($user, $token, $client);
 
-        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('requestToken' => $requestToken, 'token' => $token, 'user' => $user));
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", ['requestToken' => $requestToken, 'token' => $token, 'user' => $user]);
 
-        return array(
+        return [
             'token' => $token,
             'user' => $user,
-        );
+        ];
     }
 
     public function loginBySms(ApiRequest $request)
     {
         $fields = $request->request->all();
 
-        if (!ArrayToolkit::requireds($fields, array('mobile', 'smsToken', 'smsCode', 'client'))) {
+        if (!ArrayToolkit::requireds($fields, ['mobile', 'smsToken', 'smsCode', 'client'])) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -127,22 +127,22 @@ class Login extends AbstractResource
         $user['currentIp'] = $clientIp;
         $this->appendUser($user);
 
-        $token = $this->getLoginToken($user['id'], array(
+        $token = $this->getLoginToken($user['id'], [
                 'sms_code' => $fields['smsCode'],
                 'sms_token' => $fields['smsToken'],
                 'client' => $client,
                 'mobile' => $mobile,
-            )
+            ]
         );
 
         $this->afterLogin($user, $token, $client);
 
-        $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录登录成功", array('userId' => $user['id']));
+        $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录登录成功", ['userId' => $user['id']]);
 
-        return array(
+        return [
             'token' => $token,
             'user' => $user,
-        );
+        ];
     }
 
     private function createUser($clientIp, $client, $mobile, $request)
@@ -153,14 +153,14 @@ class Login extends AbstractResource
         }
         $password = substr($mobile, mt_rand(0, 4), 6);
 
-        $newUser = array(
+        $newUser = [
             'mobile' => $mobile,
             'emailOrMobile' => $mobile,
             'nickname' => $nickname,
             'password' => $password,
             'registeredWay' => $client,
             'createdIp' => $clientIp,
-        );
+        ];
 
         if ($this->isPluginInstalled('Drp')) {
             $newUser = DistributorCookieToolkit::setCookieTokenToFields($request->getHttpRequest(), $newUser, DistributorCookieToolkit::USER);
@@ -170,25 +170,25 @@ class Login extends AbstractResource
         $user['realPassword'] = $password;
         $user['loginTime'] = time();
 
-        $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录注册成功", array('userId' => $user['id']));
+        $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录注册成功", ['userId' => $user['id']]);
 
         return $user;
     }
 
     private function sendRegisterSms($mobile, $userId, $nickname, $password)
     {
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', []);
 
-        $templateParams = array(
+        $templateParams = [
             'url' => $site['url'],
             'password' => $password,
-        );
+        ];
 
-        $smsParams = array(
+        $smsParams = [
             'mobiles' => $mobile,
             'templateId' => SmsType::IMPORT_USER,
             'templateParams' => $templateParams,
-        );
+        ];
 
         try {
             $this->getSDKSmsService()->sendToOne($smsParams);
@@ -208,12 +208,12 @@ class Login extends AbstractResource
             $vip = $this->getVipService()->getMemberByUserId($user['id']);
             $level = $this->getLevelService()->getLevel($vip['levelId']);
             if ($vip) {
-                $user['vip'] = array(
+                $user['vip'] = [
                     'levelId' => $vip['levelId'],
                     'vipName' => $level['name'],
                     'deadline' => date('c', $vip['deadline']),
                     'seq' => $level['seq'],
-                );
+                ];
             } else {
                 $user['vip'] = null;
             }
@@ -223,14 +223,14 @@ class Login extends AbstractResource
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
     }
 
-    private function getLoginToken($userId, $data = array())
+    private function getLoginToken($userId, $data = [])
     {
-        $token = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
+        $token = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, [
             'times' => 0,
             'duration' => TimeMachine::ONE_MONTH,
             'userId' => $userId,
             'data' => $data,
-        ));
+        ]);
 
         return $token['token'];
     }
@@ -363,7 +363,7 @@ class Login extends AbstractResource
 
     protected function getSDKSmsService()
     {
-        return $this->biz['qiQiuYunSdk.sms'];
+        return $this->biz['ESCloudSdk.sms'];
     }
 
     private function getBizSms()
