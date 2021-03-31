@@ -144,13 +144,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $siteSetting = $this->getSettingService()->get('site', []);
         $originLicenseSetting = $this->getSettingService()->get('license', []);
-//
-//        $licenseSetting = [
-//            'license_name' => '',
-//            'license_picture' => '',
-//            'license_url' => '',
-//        ];
-        $permitsSetting = isset($originLicenseSetting['permits']) ? $originLicenseSetting['permits'] : [['name' => '', 'record_number' => '', 'picture' => ''],];
+
+
         $qualificationsSetting = [
             'icp' => isset($siteSetting['icp']) ? $siteSetting['icp'] : '',
             'icpUrl' => isset($siteSetting['icpUrl']) ? $siteSetting['icpUrl'] : 'https://beian.miit.gov.cn',
@@ -164,7 +159,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (empty($this->getSettingService()->get('permits'))){
-            $this->getSettingService()->set('permits', $permitsSetting);
+            $this->getSettingService()->set('permits', $originLicenseSetting);
         }
 
         return 1;
