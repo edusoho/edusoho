@@ -142,7 +142,7 @@
 
 <script>
 import Api from '@/api';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
 
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
@@ -199,6 +199,7 @@ export default {
     ...mapState(['vipSwitch']),
     ...mapState({
       userInfo: state => state.user,
+      vipOpenStatus: state => state.vip.vipOpenStatus,
     }),
 
     vipDated() {
@@ -290,7 +291,7 @@ export default {
       return dataFormat;
     },
   },
-  created() {
+  async created() {
     // 未登录跳转登录页面
     if (!this.$store.state.token) {
       this.$router.replace({
@@ -301,7 +302,9 @@ export default {
       });
       return;
     }
-    if (!this.vipSwitch) {
+
+    await this.getVipOpenStatus();
+    if (!this.vipOpenStatus) {
       this.$router.push({
         path: '/',
         query: {
@@ -314,6 +317,8 @@ export default {
     this.getVipDetail();
   },
   methods: {
+    ...mapActions('vip', ['getVipOpenStatus']),
+
     getVipDetail() {
       const queryId = this.$route.query.id;
       Api.getVipDetail().then(res => {
