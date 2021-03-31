@@ -1,5 +1,5 @@
 <div class="nav-btn-tab">
-  <ul class="nav nav-tabs" role="tablist">
+  <ul class="nav nav-tabs nav-tabs-scroll" role="tablist">
     {% set classroomSetting = setting('classroom') %}
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
@@ -27,12 +27,25 @@
     {% if can_obtain_certificates(classroom.id, 'classroom') %}
       <li role="presentation" class="{% if nav == 'certificates' %}active{% endif %}"><a href="{{ path('classroom_certificates', {classroomId:classroom.id}) }}">{{ 'classroom.certificates'|trans }}</a></li>
     {% endif %}
-    <div class="btnbar hidden-xs">
+
+    {% if not planMember|default(null) %}
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'course'|trans}} <small >({{classroom.courseNum}})</small></a></li>
+    {% endif %}{% if not planMember|default(null) %}
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'course'|trans}} <small >({{classroom.courseNum}})</small></a></li>
+    {% endif %}{% if not planMember|default(null) %}
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'course'|trans}} <small >({{classroom.courseNum}})</small></a></li>
+    {% endif %}{% if not planMember|default(null) %}
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'course'|trans}} <small >({{classroom.courseNum}})</small></a></li>
+    {% endif %}
+    {# <div class="btnbar"> #}
+      <li class="btnbar introductionBtn">
       <a href="{{ path('classroom_introductions', {id:classroom.id}) }}"
          class="btn btn-link">
         {{ 'goods.description'|trans ~ ' >' }}
       </a>
-    </div>
+      </li>
+      
+    {# </div> #}
   </ul>
 
 {#  {% if canManageClassroom %}#}
