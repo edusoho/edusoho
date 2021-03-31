@@ -1202,6 +1202,10 @@ class ClassroomServiceTest extends BaseTestCase
                     'functionName' => 'get',
                     'returnValue' => ['title' => 'test', 'status' => 'closed', 'expiryMode' => 'forever', 'expiryValue' => 0],
                 ],
+                [
+                    'functionName' => 'update',
+                    'returnValue' => [],
+                ],
             ]
         );
         $this->mockBiz(
