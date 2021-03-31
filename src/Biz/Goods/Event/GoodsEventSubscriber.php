@@ -26,7 +26,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $review = $event->getSubject();
 
-        if (!isset($review['targetId'])) {
+        if (!isset($review['targetId']) || $review['targetType'] != 'goods') {
             return true;
         }
 

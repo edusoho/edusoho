@@ -29,7 +29,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $review = $event->getSubject();
 
-        if (!isset($review['targetId'])) {
+        if (!isset($review['targetId']) || $review['targetType'] != 'goods') {
             return true;
         }
 
