@@ -35,7 +35,6 @@ const actions = {
       Api.getVipOpenStatus()
         .then(res => {
           resolve(res);
-          console.log(res);
           commit('SET_VIP_OPEN_STATUS', res.h5Enabled);
         })
         .catch(err => {
