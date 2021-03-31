@@ -50,15 +50,15 @@
           <tr>
             <td>{{ student.nickname }}</td>
             <td>
-              {% if student.mobile %}
-                {{ student.mobile|default('') }}
+              {% if student.mobile|default() %}
+                {{ student.mobile }}
               {% else %}
                 ----
               {% endif %}
             </td>
             <td>
-              {% if student.idcard %}
-                {{ student.idcard|default('') }}
+              {% if student.idcard|default() %}
+                {{ student.idcard }}
               {% else %}
                 ----
               {% endif %}

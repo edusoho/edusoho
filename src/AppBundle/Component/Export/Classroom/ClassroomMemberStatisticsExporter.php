@@ -43,14 +43,14 @@ class ClassroomMemberStatisticsExporter extends Exporter
         }
 
         $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
-        $userApprovals = $this->getUserService()->searchApprovals([
+        $usersApproval = $this->getUserService()->searchApprovals([
             'userIds' => $userIds,
             'status' => 'approved', ], [], 0, count($userIds));
-        $usersApprovals = ArrayToolkit::index($userApprovals, 'userId');
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
 
         foreach ($users as $key => &$user) {
             $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
-            $user['idcard'] = isset($usersApprovals[$key]['idcard']) ? $usersApprovals[$key]['idcard'] : '';
+            $user['idcard'] = isset($usersApproval[$key]['idcard']) ? $usersApproval[$key]['idcard'] : '';
         }
 
         $content = [];

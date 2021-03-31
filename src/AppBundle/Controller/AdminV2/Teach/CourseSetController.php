@@ -336,7 +336,7 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
         $studentIds = ArrayToolkit::column($students, 'userId');
-        $userProfileAndApprovedApprovals = $this->makeUserProfileAndApprovedApprovals($studentIds);
+        $userProfilesAndApprovedApprovals = $this->makeUserProfilesAndApprovedApprovals($studentIds);
         $students = ArrayToolkit::index($students, 'userId');
 
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
@@ -357,8 +357,8 @@ class CourseSetController extends BaseController
                 $student['fininshDay'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
-            $student['mobile'] = isset($userProfileAndApprovedApprovals['usersProfile'][$key]['mobile']) ? $userProfileAndApprovedApprovals['usersProfile'][$key]['mobile'] : '';
-            $student['idcard'] = isset($userProfileAndApprovedApprovals['usersApproval'][$key]['idcard']) ? $userProfileAndApprovedApprovals['usersApproval'][$key]['idcard'] : '';
+            $student['mobile'] = isset($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile'] : '';
+            $student['idcard'] = isset($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard'] : '';
 
             $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $student['pureLearnTime'] = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
@@ -764,7 +764,7 @@ class CourseSetController extends BaseController
 
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
 
-        $userProfileAndApprovedApprovals = $this->makeUserProfileAndApprovedApprovals($studentIds);
+        $userProfilesAndApprovedApprovals = $this->makeUserProfilesAndApprovedApprovals($studentIds);
 
         $students = ArrayToolkit::index($students, 'userId');
 
@@ -773,8 +773,8 @@ class CourseSetController extends BaseController
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
             $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
-            $exportMember['mobile'] = empty($userProfileAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfileAndApprovedApprovals['usersProfile'][$key]['mobile']."\t";
-            $exportMember['idcard'] = empty($userProfileAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfileAndApprovedApprovals['usersApproval'][$key]['idcard']."\t";
+            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']."\t";
+            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']."\t";
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -909,7 +909,7 @@ class CourseSetController extends BaseController
         return $courseSets;
     }
 
-    private function makeUserProfileAndApprovedApprovals($userIds)
+    private function makeUserProfilesAndApprovedApprovals($userIds)
     {
         $usersProfile = $this->getUserService()->findUserProfilesByIds($userIds);
         $usersApproval = $this->getUserService()->searchApprovals(
