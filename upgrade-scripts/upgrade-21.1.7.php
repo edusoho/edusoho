@@ -93,6 +93,74 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    public function updateSetting()
+    {
+        $courseSetting = $this->getSettingService()->get('course', []);
+        $classroomSetting = $this->getSettingService()->get('classroom', []);
+        $messageSetting = $this->getSettingService()->get('message', []);
+        $openCourseSetting = $this->getSettingService()->get('openCourse', []);
+        $articleSetting = $this->getSettingService()->get('article', []);
+
+        $ugcReviewSetting = [
+            'enable_review' => '1',
+            'enable_course_review' => isset($courseSetting['show_review']) ? $courseSetting['show_review'] : '1',
+            'enable_classroom_review' => isset($classroomSetting['show_review']) ? $classroomSetting['show_review'] : '1',
+            'enable_question_bank_review' => '1',
+            'enable_open_course_review' => isset($openCourseSetting['show_comment']) ? $openCourseSetting['show_comment'] : '1',
+            'enable_article_review' => isset($articleSetting['show_comment']) ? $articleSetting['show_comment'] : '1',
+        ];
+        $ugcNoteSetting = [
+            'enable_note' => '1',
+            'enable_course_note' => isset($courseSetting['show_note']) ? $courseSetting['show_note'] : '1',
+            'enable_classroom_note' => isset($classroomSetting['show_review']) ? $classroomSetting['show_review'] : '1',
+        ];
+        $ugcThreadSetting = [
+            'enable_thread' => '1',
+            'enable_course_question' => isset($courseSetting['show_question']) ? $courseSetting['show_question'] : '1',
+            'enable_classroom_question' => isset($classroomSetting['show_thread']) ? $classroomSetting['show_thread'] : '1',
+            'enable_course_thread' => isset($courseSetting['show_discussion']) ? $courseSetting['show_discussion'] : '1',
+            'enable_classroom_thread' => isset($classroomSetting['show_thread']) ? $classroomSetting['show_thread'] : '1',
+            'enable_group_thread' => '1',
+        ];
+        $ugcPrivateMessageSetting = [
+            'enable_private_message' => isset($messageSetting['showable']) ? $messageSetting['showable'] : '1',
+            'student_to_student' => isset($messageSetting['studentToStudent']) ? $messageSetting['studentToStudent'] : '1',
+            'student_to_teacher' => isset($messageSetting['studentToTeacher']) ? $messageSetting['studentToTeacher'] : '1',
+            'teacher_to_student' => isset($messageSetting['teacherToStudent']) ? $messageSetting['teacherToStudent'] : '1',
+        ];
+        if (empty($this->getSettingService()->get('ugc_review'))) {
+            $this->getSettingService()->set('ugc_review', $ugcReviewSetting);
+        }
+        if (empty($this->getSettingService()->get('ugc_note'))) {
+            $this->getSettingService()->set('ugc_note', $ugcNoteSetting);
+        }
+        if (empty($this->getSettingService()->get('ugc_thread'))) {
+            $this->getSettingService()->set('ugc_thread', $ugcThreadSetting);
+        }
+        if (empty($this->getSettingService()->get('ugc_private_message'))) {
+            $this->getSettingService()->set('ugc_private_message', $ugcPrivateMessageSetting);
+        }
+        return 1;
+
+//        $siteSetting = $this->getSettingService()->get('site', []);
+//
+//        $licenseSetting = [
+//            'license_name' => '',
+//            'license_picture' => '',
+//            'license_url' => '',
+//        ];
+//        $permitsSetting = [
+//            ['name' => '', 'record_number' => '', 'picture' => ''],
+//        ];
+//        $qualificationsSetting = [
+//            'icp' => '',
+//            'icpUrl' => 'https://beian.miit.gov.cn',
+//            'recordPicture' => '',
+//            'recordCode' => '',
+//            'recordUrl' => 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
+//        ];
+    }
+
     public function addJoinedChannel()
     {
         if (!$this->isFieldExist('course_member', 'joinedChannel')) {
