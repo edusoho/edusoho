@@ -13,17 +13,6 @@ use AppBundle\Common\ArrayToolkit;
 
 class ClassroomMember extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
-    public function get(ApiRequest $request, $classroomId, $userId)
-    {
-        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
-        $this->getOCUtil()->single($member, ['userId']);
-
-        return $member;
-    }
-
     public function add(ApiRequest $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);

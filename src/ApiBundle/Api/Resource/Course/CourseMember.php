@@ -42,10 +42,10 @@ class CourseMember extends AbstractResource
      */
     public function get(ApiRequest $request, $courseId, $userId)
     {
-        $member = $this->getMemberService()->getCourseMember($courseId, $userId);
-        $this->getOCUtil()->single($member, ['userId']);
+        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
+        $this->getOCUtil()->single($courseMember, ['userId']);
 
-        return $member;
+        return $courseMember;
     }
 
     public function add(ApiRequest $request, $courseId)
