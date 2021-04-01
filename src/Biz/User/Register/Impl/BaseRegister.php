@@ -203,14 +203,14 @@ abstract class BaseRegister
         return new MessageDigestPasswordEncoder('sha256');
     }
 
-    private function createUser($registration)
+    protected function createUser($registration)
     {
         list($user, $registration) = $this->beforeSave($registration);
 
         return [$this->getUserDao()->create($user), $registration];
     }
 
-    private function createUserProfile($registration, $user)
+    protected function createUserProfile($registration, $user)
     {
         $profile = [];
         $profile['id'] = $user['id'];
@@ -237,7 +237,7 @@ abstract class BaseRegister
         $this->getProfileDao()->create($profile);
     }
 
-    private function createPerInviteUser($registration, $userId)
+    protected function createPerInviteUser($registration, $userId)
     {
         $originUser = $this->biz['user'];
 

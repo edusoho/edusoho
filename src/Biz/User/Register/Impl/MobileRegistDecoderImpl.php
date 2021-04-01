@@ -2,8 +2,8 @@
 
 namespace Biz\User\Register\Impl;
 
-use Biz\User\UserException;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\UserException;
 
 class MobileRegistDecoderImpl extends RegistDecoder
 {
@@ -25,5 +25,18 @@ class MobileRegistDecoderImpl extends RegistDecoder
         }
 
         return $user;
+    }
+
+    public function register($registration)
+    {
+        if (empty($registration['type'])) {
+            $registration['type'] = 'default';
+        }
+
+        list($user, $registration) = $this->createUser($registration);
+        $this->createUserProfile($registration, $user);
+        $this->afterSave($registration, $user);
+
+        return [$user, $this->createPerInviteUser($registration, $user['id'])];
     }
 }
