@@ -17,7 +17,7 @@ class RegisterTypeToolkitTest extends BaseTestCase
 
         $result = $this->biz['user.register.type.toolkit']->getRegisterTypes($registrations);
 
-        $this->assertArrayEquals(array('mobile', 'email', 'binder', 'distributor'), $result);
+        $this->assertArrayEquals(array('mobile'), $result);
     }
 
     public function testGetThirdPartyRegisterTypes()
