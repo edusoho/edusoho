@@ -7,9 +7,13 @@ class CourseSetsWithGoodsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
+        $type = 'course';
+
         $conditions = [
             'status' => 'published',
             'parentId' => 0,
+            'productTargetType' => $type,
+            'goodsType' => $type,
         ];
 
         $conditions = $this->getCourseService()->appendReservationConditions($conditions);
@@ -20,7 +24,7 @@ class CourseSetsWithGoodsDataTag extends CourseBaseDataTag implements DataTag
             $category = $this->getCategoryService()->getCategoryByCode($arguments['categoryCode']);
             $conditions['categoryId'] = empty($category) ? -1 : $category['id'];
         }
-        $orderBy = 'createdTime';
+
         if (!empty($arguments['orderBy'])) {
             $orderBy = $arguments['orderBy'];
         }

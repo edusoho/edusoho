@@ -76,14 +76,10 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         $courseSetTable = 'course_set_v8';
         $productTable = 'product';
         $goodsTable = 'goods';
-        $type = 'course';
         foreach ($conditions as $key => $condition) {
             $conditions[$courseSetTable.'_'.$key] = $condition;
             unset($conditions[$key]);
         }
-
-        $conditions['productTargetType'] = $type;
-        $conditions['goodsType'] = $type;
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$courseSetTable}.*, {$goodsTable}.ratingNum")
@@ -94,8 +90,8 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
             ->andWhere("{$courseSetTable}.status = :{$courseSetTable}_status")
             ->andWhere("{$courseSetTable}.parentId = :{$courseSetTable}_parentId")
             ->andWhere("{$courseSetTable}.type NOT IN (:{$courseSetTable}_excludeTypes)")
-            ->andWhere("{$productTable}.targetType = :productTargetType")
-            ->andWhere("{$goodsTable}.type = :goodsType");
+            ->andWhere("{$productTable}.targetType = :{$courseSetTable}_productTargetType")
+            ->andWhere("{$goodsTable}.type = :{$courseSetTable}_goodsType");
 
         foreach ($orderBys ?: [] as $order => $sort) {
             $builder->addOrderBy($order, $sort);
