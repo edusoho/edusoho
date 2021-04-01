@@ -28,6 +28,8 @@ const state = {
     wx: true,
   },
   DrpSwitch: false, // 分销插件
+  cloudSdkCdn: '', // 气球云 SDK 的 CDN 地址
+  cloudPlayServer: '', // 云资源播放 SDK 的 API 地址
 };
 
 export default new Vuex.Store({

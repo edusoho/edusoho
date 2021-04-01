@@ -61,4 +61,11 @@ export default {
   [types.SET_TASK_SATUS](state, payload) {
     state.course.taskStatus = payload;
   },
+
+  SET_CLOUD_SDK_CDN(state, address) {
+    state.cloudSdkCdn = address;
+  },
+  SET_CLOUD_PLAY_SERVER(state, address) {
+    state.cloudPlayServer = address;
+  },
 };
