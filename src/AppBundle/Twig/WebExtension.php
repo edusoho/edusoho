@@ -521,7 +521,7 @@ class WebExtension extends \Twig_Extension
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
-        $url = empty($url) ? $this->requestStack->getMasterRequest()->getUri() : $url;
+        $url = empty($url) ? $this->requestStack->getMasterRequest()->getSchemeAndHttpHost().$this->requestStack->getMasterRequest()->getRequestUri() : $url;
         $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
         $config['string'] = $string;
         $config['signature'] = sha1($string);
