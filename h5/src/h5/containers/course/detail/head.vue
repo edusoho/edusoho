@@ -107,7 +107,7 @@
 </template>
 <script>
 import loadScript from 'load-script';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Api from '@/api';
 import { Toast, Dialog } from 'vant';
 import countDown from '&/components/e-marketing/e-count-down/index';
@@ -166,7 +166,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['DrpSwitch']),
+    ...mapState(['DrpSwitch', 'cloudSdkCdn']),
     ...mapState('course', {
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
@@ -216,6 +216,8 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
+    ...mapActions(['setCloudAddress']),
+
     toToast() {
       const condition = this.finishCondition;
       if (!condition) return;
@@ -429,9 +431,12 @@ export default {
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
     },
-    initPlayer(options) {
+    async initPlayer(options) {
+      if (!this.cloudSdkCdn) {
+        await this.setCloudAddress();
+      }
       const playerSDKUri =
-        '//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?' +
+        `//${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?` +
         ~~(Date.now() / 1000 / 60);
       loadScript(playerSDKUri, err => {
         this.$store.commit('UPDATE_LOADING_STATUS', false);

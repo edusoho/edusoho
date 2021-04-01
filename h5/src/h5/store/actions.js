@@ -182,3 +182,21 @@ export const setDrpSwitch = ({ commit }) =>
   Api.hasDrpPluginInstalled({}).then(res => {
     commit(types.GET_SETTINGS, { key: 'DrpSwitch', setting: res.Drp });
   });
+
+// 云平台播放器配置
+export const setCloudAddress = ({ commit }) =>
+  Api.getSettings({
+    query: {
+      type: 'developer',
+    },
+  })
+    .then(res => {
+      const { cloudSdkCdn, cloudPlayServer } = res;
+      const sdkCdn = cloudSdkCdn || 'service-cdn.qiqiuyun.net';
+      const playServer = cloudPlayServer || 'play1.qiqiuyun.net';
+      commit('SET_CLOUD_SDK_CDN', sdkCdn);
+      commit('SET_CLOUD_PLAY_SERVER', playServer);
+    })
+    .catch(err => {
+      console.log(err);
+    });
