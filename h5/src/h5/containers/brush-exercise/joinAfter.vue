@@ -8,7 +8,7 @@
       <van-tab title="课程目录">
         <directory :exerciseId="Number(id)" />
       </van-tab>
-      <van-tab title="学员评价">
+      <van-tab title="学员评价" v-if="show_question_bank_review == 1">
         <review-list
           ref="review"
           title="学员评价"
@@ -36,6 +36,8 @@ export default {
   data() {
     return {
       active: 1,
+      show_question_bank_review: this.$store.state.goods
+        .show_question_bank_review,
     };
   },
   computed: {

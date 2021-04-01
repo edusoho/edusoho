@@ -250,7 +250,7 @@ export default {
     lessonCellClick(task, lessonIndex, taskIndex) {
       this.$store.commit(types.SET_TASK_SATUS, '');
       // 课程错误和未发布状态，不允许学习任务
-      if (this.errorMsg) {
+      if (this.errorMsg && !Number(task.isFree)) {
         this.$emit('showDialog');
         return;
       }

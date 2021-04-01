@@ -146,6 +146,7 @@
 	display: flex;
 	width: 100%;
 	height: vw(48);
+	background-color: #fff;
 
 	.info-buy__collection {
 		display: flex;
@@ -177,11 +178,11 @@
 		color: #fff;
 		font-weight: 500;
 		font-size: vw(16);
-		background-color: #ff765f;
+		background-color: #f57a65;
 	}
 
 	.disabled {
-		background-color: #b0bdc9;
+		background: rgba(245, 122, 101, 0.5);
 	}
 }
 
