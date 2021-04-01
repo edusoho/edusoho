@@ -17,7 +17,7 @@
 			  	<div class="review-content">{{ review.content|raw|wrap_text(30) }}</div>
 
 				  <div class="review-footer">
-					  <a href="{{ path('goods_show', {id: goods.id}) }}" class="course-title"> 《 {{ goods.title }} 》</a>
+					  <a href="{{ path('goods_show', {id: goods.id}) }}" class="course-title"> 《 {{ goods.title|raw }} 》</a>
 					  <span class="divider"></span>
 					  <span class="stars-{{ review.rating }}">&nbsp;</span>
 				  </div>
