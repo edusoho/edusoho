@@ -6,21 +6,37 @@
         <div class="goods-detail__banner">
           <img :src="goods.images.large" />
         </div>
+
         <discount
           v-if="goods.discount"
           :currentSku="currentSku"
           :goods="goods"
         />
+
         <detail
           :goods="goods"
           :currentSku="currentSku"
           :goods-setting="goodsSetting"
         />
-        <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+
+        <vip
+          v-if="currentSku.vipLevelInfo && vipSwitch"
+          :currentSku="currentSku"
+          :type="goods.type"
+        />
+
+        <specs
+          v-if="goods.specs.length > 1 || currentSku.services.length"
+          :goods="goods"
+          :currentSku="currentSku"
+          @changeSku="changeSku"
+        />
+
         <certificate
           v-if="currentSku.hasCertificate"
           :selectedPlanId="currentSku.targetId"
         />
+
         <enter-learning
           v-if="
             componentsInfo.mpQrCode &&
@@ -41,7 +57,13 @@
           <li @click="onActive(2, 'catalog')">
             <a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a>
           </li>
-          <li @click="onActive(3, 'evaluate')">
+          <li
+            @click="onActive(3, 'evaluate')"
+            v-if="
+              (show_course_review == 1 && goods.type === 'course') ||
+                (show_classroom_review == 1 && goods.type === 'classroom')
+            "
+          >
             <a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a>
           </li>
         </ul>
@@ -82,10 +104,20 @@
         </section>
 
         <!-- 评价 -->
-        <section class="js-scroll-top goods-info__item" id="evaluate">
+        <section
+          class="js-scroll-top goods-info__item"
+          id="evaluate"
+          v-if="
+            (show_course_review == 1 && goods.type == 'course') ||
+              (show_classroom_review == 1 && goods.type == 'classroom')
+          "
+        >
           <div class="goods-info__title">课程评价</div>
           <reviews
-            v-if="goodsSetting.show_review == '1'"
+            v-if="
+              (show_course_review == 1 && goods.type == 'course') ||
+                (show_classroom_review == 1 && goods.type == 'classroom')
+            "
             :target-type="'goods'"
             :target-id="parseInt($route.params.id)"
             :limit="5"
@@ -129,6 +161,7 @@ import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
 import Certificate from './components/certificate';
+import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -142,7 +175,7 @@ import initShare from '@/utils/weiixn-share-sdk';
 
 import Api from '@/api';
 import { Toast } from 'vant';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -157,6 +190,9 @@ export default {
       componentsInfo: {}, // 组件数据
       isLoading: true,
       goodsSetting: {},
+      show_review: this.$store.state.goods.show_review,
+      show_course_review: this.$store.state.goods.show_course_review,
+      show_classroom_review: this.$store.state.goods.show_classroom_review,
     };
   },
   components: {
@@ -172,8 +208,11 @@ export default {
     ClassroomCourses,
     Certificate,
     EnterLearning,
+    Vip,
   },
   computed: {
+    ...mapState(['vipSwitch']),
+
     summary() {
       if (!this.goods.summary) return '暂无简介~';
       return this.goods.summary;

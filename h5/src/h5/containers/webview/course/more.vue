@@ -1,14 +1,16 @@
 <template>
-  <div class="app">
-    <treeSelects
-      :select-items="selectItems"
-      :categories="categories"
-      :treeMenuLevel="treeMenuLevel"
-      :selectedData="selectedData"
-      type="course"
-      @selectedChange="setQuery"
-      @selectToggled="toggleHandler"
-    />
+  <div :class="{ more__still: selecting }" class="more">
+    <van-dropdown-menu active-color="#1989fa">
+      <template v-for="(item, index) in dropdownData" @change="change">
+        <van-dropdown-item
+          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
+          :key="index"
+          v-model="item.value"
+          :options="item.options"
+          @change="change"
+        />
+      </template>
+    </van-dropdown-menu>
 
     <infinite-scroll
       :course-list="courseList"
@@ -19,13 +21,14 @@
       :type-list="'course_list'"
       :is-app-use="isAppUse"
       @needRequest="sendRequest"
-      @resetData="initCourseList"
+      :showNumberData="showNumberData"
     />
     <empty
       v-if="isEmptyCourse && isRequestCompile"
       text="暂无课程"
       class="empty__couse"
     />
+
     <back-top icon="icon-top" color="#20B573" />
   </div>
 </template>
@@ -33,22 +36,19 @@
 <script>
 import Api from '@/api';
 import infiniteScroll from '&/components/e-infinite-scroll/e-infinite-scroll.vue';
-import treeSelects from '&/components/e-tree-selects/e-tree-selects.vue';
 import empty from '&/components/e-empty/e-empty.vue';
 import backTop from '&/components/e-back-top/e-back-top.vue';
-import { mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import CATEGORY_DEFAULT from '@/config/category-default-config.js';
+
 export default {
-  name: 'more_course_new',
   components: {
     infiniteScroll,
-    treeSelects,
     empty,
     backTop,
   },
   data() {
     return {
-      showShadow: false,
       isAppUse: true, // 是否被app调用
       selectedData: {},
       courseItemType: 'price',
@@ -58,104 +58,168 @@ export default {
       courseList: [],
       offset: 0,
       limit: 10,
-      type: 'all',
-      categoryId: 0,
-      sort: 'recommendedSeq',
       selecting: false,
-      queryForm: {
-        courseType: 'type',
-        category: 'categoryId',
-        categoryId: 'categoryId',
-        sort: 'sort',
-      },
-      treeMenuLevel: 1,
-      selectItems: CATEGORY_DEFAULT.course_list,
-      categories: [],
+      showNumberData: '',
+      dataDefault: CATEGORY_DEFAULT.new_course_list,
+      dropdownData: [],
     };
   },
-  created() {
+  computed: {
+    ...mapState({
+      searchCourseList: state => state.course.searchCourseList,
+      vipLevels: state => state.vip.vipLevels,
+      vipSwitch: state => state.vipSwitch,
+    }),
+  },
+  watch: {
+    selectedData() {
+      const { courseList, selectedData, paging } = this.searchCourseList;
+
+      if (this.isSelectedDataSame(selectedData)) {
+        this.courseList = courseList;
+        this.requestCoursesSuccess(paging);
+
+        return;
+      }
+
+      this.initCourseList();
+      const setting = {
+        offset: this.offset,
+        limit: this.limit,
+      };
+      this.requestCourses(setting);
+    },
+  },
+  async created() {
+    window.scroll(0, 0);
     this.setTitle();
-    this.selectedData = this.transform(this.$route.query);
-    this.getCourseCategories();
-    this.setQuery();
+    // vuex 中会员等级列表为空
+    if (!this.vipLevels.length) {
+      await this.getVipLevels();
+    }
+
+    // 初始化下拉筛选数据
+    this.initDropdownData();
+
+    this.getGoodSettings();
   },
   methods: {
+    ...mapActions('course', ['setCourseList']),
+    ...mapActions('vip', ['getVipLevels']),
+
     setTitle() {
       window.postNativeMessage({
         action: 'kuozhi_native_header',
         data: { title: '所有课程' },
       });
     },
-    setQuery(value) {
-      if (value) {
-        this.selectedData = value;
-      }
-      this.initCourseList();
-      this.getCourseList();
-    },
-    // 获取课程分类数据
-    getCourseCategories() {
-      Api.getCourseCategories()
-        .then(data => {
-          this.formateCategories(data);
-        })
-        .catch(error => {
-          this.sendError(error);
-        });
-    },
-    formateCategories(categories) {
-      categories.unshift({
-        name: '全部',
-        id: '0',
-        children: [],
+
+    async initDropdownData() {
+      // 获取班级分类数据
+      const res = await Api.getCourseCategories();
+      this.dataDefault[0].options = this.initOptions({
+        text: '全部',
+        data: res,
       });
-      categories.forEach(item => {
-        if (item.children.length) {
-          this.treeMenuLevel = 2;
+      this.dataDefault[2].options = this.initOptions({
+        text: '会员课程',
+        data: this.vipLevels,
+      });
+
+      const query = this.$route.query;
+      this.dataDefault.forEach((item, index) => {
+        const value = query[item.type];
+        if (value) {
+          this.dataDefault[index].value = value;
         }
       });
-      this.categories = categories;
+
+      this.dropdownData = this.dataDefault;
+      this.selectedData = this.transform(this.$route.query);
     },
+
+    initOptions({ text, data }) {
+      const options = [{ text: text, value: '0' }];
+
+      data.forEach(item => {
+        options.push({
+          text: item.name,
+          value: item.id,
+        });
+      });
+      return options;
+    },
+
+    change() {
+      this.selectedData = this.getSelectedData();
+      this.setQuery(this.selectedData);
+    },
+
+    transform(obj = {}) {
+      return Object.assign(this.getSelectedData(), obj);
+    },
+
+    getSelectedData() {
+      const selectedData = {};
+      this.dropdownData.forEach(item => {
+        const { type, value } = item;
+        if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
+          return;
+        }
+        selectedData[type] = value;
+      });
+      return selectedData;
+    },
+
+    setQuery(value) {
+      this.$router.replace({
+        name: 'more_course_new',
+        query: value,
+      });
+    },
+
     initCourseList() {
       this.isRequestCompile = false;
       this.isAllCourse = false;
       this.courseList = [];
       this.offset = 0;
     },
-    getCourseList() {
-      const setting = {
-        offset: this.offset,
-        limit: this.limit,
-      };
 
-      this.requestCourses(setting).then(() => {
-        this.isEmptyCourse = this.courseList.length === 0;
-      });
+    judegIsAllCourse(paging) {
+      return this.courseList.length == paging.total;
     },
-    judegIsAllCourse(courseInfomation) {
-      return this.courseList.length == courseInfomation.paging.total;
-    },
+
     requestCourses(setting) {
       this.isRequestCompile = false;
-      const config = Object.assign(this.selectedData, setting);
+      const config = Object.assign({}, this.selectedData, setting);
       return Api.getCourseList({
         params: config,
       })
-        .then(data => {
-          this.formateData(data);
-          this.isRequestCompile = true;
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.courseList.push(element);
+          });
+          this.setCourseList({
+            selectedData: this.selectedData,
+            courseList: this.courseList,
+            paging,
+          });
+          this.requestCoursesSuccess(paging);
         })
-        .catch(error => {
-          this.sendError(error);
+        .catch(err => {
+          console.log(err, 'error');
         });
     },
-    formateData(data) {
-      this.courseList = this.courseList.concat(data.data);
-      this.isAllCourse = this.judegIsAllCourse(data);
+
+    requestCoursesSuccess(paging = {}) {
+      this.isAllCourse = this.judegIsAllCourse(paging);
       if (!this.isAllCourse) {
         this.offset = this.courseList.length;
       }
+      this.isRequestCompile = true;
+      this.isEmptyCourse = this.courseList.length === 0;
     },
+
     sendRequest() {
       const args = {
         offset: this.offset,
@@ -164,40 +228,33 @@ export default {
 
       if (!this.isAllCourse) this.requestCourses(args);
     },
-    transform(obj) {
-      const config = {};
-      const arr = Object.keys(obj);
-      const defaultData = {
-        categoryId: this.categoryId,
-        type: this.type,
-        sort: this.sort,
-      };
-      if (!arr.length) {
-        return defaultData;
-      }
-      arr.forEach((current, index) => {
-        if (current === 'category') {
-          config[this.queryForm[current]] = Number(obj[current]);
-          return;
-        }
-        config[this.queryForm[current]] = obj[current];
-      });
-      return Object.assign(defaultData, config);
-    },
+
     toggleHandler(value) {
       this.selecting = value;
     },
-    sendError(error) {
-      window.postNativeMessage({
-        action: 'kuozhi_h5_error',
-        data: {
-          code: error.code,
-          message: error.message,
+    isSelectedDataSame(selectedData) {
+      const oldLength = Object.keys(selectedData).length;
+      const newLength = Object.keys(this.selectedData).length;
+
+      if (oldLength != newLength) return false;
+
+      for (const key in this.selectedData) {
+        if (this.selectedData[key] != selectedData[key]) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
         },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
       });
     },
   },
 };
 </script>
-
-<style></style>

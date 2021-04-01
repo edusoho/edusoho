@@ -11,6 +11,7 @@ import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
 import wapSdk from 'wap-sdk';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -49,6 +50,8 @@ import {
   DatetimePicker,
   Picker,
   Icon,
+  DropdownMenu,
+  DropdownItem,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -103,8 +106,14 @@ Vue.use(Tab)
   .use(Picker);
 Vue.use(VueClipboard);
 Vue.use(Icon);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;
+
+Vue.prototype.$moment = moment;
+Vue.prototype.$version = require('../../package.json').version;
+
 Api.getSettings({
   query: {
     type: 'wap',
@@ -209,3 +218,19 @@ Api.getSettings({
   script.innerHTML = funStr;
   scriptEle.parentNode.insertBefore(script, scriptEle);
 });
+
+Api.getSettings({
+  query: {
+    type: 'ugc',
+  },
+})
+  .then(res => {
+    store.state.goods.show_review = res.review.enable;
+    store.state.goods.show_course_review = res.review.course_enable;
+    store.state.goods.show_classroom_review = res.review.classroom_enable;
+    store.state.goods.show_question_bank_review =
+      res.review.question_bank_enable;
+  })
+  .catch(error => {
+    console.error(error);
+  });

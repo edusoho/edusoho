@@ -9,6 +9,10 @@ const state = {
   OptimizationCourseLessons: [],
   allTask: {},
   taskStatus: '',
+  show_review: 0,
+  show_classroom_review: 0,
+  show_course_review: 0,
+  show_question_bank_review: 0,
 };
 
 const mutations = {

@@ -1,11 +1,17 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <treeSelect
-      :select-items="selectItems"
-      v-model="selectedData"
-      @selectedChange="setQuery"
-      @selectToggled="toggleHandler"
-    />
+    <van-dropdown-menu active-color="#1989fa">
+      <template v-for="(item, index) in dropdownData" @change="change">
+        <van-dropdown-item
+          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
+          :key="index"
+          v-model="item.value"
+          :options="item.options"
+          @change="change"
+        />
+      </template>
+    </van-dropdown-menu>
+
     <lazyLoading
       :course-list="courseList"
       :is-all-data="true"
@@ -28,7 +34,6 @@
 
 <script>
 import Api from '@/api';
-import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
 import { mapState, mapActions } from 'vuex';
@@ -36,14 +41,11 @@ import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
   components: {
-    treeSelect,
     lazyLoading,
     emptyCourse,
   },
   data() {
     return {
-      selectItems: [],
-      copySelectItems: [],
       selectedData: {},
       courseItemType: 'price',
       isRequestCompile: false,
@@ -52,22 +54,17 @@ export default {
       courseList: [],
       offset: 0,
       limit: 10,
-      type: 'all',
-      categoryId: 0,
-      sort: 'recommendedSeq',
       selecting: false,
-      queryForm: {
-        courseType: 'type',
-        category: 'categoryId',
-        sort: 'sort',
-      },
-      dataDefault: CATEGORY_DEFAULT.classroom_list,
+      dataDefault: CATEGORY_DEFAULT.new_classroom_list,
+      dropdownData: [],
       showNumberData: '',
     };
   },
   computed: {
     ...mapState({
       searchClassRoomList: state => state.classroom.searchClassRoomList,
+      vipLevels: state => state.vip.vipLevels,
+      vipSwitch: state => state.vipSwitch,
     }),
   },
   watch: {
@@ -90,24 +87,78 @@ export default {
       this.requestCourses(setting);
     },
   },
-  created() {
+  async created() {
     window.scroll(0, 0);
-    this.selectedData = this.transform(this.$route.query);
-    // 合并参数
 
-    // 获取班级分类数据
-    Api.getClassCategories().then(data => {
-      data.unshift({
-        name: '全部',
-        id: '0',
-      });
-      this.dataDefault[0].data = data;
-      this.selectItems = this.dataDefault;
-    });
+    // vuex 中会员等级列表为空
+    if (!this.vipLevels.length) {
+      await this.getVipLevels();
+    }
+    // 初始化下拉筛选数据
+    this.initDropdownData();
+
     this.getGoodSettings();
   },
   methods: {
     ...mapActions('classroom', ['setClassRoomList']),
+    ...mapActions('vip', ['getVipLevels']),
+
+    async initDropdownData() {
+      // 获取班级分类数据
+      const res = await Api.getClassCategories();
+      this.dataDefault[0].options = this.initOptions({
+        text: '全部',
+        data: res,
+      });
+      this.dataDefault[1].options = this.initOptions({
+        text: '会员班级',
+        data: this.vipLevels,
+      });
+
+      const query = this.$route.query;
+      this.dataDefault.forEach((item, index) => {
+        const value = query[item.type];
+        if (value) {
+          this.dataDefault[index].value = value;
+        }
+      });
+
+      this.dropdownData = this.dataDefault;
+      this.selectedData = this.transform(this.$route.query);
+    },
+
+    initOptions({ text, data }) {
+      const options = [{ text: text, value: '0' }];
+
+      data.forEach(item => {
+        options.push({
+          text: item.name,
+          value: item.id,
+        });
+      });
+      return options;
+    },
+
+    change() {
+      this.selectedData = this.getSelectedData();
+      this.setQuery(this.selectedData);
+    },
+
+    transform(obj = {}) {
+      return Object.assign(this.getSelectedData(), obj);
+    },
+
+    getSelectedData() {
+      const selectedData = {};
+      this.dropdownData.forEach(item => {
+        const { type, value } = item;
+        if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
+          return;
+        }
+        selectedData[type] = value;
+      });
+      return selectedData;
+    },
 
     setQuery(value) {
       this.$router.replace({
@@ -167,22 +218,16 @@ export default {
       if (!this.isAllClassroom) this.requestCourses(args);
     },
 
-    transform(obj = {}) {
-      return Object.assign(
-        {
-          categoryId: this.categoryId,
-          type: this.type,
-          sort: this.sort,
-        },
-        obj,
-      );
-    },
-
     toggleHandler(value) {
       this.selecting = value;
     },
 
     isSelectedDataSame(selectedData) {
+      const oldLength = Object.keys(selectedData).length;
+      const newLength = Object.keys(this.selectedData).length;
+
+      if (oldLength != newLength) return false;
+
       for (const key in this.selectedData) {
         if (this.selectedData[key] != selectedData[key]) {
           return false;

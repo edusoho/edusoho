@@ -5,7 +5,7 @@
       :show-indicators="false"
       :loop="false"
       :touchable="true"
-      :width="265"
+      :width="swiperWidth"
       :initial-swipe="slideIndex"
       @change="changeChapter"
     >
@@ -65,6 +65,16 @@ export default {
     return {
       current: this.slideIndex || 0,
     };
+  },
+  computed: {
+    swiperWidth() {
+      const w = window.innerWidth;
+      if (w <= 500) {
+        return 265;
+      } else {
+        return w / 1.5;
+      }
+    },
   },
   watch: {
     slideIndex: function(val, oldVal) {

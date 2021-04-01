@@ -65,8 +65,8 @@ export default {
     },
   },
   beforeRouteEnter(to, from, next) {
-    const navTitle = to.query.vipName || '会员';
-    to.meta.title = `${navTitle}班级`;
+    // const navTitle = to.query.vipName || '会员';
+    to.meta.title = `会员班级`;
     next();
   },
   methods: {
