@@ -1226,6 +1226,26 @@ class ClassroomServiceTest extends BaseTestCase
                 ],
             ]
         );
+
+        $this->mockBiz(
+            'Product:ProductService',
+            [
+                [
+                    'functionName' => 'getProductByTargetIdAndType',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Goods:GoodsService',
+            [
+                [
+                    'functionName' => 'getGoodsSpecsByProductIdAndTargetId',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
         $this->getClassroomService()->becomeStudent(1, 1, ['becomeUseMember' => 1]);
     }
 
