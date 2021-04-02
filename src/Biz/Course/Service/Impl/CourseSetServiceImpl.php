@@ -959,17 +959,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
     }
 
-    public function searchCourseSetAdoptProductWithGoods($conditions, $orderBys, $start, $limit)
-    {
-        if (!is_array($conditions) || empty($conditions)) {
-            return [];
-        }
-        $orderBys = $this->getOrderBys($orderBys);
-        $preparedConditions = $this->prepareConditions($conditions);
-
-        return $this->getCourseSetDao()->searchCourseSetAdoptProductWithGoods($preparedConditions, $orderBys, $start, $limit);
-    }
-
     public function waveCourseSet($id, $field, $diff)
     {
         return $this->getCourseSetDao()->wave([$id], [$field => $diff]);

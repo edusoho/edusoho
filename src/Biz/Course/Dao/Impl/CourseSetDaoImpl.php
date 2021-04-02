@@ -71,35 +71,6 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $builder->execute()->fetchAll();
     }
 
-    public function searchCourseSetAdoptProductWithGoods($conditions, $orderBys, $start, $limit)
-    {
-        $courseSetTable = 'course_set_v8';
-        $productTable = 'product';
-        $goodsTable = 'goods';
-        foreach ($conditions as $key => $condition) {
-            $conditions[$courseSetTable.'_'.$key] = $condition;
-            unset($conditions[$key]);
-        }
-
-        $builder = $this->createQueryBuilder($conditions)
-            ->select("{$courseSetTable}.*, {$goodsTable}.ratingNum")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->leftJoin($courseSetTable, $productTable, $productTable, "{$courseSetTable}.id={$productTable}.targetId")
-            ->leftJoin($productTable, $goodsTable, $goodsTable, "{$productTable}.id={$goodsTable}.productId")
-            ->andWhere("{$courseSetTable}.status = :{$courseSetTable}_status")
-            ->andWhere("{$courseSetTable}.parentId = :{$courseSetTable}_parentId")
-            ->andWhere("{$courseSetTable}.type NOT IN (:{$courseSetTable}_excludeTypes)")
-            ->andWhere("{$productTable}.targetType = :{$courseSetTable}_productTargetType")
-            ->andWhere("{$goodsTable}.type = :{$courseSetTable}_goodsType");
-
-        foreach ($orderBys ?: [] as $order => $sort) {
-            $builder->addOrderBy($order, $sort);
-        }
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         $conditions = [
