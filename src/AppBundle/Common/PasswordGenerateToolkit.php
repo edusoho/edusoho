@@ -4,50 +4,37 @@ namespace AppBundle\Common;
 
 class PasswordGenerateToolkit
 {
-    private static $passwordDegree = ['low', 'middle', 'high'];
+    private static $passwordType = ['low', 'middle', 'high'];
 
     public static function create($passwordType)
     {
-        if (!in_array($passwordType, self::$passwordDegree)) {
-            return false;
+        if (!in_array($passwordType, self::$passwordType)) {
+            throw new \Exception('Password type not allowed');
         }
 
-        $method = "{$passwordType}Password";
+        $defaultRule = ['number' => 'need'];
+        $defaultLength = 4;
 
-        return self::$method();
+        switch ($passwordType) {
+            case 'low':
+                $defaultLength = mt_rand(6, 20);
+                break;
+            case 'middle':
+                $defaultRule = ['letter' => 'lower', 'number' => 'need'];
+                $defaultLength = mt_rand(9, 20);
+                break;
+            case 'high':
+                $defaultRule = ['letter' => 'lowerAndUpper', 'number' => 'need', 'special' => 'need'];
+                $defaultLength = mt_rand(9, 32);
+                break;
+            default:
+                break;
+        }
+
+        return self::generate($defaultLength, $defaultRule);
     }
 
-    private static function lowPassword()
-    {
-        $rule = [
-            'number' => 1,
-        ];
-
-        return self::generate(6, $rule);
-    }
-
-    private static function middlePassword()
-    {
-        $rule = [
-            'letter' => 3,
-            'number' => 1,
-        ];
-
-        return self::generate(9, $rule);
-    }
-
-    private static function highPassword()
-    {
-        $rule = [
-            'letter' => 2,
-            'number' => 1,
-            'special' => 1,
-        ];
-
-        return self::generate(9, $rule);
-    }
-
-    private static function generate($length = 8, $rule = [])
+    private static function generate($length, $rule = [])
     {
         $pool = '';
         $force_pool = '';
@@ -56,25 +43,22 @@ class PasswordGenerateToolkit
             $letter = self::getLetter();
 
             switch ($rule['letter']) {
-                case 2:
-                    $force_pool .= substr($letter, mt_rand(0, strlen($letter) - 1), 1);
-                    break;
-
-                case 3:
+                case 'lower':
                     $force_pool .= strtolower(substr($letter, mt_rand(0, strlen($letter) - 1), 1));
                     $letter = strtolower($letter);
                     break;
 
-                case 4:
+                case 'upper':
                     $force_pool .= strtoupper(substr($letter, mt_rand(0, strlen($letter) - 1), 1));
                     $letter = strtoupper($letter);
                     break;
 
-                case 5:
+                case 'lowerAndUpper':
                     $force_pool .= strtolower(substr($letter, mt_rand(0, strlen($letter) - 1), 1));
                     $force_pool .= strtoupper(substr($letter, mt_rand(0, strlen($letter) - 1), 1));
                     break;
                 default:
+                    $force_pool .= substr($letter, mt_rand(0, strlen($letter) - 1), 1);
                     break;
             }
 
@@ -84,7 +68,7 @@ class PasswordGenerateToolkit
         if (isset($rule['number'])) {
             $number = self::getNumber();
 
-            if (1 == $rule['number']) {
+            if ('need' == $rule['number']) {
                 $force_pool .= substr($number, mt_rand(0, strlen($number) - 1), 1);
             }
 
@@ -94,7 +78,7 @@ class PasswordGenerateToolkit
         if (isset($rule['special'])) {
             $special = self::getSpecial();
 
-            if (1 == $rule['special']) {
+            if ('need' == $rule['special']) {
                 $force_pool .= substr($special, mt_rand(0, strlen($special) - 1), 1);
             }
 
