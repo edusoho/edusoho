@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\MathToolkit;
+use AppBundle\Common\PasswordGenerateToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
@@ -151,7 +152,9 @@ class Login extends AbstractResource
         while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
             $nickname = MathToolkit::uniqid();
         }
-        $password = substr($mobile, mt_rand(0, 4), 6);
+        $auth = $this->getSettingService()->get('auth', []);
+        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
+        $password = PasswordGenerateToolkit::create($passwordLevel);
 
         $newUser = array(
             'mobile' => $mobile,

@@ -8,23 +8,23 @@ class RegisterTypeToolkitTest extends BaseTestCase
 {
     public function testGetRegisterTypes()
     {
-        $registrations = [
+        $registrations = array(
             'verifiedMobile' => '13766221231',
             'email' => 'acb@howzhi.com',
             'type' => 'qq',
             'distributorToken' => 'acd',
-        ];
+        );
 
         $result = $this->biz['user.register.type.toolkit']->getRegisterTypes($registrations);
 
-        $this->assertArrayEquals(['mobile'], $result);
+        $this->assertArrayEquals(array('mobile', 'email', 'binder', 'distributor'), $result);
     }
 
     public function testGetThirdPartyRegisterTypes()
     {
-        $registrations = ['distributorToken' => '1dds'];
+        $registrations = array('distributorToken' => '1dds');
         $result = $this->biz['user.register.type.toolkit']->getThirdPartyRegisterTypes('mobile', $registrations);
 
-        $this->assertArrayEquals(['mobile', 'binder', 'distributor'], $result);
+        $this->assertArrayEquals(array('mobile', 'binder', 'distributor'), $result);
     }
 }

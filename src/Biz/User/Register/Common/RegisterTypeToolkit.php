@@ -9,8 +9,6 @@ class RegisterTypeToolkit
         $regTypes = [];
         if (!empty($registrations['verifiedMobile'])) {
             $regTypes[] = 'mobile';
-
-            return $regTypes;
         }
 
         if (!empty($registrations['email'])) {
