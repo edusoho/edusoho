@@ -237,7 +237,7 @@ abstract class BaseRegister
         $this->getProfileDao()->create($profile);
     }
 
-    private  function createPerInviteUser($registration, $userId)
+    private function createPerInviteUser($registration, $userId)
     {
         $originUser = $this->biz['user'];
 
