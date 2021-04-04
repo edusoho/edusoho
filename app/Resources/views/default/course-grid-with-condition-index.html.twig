@@ -14,6 +14,7 @@
   {% endif %}
   {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
   {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
+  {% set courseSets = data('CourseSetsWithGoods',{'courseSets':courseSets}) %}
   <div class="container">
     <div class="text-line">
       <h5><span>{{ config.title|default(config.defaultTitle) }}</span>
@@ -99,7 +100,6 @@
     <div class="course-list course-list-new">
       <div class="row">
         {% for courseSet in courseSets %}
-          {% set courseSet = data('CourseSetsWithGoods',{'courseSet':courseSet}) %}
           <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
             {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
           </div>

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 
@@ -9,29 +10,46 @@ class CourseSetsWithGoodsDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)
     {
-        if (!isset($arguments['courseSet'])) {
+        if (empty($arguments['courseSets'])) {
             return [];
         }
-
-        $targetType = 'course';
 
         $goodsFields = [
             'ratingNum',
         ];
-        $courseSetsWithGoods = [];
 
-        $product = $this->getProductService()->getProductByTargetIdAndType($arguments['courseSet']['id'], $targetType);
+        return $this->courseSetsWithGoods($arguments['courseSets'], $goodsFields);
+    }
 
-        if ($product) {
-            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-            $goodsMerge = [];
-            foreach ($goodsFields as $field) {
-                $goodsMerge[$field] = $goods[$field];
+    private function courseSetsWithGoods($courseSets, $goodsFields)
+    {
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $products = $this->getProductService()->findProductsByTargetTypeAndTargetIds('course', ArrayToolkit::column($courseSets, 'id'));
+
+        $products = ArrayToolkit::index($products, 'targetId');
+
+        $courseSetsIndexByProductId = [];
+
+        array_walk($courseSets, function ($value) use ($products, &$courseSetsIndexByProductId) {
+            if (isset($products[$value['id']])) {
+                $courseSetsIndexByProductId[$products[$value['id']]['id']] = $value;
             }
-            $courseSetsWithGoods = array_merge($arguments['courseSet'], $goodsMerge);
+        });
+
+        $goods = $this->getGoodsService()->findGoodsByProductIds(ArrayToolkit::column($products, 'id'));
+
+        $goods = ArrayToolkit::index($goods, 'productId');
+
+        foreach ($courseSetsIndexByProductId as $key => &$courseSet) {
+            if (isset($goods[$key])) {
+                array_walk($goodsFields, function ($value) use ($key, $goods,&$courseSet) {
+                    $courseSet[$value] = $goods[$key][$value];
+                });
+            }
         }
 
-        return $courseSetsWithGoods;
+        return $courseSetsIndexByProductId;
     }
 
     /**

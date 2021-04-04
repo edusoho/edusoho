@@ -4,6 +4,8 @@ namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,11 +31,21 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $review = $event->getSubject();
 
-        if (!isset($review['targetId']) || 'goods' != $review['targetType']) {
+        if (empty($review['targetId'])) {
             return true;
         }
 
-        $this->getCourseSetService()->waveCourseSet($review['targetId'], 'ratingNum', +1);
+        $goods = $this->getGoodsService()->getGoods($review['targetId']);
+
+        if ('course' != $goods['type']) {
+            return true;
+        }
+
+        $product = $this->getProductService()->getProduct($goods['productId']);
+
+        if ($product) {
+            $this->getCourseSetService()->waveCourseSet($product['targetId'], 'ratingNum', +1);
+        }
     }
 
     public function onCourseStatusChange(Event $event)
@@ -95,6 +107,22 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->getBiz()->service('Product:ProductService');
     }
 
     /**
