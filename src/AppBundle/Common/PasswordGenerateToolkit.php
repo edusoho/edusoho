@@ -12,26 +12,48 @@ class PasswordGenerateToolkit
             throw new \Exception('Password type not allowed');
         }
 
-        $defaultRule = ['number' => 'need'];
-        $defaultLength = 4;
+        return self::generate(self::getLength($passwordType), self::getRule($passwordType));
+    }
+
+    private static function getRule($passwordType)
+    {
+        $defaultRule = ['number' => 'require'];
 
         switch ($passwordType) {
-            case 'low':
-                $defaultLength = mt_rand(6, 20);
-                break;
             case 'middle':
-                $defaultRule = ['letter' => 'lower', 'number' => 'need'];
-                $defaultLength = mt_rand(9, 20);
+                $rule = ['letter' => 'lower', 'number' => 'require'];
                 break;
             case 'high':
-                $defaultRule = ['letter' => 'lowerAndUpper', 'number' => 'need', 'special' => 'need'];
-                $defaultLength = mt_rand(9, 32);
+                $rule = ['letter' => 'lowerAndUpper', 'number' => 'require', 'special' => 'require'];
                 break;
             default:
+                $rule = $defaultRule;
                 break;
         }
 
-        return self::generate($defaultLength, $defaultRule);
+        return $rule;
+    }
+
+    private static function getLength($passwordType)
+    {
+        $defaultLength = 5;
+
+        switch ($passwordType) {
+            case 'low':
+                $length = mt_rand(5, 20);
+                break;
+            case 'middle':
+                $length = mt_rand(8, 20);
+                break;
+            case 'high':
+                $length = mt_rand(8, 32);
+                break;
+            default:
+                $length = $defaultLength;
+                break;
+        }
+
+        return $length;
     }
 
     private static function generate($length, $rule = [])
@@ -68,7 +90,7 @@ class PasswordGenerateToolkit
         if (isset($rule['number'])) {
             $number = self::getNumber();
 
-            if ('need' == $rule['number']) {
+            if ('require' == $rule['number']) {
                 $force_pool .= substr($number, mt_rand(0, strlen($number) - 1), 1);
             }
 
@@ -78,7 +100,7 @@ class PasswordGenerateToolkit
         if (isset($rule['special'])) {
             $special = self::getSpecial();
 
-            if ('need' == $rule['special']) {
+            if ('require' == $rule['special']) {
                 $force_pool .= substr($special, mt_rand(0, strlen($special) - 1), 1);
             }
 
