@@ -4,22 +4,22 @@ namespace AppBundle\Common;
 
 class PasswordGenerateToolkit
 {
-    private static $passwordType = ['low', 'middle', 'high'];
+    private static $levels = ['low', 'middle', 'high'];
 
-    public static function create($passwordType)
+    public static function create($passwordLevel)
     {
-        if (!in_array($passwordType, self::$passwordType)) {
-            throw new \Exception('Password type not allowed');
+        if (!in_array($passwordLevel, self::$levels)) {
+            throw new \Exception('Password level not allowed');
         }
 
-        return self::generate(self::getLength($passwordType), self::getRule($passwordType));
+        return self::generate(self::getLength($passwordLevel), self::getRule($passwordLevel));
     }
 
-    private static function getRule($passwordType)
+    private static function getRule($passwordLevel)
     {
         $defaultRule = ['number' => 'require'];
 
-        switch ($passwordType) {
+        switch ($passwordLevel) {
             case 'middle':
                 $rule = ['letter' => 'lower', 'number' => 'require'];
                 break;
@@ -34,11 +34,11 @@ class PasswordGenerateToolkit
         return $rule;
     }
 
-    private static function getLength($passwordType)
+    private static function getLength($passwordLevel)
     {
         $defaultLength = 5;
 
-        switch ($passwordType) {
+        switch ($passwordLevel) {
             case 'low':
                 $length = mt_rand(5, 20);
                 break;
