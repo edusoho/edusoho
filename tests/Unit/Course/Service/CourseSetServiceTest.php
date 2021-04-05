@@ -15,6 +15,14 @@ use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
+    public function testWaveCourseSet()
+    {
+        $courseSet = $this->createCourseSet();
+        $this->getCourseSetService()->waveCourseSet($courseSet['id'], 'ratingNum', +1);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $this->assertEquals(1, $courseSet['ratingNum']);
+    }
+
     public function testUpdateDefaultCourseId_whenSet_thenGet()
     {
         $courseSet = [
@@ -833,6 +841,16 @@ class CourseSetServiceTest extends BaseTestCase
         $user['roles'] = ['ROLE_USER'];
 
         return $user;
+    }
+
+    private function createCourseSet()
+    {
+        $courseSet = [
+            'type' => 'normal',
+            'title' => 'test',
+        ];
+
+        return $this->getCourseSetDao()->create($courseSet);
     }
 
     /**

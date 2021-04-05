@@ -81,5 +81,5 @@ interface GoodsService
      */
     public function getGoodsEntityFactory();
 
-    public function waveGoods($productId, $field, $diff);
+    public function waveGoods($id, $field, $diff);
 }

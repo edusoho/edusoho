@@ -32,7 +32,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
 
         $goods = $this->getGoodsService()->getGoods($review['targetId']);
 
-        if ('course' != $goods['type']) {
+        if (empty($goods)) {
             return  true;
         }
 
