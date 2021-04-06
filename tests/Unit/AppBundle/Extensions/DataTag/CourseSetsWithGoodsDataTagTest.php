@@ -13,16 +13,12 @@ class CourseSetsWithGoodsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $courseSet = $this->createCourseSet();
-
         $product = $this->createProduct($courseSet);
-
         $goods = $this->createGoods($product);
-
         $dataTag = new CourseSetsWithGoodsDataTag();
-
         $courseSets = $dataTag->getData(['courseSets' => [$courseSet]]);
 
-        $this->assertEquals($goods['ratingNum'], $courseSets[$product['id']]['ratingNum']);
+        $this->assertEquals($goods['ratingNum'], $courseSets[$courseSet['id']]['ratingNum']);
     }
 
     private function createCourseSet()
@@ -54,7 +50,7 @@ class CourseSetsWithGoodsDataTagTest extends BaseTestCase
             'type' => 'course',
             'productId' => $product['id'],
             'title' => 'test',
-            'ratingNum' => 10,
+            'ratingNum' => 5,
         ];
 
         return $this->getGoodsDao()->create($goods);

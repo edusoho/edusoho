@@ -25,18 +25,14 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
     public function onReviewChanged(Event $event)
     {
         $review = $event->getSubject();
-
         if (!isset($review['targetId'])) {
             return true;
         }
 
         $goods = $this->getGoodsService()->getGoods($review['targetId']);
-
-        if (empty($goods)) {
-            return  true;
+        if (!empty($goods)) {
+            $this->getGoodsService()->waveGoods($goods['id'], 'ratingNum', +1);
         }
-
-        $this->getGoodsService()->waveGoods($review['targetId'], 'ratingNum', +1);
     }
 
     public function onClassroomCourseDelete(Event $event)

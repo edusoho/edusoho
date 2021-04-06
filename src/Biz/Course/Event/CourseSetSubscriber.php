@@ -30,21 +30,21 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onReviewChanged(Event $event)
     {
         $review = $event->getSubject();
-
         if (empty($review['targetId'])) {
             return true;
         }
 
         $goods = $this->getGoodsService()->getGoods($review['targetId']);
-
         if ('course' != $goods['type']) {
             return true;
         }
 
         $product = $this->getProductService()->getProduct($goods['productId']);
-
-        if ($product) {
-            $this->getCourseSetService()->waveCourseSet($product['targetId'], 'ratingNum', +1);
+        if (!empty($product)) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
+            if (!empty($courseSet)) {
+                $this->getCourseSetService()->waveCourseSet($courseSet['id'], 'ratingNum', +1);
+            }
         }
     }
 

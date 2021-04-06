@@ -23,33 +23,28 @@ class CourseSetsWithGoodsDataTag extends CourseBaseDataTag implements DataTag
 
     private function courseSetsWithGoods($courseSets, $goodsFields)
     {
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-
         $products = $this->getProductService()->findProductsByTargetTypeAndTargetIds('course', ArrayToolkit::column($courseSets, 'id'));
-
         $products = ArrayToolkit::index($products, 'targetId');
+        $goodss = $this->getGoodsService()->findGoodsByProductIds(ArrayToolkit::column($products, 'id'));
+        $goodss = ArrayToolkit::index($goodss, 'productId');
 
-        $courseSetsIndexByProductId = [];
-
-        array_walk($courseSets, function ($value) use ($products, &$courseSetsIndexByProductId) {
-            if (isset($products[$value['id']])) {
-                $courseSetsIndexByProductId[$products[$value['id']]['id']] = $value;
+        foreach ($courseSets as &$courseSet) {
+            // todo: 2 个 if 可以合并为 $goods[$products[$courseSet['id']]['id']]
+            if (empty($products[$courseSet['id']])) {
+                continue;
             }
-        });
 
-        $goods = $this->getGoodsService()->findGoodsByProductIds(ArrayToolkit::column($products, 'id'));
+            $product = $products[$courseSet['id']];
 
-        $goods = ArrayToolkit::index($goods, 'productId');
-
-        foreach ($courseSetsIndexByProductId as $key => &$courseSet) {
-            if (isset($goods[$key])) {
-                array_walk($goodsFields, function ($value) use ($key, $goods,&$courseSet) {
-                    $courseSet[$value] = $goods[$key][$value];
-                });
+            if (empty($goodss[$product['id']])) {
+                continue;
             }
+            $goods = $goodss[$product['id']];
+
+            $courseSet = array_merge($courseSet, ArrayToolkit::parts($goods, $goodsFields));
         }
 
-        return $courseSetsIndexByProductId;
+        return ArrayToolkit::index($courseSets, 'id');
     }
 
     /**
