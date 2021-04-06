@@ -2,10 +2,12 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
+use Biz\Review\Service\ReviewService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,6 +26,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
             'review.create' => 'onReviewChanged',
+            'review.delete' => 'onReviewChanged',
         ];
     }
 
@@ -43,7 +46,10 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         if (!empty($product)) {
             $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
             if (!empty($courseSet)) {
-                $this->getCourseSetService()->waveCourseSet($courseSet['id'], 'ratingNum', +1);
+                $reviewCount = $this->getReviewService()->countReviews([
+                    'targetId' => $goods['id'],
+                ]);
+                $this->getCourseSetDao()->update($courseSet['id'], ['ratingNum' => $reviewCount]);
             }
         }
     }
@@ -102,6 +108,14 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     }
 
     /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->getBiz()->service('Review:ReviewService');
+    }
+
+    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
@@ -139,6 +153,14 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseDao()
     {
         return $this->getBiz()->dao('Course:CourseDao');
+    }
+
+    /**
+     * @return courseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->getBiz()->dao('Course:courseSetDao');
     }
 
     /**

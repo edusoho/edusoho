@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Goods\Service\GoodsService;
+use Biz\Review\Service\ReviewService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,20 +20,29 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
         return [
             'classroom.course.delete' => 'onClassroomCourseDelete',
             'review.create' => 'onReviewChanged',
+            'review.delete' => 'onReviewChanged',
         ];
     }
 
     public function onReviewChanged(Event $event)
     {
         $review = $event->getSubject();
+
         if (!isset($review['targetId'])) {
             return true;
         }
 
         $goods = $this->getGoodsService()->getGoods($review['targetId']);
-        if (!empty($goods)) {
-            $this->getGoodsService()->waveGoods($goods['id'], 'ratingNum', +1);
+
+        if (empty($goods)) {
+            return  true;
         }
+
+        $reviewCount = $this->getReviewService()->countReviews([
+            'targetId' => $goods['id'],
+        ]);
+
+        $this->getGoodsService()->updateGoods($goods['id'], ['ratingNum' => $reviewCount]);
     }
 
     public function onClassroomCourseDelete(Event $event)
@@ -57,6 +67,14 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->getBiz()->service('Review:ReviewService');
     }
 
     /**
