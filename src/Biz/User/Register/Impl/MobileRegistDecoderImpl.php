@@ -2,8 +2,8 @@
 
 namespace Biz\User\Register\Impl;
 
-use Biz\User\UserException;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\UserException;
 
 class MobileRegistDecoderImpl extends RegistDecoder
 {
