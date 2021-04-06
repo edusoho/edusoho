@@ -51,14 +51,14 @@ class MeClassroomMember extends AbstractResource
         $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
         if (empty($classroom) || empty($member) || $classroom['status'] != 'published') {
             return [
-                'status' => false,
+                'status' => 0,
                 'deadline' => 0
             ];
         }
 
         if ($classroom['expiryMode'] == 'forever' && empty($member['levelId'])) {
             return [
-                'status' => true,
+                'status' => 1,
                 'deadline' => $member['deadline']
             ];
         }
@@ -78,12 +78,13 @@ class MeClassroomMember extends AbstractResource
 
         if (empty($deadline)) {
             return [
-                'status' => $deadline < time() ? false : true
+                'status' => $deadline < time() ? 0 : 1,
+                'deadline' => 0
             ];
         }
 
         return [
-            'status' => $deadline < time() ? false : true,
+            'status' => $deadline < time() ? 0 : 1,
             'deadline' => $deadline
         ];
     }

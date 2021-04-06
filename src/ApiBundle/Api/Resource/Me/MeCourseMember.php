@@ -24,6 +24,18 @@ class MeCourseMember extends AbstractResource
             $courseMember['expire'] = $this->getCourseMemberExpire($courseMember);
         }
 
+        // 获取班级课程有效期
+        $course = $this->getCourseService()->getCourse($courseId);
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $classroomMember = $this->invokeResource(new ApiRequest("/api/me/classroom_members/{$classroom['id']}", 'GET'));
+
+            if (!empty($classroomMember['expire'])) {
+                $courseMember['expire']['status'] = $classroomMember['expire']['status'];
+                $courseMember['expire']['deadline'] = strtotime($classroomMember['expire']['deadline']);
+            }
+        }
+
         return $courseMember;
     }
 
@@ -53,14 +65,14 @@ class MeCourseMember extends AbstractResource
         $course = $this->getCourseService()->getCourse($member['courseId']);
         if (empty($course) || empty($member) || $course['status'] != 'published') {
             return [
-                'status' => false,
+                'status' => 0,
                 'deadline' => 0
             ];
         }
 
         if ($course['expiryMode'] == 'forever' && empty($member['levelId'])) {
             return [
-                'status' => true,
+                'status' => 1,
                 'deadline' => $member['deadline']
             ];
         }
@@ -79,7 +91,7 @@ class MeCourseMember extends AbstractResource
         }
 
         return [
-            'status' => $deadline < time() ? false : true,
+            'status' => $deadline < time() ? 0 : 1,
             'deadline' => $deadline
         ];
     }
@@ -139,5 +151,10 @@ class MeCourseMember extends AbstractResource
     protected function getVipService()
     {
         return $this->service('VipPlugin:Vip:VipService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }
