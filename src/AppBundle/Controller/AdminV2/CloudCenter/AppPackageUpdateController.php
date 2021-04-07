@@ -14,9 +14,8 @@ class AppPackageUpdateController extends BaseController
     public function agreementAction(Request $request, $id)
     {
         $package = $this->getAppService()->getCenterPackageInfo($id);
-        $agreement = $this->getAppService()->getAgreement($package['product']['code']);
 
-        if (empty($agreement)) {
+        if (empty($package['agreement'])) {
             return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id], ['type' => 'upgrade']);
         }
 
@@ -25,7 +24,7 @@ class AppPackageUpdateController extends BaseController
         }
 
         return $this->render('admin-v2/cloud-center/app-package-update/agreement.html.twig', [
-            'agreement' => $agreement,
+            'agreement' => $package['agreement'],
             'id' => $id,
         ]);
     }
@@ -127,13 +126,6 @@ class AppPackageUpdateController extends BaseController
                 ]);
             }
 
-            $agreement = $this->getAppService()->getAgreement($code);
-            if (!empty($agreement)) {
-                return $this->createJsonResponse([
-                    'isUpgrade' => false,
-                ]);
-            }
-
             $apps = $this->getAppService()->checkAppUpgrades();
 
             if (empty($apps)) {
@@ -156,6 +148,12 @@ class AppPackageUpdateController extends BaseController
                 return $this->createJsonResponse([
                     'status' => 'error',
                     'errors' => $errors,
+                ]);
+            }
+
+            if (!empty($apps[$code]['package']['agreement'])) {
+                return $this->createJsonResponse([
+                    'isUpgrade' => false,
                 ]);
             }
 
