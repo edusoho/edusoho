@@ -1,0 +1,39 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_user_content_control_private_message' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/admin-v2/system/user-content-control/private-message/index.js']) %}
+{% block main %}
+  <form class="form-horizontal" id="user_content_control_private_message" method="post" novalidate>
+    <legend style="height: 50px;">
+      <div class="row form-group">
+        <div class="col-md-2 " style="padding-top: 5px;width: 15%;"><label>{{ 'admin_v2.system.user_content_control.private_message_manage'|trans }}：</label></div>
+        <div class="col-md-8 controls radios">
+          {{ radios('enable_private_message', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, privateMessageSetting.enable_private_message|default('1')) }}
+        </div>
+        <div class="col-md-2" style="padding-top: 5px;font-size: 14px;">
+          <a class="pull-right" target="_blank" href="{{ path('admin_v2_message') }}">{{ 'admin_v2.system.user_content_control.goto_private_message_manage'|trans }}</a>
+        </div>
+      </div>
+    </legend>
+    <div class="js-sub-management {% if privateMessageSetting.enable_private_message|default('1') == '0' %}hidden{% endif %}">
+      <div class="form-group">
+        <div class="col-md-2 control-label" style="padding-top:0 !important;">
+          <label for="">{{ 'admin.user_center.message_title_name'|trans }}</label>
+        </div>
+        <div class="controls col-md-10">
+          <label><input type="checkbox" name="student_to_student" {% if privateMessageSetting.student_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_student'|trans }}</label><br/>
+          <label><input type="checkbox" name="student_to_teacher" {% if privateMessageSetting.student_to_teacher|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_student_to_teacher'|trans }}</label><br/>
+          <label><input type="checkbox" name="teacher_to_student" {% if privateMessageSetting.teacher_to_student|default('1') %}checked{% endif %} value="1" /> {{ 'admin.user_center.message_teacher_to_student'|trans }}</label><br/>
+          <p class="help-block">{{ 'admin.user_center.message.setting_tip'|trans }}</p>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-primary mtl js-private-message-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

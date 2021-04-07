@@ -473,3 +473,29 @@ body {
     }
   }
 }
+.image-upload-mask {
+  .image-delete-tip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 0 0 0 20px;
+    z-index: 200;
+    cursor: pointer;
+  }
+}
+.cd-image-upload {
+  .upload-auto-width {
+    min-width: 150px;
+    max-width: 400px;
+    border: 1px solid #ccc;
+  }
+  img[src=""],img:not([src]){
+    opacity:0;
+    border: 1px solid #ccc;
+  }
+}
+
+

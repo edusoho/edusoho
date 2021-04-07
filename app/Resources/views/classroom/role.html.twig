@@ -20,9 +20,9 @@
               {% if checkMemberLevelResult == 'not_login' %}
                 <a href="{{ path('login') }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>  
               {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
-                <a href="{{ path('vip_buy') }}">{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>  
+                <a href="{{ path('vip') }}">{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
               {% elseif checkMemberLevelResult == 'level_low' %}
-                <a href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+                <a href="{{ path('vip', {levelId: classroomMemberLevel.id}) }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
               {% elseif checkMemberLevelResult == 'ok' %}
                 <a href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
               {% endif %}

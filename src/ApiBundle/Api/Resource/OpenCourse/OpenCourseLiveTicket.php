@@ -29,17 +29,17 @@ class OpenCourseLiveTicket extends AbstractResource
 
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
 
-        $params = array();
+        $params = [];
 
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
             if (empty($member)) {
-                $this->getOpenCourseService()->createMember(array(
+                $this->getOpenCourseService()->createMember([
                     'courseId' => $lesson['courseId'],
                     'ip' => $request->getHttpRequest()->getClientIp(),
                     'lastEnterTime' => time(),
-                ));
+                ]);
             }
         }
 

@@ -13,16 +13,16 @@ class ThemeController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $currentTheme = $this->setting('theme', array('uri' => 'default'));
+        $currentTheme = $this->setting('theme', ['uri' => 'default']);
 
         $themes = $this->getThemes();
 
         return $this->render(
             'admin-v2/operating/theme/index.html.twig',
-            array(
+            [
                 'themes' => $themes,
                 'currentTheme' => $currentTheme,
-            )
+            ]
         );
     }
 
@@ -47,7 +47,7 @@ class ThemeController extends BaseController
     {
         $this->getThemeService()->saveConfirmConfig();
 
-        return $this->redirect($this->generateUrl('admin_v2_setting_theme', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+        return $this->redirect($this->generateUrl('admin_v2_setting_theme', [], UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
     public function manageIndexAction(Request $request, $uri)
@@ -61,11 +61,11 @@ class ThemeController extends BaseController
 
         return $this->render(
             'admin-v2/operating/theme/edit.html.twig',
-            array(
+            [
                 'themeConfig' => $themeConfig['config'],
                 'allConfig' => $themeConfig['allConfig'],
                 'themeUri' => $uri,
-            )
+            ]
         );
     }
 
@@ -80,11 +80,11 @@ class ThemeController extends BaseController
 
         return $this->render(
             'admin-v2/operating/theme/edit.html.twig',
-            array(
+            [
                 'themeConfig' => $themeConfig['config'],
                 'allConfig' => $themeConfig['allConfig'],
                 'themeUri' => $uri,
-            )
+            ]
         );
     }
 
@@ -92,9 +92,9 @@ class ThemeController extends BaseController
     {
         $request->request->set('themeEditing', 1);
 
-        return $this->forward('AppBundle:Default:index', array(
+        return $this->forward('AppBundle:Default:index', [
             'request' => $request,
-        ));
+        ]);
     }
 
     public function themeConfigEditAction(Request $request)
@@ -143,7 +143,7 @@ class ThemeController extends BaseController
 
     protected function getThemes()
     {
-        $themes = array();
+        $themes = [];
 
         $dir = $this->container->getParameter('kernel.root_dir').'/../web/themes';
         $finder = new Finder();
@@ -170,9 +170,10 @@ class ThemeController extends BaseController
 
         return $this->render(
             $template,
-            array(
+            [
                 'config' => $config,
-            )
+                'code' => $code,
+            ]
         );
     }
 

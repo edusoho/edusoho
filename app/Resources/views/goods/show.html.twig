@@ -13,6 +13,8 @@
        data-current-url="{{ url('goods_show', { id: app.request.get('id')}) }}"
        data-goods-setting="{{ setting('goods_setting', {})|json_encode }}"
        data-drp-recruit-switch="{{ setting('drp.recruitSwitch')|default() }}"
+       data-ugc-review-setting="{{ setting('ugc_review', {})|json_encode }}"
+       data-vip-enabled="{{ setting('vip.enabled')|default(1) }}"
   ></div>
   <div class="hidden js-hidden-i18n">
     {
@@ -40,7 +42,7 @@
 
   <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
 
-  {% 
+  {%
     include 'common/weixin-share.html.twig' with {
       'title': goods.title,
       'desc': goods.summary|striptags|purify_and_trim_html,

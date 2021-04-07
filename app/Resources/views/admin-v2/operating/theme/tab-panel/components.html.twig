@@ -23,7 +23,12 @@
       <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
         {% for key, pendant in blockConfig %}
           {% if orginAllConfig[key]|default() %}
-            {% include 'admin-v2/operating/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
+            {% if pendant.code == 'vip' and setting('vip.enabled', 1) != 1 %}
+              {% set isChoiced = false %}
+            {% else %}
+              {% set isChoiced = true %}
+            {% endif %}
+            {% include 'admin-v2/operating/theme/theme-edit-config-li.html.twig' with {isChoiced: isChoiced} %}
           {% endif %}
         {% endfor %}
         

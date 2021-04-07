@@ -275,7 +275,7 @@ class CourseController extends CourseBaseController
         }
 
         $info = [
-            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'joinedChannel' => $classroomMember['joinedChannel'],
             'deadline' => $classroomMember['deadline'],
         ];
 
