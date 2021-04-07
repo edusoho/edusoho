@@ -40,6 +40,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
 
         $reviewCount = $this->getReviewService()->countReviews([
             'targetId' => $goods['id'],
+            'targetType' => 'goods',
         ]);
 
         $this->getGoodsService()->updateGoods($goods['id'], ['ratingNum' => $reviewCount]);

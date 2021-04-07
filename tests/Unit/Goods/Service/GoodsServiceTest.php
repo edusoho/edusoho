@@ -507,17 +507,6 @@ class GoodsServiceTest extends BaseTestCase
     {
     }
 
-    public function testWaveGoods()
-    {
-        $goods = $this->createGoods();
-
-        $this->getGoodsService()->waveGoods($goods['id'], 'ratingNum', +1);
-
-        $goods = $this->getGoodsService()->getGoods($goods['id']);
-
-        $this->assertEquals(1, $goods['ratingNum']);
-    }
-
     private function createCourseSet($customFields = [])
     {
         return $this->getCourseSetService()->createCourseSet($this->mockCourseSet($customFields));

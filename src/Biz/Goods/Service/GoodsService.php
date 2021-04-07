@@ -80,6 +80,4 @@ interface GoodsService
      * @return GoodsEntityFactory
      */
     public function getGoodsEntityFactory();
-
-    public function waveGoods($id, $field, $diff);
 }

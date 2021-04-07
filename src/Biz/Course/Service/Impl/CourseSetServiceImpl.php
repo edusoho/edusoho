@@ -406,6 +406,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'summary',
                 'goals',
                 'audiences',
+                'ratingNum',
             ]
         );
 
@@ -957,11 +958,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->getCourseDao()->update($course['id'], $course);
         $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
-    }
-
-    public function waveCourseSet($id, $field, $diff)
-    {
-        return $this->getCourseSetDao()->wave([$id], [$field => $diff]);
     }
 
     protected function getRelatedCourseSetDao()

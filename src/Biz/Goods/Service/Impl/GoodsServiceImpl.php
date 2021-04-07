@@ -429,11 +429,6 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->refreshHotSeq();
     }
 
-    public function waveGoods($id, $field, $diff)
-    {
-        return $this->getGoodsDao()->wave([$id], [$field => $diff]);
-    }
-
     protected function checkGoodsPermission($goods)
     {
         if (empty($goods)) {

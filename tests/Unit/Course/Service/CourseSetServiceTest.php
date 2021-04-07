@@ -15,29 +15,21 @@ use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
-    public function testWaveCourseSet()
-    {
-        $courseSet = $this->createCourseSet();
-        $this->getCourseSetService()->waveCourseSet($courseSet['id'], 'ratingNum', +1);
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
-        $this->assertEquals(1, $courseSet['ratingNum']);
-    }
-
     public function testUpdateDefaultCourseId_whenSet_thenGet()
     {
         $courseSet = [
-                'title' => '新课程开始！',
-                'type' => 'normal',
-            ];
+            'title' => '新课程开始！',
+            'type' => 'normal',
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $courseFields1 = [
-                'courseSetId' => $created['id'],
-                'title' => '计划名称1',
-                'learnMode' => 'freeMode',
-                'expiryDays' => 0,
-                'expiryMode' => 'forever',
-                'courseType' => 'normal',
-            ];
+            'courseSetId' => $created['id'],
+            'title' => '计划名称1',
+            'learnMode' => 'freeMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        ];
         $course = $this->getCourseService()->createCourse($courseFields1);
         $before = $this->getCourseSetService()->getCourseSet($created['id']);
         $this->assertNotEquals($before['defaultCourseId'], $course['id']);
@@ -841,16 +833,6 @@ class CourseSetServiceTest extends BaseTestCase
         $user['roles'] = ['ROLE_USER'];
 
         return $user;
-    }
-
-    private function createCourseSet()
-    {
-        $courseSet = [
-            'type' => 'normal',
-            'title' => 'test',
-        ];
-
-        return $this->getCourseSetDao()->create($courseSet);
     }
 
     /**

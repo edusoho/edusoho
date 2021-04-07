@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Event;
 
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
@@ -48,8 +47,14 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             if (!empty($courseSet)) {
                 $reviewCount = $this->getReviewService()->countReviews([
                     'targetId' => $goods['id'],
+                    'targetType' => 'goods',
                 ]);
-                $this->getCourseSetDao()->update($courseSet['id'], ['ratingNum' => $reviewCount]);
+                $this->getCourseSetService()->updateCourseSet($courseSet['id'], [
+                    'title' => $courseSet['title'],
+                    'categoryId' => $courseSet['categoryId'],
+                    'serializeMode' => $courseSet['serializeMode'],
+                    'ratingNum' => $reviewCount,
+                ]);
             }
         }
     }
@@ -153,14 +158,6 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseDao()
     {
         return $this->getBiz()->dao('Course:CourseDao');
-    }
-
-    /**
-     * @return courseSetDao
-     */
-    protected function getCourseSetDao()
-    {
-        return $this->getBiz()->dao('Course:courseSetDao');
     }
 
     /**
