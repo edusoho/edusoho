@@ -1,0 +1,31 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
+{% block body %}
+  <div class="alert">
+    {% if code == 'not_member' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':userLevel.name,'%vipName%':userLevel.name, '%type%': 'site.default.classroom'|trans})|raw }}
+    {% elseif code == 'member_expired' %}
+      {{ 'vip.member_expired'|trans({'%type%': 'site.default.classroom'|trans, '%typeName%': 'site.default.classroom'|trans})|raw }}
+    {% elseif code == 'level_not_exist' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': 'site.default.classroom'|trans}) }}
+    {% elseif code == 'vip_right_not_exist' %}
+      {{ 'vip.level_not_exist'|trans({'%type%': 'site.default.classroom'|trans, '%typeName%': 'site.default.classroom'|trans}) }}
+    {% elseif code == 'level_low' %}
+      {{ 'vip.not_member'|trans({'%vipLevelName%':vipRightLevel.name,'%vipName%':vipRightLevel.name, '%type%': 'site.default.classroom'|trans}) }}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <a href="{{ path('classroom_exit_no_reason', {id:classroom.id}) }}" class="btn btn-default">
+    {{'course.member.classroom_member.classroom_exit_btn'|trans }}
+  </a>
+  {% if code == 'not_member' %}
+    <a href="{{ path('vip', {levelId: userLevel.id}) }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
+  {% elseif code == 'member_expired' %}
+    <a href="{{ path('vip', {levelId: userLevel.id}) }}" class="btn btn-danger">{{'vip.to_renew'|trans }}</a>
+  {% elseif code == 'level_low' %}
+    <a href="{{ path('vip', {levelId: userLevel.id|default(0)}) }}" class="btn btn-danger">{{'vip.to_buy'|trans }}</a>
+  {% endif %}
+{% endblock %}

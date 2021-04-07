@@ -4,12 +4,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
 use Biz\Thread\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
 use Biz\Thread\ThreadException;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\PostFilter\Service\TokenBucketService;
+use function Deployer\Support\array_merge_alternate;
 
 class ThreadController extends BaseController
 {
@@ -25,6 +27,21 @@ class ThreadController extends BaseController
     public function listAction(Request $request, $target, $filters)
     {
         $conditions = $this->convertFiltersToConditions($target['id'], $filters);
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+        $typeExcludes = [];
+        if (empty($threadSetting['enable_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question', 'discussion']);
+        }
+        if (empty($threadSetting['enable_classroom_question'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question']);
+        }
+        if (empty($threadSetting['enable_classroom_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['discussion']);
+        }
+
+        if (!empty($typeExcludes)) {
+            $conditions['typeExcludes'] = $typeExcludes;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -495,5 +512,13 @@ class ThreadController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }

@@ -52,4 +52,12 @@
   }%}
 
   {% include 'common/consult-supplier.html.twig' %}
+
+  {% block member_expired %}
+    {% if is_plugin_installed('Vip') and member.access|default('') and member.access.code|default('') not in ['member.auditor', 'success'] and not (classroom.price == 0 and classroom.buyable == 1) %}
+      <div class="member-expire">
+        <a href="#modal" data-toggle="modal" data-url="{{ path('classroom_member_access', {classroomId:classroom.id, memberId:member.userId}) }}"></a>
+      </div>
+    {% endif %}
+  {% endblock %}
 {% endblock %}

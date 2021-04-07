@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Controller\BuyFlowController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseBuyController extends BuyFlowController
 {
@@ -17,7 +18,7 @@ class CourseBuyController extends BuyFlowController
         $vipJoinEnabled = false;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $user = $this->getCurrentUser();
-            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserVipRight($user['id'], CourseVipRightSupplier::CODE, $course['id']);
         }
 
         return !$course['isFree'] && !$payment['enabled'] && !$vipJoinEnabled;
@@ -63,8 +64,15 @@ class CourseBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
-        if ((1 != $course['isFree'] || 0 != $course['originPrice']) && !$course['vipLevelId']) {
-            return [];
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+            if ((1 != $course['isFree'] || 0 != $course['originPrice']) && empty($vipRight)) {
+                return [];
+            }
+        } else {
+            if ((1 != $course['isFree'] || 0 != $course['originPrice'])) {
+                return [];
+            }
         }
 
         $location = ['targetType' => 'course', 'targetId' => $targetId];

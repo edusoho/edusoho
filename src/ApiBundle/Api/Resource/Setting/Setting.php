@@ -19,8 +19,18 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group',
+        'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'consult',
     ];
+
+    public static function convertUnderline($str)
+    {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $str);
+
+        return $str;
+    }
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -28,6 +38,7 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         $this->checkType($type);
+        $type = self::convertUnderline($type);
         $method = "get${type}";
 
         return $this->$method($request);
@@ -50,6 +61,85 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getUgc()
+    {
+        return [
+            'review' => $this->getUgcReview(),
+            'note' => $this->getUgcNote(),
+            'thread' => $this->getUgcThread(),
+            'private_message' => $this->getUgcPrivateMessage(),
+        ];
+    }
+
+    public function getUgcReview()
+    {
+        $reviewSetting = $this->getSettingService()->get('ugc_review', []);
+
+        return [
+            'enable' => empty($reviewSetting['enable_review']) ? 0 : 1,
+            'course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review'])) ? 1 : 0,
+            'classroom_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review'])) ? 1 : 0,
+            'question_bank_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_question_bank_review'])) ? 1 : 0,
+            'open_course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_open_course_review'])) ? 1 : 0,
+            'article_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_article_review'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcNote()
+    {
+        $noteSetting = $this->getSettingService()->get('ugc_note', []);
+
+        return [
+            'enable' => empty($noteSetting['enable_note']) ? 0 : 1,
+            'course_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_course_note'])) ? 1 : 0,
+            'classroom_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_classroom_note'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcThread()
+    {
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+
+        return [
+            'enable' => empty($threadSetting['enable_thread']) ? 0 : 1,
+            'course_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_question'])) ? 1 : 0,
+            'course_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_thread'])) ? 1 : 0,
+            'classroom_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_question'])) ? 1 : 0,
+            'classroom_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_thread'])) ? 1 : 0,
+            'group_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_group_thread'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcPrivateMessage()
+    {
+        $privateMessageSetting = $this->getSettingService()->get('ugc_private_message', []);
+
+        return [
+            'enable' => empty($privateMessageSetting['enable_private_message']) ? 0 : 1,
+            'student_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_student'])) ? 1 : 0,
+            'student_to_teacher' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_teacher'])) ? 1 : 0,
+            'teacher_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['teacher_to_student'])) ? 1 : 0,
+        ];
+    }
+
+    public function getConsult()
+    {
+        $consultSetting = $this->getSettingService()->get('consult', []);
+        if (1 == $consultSetting['enabled']) {
+            return [
+                'enabled' => $consultSetting['enabled'],
+                'qq' => $consultSetting['qq'],
+                'qqgroup' => $consultSetting['qqgroup'],
+                'phone' => $consultSetting['phone'],
+                'email' => $consultSetting['email'],
+            ];
+        }
+
+        return [
+            'enabled' => $consultSetting['enabled'],
+        ];
     }
 
     public function getGoods()
@@ -307,30 +397,13 @@ class Setting extends AbstractResource
     {
         $vipSetting = $this->getSettingService()->get('vip', []);
 
-        if (!empty($vipSetting['buyType'])) {
-            switch ($vipSetting['buyType']) {
-                case 10:
-                    $buyType = 'year_and_month';
-                    break;
-                case 20:
-                    $buyType = 'year';
-                    break;
-                case 30:
-                    $buyType = 'month';
-                    break;
-                default:
-                    $buyType = 'month';
-                    break;
-            }
-        }
-
         return [
             'enabled' => empty($vipSetting['enabled']) ? false : true,
-            'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
-            'buyType' => empty($buyType) ? 'month' : $buyType,
-            'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
-            'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
-            'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
+            'h5Enabled' => empty($vipSetting['enabled']) ? false : true,
+            'buyType' => 'year_and_month', //兼容会员营销重构2.0
+            'upgradeMinDay' => '30', //兼容会员营销重构2.0
+            'defaultBuyYears' => '1', //兼容会员营销重构2.0
+            'defaultBuyMonths' => '30', //兼容会员营销重构2.0
         ];
     }
 
