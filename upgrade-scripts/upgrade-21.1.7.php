@@ -386,7 +386,7 @@ class EduSohoUpgrade extends AbstractUpdater
             unix_timestamp(now())
         FROM vip_right vr , vip v where vr.vipLevelId in ({$ids}) and v.levelId = {$level['id']};");
 
-        $this->logger('info', "更新vip_user_right，当前会员{$level['id']}");
+        $this->logger('info', "更新vip_user_right，当前会员{$level['id']}" . json_encode($ids));
 
         return $page + 1;
     }
