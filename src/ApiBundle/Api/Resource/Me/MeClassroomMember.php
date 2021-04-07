@@ -2,10 +2,10 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\Course\MemberException;
 
 class MeClassroomMember extends AbstractResource
@@ -39,27 +39,27 @@ class MeClassroomMember extends AbstractResource
             throw MemberException::NOTFOUND_MEMBER();
         }
 
-        $this->getClassroomService()->removeStudent($classroomId, $user->getId(), array(
+        $this->getClassroomService()->removeStudent($classroomId, $user->getId(), [
            'reason' => $reason,
-        ));
+        ]);
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     private function getClassroomMemberExpire($member)
     {
         $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-        if (empty($classroom) || empty($member) || $classroom['status'] != 'published') {
+        if (empty($classroom) || empty($member) || 'published' != $classroom['status']) {
             return [
                 'status' => 0,
-                'deadline' => 0
+                'deadline' => 0,
             ];
         }
 
-        if ($classroom['expiryMode'] == 'forever' && empty($member['levelId'])) {
+        if ('forever' == $classroom['expiryMode'] && 'vip_join' != $member['joinedChannel']) {
             return [
                 'status' => 1,
-                'deadline' => $member['deadline']
+                'deadline' => $member['deadline'],
             ];
         }
 
@@ -72,20 +72,20 @@ class MeClassroomMember extends AbstractResource
         }
 
         // 会员加入情况下的有效期
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             $deadline = $this->getVipDeadline($classroom, $member, $deadline);
         }
 
         if (empty($deadline)) {
             return [
                 'status' => $deadline < time() ? 0 : 1,
-                'deadline' => 0
+                'deadline' => 0,
             ];
         }
 
         return [
             'status' => $deadline < time() ? 0 : 1,
-            'deadline' => $deadline
+            'deadline' => $deadline,
         ];
     }
 
@@ -106,7 +106,7 @@ class MeClassroomMember extends AbstractResource
             return 0;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        $status = $this->getVipService()->checkUserVipRight($member['userId'], 'classroom', $classroom['id']);
         if ('ok' !== $status) {
             return 0;
         }

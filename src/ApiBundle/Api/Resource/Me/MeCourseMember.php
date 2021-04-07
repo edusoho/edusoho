@@ -2,12 +2,12 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeCourseMember extends AbstractResource
 {
@@ -17,7 +17,7 @@ class MeCourseMember extends AbstractResource
     public function get(ApiRequest $request, $courseId)
     {
         $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
-        $this->getOCUtil()->single($courseMember, array('userId'));
+        $this->getOCUtil()->single($courseMember, ['userId']);
 
         if ($courseMember) {
             $courseMember['access'] = $this->getCourseService()->canLearnCourse($courseId);
@@ -53,27 +53,27 @@ class MeCourseMember extends AbstractResource
             throw MemberException::NOTFOUND_MEMBER();
         }
 
-        $this->getCourseMemberService()->removeStudent($courseId, $user->getId(), array(
+        $this->getCourseMemberService()->removeStudent($courseId, $user->getId(), [
            'reason' => $reason,
-        ));
+        ]);
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     private function getCourseMemberExpire($member)
     {
         $course = $this->getCourseService()->getCourse($member['courseId']);
-        if (empty($course) || empty($member) || $course['status'] != 'published') {
+        if (empty($course) || empty($member) || 'published' != $course['status']) {
             return [
                 'status' => 0,
-                'deadline' => 0
+                'deadline' => 0,
             ];
         }
 
-        if ($course['expiryMode'] == 'forever' && empty($member['levelId'])) {
+        if ('forever' == $course['expiryMode'] && 'vip_join' != $member['joinedChannel']) {
             return [
                 'status' => 1,
-                'deadline' => $member['deadline']
+                'deadline' => $member['deadline'],
             ];
         }
 
@@ -86,13 +86,13 @@ class MeCourseMember extends AbstractResource
         }
 
         // 会员加入情况下的有效期
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             $deadline = $this->getVipDeadline($course, $member, $deadline);
         }
 
         return [
             'status' => $deadline < time() ? 0 : 1,
-            'deadline' => $deadline
+            'deadline' => $deadline,
         ];
     }
 
@@ -113,19 +113,18 @@ class MeCourseMember extends AbstractResource
             return 0;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        $status = $this->getVipService()->checkUserVipRight($member['user']['id'], 'course', $course['id']);
         if ('ok' !== $status) {
             return 0;
         }
 
-        $vip = $this->getVipService()->getMemberByUserId($member['userId']);
+        $vip = $this->getVipService()->getMemberByUserId($member['user']['id']);
         if (!$deadline) {
             return $vip['deadline'];
         } else {
             return $deadline < $vip['deadline'] ? $deadline : $vip['deadline'];
         }
     }
-
 
     /**
      * @return CourseService
