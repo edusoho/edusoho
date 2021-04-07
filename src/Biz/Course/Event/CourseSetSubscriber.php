@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Event;
 
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
@@ -26,7 +25,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
             'review.create' => 'onReviewChanged',
-            'review.delete' => 'onReviewChanged'
+            'review.delete' => 'onReviewChanged',
         ];
     }
 
@@ -48,10 +47,10 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             if (!empty($courseSet)) {
                 $reviewCount = $this->getReviewService()->countReviews([
                     'targetId' => $goods['id'],
-                    'targetType' => 'goods'
+                    'targetType' => 'goods',
                 ]);
                 $this->getCourseSetService()->updateCourseSetRatingNum($courseSet['id'], [
-                    'ratingNum' => $reviewCount
+                    'ratingNum' => $reviewCount,
                 ]);
             }
         }

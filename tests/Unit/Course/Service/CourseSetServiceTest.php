@@ -22,11 +22,11 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         ];
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
-        $courseSet = $this->getCourseSetService()->updateCourseSetRatingNum($courseSet['id'],['ratingNum' => 1]);
+        $courseSet = $this->getCourseSetService()->updateCourseSetRatingNum($courseSet['id'], ['ratingNum' => 1]);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
         $this->assertEquals(1, $courseSet['ratingNum']);
-
     }
+
     public function testUpdateDefaultCourseId_whenSet_thenGet()
     {
         $courseSet = [
