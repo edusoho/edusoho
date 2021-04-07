@@ -192,6 +192,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'targetId' => $orderItem['target_id'],
                 'num' => $orderItem['num'],
                 'unit' => $orderItem['unit'],
+                'orderItemId' => $orderItem['id'],
             ]);
 
             return $product;

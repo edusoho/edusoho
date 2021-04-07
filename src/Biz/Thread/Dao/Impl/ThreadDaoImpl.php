@@ -50,6 +50,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'targetId = :targetId',
                 'userId = :userId',
                 'type = :type',
+                'type != :typeExclude',
+                'type not in (:typeExcludes)',
                 'sticky = :isStick',
                 'nice = :nice',
                 'postNum = :postNum',

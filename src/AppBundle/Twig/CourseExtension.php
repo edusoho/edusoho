@@ -16,6 +16,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -88,7 +89,7 @@ class CourseExtension extends \Twig_Extension
                 return false;
             }
             //会员免费学满足免费学条件，无视课程是否允许购买
-            $status = $this->createService('VipPlugin:Vip:VipService')->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+            $status = $this->createService('VipPlugin:Vip:VipService')->checkUserVipRight($user['id'], CourseVipRightSupplier::CODE, $course['id']);
 
             return 'ok' === $status;
         }
@@ -335,9 +336,10 @@ class CourseExtension extends \Twig_Extension
             $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             if (!empty($classroomRef)) {
                 $user = $this->biz['user'];
+                $classroom = $this->getClassroomService()->getClassroom($classroomRef['classroomId']);
                 $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
 
-                return $member['deadline'] > 0 && $member['deadline'] < time();
+                return !$this->getClassroomService()->isMemberNonExpired($classroom, $member);
             }
         }
 

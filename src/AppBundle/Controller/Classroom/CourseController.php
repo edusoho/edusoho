@@ -17,6 +17,9 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends BaseController
 {
@@ -131,6 +134,9 @@ class CourseController extends BaseController
 
             return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
+        if ($this->isPluginInstalled('Vip')) {
+            $member['access'] = $this->getClassroomService()->canLearnClassroom($classroomId);
+        }
 
         $layout = 'classroom/layout.html.twig';
         $isCourseMember = false;
@@ -159,6 +165,30 @@ class CourseController extends BaseController
                 'isCourseMember' => $isCourseMember,
             ]
         );
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function searchAction(Request $request, $classroomId)

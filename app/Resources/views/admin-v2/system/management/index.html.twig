@@ -1,0 +1,120 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_business_qualification' %}
+
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/system/setting/business/index.js']) %}
+
+{% block main %}
+
+  <form class="form-horizontal" id="business-form" method="post"
+        action="{{ path('admin_v2_qualifications_information_save') }}" novalidate="novalidate">
+    <legend>{{ 'admin.setting.site.icp_record_information'|trans }}<a href="http://www.qiqiuyu.com/faq/search?categoryId=93" target="_blank" style="padding-left: 2%;font-size: 13px;">{{ 'admin.setting.site.ICP_record'|trans|raw }}</a></legend>
+    <fieldset>
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+            <label for="icp" class="control-label-required">{{ 'admin.setting.site.icp'|trans }}</label>
+          </div>
+          <div class="col-md-8 controls">
+            <input required="required" type="text" id="icp" name="icp" class="form-control" value="{{ qualifications.icp }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+            <label for="icpUrl" class="control-label-required">{{ 'admin.setting.site.icp_url'|trans }}</label>
+          </div>
+          <div class="col-md-8 controls">
+            <input type="text" id="icpUrl" name="icpUrl" class="form-control" value="{{ qualifications.icpUrl }}">
+            <p class="help-block">{{ 'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()}) }}</p>
+          </div>
+        </div>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+        </div>
+        <div class="col-md-8 controls">
+          <p class="help-block" style="color: red;">{{ 'admin.setting.site.icp.help_block'|trans|raw }}</p>
+
+        </div>
+      </div>
+    </fieldset>
+
+    <br>
+
+    <fieldset>
+      <legend>{{ 'admin.setting.site.public_security_record_information'|trans }} <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank"  style="padding-left: 2%;font-size: 13px;">{{ 'admin.setting.site.public_security_record'|trans|raw }}</a></legend>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="business-picture">{{ 'admin.setting.record.picture'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <div class="cd-image-upload" id="business-picture-container">
+            <img src="{% if qualifications.recordPicture|default() %}{{ asset(qualifications.recordPicture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
+                 alt=""
+                 class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="business-qrcode"/>
+            <div class="image-upload-mask">
+              <div class="image-delete-tip js-image-delete {% if not qualifications.recordPicture|default() %}hidden{% endif %}">
+                <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+              </div>
+              <div class="image-upload-content">
+                <i
+                  class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
+              </div>
+            </div>
+            <label class="image-upload-label">
+              <input id="recordPicture" type="file" name="file" class="cd-hide" data-target="#business-qrcode"
+                     accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
+                     data-token="{{ upload_token('default', 'image') }}"/>
+            </label>
+          </div>
+          <input id="business-qrcode" type="hidden" name="recordPicture"
+                 value="{{ qualifications.recordPicture|default('') }}"
+                 class="form-control">
+          <div class="help-block">
+            <p class="help-block">{{ 'admin.setting.record.picture.help_block'|trans|raw }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.record.code' | trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" name="recordCode" class="form-control"
+                 value="{{ qualifications.recordCode|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.record.url' | trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" name="recordUrl" class="form-control"
+                 value="{{ qualifications.recordUrl|default('') }}">
+          <p class="help-block">{{ 'admin.setting.site.recordUrl.help_block'|trans }}</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+        </div>
+        <div class="col-md-8 controls">
+          <p class="help-block" style="color: red;">{{ 'admin.setting.site.public_security.help_block'|trans|raw }}</p>
+
+        </div>
+      </div>
+
+    </fieldset>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-primary" id="save-business">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('qualifications') }}">
+
+  </form>
+
+{% endblock %}

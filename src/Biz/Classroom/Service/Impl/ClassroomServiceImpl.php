@@ -39,6 +39,8 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
@@ -467,7 +469,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'about',
             'description',
             'price',
-            'vipLevelId',
             'smallPicture',
             'middlePicture',
             'largePicture',
@@ -1093,8 +1094,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $userMember = [];
 
-        if (!empty($info['becomeUseMember'])) {
-            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+        if (!empty($info['becomeUseMember']) && $this->isPluginInstalled('Vip')) {
+            $levelChecked = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
             if ('ok' != $levelChecked) {
                 $this->createNewException(ClassroomException::MEMBER_LEVEL_LIMIT());
@@ -1119,11 +1120,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ]);
 
         $refundSetting = $this->getSettingService()->get('refund', []);
+        $reason = $this->buildJoinReason($info, $order);
         $fields = [
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
-            'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'joinedChannel' => $reason['reason_type'],
             'role' => ['student'],
             'remark' => empty($info['note']) ? '' : $info['note'],
             'deadline' => $deadline,
@@ -1135,7 +1137,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member['refundDeadline'] = $fields['refundDeadline'];
             if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
-                $member['levelId'] = $fields['levelId'];
                 $member['remark'] = $fields['remark'];
             } else {
                 $member['role'] = ['student'];
@@ -1147,7 +1148,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $reason = $this->buildJoinReason($info, $order);
         $this->createOperateRecord($member, 'join', $reason);
 
         $params = [
@@ -1406,7 +1406,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'classroomId' => $classroomId,
                     'userId' => $userId,
                     'orderId' => 0,
-                    'levelId' => 0,
                     'role' => ['headTeacher'],
                     'remark' => '',
                     'createdTime' => time(),
@@ -1512,7 +1511,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['auditor'],
             'remark' => '',
             'createdTime' => time(),
@@ -1552,7 +1550,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['assistant'],
             'remark' => '',
             'createdTime' => time(),
@@ -1598,7 +1595,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['teacher'],
             'remark' => '',
             'createdTime' => TimeMachine::time(),
@@ -2318,7 +2314,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userCourses = ArrayToolkit::index($userCourses, 'courseId');
 
         foreach ($courseIds as $key => $courseId) {
-            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
             $courseMember = empty($userCourses[$courseId]) ? [] : $userCourses[$courseId];
 
             if ($courseMember) {
@@ -2328,7 +2323,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $info = [
                 'orderId' => empty($params['orderId']) ? 0 : $params['orderId'],
                 'orderNote' => empty($params['note']) ? '' : $params['note'],
-                'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+                'joinedChannel' => $classroomMember['joinedChannel'],
                 'deadline' => $classroomMember['deadline'],
             ];
             $this->getCourseMemberService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
@@ -2408,7 +2403,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $vipNonExpired = true;
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             // 会员加入的情况下
             $vipNonExpired = $this->isVipMemberNonExpired($classroom, $member);
         }
@@ -2509,20 +2504,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * 会员到期后、会员被取消后、课程会员等级被提高均为过期
      *
-     * @param  $course
+     * @param  $classroom
      * @param  $member
      *
      * @return bool 会员加入的学员是否已到期
      */
     protected function isVipMemberNonExpired($classroom, $member)
     {
-        $vipApp = $this->getAppService()->getAppByCode('vip');
-
-        if (empty($vipApp)) {
+        if (!$this->isPluginInstalled('Vip')) {
             return false;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
         return 'ok' === $status;
     }
@@ -2621,6 +2614,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

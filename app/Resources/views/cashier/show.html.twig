@@ -5,15 +5,20 @@
 
 {% set step = '2' %}
 {% block order_body %}
-  {% if not product.productEnable %}
+  {% set message = slot('cashier.product.warn_message', {'product': product}) %}
+  {% if message %}
+    <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+      {{ message }}
+    </div>
+  {% elseif not product.productEnable %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ ('pay_center.'~product.targetType~'.close')|trans }}
     </div>
-    {% elseif unablePay %}
+  {% elseif unablePay %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ 'pay_center.pay.unable_pay.tips'|trans }}
     </div>
-    {% else %}
+  {% else %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ 'pay_center.pay.submit_tips'|trans }}
     </div>
@@ -23,8 +28,10 @@
     <div class="order-center-card__img">
       {% if product.cover and product.cover.middle|default('') starts with '/assets' %}
         <img src="{{ asset(product.cover.middle) }}" alt="{{ order.title }}">
-      {% elseif product.targetType in ['vip', 'course','classroom', 'item_bank_exercise'] %}
+      {% elseif product.targetType in ['course','classroom', 'item_bank_exercise'] %}
         <img src="{{ filepath(product.cover.middle|default(''), product.targetType ~ '.png') }}" alt="{{ order.title }}">
+      {% elseif product.targetType in ['vip'] %}
+        <img src="{{ product.cover.middle|default(asset('assets/img/default/vip.png')) }}" alt="{{ order.title }}">
       {% endif %}
 
       {{ slot('cashier.product.cover', {'product': product}) }}

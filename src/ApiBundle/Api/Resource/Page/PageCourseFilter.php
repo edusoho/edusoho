@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemWithLessonFilter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReviewFilter;
@@ -17,7 +18,7 @@ class PageCourseFilter extends Filter
         'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary',
         'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers',
         'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
-        'reviews', 'myReview', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum',
+        'reviews', 'myReview', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom',
     ];
 
     protected function publicFields(&$data)
@@ -61,5 +62,11 @@ class PageCourseFilter extends Filter
         $data['reviews'] = $reviews;
         $data['myReview'] = $review;
         $data['vipLevel'] = empty($vipLevel) ? null : $vipLevel;
+
+        if (!empty($data['classroom'])) {
+            $classroomFilter = new ClassroomFilter();
+            $classroomFilter->setMode(Filter::SIMPLE_MODE);
+            $classroomFilter->filter($data['classroom']);
+        }
     }
 }

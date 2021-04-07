@@ -13,7 +13,7 @@
     </td>
     <td style="vertical-align: middle;">
         <div class="btn-group">
-            {% if app.user.id != user.id %}
+            {% if app.user.id != user.id and can_send_message(user.id) %}
                 <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'classroom.send_private_message'|trans}}</a>
             {% endif %}
             {% if app.user.isAdmin() %}

@@ -1,0 +1,66 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_user_content_control_note' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/admin-v2/system/user-content-control/note/index.js']) %}
+{% do load_script('widget/tooltip-widget') %}
+{% block main %}
+  <form class="form-horizontal" id="user_content_control_note" method="post" novalidate>
+    <legend style="height: 50px;">
+      <div class="row form-group">
+        <div class="col-md-2" style="padding-top: 5px;width:15%;"><label>{{ 'admin_v2.system.user_content_control.note_manage'|trans }}：</label></div>
+        <div class="col-md-8 controls radios">
+          {{ radios('enable_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_note|default('1')) }}
+        </div>
+        <div class="col-md-2" style="padding-top: 5px;font-size: 14px;">
+          <a class="pull-right" target="_blank" href="{{ path('admin_v2_course_note') }}">{{ 'admin_v2.system.user_content_control.goto_note_manage'|trans }}</a>
+        </div>
+      </div>
+    </legend>
+    <div class="js-sub-management {% if noteSetting.enable_note|default('1') == '0' %}hidden{% endif %}">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="">
+            {{ 'admin_v2.system.user_content_control.course_note_manage'|trans }}&nbsp;
+            <div class="js-tooltip-twig-widget pull-right">
+            <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="top" href="javascript:;">
+            </span>
+              <div class="js-twig-widget-html" style="display:none;" >
+                <div style="width: 200px;">{{ 'admin_v2.system.user_content_control.course_note_tooltips'|trans }}</div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_course_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_course_note|default('1')) }}
+          <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="">
+            {{ 'admin_v2.system.user_content_control.classroom_note_manage'|trans }}&nbsp;
+            <div class="js-tooltip-twig-widget pull-right">
+            <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="top" href="javascript:;">
+            </span>
+              <div class="js-twig-widget-html" style="display:none;">
+                <div style="width: 200px;">{{ 'admin_v2.system.user_content_control.classroom_note_tooltips'|trans }}</div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_classroom_note', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, noteSetting.enable_classroom_note|default('1')) }}
+          <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-primary mtl js-note-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

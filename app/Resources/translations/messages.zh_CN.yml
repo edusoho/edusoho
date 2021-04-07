@@ -447,7 +447,7 @@ finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
-finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_rate: 虚拟币最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
@@ -685,7 +685,7 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
-pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.course.close: 该课程已被关闭
 pay_center.classroom.close: 该班级已关闭，请谨慎支付
 pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 
@@ -4785,6 +4785,9 @@ item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无�
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
 item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
+course.member.course.exit_btn: 退出课程
+course.member.classroom_member.exit_btn: 退出
+course.member.classroom_member.classroom_exit_btn: 退出班级
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
@@ -5686,6 +5689,8 @@ admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
 admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
+admin.setting.site.icp.help_block: 根据《非经营性互联网信息服务备案管理办法》（原信息产业部令第33号令）规定，备案成功后需将工信部下发的主体备案号放置在网页底部并链接至工信部网址:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>供公众查询核对。若违反相关部门规定，会存在违法风险。
+admin.setting.site.public_security.help_block: 依据 《计算机信息网络国际联网安全保护管理办法》相关规定，各网站在工信部备案成功后，需在网站开通之日起30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>提交公安联网备案申请。公安联网备案审核通过后，您需在30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>，在您的已备案网站详情中，将网站公安机关备案号及图标信息编辑放置在网页底部。
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
@@ -5698,6 +5703,8 @@ admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名
 admin.setting.site.icp: ICP备案号
 admin.setting.site.icp_url: ICP备案链接
 admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
+admin.setting.site.icp_record_information: ICP备案信息
+admin.setting.site.public_security_record_information: 公安备案信息
 admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
@@ -5707,6 +5714,8 @@ admin.setting.site.website_status: 站点状态
 admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
+admin.setting.site.ICP_record: 如何将ICP备案号添加至网站底部？
+admin.setting.site.public_security_record : 如何将公安备案图标和编号添加至网站底部？
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
@@ -5742,6 +5751,13 @@ admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
 admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 排列顺序
+admin.setting.theme.manage.modal.orderby_low_to_high: 从低到高
+admin.setting.theme.manage.modal.orderby_high_to_low: 从高到低
+admin.setting.theme.manage.modal.setting_custom_vip_list: 最新会员列表
+admin.setting.theme.manage.modal.vip_list_show: 展示
+admin.setting.theme.manage.modal.vip_list_hidden: 不展示
+admin.setting.theme.manage.modal.vip_list_tip: 在会员中心页展示最新加入会员的用户列表
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
 admin.setting.theme.manage.modal.color_gray: 灰色
 admin.setting.theme.manage.modal.color_wihte: 白色
@@ -5758,8 +5774,10 @@ admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设�
 admin.setting.license.headline: 电子营业执照配置
 admin.setting.license.name: 电子营业执照名称
 admin.setting.license.picture: 电子营业执照图片
+admin.setting.upload.license.photo: 上传证件图片
 admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校电子营业图片设置后将显示在首页底栏。
 admin.setting.license.url: 电子营业执照链接
+admin.setting.license.prompt: (网校可根据各地方政策要求及网校实际业务而定)
 admin.setting.permit.headline: 经营许可配置
 admin.setting.permit.name: 经营许可证名称
 admin.setting.permit.record.number: 备案号
@@ -5772,7 +5790,6 @@ admin.setting.record.code: 公安备案号
 admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
     <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
@@ -10097,6 +10114,7 @@ order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
 order.pay_check_msg.pay_password_not_set: 支付密码未设置
 order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
+order.pay_check_msg.goods_closed: 该商品已被关闭
 order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
 
 site.join_by_import: 导入
@@ -10631,6 +10649,7 @@ exception.reward_point.account.error_pay_password_format: 新支付密码不可�
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.order_pay_check.unable_pay: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
+exception.order_pay_check.vip.app_upgrade: 请升级至最新版本，查看会员售价
 exception.live_replay.not_found: 直播回放不存在
 exception.cloud_file.not_found: 云文件不存在
 exception.cloud_file.not_found_player: 云播放器不存在
@@ -11110,7 +11129,7 @@ admin_v2.setting.navigation.foot.tips: >
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
-admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
+admin_v2.newcomer_task.helper_tip: 七步完成网校基础建设
 admin_v2.newcomer_task.collapse: 收起
 admin_v2.newcomer_task.todo: 前去完成
 admin_v2.newcomer_task.done: 已完成
@@ -11670,4 +11689,32 @@ classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
+admin_v2.system.user_content_control.review_manage: 评价内容管理
+admin_v2.system.user_content_control.course_review_manage: 课程评价模块
+admin_v2.system.user_content_control.classroom_review_manage: 班级评价模块
+admin_v2.system.user_content_control.question_bank_review_manage: 题库练习评价模块
+admin_v2.system.user_content_control.open_course_review_manage: 公开课评价模块
+admin_v2.system.user_content_control.article_review_manage: 资讯评价模块
+admin_v2.system.user_content_control.goto_review_manage: 前往评价管理>>
+admin_v2.system.user_content_control.thread_manage: 话题问答内容管理
+admin_v2.system.user_content_control.course_question_manage: 课程问题(问答)模块
+admin_v2.system.user_content_control.classroom_question_manage: 班级问题(问答)模块
+admin_v2.system.user_content_control.course_thread_manage: 课程话题模块
+admin_v2.system.user_content_control.classroom_thread_manage:  班级话题模块
+admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
+admin_v2.system.user_content_control.private_message_manage: 私信内容管理
+admin_v2.system.user_content_control.note_manage: 笔记内容管理
+admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
+admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
+admin_v2.system.user_content_control.course_note_manage: 课程笔记模块
+admin_v2.system.user_content_control.pc_switch_tips: 开启或关闭后，仅对PC端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.course_note_tooltips: 课程学习页笔记显示及课时笔记入口由此开关控制
+admin_v2.system.user_content_control.classroom_note_tooltips: 班级学习页的笔记显示由此开关控制
+admin_v2.system.user_content_control.pc_app_switch_tips: 开启或关闭后，仅对PC端和APP端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.goto_question_manage: 前往问答管理>>
+admin_v2.system.user_content_control.goto_thread_manage: 前往话题管理>>
+admin_v2.system.user_content_control.goto_group_thread_manage: 前往小组话题管理>>
+admin_v2.system.user_content_control.goto_private_message_manage: 前往私信管理>>
 
+admin_v2.vip_close.block_tip: 会员功能未开启
+admin_v2.vip_close.to_open_vip: 去开启

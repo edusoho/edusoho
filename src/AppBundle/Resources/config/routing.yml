@@ -2183,6 +2183,10 @@ course_exit:
   defaults: {_controller: AppBundle:Course/Course:exit}
   methods: [POST]
 
+course_exit_no_reason:
+  path: /course/{id}/exit/not_reason
+  defaults: {_controller: AppBundle:Course/Course:exitForNoReason}
+
 course_exit_modal:
   path: /course/show_exit_modal
   defaults: {_controller: AppBundle:Course/Course:exitModal}
@@ -2769,6 +2773,10 @@ classroom_exit:
     path: /classroom/{id}/exit
     defaults: { _controller: AppBundle:Classroom/Classroom:exit }
 
+classroom_exit_no_reason:
+    path: /classroom/{id}/exit/no_reason
+    defaults: { _controller: AppBundle:Classroom/Classroom:exitForNoReason }
+
 classroom_canview:
     path: /classroom/{classroomId}/canview
     defaults: { _controller: AppBundle:Classroom/Classroom:canview }
@@ -2776,6 +2784,10 @@ classroom_canview:
 classroom_courses:
     path: /classroom/{classroomId}/courses
     defaults: { _controller: AppBundle:Classroom/Course:list }
+
+classroom_member_access:
+    path: /classroom/{classroomId}/member/{memberId}/access
+    defaults: { _controller: AppBundle:Classroom/Classroom:memberAccess }
 #
 # 讨论区
 #

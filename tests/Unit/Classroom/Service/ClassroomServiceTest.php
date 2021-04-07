@@ -1200,7 +1200,11 @@ class ClassroomServiceTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' => ['status' => 'closed', 'vipLevelId' => 1],
+                    'returnValue' => ['id' => 1, 'title' => 'test', 'status' => 'closed', 'expiryMode' => 'forever', 'expiryValue' => 0],
+                ],
+                [
+                    'functionName' => 'update',
+                    'returnValue' => [],
                 ],
             ]
         );
@@ -1217,8 +1221,28 @@ class ClassroomServiceTest extends BaseTestCase
             'VipPlugin:Vip:VipService',
             [
                 [
-                    'functionName' => 'checkUserInMemberLevel',
+                    'functionName' => 'checkUserVipRight',
                     'returnValue' => 'no',
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Product:ProductService',
+            [
+                [
+                    'functionName' => 'getProductByTargetIdAndType',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Goods:GoodsService',
+            [
+                [
+                    'functionName' => 'getGoodsSpecsByProductIdAndTargetId',
+                    'returnValue' => ['id' => 1],
                 ],
             ]
         );
@@ -1787,7 +1811,6 @@ class ClassroomServiceTest extends BaseTestCase
                             'classroomId' => 1,
                             'userId' => 3,
                             'orderId' => 0,
-                            'levelId' => 0,
                             'role' => ['teacher'],
                             'remark' => '',
                             'createdTime' => TimeMachine::time(),

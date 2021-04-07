@@ -5,10 +5,14 @@
       {% if member.deadline == 0 or member.deadline > 'now'|date('U') %}
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-sm dropdown-toggle
-          " data-toggle="dropdown" aria-expanded="false">{{'classroom.thread.send_btn'|trans}} <span class="caret"></span></button>
+          " data-toggle="dropdown" aria-expanded="false">{{'发布内容'|trans}} <span class="caret"></span></button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'classroom.thread.send_btn'|trans}}</a></li>
-            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'classroom.thread.question_btn'|trans}}</a></li>
+            {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_thread')|default('1') == '1' %}
+              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'classroom.thread.send_btn'|trans}}</a></li>
+            {% endif %}
+            {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_question')|default('1') == '1' %}
+              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'classroom.thread.question_btn'|trans}}</a></li>
+            {% endif %}
             {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
               <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'classroom.thread.event_btn'|trans}}</a></li>
             {% endif %}
@@ -25,9 +29,9 @@
 
   <ul class="nav nav-pills nav-pills-sm">
     <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'all'})) }}">{{'classroom.thread.nav.all_btn'|trans}}</a></li>
-    
-    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'question'})) }}">{{'classroom.thread.nav.question_btn'|trans}}</a></li>
-
+    {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_question')|default('1') == '1' %}
+      <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'question'})) }}">{{'classroom.thread.nav.question_btn'|trans}}</a></li>
+    {% endif %}
     <li{% if filters.type == 'nice' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'nice'})) }}">{{'classroom.thread.nav.nice_btn'|trans}}</a></li>
 
     <li class="dropdown">

@@ -30,6 +30,8 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
@@ -820,7 +822,7 @@ class CourseSetController extends BaseController
                 $conditions['isClassroomRef'] = 1;
                 break;
             case 'vip':
-                $conditions['isVip'] = 1;
+                $conditions = $this->getVipCourseSetConditions($conditions);
                 $conditions['parentId'] = 0;
                 $conditions['isClassroomRef'] = 0;
                 break;
@@ -843,6 +845,17 @@ class CourseSetController extends BaseController
             $conditions['tagIds'] = [$conditions['tagId']];
             $conditions = $this->getCourseConditionsByTags($conditions);
         }
+
+        return $conditions;
+    }
+
+    protected function getVipCourseSetConditions($conditions)
+    {
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCode('course');
+        $courseIds = ArrayToolkit::column($vipRights, 'uniqueCode');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $conditions['ids'] = ArrayToolkit::column($courses, 'courseSetId');
 
         return $conditions;
     }
@@ -878,8 +891,8 @@ class CourseSetController extends BaseController
     {
         foreach ($courseSets as &$courseSet) {
             $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-            $levelIds = ArrayToolkit::column($courses, 'vipLevelId');
-            $levelIds = array_unique($levelIds);
+            $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes(CourseVipRightSupplier::CODE, array_column($courses, 'id'));
+            $levelIds = array_column($vipRights, 'vipLevelId');
             $levels = $this->getVipLevelService()->searchLevels(
                 ['ids' => $levelIds],
                 ['seq' => 'ASC'],
@@ -1033,6 +1046,14 @@ class CourseSetController extends BaseController
     protected function getVipLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

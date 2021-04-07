@@ -50,6 +50,11 @@ class Classroom extends AbstractResource
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+        if ($this->isPluginInstalled('Vip') && isset($conditions['vipLevelId'])) {
+            $vipClassroomIds = $this->getVipClassroomIdsByVipLevelId($conditions['vipLevelId']);
+            $conditions['classroomIds'] = empty($vipClassroomIds) ? [-1] : $vipClassroomIds;
+            unset($conditions['vipLevelId']);
+        }
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
             $this->getSort($request),
@@ -69,6 +74,28 @@ class Classroom extends AbstractResource
         $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
+    }
+
+    protected function getVipClassroomIdsByVipLevelId($vipLevelId)
+    {
+        if ('0' == $vipLevelId) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+            $vipLevelIds = ArrayToolkit::column($levels, 'id');
+        } else {
+            if (empty($this->getLevelService()->getLevel($vipLevelId))) {
+                return [];
+            }
+            $levels = $this->getLevelService()->findPrevEnabledLevels($vipLevelId);
+            $vipLevelIds = array_merge(ArrayToolkit::column($levels, 'id'), [$vipLevelId]);
+        }
+
+        if (empty($vipLevelIds)) {
+            return [];
+        }
+
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds('classroom', $vipLevelIds);
+
+        return empty($vipRights) ? [] : ArrayToolkit::column($vipRights, 'uniqueCode');
     }
 
     private function mergeProfile(&$user)
@@ -104,5 +131,15 @@ class Classroom extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->service('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }

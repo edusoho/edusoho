@@ -47,7 +47,7 @@ class CourseSetController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("course-set/block/course-block-{$view}.html.twig", [
-            'courseSets' => $courseSets,
+            'courseSets' => $this->getWebExtension()->filterCourseSetsVipRight($courseSets),
             'users' => $users,
             'mode' => $mode,
         ]);
