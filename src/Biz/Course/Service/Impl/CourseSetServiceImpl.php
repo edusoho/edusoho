@@ -406,7 +406,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'summary',
                 'goals',
                 'audiences',
-                'ratingNum',
             ]
         );
 
@@ -452,6 +451,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 ]
             );
         }
+    }
+
+    public function updateCourseRatingNum($id, $fields)
+    {
+        $fields = ArrayToolkit::parts(
+            $fields,
+            [
+                'ratingNum',
+            ]
+        );
+
+        return $this->getCourseSetDao()->update($id, $fields);
     }
 
     /**

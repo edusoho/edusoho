@@ -49,10 +49,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $goods['id'],
                     'targetType' => 'goods',
                 ]);
-                $this->getCourseSetService()->updateCourseSet($courseSet['id'], [
-                    'title' => $courseSet['title'],
-                    'categoryId' => $courseSet['categoryId'],
-                    'serializeMode' => $courseSet['serializeMode'],
+                $this->getCourseSetService()->updateCourseRatingNum($courseSet['id'], [
                     'ratingNum' => $reviewCount,
                 ]);
             }

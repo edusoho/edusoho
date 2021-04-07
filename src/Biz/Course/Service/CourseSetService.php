@@ -293,4 +293,6 @@ interface CourseSetService
      * 课程从班级移除后，重置课程及教学计划的parentId
      */
     public function resetParentIdByCourseId($courseId);
+
+    public function updateCourseRatingNum($id, $fields);
 }
