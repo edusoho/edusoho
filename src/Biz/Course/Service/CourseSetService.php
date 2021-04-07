@@ -294,5 +294,5 @@ interface CourseSetService
      */
     public function resetParentIdByCourseId($courseId);
 
-    public function updateCourseRatingNum($id, $fields);
+    public function updateCourseSetRatingNum($id,$fields);
 }

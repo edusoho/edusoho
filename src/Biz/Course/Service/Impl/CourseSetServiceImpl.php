@@ -453,7 +453,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    public function updateCourseRatingNum($id, $fields)
+    public function updateCourseSetRatingNum($id,$fields)
     {
         $fields = ArrayToolkit::parts(
             $fields,
