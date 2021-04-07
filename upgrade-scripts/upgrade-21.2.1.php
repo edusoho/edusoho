@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'addActivityTestpaperAnswerMode',
+            'updateStorageSetting',
         );
 
         $funcNames = array();
@@ -93,6 +94,17 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `answerMode` TINYINT NOT NULL DEFAULT 0 COMMENT '答案显示模式: 1:合格后显示答案;' AFTER doTimes");
 
         $this->logger('info', "添加answerMode结束");
+
+        return 1;
+    }
+
+    public function updateStorageSetting($page)
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (!isset($storageSetting['video_fingerprint'])) return 1;
+
+        $storageSetting['video_fingerprint_content'] = ['nickname', 'domain'];
+        $this->getSettingService()->set('storage', $storageSetting);
 
         return 1;
     }
