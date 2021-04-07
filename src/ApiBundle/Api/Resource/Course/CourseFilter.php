@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\Good\GoodSpecsFilter;
@@ -11,6 +12,11 @@ use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\System\Service\SettingService;
+use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseFilter extends Filter
 {
@@ -19,11 +25,11 @@ class CourseFilter extends Filter
     ];
 
     protected $publicFields = [
-        'subtitle', 'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
+        'id', 'subtitle', 'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
-        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum',
+        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom',
     ];
 
     protected function publicFields(&$data)
@@ -53,6 +59,22 @@ class CourseFilter extends Filter
          */
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
+            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
+            $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+        }
+
+        if (!empty($data['classroom'])) {
+            $classroomFilter = new ClassroomFilter();
+            $classroomFilter->setMode(Filter::SIMPLE_MODE);
+            $classroomFilter->filter($data['classroom']);
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['classroom']['id']);
+                $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+            }
+        }
     }
 
     protected function simpleFields(&$data)
@@ -87,5 +109,21 @@ class CourseFilter extends Filter
 
         $data['price2'] = Money::convert($data['price']);
         $data['originPrice2'] = Money::convert($data['originPrice']);
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

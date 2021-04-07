@@ -81,15 +81,15 @@
                 </div>
             </el-form-item>
 
-            <el-form-item v-if="vipInstalled && vipEnabled" :label="'vip.level.free_learning'|trans">
+            <el-form-item v-if="vipInstalled && vipEnabled" :label="'vip.level.free_learning_new'|trans">
                 <el-select v-model="form.vipLevelId">
                     <el-option value="0" :label="'site.default.none'|trans"></el-option>
                     <el-option
                         v-if="vipLevels"
-                        v-for="(label, level) in vipLevels"
-                        :key="level"
-                        :label="label"
-                        :value="level">
+                        v-for="(level) in vipLevels"
+                        :key="level.id"
+                        :label="level.name"
+                        :value="level.id">
                     </el-option>
                 </el-select>
             </el-form-item>

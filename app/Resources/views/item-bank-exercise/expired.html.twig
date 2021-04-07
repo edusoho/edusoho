@@ -3,18 +3,12 @@
 {% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
-    {% set message = slot('course.expired.message', {
-      course: exercise,
-      member: member
-    }) %}
     {% if member.deadline < timestamp() and member.deadline != 0 %}
       {% if exercise.expiryMode == 'date' %}
         {{ 'item_bank_exercise.member.expiry_tips'|trans }}
       {% else %}
         {{ 'item_bank_exercise.member.allow_buy.tips'|trans }}
       {% endif %}
-    {% elseif message|trim is not empty  %}
-       {{ message|raw }}
     {% endif %}
   </div>
 {% endblock %}

@@ -9,6 +9,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
 
 abstract class BuyFlowController extends BaseController
 {
@@ -133,6 +134,14 @@ abstract class BuyFlowController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

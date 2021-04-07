@@ -2,11 +2,11 @@
 
 namespace ApiBundle\Api\Resource\User;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
-use Biz\Common\BizSms;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\User\UserException;
 
@@ -25,9 +25,9 @@ class UserSmsResetPassword extends AbstractResource
         $this->getDragCaptcha()->check($token);
         $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD, $mobile);
 
-        return array(
+        return [
             'smsToken' => $smsToken['token'],
-        );
+        ];
     }
 
     /**
@@ -36,9 +36,9 @@ class UserSmsResetPassword extends AbstractResource
     public function get(ApiRequest $request, $mobile, $code)
     {
         $fields = $request->query->all();
-        if (!ArrayToolkit::requireds($fields, array(
+        if (!ArrayToolkit::requireds($fields, [
             'smsToken',
-        ))) {
+        ])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 

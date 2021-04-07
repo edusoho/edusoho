@@ -2,15 +2,18 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\Course\MaterialException;
 use Biz\Course\MemberException;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class MaterialController extends CourseBaseController
 {
-    public function indexAction(Request $request, $course, $member = array())
+    public function indexAction(Request $request, $course, $member = [])
     {
         $courseMember = $this->getCourseMember($request, $course);
         if (empty($courseMember)) {
@@ -19,12 +22,12 @@ class MaterialController extends CourseBaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $conditions = array(
+        $conditions = [
             'courseId' => $course['id'],
             'excludeLessonId' => 0,
             'source' => 'coursematerial',
             'type' => 'course',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -34,22 +37,22 @@ class MaterialController extends CourseBaseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
+        $tasks = $this->getTaskService()->searchTasks(['courseId' => $course['id'], 'type' => 'download'], [], 0, 100);
         $tasks = ArrayToolkit::index($tasks, 'activityId');
 
-        return $this->render('course/tabs/material.html.twig', array(
+        return $this->render('course/tabs/material.html.twig', [
             'courseSet' => $courseSet,
             'course' => $course,
             'member' => $member,
             'tasks' => $tasks,
             'materials' => $materials,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function downloadAction(Request $request, $courseId, $materialId)
@@ -57,24 +60,24 @@ class MaterialController extends CourseBaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId, 'tab' => 'material')));
+            return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId, 'tab' => 'material']));
         }
 
-        if ($member && $member['levelId'] > 0) {
-            if (empty($course['vipLevelId'])) {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+        if ($member && 'vip_join' == $member['joinedChannel']) {
+            if (empty($this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']))) {
+                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
             } elseif (empty($course['parentId'])
                 && $this->isVipPluginEnabled()
-                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok'
+                && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id'])
             ) {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
             } elseif (!empty($course['parentId'])) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
                 if (!empty($classroom)
                     && $this->isVipPluginEnabled()
-                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok'
+                    && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id'])
                 ) {
-                    return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+                    return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
                 }
             }
         }
@@ -85,11 +88,11 @@ class MaterialController extends CourseBaseController
             $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
-        if ($material['source'] == 'courseactivity' || !$material['lessonId']) {
+        if ('courseactivity' == $material['source'] || !$material['lessonId']) {
             return $this->createMessageResponse('error', '无权下载该资料');
         }
 
-        return $this->forward('AppBundle:UploadFile:download', array('fileId' => $material['fileId']));
+        return $this->forward('AppBundle:UploadFile:download', ['fileId' => $material['fileId']]);
     }
 
     public function deleteAction(Request $request, $id, $materialId)
@@ -119,6 +122,14 @@ class MaterialController extends CourseBaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipService');
     }
 
     protected function getClassroomService()

@@ -377,17 +377,26 @@ class GroupThreadController extends BaseController
     {
         $keyWord = $request->query->get('keyWord') ?: '';
         $group = $this->getGroupService()->getGroup($id);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getThreadService()->countThreads(['status' => 'open', 'title' => $keyWord, 'groupId' => $id]),
-            15
-        );
-        $threads = $this->getThreadService()->searchThreads(
-            ['status' => 'open', 'title' => $keyWord, 'groupId' => $id],
-            ['createdTime' => 'DESC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+        if (empty($threadSetting['enable_thread']) || empty(($threadSetting['enable_group_thread']))) {
+            $paginator = new Paginator(
+                $this->get('request'),
+                0,
+                15
+            );
+            $threads = [];
+        } else {
+            $paginator = new Paginator(
+                $this->get('request'),
+                $this->getThreadService()->countThreads(['status' => 'open', 'title' => $keyWord, 'groupId' => $id]),
+                15
+            );
+            $threads = $this->getThreadService()->searchThreads(
+                ['status' => 'open', 'title' => $keyWord, 'groupId' => $id],
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount());
+        }
 
         $ownerIds = ArrayToolkit::column($threads, 'userId');
 

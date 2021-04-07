@@ -9,6 +9,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class PageCourse extends AbstractResource
 {
@@ -55,14 +58,31 @@ class PageCourse extends AbstractResource
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
-        if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
-            $course['vipLevel'] = $this->invokeResource($apiRequest);
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            empty($classroom) || $course['classroom'] = $this->getClassroomService()->appendSpecInfo($classroom);
         }
+
+        if ($this->isPluginInstalled('vip')) {
+            if (!empty($course['classroom'])) {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $course['classroom']['id']);
+            } else {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+            }
+            empty($vipRight) || $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
+        }
+
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
 
         return $course;
+    }
+
+    protected function getVipLevel($levelId)
+    {
+        $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$levelId, 'GET', []);
+
+        return $this->invokeResource($apiRequest);
     }
 
     protected function searchCourseReviews($course)
@@ -156,5 +176,18 @@ class PageCourse extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }

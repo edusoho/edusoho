@@ -515,7 +515,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             ];
         }
 
-        return array_merge($result, [
+        $result = array_merge($result, [
             'courseList-1' => [
                 'type' => 'course_list',
                 'moduleType' => 'courseList-1',
@@ -543,6 +543,21 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 ],
             ],
         ]);
+
+        if ($this->isPluginInstalled('Vip')) {
+            $result['vip-3'] = [
+                'type' => 'vip',
+                'moduleType' => 'vip-3',
+                'data' => [
+                    'title' => '会员专区',
+                    'titleShow' => 'show',
+                    'sort' => 'asc',
+                    'items' => [],
+                ],
+            ];
+        }
+
+        return $result;
     }
 
     protected function getTemplateFactory()

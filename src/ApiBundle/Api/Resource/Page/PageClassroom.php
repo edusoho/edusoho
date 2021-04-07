@@ -7,6 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class PageClassroom extends AbstractResource
 {
@@ -58,12 +60,22 @@ class PageClassroom extends AbstractResource
 
         $classroom['reviews'] = $reviewResult['data'];
 
-        if ($this->isPluginInstalled('vip') && $classroom['vipLevelId'] > 0) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$classroom['vipLevelId'], 'GET', []);
-            $classroom['vipLevel'] = $this->invokeResource($apiRequest);
+        if ($this->isPluginInstalled('vip')) {
+            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            if (!empty($vipRight)) {
+                $classroom['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
+                $classroom['vipLevelId'] = $vipRight['vipLevelId']; //新版本classroom已删除该字段，兼容需加上
+            }
         }
 
         return $classroom;
+    }
+
+    protected function getVipLevel($levelId)
+    {
+        $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$levelId, 'GET', []);
+
+        return $this->invokeResource($apiRequest);
     }
 
     private function getMyReview($classroom, $user)
@@ -104,5 +116,13 @@ class PageClassroom extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }

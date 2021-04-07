@@ -2,11 +2,12 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Util\AvatarAlert;
 use Biz\Course\Service\CourseSetService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseOrderController extends BaseController
 {
@@ -23,54 +24,54 @@ class CourseOrderController extends BaseController
         if (!empty($member)) {
             return $this->render(
                 'course/order/is-member.html.twig',
-                array(
+                [
                     'course' => $course,
-                )
+                ]
             );
         }
 
         $vipJoinEnabled = false;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserVipRight($user['id'], CourseVipRightSupplier::CODE, $course['id']);
         }
 
         $paymentSetting = $this->setting('payment');
         if ($course['price'] > 0 && !$paymentSetting['enabled'] && !$vipJoinEnabled) {
             return $this->render(
                 'buy-flow/payments-disabled-modal.html.twig',
-                array(
+                [
                     'course' => $course,
-                )
+                ]
             );
         }
 
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
-        if ($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')) {
+        if (1 == $course['approval'] && ('approved' != $userInfo['approvalStatus'])) {
             return $this->render(
                 'course/order/approve-modal.html.twig',
-                array(
+                [
                     'course' => $course,
-                )
+                ]
             );
         }
 
         $remainingStudentNum = $this->getRemainStudentNum($course);
-        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
+        if ($remainingStudentNum <= 0 && 'live' == $course['type']) {
             return $this->render(
                 'course/order/remainless-modal.html.twig',
-                array(
+                [
                     'course' => $course,
-                )
+                ]
             );
         }
 
         if (AvatarAlert::alertJoinCourse($user)) {
             return $this->render(
                 'course/order/avatar-alert-modal.html.twig',
-                array(
+                [
                     'course' => $course,
-                )
+                ]
             );
         }
 
@@ -79,13 +80,13 @@ class CourseOrderController extends BaseController
 
         return $this->render(
             'course/order/buy-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'courseId' => $course['id'],
                 'courseSet' => $courseSet,
                 'user' => $userInfo,
                 'userFields' => $userFields,
-            )
+            ]
         );
     }
 
@@ -101,9 +102,9 @@ class CourseOrderController extends BaseController
 
         return $this->forward(
             'AppBundle:Order:detail',
-            array(
+            [
                 'id' => $id,
-            )
+            ]
         );
     }
 
@@ -111,17 +112,17 @@ class CourseOrderController extends BaseController
     {
         $remainingStudentNum = $course['maxStudentNum'];
 
-        if ($course['type'] == 'live') {
+        if ('live' == $course['type']) {
             if ($course['price'] <= 0) {
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
             } else {
                 $createdOrdersCount = $this->getOrderService()->countOrders(
-                    array(
+                    [
                         'targetType' => 'course',
                         'targetId' => $course['id'],
                         'status' => 'created',
                         'createdTimeGreaterThan' => strtotime('-30 minutes'),
-                    )
+                    ]
                 );
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
             }

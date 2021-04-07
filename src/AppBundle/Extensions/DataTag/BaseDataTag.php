@@ -13,6 +13,13 @@ abstract class BaseDataTag
         return ServiceKernel::instance();
     }
 
+    protected function getWebExtension()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.twig.extension');
+    }
+
     protected function fillOrgCode($conditions)
     {
         $magic = $this->setting('magic');
@@ -44,7 +51,7 @@ abstract class BaseDataTag
         return ServiceKernel::instance()->getCurrentUser();
     }
 
-    protected function setting($name, $default = array())
+    protected function setting($name, $default = [])
     {
         return ServiceKernel::instance()->createService('System:SettingService')->get($name, $default);
     }

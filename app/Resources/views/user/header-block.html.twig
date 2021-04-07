@@ -33,6 +33,9 @@
       <div class="mates">
         <span class="mrm">{{follower|default(0)}}</span>{{'user.fields.fan'|trans}}<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>{{'user.fields.following'|trans}}
       </div>
+      {% if app.user.id|default(0) == user.id %}
+        {{ slot('user.center.info', {user: user}) }}
+      {% endif %}
       {% set messageSetting = setting('message') %}
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
