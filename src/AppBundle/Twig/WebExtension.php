@@ -117,6 +117,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('convert_absolute_url', [$this, 'convertAbsoluteUrl']),
             new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
             new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
+            new \Twig_SimpleFilter('html_special_chars', [$this, 'getHtmlSpecialChars']),
         ];
     }
 
@@ -1088,6 +1089,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return date('Y-m-d', $time);
+    }
+
+    public function getHtmlSpecialChars($text)
+    {
+        return htmlspecialchars_decode($text);
     }
 
     public function remainTimeFilter($value, $timeType = '')
