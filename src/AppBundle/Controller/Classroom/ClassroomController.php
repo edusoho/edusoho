@@ -191,7 +191,8 @@ class ClassroomController extends BaseController
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         if ($member && '0' == $member['locked']) {
-            if (in_array('student', $member['role'])) {
+            // 班级成员和旁听生进入班级课程列表页
+            if (array_intersect(['student', 'auditor'], $member['role'])) {
                 return $this->redirect($this->generateUrl('classroom_courses', [
                     'classroomId' => $id,
                 ]));

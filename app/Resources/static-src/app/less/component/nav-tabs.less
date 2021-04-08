@@ -73,4 +73,43 @@
     top: 0;
     right: 0;
   }
+  .nav.nav-tabs-common {
+    overflow: hidden;
+    white-space: nowrap;
+    > li {
+      float: none;
+      display: inline-block;
+      margin-bottom: 0;
+    }
+  }
+  .nav.nav-tabs-scroll {
+    position: static;
+    margin-right: 104px;
+    @media(max-width: @screen-xs-max) {
+      overflow-x: hidden;
+      margin-right: 53px;
+    }
+    > li > a {
+      @media(min-width: @screen-md-max) {
+        padding: 5px 30px 12px;
+      }
+    }
+    .introductionBtn::before {
+      content: ' ';
+      position: absolute;
+      top: -16px;
+      left: 0;
+      height: 56px;
+      width: 8px;
+      background-image: linear-gradient(270deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+      @media(max-width: @screen-xs-max) {
+        left: -8px;
+        height: 53px;
+      }
+    }
+  }
+}
+
+.ps-container .ps-scrollbar-x-rail {
+  position: static;
 }

@@ -460,6 +460,31 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $thread['postNum']);
     }
 
+    public function testDeletePostsByThreadId_Wave_Correct()
+    {
+        $groups = $this->createGroups();
+
+        $thread = $this->createGroupsThread($groups);
+
+        $groupsMember = $this->createGroupsMember($groups);
+
+        $threadContent['content'] = 'test content';
+
+        $this->getGroupThreadService()->postThread($threadContent, $groups['id'], $groupsMember['userId'], $thread['id']);
+
+        $this->getGroupThreadService()->deletePostsByThreadId($thread['id']);
+
+        $postCount = $this->getThreadPostDao()->count(['threadId' => $thread['id']]);
+
+        $groupData = $this->getGroupDao()->get($groups['id']);
+
+        $groupMemberData = $this->getGroupMemberDao()->getByGroupIdAndUserId($groups['id'], $thread['userId']);
+
+        $this->assertEquals($groupData['postNum'], $postCount);
+
+        $this->assertEquals($groupMemberData['postNum'], $postCount);
+    }
+
     /**
      * @expectedException \Biz\Thread\ThreadException
      */
@@ -1016,12 +1041,50 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getThreadService()->createMember($fields);
     }
 
+    protected function createGroups()
+    {
+        $groups = [
+            'title' => 'test group',
+            'about' => 'test group about',
+            'ownerId' => 1,
+        ];
+
+        return $this->getGroupDao()->create($groups);
+    }
+
+    protected function createGroupsThread($groups)
+    {
+        $groupsThread = [
+            'title' => 'test thread',
+            'content' => 'test groupId content',
+            'groupId' => $groups['id'],
+            'userId' => 1,
+        ];
+
+        return $this->getGroupThreadDao()->create($groupsThread);
+    }
+
+    protected function createGroupsMember($groups)
+    {
+        $groupsMember = [
+            'groupId' => $groups['id'],
+            'userId' => 2,
+        ];
+
+        return $this->getGroupMemberDao()->create($groupsMember);
+    }
+
     /**
      * @return ThreadService
      */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
+    }
+
+    protected function getGroupThreadService()
+    {
+        return $this->createService('Group:ThreadService');
     }
 
     protected function getClassroomService()
@@ -1037,5 +1100,25 @@ class ThreadServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getGroupDao()
+    {
+        return $this->createDao('Group:GroupDao');
+    }
+
+    protected function getGroupThreadDao()
+    {
+        return $this->createDao('Group:ThreadDao');
+    }
+
+    protected function getThreadPostDao()
+    {
+        return $this->createDao('Group:ThreadPostDao');
+    }
+
+    protected function getGroupMemberDao()
+    {
+        return $this->createDao('Group:MemberDao');
     }
 }

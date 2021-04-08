@@ -14,7 +14,8 @@
         <label>{{'admin.setting_course.questions_setting'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('testpaper_answers_show_mode', {'hide':'admin.setting_course.questions_setting.hide'|trans, 'reviewed':'admin.setting_course.questions_setting.reviewed'|trans , 'submitted':'admin.setting_course.questions_setting.submitted'|trans}, setting('questions.testpaper_answers_show_mode','submitted')) }}
+      {% set submittedLabel = 'admin.setting_course.questions_setting.submitted'|trans ~ '<span class="text-muted text-sm">（' ~ 'admin.setting_course.questions_setting.submitted_tips'|trans ~ '）</span>' %}
+        {{ radios('testpaper_answers_show_mode', {'hide':'admin.setting_course.questions_setting.hide'|trans, 'reviewed':'admin.setting_course.questions_setting.reviewed'|trans , 'submitted':submittedLabel }, setting('questions.testpaper_answers_show_mode','submitted')) }}
       </div>
     </div>
 </fieldset>
