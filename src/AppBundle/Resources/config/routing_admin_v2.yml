@@ -1162,6 +1162,16 @@ admin_v2_certificate_template_img_show:
     path:  /certificate/template/{id}/img
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
 
+# 运营-内容运营-用户内容审核
+admin_v2_user_content_review:
+    path:  /user_content_review
+    defaults: { _controller: AppBundle:AdminV2/Operating/UserContentReview:index }
+
+# 运营-内容运营-举报内容审核
+admin_v2_report_content_review:
+    path:  /report_content_review
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentReview:index }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement
@@ -2895,3 +2905,9 @@ admin_v2_user_content_control_thread:
 admin_v2_user_content_control_private_message:
     path: /setting/ugc/user_content_control/private_message
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:privateMessage }
+
+# 系统-合规经营管理-内容审核设置
+admin_v2_user_content_review_setting:
+    path: /setting/ugc/user_content_review
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:contentReview }
+

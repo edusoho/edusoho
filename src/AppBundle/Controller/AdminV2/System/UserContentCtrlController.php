@@ -144,6 +144,11 @@ class UserContentCtrlController extends BaseController
         ]);
     }
 
+    public function contentReviewAction(Request $request)
+    {
+        return $this->render('admin-v2/system/user-content-control/content-review.html.twig');
+    }
+
     protected function syncPrivateMessageSetting($privateMessageSetting)
     {
         $messageSetting = $this->getSettingService()->get('message', []);
