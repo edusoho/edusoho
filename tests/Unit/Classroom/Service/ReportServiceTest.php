@@ -100,14 +100,130 @@ class ReportServiceTest extends BaseTestCase
 
     public function testGetStudentDetail()
     {
+        $classroom = [
+            'title' => '班级标题',
+            'status' => 'draft',
+        ];
+
+        $course = $this->createCourse('计划2', '课程2');
+        $user1 = $this->createUser('userA');
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], [$course['id']]);
+        $classroom = $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $member1 = $this->getClassroomService()->becomeStudent($classroom['id'], $user1['id'], []);
+        $classroom = $this->getClassroomDao()->update($classroom['id'], [
+            'lessonNum' => 12,
+            'compulsoryTaskNum' => 10,
+            'electiveTaskNum' => 2,
+        ]);
+        $member1 = $this->getClassroomMemberDao()->update($member1['id'], [
+            'learnedNum' => 5,
+            'learnedCompulsoryTaskNum' => 4,
+            'learnedElectiveTaskNum' => 1,
+            'lastLearnTime' => time() - (86400 * 8),
+        ]);
+
+        $res0 = $this->getReportService()->getStudentDetail($classroom['id'], $member1['userId']);
+        self::assertEquals($member1['id'], $res0['id']);
     }
 
     public function testGetStudentDetailCount()
     {
+        $classroom = [
+            'title' => '班级标题',
+            'status' => 'draft',
+        ];
+
+        $course = $this->createCourse('计划1', '课程1');
+        $user1 = $this->createUser('userA');
+        $user2 = $this->createUser('userB');
+        $user3 = $this->createUser('userC');
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], [$course['id']]);
+        $classroom = $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $member1 = $this->getClassroomService()->becomeStudent($classroom['id'], $user1['id'], []);
+        $member2 = $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id'], []);
+        $member3 = $this->getClassroomService()->becomeStudent($classroom['id'], $user3['id'], []);
+        $classroom = $this->getClassroomDao()->update($classroom['id'], [
+            'lessonNum' => 12,
+            'compulsoryTaskNum' => 10,
+            'electiveTaskNum' => 2,
+        ]);
+        $this->getClassroomMemberDao()->update($member1['id'], [
+            'learnedNum' => 5,
+            'learnedCompulsoryTaskNum' => 4,
+            'learnedElectiveTaskNum' => 1,
+            'lastLearnTime' => time() - (86400 * 8),
+        ]);
+
+        $this->getClassroomMemberDao()->update($member2['id'], [
+            'learnedNum' => 11,
+            'learnedCompulsoryTaskNum' => 10,
+            'learnedElectiveTaskNum' => 1,
+            'isFinished' => 1,
+            'lastLearnTime' => time() - (86400 * 2),
+        ]);
+        $this->getClassroomMemberDao()->update($member3['id'], [
+            'learnedNum' => 11,
+            'learnedCompulsoryTaskNum' => 9,
+            'learnedElectiveTaskNum' => 2,
+            'isFinished' => 1,
+            'lastLearnTime' => time() - (86400 * 8),
+        ]);
+        $count = $this->getReportService()->getStudentDetailCount($classroom['id'], ['filter' => 'unLearnedSevenDays']);
+        self::assertEquals(2, $count);
     }
 
     public function testGetCourseDetailList()
     {
+        $classroom = [
+        'title' => '班级标题',
+        'status' => 'draft',
+    ];
+
+        $course = $this->createCourse('计划1', '课程1');
+        $user1 = $this->createUser('userA');
+        $user2 = $this->createUser('userB');
+        $user3 = $this->createUser('userC');
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], [$course['id']]);
+        $classroom = $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $member1 = $this->getClassroomService()->becomeStudent($classroom['id'], $user1['id'], []);
+        $member2 = $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id'], []);
+        $member3 = $this->getClassroomService()->becomeStudent($classroom['id'], $user3['id'], []);
+        $classroom = $this->getClassroomDao()->update($classroom['id'], [
+            'lessonNum' => 12,
+            'compulsoryTaskNum' => 10,
+            'electiveTaskNum' => 2,
+        ]);
+        $this->getClassroomMemberDao()->update($member1['id'], [
+            'learnedNum' => 5,
+            'learnedCompulsoryTaskNum' => 4,
+            'learnedElectiveTaskNum' => 1,
+            'lastLearnTime' => time() - (86400 * 8),
+        ]);
+
+        $this->getClassroomMemberDao()->update($member2['id'], [
+            'learnedNum' => 11,
+            'learnedCompulsoryTaskNum' => 10,
+            'learnedElectiveTaskNum' => 1,
+            'isFinished' => 1,
+            'lastLearnTime' => time() - (86400 * 2),
+        ]);
+        $this->getClassroomMemberDao()->update($member3['id'], [
+            'learnedNum' => 11,
+            'learnedCompulsoryTaskNum' => 9,
+            'learnedElectiveTaskNum' => 2,
+            'isFinished' => 1,
+            'lastLearnTime' => time() - (86400 * 8),
+        ]);
+
+        $res = $this->getReportService()->getCourseDetailList($classroom['id'], [], 0, 100);
+        self::assertCount(1, $res);
+        self::assertEquals(0, $res[0]['finishedNum']);
     }
 
     public function testGetCourseDetailCount()

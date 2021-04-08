@@ -816,7 +816,6 @@ class ThreadServiceTest extends BaseTestCase
                 'keyword' => '1234',
             ],
         ]);
-        var_dump($conditions);
 
         $this->assertEquals('1234', $conditions['title']);
         $this->assertNotNull($conditions['userId']);
