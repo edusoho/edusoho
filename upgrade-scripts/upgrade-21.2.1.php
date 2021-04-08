@@ -91,7 +91,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->logger('info', "添加answerMode");
 
-        $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `answerMode` TINYINT NOT NULL DEFAULT 0 COMMENT '答案显示模式: 1:合格后显示答案;' AFTER doTimes");
+        if (!$this->isFieldExist('activity_testpaper', 'answerMode')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `answerMode` TINYINT NOT NULL DEFAULT 0 COMMENT '答案显示模式: 1:合格后显示答案;' AFTER doTimes");
+        }
 
         $this->logger('info', "添加answerMode结束");
 
