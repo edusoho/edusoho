@@ -14,7 +14,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('id');
 
-        return $builder->execute()->fetchAll(0) ?: array();
+        return $builder->execute()->fetchAll(0) ?: [];
     }
 
     protected function createQueryBuilder($conditions)
@@ -32,19 +32,19 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updateTime'),
-            'serializes' => array(
+        return [
+            'timestamps' => ['createdTime', 'updateTime'],
+            'serializes' => [
                 'ats' => 'json',
-            ),
-            'orderbys' => array(
+            ],
+            'orderbys' => [
                 'sticky',
                 'createdTime',
                 'lastPostTime',
                 'updateTime',
                 'hitNum',
-            ),
-            'conditions' => array(
+            ],
+            'conditions' => [
                 'updateTime >= :updateTime_GE',
                 'targetType = :targetType',
                 'targetId = :targetId',
@@ -64,7 +64,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'targetId IN (:targetIds)',
                 'startTime > :startTimeGreaterThan',
                 'content LIKE :content',
-            ),
-        );
+            ],
+        ];
     }
 }
