@@ -1191,66 +1191,6 @@ class ClassroomServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Classroom\ClassroomException
-     * @expectedExceptionMessage exception.classroom.member_level_limit
-     */
-    public function testBecomeStudentWithStudentLevelLimit()
-    {
-        $this->mockBiz(
-            'Classroom:ClassroomDao',
-            [
-                [
-                    'functionName' => 'get',
-                    'returnValue' => ['id' => 1, 'title' => 'test', 'status' => 'closed', 'expiryMode' => 'forever', 'expiryValue' => 0],
-                ],
-                [
-                    'functionName' => 'update',
-                    'returnValue' => [],
-                ],
-            ]
-        );
-        $this->mockBiz(
-            'User:UserService',
-            [
-                [
-                    'functionName' => 'getUser',
-                    'returnValue' => ['id' => 1],
-                ],
-            ]
-        );
-        $this->mockBiz(
-            'VipPlugin:Vip:VipService',
-            [
-                [
-                    'functionName' => 'checkUserVipRight',
-                    'returnValue' => 'no',
-                ],
-            ]
-        );
-
-        $this->mockBiz(
-            'Product:ProductService',
-            [
-                [
-                    'functionName' => 'getProductByTargetIdAndType',
-                    'returnValue' => ['id' => 1],
-                ],
-            ]
-        );
-
-        $this->mockBiz(
-            'Goods:GoodsService',
-            [
-                [
-                    'functionName' => 'getGoodsSpecsByProductIdAndTargetId',
-                    'returnValue' => ['id' => 1],
-                ],
-            ]
-        );
-        $this->getClassroomService()->becomeStudent(1, 1, ['becomeUseMember' => 1]);
-    }
-
-    /**
      * @expectedException \Biz\Order\OrderException
      * @expectedExceptionMessage exception.order.not_found
      */
