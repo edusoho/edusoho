@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
+use VipPlugin\Biz\Marketing\Service\VipSellModeService;
 
 class AvailableCouponCommand extends Command
 {
@@ -48,6 +49,8 @@ class AvailableCouponCommand extends Command
                 $course = $this->getCourseService()->getCourse($targetId);
                 $targetId = $course['courseSetId'];
             }
+        } elseif ('vip' === $product->targetType) {
+            $targetId = $product->levelId;
         } else {
             $targetId = $product->targetId;
         }
@@ -90,6 +93,11 @@ class AvailableCouponCommand extends Command
             $id = $course['courseSetId'];
         }
 
+        if ('vip' === $type) {
+            $sellMode = $this->getVipSellModeService()->getSellMode($id);
+            $id = empty($sellMode) ? 0 : $sellMode['vipLevelId'];
+        }
+
         return $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
             $type, $id
         );
@@ -125,5 +133,13 @@ class AvailableCouponCommand extends Command
     private function getGoodsService()
     {
         return $this->biz->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return VipSellModeService
+     */
+    private function getVipSellModeService()
+    {
+        return $this->biz->service('VipPlugin:Marketing:VipSellModeService');
     }
 }
