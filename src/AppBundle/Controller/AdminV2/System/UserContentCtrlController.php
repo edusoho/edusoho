@@ -144,9 +144,9 @@ class UserContentCtrlController extends BaseController
         ]);
     }
 
-    public function contentReviewAction(Request $request)
+    public function contentAuditAction(Request $request)
     {
-        return $this->render('admin-v2/system/user-content-control/content-review.html.twig');
+        return $this->render('admin-v2/system/user-content-control/content-audit.html.twig');
     }
 
     protected function syncPrivateMessageSetting($privateMessageSetting)

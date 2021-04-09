@@ -816,19 +816,19 @@ admin_v2:
                                       admin_v2_certificate_template_create:
                                             name: admin_v2.operation.certificate.template.create_tab
                                             group: topBtn
-                        admin_v2_operation_user_content_review:
-                            name: admin_v2.operation.user_content_review_menu
+                        admin_v2_operation_user_content_audit:
+                            name: admin_v2.operation.user_content_audit_menu
                             group: 2
                             children:
-                                admin_v2_user_content_review:
-                                    name: admin_v2.operation.user_content_review_tab
+                                admin_v2_user_content_audit:
+                                    name: admin_v2.operation.user_content_audit_tab
                                     disable: true
-                        admin_v2_operation_report_content_review:
-                            name: admin_v2.operation.report_content_review_menu
+                        admin_v2_operation_report_content_audit:
+                            name: admin_v2.operation.report_content_audit_menu
                             group: 2
                             children:
-                                admin_v2_report_content_review:
-                                    name: admin_v2.operation.report_content_review_tab
+                                admin_v2_report_content_audit:
+                                    name: admin_v2.operation.report_content_audit_tab
                                     disable: true
                         admin_v2_operation_notification:
                             name: admin_v2.operation.notification_menu
@@ -1338,11 +1338,11 @@ admin_v2:
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
                         # 用户内容审核
-                        admin_v2_user_content_review_control:
-                            name: admin_v2.system.user_content_review_menu
+                        admin_v2_user_content_audit_control:
+                            name: admin_v2.system.user_content_audit_menu
                             children:
-                                admin_v2_user_content_review_setting:
-                                    name: admin_v2.system.user_content_review_tab
+                                admin_v2_user_content_audit_setting:
+                                    name: admin_v2.system.user_content_audit_tab
                                     disable: true
                 # 交易设置
                 admin_v2_transaction_group:
