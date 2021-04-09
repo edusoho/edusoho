@@ -305,7 +305,10 @@ export default {
       return;
     }
 
-    await this.getVipOpenStatus();
+    if (this.vipOpenStatus === null) {
+      await this.getVipOpenStatus();
+    }
+
     if (!this.vipOpenStatus) {
       this.$router.push({
         path: '/',

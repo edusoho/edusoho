@@ -70,6 +70,7 @@ export default {
       searchClassRoomList: state => state.classroom.searchClassRoomList,
       vipLevels: state => state.vip.vipLevels,
       vipSwitch: state => state.vipSwitch,
+      vipOpenStatus: state => state.vip.vipOpenStatus,
     }),
   },
   watch: {
@@ -95,8 +96,12 @@ export default {
   async created() {
     window.scroll(0, 0);
     this.setTitle();
+
+    if (this.vipOpenStatus === null) {
+      await this.getVipOpenStatus();
+    }
     // vuex 中会员等级列表为空
-    if (!this.vipLevels.length) {
+    if (this.vipOpenStatus && !this.vipLevels.length) {
       await this.getVipLevels();
     }
 
@@ -107,7 +112,7 @@ export default {
   },
   methods: {
     ...mapActions('classroom', ['setClassRoomList']),
-    ...mapActions('vip', ['getVipLevels']),
+    ...mapActions('vip', ['getVipLevels', 'getVipOpenStatus']),
 
     setTitle() {
       window.postNativeMessage({
