@@ -239,6 +239,38 @@ class TaskResultDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $result[2]['count']);
     }
 
+    public function testCountFinishedCompulsoryTasksByUserIdAndCourseId()
+    {
+        $result = $this->getDao()->countFinishedCompulsoryTasksByUserIdAndCourseId($this->getCurrentUser()->getId(), 1);
+        $this->assertEquals(0, $result);
+
+        $task1 = $this->mockCourseTask(['courseId' => 1, 'isOptional' => 1]);
+        $task2 = $this->mockCourseTask(['courseId' => 1]);
+
+        $this->mockTaskResult(['courseTaskId' => $task1['id'], 'userId' => $this->getCurrentUser()->getId(), 'courseId' => $task1['courseId'], 'status' => 'finish']);
+        $this->mockTaskResult(['courseTaskId' => $task2['id'], 'userId' => $this->getCurrentUser()->getId(), 'courseId' => $task2['courseId'], 'status' => 'finish']);
+
+        $result = $this->getDao()->countFinishedCompulsoryTasksByUserIdAndCourseId($this->getCurrentUser()->getId(), 1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCountFinishedCompulsoryTasksByUserIdAndCourseIds()
+    {
+        $result = $this->getDao()->countFinishedCompulsoryTasksByUserIdAndCourseIds($this->getCurrentUser()->getId(), [1, 2]);
+        $this->assertEquals(0, $result);
+
+        $task1 = $this->mockCourseTask(['courseId' => 1, 'isOptional' => 1]);
+        $task2 = $this->mockCourseTask(['courseId' => 1]);
+        $task3 = $this->mockCourseTask(['courseId' => 2]);
+
+        $this->mockTaskResult(['courseTaskId' => $task1['id'], 'userId' => $this->getCurrentUser()->getId(), 'courseId' => $task1['courseId'], 'status' => 'finish']);
+        $this->mockTaskResult(['courseTaskId' => $task2['id'], 'userId' => $this->getCurrentUser()->getId(), 'courseId' => $task2['courseId'], 'status' => 'finish']);
+        $this->mockTaskResult(['courseTaskId' => $task3['id'], 'userId' => $this->getCurrentUser()->getId(), 'courseId' => $task3['courseId'], 'status' => 'finish']);
+
+        $result = $this->getDao()->countFinishedCompulsoryTasksByUserIdAndCourseIds($this->getCurrentUser()->getId(), [1, 2]);
+        $this->assertEquals(2, $result);
+    }
+
     protected function mockTaskResult($fields = [])
     {
         $taskReult = array_merge($this->getDefaultMockFields(), $fields);

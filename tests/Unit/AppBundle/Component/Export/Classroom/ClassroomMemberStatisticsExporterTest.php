@@ -14,6 +14,8 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
 
         $this->assertEquals([
             'admin.classroom_manage.statistics.member.nickname_th',
+            'admin.classroom_manage.statistics.member.phone_number_th',
+            'admin.classroom_manage.statistics.member.id_number_th',
             'admin.classroom_manage.statistics.member.create_time_th',
             'admin.classroom_manage.statistics.member.finish_time_th',
             'admin.classroom_manage.statistics.member.learn_time_th',
@@ -52,6 +54,16 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
                 'withParams' => [[$member['userId']]],
                 'returnValue' => [$member['userId'] => ['id' => $member['userId'], 'nickname' => 'test name']],
             ],
+            [
+                'functionName' => 'findUserProfilesByIds',
+                'withParams' => [[$member['userId']]],
+                'returnValue' => [$member['userId'] => ['mobile' => $member['mobile']]],
+            ],
+            [
+                'functionName' => 'searchApprovals',
+                'withParams' => [['userIds' => [$member['userId']], 'status' => 'approved'], [], 0, 1],
+                'returnValue' => [$member['userId'] => ['idcard' => $member['idcard']]],
+            ],
         ]);
         $this->mockBiz('Visualization:CoursePlanLearnDataDailyStatisticsService', [
             [
@@ -60,11 +72,12 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
                 'returnValue' => [['userId' => $member['userId'], 'learnedTime' => 60]],
             ],
         ]);
-
         $this->getContainer()->set('biz', $this->getBiz());
         $exporter = new ClassroomMemberStatisticsExporter($this->getContainer(), $conditions);
         $expected = [[
             'test name',
+            empty($member['mobile']) ? '--' : $member['mobile']."\t",
+            empty($member['idcard']) ? '--' : $member['idcard']."\t",
             date('Y-m-d H:i:s', $member['createdTime']),
             '--',
             1.0,
@@ -135,6 +148,8 @@ class ClassroomMemberStatisticsExporterTest extends BaseTestCase
     {
         return array_merge([
             'userId' => $this->getCurrentUser()->getId(),
+            'mobile' => '',
+            'idcard' => '',
             'createdTime' => time(),
             'finishedTime' => 0,
             'questionNum' => '2',

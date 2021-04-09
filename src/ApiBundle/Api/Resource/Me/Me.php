@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use Codeages\Biz\Pay\Service\AccountService;
+use Biz\System\Service\SettingService;
 
 class Me extends AbstractResource
 {
@@ -51,6 +52,12 @@ class Me extends AbstractResource
             }
         }
 
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (isset($storageSetting['video_fingerprint_content'])) {
+            $fingerPrint = $this->getWebExtension()->getFingerprint();
+            $user['fingerPrintSetting']['video_fingerprint_content'] = substr($fingerPrint, strpos($fingerPrint, '>') + 1, strrpos($fingerPrint, '<') - strlen($fingerPrint));
+        }
+
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
@@ -67,5 +74,13 @@ class Me extends AbstractResource
     private function getAccountService()
     {
         return $this->service('Pay:AccountService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

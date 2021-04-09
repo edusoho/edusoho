@@ -202,6 +202,7 @@ class LiveReplayServiceTest extends BaseTestCase
                         'provider' => 'ESLive',
                         'user' => 'admin@admin.com',
                         'nickname' => 'admin',
+                        'role' => 'student',
                         'userId' => '1',
                     ]],
                 ],

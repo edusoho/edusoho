@@ -29,7 +29,7 @@ define(function(require, exports, module) {
       function(options) {
         var element = options.element  ;
         if ($.trim(element.val()).length <= 0 )
-        { 
+        {
           return false;
         } else {
           return true;

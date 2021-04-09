@@ -1008,7 +1008,7 @@ class MemberServiceTest extends BaseTestCase
         $this->getMemberService()->becomeStudent(1, 1);
     }
 
-    public function testBecomeStudent()
+    public function testBecomeStudent_whenTeacherExist_thenReturnMember()
     {
         $this->mockBiz('Course:CourseService', [
             ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published']],
@@ -1020,6 +1020,56 @@ class MemberServiceTest extends BaseTestCase
 
         $result = $this->getMemberService()->becomeStudent(1, 1);
         $this->assertEquals('teacher', $result['role']);
+    }
+
+    public function testBecomeStudent()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $course = $this->getCourseDao()->update($course['id'], ['compulsoryTaskNum' => 3]);
+        $this->getCourseService()->publishCourse($course['id']);
+        $this->mockCourseThread(['courseId' => $course['id'], 'userId' => $user['id']]);
+
+        $time = time();
+        $this->mockBiz('MemberOperation:MemberOperationService', [
+            [
+                'functionName' => 'countRecords',
+                'returnValue' => 1,
+            ],
+            [
+                'functionName' => 'getJoinReasonByOrderId',
+                'returnValue' => ['reason' => 'site.join_by_import', 'reason_type' => 'import_join'],
+            ],
+            [
+                'functionName' => 'createRecord',
+                'returnValue' => [],
+            ],
+        ]);
+
+        $this->mockBiz('Task:TaskResultService', [
+            [
+                'functionName' => 'countTaskResults',
+                'returnValue' => 4,
+            ],
+            [
+                'functionName' => 'countFinishedCompulsoryTasksByUserIdAndCourseId',
+                'returnValue' => 3,
+            ],
+            [
+                'functionName' => 'searchTaskResults',
+                'returnValue' => [['createdTime' => $time, 'updatedTime' => $time, 'finishedTime' => $time]],
+            ],
+        ]);
+
+        $member = $this->getMemberService()->becomeStudent($course['id'], $user['id']);
+
+        $this->assertEquals($time, $member['startLearnTime']);
+        $this->assertEquals($time, $member['finishedTime']);
+        $this->assertEquals($time, $member['lastLearnTime']);
+        $this->assertEquals('3', $member['learnedCompulsoryTaskNum']);
+        $this->assertEquals('1', $member['learnedElectiveTaskNum']);
+        $this->assertEquals('4', $member['learnedNum']);
+        $this->assertEquals('1', $member['isLearned']);
     }
 
     /**
@@ -1492,5 +1542,10 @@ class MemberServiceTest extends BaseTestCase
     protected function getThreadPostDao()
     {
         return $this->createDao('Course:ThreadPostDao');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

@@ -13,7 +13,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($userId, $status));
+        return $this->db()->fetchAssoc($sql, [$userId, $status]);
     }
 
     public function findByUserIds($userIds)
@@ -23,14 +23,17 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
 
     public function declares()
     {
-        return array(
-            'orderbys' => array('id', 'createdTime'),
-            'conditions' => array(
+        return [
+            'orderbys' => ['id', 'createdTime'],
+            'conditions' => [
+                'id = :id',
+                'userId IN (:userIds)',
+                'status = :status',
                 'truename LIKE :truename',
                 'createTime >=:startTime',
                 'createTime <=:endTime',
                 'idcard LIKE :idcard',
-            ),
-        );
+            ],
+        ];
     }
 }
