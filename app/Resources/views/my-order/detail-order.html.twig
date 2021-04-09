@@ -106,7 +106,7 @@
         </tr>
       {% endif %}
 
-      {% if order.pay_amount != 0 %}
+      {% if order.pay_amount != 0 and orderItems[0].target_type|default('') != 'vip'%}
         <tr>
           <td width="25%">
             {{ 'order.refund_deadline'|trans }}

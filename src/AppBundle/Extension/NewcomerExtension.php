@@ -6,6 +6,7 @@ use Biz\NewComer\AuthSettingTask;
 use Biz\NewComer\CloudAppliedTask;
 use Biz\NewComer\CourseCreatedTask;
 use Biz\NewComer\DecorationWebTask;
+use Biz\NewComer\ManagementQualificationsTask;
 use Biz\NewComer\PaymentAppliedTask;
 use Biz\NewComer\PluginRegisterTask;
 use Pimple\Container;
@@ -16,6 +17,14 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
     public function getNewcomerTasks()
     {
         return [
+            'management_qualifications_task' => [
+                'name' => '合规经营',
+                'description' => '网校合规经营资质，把控网校关停风险',
+                'url' => '/admin/v2/setting/ugc/qualification',
+                'guideUrl' => 'https://www.qiqiuyu.com/goods/show/80?targetId=451',
+                'status' => false,
+                'class' => ManagementQualificationsTask::class,
+            ],
             'cloud_applied_task' => [
                 'name' => 'admin_v2.newcomer_task.cloud_applied.title',
                 'description' => 'admin_v2.newcomer_task.cloud_applied.tip',

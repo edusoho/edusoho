@@ -170,8 +170,10 @@ define(function(require, exports, module) {
                     rule: 'decimal min{min:0.1} max{max:100}',
                     display:Translator.trans('admin.setting.cloud.validate_old.video_fingerprint_time.display')
                 });
+                $('.js-fingerprint-show').show();
             } else {
                 validator.removeItem('[name="video_fingerprint_time"]');
+                $('.js-fingerprint-show').hide();
             }
         })
 

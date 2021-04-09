@@ -1,9 +1,17 @@
 {% do script(['app/js/my/course-set-teacher-list/index.js'])  %}
-<div class="course-list">
+<div class="course-list course-list-new">
     <div class="row test-row">
         {% for courseSet in courseSets %}
             <div class="col-lg-3 col-md-4 col-xs-6">
                 <div class="course-item course-sticky-item">
+                  {% if courseSet.course is defined %}
+                    {% set course = courseSet.course %}
+                  {% else %}
+                    {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+                  {% endif %}
+                  {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
+                    <span class="tag-vip-free"></span>
+                  {% endif %}
                   <div class="course-img">
                     <a {% if ref|default() %} href="{{ path('course_show', {id: courseSet.defaultCourseId,ref:ref}) }}" {% else %} href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" {% endif %} target="_blank">
                       {% if courseSet.discountId > 0 %}
@@ -43,7 +51,7 @@
                     <div class="title">
                       <a class="link-dark" {% if ref|default() %} href="{{ path('course_show', {id: courseSet.defaultCourseId,ref:ref}) }}" {% else %} href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" {% endif %}
                        target="_blank">
-                        {{ courseSet.title }}
+                        {{ courseSet.title|raw|nl2br }}
                       </a>
                     </div>
                     <div class="metas clearfix">

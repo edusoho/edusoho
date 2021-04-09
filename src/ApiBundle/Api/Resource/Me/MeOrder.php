@@ -34,7 +34,7 @@ class MeOrder extends AbstractResource
             $order['cover'] = empty($product->cover) ? ['middle' => ''] : $product->cover;
             $order['targetType'] = $product->targetType;
             $order['targetId'] = $product->targetId; //targetId要转化成正常的接口
-            $order['targetUrl'] = $this->generateUrl($product->successUrl[0], $product->successUrl[1], UrlGeneratorInterface::ABSOLUTE_URL); //跳转URL需要改造
+            $order['targetUrl'] = empty($product->successUrl[1]['id']) ? '' : $this->generateUrl($product->successUrl[0], $product->successUrl[1], UrlGeneratorInterface::ABSOLUTE_URL); //跳转URL需要改造
             $order['goodsId'] = $product->goodsId;
             $order['specsId'] = $product->goodsSpecsId;
         }

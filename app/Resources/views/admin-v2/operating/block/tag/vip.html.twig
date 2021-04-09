@@ -1,0 +1,46 @@
+{% set block_data = block.data[type] %}
+<div role="tabpanel" class="tab-pane active" id="">
+  {% for label,data in block_data if block_data %}
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{ data.title }}</label>
+      {% if label in ['defaultTitle','subTitle'] %}
+        <div class="col-md-3">
+          <input type="text" class="form-control" name="data[{{ type }}][{{ label }}][value]" placeholder="{{ data.value }}" value="{{ data.value }}">
+        </div>
+      {% elseif label == 'vipOrder' %}
+        <div class="col-md-3">
+          <label class="checkbox-inline">
+            <input class="vipOrder status-input" name="data[{{ type }}][{{ label }}][value]" type="radio" value="ASC" {% if data.value == 'ASC' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.orderby_low_to_high'|trans}}
+          </label>
+          <label class="checkbox-inline">
+            <input class="vipOrder status-input" name="data[{{ type }}][{{ label }}][value]" type="radio" value="DESC" {% if data.value == 'DESC' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.orderby_high_to_low'|trans}}
+          </label>
+          {% set config = {'count':data.count|default(4), 'vipOrder':data.value} %}
+          {% set vipLevel = vip_level_list(config, 0) %}
+          {% if vipLevel %}
+            <div style="background-color: #f5f5f5; width: 100%;padding: 2px 0">
+              <table style="width: 100%;" id="vipLevelTable" data-url="{{ path('admin_v2_vip_level_list') }}">
+                {% for level in vipLevel %}
+                  <tr style="border: 1px solid #ddd;"><td style="padding: 10px 0 10px 10px">{{ level.name }}</td></tr>
+                {% endfor %}
+              </table>
+            </div>
+          {% endif %}
+        </div>
+        <input class="status-value" type="hidden" name="data[{{ type }}][{{ label }}][count]" value="{{ data.count|default(4) }}">
+      {% elseif data.label == 'vipList' %}
+        <div class="col-md-3">
+          <label class="checkbox-inline">
+            <input class="status-input vip-list" name="data[{{ type }}][{{ label }}][value]" type="radio" value="show" {% if data.value == 'show' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_show'|trans}}
+          </label>
+          <label class="checkbox-inline">
+            <input class="status-input vip-list" name="data[{{ type }}][{{ label }}][value]" type="radio" value="hidden" {% if data.value == 'hidden' %}checked{% endif %}> {{'admin.setting.theme.manage.modal.vip_list_hidden'|trans}}
+          </label>
+          <div class="vip-list-block help-block {% if data.value|default('show') == 'hidden' %}hidden{% endif %}">{{ 'admin.setting.theme.manage.modal.vip_list_tip'|trans }}</div>
+        </div>
+      {% endif %}
+      <input class="status-value" type="hidden" name="data[{{ type }}][{{ label }}][title]" value="{{ data.title }}">
+      <input class="status-value" type="hidden" name="data[{{ type }}][{{ label }}][label]" value="{{ label }}">
+    </div>
+  {% endfor %}
+</div>

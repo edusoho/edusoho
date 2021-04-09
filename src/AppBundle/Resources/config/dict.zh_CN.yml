@@ -219,13 +219,15 @@ memberLevel:
 duration_unit:
     month: 个月
     year: 年
+    day: 天
 
 boughtType:
     new: 购买
     renew: 续费
     upgrade: 升级
-    edit: 编辑
+    admin: 添加会员
     cancel: 取消会员
+    edit: 编辑会员
 
 userKeyWordType:
     nickname: 用户名

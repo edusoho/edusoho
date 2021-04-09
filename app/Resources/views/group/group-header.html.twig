@@ -27,7 +27,9 @@
       <div class="media-metas">
 
         {{'group.detail.member_number'|trans({'%memberNum%':groupinfo.memberNum})}}
-        <span class="mlm">{{'group.detail.thread_number'|trans({'%threadNum%':groupinfo.threadNum})}}</span>
+        {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_group_thread')|default('1') == '1' %}
+          <span class="mlm">{{'group.detail.thread_number'|trans({'%threadNum%':groupinfo.threadNum})}}</span>
+        {% endif %}
         <span class="fsn mlm">{{'group.detail.created_time'|trans({'%createdTime%':groupinfo.createdTime|date('Y-m-d')})}}</span>
 
       </div>

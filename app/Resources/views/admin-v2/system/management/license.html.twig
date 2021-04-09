@@ -1,0 +1,147 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_business_license' %}
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/system/setting/license/index.js']) %}
+
+{% block main %}
+  <form class="form-horizontal" id="license-form" method="post">
+    <fieldset id="license_area">
+      <legend>{{ 'admin.setting.license.headline'|trans }} <span style="color: red;font-size: 13px;padding-left:2%">{{ 'admin.setting.license.prompt'|trans }}</span></legend>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.license.name'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="license_name" name="license_name" class="form-control"
+                 value="{{ license.license_name }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="license-picture">{{ 'admin.setting.license.picture'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <div class="cd-image-upload" id="license-picture-container">
+            <img src="{% if license.license_picture|default() %}{{ asset(license.license_picture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
+                 alt=""
+                 class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="leading-qrcode"/>
+            <div class="image-upload-mask">
+              <div class="image-delete-tip js-image-delete {% if not license.license_picture|default() %}hidden{% endif %}">
+                <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+              </div>
+              <div class="image-upload-content">
+                <i
+                  class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
+              </div>
+            </div>
+            <label class="image-upload-label">
+              <input id="license-picture" type="file" name="license-picture" class="cd-hide" data-target="#leading-qrcode"
+                     accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
+                     data-token="{{ upload_token('default', 'image') }}"/>
+            </label>
+          </div>
+          <input id="leading-qrcode" type="hidden" name="license_picture"
+                 value="{{ license.license_picture|default() }}"
+                 class="form-control">
+          <div class="help-block">
+            {{ 'admin.setting.license.picture.help_block'|trans }}
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="url">{{ 'admin.setting.license.url'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="license_url" name="license_url" class="form-control" value="{{ license.license_url }}">
+          <p class="help-block">{{ 'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()}) }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <legend>{{ 'admin.setting.permit.headline'|trans }}<span style="color: red;font-size: 13px;padding-left:2%">{{ 'admin.setting.license.prompt'|trans }}</span></legend>
+    <fieldset id="permit_area">
+      {% for permit in license.permits %}
+        <div class="setting_permit" id="settingPermit_{{ loop.index - 1 }}"><br>
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="analytics">{{ 'admin.setting.permit.name'|trans }}</label>
+            </div>
+            <div class="col-md-8 controls">
+              <input type="text" name="permits[{{ loop.index - 1 }}][name]" class="form-control permit_name"
+                     value="{{ permit.name }}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="name">{{ 'admin.setting.permit.record.number'|trans }}</label>
+            </div>
+            <div class="col-md-8 controls">
+              <input type="text" name="permits[{{ loop.index - 1 }}][record_number]"
+                     class="form-control permit_record_number" value="{{ permit.record_number }}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="permits-qrcode">{{ 'admin.setting.permit.picture'|trans }}</label>
+            </div>
+            <div class="controls col-md-8">
+              <div class="cd-image-upload" id="permits-container">
+                <img src="{% if permit.picture|default() %}{{ asset(permit.picture) }}{% else %}{{ '/assets/img/default/gif.png' }}{% endif %}"
+                     alt=""
+                     class="cd-avatar cd-avatar-square upload-auto-width js-uploaded-image" id="permits-qrcode{{ loop.index - 1 }}"/>
+                <div class="image-upload-mask">
+
+                    <div id="js-image-delete-{{ loop.index - 1 }}" class="image-delete-tip {% if not permit.picture|default() %}hidden{% endif %}">
+                      <i class="cd-icon cd-icon-close" style="font-size: 16px;position: absolute;top:3px;left: 5px;"></i>
+                    </div>
+                  <div class="image-upload-content">
+                    <i
+                      class="cd-icon cd-icon-camera"></i>{{ 'admin.setting.upload.license.photo'|trans }}
+                  </div>
+                </div>
+                <label class="image-upload-label">
+                  <input id="permits{{ loop.index - 1  }}" type="file" name="permits2" class="cd-hide" data-target="#permits-qrcode{{ loop.index - 1 }}"
+                         accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
+                         data-token="{{ upload_token('default', 'image') }}"/>
+                </label>
+              </div>
+              <input id="permits-qrcode" type="hidden" name="permits[{{ loop.index - 1  }}][picture]"
+                     value="{{ permit.picture|default() }}"
+                     class="permit_picture">
+              <div class="help-block">
+                {{ 'admin.setting.permit.picture.help_block'|trans }}
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"></div>
+            <div class="col-md-8 controls">
+              <input class="btn btn-default addSettingPermitBtn" type="button" style="display:none;"
+                     id="addSettingPermitBtn_{{ loop.index - 1 }}"
+                     value={{ 'admin.setting.permit.setting.add' |trans }}>
+              <input class="btn btn-default removeSettingPermitBtn" type="button"
+                     id="removeSettingPermitBtn_{{ loop.index - 1 }}"
+                     value={{ 'admin.setting.permit.setting.remove' |trans }}>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </fieldset><br>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-primary" id="save_license">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+  </form>
+{% endblock %}
