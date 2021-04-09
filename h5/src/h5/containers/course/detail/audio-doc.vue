@@ -10,8 +10,7 @@
 </template>
 <script>
 import loadScript from 'load-script';
-import { mapState } from 'vuex';
-import Api from '@/api';
+import { mapState, mapActions } from 'vuex';
 import { Toast } from 'vant';
 
 export default {
@@ -21,6 +20,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['cloudSdkCdn']),
     ...mapState('course', {
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
@@ -38,6 +38,8 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
+    ...mapActions(['setCloudAddress']),
+
     getParams() {
       const canTryLookable = !this.joinStatus;
       return canTryLookable
@@ -90,10 +92,13 @@ export default {
         player.on('timeupdate', e => {});
       });
     },
-    loadPlayerSDK() {
+    async loadPlayerSDK() {
       if (!window.AudioPlayerSDK) {
+        if (!this.cloudSdkCdn) {
+          await this.setCloudAddress();
+        }
         const scrptSrc =
-          '//service-cdn.qiqiuyun.net/js-sdk/audio-player/sdk-v1.js?v=' +
+          `//${this.cloudSdkCdn}/js-sdk/audio-player/sdk-v1.js?v=` +
           Date.now() / 1000 / 60;
         // Cache SDK for 1 min.
 

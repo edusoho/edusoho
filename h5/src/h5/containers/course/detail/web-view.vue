@@ -40,7 +40,7 @@
 <script>
 import loadScript from 'load-script';
 import Api from '@/api';
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import report from '@/mixins/course/report';
@@ -67,6 +67,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['cloudSdkCdn']),
     ...mapState('course', {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
@@ -84,6 +85,8 @@ export default {
     this.initData();
   },
   methods: {
+    ...mapActions(['setCloudAddress']),
+
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
@@ -159,12 +162,15 @@ export default {
             },
           };
     },
-    initPlayer(playerParams) {
+    async initPlayer(playerParams) {
       const media = playerParams.media;
       // const playerSDKUri ="//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v="
       // + parseInt(Date.now() / 1000 / 60);
+      if (!this.cloudSdkCdn) {
+        await this.setCloudAddress();
+      }
       const playerSDKUri =
-        '//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?' +
+        `//${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?` +
         ~~(Date.now() / 1000 / 60);
       loadScript(playerSDKUri, err => {
         if (err) throw err;

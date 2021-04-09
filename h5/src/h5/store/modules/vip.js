@@ -2,7 +2,7 @@ import Api from '@/api';
 
 const state = {
   vipLevels: [], // 会员等级列表
-  vipOpenStatus: false, // 会员插件是否开启
+  vipOpenStatus: null, // 会员插件是否开启
 };
 
 const mutations = {
