@@ -10,7 +10,7 @@ if (copyEnabled) {
     document.onselectstart = new Function('return false');
     document.oncontextmenu = new Function('return false');
     if (window.sidebar) {
-      document.onmousedown = new Function('return false');
+      document.onmousedown = new Function('return true');
       document.onclick = new Function('return true');
       document.oncut = new Function('return false');
       document.oncopy = new Function('return false');
