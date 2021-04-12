@@ -1,6 +1,37 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
 {% set menu = 'admin_v2_user_content_audit_setting' %}
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/system/user-content-control/content-audit/index.js']) %}
 
 {% block main %}
+<form class="form-horizontal" id="content_audit_form" method="post" novalidate>
+	<div class="form-group">
+		<div class="col-md-3 control-label text-right">
+			<label for="enable_course_review">{{ 'admin_v2.system.user_content_control.content_audit_setting.label'|trans }}</label>
+		</div>
+		<div class="col-md-8 controls radios">
+			<label><input type="radio" name="mode" value="audit_after" {% if 'audit_after' == contentAuditSetting.mode|default('audit_after') %} checked="checked"{% endif %}> {{ 'admin_v2.system.user_content_control.content_audit_setting.audit_after'|trans }}</label>
+      <span class="text-muted text-sm">{{ 'admin_v2.system.user_content_control.content_audit_setting.audit_before.tips'|trans }}</span>
+		</div>
+		<div class="col-md-offset-3 col-md-8 controls radios">
+  		<label><input type="radio" name="mode" value="audit_before" {% if 'audit_before' == contentAuditSetting.mode|default('audit_after')  %} checked="checked"{% endif %}> {{ 'admin_v2.system.user_content_control.content_audit_setting.audit_before'|trans }}</label>
+      <span class="text-muted text-sm">{{ 'admin_v2.system.user_content_control.content_audit_setting.audit_after.tips'|trans }}</span>
+    </div>
+	</div>
+  <div class="form-group">
+		<div class="col-md-3 control-label text-right">
+			<label for="enable_course_review">{{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.label'|trans }}</label>
+		</div>
+		<div class="col-md-8 controls radios">
+        {{ radios('enable_auto_audit', {1:'admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow'|trans, 0:'admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow'|trans}, contentAuditSetting.enable_auto_audit|default('1')) }}
+		</div>
+	</div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <div class="form-group">
+    <div class="col-md-offset-3 col-md-8">
+      <a class="btn btn-primary mtl pll prl js-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
+    </div>
+  </div>
+</form>
 {% endblock %}
