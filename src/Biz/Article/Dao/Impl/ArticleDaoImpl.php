@@ -36,6 +36,17 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         return $this->db()->fetchAll($sql, array()) ?: array();
     }
 
+    public function findByLikeTitle($title)
+    {
+        if (empty($title)) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+
+        return $this->db()->fetchAll($sql, ['%'.$title.'%']);
+    }
+
     public function searchByCategoryIds(array $categoryIds, $start, $limit)
     {
         return $this->search(

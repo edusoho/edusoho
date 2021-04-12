@@ -5377,6 +5377,15 @@ admin.operation_invite.register_coupon: 'Register Award'
 admin.operation_invite.invite_coupon: 'Invite Award'
 admin.operation_invite.invite_code_owner: 'inviter'
 admin.operation_invite.register_user: 'registered user'
+admin.operation_article.review.form.input.title.placeholer: 'Article Title Name'
+admin.operation_article.review.form.input.author.placeholer: 'author'
+admin:operation_article.review.form.input.content.placeholer: 'Key words in rate'
+admin.operation_article.review.content_th: 'Article Review Content'
+admin.operation_article.review.author_th: author
+admin.operation_article.review.operation_th: operation
+admin.operation_article.review.expand_td: unfold
+admin.operation_article.review.collapse_td: Folded
+admin:operation_article.review.content: 'Review Content'
 
 #用户信息采集
 admin.imformation_collection.create: 'Create'

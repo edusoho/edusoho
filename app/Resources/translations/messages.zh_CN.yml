@@ -6276,6 +6276,15 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
+admin.operation_article.review.form.input.title.placeholer: 资讯标题名
+admin.operation_article.review.form.input.author.placeholer: 作者
+admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
+admin.operation_article.review.content_th: 评论内容
+admin.operation_article.review.author_th: 作者
+admin.operation_article.review.operation_th: 操作
+admin.operation_article.review.expand_td: 展开
+admin.operation_article.review.collapse_td: 收起
+admin:operation_article.review.content: 评价
 
 # 小组话题管理
 admin.operation_group.groupstatus_option: 小组状态
