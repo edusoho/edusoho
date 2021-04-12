@@ -23,6 +23,7 @@ class ClassroomMemberEventSubscriber extends EventSubscriber implements EventSub
     {
         $classroom = $event->getSubject();
         $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
+        $this->getClassroomService()->updateClassroomMembersNoteAndThreadNums($classroom['id']);
     }
 
     public function onCourseMembersFinishedRefresh(Event $event)

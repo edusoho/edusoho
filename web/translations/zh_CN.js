@@ -736,7 +736,7 @@ t.add("validate_old.date_check.message", "\u5f00\u59cb\u65f6\u95f4\u5fc5\u987b\u
 t.add("validate_old.not_all_digital.message", "%display%\u4e0d\u80fd\u5168\u4e3a\u6570\u5b57", "js", "zh_CN");
 t.add("validate_old.right_time_tip", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u65f6\u95f4\u683c\u5f0f", "js", "zh_CN");
 t.add("validate_old.es_version.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684%display%\uff0c\u6b63\u786e\u683c\u5f0f\u662fXX.XX.XX", "js", "zh_CN");
-t.add("validate_old.visible_character.message", "%display%\u8bf7\u8f93\u5165\u53ef\u89c1\u6027\u5b57\u7b26", "js", "zh_CN");
+t.add("validate_old.visible_character.message", "\u8bf7\u8f93\u5165%display%", "js", "zh_CN");
 t.add("validate_old.chinese_limit.message", "%display%\u7684\u957f\u5ea6\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e%max%\u5b57\u7b26,\u4e00\u4e2a\u4e2d\u6587\u4e3a2\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate_old.chinese.message", "%display%\u5fc5\u987b\u662f\u4e2d\u6587\u5b57", "js", "zh_CN");
 t.add("validate_old.phone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684%display%\uff08\u4ec5\u652f\u6301\u4e2d\u56fd\u5927\u9646\u624b\u673a\u53f7\uff09\u3002", "js", "zh_CN");
