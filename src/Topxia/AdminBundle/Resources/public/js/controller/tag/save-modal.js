@@ -36,7 +36,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#tag-name-field',
             required: true,
-            rule: 'remote byte_maxlength{max:20}'
+            rule: 'remote byte_maxlength{max:20} visible_character'
         });
 
         $modal.find('.delete-tag').on('click', function() {

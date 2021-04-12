@@ -865,7 +865,7 @@ validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
 validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
-validate_old.visible_character.message: %display%请输入可见性字符
+validate_old.visible_character.message: 请输入%display%
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
 validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
@@ -1574,6 +1574,7 @@ site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
 vip.level.free_learning: 会员免费学
+vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
@@ -1750,8 +1751,12 @@ site.share: 分享
 site.manage: 管理
 goods.show_page.goto_learn: 去学习
 goods.show_page.vip_free_learn: 会员免费学
+goods.show_page.vip_free_learn_new: 会员免费兑换
+goods.show_page.vip_buy: %vipName%免费
+goods.show_page.vip_upgrade: 升级为%vipName%免费
 goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
-goods.show_page.not_buyable_tips: 抱歉，该商品为限制商品，请联系客服
+goods.show_page.course_not_buyable_tips: 抱歉，该课程无法学习，请联系学校老师
+goods.show_page.classroom_not_buyable_tips: 抱歉，该班级无法学习，请联系学校老师
 goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服
 goods.show_page.usage_expiry_tips: 超过学习截止日期，不允许加入和购买
 goods.show_page.free_join_btn: 免费加入

@@ -48,6 +48,8 @@ class ClassroomManageController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
+            $classroom['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
         }
 
         $coursePrice = 0;
@@ -68,7 +70,7 @@ class ClassroomManageController extends BaseController
                     'ownerId' => $id,
                 ]), 'name'),
                 'vipInstalled' => $this->isPluginInstalled('Vip'),
-                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
+                'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
                 'coursePrice' => $coursePrice,
                 'courseNum' => $courseNum,
             ]
@@ -643,7 +645,30 @@ class ClassroomManageController extends BaseController
 
         $this->getClassroomService()->updateClassroomInfo($id, $class);
 
+        if ($this->isPluginInstalled('Vip')) {
+            $this->setVipRight($id, $class);
+        }
+
         return $this->createJsonResponse(true);
+    }
+
+    protected function setVipRight($id, $data)
+    {
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $id);
+        if (!empty($vipRight) && !empty($data['vipLevelId']) && $vipRight['vipLevelId'] == $data['vipLevelId']) {
+            return;
+        }
+
+        isset($vipRight['id']) && $this->getVipRightService()->deleteVipRight($vipRight['id']);
+
+        if (!empty($data['vipLevelId'])) {
+            $this->getVipRightService()->createVipRight([
+                'vipLevelId' => $data['vipLevelId'],
+                'supplierCode' => 'classroom',
+                'uniqueCode' => $id,
+                'title' => $data['title'],
+            ]);
+        }
     }
 
     public function expiryDateRuleAction()
@@ -1429,6 +1454,11 @@ class ClassroomManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

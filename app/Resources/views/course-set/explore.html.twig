@@ -81,7 +81,7 @@
       </li>
     </ul>
     <div class="filter hidden-xs">
-      {% if is_plugin_installed('vip') %}
+      {% if is_plugin_installed('vip') and setting('vip.enabled', 1) %}
         <div class="btn-group">
           <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
               class="es-icon es-icon-crown text-warning"></i>

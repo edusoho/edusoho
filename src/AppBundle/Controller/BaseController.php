@@ -170,6 +170,19 @@ class BaseController extends Controller
         return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
     }
 
+    public function getPluginVersion($pluginName)
+    {
+        $plugins = $this->get('kernel')->getPluginConfigurationManager()->getInstalledPlugins();
+
+        foreach ($plugins as $plugin) {
+            if (strtolower($plugin['code']) == strtolower($pluginName)) {
+                return $plugin['version'];
+            }
+        }
+
+        return null;
+    }
+
     protected function getTargetPath(Request $request)
     {
         if ($request->query->get('goto')) {

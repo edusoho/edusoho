@@ -1,0 +1,75 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_user_content_control_thread' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/admin-v2/system/user-content-control/thread/index.js']) %}
+{% block main %}
+  <form class="form-horizontal" id="user_content_control_thread" method="post" novalidate>
+    <legend style="height: 50px;">
+      <div class="row form-group">
+        <div class="col-lg-2 col-md-3" style="padding-top: 5px;">
+          <label for="enable_thread">{{ 'admin_v2.system.user_content_control.thread_manage'|trans }}：</label>
+        </div>
+        <div class="col-lg-10 col-md-9 controls radios">
+          {{ radios('enable_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_thread|default('1')) }}
+        </div>
+      </div>
+    </legend>
+    <div class="js-sub-management {% if threadSetting.enable_thread|default('1') == '0' %}hidden{% endif %}">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="enable_course_question">{{ 'admin_v2.system.user_content_control.course_question_manage'|trans }}</label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_course_question', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_course_question|default('1')) }}
+          <label><a target="_blank" href="{{ path('admin_v2_question', { postStatus: 'unPosted' }) }}">{{ 'admin_v2.system.user_content_control.goto_question_manage'|trans }}</a></label>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="enable_classroom_question">{{ 'admin_v2.system.user_content_control.classroom_question_manage'|trans }}</label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_classroom_question', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_classroom_question|default('1')) }}
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="enable_course_thread">{{ 'admin_v2.system.user_content_control.course_thread_manage'|trans }}</label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_course_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_course_thread|default('1')) }}
+          <label><a target="_blank" href="{{ path('admin_v2_course_thread') }}">{{ 'admin_v2.system.user_content_control.goto_thread_manage'|trans }}</a></label>
+          <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_app_switch_tips'|trans }}</div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="enable_classroom_thread">{{ 'admin_v2.system.user_content_control.classroom_thread_manage'|trans }}</label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_classroom_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_classroom_thread|default('1')) }}
+          <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_app_switch_tips'|trans }}</div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="enable_group_thread">{{ 'admin_v2.system.user_content_control.group_thread_manage'|trans }}</label>
+        </div>
+        <div class="col-md-10 controls radios">
+          {{ radios('enable_group_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_group_thread|default('1')) }}
+          <label><a target="_blank" href="{{ path('admin_v2_groupThread') }}">{{ 'admin_v2.system.user_content_control.goto_group_thread_manage'|trans }}</a></label>
+          <div class="help-block">{{ 'admin_v2.system.user_content_control.pc_switch_tips'|trans }}</div>
+        </div>
+      </div>
+    </div>
+
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-primary mtl js-thread-setting-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

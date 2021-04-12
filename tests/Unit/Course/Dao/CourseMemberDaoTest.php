@@ -406,7 +406,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res[] = $tmp;
         foreach ($res as $key => $val) {
-            $this->assertEquals($expected[$key], $val);
+            $this->assertEquals($expected[$key]['userId'], $val['userId']);
+            $this->assertEquals($expected[$key]['courseId'], $val['courseId']);
         }
     }
 
@@ -624,10 +625,10 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'courseId' => '1',
             'classroomId' => '1',
             'joinedType' => 'course',
+            'joinedChannel' => '',
             'userId' => '1',
             'orderId' => '1',
             'deadline' => '1',
-            'levelId' => '1',
             'learnedNum' => '1',
             'credit' => '1',
             'noteNum' => '1',
@@ -669,7 +670,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'creator' => 1,
             'isFree' => 1,
             'price' => 1,
-            'vipLevelId' => 1,
             'buyable' => 1,
             'tryLookable' => 1,
             'tryLookLength' => 1,

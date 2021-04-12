@@ -15,25 +15,28 @@ class OperationSettingController extends BaseController
 {
     public function articleSetAction(Request $request)
     {
-        $articleSetting = $this->getSettingService()->get('article', array());
+        $articleSetting = $this->getSettingService()->get('article', []);
+        $reviewEnabled = $this->getSettingService()->node('ugc_review.enable_review', '1');
 
-        $default = array(
+        $default = [
             'name' => '资讯频道',
             'pageNums' => 20,
-            'show_comment' => '1',
-        );
+            'show_comment' => $reviewEnabled ?
+                $this->getSettingService()->node('ugc_review.enable_article_review', '1') :
+                0,
+        ];
 
         $articleSetting = array_merge($default, $articleSetting);
 
         if ('POST' == $request->getMethod()) {
-            $articleSetting = $request->request->all();
+            $articleSetting = array_merge($default, $request->request->all());
             $this->getSettingService()->set('article', $articleSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/article-set.html.twig', array(
+        return $this->render('admin-v2/system/operation/article-set.html.twig', [
             'articleSetting' => $articleSetting,
-        ));
+        ]);
     }
 
     public function groupSetAction(Request $request)
@@ -45,13 +48,13 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/group-set.html.twig', array(
-        ));
+        return $this->render('admin-v2/system/operation/group-set.html.twig', [
+        ]);
     }
 
     public function inviteSetAction(Request $request)
     {
-        $default = array(
+        $default = [
             'invite_code_setting' => 0,
             'promoted_user_enable' => 0,
             'promoted_user_batchId' => '',
@@ -61,23 +64,23 @@ class OperationSettingController extends BaseController
             'inviteInfomation_template' => '{{registerUrl}}',
             'remain_number' => '',
             'mobile' => '',
-        );
+        ];
 
         if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
             if (!empty($inviteSetting['promoted_user_batchId']) || !empty($inviteSetting['promoted_user_enable'])) {
                 $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
                 if ($batch['unreceivedNum'] <= 1) {
-                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                    return  $this->createJsonResponse(['status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')]);
                 }
             }
             if (!empty($inviteSetting['promote_user_batchId']) || !empty($inviteSetting['promote_user_enable'])) {
                 $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
                 if ($batch['unreceivedNum'] <= 1) {
-                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                    return  $this->createJsonResponse(['status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')]);
                 }
             }
-            $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
+            $inviteSetting = ArrayToolkit::parts($inviteSetting, [
                 'invite_code_setting',
                 'promoted_user_enable',
                 'promoted_user_batchId',
@@ -87,7 +90,7 @@ class OperationSettingController extends BaseController
                 'inviteInfomation_template',
                 'remain_number',
                 'mobile',
-            ));
+            ]);
 
             $inviteSetting = array_merge($default, $inviteSetting);
             $inviteSetting['promoted_sms_send'] = 1;
@@ -101,22 +104,22 @@ class OperationSettingController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->getSettingService()->get('invite', []);
         $inviteSetting = array_merge($default, $inviteSetting);
 
-        return $this->render('admin-v2/system/operation/invite-set.html.twig', array(
+        return $this->render('admin-v2/system/operation/invite-set.html.twig', [
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
-        ));
+        ]);
     }
 
     public function messageOpenAction(Request $request)
     {
-        $message = $this->getSettingService()->get('message', array());
+        $message = $this->getSettingService()->get('message', []);
 
-        $default = array(
+        $default = [
             'showable' => '1',
-        );
+        ];
 
         $message = array_merge($default, $message);
 
@@ -129,26 +132,26 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/message-open.html.twig', array(
+        return $this->render('admin-v2/system/operation/message-open.html.twig', [
             'messageSetting' => $message,
-        ));
+        ]);
     }
 
     public function messageSendAction(Request $request)
     {
-        $messageSettingDefault = array(
+        $messageSettingDefault = [
             'studentToStudent' => 1,
             'studentToTeacher' => 1,
             'teacherToStudent' => 1,
-        );
-        $setting = $this->getSettingService()->get('message', array());
+        ];
+        $setting = $this->getSettingService()->get('message', []);
         $setting = array_merge($messageSettingDefault, $setting);
         $this->getSettingService()->set('message', $setting);
 
         if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
-            $formData = ArrayToolkit::parts($formData, array('studentToStudent', 'studentToTeacher', 'teacherToStudent'));
-            $formData = array_merge(array('studentToStudent' => 0, 'studentToTeacher' => 0, 'teacherToStudent' => 0), $formData);
+            $formData = ArrayToolkit::parts($formData, ['studentToStudent', 'studentToTeacher', 'teacherToStudent']);
+            $formData = array_merge(['studentToStudent' => 0, 'studentToTeacher' => 0, 'teacherToStudent' => 0], $formData);
 
             $this->getSettingService()->set('message', $formData);
             $this->setFlashMessage('success', 'site.save.success');
@@ -171,7 +174,7 @@ class OperationSettingController extends BaseController
 
         $batchs = $this->getCouponBatchService()->searchBatchs(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -180,30 +183,30 @@ class OperationSettingController extends BaseController
             $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
         }
 
-        return $this->render('admin-v2/system/operation/choose-coupon/chooser-coupon-modal.html.twig', array(
+        return $this->render('admin-v2/system/operation/choose-coupon/chooser-coupon-modal.html.twig', [
             'batchs' => $batchs,
             'type' => $type,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function chooseResourceListAction(Request $request, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
-        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
+        if (!in_array($batch['targetType'], ['course', 'classroom']) || $batch['targetId'] < 0) {
             $this->createNewException(CouponException::TARGET_TYPE_ERROR());
         }
-        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
+        $resourceIds = empty($batch['targetIds']) ? [-1] : $batch['targetIds'];
         if ('course' == $batch['targetType']) {
             $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
         } else {
             $resources = $this->getClassroomService()->findClassroomsByIds($resourceIds);
         }
 
-        return $this->render('admin-v2/system/operation/choose-coupon/coupon-batch-resource-list-modal.html.twig', array(
+        return $this->render('admin-v2/system/operation/choose-coupon/coupon-batch-resource-list-modal.html.twig', [
             'batch' => $batch,
             'resources' => $resources,
-        ));
+        ]);
     }
 
     protected function updateInviteSmsSendSetting($inviteSetting)
@@ -228,11 +231,11 @@ class OperationSettingController extends BaseController
     public function mailerAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin-v2/system/operation/mailer-set.html.twig', array());
+            return $this->render('admin-v2/system/operation/mailer-set.html.twig', []);
         }
 
-        $mailer = $this->getSettingService()->get('mailer', array());
-        $default = array(
+        $mailer = $this->getSettingService()->get('mailer', []);
+        $default = [
             'enabled' => 0,
             'host' => '',
             'port' => '',
@@ -240,7 +243,7 @@ class OperationSettingController extends BaseController
             'password' => '',
             'from' => '',
             'name' => '',
-        );
+        ];
         $mailer = array_merge($default, $mailer);
         if ($request->isMethod('POST')) {
             $mailer = $request->request->all();
@@ -254,34 +257,34 @@ class OperationSettingController extends BaseController
 
         $cloudMailName = '';
 
-        return $this->render('admin-v2/system/operation/mailer-set.html.twig', array(
+        return $this->render('admin-v2/system/operation/mailer-set.html.twig', [
             'mailer' => $mailer,
             'status' => $status,
             'cloudMailName' => $cloudMailName,
-        ));
+        ]);
     }
 
     public function mailerTestAction(Request $request)
     {
         $user = $this->getUser();
-        $mailOptions = array(
+        $mailOptions = [
             'to' => $user['email'],
             'template' => 'email_system_self_test',
-        );
+        ];
         $mailFactory = $this->getBiz()->offsetGet('mail_factory');
         $mail = $mailFactory($mailOptions);
 
         try {
             $mail->send();
 
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'status' => true,
-            ));
+            ]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'status' => false,
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -290,8 +293,8 @@ class OperationSettingController extends BaseController
      */
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
-        $mailer = $this->getSettingService()->get('mailer', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
 
         if (!empty($cloudEmail) && 'enable' === $cloudEmail['status']) {
             return 'cloud_email_crm';

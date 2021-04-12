@@ -1,0 +1,30 @@
+
+<!-- 会员 -->
+{% set vipLevels = vip_level_list(config) %}
+{% if vipLevels %}
+  <section class="class-section {{config.background|default("")}} ">
+    <div class="container">
+      <div class="text-line">
+        <h5>
+          <span>{{config.title|default("vip"|trans)}}</span>
+          <div class="line"></div>
+        </h5>
+        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+      </div>
+      <div class="recommend-class-list row">
+        {% for vipLevel in vipLevels %}
+          <div class="col-md-3 prm plm">
+              <a href="{{ path('vip', {levelId: vipLevel.id}) }}">
+                <img style="width: 264px;height: 148px" src="{% if vipLevel.picture %}{{ vipLevel.picture }}{% else %}{{ vipLevel.background }}{% endif %}" alt="">
+              </a>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="section-more-btn">
+        <a href="{{ path('vip') }}" class="btn btn-default btn-lg">
+          {{ 'course.video.convert.audio.detail'|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+{% endif %}
