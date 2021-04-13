@@ -11,12 +11,12 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 
     public function deletePostsByThreadId($threadId)
     {
-        return $this->db()->delete($this->table, array('threadId' => $threadId));
+        return $this->db()->delete($this->table, ['threadId' => $threadId]);
     }
 
     public function deletePostsByParentId($parentId)
     {
-        return $this->db()->delete($this->table, array('parentId' => $parentId));
+        return $this->db()->delete($this->table, ['parentId' => $parentId]);
     }
 
     public function findThreadIds($conditions)
@@ -24,18 +24,18 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('threadId');
 
-        return $builder->execute()->fetchAll(0) ?: array();
+        return $builder->execute()->fetchAll(0) ?: [];
     }
 
     public function declares()
     {
-        $declares['orderbys'] = array(
+        $declares['orderbys'] = [
             'createdTime',
             'updatedTime',
             'ups',
-        );
+        ];
 
-        $declares['conditions'] = array(
+        $declares['conditions'] = [
             'userId = :userId',
             'userId NOT IN (:notUserIds)',
             'userId IN (:userIds)',
@@ -51,11 +51,12 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             'targetId IN (:targetIds)',
             'targetType = :targetType',
             'adopted = :adopted',
-        );
+            'content LIKE :contentSearch',
+        ];
 
-        $declares['serializes'] = array(
+        $declares['serializes'] = [
             'ats' => 'json',
-        );
+        ];
 
         return $declares;
     }
