@@ -146,7 +146,23 @@ class UserContentCtrlController extends BaseController
 
     public function contentAuditAction(Request $request)
     {
-        return $this->render('admin-v2/system/user-content-control/content-audit.html.twig');
+        $defaultSetting = [
+            'mode' => 'audit_after',
+            'enable_auto_audit' => '1',
+        ];
+
+        $contentAuditSetting = array_merge($defaultSetting, $this->getSettingService()->get(SettingNames::UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT, []));
+
+        if ('POST' === $request->getMethod()) {
+            $contentAuditSetting = array_merge($contentAuditSetting, $this->filterContentAuditSetting($request->request->all()));
+            $this->getSettingService()->set(SettingNames::UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT, $contentAuditSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('admin-v2/system/user-content-control/content-audit.html.twig', [
+            'contentAuditSetting' => $contentAuditSetting,
+        ]);
     }
 
     protected function syncPrivateMessageSetting($privateMessageSetting)
@@ -209,6 +225,16 @@ class UserContentCtrlController extends BaseController
         foreach (['student_to_student', 'student_to_teacher', 'teacher_to_student'] as $key) {
             $submitSetting[$key] = empty($submitSetting[$key]) ? '0' : '1';
         }
+
+        return $submitSetting;
+    }
+
+    protected function filterContentAuditSetting($submitSetting)
+    {
+        $submitSetting = ArrayToolkit::parts($submitSetting, [
+            'mode',
+            'enable_auto_audit',
+        ]);
 
         return $submitSetting;
     }

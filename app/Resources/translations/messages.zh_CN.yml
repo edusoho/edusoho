@@ -11718,3 +11718,14 @@ admin_v2.system.user_content_control.goto_private_message_manage: 前往私信�
 
 admin_v2.vip_close.block_tip: 会员功能未开启
 admin_v2.vip_close.to_open_vip: 去开启
+
+admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
+admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
+admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+
+
