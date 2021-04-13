@@ -17,21 +17,28 @@ class ArticleReviewController extends BaseController
 
         $conditions = $this->prepareConditions($conditions);
 
+        $reviews = [];
+        $articles = [];
+        $users = [];
+
+        $paginatorTotal = empty($conditions) ? 0 : $this->getThreadService()->searchPostsCount($conditions);
+
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchPostsCount($conditions),
+            $paginatorTotal,
             20
         );
 
-        $reviews = $this->getThreadService()->searchPosts(
-            $conditions,
-            ['createdTime' => 'DESC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $articles = $this->getArticleService()->findArticlesByIds(ArrayToolkit::column($reviews, 'targetId'));
+        if (!empty($conditions)) {
+            $reviews = $this->getThreadService()->searchPosts(
+                $conditions,
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+            $articles = $this->getArticleService()->findArticlesByIds(ArrayToolkit::column($reviews, 'targetId'));
+        }
 
         return $this->render('admin-v2/operating/article-review/index.html.twig', [
             'reviews' => $reviews,
@@ -64,9 +71,13 @@ class ArticleReviewController extends BaseController
         $conditions['threadId'] = 0;
 
         if (!empty($conditions['articleTitle'])) {
-            $article = $this->getArticleService()->findArticleByLikeTitle(trim($conditions['articleTitle']));
+            $articles = $this->getArticleService()->findArticleByLikeTitle(trim($conditions['articleTitle']));
             unset($conditions['articleTitle']);
-            $conditions['targetIds'] = ArrayToolkit::column($article, 'id');
+            $targetIds = ArrayToolkit::column($articles, 'id');
+            if (empty($targetIds)) {
+                return [];
+            }
+            $conditions['targetIds'] = ArrayToolkit::column($articles, 'id');
         }
 
         if (!empty($conditions['author'])) {

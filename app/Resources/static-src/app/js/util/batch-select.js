@@ -6,7 +6,9 @@ export default class BatchSelect {
   }
 
   batchSelect() {
+
     const $that = $(this.element);
+
     this.element.on('click', '[data-role=batch-select]', function () {
       if( $(this).is(":checked") === true){
           $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download').attr('disabled', false);
@@ -20,6 +22,7 @@ export default class BatchSelect {
   }
 
   batchItem() {
+
     const $that = $(this.element);
 
     this.element.on('click', '[data-role=batch-item]', function () {
