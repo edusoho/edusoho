@@ -662,10 +662,11 @@ admin_v2.operation.wechat.notification_record_tab: 发送记录
 admin_v2.operation.wechat.notification_manage: 设置
 
 # 运营-内容运营-敏感词
-admin_v2.operation.sensitive_words_menu: 敏感词管理
-admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
-admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
-admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
+admin_v2.system.sensitive_words_menu: 敏感词管理
+admin_v2.system.sensitive_words.sensitive_words_list_tab: 敏感词列表
+admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
+admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn: 导入敏感词
+admin_v2.system.sensitive_words.banlogs_tab: 屏蔽记录
 
 
 #营销-公开课管理

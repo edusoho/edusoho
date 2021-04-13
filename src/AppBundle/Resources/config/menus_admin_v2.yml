@@ -1330,19 +1330,25 @@ admin_v2:
                                 admin_v2_user_content_audit_setting:
                                     name: admin_v2.system.user_content_audit_tab
                                     disable: true
-                        admin_v2_operation_sensitive_words:
-                            name: admin_v2.operation.sensitive_words_menu
+                        admin_v2_system_sensitive_words:
+                            name: admin_v2.system.sensitive_words_menu
                             children:
                                 admin_v2_keyword:
-                                    name: admin_v2.operation.sensitive_words.sensitive_words_list_tab
+                                    name: admin_v2.system.sensitive_words.sensitive_words_list_tab
                                     disable: true
                                     children:
                                         admin_v2_keyword_create:
-                                            name: admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                        admin_v2_keyword_import:
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn
+                                            router_name: importer_index
+                                            router_params: { 'type': 'sensitive' }
                                             mode: modal
                                             group: topBtn
                                 admin_v2_keyword_banlogs:
-                                    name: admin_v2.operation.sensitive_words.banlogs_tab
+                                    name: admin_v2.system.sensitive_words.banlogs_tab
                                     disable: true
                 # 交易设置
                 admin_v2_transaction_group:

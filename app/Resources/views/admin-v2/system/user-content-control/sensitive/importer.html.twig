@@ -1,0 +1,41 @@
+{% extends 'importer/layout.html.twig' %}
+
+		{% block title %}
+			{{'批量导入敏感词'|trans}}
+		{% endblock %}
+
+		{% do script(['libs/handlebars.js', 'libs/jquery-validation.js', 'app/js/course-manage/student-import/index.js']) %}
+
+		{% block form_data %}
+			<div class="form-group" id="teachers-form-group">
+				<label class="col-sm-2 control-label">
+					{{ 'import.user_import.choose_file'|trans }}
+				</label>
+				<div class="col-sm-8 controls">
+					<div class="input-group uploader-btn-group">
+						<input type="text" class="js-filename form-control"/>
+						<input type="file" size="30" name="excel" class="file-input"/>
+						<div class="input-group-addon">
+							{{ 'import.user_import.browser_btn'|trans }}
+						</div>
+					</div>
+					<br>
+					{{ 'import.user_import.download_example_tips'|trans }}
+					<a href="{{ asset('assets/files/sensitive_import_example.xls') }}">
+						{{ 'import.user_import.download_example_btn'|trans }}
+					</a>
+				</div>
+			</div>
+			<style>
+				.uploader-btn-group .file-input {
+					height: 100%;
+					opacity: 0;
+					position: absolute;
+					right: 0;
+					top: 0;
+					width: 100%;
+					z-index: 2;
+          cursor: pointer;
+				}
+			</style>
+		{% endblock %}

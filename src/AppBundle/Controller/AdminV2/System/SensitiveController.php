@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2\Operating;
+namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -30,7 +30,7 @@ class SensitiveController extends BaseController
             $keyword['name'] = stripslashes($keyword['name']);
         }
 
-        return $this->render('admin-v2/operating/sensitive/index.html.twig', [
+        return $this->render('admin-v2/system/user-content-control/sensitive/index.html.twig', [
             'keywords' => $keywords,
             'paginator' => $paginator,
         ]);
@@ -69,7 +69,7 @@ class SensitiveController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_keyword'));
         }
 
-        return $this->render('admin-v2/operating/sensitive/keyword-add.html.twig');
+        return $this->render('admin-v2/system/user-content-control/sensitive/keyword-add.html.twig');
     }
 
     public function deleteAction(Request $request, $id)
@@ -158,7 +158,7 @@ class SensitiveController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));
 
-        return $this->render('admin-v2/operating/sensitive/banlogs.html.twig', [
+        return $this->render('admin-v2/system/user-content-control/sensitive/banlogs.html.twig', [
             'banlogs' => $banlogs,
             'users' => $users,
             'paginator' => $paginator,
