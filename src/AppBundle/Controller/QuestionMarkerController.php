@@ -25,7 +25,11 @@ class QuestionMarkerController extends BaseController
     //新的云播放器需要的弹题数据
     public function showQuestionMakersAction(Request $request, $mediaId)
     {
+        $isPreview = $request->query->get('isPreview', false);
+        $user = $this->getCurrentUser();
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
+        $questionMarkerResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerIds($user['id'], array_column($questionMakers, 'markerId'));
+        $questionMarkerResults = ArrayToolkit::group($questionMarkerResults, 'questionMarkerId');
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMakers, 'questionId'), true);
         $baseUrl = $request->getSchemeAndHttpHost();
         $results = [];
@@ -42,6 +46,11 @@ class QuestionMarkerController extends BaseController
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
                 continue;
             }
+
+            if (!$isPreview && !empty($questionMarkerResults[$questionMaker['id']]) && 'right' == $questionMarkerResults[$questionMaker['id']][0]['status']) {
+                continue;
+            }
+
             $item = $items[$questionMaker['questionId']];
             $question = array_shift($item['questions']);
             $isChoice = in_array($item['type'], ['choice', 'single_choice', 'uncertain_choice']);
