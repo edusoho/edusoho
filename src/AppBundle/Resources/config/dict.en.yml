@@ -382,7 +382,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: Excellent
     good: Good
     passed: Passed
@@ -525,3 +525,11 @@ certificateSearchTypes:
     email: email
     batch: batch
     code: code
+
+#用户举报原因标签
+reportTags:
+    1: Invalid advertisement information
+    2: Politically sensitive information
+    3: Pornographic and vulgar information
+    4: Illegal information
+    5: Abusive, personal attacks and other unfriendly behavior

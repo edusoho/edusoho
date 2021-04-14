@@ -13,6 +13,14 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
         return $this->getContentAuditDao()->get($id);
     }
 
+    public function createAudit($fields)
+    {
+    }
+
+    public function updateAudit()
+    {
+    }
+
     /**
      * @return ContentAuditDao
      */

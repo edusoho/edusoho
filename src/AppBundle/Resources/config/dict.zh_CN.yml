@@ -400,7 +400,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: 优秀
     good: 良好
     passed: 合格
@@ -555,3 +555,11 @@ certificateAuditSearchTypes:
     nickname: 用户名
     verifiedMobile: 手机号
     email: 邮箱
+
+#用户举报原因标签
+reportTags:
+    1: 举报垃圾广告
+    2: 政治敏感信息
+    3: 色情低俗信息
+    4: 违法违规信息
+    5: 辱骂、人身攻击等不友善行为
