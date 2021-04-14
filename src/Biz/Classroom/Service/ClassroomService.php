@@ -299,4 +299,6 @@ interface ClassroomService
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields);
+
+    public function updateClassroomMembersNoteAndThreadNums($classroomId);
 }
