@@ -75,7 +75,6 @@ class SensitiveImporter extends Importer
         }
 
         $importData = $this->getImportData();
-        var_dump($importData);
 
         if (!empty($importData['errorInfo'])) {
             return $this->createErrorResponse($importData['errorInfo']);
