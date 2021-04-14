@@ -17,7 +17,8 @@ load.then(function(){
       var isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
       var classStr = isIOS ? 'text-iframe-wrap iframe-scroll': 'text-iframe-wrap';
       $('.js-text-activity-content').addClass(classStr);
-      $iframe.attr('scrolling', 'no');
+      $iframe.attr('height', $('.text-activity-content')[0].clientHeight);
+      $iframe.attr('scrolling', 'auto');
     } else {
       if (isMac) {
         $('#text-activity').perfectScrollbar({wheelSpeed:1});

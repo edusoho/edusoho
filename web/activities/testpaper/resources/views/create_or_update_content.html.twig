@@ -82,6 +82,14 @@
           <div class="col-sm-10 controls radios">
               {{ radios('doTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.answerScene.do_times|default('0')) }}
           </div>
+          
+          <div class="col-sm-offset-2 col-sm-10 controls {% if setting('questions.testpaper_answers_show_mode', 'submitted') == 'submitted' %} js-show-answer-mode {% else %} hidden {% endif %}" {% if activity.ext.answerScene.do_times|default('0') == 1 %} style="display:none;" {% endif %}>
+            <label class="checkbox-inline help-block">
+              <input name="answerMode" type="checkbox" value="1" {% if activity.ext.answerMode|default(0) == 1 %} checked=checked {% endif %}>{{'course.plan_task.activity_manage.testpaper.show_answer'|trans}}
+              <span class="text-sm">（{{ 'course.plan_task.activity_manage.testpaper.show_answer_tips'|trans }}）</span>
+            </label>
+          </div>
+          
       </div>
 
       <div class="form-group" {% if activity.ext.answerScene.do_times|default('0') == 1 %}style="display:none;" {% endif %}>
