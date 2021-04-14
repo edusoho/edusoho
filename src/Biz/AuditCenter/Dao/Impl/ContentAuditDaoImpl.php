@@ -12,6 +12,14 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
     public function declares()
     {
         return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => [
+                'sensitiveWords' => 'delimiter',
+            ],
+            'conditions' => [
+                'id = :id',
+            ],
+            'orderbys' => ['id'],
         ];
     }
 }
