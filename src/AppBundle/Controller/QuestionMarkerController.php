@@ -47,7 +47,7 @@ class QuestionMarkerController extends BaseController
                 continue;
             }
 
-            if (!$isPreview && !empty($questionMarkerResults[$questionMaker['id']]) && 'right' == $questionMarkerResults[$questionMaker['id']][0]['status']) {
+            if (!$isPreview && !empty($questionMarkerResults[$questionMaker['id']]) && 'right' === end($questionMarkerResults[$questionMaker['id']])['status']) {
                 continue;
             }
 
