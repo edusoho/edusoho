@@ -231,12 +231,12 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function searchkeywordsCount($conditions)
     {
-        return $this->getSensitiveDao()->count($conditions);
+        return $this->getSensitiveDao()->count($this->prepareConditions($conditions));
     }
 
     public function searchKeywords($conditions, $orderBy, $start, $limit, array $columns = [])
     {
-        return $this->getSensitiveDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getSensitiveDao()->search($this->prepareConditions($conditions), $orderBy, $start, $limit);
     }
 
     public function searchBanlogsCount($conditions)
@@ -252,6 +252,17 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit)
     {
         return $this->getBanlogDao()->searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (isset($conditions['keyword'])) {
+            if ('name' == $conditions['searchKeyWord']) {
+                $conditions['keyword'] = $this->flagReplaceReverse($conditions['keyword']);
+            }
+        }
+
+        return $conditions;
     }
 
     /**

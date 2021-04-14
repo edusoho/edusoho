@@ -12,7 +12,7 @@ class SensitiveImporter extends Importer
 
     protected $type = 'sensitive';
     protected $necessaryFields = ['name' => '敏感词', 'state' => '类型'];
-    protected $keywordStates = ['banned' => '禁止', 'replaced' => '屏蔽'];
+    protected $keywordStates = ['banned' => '禁用', 'replaced' => '屏蔽'];
     protected $checkFields = ['name'];
     protected $maxRowTotal = 5000;
 

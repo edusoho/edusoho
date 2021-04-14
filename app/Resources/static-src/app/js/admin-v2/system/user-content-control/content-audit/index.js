@@ -1,3 +1,5 @@
+$("[data-toggle='popover']").popover();
+
 let $saveBtn = $('.js-save-btn');
 let validator = $('#content_audit_form').validate({
   rules: {},
