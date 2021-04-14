@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
 use Biz\User\UserException;

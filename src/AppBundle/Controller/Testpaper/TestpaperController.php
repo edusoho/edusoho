@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Testpaper;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -72,27 +73,35 @@ class TestpaperController extends BaseController
             'answerRecord' => $answerRecord,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
-            'answerShow' => $this->getAnswerShowByAnswerSceneId($answerRecord['answer_scene_id']),
+            'answerShow' => $this->getAnswerShow($answerRecord['answer_scene_id'], $answerRecord['status'], $answerScene['pass_score'], $answerReport['score']),
         ]);
     }
 
-    protected function getAnswerShowByAnswerSceneId($answerSceneId)
+    protected function getAnswerShow($answerSceneId, $answerRecordStatus, $passScore, $score)
     {
         $questionSetting = $this->getSettingService()->get('questions', []);
         $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];
         switch ($answerShowMode) {
             case 'hide':
                 return 'none';
-                break;
-
             case 'reviewed':
                 if ($this->getAnswerRecordService()->count(['answer_scene_id' => $answerSceneId, 'statusNeq' => 'finished'])) {
                     return 'none';
                 } else {
                     return 'show';
                 }
-                break;
+                // no break
+            case 'submitted':
+                $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+                if (0 == $testpaperActivity['doTimes'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
+                    if ('finished' === $answerRecordStatus && $score >= $passScore) {
+                        return 'show';
+                    } else {
+                        return 'none';
+                    }
+                }
 
+                return 'show';
             default:
                 return 'show';
                 break;

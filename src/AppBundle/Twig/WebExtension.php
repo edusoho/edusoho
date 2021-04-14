@@ -91,6 +91,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text', [$this, 'plainTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -685,7 +686,7 @@ class WebExtension extends \Twig_Extension
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
-        $url = empty($url) ? $this->requestStack->getMasterRequest()->getUri() : $url;
+        $url = empty($url) ? $this->requestStack->getMasterRequest()->getSchemeAndHttpHost().$this->requestStack->getMasterRequest()->getRequestUri() : $url;
         $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
         $config['string'] = $string;
         $config['signature'] = sha1($string);
@@ -775,20 +776,20 @@ class WebExtension extends \Twig_Extension
         }
 
         $user = $this->getUserService()->getUser($user['id']);
-
-        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
-        $pattern = $this->getSetting('magic.video_fingerprint');
+        $magicSetting = $this->getSetting('magic.video_fingerprint');
+        $request = $this->requestStack->getMasterRequest();
+        $host = $request->getHttpHost();
         $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
-        if ($pattern) {
-            $fingerprint = $this->parsePattern($pattern, $user);
+        if (!empty($magicSetting)) {
+            $fingerprint = $this->parsePattern($magicSetting, $user);
         } else {
-            $request = $this->requestStack->getMasterRequest();
-            $host = $request->getHttpHost();
-            $fingerprint = "<span style=\"opacity:{$opacity};\"> {$host} {$user['nickname']} </span>";
+            $pattern = $this->getSetting('storage.video_fingerprint_content', ['nickname', 'domain']);
+            $pattern = empty($pattern) ? '' : '{{'.implode('}} {{', $pattern).'}}';
+            $fingerprint = $this->parsePattern($pattern, $user, '-');
         }
 
-        return $fingerprint;
+        return "<span style=\"opacity:{$opacity}\";>".str_replace('{{domain}}', $host, $fingerprint).'</span>';
     }
 
     public function popRewardPointNotify()
@@ -806,7 +807,7 @@ class WebExtension extends \Twig_Extension
         return $message;
     }
 
-    protected function parsePattern($pattern, $user)
+    protected function parsePattern($pattern, $user, $default = null)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
@@ -818,7 +819,7 @@ class WebExtension extends \Twig_Extension
             }
         );
 
-        return $this->simpleTemplateFilter($pattern, $values);
+        return $this->simpleTemplateFilter($pattern, $values, $default);
     }
 
     public function subStr($text, $start, $length)
@@ -1641,6 +1642,24 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
+    public function wrapTextFilter($text, $length = null)
+    {
+        $text = strip_tags($text);
+
+        $text = str_replace(["\n", "\r", "\t"], '<br/>', $text);
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+
+        if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+            $text .= '...';
+        }
+
+        return $text;
+    }
+
     public function getFileType($fileName, $string = null)
     {
         $fileName = explode('.', $fileName);
@@ -1717,9 +1736,10 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function simpleTemplateFilter($text, $variables)
+    public function simpleTemplateFilter($text, $variables, $default = null)
     {
         foreach ($variables as $key => $value) {
+            $value = (empty($value) && !empty($default)) ? $default : $value;
             $text = str_replace('{{'.$key.'}}', $value, $text);
         }
 
