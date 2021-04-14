@@ -10478,3 +10478,12 @@ admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: Tha
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the review status is system reviewed-passed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in bulk
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
+admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse

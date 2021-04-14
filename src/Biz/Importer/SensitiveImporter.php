@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SensitiveImporter extends Importer
 {
-    const MAX_SENSITIVE_IMPORTER_COMPLEXITY = 400; //单请求最大导入复杂度（例如：人数*单次课程|班级数量<8）
+    const MAX_SENSITIVE_IMPORTER_COMPLEXITY = 400; //单请求最大导入复杂度
 
     protected $type = 'sensitive';
     protected $necessaryFields = ['name' => '敏感词', 'state' => '类型'];
@@ -24,7 +24,6 @@ class SensitiveImporter extends Importer
         });
 
         $totalCount = count($importData);
-
         if (empty($totalCount)) {
             return ['successCount' => $totalCount];
         }
@@ -76,6 +75,7 @@ class SensitiveImporter extends Importer
         }
 
         $importData = $this->getImportData();
+        var_dump($importData);
 
         if (!empty($importData['errorInfo'])) {
             return $this->createErrorResponse($importData['errorInfo']);
