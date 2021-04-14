@@ -6276,6 +6276,15 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
+admin.operation_article.review.form.input.title.placeholer: 资讯标题名
+admin.operation_article.review.form.input.author.placeholer: 作者
+admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
+admin.operation_article.review.content_th: 评论内容
+admin.operation_article.review.author_th: 作者
+admin.operation_article.review.operation_th: 操作
+admin.operation_article.review.expand_td: 展开
+admin.operation_article.review.collapse_td: 收起
+admin:operation_article.review.content: 评价
 
 # 小组话题管理
 admin.operation_group.groupstatus_option: 小组状态
@@ -11718,3 +11727,14 @@ admin_v2.system.user_content_control.goto_private_message_manage: 前往私信�
 
 admin_v2.vip_close.block_tip: 会员功能未开启
 admin_v2.vip_close.to_open_vip: 去开启
+
+admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
+admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
+admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+
+

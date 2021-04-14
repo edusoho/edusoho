@@ -879,6 +879,10 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                                admin_v2_operation_article_review:
+                                  name: admin_v2.operation.article.review_tab
+                                  disable: true
+                                  router_name: admin_v2_article_review
                         admin_v2_operation_group_manage:
                             name: admin_v2.operation.group_menu
                             quick_entrance_icon: 'group'
