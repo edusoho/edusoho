@@ -25,7 +25,7 @@
         {% if setting('qualifications.recordCode') |default('') %}
           <a class="license-picture">
             <img src="{% if setting('qualifications.recordPicture') %}{{ asset(setting('qualifications.recordPicture')) }}
-                      {% else %}{{ asset('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
+                      {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
           </a>
           <a class="mlm" {% if setting('qualifications.recordUrl') |default('') %}
             href="{{ setting('qualifications.recordUrl') }}"
