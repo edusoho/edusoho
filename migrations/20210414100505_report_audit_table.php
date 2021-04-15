@@ -14,6 +14,7 @@ class ReportAuditTable extends Migration
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `targetType` varchar(32) NOT NULL DEFAULT '' COMMENT '举报目标类型',
           `targetId` int(11) NOT NULL COMMENT '举报目标id',
+          `content` mediumtext NOT NULL COMMENT '审核内容',
           `author` int(11) NOT NULL COMMENT '作者',
           `reportCount` int(11) NOT NULL COMMENT '被举报次数',
           `reportTags` varchar(1024) NOT NULL DEFAULT '' COMMENT '举报标签',

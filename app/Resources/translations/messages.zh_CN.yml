@@ -11756,4 +11756,39 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
 
+admin_v2.operation.report_content_audit.target_type_placeholder: 全部类型
+admin_v2.operation.report_content_audit.status_placeholder: 全部状态
+admin_v2.operation.report_content_audit.report_tag_placeholder: 举报类型
+admin_v2.operation.report_content_audit.author_placeholder: 发布者
+admin_v2.operation.report_content_audit.table.content: 被举报内容
+admin_v2.operation.report_content_audit.table.type: 类型
+admin_v2.operation.report_content_audit.table.count: 被举报次数
+admin_v2.operation.report_content_audit.table.tag: 被举报标签
+admin_v2.operation.report_content_audit.table.author: 发布者/时间
+admin_v2.operation.report_content_audit.table.status: 审核状态
+admin_v2.operation.report_content_audit.table.auditor: 审核人
+admin_v2.operation.report_content_audit.table.operate: 操作
+admin_v2.operation.report_content_audit.table.auditor_default: 系统
+
+admin_v2.operation.report_content_audit.table.operate_item: 详情
+admin_v2.operation.report_content_audit.table.operate_pass: 确认正常
+admin_v2.operation.report_content_audit.table.operate_illegal: 确认违规
+admin_v2.operation.report_content_audit.table.batch_pass: 批量正常
+admin_v2.operation.report_content_audit.table.batch_illegal: 批量违规
+admin_v2.operation.report_content_audit.table.batch_pass.notice: 确认被举报的内容正常吗？
+admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
+admin_v2.operation.report_content_audit.table.batch_illegal.notice: 确认被举报的内容违规吗？
+admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+
+exception.audit_center.report_audit_not_exist: 举报信息不存在
+exception.audit_center.report_audit_status_not_valid: 审核状态不合法
+
+
+
+
+
+
+
+
+
 

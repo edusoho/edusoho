@@ -1172,6 +1172,15 @@ admin_v2_report_content_audit:
     path:  /report_content_audit
     defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:index }
 
+admin_v2_report_content_audit_update_status:
+    path:  /report_content_audit/{id}/update_status/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:updateStatus }
+
+    # batchUpdateStatus
+admin_v2_report_content_audit_batch_update:
+    path:  /report_content_audit/batch_update/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:batchUpdateStatus }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement

@@ -16,10 +16,14 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
             'serializes' => [
                 'reportTags' => 'delimiter',
             ],
+            'orderbys' => ['id', 'reportCount'],
             'conditions' => [
+                'id IN (:ids)',
                 'id = :id',
+                'reportTags LIKE :reportTag',
+                'status = :status',
+                'targetType = :targetType',
             ],
-            'orderbys' => ['id'],
         ];
     }
 }
