@@ -19,7 +19,7 @@ class ReportAuditTable extends Migration
           `reportTags` varchar(1024) NOT NULL DEFAULT '' COMMENT '举报标签',
           `auditor` int(11) NOT NULL COMMENT '审核人',
           `status` varchar(32) NOT NULL DEFAULT '' COMMENT '审核状态',
-          `auditTime` int(11) unsigned NOT NULL COMMENT '审核时间',
+          `auditTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '审核时间',
           `createdTime` int(11) DEFAULT NULL,
           `updatedTime` int(11) DEFAULT NULL,
           PRIMARY KEY (`id`)
@@ -46,7 +46,7 @@ class ReportAuditTable extends Migration
           `content` mediumtext NOT NULL COMMENT '举报正文',
           `author` int(11) NOT NULL COMMENT '作者',
           `reportTags` varchar(1024) NOT NULL DEFAULT '' COMMENT '举报标签',
-          `auditTime` int(11) unsigned NOT NULL COMMENT '审核时间',
+          `auditTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '审核时间',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     }
