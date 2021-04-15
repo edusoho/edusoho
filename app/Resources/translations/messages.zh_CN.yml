@@ -433,7 +433,10 @@ form.btn.reply_publish.submiting: 正在发表回复...
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 form.btn.continue: 完成并继续
-
+form.btn.confirm.normal: 确认正常
+form.btn.confirm.illegal: 确认违规
+form.btn.batch.normal: 批量正常
+form.btn.batch.illegal: 批量违规
 #财务通用
 finance.income: 收入
 finance.total_income: 总计收入
@@ -11737,4 +11740,16 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
 
-
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholer: 敏感词关键字
+admin_v2.operation.user_content_audit_form.author.placeholer: 发布者
+admin_v2.operation.user_content_audit_form.startTime: 起始时间
+admin_v2.operation.user_content_audit_form.endTime: 结束时间
+admin_v2.operation.user_content_audit.content_th: 用户发布内容
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: 关键敏感词
+admin_v2.operation.user_content_audit.type_th: 类型
+admin_v2.operation.user_content_audit.author_time_th: 发布者/时间
+admin_v2.operation.user_content_audit.status_th: 审核状态
+admin_v2.operation.user_content_audit.auditor_th: 审核人
+admin_v2.operation.user_content_audit.operation_th: 操作
+admin_v2.operation.user_content_audit.expand_td: 展开
+admin_v2.operation.user_content_audit.collapse_td: 收起

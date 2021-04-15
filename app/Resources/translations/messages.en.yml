@@ -2463,6 +2463,10 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.confirm.normal: 'Confirm normal'
+form.btn.confirm.illegal: 'Confirm illegal'
+form.btn.batch.normal: 'Batch normal'
+form.btn.batch.illegal: 'Batch illegal'
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -10478,3 +10482,17 @@ admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: Tha
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholer: Sensitive Keywords
+admin_v2.operation.user_content_audit_form.author.placeholer: Author
+admin_v2.operation.user_content_audit_form.startTime: Start Time
+admin_v2.operation.user_content_audit_form.endTime: End Time
+admin_v2.operation.user_content_audit.content_th: User Published content
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: Sensitive Keywords
+admin_v2.operation.user_content_audit.type_th: Type
+admin_v2.operation.user_content_audit.author_time_th: Author/Time
+admin_v2.operation.user_content_audit.status_th: Audit Status
+admin_v2.operation.user_content_audit.auditor_th: Auditor
+admin_v2.operation.user_content_audit.operation_th: Operation
+admin_v2.operation.user_content_audit.expand_td: Unfold
+admin_v2.operation.user_content_audit.collapse_td: Folded
