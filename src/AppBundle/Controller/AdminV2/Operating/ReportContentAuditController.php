@@ -20,7 +20,7 @@ class ReportContentAuditController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getReportAuditService()->searchReportAuditCount($conditions),
-            10
+            20
         );
 
         $reportAudits = $this->getReportAuditService()->searchReportAudits(

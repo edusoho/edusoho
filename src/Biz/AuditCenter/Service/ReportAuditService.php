@@ -11,4 +11,18 @@ interface ReportAuditService
     public function updateReportAuditStatus($id, $status);
 
     public function updateReportAuditStatusByIds(array $ids, $status);
+
+    public function getReportAudit($id);
+
+    public function createReportAudit($fields);
+
+    public function updateReportAudit($id, $fields);
+
+    public function deleteReportAudit($id);
+
+    public function getReportAuditRecord($id);
+
+    public function createReportAuditRecord($fields);
+
+    public function updateReportAuditRecord($id, $fields);
 }
