@@ -22,4 +22,22 @@ class ReportAuditRecordDaoImpl extends AdvancedDaoImpl implements ReportAuditRec
             'orderbys' => ['id'],
         ];
     }
+
+    /**
+     * @param $auditId
+     *
+     * @return int
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteByAuditId($auditId)
+    {
+        if (empty($auditId)) {
+            return 0;
+        }
+
+        $sql = "DELETE FROM {$this->table} WHERE auditId = ?;";
+
+        return $this->db()->executeUpdate($sql, [$auditId]);
+    }
 }

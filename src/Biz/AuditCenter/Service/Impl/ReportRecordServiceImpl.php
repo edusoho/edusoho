@@ -17,10 +17,10 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
 
     public function createReportRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, ['auditId', 'content', 'author', 'reportTags'])) {
+        if (!ArrayToolkit::requireds($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-        $fields = ArrayToolkit::parts($fields, ['auditId', 'content', 'author', 'reportTags', 'auditTime']);
+        $fields = ArrayToolkit::parts($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags', 'auditTime']);
 
         return $this->getReportRecordDao()->create($fields);
     }
