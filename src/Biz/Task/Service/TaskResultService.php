@@ -61,6 +61,8 @@ interface TaskResultService
 
     public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
+    public function countFinishedCompulsoryTasksByUserIdAndCourseIds($userId, array $courseIds);
+
     public function findTaskresultsByTaskId($taskId);
 
     public function findTaskResultsByUserId($userId);

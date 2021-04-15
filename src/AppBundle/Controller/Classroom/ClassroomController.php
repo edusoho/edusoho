@@ -191,15 +191,9 @@ class ClassroomController extends BaseController
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         if ($member && '0' == $member['locked']) {
-            if (in_array('student', $member['role'])) {
-                return $this->redirect($this->generateUrl('classroom_courses', [
-                    'classroomId' => $id,
-                ]));
-            } else {
-                return $this->redirect($this->generateUrl('classroom_threads', [
-                    'classroomId' => $id,
-                ]));
-            }
+            return $this->redirect($this->generateUrl('classroom_courses', [
+                'classroomId' => $id,
+            ]));
         }
 
         $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');

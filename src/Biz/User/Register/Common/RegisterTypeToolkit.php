@@ -6,7 +6,7 @@ class RegisterTypeToolkit
 {
     public function getRegisterTypes($registrations)
     {
-        $regTypes = array();
+        $regTypes = [];
         if (!empty($registrations['verifiedMobile'])) {
             $regTypes[] = 'mobile';
         }
@@ -16,7 +16,7 @@ class RegisterTypeToolkit
         }
 
         if (!empty($registrations['type']) &&
-                in_array($registrations['type'], array('qq', 'weibo', 'renren', 'weixinweb', 'weixinmob'))) {
+                in_array($registrations['type'], ['qq', 'weibo', 'renren', 'weixinweb', 'weixinmob'])) {
             $regTypes[] = 'binder';
         }
 
@@ -38,7 +38,7 @@ class RegisterTypeToolkit
      */
     public function getThirdPartyRegisterTypes($accountType, $registrations)
     {
-        $regTypes = array($accountType, 'binder');
+        $regTypes = [$accountType, 'binder'];
 
         if (!empty($registrations['distributorToken'])) {
             $regTypes[] = 'distributor';

@@ -30,6 +30,12 @@
             tagSearchUrl: '',
         },
         methods: {
+            checkTags(value) {
+                if (Array.isArray(value) && value.length === 0) {
+                    return null;
+                }
+                return value;
+            },
             searchTags(query) {
                 this.$axios.get(this.tagSearchUrl ? this.tagSearchUrl : '/tag/match_jsonp', {
                     params: {q: query},
@@ -39,6 +45,7 @@
 
             },
             updateTags(value) {
+                value = this.checkTags(value)
                 this.$emit('update:tags', value);
             }
         },

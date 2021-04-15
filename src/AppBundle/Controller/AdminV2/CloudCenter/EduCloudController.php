@@ -359,6 +359,7 @@ class EduCloudController extends BaseController
             'video_fingerprint' => 0,
             'video_fingerprint_time' => 0.5,
             'video_fingerprint_opacity' => 1,
+            'video_fingerprint_content' => ['domain', 'nickname'],
             'video_header' => null,
             'video_auto_play' => 'true',
         ];
@@ -370,6 +371,11 @@ class EduCloudController extends BaseController
                 $this->deleteCloudMP4Files();
                 $storageSetting['delete_mp4_status'] = 'waiting';
             }
+
+            if (empty($set['video_fingerprint_content'])) {
+                $storageSetting['video_fingerprint_content'] = [];
+            }
+
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
 

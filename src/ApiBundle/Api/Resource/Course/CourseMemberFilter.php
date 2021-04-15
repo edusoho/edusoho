@@ -13,9 +13,9 @@ class CourseMemberFilter extends Filter
         'id', 'courseId', 'deadline', 'courseSetId',
     ];
 
-    protected $publicFields = [
-        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum',
-    ];
+    protected $publicFields = array(
+        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum', 'expire',
+    );
 
     protected function simpleFields(&$data)
     {
@@ -31,6 +31,15 @@ class CourseMemberFilter extends Filter
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
         $data['lastViewTime'] = date('c', $data['lastViewTime']);
 
+        // 去掉长期有效
+        if (isset($data['expire']['deadline']) && $data['expire']['deadline'] == 0) {
+            unset($data['expire']['deadline']);
+        }
+
+        if (!empty($data['expire']['deadline'])) {
+            $data['expire']['deadline'] = date('c', $data['expire']['deadline']);
+        }
+        
         if ($this->isPluginInstalled('Vip')) {
             $vipMember = $this->getVipService()->getMemberByUserId($data['user']['id']);
             $data['levelId'] = empty($vipMember) ? 0 : $vipMember['levelId'];

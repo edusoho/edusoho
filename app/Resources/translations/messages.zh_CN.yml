@@ -2118,6 +2118,8 @@ course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
 course.plan_task.activity_manage.testpaper.times.once: 单次
 course.plan_task.activity_manage.testpaper.times.always: 不限
+course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
+course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
@@ -5142,6 +5144,8 @@ admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
+admin.course_manage.statistics.data_detail.phone_number: 手机号
+admin.course_manage.statistics.data_detail.id_number: 身份证号
 admin.course_manage.statistics.data_detail.join_time: 加入时间
 admin.course_manage.statistics.data_detail.finished_time: 完成时间
 admin.course_manage.statistics.data_detail.study_days: 学习天数
@@ -5150,6 +5154,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长�
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
 admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1.学员重新加入课程可能导致学员的学习天数清零<br/>
+  2.新增课时任务学员产生学习行为后，学员的学习天数将会刷新<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.该页面为实时数据。<br/>
@@ -5791,7 +5798,7 @@ admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
 admin.setting.record.code.help_block: >
-    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -6872,8 +6879,14 @@ admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
-  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
-admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
+  开启后，将在视频播放中随机时间、随机位置显示云视频指纹信息。
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_content_label: 云视频指纹信息
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: 用户名
+admin.edu_cloud.edu_video.finger_print_content_label.realname: 真实姓名
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: 手机号
+admin.edu_cloud.edu_video.finger_print_content_label.domain: 网校域名
+admin.edu_cloud.edu_video.finger_print_content_tips: 为了用户体验效果更佳，建议最多组合2项信息显示。注意：若用户的真实姓名和手机号没有则显示为-
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
@@ -7661,6 +7674,7 @@ admin.setting_course.questions_setting: 交卷后答案以及解析的显示
 admin.setting_course.questions_setting.hide: 不显示
 admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显示
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
+admin.setting_course.questions_setting.submitted_tips: 开启后，在考试任务中可设置分数合格后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
 admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
@@ -8222,6 +8236,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
 admin.wap_setting.old: 旧版微网校
+admin.wap_setting.responsive: 响应式微网校
 admin.wap_setting.off: 关闭
 admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
 admin.wap_setting.edit.tip: 左侧为您的微网校首页预览效果，可点击【编辑微网校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微网校首页。
@@ -9037,10 +9052,10 @@ my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
-task.learn_data_detail.createdTime: 加入学习时间
-task.learn_data_detail.join_time: 加入时间
-task.learn_data_detail.finishedTime: 完成%taskName%时间
-task.learn_data_detail.finished_time: 完成时间
+task.learn_data_detail.createdTime: 任务开始时间
+task.learn_data_detail.join_time: 任务开始时间
+task.learn_data_detail.finishedTime: 任务完成时间
+task.learn_data_detail.finished_time: 任务完成时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
@@ -11638,6 +11653,8 @@ admin.classroom_manage.statistics.member.title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 班级中所有课程被累加学习时长（分）：%mins%
 admin.classroom_manage.statistics.member.nickname_th: 用户名
+admin.classroom_manage.statistics.member.phone_number_th: 手机号
+admin.classroom_manage.statistics.member.id_number_th: 身份证号
 admin.classroom_manage.statistics.member.create_time_th: 加入时间
 admin.classroom_manage.statistics.member.finish_time_th: 完成时间
 admin.classroom_manage.statistics.member.learn_time_th: 累加学习时长（分）
@@ -11681,6 +11698,7 @@ classroom.manage.data_statistics.student_trendency.select_seven_days: 7天
 classroom.manage.data_statistics.student_trendency.select_thrity_days: 30天
 classroom.manage.data_statistics.student_detail_list.title: 学员详情
 classroom.manage.data_statistics.course_detail_list.title: 课程详情
+classroom.manage.data_statistics.course_detail_list.select_all: 默认
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: 完课率
 classroom.manage.data_statistics.student_detail_list.select_all: 全部
 classroom.manage.data_statistics.student_detail_list.select_un_finished: 未完成
@@ -11689,6 +11707,7 @@ classroom.manage.data_statistics.name_or_mobile_placeholder: 用户名/手机号
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname%的全部课程
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
+
 admin_v2.system.user_content_control.review_manage: 评价内容管理
 admin_v2.system.user_content_control.course_review_manage: 课程评价模块
 admin_v2.system.user_content_control.classroom_review_manage: 班级评价模块

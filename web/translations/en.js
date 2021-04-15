@@ -791,7 +791,7 @@ t.add("validate_old.date_check.message", "The start time must be less than or eq
 t.add("validate_old.not_all_digital.message", "%display% can not be all numbers", "js", "en");
 t.add("validate_old.right_time_tip", "Please input the time in right format", "js", "en");
 t.add("validate_old.es_version.message", "Please input correct es version\uff0ccorrect is XX.XX.XX", "js", "en");
-t.add("validate_old.visible_character.message", "%display% Enter the visibility character", "js", "en");
+t.add("validate_old.visible_character.message", "Please enter %display%", "js", "en");
 t.add("validate_old.chinese_limit.message", "%display% must be less than or equal to% max% and 2 characters in Chinese", "js", "en");
 t.add("validate_old.chinese.message", "%display% must be Chinese", "js", "en");
 t.add("validate_old.phone.message", "Please enter a valid %display% (only mainland China phone number).", "js", "en");

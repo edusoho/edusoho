@@ -2,8 +2,8 @@
 
 namespace Biz\User\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 
@@ -29,7 +29,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
 
         $fieldName = $this->checkType($fields['field_type']);
-        if ($fieldName == false) {
+        if (false == $fieldName) {
             $this->createNewException(UserFieldException::TYPE_INVALID());
         }
 
@@ -82,11 +82,11 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     public function updateField($id, $fields)
     {
-        $fields = ArrayToolkit::filter($fields, array(
+        $fields = ArrayToolkit::filter($fields, [
             'title' => '',
             'seq' => '',
             'enabled' => 0,
-        ));
+        ]);
 
         if (isset($fields['title']) && empty($fields['title'])) {
             $this->createNewException(UserFieldException::TITLE_REQUIRED());
@@ -115,7 +115,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     protected function checkType($type)
     {
         $fieldName = '';
-        if ($type == 'text') {
+        if ('text' == $type) {
             for ($i = 1; $i < 11; ++$i) {
                 $field = $this->getUserFieldDao()->getByFieldName('textField'.$i);
                 if (!$field) {
@@ -124,7 +124,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
                 }
             }
         }
-        if ($type == 'int') {
+        if ('int' == $type) {
             for ($i = 1; $i < 6; ++$i) {
                 $field = $this->getUserFieldDao()->getByFieldName('intField'.$i);
                 if (!$field) {
@@ -133,7 +133,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
                 }
             }
         }
-        if ($type == 'date') {
+        if ('date' == $type) {
             for ($i = 1; $i < 6; ++$i) {
                 $field = $this->getUserFieldDao()->getByFieldName('dateField'.$i);
                 if (!$field) {
@@ -142,7 +142,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
                 }
             }
         }
-        if ($type == 'float') {
+        if ('float' == $type) {
             for ($i = 1; $i < 6; ++$i) {
                 $field = $this->getUserFieldDao()->getByFieldName('floatField'.$i);
                 if (!$field) {
@@ -151,7 +151,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
                 }
             }
         }
-        if ($type == 'varchar') {
+        if ('varchar' == $type) {
             for ($i = 1; $i < 11; ++$i) {
                 $field = $this->getUserFieldDao()->getByFieldName('varcharField'.$i);
                 if (!$field) {
@@ -160,7 +160,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
                 }
             }
         }
-        if ($fieldName == '') {
+        if ('' == $fieldName) {
             return false;
         }
 
