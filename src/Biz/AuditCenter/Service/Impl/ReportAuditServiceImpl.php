@@ -31,7 +31,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'auditTime',
         ]);
 
-        $this->getReportAuditDao()->create($fields);
+        return $this->getReportAuditDao()->create($fields);
     }
 
     /**
@@ -49,7 +49,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'auditTime',
         ]);
 
-        $this->getReportAuditDao()->update($id, $fields);
+        return $this->getReportAuditDao()->update($id, $fields);
     }
 
     public function deleteReportAudit($id)
