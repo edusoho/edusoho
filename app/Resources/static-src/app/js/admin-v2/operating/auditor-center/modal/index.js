@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 $('.js-confirm-submit').click((e) => {
   $.post($(e.currentTarget).data('url'), $('#operate-confirm-form').serialize(), function () {
     $('#modal').modal('hide');

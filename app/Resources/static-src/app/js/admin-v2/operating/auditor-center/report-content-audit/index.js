@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import ShortLongText from 'app/js/util/short-long-text';
 import BatchSelect from 'app/js/util/batch-select';
 
