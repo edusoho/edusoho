@@ -9,32 +9,42 @@ export default class BatchConfirm {
   batchConfirm () {
 
     const $that = $(this.element);
+    const $dataRole = this.dataRole;
 
-    this.element.on('click', '[data-role=' + this.dataRole + ']', function () {
-
+    this.element.on('click', '[data-role=batch-' + $dataRole + ']', function (onSuccess) {
       let $btn = $(this);
       let name = $btn.data('name');
       let ids = [];
+
+      let status = $dataRole === 'confirm-pass' ? 'pass' : 'illegal';
 
       $that.find('[data-role=batch-item]:checked').each(function(){
         ids.push(this.value);
       });
 
       if (ids.length === 0) {
-        cd.message({ type: 'danger', message: Translator.trans('admin.util.batch_delete.checked_empty_hint',{name:name}) });
+        cd.message({ type: 'danger', message: Translator.trans('admin_v2.operation.user_content_audit.tip.checked_empty_hint',{name:name}) });
         return ;
       }
 
-      if (!confirm(Translator.trans('admin.util.batch_delete.delete_hint',{ids:ids.length,name:name}))) {
-        return ;
-      }
 
-      $(this.element).find('.btn').addClass('disabled');
+      $('#modal-' + $dataRole).modal('show');
 
-      cd.message({ type: 'info', message: Translator.trans('admin.util.batch_delete.deleting_hint',{name:name}) });
+      $('.cancel').click(function(){
+        $(this.element).find('.btn').addClass('disabled');
+        $('#modal-' + $dataRole).modal('hide');
+      });
 
-      $.post($btn.data('url'), {ids:ids}, function(){
-        window.location.reload();
+      $('.confirm').click(function(){
+        $(this.element).find('.btn').addClass('disabled');
+        $.post($btn.data('url'), {ids:ids,status:status}, function(){
+          if ($.isFunction(onSuccess)) {
+            onSuccess.call($element, $item);
+          } else {
+            cd.message({ type: 'success', message: Translator.trans('admin_v2.operation.user_content_audit.tip.message',{name:name}) });
+            window.location.reload();
+          }
+        });
       });
 
     });

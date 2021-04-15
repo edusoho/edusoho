@@ -400,7 +400,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: 优秀
     good: 良好
     passed: 合格
@@ -573,7 +573,7 @@ userAuditTargetType:
   12: 班级问答
 
 #用户内容审核状态
-usertAuditStatus:
+userAuditStatus:
   all: 全部状态
   sysPass: 系统已审
   none: 未审核
@@ -581,7 +581,15 @@ usertAuditStatus:
   illegal: 违规
 
 #用户内容审核 敏感词
-usertAuditSensitiveWords:
+containSensitiveWords:
   0: 敏感词过滤
   1: 含敏感词
   2: 不含敏感词
+
+#用户举报原因标签
+reportTags:
+    1: 举报垃圾广告
+    2: 政治敏感信息
+    3: 色情低俗信息
+    4: 违法违规信息
+    5: 辱骂、人身攻击等不友善行为

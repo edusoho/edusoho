@@ -1836,6 +1836,8 @@ course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
+course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.time: Time
@@ -4344,6 +4346,8 @@ admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Tim
 admin.course_manage.statistics.optional_task: Optional
 
 admin.course_manage.statistics.data_detail.name: 'User Name'
+admin.course_manage.statistics.data_detail.phone_number: 'Phone Number'
+admin.course_manage.statistics.data_detail.id_number: 'ID Number'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
@@ -4352,6 +4356,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 'Pure Learned Time(m
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.course_manage.statistics.data_detail.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1. Re-joining the course by the student may cause the student’s study days to be cleared<br/>
+  2. The number of learning days of the students will be refreshed after the students have learned behaviors in the new class time task<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.This page is real-time data.<br/>
@@ -6429,6 +6436,7 @@ admin.setting_course.questions_setting: 'Display answer and resolution after han
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
+admin.setting_course.questions_setting.submitted_tips: After it is turned on, the test task can be set to display the answer and analysis after the score is passed
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
 admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
@@ -6894,6 +6902,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
+admin.wap_setting.responsive: Responsive
 admin.wap_setting.off: Off
 admin.wap_setting.tip: MicroSchool is an application that is opened through a browser and does not require a download. The link can be sent to students, or added to a push SMS, students can click on the link and immediately enter the micro-net school to study, purchase courses, course sharing, etc. The micro-net school is more suitable for the purpose of promoting student sharing, new promotion, and activation through marketing activities.
 admin.wap_setting.edit.tip: On the left side is a preview of the home page of your micro-net school, you can click "Edit Micro-net School" to enter the edit page. You can also select the appropriate theme application through the Theme Template. Build a personalized micro-net school home page through the free combination of components.
@@ -10392,6 +10401,8 @@ admin.classroom_manage.statistics.member_modal_title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 'All courses in the class are accumulated learning time (minutes): %mins%'
 admin.classroom_manage.statistics.member.nickname_th: Username
+admin.classroom_manage.statistics.member.phone_number_th: Phone Number
+admin.classroom_manage.statistics.member.id_number_th: ID Number
 admin.classroom_manage.statistics.member.create_time_th: Join Time
 admin.classroom_manage.statistics.member.finish_time_th: Finish Time
 admin.classroom_manage.statistics.member.learn_time_th: Learned Time
@@ -10441,9 +10452,19 @@ classroom.manage.data_statistics.finished_time: FinishedTime
 classroom.manage.data_statistics.finish_status.unlearn: UnLearn
 classroom.manage.data_statistics.finish_status.learning: Learning
 classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.course_detail_list.select_all: All
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+
+admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
+admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: Mobile
+admin.edu_cloud.edu_video.finger_print_content_label.domain: Domain
+admin.edu_cloud.edu_video.finger_print_content_tips: For a better user experience, it is recommended to combine up to 2 information displays. Note: If the user's real name and mobile phone number are not available, it will be displayed as-
+admin.edu_cloud.edu_video.finger_print_embed_tips: After it is turned on, cloud video fingerprint information will be displayed at random times and locations during video playback.
+
 admin_v2.system.user_content_control.review_manage: Review Manage
 admin_v2.system.user_content_control.course_review_manage: Course Review Manage
 admin_v2.system.user_content_control.classroom_review_manage: Course Review Manage
@@ -10493,6 +10514,16 @@ admin_v2.operation.user_content_audit.type_th: Type
 admin_v2.operation.user_content_audit.author_time_th: Author/Time
 admin_v2.operation.user_content_audit.status_th: Audit Status
 admin_v2.operation.user_content_audit.auditor_th: Auditor
+admin_v2.operation.user_content_audit.default_auditor: System
 admin_v2.operation.user_content_audit.operation_th: Operation
 admin_v2.operation.user_content_audit.expand_td: Unfold
 admin_v2.operation.user_content_audit.collapse_td: Folded
+admin_v2.operation.user_content_audit.user_content: User Content
+admin_v2.operation.user_content_audit.modal.title: User Audit Content Confirm
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: Are you sure to judge user content as illegal?
+admin_v2.operation.user_content_audit.modal.body.illegal_info: After confirming the violation, the user content will not be displayed on the foreground page
+admin_v2.operation.user_content_audit.modal.body.pass_warning: Are you sure to pass the user content judgment?
+admin_v2.operation.user_content_audit.modal.body.pass_info: After confirmation, the user content is displayed on the front page
+admin_v2.operation.user_content_audit.select_all_btn: All Select
+admin_v2.operation.user_content_audit.modal.body.button.confirm: Confirm
+admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel

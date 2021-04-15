@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
+use Biz\System\Service\SettingService;
 
 class Token extends AbstractResource
 {
@@ -80,6 +81,12 @@ class Token extends AbstractResource
             }
         }
 
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (isset($storageSetting['video_fingerprint_content'])) {
+            $fingerPrint = $this->getWebExtension()->getFingerprint();
+            $user['fingerPrintSetting']['video_fingerprint_content'] = substr($fingerPrint, strpos($fingerPrint, '>') + 1, strrpos($fingerPrint, '<') - strlen($fingerPrint));
+        }
+
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
@@ -125,5 +132,13 @@ class Token extends AbstractResource
     private function getAccountService()
     {
         return $this->service('Pay:AccountService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

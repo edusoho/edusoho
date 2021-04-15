@@ -11,24 +11,28 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
 
     public function declares()
     {
-        $declares['orderbys'] = [
-            'createdTime'
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => [
+                'sensitiveWords' => 'delimiter',
+            ],
+            'conditions' => [
+                'id = :id',
+                'id > :minId',
+                'author = :author',
+                'auditor = :auditor',
+                'targetType = :targetType',
+                'status = :status',
+                'createdTime >= :startTime',
+                'createdTime <= :endTime',
+                'author IN (:authorIds)',
+                'auditor IN (:auditorIds)',
+                'sensitiveWords = :sensitiveWords',
+                'sensitiveWords != :notContainSensitiveWords',
+                'sensitiveWords LIKE :sensitiveWordsSearch',
+                'content LIKE :contentSearch',
+            ],
+            'orderbys' => ['id','createdTime'],
         ];
-
-        $declares['conditions'] = [
-            'author = :author',
-            'auditor = :auditor',
-            'targetType = :targetType',
-            'status = :status',
-            'createdTime >= :startTime',
-            'createdTime <= :endTime',
-            'author IN (:authorIds)',
-            'auditor IN (:auditorIds)',
-            'status IN (:variousStatus)',
-            'sensitiveWords LIKE :sensitiveWordsSearch',
-            'content LIKE :contentSearch',
-        ];
-
-        return $declares;
     }
 }

@@ -7,23 +7,23 @@ export default class ItemConfirm {
   }
 
   itemConfirm() {
-    this.element.on('click', '[data-role=' + this.dataRole + ']', function() {
+    const $dataRole = this.dataRole;
+    this.element.on('click', '[data-role=item-' + $dataRole + ']', function(onSuccess) {
       let $btn = $(this),
-        name = $btn.data('name'),
-        message = $btn.data('message');
+        name = $btn.data('name');
 
-      cd.confirm({
-        title: Translator.trans('site.data.delete_title_hint', {'name':name}),
-        content: Translator.trans('site.data.delete_name_hint', {'name':name}),
-        okText: Translator.trans('site.confirm'),
-        cancelText: Translator.trans('site.close'),
-      }).on('ok', () => {
+      $('#modal-' + $dataRole).modal('show');
+
+      $('.cancel').click(function(){
+        $('#modal-' + $dataRole).modal('hide');
+      });
+
+      $('.confirm').click(function(){
         $.post($btn.data('url'), function() {
-          if ($.isFunction(self.onSuccess)) {
-            self.onSuccess.call(self.$element);
+          if ($.isFunction(onSuccess)) {
+            onSuccess.call($element, $item);
           } else {
-            $btn.closest('[data-role=item]').remove();
-            cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+            cd.message({ type: 'success', message: Translator.trans('admin_v2.operation.user_content_audit.tip.message',{name:name}) });
             window.location.reload();
           }
         });

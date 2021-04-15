@@ -7,8 +7,19 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class ReportRecordDaoImpl extends AdvancedDaoImpl implements ReportRecordDao
 {
+    protected $table = 'report_record';
+
     public function declares()
     {
-        return [];
+        return [
+            'timestamps' => [],
+            'serializes' => [
+                'reportTags' => 'delimiter',
+            ],
+            'conditions' => [
+                'id = :id',
+            ],
+            'orderbys' => ['id'],
+        ];
     }
 }

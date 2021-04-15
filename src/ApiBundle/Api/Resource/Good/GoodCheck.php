@@ -111,6 +111,11 @@ class GoodCheck extends AbstractResource
             }
             $user = array_merge($userInfo, $user->toArray());
             $buyFields = $setting['userinfoFields'];
+            // $buyFields 可能为 NULL
+            if (empty($buyFields)) {
+                return false;
+            }
+
             foreach ($buyFields as $buyField) {
                 if (empty($user[$buyField])) {
                     return true;

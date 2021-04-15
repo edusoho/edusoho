@@ -16,22 +16,22 @@ new BatchSelect({
 
 new ItemConfirm({
   element: $container,
-  dataRole: 'item-confirm-normal'
+  dataRole: 'confirm-pass'
 });
 
 new ItemConfirm({
   element: $container,
-  dataRole: 'item-confirm-illegal'
+  dataRole: 'confirm-illegal',
 });
 
 new BatchConfirm({
   element: $container,
-  dataRole: 'batch-confirm-normal'
+  dataRole: 'confirm-pass'
 });
 
 new BatchConfirm({
   element: $container,
-  dataRole: 'batch-confirm-illegal'
+  dataRole: 'confirm-illegal'
 });
 
 initDatetimePicker();
@@ -42,7 +42,6 @@ function initDatetimePicker() {
     language: document.documentElement.lang,
     autoclose: true
   }).on('hide', function (ev) {
-    // validator.form();
   });
 
   $('[name=startTime]').datetimepicker('setStartDate', now);
@@ -54,7 +53,6 @@ function initDatetimePicker() {
     autoclose: true,
     language: document.documentElement.lang,
   }).on('hide', function (ev) {
-    // validator.form();
   });
 
   $('[name=endTime]').datetimepicker('setStartDate', now);

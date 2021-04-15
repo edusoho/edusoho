@@ -382,7 +382,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: Excellent
     good: Good
     passed: Passed
@@ -541,14 +541,22 @@ userAuditTargetType:
   11: Course Question
   12: Classromm Question
 
-usertAuditStatus:
+userAuditStatus:
   all: All Status
   sysPass: Syetem pass
   none: Not pass
   pass: Pass
   illegal: Illegal
 
-usertAuditSensitiveWords:
+containSensitiveWords:
   0: Sensitive words
   1: Contain Sensitive Words
   2: Not Contain Sensitive Words
+
+#用户举报原因标签
+reportTags:
+    1: Invalid advertisement information
+    2: Politically sensitive information
+    3: Pornographic and vulgar information
+    4: Illegal information
+    5: Abusive, personal attacks and other unfriendly behavior

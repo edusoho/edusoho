@@ -7,7 +7,7 @@
       <a href="{{ path('course_show', {id:course.id}) }}">
         <img src="{{ filepath(course.largePicture, 'avatar.png') }}"  class="img-responsive thumb pull-left">
       </a>
-      <p>《{{ course.title }}》</p>
+      <p>《{{ course.title|raw }}》</p>
       {% set teacher = teachers|first %}
       <p class="teacher-name">{{'教师：'|trans}}{{ teacher.nickname|default("") }}</p>
       <div class="progress-block clearfix">

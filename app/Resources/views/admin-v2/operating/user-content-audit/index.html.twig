@@ -2,13 +2,17 @@
 
 {% set menu = 'admin_v2_user_content_audit' %}
 
-{% do script(['libs/bootstrap-datetimepicker.js', 'app/js/audit/user-content-audit/index.js']) %}
+{% do script(['libs/bootstrap-datetimepicker.js','app/js/audit/user-content-audit/index.js']) %}
 
 {% block main %}
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-{#    {% include('./dit-model.html.twig') %}#}
+  <div class="modal fade" id="modal-confirm-pass" tabindex="-1" role="dialog" aria-hidden="true">
+    {% include 'admin-v2/operating/user-content-audit/audit-pass-modal.html.twig' %}
   </div>
-  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <div class="modal fade" id="modal-confirm-illegal" tabindex="-1" role="dialog" aria-hidden="true">
+    {% include 'admin-v2/operating/user-content-audit/audit-illegal-modal.html.twig' %}
+  </div>
+
+  <form id="audit-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
     <div class="form-group">
       <select class="form-control" name="targetType">
@@ -18,13 +22,13 @@
 
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ dict_select_options('usertAuditStatus') }}
+        {{ dict_select_options('userAuditStatus') }}
       </select>
     </div>
 
     <div class="form-group">
-      <select class="form-control" name="sensitiveWords">
-        {{ dict_select_options('usertAuditSensitiveWords') }}
+      <select class="form-control" name="containSensitiveWords">
+        {{ dict_select_options('containSensitiveWords') }}
       </select>
     </div>
 
@@ -38,14 +42,15 @@
 
     <div class="form-group ">
       <input class="form-control" type="text" id="startTime" name="startTime"
-             value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin_v2.operation.user_content_audit_form.startTime'|trans }}" autocomplete="off">
+             value="{{ app.request.query.get('startTime') }}" placeholder="{{ 'admin_v2.operation.user_content_audit_form.startTime'|trans }}" autocomplete="off">
       -
       <input class="form-control" type="text" id="endTime" name="endTime"
-             value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin_v2.operation.user_content_audit_form.endTime'|trans }}" autocomplete="off">
+             value="{{ app.request.query.get('endTime') }}" placeholder="{{ 'admin_v2.operation.user_content_audit_form.endTime'|trans }}" autocomplete="off">
     </div>
 
     <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
+
 
   <div id="audit-table-container">
     <table class="table table-striped table-hover" id="audit-table">
@@ -69,33 +74,37 @@
           <td><input type="checkbox" value="{{audit.id}}" data-role="batch-item"></td>
           <td>
             <div class="short-long-text">
-              <div class="short-text">
-                {{ audit.content|plain_text(200) }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.expand_td'|trans}})</span>
+              <div class="short-text" style="white-space: pre-wrap;">
+                {{ audit.short_content|raw }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.expand_td'|trans}})</span>
               </div>
-              <div class="long-text">{{ audit.content|nl2br }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.collapse_td'|trans}})</span></div>
+              <div class="long-text">{{ audit.content|raw }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.collapse_td'|trans}})</span></div>
             </div>
           </td>
           <td>
             <div class="short-long-text">
               <div class="short-text">
-                {{ audit.sensitiveWords|plain_text(30) }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.expand_td'|trans}})</span>
+                {{ audit.sensitiveWords|join(',')|plain_text(30) }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.expand_td'|trans}})</span>
               </div>
-              <div class="long-text">{{ audit.sensitiveWords|nl2br }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.collapse_td'|trans}})</span></div>
+              <div class="long-text">{{ audit.sensitiveWords|join(',')|nl2br }} <span class="text-muted trigger">({{'admin_v2.operation.user_content_audit.collapse_td'|trans}})</span></div>
             </div>
           </td>
           <td>{{ dict_text('userAuditTargetType', audit.targetType) }}</td>
           <td>
-            {{ admin_macro.user_link(author) }}<br>
+            {{ admin_macro.user_link(author)|default('') }}<br>
             <span class="text-muted">{{audit.createdTime|date('Y-n-d H:i')}}</span>
           </td>
-          <td>{{ dict_text('usertAuditStatus', audit.status) }}</td>
-          <td>{{ admin_macro.user_link(auditor) }}</td>
+          <td>{{ dict_text('userAuditStatus', audit.status) }}</td>
+          {% if 'sysPass' == audit.status %}
+            <td>{{ 'admin_v2.operation.user_content_audit.default_auditor'|trans }}</td>
+          {% else %}
+            <td>{{ admin_macro.user_link(auditor)|default('--') }}</td>
+          {% endif %}
           <td>
-            <div>
-              <div class="btn-group">
-                <a class="btn btn-primary btn-xs" href="#modal" data-toggle="modal" data-role="item-confirm-normal" data-name="{{'admin:operation_article.review.content'|trans}}" data-url="{{ path('admin_v2_article_review_delete', {id:audit.id}) }}">{{'form.btn.confirm.normal'|trans}}</a>
-                <a class="btn btn-danger btn-xs" href="#modal" data-toggle="modal" data-role="item-confirm-illegal" data-name="{{'admin:operation_article.review.content'|trans}}" data-url="{{ path('admin_v2_article_review_delete', {id:audit.id}) }}">{{'form.btn.confirm.illegal'|trans}}</a>
+              <div class="btn-group" style="margin-top: 30%;">
+                <button class="btn btn-primary btn-xs mlm" data-role="item-confirm-pass" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'pass'}) }}">{{'form.btn.confirm.normal'|trans}}</button>
               </div>
+            <div class="btn-group" style="margin-top: 20%;">
+              <button class="btn btn-danger btn-xs mlm" data-role="item-confirm-illegal" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'illegal'}) }}">{{'form.btn.confirm.illegal'|trans}}</button>
             </div>
           </td>
         </tr>
@@ -106,9 +115,9 @@
     </table>
 
     <div>
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
-      <button class="btn btn-primary btn-xs mlm" data-url="{{ path('admin_v2_article_review_batch_delete') }}" data-role="batch-confirm-normal" data-name="{{ 'admin:operation_article.review.content'|trans }}">{{'form.btn.confirm.normal'|trans}}</button>
-      <button class="btn btn-danger btn-xs mlm" data-url="{{ path('admin_v2_article_review_batch_delete') }}" data-role="batch-confirm-illegal" data-name="{{ 'admin:operation_article.review.content'|trans }}">{{'form.btn.confirm.illegal'|trans}}</button>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin_v2.operation.user_content_audit.select_all_btn'|trans}}</label>
+      <button class="btn btn-primary btn-xs mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm') }}" data-role="batch-confirm-pass" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.normal'|trans}}</button>
+      <button class="btn btn-danger btn-xs mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm') }}" data-role="batch-confirm-illegal" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.illegal'|trans}}</button>
     </div>
   </div>
 
