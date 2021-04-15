@@ -27,8 +27,6 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
     {
         $conditions = $this->prepareContentAuditSearchConditions($conditions);
 
-//        var_dump($conditions);
-//        die();
         return $this->getContentAuditDao()->search($conditions, $orderBy, $start, $limit);
     }
 
