@@ -18,6 +18,7 @@ class ReportRecordServiceTest extends BaseTestCase
     {
         $res = $this->getReportRecordService()->createReportRecord([
             'auditId' => 1,
+            'reporter' => 10,
             'content' => '测试创建',
             'author' => 3,
             'reportTags' => [1, 3],
@@ -42,6 +43,7 @@ class ReportRecordServiceTest extends BaseTestCase
     {
         return $this->getReportRecordService()->createReportRecord(array_merge([
             'auditId' => 1,
+            'reporter' => 10,
             'content' => '测试正文',
             'author' => 1,
             'reportTags' => [1, 3],

@@ -18,7 +18,7 @@ class UserContentAuditTable extends Migration
               `author` int(11) NOT NULL COMMENT '作者ID',
               `content` mediumtext COMMENT '内容',
               `sensitiveWords` varchar(2048) DEFAULT '' COMMENT '敏感词',
-              `auditor` int(11) NOT NULL COMMENT '最后一次审核人',
+              `auditor` int(11) DEFAULT NULL COMMENT '最后一次审核人',
               `status` varchar(32) NOT NULL DEFAULT '' COMMENT '当前审核状态',
               `auditTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最后审核时间',
               `createdTime` int(11) unsigned NOT NULL,

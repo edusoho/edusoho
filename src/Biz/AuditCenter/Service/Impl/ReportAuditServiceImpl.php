@@ -4,9 +4,11 @@ namespace Biz\AuditCenter\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\Dao\ReportAuditDao;
+use Biz\AuditCenter\Dao\ReportAuditRecordDao;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Codeages\Biz\Framework\Event\Event;
 
 class ReportAuditServiceImpl extends BaseService implements ReportAuditService
 {
@@ -54,22 +56,56 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
 
     public function deleteReportAudit($id)
     {
-        // TODO: Implement deleteReportAudit() method.
+        $this->beginTransaction();
+
+        try {
+            $reportAudit = $this->getReportAudit($id);
+            $this->getReportAuditDao()->delete($id);
+            $this->getReportAuditRecordDao()->deleteByAuditId($id);
+            $this->dispatchEvent('report_audit.delete', new Event($reportAudit));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+        }
     }
 
     public function getReportAuditRecord($id)
     {
-        // TODO: Implement getReportAuditRecord() method.
+        return $this->getReportAuditRecordDao()->get($id);
     }
 
     public function createReportAuditRecord($fields)
     {
-        // TODO: Implement createReportAuditRecord() method.
+        if (!ArrayToolkit::requireds($fields, ['auditId', 'content', 'author', 'reportTags', 'auditor', 'status', 'originStatus', 'auditTime'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $fields = ArrayToolkit::parts($fields, [
+            'auditId',
+            'content',
+            'author',
+            'reportTags',
+            'auditor',
+            'status',
+            'originStatus',
+            'auditTime',
+        ]);
+
+        return $this->getReportAuditRecordDao()->create($fields);
     }
 
     public function updateReportAuditRecord($id, $fields)
     {
-        // TODO: Implement updateReportAuditRecord() method.
+        $fields = ArrayToolkit::parts($fields, [
+            'content',
+            'author',
+            'reportTags',
+            'auditor',
+            'status',
+            'originStatus',
+            'auditTime',
+        ]);
+
+        return $this->getReportAuditRecordDao()->update($id, $fields);
     }
 
     /**
@@ -78,5 +114,13 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     protected function getReportAuditDao()
     {
         return $this->biz->dao('AuditCenter:ReportAuditDao');
+    }
+
+    /**
+     * @return ReportAuditRecordDao
+     */
+    protected function getReportAuditRecordDao()
+    {
+        return $this->biz->dao('AuditCenter:ReportAuditRecordDao');
     }
 }
