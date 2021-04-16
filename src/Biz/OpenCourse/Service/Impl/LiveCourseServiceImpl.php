@@ -30,7 +30,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         if (isset($live['error'])) {
-            throw $this->createServiceException($live['error']);
+            throw $this->createServiceException($live['error'], 500);
         }
 
         return $live;
