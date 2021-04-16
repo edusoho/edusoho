@@ -1774,3 +1774,6 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
+
+admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
+admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功

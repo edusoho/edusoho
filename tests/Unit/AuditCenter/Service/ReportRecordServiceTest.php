@@ -39,6 +39,26 @@ class ReportRecordServiceTest extends BaseTestCase
         self::assertEquals('更新的创建记录', $updated['content']);
     }
 
+    public function testSearchReportRecords()
+    {
+        $audit1 = $this->mockReportRecord(['auditId' => '1']);
+        $audit2 = $this->mockReportRecord(['auditId' => '2']);
+
+        $result = $this->getReportRecordService()->searchReportRecords(['auditId' => $audit2['id']], ['id' => 'ASC'], 0, 3);
+
+        $this->assertEquals([$audit2], $result);
+    }
+
+    public function testSearchReportAuditRecordCount()
+    {
+        $audit1 = $this->mockReportRecord(['auditId' => '1']);
+        $audit2 = $this->mockReportRecord(['auditId' => '2']);
+
+        $result = $this->getReportRecordService()->searchReportRecordCount(['auditId' => $audit2['id']], ['id' => 'ASC'], 0, 3);
+
+        $this->assertEquals(1, $result);
+    }
+
     protected function mockReportRecord($customFields = [])
     {
         return $this->getReportRecordService()->createReportRecord(array_merge([

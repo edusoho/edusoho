@@ -9,6 +9,11 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
 {
     protected $table = 'report_audit';
 
+    public function findByIds(array $ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [
@@ -16,10 +21,15 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
             'serializes' => [
                 'reportTags' => 'delimiter',
             ],
+            'orderbys' => ['id', 'reportCount'],
             'conditions' => [
+                'id IN (:ids)',
                 'id = :id',
+                'reportTags LIKE :reportTag',
+                'status = :status',
+                'targetType = :targetType',
+                'author = :author',
             ],
-            'orderbys' => ['id'],
         ];
     }
 }
