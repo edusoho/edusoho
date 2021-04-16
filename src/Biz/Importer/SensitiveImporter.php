@@ -95,7 +95,7 @@ class SensitiveImporter extends Importer
         foreach ($this->checkFields as $checkField) {
             $checkFieldData = [];
             foreach ($fieldSort as $key => $value) {
-                if ($value['fieldName'] == $checkField) {
+                if ($value['fieldName'] === $checkField) {
                     $checkFieldCol = $value['num'];
                 }
             }

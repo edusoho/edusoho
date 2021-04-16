@@ -257,7 +257,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     protected function prepareConditions($conditions)
     {
         if (isset($conditions['keyword'])) {
-            if ('name' == $conditions['searchKeyWord']) {
+            if ('name' === $conditions['searchKeyWord']) {
                 $conditions['keyword'] = $this->flagReplaceReverse($conditions['keyword']);
             }
         }
