@@ -2,6 +2,7 @@
 
 namespace Biz\Sensitive\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Sensitive\SensitiveException;
 use Biz\Sensitive\Service\SensitiveService;
@@ -224,6 +225,8 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function updateKeyword($id, $fields)
     {
+        $fields = ArrayToolkit::parts($fields, ['state', 'bannedNum']);
+
         $result = $this->getSensitiveDao()->update($id, $fields);
 
         return $result;
