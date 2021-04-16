@@ -26,6 +26,7 @@ use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\Importer\ItemBankExerciseMemberImporter;
+use Biz\Importer\SensitiveImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\System\Template\TemplateFactory;
@@ -115,6 +116,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['importer.classroom-member'] = function ($biz) {
             return new ClassroomMemberImporter($biz);
+        };
+
+        $biz['importer.sensitive'] = function ($biz) {
+            return new SensitiveImporter($biz);
         };
 
         $biz['course.strategy_context'] = function ($biz) {
