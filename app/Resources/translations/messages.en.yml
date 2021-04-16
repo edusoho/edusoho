@@ -10527,3 +10527,6 @@ admin_v2.operation.user_content_audit.modal.body.pass_info: After confirmation, 
 admin_v2.operation.user_content_audit.select_all_btn: All Select
 admin_v2.operation.user_content_audit.modal.body.button.confirm: Confirm
 admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel
+admin_v2.operation.user_content_audit_form.all_type_option: All type
+admin_v2.operation.user_content_audit_form.all_status_option: All status
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: Sensitive words filter

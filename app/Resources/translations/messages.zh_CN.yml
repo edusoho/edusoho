@@ -11782,3 +11782,6 @@ admin_v2.operation.user_content_audit.modal.body.pass_info: 确认通过后，�
 admin_v2.operation.user_content_audit.select_all_btn: 全选
 admin_v2.operation.user_content_audit.modal.body.button.confirm: 确认
 admin_v2.operation.user_content_audit.modal.body.button.cancel: 取消
+admin_v2.operation.user_content_audit_form.all_type_option: 全部类型
+admin_v2.operation.user_content_audit_form.all_status_option: 全部状态
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: 敏感词过滤

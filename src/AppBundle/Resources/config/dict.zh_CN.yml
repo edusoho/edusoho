@@ -558,7 +558,6 @@ certificateAuditSearchTypes:
 
 #用户内容审核类型
 userAuditTargetType:
-  0: 全部类型
   1: 课程评价
   2: 班级评价
   3: 题库练习评价
@@ -574,7 +573,6 @@ userAuditTargetType:
 
 #用户内容审核状态
 userAuditStatus:
-  all: 全部状态
   sysPass: 系统已审
   none: 未审核
   pass: 正常
@@ -582,7 +580,6 @@ userAuditStatus:
 
 #用户内容审核 敏感词
 containSensitiveWords:
-  0: 敏感词过滤
   1: 含敏感词
   2: 不含敏感词
 

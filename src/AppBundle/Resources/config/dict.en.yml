@@ -527,7 +527,6 @@ certificateSearchTypes:
     code: code
 
 userAuditTargetType:
-  0: All Type
   1: Course Review
   2: Classroom Review
   3: Exercise Review
@@ -542,14 +541,12 @@ userAuditTargetType:
   12: Classromm Question
 
 userAuditStatus:
-  all: All Status
   sysPass: Syetem pass
   none: Not pass
   pass: Pass
   illegal: Illegal
 
 containSensitiveWords:
-  0: Sensitive words
   1: Contain Sensitive Words
   2: Not Contain Sensitive Words
 

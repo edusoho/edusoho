@@ -30,14 +30,13 @@ class UserContentAuditController extends BaseController
 
         $userAudits = $this->auditContentSensitiveWordsMarker($userAudits);
 
-        $authors = $this->getUserService()->findUsersByIds(ArrayToolkit::column($userAudits, 'author'));
-        $auditors = $this->getUserService()->findUsersByIds(ArrayToolkit::column($userAudits, 'auditor'));
+        $userIds = array_merge(ArrayToolkit::column($userAudits, 'author'), ArrayToolkit::column($userAudits, 'auditor'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin-v2/operating/user-content-audit/index.html.twig', [
             'userAudits' => $userAudits,
             'paginator' => $paginator,
-            'authors' => $authors,
-            'auditors' => $auditors,
+            'users' => $users,
         ]);
     }
 
@@ -124,8 +123,6 @@ class UserContentAuditController extends BaseController
 
         if (isset($conditions['containSensitiveWords'])) {
             switch ($conditions['containSensitiveWords']) {
-                case 0:
-                    break;
                 case 1:
                     $conditions['notContainSensitiveWords'] = '';
                     break;

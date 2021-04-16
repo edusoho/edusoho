@@ -16,19 +16,20 @@
 
     <div class="form-group">
       <select class="form-control" name="targetType">
-        {{ dict_select_options('userAuditTargetType') }}
+        {{ select_options(dict('userAuditTargetType'), app.request.query.get('targetType'), 'admin_v2.operation.user_content_audit_form.all_type_option'|trans) }}
       </select>
     </div>
 
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ dict_select_options('userAuditStatus') }}
+        {{ select_options(dict('userAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
       </select>
     </div>
 
     <div class="form-group">
       <select class="form-control" name="containSensitiveWords">
-        {{ dict_select_options('containSensitiveWords') }}
+        {{ select_options(dict('containSensitiveWords'), app.request.query.get('containSensitiveWords'), 'admin_v2.operation.user_content_audit_form.sensitive_words_filter_option'|trans) }}
+
       </select>
     </div>
 
@@ -68,8 +69,8 @@
       </thead>
       <tbody>
       {% for audit in userAudits %}
-        {% set author = authors[audit.author]|default(null) %}
-        {% set auditor = auditors[audit.auditor]|default(null) %}
+        {% set author = users[audit.author]|default(null) %}
+        {% set auditor = users[audit.auditor]|default(null) %}
         <tr id="review-table-tr-{{audit.id}}" data-role="item">
           <td><input type="checkbox" value="{{audit.id}}" data-role="batch-item"></td>
           <td>
