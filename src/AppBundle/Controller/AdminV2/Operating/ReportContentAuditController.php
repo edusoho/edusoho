@@ -19,7 +19,7 @@ class ReportContentAuditController extends BaseController
         ], $request->query->all());
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getReportAuditService()->searchReportAuditCount($conditions),
             20
         );
@@ -59,8 +59,7 @@ class ReportContentAuditController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $ids = $request->request->get('ids');
-            $ids = is_array($ids) ? $ids : json_decode($ids);
-            $status = $request->request->get('status');
+            $ids = is_array($ids) ? $ids : json_decode($ids, true);
             $this->getReportAuditService()->updateReportAuditStatusByIds($ids, $status);
 
             return $this->createJsonResponse(true);
@@ -77,7 +76,7 @@ class ReportContentAuditController extends BaseController
     {
         $conditions = ['auditId' => $auditId];
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getReportRecordService()->searchReportRecordCount($conditions),
             20
         );

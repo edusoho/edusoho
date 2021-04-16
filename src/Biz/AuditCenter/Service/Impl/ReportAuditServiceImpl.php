@@ -15,12 +15,6 @@ use InvalidArgumentException;
 
 class ReportAuditServiceImpl extends BaseService implements ReportAuditService
 {
-    const STATUS_NONE = 'none';
-
-    const STATUS_PASS = 'pass';
-
-    const STATUS_ILLEGAL = 'illegal';
-
     public function searchReportAudits(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
         $conditions = $this->prepareSearchReportAuditConditions($conditions);
@@ -181,6 +175,10 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     {
         if (isset($conditions['status']) && 'all' === $conditions['status']) {
             unset($conditions['status']);
+        }
+
+        if (!empty($conditions['targetTags'])) {
+            $conditions['targetTags'] = "|{$conditions['targetTags']}|";
         }
 
         if (!empty($conditions['author'])) {

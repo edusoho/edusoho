@@ -3,7 +3,6 @@
 namespace Tests\Unit\AuditCenter\Service;
 
 use Biz\AuditCenter\Dao\ReportAuditRecordDao;
-use Biz\AuditCenter\Service\Impl\ReportAuditServiceImpl;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseTestCase;
 
@@ -68,7 +67,7 @@ class ReportAuditServiceTest extends BaseTestCase
      */
     public function testUpdateReportAuditStatus_whenAuditNotExist_thenThrowException()
     {
-        $this->getReportAuditService()->updateReportAuditStatus(1, ReportAuditServiceImpl::STATUS_PASS);
+        $this->getReportAuditService()->updateReportAuditStatus(1, ReportAuditService::STATUS_PASS);
     }
 
     public function testUpdateReportAuditStatus_whenAuditStatusNotChanged_thenReturn()
@@ -81,31 +80,31 @@ class ReportAuditServiceTest extends BaseTestCase
     public function testUpdateReportAuditStatus()
     {
         $audit = $this->mockReportAudit();
-        $result = $this->getReportAuditService()->updateReportAuditStatus($audit['id'], ReportAuditServiceImpl::STATUS_PASS);
+        $result = $this->getReportAuditService()->updateReportAuditStatus($audit['id'], ReportAuditService::STATUS_PASS);
         $record = $this->getReportAuditRecordDao()->search(['auditId' => $audit['id']], [], 0, 1);
 
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_NONE, $audit['status']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_PASS, $result['status']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_NONE, $record[0]['originStatus']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_PASS, $record[0]['status']);
+        $this->assertEquals(ReportAuditService::STATUS_NONE, $audit['status']);
+        $this->assertEquals(ReportAuditService::STATUS_PASS, $result['status']);
+        $this->assertEquals(ReportAuditService::STATUS_NONE, $record[0]['originStatus']);
+        $this->assertEquals(ReportAuditService::STATUS_PASS, $record[0]['status']);
     }
 
     public function testUpdateReportAuditStatusByIds()
     {
         $audit1 = $this->mockReportAudit(['content' => '举报正文1']);
-        $audit2 = $this->mockReportAudit(['content' => '举报正文2', 'status' => ReportAuditServiceImpl::STATUS_PASS, 'author' => 2]);
+        $audit2 = $this->mockReportAudit(['content' => '举报正文2', 'status' => ReportAuditService::STATUS_PASS, 'author' => 2]);
 
-        $this->getReportAuditService()->updateReportAuditStatusByIds([$audit1['id'], $audit2['id']], ReportAuditServiceImpl::STATUS_PASS);
+        $this->getReportAuditService()->updateReportAuditStatusByIds([$audit1['id'], $audit2['id']], ReportAuditService::STATUS_PASS);
         $audit1Result = $this->getReportAuditDao()->get($audit1['id']);
         $audit2Result = $this->getReportAuditDao()->get($audit2['id']);
 
         $audit1Record = $this->getReportAuditRecordDao()->search(['auditId' => $audit1['id']], [], 0, 1);
         $audit2Record = $this->getReportAuditRecordDao()->search(['auditId' => $audit2['id']], [], 0, 1);
 
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_NONE, $audit1['status']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_PASS, $audit1Result['status']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_NONE, $audit1Record[0]['originStatus']);
-        $this->assertEquals(ReportAuditServiceImpl::STATUS_PASS, $audit1Record[0]['status']);
+        $this->assertEquals(ReportAuditService::STATUS_NONE, $audit1['status']);
+        $this->assertEquals(ReportAuditService::STATUS_PASS, $audit1Result['status']);
+        $this->assertEquals(ReportAuditService::STATUS_NONE, $audit1Record[0]['originStatus']);
+        $this->assertEquals(ReportAuditService::STATUS_PASS, $audit1Record[0]['status']);
         $this->assertEquals($audit2['status'], $audit2Result['status']);
         $this->assertEmpty($audit2Record);
     }
@@ -160,8 +159,8 @@ class ReportAuditServiceTest extends BaseTestCase
             'author' => 1,
             'reportTags' => [1, 5],
             'auditor' => 3,
-            'status' => ReportAuditServiceImpl::STATUS_PASS,
-            'originStatus' => ReportAuditServiceImpl::STATUS_ILLEGAL,
+            'status' => ReportAuditService::STATUS_PASS,
+            'originStatus' => ReportAuditService::STATUS_ILLEGAL,
             'auditTime' => time(),
         ]);
         self::assertEquals('举报正文', $res['content']);
@@ -196,8 +195,8 @@ class ReportAuditServiceTest extends BaseTestCase
             'author' => 1,
             'reportTags' => [1, 5],
             'auditor' => 3,
-            'status' => ReportAuditServiceImpl::STATUS_PASS,
-            'originStatus' => ReportAuditServiceImpl::STATUS_ILLEGAL,
+            'status' => ReportAuditService::STATUS_PASS,
+            'originStatus' => ReportAuditService::STATUS_ILLEGAL,
             'auditTime' => time(),
         ], $customFields));
     }

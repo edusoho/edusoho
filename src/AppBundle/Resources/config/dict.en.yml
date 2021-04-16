@@ -540,7 +540,7 @@ reportTargetType:
     2: Classroom Review
     3: Question Bank Exervise Review
     4: Open Course Review
-    5: Aeticle Review
+    5: Article Review
     6: Course Note
     7: Classroom Note
     8: Course Thread
@@ -551,6 +551,6 @@ reportTargetType:
 
 #用户举报内容审核状态
 reportAuditStatus:
-    none: none
+    none: None
     pass: Pass
     illegal: Illegal
