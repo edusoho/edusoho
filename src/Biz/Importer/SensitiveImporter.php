@@ -4,6 +4,7 @@ namespace Biz\Importer;
 
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class SensitiveImporter extends Importer
@@ -19,24 +20,28 @@ class SensitiveImporter extends Importer
     public function import(Request $request)
     {
         $importData = $request->request->get('importData');
-        array_walk($importData, function (&$keyword) {
-            $keyword['name'] = preg_quote($keyword['name'], '/');
-        });
-
         $totalCount = count($importData);
         if (empty($totalCount)) {
             return ['successCount' => $totalCount];
         }
 
-        $existedKeywords = $this->getSensitiveService()->searchKeywords(['names' => array_column($importData, 'name')], [], 0, $totalCount, ['id', 'name']);
-        $existedKeywordNames = empty($existedKeywords) ? [] : array_combine(array_column($existedKeywords, 'id'), array_column($existedKeywords, 'name'));
+        try {
+            $this->biz['db']->beginTransaction();
 
-        foreach ($importData as $keyword) {
-            if (in_array($keyword['name'], $existedKeywordNames)) {
-                $this->getSensitiveService()->updateKeyword(array_search($keyword['name'], $existedKeywordNames), $keyword);
-            } else {
-                $this->getSensitiveService()->addKeyword($keyword['name'], $keyword['state']);
+            foreach ($importData as $keyword) {
+                $existedKeyword = $this->getSensitiveService()->getKeywordByName($keyword['name']);
+
+                if (empty($existedKeyword)) {
+                    $this->getSensitiveService()->addKeyword($keyword['name'], $keyword['state']);
+                } else {
+                    $this->getSensitiveService()->updateKeyword($existedKeyword['id'], $keyword);
+                }
             }
+
+            $this->biz['db']->commit();
+        } catch (Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
         }
 
         return ['successCount' => $totalCount];
