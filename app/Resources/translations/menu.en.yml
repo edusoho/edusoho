@@ -665,10 +665,11 @@ admin_v2.operation.wechat.notification_record_tab: Send Record
 admin_v2.operation.wechat.notification_manage: Setting
 
 # 运营-内容运营-敏感词
-admin_v2.operation.sensitive_words_menu: Sensitive Words
-admin_v2.operation.sensitive_words.sensitive_words_list_tab: Sensitive Words List
-admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
-admin_v2.operation.sensitive_words.banlogs_tab: Processing History
+admin_v2.system.sensitive_words_menu: Sensitive Words
+admin_v2.system.sensitive_words.sensitive_words_list_tab: Sensitive Words List
+admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
+admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn: Import Sensitive Word
+admin_v2.system.sensitive_words.banlogs_tab: Processing History
 
 #营销-公开课管理
 admin_v2.open_course.basic_group: Open Course
