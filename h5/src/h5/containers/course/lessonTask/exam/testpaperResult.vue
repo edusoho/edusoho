@@ -80,6 +80,7 @@
 
       <div ref="footer" class="result-footer">
         <van-button
+          v-if="resultShow"
           :style="{ marginRight: isReadOver && !doTimes ? '2vw' : 0 }"
           class="result-footer__btn"
           type="primary"
@@ -156,6 +157,7 @@ export default {
         partRight: 'orange',
         noAnswer: 'gray',
       },
+      resultShow: false,
     };
   },
   computed: {
@@ -204,6 +206,7 @@ export default {
         this.result = res.testpaperResult;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
         this.isReadOver = this.result.status === 'finished';
+        this.resultShow = res.resultShow;
         this.getSubjectList(res.items);
         this.calSubjectHeight();
         // 上报学习进度

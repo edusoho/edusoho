@@ -73,6 +73,7 @@
             :answer="paper.answer"
             :subject="paper.type"
             :is-exercise="isExercise"
+            :result-show="resultShow"
           />
         </div>
       </van-swipe-item>
@@ -99,7 +100,6 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
 import fillType from '../component/fill';
 import essayType from '../component/essay';
 import headTop from '../component/head';
@@ -107,7 +107,6 @@ import choiceType from '../component/choice';
 import singleChoice from '../component/single-choice';
 import determineType from '../component/determine';
 import analysis from '../component/analysis';
-import { setTimeout } from 'timers';
 const NAVBARHEIGHT = 44;
 const WINDOWHEIGHT = document.documentElement.clientHeight - NAVBARHEIGHT;
 
@@ -157,6 +156,10 @@ export default {
     isExercise: {
       type: Boolean,
       default: false,
+    },
+    resultShow: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -239,7 +242,7 @@ export default {
           typeName = '材料题';
           break;
         default:
-          '';
+          typeName = '';
       }
       return parentType + typeName;
     },
