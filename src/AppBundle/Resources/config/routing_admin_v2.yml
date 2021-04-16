@@ -1172,11 +1172,14 @@ admin_v2_report_content_audit:
     path:  /report_content_audit
     defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:index }
 
+admin_v2_report_record:
+    path:  /report_record/{auditId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:reportRecord }
+
 admin_v2_report_content_audit_update_status:
     path:  /report_content_audit/{id}/update_status/{status}
     defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:updateStatus }
 
-    # batchUpdateStatus
 admin_v2_report_content_audit_batch_update:
     path:  /report_content_audit/batch_update/{status}
     defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:batchUpdateStatus }

@@ -11779,6 +11779,10 @@ admin_v2.operation.report_content_audit.table.batch_pass.notice: 确认被举报
 admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
 admin_v2.operation.report_content_audit.table.batch_illegal.notice: 确认被举报的内容违规吗？
 admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+admin_v2.operation.report_content_audit.record.title: 举报详情
+admin_v2.operation.report_content_audit.record.type: 举报类型
+admin_v2.operation.report_content_audit.record.reporter: 举报者
+admin_v2.operation.report_content_audit.record.time: 举报时间
 
 exception.audit_center.report_audit_not_exist: 举报信息不存在
 exception.audit_center.report_audit_status_not_valid: 审核状态不合法

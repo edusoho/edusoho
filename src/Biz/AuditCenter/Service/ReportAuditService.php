@@ -20,6 +20,10 @@ interface ReportAuditService
 
     public function deleteReportAudit($id);
 
+    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = []);
+
+    public function searchReportRecordCount(array $conditions);
+
     public function getReportAuditRecord($id);
 
     public function createReportAuditRecord($fields);

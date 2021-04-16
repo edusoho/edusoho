@@ -5,10 +5,13 @@ namespace Biz\AuditCenter\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\AuditCenterException;
 use Biz\AuditCenter\Dao\ReportAuditDao;
+use Biz\AuditCenter\Dao\ReportRecordDao;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Exception;
 use InvalidArgumentException;
 
 class ReportAuditServiceImpl extends BaseService implements ReportAuditService
@@ -21,26 +24,51 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
 
     public function searchReportAudits(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
-        $conditions = $this->prepareSearchConditions($conditions);
+        $conditions = $this->prepareSearchReportAuditConditions($conditions);
 
         return $this->getReportAuditDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function searchReportAuditCount(array $conditions)
     {
-        return $this->getReportAuditDao()->count($this->prepareSearchConditions($conditions));
+        return $this->getReportAuditDao()->count($this->prepareSearchReportAuditConditions($conditions));
     }
 
     public function updateReportAuditStatus($id, $status)
     {
         $this->checkReportAuditStatus($status);
-        $reportAudit = $this->getReportAuditDao()->get($id);
-
-        if (empty($reportAudit)) {
+        $originReportAudit = $this->getReportAuditDao()->get($id);
+        if (empty($originReportAudit)) {
             $this->createNewException(AuditCenterException::REPORT_AUDIT_NOT_EXIST());
         }
 
-        return $this->getReportAuditDao()->update($reportAudit['id'], ['status' => $status]);
+        if ($originReportAudit['status'] === $status) {
+            return $originReportAudit;
+        }
+
+        $reportAudit = $this->updateReportAudit($originReportAudit['id'], [
+            'status' => $status,
+            'auditor' => $this->getCurrentUser()->getId(),
+            'auditTime' => time(),
+        ]);
+
+        $this->createReportAuditRecord($this->prepareReportAuditRecord($originReportAudit, $reportAudit));
+
+        return $reportAudit;
+    }
+
+    protected function prepareReportAuditRecord($originReportAudit, $reportAudit)
+    {
+        return [
+            'auditId' => $reportAudit['id'],
+            'content' => $reportAudit['content'],
+            'author' => $reportAudit['author'],
+            'reportTags' => $reportAudit['reportTags'],
+            'auditor' => $reportAudit['auditor'],
+            'status' => $reportAudit['status'],
+            'originStatus' => $originReportAudit['status'],
+            'auditTime' => $reportAudit['auditTime'],
+        ];
     }
 
     public function updateReportAuditStatusByIds(array $ids, $status)
@@ -48,10 +76,17 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         if (empty($ids)) {
             throw new InvalidArgumentException('Params ids invalid.');
         }
-
         $this->checkReportAuditStatus($status);
-
-        return $this->getReportAuditDao()->update(['ids' => $ids], ['status' => $status]);
+        try {
+            $this->beginTransaction();
+            foreach ($ids as $id) {
+                $this->updateReportAuditStatus($id, $status);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function getReportAudit($id)
@@ -135,20 +170,14 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditRecordDao()->create($fields);
     }
 
-    protected function checkReportAuditStatus($status)
+    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
-        if (!in_array($status, [self::STATUS_NONE, self::STATUS_PASS, self::STATUS_ILLEGAL])) {
-            $this->createNewException(AuditCenterException::REPORT_AUDIT_STATUS_INVALID());
-        }
+        return $this->getReportRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    protected function prepareSearchConditions($conditions)
+    public function searchReportRecordCount(array $conditions)
     {
-        if (isset($conditions['status']) && 'all' === $conditions['status']) {
-            unset($conditions['status']);
-        }
-
-        return $conditions;
+        return $this->getReportRecordDao()->count($conditions);
     }
 
     public function updateReportAuditRecord($id, $fields)
@@ -166,6 +195,27 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditRecordDao()->update($id, $fields);
     }
 
+    protected function checkReportAuditStatus($status)
+    {
+        if (!in_array($status, [self::STATUS_NONE, self::STATUS_PASS, self::STATUS_ILLEGAL])) {
+            $this->createNewException(AuditCenterException::REPORT_AUDIT_STATUS_INVALID());
+        }
+    }
+
+    protected function prepareSearchReportAuditConditions($conditions)
+    {
+        if (isset($conditions['status']) && 'all' === $conditions['status']) {
+            unset($conditions['status']);
+        }
+
+        if (!empty($conditions['author'])) {
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
+            $conditions['author'] = empty($author) ? -1 : $author['id'];
+        }
+
+        return $conditions;
+    }
+
     /**
      * @return ReportAuditDao
      */
@@ -180,5 +230,21 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     protected function getReportAuditRecordDao()
     {
         return $this->createDao('AuditCenter:ReportAuditRecordDao');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return ReportRecordDao
+     */
+    protected function getReportRecordDao()
+    {
+        return $this->createDao('AuditCenter:ReportRecordDao');
     }
 }

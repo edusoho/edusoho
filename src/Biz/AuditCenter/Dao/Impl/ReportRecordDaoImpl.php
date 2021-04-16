@@ -18,6 +18,7 @@ class ReportRecordDaoImpl extends AdvancedDaoImpl implements ReportRecordDao
             ],
             'conditions' => [
                 'id = :id',
+                'auditId = :auditId',
             ],
             'orderbys' => ['id'],
         ];

@@ -85,7 +85,7 @@
 									{% endif %}
 								</td>
 								<td>
-									<a class="btn btn-sm btn-default operating-btn">{{ 'admin_v2.operation.report_content_audit.table.operate_item'|trans }}</a>
+									<a class="btn btn-sm btn-default operating-btn"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_report_record', {auditId: reportAudit.id}) }}">{{ 'admin_v2.operation.report_content_audit.table.operate_item'|trans }}</a>
 									<a class="btn btn-sm btn-info operating-btn js-table-item-operate {% if reportAudit.status == 'pass' %}hide{% endif %}" data-url="{{ path('admin_v2_report_content_audit_update_status', {id: reportAudit.id, status: 'pass'}) }}">{{ 'admin_v2.operation.report_content_audit.table.operate_pass'|trans }}</a>
 									<a class="btn btn-sm btn-danger operating-btn js-table-item-operate {% if reportAudit.status == 'illegal' %}hide{% endif %}" data-url="{{ path('admin_v2_report_content_audit_update_status', {id: reportAudit.id, status: 'illegal'}) }}">{{ 'admin_v2.operation.report_content_audit.table.operate_illegal'|trans }}</a>
 								</td>

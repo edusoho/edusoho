@@ -31,7 +31,7 @@ class ReportContentAuditController extends BaseController
         );
 
         $userIds = array_merge(array_column($reportAudits, 'auditor'), array_column($reportAudits, 'author'));
-        $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds), ['id', 'nickname']);
+        $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds));
 
         return $this->render('admin-v2/operating/report-content-audit/index.html.twig', [
             'reportAudits' => $reportAudits,
@@ -69,6 +69,26 @@ class ReportContentAuditController extends BaseController
             'params' => $request->query->all(),
             'status' => $status,
             'url' => $this->generateUrl('admin_v2_report_content_audit_batch_update', ['status' => $status]),
+        ]);
+    }
+
+    public function reportRecordAction(Request $request, $auditId)
+    {
+        $conditions = ['auditId' => $auditId];
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getReportAuditService()->searchReportRecordCount($conditions),
+            20
+        );
+
+        $reportRecords = $this->getReportAuditService()->searchReportRecords($conditions, [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $userIds = array_column($reportRecords, 'reporter');
+        $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds));
+
+        return $this->render('admin-v2/operating/report-content-audit/record-modal.html.twig', [
+            'users' => $users,
+            'reportRecords' => $reportRecords,
+            'paginator' => $paginator,
         ]);
     }
 

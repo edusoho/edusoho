@@ -10524,6 +10524,10 @@ admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported
 admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
 admin_v2.operation.report_content_audit.table.batch_illegal.notice: Confirm that the reported content violates the rules?
 admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.report_content_audit.record.title: Records
+admin_v2.operation.report_content_audit.record.type: Type
+admin_v2.operation.report_content_audit.record.reporter: Reporter
+admin_v2.operation.report_content_audit.record.time: Time
 
 exception.audit_center.report_audit_not_exist: Report information does not exist
 exception.audit_center.report_audit_status_not_valid: Invalid review status
