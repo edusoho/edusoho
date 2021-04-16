@@ -5,7 +5,6 @@ namespace Biz\AuditCenter\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\AuditCenterException;
 use Biz\AuditCenter\Dao\ReportAuditDao;
-use Biz\AuditCenter\Dao\ReportRecordDao;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -55,20 +54,6 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         $this->createReportAuditRecord($this->prepareReportAuditRecord($originReportAudit, $reportAudit));
 
         return $reportAudit;
-    }
-
-    protected function prepareReportAuditRecord($originReportAudit, $reportAudit)
-    {
-        return [
-            'auditId' => $reportAudit['id'],
-            'content' => $reportAudit['content'],
-            'author' => $reportAudit['author'],
-            'reportTags' => $reportAudit['reportTags'],
-            'auditor' => $reportAudit['auditor'],
-            'status' => $reportAudit['status'],
-            'originStatus' => $originReportAudit['status'],
-            'auditTime' => $reportAudit['auditTime'],
-        ];
     }
 
     public function updateReportAuditStatusByIds(array $ids, $status)
@@ -170,16 +155,6 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditRecordDao()->create($fields);
     }
 
-    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
-    {
-        return $this->getReportRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
-    }
-
-    public function searchReportRecordCount(array $conditions)
-    {
-        return $this->getReportRecordDao()->count($conditions);
-    }
-
     public function updateReportAuditRecord($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, [
@@ -216,6 +191,20 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $conditions;
     }
 
+    protected function prepareReportAuditRecord($originReportAudit, $reportAudit)
+    {
+        return [
+            'auditId' => $reportAudit['id'],
+            'content' => $reportAudit['content'],
+            'author' => $reportAudit['author'],
+            'reportTags' => $reportAudit['reportTags'],
+            'auditor' => $reportAudit['auditor'],
+            'status' => $reportAudit['status'],
+            'originStatus' => $originReportAudit['status'],
+            'auditTime' => $reportAudit['auditTime'],
+        ];
+    }
+
     /**
      * @return ReportAuditDao
      */
@@ -238,13 +227,5 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return ReportRecordDao
-     */
-    protected function getReportRecordDao()
-    {
-        return $this->createDao('AuditCenter:ReportRecordDao');
     }
 }

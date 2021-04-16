@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\Operating;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\AuditCenter\Service\ReportAuditService;
+use Biz\AuditCenter\Service\ReportRecordService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReportContentAuditController extends BaseController
@@ -77,11 +78,11 @@ class ReportContentAuditController extends BaseController
         $conditions = ['auditId' => $auditId];
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getReportAuditService()->searchReportRecordCount($conditions),
+            $this->getReportRecordService()->searchReportRecordCount($conditions),
             20
         );
 
-        $reportRecords = $this->getReportAuditService()->searchReportRecords($conditions, [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $reportRecords = $this->getReportRecordService()->searchReportRecords($conditions, [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $userIds = array_column($reportRecords, 'reporter');
         $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds));
 
@@ -98,5 +99,13 @@ class ReportContentAuditController extends BaseController
     protected function getReportAuditService()
     {
         return $this->createService('AuditCenter:ReportAuditService');
+    }
+
+    /**
+     * @return ReportRecordService
+     */
+    protected function getReportRecordService()
+    {
+        return $this->createService('AuditCenter:ReportRecordService');
     }
 }

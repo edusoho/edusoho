@@ -37,9 +37,14 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
         // TODO: Implement deleteReportRecord() method.
     }
 
-    public function searchReportRecords($conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
-        // TODO: Implement searchReportRecords() method.
+        return $this->getReportRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function searchReportRecordCount(array $conditions)
+    {
+        return $this->getReportRecordDao()->count($conditions);
     }
 
     /**
