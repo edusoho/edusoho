@@ -23,6 +23,7 @@ class AnswerReportFilter extends Filter
         'review_time',
         'review_user_id',
         'section_reports',
+        'resultShow',
     ];
 
     protected function publicFields(&$data)
