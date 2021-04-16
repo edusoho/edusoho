@@ -105,42 +105,29 @@ class UserContentAuditController extends BaseController
         if (!empty($conditions['author'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['author'] = $user['id'] ? $user['id'] : -1;
-        } else {
-            unset($conditions['author']);
         }
 
         if (!empty($conditions['startTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
-        } else {
-            unset($conditions['startTime']);
         }
 
         if (!empty($conditions['startTime'])) {
             $conditions['endTime'] = strtotime($conditions['endTime']);
-        } else {
-            unset($conditions['endTime']);
         }
 
-        if (isset($conditions['containSensitiveWords'])) {
-            switch ($conditions['containSensitiveWords']) {
+        if (isset($conditions['sensitiveWordsFilter'])) {
+            switch ($conditions['sensitiveWordsFilter']) {
                 case 1:
-                    $conditions['notContainSensitiveWords'] = '';
+                    $conditions['containSensitiveWords'] = 0;
                     break;
                 case 2:
-                    $conditions['sensitiveWords'] = '';
+                    $conditions['notContainSensitiveWords'] = 0;
                     break;
                 default:
                     $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
                     break;
             }
-            unset($conditions['containSensitiveWords']);
-        }
-
-        if (empty($conditions['targetType'])) {
-            unset($conditions['targetType']);
-        }
-        if (empty($conditions['sensitiveWordsSearch'])) {
-            unset($conditions['sensitiveWordsSearch']);
+            unset($conditions['sensitiveWordsFilter']);
         }
 
         return $conditions;

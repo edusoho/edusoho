@@ -27,12 +27,12 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
                 'createdTime <= :endTime',
                 'author IN (:authorIds)',
                 'auditor IN (:auditorIds)',
-                'sensitiveWords = :sensitiveWords',
-                'sensitiveWords != :notContainSensitiveWords',
+                'length(sensitiveWords) <> :containSensitiveWords',
+                'length(sensitiveWords) = :notContainSensitiveWords',
                 'sensitiveWords LIKE :sensitiveWordsSearch',
                 'content LIKE :contentSearch',
             ],
-            'orderbys' => ['id','createdTime'],
+            'orderbys' => ['id', 'createdTime'],
         ];
     }
 }

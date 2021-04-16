@@ -11759,8 +11759,8 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
 
-admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholer: 敏感词关键字
-admin_v2.operation.user_content_audit_form.author.placeholer: 发布者
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: 敏感词关键字
+admin_v2.operation.user_content_audit_form.author.placeholder: 发布者
 admin_v2.operation.user_content_audit_form.startTime: 起始时间
 admin_v2.operation.user_content_audit_form.endTime: 结束时间
 admin_v2.operation.user_content_audit.content_th: 用户发布内容
@@ -11774,7 +11774,6 @@ admin_v2.operation.user_content_audit.operation_th: 操作
 admin_v2.operation.user_content_audit.expand_td: 展开
 admin_v2.operation.user_content_audit.collapse_td: 收起
 admin_v2.operation.user_content_audit.user_content: 用户内容
-admin_v2.operation.user_content_audit.modal.title: 用户审核内容确认
 admin_v2.operation.user_content_audit.modal.body.illegal_warning: 确认将用户内容判定违规吗？
 admin_v2.operation.user_content_audit.modal.body.illegal_info: 确认违规后，用户内容在前台页面不展示
 admin_v2.operation.user_content_audit.modal.body.pass_warning: 确认将用户内容判定通过吗？

@@ -1,7 +1,5 @@
-{% set modal_class= "modal-sd" %}
+{% set modal_class= "modal-md" %}
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
-
-{% block title %}{{'admin_v2.operation.user_content_audit.modal.title'|trans}}{% endblock %}
 
 {% block body %}
   <div class="row">
@@ -10,9 +8,10 @@
       <p class="text-center">{{ 'admin_v2.operation.user_content_audit.modal.body.pass_info'|trans }}</p><br>
     </div>
   </div>
-{% endblock %}
 
-{% block footer %}
-  <button class="btn btn-default btn-lg pull-left cancel">{{ 'admin_v2.operation.user_content_audit.modal.body.button.cancel'|trans }}</button>
-  <button class="btn btn-primary btn-lg pull-right confirm">{{ 'admin_v2.operation.user_content_audit.modal.body.button.confirm'|trans }}</button>
+  <div class="confirm-btn-group row">
+    <button type="button" class="btn btn-default btn-cancel cancel" tabindex="6">{{'admin_v2.operation.user_content_audit.modal.body.button.cancel'|trans}}</button>
+    <button type="button" class="btn btn-primary btn-confirm js-confirm-submit col-md-4 pull-right confirm" tabindex="4">{{'admin_v2.operation.user_content_audit.modal.body.button.confirm'|trans}}</button>
+  </div>
+
 {% endblock %}
