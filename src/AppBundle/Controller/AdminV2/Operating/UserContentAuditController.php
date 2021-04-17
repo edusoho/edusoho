@@ -42,33 +42,35 @@ class UserContentAuditController extends BaseController
 
     public function confirmAction(Request $request, $id, $status)
     {
-        $auditor = $this->getCurrentUser()->getId();
+        if ($request->isMethod('POST')) {
+            $auditor = $this->getCurrentUser()->getId();
+            $this->getContentAuditService()->confirmUserAudit($id, $status, $auditor);
 
-        $this->getContentAuditService()->updateAudit($id, [
-            'auditTime' => time(),
-            'status' => $status,
-            'auditor' => $auditor,
-        ]);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function batchConfirmAction(Request $request)
-    {
-        $ids = $request->request->get('ids');
-        $status = $request->request->get('status');
-
-        $auditor = $this->getCurrentUser()->getId();
-
-        foreach ($ids as $id) {
-            $this->getContentAuditService()->updateAudit($id, [
-                'auditTime' => time(),
-                'status' => $status,
-                'auditor' => $auditor,
-            ]);
+            return $this->createJsonResponse(true);
         }
 
-        return $this->createJsonResponse(true);
+        return $this->render('admin-v2/operating/user-content-audit/audit-modal.html.twig', [
+            'status' => $status,
+            'url' => $this->generateUrl('admin_v2_user_content_audit_confirm', ['id' => $id, 'status' => $status]),
+        ]);
+    }
+
+    public function batchConfirmAction(Request $request, $status)
+    {
+        if ($request->isMethod('POST')) {
+            $ids = $request->request->get('ids');
+            $ids = is_array($ids) ? $ids : json_decode($ids, true);
+            $auditor = $this->getCurrentUser()->getId();
+            $this->getContentAuditService()->batchConfirmUserAuditByIds($ids, $status, $auditor);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('admin-v2/operating/user-content-audit/audit-modal.html.twig', [
+            'params' => $request->query->all(),
+            'status' => $status,
+            'url' => $this->generateUrl('admin_v2_user_content_audit_batch_confirm', ['status' => $status]),
+        ]);
     }
 
     protected function auditContentSensitiveWordsMarker($userAudits)
@@ -84,8 +86,8 @@ class UserContentAuditController extends BaseController
                 continue;
             }
             array_walk($sensitiveWords, function ($word) use (&$audit) {
-                $audit['content'] = str_replace($word, "<span style='color: red'>{$word}</span>", $audit['content']);
-                $audit['short_content'] = str_replace($word, "<span style='color: red'>{$word}</span>", $audit['short_content']);
+                $audit['content'] = str_replace($word, "<span class='text-danger'>{$word}</span>", $audit['content']);
+                $audit['short_content'] = str_replace($word, "<span class='text-danger'>{$word}</span>", $audit['short_content']);
             });
         }
 

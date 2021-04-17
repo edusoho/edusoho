@@ -8,6 +8,7 @@ use Biz\AuditCenter\Dao\ContentAuditRecordDao;
 use Biz\AuditCenter\Service\ContentAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use InvalidArgumentException;
 
 class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 {
@@ -28,6 +29,48 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
         $conditions = $this->prepareContentAuditSearchConditions($conditions);
 
         return $this->getContentAuditDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function confirmUserAudit($id, $status, $auditor)
+    {
+        $this->checkUserAuditStatus($status);
+        $userAudit = $this->getContentAuditDao()->get($id);
+
+        if (empty($userAudit)) {
+            throw new \Exception('The audited user content does not exist');
+        }
+
+        $confirmFields = [
+            'status' => $status,
+            'auditor' => $auditor,
+        ];
+
+        return $this->getContentAuditDao()->update($id, $confirmFields);
+    }
+
+    public function batchConfirmUserAuditByIds($ids, $status, $auditor)
+    {
+        if (empty($ids)) {
+            throw new InvalidArgumentException('Params ids invalid.');
+        }
+
+        $this->checkUserAuditStatus($status);
+
+        $confirmFields = [
+            'status' => $status,
+            'auditor' => $auditor,
+        ];
+
+        return $this->getContentAuditDao()->update(['ids' => $ids], $confirmFields);
+    }
+
+    protected function checkUserAuditStatus($status)
+    {
+        $confirmStatus = ['pass', 'illegal'];
+
+        if (!in_array($status, $confirmStatus)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
     }
 
     protected function prepareContentAuditSearchConditions($conditions)
@@ -67,7 +110,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
      */
     public function updateAudit($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTime', 'auditor']);
+        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTime']);
         $this->getContentAuditDao()->update($id, $fields);
     }
 

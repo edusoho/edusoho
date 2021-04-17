@@ -1775,5 +1775,5 @@ course.task.out_focus_mask.anti_brush.tips: >
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
 
-admin_v2.operation.user_content_audit.tip.message: 审核%name%成功
+admin_v2.operation.user_content_audit.tip.message: 操作成功
 admin_v2.operation.user_content_audit.tip.checked_empty_hint: 未选中任何%name%

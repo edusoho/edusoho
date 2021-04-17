@@ -41,7 +41,6 @@ function initDatetimePicker() {
   $('[name=startTime]').datetimepicker({
     language: document.documentElement.lang,
     autoclose: true
-  }).on('hide', function (ev) {
   });
 
   $('[name=startTime]').datetimepicker('setStartDate', now);
@@ -52,7 +51,6 @@ function initDatetimePicker() {
   $('[name=endTime]').datetimepicker({
     autoclose: true,
     language: document.documentElement.lang,
-  }).on('hide', function (ev) {
   });
 
   $('[name=endTime]').datetimepicker('setStartDate', now);

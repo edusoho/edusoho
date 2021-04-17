@@ -5,12 +5,6 @@
 {% do script(['libs/bootstrap-datetimepicker.js','app/js/audit/user-content-audit/index.js']) %}
 
 {% block main %}
-  <div class="modal fade" id="modal-confirm-pass" tabindex="-1" role="dialog" aria-hidden="true">
-    {% include 'admin-v2/operating/user-content-audit/audit-pass-modal.html.twig' %}
-  </div>
-  <div class="modal fade" id="modal-confirm-illegal" tabindex="-1" role="dialog" aria-hidden="true">
-    {% include 'admin-v2/operating/user-content-audit/audit-illegal-modal.html.twig' %}
-  </div>
 
   <form id="audit-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -54,24 +48,24 @@
 
 
   <div id="audit-table-container">
-    <table class="table table-striped table-hover" id="audit-table">
+    <table class="table table-striped table-hover audit-table" id="audit-table">
       <thead>
       <tr>
         <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
         <th width="40%">{{'admin_v2.operation.user_content_audit.content_th'|trans}}</th>
         <th width="20%">{{'admin_v2.operation.user_content_audit.contain_sensitive_words_th'|trans}}</th>
-        <th width="7%">{{'admin_v2.operation.user_content_audit.type_th'|trans}}</th>
-        <th width="7%">{{'admin_v2.operation.user_content_audit.author_time_th'|trans}}</th>
-        <th width="7%">{{'admin_v2.operation.user_content_audit.status_th'|trans}}</th>
-        <th width="7%">{{'admin_v2.operation.user_content_audit.auditor_th'|trans}}</th>
-        <th width="7%">{{'admin_v2.operation.user_content_audit.operation_th'|trans}}</th>
+        <th width="6%">{{'admin_v2.operation.user_content_audit.type_th'|trans}}</th>
+        <th width="8%">{{'admin_v2.operation.user_content_audit.author_time_th'|trans}}</th>
+        <th width="6%">{{'admin_v2.operation.user_content_audit.status_th'|trans}}</th>
+        <th width="6%">{{'admin_v2.operation.user_content_audit.auditor_th'|trans}}</th>
+        <th width="9%">{{'admin_v2.operation.user_content_audit.operation_th'|trans}}</th>
       </tr>
       </thead>
       <tbody>
       {% for audit in userAudits %}
         {% set author = users[audit.author]|default(null) %}
         {% set auditor = users[audit.auditor]|default(null) %}
-        <tr id="review-table-tr-{{audit.id}}" data-role="item">
+        <tr id="audit-table-tr-{{audit.id}}" data-role="item">
           <td><input type="checkbox" value="{{audit.id}}" data-role="batch-item"></td>
           <td>
             <div class="short-long-text">
@@ -94,23 +88,26 @@
             {{ admin_macro.user_link(author)|default('') }}<br>
             <span class="text-muted">{{audit.createdTime|date('Y-n-d H:i')}}</span>
           </td>
-          <td>{{ dict_text('userAuditStatus', audit.status) }}</td>
+          <td class="text-{{ audit.status }}">
+            {{ dict_text('userAuditStatus', audit.status) }}
+            {% if 'sysPass' == audit.status %}
+              <br/>
+              ({{ 'admin_v2.operation.user_content_audit_status.sys_pass_sub'|trans }})
+            {% endif %}
+          </td>
+
           {% if 'sysPass' == audit.status %}
             <td>{{ 'admin_v2.operation.user_content_audit.default_auditor'|trans }}</td>
           {% else %}
             <td>{{ admin_macro.user_link(auditor)|default('--') }}</td>
           {% endif %}
           <td>
-            {% if 'pass' == audit.status %}
-                <div class="btn-group" style="margin-top: 20%;">
-                  <button class="btn btn-primary btn-sm mlm" data-role="item-confirm-pass" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'pass'}) }}">{{'form.btn.confirm.normal'|trans}}</button>
-                </div>
-            {% endif %}
-            {% if 'illegal' == audit.status %}
-              <div class="btn-group" style="margin-top: 20%;">
-                <button class="btn btn-danger btn-sm mlm" data-role="item-confirm-illegal" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'illegal'}) }}">{{'form.btn.confirm.illegal'|trans}}</button>
-              </div>
-            {% endif %}
+            <div class="btn-group" style="margin-top: 20%;">
+              <button class="btn btn-primary btn-sm mlm {% if 'pass' == audit.status %} hide {% endif %}" data-role="item-confirm-pass" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'pass'}) }}">{{'form.btn.confirm.normal'|trans}}</button>
+            </div>
+            <div class="btn-group" style="margin-top: 20%;">
+              <button class="btn btn-danger btn-sm mlm {% if 'illegal' == audit.status %} hide {% endif %}"  data-role="item-confirm-illegal" data-name="{{'admin_v2.operation.user_content_audit.user_content'|trans}}" data-url="{{ path('admin_v2_user_content_audit_confirm', {id:audit.id,status:'illegal'}) }}">{{'form.btn.confirm.illegal'|trans}}</button>
+            </div>
           </td>
         </tr>
       {% else %}
@@ -121,8 +118,8 @@
 
     <div>
       <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin_v2.operation.user_content_audit.select_all_btn'|trans}}</label>
-      <button class="btn btn-primary btn-sm mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm') }}" data-role="batch-confirm-pass" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.normal'|trans}}</button>
-      <button class="btn btn-danger btn-sm mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm') }}" data-role="batch-confirm-illegal" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.illegal'|trans}}</button>
+      <button class="btn btn-primary btn-sm mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm', {status: 'pass'}) }}" data-status="pass" data-role="batch-confirm-pass" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.normal'|trans}}</button>
+      <button class="btn btn-danger btn-sm mlm" data-url="{{ path('admin_v2_user_content_audit_batch_confirm' ,{status: 'illegal'}) }}" data-status="illegal" data-role="batch-confirm-illegal" data-name="{{ 'admin_v2.operation.user_content_audit.user_content'|trans }}">{{'form.btn.confirm.illegal'|trans}}</button>
     </div>
   </div>
 

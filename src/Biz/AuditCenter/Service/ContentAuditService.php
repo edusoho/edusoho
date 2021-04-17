@@ -10,6 +10,10 @@ interface ContentAuditService
 
     public function searchAudits($conditions, $orderBy, $start, $limit);
 
+    public function confirmUserAudit($id, $status, $auditor);
+
+    public function batchConfirmUserAuditByIds($ids, $status, $auditor);
+
     public function createAudit($fields);
 
     public function updateAudit($id, $fields);
