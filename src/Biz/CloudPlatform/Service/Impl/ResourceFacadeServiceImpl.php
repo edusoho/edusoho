@@ -43,7 +43,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
                 $payload['head'] = $videoHeaderFile['globalId'];
             }
         }
-        if (!DeviceToolkit::isMobileClient()){
+        if (!DeviceToolkit::isMobileClient()) {
             $payload['hlsClefEncryptVersion'] = 3;
         }
         $context['token'] = $this->makePlayToken($file, 600, $payload);
