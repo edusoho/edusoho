@@ -14,9 +14,9 @@ export default class BatchConfirm {
     this.element.on('click', '[data-role=batch-' + $dataRole + ']', function () {
       $('#modal').html('');
       let $btn = $(this),
-          name = $btn.data('name'),
-          ids = [],
-          status = $btn.data('status');
+        name = $btn.data('name'),
+        ids = [],
+        status = $btn.data('status');
 
       $that.find('[data-role=batch-item]:checked').each(function(){
         ids.push(this.value);
