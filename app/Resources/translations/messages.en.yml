@@ -10547,12 +10547,12 @@ admin_v2.operation.report_content_audit.table.auditor_default: System
 admin_v2.operation.report_content_audit.table.operate_item: Item
 admin_v2.operation.report_content_audit.table.operate_pass: Pass
 admin_v2.operation.report_content_audit.table.operate_illegal: Illegal
-admin_v2.operation.report_content_audit.table.batch_pass: Batch Pass
-admin_v2.operation.report_content_audit.table.batch_illegal: Batch Illegal
+admin_v2.operation.audit_center.table.batch_pass: Batch Pass
+admin_v2.operation.audit_center.table.batch_illegal: Batch Illegal
 admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported content normal?
-admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
-admin_v2.operation.report_content_audit.table.batch_illegal.notice: Confirm that the reported content violates the rules?
-admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
+admin_v2.operation.audit_center.table.batch_illegal.notice: Confirm that the reported content violates the rules?
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
 admin_v2.operation.report_content_audit.record.title: Records
 admin_v2.operation.report_content_audit.record.type: Type
 admin_v2.operation.report_content_audit.record.reporter: Reporter
