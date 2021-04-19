@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\AuditCenter\Service\ReportService;
@@ -14,8 +13,15 @@ class ReportController extends BaseController
     {
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
-        $data = ArrayToolkit::parts($request->request->all(), ['reasons' => [$request->request->get('reason')]]);
-        $this->getReportService()->submit($targetType, $targetId, $data);
+        $data = [
+            'reporter' => $this->getCurrentUser()->getId(),
+            'reportTags' => [$request->request->get('reason')],
+        ];
+//        $this->getReportService()->submit($targetType, $targetId, $data);
+        $this->getReportService()->submit('course_review', 1, [
+            'reporter' => 2,
+            'reportTags' => [2],
+        ]);
 
         return $this->createJsonResponse(true);
     }

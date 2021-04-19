@@ -3702,3 +3702,7 @@ exam_result_analysis_job_sync:
 exam_result_analysis_job_check:
   path: exam/{answerSceneId}/job_check
   defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:jobCheck }
+
+common_report:
+  path: /common/report
+  defaults: { _controller: AppBundle:Report:submit }
