@@ -3,6 +3,7 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DeviceToolkit;
 use Biz\CloudPlatform\Service\BaseFacade;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\S2B2C\Service\FileSourceService;
@@ -41,6 +42,9 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
                 $payload['head'] = $videoHeaderFile['globalId'];
             }
+        }
+        if (!DeviceToolkit::isMobileClient()){
+            $payload['hlsClefEncryptVersion'] = 3;
         }
         $context['token'] = $this->makePlayToken($file, 600, $payload);
         $context['resNo'] = $file['globalId'];
