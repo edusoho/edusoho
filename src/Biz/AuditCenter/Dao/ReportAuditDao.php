@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 interface ReportAuditDao extends AdvancedDaoInterface
 {
     public function findByIds(array $ids);
+
+    public function getByTargetTypeAndTargetId($targetType, $targetId);
 }

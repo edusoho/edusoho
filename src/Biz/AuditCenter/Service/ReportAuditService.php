@@ -29,6 +29,8 @@ interface ReportAuditService
 
     public function getReportAudit($id);
 
+    public function getReportAuditByTargetTypeAndTargetId($targetType, $targetId);
+
     public function createReportAudit($fields);
 
     public function updateReportAudit($id, $fields);
