@@ -18,6 +18,7 @@ class ReportAuditRecordDaoImpl extends AdvancedDaoImpl implements ReportAuditRec
             ],
             'conditions' => [
                 'id = :id',
+                'auditId = :auditId',
             ],
             'orderbys' => ['id'],
         ];

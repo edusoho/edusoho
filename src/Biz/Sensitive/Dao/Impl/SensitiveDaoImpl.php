@@ -58,9 +58,9 @@ class SensitiveDaoImpl extends AdvancedDaoImpl implements SensitiveDao
         );
 
         if (isset($conditions['keyword'])) {
-            if ('id' == $conditions['searchKeyWord']) {
+            if ('id' === $conditions['searchKeyWord']) {
                 $conditions['id'] = $conditions['keyword'];
-            } elseif ('name' == $conditions['searchKeyWord']) {
+            } elseif ('name' === $conditions['searchKeyWord']) {
                 $conditions['name'] = "%{$conditions['keyword']}%";
             }
         }

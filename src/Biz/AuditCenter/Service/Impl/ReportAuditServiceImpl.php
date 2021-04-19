@@ -3,15 +3,71 @@
 namespace Biz\AuditCenter\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\AuditCenter\AuditCenterException;
 use Biz\AuditCenter\Dao\ReportAuditDao;
-use Biz\AuditCenter\Dao\ReportAuditRecordDao;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Exception;
+use InvalidArgumentException;
 
 class ReportAuditServiceImpl extends BaseService implements ReportAuditService
 {
+    public function searchReportAudits(array $conditions, array $orderBy, $start, $limit, array $columns = [])
+    {
+        $conditions = $this->prepareSearchReportAuditConditions($conditions);
+
+        return $this->getReportAuditDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function searchReportAuditCount(array $conditions)
+    {
+        return $this->getReportAuditDao()->count($this->prepareSearchReportAuditConditions($conditions));
+    }
+
+    public function updateReportAuditStatus($id, $status)
+    {
+        $this->checkReportAuditStatus($status);
+        $originReportAudit = $this->getReportAuditDao()->get($id);
+        if (empty($originReportAudit)) {
+            $this->createNewException(AuditCenterException::REPORT_AUDIT_NOT_EXIST());
+        }
+
+        if ($originReportAudit['status'] === $status) {
+            return $originReportAudit;
+        }
+
+        $reportAudit = $this->updateReportAudit($originReportAudit['id'], [
+            'status' => $status,
+            'auditor' => $this->getCurrentUser()->getId(),
+            'auditTime' => time(),
+        ]);
+
+        $this->createReportAuditRecord($this->prepareReportAuditRecord($originReportAudit, $reportAudit));
+
+        return $reportAudit;
+    }
+
+    public function updateReportAuditStatusByIds(array $ids, $status)
+    {
+        if (empty($ids)) {
+            throw new InvalidArgumentException('Params ids invalid.');
+        }
+        $this->checkReportAuditStatus($status);
+        try {
+            $this->beginTransaction();
+            foreach ($ids as $id) {
+                $this->updateReportAuditStatus($id, $status);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     public function getReportAudit($id)
     {
         return $this->getReportAuditDao()->get($id);
@@ -108,12 +164,51 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditRecordDao()->update($id, $fields);
     }
 
+    protected function checkReportAuditStatus($status)
+    {
+        if (!in_array($status, [self::STATUS_NONE, self::STATUS_PASS, self::STATUS_ILLEGAL])) {
+            $this->createNewException(AuditCenterException::REPORT_AUDIT_STATUS_INVALID());
+        }
+    }
+
+    protected function prepareSearchReportAuditConditions($conditions)
+    {
+        if (isset($conditions['status']) && 'all' === $conditions['status']) {
+            unset($conditions['status']);
+        }
+
+        if (!empty($conditions['targetTags'])) {
+            $conditions['targetTags'] = "|{$conditions['targetTags']}|";
+        }
+
+        if (!empty($conditions['author'])) {
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
+            $conditions['author'] = empty($author) ? -1 : $author['id'];
+        }
+
+        return $conditions;
+    }
+
+    protected function prepareReportAuditRecord($originReportAudit, $reportAudit)
+    {
+        return [
+            'auditId' => $reportAudit['id'],
+            'content' => $reportAudit['content'],
+            'author' => $reportAudit['author'],
+            'reportTags' => $reportAudit['reportTags'],
+            'auditor' => $reportAudit['auditor'],
+            'status' => $reportAudit['status'],
+            'originStatus' => $originReportAudit['status'],
+            'auditTime' => $reportAudit['auditTime'],
+        ];
+    }
+
     /**
      * @return ReportAuditDao
      */
     protected function getReportAuditDao()
     {
-        return $this->biz->dao('AuditCenter:ReportAuditDao');
+        return $this->createDao('AuditCenter:ReportAuditDao');
     }
 
     /**
@@ -121,6 +216,14 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
      */
     protected function getReportAuditRecordDao()
     {
-        return $this->biz->dao('AuditCenter:ReportAuditRecordDao');
+        return $this->createDao('AuditCenter:ReportAuditRecordDao');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

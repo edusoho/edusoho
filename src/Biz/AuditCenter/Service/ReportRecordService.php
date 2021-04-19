@@ -12,5 +12,7 @@ interface ReportRecordService
 
     public function deleteReportRecord($id);
 
-    public function searchReportRecords($conditions, $orderBys, $start, $limit, $columns = []);
+    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = []);
+
+    public function searchReportRecordCount(array $conditions);
 }
