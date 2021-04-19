@@ -1403,7 +1403,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $params['liveId'] = $lesson['mediaId'];
         $params['provider'] = $lesson['liveProvider'];
-        $params['role'] = 'student';
+        $params['role'] = $this->getUserRoleByCourseIdAndUserId($lesson['courseId'], $user['id']);
 
         $params['user'] = $params['email'];
 
@@ -1425,6 +1425,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'result' => $result,
             ],
         ];
+    }
+
+    protected function getUserRoleByCourseIdAndUserId($courseId, $userId)
+    {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $userId)) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            if ($teacherId == $userId) {
+                return 'teacher';
+            } else {
+                return 'speaker';
+            }
+        }
+
+        return 'student';
     }
 
     protected function makeSign($string)

@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\DeviceToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
+use Biz\Course\Service\MemberService;
 use Biz\Task\TaskException;
 
 class TaskLiveTicket extends AbstractResource
@@ -30,7 +31,7 @@ class TaskLiveTicket extends AbstractResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = 'student';
+        $params['role'] = $this->getUserRoleByCourseIdAndUserId($task['courseId'], $user['id']);
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
@@ -41,6 +42,22 @@ class TaskLiveTicket extends AbstractResource
         }
 
         return $liveTicket;
+    }
+
+    protected function getUserRoleByCourseIdAndUserId($courseId, $userId)
+    {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $userId)) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            if ($teacherId == $userId) {
+                return 'teacher';
+            } else {
+                return 'speaker';
+            }
+        }
+
+        return 'student';
     }
 
     /**
@@ -81,5 +98,13 @@ class TaskLiveTicket extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
