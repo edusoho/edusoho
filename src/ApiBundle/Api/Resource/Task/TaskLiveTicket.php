@@ -31,7 +31,7 @@ class TaskLiveTicket extends AbstractResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = $this->getUserRoleByCourseIdAndUserId($task['courseId'], $user['id']);
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
@@ -42,22 +42,6 @@ class TaskLiveTicket extends AbstractResource
         }
 
         return $liveTicket;
-    }
-
-    protected function getUserRoleByCourseIdAndUserId($courseId, $userId)
-    {
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $userId)) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
-
-            if ($teacherId == $userId) {
-                return 'teacher';
-            } else {
-                return 'speaker';
-            }
-        }
-
-        return 'student';
     }
 
     /**

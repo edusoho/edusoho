@@ -58,6 +58,7 @@ class TaskLiveReplay extends AbstractResource
             'nickname' => $user['nickname'],
             'device' => $device,
             'protocol' => $protocol,
+            'role' => $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
         ];
 
         foreach ($visibleReplays as $index => $visibleReplay) {
@@ -162,5 +163,10 @@ class TaskLiveReplay extends AbstractResource
     protected function getTokenService()
     {
         return $this->service('User:TokenService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }

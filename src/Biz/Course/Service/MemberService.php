@@ -181,4 +181,6 @@ interface MemberService
     public function refreshMemberFinishData($courseId, $userId);
 
     public function refreshCourseMembersFinishData($courseId);
+
+    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
 }

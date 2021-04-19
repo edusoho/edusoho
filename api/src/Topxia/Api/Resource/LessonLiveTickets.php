@@ -29,7 +29,7 @@ class LessonLiveTickets extends BaseResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = $this->getUserRoleByCourseIdAndUserId($task['courseId'], $user['id']);
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
 
         // android, iphone
         if ($request->request->get('device')) {
@@ -49,22 +49,6 @@ class LessonLiveTickets extends BaseResource
         }
 
         return $ticket;
-    }
-
-    protected function getUserRoleByCourseIdAndUserId($courseId, $userId)
-    {
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $userId)) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
-
-            if ($teacherId == $userId) {
-                return 'teacher';
-            } else {
-                return 'speaker';
-            }
-        }
-
-        return 'student';
     }
 
     protected function getDevice($request)
