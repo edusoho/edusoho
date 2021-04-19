@@ -56,12 +56,16 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 
         $this->checkUserAuditStatus($status);
 
-        $confirmFields = [
-            'status' => $status,
-            'auditor' => $auditor,
-        ];
-
-        return $this->getContentAuditDao()->update(['ids' => $ids], $confirmFields);
+        try {
+            $this->beginTransaction();
+            foreach ($ids as $id) {
+                $this->confirmUserAudit($id, $status, $auditor);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     protected function checkUserAuditStatus($status)

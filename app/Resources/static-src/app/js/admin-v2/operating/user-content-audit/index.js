@@ -1,7 +1,7 @@
 import ShortLongText from 'app/js/util/short-long-text';
 import BatchSelect from 'app/js/util/batch-select';
-import ItemConfirm from 'app/js/audit/item-confirm';
-import BatchConfirm from 'app/js/audit/batch-confirm';
+import ItemConfirm from 'app/js/admin-v2/operating/user-content-audit/item-confirm';
+import BatchConfirm from 'app/js/admin-v2/operating/user-content-audit/batch-confirm';
 
 let $table = $('#audit-table');
 let $container = $('#audit-table-container');
