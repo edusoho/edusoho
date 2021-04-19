@@ -111,7 +111,8 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
     public function updateAudit($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTime']);
-        $this->getContentAuditDao()->update($id, $fields);
+
+        return $this->getContentAuditDao()->update($id, $fields);
     }
 
     public function getAuditRecord($id)
@@ -134,7 +135,8 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
             'originStatus',
             'auditTime',
         ]);
-        $this->getContentAuditRecordDao()->create($fields);
+
+        return $this->getContentAuditRecordDao()->create($fields);
     }
 
     public function updateAuditRecord($id, $fields)

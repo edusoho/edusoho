@@ -1823,3 +1823,6 @@ classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasem
 
 admin_v2.operation.user_content_audit.tip.message: Success
 admin_v2.operation.user_content_audit.tip.checked_empty_hint: None selected %name%
+
+admin_v2.operation.report_content_audit.batch_operate_tips: Please select the content to be operated in batches first
+admin_v2.operation.report_content_audit.batch_operate_success_tips: Success

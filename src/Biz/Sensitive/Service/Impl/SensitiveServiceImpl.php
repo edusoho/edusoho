@@ -2,10 +2,11 @@
 
 namespace Biz\Sensitive\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Topxia\Service\Common\ServiceKernel;
-use Biz\Sensitive\Service\SensitiveService;
 use Biz\Sensitive\SensitiveException;
+use Biz\Sensitive\Service\SensitiveService;
+use Topxia\Service\Common\ServiceKernel;
 
 class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
@@ -30,7 +31,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $rows = $this->getSensitiveDao()->findByState('banned');
 
         if (empty($rows)) {
-            return array('success' => false, 'text' => $text);
+            return ['success' => false, 'text' => $text];
         }
 
         $keywords = array_column($rows, 'name');
@@ -46,7 +47,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         }
 
         if (!$matched) {
-            return array('success' => false, 'text' => $text);
+            return ['success' => false, 'text' => $text];
         }
 
         $keyword = $this->flagReplaceReverse($match[1]);
@@ -54,13 +55,13 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $bannedKeyword = $this->getSensitiveDao()->getByName($keyword);
 
         if (empty($bannedKeyword)) {
-            return array('success' => false, 'text' => $text);
+            return ['success' => false, 'text' => $text];
         }
 
         $currentUser = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($currentUser->id);
         $env = $this->getEnvVariable();
-        $banlog = array(
+        $banlog = [
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
             'state' => $bannedKeyword['state'],
@@ -68,13 +69,13 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             'userId' => $user ? $user['id'] : 0,
             'ip' => empty($user['loginIp']) ? 0 : $user['loginIp'],
             'createdTime' => time(),
-        );
+        ];
 
         $this->getBanlogDao()->create($banlog);
 
-        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
+        $this->getSensitiveDao()->wave([$bannedKeyword['id']], ['bannedNum' => 1]);
 
-        return array('success' => true, 'text' => $text);
+        return ['success' => true, 'text' => $text];
     }
 
     protected function replaceText($text, $type = '')
@@ -89,7 +90,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $chunkKeywords = array_chunk($keywords, 100);
 
-        $matchs = array();
+        $matchs = [];
         $matcheds = 0;
         $replacedText = $text;
         foreach ($chunkKeywords as $chunkKeyword) {
@@ -114,7 +115,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         foreach ($keywords as $key => $value) {
             $value = $this->flagReplaceReverse($value);
             $keyword = $this->getSensitiveDao()->getByName($value);
-            $banlog = array(
+            $banlog = [
                 'keywordId' => $keyword['id'],
                 'keywordName' => $keyword['name'],
                 'state' => $keyword['state'],
@@ -122,11 +123,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
                 'userId' => $user ? $user['id'] : 0,
                 'ip' => empty($user['loginIp']) ? 0 : $user['loginIp'],
                 'createdTime' => time(),
-            );
+            ];
 
             $this->getBanlogDao()->create($banlog);
 
-            $this->getSensitiveDao()->wave(array($keyword['id']), array('bannedNum' => 1));
+            $this->getSensitiveDao()->wave([$keyword['id']], ['bannedNum' => 1]);
         }
 
         return $replacedText;
@@ -171,7 +172,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $currentUser = $this->getCurrentUser();
 
         $env = $this->getEnvVariable();
-        $banlog = array(
+        $banlog = [
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
             'state' => $bannedKeyword['state'],
@@ -179,11 +180,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             'userId' => $currentUser ? $currentUser['id'] : 0,
             'ip' => 0,
             'createdTime' => time(),
-        );
+        ];
 
         $this->getBanlogDao()->create($banlog);
 
-        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
+        $this->getSensitiveDao()->wave([$bannedKeyword['id']], ['bannedNum' => 1]);
 
         return $match[1];
     }
@@ -204,11 +205,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     {
         $keyword = $this->flagReplaceReverse($keyword);
 
-        $conditions = array(
+        $conditions = [
             'name' => $keyword,
             'state' => $state,
             'createdTime' => time(),
-        );
+        ];
         $result = $this->getSensitiveDao()->create($conditions);
 
         return $result;
@@ -224,6 +225,8 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function updateKeyword($id, $fields)
     {
+        $fields = ArrayToolkit::parts($fields, ['state', 'bannedNum']);
+
         $result = $this->getSensitiveDao()->update($id, $fields);
 
         return $result;
@@ -231,12 +234,12 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function searchkeywordsCount($conditions)
     {
-        return $this->getSensitiveDao()->count($conditions);
+        return $this->getSensitiveDao()->count($this->prepareConditions($conditions));
     }
 
-    public function searchKeywords($conditions, $orderBy, $start, $limit)
+    public function searchKeywords($conditions, $orderBy, $start, $limit, array $columns = [])
     {
-        return $this->getSensitiveDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getSensitiveDao()->search($this->prepareConditions($conditions), $orderBy, $start, $limit);
     }
 
     public function searchBanlogsCount($conditions)
@@ -252,6 +255,17 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit)
     {
         return $this->getBanlogDao()->searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (isset($conditions['keyword'])) {
+            if ('name' === $conditions['searchKeyWord']) {
+                $conditions['keyword'] = $this->flagReplaceReverse($conditions['keyword']);
+            }
+        }
+
+        return $conditions;
     }
 
     /**
@@ -276,7 +290,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
      */
     private function semiangleTofullangle($text, $flag = true)
     {
-        $fullangle = array(
+        $fullangle = [
             '０', '１', '２', '３', '４',
             '５', '６', '７', '８', '９',
             'Ａ', 'Ｂ', 'Ｃ', 'Ｄ', 'Ｅ',
@@ -296,8 +310,8 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             '［', '］', '｛', '｝', '＼',
             '｜', '＋', '＝', '＿', '＾',
             '￥', '￣', '｀',
-        );
-        $semiangle = array( // 半角
+        ];
+        $semiangle = [ // 半角
             '0', '1', '2', '3', '4',
             '5', '6', '7', '8', '9',
             'A', 'B', 'C', 'D', 'E',
@@ -317,7 +331,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             '[', ']', '{', '}', '\\',
             '|', '+', '=', '_', '^',
             '$', '~', '`',
-        );
+        ];
         //true 全角->半角
         return $flag ? str_replace($fullangle, $semiangle, $text) : str_replace($semiangle, $fullangle, $text);
     }

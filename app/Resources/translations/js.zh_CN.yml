@@ -1777,3 +1777,6 @@ classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
 
 admin_v2.operation.user_content_audit.tip.message: 操作成功
 admin_v2.operation.user_content_audit.tip.checked_empty_hint: 未选中任何%name%
+
+admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
+admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功

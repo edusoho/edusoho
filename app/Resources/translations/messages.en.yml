@@ -10529,3 +10529,44 @@ admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel
 admin_v2.operation.user_content_audit_form.all_type_option: All type
 admin_v2.operation.user_content_audit_form.all_status_option: All status
 admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: Sensitive words filter
+
+admin_v2.operation.report_content_audit.target_type_placeholder: All
+admin_v2.operation.report_content_audit.status_placeholder: All
+admin_v2.operation.report_content_audit.report_tag_placeholder: Report Type
+admin_v2.operation.report_content_audit.author_placeholder: Author
+admin_v2.operation.report_content_audit.table.content: Content
+admin_v2.operation.report_content_audit.table.type: Type
+admin_v2.operation.report_content_audit.table.count: Count
+admin_v2.operation.report_content_audit.table.tag: Tags
+admin_v2.operation.report_content_audit.table.author: Author/Time
+admin_v2.operation.report_content_audit.table.status: Status
+admin_v2.operation.report_content_audit.table.auditor: Auditor
+admin_v2.operation.report_content_audit.table.operate: Operate
+admin_v2.operation.report_content_audit.table.auditor_default: System
+
+admin_v2.operation.report_content_audit.table.operate_item: Item
+admin_v2.operation.report_content_audit.table.operate_pass: Pass
+admin_v2.operation.report_content_audit.table.operate_illegal: Illegal
+admin_v2.operation.report_content_audit.table.batch_pass: Batch Pass
+admin_v2.operation.report_content_audit.table.batch_illegal: Batch Illegal
+admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported content normal?
+admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
+admin_v2.operation.report_content_audit.table.batch_illegal.notice: Confirm that the reported content violates the rules?
+admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.report_content_audit.record.title: Records
+admin_v2.operation.report_content_audit.record.type: Type
+admin_v2.operation.report_content_audit.record.reporter: Reporter
+admin_v2.operation.report_content_audit.record.time: Time
+
+exception.audit_center.report_audit_not_exist: Report information does not exist
+exception.audit_center.report_audit_status_not_valid: Invalid review status
+
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the review status is system reviewed-passed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in bulk
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
+admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse

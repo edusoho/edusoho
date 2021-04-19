@@ -17,16 +17,19 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
 
     public function createReportRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, ['auditId', 'content', 'author', 'reportTags'])) {
+        if (!ArrayToolkit::requireds($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-        $fields = ArrayToolkit::parts($fields, ['auditId', 'content', 'author', 'reportTags', 'auditTime']);
-        $this->getReportRecordDao()->create($fields);
+        $fields = ArrayToolkit::parts($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags', 'auditTime']);
+
+        return $this->getReportRecordDao()->create($fields);
     }
 
     public function updateReportRecord($id, $fields)
     {
-        // TODO: Implement updateReportRecord() method.
+        $fields = ArrayToolkit::parts($fields, ['auditId', 'content', 'author', 'reportTags', 'auditTime']);
+
+        return $this->getReportRecordDao()->update($id, $fields);
     }
 
     public function deleteReportRecord($id)
@@ -34,9 +37,14 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
         // TODO: Implement deleteReportRecord() method.
     }
 
-    public function searchReportRecords($conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchReportRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
-        // TODO: Implement searchReportRecords() method.
+        return $this->getReportRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function searchReportRecordCount(array $conditions)
+    {
+        return $this->getReportRecordDao()->count($conditions);
     }
 
     /**

@@ -557,3 +557,24 @@ reportTags:
     3: Pornographic and vulgar information
     4: Illegal information
     5: Abusive, personal attacks and other unfriendly behavior
+
+#用户举报目标类型标签
+reportTargetType:
+    1: Course Review
+    2: Classroom Review
+    3: Question Bank Exervise Review
+    4: Open Course Review
+    5: Article Review
+    6: Course Note
+    7: Classroom Note
+    8: Course Thread
+    9: Classroom Thread
+    10: Group Thread
+    11: Course QA
+    12: Classroom QA
+
+#用户举报内容审核状态
+reportAuditStatus:
+    none: None
+    pass: Pass
+    illegal: Illegal

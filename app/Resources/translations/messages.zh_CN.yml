@@ -11785,3 +11785,43 @@ admin_v2.operation.user_content_audit_form.all_type_option: 全部类型
 admin_v2.operation.user_content_audit_form.all_status_option: 全部状态
 admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: 敏感词过滤
 admin_v2.operation.user_content_audit_status.sys_pass_sub: 待人工审核
+
+admin_v2.operation.report_content_audit.target_type_placeholder: 全部类型
+admin_v2.operation.report_content_audit.status_placeholder: 全部状态
+admin_v2.operation.report_content_audit.report_tag_placeholder: 举报类型
+admin_v2.operation.report_content_audit.author_placeholder: 发布者
+admin_v2.operation.report_content_audit.table.content: 被举报内容
+admin_v2.operation.report_content_audit.table.type: 类型
+admin_v2.operation.report_content_audit.table.count: 被举报次数
+admin_v2.operation.report_content_audit.table.tag: 被举报标签
+admin_v2.operation.report_content_audit.table.author: 发布者/时间
+admin_v2.operation.report_content_audit.table.status: 审核状态
+admin_v2.operation.report_content_audit.table.auditor: 审核人
+admin_v2.operation.report_content_audit.table.operate: 操作
+admin_v2.operation.report_content_audit.table.auditor_default: 系统
+
+admin_v2.operation.report_content_audit.table.operate_item: 详情
+admin_v2.operation.report_content_audit.table.operate_pass: 确认正常
+admin_v2.operation.report_content_audit.table.operate_illegal: 确认违规
+admin_v2.operation.report_content_audit.table.batch_pass: 批量正常
+admin_v2.operation.report_content_audit.table.batch_illegal: 批量违规
+admin_v2.operation.report_content_audit.table.batch_pass.notice: 确认被举报的内容正常吗？
+admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
+admin_v2.operation.report_content_audit.table.batch_illegal.notice: 确认被举报的内容违规吗？
+admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+admin_v2.operation.report_content_audit.record.title: 举报详情
+admin_v2.operation.report_content_audit.record.type: 举报类型
+admin_v2.operation.report_content_audit.record.reporter: 举报者
+admin_v2.operation.report_content_audit.record.time: 举报时间
+
+exception.audit_center.report_audit_not_exist: 举报信息不存在
+exception.audit_center.report_audit_status_not_valid: 审核状态不合法
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为系统已审-通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">审核设置项变更后，仅对变更后新产生的数据生效</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: 批量导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: 选择要导入的文件
+admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EXCEL文件模板导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
