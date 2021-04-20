@@ -47,13 +47,6 @@ class SensitiveImporter extends Importer
         return ['successCount' => $totalCount];
     }
 
-    protected function prepareImportData($importData)
-    {
-        foreach ($importData as &$keyword) {
-            $keyword['name'] = preg_quote($keyword['name'], '/');
-        }
-    }
-
     public function getTemplate(Request $request)
     {
         return $this->render('admin-v2/system/user-content-control/sensitive/importer.html.twig', [
