@@ -32,6 +32,7 @@ class Question
             'response_points' => ['array'],
             'answer_mode' => ['required'],
             'attachments' => ['array'],
+            'case_sensitive' => ['integer'],
         ]);
 
         $this->getAnswerMode($question['answer_mode'])->validate($question['response_points'], $question['answer']);
@@ -62,6 +63,11 @@ class Question
             return $this->getDeleteQuestionReviewResult($questionId, $response);
         }
 
+        if ($question['answer_mode'] == 'text' && $question['case_sensitive'] == 0) {
+            $question['answer'] =$this->convertToLowercase($question['answer']);
+            $response =$this->convertToLowercase($response);
+        }
+
         $reviewResult = $this->getAnswerMode($question['answer_mode'])->review(
             $question['response_points'],
             $question['answer'],
@@ -74,6 +80,16 @@ class Question
             'response_points_result' => $reviewResult['response_points_result'],
             'response' => $response,
         ];
+    }
+
+    private function convertToLowercase($arr)
+    {
+        $lowercaseArr = [];
+        foreach ($arr as $val) {
+            $lowercaseStr[] = strtolower($val);
+        }
+
+        return $lowercaseArr;
     }
 
     public function getDeleteQuestionReviewResult($questionId, $response)
