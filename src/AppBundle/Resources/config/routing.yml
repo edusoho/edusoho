@@ -3706,3 +3706,7 @@ exam_result_analysis_job_check:
 common_report:
   path: /common/report
   defaults: { _controller: AppBundle:Report:submit }
+
+common_report_tags_modal:
+  path: /common/report/tags_modal
+  defaults: { _controller: AppBundle:Report:tagsModal }

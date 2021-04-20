@@ -29,7 +29,10 @@ class ReportServiceImpl extends BaseService implements ReportService
                 ];
                 $audit = $this->getReportAuditService()->createReportAudit($auditInfo);
             } else {
-                $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportTags' => array_unique(array_merge($audit['reportTags'], $data['reportTags']))]);
+                $audit = $this->getReportAuditService()->updateReportAudit(
+                    $audit['id'],
+                    ['reportTags' => array_unique(array_merge($audit['reportTags'], $data['reportTags']))]
+                );
             }
 
             $data['auditId'] = $audit['id'];

@@ -17,13 +17,14 @@ class ReportController extends BaseController
             'reporter' => $this->getCurrentUser()->getId(),
             'reportTags' => [$request->request->get('reason')],
         ];
-//        $this->getReportService()->submit($targetType, $targetId, $data);
-        $this->getReportService()->submit('course_review', 1, [
-            'reporter' => 2,
-            'reportTags' => [2],
-        ]);
+        $this->getReportService()->submit($targetType, $targetId, $data);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function tagsModalAction(Request $request)
+    {
+        return $this->render('report/tags-modal.html.twig', []);
     }
 
     /**
