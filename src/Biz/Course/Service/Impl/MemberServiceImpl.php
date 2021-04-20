@@ -1568,6 +1568,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
+    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
+    {
+        if ($this->isCourseTeacher($courseId, $userId)) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            if ($teacherId == $userId) {
+                return 'teacher';
+            } else {
+                return 'speaker';
+            }
+        }
+
+        return 'student';
+    }
+
     /**
      * @return CourseMemberDao
      */

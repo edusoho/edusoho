@@ -170,7 +170,9 @@ class Show {
 
       if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
-          $.getJSON(this.markerUrl, function(questions) {
+          let url = window.location.href;
+          let isPreview = url.indexOf('preview=1') > 0 ? 1 : 0;
+          $.getJSON(this.markerUrl, {isPreview: isPreview}, function(questions) {
             player.setQuestions(questions);
           });
         }
