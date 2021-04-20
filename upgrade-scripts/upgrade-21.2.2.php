@@ -91,7 +91,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "添加case_sensitive");
 
         if (!$this->isFieldExist('biz_question', 'case_sensitive')) {
-            $this->getConnection()->exec("ALTER TABLE `case_sensitive` tinyint DEFAULT '1' COMMENT '大小写敏感' AFTER updated_user_id");
+            $this->getConnection()->exec("ALTER TABLE `biz_question` ADD COLUMN `case_sensitive` tinyint DEFAULT '1' COMMENT '大小写敏感' AFTER updated_user_id");
         }
 
         $this->logger('info', "添加case_sensitive结束");
