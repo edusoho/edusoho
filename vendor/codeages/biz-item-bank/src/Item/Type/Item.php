@@ -103,6 +103,7 @@ abstract class Item
         $seq = 1;
         foreach ($item['questions'] as &$question) {
             $question['seq'] = $seq++;
+            $question['case_sensitive'] = (isset($question['case_sensitive']) && $question['case_sensitive'] == false) ? 0 : 1;
             $question = $this->getQuestionProcessor()->process($question);
             unset($question);
         }

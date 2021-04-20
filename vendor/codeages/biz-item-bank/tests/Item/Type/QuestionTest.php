@@ -130,6 +130,7 @@ class QuestionTest extends IntegrationTestCase
             'answer' => ['李白'],
             'response_points' => [['text' => []]],
             'answer_mode' => 'text',
+            'case_sensitive' => 1
         ];
         $result = $this->getQuestionProcessor()->process($question);
         $this->assertEquals('诗仙[[]]', $result['stem']);
