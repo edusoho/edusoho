@@ -19,6 +19,6 @@ class AlterTableBizQuestionAddCaseSensitive extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `biz_question` DROP COLUMN `case_sensitive`;");
+        $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `case_sensitive`;');
     }
 }
