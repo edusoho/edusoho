@@ -23,7 +23,7 @@
                     <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
                     <div class="reviews-text__content" style="white-space: pre-wrap;">{{ review.content|removeHtml}}</div>
                     <div class="reviews-text__reply">
-                        <a class="review-text__hover" href="#modal" data-toggle="modal" data-url="/common/report/tags_modal">举报</a>
+                        <a class="review-text__hover" href="#modal" data-toggle="modal" :data-url="`/common/report/${reportType}/target_id/${review.id}/tags_modal`">举报</a>
                         <a href="javascript:;"
                            v-if="canCreate"
                            :data-toggle="'reviews-text__reply-content-'+review.id"
@@ -172,6 +172,10 @@
             },
             targetId: {
                 type: Number,
+                default: null
+            },
+            reportType: {
+                type: String,
                 default: null
             },
             needPosts: {

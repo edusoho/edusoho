@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extension;
 
-use Biz\AuditCenter\ReportSources\GoodsReview;
+use Biz\AuditCenter\ReportSources\CommonReview;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -20,8 +20,8 @@ class ReportExtension extends Extension implements ServiceProviderInterface
     public function getReportSources()
     {
         return [
-            'course_review' => GoodsReview::class,
-            'classroom_review' => GoodsReview::class,
+            'course_review' => CommonReview::class,
+            'classroom_review' => CommonReview::class,
         ];
     }
 }
