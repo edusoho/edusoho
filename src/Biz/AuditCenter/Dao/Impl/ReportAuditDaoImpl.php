@@ -14,6 +14,11 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
         return $this->findInField('id', $ids);
     }
 
+    public function getByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->getByFields(['targetType' => $targetType, 'targetId' => $targetId]);
+    }
+
     public function declares()
     {
         return [
@@ -28,6 +33,7 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
                 'reportTags LIKE :reportTag',
                 'status = :status',
                 'targetType = :targetType',
+                'targetId = :targetId',
                 'author = :author',
             ],
         ];

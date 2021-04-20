@@ -34,7 +34,7 @@ class ReportAuditTable extends Migration
           `reportTags` varchar(1024) NOT NULL DEFAULT '' COMMENT '举报标签',
           `auditor` int(11) NOT NULL COMMENT '审核者',
           `status` varchar(32) NOT NULL DEFAULT '' COMMENT '审核状态',
-          `originStatus` varchar(32) NOT NULL DEFAULT '' COMMENT '员审核状态',
+          `originStatus` varchar(32) NOT NULL DEFAULT '' COMMENT '原审核状态',
           `auditTime` int(11) unsigned NOT NULL COMMENT '审核时间',
           `createdTime` int(11) unsigned NOT NULL,
           `updatedTime` int(11) unsigned NOT NULL,

@@ -35,7 +35,7 @@ class UserContentAuditTable extends Migration
               `sensitiveWords` varchar(2048) NOT NULL DEFAULT '' COMMENT '敏感词',
               `auditor` int(11) NOT NULL COMMENT '审核人',
               `status` varchar(32) NOT NULL DEFAULT '' COMMENT '状态',
-              `originStatus` varchar(32) NOT NULL DEFAULT '' COMMENT '原状态',
+              `originStatus` varchar(32) NOT NULL DEFAULT '' COMMENT '原审核状态',
               `auditTime` int(11) unsigned NOT NULL COMMENT '审核时间',
               `createdTime` int(11) unsigned NOT NULL,
               `updatedTime` int(11) unsigned NOT NULL,

@@ -5,6 +5,7 @@ namespace Biz\AuditCenter\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\AuditCenterException;
 use Biz\AuditCenter\Dao\ReportAuditDao;
+use Biz\AuditCenter\Dao\ReportAuditRecordDao;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -66,6 +67,11 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function getReportAuditByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->getReportAuditDao()->getByTargetTypeAndTargetId($targetType, $targetId);
     }
 
     public function getReportAudit($id)
