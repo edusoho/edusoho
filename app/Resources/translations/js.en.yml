@@ -1821,5 +1821,5 @@ course.task.out_focus_mask.anti_brush.tips: >
 classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
 classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement
 
-admin_v2.operation.report_content_audit.batch_operate_tips: Please select the content to be operated in batches first
-admin_v2.operation.report_content_audit.batch_operate_success_tips: Success
+admin_v2.operation.audit_center.batch_operate_tips: Please select the content to be operated in batches first
+admin_v2.operation.audit_center.batch_operate_success_tips: Success
