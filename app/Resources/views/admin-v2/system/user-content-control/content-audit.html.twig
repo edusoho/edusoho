@@ -16,7 +16,7 @@
         <label for="mode">{{ 'admin_v2.system.user_content_control.content_audit_setting.label'|trans }}</label>
       </div>
       <div class="col-md-8 controls radios">
-        <label>
+        <label class="col-md-2">
           <input type="radio" name="mode"
                  value="audit_after" {% if 'audit_after' == contentAuditSetting.mode|default('audit_after') %} checked="checked" {% endif %}>
           {{ 'admin_v2.system.user_content_control.content_audit_setting.audit_after'|trans }}
@@ -25,7 +25,7 @@
           class="text-muted text-sm">{{ 'admin_v2.system.user_content_control.content_audit_setting.audit_before.tips'|trans }}</span>
       </div>
       <div class="col-md-offset-3 col-md-8 controls radios">
-        <label>
+        <label class="col-md-2">
           <input type="radio" name="mode"
                  value="audit_before" {% if 'audit_before' == contentAuditSetting.mode|default('audit_after') %} checked="checked" {% endif %}>
           {{ 'admin_v2.system.user_content_control.content_audit_setting.audit_before'|trans }}
@@ -40,7 +40,7 @@
           for="enable_auto_audit">{{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.label'|trans }}</label>
       </div>
       <div class="col-md-8 controls radios">
-        <label>
+        <label class="col-md-2">
           <input type="radio" name="enable_auto_audit"
                  value="1" {% if '1' == contentAuditSetting.enable_auto_audit|default(1) %} checked="checked" {% endif %}>
           {{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow'|trans }}
@@ -49,13 +49,15 @@
           class="text-muted text-sm">{{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips'|trans }}</span>
       </div>
       <div class="col-md-offset-3 col-md-8 controls radios">
-        <label>
+        <label class="col-md-2">
           <input type="radio" name="enable_auto_audit"
                  value="0" {% if '0' == contentAuditSetting.enable_auto_audit|default(1) %} checked="checked" {% endif %}>
           {{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow'|trans }}
         </label>
-        <span
-          class="text-muted text-sm">{{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips'|trans }}</span>
+        <span class="text-muted text-sm js-auto-audit-mode-tips">
+          {% set tip = 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.'~contentAuditSetting.mode|default('audit_after')~'.not_allow.tips' %}
+          {{ tip|trans }}
+        </span>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -11753,8 +11753,8 @@ admin_v2.vip_close.to_open_vip: 去开启
 admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
 admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
 admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
-admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
-admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
@@ -11817,7 +11817,8 @@ admin_v2.operation.report_content_audit.record.time: 举报时间
 exception.audit_center.report_audit_not_exist: 举报信息不存在
 exception.audit_center.report_audit_status_not_valid: 审核状态不合法
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为系统已审-通过
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >
   <span style="font-size: 14px;">审核设置项变更后，仅对变更后新产生的数据生效</span>
 

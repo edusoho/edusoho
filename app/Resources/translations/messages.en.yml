@@ -10498,8 +10498,8 @@ admin_v2.vip_close.to_open_vip: To open
 admin_v2.system.user_content_control.content_audit_setting.label: Audit Setting
 admin_v2.system.user_content_control.content_audit_setting.audit_before: Audit Before
 admin_v2.system.user_content_control.content_audit_setting.audit_after: Audit After
-admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
-admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
@@ -10562,7 +10562,8 @@ exception.audit_center.report_audit_not_exist: Report information does not exist
 exception.audit_center.report_audit_status_not_valid: Invalid review status
 
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the review status is system reviewed-passed
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >
   <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
 
