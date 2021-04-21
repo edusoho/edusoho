@@ -2465,6 +2465,10 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.confirm.normal: 'Confirm normal'
+form.btn.confirm.illegal: 'Confirm illegal'
+form.btn.batch.normal: 'Batch normal'
+form.btn.batch.illegal: 'Batch illegal'
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -10494,11 +10498,37 @@ admin_v2.vip_close.to_open_vip: To open
 admin_v2.system.user_content_control.content_audit_setting.label: Audit Setting
 admin_v2.system.user_content_control.content_audit_setting.audit_before: Audit Before
 admin_v2.system.user_content_control.content_audit_setting.audit_after: Audit After
-admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
-admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: Sensitive Keywords
+admin_v2.operation.user_content_audit_form.author.placeholder: Author
+admin_v2.operation.user_content_audit_form.startTime: Start Time
+admin_v2.operation.user_content_audit_form.endTime: End Time
+admin_v2.operation.user_content_audit.content_th: User Published content
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: Sensitive Keywords
+admin_v2.operation.user_content_audit.type_th: Type
+admin_v2.operation.user_content_audit.author_time_th: Author/Time
+admin_v2.operation.user_content_audit.status_th: Audit Status
+admin_v2.operation.user_content_audit.auditor_th: Auditor
+admin_v2.operation.user_content_audit.default_auditor: System
+admin_v2.operation.user_content_audit.operation_th: Operation
+admin_v2.operation.user_content_audit.expand_td: Unfold
+admin_v2.operation.user_content_audit.collapse_td: Folded
+admin_v2.operation.user_content_audit.user_content: User Content
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: Are you sure to judge user content as illegal?
+admin_v2.operation.user_content_audit.modal.body.illegal_info: After confirming the violation, the user content will not be displayed on the foreground page
+admin_v2.operation.user_content_audit.modal.body.pass_warning: Are you sure to pass the user content judgment?
+admin_v2.operation.user_content_audit.modal.body.pass_info: After confirmation, the user content is displayed on the front page
+admin_v2.operation.user_content_audit.select_all_btn: All Select
+admin_v2.operation.user_content_audit.modal.body.button.confirm: Confirm
+admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel
+admin_v2.operation.user_content_audit_form.all_type_option: All type
+admin_v2.operation.user_content_audit_form.all_status_option: All status
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: Sensitive words filter
 
 admin_v2.operation.report_content_audit.target_type_placeholder: All
 admin_v2.operation.report_content_audit.status_placeholder: All
@@ -10517,12 +10547,12 @@ admin_v2.operation.report_content_audit.table.auditor_default: System
 admin_v2.operation.report_content_audit.table.operate_item: Item
 admin_v2.operation.report_content_audit.table.operate_pass: Pass
 admin_v2.operation.report_content_audit.table.operate_illegal: Illegal
-admin_v2.operation.report_content_audit.table.batch_pass: Batch Pass
-admin_v2.operation.report_content_audit.table.batch_illegal: Batch Illegal
+admin_v2.operation.audit_center.table.batch_pass: Batch Pass
+admin_v2.operation.audit_center.table.batch_illegal: Batch Illegal
 admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported content normal?
-admin_v2.operation.report_content_audit.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
-admin_v2.operation.report_content_audit.table.batch_illegal.notice: Confirm that the reported content violates the rules?
-admin_v2.operation.report_content_audit.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
+admin_v2.operation.audit_center.table.batch_illegal.notice: Confirm that the reported content violates the rules?
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
 admin_v2.operation.report_content_audit.record.title: Records
 admin_v2.operation.report_content_audit.record.type: Type
 admin_v2.operation.report_content_audit.record.reporter: Reporter
@@ -10532,7 +10562,8 @@ exception.audit_center.report_audit_not_exist: Report information does not exist
 exception.audit_center.report_audit_status_not_valid: Invalid review status
 
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the review status is system reviewed-passed
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >
   <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
 
