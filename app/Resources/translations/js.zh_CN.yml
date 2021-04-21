@@ -1780,3 +1780,5 @@ admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功
 
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
+admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功

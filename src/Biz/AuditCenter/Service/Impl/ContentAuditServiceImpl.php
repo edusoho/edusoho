@@ -8,12 +8,84 @@ use Biz\AuditCenter\Dao\ContentAuditRecordDao;
 use Biz\AuditCenter\Service\ContentAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use InvalidArgumentException;
 
 class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 {
     public function getAudit($id)
     {
         return $this->getContentAuditDao()->get($id);
+    }
+
+    public function searchAuditCount($conditions)
+    {
+        $conditions = $this->prepareContentAuditSearchConditions($conditions);
+
+        return $this->getContentAuditDao()->count($conditions);
+    }
+
+    public function searchAudits($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->prepareContentAuditSearchConditions($conditions);
+
+        return $this->getContentAuditDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function confirmUserAudit($id, $status, $auditor)
+    {
+        $this->checkUserAuditStatus($status);
+        $userAudit = $this->getContentAuditDao()->get($id);
+
+        if (empty($userAudit)) {
+            throw new \Exception('The audited user content does not exist');
+        }
+
+        $confirmFields = [
+            'status' => $status,
+            'auditor' => $auditor,
+        ];
+
+        return $this->getContentAuditDao()->update($id, $confirmFields);
+    }
+
+    public function batchConfirmUserAuditByIds($ids, $status, $auditor)
+    {
+        if (empty($ids)) {
+            throw new InvalidArgumentException('Params ids invalid.');
+        }
+
+        $this->checkUserAuditStatus($status);
+
+        try {
+            $this->beginTransaction();
+            foreach ($ids as $id) {
+                $this->confirmUserAudit($id, $status, $auditor);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function checkUserAuditStatus($status)
+    {
+        $confirmStatus = ['pass', 'illegal'];
+
+        if (!in_array($status, $confirmStatus)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+    }
+
+    protected function prepareContentAuditSearchConditions($conditions)
+    {
+        $statusAll = ['sysPass', 'none', 'pass', 'illegal'];
+
+        if (!empty($conditions['status']) && !in_array($conditions['status'], $statusAll)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        return $conditions;
     }
 
     public function createAudit($fields)

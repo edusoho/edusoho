@@ -19,7 +19,7 @@ $('.js-table-item-operate').click((element) => {
 $('.js-batch-operate-btn').click((element) => {
   let ids = getBatchOperateIds();
   if (!ids.length) {
-    cd.message({ type: 'danger', message: Translator.trans('admin_v2.operation.report_content_audit.batch_operate_tips') });
+    cd.message({ type: 'danger', message: Translator.trans('admin_v2.operation.audit_center.batch_operate_tips') });
 
     return;
   }

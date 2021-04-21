@@ -1826,3 +1826,5 @@ admin_v2.operation.report_content_audit.batch_operate_success_tips: Success
 
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.operation.audit_center.batch_operate_tips: Please select the content to be operated in batches first
+admin_v2.operation.audit_center.batch_operate_success_tips: Success
