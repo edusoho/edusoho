@@ -4,7 +4,7 @@ namespace Biz\AuditCenter\ReportSources;
 
 use Biz\Review\Service\ReviewService;
 
-class GoodsReview extends AbstractSource
+class CommonReview extends AbstractSource
 {
     public function getReportContext($targetId)
     {

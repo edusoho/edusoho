@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\AuditCenter\Service\ReportService;
@@ -14,10 +13,21 @@ class ReportController extends BaseController
     {
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
-        $data = ArrayToolkit::parts($request->request->all(), ['reasons' => [$request->request->get('reason')]]);
+        $data = [
+            'reporter' => $this->getCurrentUser()->getId(),
+            'reportTags' => [$request->request->get('reportTag')],
+        ];
         $this->getReportService()->submit($targetType, $targetId, $data);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function tagsModalAction(Request $request, $targetType, $targetId)
+    {
+        return $this->render('report/tags-modal.html.twig', [
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+        ]);
     }
 
     /**
