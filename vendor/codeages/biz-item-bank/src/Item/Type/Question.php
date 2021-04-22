@@ -86,7 +86,7 @@ class Question
     {
         $lowercaseArr = [];
         foreach ($arr as $val) {
-            $lowercaseStr[] = strtolower($val);
+            $lowercaseArr[] = strtolower($val);
         }
 
         return $lowercaseArr;
