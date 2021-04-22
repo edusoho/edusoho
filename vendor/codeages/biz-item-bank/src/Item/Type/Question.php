@@ -63,15 +63,17 @@ class Question
             return $this->getDeleteQuestionReviewResult($questionId, $response);
         }
 
+        // todo: 填空题大小写敏感判断 reviewResponse
+        $reviewResponse = $response;
         if ($question['answer_mode'] == 'text' && $question['case_sensitive'] == 0) {
             $question['answer'] =$this->convertToLowercase($question['answer']);
-            $response =$this->convertToLowercase($response);
+            $reviewResponse =$this->convertToLowercase($reviewResponse);
         }
 
         $reviewResult = $this->getAnswerMode($question['answer_mode'])->review(
             $question['response_points'],
             $question['answer'],
-            $response
+            $reviewResponse
         );
 
         return [
