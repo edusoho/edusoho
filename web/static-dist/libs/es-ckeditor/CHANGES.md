@@ -1,3 +1,7 @@
+# es-ckeditor 4.7.2-patch18 (2021-04-20)
+
+* 解决 ckeditor 无法复制粘贴 word 中图片的问题
+
 # es-ckeditor 4.7.2-patch17 (2021-04-16)
 
 * 修复上传图片显示多个上传窗口问题
