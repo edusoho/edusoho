@@ -89,6 +89,6 @@ class TaskLiveTicket extends AbstractResource
      */
     protected function getCourseMemberService()
     {
-        return $this->createService('Course:MemberService');
+        return $this->service('Course:MemberService');
     }
 }
