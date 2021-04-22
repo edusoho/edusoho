@@ -75,7 +75,12 @@
             {{ admin_macro.user_link(author) }}<br>
             <span class="text-muted">{{ reportAudit.createdTime|date('Y-n-d H:i') }}</span>
           </td>
-          <td class="text-{{ reportAudit.status }}">{{ reportAuditStatus[reportAudit.status]|default('') }}</td>
+          <td class="text-{{ reportAudit.status }}">
+            {{ reportAuditStatus[reportAudit.status]|default(reportAuditStatus.none) }}
+            {% if 'sys_illegal' == reportAudit.status %}
+              <div class="text-illegal">{{ 'admin_v2.operation.audit_center.table.status.sys_illegal'|trans }}</div>
+            {% endif%}
+          </td>
           <td>
             {% if reportAudit.auditor|default(null) is not null and reportAudit.auditor|default(null) == 0 %}
               {{ 'admin_v2.operation.report_content_audit.table.auditor_default'|trans }}

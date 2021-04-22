@@ -11813,6 +11813,7 @@ admin_v2.operation.report_content_audit.record.title: 举报详情
 admin_v2.operation.report_content_audit.record.type: 举报类型
 admin_v2.operation.report_content_audit.record.reporter: 举报者
 admin_v2.operation.report_content_audit.record.time: 举报时间
+admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
 
 exception.audit_center.report_audit_not_exist: 举报信息不存在
 exception.audit_center.report_audit_status_not_valid: 审核状态不合法
