@@ -233,13 +233,3 @@ Api.getSettings({
   .catch(error => {
     console.error(error);
   });
-
-// 路由参数进行 encodeURIComponent 转码
-// function urlQueryParamsEncodeURIComponent() {
-//   let url = window.location.href;
-//   const values = url.match(/(?<==)([^&]*)/g);
-//   for (const index in values) {
-//     url = url.replace(values[index], encodeURIComponent(values[index]));
-//   }
-//   window.location.replace(url);
-// }
