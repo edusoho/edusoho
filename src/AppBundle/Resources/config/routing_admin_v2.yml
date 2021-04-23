@@ -1385,6 +1385,10 @@ admin_v2_wechat_notification_manage:
     path: /wechat/notification/manage
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:manage }
 
+admin_v2_wechat_notification_manage_setting_type:
+  path: /wechat/notification/manage/setting/type
+  defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:settingType }
+
 admin_v2_wechat_notification_record_detail:
     path: /wechat/notification/record/{id}/detail
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:recordDetail }

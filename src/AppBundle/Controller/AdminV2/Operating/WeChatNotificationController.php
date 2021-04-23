@@ -16,28 +16,29 @@ class WeChatNotificationController extends BaseController
     public function manageAction(Request $request)
     {
         $wechatDefault = $this->getDefaultWechatSetting();
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-        $wechatSetting = array_merge($wechatDefault, $wechatSetting);
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification', $this->getDefaultWechatNotification());
+        $wechatSetting = array_merge($wechatDefault, $wechatSetting, $wechatNotificationSetting);
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
 
-        return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', array(
+        return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', [
             'wechatSetting' => $wechatSetting,
             'templates' => $templates,
             'isCloudOpen' => $this->isCloudOpen(),
-        ));
+        ]);
     }
 
     public function indexAction(Request $request)
     {
         $paginator = new Paginator(
             $request,
-            $this->getNotificationService()->countBatches(array()),
+            $this->getNotificationService()->countBatches([]),
             20
         );
         $notifications = $this->getNotificationService()->searchBatches(
-            array(),
-            array('createdTime' => 'DESC'),
+            [],
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -48,20 +49,20 @@ class WeChatNotificationController extends BaseController
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
         $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
 
-        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', array(
+        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
             'notifications' => $notifications,
             'notificationEvents' => $notificationEvents,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function recordDetailAction(Request $request, $id)
     {
         $notification = $this->getNotificationService()->getEvent($id);
 
-        return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', array(
+        return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [
             'notification' => $notification,
-        ));
+        ]);
     }
 
     public function showAction(Request $request)
@@ -69,15 +70,15 @@ class WeChatNotificationController extends BaseController
         $key = $request->query->get('key');
         $templates = $this->get('extension.manager')->getWeChatTemplates();
 
-        return $this->render('admin-v2/operating/wechat-notification/template-modal.html.twig', array(
+        return $this->render('admin-v2/operating/wechat-notification/template-modal.html.twig', [
             'template' => $templates[$key],
-        ));
+        ]);
     }
 
     public function settingModalAction(Request $request)
     {
         $key = $request->query->get('key');
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
 
@@ -97,19 +98,51 @@ class WeChatNotificationController extends BaseController
         }
         $modal = isset($templates[$key]['setting_modal_v2']) ? $templates[$key]['setting_modal_v2'] : 'admin-v2/operating/wechat-notification/setting-modal/default-modal.html.twig';
 
-        return $this->render($modal, array(
+        return $this->render($modal, [
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
             'key' => $key,
-        ));
+        ]);
+    }
+
+    public function settingTypeAction(Request $request)
+    {
+        $notification_type = $request->request->get('notification_type');
+        $notification_sms = $request->request->get('notification_sms');
+        $wechat_notification_config = $this->prepareWechatNotificationSetting($notification_type, $notification_sms);
+        $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
+
+        return $this->createJsonResponse(true);
+    }
+
+    private function prepareWechatNotificationSetting($notification_type, $notification_sms)
+    {
+        $wechat_notification = $this->getDefaultWechatNotification();
+
+        if (in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
+            $wechat_notification['notification_type'] = $notification_type;
+        }
+        if ($notification_sms) {
+            $wechat_notification['notification_sms'] = 1;
+        }
+
+        return $wechat_notification;
     }
 
     private function getDefaultWechatSetting()
     {
-        return array(
+        return [
             'wechat_notification_enabled' => 0,
             'account_code' => '',
-        );
+        ];
+    }
+
+    private function getDefaultWechatNotification()
+    {
+        return [
+            'notification_type' => 'serviceFollow',
+            'notification_sms' => 0,
+        ];
     }
 
     private function getTemplateClient()

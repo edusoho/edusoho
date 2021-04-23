@@ -6457,7 +6457,11 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: The l
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
 admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_notification_type: WeChat Account Notification Type
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: Users need to bind wechat, and need to subscribe many times to receive the corresponding number of wechat notifications
+admin.setting_wechat_auth.wechat_notification_sms: SMS notification
+admin.setting_wechat_auth.wechat_notification_sms_tip: After this configuration is enabled, users who do not subscribe will be notified by SMS
 admin.setting_wechat_auth.web_scan_login_hint: >
   After the opening, the PC side of the website will support WeChat scan code login, and the App side will support WeChat authorized login.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >

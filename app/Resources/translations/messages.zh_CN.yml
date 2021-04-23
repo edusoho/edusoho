@@ -7732,7 +7732,11 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: 同�
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
 admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
+admin.setting_wechat_auth.wechat_notification_type: 通知模式
 admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: 用户需要绑定微信，且需要订阅多次才能接收到相应次数的微信通知
+admin.setting_wechat_auth.wechat_notification_sms: 短信通知
+admin.setting_wechat_auth.wechat_notification_sms_tip: 开启此项配置后会以短信的方式通知没有订阅的用户
 admin.setting_wechat_auth.web_scan_login_hint: >
   开通后，网站PC端将支持微信扫码登录，App端将支持微信授权登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
