@@ -42,7 +42,7 @@ const mutations = {
     currentState.joinStatus = true;
   },
   [types.SET_SOURCETYPE](currentState, payload) {
-    currentState.sourceType = payload.sourceType;
+    currentState.sourceType = payload.sourceType || 'img';
     currentState.taskId = payload.taskId;
   },
   [types.UPDATE_PROGRESS](currentState, payload) {

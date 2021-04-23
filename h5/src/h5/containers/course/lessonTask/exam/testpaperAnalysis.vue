@@ -16,6 +16,7 @@
       :slide-index.sync="slideIndex"
       :can-do="canDo"
       :all="allList.length"
+      :result-show="resultShow"
     />
     <!-- 底部 -->
     <div class="paper-footer">
@@ -146,6 +147,7 @@ export default {
       answer: {},
       slideIndex: 0, // 题库组件当前所在的划片位置
       canDo: false, // 是否能答题，解析模式下不能答题
+      resultShow: false,
     };
   },
   computed: {
@@ -183,6 +185,7 @@ export default {
         this.isReadOver = this.result.status === 'finished';
         this.result = res.testpaperResult;
         this.items = res.items;
+        this.resultShow = res.resultShow;
       });
     },
     // 遍历数据类型去做对应处理
