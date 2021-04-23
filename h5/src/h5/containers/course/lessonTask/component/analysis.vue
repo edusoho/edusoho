@@ -9,7 +9,7 @@
         </div>
 
         <div v-if="subject === 'fill'">
-          <div class="analysis-content__item  mt10">
+          <div class="analysis-content__item  mt10" v-if="resultShow">
             <div class="analysis-item__title">正确答案</div>
             <div class="analysis-item_right analysis-content__item--column">
               <div
@@ -38,7 +38,7 @@
         </div>
 
         <div v-if="subject === 'essay'">
-          <div class="analysis-content__item  mt10">
+          <div class="analysis-content__item  mt10" v-if="resultShow">
             <div class="analysis-item__title">正确答案</div>
             <div class="analysis-item_right" v-html="answer[0]" />
           </div>
@@ -54,7 +54,7 @@
         </div>
 
         <div v-if="subject !== 'fill' && subject !== 'essay'">
-          <div class="analysis-content__item  mt10">
+          <div class="analysis-content__item  mt10" v-if="resultShow">
             <div class="analysis-item__title">正确答案</div>
             <div
               class="analysis-item_right"
@@ -71,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="mt10 analysis-result">
+    <div class="mt10 analysis-result" v-if="resultShow">
       <div class="analysis-title">做题解析</div>
       <div v-if="analysis" class="analysis-content mt10" v-html="analysis" />
       <div v-else class="analysis-content mt10">无解析</div>
@@ -103,6 +103,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    resultShow: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     statusColor() {
@@ -123,6 +127,7 @@ export default {
         case 'noAnswer':
           return 'analysis-item_noAnswer';
       }
+      return '';
     },
   },
   methods: {
