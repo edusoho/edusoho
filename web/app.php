@@ -16,6 +16,12 @@ if ((0 !== strpos($_SERVER['REQUEST_URI'], '/admin')) && file_exists(__DIR__.'/.
     }
 }
 
+if ((strpos($_SERVER['REQUEST_URI'], '/admin/setting/developer') === 0 ) ||
+    strpos($_SERVER['REQUEST_URI'], '/admin/v2/setting/developer') === 0 ) {
+    header('HTTP/1.0 403 Forbidden');
+    exit('You are not allowed to access this link.');
+}
+
 if (isOldApiCall()) {
     define('API_ENV', 'prod');
     include __DIR__.'/../api/index.php';
