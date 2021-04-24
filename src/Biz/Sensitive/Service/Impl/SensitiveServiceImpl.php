@@ -17,7 +17,19 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         if ($bannedResult['success']) {
             $this->createNewException(SensitiveException::FORBIDDEN_WORDS());
         } else {
-            return $this->replaceText($text, $type);
+            $handled = $this->handleContent($text, $type);
+
+            return $handled['content'];
+        }
+    }
+
+    public function sensitiveCheckResult($content, $targetType = '', $targetId = '')
+    {
+        $bannedResult = $this->bannedKeyword($content, $targetType);
+        if ($bannedResult['success']) {
+            $this->createNewException(SensitiveException::FORBIDDEN_WORDS());
+        } else {
+            return $this->handleContent($content, $targetType, $targetId);
         }
     }
 
@@ -60,7 +72,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $currentUser = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($currentUser->id);
-        $env = $this->getEnvVariable();
         $banlog = [
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
@@ -78,7 +89,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return ['success' => true, 'text' => $text];
     }
 
-    protected function replaceText($text, $type = '')
+    protected function handleContent($text, $type = '', $targetId = '')
     {
         $rows = $this->getSensitiveDao()->findByState('replaced');
 
@@ -104,15 +115,14 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         }
 
         if (!$matcheds) {
-            return $text;
+            return ['content' => $text, 'keywords' => []];
         }
 
-        $keywords = array_unique($matchs);
+        $hits = array_unique($matchs);
 
         $currentUser = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($currentUser->id);
-        $env = $this->getEnvVariable();
-        foreach ($keywords as $key => $value) {
+        foreach ($hits as $key => $value) {
             $value = $this->flagReplaceReverse($value);
             $keyword = $this->getSensitiveDao()->getByName($value);
             $banlog = [
@@ -130,7 +140,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $this->getSensitiveDao()->wave([$keyword['id']], ['bannedNum' => 1]);
         }
 
-        return $replacedText;
+        return ['content' => $replacedText, 'keywords' => $hits];
     }
 
     public function scanText($text)

@@ -8,6 +8,7 @@ use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Service\ThreadService;
 use Biz\Group\ThreadException;
+use Biz\Sensitive\Service\SensitiveService;
 use Biz\Thread\Dao\ThreadDao;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -313,7 +314,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         if (mb_strlen($threadContent['content'], 'UTF-8') > 3000) {
-            throw $this->createNewException(CommonException::ERROR_PARAMETER());
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
@@ -460,6 +461,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $orderBys;
     }
 
+    /**
+     * @return SensitiveService
+     */
     protected function getSensitiveService()
     {
         return $this->biz->service('Sensitive:SensitiveService');

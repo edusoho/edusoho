@@ -13,6 +13,8 @@ interface SensitiveService
 
     public function sensitiveCheck($text, $type = '');
 
+    public function sensitiveCheckResult($content, $targetType = '', $targetId = '');
+
     public function findAllKeywords();
 
     public function getKeywordByName($name);
