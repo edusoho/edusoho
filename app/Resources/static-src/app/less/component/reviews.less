@@ -76,3 +76,55 @@
     text-align: center;
   }
 }
+
+.review-report {
+  .review-report__title {
+    margin: 10px 0;
+    text-align: center;
+    color: #333;
+  }
+
+  .review-report__form {
+    width: 300px;
+    margin: 0 auto;
+
+    .report-form {
+      text-align: center;
+
+      .report-form__item {
+        border-bottom: 1px solid #e1e1e1;
+        text-align: left;
+
+        .report-form__item__label {
+          padding: 10px 0 10px;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .report-form__item__icon {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .report-form__item__input {
+          width: 0;
+          height: 0;
+
+          &[type=radio]:checked + span {
+            display: block !important;
+          }
+        }
+      }
+
+      .report-from__submit {
+        padding: 6px 80px;
+      }
+    }
+  }
+}
