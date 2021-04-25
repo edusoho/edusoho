@@ -70,7 +70,7 @@
     {% for note in notes %}
       {% set author = users[note.userId] %}
       {% set task = tasks[note.taskId]|default(null) %}
-      <div class="media note-item">
+      <div class="media note-item main_hover_item">
         <div class="media-left">
           <a class="{% if not author.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': author.id }) }}"
             data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
@@ -108,7 +108,12 @@
             {% else %}
               {{ 'course.note.mission_delete_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             {% endif %}
+            {% if app.user.isLogin() and app.user.id != note.userId and is_reported('course_note', note.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}
+            <span id="{{ 'js-course-note-after-' ~ note.id }}"></span>
             <span class="metas-sns">
+              {% if app.user.isLogin() and app.user.id != note.userId and not is_reported('course_note', note.id) %}
+                <a class="color-primary item-hover" id="js-course-note-modal-{{ note.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: 'course_note', targetId: note.id, modalTarget: 'js-course-note-modal-'~ note.id, contentTarget: 'js-course-note-after-' ~ note.id }) }}">举报</a>&nbsp;&nbsp;&nbsp;&nbsp;
+              {% endif %}
               <span class="icon-favour">
                 <a href="javascript:;" class="js-like {% if note.id in likeNoteIds %}color-primary{% endif %}"
                   data-like-url="{{ path('note_like', {id: note.id}) }}"
