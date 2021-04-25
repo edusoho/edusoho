@@ -57,9 +57,9 @@
         {% set onDiscount =  is_discount(course) %}
         <div class="course-detail-info__title">
           {% if marketingPage %}
-            {{ courseSet.title }}
+            {{ courseSet.title|raw }}
           {% else %}
-            {{ course.title }}
+            {{ course.title|raw }}
           {% endif %}
         </div>
         {#添加admin_v2#}

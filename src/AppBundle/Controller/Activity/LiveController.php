@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\LiveroomController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -93,22 +92,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
-            $teachers = ArrayToolkit::index($teachers, 'userId');
-
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
-
-            $teacher = $teachers[$teacherId];
-
-            if ($teacher['userId'] == $user['id']) {
-                $params['role'] = 'teacher';
-            } else {
-                $params['role'] = 'speaker';
-            }
-        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $params['role'] = 'student';
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id'])) {
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }

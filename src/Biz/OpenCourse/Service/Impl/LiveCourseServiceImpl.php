@@ -7,8 +7,8 @@ use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
-use Biz\User\UserException;
 use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -30,7 +30,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         if (isset($live['error'])) {
-            throw $this->createServiceException($live['error']);
+            throw $this->createServiceException($live['error'], 500);
         }
 
         return $live;
@@ -51,22 +51,22 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     public function checkLessonStatus($lesson)
     {
         if (empty($lesson)) {
-            return array('result' => false, 'message' => '课时不存在！');
+            return ['result' => false, 'message' => '课时不存在！'];
         }
 
         if (empty($lesson['mediaId'])) {
-            return array('result' => false, 'message' => '直播教室不存在！');
+            return ['result' => false, 'message' => '直播教室不存在！'];
         }
 
         if ($lesson['startTime'] - time() > self::LIVE_STARTTIME_DIFF_SECONDS) {
-            return array('result' => false, 'message' => '直播还没开始!');
+            return ['result' => false, 'message' => '直播还没开始!'];
         }
 
         if ($this->checkLiveFinished($lesson)) {
-            return array('result' => false, 'message' => '直播已结束!');
+            return ['result' => false, 'message' => '直播已结束!'];
         }
 
-        return array('result' => true, 'message' => '');
+        return ['result' => true, 'message' => ''];
     }
 
     public function checkCourseUserRole($course, $lesson)
@@ -164,14 +164,14 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     private function _filterParams($courseTeacherIds, $lesson, $routes, $actionType = 'add')
     {
-        $params = array(
+        $params = [
             'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
             'title' => $lesson['title'],
             'type' => $lesson['type'],
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $routes['authUrl'],
             'jumpUrl' => $routes['jumpUrl'],
-        );
+        ];
 
         if ('add' == $actionType) {
             $params['liveLogoUrl'] = $this->_getLiveLogo();

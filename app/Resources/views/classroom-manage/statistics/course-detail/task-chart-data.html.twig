@@ -16,8 +16,8 @@
     </div>
     {% for task in tasks %}
         <div class="chart-item clearfix">
-            <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ task.courseSetTitle }}">
-              {{ task.courseSetTitle|raw }}
+            <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ task.courseSetTitle|html_special_chars_decode }}">
+              {{ task.courseSetTitle|html_special_chars_decode }}
             </div>
             <div class="col-80">
                 <div class="progress"
@@ -27,7 +27,7 @@
                      data-html="true"
                      data-delay="100"
                      data-content="
-                        <div><p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.course_name'|trans  }} : {{ task.courseSetTitle }}</p>
+                        <div><p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.course_name'|trans  }} : {{ task.courseSetTitle|html_special_chars_decode }}</p>
                         <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.task_num'|trans }} : {{ task.compulsoryTaskNum }}</p>
                         <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.learn_conditions'|trans }} : </p>
                         <span class='legend-icon finish'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
