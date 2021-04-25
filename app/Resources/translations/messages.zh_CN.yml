@@ -433,6 +433,7 @@ form.btn.reply_publish.submiting: 正在发表回复...
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 form.btn.continue: 完成并继续
+form.btn.set_template: 设置模板
 
 #财务通用
 finance.income: 收入
@@ -7746,8 +7747,8 @@ admin.setting_wechat_auth.wechat_auth_login_hint: >
   开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
-  开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
-  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件</span>。
+  开通后，绑定微信并且关注服务号或订阅通知的用户即可收取微信服务号模板消息。<br>
+  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件。</span>。
 admin.setting_wechat_auth.wechat_pay_hint: >
   开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
@@ -7770,6 +7771,7 @@ admin.setting_wechat_auth.account_code_download: 下载二维码
 admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
+admin.setting_wechat_auth.message_template: 消息模板
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API

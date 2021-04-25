@@ -2465,6 +2465,7 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.set_template: 'Set template'
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -6468,7 +6469,7 @@ admin.setting_wechat_auth.wechat_auth_login_hint: >
   If turned on, users can register or login the site with wechat id in wechat app.<br>
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  After opening, users who bind wechat and pay attention to service number or subscription notice can receive wechat service number template message.<br>
   Please enable web scan code login and authorized login on WeChat first, and <span class="text-danger">enable service number template message pluginin WeChat background</span> .
 admin.setting_wechat_auth.wechat_pay_hint: >
   After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
@@ -6489,6 +6490,8 @@ admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
+admin.setting_wechat_auth.message_template: Message template
+
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.s2b2c_api: S2B2C Server API

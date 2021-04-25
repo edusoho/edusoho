@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Component\Notification\WeChatTemplateMessage;
-
 
 class MessageSubscribeTemplateUtil
 {
@@ -41,8 +39,8 @@ class MessageSubscribeTemplateUtil
 
     public static function templates()
     {
-       return [
-           self::TEMPLATE_LIVE_OPEN => array(
+        return [
+           self::TEMPLATE_LIVE_OPEN => [
                'id' => self::TEMPLATE_LIVE_OPEN_CODE,
                'name' => 'wechat.notification.template_name.live_start',
                'setting_modal' => 'admin/wechat-notification/setting-modal/live-open-modal.html.twig',
@@ -54,8 +52,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>开课时间：{{keyword2.DATA}}<br>开课地点：{{keyword3.DATA}}<br>联系方式：{{keyword4.DATA}}<br>{{remark.DATA}}',
                'object' => '课程学员',
                'status' => 0,
-           ),
-           self::TEMPLATE_HOMEWORK_RESULT => array(
+           ],
+           self::TEMPLATE_HOMEWORK_RESULT => [
                'id' => self::TEMPLATE_HOMEWORK_RESULT_CODE,
                'name' => 'wechat.notification.template_name.homework_result',
                'content' => 'wechat.notification.message_subscribe_template.homework_result',
@@ -65,8 +63,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}',
                'object' => '作业提交学员',
                'status' => 0,
-           ),
-           self::TEMPLATE_EXAM_RESULT => array(
+           ],
+           self::TEMPLATE_EXAM_RESULT => [
                'id' => self::TEMPLATE_EXAM_RESULT_CODE,
                'name' => 'wechat.notification.template_name.exam_result',
                'content' => 'wechat.notification.message_subscribe_template.exam_result',
@@ -76,8 +74,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}}',
                'object' => '试卷提交学员',
                'status' => 0,
-           ),
-           self::TEMPLATE_COURSE_UPDATE => array(
+           ],
+           self::TEMPLATE_COURSE_UPDATE => [
                'id' => self::TEMPLATE_COURSE_UPDATE_CODE,
                'name' => 'wechat.notification.template_name.lesson_add',
                'content' => 'wechat.notification.message_subscribe_template.lesson_add',
@@ -87,8 +85,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
                'object' => '课程学员',
                'status' => 0,
-           ),
-           self::TEMPLATE_VIP_EXPIRED => array(
+           ],
+           self::TEMPLATE_VIP_EXPIRED => [
                'id' => self::TEMPLATE_TEMPLATE_VIP_EXPIRED,
                'name' => 'wechat.notification.template_name.vip_expired',
                'content' => '',
@@ -98,8 +96,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '',
                'object' => '单个用户',
                'status' => 0,
-           ),
-            self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => array(
+           ],
+            self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => [
                 'id' => self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW_CODE,
                 'name' => 'wechat.notification.template_name.homework_or_testpaper_need_review',
                 'setting_modal' => 'admin/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
@@ -111,8 +109,8 @@ class MessageSubscribeTemplateUtil
                 'detail' => '',
                 'object' => '课程教师',
                 'status' => 0,
-            ),
-           self::TEMPLATE_COURSE_REMIND => array(
+            ],
+           self::TEMPLATE_COURSE_REMIND => [
                'id' => self::TEMPLATE_COURSE_REMIND_CODE,
                'name' => 'wechat.notification.template_name.remind_course',
                'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
@@ -124,8 +122,8 @@ class MessageSubscribeTemplateUtil
                'detail' => '',
                'object' => '课程学员',
                'status' => 0,
-           ),
-            self::TEMPLATE_ASK_QUESTION => array(
+           ],
+            self::TEMPLATE_ASK_QUESTION => [
                 'id' => self::TEMPLATE_ASK_QUESTION_CODE,
                 'name' => 'wechat.notification.template_name.ask_question',
                 'content' => 'wechat.notification.message_subscribe_template.ask_question',
@@ -135,8 +133,8 @@ class MessageSubscribeTemplateUtil
                 'detail' => '{{first.DATA}}<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程/班级教师，助教，班主任',
                 'status' => 0,
-            ),
-            self::TEMPLATE_ANSWER_QUESTION => array(
+            ],
+            self::TEMPLATE_ANSWER_QUESTION => [
                 'id' => self::TEMPLATE_ANSWER_QUESTION_CODE,
                 'name' => 'wechat.notification.template_name.answer_question',
                 'content' => '',
@@ -146,8 +144,8 @@ class MessageSubscribeTemplateUtil
                 'detail' => '',
                 'object' => '提问者',
                 'status' => 0,
-            ),
-            self::TEMPLATE_COIN_RECHARGE => array(
+            ],
+            self::TEMPLATE_COIN_RECHARGE => [
                 'id' => self::TEMPLATE_COIN_RECHARGE_CODE,
                 'name' => 'wechat.notification.template_name.charge_success',
                 'content' => '',
@@ -157,8 +155,8 @@ class MessageSubscribeTemplateUtil
                 'detail' => '',
                 'object' => '购买者',
                 'status' => 0,
-            ),
-            self::TEMPLATE_PAY_SUCCESS => array(
+            ],
+            self::TEMPLATE_PAY_SUCCESS => [
                 'id' => self::TEMPLATE_PAY_SUCCESS_CODE,
                 'name' => 'wechat.notification.template_name.buy_success',
                 'content' => '',
@@ -168,7 +166,7 @@ class MessageSubscribeTemplateUtil
                 'detail' => '',
                 'object' => '购买者',
                 'status' => 0,
-            ),
+            ],
         ];
     }
 }
