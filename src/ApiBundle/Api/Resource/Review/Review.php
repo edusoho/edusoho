@@ -113,14 +113,14 @@ class Review extends AbstractResource
             if ($currentUser->isLogin()) {
                 if ('goods' === $review['targetType']) {
                     if ('course' === $review['target']['type']) {
-                        $reportType = 'course_review_replay';
+                        $reportType = 'course_review_reply';
                     } elseif ('classroom' === $review['target']['type']) {
-                        $reportType = 'classroom_review_replay';
+                        $reportType = 'classroom_review_reply';
                     }
                 } elseif ('course' === $review['targetType']) {
-                    $reportType = 'course_review_replay';
+                    $reportType = 'course_review_reply';
                 } elseif ('item_bank_exercise' === $review['targetType']) {
-                    $reportType = 'item_bank_exercise_review_replay';
+                    $reportType = 'item_bank_exercise_review_reply';
                 }
                 if (!empty($reportType)) {
                     foreach ($review['posts'] as &$post) {

@@ -21,9 +21,9 @@ class ReportExtension extends Extension implements ServiceProviderInterface
     {
         return [
             'course_review' => CommonReview::class,
-            'course_review_replay' => CommonReview::class,
+            'course_review_reply' => CommonReview::class,
             'classroom_review' => CommonReview::class,
-            'classroom_review_replay' => CommonReview::class,
+            'classroom_review_reply' => CommonReview::class,
         ];
     }
 }

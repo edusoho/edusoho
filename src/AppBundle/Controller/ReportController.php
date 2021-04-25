@@ -26,6 +26,7 @@ class ReportController extends BaseController
     {
         return $this->render('report/tags-modal.html.twig', [
             'contentTarget' => $request->query->get('contentTarget', ''),
+            'modalTarget' => $request->query->get('modalTarget', ''),
             'targetType' => $targetType,
             'targetId' => $targetId,
         ]);

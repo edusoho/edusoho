@@ -15,7 +15,9 @@ $('.js-report-submit').on('click', function () {
     data: {targetType: targetType, targetId: targetId, reportTag: $('[name=reportTag]:checked').val()},
     success: function(res) {
       let contentTarget = $this.data('contentTarget');
+      let modalTarget = $this.data('modalTarget');
       $(`#${contentTarget}`).append('<span style="color: red;">(已举报)</span>');
+      $(`#${modalTarget}`).remove();
       cd.message({type: 'success', message: '举报成功'});
       $('.js-review-report').html(
         `<div>
