@@ -13,9 +13,9 @@ class CreateWechatSubscribeRecord extends Migration
         $biz['db']->exec("
             CREATE TABLE `wechat_subscribe_record` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
-              `toId` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户openId',
-              `templateCode` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '模板code',
-              `templateType` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '模板类型（一次性、长期）',
+              `toId` varchar(64) NOT NULL DEFAULT '' COMMENT '用户openId',
+              `templateCode` varchar(64) NOT NULL DEFAULT '' COMMENT '模板code',
+              `templateType` varchar(32) NOT NULL DEFAULT '' COMMENT '模板类型（一次性、长期）',
               `isSend` tinyint NOT NULL DEFAULT 0 COMMENT '是否已发送',
               `createdTime` int unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int unsigned NOT NULL COMMENT '更新时间',
