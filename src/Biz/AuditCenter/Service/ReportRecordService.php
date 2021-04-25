@@ -6,9 +6,15 @@ interface ReportRecordService
 {
     public function getReportRecord($id);
 
+    public function getUserReportRecordByTargetTypeAndTargetId($userId, $targetType, $targetId);
+
+    public function getReportRecordByAuditIdAndReporter($auditId, $reporter);
+
     public function createReportRecord($fields);
 
     public function updateReportRecord($id, $fields);
+
+    public function findUserReportRecordsByTargetTypeAndTargetIds($userId, $targetType, array $targetIds);
 
     public function deleteReportRecord($id);
 

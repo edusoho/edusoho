@@ -12,6 +12,7 @@ class ReportAuditTable extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec("CREATE TABLE `report_audit` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `module` varchar(32) NOT NULL DEFAULT '' COMMENT '举报目标模块',
           `targetType` varchar(32) NOT NULL DEFAULT '' COMMENT '举报目标类型',
           `targetId` int(11) NOT NULL COMMENT '举报目标id',
           `content` mediumtext NOT NULL COMMENT '举报正文',
@@ -44,6 +45,8 @@ class ReportAuditTable extends Migration
         $biz['db']->exec("CREATE TABLE `report_record` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `auditId` int(11) unsigned NOT NULL COMMENT '审核ID',
+          `targetType` varchar(32) NOT NULL DEFAULT '' COMMENT '举报目标类型',
+          `targetId` int(11) NOT NULL COMMENT '举报目标id',
           `reporter` int(11) unsigned NOT NULL COMMENT '举报者',
           `content` mediumtext NOT NULL COMMENT '举报正文',
           `author` int(11) NOT NULL COMMENT '作者',

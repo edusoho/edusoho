@@ -94,7 +94,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $rows = $this->getSensitiveDao()->findByState('replaced');
 
         if (empty($rows)) {
-            return $text;
+            return ['content' => $text, 'keywords' => []];
         }
 
         $keywords = array_column($rows, 'name');

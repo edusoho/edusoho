@@ -7,7 +7,7 @@
 {% block title %}{{ '举报' }}{% endblock %}
 
 {% block body %}
-  <div class="review-report">
+  <div class="review-report js-review-report">
     <div class="review-report__title">{{ '请选择举报理由' }}</div>
     <form action="get" class="form-horizontal review-report__form js-report-form">
 
@@ -24,7 +24,7 @@
         {% endfor %}
       </div>
       <div class="report-form">
-        <a data-target-type="{{ targetType }}" data-target-id="{{ targetId }}" data-url="{{ path('common_report') }}" class="btn btn-info report-from__submit js-report-submit">举报</a>
+        <a data-target-type="{{ targetType }}" data-target-id="{{ targetId }}" data-url="{{ path('common_report') }}" data-content-target="{{ contentTarget }}" class="btn btn-info report-from__submit js-report-submit">举报</a>
       </div>
     </form>
   </div>

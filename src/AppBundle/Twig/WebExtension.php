@@ -20,6 +20,9 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\AuditCenter\Service\ReportAuditService;
+use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\AuditCenter\Service\ReportService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
@@ -225,7 +228,22 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
             new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
             new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
+            new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
         ];
+    }
+
+    public function isReported($targetType, $targetId)
+    {
+        $currentUser = $this->biz['user'];
+        if (!$currentUser->isLogin()) {
+            return false;
+        }
+        $record = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $targetType, $targetId);
+        if (!empty($record)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isShowNewMembers()
@@ -2427,5 +2445,29 @@ class WebExtension extends \Twig_Extension
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->createService('AuditCenter:ReportService');
+    }
+
+    /**
+     * @return ReportRecordService
+     */
+    protected function getReportRecordService()
+    {
+        return $this->createService('AuditCenter:ReportRecordService');
+    }
+
+    /**
+     * @return ReportAuditService
+     */
+    protected function getReportAuditService()
+    {
+        return $this->createService('AuditCenter:ReportAuditService');
     }
 }

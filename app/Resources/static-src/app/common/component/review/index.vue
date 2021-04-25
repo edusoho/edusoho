@@ -21,9 +21,10 @@
                         {{ review.createdTime | createdTime }}
                     </div>
                     <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
-                    <div class="reviews-text__content" style="white-space: pre-wrap;">{{ review.content|removeHtml}}</div>
+                    <div class="reviews-text__content" :id="`review-content-${review.id}`" style="white-space: pre-wrap;">{{ review.content|removeHtml}}<span v-if="currentUserId > 0 && review.me_report" style="color: red;">(已举报)</span>
+                    </div>
                     <div class="reviews-text__reply">
-                        <a class="review-text__hover" href="#modal" data-toggle="modal" :data-url="`/common/report/${reportType}/target_id/${review.id}/tags_modal`">举报</a>
+                        <a class="review-text__hover" v-if="currentUserId > 0 && !review.me_report" href="#modal" data-toggle="modal" data-content-targert-id=".reviews-text__content" :data-url="`/common/report/${reportType}/target_id/${review.id}/tags_modal?contentTarget=review-content-${review.id}`">举报</a>
                         <a href="javascript:;"
                            v-if="canCreate"
                            :data-toggle="'reviews-text__reply-content-'+review.id"
