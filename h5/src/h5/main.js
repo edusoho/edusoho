@@ -113,6 +113,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
 Vue.prototype.$version = require('../../package.json').version;
+Vue.config.ignoredElements = ['wx-open-subscribe'];
 
 Api.getSettings({
   query: {
