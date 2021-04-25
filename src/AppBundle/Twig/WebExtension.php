@@ -121,6 +121,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('convert_absolute_url', [$this, 'convertAbsoluteUrl']),
             new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
             new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
+            new \Twig_SimpleFilter('html_special_chars_decode', [$this, 'getHtmlSpecialCharsDecode']),
         ];
     }
 
@@ -433,6 +434,11 @@ class WebExtension extends \Twig_Extension
     public function s2b2cFileConvert($file)
     {
         return $this->getS2b2cFileSourceService()->getFullFileInfo($file);
+    }
+
+    public function getHtmlSpecialCharsDecode($str)
+    {
+        return htmlspecialchars_decode($str);
     }
 
     public function getDays($days)

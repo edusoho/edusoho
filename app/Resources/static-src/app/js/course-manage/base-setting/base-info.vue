@@ -162,12 +162,23 @@
                 this.$axios.get('/render/upload/image?' + this.$qs.stringify(params)).then((res) => {
                     this.uploadImageTemplate = res.data;
                 });
+            },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
             }
         },
         data() {
             let baseForm = {
-                title: this.course.title ? this.course.title : '',
-                subtitle: this.course.subtitle ? this.course.subtitle : null,
+                title: this.course.title ? this.removeHtml(this.course.title) : '',
+                subtitle: this.course.subtitle ? this.removeHtml(this.course.subtitle) : null,
             };
 
             if (this.isUnMultiCourseSet) {
@@ -177,8 +188,8 @@
                     serializeMode: this.course.serializeMode,
                     orgCode: this.course.orgCode,
                     summary: this.courseSet.summary,
-                    title: this.courseSet.title,
-                    subtitle: this.courseSet.subtitle,
+                    title: this.removeHtml(this.courseSet.title),
+                    subtitle: this.removeHtml(this.courseSet.subtitle),
                 });
 
                 this.getUploadImageTemplate();
@@ -245,8 +256,7 @@
                 },
                 enableOrg: 0
             };
-        }
-        ,
+        },
         mounted() {
         }
     }

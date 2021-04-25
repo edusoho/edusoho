@@ -109,7 +109,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'provider' => $liveProvider,
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
-            'role' => $user->isLogin() ? $this->getUserRoleByCourseIdAndUserId($replay['courseId'], $user['id']) : 'student',
+            'role' => $user->isLogin() ? $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($replay['courseId'], $user['id']) : 'student',
         ];
 
         //用来计算当前直播用户数量
@@ -127,22 +127,6 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         return $this->createLiveClient()->entryReplay($args);
-    }
-
-    protected function getUserRoleByCourseIdAndUserId($courseId, $userId)
-    {
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $userId)) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
-
-            if ($teacherId == $userId) {
-                return 'teacher';
-            } else {
-                return 'speaker';
-            }
-        }
-
-        return 'student';
     }
 
     public function updateReplayShow($showReplayIds, $lessonId)
