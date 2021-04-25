@@ -219,6 +219,8 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'classroom_review' => 2,
             'classroom_review_reply' => 2,
             'course_note' => 6,
+            'item_bank_exercise_review' => 7,
+            'item_bank_exercise_review_reply' => 8,
         ];
 
         return $modules[$targetType];
