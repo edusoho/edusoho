@@ -1,5 +1,9 @@
 {% extends 'layout.html.twig' %}
 
+{% block meta %}
+  {{ parent() }}
+  <meta name="robots" content="none,noarchive,nosnippet,notranslate,noimageindex">
+{% endblock %}
 {% block title %}{% if pageNav == 'teach' %}{{'user.homepage.teaching_courses'|trans}} - {% elseif pageNav == 'learn' %}{{'user.homepage.learning_courses'|trans}} - {% elseif pageNav == 'favorited' %}{{'user.homepage.favorite_courses'|trans}} - {% elseif pageNav == 'group' %}{{'user.homepage.joined_group'|trans}} - {% elseif pageNav == 'friend' %}{{'user.homepage.following_fan'|trans}} - {% else %}{{''}}{% endif %}{% if user.destroyed|default(0) == 0 %}{{'user.homepage'|trans({'%nickname%':user.nickname})}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %} - {{ parent() }}{% endblock %}
 {% block keywords %}{{ user.title }}{% endblock %}
 {% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}

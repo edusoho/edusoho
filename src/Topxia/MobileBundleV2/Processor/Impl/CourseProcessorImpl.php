@@ -1403,7 +1403,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $params['liveId'] = $lesson['mediaId'];
         $params['provider'] = $lesson['liveProvider'];
-        $params['role'] = 'student';
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($lesson['courseId'], $user['id']);
 
         $params['user'] = $params['email'];
 

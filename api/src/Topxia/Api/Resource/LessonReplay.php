@@ -73,6 +73,7 @@ class LessonReplay extends BaseResource
                     'nickname' => $user['nickname'],
                     'device' => $device,
                     'protocol' => $protocol,
+                    'role' => $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
                 ];
 
                 foreach ($visibleReplays as $index => $visibleReplay) {
@@ -214,5 +215,10 @@ class LessonReplay extends BaseResource
         curl_close($curl);
 
         return $response;
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }
