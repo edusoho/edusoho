@@ -17,13 +17,15 @@ class WeChatNotificationController extends BaseController
     {
         $wechatDefault = $this->getDefaultWechatSetting();
         $wechatSetting = $this->getSettingService()->get('wechat', []);
-        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification', $this->getDefaultWechatNotification());
-        $wechatSetting = array_merge($wechatDefault, $wechatSetting, $wechatNotificationSetting);
+        $wechatSetting = array_merge($wechatDefault, $wechatSetting);
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
+        $messageSubscribeTemplates = $this->get('extension.manager')->getMessageSubscribeTemplates();
+        $messageSubscribeTemplates = $this->getTemplateSetting($messageSubscribeTemplates, $wechatSetting, 'message_subscribe_templates');
 
         return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', [
             'wechatSetting' => $wechatSetting,
+            'messageSubscribeTemplates' => $messageSubscribeTemplates,
             'templates' => $templates,
             'isCloudOpen' => $this->isCloudOpen(),
         ]);
@@ -78,9 +80,20 @@ class WeChatNotificationController extends BaseController
     public function settingModalAction(Request $request)
     {
         $key = $request->query->get('key');
+        $notification_type = $request->query->get('notification_type');
+        if (!in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
+            throw new \InvalidArgumentException('Notification type error');
+        }
         $wechatSetting = $this->getSettingService()->get('wechat', []);
+
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
+        $templatesType = 'templates';
+        if ('MessageSubscribe' == $notification_type) {
+            $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
+            $templates = $this->getTemplateSetting($templates, $wechatSetting, 'message_subscribe_templates');
+            $templatesType = 'message_subscribe_templates';
+        }
 
         if ('POST' == $request->getMethod()) {
             if (empty($wechatSetting['wechat_notification_enabled'])) {
@@ -88,11 +101,11 @@ class WeChatNotificationController extends BaseController
             }
             $fields = $request->request->all();
             if (1 == $fields['status']) {
-                $this->getWeChatService()->addTemplate($templates[$key], $key);
+                $this->getWeChatService()->addTemplate($templates[$key], $key, $templatesType);
             } else {
-                $this->getWeChatService()->deleteTemplate($templates[$key], $key);
+                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $templatesType);
             }
-            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields);
+            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $templatesType);
 
             return $this->createJsonResponse(true);
         }
@@ -102,31 +115,35 @@ class WeChatNotificationController extends BaseController
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
             'key' => $key,
+            'notification_type' => $notification_type,
         ]);
     }
 
-    public function settingTypeAction(Request $request)
+    public function settingNotificationAction(Request $request)
     {
         $notification_type = $request->request->get('notification_type');
         $notification_sms = $request->request->get('notification_sms');
-        $wechat_notification_config = $this->prepareWechatNotificationSetting($notification_type, $notification_sms);
-        $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
+        $wechat_notification_config = $this->prepareWechatSetting($notification_type, $notification_sms);
+        $this->getSettingService()->set('wechat', $wechat_notification_config);
 
         return $this->createJsonResponse(true);
     }
 
-    private function prepareWechatNotificationSetting($notification_type, $notification_sms)
+    private function prepareWechatSetting($notification_type, $notification_sms)
     {
-        $wechat_notification = $this->getDefaultWechatNotification();
+        $wechatSetting = array_merge($this->getDefaultWechatSetting(), $this->getSettingService()->get('wechat', []));
 
         if (in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
-            $wechat_notification['notification_type'] = $notification_type;
+            $wechatSetting['notification_type'] = $notification_type;
         }
         if ($notification_sms) {
-            $wechat_notification['notification_sms'] = 1;
+            $wechatSetting['notification_sms'] = 1;
+        }
+        if ('serviceFollow' == $notification_type) {
+            $wechatSetting['notification_sms'] = 0;
         }
 
-        return $wechat_notification;
+        return $wechatSetting;
     }
 
     private function getDefaultWechatSetting()
@@ -134,12 +151,6 @@ class WeChatNotificationController extends BaseController
         return [
             'wechat_notification_enabled' => 0,
             'account_code' => '',
-        ];
-    }
-
-    private function getDefaultWechatNotification()
-    {
-        return [
             'notification_type' => 'serviceFollow',
             'notification_sms' => 0,
         ];
@@ -152,10 +163,10 @@ class WeChatNotificationController extends BaseController
         return $biz['wechat.template_message_client'];
     }
 
-    private function getTemplateSetting($templates, $wechatSetting)
+    private function getTemplateSetting($templates, $wechatSetting, $templatesType = 'templates')
     {
         foreach ($templates as $key => &$template) {
-            $template = empty($wechatSetting['templates'][$key]) ? $template : array_merge($template, $wechatSetting['templates'][$key]);
+            $template = empty($wechatSetting[$templatesType][$key]) ? $template : array_merge($template, $wechatSetting[$templatesType][$key]);
         }
 
         return $templates;

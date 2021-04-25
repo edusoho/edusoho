@@ -81,7 +81,6 @@ class WeChatSettingController extends BaseController
             }
 
             $this->getSettingService()->set('wechat', $wechatSetting);
-            $this->getSettingService()->set('wechat_notification', $this->getDefaultWechatNotification());
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -230,12 +229,6 @@ class WeChatSettingController extends BaseController
         return [
             'wechat_notification_enabled' => 0,
             'account_code' => '',
-        ];
-    }
-
-    private function getDefaultWechatNotification()
-    {
-        return [
             'notification_type' => 'serviceFollow',
             'notification_sms' => 0,
         ];

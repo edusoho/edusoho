@@ -18,7 +18,7 @@ interface WeChatService
 
     public function getPreAuthUrl($platformType, $callbackUrl);
 
-    public function saveWeChatTemplateSetting($key, $fields);
+    public function saveWeChatTemplateSetting($key, $fields, $templatesType);
 
     public function getWeChatUserByTypeAndUnionId($type, $unionId);
 
@@ -38,9 +38,9 @@ interface WeChatService
 
     public function getTemplateId($key, $scene = '');
 
-    public function addTemplate($template, $key);
+    public function addTemplate($template, $key, $templatesType);
 
-    public function deleteTemplate($template, $key);
+    public function deleteTemplate($template, $key, $templatesType);
 
     public function createWeChatUser($fields);
 

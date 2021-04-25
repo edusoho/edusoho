@@ -5143,7 +5143,7 @@ admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
-admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
@@ -9567,6 +9567,17 @@ wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, y
 wechat.notification.template.remind_course: 'Dear students, keep learning today, too.<br>course name: [last study plan name]<br>time: [date of the day, accurate to day] progress: [study plan progress]<br>if you have completed the study plan today, please ignore this notice.'
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the [course name or class name]. <br>question time: [question time]<br>reply content: [reply content]'
 wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
+
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> Course Title: course name - task name <b > time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher mobile number]<br><span class='text-danger'>Note: you can also receive n times of subscription notice. Please enter the course learning page to subscribe to the notice<span>"
+wechat.notification.message_subscribe_template.homework_result: "Assignment correction completion notice <br> Title: course name - task name <br> assignment status: [assignment status] <br> comments: [comments] <br><span class='text-danger'>Note: you can also receive n times of subscription notice. Please enter the course learning page to subscribe to the notice<span>"
+wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> examination name: course name - task name <br> score: [examination score] <br> warm tips：<br><span class='text-danger'>Note: you can also receive n times of subscription notice. Please enter the course learning page to subscribe to the notice<span>"
+wechat.notification.message_subscribe_template.lesson_add: "New notice on course <br> exam Name: course: course name ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time]<br><span class='text-danger'>Note: you can also receive n times of subscription notice. Please enter the course learning page to subscribe to the notice<span>"
+wechat.notification.message_subscribe_template.ask_question: "Student question reminder <br> Course Name: [Course name] or [class name] <br> questioner: [student user name] <br> question: [question title] <br> question time: [question submission time]<br><span class='text-danger'>Note: you can also receive n times of subscription notice. Please enter the course learning page to subscribe to the notice<span>"
+wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Course learning page <br> (course / class teacher, Ta, head teacher)'
+wechat.notification.message_subscribe_sms.template.lesson_add: 'General course <br> your course: course name - learning task: learning task name has been published! Link address <br> live broadcast <br> Course: course name - learning task: learning task name will be broadcast on [broadcast time]! Link address'
+wechat.notification.message_subscribe_sms.template.ask_question: "Dear teacher, there are questions from students in the course or class name <br> applicant: [questioner] <br> question content: [question title] <br> time: [question submission time]"
 
 #微信通知规则
 Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'

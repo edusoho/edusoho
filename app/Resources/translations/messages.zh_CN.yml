@@ -6110,7 +6110,7 @@ admin.mobile_manage.discovery_upgrade.function: >
 admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
-admin.wechat_notification.switch: 微信通知开关
+admin.wechat_notification.switch: 微信通知设置
 admin.wechat_notification.template: 微信通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
@@ -6131,6 +6131,9 @@ admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前�
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
+admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
+admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
@@ -10850,6 +10853,17 @@ wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师
 wechat.notification.template.remind_course: '亲爱的学员，今日也要坚持学习哦<br>课程名称：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
 wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
 wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br>课程标题：《课程名》-《任务名》<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br>标题：《课程名》-《任务名》<br>作业情况：[作业情况]<br>评语：[评语] <br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br>考试名称：《课程名》-《任务名》<br>分数：[考试的分数]<br>温馨提示：<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br>考试名称：课程：《课程名》([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: [课程名称] 或 [班级名称]<br>提问者：[学生用户名]<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: '课程学习页<br>（课程/班级教师，助教，班主任）'
+wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程<br>您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址<br>直播<br>课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址'
+wechat.notification.message_subscribe_sms.template.ask_question: "尊敬的老师，《课程或班级名称》中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]"
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
