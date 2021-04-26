@@ -34,7 +34,7 @@ export default {
 
   data() {
     return {
-      supportWechatSubscribe: false,
+      supportWechatSubscribe: true,
       firstSubscribe: false,
     };
   },
