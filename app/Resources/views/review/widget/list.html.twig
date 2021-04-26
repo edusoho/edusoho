@@ -41,11 +41,13 @@
         <div class="actions clearfix">
           <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'course.reviews.expand_btn'|trans}}]</a>
           <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'course.reviews.collapse_btn'|trans}}]</a>
-          {% if app.user.isLogin() and app.user.id != review.userId and not is_reported(reportType, review.id) %}
-            <a class="color-primary item-hover pull-right" id="js-review-modal-{{ review.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: review.id, modalTarget: 'js-review-modal-'~ review.id, contentTarget: 'js-review-after-' ~ review.id }) }}">举报</a>&nbsp;&nbsp;&nbsp;&nbsp;
-          {% endif %}
           {% if canAccess %}
             <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'course.reviews.reply_btn'|trans}}{% else %}{{'course.reviews.cancel_reply_btn'|trans}}{% endif %}</a>
+          {% endif %}
+          {% if app.user.isLogin() and app.user.id != review.userId and not is_reported(reportType, review.id) %}
+            <span class="pull-right" style="position: relative;right: 10px;">
+              <a class="color-primary item-hover" id="js-review-modal-{{ review.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: review.id, modalTarget: 'js-review-modal-'~ review.id, contentTarget: 'js-review-after-' ~ review.id }) }}">举报</a>
+            </span>
           {% endif %}
         </div>
 
