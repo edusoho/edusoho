@@ -63,6 +63,7 @@
             <style>
               .subscribe-btn {
                 color: #fff;
+                font-size: 14px;
               }
 
               .subscribe-btn svg {
