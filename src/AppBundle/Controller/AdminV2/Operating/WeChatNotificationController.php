@@ -9,19 +9,27 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
 
 class WeChatNotificationController extends BaseController
 {
     public function manageAction(Request $request)
     {
+        $wechatAuth = $this->getAuthorizationInfo();
+        if ($wechatAuth['isAuthorized']) {
+            $wechatSetting['is_authorization'] = 1;
+        }
         $wechatDefault = $this->getDefaultWechatSetting();
         $wechatSetting = $this->getSettingService()->get('wechat', []);
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
+
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $messageSubscribeTemplates = $this->get('extension.manager')->getMessageSubscribeTemplates();
         $messageSubscribeTemplates = $this->getTemplateSetting($messageSubscribeTemplates, $wechatSetting, 'message_subscribe_templates');
+
+        $this->getSettingService()->set('wechat', $wechatSetting);
 
         return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', [
             'wechatSetting' => $wechatSetting,
@@ -218,6 +226,32 @@ class WeChatNotificationController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getAuthorizationInfo()
+    {
+        $biz = $this->getBiz();
+        try {
+            $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+            if ($info['isAuthorized']) {
+                $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
+                $ids = ArrayToolkit::column($ids, 'id');
+                /**
+                 * 2、用户管理权限  7、群发与通知权限
+                 */
+                $needIds = [2, 7];
+                $diff = array_diff($needIds, $ids);
+                if (empty($diff)) {
+                    $info['wholeness'] = 1;
+                }
+            }
+        } catch (\Exception $e) {
+            $info = [
+                'isAuthorized' => false,
+            ];
+        }
+
+        return $info;
     }
 
     /**

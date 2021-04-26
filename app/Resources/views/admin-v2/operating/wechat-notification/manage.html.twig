@@ -103,4 +103,21 @@
     {% include 'admin-v2/operating/wechat-notification/message-subscribe.html.twig' %}
   </div>
     <div id="test" class="hidden"></div>
+  <div class="confirm-modal modal fade" id="confirm-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close js-confirm-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ 'site.tips'|trans }}</h4>
+        </div>
+        <div class="modal-body js-confirm-tip">
+          {{ 'admin.setting_wechat_auth.authorization_in_new_page_hint'|trans }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary confirm-modal__btn js-confirm-close" data-dismiss="modal">{{ 'admin.setting_wechat_auth.authorization_success'|trans }}</button>
+          <a type="button" href="#" target="_blank" class="btn btn-default js-confirm-close js-re-auth-btn">{{ 'admin.setting_wechat_auth.re_authorization_btn'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

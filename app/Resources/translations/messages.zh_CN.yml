@@ -6135,6 +6135,7 @@ admin.wechat.notification.go_authorizer: 立即授权
 admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
 admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
 admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
+admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--

@@ -227,6 +227,7 @@ class WeChatSettingController extends BaseController
     private function getDafaultWechatSetting()
     {
         return [
+            'is_authorization' => 0,
             'wechat_notification_enabled' => 0,
             'account_code' => '',
             'notification_type' => 'serviceFollow',

@@ -13,6 +13,26 @@ define(function(require, exports, module) {
       }
     });
 
+    $('.js-wechat-notification-message-subscribe-setting').on('click', function() {
+      if ($('.js-click-enable').length > 0) {
+        Notify.danger(Translator.trans('wechat.notification.cloud_open_tip'));
+      }
+      if ($('.js-wechat-notification-message-subscribe-authorization').data('enabled') == '0') {
+        Notify.danger(Translator.trans('admin.wechat_notification.message_subscribe.disable_setting_tip'));
+      }
+    });
+
+    $('.js-wechat-pre-auth-url').on('click', function (event) {
+      $.get($('.js-wechat-pre-auth-url').data('url'), function (resp) {
+        $('.js-re-auth-btn').attr('href', resp.url);
+        $('#confirm-modal').modal('show');
+        window.open(resp.url,'_blank');
+      });
+    });
+    $('#confirm-modal').on('hidden.bs.modal', function () {
+      window.location.reload();
+    });
+
     $('.js-notification-submit').click(function () {
       $.post($form.data('url'), $form.serialize())
         .success(function() {
