@@ -32,6 +32,7 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
                 'id = :id',
                 'reportTags LIKE :reportTag',
                 'status = :status',
+                'module = :module',
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'author = :author',

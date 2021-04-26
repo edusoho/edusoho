@@ -34,7 +34,8 @@ class ReportServiceImpl extends BaseService implements ReportService
                     ['reportTags' => array_unique(array_merge($audit['reportTags'], $data['reportTags']))]
                 );
             }
-
+            $data['targetType'] = $targetType;
+            $data['targetId'] = $targetId;
             $data['auditId'] = $audit['id'];
             $data['content'] = $context['content'];
             $data['author'] = $context['author'];

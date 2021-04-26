@@ -15,12 +15,22 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
         return $this->getReportRecordDao()->get($id);
     }
 
+    public function getUserReportRecordByTargetTypeAndTargetId($userId, $targetType, $targetId)
+    {
+        return $this->getReportRecordDao()->getByReporterAndTargetTypeAndTargetId($userId, $targetType, $targetId);
+    }
+
+    public function getReportRecordByAuditIdAndReporter($auditId, $reporter)
+    {
+        return $this->getReportRecordDao()->getByAuditIdAndReporter($auditId, $reporter);
+    }
+
     public function createReportRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags'])) {
+        if (!ArrayToolkit::requireds($fields, ['auditId', 'targetType', 'targetId', 'reporter', 'content', 'author', 'reportTags'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-        $fields = ArrayToolkit::parts($fields, ['auditId', 'reporter', 'content', 'author', 'reportTags', 'auditTime']);
+        $fields = ArrayToolkit::parts($fields, ['auditId', 'targetType', 'targetId', 'reporter', 'content', 'author', 'reportTags', 'auditTime']);
 
         return $this->getReportRecordDao()->create($fields);
     }
@@ -30,6 +40,11 @@ class ReportRecordServiceImpl extends BaseService implements ReportRecordService
         $fields = ArrayToolkit::parts($fields, ['auditId', 'content', 'author', 'reportTags', 'auditTime']);
 
         return $this->getReportRecordDao()->update($id, $fields);
+    }
+
+    public function findUserReportRecordsByTargetTypeAndTargetIds($userId, $targetType, array $targetIds)
+    {
+        return $this->getReportRecordDao()->findByReporterAndTargetTypeAndTargetIds($userId, $targetType, $targetIds);
     }
 
     public function deleteReportRecord($id)

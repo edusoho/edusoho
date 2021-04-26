@@ -25,6 +25,8 @@ class ReportController extends BaseController
     public function tagsModalAction(Request $request, $targetType, $targetId)
     {
         return $this->render('report/tags-modal.html.twig', [
+            'contentTarget' => $request->query->get('contentTarget', ''),
+            'modalTarget' => $request->query->get('modalTarget', ''),
             'targetType' => $targetType,
             'targetId' => $targetId,
         ]);

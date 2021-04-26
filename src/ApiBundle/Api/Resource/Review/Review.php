@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -73,6 +74,7 @@ class Review extends AbstractResource
     protected function makeUpReviews($reviews, $needPosts = false)
     {
         $makeUpReviews = [];
+        $currentUser = $this->biz['user'];
         $reviewGroupByType = ArrayToolkit::group($reviews, 'targetType');
         foreach ($reviewGroupByType as $type => $groupedReviews) {
             $this->getOCUtil()->multiple($groupedReviews, ['targetId'], $type);
@@ -86,12 +88,46 @@ class Review extends AbstractResource
         }
 
         foreach ($makeUpReviews as &$review) {
+            if ($currentUser->isLogin()) {
+                if ('goods' === $review['targetType']) {
+                    if ('course' === $review['target']['type']) {
+                        $reportType = 'course_review';
+                    } elseif ('classroom' === $review['target']['type']) {
+                        $reportType = 'classroom_review';
+                    }
+                } elseif ('course' === $review['targetType']) {
+                    $reportType = 'course_review';
+                } elseif ('item_bank_exercise' === $review['targetType']) {
+                    $reportType = 'item_bank_exercise_review';
+                }
+                if (!empty($reportType)) {
+                    $review['me_report'] = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $reportType, $review['id']);
+                }
+            }
             $review['posts'] = $this->getReviewService()->searchReviews(
                 ['parentId' => $review['id']],
                 ['createdTime' => 'ASC'],
                 0,
                 5
             );
+            if ($currentUser->isLogin()) {
+                if ('goods' === $review['targetType']) {
+                    if ('course' === $review['target']['type']) {
+                        $reportType = 'course_review_reply';
+                    } elseif ('classroom' === $review['target']['type']) {
+                        $reportType = 'classroom_review_reply';
+                    }
+                } elseif ('course' === $review['targetType']) {
+                    $reportType = 'course_review_reply';
+                } elseif ('item_bank_exercise' === $review['targetType']) {
+                    $reportType = 'item_bank_exercise_review_reply';
+                }
+                if (!empty($reportType)) {
+                    foreach ($review['posts'] as &$post) {
+                        $post['me_report'] = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $reportType, $post['id']);
+                    }
+                }
+            }
             $this->getOCUtil()->multiple($review['posts'], ['userId'], 'user');
         }
 
@@ -119,6 +155,14 @@ class Review extends AbstractResource
     protected function getReviewService()
     {
         return $this->service('Review:ReviewService');
+    }
+
+    /**
+     * @return ReportRecordService
+     */
+    protected function getReportRecordService()
+    {
+        return $this->service('AuditCenter:ReportRecordService');
     }
 
     /**

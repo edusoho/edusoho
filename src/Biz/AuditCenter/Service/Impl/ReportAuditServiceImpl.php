@@ -95,6 +95,8 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'auditTime',
         ]);
 
+        $fields['module'] = $this->getModule($fields['targetType']);
+
         return $this->getReportAuditDao()->create($fields);
     }
 
@@ -207,6 +209,23 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'originStatus' => $originReportAudit['status'],
             'auditTime' => $reportAudit['auditTime'],
         ];
+    }
+
+    protected function getModule($targetType)
+    {
+        $modules = [
+            'course_review' => 1,
+            'course_review_reply' => 1,
+            'classroom_review' => 2,
+            'classroom_review_reply' => 2,
+            'course_note' => 6,
+            'item_bank_exercise_review' => 7,
+            'item_bank_exercise_review_reply' => 8,
+            'course_question' => 9,
+            'course_thread' => 10,
+        ];
+
+        return $modules[$targetType];
     }
 
     /**

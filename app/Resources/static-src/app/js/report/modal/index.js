@@ -14,7 +14,19 @@ $('.js-report-submit').on('click', function () {
     dataType: 'json',
     data: {targetType: targetType, targetId: targetId, reportTag: $('[name=reportTag]:checked').val()},
     success: function(res) {
+      let contentTarget = $this.data('contentTarget');
+      let modalTarget = $this.data('modalTarget');
+      $(`#${contentTarget}`).append('<span style="color: red;">(已举报)</span>');
+      $(`#${modalTarget}`).remove();
       cd.message({type: 'success', message: '举报成功'});
+      $('.js-review-report').html(
+        `<div>
+            <h2 class="text-center">你的举报我们已经收到了，会尽快处理……</h2>
+            <div class="text-center">
+              <a data-dismiss="modal" aria-hidden="true" class="btn btn-info">关闭</a>
+            </div>
+          </div>
+        `);
     },
     error: function(){
     }

@@ -56,6 +56,7 @@
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
                                  :report-type="getReportType"
+                                 :reply-report-type="getReplyReportType"
                                  :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
@@ -185,6 +186,15 @@
 
                 if (this.goods.type === 'course' && this.targetId) {
                     return 'course_review';
+                }
+            },
+            getReplyReportType() {
+                if (this.goods.type === 'classroom') {
+                    return 'classroom_review_reply';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return 'course_review_reply';
                 }
             },
         },
