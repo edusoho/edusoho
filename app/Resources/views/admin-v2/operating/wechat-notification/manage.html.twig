@@ -59,12 +59,12 @@
               </div>
               <div class="col-md-2">
                 <div class="radios">
-                  {{ radios('notification_type', dict('WechatNotificationType'), wechatSetting.notification_type) }}
+                  {{ radios('notification_type', dict('WechatNotificationType'), wechatNotificationSetting.notification_type) }}
                 </div>
               </div>
             </div>
 
-            <div id="message-subscribe-form" {% if wechatSetting.notification_type == 'serviceFollow' %}style="display:none;"{% endif %}>
+            <div id="message-subscribe-form" {% if wechatNotificationSetting.notification_type == 'serviceFollow' %}style="display:none;"{% endif %}>
               <div class="row form-group">
                 <div class="col-md-5 col-md-offset-3">
                   <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_message_subscribe_tip'|trans }}</span>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-md-2">
                   <div class="radios">
-                    <label><input type="checkbox" name="notification_sms" {% if ( wechatSetting.notification_sms) %}checked{% endif %}></label>
+                    <label><input type="checkbox" name="notification_sms" {% if ( wechatNotificationSetting.notification_sms) %}checked{% endif %}></label>
                   </div>
                 </div>
               </div>

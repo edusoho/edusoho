@@ -117,9 +117,9 @@ class WeChatService extends BaseService
      * @return array 返回参数如下
      *               template_id  创建的模版id
      */
-    public function createNotificationTemplate($templateCode)
+    public function createNotificationTemplate($templateCode, $parameter = [])
     {
-        return $this->request('POST', "/notification_template/{$templateCode}");
+        return $this->request('POST', "/notification_template/{$templateCode}", $parameter);
     }
 
     /**

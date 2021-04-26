@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\AdminV2\System;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use AppBundle\Controller\AdminV2\BaseController;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use AppBundle\Controller\AdminV2\BaseController;
 
 class WeChatSettingController extends BaseController
 {
@@ -19,23 +19,29 @@ class WeChatSettingController extends BaseController
         $isCallback = $request->query->get('isCallback', false);
         $clients = OAuthClientFactory::clients();
         $loginDefault = $this->getDefaultLoginConnect($clients);
-        $loginConnect = $this->getSettingService()->get('login_bind', []);
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $loginConnect = array_merge($loginDefault, $loginConnect);
 
         $paymentDefault = $this->getDefaultPaymentSetting();
-        $payment = $this->getSettingService()->get('payment', []);
+        $payment = $this->getSettingService()->get('payment', array());
         $payment = array_merge($paymentDefault, $payment);
 
         $wechatDefault = $this->getDafaultWechatSetting();
-        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
+
+        $wechatNotificationDefault = $this->getDefaultWechatNotificationSetting();
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification', array());
+        $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
 
         if ($isCallback) {
             $wechatAuth = $this->getAuthorizationInfo();
             if ($wechatAuth['isAuthorized']) {
                 $wechatSetting['is_authorization'] = 1;
+                $wechatNotificationSetting['is_authorization'] = 1;
             }
             $this->getSettingService()->set('wechat', $wechatSetting);
+            $this->getSettingService()->set('wechat_notification', $wechatNotificationSetting);
         }
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
@@ -66,34 +72,37 @@ class WeChatSettingController extends BaseController
             if (!$this->getWeChatService()->handleCloudNotification($wechatSetting, $newWeChatSetting, $loginConnect)) {
                 $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
 
-                return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', [
+                return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
                     'wechatSetting' => $wechatSetting,
                     'isCloudOpen' => $this->isCloudOpen(),
-                ]);
+                ));
             }
             $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
 
             $wechatAuth = $this->getAuthorizationInfo();
             if ($wechatAuth['isAuthorized']) {
                 $wechatSetting['is_authorization'] = 1;
+                $wechatNotificationSetting['is_authorization'] = 1;
             }
 
             $this->getSettingService()->set('wechat', $wechatSetting);
+            $this->getSettingService()->set('wechat_notification', $wechatNotificationSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', [
+        return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
             'loginConnect' => $loginConnect,
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
             'isCloudOpen' => $this->isCloudOpen(),
             'wechatAuth' => $this->getAuthorizationInfo(),
-        ]);
+        ));
     }
 
     /**
+     * @param Request $request
      * @param $platformType
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -101,15 +110,15 @@ class WeChatSettingController extends BaseController
     public function preAuthUrlAction(Request $request, $platformType)
     {
         if ('official_account' == $platformType) {
-            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_v2_setting_wechat_auth', ['isCallback' => true], UrlGeneratorInterface::ABSOLUTE_URL));
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_v2_setting_wechat_auth', array('isCallback' => true), UrlGeneratorInterface::ABSOLUTE_URL));
         }
         if ('mini_program' == $platformType) {
-            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('admin_v2_setting_wechat_auth', [], UrlGeneratorInterface::ABSOLUTE_URL));
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('admin_v2_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
         }
 
-        return $this->createJsonResponse([
+        return $this->createJsonResponse(array(
             'url' => empty($url) ? '' : $url,
-        ]);
+        ));
     }
 
     protected function isCloudOpen()
@@ -139,16 +148,16 @@ class WeChatSettingController extends BaseController
                 /**
                  * 2、用户管理权限  7、群发与通知权限
                  */
-                $needIds = [2, 7];
+                $needIds = array(2, 7);
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
                     $info['wholeness'] = 1;
                 }
             }
         } catch (\Exception $e) {
-            $info = [
+            $info = array(
                 'isAuthorized' => false,
-            ];
+            );
         }
 
         return $info;
@@ -156,7 +165,7 @@ class WeChatSettingController extends BaseController
 
     private function decideEnabledLoginConnect($loginConnect)
     {
-        $loginConnects = ArrayToolkit::parts($loginConnect, ['weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled']);
+        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
         $sum = 0;
         foreach ($loginConnects as $value) {
             $sum += $value;
@@ -173,7 +182,7 @@ class WeChatSettingController extends BaseController
 
     private function getDefaultLoginConnect($clients)
     {
-        $default = [
+        $default = array(
             'login_limit' => 0,
             'enabled' => 0,
             'verify_code' => '',
@@ -182,7 +191,7 @@ class WeChatSettingController extends BaseController
             'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,
-        ];
+        );
 
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"] = 0;
@@ -199,7 +208,7 @@ class WeChatSettingController extends BaseController
 
     private function getDefaultPaymentSetting()
     {
-        return [
+        return array(
             'enabled' => 0,
             'disabled_message' => '由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。',
             'bank_gateway' => 'none',
@@ -221,15 +230,21 @@ class WeChatSettingController extends BaseController
             'llpay_accessKey' => '',
             'llpay_secretKey' => '',
             'wxpay_mp_secret' => $this->getWeixinMpFile(),
-        ];
+        );
     }
 
     private function getDafaultWechatSetting()
     {
-        return [
-            'is_authorization' => 0,
+        return array(
             'wechat_notification_enabled' => 0,
             'account_code' => '',
+        );
+    }
+
+    private function getDefaultWechatNotificationSetting()
+    {
+        return [
+            'is_authorization' => 0,
             'notification_type' => 'serviceFollow',
             'notification_sms' => 0,
         ];

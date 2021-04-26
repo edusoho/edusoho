@@ -16,23 +16,28 @@ class WeChatNotificationController extends BaseController
 {
     public function manageAction(Request $request)
     {
-        $wechatAuth = $this->getAuthorizationInfo();
-        if ($wechatAuth['isAuthorized']) {
-            $wechatSetting['is_authorization'] = 1;
-        }
         $wechatDefault = $this->getDefaultWechatSetting();
         $wechatSetting = $this->getSettingService()->get('wechat', []);
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
 
+        $wechatNotificationDefault = $this->getDefaultWechatNotificationSetting();
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
+        $wechatAuth = $this->getAuthorizationInfo();
+        if ($wechatAuth['isAuthorized']) {
+            $wechatNotificationSetting['is_authorization'] = 1;
+        }
+
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $messageSubscribeTemplates = $this->get('extension.manager')->getMessageSubscribeTemplates();
-        $messageSubscribeTemplates = $this->getTemplateSetting($messageSubscribeTemplates, $wechatSetting, 'message_subscribe_templates');
+        $messageSubscribeTemplates = $this->getTemplateSetting($messageSubscribeTemplates, $wechatNotificationSetting);
 
-        $this->getSettingService()->set('wechat', $wechatSetting);
+        $this->getSettingService()->set('wechat_notification', $wechatNotificationSetting);
 
         return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', [
             'wechatSetting' => $wechatSetting,
+            'wechatNotificationSetting' => $wechatNotificationSetting,
             'messageSubscribeTemplates' => $messageSubscribeTemplates,
             'templates' => $templates,
             'isCloudOpen' => $this->isCloudOpen(),
@@ -93,27 +98,28 @@ class WeChatNotificationController extends BaseController
             throw new \InvalidArgumentException('Notification type error');
         }
         $wechatSetting = $this->getSettingService()->get('wechat', []);
-
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
-        $templatesType = 'templates';
+
         if ('MessageSubscribe' == $notification_type) {
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
-            $templates = $this->getTemplateSetting($templates, $wechatSetting, 'message_subscribe_templates');
-            $templatesType = 'message_subscribe_templates';
+            $templates = $this->getTemplateSetting($templates, $wechatSetting);
         }
 
         if ('POST' == $request->getMethod()) {
             if (empty($wechatSetting['wechat_notification_enabled'])) {
                 throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
             }
+            if (!$this->templateSettingFilter($notification_type, $templates[$key])) {
+                return $this->createJsonResponse(true);
+            }
             $fields = $request->request->all();
             if (1 == $fields['status']) {
-                $this->getWeChatService()->addTemplate($templates[$key], $key, $templatesType);
+                $this->getWeChatService()->addTemplate($templates[$key], $key, $notification_type);
             } else {
-                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $templatesType);
+                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $notification_type);
             }
-            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $templatesType);
+            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notification_type);
 
             return $this->createJsonResponse(true);
         }
@@ -127,19 +133,28 @@ class WeChatNotificationController extends BaseController
         ]);
     }
 
+    public function templateSettingFilter($notification_type, $template)
+    {
+        if ('MessageSubscribe' == $notification_type) {
+            return isset($template['id']);
+        }
+
+        return true;
+    }
+
     public function settingNotificationAction(Request $request)
     {
         $notification_type = $request->request->get('notification_type');
         $notification_sms = $request->request->get('notification_sms');
-        $wechat_notification_config = $this->prepareWechatSetting($notification_type, $notification_sms);
-        $this->getSettingService()->set('wechat', $wechat_notification_config);
+        $wechat_notification_config = $this->prepareWechatNotificationSetting($notification_type, $notification_sms);
+        $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
 
         return $this->createJsonResponse(true);
     }
 
-    private function prepareWechatSetting($notification_type, $notification_sms)
+    private function prepareWechatNotificationSetting($notification_type, $notification_sms)
     {
-        $wechatSetting = array_merge($this->getDefaultWechatSetting(), $this->getSettingService()->get('wechat', []));
+        $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
         if (in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
             $wechatSetting['notification_type'] = $notification_type;
@@ -159,6 +174,13 @@ class WeChatNotificationController extends BaseController
         return [
             'wechat_notification_enabled' => 0,
             'account_code' => '',
+        ];
+    }
+
+    private function getDefaultWechatNotificationSetting()
+    {
+        return [
+            'is_authorization' => 0,
             'notification_type' => 'serviceFollow',
             'notification_sms' => 0,
         ];
@@ -171,10 +193,10 @@ class WeChatNotificationController extends BaseController
         return $biz['wechat.template_message_client'];
     }
 
-    private function getTemplateSetting($templates, $wechatSetting, $templatesType = 'templates')
+    private function getTemplateSetting($templates, $wechatSetting)
     {
         foreach ($templates as $key => &$template) {
-            $template = empty($wechatSetting[$templatesType][$key]) ? $template : array_merge($template, $wechatSetting[$templatesType][$key]);
+            $template = empty($wechatSetting['templates'][$key]) ? $template : array_merge($template, $wechatSetting['templates'][$key]);
         }
 
         return $templates;
