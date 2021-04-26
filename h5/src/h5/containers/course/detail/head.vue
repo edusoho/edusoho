@@ -54,31 +54,8 @@
         @timesUp="expire"
         @sellOut="sellOut"
       />
-      <div class="wechat-subscribe">
-        <wx-open-subscribe
-          template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U"
-          id="subscribe-btn"
-        >
-          <script type="text/wxtag-template" slot="style">
-            <style>
-              .subscribe-btn {
-                color: #fff;
-                font-size: 14px;
-              }
-
-              .subscribe-btn svg {
-                width: 20px;
-                height: 20px;
-              }
-            </style>
-          </script>
-          <script type="text/wxtag-template">
-            <span class="subscribe-btn">
-              <svg t="1619420533012" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2825" width="128" height="128"><path d="M451.541333 322.154667l-66.986666 12.138666-2.816 0.64c-22.997333 6.250667-31.552 35.242667-14.592 52.970667l47.061333 49.173333-9.173333 67.498667-0.234667 2.688c-1.322667 23.893333 23.701333 41.130667 45.866667 30.442667l61.312-29.568 61.354666 29.568 2.474667 1.066666c22.336 8.661333 46.442667-9.813333 43.136-34.197333l-9.173333-67.498667 47.082666-49.173333 1.92-2.176c14.933333-18.56 4.8-47.061333-19.328-51.434667l-67.008-12.138666-32.256-59.968c-12.074667-22.464-44.288-22.464-56.362666 0L451.541333 322.133333zM512 344.874667l11.370667 21.162666 1.664 2.773334a32 32 0 0 0 20.821333 13.568l23.616 4.266666-16.597333 17.365334-2.112 2.432a32 32 0 0 0-6.464 24l3.221333 23.765333-21.632-10.410667-2.986667-1.258666a32 32 0 0 0-24.789333 1.28l-21.653333 10.389333 3.242666-23.765333 0.277334-3.221334a32 32 0 0 0-8.853334-23.210666l-16.618666-17.365334 23.637333-4.266666a32 32 0 0 0 22.485333-16.341334l11.370667-21.162666z" fill="#666666" p-id="2826"></path><path d="M768 53.333333H256A117.333333 117.333333 0 0 0 138.666667 170.666667v688.917333a74.666667 74.666667 0 0 0 115.669333 62.4l252.202667-165.717333a10.666667 10.666667 0 0 1 11.733333 0l251.306667 165.546666a74.666667 74.666667 0 0 0 115.754666-62.336V170.666667A117.333333 117.333333 0 0 0 768 53.333333z m-512 64h512A53.333333 53.333333 0 0 1 821.333333 170.666667v688.810666a10.666667 10.666667 0 0 1-16.533333 8.896l-251.349333-165.546666a74.666667 74.666667 0 0 0-82.069334-0.042667L219.2 868.48a10.666667 10.666667 0 0 1-16.533333-8.917333V170.666667A53.333333 53.333333 0 0 1 256 117.333333z" fill="#666666" p-id="2827"></path></svg>
-              订阅
-            </span>
-          </script>
-        </wx-open-subscribe>
+      <div class="wechat-subscribe-box">
+        <wechat-subscribe />
       </div>
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
@@ -142,7 +119,7 @@ import finishDialog from '../components/finish-dialog';
 import qs from 'qs';
 import report from '@/mixins/course/report';
 import VideoReportMask from '@/components/video-report-mask';
-import initSubscribe from '@/utils/wechat-subscribe.js';
+import WechatSubscribe from '../components/wechat-subscribe';
 
 export default {
   components: {
@@ -150,6 +127,7 @@ export default {
     tagLink,
     finishDialog,
     VideoReportMask,
+    WechatSubscribe,
   },
   mixins: [report],
   props: {
@@ -226,7 +204,6 @@ export default {
   created() {
     this.initHead();
     this.showTagLink();
-    this.initSubscribe();
   },
   beforeDestroy() {
     if (this.sign.length > 0) {
@@ -245,9 +222,6 @@ export default {
    */
   methods: {
     ...mapActions(['setCloudAddress']),
-
-    initSubscribe,
-
     toToast() {
       const condition = this.finishCondition;
       if (!condition) return;
