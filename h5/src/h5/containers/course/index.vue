@@ -2,26 +2,6 @@
   <div class="course-detail">
     <e-loading v-if="isLoading" />
     <component :is="currentComp" :details="details" />
-    <wx-open-subscribe
-      template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U"
-      id="subscribe-btn"
-    >
-      <script type="text/wxtag-template" slot="style">
-        <style>
-          .subscribe-btn {
-            width: 100px;
-            height: 100px;
-            color: #fff;
-            background-color: #07c160;
-          }
-        </style>
-      </script>
-      <script type="text/wxtag-template">
-        <button class="subscribe-btn">
-          一次性模版消息订阅
-        </button>
-      </script>
-    </wx-open-subscribe>
   </div>
 </template>
 
@@ -31,7 +11,6 @@ import joinBefore from './join-before.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
-import initSubscribe from '@/utils/wechat-subscribe.js';
 
 export default {
   components: {},
@@ -62,16 +41,12 @@ export default {
   },
   created() {
     this.getData();
-    this.initSubscribe();
   },
   methods: {
     ...mapActions('course', ['getCourseLessons']),
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE,
     }),
-
-    initSubscribe,
-
     getData() {
       this.getCourseLessons({
         courseId: this.$route.params.id,

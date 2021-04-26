@@ -223,6 +223,8 @@
 		background-color: #dcdbdc;
 
 		&--img {
+			position: relative;
+
 			> img {
 				width: 100%;
 				height: vw(210);
