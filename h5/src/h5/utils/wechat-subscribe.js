@@ -23,7 +23,6 @@ const initSubscribe = () => {
       btn.addEventListener('error', function(e) {
         console.log('fail', e.detail);
       });
-      return true;
     });
   });
 };

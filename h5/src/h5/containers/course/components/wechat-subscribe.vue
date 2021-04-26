@@ -40,18 +40,11 @@ export default {
   },
 
   created() {
-    this.initSupportWechatSubscribe();
+    initSubscribe();
     this.firstWechatSubscribe();
   },
 
   methods: {
-    async initSupportWechatSubscribe() {
-      const status = await initSubscribe();
-      if (status) {
-        this.supportWechatSubscribe = true;
-      }
-    },
-
     firstWechatSubscribe() {
       const status = localStorage.getItem('first-wechat-subscribe');
       if (status) return;
