@@ -1,7 +1,6 @@
 <template>
   <div v-if="supportWechatSubscribe" class="wechat-subscribe">
     <i class="iconfont icon-subscribe" />
-    订阅
     <div v-if="firstSubscribe" class="wechat-subscribe-popover">
       请点此订阅微信通知
     </div>
@@ -14,6 +13,7 @@
           .subscribe-btn {
             color: #fff;
             font-size: 14px;
+            line-height: 21px;
           }
         </style>
       </script>
