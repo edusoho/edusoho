@@ -6,20 +6,24 @@
   </div>
   <div class="media-body" style="overflow: visible">
     <div class="metas">
-      {% if canAccess|default(false) or  %}
+      {% if canAccess|default(false) or (app.user.isLogin() and app.user.id != post.userId and not is_reported(replyReportType, post.id)) %}
         <div class="thread-post-manage-dropdown dropdown pull-right">
           <a href="javascript:;" class="dropdown-toggle color-gray" data-toggle="dropdown"><span class="glyphicon glyphicon-collapse-down"></span></a>
           <ul class="dropdown-menu">
-            <li>
-              <a href="javascript:" class="js-delete-post" data-review-id="{{ post.id }}" data-for="#post-{{ post.id }}">{{'course.reviews.delete_btn'|trans}}</a>
-            </li>
-            <li id="{{ 'js-review-reply-modal-' ~ post.id }}">
-              <a class="js-report-post"
-                 href="#modal"
-                 data-toggle="modal"
-                 data-url="{{ path('common_report_tags_modal', {targetType: replyReportType, targetId: post.id, modalTarget: 'js-review-reply-modal-'~ post.id, contentTarget: 'js-review-reply-after-' ~ post.id }) }}"
-              >举报</a>
-            </li>
+            {% if canAccess|default(false) %}
+              <li>
+                <a href="javascript:" class="js-delete-post" data-review-id="{{ post.id }}" data-for="#post-{{ post.id }}">{{'course.reviews.delete_btn'|trans}}</a>
+              </li>
+            {% endif %}
+            {% if app.user.isLogin() and app.user.id != post.userId and not is_reported(replyReportType, post.id) %}
+              <li id="{{ 'js-review-reply-modal-' ~ post.id }}">
+                <a class="js-report-post"
+                   href="#modal"
+                   data-toggle="modal"
+                   data-url="{{ path('common_report_tags_modal', {targetType: replyReportType, targetId: post.id, modalTarget: 'js-review-reply-modal-'~ post.id, contentTarget: 'js-review-reply-after-' ~ post.id }) }}"
+                >举报</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       {% endif %}
