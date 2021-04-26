@@ -4,6 +4,8 @@ namespace AppBundle\Controller\AdminV2\Operating;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Notification\Service\NotificationService;
@@ -16,8 +18,9 @@ class WeChatNotificationController extends BaseController
 {
     public function manageAction(Request $request)
     {
+
         $wechatDefault = $this->getDefaultWechatSetting();
-        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
 
         $wechatNotificationDefault = $this->getDefaultWechatNotificationSetting();
@@ -34,26 +37,25 @@ class WeChatNotificationController extends BaseController
         $messageSubscribeTemplates = $this->getTemplateSetting($messageSubscribeTemplates, $wechatNotificationSetting);
 
         $this->getSettingService()->set('wechat_notification', $wechatNotificationSetting);
-
-        return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', [
+        return $this->render('admin-v2/operating/wechat-notification/manage.html.twig', array(
             'wechatSetting' => $wechatSetting,
             'wechatNotificationSetting' => $wechatNotificationSetting,
             'messageSubscribeTemplates' => $messageSubscribeTemplates,
             'templates' => $templates,
             'isCloudOpen' => $this->isCloudOpen(),
-        ]);
+        ));
     }
 
     public function indexAction(Request $request)
     {
         $paginator = new Paginator(
             $request,
-            $this->getNotificationService()->countBatches([]),
+            $this->getNotificationService()->countBatches(array()),
             20
         );
         $notifications = $this->getNotificationService()->searchBatches(
-            [],
-            ['createdTime' => 'DESC'],
+            array(),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -64,20 +66,20 @@ class WeChatNotificationController extends BaseController
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
         $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
 
-        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
+        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', array(
             'notifications' => $notifications,
             'notificationEvents' => $notificationEvents,
             'paginator' => $paginator,
-        ]);
+        ));
     }
 
     public function recordDetailAction(Request $request, $id)
     {
         $notification = $this->getNotificationService()->getEvent($id);
 
-        return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [
+        return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', array(
             'notification' => $notification,
-        ]);
+        ));
     }
 
     public function showAction(Request $request)
@@ -85,9 +87,9 @@ class WeChatNotificationController extends BaseController
         $key = $request->query->get('key');
         $templates = $this->get('extension.manager')->getWeChatTemplates();
 
-        return $this->render('admin-v2/operating/wechat-notification/template-modal.html.twig', [
+        return $this->render('admin-v2/operating/wechat-notification/template-modal.html.twig', array(
             'template' => $templates[$key],
-        ]);
+        ));
     }
 
     public function settingModalAction(Request $request)
@@ -97,11 +99,12 @@ class WeChatNotificationController extends BaseController
         if (!in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
             throw new \InvalidArgumentException('Notification type error');
         }
-        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
 
         if ('MessageSubscribe' == $notification_type) {
+            $wechatSetting = $this->getSettingService()->get('wechat_notification', array());
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
             $templates = $this->getTemplateSetting($templates, $wechatSetting);
         }
@@ -125,20 +128,19 @@ class WeChatNotificationController extends BaseController
         }
         $modal = isset($templates[$key]['setting_modal_v2']) ? $templates[$key]['setting_modal_v2'] : 'admin-v2/operating/wechat-notification/setting-modal/default-modal.html.twig';
 
-        return $this->render($modal, [
+        return $this->render($modal, array(
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
             'key' => $key,
-            'notification_type' => $notification_type,
-        ]);
+            'notification_type' => $notification_type
+        ));
     }
 
-    public function templateSettingFilter($notification_type, $template)
+    public function templateSettingFilter($notification_type ,$template)
     {
         if ('MessageSubscribe' == $notification_type) {
             return isset($template['id']);
         }
-
         return true;
     }
 
@@ -154,7 +156,7 @@ class WeChatNotificationController extends BaseController
 
     private function prepareWechatNotificationSetting($notification_type, $notification_sms)
     {
-        $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
+        $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', array()));
 
         if (in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
             $wechatSetting['notification_type'] = $notification_type;
@@ -171,10 +173,10 @@ class WeChatNotificationController extends BaseController
 
     private function getDefaultWechatSetting()
     {
-        return [
+        return array(
             'wechat_notification_enabled' => 0,
             'account_code' => '',
-        ];
+        );
     }
 
     private function getDefaultWechatNotificationSetting()
@@ -261,20 +263,21 @@ class WeChatNotificationController extends BaseController
                 /**
                  * 2、用户管理权限  7、群发与通知权限
                  */
-                $needIds = [2, 7];
+                $needIds = array(2, 7);
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
                     $info['wholeness'] = 1;
                 }
             }
         } catch (\Exception $e) {
-            $info = [
+            $info = array(
                 'isAuthorized' => false,
-            ];
+            );
         }
 
         return $info;
     }
+
 
     /**
      * @return NotificationService
