@@ -17,6 +17,11 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
         return $this->getContentAuditDao()->get($id);
     }
 
+    public function getAuditByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->getContentAuditDao()->getByTargetTypeAndTargetId($targetType, $targetId);
+    }
+
     public function searchAuditCount($conditions)
     {
         $conditions = $this->prepareContentAuditSearchConditions($conditions);
@@ -114,7 +119,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
      */
     public function updateAudit($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTime']);
+        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTimed', 'sensitiveWords']);
 
         return $this->getContentAuditDao()->update($id, $fields);
     }

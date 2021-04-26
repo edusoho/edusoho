@@ -6,6 +6,8 @@ interface ContentAuditService
 {
     public function getAudit($id);
 
+    public function getAuditByTargetTypeAndTargetId($targetType, $targetId);
+
     public function searchAuditCount($conditions);
 
     public function searchAudits($conditions, $orderBy, $start, $limit);

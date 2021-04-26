@@ -94,7 +94,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $rows = $this->getSensitiveDao()->findByState('replaced');
 
         if (empty($rows)) {
-            return ['content' => $text, 'keywords' => []];
+            return ['content' => $text, 'originContent' => $text, 'keywords' => []];
         }
 
         $keywords = array_column($rows, 'name');
@@ -115,7 +115,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         }
 
         if (!$matcheds) {
-            return ['content' => $text, 'keywords' => []];
+            return ['content' => $text, 'originContent' => $text, 'keywords' => []];
         }
 
         $hits = array_unique($matchs);
@@ -140,7 +140,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $this->getSensitiveDao()->wave([$keyword['id']], ['bannedNum' => 1]);
         }
 
-        return ['content' => $replacedText, 'keywords' => $hits];
+        return ['content' => $replacedText, 'originContent' => $text, 'keywords' => $hits];
     }
 
     public function scanText($text)
