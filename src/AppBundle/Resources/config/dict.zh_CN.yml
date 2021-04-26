@@ -573,8 +573,8 @@ userAuditTargetType:
 
 #用户内容审核状态
 userAuditStatus:
-  sysPass: 系统已审
-  none: 未审核
+  sysChecked: 系统已审
+  noneChecked: 未审核
   pass: 正常
   illegal: 违规
 
@@ -621,7 +621,7 @@ reportModule:
 
 #用户举报内容审核状态
 reportAuditStatus:
-    none: 未审核
+    none_checked: 未审核
     pass: 正常
     illegal: 违规
 

@@ -4,7 +4,7 @@ namespace Biz\AuditCenter\ReportSources;
 
 use Biz\Thread\Service\ThreadService;
 
-class ArticleReview extends AbstractSource
+class ThreadPostReview extends AbstractSource
 {
     public function getReportContext($targetId)
     {
