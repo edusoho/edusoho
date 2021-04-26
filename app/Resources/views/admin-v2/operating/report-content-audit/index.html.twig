@@ -6,8 +6,8 @@
 {% block main %}
   <form id="report-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
-      <select class="form-control" name="targetType">
-        {{ select_options(dict('reportTargetType'), app.request.get('targetType')|default(''), {'':'admin_v2.operation.report_content_audit.target_type_placeholder'|trans}) }}
+      <select class="form-control" name="module">
+        {{ select_options(dict('reportModule'), app.request.get('module')|default(''), {'':'admin_v2.operation.report_content_audit.target_type_placeholder'|trans}) }}
       </select>
     </div>
     <div class="form-group">
@@ -46,6 +46,7 @@
       </thead>
       <tbody>
       {% set reportTargetType = dict('reportTargetType')|default(null) %}
+      {% set reportModules = dict('reportModule') %}
       {% set reportAuditStatus = dict('reportAuditStatus')|default(null) %}
       {% set reportTags = dict('reportTags')|default(null) %}
 
@@ -63,7 +64,7 @@
               </div>
             </div>
           </td>
-          <td>{{ reportTargetType[reportAudit.targetType]|default('') }}</td>
+          <td>{{ reportModules[reportAudit.module]|default('') }}</td>
           <td>{{ reportAudit.reportCount|default(0) }}</td>
           <td>
             {% for tag in reportAudit.reportTags %}

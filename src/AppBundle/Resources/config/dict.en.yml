@@ -573,6 +573,19 @@ reportTargetType:
     11: Course QA
     12: Classroom QA
 
+reportModule:
+  1: Course Review
+  2: Classroom Review
+  3: Question Bank Exervise Review
+  4: Open Course Review
+  5: Article Review
+  6: Course Note
+  7: Course Thread
+  8: Classroom Thread
+  9: Group Thread
+  10: Course QA
+  11: Classroom QA
+
 #用户举报内容审核状态
 reportAuditStatus:
     none: None
