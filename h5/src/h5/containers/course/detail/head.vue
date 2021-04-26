@@ -68,9 +68,9 @@
             </style>
           </script>
           <script type="text/wxtag-template">
-            <button class="subscribe-btn">
+            <span class="subscribe-btn">
               订阅
-            </button>
+            </span>
           </script>
         </wx-open-subscribe>
       </div>
