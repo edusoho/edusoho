@@ -13,7 +13,6 @@
           .subscribe-btn {
             color: #fff;
             font-size: 14px;
-            line-height: 21px;
           }
         </style>
       </script>
