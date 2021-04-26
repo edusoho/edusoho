@@ -230,6 +230,14 @@
 				height: vw(210);
 				vertical-align: middle;
 			}
+
+			.wechat-subscribe {
+				position: absolute;
+				top: -30px;
+				right: 20px;
+				z-index: 1002;
+				color: #fff;
+			}
 		}
 
 		#course-detail__head--video {

@@ -54,28 +54,26 @@
         @timesUp="expire"
         @sellOut="sellOut"
       />
-      <wx-open-subscribe
-        template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U"
-        id="subscribe-btn"
-      >
-        <script type="text/wxtag-template" slot="style">
-          <style>
-            .subscribe-btn {
-              position: absolute;
-              top: -30px;
-              right: 20px;
-              color: red;
-              z-index: 1002;
-            }
-          </style>
-        </script>
-        <script type="text/wxtag-template">
-          <span class="subscribe-btn">
-            <i class="van-icon van-icon-arrow van-nav-bar__arrow" />
-            订阅
-          </span>
-        </script>
-      </wx-open-subscribe>
+      <div class="wechat-subscribe">
+        <i class="van-icon van-icon-arrow van-nav-bar__arrow" />
+        <wx-open-subscribe
+          template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U"
+          id="subscribe-btn"
+        >
+          <script type="text/wxtag-template" slot="style">
+            <style>
+              .subscribe-btn {
+                color: #fff;
+              }
+            </style>
+          </script>
+          <script type="text/wxtag-template">
+            <button class="subscribe-btn">
+              订阅
+            </button>
+          </script>
+        </wx-open-subscribe>
+      </div>
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div v-show="!isShowOutFocusMask">
