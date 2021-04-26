@@ -222,6 +222,7 @@ export default {
    */
   methods: {
     ...mapActions(['setCloudAddress']),
+
     toToast() {
       const condition = this.finishCondition;
       if (!condition) return;
