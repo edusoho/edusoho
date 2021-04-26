@@ -1,6 +1,6 @@
 <template>
   <div v-if="supportWechatSubscribe" class="wechat-subscribe">
-    <i class="van-icon van-icon-arrow van-nav-bar__arrow" />
+    <i class="iconfont icon-subscribe" />
     订阅
     <div v-if="firstSubscribe" class="wechat-subscribe-popover">
       请点此订阅微信通知
