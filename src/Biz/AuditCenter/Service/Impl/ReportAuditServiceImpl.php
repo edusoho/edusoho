@@ -226,9 +226,11 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'article_review_reply' => 5,
             'course_note' => 6,
             'course_thread' => 7,
+            'course_thread_reply' => 7,
             'classroom_thread' => 8,
             'group_thread' => 9,
             'course_question' => 10,
+            'course_question_reply' => 10,
             'classroom_question' => 11,
         ];
 
