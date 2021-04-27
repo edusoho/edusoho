@@ -9,21 +9,21 @@ class MessageSubscribeTemplateUtil
     const TEMPLATE_COURSE_REMIND = 'courseRemind';
 
     const TEMPLATE_ASK_QUESTION = 'askQuestion';
-    const TEMPLATE_ASK_QUESTION_CODE = 'OPENTM414529612';
+    const TEMPLATE_ASK_QUESTION_CODE = 3541;
 
     const TEMPLATE_ANSWER_QUESTION = 'answerQuestion';
 
     const TEMPLATE_LIVE_OPEN = 'liveOpen';
-    const TEMPLATE_LIVE_OPEN_CODE = 'OPENTM206214624';
+    const TEMPLATE_LIVE_OPEN_CODE = 159;
 
     const TEMPLATE_HOMEWORK_RESULT = 'homeworkResult';
-    const TEMPLATE_HOMEWORK_RESULT_CODE = 'OPENTM400905764';
+    const TEMPLATE_HOMEWORK_RESULT_CODE = 1588;
 
     const TEMPLATE_EXAM_RESULT = 'examResult';
-    const TEMPLATE_EXAM_RESULT_CODE = 'OPENTM409257668';
+    const TEMPLATE_EXAM_RESULT_CODE = 734;
 
     const TEMPLATE_COURSE_UPDATE = 'courseUpdate';
-    const TEMPLATE_COURSE_UPDATE_CODE = 'TM408917738';
+    const TEMPLATE_COURSE_UPDATE_CODE = 10475;
 
     const TEMPLATE_COIN_RECHARGE = 'coinRecharge';
 
@@ -44,8 +44,9 @@ class MessageSubscribeTemplateUtil
                'sms_content' => 'admin.edu_cloud.edu_sms.study_task_notify_tips',
                'rule' => 'wechat.notification.template.live_start.rule',
                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>开课时间：{{keyword2.DATA}}<br>开课地点：{{keyword3.DATA}}<br>联系方式：{{keyword4.DATA}}<br>{{remark.DATA}}',
-               'kidList' => ['1', '3', '13', '5'],
+               'kidList' => ['2', '5', '15', '7'],
                'object' => '课程学员',
+               'sceneDesc' => '订阅课程开课提醒',
                'status' => 0,
            ],
            self::TEMPLATE_HOMEWORK_RESULT => [
@@ -58,6 +59,7 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}',
                'kidList' => ['2', '3', '8'],
                'object' => '作业提交学员',
+               'sceneDesc' => '作业批改完成通知',
                'status' => 0,
            ],
            self::TEMPLATE_EXAM_RESULT => [
@@ -70,6 +72,7 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}}',
                'kidList' => ['1', '4', '6'],
                'object' => '试卷提交学员',
+               'sceneDesc' => '考试成绩通知',
                'status' => 0,
            ],
            self::TEMPLATE_COURSE_UPDATE => [
@@ -82,6 +85,7 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
                'kidList' => ['1', '4', '2', '3'],
                'object' => '课程学员',
+               'sceneDesc' => '课程更新通知',
                'status' => 0,
            ],
            self::TEMPLATE_VIP_EXPIRED => [
@@ -128,6 +132,7 @@ class MessageSubscribeTemplateUtil
                 'detail' => '{{first.DATA}}<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'kidList' => ['4', '1', '2', '3'],
                 'object' => '课程/班级教师，助教，班主任',
+                'sceneDesc' => '学生提问提醒',
                 'status' => 0,
             ],
             self::TEMPLATE_ANSWER_QUESTION => [

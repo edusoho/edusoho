@@ -376,7 +376,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $fields = $event->getSubject();
         $key = $event->getArgument('key');
-        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $notification_type = $event->getArgument('notification_type');
+        $settingName = 'wechat';
+
+        if ('MessageSubscribe' == $notification_type) {
+            $settingName = 'wechat_notification';
+        }
+        $wechatSetting = $this->getSettingService()->get($settingName, []);
         $templates = empty($wechatSetting['templates']) ? [] : $wechatSetting['templates'];
         if ('homeworkOrTestPaperReview' == $key) {
             $templates['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];

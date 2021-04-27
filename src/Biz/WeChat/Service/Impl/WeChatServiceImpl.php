@@ -49,7 +49,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $fields['scenes'] = empty($fields['scenes']) ? [] : $fields['scenes'];
         $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
         $this->getSettingService()->set($settingName, $wechatSetting);
-        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, ['key' => $key, 'wechatSetting' => $wechatSetting]));
+        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, ['key' => $key, 'wechatSetting' => $wechatSetting, 'notification_type' => $notification_type]));
 
         return true;
     }
@@ -345,6 +345,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     /**
      * @param $template
      * @param $key
+     * @param $notification_type
      *
      * @return mixed
      *
@@ -364,7 +365,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             $settingName = 'wechat_notification';
             $parameter = [
                 'templateType' => 'subscribe',
-                'templateParams' => $template['kidList'],
+                'templateParams' => [
+                    'kidList' => $template['kidList'],
+                    'sceneDesc' => $template['sceneDesc'],
+                    ],
             ];
         }
         $wechatSetting = $wechatSetting = $this->getSettingService()->get($settingName);
@@ -405,6 +409,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     /**
      * @param $template
      * @param $key
+     * @param $notification_type
      *
      * @return mixed
      *
