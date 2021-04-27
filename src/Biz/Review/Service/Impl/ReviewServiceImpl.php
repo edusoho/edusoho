@@ -60,10 +60,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ]);
 
         $review['content'] = $this->purifyHtml($review['content']);
-        $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($review['content'], 'review');
+        $review['content'] = $sensitiveResult['content'];
 
         $review = $this->getReviewDao()->create($review);
-        $this->dispatchEvent('review.create', new Event($review));
+        $this->dispatchEvent('review.create', new Event($review, ['sensitiveResult' => $sensitiveResult]));
 
         return $review;
     }
@@ -80,7 +81,8 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review = ArrayToolkit::parts($review, ['content', 'rating']);
 
         $review['content'] = $this->purifyHtml($review['content']);
-        $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($review['content'], 'review');
+        $review['content'] = $sensitiveResult['content'];
 
         $review = $this->getReviewDao()->update($id, $review);
 

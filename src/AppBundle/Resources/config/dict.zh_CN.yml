@@ -585,7 +585,7 @@ containSensitiveWords:
 
 #用户举报原因标签
 reportTags:
-    1: 举报垃圾广告
+    1: 垃圾广告信息
     2: 政治敏感信息
     3: 色情低俗信息
     4: 违法违规信息
