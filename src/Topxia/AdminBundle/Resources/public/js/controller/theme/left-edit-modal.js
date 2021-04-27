@@ -36,5 +36,19 @@ define(function(require, exports, module) {
         }
       });
 
+      $('#addCategory').on('click', function (event) {
+        let selectCount = $('#categories').children('select').length;
+        if (selectCount >= 4){
+          $('.categoriesTip').removeClass('hidden');
+          return;
+        }
+        let categoryChoices = JSON.parse($('#categoryChoices').val());
+        let html = '<select class="form-control width-input-large pull-left" name="categoryIds[][categoryId]" style="margin-top: 12px">\n <option value=""></option>';
+        for (var categoryId in categoryChoices) {
+          html += '<option value="' + categoryId + '">' + categoryChoices[categoryId] + '</option>';
+        }
+        html += '</select>';
+        $('#categories').append(html);
+      });
     };
 });

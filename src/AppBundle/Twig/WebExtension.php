@@ -147,6 +147,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('build_category_choices', [$this, 'buildCategoryChoices']),
             new \Twig_SimpleFunction('question_category_choices', [$this, 'getQuestionCategoryChoices']),
             new \Twig_SimpleFunction('item_category_choices', [$this, 'getItemCategoryChoices']),
+            new \Twig_SimpleFunction('article_category_choices', [$this, 'getArticleCategoryChoices']),
             new \Twig_SimpleFunction('upload_max_filesize', [$this, 'getUploadMaxFilesize']),
             new \Twig_SimpleFunction('js_paths', [$this, 'getJsPaths']),
             new \Twig_SimpleFunction('is_plugin_installed', [$this, 'isPluginInstalled']),
@@ -1910,6 +1911,40 @@ class WebExtension extends \Twig_Extension
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();
+    }
+
+    public function getArticleCategoryChoices()
+    {
+        $categories = $this->getArticleCategoryService()->getCategoryStructureTree();
+
+        if (empty($categories)){
+            return $categories;
+        }
+
+        $choices = [];
+        foreach ($categories as $category){
+            $choices[$category['id']] = $category['name'];
+            if (!empty($category['children'])){
+                foreach ($category['children'] as $categoryChildren){
+                    $choices[$categoryChildren['id']] = '　'.$categoryChildren['name'];
+                    if (!empty($categoryChildren['children'])){
+                        foreach ($categoryChildren['children'] as $value){
+                            $choices[$value['id']] = '　　'.$value['name'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @return \Biz\Article\Service\CategoryService
+     */
+    protected function getArticleCategoryService()
+    {
+        return $this->createService('Article:CategoryService');
     }
 
     public function getNextExecutedTime()
