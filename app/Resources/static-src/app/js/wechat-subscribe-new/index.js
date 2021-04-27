@@ -5,11 +5,13 @@ let $jweixin = $('.js-wechat-data');
 
 wx.config($jweixin.data('config'));
 
+const reg = /accept/;
+
 wx.ready(function() {
   var btn = document.getElementById('subscribe-btn');
   btn.addEventListener('success', function (e) {
     const subscribeDetails = e.detail.subscribeDetails;
-    if (subscribeDetails.test(/accept/)) {
+    if (reg.test(subscribeDetails)) {
       notify('success', '订阅成功indexof');
     }
   });   
