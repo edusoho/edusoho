@@ -11,7 +11,7 @@ class WeChatNotificationServiceImpl extends BaseService implements WeChatNotific
 {
     const SYNCHRONIZE_RECORD_PAGE = 10;
 
-    public function SynchronizeSubscriptionRecords()
+    public function synchronizeSubscriptionRecords()
     {
         $options = [
             'createdTime' => $this->getLastCreatedTime(),

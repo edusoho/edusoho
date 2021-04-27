@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\WeChatNotification\Job;
-
 
 use Biz\WeChatNotification\Service\WeChatNotificationService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -11,7 +9,7 @@ class WeChatSubscribeRecordSynJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getWeChatNotificationService()->SynchronizeSubscriptionRecords();
+        $this->getWeChatNotificationService()->synchronizeSubscriptionRecords();
     }
 
     /**
