@@ -47,6 +47,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['2', '5', '15', '7'],
                'object' => '课程学员',
                'sceneDesc' => '订阅课程开课提醒',
+               'role' => 'student',
                'status' => 0,
            ],
            self::TEMPLATE_HOMEWORK_RESULT => [
@@ -60,6 +61,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['2', '3', '8'],
                'object' => '作业提交学员',
                'sceneDesc' => '作业批改完成通知',
+               'role' => 'student',
                'status' => 0,
            ],
            self::TEMPLATE_EXAM_RESULT => [
@@ -73,6 +75,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['1', '4', '6'],
                'object' => '试卷提交学员',
                'sceneDesc' => '考试成绩通知',
+               'role' => 'student',
                'status' => 0,
            ],
            self::TEMPLATE_COURSE_UPDATE => [
@@ -86,6 +89,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['1', '4', '2', '3'],
                'object' => '课程学员',
                'sceneDesc' => '课程更新通知',
+               'role' => 'student',
                'status' => 0,
            ],
            self::TEMPLATE_VIP_EXPIRED => [
@@ -96,6 +100,7 @@ class MessageSubscribeTemplateUtil
                'rule' => 'wechat.notification.template.vip_expired.rule',
                'detail' => '',
                'object' => '单个用户',
+               'role' => '',
                'status' => 0,
            ],
             self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => [
@@ -108,6 +113,7 @@ class MessageSubscribeTemplateUtil
                 'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
                 'detail' => '',
                 'object' => '课程教师',
+                'role' => '',
                 'status' => 0,
             ],
            self::TEMPLATE_COURSE_REMIND => [
@@ -120,6 +126,7 @@ class MessageSubscribeTemplateUtil
                'rule' => 'wechat.notification.template.remind_course.rule',
                'detail' => '',
                'object' => '课程学员',
+               'role' => '',
                'status' => 0,
            ],
             self::TEMPLATE_ASK_QUESTION => [
@@ -133,6 +140,7 @@ class MessageSubscribeTemplateUtil
                 'kidList' => ['4', '1', '2', '3'],
                 'object' => '课程/班级教师，助教，班主任',
                 'sceneDesc' => '学生提问提醒',
+                'role' => 'teacher',
                 'status' => 0,
             ],
             self::TEMPLATE_ANSWER_QUESTION => [
@@ -143,6 +151,7 @@ class MessageSubscribeTemplateUtil
                 'rule' => 'wechat.notification.template.answer_question.rule',
                 'detail' => '',
                 'object' => '提问者',
+                'role' => '',
                 'status' => 0,
             ],
             self::TEMPLATE_COIN_RECHARGE => [
@@ -153,6 +162,7 @@ class MessageSubscribeTemplateUtil
                 'rule' => 'wechat.notification.template.charge_success.rule',
                 'detail' => '',
                 'object' => '购买者',
+                'role' => '',
                 'status' => 0,
             ],
             self::TEMPLATE_PAY_SUCCESS => [
@@ -163,6 +173,7 @@ class MessageSubscribeTemplateUtil
                 'rule' => 'wechat.notification.template.buy_success.rule',
                 'detail' => '',
                 'object' => '购买者',
+                'role' => '',
                 'status' => 0,
             ],
         ];

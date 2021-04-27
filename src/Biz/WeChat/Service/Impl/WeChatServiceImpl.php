@@ -34,11 +34,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $preAuthUrl['url'];
     }
 
-    public function saveWeChatTemplateSetting($key, $fields, $notification_type)
+    public function saveWeChatTemplateSetting($key, $fields, $notificationType)
     {
         $settingName = 'wechat';
 
-        if ('MessageSubscribe' == $notification_type) {
+        if ('MessageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName, []);
@@ -49,7 +49,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $fields['scenes'] = empty($fields['scenes']) ? [] : $fields['scenes'];
         $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
         $this->getSettingService()->set($settingName, $wechatSetting);
-        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, ['key' => $key, 'wechatSetting' => $wechatSetting, 'notification_type' => $notification_type]));
+        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, ['key' => $key, 'wechatSetting' => $wechatSetting, 'notificationType' => $notificationType]));
 
         return true;
     }
@@ -345,25 +345,25 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     /**
      * @param $template
      * @param $key
-     * @param $notification_type
+     * @param $notificationType
      *
      * @return mixed
      *
      * @throws \Exception
      */
-    public function addTemplate($template, $key, $notification_type)
+    public function addTemplate($template, $key, $notificationType)
     {
         $client = $this->getTemplateClient();
         if (empty($client)) {
             $this->createNewException(WeChatException::TOKEN_MAKE_ERROR());
         }
 
-        $parameter = [];
+        $templateParam = [];
         $settingName = 'wechat';
 
-        if ('MessageSubscribe' == $notification_type) {
+        if ('MessageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
-            $parameter = [
+            $templateParam = [
                 'templateType' => 'subscribe',
                 'templateParams' => [
                     'kidList' => $template['kidList'],
@@ -376,9 +376,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         if (empty($wechatSetting['templates'][$key]['templateId'])) {
             try {
                 if (!empty($wechatSetting['is_authorization'])) {
-                    $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id'], $parameter);
+                    $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id'], $templateParam);
                 }
-                if (empty($wechatSetting['is_authorization']) && 'serviceFollow' == $notification_type) {
+                if (empty($wechatSetting['is_authorization']) && 'serviceFollow' == $notificationType) {
                     $data = $client->addTemplate($template['id']);
                 }
             } catch (\Exception $e) {
@@ -409,13 +409,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     /**
      * @param $template
      * @param $key
-     * @param $notification_type
+     * @param $notificationType
      *
      * @return mixed
      *
      * @throws \Exception
      */
-    public function deleteTemplate($template, $key, $notification_type)
+    public function deleteTemplate($template, $key, $notificationType)
     {
         $client = $this->getTemplateClient();
         if (empty($client)) {
@@ -423,17 +423,22 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $settingName = 'wechat';
-
-        if ('MessageSubscribe' == $notification_type) {
+        if ('MessageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName);
 
         if (!empty($wechatSetting['templates'][$key]['templateId'])) {
-            if (!empty($wechatSetting['is_authorization'])) {
-                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
-            } else {
-                $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
+            if ('serviceFollow' == $notificationType) {
+                if (!empty($wechatSetting['is_authorization'])) {
+                    $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
+                } else {
+                    $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
+                }
+            }
+
+            if ('MessageSubscribe' == $notificationType && !empty($wechatSetting['templates'][$key]['id'])) {
+                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['id'], ['templateType' => 'subscribe']);
             }
 
             if (empty($data)) {

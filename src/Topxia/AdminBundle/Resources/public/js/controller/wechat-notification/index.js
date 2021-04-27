@@ -42,9 +42,8 @@ define(function(require, exports, module) {
       });
     });
 
-    $('input[type=radio][name=notification_type]').change(function() {
-      var type = $('input[type=radio][name=notification_type]:checked').val();
-
+    $('input[type=radio][name=notificationType]').change(function() {
+      var type = $('input[type=radio][name=notificationType]:checked').val();
       if (type === 'MessageSubscribe') {
         $('#message-subscribe').show()
         $('#service-follow').hide()

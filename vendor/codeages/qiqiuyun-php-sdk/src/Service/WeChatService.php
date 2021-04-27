@@ -113,14 +113,14 @@ class WeChatService extends BaseService
 
     /**
      * @param $templateCode string 必填 模版识别码
-     * @param $parameter 请求参数
+     * @param $templateParam 请求参数
      *
      * @return array 返回参数如下
      *               template_id  创建的模版id
      */
-    public function createNotificationTemplate($templateCode, $parameter = [])
+    public function createNotificationTemplate($templateCode, $templateParam = [])
     {
-        return $this->request('POST', "/notification_template/{$templateCode}", $parameter);
+        return $this->request('POST', "/notification_template/{$templateCode}", $templateParam);
     }
 
     /**
@@ -129,9 +129,9 @@ class WeChatService extends BaseService
      * @return array 返回参数如下
      *               success bool 是否删除成功
      */
-    public function deleteNotificationTemplate($templateId)
+    public function deleteNotificationTemplate($templateId, $templateParam = [])
     {
-        return $this->request('DELETE', "/notification_template/{$templateId}");
+        return $this->request('DELETE', "/notification_template/{$templateId}", $templateParam);
     }
 
     /**

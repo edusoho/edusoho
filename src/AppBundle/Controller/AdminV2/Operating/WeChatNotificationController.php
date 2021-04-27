@@ -23,6 +23,7 @@ class WeChatNotificationController extends BaseController
         $wechatNotificationDefault = $this->getDefaultWechatNotificationSetting();
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
         $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
+
         $wechatAuth = $this->getAuthorizationInfo();
         if ($wechatAuth['isAuthorized']) {
             $wechatNotificationSetting['is_authorization'] = 1;
@@ -93,8 +94,8 @@ class WeChatNotificationController extends BaseController
     public function settingModalAction(Request $request)
     {
         $key = $request->query->get('key');
-        $notification_type = $request->query->get('notification_type');
-        if (!in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
+        $notificationType = $request->query->get('notificationType');
+        if (!in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
             throw new \InvalidArgumentException('Notification type error');
         }
         $wechatSetting = $this->getSettingService()->get('wechat', []);
@@ -102,7 +103,7 @@ class WeChatNotificationController extends BaseController
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $wechat_notification_enabled = $wechatSetting['wechat_notification_enabled'];
 
-        if ('MessageSubscribe' == $notification_type) {
+        if ('MessageSubscribe' == $notificationType) {
             $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
             $templates = $this->getTemplateSetting($templates, $wechatSetting);
@@ -114,18 +115,18 @@ class WeChatNotificationController extends BaseController
             }
             $fields = $request->request->all();
 
-            if (!$this->templateSettingFilter($notification_type, $templates[$key])) {
-                $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notification_type);
+            if (!$this->templateSettingFilter($notificationType, $templates[$key])) {
+                $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notificationType);
 
                 return $this->createJsonResponse(true);
             }
             if (1 == $fields['status']) {
-                $this->getWeChatService()->addTemplate($templates[$key], $key, $notification_type);
+                $this->getWeChatService()->addTemplate($templates[$key], $key, $notificationType);
             } else {
-                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $notification_type);
+                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $notificationType);
             }
 
-            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notification_type);
+            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notificationType);
 
             return $this->createJsonResponse(true);
         }
@@ -135,13 +136,13 @@ class WeChatNotificationController extends BaseController
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
             'key' => $key,
-            'notification_type' => $notification_type,
+            'notificationType' => $notificationType,
         ]);
     }
 
-    public function templateSettingFilter($notification_type, $template)
+    public function templateSettingFilter($notificationType, $template)
     {
-        if ('MessageSubscribe' == $notification_type) {
+        if ('MessageSubscribe' == $notificationType) {
             return isset($template['id']);
         }
 
@@ -150,25 +151,25 @@ class WeChatNotificationController extends BaseController
 
     public function settingNotificationAction(Request $request)
     {
-        $notification_type = $request->request->get('notification_type');
+        $notificationType = $request->request->get('notificationType');
         $notification_sms = $request->request->get('notification_sms');
-        $wechat_notification_config = $this->prepareWechatNotificationSetting($notification_type, $notification_sms);
+        $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notification_sms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
 
         return $this->createJsonResponse(true);
     }
 
-    private function prepareWechatNotificationSetting($notification_type, $notification_sms)
+    private function prepareWechatNotificationSetting($notificationType, $notification_sms)
     {
         $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
-        if (in_array($notification_type, ['serviceFollow', 'MessageSubscribe'])) {
-            $wechatSetting['notification_type'] = $notification_type;
+        if (in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
+            $wechatSetting['notification_type'] = $notificationType;
         }
         if ($notification_sms) {
             $wechatSetting['notification_sms'] = 1;
         }
-        if ('serviceFollow' == $notification_type) {
+        if ('serviceFollow' == $notificationType) {
             $wechatSetting['notification_sms'] = 0;
         }
 
@@ -267,7 +268,7 @@ class WeChatNotificationController extends BaseController
                 /**
                  * 2、用户管理权限  7、群发与通知权限
                  */
-                $needIds = [2, 7];
+                $needIds = [2, 7, 89];
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
                     $info['wholeness'] = 1;
