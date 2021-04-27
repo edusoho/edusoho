@@ -26,6 +26,7 @@
           <th width="60%">{{'admin.course_thread.post_th'|trans}}</th>
           <th width="10%">{{'admin.course_thread.reply_or_review_th'|trans}}</th>
           <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="8%">{{'内容状态'|trans}}</th>
           <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
@@ -44,7 +45,7 @@
                 <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
                 <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
-              
+
               <div class="text-sm mts">
                 {% if classroom %}
                   <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="text-success" target="_blank">{{ classroom.title }}</a>
@@ -55,6 +56,15 @@
             <td>
               {{ admin_macro.user_link(author) }} <br />
               <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
+            </td>
+            <td>
+              {% if review.auditStatus|default('pass') == 'pass' %}
+                <span class="text-success">{{ '正常'|trans }}</span>
+              {% elseif review.auditStatus|default('pass') == 'illegal' %}
+                <span class="text-danger">{{ '违规'|trans }}</span>
+              {% elseif review.auditStatus|default('pass') == 'sys_checked' %}
+                <span class="text-info">{{ '系统预审'|trans }}</span>
+              {% endif %}
             </td>
             <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_v2_classroom_thread_delete', {threadId:thread.id}) }}">{{'form.btn.delete'|trans}}</button></td>
           </tr>
@@ -69,7 +79,7 @@
     </div>
   </div>
   <nav class="text-center">
-    {{ admin_macro.paginator(paginator) }} 
+    {{ admin_macro.paginator(paginator) }}
   </nav>
-  
+
 {% endblock %}

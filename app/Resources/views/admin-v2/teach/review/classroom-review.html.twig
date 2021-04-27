@@ -6,7 +6,7 @@
 
 {% block main %}
 
-  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
     <div class="form-group">
       <select class="form-control" name="rating">
@@ -37,6 +37,7 @@
           <th width="60%">{{'admin.course_review.content_th'|trans}}</th>
           <th width="8">{{'admin.course_review.content'|trans}}</th>
           <th width="20%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="8%">{{'内容状态'|trans}}</th>
           <th width="8%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
@@ -64,6 +65,15 @@
             <td>
               {{ admin_macro.user_link(author) }}<br>
               <span class="color-gray">{{review.createdTime|date('Y-n-d H:i')}}</span>
+            </td>
+            <td>
+              {% if review.auditStatus|default('pass') == 'pass' %}
+                <span class="text-success">{{ '正常'|trans }}</span>
+              {% elseif review.auditStatus|default('pass') == 'illegal' %}
+                <span class="text-danger">{{ '违规'|trans }}</span>
+              {% elseif review.auditStatus|default('pass') == 'sys_checked' %}
+                <span class="text-info">{{ '系统预审'|trans }}</span>
+              {% endif %}
             </td>
             <td>
               <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ path('admin_v2_classroom_review_delete', {id:review.id}) }}">{{'form.btn.delete'|trans}}</button>
