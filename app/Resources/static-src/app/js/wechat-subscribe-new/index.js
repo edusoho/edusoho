@@ -5,13 +5,15 @@ let $jweixin = $('.js-wechat-data');
 
 wx.config($jweixin.data('config'));
 
-notify('success', '订阅成功-hongbusi');
-
 wx.ready(function() {
   var btn = document.getElementById('subscribe-btn');
   btn.addEventListener('success', function (e) {
-    console.log('Hongbusi-success', e.detail);
-    notify('success', '订阅成功');
+    const subscribeDetails = e.detail.subscribeDetails;
+    if (subscribeDetails.indexof('accept') !== -1) {
+      notify('success', '订阅成功indexof');
+    }
+    console.log('Hongbusi-success', subscribeDetails);
+    console.log('Hongbusi-success', subscribeDetails.indexof('accept'));
   });   
   btn.addEventListener('error',function (e) {
     console.log('fail', e.detail);
