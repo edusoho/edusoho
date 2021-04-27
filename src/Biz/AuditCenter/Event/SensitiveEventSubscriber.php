@@ -25,7 +25,106 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.post.update' => 'onCourseThreadPostUpdate',
             'review.create' => 'onReviewCreate',
             'review.update' => 'onReviewUpdate',
+            'thread.post.create' => 'onThreadPostCreate',
+            'thread.create' => 'onThreadCreate',
+            'thread.update' => 'onThreadUpdate',
         ];
+    }
+
+    public function onThreadUpdate(Event $event)
+    {
+        $thread = $event->getSubject();
+        $sensitiveResult = $event->getArgument('sensitiveResult');
+        $threadType = $this->getThreadTargetType($thread);
+        $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($threadType, $thread['id']);
+        if ($existAudit) {
+            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+                'content' => $sensitiveResult['originContent'],
+                'sensitiveWords' => $sensitiveResult['keywords'],
+            ]);
+        } else {
+            $this->getContentAuditService()->createAudit([
+                'targetType' => $threadType,
+                'targetId' => $thread['id'],
+                'author' => $thread['userId'],
+                'content' => $sensitiveResult['originContent'],
+                'sensitiveWords' => $sensitiveResult['keywords'],
+            ]);
+        }
+    }
+
+    public function onThreadCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        $sensitiveResult = $event->getArgument('sensitiveResult');
+
+        $this->getContentAuditService()->createAudit([
+            'targetType' => $this->getThreadTargetType($thread),
+            'targetId' => $thread['id'],
+            'author' => $thread['userId'],
+            'content' => $sensitiveResult['originContent'],
+            'sensitiveWords' => $sensitiveResult['keywords'],
+        ]);
+    }
+
+    public function getThreadTargetType($thread)
+    {
+        if ('classroom' === $thread['targetType']) {
+            if ('discussion' === $thread['type']) {
+                $threadTargetType = 'classroom_thread';
+            } elseif ('question' === $thread['type']) {
+                $threadTargetType = 'classroom_question';
+            } elseif ('event' === $thread['type']) {
+                $threadTargetType = 'classroom_event';
+            } else {
+                $threadTargetType = '';
+            }
+        } else {
+            $threadTargetType = '';
+        }
+
+        return $threadTargetType;
+    }
+
+    public function onThreadPostCreate(Event $event)
+    {
+        $threadPost = $event->getSubject();
+        $sensitiveResult = $event->getArgument('sensitiveResult');
+        $thread = $event->getArgument('thread');
+        $this->getContentAuditService()->createAudit([
+            'targetType' => $this->getThreadPostTargetType($threadPost, $thread),
+            'targetId' => $threadPost['id'],
+            'author' => $threadPost['userId'],
+            'content' => $sensitiveResult['originContent'],
+            'sensitiveWords' => $sensitiveResult['keywords'],
+        ]);
+    }
+
+    private function getThreadPostTargetType($threadPost, $thread)
+    {
+        if ('openCourse' === $threadPost['targetType']) {
+            $threadPostTargetType = empty($threadPost['parentId']) ? 'open_course_review' : 'open_course_review_reply';
+        } elseif ('article' === $threadPost['targetType']) {
+            $threadPostTargetType = empty($threadPost['parentId']) ? 'article_review' : 'article_review_reply';
+        } elseif ('classroom' === $threadPost['targetType']) {
+            if ($thread) {
+                if ('discussion' === $thread['type']) {
+                    $threadPostTargetType = 'classroom_thread_reply';
+                } elseif ('question' === $thread['type']) {
+                    $threadPostTargetType = 'classroom_question_reply';
+                } elseif ('event' === $thread['type']) {
+                    $threadPostTargetType = 'classroom_event_reply';
+                } else {
+                    $threadPostTargetType = '';
+                }
+            } else {
+                $threadPostTargetType = '';
+            }
+        } else {
+            $threadPostTargetType = '';
+        }
+
+        return $threadPostTargetType;
     }
 
     public function onReviewCreate(Event $event)
