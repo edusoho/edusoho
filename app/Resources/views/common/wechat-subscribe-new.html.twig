@@ -1,0 +1,25 @@
+{% set wxconfig = wx_js_sdk_config() %}
+{% if wxconfig|default(null) %}
+  {% do script(['app/js/wechat-subscribe-new/index.js']) %}
+  <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
+{% endif %}
+
+<span>
+  <i class="es-icon es-icon-share"></i>
+  <br>
+  <wx-open-subscribe template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U" id="subscribe-btn">
+    <template slot="style">
+      <style>
+        .subscribe-btn {
+          color: #fff;
+          background-color: #07c160;
+        }
+      </style>
+    </template>
+    <template>
+      <span class="subscribe-btn">
+        订阅
+      </span>
+    </template>
+  </wx-open-subscribe>
+</span>
