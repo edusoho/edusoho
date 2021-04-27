@@ -7,6 +7,7 @@ use AppBundle\Component\RateLimit\EmailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
+use AppBundle\Component\RateLimit\UgcReportRateLimiter;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Biz\Article\Event\ArticleEventSubscriber;
 use Biz\Certificate\ImgBuilder\HorizontalImgBuilder;
@@ -200,6 +201,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['email_rate_limiter'] = function ($biz) {
             return new EmailRateLimiter($biz);
+        };
+
+        $biz['ugc_report_rate_limiter'] = function ($biz) {
+            return new UgcReportRateLimiter($biz);
         };
 
         $biz['render_view_resolvers'] = function ($biz) {
