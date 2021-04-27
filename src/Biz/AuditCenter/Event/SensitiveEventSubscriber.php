@@ -3,6 +3,7 @@
 namespace Biz\AuditCenter\Event;
 
 use Biz\AuditCenter\Service\ContentAuditService;
+use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,7 +23,68 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.update' => 'onCourseThreadUpdate',
             'course.thread.post.create' => 'onCourseThreadPostCreate',
             'course.thread.post.update' => 'onCourseThreadPostUpdate',
+            'review.create' => 'onReviewCreate',
+            'review.update' => 'onReviewUpdate',
         ];
+    }
+
+    public function onReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+        $sensitiveResult = $event->getArgument('sensitiveResult');
+
+        $this->getContentAuditService()->createAudit([
+            'targetType' => $this->getReviewAuditTargetType($review),
+            'targetId' => $review['id'],
+            'author' => $review['userId'],
+            'content' => $sensitiveResult['originContent'],
+            'sensitiveWords' => $sensitiveResult['keywords'],
+        ]);
+    }
+
+    public function onReviewUpdate(Event $event)
+    {
+        $review = $event->getSubject();
+        $sensitiveResult = $event->getArgument('sensitiveResult');
+        $reviewAuditTargetType = $this->getReviewAuditTargetType($review);
+
+        $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
+        if ($existAudit) {
+            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+                'content' => $sensitiveResult['originContent'],
+                'sensitiveWords' => $sensitiveResult['keywords'],
+            ]);
+        } else {
+            $this->getContentAuditService()->createAudit([
+                'targetType' => $reviewAuditTargetType,
+                'targetId' => $review['id'],
+                'author' => $review['userId'],
+                'content' => $sensitiveResult['originContent'],
+                'sensitiveWords' => $sensitiveResult['keywords'],
+            ]);
+        }
+    }
+
+    private function getReviewAuditTargetType($review)
+    {
+        if ('goods' === $review['targetType']) {
+            $goods = $this->getGoodsService()->getGoods($review['targetId']);
+            if ('course' === $goods['type']) {
+                $reviewTargetType = empty($review['parentId']) ? 'course_review' : 'course_review_reply';
+            } elseif ('classroom' === $goods['type']) {
+                $reviewTargetType = empty($review['parentId']) ? 'classroom_review' : 'classroom_review_reply';
+            } else {
+                $reviewTargetType = '';
+            }
+        } elseif ('course' === $review['targetType']) {
+            $reviewTargetType = empty($review['parentId']) ? 'course_review' : 'course_review_reply';
+        } elseif ('item_bank_exercise' === $review['targetType']) {
+            $reviewTargetType = empty($review['parentId']) ? 'item_bank_exercise_review' : 'item_bank_exercise_review_reply';
+        } else {
+            $reviewTargetType = '';
+        }
+
+        return $reviewTargetType;
     }
 
     public function onCourseThreadPostCreate(Event $event)
@@ -237,5 +299,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getContentAuditService()
     {
         return $this->getBiz()->service('AuditCenter:ContentAuditService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    public function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
     }
 }
