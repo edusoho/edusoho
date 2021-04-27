@@ -162,7 +162,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(\Biz\Thread\ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
-        $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($thread['content'], 'course-thread-create');
+        $thread['content'] = $sensitiveResult['content'];
         $thread['title'] = $this->sensitiveFilter($thread['title'], 'course-thread-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
@@ -207,7 +208,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             ]);
         }
 
-        $this->dispatchEvent('course.thread.create', new Event($thread));
+        $this->dispatchEvent('course.thread.create', new Event($thread, ['sensitiveResult' => $sensitiveResult]));
 
         return $thread;
     }
@@ -220,7 +221,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : $thread['content'];
+        $fields['content'] = isset($fields['content']) ? $fields['content'] : $thread['content'];
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'course-thread-update');
+        $fields['content'] = $sensitiveResult['content'];
         $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : $thread['title'];
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
@@ -241,7 +244,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['content'] = $this->filter_Emoji($thread['content']);
         $thread['title'] = $this->filter_Emoji($thread['title']);
         $thread = $this->getThreadDao()->update($threadId, $fields);
-        $this->dispatchEvent('course.thread.update', new Event($thread));
+        $this->dispatchEvent('course.thread.update', new Event($thread, ['sensitiveResult' => $sensitiveResult]));
 
         return $thread;
     }
@@ -419,9 +422,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
-
-        $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
         $post['content'] = $this->filter_Emoji($post['content']);
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($post['content'], 'course-thread-post-create');
+        $post['content'] = $sensitiveResult['content'];
 
         $this->getCourseService()->tryTakeCourse($post['courseId']);
 
@@ -472,14 +475,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             }
         }
 
-        $this->dispatchEvent('course.thread.post.create', $post);
+        $this->dispatchEvent('course.thread.post.create', $post, ['thread' => $thread, 'sensitiveResult' => $sensitiveResult]);
 
         return $post;
     }
 
     public function updatePost($courseId, $id, $fields)
     {
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-post-update');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'course-thread-post-create');
+        $fields['content'] = $sensitiveResult['content'];
 
         $post = $this->getPost($courseId, $id);
 
@@ -503,7 +507,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
 
         $post = $this->getThreadPostDao()->update($id, $fields);
-        $this->dispatchEvent('course.thread.post.update', $post);
+        $thread = $this->getThreadByThreadId($post['threadId']);
+        $this->dispatchEvent('course.thread.post.update', $post, ['thread' => $thread, 'sensitiveResult' => $sensitiveResult]);
 
         return $post;
     }
