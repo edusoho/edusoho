@@ -198,6 +198,10 @@ class SystemCrontabInitializer
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
             ],
+            'WechatSubscribeRecordSynJob' => [
+                'expression' => "{$convertStatusRandNum}/15 * * * *",
+                'class' => 'Biz\WeChatNotification\Job\WechatSubscribeRecordSynJob',
+            ],
 //            'StatisticsPageStayDailyDataJob' => [
 //                'expression' => '30 0 * * *',
 //                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
