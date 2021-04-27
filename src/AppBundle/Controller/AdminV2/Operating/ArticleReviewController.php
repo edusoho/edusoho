@@ -13,38 +13,30 @@ class ArticleReviewController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = array_merge(['targetType' => 'article'], $request->query->all());
-
+        $conditions = $request->query->all();
         $conditions = $this->prepareConditions($conditions);
-
-        $reviews = [];
-        $articles = [];
-        $users = [];
-
-        $paginatorTotal = empty($conditions) ? 0 : $this->getThreadService()->searchPostsCount($conditions);
 
         $paginator = new Paginator(
             $request,
-            $paginatorTotal,
-            20
+            $this->getThreadService()->searchPostsCount($conditions),
+            1
         );
 
-        if (!empty($conditions)) {
-            $reviews = $this->getThreadService()->searchPosts(
-                $conditions,
-                ['createdTime' => 'DESC'],
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-            $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-            $articles = $this->getArticleService()->findArticlesByIds(ArrayToolkit::column($reviews, 'targetId'));
-        }
+        $reviews = $this->getThreadService()->searchPosts(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $articles = $this->getArticleService()->findArticlesByIds(ArrayToolkit::column($reviews, 'targetId'));
 
         return $this->render('admin-v2/operating/article-review/index.html.twig', [
-            'reviews' => $reviews,
-            'articles' => $articles,
             'paginator' => $paginator,
+            'reviews' => $reviews,
             'users' => $users,
+            'articles' => $articles,
         ]);
     }
 
@@ -67,17 +59,14 @@ class ArticleReviewController extends BaseController
 
     protected function prepareConditions($conditions)
     {
+        $conditions['targetType'] = 'article';
         $conditions['parentId'] = 0;
         $conditions['threadId'] = 0;
 
         if (!empty($conditions['articleTitle'])) {
-            $articles = $this->getArticleService()->findArticleByLikeTitle(trim($conditions['articleTitle']));
+            $articles = $this->getArticleService()->findArticlesByLikeTitle(trim($conditions['articleTitle']));
             unset($conditions['articleTitle']);
-            $targetIds = ArrayToolkit::column($articles, 'id');
-            if (empty($targetIds)) {
-                return [];
-            }
-            $conditions['targetIds'] = ArrayToolkit::column($articles, 'id');
+            $conditions['targetIds'] = empty($articles) ? [-1] : ArrayToolkit::column($articles, 'id');
         }
 
         if (!empty($conditions['author'])) {
