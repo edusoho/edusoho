@@ -1,6 +1,8 @@
 <?php
 
+
 namespace Biz\WeChatNotification\Service\Impl;
+
 
 use Biz\BaseService;
 use Biz\WeChatNotification\Service\WeChatNotificationService;
@@ -15,7 +17,7 @@ class WeChatNotificationServiceImpl extends BaseService implements WeChatNotific
     {
         $options = [
             'createdTime' => $this->getLastCreatedTime(),
-            'page' => self::SYNCHRONIZE_RECORD_PAGE,
+            'page' => self::SYNCHRONIZE_RECORD_PAGE
         ];
 
 //        $SynchronizeRecords = $this->getSDKWeChatService()->getWechatSubscriptionRecords($options);
@@ -43,11 +45,13 @@ class WeChatNotificationServiceImpl extends BaseService implements WeChatNotific
             $batchUpdateHelper->add($createRecord);
         }
         $batchUpdateHelper->flush();
+
     }
+
 
     public function getLastCreatedTime()
     {
-        $lastRecord = $this->getWechatSubscribeRecordDao()->getLastRecord();
+        $lastRecord =  $this->getWechatSubscribeRecordDao()->getLastRecord();
 
         return $lastRecord ? $lastRecord['createdTime'] : '';
     }

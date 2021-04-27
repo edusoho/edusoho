@@ -1,6 +1,8 @@
 <?php
 
+
 namespace Biz\WeChatNotification\Job;
+
 
 use Biz\WeChatNotification\Service\WeChatNotificationService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
