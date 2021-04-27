@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Component\RateLimit;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\RateLimit\UgcReportRateLimiter;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\RateLimit\UgcReportRateLimiter;
+use Biz\BaseTestCase;
 
 class UgcReportRateLimiterTest extends BaseTestCase
 {
