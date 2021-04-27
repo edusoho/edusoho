@@ -19,7 +19,7 @@ class ArticleReviewController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount($conditions),
-            1
+            20
         );
 
         $reviews = $this->getThreadService()->searchPosts(
