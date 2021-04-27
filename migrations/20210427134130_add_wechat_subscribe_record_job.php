@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddWechatSubscribeRecordJob extends Migration
+class AddWeChatSubscribeRecordJob extends Migration
 {
     /**
      * Do the migration
@@ -27,9 +27,9 @@ class AddWechatSubscribeRecordJob extends Migration
               `created_time`
         ) VALUES
         (
-            'WechatSubscribeRecordSynJob',
+            'WeChatSubscribeRecordSynJob',
             '*/15 * * * *',
-            'Biz\\\\WeChatNotification\\\\Job\\\\WechatSubscribeRecordSynJob',
+            'Biz\\\\WeChatNotification\\\\Job\\\\WeChatSubscribeRecordSynJob',
             '',
             '100',
             '{$currentTime}',

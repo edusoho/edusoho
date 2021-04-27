@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class UpdateWechatSubscribeRecordJob extends Migration
+class UpdateWeChatSubscribeRecordJob extends Migration
 {
     /**
      * Do the migration
@@ -12,7 +12,7 @@ class UpdateWechatSubscribeRecordJob extends Migration
         $biz = $this->getContainer();
         $expression = rand(0, 15).'/15 * * * *';
         $biz['db']->exec("
-            UPDATE `biz_scheduler_job` SET expression = '{$expression}' WHERE name = 'WechatSubscribeRecordSynJob';
+            UPDATE `biz_scheduler_job` SET expression = '{$expression}' WHERE name = 'WeChatSubscribeRecordSynJob';
         ");
     }
 
@@ -23,7 +23,7 @@ class UpdateWechatSubscribeRecordJob extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            UPDATE `biz_scheduler_job` SET expression = '*/15 * * * *' WHERE name = 'WechatSubscribeRecordSynJob';
+            UPDATE `biz_scheduler_job` SET expression = '*/15 * * * *' WHERE name = 'WeChatSubscribeRecordSynJob';
         ");
     }
 }
