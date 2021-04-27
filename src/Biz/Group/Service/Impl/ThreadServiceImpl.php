@@ -82,11 +82,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if ($event->isPropagationStopped()) {
             $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
-
-        $thread['title'] = $this->sensitiveFilter($thread['title'], 'group-thread-create');
-        $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
         $thread['title'] = $this->purifyHtml($thread['title']);
         $thread['content'] = $this->purifyHtml($thread['content']);
+        $thread['title'] = $this->sensitiveFilter($thread['title'], 'group-thread-create');
+        $contentSensitiveCheck = $this->getSensitiveService()->sensitiveCheckResult($thread['content'], 'group-thread-create');
+        $thread['content'] = $contentSensitiveCheck['content'];
 
         if (empty($thread['groupId'])) {
             $this->createNewException(ThreadException::GROUPID_REQUIRED());
@@ -104,7 +104,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'threadNum', +1);
 
         $this->hideThings($thread['content'], $thread['id']);
-        $this->dispatchEvent('group.thread.create', $thread);
+        $this->dispatchEvent('group.thread.create', $thread, ['sensitiveResult' => $contentSensitiveCheck]);
 
         return $thread;
     }
@@ -274,17 +274,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::CONTENT_REQUIRED());
         }
 
-        $fields['title'] = $this->sensitiveFilter($fields['title'], 'group-thread-update');
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
-
         $this->getThreadGoodsDao()->deleteByThreadIdAndType($id, 'content');
         $this->hideThings($fields['content'], $id);
-
         $fields['title'] = $this->purifyHtml($fields['title']);
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['title'] = $this->sensitiveFilter($fields['title'], 'group-thread-update');
+        $contentSensitiveCheck = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'group-thread-update');
+        $fields['content'] = $contentSensitiveCheck['content'];
 
         $thread = $this->getThreadDao()->update($id, $fields);
-        $this->dispatchEvent('group.thread.update', $thread);
+        $this->dispatchEvent('group.thread.update', $thread, ['sensitiveResult' => $contentSensitiveCheck]);
 
         return $thread;
     }
@@ -317,8 +316,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
         $threadContent['content'] = $this->purifyHtml($threadContent['content']);
+        $sensitiveCheckResult = $this->getSensitiveService()->sensitiveCheckResult($threadContent['content'], 'group-thread-post-create');
+        $threadContent['content'] = $sensitiveCheckResult['content'];
         $threadContent['userId'] = $memberId;
         $threadContent['createdTime'] = time();
         $threadContent['threadId'] = $threadId;
@@ -334,7 +334,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->getThread($threadId);
 
-        $this->dispatchEvent('group.thread.post.create', $post);
+        $this->dispatchEvent('group.thread.post.create', $post, ['sensitiveResult' => $sensitiveCheckResult]);
 
         return $post;
     }
@@ -384,12 +384,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function updatePost($id, $fields)
     {
         if (!empty($fields['content'])) {
-            $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
-            $fields['content'] = $this > purifyHtml($fields['content']);
+            $fields['content'] = $this->purifyHtml($fields['content']);
+            $sensitiveCheckResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'group-thread-post-update');
+            $fields['content'] = $sensitiveCheckResult['content'];
         }
-
         $post = $this->getThreadPostDao()->update($id, $fields);
-        $this->dispatchEvent('group.thread.post.update', $post);
+        $this->dispatchEvent('group.thread.post.update', $post, ['sensitiveResult' => empty($sensitiveCheckResult) ? null : $sensitiveCheckResult]);
 
         return $post;
     }

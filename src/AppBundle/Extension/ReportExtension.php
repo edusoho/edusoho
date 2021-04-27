@@ -6,6 +6,7 @@ use Biz\AuditCenter\ReportSources\CommonReview;
 use Biz\AuditCenter\ReportSources\CourseNote;
 use Biz\AuditCenter\ReportSources\CourseThread;
 use Biz\AuditCenter\ReportSources\CourseThreadReply;
+use Biz\AuditCenter\ReportSources\ThreadPostReview;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -34,6 +35,8 @@ class ReportExtension extends Extension implements ServiceProviderInterface
             'course_question' => CourseThread::class,
             'course_thread_reply' => CourseThreadReply::class,
             'course_question_reply' => CourseThreadReply::class,
+            'article_review' => ThreadPostReview::class,
+            'open_course_review' => ThreadPostReview::class,
         ];
     }
 }

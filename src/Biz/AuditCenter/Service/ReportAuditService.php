@@ -7,7 +7,7 @@ interface ReportAuditService
     /**
      * 举报内容审核状态： 未审核
      */
-    const STATUS_NONE = 'none';
+    const STATUS_NONE = 'none_checked';
 
     /**
      * 举报内容审核状态： 审核为正常

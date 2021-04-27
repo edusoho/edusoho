@@ -1,5 +1,12 @@
 {% import "macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-subpost media user-id-{{author.id}} {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
+{% if post.targetType == 'article' %}
+  {% set reportType = 'article_review' %}
+{% elseif post.targetType == 'openCourse' %}
+  {% set reportType = 'open_course_review' %}
+{% else %}
+  {% set reportType = post.targetType %}
+{% endif %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-subpost media main_hover_item user-id-{{author.id}} {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
   data-author-name="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}">
   <div class="media-left">
     {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
@@ -15,7 +22,7 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}</div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}{% if app.user.isLogin() and app.user.id != post.userId and is_reported(reportType, post.id) %}<span style="color:red;">({{ '已举报'|trans }})</span>{% endif %}<span id="{{ 'js-thread-after-' ~ post.id }}" style="color:red;"></span></div>
     {% include 'thread/post-interaction.html.twig' %}
   </div>
 </li>

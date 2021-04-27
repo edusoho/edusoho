@@ -4,7 +4,15 @@ namespace Biz\AuditCenter\Service;
 
 interface ContentAuditService
 {
+    const AUDIT_STATUS_NONE_CHECKED = 'non_checked';
+
+    const AUDIT_STATUS_PASS = 'pass';
+
+    const AUDIT_STATUS_ILLEGAL = 'illegal';
+
     public function getAudit($id);
+
+    public function getAuditByTargetTypeAndTargetId($targetType, $targetId);
 
     public function searchAuditCount($conditions);
 

@@ -35,4 +35,9 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
             'orderbys' => ['id', 'createdTime'],
         ];
     }
+
+    public function getByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->getByFields(['targetType' => $targetType, 'targetId' => $targetId]);
+    }
 }
