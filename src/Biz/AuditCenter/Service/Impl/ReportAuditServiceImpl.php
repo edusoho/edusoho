@@ -228,10 +228,14 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'course_thread' => 7,
             'course_thread_reply' => 7,
             'classroom_thread' => 8,
+            'classroom_thread_reply' => 8,
             'group_thread' => 9,
             'course_question' => 10,
             'course_question_reply' => 10,
             'classroom_question' => 11,
+            'classroom_question_reply' => 11,
+            'classroom_event' => 12,
+            'classroom_event_reply' => 12,
         ];
 
         return $modules[$targetType];
