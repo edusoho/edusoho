@@ -86,7 +86,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $review = $this->getReviewDao()->update($id, $review);
 
-        $this->dispatchEvent('review.update', new Event($review));
+        $this->dispatchEvent('review.update', new Event($review, ['sensitiveResult' => $sensitiveResult]));
 
         return $review;
     }
