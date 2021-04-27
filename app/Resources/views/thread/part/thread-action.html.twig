@@ -1,4 +1,25 @@
 <div class="topic-action">
+  {% if thread.targetType == 'classroom' %}
+    {% if thread.type == 'discussion' %}
+      {% set reportType = 'classroom_thread' %}
+    {% elseif thread.type == 'question' %}
+      {% set reportType = 'classroom_question' %}
+    {% elseif thread.type == 'event' %}
+      {% set reportType = 'classroom_event' %}
+    {% else %}
+      {% set reportType = '' %}
+    {% endif %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+  {{ is_reported(reportType, thread.id) }}
+    {% if app.user.isLogin() and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
+      <a class="color-primary item-hover"
+         id="js-thread-modal-{{ thread.id }}"
+         href="#modal"
+         data-toggle="modal"
+         data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: thread.id, modalTarget: 'js-thread-modal-'~ thread.id, contentTarget: 'js-thread-after-' ~ thread.id }) }}"><i class="es-icon es-icon-warning"></i> 举报</a>
+    {% endif %}
     {% if service.canAccess('thread.update', thread) %}
       <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><i class="es-icon es-icon-edit"></i> {{'thread.edit_btn'|trans}}</a>
     {% endif %}

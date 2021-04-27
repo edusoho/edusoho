@@ -2,6 +2,19 @@
   {% set reportType = 'article_review' %}
 {% elseif post.targetType == 'openCourse' %}
   {% set reportType = 'open_course_review' %}
+{% elseif post.targetType == 'classroom' %}
+  {% set thread = get_classroom_thread(post.threadId) %}
+  {% if thread.type == 'discussion' %}
+    {% set reportType = 'classroom_thread_reply' %}
+  {% elseif thread.type == 'question' %}
+    {% set reportType = 'classroom_question_reply' %}
+  {% elseif thread.type == 'event' %}
+    {% set reportType = 'classroom_event_reply' %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+
+
 {% else %}
   {% set reportType = post.targetType %}
 {% endif %}
