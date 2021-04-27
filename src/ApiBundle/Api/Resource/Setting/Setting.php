@@ -20,7 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult',
+        'consult', 'wechat_message_subscribe', 'message_subscribe_template',
     ];
 
     public static function convertUnderline($str)
@@ -351,6 +351,22 @@ class Setting extends AbstractResource
         return $result;
     }
 
+    public function getWechatMessageSubscribe($request)
+    {
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+
+        return [
+            'enabled' => 'MessageSubscribe' == $wechatNotificationSetting['notification_type'],
+        ];
+    }
+
+    public function getMessageSubscribeTemplate($request)
+    {
+        $roles = $request->query->get('roles', '');
+
+        return $this->getMessageSubscribeTemplateIdByUserRole($roles);
+    }
+
     public function getWap($request = null)
     {
         $wapSetting = $this->getSettingService()->get('wap', ['version' => 0]);
@@ -586,6 +602,22 @@ class Setting extends AbstractResource
         return [
             'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
         ];
+    }
+
+    private function getMessageSubscribeTemplateIdByUserRole($userRole)
+    {
+        if (!in_array($userRole, ['teacher', 'student'])) {
+            throw new \InvalidArgumentException('user role error');
+        }
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $templateIds = [];
+        foreach ($wechatNotificationSetting['templates'] as $template) {
+            if ($template['role'] == $userRole) {
+                $templateIds[] = $template['templateId'];
+            }
+        }
+
+        return $templateIds;
     }
 
     private function getLoginConnect($clients)
