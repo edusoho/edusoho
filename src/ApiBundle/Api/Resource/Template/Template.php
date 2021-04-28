@@ -2,16 +2,12 @@
 
 namespace ApiBundle\Api\Resource\Template;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\SettingService;
 
 class Template extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=true)
-     */
     public function get(ApiRequest $request)
     {
         $role = $this->getCurrentUser()->getRoles();
