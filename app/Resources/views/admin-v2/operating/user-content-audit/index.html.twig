@@ -100,18 +100,18 @@
             {{ admin_macro.user_link(author)|default('') }}<br>
             <span class="text-muted">{{ audit.createdTime|date('Y-n-d H:i') }}</span>
           </td>
-          <td class="text-{{ audit.status }}">
+          <td class="text-{{ audit.status }}" align="center">
             {{ dict_text('userAuditStatus', audit.status) }}
-            {% if 'sysPass' == audit.status %}
+            {% if audit.auditor == '-1' %}
               <br/>
-              ({{ 'admin_v2.operation.user_content_audit_status.sys_pass_sub'|trans }})
+              ({{ '系统已审'|trans }})
             {% endif %}
           </td>
 
           <td>
-            {% if audit.auditor|default(null) is not null and audit.auditor|default(null) == 0 %}
+            {% if audit.auditor == '-1' %}
               {{ 'admin_v2.operation.user_content_audit.default_auditor'|trans }}
-            {% elseif audit.auditor|default(null) is not null %}
+            {% elseif audit.auditor != '0' %}
               {% set auditor = users[audit.auditor]|default([]) %}
               {{ admin_macro.user_link(auditor) }}<br>
             {% else %}
