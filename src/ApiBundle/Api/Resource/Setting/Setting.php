@@ -371,13 +371,6 @@ class Setting extends AbstractResource
         ];
     }
 
-    public function getMessageSubscribeTemplate($request)
-    {
-        $role = $this->getCurrentUser()->getRoles();
-
-        return $this->getMessageSubscribeTemplateCodesByUserRole($role);
-    }
-
     public function getWap($request = null)
     {
         $wapSetting = $this->getSettingService()->get('wap', ['version' => 0]);
@@ -613,33 +606,6 @@ class Setting extends AbstractResource
         return [
             'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
         ];
-    }
-
-    private function getMessageSubscribeTemplateCodesByUserRole($userRole)
-    {
-        $role = '';
-        if (in_array('ROLE_USER', $userRole)) {
-            $role = 'ROLE_USER';
-        }
-        if (in_array('ROLE_TEACHER', $userRole)) {
-            $role = 'ROLE_TEACHER';
-        }
-        if (!in_array($role, ['ROLE_USER', 'ROLE_TEACHER'])) {
-            throw new \InvalidArgumentException('user role error');
-        }
-        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
-
-        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
-            return [];
-        }
-        $templateCodes = [];
-        foreach ($wechatNotificationSetting['templates'] as $template) {
-            if ($template['role'] == $role) {
-                $templateCodes[] = $template['id'];
-            }
-        }
-
-        return $templateCodes;
     }
 
     private function getLoginConnect($clients)
