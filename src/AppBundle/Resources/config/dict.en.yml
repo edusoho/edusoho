@@ -546,7 +546,7 @@ userAuditStatus:
   pass: Pass
   illegal: Illegal
 
-containSensitiveWords:
+sensitiveWordsFilter:
   1: Contain Sensitive Words
   2: Not Contain Sensitive Words
 

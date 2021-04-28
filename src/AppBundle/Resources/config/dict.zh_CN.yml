@@ -609,7 +609,7 @@ selectUserAuditStatus:
   illegal: 违规
 
 #用户内容审核 敏感词
-containSensitiveWords:
+sensitiveWordsFilter:
   1: 含敏感词
   2: 不含敏感词
 

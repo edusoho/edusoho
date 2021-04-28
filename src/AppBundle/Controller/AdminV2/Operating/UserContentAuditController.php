@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\AuditCenter\Service\ContentAuditService;
-use Biz\Common\CommonException;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserContentAuditController extends BaseController
@@ -98,7 +97,11 @@ class UserContentAuditController extends BaseController
     {
         $conditions['minId'] = 0;
 
-        $statusAll = ['sysPass', 'none', 'pass', 'illegal'];
+        if ('sys_checked' === $conditions['status']) {
+            $conditions['auditor'] = -1;
+        }
+
+        $statusAll = ['none_checked', 'pass', 'illegal'];
 
         if (!empty($conditions['status']) && !in_array($conditions['status'], $statusAll)) {
             unset($conditions['status']);
@@ -126,7 +129,6 @@ class UserContentAuditController extends BaseController
                     $conditions['notContainSensitiveWords'] = 0;
                     break;
                 default:
-                    $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
                     break;
             }
             unset($conditions['sensitiveWordsFilter']);

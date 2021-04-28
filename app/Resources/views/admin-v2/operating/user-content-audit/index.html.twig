@@ -16,14 +16,13 @@
 
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ select_options(dict('userAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
+        {{ select_options(dict('selectUserAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
       </select>
     </div>
 
     <div class="form-group">
-      <select class="form-control" name="containSensitiveWords">
-        {{ select_options(dict('containSensitiveWords'), app.request.query.get('containSensitiveWords'), 'admin_v2.operation.user_content_audit_form.sensitive_words_filter_option'|trans) }}
-
+      <select class="form-control" name="sensitiveWordsFilter">
+        {{ select_options(dict('sensitiveWordsFilter'), app.request.query.get('sensitiveWordsFilter'), 'admin_v2.operation.user_content_audit_form.sensitive_words_filter_option'|trans) }}
       </select>
     </div>
 
