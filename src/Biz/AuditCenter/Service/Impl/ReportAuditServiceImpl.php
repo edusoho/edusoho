@@ -109,6 +109,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     {
         $fields = ArrayToolkit::parts($fields, [
             'reportTags',
+            'reportCount',
             'content',
             'auditor',
             'status',

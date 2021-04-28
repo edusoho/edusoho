@@ -8,6 +8,8 @@ use Biz\AuditCenter\Dao\ContentAuditRecordDao;
 use Biz\AuditCenter\Service\ContentAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
+use Biz\System\SettingNames;
 use InvalidArgumentException;
 
 class ContentAuditServiceImpl extends BaseService implements ContentAuditService
@@ -73,6 +75,16 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
         }
     }
 
+    public function getAuditSetting()
+    {
+        $setting = $this->getSettingService()->get(SettingNames::UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT, []);
+
+        return [
+            'mode' => empty($setting['mode']) ? 'audit_after' : $setting['mode'],
+            'enable_auto_audit' => empty($setting['enable_auto_audit']) ? 0 : 1,
+        ];
+    }
+
     protected function checkUserAuditStatus($status)
     {
         $confirmStatus = ['pass', 'illegal'];
@@ -119,7 +131,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
      */
     public function updateAudit($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'originStatus', 'auditTimed', 'sensitiveWords']);
+        $fields = ArrayToolkit::parts($fields, ['content', 'status', 'auditor', 'auditTime', 'sensitiveWords']);
 
         return $this->getContentAuditDao()->update($id, $fields);
     }
@@ -198,5 +210,13 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
     protected function getContentAuditRecordDao()
     {
         return $this->biz->dao('AuditCenter:ContentAuditRecordDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

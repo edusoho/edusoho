@@ -39,7 +39,9 @@ class ReportServiceImpl extends BaseService implements ReportService
             $data['auditId'] = $audit['id'];
             $data['content'] = $context['content'];
             $data['author'] = $context['author'];
+            $data['auditTime'] = time();
             $record = $this->getReportRecordService()->createReportRecord($data);
+            $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportCount' => $this->getReportRecordService()->searchReportRecordCount(['auditId' => $audit['id']])]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
