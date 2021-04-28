@@ -50,7 +50,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['2', '5', '15', '7'],
                'object' => '课程学员',
                'sceneDesc' => '订阅课程开课提醒',
-               'role' => 'student',
+               'role' => 'ROLE_USER',
                'status' => 0,
            ],
            self::TEMPLATE_HOMEWORK_RESULT => [
@@ -65,7 +65,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['2', '3', '8'],
                'object' => '作业提交学员',
                'sceneDesc' => '作业批改完成通知',
-               'role' => 'student',
+               'role' => 'ROLE_USER',
                'status' => 0,
            ],
            self::TEMPLATE_EXAM_RESULT => [
@@ -80,7 +80,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['1', '4', '6'],
                'object' => '试卷提交学员',
                'sceneDesc' => '考试成绩通知',
-               'role' => 'student',
+               'role' => 'ROLE_USER',
                'status' => 0,
            ],
            self::TEMPLATE_COURSE_UPDATE => [
@@ -98,7 +98,7 @@ class MessageSubscribeTemplateUtil
                'kidList' => ['1', '4', '2', '3'],
                'object' => '课程学员',
                'sceneDesc' => '课程更新通知',
-               'role' => 'student',
+               'role' => 'ROLE_USER',
                'status' => 0,
            ],
            self::TEMPLATE_VIP_EXPIRED => [
@@ -161,7 +161,7 @@ class MessageSubscribeTemplateUtil
                 'kidList' => ['4', '1', '2', '3'],
                 'object' => '课程/班级教师，助教，班主任',
                 'sceneDesc' => '学生提问提醒',
-                'role' => 'teacher',
+                'role' => 'ROLE_TEACHER',
                 'status' => 0,
             ],
             self::TEMPLATE_ANSWER_QUESTION => [

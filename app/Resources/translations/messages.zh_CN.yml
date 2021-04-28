@@ -10802,6 +10802,7 @@ wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.subscribe_scan_and_bind: 为享受更好的服务，扫码绑定微信并关注服务号。
 wechat.notification.record_content: 通知内容
 wechat.notification.wechat_record_content: 微信通知内容
 wechat.notification.sms_record_content: 短信通知内容

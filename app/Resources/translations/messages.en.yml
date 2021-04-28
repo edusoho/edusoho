@@ -9521,6 +9521,7 @@ wechat.notification.pay_success: Pay Success
 wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+wechat.notification.subscribe_scan_and_bind: In order to enjoy better service, scan the code to bind wechat and pay attention to the service number.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
 wechat.notification.record_content: Notification content
 wechat.notification.wechat_record_content: WeChat notification content
