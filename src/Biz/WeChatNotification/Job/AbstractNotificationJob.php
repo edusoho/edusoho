@@ -82,7 +82,7 @@ class AbstractNotificationJob extends AbstractJob
     {
         $biz = $this->biz;
 
-        return $biz['qiQiuYunSdk.notification'];
+        return $biz['ESCloudSdk.notification'];
     }
 
     /**

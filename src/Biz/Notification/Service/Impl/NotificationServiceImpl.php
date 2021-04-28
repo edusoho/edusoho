@@ -157,7 +157,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     protected function getSDKNotificationService()
     {
-        return $this->biz['qiQiuYunSdk.notification'];
+        return $this->biz['ESCloudSdk.notification'];
     }
 
     /**
