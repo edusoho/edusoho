@@ -359,12 +359,13 @@ class Setting extends AbstractResource
         if (empty($wechatSetting['wechat_notification_enabled'])) {
             $enable = false;
         }
-        if ( 'MessageSubscribe' != $wechatNotificationSetting['notification_type']) {
+        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type']) {
             $enable = false;
         }
-        if ( empty($wechatNotificationSetting['is_authorization'])) {
+        if (empty($wechatNotificationSetting['is_authorization'])) {
             $enable = false;
         }
+
         return [
             'enable' => $enable,
         ];
@@ -617,13 +618,13 @@ class Setting extends AbstractResource
     private function getMessageSubscribeTemplateCodesByUserRole($userRole)
     {
         $role = '';
-        if (in_array('ROLE_USER',$userRole)){
+        if (in_array('ROLE_USER', $userRole)) {
             $role = 'ROLE_USER';
         }
-        if (in_array('ROLE_TEACHER',$userRole)){
-            $role = 'ROLE_USER';
+        if (in_array('ROLE_TEACHER', $userRole)) {
+            $role = 'ROLE_TEACHER';
         }
-        if (!in_array($role, ['ROLE_USER', 'ROLE_USER'])) {
+        if (!in_array($role, ['ROLE_USER', 'ROLE_TEACHER'])) {
             throw new \InvalidArgumentException('user role error');
         }
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
