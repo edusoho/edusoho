@@ -28,8 +28,15 @@ class UgcReportRateLimiter extends AbstractRateLimiter implements RateLimiterInt
     {
         $user = $this->biz['user'];
         $udr = $this->userDayRateLimiter->check($user['id']);
-        $isLimitReach = $udr <= 0;
-        if ($isLimitReach) {
+
+        return $udr;
+    }
+
+    public function getAllow()
+    {
+        $user = $this->biz['user'];
+        $allow = $this->userDayRateLimiter->getAllow($user['id']);
+        if (!$allow) {
             throw $this->createUgcReportMaxRequestOccurException();
         }
     }
