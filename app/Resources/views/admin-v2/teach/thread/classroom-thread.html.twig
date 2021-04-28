@@ -58,12 +58,12 @@
               <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
             </td>
             <td>
-              {% if review.auditStatus|default('pass') == 'pass' %}
+              {% if thread.auditStatus|default('none_checked') == 'pass' %}
                 <span class="text-success">{{ '正常'|trans }}</span>
-              {% elseif review.auditStatus|default('pass') == 'illegal' %}
+              {% elseif thread.auditStatus|default('none_checked') == 'illegal' %}
                 <span class="text-danger">{{ '违规'|trans }}</span>
-              {% elseif review.auditStatus|default('pass') == 'sys_checked' %}
-                <span class="text-info">{{ '系统预审'|trans }}</span>
+              {% elseif thread.auditStatus|default('none_checked') == 'none_checked' %}
+                <span class="text-muted">{{ '未审核'|trans }}</span>
               {% endif %}
             </td>
             <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_v2_classroom_thread_delete', {threadId:thread.id}) }}">{{'form.btn.delete'|trans}}</button></td>
