@@ -200,7 +200,7 @@ class SystemCrontabInitializer
             ],
             'WechatSubscribeRecordSynJob' => [
                 'expression' => "{$convertStatusRandNum}/15 * * * *",
-                'class' => 'Biz\WeChatNotification\Job\WechatSubscribeRecordSynJob',
+                'class' => 'Biz\WeChat\Job\WechatSubscribeRecordSynJob',
             ],
 //            'StatisticsPageStayDailyDataJob' => [
 //                'expression' => '30 0 * * *',
