@@ -194,7 +194,7 @@ class NotificationServiceTest extends BaseTestCase
     public function testCreateWeChatNotificationRecord()
     {
         $data = ['first' => ['value' => 'testName']];
-        $result = $this->getNotificationService()->createWeChatNotificationRecord('testSn', 'liveOpen', $data);
+        $result = $this->getNotificationService()->createWeChatNotificationRecord('testSn', 'liveOpen', $data, 'wechat_template');
         $this->assertEquals('testSn', $result['sn']);
 
         $event = $this->getNotificationService()->getEvent($result['eventId']);
