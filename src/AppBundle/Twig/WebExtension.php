@@ -1916,23 +1916,22 @@ class WebExtension extends \Twig_Extension
     public function getArticleCategoryChoices()
     {
         $categories = $this->getArticleCategoryService()->getCategoryStructureTree();
-
+        $choices = [];
         if (empty($categories)){
-            return $categories;
+            return $choices;
         }
 
-        $choices = [];
+        return $this->getArticleCategoryTree([], $categories, -1);
+    }
+
+    public function getArticleCategoryTree($choices, $categories, $depth)
+    {
+        $depth++;
+        $indent = '　';
         foreach ($categories as $category){
-            $choices[$category['id']] = $category['name'];
+            $choices[$category['id']] = str_repeat($indent, $depth) . $category['name'];
             if (!empty($category['children'])){
-                foreach ($category['children'] as $categoryChildren){
-                    $choices[$categoryChildren['id']] = '　'.$categoryChildren['name'];
-                    if (!empty($categoryChildren['children'])){
-                        foreach ($categoryChildren['children'] as $value){
-                            $choices[$value['id']] = '　　'.$value['name'];
-                        }
-                    }
-                }
+                $choices = $this->getArticleCategoryTree($choices, $category['children'], $depth);
             }
         }
 
