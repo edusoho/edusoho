@@ -10,8 +10,6 @@ use ESCloud\SDK\Service\NotificationService;
 
 class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordService
 {
-    const SYNCHRONIZE_RECORD_PAGE = 10;
-
     public function synchronizeSubscriptionRecords()
     {
         $options = [
@@ -33,11 +31,13 @@ class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordS
             $batchUpdateHelper->add($createRecord);
         }
         $batchUpdateHelper->flush();
+
     }
+
 
     public function getLastCreatedTime()
     {
-        $lastRecord = $this->getSubscribeRecordDao()->getLastRecord();
+        $lastRecord =  $this->getSubscribeRecordDao()->getLastRecord();
 
         return $lastRecord ? $lastRecord['createdTime'] : 0;
     }
