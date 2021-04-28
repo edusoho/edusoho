@@ -555,3 +555,7 @@ certificateAuditSearchTypes:
     nickname: 用户名
     verifiedMobile: 手机号
     email: 邮箱
+
+WechatNotificationType:
+  serviceFollow: 服务号关注
+  MessageSubscribe: 消息订阅

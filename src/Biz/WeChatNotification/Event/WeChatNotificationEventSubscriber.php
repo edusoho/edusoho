@@ -376,7 +376,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $fields = $event->getSubject();
         $key = $event->getArgument('key');
-        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $notificationType = $event->getArgument('notificationType');
+        $settingName = 'wechat';
+
+        if ('MessageSubscribe' == $notificationType) {
+            $settingName = 'wechat_notification';
+        }
+        $wechatSetting = $this->getSettingService()->get($settingName, []);
         $templates = empty($wechatSetting['templates']) ? [] : $wechatSetting['templates'];
         if ('homeworkOrTestPaperReview' == $key) {
             $templates['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
@@ -776,7 +782,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.notification'];
+        return $biz['ESCloudSdk.notification'];
     }
 
     private function findTargetIdByOrderItem(array $orderItem)

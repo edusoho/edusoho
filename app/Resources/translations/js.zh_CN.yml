@@ -1412,6 +1412,7 @@ wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
 admin.wechat_notification.send_days: 发送日
+admin.wechat_notification.message_subscribe.disable_setting_tip: 请授权网站生成微信通知模板
 
 #试卷导入引导
 document.import.intro_hover: >
