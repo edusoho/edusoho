@@ -6,7 +6,6 @@ use AppBundle\Common\TimeMachine;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class UgcReportRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
 {
     /**

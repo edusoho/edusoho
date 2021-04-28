@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Component\RateLimit\RateLimitException;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\AuditCenter\Service\ReportService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Component\RateLimit\RateLimitException;
 
 class ReportController extends BaseController
 {
