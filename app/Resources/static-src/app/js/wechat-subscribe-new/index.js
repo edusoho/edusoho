@@ -64,6 +64,7 @@ function initWechatConfig() {
 const browser = navigator.userAgent.toLowerCase();
 
 if (browser.match(/MicroMessenger/i) == 'micromessenger') {
+  console.log('iswechat');
   $.ajax({
     url: '/api/settings/wechat_message_subscribe',
     type: 'GET',
