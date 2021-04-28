@@ -362,9 +362,9 @@ class Setting extends AbstractResource
 
     public function getMessageSubscribeTemplate($request)
     {
-        $roles = $request->query->get('roles', '');
+        $role = $request->query->get('role', '');
 
-        return $this->getMessageSubscribeTemplateIdByUserRole($roles);
+        return $this->getMessageSubscribeTemplateIdByUserRole($role);
     }
 
     public function getWap($request = null)
@@ -610,6 +610,7 @@ class Setting extends AbstractResource
             throw new \InvalidArgumentException('user role error');
         }
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        var_dump($wechatNotificationSetting['templates']);die;
         $templateIds = [];
         foreach ($wechatNotificationSetting['templates'] as $template) {
             if ($template['role'] == $userRole) {
