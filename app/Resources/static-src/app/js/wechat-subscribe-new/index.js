@@ -5,7 +5,7 @@ let $jweixin = $('.js-wechat-data');
 
 function initWechatSubscribe() {
   $.ajax({
-    url: '/api/template/template',
+    url: '/api/template',
     type: 'GET',
     headers:{
       'Accept':'application/vnd.edusoho.v2+json'
