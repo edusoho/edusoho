@@ -2,7 +2,7 @@
   <div
     v-if="supportWechatSubscribe"
     class="wechat-subscribe"
-    @click="clickSubscribe"
+    @click.native="clickSubscribe"
   >
     <div class="wechat-subscribe-guide">
       <img src="static/images/course_guide.png" alt="" />
@@ -98,6 +98,7 @@ export default {
 
     clickSubscribe() {
       if (this.firstSubscribe) this.firstSubscribe = false;
+      console.log('点击了');
     },
 
     firstWechatSubscribe() {
