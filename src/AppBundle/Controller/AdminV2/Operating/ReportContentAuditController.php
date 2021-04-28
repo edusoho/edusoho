@@ -6,6 +6,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\AuditCenter\Service\ReportService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReportContentAuditController extends BaseController
@@ -30,6 +31,11 @@ class ReportContentAuditController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        foreach ($reportAudits as &$reportAudit) {
+            $context = $this->getReportService()->getReportSourceContext($reportAudit['targetType'], $reportAudit['targetId']);
+            $reportAudit['content'] = empty($context['content']) ? $reportAudit['content'] : $context['content'];
+        }
 
         $userIds = array_merge(array_column($reportAudits, 'auditor'), array_column($reportAudits, 'author'));
         $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds));
@@ -106,5 +112,13 @@ class ReportContentAuditController extends BaseController
     protected function getReportRecordService()
     {
         return $this->createService('AuditCenter:ReportRecordService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->createService('AuditCenter:ReportService');
     }
 }

@@ -49,6 +49,13 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $record;
     }
 
+    public function getReportSourceContext($targetType, $targetId)
+    {
+        $source = $this->getReportSource($targetType);
+
+        return $source->getReportContext($targetId);
+    }
+
     /**
      * @param $targetType
      *
