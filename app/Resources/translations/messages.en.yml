@@ -9523,6 +9523,12 @@ wechat.notification.mobile_open_notification_tip: Long press the identification 
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
 wechat.notification.record_content: Notification content
+wechat.notification.wechat_record_content: WeChat notification content
+wechat.notification.sms_record_content: Text message notification content
+wechat.notification.wechat: WeChat
+wechat.notification.sms: Text message
+wechat.notification.record_send_number: receive/send
+wechat.notification.sms.record_send_number: send
 wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number

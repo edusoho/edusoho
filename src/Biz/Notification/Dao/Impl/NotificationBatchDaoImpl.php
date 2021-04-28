@@ -20,6 +20,7 @@ class NotificationBatchDaoImpl extends AdvancedDaoImpl implements NotificationBa
                 'sn = :sn',
                 'status = :status',
                 'strategyId = :strategyId',
+                'source = :source',
             ),
         );
     }

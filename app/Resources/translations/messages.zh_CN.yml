@@ -10803,6 +10803,12 @@ wechat.notification.open_notification_tip: 扫码关注服务号，即可接收�
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
 wechat.notification.record_content: 通知内容
+wechat.notification.wechat_record_content: 微信通知内容
+wechat.notification.sms_record_content: 短信通知内容
+wechat.notification.wechat: 微信
+wechat.notification.sms: 短信
+wechat.notification.record_send_number: 接收/发送
+wechat.notification.sms.record_send_number: 发送
 wechat.notification.record_send_time: 发送时间
 wechat.notification.record_send_status: 发送状态
 wechat.notification.record_number: 接收/发送人数

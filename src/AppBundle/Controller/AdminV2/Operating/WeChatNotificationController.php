@@ -47,13 +47,18 @@ class WeChatNotificationController extends BaseController
 
     public function indexAction(Request $request)
     {
+        $notificationMode = $this->getSettingService()->get('wechat_notification', []);
+        $mode = empty($notificationMode) || $notificationMode['notification_type'] != 'MessageSubscribe' ? 'wechat_template' : 'wechat_subscribe';
+        $conditions = [
+            'source' => $mode,
+        ];
         $paginator = new Paginator(
             $request,
-            $this->getNotificationService()->countBatches([]),
+            $this->getNotificationService()->countBatches($conditions),
             20
         );
         $notifications = $this->getNotificationService()->searchBatches(
-            [],
+            $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -64,20 +69,35 @@ class WeChatNotificationController extends BaseController
         $this->getNotificationService()->batchHandleNotificationResults($notifications);
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
         $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
+        $smsNotificationEvents = $this->getNotificationService()->findEventsByIds(array_column($notifications, 'smsEventId'));
+        $smsNotificationEvents = ArrayToolkit::index($smsNotificationEvents, 'id');
 
-        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
+        if ('wechat_template' == $mode) {
+            return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
+                'notifications' => $notifications,
+                'notificationEvents' => $notificationEvents,
+                'smsNotificationEvents' => $smsNotificationEvents,
+                'paginator' => $paginator,
+            ]);
+        }
+
+        return $this->render('admin-v2/operating/wechat-notification/subscribe-record.html.twig', [
             'notifications' => $notifications,
             'notificationEvents' => $notificationEvents,
+            'smsNotificationEvents' => $smsNotificationEvents,
             'paginator' => $paginator,
         ]);
     }
 
     public function recordDetailAction(Request $request, $id)
     {
+        $notificationMode = $this->getSettingService()->get('wechat_notification', []);
+        $mode = empty($notificationMode) || $notificationMode['notification_type'] != 'MessageSubscribe' ? 'wechat_template' : 'wechat_subscribe';
         $notification = $this->getNotificationService()->getEvent($id);
 
         return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [
             'notification' => $notification,
+            'mode' => $mode,
         ]);
     }
 
