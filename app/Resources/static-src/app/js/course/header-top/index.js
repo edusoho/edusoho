@@ -1,5 +1,8 @@
 import 'app/common/widget/qrcode';
 import Api from 'common/api';
+import 'store';
+
+const WECHAT_SUBSCRIBE_INTRO = 'WECHAT_SUBSCRIBE_INTRO';
 
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
@@ -75,3 +78,24 @@ const fixButtonPosition = () => {
 $(document).ready(() => {
   fixButtonPosition();
 });
+
+const wechatIntro = () => {
+  introJs().setOptions({
+    steps: [{
+      element: '.js-es-course-qrcode',
+      intro: Translator.trans('course.intro.wechat_subscribe'),
+    }],
+    doneLabel: '确认',
+    showBullets: false,
+    showStepNumbers: false,
+    exitOnEsc: false,
+    exitOnOverlayClick: false,
+    tooltipClass: 'es-course-qrcode-intro',
+  }).start();
+}
+
+var $notificationEnable = $('#wechat_notification_type').val();
+if ($notificationEnable == 'MessageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INTRO)) {
+  store.set(WECHAT_SUBSCRIBE_INTRO, true);
+  wechatIntro();
+}
