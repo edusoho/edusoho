@@ -14,12 +14,11 @@ function initWechatSubscribe() {
       request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
     },
   }).success(function (res) {
-    $('#subscribe-btn').attr('template', res);
     const template = 
     `
     <i class="es-icon es-icon-share"></i>
     <br>
-    <wx-open-subscribe class="js-subscribe-btn" template=${res} id="subscribe-btn">
+    <wx-open-subscribe template="${res}" id="subscribe-btn">
       <template slot="style">
         <style>
           .subscribe-btn {
