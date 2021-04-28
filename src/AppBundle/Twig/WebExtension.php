@@ -147,6 +147,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('build_category_choices', [$this, 'buildCategoryChoices']),
             new \Twig_SimpleFunction('question_category_choices', [$this, 'getQuestionCategoryChoices']),
             new \Twig_SimpleFunction('item_category_choices', [$this, 'getItemCategoryChoices']),
+            new \Twig_SimpleFunction('article_category_choices', [$this, 'getArticleCategoryChoices']),
             new \Twig_SimpleFunction('upload_max_filesize', [$this, 'getUploadMaxFilesize']),
             new \Twig_SimpleFunction('js_paths', [$this, 'getJsPaths']),
             new \Twig_SimpleFunction('is_plugin_installed', [$this, 'isPluginInstalled']),
@@ -1910,6 +1911,39 @@ class WebExtension extends \Twig_Extension
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();
+    }
+
+    public function getArticleCategoryChoices()
+    {
+        $categories = $this->getArticleCategoryService()->getCategoryStructureTree();
+        $choices = [];
+        if (empty($categories)){
+            return $choices;
+        }
+
+        return $this->getArticleCategoryTree([], $categories, -1);
+    }
+
+    public function getArticleCategoryTree($choices, $categories, $depth)
+    {
+        $depth++;
+        $indent = '　';
+        foreach ($categories as $category){
+            $choices[$category['id']] = str_repeat($indent, $depth) . $category['name'];
+            if (!empty($category['children'])){
+                $choices = $this->getArticleCategoryTree($choices, $category['children'], $depth);
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @return \Biz\Article\Service\CategoryService
+     */
+    protected function getArticleCategoryService()
+    {
+        return $this->createService('Article:CategoryService');
     }
 
     public function getNextExecutedTime()
