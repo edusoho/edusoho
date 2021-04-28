@@ -9035,6 +9035,7 @@ exception.thread.not_found_member: Member does not exist
 exception.thread.access_denied: The permission or resource cannot be accessed
 exception.rate_limit_max_attempt_reach: Too many requests are sent, please try later!
 exception.rate_limit_email_max_attempt_reach: The delivery limit has been exceeded and try again after 1 hour!
+exception.rate_limit_ugc_report_max_attempt_reach: The report times has been exceeded, please try after 1 day!
 exception.rate_limit_error_captcha: Graphic verification code error!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!

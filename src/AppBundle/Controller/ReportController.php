@@ -6,6 +6,7 @@ use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\AuditCenter\Service\ReportService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Component\RateLimit\RateLimitException;
 
 class ReportController extends BaseController
 {
@@ -24,12 +25,22 @@ class ReportController extends BaseController
 
     public function tagsModalAction(Request $request, $targetType, $targetId)
     {
-        return $this->render('report/tags-modal.html.twig', [
-            'contentTarget' => $request->query->get('contentTarget', ''),
-            'modalTarget' => $request->query->get('modalTarget', ''),
-            'targetType' => $targetType,
-            'targetId' => $targetId,
-        ]);
+        try {
+            $biz = $this->getBiz();
+            $rateLimiter = $biz['ugc_report_rate_limiter'];
+            $rateLimiter->handle($request);
+
+            return $this->render('report/tags-modal.html.twig', [
+                'contentTarget' => $request->query->get('contentTarget', ''),
+                'modalTarget' => $request->query->get('modalTarget', ''),
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+            ]);
+        } catch (RateLimitException $e) {
+            return $this->render('report/rate-limit-modal.html.twig', [
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
