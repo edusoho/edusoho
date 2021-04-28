@@ -76,12 +76,12 @@
               <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
             </td>
             <td>
-              {% if review.auditStatus|default('pass') == 'pass' %}
+              {% if review.auditStatus|default('none_checked') == 'pass' %}
                 <span class="text-success">{{ '正常'|trans }}</span>
-              {% elseif review.auditStatus|default('pass') == 'illegal' %}
+              {% elseif review.auditStatus|default('none_checked') == 'illegal' %}
                 <span class="text-danger">{{ '违规'|trans }}</span>
-              {% elseif review.auditStatus|default('pass') == 'sys_checked' %}
-                <span class="text-info">{{ '系统预审'|trans }}</span>
+              {% elseif review.auditStatus|default('none_checked') == 'none_checked' %}
+                <span class="text-muted">{{ '未审核'|trans }}</span>
               {% endif %}
             </td>
             <td>

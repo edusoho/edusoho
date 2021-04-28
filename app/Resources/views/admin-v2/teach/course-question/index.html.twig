@@ -102,12 +102,12 @@
               {{ question.createdTime|date('Y-n-d H:i:s') }}
             </td>
             <td>
-              {% if question.auditStatus|default('pass') == 'pass' %}
+              {% if question.auditStatus|default('none_checked') == 'pass' %}
                 <span class="text-success">{{ '正常'|trans }}</span>
-              {% elseif question.auditStatus|default('pass') == 'illegal' %}
+              {% elseif question.auditStatus|default('none_checked') == 'illegal' %}
                 <span class="text-danger">{{ '违规'|trans }}</span>
-              {% elseif question.auditStatus|default('pass') == 'sys_checked' %}
-                <span class="text-info">{{ '系统预审'|trans }}</span>
+              {% elseif question.auditStatus|default('none_checked') == 'none_checked' %}
+                <span class="text-muted">{{ '未审核'|trans }}</span>
               {% endif %}
             </td>
             <td>

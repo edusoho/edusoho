@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\AuditCenterException;
 use Biz\AuditCenter\Dao\ReportAuditDao;
 use Biz\AuditCenter\Dao\ReportAuditRecordDao;
+use Biz\AuditCenter\ReportSources\AbstractSource;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -45,6 +46,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
             'auditor' => $this->getCurrentUser()->getId(),
             'auditTime' => time(),
         ]);
+        $this->getReportSource($reportAudit['targetType'])->handleSource($reportAudit);
 
         $this->createReportAuditRecord($this->prepareReportAuditRecord($originReportAudit, $reportAudit));
 
@@ -264,5 +266,18 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @param $targetType
+     *
+     * @return AbstractSource
+     */
+    private function getReportSource($targetType)
+    {
+        global $kernel;
+        $reportSources = $kernel->getContainer()->get('extension.manager')->getReportSources();
+
+        return new $reportSources[$targetType]($this->biz);
     }
 }

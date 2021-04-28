@@ -17,7 +17,7 @@ class ReportContentAuditController extends BaseController
         $conditions = array_merge([
             'targetType' => '',
             'reportTag' => '',
-            'status' => 'none',
+            'status' => 'none_checked',
         ], $request->query->all());
 
         $paginator = new Paginator(
