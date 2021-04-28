@@ -31,13 +31,18 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createBatch($batch)
     {
-        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId'])) {
+        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId']);
+        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source']);
 
         return $this->getNotificationBatchDao()->create($batch);
+    }
+
+    public function updateBatch($id, $fields)
+    {
+        return $this->getNotificationBatchDao()->update($id, $fields);
     }
 
     public function getEvent($id)
@@ -98,7 +103,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $this->batchUpdateRecord($batchs, $cloudRecords);
     }
 
-    public function createWeChatNotificationRecord($sn, $key, $data)
+    public function createWeChatNotificationRecord($sn, $key, $data, $source)
     {
         global $kernel;
         $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
@@ -122,9 +127,33 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'strategyId' => $strategy['id'],
             'sn' => $sn,
             'status' => 'created',
+            'source' => $source,
         ];
 
         return $this->createBatch($batch);
+    }
+
+    public function createSmsNotificationRecord($batchId, $data, $smsParams)
+    {
+        global $kernel;
+        $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
+        $template = $templates[$smsParams['key']];
+        $content = $this->spliceContent($template['smsDetail'][$smsParams['smsTemplateId']], $data);
+        $event = [
+            'title' => $this->trans($template['name']),
+            'content' => $content,
+            'totalCount' => $smsParams['sendNum'],
+            'status' => 'sending',
+        ];
+        $event = $this->createEvent($event);
+        $strategy = [
+            'eventId' => $event['id'],
+            'type' => 'sms',
+            'seq' => 1,
+        ];
+        $strategy = $this->createStrategy($strategy);
+
+        return $this->updateBatch($batchId, ['smsEventId' => $event['id']]);
     }
 
     protected function spliceContent($content, $data)
