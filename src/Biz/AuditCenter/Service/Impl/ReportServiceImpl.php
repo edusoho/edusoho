@@ -26,6 +26,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                     'author' => $context['author'],
                     'reportTags' => $data['reportTags'],
                     'content' => $context['content'],
+                    'status' => 'none_checked',
                 ];
                 $audit = $this->getReportAuditService()->createReportAudit($auditInfo);
             } else {
@@ -41,7 +42,9 @@ class ReportServiceImpl extends BaseService implements ReportService
             $data['author'] = $context['author'];
             $data['auditTime'] = time();
             $record = $this->getReportRecordService()->createReportRecord($data);
-            $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportCount' => $this->getReportRecordService()->searchReportRecordCount(['auditId' => $audit['id']])]);
+            $reportCount = $this->getReportRecordService()->searchReportRecordCount(['auditId' => $audit['id']]);
+            $status = ($reportCount >= 20 && 'none_checked' === $audit['status']) ? 'illegal' : $audit['status'];
+            $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportCount' => $reportCount, 'status' => $status]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
