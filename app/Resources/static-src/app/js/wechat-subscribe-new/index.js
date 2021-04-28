@@ -3,6 +3,27 @@ import notify from 'common/notify';
 
 let $jweixin = $('.js-wechat-data');
 
+if (isWechatBrowser()) {
+  console.log('iswechat');
+  $.ajax({
+    url: '/api/settings/wechat_message_subscribe',
+    type: 'GET',
+    headers:{
+      'Accept':'application/vnd.edusoho.v2+json'
+    }
+  }).success(function (res) {
+    if (res.enable) {
+      initWechatSubscribe();
+    }
+  });
+};
+
+// 判断是不是微信环境
+function isWechatBrowser() {
+  const browser = navigator.userAgent.toLowerCase();
+  return browser.match(/MicroMessenger/i) == 'micromessenger';
+}
+
 function initWechatSubscribe() {
   $.ajax({
     url: '/api/template',
@@ -41,6 +62,7 @@ function initWechatSubscribe() {
   });
 }
 
+
 function initWechatConfig() {
   wx.config($jweixin.data('config'));
 
@@ -61,21 +83,3 @@ function initWechatConfig() {
     });
   });
 }
-
-// 判断是不是微信环境
-const browser = navigator.userAgent.toLowerCase();
-
-if (browser.match(/MicroMessenger/i) == 'micromessenger') {
-  console.log('iswechat');
-  $.ajax({
-    url: '/api/settings/wechat_message_subscribe',
-    type: 'GET',
-    headers:{
-      'Accept':'application/vnd.edusoho.v2+json'
-    }
-  }).success(function (res) {
-    if (res.enable) {
-      initWechatSubscribe();
-    }
-  });
-};
