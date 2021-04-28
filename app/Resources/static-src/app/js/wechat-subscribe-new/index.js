@@ -14,6 +14,8 @@ function initWechatSubscribe() {
       request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
     },
   }).success(function (res) {
+    if (!res) return;
+
     const template = 
     `
     <i class="es-icon es-icon-share"></i>
