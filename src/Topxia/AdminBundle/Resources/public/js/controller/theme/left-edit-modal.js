@@ -22,7 +22,7 @@ define(function(require, exports, module) {
       $('[name="vipOrder"]').on('change', function () {
         $.get($table.data('url'), {seq:$(this).val()}, function (res) {
             $table.find('tr').remove();
-            for (let i = 0; i < res.length; i++) {
+            for (var i = 0; i < res.length; i++) {
               $table.append('<tr style="border-top: 1px solid #ddd;"><td style="padding: 10px 0 10px 5px">'+res[i].name+'</td></tr>');
             }
         })
@@ -37,13 +37,13 @@ define(function(require, exports, module) {
       });
 
       $('#addCategory').on('click', function (event) {
-        let selectCount = $('#categories').children('select').length;
+        var selectCount = $('#categories').children('select').length;
         if (selectCount >= 4){
           $('.categoriesTip').removeClass('hidden');
           return;
         }
-        let categoryChoices = JSON.parse($('#categoryChoices').val());
-        let html = '<select class="form-control width-input-large pull-left" name="categoryIds[][categoryId]" style="margin-top: 12px">\n <option value=""></option>';
+        var categoryChoices = JSON.parse($('#categoryChoices').val());
+        var html = '<select class="form-control width-input-large pull-left" name="categoryIds[][categoryId]" style="margin-top: 12px">\n <option value=""></option>';
         for (var categoryId in categoryChoices) {
           html += '<option value="' + categoryId + '">' + categoryChoices[categoryId] + '</option>';
         }
