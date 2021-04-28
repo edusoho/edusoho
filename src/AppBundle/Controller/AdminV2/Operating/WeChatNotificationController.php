@@ -48,7 +48,7 @@ class WeChatNotificationController extends BaseController
     public function indexAction(Request $request)
     {
         $notificationMode = $this->getSettingService()->get('wechat_notification', []);
-        $mode = empty($notificationMode) || $notificationMode['notification_type'] != 'MessageSubscribe' ? 'wechat_template' : 'wechat_subscribe';
+        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $conditions = [
             'source' => $mode,
         ];
@@ -92,7 +92,7 @@ class WeChatNotificationController extends BaseController
     public function recordDetailAction(Request $request, $id)
     {
         $notificationMode = $this->getSettingService()->get('wechat_notification', []);
-        $mode = empty($notificationMode) || $notificationMode['notification_type'] != 'MessageSubscribe' ? 'wechat_template' : 'wechat_subscribe';
+        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $notification = $this->getNotificationService()->getEvent($id);
 
         return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [

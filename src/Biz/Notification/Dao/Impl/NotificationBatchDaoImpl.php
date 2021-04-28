@@ -11,17 +11,17 @@ class NotificationBatchDaoImpl extends AdvancedDaoImpl implements NotificationBa
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('id', 'createdTime', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['id', 'createdTime', 'updatedTime'],
+            'conditions' => [
                 'id = :id',
                 'eventId = :eventId',
                 'sn = :sn',
                 'status = :status',
                 'strategyId = :strategyId',
                 'source = :source',
-            ),
-        );
+            ],
+        ];
     }
 }
