@@ -20,6 +20,10 @@ class ReportController extends BaseController
         ];
         $this->getReportService()->submit($targetType, $targetId, $data);
 
+        $biz = $this->getBiz();
+        $rateLimiter = $biz['ugc_report_rate_limiter'];
+        $rateLimiter->handle($request);
+
         return $this->createJsonResponse(true);
     }
 
@@ -28,7 +32,7 @@ class ReportController extends BaseController
         try {
             $biz = $this->getBiz();
             $rateLimiter = $biz['ugc_report_rate_limiter'];
-            $rateLimiter->handle($request);
+            $rateLimiter->getAllow();
 
             return $this->render('report/tags-modal.html.twig', [
                 'contentTarget' => $request->query->get('contentTarget', ''),
