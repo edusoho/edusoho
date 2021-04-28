@@ -59,13 +59,15 @@ export default {
       const { enable } = await Api.wechatSubscribe();
       if (!enable) return;
 
+      this.templateId = await Api.wechatTemplate();
+      if (!this.templateId) {
+        console.log('template 为空');
+        return;
+      }
+
       const params = {
         url: window.location.href.split('#')[0],
       };
-
-      Api.wechatTemplate().then(res => {
-        this.templateId = res;
-      });
 
       Api.wechatJsSdkConfig({ params }).then(res => {
         wx.config({
