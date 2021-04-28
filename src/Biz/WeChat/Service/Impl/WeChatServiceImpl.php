@@ -37,7 +37,6 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function saveWeChatTemplateSetting($key, $fields, $notificationType)
     {
         $settingName = 'wechat';
-
         if ('MessageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
         }
@@ -48,6 +47,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $fields['scenes'] = empty($fields['scenes']) ? [] : $fields['scenes'];
         $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
+
         $this->getSettingService()->set($settingName, $wechatSetting);
         $this->dispatchEvent('wechat.template_setting.save', new Event($fields, ['key' => $key, 'wechatSetting' => $wechatSetting, 'notificationType' => $notificationType]));
 
@@ -385,6 +385,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 if (40220005 == $e->getCode()) {
                     $this->createNewException(WeChatException::TEMPLATE_EXCEEDS_LIMIT());
                 }
+
                 if (40220007 == $e->getCode()) {
                     $this->createNewException(WeChatException::TEMPLATE_CONFLICT_INDUSTRY());
                 }
@@ -466,7 +467,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
                 $biz['ESCloudSdk.notification']->openAccount();
-                $result = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, array(
+                $result = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, [
                     'app_id' => $loginConnect['weixinmob_key'],
                     'app_secret' => $loginConnect['weixinmob_secret'],
                 ]);
@@ -601,6 +602,6 @@ class WeChatServiceImpl extends BaseService implements WeChatService
      */
     protected function getSDKWeChatService()
     {
-        return $this->biz['qiQiuYunSdk.wechat'];
+        return $this->biz['ESCloudSdk.wechat'];
     }
 }
