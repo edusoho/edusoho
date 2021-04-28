@@ -93,7 +93,7 @@ class MessageSubscribeTemplateUtil
                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
                'smsDetail' => [
                    SmsType::LIVE_NOTIFY => '{{course_title.DATA}}－{{lesson_title.DATA}}将在{{startTime.DATA}}开播！{{url.DATA}}',
-                   SmsType::TASK_PUBLISH => '您的{{course_title.DATA}}－{{lesson_title.DATA}}已发布！{{url.DATA}}'
+                   SmsType::TASK_PUBLISH => '您的{{course_title.DATA}}－{{lesson_title.DATA}}已发布！{{url.DATA}}',
                ],
                'kidList' => ['1', '4', '2', '3'],
                'object' => '课程学员',
@@ -108,7 +108,7 @@ class MessageSubscribeTemplateUtil
                'sms_content' => 'wechat.notification.template.vip_expired',
                'rule' => 'wechat.notification.template.vip_expired.rule',
                'smsDetail' => [
-                   SmsType::VIP_EXPIRED => '亲爱的学员，您购买的会员即将到期<br> 开通时间：{{startTime.DATA}}<br> 到期时间：{{endTime.DATA}}<br> 请及时续费，以免影响您的学习'
+                   SmsType::VIP_EXPIRED => '亲爱的学员，您购买的会员即将到期<br> 开通时间：{{startTime.DATA}}<br> 到期时间：{{endTime.DATA}}<br> 请及时续费，以免影响您的学习',
                ],
                'detail' => '',
                'object' => '单个用户',
@@ -124,7 +124,7 @@ class MessageSubscribeTemplateUtil
                 'sms_content' => 'wechat.notification.template.homework_or_testpaper_need_review',
                 'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
                 'smsDetail' => [
-                    SmsType::REVIEW_NOTIFY => '尊敬的老师，您今日仍有作业/试卷未批改<br> 时间：{{day.DATA}}<br> 数目：{{num.DATA}}<br> 请及时批改。'
+                    SmsType::REVIEW_NOTIFY => '尊敬的老师，您今日仍有作业/试卷未批改<br> 时间：{{day.DATA}}<br> 数目：{{num.DATA}}<br> 请及时批改。',
                 ],
                 'detail' => '',
                 'object' => '课程教师',
@@ -140,7 +140,7 @@ class MessageSubscribeTemplateUtil
                'sms_content' => 'wechat.notification.template.remind_course',
                'rule' => 'wechat.notification.template.remind_course.rule',
                'smsDetail' => [
-                   SmsType::STUDY_NOTIFY => '今日也要坚持学习哦<br> 课程：{{title.DATA}}<br> 时间：{{day.DATA}}<br> 学习进度：{{progress.DATA}}'
+                   SmsType::STUDY_NOTIFY => '今日也要坚持学习哦<br> 课程：{{title.DATA}}<br> 时间：{{day.DATA}}<br> 学习进度：{{progress.DATA}}',
                ],
                'detail' => '',
                'object' => '课程学员',
@@ -156,7 +156,7 @@ class MessageSubscribeTemplateUtil
                 'rule' => 'wechat.notification.template.ask_question.rule',
                 'detail' => '{{first.DATA}}<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'smsDetail' => [
-                    SmsType::ANSWER_QUESTION_NOTIFY => '尊敬的老师，《{{title.DATA}}》中有学员提问<br> 申请人：{{user.DATA}}<br> 问题内容：{{question.DATA}}<br> 时间：{{time.DATA}}'
+                    SmsType::ANSWER_QUESTION_NOTIFY => '尊敬的老师，《{{title.DATA}}》中有学员提问<br> 申请人：{{user.DATA}}<br> 问题内容：{{question.DATA}}<br> 时间：{{time.DATA}}',
                 ],
                 'kidList' => ['4', '1', '2', '3'],
                 'object' => '课程/班级教师，助教，班主任',
@@ -171,7 +171,7 @@ class MessageSubscribeTemplateUtil
                 'sms_content' => 'wechat.notification.template.answer_question',
                 'rule' => 'wechat.notification.template.answer_question.rule',
                 'smsDetail' => [
-                    SmsType::QUESTION_ANSWER_NOTIFY => '您在{{title.DATA}}中的发表的问题有了新的回答。<br> 提问时间：{{day.DATA}}<br> 回复内容：{{content.DATA}}'
+                    SmsType::QUESTION_ANSWER_NOTIFY => '您在{{title.DATA}}中的发表的问题有了新的回答。<br> 提问时间：{{day.DATA}}<br> 回复内容：{{content.DATA}}',
                 ],
                 'detail' => '',
                 'object' => '提问者',
@@ -185,7 +185,7 @@ class MessageSubscribeTemplateUtil
                 'sms_content' => 'wechat.notification.template.charge_success',
                 'rule' => 'wechat.notification.template.charge_success.rule',
                 'smsDetail' => [
-                    SmsType::BUY_NOTIFY => '你已成功{{order_title.DATA}}，支付{{totalPrice.DATA}}'
+                    SmsType::BUY_NOTIFY => '你已成功{{order_title.DATA}}，支付{{totalPrice.DATA}}',
                 ],
                 'detail' => '',
                 'object' => '购买者',
@@ -199,7 +199,7 @@ class MessageSubscribeTemplateUtil
                 'sms_content' => 'wechat.notification.template.buy_success',
                 'rule' => 'wechat.notification.template.buy_success.rule',
                 'smsDetail' => [
-                    SmsType::BUY_NOTIFY => '你已成功{{order_title.DATA}}，支付{{totalPrice.DATA}}'
+                    SmsType::BUY_NOTIFY => '你已成功{{order_title.DATA}}，支付{{totalPrice.DATA}}',
                 ],
                 'detail' => '',
                 'object' => '购买者',

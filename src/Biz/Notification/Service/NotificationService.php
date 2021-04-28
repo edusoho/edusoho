@@ -4,7 +4,7 @@ namespace Biz\Notification\Service;
 
 interface NotificationService
 {
-    public function searchBatches($conditions, $orderbys, $start, $limit, $columns = array());
+    public function searchBatches($conditions, $orderbys, $start, $limit, $columns = []);
 
     public function countBatches($conditions);
 
