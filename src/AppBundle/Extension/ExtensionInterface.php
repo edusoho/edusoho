@@ -21,4 +21,6 @@ interface ExtensionInterface
     public function getFavoriteTypes();
 
     public function getReportSources();
+
+    public function getContentAuditSources();
 }

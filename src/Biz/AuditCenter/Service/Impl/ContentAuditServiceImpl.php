@@ -3,6 +3,7 @@
 namespace Biz\AuditCenter\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\AuditCenter\ContentAuditSources\AbstractSource;
 use Biz\AuditCenter\Dao\ContentAuditDao;
 use Biz\AuditCenter\Dao\ContentAuditRecordDao;
 use Biz\AuditCenter\Service\ContentAuditService;
@@ -10,6 +11,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingNames;
+use Codeages\Biz\Framework\Event\Event;
 use InvalidArgumentException;
 
 class ContentAuditServiceImpl extends BaseService implements ContentAuditService
@@ -52,7 +54,13 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
             'auditor' => $auditor,
         ];
 
-        return $this->getContentAuditDao()->update($id, $confirmFields);
+        $audit = $this->getContentAuditDao()->update($id, $confirmFields);
+
+        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+
+        $this->dispatchEvent('content.audit', new Event($audit, []));
+
+        return $audit;
     }
 
     public function batchConfirmUserAuditByIds($ids, $status, $auditor)
@@ -218,5 +226,18 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @param $targetType
+     *
+     * @return AbstractSource
+     */
+    private function getContentAuditSource($targetType)
+    {
+        global $kernel;
+        $reportSources = $kernel->getContainer()->get('extension.manager')->getContentAuditSources();
+
+        return new $reportSources[$targetType]($this->biz);
     }
 }
