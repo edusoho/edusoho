@@ -25,7 +25,7 @@ class QiQiuYunSdkProxyServiceImpl extends BaseService
      */
     protected function getNotificationService()
     {
-        return $this->biz['qiQiuYunSdk.notification'];
+        return $this->biz['ESCloudSdk.notification'];
     }
 
     /**

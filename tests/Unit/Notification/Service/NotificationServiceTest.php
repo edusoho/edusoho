@@ -169,7 +169,7 @@ class NotificationServiceTest extends BaseTestCase
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $exception = new \Exception();
         $mockNotificationService->shouldReceive('batchGetNotifications')->andThrow($exception);
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $this->getNotificationService()->batchHandleNotificationResults($batches);
     }
@@ -185,7 +185,7 @@ class NotificationServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('batchGetNotifications')->andReturn(array('data' => ''));
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getNotificationService()->batchHandleNotificationResults($batches);
         $this->assertEmpty($result);

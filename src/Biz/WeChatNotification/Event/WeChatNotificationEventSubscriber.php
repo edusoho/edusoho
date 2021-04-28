@@ -782,7 +782,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.notification'];
+        return $biz['ESCloudSdk.notification'];
     }
 
     private function findTargetIdByOrderItem(array $orderItem)
