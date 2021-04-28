@@ -4,6 +4,9 @@
     class="wechat-subscribe"
     @click="clickSubscribe"
   >
+    <div class="wechat-subscribe-guide">
+      <img src="static/images/course_guide.png" alt="" />
+    </div>
     <i class="iconfont icon-subscribe" />
     <div v-if="firstSubscribe" class="wechat-subscribe-popover">
       请点此订阅微信通知

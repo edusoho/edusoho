@@ -30,4 +30,13 @@
 			content: "";
 		}
 	}
+
+	.wechat-subscribe-guide {
+		position: fixed;
+		top: 50px;
+		left: 50%;
+		width: 325px;
+		height: 224px;
+		transform: translateX(-50%);
+	}
 }
