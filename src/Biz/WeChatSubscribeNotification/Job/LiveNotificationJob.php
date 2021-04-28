@@ -3,6 +3,7 @@
 namespace Biz\WeChatSubscribeNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Sms\SmsType;
 
 class LiveNotificationJob extends AbstractNotificationJob
 {
@@ -37,6 +38,17 @@ class LiveNotificationJob extends AbstractNotificationJob
         $userIds = ArrayToolkit::column($members, 'userId');
         $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
 
+        $this->sendSmsNotification(
+            SmsType::LIVE_NOTIFY,
+            array_diff($userIds, array_column($subscribeRecords, 'userId')),
+            [
+                'course_title' => '课程：'.$this->getCourseNameByCourse($course),
+                'lesson_title' => '学习任务：'.$task['title'],
+                'startTime' => date('Y-m-d H:i', $task['startTime']),
+                'url' => $url,
+            ]
+        );
+
         if (empty($subscribeRecords)) {
             return;
         }
@@ -51,7 +63,7 @@ class LiveNotificationJob extends AbstractNotificationJob
         $data = [
             'thing2' => ['value' => $this->plainTextByLength($task['title'], 20)],
             'date5' => ['value' => date('Y-m-d H:i', $task['startTime'])],
-            'thing15' => ['value' => $teacher['nickname']],
+            'thing15' => ['value' => empty($teacher['verifiedMobile']) ? $this->plainTextByLength($teacher['nickname'], 20) : $this->plainTextByLength($teacher['nickname'], 9).$teacher['verifiedMobile']],
         ];
 
         $list = [];
@@ -69,7 +81,7 @@ class LiveNotificationJob extends AbstractNotificationJob
                 'template_args' => $data,
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $record['toId'],
-                'goto' => $options = ['url' => $url, 'type' => 'url'],
+                'goto' => ['url' => $url, 'type' => 'url'],
             ];
         }
 

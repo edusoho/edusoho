@@ -3,6 +3,7 @@
 namespace Biz\WeChatSubscribeNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Sms\SmsType;
 
 class LessonPublishNotificationJob extends AbstractNotificationJob
 {
@@ -41,6 +42,19 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         $userIds = ArrayToolkit::column($members, 'userId');
         $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
 
+        $smsType = 'live' === $courseSet['type'] ? SmsType::LIVE_NOTIFY : SmsType::TASK_PUBLISH;
+        $params = 'live' === $courseSet['type'] ? [
+            'course_title' => '课程：'.$this->getCourseNameByCourse($course),
+            'lesson_title' => '学习任务：'.$task['title'],
+            'startTime' => date('Y-m-d H:i', $task['startTime']),
+            'url' => $url,
+        ] : [
+            'course_title' => '课程：'.$this->getCourseNameByCourse($course),
+            'lesson_title' => '学习任务：'.$task['title'],
+            'url' => $url,
+        ];
+        $this->sendSmsNotification($smsType, array_diff($userIds, array_column($subscribeRecords, 'userId')), $params);
+
         if (empty($subscribeRecords)) {
             return;
         }
@@ -53,7 +67,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         );
         $teacher = $this->getUserService()->getUser($teachers[0]['userId']);
         $data = [
-            'thing1' => ['value' => $this->plainTextByLength($this->getCourseNameByCourse($course), 15).'（'.(('live' == $courseSet['type']) ? '直播课' : '普通课').'）'],
+            'thing1' => ['value' => $this->plainTextByLength($this->getCourseNameByCourse($course), 15).'（'.(('live' === $courseSet['type']) ? '直播课' : '普通课').'）'],
             'thing4' => ['value' => $teacher['nickname']],
             'time2' => ['value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])],
         ];

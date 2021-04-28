@@ -4,7 +4,6 @@ namespace Biz\WeChat\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
-use AppBundle\Component\Notification\WeChatSubscriberMessage\TemplateUtil;
 use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
@@ -317,18 +316,47 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper->flush();
     }
 
-//    TODO： 合并秦瑞代码后修改   START
+    public function isSubscribeSmsEnabled()
+    {
+        $setting = $this->getSettingService()->get('wechat_notification', []);
+        if (empty($setting['is_authorization']) || 'MessageSubscribe' !== $setting['notification_type']) {
+            return false;
+        }
+
+        $smsSetting = $this->getSettingService()->get('cloud_sms');
+        if (empty($smsSetting['sms_enabled'])) {
+            return false;
+        }
+
+        return !empty($setting['notification_sms']);
+    }
+
+    /**
+     * @param $templateCode
+     * templateCode 模板code
+     * @param string $scene
+     *
+     * @return mixed|null
+     */
     public function getSubscribeTemplateId($templateCode, $scene = '')
     {
-        $templateIds = [
-            TemplateUtil::TEMPLATE_LIVE_OPEN => 'gd7YkJSa2zh5k0z7O3PBPE4b1eBGevLHnsOUsfqamXA',
-            TemplateUtil::TEMPLATE_HOMEWORK_RESULT => 'sdBdu75GfyqS4AhYn33BqTNCRzhxTFkFJpeuIjt5sa4',
-            TemplateUtil::TEMPLATE_EXAM_RESULT => 'g220BPGHYxo0XWUMG8-OipXo_aWw68v9Fv_4pH1GsO4',
-            TemplateUtil::TEMPLATE_COURSE_UPDATE => '7s4h3GTiWUOH_uavxmwbmt1pvG_gH8lhDOeoHkrZj30',
-            TemplateUtil::TEMPLATE_ASK_QUESTION => 'TZ3VOo3y0EmTlGnnSbawEDwDDzAq68eFTVrwZDO_C5A',
-        ];
+        $setting = $this->getSettingService()->get('wechat_notification', []);
+        if (empty($setting['is_authorization']) || 'MessageSubscribe' !== $setting['notification_type']) {
+            return null;
+        }
 
-        return $templateIds[$templateCode];
+        $template = !empty($setting['templates'][$templateCode]) ? $setting['templates'][$templateCode] : [];
+
+        if (empty($template['status']) || empty($template['templateId'])) {
+            return null;
+        }
+
+        $scenes = empty($template['scenes']) ? [] : $template['scenes'];
+        if (!empty($scene) && !in_array($scene, $scenes)) {
+            return null;
+        }
+
+        return $template['templateId'];
     }
 
     /**
@@ -555,13 +583,17 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $records = [];
-        foreach (array_column($weChatUsers, 'openId') as $openId) {
-            $records = array_merge($records, $this->searchSubscribeRecords(
-                ['templateCode' => $templateCode, 'toId' => $openId, 'templateType' => 'once', 'isSend_LT' => 1],
+        foreach ($weChatUsers as $weChatUser) {
+            $result = $this->searchSubscribeRecords(
+                ['templateCode' => $templateCode, 'toId' => $weChatUser['openId'], 'templateType' => 'once', 'isSend_LT' => 1],
                 ['id' => 'ASC'],
                 0,
                 1
-            ));
+            );
+            if (empty($result)) {
+                continue;
+            }
+            $records[] = array_merge($result[0], ['userId' => $weChatUser['userId']]);
         }
 
         return $records;

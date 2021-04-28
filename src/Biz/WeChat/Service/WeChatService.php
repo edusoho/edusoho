@@ -38,6 +38,8 @@ interface WeChatService
 
     public function getTemplateId($key, $scene = '');
 
+    public function isSubscribeSmsEnabled();
+
     public function getSubscribeTemplateId($templateCode, $scene = '');
 
     public function addTemplate($template, $key, $notificationType);
