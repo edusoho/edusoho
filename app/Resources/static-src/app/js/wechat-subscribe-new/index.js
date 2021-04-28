@@ -15,8 +15,32 @@ function initWechatSubscribe() {
     },
   }).success(function (res) {
     $('#subscribe-btn').attr('template', res);
+    const template = 
+    `
+    <i class="es-icon es-icon-share"></i>
+    <br>
+    <wx-open-subscribe class="js-subscribe-btn" template=${res} id="subscribe-btn">
+      <template slot="style">
+        <style>
+          .subscribe-btn {
+            color: #919191;
+            font-size: 12px;
+          }
+        </style>
+      </template>
+      <template>
+        <span class="subscribe-btn">
+          订阅
+        </span>
+      </template>
+    </wx-open-subscribe>
+    `;
+    $('.js-wechat-subscribe').html(template);
+    initWechatConfig();
   });
+}
 
+function initWechatConfig() {
   wx.config($jweixin.data('config'));
 
   const reg = /accept/;
