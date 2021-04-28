@@ -353,7 +353,7 @@ class WeChatServiceTest extends BaseTestCase
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('openAccount')->andReturn();
         $mockNotificationService->shouldReceive('openChannel')->andReturn(array());
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
             array('wechat_notification_enabled' => 0),
@@ -379,7 +379,7 @@ class WeChatServiceTest extends BaseTestCase
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('openAccount')->andReturn('');
         $mockNotificationService->shouldReceive('openChannel')->andReturn(array('type' => 'wechat'));
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
             array('wechat_notification_enabled' => 0),
@@ -405,7 +405,7 @@ class WeChatServiceTest extends BaseTestCase
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('closeAccount')->andReturn();
         $mockNotificationService->shouldReceive('closeChannel')->andReturn(array());
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
             array('wechat_notification_enabled' => 1),
@@ -431,7 +431,7 @@ class WeChatServiceTest extends BaseTestCase
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('closeAccount')->andReturn('');
         $mockNotificationService->shouldReceive('closeChannel')->andReturn(array('type' => 'wechat'));
-        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
             array('wechat_notification_enabled' => 1),

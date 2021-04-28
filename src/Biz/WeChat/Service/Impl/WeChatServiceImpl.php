@@ -433,15 +433,15 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $biz = $this->biz;
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
-                $biz['qiQiuYunSdk.notification']->openAccount();
-                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, array(
+                $biz['ESCloudSdk.notification']->openAccount();
+                $result = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, array(
                     'app_id' => $loginConnect['weixinmob_key'],
                     'app_secret' => $loginConnect['weixinmob_secret'],
                 ));
                 $this->registerJobs();
             } else {
-                $biz['qiQiuYunSdk.notification']->closeAccount();
-                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
+                $biz['ESCloudSdk.notification']->closeAccount();
+                $result = $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
                 $this->deleteJobs();
             }
         } catch (\RuntimeException $e) {
