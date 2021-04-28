@@ -353,10 +353,21 @@ class Setting extends AbstractResource
 
     public function getWechatMessageSubscribe($request)
     {
+        $wechatSetting = $this->getSettingService()->get('wechat');
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $enable = true;
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            $enable = false;
+        }
+        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type']) {
+            $enable = false;
+        }
+        if (empty($wechatNotificationSetting['is_authorization'])) {
+            $enable = false;
+        }
 
         return [
-            'enabled' => 'MessageSubscribe' == $wechatNotificationSetting['notification_type'],
+            'enable' => $enable,
         ];
     }
 
@@ -364,7 +375,7 @@ class Setting extends AbstractResource
     {
         $role = $request->query->get('role', '');
 
-        return $this->getMessageSubscribeTemplateIdByUserRole($role);
+        return $this->getMessageSubscribeTemplateCodesByUserRole($role);
     }
 
     public function getWap($request = null)
@@ -604,21 +615,24 @@ class Setting extends AbstractResource
         ];
     }
 
-    private function getMessageSubscribeTemplateIdByUserRole($userRole)
+    private function getMessageSubscribeTemplateCodesByUserRole($userRole)
     {
         if (!in_array($userRole, ['teacher', 'student'])) {
             throw new \InvalidArgumentException('user role error');
         }
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
-        var_dump($wechatNotificationSetting['templates']);die;
-        $templateIds = [];
+
+        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
+            return [];
+        }
+        $templateCodes = [];
         foreach ($wechatNotificationSetting['templates'] as $template) {
             if ($template['role'] == $userRole) {
-                $templateIds[] = $template['templateId'];
+                $templateCodes[] = $template['id'];
             }
         }
 
-        return $templateIds;
+        return $templateCodes;
     }
 
     private function getLoginConnect($clients)
