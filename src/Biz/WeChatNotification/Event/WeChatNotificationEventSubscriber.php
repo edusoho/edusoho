@@ -563,7 +563,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
+        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args'], 'wechat_template');
     }
 
     protected function sendTasksPublishNotification($tasks)

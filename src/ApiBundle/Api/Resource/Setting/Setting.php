@@ -20,7 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult',
+        'consult', 'wechat_message_subscribe',
     ];
 
     public static function convertUnderline($str)
@@ -349,6 +349,26 @@ class Setting extends AbstractResource
         $filter->filter($result);
 
         return $result;
+    }
+
+    public function getWechatMessageSubscribe($request)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat');
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $enable = true;
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            $enable = false;
+        }
+        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type']) {
+            $enable = false;
+        }
+        if (empty($wechatNotificationSetting['is_authorization'])) {
+            $enable = false;
+        }
+
+        return [
+            'enable' => $enable,
+        ];
     }
 
     public function getWap($request = null)
