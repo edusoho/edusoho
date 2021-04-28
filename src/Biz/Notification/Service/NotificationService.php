@@ -10,6 +10,8 @@ interface NotificationService
 
     public function createBatch($batch);
 
+    public function updateBatch($id, $fields);
+
     public function getBatch($id);
 
     public function findEventsByIds($ids);
@@ -22,5 +24,7 @@ interface NotificationService
 
     public function batchHandleNotificationResults($batches);
 
-    public function createWeChatNotificationRecord($sn, $key, $data);
+    public function createWeChatNotificationRecord($sn, $key, $data, $source);
+
+    public function createSmsNotificationRecord($batchId, $data, $smsParams);
 }
