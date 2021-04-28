@@ -47,7 +47,9 @@ export default {
 
   created() {
     const browser = navigator.userAgent.toLowerCase();
+    console.log(browser.match(/MicroMessenger/i) != 'micromessenger');
     if (browser.match(/MicroMessenger/i) != 'micromessenger') return;
+    console.log('debugger');
     this.initSubscribe();
     this.firstWechatSubscribe();
   },
