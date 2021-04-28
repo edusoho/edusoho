@@ -7,10 +7,9 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 
-// 假接口，原微信模板消息接口
 class Client
 {
-    const MESSAGE_SEND = 'cgi-bin/message/subscribe/bizsend';
+    const MESSAGE_SEND = 'cgi-bin/message/subscribe/bizsend';   // POST
 
     const ACCESS_TOKEN_GET = 'cgi-bin/token';   // GET
 
@@ -97,8 +96,6 @@ class Client
         if (!empty($options['miniprogram'])) {
             $params['miniprogram'] = $options['miniprogram'];
         }
-
-        file_put_contents('/Users/wangsan/var/www/edusoho/app/logs/test.log', 'REQUEST PARAMS: '.json_encode($params).PHP_EOL, FILE_APPEND);
 
         $result = $this->postRequest($this->baseUrl.'/'.self::MESSAGE_SEND, $params);
 
