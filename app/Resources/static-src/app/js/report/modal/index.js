@@ -21,8 +21,8 @@ $('.js-report-submit').on('click', function () {
       cd.message({type: 'success', message: '举报成功'});
       $('.js-review-report').html(
         `<div>
-            <h2 class="text-center">你的举报我们已经收到了，会尽快处理……</h2>
-            <div class="text-center">
+            <div class="text-center text-normal">你的举报我们已经收到了，会尽快处理……</div>
+            <div class="text-right">
               <a data-dismiss="modal" aria-hidden="true" class="btn btn-info">关闭</a>
             </div>
           </div>
