@@ -368,10 +368,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'templateParams' => [
                     'kidList' => $template['kidList'],
                     'sceneDesc' => $template['sceneDesc'],
-                    ],
+                ],
             ];
         }
-        $wechatSetting = $wechatSetting = $this->getSettingService()->get($settingName);
+        $wechatSetting = $this->getSettingService()->get($settingName);
 
         if (empty($wechatSetting['templates'][$key]['templateId'])) {
             try {
@@ -404,7 +404,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $this->getSettingService()->set($settingName, $wechatSetting);
 
-        return $this->getSettingService()->get($settingName, $wechatSetting);
+        return $this->getSettingService()->get($settingName);
     }
 
     /**
