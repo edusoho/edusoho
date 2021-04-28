@@ -81,4 +81,16 @@ export default [
     method: 'GET',
     disableLoading: true,
   },
+  {
+    name: 'wechatSubscribe',
+    url: '/settings/wechat_message_subscribe',
+    method: 'GET',
+    disableLoading: true,
+  },
+  {
+    name: 'wechatTemplate',
+    url: '/template/template',
+    method: 'GET',
+    disableLoading: true,
+  },
 ];

@@ -8,10 +8,7 @@
     <div v-if="firstSubscribe" class="wechat-subscribe-popover">
       请点此订阅微信通知
     </div>
-    <wx-open-subscribe
-      template="gd7YkJSa2zh5k0z7O3PBPMosQmGS6zex8bumXbzHg5U"
-      id="subscribe-btn"
-    >
+    <wx-open-subscribe :template="templateId" id="subscribe-btn">
       <script type="text/wxtag-template" slot="style">
         <style>
           .subscribe-btn {
@@ -32,14 +29,16 @@
 <script>
 import wx from 'weixin-js-sdk';
 import Api from '@/api';
+const reg = /accept/;
 
 export default {
   name: 'WechatSubscribe',
 
   data() {
     return {
-      supportWechatSubscribe: true,
+      supportWechatSubscribe: false,
       firstSubscribe: false,
+      templateId: '',
     };
   },
 
@@ -49,10 +48,18 @@ export default {
   },
 
   methods: {
-    initSubscribe() {
+    async initSubscribe() {
+      const { enable } = await Api.wechatSubscribe();
+      if (!enable) return;
+
       const params = {
         url: window.location.href.split('#')[0],
       };
+
+      Api.wechatTemplate().then(res => {
+        this.templateId = res;
+      });
+
       Api.wechatJsSdkConfig({ params }).then(res => {
         wx.config({
           debug: false,
@@ -63,10 +70,17 @@ export default {
           jsApiList: res.jsApiList,
           openTagList: ['wx-open-subscribe'],
         });
+
+        this.supportWechatSubscribe = true;
+
         wx.ready(() => {
           const btn = document.getElementById('subscribe-btn');
           btn.addEventListener('success', function(e) {
             console.log('success', e.detail);
+            const subscribeDetails = e.detail.subscribeDetails;
+            if (reg.test(subscribeDetails)) {
+              this.$toast('订阅成功');
+            }
           });
           btn.addEventListener('error', function(e) {
             console.log('fail', e.detail);
