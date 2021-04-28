@@ -1,4 +1,4 @@
-<fieldset id="message-subscribe" {% if wechatNotificationSetting.notification_type == 'serviceFollow' %}style="display:none;"{% endif %}>
+<fieldset id="message-subscribe" {% if wechatNotificationSetting.notification_type == 'serviceFollow' or wechatSetting.wechat_notification_enabled == 0 %}style="display:none;"{% endif %}>
   <legend>
     {{'admin.wechat_notification.template'|trans}}
     {% if wechatNotificationSetting.is_authorization != 1 %}
