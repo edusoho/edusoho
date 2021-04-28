@@ -11,10 +11,10 @@ class QiQiuYunSdkProxyServiceImpl extends BaseService
     public function pushEventTracking($action, $data = null)
     {
         try {
-            $this->getESopService()->submitEventTracking(array(
+            $this->getESopService()->submitEventTracking([
                 'action' => $action,
                 'data' => $data,
-            ));
+            ]);
         } catch (\Exception $e) {
             $this->getLogger()->error('pushEventTrackingError: '.$e->getMessage(), $e->getTrace());
         }
@@ -25,7 +25,7 @@ class QiQiuYunSdkProxyServiceImpl extends BaseService
      */
     protected function getNotificationService()
     {
-        return $this->biz['qiQiuYunSdk.notification'];
+        return $this->biz['ESCloudSdk.notification'];
     }
 
     /**
