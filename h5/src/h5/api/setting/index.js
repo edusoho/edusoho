@@ -89,7 +89,7 @@ export default [
   },
   {
     name: 'wechatTemplate',
-    url: '/template/template',
+    url: '/template',
     method: 'GET',
     disableLoading: true,
   },
