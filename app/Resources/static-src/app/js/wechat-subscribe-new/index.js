@@ -11,8 +11,9 @@ wx.ready(function() {
   var btn = document.getElementById('subscribe-btn');
   btn.addEventListener('success', function (e) {
     const subscribeDetails = e.detail.subscribeDetails;
+    console.log(subscribeDetails);
     if (reg.test(subscribeDetails)) {
-      notify('success', '订阅成功indexof');
+      notify('success', '订阅成功');
     }
   });   
   btn.addEventListener('error',function (e) {
