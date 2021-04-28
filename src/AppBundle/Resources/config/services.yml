@@ -38,6 +38,14 @@ services:
         tags:
           - { name: extension, priority: 10 }
 
+    content_audit.extension:
+      class: AppBundle\Extension\ContentAuditExtension
+      public: true
+      calls:
+        - [ setBiz, [ '@biz' ] ]
+      tags:
+        - { name: extension, priority: 10 }
+
     course.extension:
         class: AppBundle\Extension\CourseExtension
         public: true

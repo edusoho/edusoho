@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <select class="form-control" name="targetType">
-        {{ select_options(dict('userAuditTargetType'), app.request.query.get('targetType'), 'admin_v2.operation.user_content_audit_form.all_type_option'|trans) }}
+        {{ select_options(dict('userSelectedAuditTargetType'), app.request.query.get('targetType'), 'admin_v2.operation.user_content_audit_form.all_type_option'|trans) }}
       </select>
     </div>
 
