@@ -80,7 +80,10 @@ class UserContentAuditController extends BaseController
         }
 
         foreach ($userAudits as &$audit) {
-            $audit['short_content'] = mb_substr($audit['content'], 0, 200).'...';
+            $audit['short_content'] = $audit['content'];
+            if (strlen($audit['content']) > 200) {
+                $audit['short_content'] = mb_substr($audit['content'], 0, 200).'...';
+            }
             $sensitiveWords = $audit['sensitiveWords'];
             if (empty($sensitiveWords)) {
                 continue;
