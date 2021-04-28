@@ -4,12 +4,14 @@ namespace Biz\WeChat\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
+use AppBundle\Component\Notification\WeChatSubscriberMessage\TemplateUtil;
 use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Biz\WeChat\Dao\SubscribeRecordDao;
 use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\WeChat\WeChatException;
@@ -56,6 +58,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     public function getWeChatSendChannel()
     {
+        return 'wechat_subscribe';
+
         $wechatSetting = $this->getSettingService()->get('wechat', []);
 
         return empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
@@ -313,6 +317,20 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper->flush();
     }
 
+//    TODO： 合并秦瑞代码后修改   START
+    public function getSubscribeTemplateId($templateCode, $scene = '')
+    {
+        $templateIds = [
+            TemplateUtil::TEMPLATE_LIVE_OPEN => 'gd7YkJSa2zh5k0z7O3PBPE4b1eBGevLHnsOUsfqamXA',
+            TemplateUtil::TEMPLATE_HOMEWORK_RESULT => 'sdBdu75GfyqS4AhYn33BqTNCRzhxTFkFJpeuIjt5sa4',
+            TemplateUtil::TEMPLATE_EXAM_RESULT => 'g220BPGHYxo0XWUMG8-OipXo_aWw68v9Fv_4pH1GsO4',
+            TemplateUtil::TEMPLATE_COURSE_UPDATE => '7s4h3GTiWUOH_uavxmwbmt1pvG_gH8lhDOeoHkrZj30',
+            TemplateUtil::TEMPLATE_ASK_QUESTION => 'TZ3VOo3y0EmTlGnnSbawEDwDDzAq68eFTVrwZDO_C5A',
+        ];
+
+        return $templateIds[$templateCode];
+    }
+
     /**
      * @param $key
      * key 模板key
@@ -368,7 +386,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'templateParams' => [
                     'kidList' => $template['kidList'],
                     'sceneDesc' => $template['sceneDesc'],
-                    ],
+                ],
             ];
         }
         $wechatSetting = $wechatSetting = $this->getSettingService()->get($settingName);
@@ -506,6 +524,55 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         ];
 
         return $jobs;
+    }
+
+    public function searchSubscribeRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
+    {
+        return $this->getRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function searchSubscribeRecordCount(array $conditions)
+    {
+        return $this->getRecordDao()->count($conditions);
+    }
+
+    public function findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, array $userIds)
+    {
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $weChatUsers = $this->searchWeChatUsers(
+            ['userIds' => $userIds],
+            ['lastRefreshTime' => 'ASC'],
+            0,
+            count($userIds),
+            ['id', 'openId', 'unionId', 'userId']
+        );
+
+        if (empty($weChatUsers)) {
+            return [];
+        }
+
+        $records = [];
+        foreach (array_column($weChatUsers, 'openId') as $openId) {
+            $records = array_merge($records, $this->searchSubscribeRecords(
+                ['templateCode' => $templateCode, 'toId' => $openId, 'templateType' => 'once', 'isSend_LT' => 1],
+                ['id' => 'ASC'],
+                0,
+                1
+            ));
+        }
+
+        return $records;
+    }
+
+    /**
+     * @return SubscribeRecordDao
+     */
+    protected function getRecordDao()
+    {
+        return $this->createDao('WeChat:SubscribeRecordDao');
     }
 
     protected function isCloudOpen()

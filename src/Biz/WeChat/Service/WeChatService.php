@@ -38,6 +38,8 @@ interface WeChatService
 
     public function getTemplateId($key, $scene = '');
 
+    public function getSubscribeTemplateId($templateCode, $scene = '');
+
     public function addTemplate($template, $key, $notificationType);
 
     public function deleteTemplate($template, $key, $notificationType);
@@ -55,4 +57,10 @@ interface WeChatService
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
 
     public function getWeChatSendChannel();
+
+    public function searchSubscribeRecords(array $conditions, array $orderBy, $start, $limit, array $columns = []);
+
+    public function searchSubscribeRecordCount(array $conditions);
+
+    public function findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, array $userIds);
 }
