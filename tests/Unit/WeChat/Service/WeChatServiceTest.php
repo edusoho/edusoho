@@ -17,19 +17,19 @@ class WeChatServiceTest extends BaseTestCase
      */
     public function testCreateWeChatUserWithErrorParams()
     {
-        $this->getWeChatService()->createWeChatUser(array());
+        $this->getWeChatService()->createWeChatUser([]);
     }
 
     public function testFindAllBindUser()
     {
         $result = $this->getWeChatService()->findAllBindUserIds();
 
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testGetWeChatUserByTypeAndUnionId()
     {
-        $this->mockCreateWeChatUser(array('unionId' => 'qqq'));
+        $this->mockCreateWeChatUser(['unionId' => 'qqq']);
         $result = $this->getWeChatService()->getWeChatUserByTypeAndUnionId('official', 'qqq');
         $this->assertEquals('qqq', $result['unionId']);
 
@@ -39,7 +39,7 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testGetWeChatUserByTypeAndOpenId()
     {
-        $this->mockCreateWeChatUser(array('openId' => 'www'));
+        $this->mockCreateWeChatUser(['openId' => 'www']);
         $result = $this->getWeChatService()->getWeChatUserByTypeAndOpenId('official', 'www');
         $this->assertEquals('www', $result['openId']);
 
@@ -49,20 +49,20 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testFindWeChatUsersByUserId()
     {
-        $this->mockCreateWeChatUser(array('userId' => 2));
+        $this->mockCreateWeChatUser(['userId' => 2]);
         $result = $this->getWeChatService()->findWeChatUsersByUserId(2);
         $this->assertEquals(2, $result[0]['userId']);
     }
 
     public function testFindSubscribedUsersByUserIdsAndType()
     {
-        $result = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType(array(1), 'open-app');
+        $result = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType([1], 'open-app');
         $this->assertEmpty($result);
     }
 
     public function testFindWeChatUsersByUserIdAndType()
     {
-        $this->mockCreateWeChatUser(array('userId' => 2));
+        $this->mockCreateWeChatUser(['userId' => 2]);
         $result = $this->getWeChatService()->findWeChatUsersByUserIdAndType(2, 'official');
         $this->assertEquals(2, $result[0]['userId']);
     }
@@ -72,15 +72,15 @@ class WeChatServiceTest extends BaseTestCase
         $result = $this->getWeChatService()->getOfficialWeChatUserByUserId(2);
         $this->assertEmpty($result);
 
-        $this->mockCreateWeChatUser(array('userId' => 2, 'lastRefreshTime' => time() + 86400));
+        $this->mockCreateWeChatUser(['userId' => 2, 'lastRefreshTime' => time() + 86400]);
         $result = $this->getWeChatService()->getOfficialWeChatUserByUserId(2);
         $this->assertEquals(2, $result['userId']);
     }
 
     public function testUpdateWeChatUser()
     {
-        $weChatUser = $this->mockCreateWeChatUser(array('userId' => 2));
-        $this->getWeChatService()->updateWeChatUser($weChatUser['id'], array('userId' => 3));
+        $weChatUser = $this->mockCreateWeChatUser(['userId' => 2]);
+        $this->getWeChatService()->updateWeChatUser($weChatUser['id'], ['userId' => 3]);
 
         $result = $this->getWeChatService()->getWeChatUser($weChatUser['id']);
         $this->assertEquals(3, $result['userId']);
@@ -92,14 +92,14 @@ class WeChatServiceTest extends BaseTestCase
      */
     public function testUpdateWeChatUserWithExistUser()
     {
-        $this->getWeChatService()->updateWeChatUser(1, array());
+        $this->getWeChatService()->updateWeChatUser(1, []);
     }
 
     public function testSearchWeChatUsers()
     {
-        $this->mockCreateWeChatUser(array('openId' => 'www'));
+        $this->mockCreateWeChatUser(['openId' => 'www']);
 
-        $result = $this->getWeChatService()->searchWeChatUsers(array('userId' => 1), array('lastRefreshTime' => 'ASC'), 0, 10, array('id', 'openId', 'unionId', 'userId'));
+        $result = $this->getWeChatService()->searchWeChatUsers(['userId' => 1], ['lastRefreshTime' => 'ASC'], 0, 10, ['id', 'openId', 'unionId', 'userId']);
 
         $this->assertEquals('www', $result[0]['openId']);
     }
@@ -108,15 +108,15 @@ class WeChatServiceTest extends BaseTestCase
     {
         $biz = $this->getBiz();
         $mockClient = \Mockery::mock('AppBundle\Component\Notification\WeChatTemplateMessage\Client');
-        $mockClient->shouldReceive('getUserList')->andReturn(array(
-            'data' => array('openid' => array()),
+        $mockClient->shouldReceive('getUserList')->andReturn([
+            'data' => ['openid' => []],
             'next_openid' => 'thisisafakenextopenid',
-        ));
+        ]);
 
         $biz['wechat.template_message_client'] = $mockClient;
 
         $result = $this->getWeChatService()->batchSyncOfficialWeChatUsers();
-        $this->assertEquals(array('next_openid' => 'thisisafakenextopenid'), $result);
+        $this->assertEquals(['next_openid' => 'thisisafakenextopenid'], $result);
     }
 
     public function testBatchSyncOfficialWeChatUsersWithoutNewOpenIds()
@@ -124,25 +124,25 @@ class WeChatServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $mockClient = \Mockery::mock('AppBundle\Component\Notification\WeChatTemplateMessage\Client');
 
-        $mockClient->shouldReceive('getUserList')->andReturn(array(
-            'data' => array('openid' => array(1, 2, 3)),
+        $mockClient->shouldReceive('getUserList')->andReturn([
+            'data' => ['openid' => [1, 2, 3]],
             'next_openid' => 'thisisafakenextopenid',
-        ));
+        ]);
 
         $biz['wechat.template_message_client'] = $mockClient;
 
         $this->mockBiz(
             'WeChat:UserWeChatDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findOpenIdsInListsByType',
-                    'returnValue' => array(
-                        array('openId' => 1),
-                        array('openId' => 2),
-                        array('openId' => 3),
-                    ),
-                ),
-            )
+                    'returnValue' => [
+                        ['openId' => 1],
+                        ['openId' => 2],
+                        ['openId' => 3],
+                    ],
+                ],
+            ]
         );
 
         $result = $this->getWeChatService()->batchSyncOfficialWeChatUsers();
@@ -154,10 +154,10 @@ class WeChatServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $mockClient = \Mockery::mock('AppBundle\Component\Notification\WeChatTemplateMessage\Client');
 
-        $mockClient->shouldReceive('getUserList')->andReturn(array(
-            'data' => array('openid' => array(1, 2, 3)),
+        $mockClient->shouldReceive('getUserList')->andReturn([
+            'data' => ['openid' => [1, 2, 3]],
             'next_openid' => 'thisisafakenextopenid',
-        ));
+        ]);
 
         $mockClient->shouldReceive('getAppId')->andReturn('thisisappid');
 
@@ -165,95 +165,95 @@ class WeChatServiceTest extends BaseTestCase
 
         $this->mockBiz(
             'WeChat:UserWeChatDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findOpenIdsInListsByType',
-                    'returnValue' => array(
-                        array('openId' => 1),
-                        array('openId' => 2),
-                    ),
-                ),
-                array(
+                    'returnValue' => [
+                        ['openId' => 1],
+                        ['openId' => 2],
+                    ],
+                ],
+                [
                     'functionName' => 'batchCreate',
-                ),
-            )
+                ],
+            ]
         );
 
         $result = $this->getWeChatService()->batchSyncOfficialWeChatUsers();
-        $this->assertEquals(array('next_openid' => 'thisisafakenextopenid'), $result);
+        $this->assertEquals(['next_openid' => 'thisisafakenextopenid'], $result);
     }
 
     public function testFreshOfficialWeChatUserWhenLogin()
     {
-        $weChatUser = $this->mockCreateWeChatUser(array('openId' => 'www', 'userId' => 2));
-        $this->getWeChatService()->freshOfficialWeChatUserWhenLogin(array('id' => 10), array(), array('openid' => 'www'));
+        $weChatUser = $this->mockCreateWeChatUser(['openId' => 'www', 'userId' => 2]);
+        $this->getWeChatService()->freshOfficialWeChatUserWhenLogin(['id' => 10], [], ['openid' => 'www']);
 
         $result = $this->getWeChatService()->getWeChatUser($weChatUser['id']);
         $this->assertEquals(10, $result['userId']);
 
-        $this->getWeChatService()->freshOfficialWeChatUserWhenLogin(array('id' => 9), array('fromId' => 'ppp'), array('openid' => 'uuu'));
+        $this->getWeChatService()->freshOfficialWeChatUserWhenLogin(['id' => 9], ['fromId' => 'ppp'], ['openid' => 'uuu']);
         $result = $this->getWeChatService()->getWeChatUserByTypeAndOpenId('official', 'uuu');
         $this->assertEquals(9, $result['userId']);
     }
 
     public function testBatchFreshOfficialWeChatUsers()
     {
-        $weChatUser1 = $this->mockCreateWeChatUser(array('userId' => 3));
-        $weChatUser2 = $this->mockCreateWeChatUser(array('userId' => 4, 'unionId' => 'thisisunionid', 'openId' => 'thisisopenid'));
+        $weChatUser1 = $this->mockCreateWeChatUser(['userId' => 3]);
+        $weChatUser2 = $this->mockCreateWeChatUser(['userId' => 4, 'unionId' => 'thisisunionid', 'openId' => 'thisisopenid']);
 
-        $freshWeChatUser1 = array(
+        $freshWeChatUser1 = [
             'openid' => 'ffffffffffffffffffff',
             'unionid' => 'hhhhhhhhhhhhhhhhhhhh',
             'subscribe' => 0,
-        );
+        ];
 
-        $freshWeChatUser2 = array(
+        $freshWeChatUser2 = [
             'openid' => 'thisisopenid',
             'unionid' => 'thisisunionid',
             'subscribe' => 1,
-        );
+        ];
 
         $mockClient = \Mockery::mock('AppBundle\Component\Notification\WeChatTemplateMessage\Client');
-        $mockClient->shouldReceive('batchGetUserInfo')->andReturn(array(
+        $mockClient->shouldReceive('batchGetUserInfo')->andReturn([
             $freshWeChatUser1,
             $freshWeChatUser2,
-        ));
+        ]);
 
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findUserBindByTypeAndToIds',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'fromId' => 'hhhhhhhhhhhhhhhhhhhh',
                             'toId' => 3,
-                        ),
-                        array(
+                        ],
+                        [
                             'fromId' => 'thisisunionid',
                             'toId' => 4,
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'functionName' => 'findUserBindByTypeAndFromIds',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'fromId' => 'hhhhhhhhhhhhhhhhhhhh',
                             'toId' => 3,
-                        ),
-                        array(
+                        ],
+                        [
                             'fromId' => 'thisisunionid',
                             'toId' => 4,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $biz = $this->getBiz();
         $biz['wechat.template_message_client'] = $mockClient;
-        $this->getWeChatService()->batchFreshOfficialWeChatUsers(array($weChatUser1, $weChatUser2));
+        $this->getWeChatService()->batchFreshOfficialWeChatUsers([$weChatUser1, $weChatUser2]);
 
         $result1 = $this->getWeChatService()->getOfficialWeChatUserByUserId(3);
         $result2 = $this->getWeChatService()->getOfficialWeChatUserByUserId(4);
@@ -264,9 +264,9 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testGetTemplateIdWithUnabledSetting()
     {
-        $wechatSetting = array(
+        $wechatSetting = [
             'wechat_notification_enabled' => 0,
-        );
+        ];
         $this->getSettingService()->set('wechat', $wechatSetting);
         $result = $this->getWeChatService()->getTemplateId(1);
         $this->assertEmpty($result);
@@ -274,13 +274,13 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testGetTemplateIdWithEmptyTemplateId()
     {
-        $wechatSetting = array(
+        $wechatSetting = [
             'wechat_notification_enabled' => 1,
-            1 => array(
+            1 => [
                 'status' => 'open',
                 'templateId' => null,
-            ),
-        );
+            ],
+        ];
         $this->getSettingService()->set('wechat', $wechatSetting);
         $result = $this->getWeChatService()->getTemplateId(1);
         $this->assertEmpty($result);
@@ -288,15 +288,15 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testGetTemplateId()
     {
-        $wechatSetting = array(
+        $wechatSetting = [
             'wechat_notification_enabled' => 1,
-            'templates' => array(
-                'abc' => array(
+            'templates' => [
+                'abc' => [
                     'status' => 'open',
                     'templateId' => 123,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->getSettingService()->set('wechat', $wechatSetting);
         $result = $this->getWeChatService()->getTemplateId('abc');
         $this->assertEquals(123, $result);
@@ -304,11 +304,11 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testHandleCloudNotificationWithSameSetting()
     {
-        $setting = array(
+        $setting = [
             'wechat_notification_enabled' => 1,
-        );
+        ];
 
-        $result = $this->getWeChatService()->handleCloudNotification($setting, $setting, array());
+        $result = $this->getWeChatService()->handleCloudNotification($setting, $setting, []);
         $this->assertTrue($result);
 
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
@@ -316,9 +316,9 @@ class WeChatServiceTest extends BaseTestCase
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 1),
-            array('wechat_notification_enabled' => 0),
-            array()
+            ['wechat_notification_enabled' => 1],
+            ['wechat_notification_enabled' => 0],
+            []
         );
 
         $this->assertFalse($result);
@@ -329,13 +329,13 @@ class WeChatServiceTest extends BaseTestCase
     public function testHandleCloudNotificationWithCloudClosed()
     {
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
-        $mockApiClient->shouldReceive('get')->andReturn(array());
+        $mockApiClient->shouldReceive('get')->andReturn([]);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 1),
-            array('wechat_notification_enabled' => 0),
-            array()
+            ['wechat_notification_enabled' => 1],
+            ['wechat_notification_enabled' => 0],
+            []
         );
 
         $this->assertFalse($result);
@@ -346,22 +346,22 @@ class WeChatServiceTest extends BaseTestCase
     public function testHandleCloudNotificationWithOpenChannelFail()
     {
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
-        $mockApiClient->shouldReceive('get')->andReturn(array('accessCloud' => true));
+        $mockApiClient->shouldReceive('get')->andReturn(['accessCloud' => true]);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $biz = $this->getBiz();
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('openAccount')->andReturn();
-        $mockNotificationService->shouldReceive('openChannel')->andReturn(array());
+        $mockNotificationService->shouldReceive('openChannel')->andReturn([]);
         $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 0),
-            array('wechat_notification_enabled' => 1),
-            array(
+            ['wechat_notification_enabled' => 0],
+            ['wechat_notification_enabled' => 1],
+            [
                 'weixinmob_key' => '',
                 'weixinmob_secret' => '',
-            )
+            ]
         );
 
         $this->assertFalse($result);
@@ -372,22 +372,22 @@ class WeChatServiceTest extends BaseTestCase
     public function testHandleCloudNotificationOpenChannel()
     {
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
-        $mockApiClient->shouldReceive('get')->andReturn(array('accessCloud' => true));
+        $mockApiClient->shouldReceive('get')->andReturn(['accessCloud' => true]);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $biz = $this->getBiz();
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('openAccount')->andReturn('');
-        $mockNotificationService->shouldReceive('openChannel')->andReturn(array('type' => 'wechat'));
+        $mockNotificationService->shouldReceive('openChannel')->andReturn(['type' => 'wechat']);
         $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 0),
-            array('wechat_notification_enabled' => 1),
-            array(
+            ['wechat_notification_enabled' => 0],
+            ['wechat_notification_enabled' => 1],
+            [
                 'weixinmob_key' => '',
                 'weixinmob_secret' => '',
-            )
+            ]
         );
 
         $this->assertTrue($result);
@@ -398,22 +398,22 @@ class WeChatServiceTest extends BaseTestCase
     public function testHandleCloudNotificationWithCloseChannelFail()
     {
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
-        $mockApiClient->shouldReceive('get')->andReturn(array('accessCloud' => true));
+        $mockApiClient->shouldReceive('get')->andReturn(['accessCloud' => true]);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $biz = $this->getBiz();
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('closeAccount')->andReturn();
-        $mockNotificationService->shouldReceive('closeChannel')->andReturn(array());
+        $mockNotificationService->shouldReceive('closeChannel')->andReturn([]);
         $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 1),
-            array('wechat_notification_enabled' => 0),
-            array(
+            ['wechat_notification_enabled' => 1],
+            ['wechat_notification_enabled' => 0],
+            [
                 'weixinmob_key' => '',
                 'weixinmob_secret' => '',
-            )
+            ]
         );
 
         $this->assertFalse($result);
@@ -424,22 +424,22 @@ class WeChatServiceTest extends BaseTestCase
     public function testHandleCloudNotificationCloseChannel()
     {
         $mockApiClient = \Mockery::mock('Biz\CloudPlatform\Client\CloudAPI');
-        $mockApiClient->shouldReceive('get')->andReturn(array('accessCloud' => true));
+        $mockApiClient->shouldReceive('get')->andReturn(['accessCloud' => true]);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockApiClient);
 
         $biz = $this->getBiz();
         $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
         $mockNotificationService->shouldReceive('closeAccount')->andReturn('');
-        $mockNotificationService->shouldReceive('closeChannel')->andReturn(array('type' => 'wechat'));
+        $mockNotificationService->shouldReceive('closeChannel')->andReturn(['type' => 'wechat']);
         $biz['ESCloudSdk.notification'] = $mockNotificationService;
 
         $result = $this->getWeChatService()->handleCloudNotification(
-            array('wechat_notification_enabled' => 1),
-            array('wechat_notification_enabled' => 0),
-            array(
+            ['wechat_notification_enabled' => 1],
+            ['wechat_notification_enabled' => 0],
+            [
                 'weixinmob_key' => '',
                 'weixinmob_secret' => '',
-            )
+            ]
         );
 
         $this->assertTrue($result);
@@ -456,28 +456,28 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testSearchWeChatUsersJoinUser()
     {
-        $this->mockCreateWeChatUser(array('openId' => 'www'));
+        $this->mockCreateWeChatUser(['openId' => 'www']);
 
-        $result = $this->getWeChatService()->searchWeChatUsersJoinUser(array('userId' => 1), array('lastRefreshTime' => 'ASC'), 0, 10);
+        $result = $this->getWeChatService()->searchWeChatUsersJoinUser(['userId' => 1], ['lastRefreshTime' => 'ASC'], 0, 10);
 
         $this->assertEquals('1', $result[0]['userId']);
     }
 
     public function testCountWeChatUsersJoinUser()
     {
-        $this->mockCreateWeChatUser(array('openId' => 'www'));
+        $this->mockCreateWeChatUser(['openId' => 'www']);
 
-        $result = $this->getWeChatService()->countWeChatUserJoinUser(array('userId' => 1));
+        $result = $this->getWeChatService()->countWeChatUserJoinUser(['userId' => 1]);
 
         $this->assertEquals(1, $result);
     }
 
     public function testGetWeChatSendChannel()
     {
-        $this->getSettingService()->set('wechat', array(
+        $this->getSettingService()->set('wechat', [
             'wechat_notification_enabled' => 1,
             'is_authorization' => 1,
-        ));
+        ]);
         $res = $this->getWeChatService()->getWeChatSendChannel();
         $this->assertEquals('wechat_agent', $res);
     }
@@ -490,70 +490,70 @@ class WeChatServiceTest extends BaseTestCase
 
     public function testSaveWeChatTemplateSetting()
     {
-        $wechatSetting = array(
+        $wechatSetting = [
             'wechat_notification_enabled' => 1,
-            'templates' => array(
-                'homeworkOrTestPaperReview' => array(
+            'templates' => [
+                'homeworkOrTestPaperReview' => [
                     'templateId' => 'testId',
                     'status' => 1,
                     'sendTime' => '11:20',
-                ),
-                'courseRemind' => array(
+                ],
+                'courseRemind' => [
                     'templateId' => 'testId',
                     'status' => 1,
                     'sendTime' => '11:20',
-                    'sendDays' => array('Mon'),
-                ),
-            ),
-        );
-        $this->mockBiz('System:SettingService', array(
-            array(
+                    'sendDays' => ['Mon'],
+                ],
+            ],
+        ];
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'withParams' => array('wechat', array()),
+                'withParams' => ['wechat', []],
                 'returnValue' => $wechatSetting,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'set',
                 'returnValue' => $wechatSetting,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'node',
-                'withParams' => array('site.url'),
+                'withParams' => ['site.url'],
                 'returnValue' => 'http://www.baidu.com',
-            ),
-        ));
+            ],
+        ]);
 
         $this->getSettingService()->set('wechat', $wechatSetting);
 
-        $this->getWeChatService()->saveWeChatTemplateSetting('homeworkOrTestPaperReview', array(
+        $this->getWeChatService()->saveWeChatTemplateSetting('homeworkOrTestPaperReview', [
             'templateId' => 'testId',
             'status' => 1,
             'sendTime' => '11:20',
-        ));
-        $schedulerJobs = $this->getSchedulerService()->searchJobs(array('name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview'), array(), 0, 1);
+        ]);
+        $schedulerJobs = $this->getSchedulerService()->searchJobs(['name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview'], [], 0, 1);
         $this->assertEquals('WeChatNotificationJob_HomeWorkOrTestPaperReview', $schedulerJobs[0]['name']);
 
-        $this->getWeChatService()->saveWeChatTemplateSetting('courseRemind', array(
+        $this->getWeChatService()->saveWeChatTemplateSetting('courseRemind', [
             'templateId' => 'testId',
             'status' => 1,
             'sendTime' => '11:20',
-            'sendDays' => array('Mon'),
-        ));
-        $schedulerJobs = $this->getSchedulerService()->searchJobs(array('name' => 'WeChatNotificationJob_CourseRemind'), array(), 0, 1);
+            'sendDays' => ['Mon'],
+        ]);
+        $schedulerJobs = $this->getSchedulerService()->searchJobs(['name' => 'WeChatNotificationJob_CourseRemind'], [], 0, 1);
         $this->assertEquals('WeChatNotificationJob_CourseRemind', $schedulerJobs[0]['name']);
     }
 
-    protected function mockCreateWeChatUser($fields = array())
+    protected function mockCreateWeChatUser($fields = [])
     {
         $user = $this->getCurrentUser();
 
-        $data = array(
+        $data = [
             'appId' => 'ssssssssssssssssssss',
             'type' => 'official',
             'userId' => $user['id'],
             'openId' => 'ffffffffffffffffffff',
             'unionId' => 'hhhhhhhhhhhhhhhhhhhh',
-        );
+        ];
 
         $data = array_merge($data, $fields);
 
