@@ -20,6 +20,8 @@ class ExtensionManager
 
     protected $wechatTemplates = [];
 
+    protected $messageSubscribeTemplates = [];
+
     protected $newcomerTasks = [];
 
     protected $favoriteTypes = [];
@@ -35,6 +37,7 @@ class ExtensionManager
         $this->callbacks = array_merge($this->callbacks, $extension->getCallbacks());
         $this->courseTypes = array_merge($this->courseTypes, $extension->getCourseTypes());
         $this->wechatTemplates = array_merge($this->wechatTemplates, $extension->getWeChatTemplates());
+        $this->messageSubscribeTemplates = array_merge($this->messageSubscribeTemplates, $extension->getMessageSubscribeTemplates());
         $this->newcomerTasks = array_merge($this->newcomerTasks, $extension->getNewcomerTasks());
         $this->favoriteTypes = array_merge($this->favoriteTypes, $extension->getFavoriteTypes());
     }
@@ -72,6 +75,11 @@ class ExtensionManager
     public function getWeChatTemplates()
     {
         return $this->wechatTemplates;
+    }
+
+    public function getMessageSubscribeTemplates()
+    {
+        return $this->messageSubscribeTemplates;
     }
 
     public function getNewcomerTasks()
