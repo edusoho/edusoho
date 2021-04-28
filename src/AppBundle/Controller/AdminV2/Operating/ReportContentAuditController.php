@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller\AdminV2\Operating;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\AuditCenter\Service\ReportService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReportContentAuditController extends BaseController
@@ -31,8 +33,13 @@ class ReportContentAuditController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        foreach ($reportAudits as &$reportAudit) {
+            $context = $this->getReportService()->getReportSourceContext($reportAudit['targetType'], $reportAudit['targetId']);
+            $reportAudit['content'] = empty($context['content']) ? $reportAudit['content'] : $context['content'];
+        }
+
         $userIds = array_merge(array_column($reportAudits, 'auditor'), array_column($reportAudits, 'author'));
-        $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds));
+        $users = empty($userIds) ? [] : ArrayToolkit::index($this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds)), 'id');
 
         return $this->render('admin-v2/operating/report-content-audit/index.html.twig', [
             'reportAudits' => $reportAudits,
@@ -83,7 +90,7 @@ class ReportContentAuditController extends BaseController
 
         $reportRecords = $this->getReportRecordService()->searchReportRecords($conditions, [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $userIds = array_column($reportRecords, 'reporter');
-        $users = empty($userIds) ? [] : $this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds));
+        $users = empty($userIds) ? [] : ArrayToolkit::index($this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds)), 'id');
 
         return $this->render('admin-v2/operating/report-content-audit/record-modal.html.twig', [
             'users' => $users,
@@ -106,5 +113,13 @@ class ReportContentAuditController extends BaseController
     protected function getReportRecordService()
     {
         return $this->createService('AuditCenter:ReportRecordService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->createService('AuditCenter:ReportService');
     }
 }

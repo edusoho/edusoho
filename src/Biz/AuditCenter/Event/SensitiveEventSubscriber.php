@@ -38,19 +38,40 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $threadType = $this->getThreadTargetType($thread);
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($threadType, $thread['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => $threadType,
                 'targetId' => $thread['id'],
                 'author' => $thread['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
+    }
+
+    protected function checkContent($content, $sensitiveWords)
+    {
+        $auditSetting = $this->getContentAuditService()->getAuditSetting();
+        if (empty($auditSetting['enable_auto_audit'])) {
+            $status = 'none_checked';
+            $auditor = 0;
+        } else {
+            $auditor = -1;
+            if (!empty($sensitiveWords)) {
+                $status = 'illegal';
+            } else {
+                $status = 'pass';
+            }
+        }
+
+        return [
+            'status' => $status,
+            'auditor' => $auditor,
+        ];
     }
 
     public function onThreadCreate(Event $event)
@@ -58,13 +79,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $thread = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
 
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => $this->getThreadTargetType($thread),
             'targetId' => $thread['id'],
             'author' => $thread['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function getThreadTargetType($thread)
@@ -91,13 +112,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $threadPost = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
         $thread = $event->getArgument('thread');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => $this->getThreadPostTargetType($threadPost, $thread),
             'targetId' => $threadPost['id'],
             'author' => $threadPost['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     private function getThreadPostTargetType($threadPost, $thread)
@@ -132,13 +153,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $review = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
 
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => $this->getReviewAuditTargetType($review),
             'targetId' => $review['id'],
             'author' => $review['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onReviewUpdate(Event $event)
@@ -149,18 +170,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => $reviewAuditTargetType,
                 'targetId' => $review['id'],
                 'author' => $review['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 
@@ -198,13 +219,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             $targetType = '';
         }
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => $targetType,
             'targetId' => $threadPost['id'],
             'author' => $threadPost['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onCourseThreadPostUpdate(Event $event)
@@ -224,18 +245,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($targetType, $threadPost['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => $targetType,
                 'targetId' => $threadPost['id'],
                 'author' => $threadPost['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 
@@ -250,13 +271,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             $targetType = '';
         }
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => $targetType,
             'targetId' => $thread['id'],
             'author' => $thread['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onCourseThreadUpdate(Event $event)
@@ -272,18 +293,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $sensitiveResult = $event->getArgument('sensitiveResult');
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId('course_thread', $thread['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => $targetType,
                 'targetId' => $thread['id'],
                 'author' => $thread['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 
@@ -291,13 +312,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $threadPost = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => 'group_thread_post',
             'targetId' => $threadPost['id'],
             'author' => $threadPost['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onGroupThreadPostUpdate(Event $event)
@@ -309,18 +330,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId('group_thread_post', $threadPost['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => 'group_thread_post',
                 'targetId' => $threadPost['id'],
                 'author' => $threadPost['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 
@@ -328,13 +349,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $thread = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => 'group_thread',
             'targetId' => $thread['id'],
             'author' => $thread['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onGroupThreadUpdate(Event $event)
@@ -343,18 +364,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $sensitiveResult = $event->getArgument('sensitiveResult');
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId('group_thread', $thread['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => 'group_thread',
                 'targetId' => $thread['id'],
                 'author' => $thread['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 
@@ -362,13 +383,13 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $note = $event->getSubject();
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $this->getContentAuditService()->createAudit([
+        $this->getContentAuditService()->createAudit(array_merge([
             'targetType' => 'course_note',
             'targetId' => $note['id'],
             'author' => $note['userId'],
             'content' => $sensitiveResult['originContent'],
             'sensitiveWords' => $sensitiveResult['keywords'],
-        ]);
+        ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
     }
 
     public function onCourseNoteUpdate(Event $event)
@@ -377,18 +398,18 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
         $sensitiveResult = $event->getArgument('sensitiveResult');
         $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId('course_note', $note['id']);
         if ($existAudit) {
-            $this->getContentAuditService()->updateAudit($existAudit['id'], [
+            $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         } else {
-            $this->getContentAuditService()->createAudit([
+            $this->getContentAuditService()->createAudit(array_merge([
                 'targetType' => 'course_note',
                 'targetId' => $note['id'],
                 'author' => $note['userId'],
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
-            ]);
+            ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
     }
 

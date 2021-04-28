@@ -33,4 +33,6 @@ interface ContentAuditService
     public function createAuditRecord($fields);
 
     public function updateAuditRecord($id, $fields);
+
+    public function getAuditSetting();
 }

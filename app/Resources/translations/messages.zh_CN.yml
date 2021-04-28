@@ -11828,3 +11828,5 @@ admin_v2.syetem.user_content_control.sensitive.import: 批量导入敏感词
 admin_v2.syetem.user_content_control.sensitive.import.choose_file: 选择要导入的文件
 admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EXCEL文件模板导入敏感词
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
+
+site.content.illegal_status: 该条内容已违规处理
