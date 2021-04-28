@@ -16,16 +16,19 @@ class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordS
             'createdTime' => $this->getLastCreatedTime(),
         ];
 
-        $SynchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+
+        if (empty($synchronizeRecords['data'])) {
+            return;
+        }
 
         $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
-
-        foreach ($SynchronizeRecords as $record) {
+        foreach ($synchronizeRecords['data'] as $record) {
             $createRecord = [
-                'toId' => $record['toId'],
-                'templateCode' => $record['templateCode'],
-                'templateType' => $record['templateType'],
-                'createdTime' => $record['createdTime'],
+                'toId' => $record['to_id'],
+                'templateCode' => $record['template_code'],
+                'templateType' => 'subscribe',
+                'createdTime' => strtotime($record['created_time']),
                 'updatedTime' => time(),
             ];
             $batchUpdateHelper->add($createRecord);
@@ -47,7 +50,7 @@ class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordS
      */
     protected function getSubscribeRecordDao()
     {
-        return $this->createDao('WeChat:SubscribeRecord');
+        return $this->createDao('WeChat:SubscribeRecordDao');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Biz\WeChat\Dao\Impl;
 
+use Biz\WeChat\Dao\SubscribeRecordDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordDao
@@ -14,6 +15,7 @@ class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordD
 
         return $this->db()->fetchAssoc($sql) ?: null;
     }
+
 
     public function declares()
     {

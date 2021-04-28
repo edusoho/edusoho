@@ -12,7 +12,7 @@ class AddWeChatSubscribeRecordJob extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
         $currentTime = time();
-        $expression = rand(0, 15).'/15 * * * *';
+        $expression = rand(0, 30).'/30 * * * *';
         $db->exec("INSERT INTO `biz_scheduler_job` (
               `name`,
               `expression`,
