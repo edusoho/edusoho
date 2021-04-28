@@ -53,7 +53,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         );
         $teacher = $this->getUserService()->getUser($teachers[0]['userId']);
         $data = [
-            'thing1' => ['value' => $this->plainTextByLength($this->getCourseNameByCourse($course), 15).'['.(('live' == $courseSet['type']) ? '直播课' : '普通课').']'],
+            'thing1' => ['value' => $this->plainTextByLength($this->getCourseNameByCourse($course), 15).'（'.(('live' == $courseSet['type']) ? '直播课' : '普通课').'）'],
             'thing4' => ['value' => $teacher['nickname']],
             'time2' => ['value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])],
         ];
@@ -76,7 +76,11 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
                 'goto' => $options = ['url' => $url, 'type' => 'url'],
             ];
         }
-        $this->sendNotifications($templateCode, 'wechat_subscribe_notify_lesson_publish', $list);
+        $result = $this->sendNotifications($templateCode, 'wechat_subscribe_notify_lesson_publish', $list);
+
+        if ($result) {
+            $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
+        }
     }
 
     protected function findClassroomMembers($task, $course)

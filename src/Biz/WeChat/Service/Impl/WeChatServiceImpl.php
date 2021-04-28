@@ -567,6 +567,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $records;
     }
 
+    public function updateSubscribeRecordsByIds(array $ids, array $fields)
+    {
+        $updateFields = ArrayToolkit::filter($fields, ['is_send' => 0]);
+
+        return $this->getRecordDao()->update(['ids' => $ids], $updateFields);
+    }
+
     /**
      * @return SubscribeRecordDao
      */

@@ -63,4 +63,6 @@ interface WeChatService
     public function searchSubscribeRecordCount(array $conditions);
 
     public function findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, array $userIds);
+
+    public function updateSubscribeRecordsByIds(array $ids, array $fields);
 }

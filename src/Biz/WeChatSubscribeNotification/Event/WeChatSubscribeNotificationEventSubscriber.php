@@ -110,6 +110,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             return;
         }
 
+        $subscribeRecords = $this->getWeChatService()->searchSubscribeRecords($subscribeRecordConditions, ['id' => 'ASC'], 0, 1);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
         if (empty($task)) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_subscribe_notification_error', '发送微信订阅通知失败:获取任务失败', $activity);
@@ -139,7 +140,11 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'goto' => ['type' => 'url', 'url' => $this->generateUrl('course_task_show', ['courseId' => $task['courseId'], 'id' => $task['id']], UrlGeneratorInterface::ABSOLUTE_URL)],
         ];
 
-        $this->sendCloudWeChatNotification($templateCode, $logName, $list);
+        $result = $this->sendCloudWeChatNotification($templateCode, $logName, $list);
+
+        if ($result) {
+            $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
+        }
     }
 
     public function onTaskCreateSync(Event $event)
@@ -278,14 +283,15 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             ], $templateData);
         }
 
-        $this->sendCloudWeChatNotification($templateCode, 'wechat_subscribe_notify_ask_question', $list);
+        $result = $this->sendCloudWeChatNotification($templateCode, 'wechat_subscribe_notify_ask_question', $list);
+        if ($result) {
+            $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
+        }
     }
 
     protected function sendCloudWeChatNotification($templateCode, $logName, $list)
     {
         try {
-            file_put_contents('/Users/wangsan/var/www/edusoho/app/logs/test.log', 'REQUEST : '.$templateCode.json_encode($list).PHP_EOL, FILE_APPEND);
-
             $result = $this->getCloudNotificationClient()->sendNotifications($list);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);

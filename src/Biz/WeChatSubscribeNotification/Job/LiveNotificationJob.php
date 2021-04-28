@@ -73,6 +73,9 @@ class LiveNotificationJob extends AbstractNotificationJob
             ];
         }
 
-        $this->sendNotifications($templateCode, 'wechat_subscribe_notify_live_play', $list);
+        $result = $this->sendNotifications($templateCode, 'wechat_subscribe_notify_live_play', $list);
+        if ($result) {
+            $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
+        }
     }
 }
