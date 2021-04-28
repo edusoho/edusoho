@@ -14,6 +14,8 @@ interface ArticleDao extends GeneralDaoInterface
 
     public function findByIds(array $ids);
 
+    public function findByLikeTitle($title);
+
     public function searchByCategoryIds(array $categoryIds, $start, $limit);
 
     public function countByCategoryIds(array $categoryIds);
