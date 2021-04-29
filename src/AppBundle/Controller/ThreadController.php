@@ -120,7 +120,7 @@ class ThreadController extends BaseController
     {
         $post = $this->getThreadService()->getPost($postId);
 
-        $conditions = ['parentId' => $postId];
+        $conditions = ['parentId' => $postId, 'excludeAuditStatus' => 'illegal'];
 
         $paginator = new Paginator(
             $request,

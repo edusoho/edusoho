@@ -116,6 +116,7 @@ class GroupController extends BaseController
         $filters = $this->getThreadSearchFilters($request);
 
         $conditions = $this->convertFiltersToConditions($id, $filters);
+        $conditions['excludeAuditStatus'] = 'illegal';
 
         $threadSetting = $this->getSettingService()->get('ugc_thread', []);
         if (empty($threadSetting['enable_thread']) || empty(($threadSetting['enable_group_thread']))) {
