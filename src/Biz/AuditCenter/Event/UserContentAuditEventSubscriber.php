@@ -27,16 +27,15 @@ class UserContentAuditEventSubscriber extends EventSubscriber implements EventSu
     {
         $review = $event->getSubject();
         $reviewAuditTargetType = $this->getReviewAuditTargetType($review);
-        $userAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
 
+        $userAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
         if ($userAudit) {
             $this->getContentAuditService()->deleteAudit($userAudit['id']);
         }
 
-        $reportAudits = $this->getReportAuditService()->findReportAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
-
+        $reportAudits = $this->getReportAuditService()->findReportAuditsByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
         if ($reportAudits) {
-            $this->getReportAuditService()->deleteReportAuditByIds(ArrayToolkit::column($reportAudits,'id'));
+            $this->getReportAuditService()->deleteReportAuditsByIds(ArrayToolkit::column($reportAudits,'id'));
         }
     }
 

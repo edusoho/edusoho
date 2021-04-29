@@ -76,7 +76,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditDao()->getByTargetTypeAndTargetId($targetType, $targetId);
     }
 
-    public function findReportAuditByTargetTypeAndTargetId($targetType, $targetId)
+    public function findReportAuditsByTargetTypeAndTargetId($targetType, $targetId)
     {
         return $this->getReportAuditDao()->findByTargetTypeAndTargetId($targetType, $targetId);
     }
@@ -126,7 +126,7 @@ class ReportAuditServiceImpl extends BaseService implements ReportAuditService
         return $this->getReportAuditDao()->update($id, $fields);
     }
 
-    public function deleteReportAuditByIds($ids)
+    public function deleteReportAuditsByIds($ids)
     {
         if (empty($ids)) {
             return;
