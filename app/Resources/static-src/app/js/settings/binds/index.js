@@ -24,7 +24,7 @@ const wechatIntro = () => {
   const doneLabel = '<i class="es-icon es-icon-close01"></i>';
   const customClass = 'wechat-intro-intro';
   let $notificationType = $('#wechat_notification_type').val();
-  let transStr = $notificationType == 'MessageSubscribe' ? 'wechat.notification.wechat_subscribe_bind_hover' : 'wechat.notification.wechat_bind_hover';
+  let transStr = $notificationType == 'messageSubscribe' ? 'wechat.notification.wechat_subscribe_bind_hover' : 'wechat.notification.wechat_bind_hover';
   introJs().setOptions({
     steps: [{
       element: '.js-wechat-btn',
