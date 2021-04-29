@@ -52,6 +52,8 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             'targetType = :targetType',
             'adopted = :adopted',
             'content LIKE :contentSearch',
+            'auditStatus = :auditStatus',
+            'auditStatus != :excludeAuditStatus',
         ];
 
         $declares['serializes'] = [
