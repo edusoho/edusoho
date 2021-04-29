@@ -69,8 +69,6 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
 
         return 'serviceFollow' === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
-
-        return empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
     }
 
     public function getWeChatUser($id)
