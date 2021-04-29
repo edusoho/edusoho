@@ -30,6 +30,7 @@
         <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
         <th width="55%">{{'admin.operation_article.review.content_th'|trans}}</th>
         <th width="15%">{{'admin.operation_article.review.author_th'|trans}}</th>
+        <th width="8%">{{'内容状态'|trans}}</th>
         <th width="8%">{{'admin.operation_article.review.operation_th'|trans}}</th>
       </tr>
       </thead>
@@ -56,6 +57,15 @@
           <td>
             {{ admin_macro.user_link(author) }}<br>
             <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
+          </td>
+          <td>
+            {% if review.auditStatus|default('none_checked') == 'pass' %}
+              <span class="text-success">{{ '正常'|trans }}</span>
+            {% elseif review.auditStatus|default('none_checked') == 'illegal' %}
+              <span class="text-danger">{{ '违规'|trans }}</span>
+            {% elseif review.auditStatus|default('none_checked') == 'none_checked' %}
+              <span class="text-muted">{{ '未审核'|trans }}</span>
+            {% endif %}
           </td>
           <td>
             <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin:operation_article.review.content'|trans}}" data-url="{{ path('admin_v2_article_review_delete', {id:review.id}) }}">{{'form.btn.delete'|trans}}</button>
