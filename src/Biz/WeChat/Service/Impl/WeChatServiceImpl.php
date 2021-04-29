@@ -683,10 +683,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return;
         }
 
-
         $total = $synchronizeRecords['paging']['total'];
         $totalPage = $total / $limit;
-        for ($page = 0; $page <= $totalPage; $page++) {
+        for ($page = 0; $page <= $totalPage; ++$page) {
             $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options, $offset * $page, $limit);
             $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
             foreach ($synchronizeRecords['data'] as $record) {
