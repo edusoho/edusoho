@@ -22,6 +22,7 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
                 'author = :author',
                 'auditor = :auditor',
                 'targetType = :targetType',
+                'targetType IN (:targetTypes)',
                 'status = :status',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',

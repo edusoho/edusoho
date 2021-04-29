@@ -327,6 +327,7 @@ class CourseController extends CourseBaseController
             'taskId' => $request->query->get('task'),
             'courseSetId' => $course['courseSetId'],
             'courseId' => $selectedCourseId ? $selectedCourseId : '',
+            'excludeAuditStatus' => 'illegal',
         ];
 
         $paginator = new Paginator(
