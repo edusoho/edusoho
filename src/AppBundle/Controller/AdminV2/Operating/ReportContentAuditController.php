@@ -39,7 +39,7 @@ class ReportContentAuditController extends BaseController
         }
 
         $userIds = array_merge(array_column($reportAudits, 'auditor'), array_column($reportAudits, 'author'));
-        $users = empty($userIds) ? [] : ArrayToolkit::index($this->getUserService()->searchUsers(['ids' => $userIds], [], 0, count($userIds)), 'id');
+        $users = empty($userIds) ? [] : ArrayToolkit::index($this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds)), 'id');
 
         return $this->render('admin-v2/operating/report-content-audit/index.html.twig', [
             'reportAudits' => $reportAudits,

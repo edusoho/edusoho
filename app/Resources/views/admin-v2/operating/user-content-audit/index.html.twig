@@ -16,14 +16,13 @@
 
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ select_options(dict('userAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
+        {{ select_options(dict('selectUserAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
       </select>
     </div>
 
     <div class="form-group">
-      <select class="form-control" name="containSensitiveWords">
-        {{ select_options(dict('containSensitiveWords'), app.request.query.get('containSensitiveWords'), 'admin_v2.operation.user_content_audit_form.sensitive_words_filter_option'|trans) }}
-
+      <select class="form-control" name="sensitiveWordsFilter">
+        {{ select_options(dict('sensitiveWordsFilter'), app.request.query.get('sensitiveWordsFilter'), 'admin_v2.operation.user_content_audit_form.sensitive_words_filter_option'|trans) }}
       </select>
     </div>
 
@@ -100,18 +99,18 @@
             {{ admin_macro.user_link(author)|default('') }}<br>
             <span class="text-muted">{{ audit.createdTime|date('Y-n-d H:i') }}</span>
           </td>
-          <td class="text-{{ audit.status }}">
+          <td class="text-{{ audit.status }}" align="center">
             {{ dict_text('userAuditStatus', audit.status) }}
-            {% if 'sysPass' == audit.status %}
+            {% if audit.auditor == '-1' %}
               <br/>
-              ({{ 'admin_v2.operation.user_content_audit_status.sys_pass_sub'|trans }})
+              ({{ '系统已审'|trans }})
             {% endif %}
           </td>
 
           <td>
-            {% if audit.auditor|default(null) is not null and audit.auditor|default(null) == 0 %}
+            {% if audit.auditor == '-1' %}
               {{ 'admin_v2.operation.user_content_audit.default_auditor'|trans }}
-            {% elseif audit.auditor|default(null) is not null %}
+            {% elseif audit.auditor != '0' %}
               {% set auditor = users[audit.auditor]|default([]) %}
               {{ admin_macro.user_link(auditor) }}<br>
             {% else %}

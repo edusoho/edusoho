@@ -104,7 +104,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 
     protected function prepareContentAuditSearchConditions($conditions)
     {
-        $statusAll = ['sysPass', 'none', 'pass', 'illegal'];
+        $statusAll = ['none_checked', 'pass', 'illegal'];
 
         if (!empty($conditions['status']) && !in_array($conditions['status'], $statusAll)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());

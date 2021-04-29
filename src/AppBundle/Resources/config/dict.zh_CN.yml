@@ -598,13 +598,18 @@ userSelectedAuditTargetType:
 
 #用户内容审核状态
 userAuditStatus:
-  sysChecked: 系统已审
-  noneChecked: 未审核
+  none_checked: 未审核
+  pass: 正常
+  illegal: 违规
+#用户内容审核状态
+selectUserAuditStatus:
+  sys_checked: 系统已审
+  none_checked: 未审核
   pass: 正常
   illegal: 违规
 
 #用户内容审核 敏感词
-containSensitiveWords:
+sensitiveWordsFilter:
   1: 含敏感词
   2: 不含敏感词
 
