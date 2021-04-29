@@ -1,6 +1,10 @@
 <template>
-  <div v-if="supportWechatSubscribe" class="wechat-subscribe">
-    <div class="wechat-subscribe-guide" @click="clickSubscribe">
+  <div
+    v-if="supportWechatSubscribe"
+    class="wechat-subscribe"
+    @click="clickSubscribe"
+  >
+    <div class="wechat-subscribe-guide" v-if="firstGuide">
       <img src="static/images/course_guide.png" alt="" />
     </div>
     <i class="iconfont icon-subscribe" />
@@ -37,15 +41,14 @@ export default {
     return {
       supportWechatSubscribe: false,
       firstSubscribe: false,
+      firstGuide: false,
       templateId: '',
     };
   },
 
   created() {
     const browser = navigator.userAgent.toLowerCase();
-    console.log(browser.match(/MicroMessenger/i) != 'micromessenger');
     if (browser.match(/MicroMessenger/i) != 'micromessenger') return;
-    console.log('debugger');
     this.initSubscribe();
     this.firstWechatSubscribe();
   },
@@ -97,7 +100,7 @@ export default {
 
     clickSubscribe() {
       if (this.firstSubscribe) this.firstSubscribe = false;
-      console.log('点击了');
+      this.firstWechatGuide();
     },
 
     firstWechatSubscribe() {
@@ -105,6 +108,13 @@ export default {
       if (status) return;
       localStorage.setItem('first-wechat-subscribe', true);
       this.firstSubscribe = true;
+    },
+
+    firstWechatGuide() {
+      const status = localStorage.getItem('first-wechat-guide');
+      if (status) return;
+      localStorage.setItem('first-wechat-guide', true);
+      this.firstGuide = true;
     },
   },
 };
