@@ -45,8 +45,12 @@
 
       {% if type == 'weixinweb' and client.status|default(null) == 'bind' and setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
         <div class="wechat-inform-section text-center">
-          <div class="wechat-inform-title">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
-          <div class="wechat-inform-subtitle cd-text-danger">{{ 'wechat.notification.open_notification_hint_content'|trans }}</div>
+          {% if setting('wechat_notification.notification_type')|default('')  == 'messageSubscribe' %}
+            <div class="wechat-inform-title">{{ 'wechat.notification.open_subscribe_notification_hint_title'|trans }}</div>
+          {% else %}
+            <div class="wechat-inform-title">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
+            <div class="wechat-inform-subtitle cd-text-danger">{{ 'wechat.notification.open_notification_hint_content'|trans }}</div>
+          {% endif %}
           <div class="wechat-inform-content cd-mt40 row">
             <div class="wechat-inform-content__qcode col-xs-offset-2 col-xs-4">
               {% if weChatUser %}
