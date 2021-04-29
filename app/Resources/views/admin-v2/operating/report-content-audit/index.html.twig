@@ -59,7 +59,7 @@
                 {{ reportAudit.content|default('')|raw|plain_text(200) }}
                 <span class="text-muted trigger">({{ 'admin.course_thread.expand_td'|trans }})</span>
               </div>
-              <div class="long-text">{{ reportAudit.content|raw|default('') }}
+              <div class="long-text">{{ reportAudit.content|default('')|raw }}
                 <span class="text-muted trigger">({{ 'admin.course_thread.collapse_td'|trans }})</span>
               </div>
             </div>
@@ -85,7 +85,7 @@
           <td>
             {% if reportAudit.auditor == '-1' %}
               {{ 'admin_v2.operation.report_content_audit.table.auditor_default'|trans }}
-            {% elseif reportAudit.auditor != '0' %}
+            {% elseif reportAudit.auditor|default() %}
               {% set auditor = users[reportAudit.auditor]|default([]) %}
               {{ admin_macro.user_link(auditor) }}<br>
             {% else %}

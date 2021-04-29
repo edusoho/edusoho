@@ -6286,7 +6286,7 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
-admin.operation_article.review.form.input.title.placeholer: 资讯标题名
+admin.operation_article.review.form.input.title.placeholer: 资讯名称
 admin.operation_article.review.form.input.author.placeholer: 作者
 admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
 admin.operation_article.review.content_th: 评论内容
@@ -10301,6 +10301,7 @@ exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
+exception.rate_limit_ugc_report_max_attempt_reach: 你当日举报次数已达上限!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
@@ -11817,7 +11818,7 @@ admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
 
 exception.audit_center.report_audit_not_exist: 举报信息不存在
 exception.audit_center.report_audit_status_not_valid: 审核状态不合法
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为系统已审-通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为正常（系统已审）
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >

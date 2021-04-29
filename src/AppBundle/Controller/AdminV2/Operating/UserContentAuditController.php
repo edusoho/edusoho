@@ -13,7 +13,6 @@ class UserContentAuditController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
-
         $paginatorTotal = empty($conditions) ? 0 : $this->getContentAuditService()->searchAuditCount($conditions);
 
         $paginator = new Paginator(
@@ -79,7 +78,10 @@ class UserContentAuditController extends BaseController
         }
 
         foreach ($userAudits as &$audit) {
-            $audit['short_content'] = mb_substr($audit['content'], 0, 200).'...';
+            $audit['short_content'] = $audit['content'];
+            if (strlen($audit['content']) > 200) {
+                $audit['short_content'] = mb_substr($audit['content'], 0, 200).'...';
+            }
             $sensitiveWords = $audit['sensitiveWords'];
             if (empty($sensitiveWords)) {
                 continue;
@@ -116,7 +118,7 @@ class UserContentAuditController extends BaseController
             $conditions['startTime'] = strtotime($conditions['startTime']);
         }
 
-        if (!empty($conditions['startTime'])) {
+        if (!empty($conditions['endTime'])) {
             $conditions['endTime'] = strtotime($conditions['endTime']);
         }
 
