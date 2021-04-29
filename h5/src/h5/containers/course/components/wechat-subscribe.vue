@@ -2,7 +2,7 @@
   <div
     v-if="supportWechatSubscribe"
     class="wechat-subscribe"
-    @click.native="clickSubscribe"
+    @click.stop="clickSubscribe"
   >
     <div class="wechat-subscribe-guide">
       <img src="static/images/course_guide.png" alt="" />
