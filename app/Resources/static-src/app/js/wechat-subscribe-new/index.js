@@ -36,27 +36,29 @@ function initWechatSubscribe() {
   }).success(function (res) {
     if (!res) return;
 
-    const template = 
-    `
-    <i class="es-icon es-icon-share"></i>
-    <br>
-    <wx-open-subscribe template="${res}" id="subscribe-btn">
-      <template slot="style">
-        <style>
-          .subscribe-btn {
-            color: #919191;
-            font-size: 12px;
-          }
-        </style>
-      </template>
-      <template>
-        <span class="subscribe-btn">
-          订阅
-        </span>
-      </template>
-    </wx-open-subscribe>
-    `;
-    $('.js-wechat-subscribe').html(template);
+    // const template = 
+    // `
+    // <i class="es-icon es-icon-share"></i>
+    // <br>
+    // <wx-open-subscribe template="${res}" id="subscribe-btn">
+    //   <template slot="style">
+    //     <style>
+    //       .subscribe-btn {
+    //         color: #919191;
+    //         font-size: 12px;
+    //       }
+    //     </style>
+    //   </template>
+    //   <template>
+    //     <span class="subscribe-btn">
+    //       订阅
+    //     </span>
+    //   </template>
+    // </wx-open-subscribe>
+    // `;
+    // $('.js-wechat-subscribe').html(template);
+    $('.js-wechat-template').attr('template', res);
+    console.log($('.js-wechat-template').attr('template'));
     initWechatConfig();
   });
 }
