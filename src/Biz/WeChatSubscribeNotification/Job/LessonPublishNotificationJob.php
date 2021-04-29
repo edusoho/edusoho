@@ -37,11 +37,9 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         }
 
         $userIds = ArrayToolkit::column($members, 'userId');
-        $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
-
         $smsType = 'live' === $courseSet['type'] ? 'sms_live_lesson_publish' : 'sms_normal_lesson_publish';
         $templateId = 'live' === $courseSet['type'] ? SmsType::LIVE_NOTIFY : SmsType::TASK_PUBLISH;
-        $params = 'live' === $courseSet['type'] ? [
+        $smsParams = 'live' === $courseSet['type'] ? [
             'course_title' => '课程：'.$this->getCourseNameByCourse($course),
             'lesson_title' => '学习任务：'.$task['title'],
             'startTime' => date('Y-m-d H:i', $task['startTime']),
@@ -52,12 +50,13 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'url' => $url,
         ];
 
+        $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
         if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_COURSE_UPDATE) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
             $this->getWeChatService()->sendSubscribeSms(
                 MessageSubscribeTemplateUtil::TEMPLATE_COURSE_UPDATE,
                 array_diff($userIds, array_column($subscribeRecords, 'userId')),
                 $templateId,
-                $params
+                $smsParams
             );
         }
 

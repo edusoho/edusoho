@@ -110,24 +110,26 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             return;
         }
 
-        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($answerRecord['user_id']);
-        if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($answerRecord['user_id']) || empty($weChatUser['openId'])) {
+        $weChatUser = $this->getWeChatService()->searchWeChatUsers(['userId' => $answerRecord['user_id']], ['lastRefreshTime' => 'ASC'], 0, 1, ['id', 'openId']);
+        $weChatUser = empty($weChatUser) ? [] : $weChatUser[0];
+        if (empty($weChatUser['openId'])) {
             return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
         }
 
         list($templateCode, $logName) = $this->getTemplateCodeAndLogNameByActivity($activity);
+
+        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
+        if (empty($templateId)) {
+            return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
+        }
 
         $subscribeRecordConditions = ['templateCode' => $templateCode, 'templateType' => 'once', 'toId' => $weChatUser['openId'], 'isSend_LT' => 1];
         $subscribeRecordsCount = $this->getWeChatService()->searchSubscribeRecordCount($subscribeRecordConditions);
         if (empty($subscribeRecordsCount)) {
             return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
         }
-        $subscribeRecords = $this->getWeChatService()->searchSubscribeRecords($subscribeRecordConditions, ['id' => 'ASC'], 0, 1);
-        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
-        if (empty($templateId)) {
-            return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
-        }
 
+        $subscribeRecords = $this->getWeChatService()->searchSubscribeRecords($subscribeRecordConditions, ['id' => 'ASC'], 0, 1);
         $remainTime = $subscribeRecordsCount > 1 ? '剩'.($subscribeRecordsCount - 1).'次通知' : '无剩余通知';
 
         if ('testpaper' === $activity['mediaType']) {
@@ -348,6 +350,22 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
         }
         $user = $this->getUserService()->getUser($templateParams['thread']['userId']);
 
+        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
+        if (empty($templateId)) {
+            $this->getWeChatService()->sendSubscribeSms(
+                MessageSubscribeTemplateUtil::TEMPLATE_ASK_QUESTION,
+               $userIds,
+                SmsType::ANSWER_QUESTION_NOTIFY,
+                [
+                    'title' => $templateParams['title'],
+                    'user' => $user['nickname'],
+                    'question' => $templateParams['thread']['title'],
+                    'time' => date('Y-m-d H:i', $templateParams['thread']['createdTime']),
+                ]);
+
+            return;
+        }
+
         $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
         $this->getWeChatService()->sendSubscribeSms(
             MessageSubscribeTemplateUtil::TEMPLATE_ASK_QUESTION,
@@ -361,11 +379,6 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             ]);
 
         if (empty($subscribeRecords)) {
-            return;
-        }
-
-        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
-        if (empty($templateId)) {
             return;
         }
 
