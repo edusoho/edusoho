@@ -205,7 +205,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
                 $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
                 if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
-                    $this->getWeChatService()->sendSubscribeSms(
+                    return $this->getWeChatService()->sendSubscribeSms(
                         MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
                         [$userId],
                         SmsType::BUY_NOTIFY,

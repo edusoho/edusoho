@@ -1,24 +1,26 @@
 {% import 'admin-v2/macro.html.twig' as admin_macro %}
 <tr id="notification-table-tr-{{ notification.id }}">
-  <td>{{ event.title }}</td>
-  <td>{{ event.content|raw }}</td>
+  <td>{% if event %}{{ event.title }}{% else %}{{ smsEvent.title }}{% endif %}</td>
+  <td>{{ event.content|default('')|raw }}</td>
   <td>{{ smsEvent.content|default('')|raw }}</td>
   <td>{{ notification.createdTime|date('Y-m-d H:i:s') }}</td>
   <td>
-    {{ 'wechat.notification.wechat'|trans }}：
-    {% if event.status == 'finish' %}
-      {{ "wechat.notification.status.finish"|trans }}<br>
-      {{ 'wechat.notification.record_send_number'|trans }}：
-      {% if notification.reason %}
-        <a href="#modal" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_wechat_notification_record_detail', {'id':event.id}) }}">{{ event.succeedCount }}/{{ event.totalCount }}</a>
+    {% if event %}
+      {{ 'wechat.notification.wechat'|trans }}：
+      {% if event.status == 'finish' %}
+        {{ "wechat.notification.status.finish"|trans }}<br>
+        {{ 'wechat.notification.record_send_number'|trans }}：
+        {% if event.reason %}
+          <a href="#modal" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_wechat_notification_record_detail', {'id':event.id}) }}">{{ event.succeedCount }}/{{ event.totalCount }}</a>
+        {% else %}
+          {{ event.succeedCount }}/{{ event.totalCount }}
+        {% endif %}
       {% else %}
-        {{ event.succeedCount }}/{{ event.totalCount }}
+        {{ "wechat.notification.status.sending"|trans }}<br>
+        {{ 'wechat.notification.record_send_number'|trans }}：{{ '--' }}
       {% endif %}
-    {% else %}
-      {{ "wechat.notification.status.sending"|trans }}<br>
-      {{ 'wechat.notification.record_send_number'|trans }}：{{ '--' }}
+      <br>
     {% endif %}
-    <br>
     {% if smsEvent %}
       {{ 'wechat.notification.sms'|trans }}: {{ "wechat.notification.status.finish"|trans }}
       <br>
