@@ -528,4 +528,4 @@ certificateSearchTypes:
 
 WechatNotificationType:
   serviceFollow: service follow
-  MessageSubscribe: Message subscribe
+  messageSubscribe: Message subscribe

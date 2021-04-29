@@ -558,4 +558,4 @@ certificateAuditSearchTypes:
 
 WechatNotificationType:
   serviceFollow: 服务号关注
-  MessageSubscribe: 消息订阅
+  messageSubscribe: 消息订阅

@@ -2,21 +2,21 @@
 
 namespace Biz\WeChat\Job;
 
-use Biz\WeChat\Service\SubscribeRecordService;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class WeChatSubscribeRecordSynJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getSubscribeRecordService()->synchronizeSubscriptionRecords();
+        $this->getWeChatService()->synchronizeSubscriptionRecords();
     }
 
     /**
-     * @return SubscribeRecordService
+     * @return WeChatService
      */
-    protected function getSubscribeRecordService()
+    protected function getWeChatService()
     {
-        return $this->biz->service('WeChat:SubscribeRecordService');
+        return $this->biz->service('WeChat:WeChatService');
     }
 }
