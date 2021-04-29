@@ -377,6 +377,7 @@ class CourseController extends CourseBaseController
         $conditions = [
             'parentId' => 0,
             'targetType' => 'course',
+            'excludeAuditStatus' => 'illegal',
         ];
 
         if (!empty($selectedCourseId)) {
