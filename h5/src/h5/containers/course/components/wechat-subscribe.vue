@@ -1,12 +1,14 @@
 <template>
-  <div v-if="supportWechatSubscribe" class="wechat-subscribe">
-    <!-- <div class="wechat-subscribe-guide" v-if="firstGuide">
-      <img src="static/images/course_guide.png" alt="" />
-    </div> -->
-    <i class="iconfont icon-subscribe" />
-    <div v-if="firstSubscribe" class="wechat-subscribe-popover">
+  <div v-if="isWechatSubscribe" class="wechat-subscribe">
+    <div v-if="firstGuide" class="wechat-subscribe-first-guide">
       请点此订阅微信通知
     </div>
+
+    <div v-if="secondGuide" class="wechat-subscribe-second-guide">
+      <img src="static/images/course_guide.png" alt="" />
+    </div>
+
+    <i class="iconfont icon-subscribe" />
     <wx-open-subscribe :template="templateId" id="subscribe-btn">
       <script type="text/wxtag-template" slot="style">
         <style>
@@ -28,24 +30,35 @@
 <script>
 import wx from 'weixin-js-sdk';
 import Api from '@/api';
+
 const reg = /accept/;
+const WECHAT_SUBSCRIBE_FIRST_GUIDE = 'WECHAT_SUBSCRIBE_FIRST_GUIDE';
+const WECHAT_SUBSCRIBE_SECOND_GUIDE = 'WECHAT_SUBSCRIBE_SECOND_GUIDE';
 
 export default {
   name: 'WechatSubscribe',
 
   data() {
     return {
-      supportWechatSubscribe: false,
-      firstSubscribe: false,
-      firstGuide: false,
       templateId: '',
+      isWechatSubscribe: false,
+      firstGuide: false,
+      secondGuide: false,
     };
   },
 
   created() {
     if (!this.isWeixin()) return;
+
+    if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_FIRST_GUIDE)) {
+      this.firstGuide = true;
+    }
+
+    if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
+      this.secondGuide = true;
+    }
+
     this.initSubscribe();
-    this.firstWechatSubscribe();
   },
 
   methods: {
@@ -71,13 +84,14 @@ export default {
           openTagList: ['wx-open-subscribe'],
         });
 
-        this.supportWechatSubscribe = true;
+        this.isWechatSubscribe = true;
 
         wx.ready(() => {
           const btn = document.getElementById('subscribe-btn');
           const that = this;
           btn.addEventListener('success', function(e) {
-            that.firstSubscribe = false;
+            that.firstGuide = false;
+            that.secondGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
               that.$toast('订阅成功');
@@ -95,24 +109,12 @@ export default {
       return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
 
-    // clickSubscribe() {
-    //   if (this.firstSubscribe) this.firstSubscribe = false;
-    //   this.firstWechatGuide();
-    // },
-
-    firstWechatSubscribe() {
-      const status = localStorage.getItem('first-wechat-subscribe');
-      if (status) return;
-      localStorage.setItem('first-wechat-subscribe', true);
-      this.firstSubscribe = true;
+    isKeyLocalStorage(key) {
+      const value = localStorage.getItem(key);
+      if (value) return value;
+      localStorage.setItem(key, true);
+      return false;
     },
-
-    // firstWechatGuide() {
-    //   const status = localStorage.getItem('first-wechat-guide');
-    //   if (status) return;
-    //   localStorage.setItem('first-wechat-guide', true);
-    //   this.firstGuide = true;
-    // },
   },
 };
 </script>

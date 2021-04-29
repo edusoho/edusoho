@@ -10,7 +10,7 @@
 		font-size: 14px;
 	}
 
-	.wechat-subscribe-popover {
+	.wechat-subscribe-first-guide {
 		position: absolute;
 		top: 40px;
 		right: 0;
@@ -31,12 +31,17 @@
 		}
 	}
 
-	.wechat-subscribe-guide {
+	.wechat-subscribe-second-guide {
 		position: fixed;
 		top: 50px;
 		left: 50%;
-		width: 325px;
-		height: 224px;
+		width: 218px;
+		height: 150px;
 		transform: translateX(-50%);
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
 	}
 }
