@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Course\CourseNoteException;
-use Biz\Task\Service\TaskService;
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
+use AppBundle\Common\Paginator;
+use Biz\Course\CourseNoteException;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class NoteController extends BaseController
@@ -15,7 +15,8 @@ class NoteController extends BaseController
     public function listAction(Request $request, $courseIds, $filters)
     {
         $conditions = $this->convertFiltersToConditions($courseIds, $filters);
-        $notes = array();
+        $conditions['excludeAuditStatus'] = 'illegal';
+        $notes = [];
         $result['notes'] = $notes;
         if ((isset($conditions['courseIds']) && !empty($conditions['courseIds'])) ||
             (isset($conditions['courseId']) && !empty($conditions['courseId']))
@@ -42,7 +43,6 @@ class NoteController extends BaseController
     /**
      * create note or update note.
      *
-     * @param Request $request
      * @param  $courseId
      * @param  $taskId
      *
@@ -56,7 +56,7 @@ class NoteController extends BaseController
             $note = $request->request->all();
             $note['courseId'] = $courseId;
             $note['taskId'] = $taskId;
-            $note['status'] = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
+            $note['status'] = isset($note['status']) && 'on' === $note['status'] ? 1 : 0;
             $note = $this->getNoteService()->saveNote($note);
 
             return $this->createJsonResponse($note);
@@ -88,7 +88,7 @@ class NoteController extends BaseController
     protected function makeNotesRelated($notes, $courseIds)
     {
         $user = $this->getCurrentUser();
-        $result = array();
+        $result = [];
         $noteLikes = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
         $userIds = ArrayToolkit::column($notes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -109,9 +109,9 @@ class NoteController extends BaseController
 
     protected function convertFiltersToConditions($courseIds, $filters)
     {
-        $conditions = array(
+        $conditions = [
             'status' => 1,
-        );
+        ];
         if (is_numeric($courseIds)) {
             $conditions['courseId'] = $courseIds;
         }
@@ -130,7 +130,7 @@ class NoteController extends BaseController
 
     protected function convertFiltersToOrderBy($filters)
     {
-        $orderBy = array();
+        $orderBy = [];
         switch ($filters['sort']) {
             case 'latest':
                 $orderBy['updatedTime'] = 'DESC';
