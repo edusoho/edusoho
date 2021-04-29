@@ -25,7 +25,7 @@
         <td width="30%">{{ template.content|trans|default('无')|raw }}</td>
         <td width="10%">{{ template.position|trans|default('无')|raw }}</td>
         <td width="15%">{{ template.sms_content|default('无')|trans|raw }}</td>
-        <td width="10%">{{ template.object }}</td>
+        <td width="10%">{{ template.object|trans|raw }}</td>
         <td width="10%">
           {% if template.status == 1 %}
             <span class="text-success">{{ 'wechat.notification.template_opend'|trans }}</span>

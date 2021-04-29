@@ -37,6 +37,7 @@ define(function(require, exports, module) {
       $.post($form.data('url'), $form.serialize())
         .success(function() {
           Notify.success(Translator.trans('site.save_success_hint'));
+          window.location.reload();
         }).fail(function (){
           Notify.danger(Translator.trans('site.save_error_hint'));
       });
