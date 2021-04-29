@@ -6126,7 +6126,7 @@ admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
-admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
+admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信向学员发送消息，学员绑定微信并主动订阅时即可收取微信通知，一次订阅可收到一次消息通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
 admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
@@ -7749,7 +7749,7 @@ admin.setting_wechat_auth.wechat_auth_login_hint: >
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
   开通后，绑定微信并且关注服务号或订阅通知的用户即可收取微信服务号模板消息。<br>
-  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件。</span>。
+  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件。</span>
 admin.setting_wechat_auth.wechat_pay_hint: >
   开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
