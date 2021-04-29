@@ -17,7 +17,6 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
 
               onLoadDialog();
           }
-          window.removeEventListener("message", receiveMessage, false);
       }
       window.addEventListener("message", receiveMessage, false);
     };

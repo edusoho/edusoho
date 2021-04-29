@@ -9,6 +9,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -173,6 +174,14 @@ class WeChatNotificationController extends BaseController
         $notificationSms = $request->request->get('notificationSms');
         $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
+        $setting = $this->getSettingService()->get('wechat_notification');
+        if ($setting['notification_type'] == 'MessageSubscribe') {
+            $loginConnect = $this->getSettingService()->get('login_bind');
+            $this->getBiz()['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
+                'app_id' => $loginConnect['weixinmob_key'],
+                'app_secret' => $loginConnect['weixinmob_secret'],
+            ]);
+        }
 
         return $this->createJsonResponse(true);
     }

@@ -12,11 +12,11 @@ class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordS
 {
     public function synchronizeSubscriptionRecords()
     {
-        $options = [
+        $conditions = [
             'createdTime_GT' => $this->getLastCreatedTime(),
         ];
 
-        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($conditions);
 
         if (empty($synchronizeRecords['data'])) {
             return;

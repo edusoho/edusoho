@@ -7740,6 +7740,7 @@ admin.setting_wechat_auth.wechat_notification: 微信服务号通知
 admin.setting_wechat_auth.wechat_notification_type: 通知模式
 admin.setting_wechat_auth.wechat_pay: 微信支付
 admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: 用户需要绑定微信，且需要订阅多次才能接收到相应次数的微信通知
+admin.setting_wechat_auth.wechat_notification_message_tip: 用户只要绑定微信并关注服务号即可收到微信通知<br><span class="text-danger">注意：微信规定于2021-04-30完成对消息订阅通知模式的灰度测试，后续有可能会禁用服务号关注通知模式</span>
 admin.setting_wechat_auth.wechat_notification_sms: 短信通知
 admin.setting_wechat_auth.wechat_notification_sms_tip: 开启此项配置后会以短信的方式通知没有订阅的用户
 admin.setting_wechat_auth.web_scan_login_hint: >
