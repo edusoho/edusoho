@@ -14,9 +14,11 @@ use Biz\WeChat\Dao\SubscribeRecordDao;
 use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\WeChat\WeChatException;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use ESCloud\SDK\Service\NotificationService;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 
@@ -432,7 +434,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 ],
             ];
         }
-        $wechatSetting = $wechatSetting = $this->getSettingService()->get($settingName);
+        $wechatSetting = $this->getSettingService()->get($settingName);
 
         if (empty($wechatSetting['templates'][$key]['templateId'])) {
             try {
@@ -465,7 +467,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $this->getSettingService()->set($settingName, $wechatSetting);
 
-        return $this->getSettingService()->get($settingName, $wechatSetting);
+        return $this->getSettingService()->get($settingName);
     }
 
     /**
@@ -571,12 +573,12 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     public function searchSubscribeRecords(array $conditions, array $orderBy, $start, $limit, array $columns = [])
     {
-        return $this->getRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
+        return $this->getSubscribeRecordDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function searchSubscribeRecordCount(array $conditions)
     {
-        return $this->getRecordDao()->count($conditions);
+        return $this->getSubscribeRecordDao()->count($conditions);
     }
 
     public function findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, array $userIds)
@@ -618,15 +620,56 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $updateFields = ArrayToolkit::filter($fields, ['is_send' => 0]);
 
-        return $this->getRecordDao()->update(['ids' => $ids], $updateFields);
+        return $this->getSubscribeRecordDao()->update(['ids' => $ids], $updateFields);
+    }
+
+    public function synchronizeSubscriptionRecords()
+    {
+        $options = [
+            'createdTime' => $this->getLastCreatedTime(),
+        ];
+
+        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+
+        if (empty($synchronizeRecords['data'])) {
+            return;
+        }
+
+        $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
+        foreach ($synchronizeRecords['data'] as $record) {
+            $createRecord = [
+                'toId' => $record['to_id'],
+                'templateCode' => $record['template_code'],
+                'templateType' => 'subscribe',
+                'createdTime' => strtotime($record['created_time']),
+                'updatedTime' => time(),
+            ];
+            $batchUpdateHelper->add($createRecord);
+        }
+        $batchUpdateHelper->flush();
+    }
+
+    protected function getLastCreatedTime()
+    {
+        $lastRecord = $this->getSubscribeRecordDao()->getLastRecord();
+
+        return $lastRecord ? $lastRecord['createdTime'] : 0;
     }
 
     /**
      * @return SubscribeRecordDao
      */
-    protected function getRecordDao()
+    protected function getSubscribeRecordDao()
     {
         return $this->createDao('WeChat:SubscribeRecordDao');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getSDKNotificationService()
+    {
+        return $this->biz['ESCloudSdk.notification'];
     }
 
     protected function isCloudOpen()

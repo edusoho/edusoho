@@ -24,7 +24,7 @@ class WeChatNotificationController extends BaseController
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
         $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
 
-        $wechatAuth = $this->getAuthorizationInfo();
+        $wechatAuth = $this->getAuthorizationInfo($wechatNotificationSetting);
         if ($wechatAuth['isAuthorized']) {
             $wechatNotificationSetting['is_authorization'] = 1;
         }
@@ -47,13 +47,18 @@ class WeChatNotificationController extends BaseController
 
     public function indexAction(Request $request)
     {
+        $notificationMode = $this->getSettingService()->get('wechat_notification', []);
+        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
+        $conditions = [
+            'source' => $mode,
+        ];
         $paginator = new Paginator(
             $request,
-            $this->getNotificationService()->countBatches([]),
+            $this->getNotificationService()->countBatches($conditions),
             20
         );
         $notifications = $this->getNotificationService()->searchBatches(
-            [],
+            $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -64,20 +69,35 @@ class WeChatNotificationController extends BaseController
         $this->getNotificationService()->batchHandleNotificationResults($notifications);
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
         $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
+        $smsNotificationEvents = $this->getNotificationService()->findEventsByIds(array_column($notifications, 'smsEventId'));
+        $smsNotificationEvents = ArrayToolkit::index($smsNotificationEvents, 'id');
 
-        return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
+        if ('wechat_template' == $mode) {
+            return $this->render('admin-v2/operating/wechat-notification/index.html.twig', [
+                'notifications' => $notifications,
+                'notificationEvents' => $notificationEvents,
+                'smsNotificationEvents' => $smsNotificationEvents,
+                'paginator' => $paginator,
+            ]);
+        }
+
+        return $this->render('admin-v2/operating/wechat-notification/subscribe-record.html.twig', [
             'notifications' => $notifications,
             'notificationEvents' => $notificationEvents,
+            'smsNotificationEvents' => $smsNotificationEvents,
             'paginator' => $paginator,
         ]);
     }
 
     public function recordDetailAction(Request $request, $id)
     {
+        $notificationMode = $this->getSettingService()->get('wechat_notification', []);
+        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $notification = $this->getNotificationService()->getEvent($id);
 
         return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [
             'notification' => $notification,
+            'mode' => $mode,
         ]);
     }
 
@@ -257,21 +277,24 @@ class WeChatNotificationController extends BaseController
         return true;
     }
 
-    protected function getAuthorizationInfo()
+    protected function getAuthorizationInfo($setting)
     {
+        $mode = empty($setting) || 'MessageSubscribe' != $setting['notification_type'] ? 'wechat_template' : 'wewchat_subscribe';
         $biz = $this->getBiz();
         try {
-            $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+            $info = $biz['ESCloudSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
             if ($info['isAuthorized']) {
                 $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
                 $ids = ArrayToolkit::column($ids, 'id');
                 /**
-                 * 2、用户管理权限  7、群发与通知权限
+                 * 2、用户管理权限  7、群发与通知权限  89、订阅通知权限
                  */
-                $needIds = [2, 7, 89];
+                $needIds = 'wechat_template' == $mode ? [2, 7] : [2, 7, 89];
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
                     $info['wholeness'] = 1;
+                } else {
+                    $info['isAuthorized'] = 'wechat_template' == $mode ? true : false;
                 }
             }
         } catch (\Exception $e) {

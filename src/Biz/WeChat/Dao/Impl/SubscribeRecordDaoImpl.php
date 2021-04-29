@@ -9,6 +9,13 @@ class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordD
 {
     protected $table = 'wechat_subscribe_record';
 
+    public function getLastRecord()
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT 1";
+
+        return $this->db()->fetchAssoc($sql) ?: null;
+    }
+
     public function declares()
     {
         return [
