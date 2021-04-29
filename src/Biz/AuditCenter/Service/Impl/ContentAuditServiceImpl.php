@@ -110,6 +110,11 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        if (isset($conditions['targetType'])) {
+            $conditions['targetTypes'] = $this->convertTargetType($conditions['targetType']);
+            unset($conditions['targetType']);
+        }
+
         return $conditions;
     }
 
@@ -180,6 +185,61 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
         ]);
 
         return $this->getContentAuditRecordDao()->update($id, $fields);
+    }
+
+    public function convertTargetType($targetType)
+    {
+        $matchList = [
+            'course_review' => [
+                'course_review',
+                'course_review_reply',
+            ],
+            'classroom_review' => [
+                'classroom_review',
+                'classroom_review_reply',
+            ],
+            'item_bank_exercise_review' => [
+                'item_bank_exercise_review',
+                'item_bank_exercise_review_reply',
+            ],
+            'open_course_review' => [
+                'open_course_review',
+                'open_course_review_reply',
+            ],
+            'article_review' => [
+                'article_review',
+                'article_review_reply',
+            ],
+            'course_note' => [
+                'course_note',
+            ],
+            'course_thread' => [
+                'course_thread',
+                'course_thread_post',
+            ],
+            'classroom_thread' => [
+                'classroom_thread',
+                'classroom_thread_reply',
+            ],
+            'group_thread' => [
+                'group_thread',
+                'group_thread_post',
+            ],
+            'course_question' => [
+                'course_question',
+                'course_question_post',
+            ],
+            'classroom_question' => [
+                'classroom_question',
+                'classroom_question_reply',
+            ],
+            'classroom_event' => [
+                'classroom_event',
+                'classroom_event_reply',
+            ],
+        ];
+
+        return empty($matchList[$targetType]) ? [] : $matchList[$targetType];
     }
 
     /**
