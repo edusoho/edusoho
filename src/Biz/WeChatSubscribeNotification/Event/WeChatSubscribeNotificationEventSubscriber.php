@@ -131,6 +131,9 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
 
         $subscribeRecords = $this->getWeChatService()->searchSubscribeRecords($subscribeRecordConditions, ['id' => 'ASC'], 0, 1);
         $remainTime = $subscribeRecordsCount > 1 ? '剩'.($subscribeRecordsCount - 1).'次通知' : '无剩余通知';
+        if ('testpaper' === $activity['mediaType']) {
+            $remainTime = $remainTime.'，请进入课程学习页订阅';
+        }
 
         if ('testpaper' === $activity['mediaType']) {
             $data = [
