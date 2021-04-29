@@ -99,7 +99,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $keywords = array_column($rows, 'name');
 
-        $chunkKeywords = array_chunk($keywords, 2);
+        $chunkKeywords = array_chunk($keywords, 100);
 
         $matchs = [];
         $matcheds = 0;
