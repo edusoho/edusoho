@@ -13,7 +13,7 @@ CKEDITOR.editorConfig = function( config ) {
     // config.uiColor = '#AADC6E';
 
     config.toolbar_Minimal = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source', 'uploadpictures', 'CodeSnippet', 'kityformula'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source', 'CodeSnippet', 'kityformula'] }
     ];
 
     config.toolbar_editVip = [
@@ -21,24 +21,24 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     config.toolbar_Simple = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', '-', 'Source'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'CodeSnippet', '-', 'Source'] }
     ];
 
     config.toolbar_Thread = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', '-', 'Source', 'kityformula', '-', 'Maximize'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'CodeSnippet', '-', 'Source', 'kityformula', '-', 'Maximize'] }
     ];
 
     config.toolbar_Question = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'QuestionBlank', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source', 'uploadpictures', 'CodeSnippet', 'kityformula', '-', 'Maximize'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'QuestionBlank', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source', 'CodeSnippet', 'kityformula', '-', 'Maximize'] }
     ];
 
     config.toolbar_Group = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', '-', 'Source', '-', 'Maximize'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'CodeSnippet', '-', 'Source', '-', 'Maximize'] }
     ];
 
     config.toolbar_Detail = [
         { items: [ 'FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', '-', 'Source', '-', 'Maximize'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'CodeSnippet', '-', 'Source', '-', 'Maximize'] }
     ];
 
     config.toolbar_Task = [
@@ -46,7 +46,7 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Link', 'Unlink' ] },
         { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
         { items: [ 'FontSize', 'TextColor', 'BGColor' ] },
-        { items: [ 'uploadpictures', 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'kityformula' ] },
+        { items: [ 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'kityformula' ] },
         { items: [ 'PasteText', 'PasteFromWord'] },
         { items: [ 'Find', '-', 'Source'] }
     ];
@@ -56,7 +56,7 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Link', 'Unlink' ] },
         { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
         { items: [ 'FontSize', 'TextColor', 'BGColor' ] },
-        { items: [ 'uploadpictures', 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'kityformula' ] },
+        { items: [ 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'kityformula' ] },
         { items: [ 'PasteText', 'PasteFromWord'] },
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] }
     ];
@@ -66,7 +66,7 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Link', 'Unlink' ] },
         { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
         { items: [ 'FontSize', 'TextColor', 'BGColor' ] },
-        { items: [ 'uploadpictures', 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe' ] },
+        { items: [ 'CodeSnippet', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe' ] },
         { items: [ 'PasteText', 'PasteFromWord'] },
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] }
     ];
