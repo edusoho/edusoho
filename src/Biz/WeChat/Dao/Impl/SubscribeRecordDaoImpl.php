@@ -16,7 +16,6 @@ class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordD
         return $this->db()->fetchAssoc($sql) ?: null;
     }
 
-
     public function declares()
     {
         return [
