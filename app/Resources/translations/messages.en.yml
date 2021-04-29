@@ -10564,7 +10564,7 @@ admin_v2.operation.audit_center.table.status.sys_illegal: System illegal
 exception.audit_center.report_audit_not_exist: Report information does not exist
 exception.audit_center.report_audit_status_not_valid: Invalid review status
 
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the review status is system reviewed-passed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the audit status is normal (system approved)
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >

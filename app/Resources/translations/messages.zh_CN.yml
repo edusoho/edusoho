@@ -11818,7 +11818,7 @@ admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
 
 exception.audit_center.report_audit_not_exist: 举报信息不存在
 exception.audit_center.report_audit_status_not_valid: 审核状态不合法
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为系统已审-通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为正常（系统已审）
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
 admin_v2.system.user_content_control.content_audit_setting.title_tips: >
