@@ -64,6 +64,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'targetId IN (:targetIds)',
                 'startTime > :startTimeGreaterThan',
                 'content LIKE :content',
+                'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
             ],
         ];
     }

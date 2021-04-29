@@ -25,6 +25,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'rating = :rating',
                 'targetType IN (:targetTypes)',
                 'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
             ],
             'timestamps' => [
                 'createdTime',
