@@ -20,7 +20,7 @@ class SubscribeTemplateDataTag extends BaseDataTag implements DataTag
             return '';
         }
 
-        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
+        if ('messageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
             return '';
         }
 

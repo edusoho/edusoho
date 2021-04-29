@@ -59,7 +59,7 @@
           <div id="message-template-tip" {% if wechatNotificationSetting.notification_type != 'serviceFollow' %}style="display:none;"{% endif %}>
             <div class="row form-group">
               <div class="col-md-5 col-md-offset-3">
-                <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_message_tip'|trans }}</span>
+                <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_message_tip'|trans|raw }}</span>
               </div>
             </div>
           </div>

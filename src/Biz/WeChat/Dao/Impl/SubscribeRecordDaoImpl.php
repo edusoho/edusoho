@@ -19,9 +19,15 @@ class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordD
     public function declares()
     {
         return [
-            'orderbys' => [],
+            'orderbys' => ['id'],
             'conditions' => [
                 'id = :id',
+                'toId = :toId',
+                'toId IN (:toIds)',
+                'templateCode = :templateCode',
+                'templateType = :templateType',
+                'isSend < :isSend_LT',
+                'id IN (:ids)',
             ],
             'timestamps' => ['createdTime', 'updatedTime'],
         ];

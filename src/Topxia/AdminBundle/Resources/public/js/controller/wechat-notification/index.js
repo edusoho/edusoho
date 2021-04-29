@@ -45,7 +45,7 @@ define(function(require, exports, module) {
 
     $('input[type=radio][name=notificationType]').change(function() {
       var type = $('input[type=radio][name=notificationType]:checked').val();
-      if (type === 'MessageSubscribe') {
+      if (type === 'messageSubscribe') {
         $('#message-subscribe').show();
         $('#service-follow').hide();
         $('#message-subscribe-form').show();

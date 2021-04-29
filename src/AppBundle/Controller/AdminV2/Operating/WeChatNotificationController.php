@@ -47,7 +47,7 @@ class WeChatNotificationController extends BaseController
     public function indexAction(Request $request)
     {
         $notificationMode = $this->getSettingService()->get('wechat_notification', []);
-        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
+        $mode = empty($notificationMode) || 'messageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $conditions = [
             'source' => $mode,
         ];
@@ -91,7 +91,7 @@ class WeChatNotificationController extends BaseController
     public function recordDetailAction(Request $request, $id)
     {
         $notificationMode = $this->getSettingService()->get('wechat_notification', []);
-        $mode = empty($notificationMode) || 'MessageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
+        $mode = empty($notificationMode) || 'messageSubscribe' != $notificationMode['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $notification = $this->getNotificationService()->getEvent($id);
 
         return $this->render('admin-v2/operating/wechat-notification/notification-modal.html.twig', [
@@ -114,7 +114,7 @@ class WeChatNotificationController extends BaseController
     {
         $key = $request->query->get('key');
         $notificationType = $request->query->get('notificationType');
-        if (!in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
+        if (!in_array($notificationType, ['serviceFollow', 'messageSubscribe'])) {
             throw new \InvalidArgumentException('Notification type error');
         }
         $wechatSetting = $this->getSettingService()->get('wechat', []);
@@ -122,7 +122,7 @@ class WeChatNotificationController extends BaseController
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $wechat_notification_enabled = $wechatSetting['wechat_notification_enabled'];
 
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
             $templates = $this->getTemplateSetting($templates, $wechatSetting);
@@ -161,7 +161,7 @@ class WeChatNotificationController extends BaseController
 
     public function templateSettingFilter($notificationType, $template)
     {
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             return isset($template['id']);
         }
 
@@ -175,7 +175,7 @@ class WeChatNotificationController extends BaseController
         $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
         $setting = $this->getSettingService()->get('wechat_notification');
-        if ('MessageSubscribe' == $setting['notification_type']) {
+        if ('messageSubscribe' == $setting['notification_type']) {
             $loginConnect = $this->getSettingService()->get('login_bind');
             $this->getBiz()['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
                 'app_id' => $loginConnect['weixinmob_key'],
@@ -190,7 +190,7 @@ class WeChatNotificationController extends BaseController
     {
         $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
-        if (in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
+        if (in_array($notificationType, ['serviceFollow', 'messageSubscribe'])) {
             $wechatSetting['notification_type'] = $notificationType;
         }
         if ($notificationSms) {
@@ -286,7 +286,7 @@ class WeChatNotificationController extends BaseController
 
     protected function getAuthorizationInfo($setting)
     {
-        $mode = empty($setting) || 'MessageSubscribe' != $setting['notification_type'] ? 'wechat_template' : 'wewchat_subscribe';
+        $mode = empty($setting) || 'messageSubscribe' != $setting['notification_type'] ? 'wechat_template' : 'wechat_subscribe';
         $biz = $this->getBiz();
         try {
             $info = $biz['ESCloudSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
