@@ -31,8 +31,6 @@ class MessageSubscribeTemplateUtil
 
     const TEMPLATE_PAY_SUCCESS = 'paySuccess';
 
-    const TEMPLATE_VIP_EXPIRED = 'vipExpired';
-
     public static function templates()
     {
         return [
@@ -101,52 +99,38 @@ class MessageSubscribeTemplateUtil
                'role' => 'ROLE_USER',
                'status' => 0,
            ],
-           self::TEMPLATE_VIP_EXPIRED => [
-               'name' => 'wechat.notification.template_name.vip_expired',
-               'content' => '',
-               'position' => '',
-               'sms_content' => 'wechat.notification.template.vip_expired',
-               'rule' => 'wechat.notification.template.vip_expired.rule',
-               'smsDetail' => [
-                   SmsType::VIP_EXPIRED => '亲爱的学员，您购买的会员即将到期<br> 开通时间：{{startTime.DATA}}<br> 到期时间：{{endTime.DATA}}<br> 请及时续费，以免影响您的学习',
-               ],
-               'detail' => '',
-               'object' => '单个用户',
-               'role' => '',
-               'status' => 0,
-           ],
-            self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => [
-                'name' => 'wechat.notification.template_name.homework_or_testpaper_need_review',
-                'setting_modal' => 'admin/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
-                'setting_modal_v2' => 'admin-v2/operating/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
-                'content' => '',
-                'position' => '',
-                'sms_content' => 'wechat.notification.template.homework_or_testpaper_need_review',
-                'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
-                'smsDetail' => [
-                    SmsType::REVIEW_NOTIFY => '尊敬的老师，您今日仍有作业/试卷未批改<br> 时间：{{day.DATA}}<br> 数目：{{num.DATA}}<br> 请及时批改。',
-                ],
-                'detail' => '',
-                'object' => '课程教师',
-                'role' => '',
-                'status' => 0,
-            ],
-           self::TEMPLATE_COURSE_REMIND => [
-               'name' => 'wechat.notification.template_name.remind_course',
-               'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
-               'setting_modal_v2' => 'admin-v2/operating/wechat-notification/setting-modal/course-remind-modal.html.twig',
-               'content' => '',
-               'position' => '',
-               'sms_content' => 'wechat.notification.template.remind_course',
-               'rule' => 'wechat.notification.template.remind_course.rule',
-               'smsDetail' => [
-                   SmsType::STUDY_NOTIFY => '今日也要坚持学习哦<br> 课程：{{title.DATA}}<br> 时间：{{day.DATA}}<br> 学习进度：{{progress.DATA}}',
-               ],
-               'detail' => '',
-               'object' => '课程学员',
-               'role' => '',
-               'status' => 0,
-           ],
+//            self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => [
+//                'name' => 'wechat.notification.template_name.homework_or_testpaper_need_review',
+//                'setting_modal' => 'admin/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
+//                'setting_modal_v2' => 'admin-v2/operating/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
+//                'content' => '',
+//                'position' => '',
+//                'sms_content' => 'wechat.notification.template.homework_or_testpaper_need_review',
+//                'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
+//                'smsDetail' => [
+//                    SmsType::REVIEW_NOTIFY => '尊敬的老师，您今日仍有作业/试卷未批改<br> 时间：{{day.DATA}}<br> 数目：{{num.DATA}}<br> 请及时批改。',
+//                ],
+//                'detail' => '',
+//                'object' => '课程教师',
+//                'role' => '',
+//                'status' => 0,
+//            ],
+//           self::TEMPLATE_COURSE_REMIND => [
+//               'name' => 'wechat.notification.template_name.remind_course',
+//               'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
+//               'setting_modal_v2' => 'admin-v2/operating/wechat-notification/setting-modal/course-remind-modal.html.twig',
+//               'content' => '',
+//               'position' => '',
+//               'sms_content' => 'wechat.notification.template.remind_course',
+//               'rule' => 'wechat.notification.template.remind_course.rule',
+//               'smsDetail' => [
+//                   SmsType::STUDY_NOTIFY => '今日也要坚持学习哦<br> 课程：{{title.DATA}}<br> 时间：{{day.DATA}}<br> 学习进度：{{progress.DATA}}',
+//               ],
+//               'detail' => '',
+//               'object' => '课程学员',
+//               'role' => '',
+//               'status' => 0,
+//           ],
             self::TEMPLATE_ASK_QUESTION => [
                 'id' => self::TEMPLATE_ASK_QUESTION_CODE,
                 'name' => 'wechat.notification.template_name.ask_question',

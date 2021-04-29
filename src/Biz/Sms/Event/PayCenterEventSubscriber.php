@@ -3,8 +3,10 @@
 namespace Biz\Sms\Event;
 
 use AppBundle\Common\StringToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsType;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -40,6 +42,14 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
             }
 
             $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+            if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
+                $this->getWeChatService()->sendSubscribeSms(
+                    MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
+                    [$userId],
+                    SmsType::BUY_NOTIFY,
+                    $parameters
+                );
+            }
         }
     }
 
@@ -49,5 +59,13 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 }
