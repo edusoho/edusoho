@@ -480,7 +480,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
                 $biz['ESCloudSdk.notification']->closeAccount();
                 $wechatChannel = $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
-                $subscribeChannel = empty($notificationSetting) || $notificationSetting['notification_type'] != 'MessageSubscribe' ? true : $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE);
+                $subscribeChannel = empty($notificationSetting) || 'MessageSubscribe' != $notificationSetting['notification_type'] ? true : $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE);
                 $this->deleteJobs();
             }
         } catch (\RuntimeException $e) {

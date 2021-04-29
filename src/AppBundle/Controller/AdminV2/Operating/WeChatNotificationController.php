@@ -175,7 +175,7 @@ class WeChatNotificationController extends BaseController
         $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
         $setting = $this->getSettingService()->get('wechat_notification');
-        if ($setting['notification_type'] == 'MessageSubscribe') {
+        if ('MessageSubscribe' == $setting['notification_type']) {
             $loginConnect = $this->getSettingService()->get('login_bind');
             $this->getBiz()['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
                 'app_id' => $loginConnect['weixinmob_key'],
