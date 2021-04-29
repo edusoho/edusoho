@@ -1,7 +1,8 @@
 <?php
 
-namespace Biz\WeChat\Service\Impl;
+namespace Biz\WeChat\Service;
 
 interface SubscribeRecordService
 {
+    public function synchronizeSubscriptionRecords();
 }

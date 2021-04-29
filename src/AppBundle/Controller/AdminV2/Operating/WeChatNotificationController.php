@@ -24,7 +24,7 @@ class WeChatNotificationController extends BaseController
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
         $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
 
-        $wechatAuth = $this->getAuthorizationInfo();
+        $wechatAuth = $this->getAuthorizationInfo($wechatNotificationSetting);
         if ($wechatAuth['isAuthorized']) {
             $wechatNotificationSetting['is_authorization'] = 1;
         }
@@ -277,21 +277,24 @@ class WeChatNotificationController extends BaseController
         return true;
     }
 
-    protected function getAuthorizationInfo()
+    protected function getAuthorizationInfo($setting)
     {
+        $mode = empty($setting) || 'MessageSubscribe' != $setting['notification_type'] ? 'wechat_template' : 'wewchat_subscribe';
         $biz = $this->getBiz();
         try {
-            $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+            $info = $biz['ESCloudSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
             if ($info['isAuthorized']) {
                 $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
                 $ids = ArrayToolkit::column($ids, 'id');
                 /**
-                 * 2、用户管理权限  7、群发与通知权限
+                 * 2、用户管理权限  7、群发与通知权限  89、订阅通知权限
                  */
-                $needIds = [2, 7, 89];
+                $needIds = 'wechat_template' == $mode ? [2, 7] : [2, 7, 89];
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
                     $info['wholeness'] = 1;
+                } else {
+                    $info['isAuthorized'] = 'wechat_template' == $mode ? true : false;
                 }
             }
         } catch (\Exception $e) {
