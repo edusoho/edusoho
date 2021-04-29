@@ -8,7 +8,6 @@ use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
 use Biz\Sms\Service\SmsService;
-use Biz\Sms\SmsException;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -349,7 +348,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [])
     {
         if (empty($userIds)) {
-            return true;
+            return [];
         }
 
         if (!$this->isSubscribeSmsEnabled($smsType)) {
@@ -358,23 +357,47 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         if (empty($mobiles)) {
-            return true;
+            return [];
         }
 
         try {
-            $this->getSmsNotificationClient()->sendToMany([
+            $result = $this->getSmsNotificationClient()->sendToMany([
                 'mobiles' => $mobiles,
                 'templateId' => $templateId,
                 'templateParams' => $params,
             ]);
         } catch (\Exception $e) {
-            $this->createNewException(SmsException::FAILED_SEND());
+            $this->getLogger()->error("发送微信通知失败:template:{$smsType}", ['error' => $e->getMessage()]);
+
+            return [];
         }
 
-        $message = sprintf('对%s发送用于%s的订阅消息短信', implode(',', $mobiles), $smsType);
-        $this->getLogger()->info("{$message}成功");
+        if (empty($result['sn'])) {
+            $this->getLogger()->error("发送微信通知失败:template:{$smsType}", $result);
 
-        return true;
+            return [];
+        }
+
+        return $this->getNotificationService()->createSmsNotificationRecord($params, ['key' => $smsType, 'smsTemplateId' => $templateId, 'sendNum' => count($mobiles)], 'wechat_subscribe');
+    }
+
+    public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0)
+    {
+        try {
+            $result = $this->getSDKNotificationService()->sendNotifications($list);
+        } catch (\Exception $e) {
+            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
+
+            return false;
+        }
+
+        if (empty($result['sn'])) {
+            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", $result);
+
+            return false;
+        }
+
+        return $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $templateCode, $list[0]['template_args'], 'wechat_subscribe', $batchId);
     }
 
     /**
@@ -671,27 +694,34 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function synchronizeSubscriptionRecords()
     {
         $options = [
-            'createdTime' => $this->getLastCreatedTime(),
+            'createdTime_GT' => $this->getLastCreatedTime(),
+            'createdTime_LT' => time(),
         ];
 
-        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+        $offset = 0;
+        $limit = 30;
 
+        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options, $offset);
         if (empty($synchronizeRecords['data'])) {
             return;
         }
 
-        $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
-        foreach ($synchronizeRecords['data'] as $record) {
-            $createRecord = [
-                'toId' => $record['to_id'],
-                'templateCode' => $record['template_code'],
-                'templateType' => 'subscribe',
-                'createdTime' => strtotime($record['created_time']),
-                'updatedTime' => time(),
-            ];
-            $batchUpdateHelper->add($createRecord);
+        $total = $synchronizeRecords['paging']['total'];
+        $totalPage = $total / $limit;
+        for ($page = 0; $page <= $totalPage; ++$page) {
+            $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options, $offset * $page, $limit);
+            $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
+            foreach ($synchronizeRecords['data'] as $record) {
+                $createRecord = [
+                    'toId' => $record['to_id'],
+                    'templateCode' => $record['template_code'],
+                    'templateType' => 'once',
+                    'createdTime' => strtotime($record['created_time']),
+                ];
+                $batchUpdateHelper->add($createRecord);
+            }
+            $batchUpdateHelper->flush();
         }
-        $batchUpdateHelper->flush();
     }
 
     protected function getLastCreatedTime()
@@ -825,5 +855,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     private function getSmsNotificationClient()
     {
         return $this->biz['ESCloudSdk.sms'];
+    }
+
+    /**
+     * @return \Biz\Notification\Service\NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->biz->service('Notification:NotificationService');
     }
 }
