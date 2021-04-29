@@ -25,7 +25,6 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.post.update' => 'onCourseThreadPostUpdate',
             'review.create' => 'onReviewCreate',
             'review.update' => 'onReviewUpdate',
-            'review.delete' => 'onReviewDelete',
             'thread.post.create' => 'onThreadPostCreate',
             'thread.create' => 'onThreadCreate',
             'thread.update' => 'onThreadUpdate',
@@ -183,17 +182,6 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'content' => $sensitiveResult['originContent'],
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
-        }
-    }
-
-    public function onReviewDelete(Event $event)
-    {
-        $review = $event->getSubject();
-        $reviewAuditTargetType = $this->getReviewAuditTargetType($review);
-        $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
-
-        if ($existAudit) {
-            $this->getContentAuditService()->deleteAudit($existAudit['id']);
         }
     }
 

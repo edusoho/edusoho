@@ -42,4 +42,6 @@ interface ReportAuditService
     public function createReportAuditRecord($fields);
 
     public function updateReportAuditRecord($id, $fields);
+
+    public function findReportAuditByTargetTypeAndTargetId($targetType, $targetId);
 }
