@@ -77,7 +77,7 @@ export default {
           const btn = document.getElementById('subscribe-btn');
           const that = this;
           btn.addEventListener('success', function(e) {
-            console.log('success', e.detail);
+            that.firstSubscribe = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
               that.$toast('订阅成功');
