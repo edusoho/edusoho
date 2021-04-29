@@ -11,7 +11,7 @@ if (isWechatBrowser()) {
       'Accept':'application/vnd.edusoho.v2+json'
     }
   }).success(function (res) {
-    if (!res.enable || !$('.js-wechat-template').attr('template')) return;    
+    if (!res.enable) return;
     initWechatConfig();
   });
 };
