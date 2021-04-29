@@ -10,10 +10,6 @@ class LiveNotificationJob extends AbstractNotificationJob
     public function execute()
     {
         $templateCode = $this->args['templateCode'];
-        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
-        if (empty($templateId)) {
-            return;
-        }
         $taskId = $this->args['taskId'];
         $url = $this->args['url'];
         $task = $this->getTaskService()->getTask($taskId);
@@ -50,6 +46,11 @@ class LiveNotificationJob extends AbstractNotificationJob
         );
 
         if (empty($subscribeRecords)) {
+            return;
+        }
+
+        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
+        if (empty($templateId)) {
             return;
         }
 

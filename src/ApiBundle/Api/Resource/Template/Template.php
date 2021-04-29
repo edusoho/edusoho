@@ -20,7 +20,7 @@ class Template extends AbstractResource
         $role = in_array('ROLE_TEACHER', $userRole) ? 'ROLE_TEACHER' : 'ROLE_USER';
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
 
-        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
+        if ('messageSubscribe' != $wechatNotificationSetting['notification_type'] || empty($wechatNotificationSetting['is_authorization'])) {
             return '';
         }
         $templateCodes = [];

@@ -47,6 +47,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'course.task.publish.sync' => 'onTaskPublishSync',
             'course.thread.create' => 'onCourseQuestionCreate',
             'thread.create' => 'onClassroomQuestionCreate',
+            'wechat.template_setting.save' => 'onWeChatTemplateSettingSave',
         ];
     }
 

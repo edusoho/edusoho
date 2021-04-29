@@ -10,10 +10,6 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
     public function execute()
     {
         $templateCode = $this->args['templateCode'];
-        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
-        if (empty($templateId)) {
-            return;
-        }
         $taskId = $this->args['taskId'];
         $url = $this->args['url'];
         $task = $this->getTaskService()->getTask($taskId);
@@ -56,6 +52,11 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         $this->sendSmsNotification($smsType, array_diff($userIds, array_column($subscribeRecords, 'userId')), $params);
 
         if (empty($subscribeRecords)) {
+            return;
+        }
+
+        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
+        if (empty($templateId)) {
             return;
         }
 

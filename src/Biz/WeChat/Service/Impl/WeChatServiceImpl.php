@@ -38,7 +38,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function saveWeChatTemplateSetting($key, $fields, $notificationType)
     {
         $settingName = 'wechat';
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName, []);
@@ -57,9 +57,14 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     public function getWeChatSendChannel()
     {
-        return 'wechat_subscribe';
-
         $wechatSetting = $this->getSettingService()->get('wechat', []);
+        if (empty($wechatSetting['is_authorization'])) {
+            return 'wechat';
+        }
+
+        $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
+
+        return  'serviceFollow' === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
 
         return empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
     }
@@ -319,7 +324,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function isSubscribeSmsEnabled()
     {
         $setting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($setting['is_authorization']) || 'MessageSubscribe' !== $setting['notification_type']) {
+        if (empty($setting['is_authorization']) || 'messageSubscribe' !== $setting['notification_type']) {
             return false;
         }
 
@@ -340,8 +345,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
      */
     public function getSubscribeTemplateId($templateCode, $scene = '')
     {
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            return null;
+        }
+
         $setting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($setting['is_authorization']) || 'MessageSubscribe' !== $setting['notification_type']) {
+        if (empty($setting['is_authorization']) || 'messageSubscribe' !== $setting['notification_type']) {
             return null;
         }
 
@@ -371,6 +381,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $wechatSetting = $this->getSettingService()->get('wechat', []);
         if (empty($wechatSetting['wechat_notification_enabled'])) {
+            return null;
+        }
+
+        $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
+        if (empty($notificationSetting['is_authorization']) || 'serviceFollow' !== $notificationSetting['notification_type']) {
             return null;
         }
 
@@ -407,7 +422,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $templateParam = [];
         $settingName = 'wechat';
 
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
             $templateParam = [
                 'templateType' => 'subscribe',
@@ -470,7 +485,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $settingName = 'wechat';
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName);
@@ -484,7 +499,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 }
             }
 
-            if ('MessageSubscribe' == $notificationType && !empty($wechatSetting['templates'][$key]['id'])) {
+            if ('messageSubscribe' == $notificationType && !empty($wechatSetting['templates'][$key]['id'])) {
                 $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['id'], ['templateType' => 'subscribe']);
             }
 
