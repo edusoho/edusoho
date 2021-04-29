@@ -85,7 +85,7 @@
           <td>
             {% if reportAudit.auditor == '-1' %}
               {{ 'admin_v2.operation.report_content_audit.table.auditor_default'|trans }}
-            {% elseif reportAudit.auditor != '0' %}
+            {% elseif reportAudit.auditor|default() %}
               {% set auditor = users[reportAudit.auditor]|default([]) %}
               {{ admin_macro.user_link(auditor) }}<br>
             {% else %}

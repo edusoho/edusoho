@@ -350,27 +350,27 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $orderBy = ['createdTime' => 'ASC'];
         }
 
-        return $this->getThreadPostDao()->search(['threadId' => $threadId], $orderBy, $start, $limit);
+        return $this->getThreadPostDao()->search(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal'], $orderBy, $start, $limit);
     }
 
     public function getThreadPostCount($courseId, $threadId)
     {
-        return $this->getThreadPostDao()->count(['threadId' => $threadId]);
+        return $this->getThreadPostDao()->count(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function findThreadElitePosts($courseId, $threadId, $start, $limit)
     {
-        return $this->getThreadPostDao()->search(['threadId' => $threadId, 'isElite' => 1], ['createdTime' => 'ASC'], $start, $limit);
+        return $this->getThreadPostDao()->search(['threadId' => $threadId, 'isElite' => 1, 'excludeAuditStatus' => 'illegal'], ['createdTime' => 'ASC'], $start, $limit);
     }
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId)
     {
-        return $this->getThreadPostDao()->count(['userId' => $userId, 'threadId' => $threadId]);
+        return $this->getThreadPostDao()->count(['userId' => $userId, 'threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function getThreadPostCountByThreadId($threadId)
     {
-        return $this->getThreadPostDao()->count(['threadId' => $threadId]);
+        return $this->getThreadPostDao()->count(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function getMyReplyThreadCount()

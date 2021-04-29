@@ -32,7 +32,7 @@ class Review extends AbstractResource
 
         $orderBys = empty($request->query->get('orderBys')) ? ['createdTime' => 'DESC'] : $request->query->get('orderBys');
 
-        $conditions = array_merge(['parentId' => 0], $request->query->all());
+        $conditions = array_merge(['parentId' => 0, 'excludeAuditStatus' => 'illegal'], $request->query->all());
         $reviews = $this->getReviewService()->searchReviews($conditions, $orderBys, $offset, $limit);
 
         $reviews = $this->makeUpReviews($reviews, $request->query->get('needPosts'));
@@ -105,7 +105,7 @@ class Review extends AbstractResource
                 }
             }
             $review['posts'] = $this->getReviewService()->searchReviews(
-                ['parentId' => $review['id']],
+                ['parentId' => $review['id'], 'excludeAuditStatus' => 'illegal'],
                 ['createdTime' => 'ASC'],
                 0,
                 5

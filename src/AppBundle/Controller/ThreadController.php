@@ -42,6 +42,8 @@ class ThreadController extends BaseController
             $conditions['typeExcludes'] = $typeExcludes;
         }
 
+        $conditions['excludeAuditStatus'] = 'illegal';
+
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchThreadCount($conditions),
@@ -75,6 +77,7 @@ class ThreadController extends BaseController
         $conditions = [
             'threadId' => $thread['id'],
             'parentId' => 0,
+            'excludeAuditStatus' => 'illegal',
         ];
         $paginator = new Paginator(
             $request,
@@ -117,7 +120,7 @@ class ThreadController extends BaseController
     {
         $post = $this->getThreadService()->getPost($postId);
 
-        $conditions = ['parentId' => $postId];
+        $conditions = ['parentId' => $postId, 'excludeAuditStatus' => 'illegal'];
 
         $paginator = new Paginator(
             $request,
@@ -159,12 +162,12 @@ class ThreadController extends BaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", [
+                return $this->createJsonResponse(['status' => 'success', 'url' => $this->generateUrl("{$target['type']}_thread_show", [
                     "{$target['type']}Id" => $thread['targetId'],
                     'threadId' => $thread['id'],
-                ]));
+                ])]);
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
+                return $this->createJsonResponse(['status' => 'error', 'message' => $this->trans($e->getMessage())]);
             }
         }
 
