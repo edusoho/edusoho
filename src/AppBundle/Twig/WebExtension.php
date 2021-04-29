@@ -27,6 +27,7 @@ use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
+use Biz\Group\Service\GroupService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
@@ -227,7 +228,39 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
             new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
             new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
+            new \Twig_SimpleFunction('is_group_member', [$this, 'isGroupMember']),
         ];
+    }
+
+    public function isGroupMember($groupId)
+    {
+        $user = $this->biz['user'];
+
+        if (!$user['id']) {
+            return false;
+        }
+
+        if ($this->getGroupService()->isOwner($groupId, $user['id'])) {
+            return true;
+        }
+
+        if ($this->getGroupService()->isAdmin($groupId, $user['id'])) {
+            return true;
+        }
+
+        if ($this->getGroupService()->isMember($groupId, $user['id'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->createService('Group:GroupService');
     }
 
     public function isShowNewMembers()
