@@ -18,6 +18,7 @@ class Thread extends AbstractSource
             'content' => $thread['content'],
             'author' => $thread['userId'],
             'createdTime' => $thread['createdTime'],
+            'updatedTime' => $thread['updateTime'],
         ];
     }
 

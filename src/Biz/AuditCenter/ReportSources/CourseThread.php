@@ -20,6 +20,7 @@ class CourseThread extends AbstractSource
                 'content' => $thread['content'],
                 'author' => $thread['userId'],
                 'createdTime' => $thread['createdTime'],
+                'updatedTime' => $thread['updatedTime'],
             ];
         } catch (ThreadException $e) {
             return;

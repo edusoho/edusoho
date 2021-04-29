@@ -36,6 +36,7 @@ class ReportContentAuditController extends BaseController
         foreach ($reportAudits as &$reportAudit) {
             $context = $this->getReportService()->getReportSourceContext($reportAudit['targetType'], $reportAudit['targetId']);
             $reportAudit['content'] = empty($context['content']) ? $reportAudit['content'] : $context['content'];
+            $reportAudit['contentUpdatedTime'] = empty($context['updatedTime']) ? $reportAudit['createdTime'] : $context['updatedTime'];
         }
 
         $userIds = array_merge(array_column($reportAudits, 'auditor'), array_column($reportAudits, 'author'));
