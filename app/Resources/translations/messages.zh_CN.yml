@@ -10865,15 +10865,25 @@ wechat.notification.template.answer_question: '亲爱的学员，您在[课程�
 wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 
 #微信消息订阅通知模板
-wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br>课程标题：《课程名》-《任务名》<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
-wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br>标题：《课程名》-《任务名》<br>作业情况：[作业情况]<br>评语：[评语] <br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
-wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br>考试名称：《课程名》-《任务名》<br>分数：[考试的分数]<br>温馨提示：<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
-wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br>考试名称：课程：《课程名》([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
-wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: [课程名称] 或 [班级名称]<br>提问者：[学生用户名]<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]<br><span class='text-danger'>备注：您还能收到N次订阅通知，请进入课程学习页订阅通知<span>"
+wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.homework_result: "<br>作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
+wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.lesson_add: "<br>课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.ask_question: "<br>学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]<br><br>"
 wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
-wechat.notification.message_subscribe_template.position.lesson_page_teacher: '课程学习页<br>（课程/班级教师，助教，班主任）'
-wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程<br>您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址<br>直播<br>课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址'
-wechat.notification.message_subscribe_sms.template.ask_question: "尊敬的老师，《课程或班级名称》中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]"
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: '课程学习页<br>（课程/班级<br>教师，助教，<br>班主任）'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
+wechat.notification.message_subscribe_sms.template.homework_result: "<br>【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.exam_result: "<br>【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
+wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.message_subscribe_sms.template.remind_course: '<br>【 在线教育 】今日也要坚持学习哦<br>课程：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br><br>'
+wechat.notification.message_subscribe_sms.template.ask_question: "<br>【 在线教育 】尊敬的老师，[课程或班级名称]中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]<br>"
+wechat.notification.message_subscribe_sms.template.answer_question: "<br>【 在线教育 】您在[课程名或班级名]<br>提问时间：[提问的时间]<br>回复内容：[回复内容]<br>"
+wechat.notification.message_subscribe_sms.template.charge_success: "<br>【 在线教育 】 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。<br>"
+wechat.notification.message_subscribe_sms.template.buy_success: "课程：<br>【 在线教育 】 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。<br>班级：<br>【 在线教育 】 你已成功购买班级《班级名称》，支付［订单金额］。<br>会员：<br>【 在线教育 】 你已成功购买《会员名称》，支付［订单金额］。"
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
