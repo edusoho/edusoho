@@ -1,12 +1,8 @@
 <template>
-  <div
-    v-if="supportWechatSubscribe"
-    class="wechat-subscribe"
-    @click="clickSubscribe"
-  >
-    <div class="wechat-subscribe-guide" v-if="firstGuide">
+  <div v-if="supportWechatSubscribe" class="wechat-subscribe">
+    <!-- <div class="wechat-subscribe-guide" v-if="firstGuide">
       <img src="static/images/course_guide.png" alt="" />
-    </div>
+    </div> -->
     <i class="iconfont icon-subscribe" />
     <div v-if="firstSubscribe" class="wechat-subscribe-popover">
       请点此订阅微信通知
@@ -47,8 +43,7 @@ export default {
   },
 
   created() {
-    const browser = navigator.userAgent.toLowerCase();
-    if (browser.match(/MicroMessenger/i) != 'micromessenger') return;
+    if (!this.isWeixin()) return;
     this.initSubscribe();
     this.firstWechatSubscribe();
   },
@@ -59,10 +54,7 @@ export default {
       if (!enable) return;
 
       this.templateId = await Api.wechatTemplate();
-      if (!this.templateId) {
-        console.log('template 为空');
-        return;
-      }
+      if (!this.templateId) return;
 
       const params = {
         url: window.location.href.split('#')[0],
@@ -98,10 +90,15 @@ export default {
       });
     },
 
-    clickSubscribe() {
-      if (this.firstSubscribe) this.firstSubscribe = false;
-      this.firstWechatGuide();
+    isWeixin() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
+
+    // clickSubscribe() {
+    //   if (this.firstSubscribe) this.firstSubscribe = false;
+    //   this.firstWechatGuide();
+    // },
 
     firstWechatSubscribe() {
       const status = localStorage.getItem('first-wechat-subscribe');
@@ -110,12 +107,12 @@ export default {
       this.firstSubscribe = true;
     },
 
-    firstWechatGuide() {
-      const status = localStorage.getItem('first-wechat-guide');
-      if (status) return;
-      localStorage.setItem('first-wechat-guide', true);
-      this.firstGuide = true;
-    },
+    // firstWechatGuide() {
+    //   const status = localStorage.getItem('first-wechat-guide');
+    //   if (status) return;
+    //   localStorage.setItem('first-wechat-guide', true);
+    //   this.firstGuide = true;
+    // },
   },
 };
 </script>
