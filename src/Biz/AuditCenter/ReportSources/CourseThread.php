@@ -10,6 +10,9 @@ class CourseThread extends AbstractSource
     public function getReportContext($targetId)
     {
         $thread = $this->getCourseThreadService()->getThreadByThreadId($targetId);
+        if (empty($thread)) {
+            return;
+        }
 
         return [
             'content' => $thread['content'],

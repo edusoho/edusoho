@@ -10,6 +10,9 @@ class GroupThreadPost extends AbstractSource
     public function getReportContext($targetId)
     {
         $thread = $this->getThreadService()->getPost($targetId);
+        if (empty($thread)) {
+            return;
+        }
 
         return [
             'content' => $thread['content'],

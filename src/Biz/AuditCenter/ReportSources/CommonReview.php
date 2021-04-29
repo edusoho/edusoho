@@ -10,6 +10,9 @@ class CommonReview extends AbstractSource
     public function getReportContext($targetId)
     {
         $review = $this->getReviewService()->getReview($targetId);
+        if (empty($review)) {
+            return;
+        }
 
         return [
             'content' => $review['content'],
