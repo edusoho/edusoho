@@ -4,7 +4,6 @@ import notify from 'common/notify';
 let $jweixin = $('.js-wechat-data');
 
 if (isWechatBrowser()) {
-  console.log('iswechat');
   $.ajax({
     url: '/api/settings/wechat_message_subscribe',
     type: 'GET',
@@ -69,7 +68,9 @@ function initWechatConfig() {
   const reg = /accept/;
   
   wx.ready(function() {
-    var btn = document.getElementById('subscribe-btn');
+    var btn = $('.js-wechat-subscribe').find('#subscribe-btn');
+    console.log('hongbusi', btn);
+    console.log($('#subscribe-btn'));
     $('.js-wechat-subscribe').removeClass('hidden');
     btn.addEventListener('success', function (e) {
       const subscribeDetails = e.detail.subscribeDetails;
