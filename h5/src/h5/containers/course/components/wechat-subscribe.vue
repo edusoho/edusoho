@@ -88,6 +88,10 @@ export default {
 
         wx.ready(() => {
           const btn = document.getElementById('subscribe-btn');
+          btn.addEventListener('click', function() {
+            console.log('点击了');
+            alert('dianjile ');
+          });
           const that = this;
           btn.addEventListener('success', function(e) {
             that.firstGuide = false;
