@@ -16,7 +16,13 @@ let validator = $form.validate({
 $('.js-btn-thread-save').click((event) => {
   if (validator.form()) {
     $(event.currentTarget).button('loading');
-    $form.submit();
+    $.post($form.action, $form.serialize(), function (data) {
+      if (data.status && data.status === 'error'){
+        cd.message({type: 'danger', message: data.message}).on('close', window.location.href);
+      } else {
+        window.location.href = data.url;
+      }
+    });
   }
 });
 
