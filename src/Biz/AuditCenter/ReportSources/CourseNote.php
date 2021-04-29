@@ -10,6 +10,9 @@ class CourseNote extends AbstractSource
     public function getReportContext($targetId)
     {
         $note = $this->getCourseNoteService()->getNote($targetId);
+        if (empty($note)) {
+            return;
+        }
 
         return [
             'content' => $note['content'],
