@@ -1,10 +1,6 @@
 <template>
-  <div
-    v-if="supportWechatSubscribe"
-    class="wechat-subscribe"
-    @click.stop="clickSubscribe"
-  >
-    <div class="wechat-subscribe-guide">
+  <div v-if="supportWechatSubscribe" class="wechat-subscribe">
+    <div class="wechat-subscribe-guide" @click.stop="clickSubscribe">
       <img src="static/images/course_guide.png" alt="" />
     </div>
     <i class="iconfont icon-subscribe" />
@@ -84,11 +80,12 @@ export default {
 
         wx.ready(() => {
           const btn = document.getElementById('subscribe-btn');
+          const that = this;
           btn.addEventListener('success', function(e) {
             console.log('success', e.detail);
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
-              this.$toast('订阅成功');
+              that.$toast('订阅成功');
             }
           });
           btn.addEventListener('error', function(e) {
