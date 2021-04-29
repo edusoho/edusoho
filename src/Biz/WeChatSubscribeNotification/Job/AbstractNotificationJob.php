@@ -46,30 +46,6 @@ class AbstractNotificationJob extends AbstractJob
         return mb_substr($text, 0, $length - 1, 'utf-8').'…';
     }
 
-    protected function sendSmsNotification($templateId, array $userIds, array $params, array $options = [])
-    {
-        if (empty($userIds)) {
-            return;
-        }
-
-        if (!$this->getWeChatService()->isSubscribeSmsEnabled()) {
-            return;
-        }
-
-        $users = $this->getUserService()->searchUsers(['ids' => $userIds, 'locked' => 0], ['id' => 'ASC'], 0, count($userIds), ['id', 'verifiedMobile']);
-        $mobiles = array_column($users, 'verifiedMobile');
-        if (empty($mobiles)) {
-            return;
-        }
-
-        $this->getSmsNotificationClient()->sendToMany([
-            'mobiles' => $mobiles,
-            'templateId' => $templateId,
-            'templateParams' => $params,
-            'options' => $options,
-        ]);
-    }
-
     protected function sendWeChatNotification($templateCode, $logName, $list)
     {
         try {

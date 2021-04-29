@@ -3,6 +3,7 @@
 namespace Biz\WeChatSubscribeNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
 use Biz\Sms\SmsType;
 
 class LiveNotificationJob extends AbstractNotificationJob
@@ -12,6 +13,7 @@ class LiveNotificationJob extends AbstractNotificationJob
         $templateCode = $this->args['templateCode'];
         $taskId = $this->args['taskId'];
         $url = $this->args['url'];
+        $smsType = $this->args['smsType'];
         $task = $this->getTaskService()->getTask($taskId);
         if ('published' != $task['status']) {
             return;
@@ -34,16 +36,19 @@ class LiveNotificationJob extends AbstractNotificationJob
         $userIds = ArrayToolkit::column($members, 'userId');
         $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
 
-        $this->sendSmsNotification(
-            SmsType::LIVE_NOTIFY,
-            array_diff($userIds, array_column($subscribeRecords, 'userId')),
-            [
-                'course_title' => '课程：'.$this->getCourseNameByCourse($course),
-                'lesson_title' => '学习任务：'.$task['title'],
-                'startTime' => date('Y-m-d H:i', $task['startTime']),
-                'url' => $url,
-            ]
-        );
+        if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
+            $this->getWeChatService()->sendSubscribeSms(
+                MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN,
+                array_diff($userIds, array_column($subscribeRecords, 'userId')),
+                SmsType::LIVE_NOTIFY,
+                [
+                    'course_title' => '课程：'.$this->getCourseNameByCourse($course),
+                    'lesson_title' => '学习任务：'.$task['title'],
+                    'startTime' => date('Y-m-d H:i', $task['startTime']),
+                    'url' => $url,
+                ]
+            );
+        }
 
         if (empty($subscribeRecords)) {
             return;

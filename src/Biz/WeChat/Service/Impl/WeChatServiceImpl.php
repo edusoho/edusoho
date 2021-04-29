@@ -7,6 +7,8 @@ use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
+use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsException;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -66,7 +68,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
 
-        return  'serviceFollow' === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
+        return 'serviceFollow' === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
 
         return empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
     }
@@ -323,10 +325,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper->flush();
     }
 
-    public function isSubscribeSmsEnabled()
+    public function isSubscribeSmsEnabled($smsType = '')
     {
-        $setting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($setting['is_authorization']) || 'messageSubscribe' !== $setting['notification_type']) {
+        $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
+        if (empty($wechatSetting['is_authorization']) || 'messageSubscribe' !== $wechatSetting['notification_type']) {
             return false;
         }
 
@@ -335,7 +337,52 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return false;
         }
 
-        return !empty($setting['notification_sms']);
+        if ($smsType && $this->getSmsService()->isOpen($smsType)) {
+            return false;
+        }
+
+        if (empty($wechatSetting['notification_sms'])) {
+            return false;
+        }
+
+        return !empty($setting[$smsType]['status']);
+    }
+
+    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [])
+    {
+        if (empty($userIds)) {
+            return true;
+        }
+
+        if (!$this->isSubscribeSmsEnabled($smsType)) {
+            return $this->getLogger()->info('云短信服务已开启，微信订阅消息短信发送取消');
+        }
+
+        $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
+
+        if (empty($mobiles)) {
+            return true;
+        }
+
+        try {
+            file_put_contents('/Users/wangsan/var/www/edusoho/app/logs/test.log', 'params'.json_encode([
+                    'mobiles' => $mobiles,
+                    'templateId' => $templateId,
+                    'templateParams' => $params,
+                ]).PHP_EOL, FILE_APPEND);
+            $this->getSmsNotificationClient()->sendToMany([
+                'mobiles' => $mobiles,
+                'templateId' => $templateId,
+                'templateParams' => $params,
+            ]);
+        } catch (\Exception $e) {
+            $this->createNewException(SmsException::FAILED_SEND());
+        }
+
+        $message = sprintf('对%s发送用于%s的订阅消息短信', implode(',', $mobiles), $smsType);
+        $this->getLogger()->info("{$message}成功");
+
+        return true;
     }
 
     /**
@@ -767,5 +814,18 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     protected function getSDKWeChatService()
     {
         return $this->biz['ESCloudSdk.wechat'];
+    }
+
+    /**
+     * @return SmsService
+     */
+    protected function getSmsService()
+    {
+        return $this->createService('Sms:SmsService');
+    }
+
+    private function getSmsNotificationClient()
+    {
+        return $this->biz['ESCloudSdk.sms'];
     }
 }
