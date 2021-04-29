@@ -13,7 +13,6 @@ class UserContentAuditController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
-
         $paginatorTotal = empty($conditions) ? 0 : $this->getContentAuditService()->searchAuditCount($conditions);
 
         $paginator = new Paginator(
@@ -119,7 +118,7 @@ class UserContentAuditController extends BaseController
             $conditions['startTime'] = strtotime($conditions['startTime']);
         }
 
-        if (!empty($conditions['startTime'])) {
+        if (!empty($conditions['endTime'])) {
             $conditions['endTime'] = strtotime($conditions['endTime']);
         }
 

@@ -37,9 +37,13 @@ interface ReportAuditService
 
     public function deleteReportAudit($id);
 
+    public function deleteReportAuditsByIds(array $ids);
+
     public function getReportAuditRecord($id);
 
     public function createReportAuditRecord($fields);
 
     public function updateReportAuditRecord($id, $fields);
+
+    public function findReportAuditsByTargetTypeAndTargetId($targetType, $targetId);
 }
