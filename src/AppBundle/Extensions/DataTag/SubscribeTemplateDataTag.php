@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Common\CommonException;
-
 class SubscribeTemplateDataTag extends BaseDataTag implements DataTag
 {
     /**
