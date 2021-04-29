@@ -1,7 +1,7 @@
 <template>
   <div v-if="isWechatSubscribe" class="wechat-subscribe">
     <div v-if="firstGuide" class="wechat-subscribe-first-guide">
-      请点此订阅微信通知
+      请点此订阅课程相关通知
     </div>
 
     <div v-if="secondGuide" class="wechat-subscribe-second-guide">
