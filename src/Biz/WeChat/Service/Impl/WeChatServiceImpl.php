@@ -345,7 +345,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return false;
         }
 
-        return !empty($setting[$smsType]['status']);
+        return !empty($wechatSetting['templates'][$smsType]['status']);
     }
 
     public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [])
@@ -355,21 +355,15 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         if (!$this->isSubscribeSmsEnabled($smsType)) {
-            return $this->getLogger()->info('云短信服务已开启，微信订阅消息短信发送取消');
+            return $this->getLogger()->info('微信订阅消息短信发送服务未开启');
         }
 
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
-
         if (empty($mobiles)) {
             return true;
         }
 
         try {
-            file_put_contents('/Users/wangsan/var/www/edusoho/app/logs/test.log', 'params'.json_encode([
-                    'mobiles' => $mobiles,
-                    'templateId' => $templateId,
-                    'templateParams' => $params,
-                ]).PHP_EOL, FILE_APPEND);
             $this->getSmsNotificationClient()->sendToMany([
                 'mobiles' => $mobiles,
                 'templateId' => $templateId,
@@ -665,7 +659,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     public function updateSubscribeRecordsByIds(array $ids, array $fields)
     {
-        $updateFields = ArrayToolkit::filter($fields, ['is_send' => 0]);
+        $updateFields = ArrayToolkit::filter($fields, ['isSend' => 0]);
 
         return $this->getSubscribeRecordDao()->update(['ids' => $ids], $updateFields);
     }

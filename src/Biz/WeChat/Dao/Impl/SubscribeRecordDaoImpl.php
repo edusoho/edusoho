@@ -27,6 +27,7 @@ class SubscribeRecordDaoImpl extends AdvancedDaoImpl implements SubscribeRecordD
                 'templateCode = :templateCode',
                 'templateType = :templateType',
                 'isSend < :isSend_LT',
+                'id IN (:ids)',
             ],
             'timestamps' => ['createdTime', 'updatedTime'],
         ];
