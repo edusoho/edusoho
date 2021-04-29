@@ -35,10 +35,9 @@ class SubscribeRecordServiceImpl extends BaseService implements SubscribeRecordS
         $batchUpdateHelper->flush();
     }
 
-
     public function getLastCreatedTime()
     {
-        $lastRecord =  $this->getSubscribeRecordDao()->getLastRecord();
+        $lastRecord = $this->getSubscribeRecordDao()->getLastRecord();
 
         return $lastRecord ? $lastRecord['createdTime'] : 0;
     }
