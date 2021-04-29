@@ -10881,8 +10881,8 @@ wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教�
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
 wechat.notification.message_subscribe_sms.template.remind_course: '<br>【 在线教育 】今日也要坚持学习哦<br>课程：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br><br>'
 wechat.notification.message_subscribe_sms.template.ask_question: "<br>【 在线教育 】尊敬的老师，[课程或班级名称]中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]<br>"
-wechat.notification.message_subscribe_sms.template.answer_question: "<br>【 在线教育 】您在[课程名或班级名]<br>提问时间：[提问的时间]<br>回复内容：[回复内容]<br>"
-wechat.notification.message_subscribe_sms.template.charge_success: "<br>【 在线教育 】 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。<br>"
+wechat.notification.message_subscribe_sms.template.answer_question: "<br>【 在线教育 】您在[课程名或班级名]<br>提问时间：[提问的时间]<br>回复内容：[回复内容]<br><br>"
+wechat.notification.message_subscribe_sms.template.charge_success: "<br>【 在线教育 】 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。<br><br>"
 wechat.notification.message_subscribe_sms.template.buy_success: "课程：<br>【 在线教育 】 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。<br>班级：<br>【 在线教育 】 你已成功购买班级《班级名称》，支付［订单金额］。<br>会员：<br>【 在线教育 】 你已成功购买《会员名称》，支付［订单金额］。"
 
 #微信通知规则
