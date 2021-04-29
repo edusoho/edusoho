@@ -377,12 +377,22 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $fields = $event->getSubject();
         $key = $event->getArgument('key');
         $notificationType = $event->getArgument('notificationType');
-        $settingName = 'wechat';
 
-        if ('MessageSubscribe' == $notificationType) {
-            $settingName = 'wechat_notification';
+        if ('serviceFollow' !== $notificationType) {
+            $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
+            if ($notificationJob) {
+                $this->getSchedulerService()->deleteJob($notificationJob['id']);
+            }
+
+            $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
+            if ($notificationJob) {
+                $this->getSchedulerService()->deleteJob($notificationJob['id']);
+            }
+
+            return;
         }
-        $wechatSetting = $this->getSettingService()->get($settingName, []);
+
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
         $templates = empty($wechatSetting['templates']) ? [] : $wechatSetting['templates'];
         if ('homeworkOrTestPaperReview' == $key) {
             $templates['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];

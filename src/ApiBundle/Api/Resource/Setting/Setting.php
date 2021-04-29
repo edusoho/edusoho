@@ -359,7 +359,7 @@ class Setting extends AbstractResource
         if (empty($wechatSetting['wechat_notification_enabled'])) {
             $enable = false;
         }
-        if ('MessageSubscribe' != $wechatNotificationSetting['notification_type']) {
+        if ('messageSubscribe' != $wechatNotificationSetting['notification_type']) {
             $enable = false;
         }
         if (empty($wechatNotificationSetting['is_authorization'])) {

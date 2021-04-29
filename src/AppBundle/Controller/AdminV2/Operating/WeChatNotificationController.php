@@ -114,7 +114,7 @@ class WeChatNotificationController extends BaseController
     {
         $key = $request->query->get('key');
         $notificationType = $request->query->get('notificationType');
-        if (!in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
+        if (!in_array($notificationType, ['serviceFollow', 'messageSubscribe'])) {
             throw new \InvalidArgumentException('Notification type error');
         }
         $wechatSetting = $this->getSettingService()->get('wechat', []);
@@ -122,7 +122,7 @@ class WeChatNotificationController extends BaseController
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $wechat_notification_enabled = $wechatSetting['wechat_notification_enabled'];
 
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
             $templates = $this->getTemplateSetting($templates, $wechatSetting);
@@ -161,7 +161,7 @@ class WeChatNotificationController extends BaseController
 
     public function templateSettingFilter($notificationType, $template)
     {
-        if ('MessageSubscribe' == $notificationType) {
+        if ('messageSubscribe' == $notificationType) {
             return isset($template['id']);
         }
 
@@ -190,7 +190,7 @@ class WeChatNotificationController extends BaseController
     {
         $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
-        if (in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
+        if (in_array($notificationType, ['serviceFollow', 'messageSubscribe'])) {
             $wechatSetting['notification_type'] = $notificationType;
         }
         if ($notificationSms) {
