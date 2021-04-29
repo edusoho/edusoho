@@ -6,8 +6,8 @@
   <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
 {% endif %}
 
-<span class="hidden js-wechat-subscribe" style="display: inline-block; width: 50px; text-align: center;">
-  <i class="es-icon es-icon-share"></i>
+<span class="hidden js-wechat-subscribe" style="position: relative; display: inline-block; width: 50px; text-align: center;">
+  <i class="es-icon es-icon-share" style="position: absolute; left: 16px; top: 2px;"></i>
   <br>
   <wx-open-subscribe class="js-wechat-template" template="{{template}}" id="subscribe-btn">
     <template slot="style">
@@ -15,6 +15,7 @@
         .subscribe-btn {
           color: #919191;
           font-size: 12px;
+          padding-top: 28px;
         }
       </style>
     </template>
