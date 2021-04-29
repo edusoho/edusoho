@@ -1,6 +1,6 @@
 <template>
   <div v-if="supportWechatSubscribe" class="wechat-subscribe">
-    <div class="wechat-subscribe-guide" @click.stop="clickSubscribe">
+    <div class="wechat-subscribe-guide" @click="clickSubscribe">
       <img src="static/images/course_guide.png" alt="" />
     </div>
     <i class="iconfont icon-subscribe" />
