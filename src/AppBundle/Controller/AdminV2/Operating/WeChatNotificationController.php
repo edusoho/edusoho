@@ -172,21 +172,21 @@ class WeChatNotificationController extends BaseController
     public function settingNotificationAction(Request $request)
     {
         $notificationType = $request->request->get('notificationType');
-        $notification_sms = $request->request->get('notification_sms');
-        $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notification_sms);
+        $notificationSms = $request->request->get('notificationSms');
+        $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
 
         return $this->createJsonResponse(true);
     }
 
-    private function prepareWechatNotificationSetting($notificationType, $notification_sms)
+    private function prepareWechatNotificationSetting($notificationType, $notificationSms)
     {
         $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
         if (in_array($notificationType, ['serviceFollow', 'MessageSubscribe'])) {
             $wechatSetting['notification_type'] = $notificationType;
         }
-        if ($notification_sms) {
+        if ($notificationSms) {
             $wechatSetting['notification_sms'] = 1;
         }
         if ('serviceFollow' == $notificationType) {
