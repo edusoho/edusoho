@@ -279,6 +279,7 @@ class WeChatNotificationController extends BaseController
 
     protected function getAuthorizationInfo($setting)
     {
+        $mode = empty($setting) || 'MessageSubscribe' != $setting['notification_type'] ? 'wechat_template' : 'wewchat_subscribe';
         $biz = $this->getBiz();
         try {
             $info = $biz['ESCloudSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
@@ -288,13 +289,12 @@ class WeChatNotificationController extends BaseController
                 /**
                  * 2、用户管理权限  7、群发与通知权限  89、订阅通知权限
                  */
-                $needIds = empty($setting) || 'MessageSubscribe' != $setting['notification_type'] ? [2, 7] : [2, 7, 89];
+                $needIds = 'wechat_template' == $mode ? [2, 7] : [2, 7, 89];
                 $diff = array_diff($needIds, $ids);
                 if (empty($diff)) {
-                    $info['isAuthorized'] = true;
                     $info['wholeness'] = 1;
                 } else {
-                    $info['isAuthorized'] = false;
+                    $info['isAuthorized'] = 'wechat_template' == $mode ? true : false;
                 }
             }
         } catch (\Exception $e) {
