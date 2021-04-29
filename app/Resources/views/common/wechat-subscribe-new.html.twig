@@ -1,0 +1,27 @@
+{% set wxconfig = wx_js_sdk_config() %}
+{% set template = data('SubscribeTemplate', {})%}
+
+{% if wxconfig|default(null) %}
+  {% do script(['app/js/wechat-subscribe-new/index.js']) %}
+  <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
+{% endif %}
+
+<span class="hidden js-wechat-subscribe" style="position: relative; display: inline-block; width: 50px; height: 44px; text-align: center;">
+  <i class="es-icon es-icon-subscribe"></i>
+  <br>
+  <wx-open-subscribe class="js-wechat-template" template="{{template}}" id="subscribe-btn">
+    <template slot="style">
+      <style>
+        .subscribe-btn {
+          color: #919191;
+          font-size: 12px;
+        }
+      </style>
+    </template>
+    <template>
+      <span class="subscribe-btn">
+        订阅
+      </span>
+    </template>
+  </wx-open-subscribe>
+</span>

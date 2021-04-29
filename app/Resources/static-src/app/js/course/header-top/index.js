@@ -1,4 +1,5 @@
 import 'app/common/widget/qrcode';
+import { isMobileDevice } from 'common/utils';
 import Api from 'common/api';
 import 'store';
 
@@ -95,7 +96,7 @@ const wechatIntro = () => {
 }
 
 var $notificationEnable = $('#wechat_notification_type').val();
-if ($notificationEnable == 'MessageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INTRO)) {
+if ($notificationEnable == 'MessageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INTRO) && !isMobileDevice()) {
   store.set(WECHAT_SUBSCRIBE_INTRO, true);
   wechatIntro();
 }
