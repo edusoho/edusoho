@@ -72,7 +72,7 @@ function initWechatConfig() {
   
   wx.ready(function() {
     $('.js-wechat-subscribe').removeClass('hidden');
-    var btn = $('.js-wechat-subscribe').find('#subscribe-btn');
+    var btn = document.getElementById('subscribe-btn');
     console.log('hongbusi', btn);
     console.log($('#subscribe-btn'));
     btn.addEventListener('success', function (e) {
