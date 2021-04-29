@@ -18,6 +18,7 @@ class CommonReview extends AbstractSource
             'content' => $review['content'],
             'author' => $review['userId'],
             'createdTime' => $review['createdTime'],
+            'updatedTime' => $review['updatedTime'],
         ];
     }
 

@@ -18,6 +18,7 @@ class CourseThreadReply extends AbstractSource
             'content' => $threadPost['content'],
             'author' => $threadPost['userId'],
             'createdTime' => $threadPost['createdTime'],
+            'updatedTime' => $threadPost['createdTime'],
         ];
     }
 

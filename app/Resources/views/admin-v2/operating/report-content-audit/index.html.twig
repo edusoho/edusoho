@@ -74,7 +74,7 @@
           <td>
             {% set author = users[reportAudit.author]|default([]) %}
             {{ admin_macro.user_link(author) }}<br>
-            <span class="text-muted">{{ reportAudit.createdTime|date('Y-n-d H:i') }}</span>
+            <span class="text-muted">{{ reportAudit.contentUpdatedTime|date('Y-n-d H:i') }}</span>
           </td>
           <td class="text-{{ reportAudit.status }}" align="center">
             {{ reportAuditStatus[reportAudit.status]|default(reportAuditStatus.none_checked) }}

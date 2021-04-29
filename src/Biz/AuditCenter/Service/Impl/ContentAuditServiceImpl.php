@@ -77,7 +77,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
                 $this->confirmUserAudit($id, $status, $auditor);
             }
             $this->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }

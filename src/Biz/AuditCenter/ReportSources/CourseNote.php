@@ -18,6 +18,7 @@ class CourseNote extends AbstractSource
             'content' => $note['content'],
             'author' => $note['userId'],
             'createdTime' => $note['createdTime'],
+            'updatedTime' => $note['updatedTime'],
         ];
     }
 
