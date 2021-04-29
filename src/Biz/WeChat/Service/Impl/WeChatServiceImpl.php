@@ -571,21 +571,27 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
                 $biz['ESCloudSdk.notification']->openAccount();
-                $result = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, [
+                $wechatChannel = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, [
+                    'app_id' => $loginConnect['weixinmob_key'],
+                    'app_secret' => $loginConnect['weixinmob_secret'],
+                ]);
+                $subscribeChannel = $biz['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
                     'app_id' => $loginConnect['weixinmob_key'],
                     'app_secret' => $loginConnect['weixinmob_secret'],
                 ]);
                 $this->registerJobs();
             } else {
+                $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
                 $biz['ESCloudSdk.notification']->closeAccount();
-                $result = $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
+                $wechatChannel = $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
+                $subscribeChannel = empty($notificationSetting) || 'MessageSubscribe' != $notificationSetting['notification_type'] ? true : $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE);
                 $this->deleteJobs();
             }
         } catch (\RuntimeException $e) {
             return false;
         }
 
-        if (empty($result)) {
+        if (empty($wechatChannel) || empty($subscribeChannel)) {
             return false;
         }
 

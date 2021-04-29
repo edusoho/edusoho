@@ -9,6 +9,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,9 +26,7 @@ class WeChatNotificationController extends BaseController
         $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
 
         $wechatAuth = $this->getAuthorizationInfo($wechatNotificationSetting);
-        if ($wechatAuth['isAuthorized']) {
-            $wechatNotificationSetting['is_authorization'] = 1;
-        }
+        $wechatNotificationSetting['is_authorization'] = $wechatAuth['isAuthorized'];
 
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
@@ -172,21 +171,29 @@ class WeChatNotificationController extends BaseController
     public function settingNotificationAction(Request $request)
     {
         $notificationType = $request->request->get('notificationType');
-        $notification_sms = $request->request->get('notification_sms');
-        $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notification_sms);
+        $notificationSms = $request->request->get('notificationSms');
+        $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
+        $setting = $this->getSettingService()->get('wechat_notification');
+        if ('MessageSubscribe' == $setting['notification_type']) {
+            $loginConnect = $this->getSettingService()->get('login_bind');
+            $this->getBiz()['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
+                'app_id' => $loginConnect['weixinmob_key'],
+                'app_secret' => $loginConnect['weixinmob_secret'],
+            ]);
+        }
 
         return $this->createJsonResponse(true);
     }
 
-    private function prepareWechatNotificationSetting($notificationType, $notification_sms)
+    private function prepareWechatNotificationSetting($notificationType, $notificationSms)
     {
         $wechatSetting = array_merge($this->getDefaultWechatNotificationSetting(), $this->getSettingService()->get('wechat_notification', []));
 
         if (in_array($notificationType, ['serviceFollow', 'messageSubscribe'])) {
             $wechatSetting['notification_type'] = $notificationType;
         }
-        if ($notification_sms) {
+        if ($notificationSms) {
             $wechatSetting['notification_sms'] = 1;
         }
         if ('serviceFollow' == $notificationType) {

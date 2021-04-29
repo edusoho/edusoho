@@ -37,9 +37,10 @@ define(function(require, exports, module) {
       $.post($form.data('url'), $form.serialize())
         .success(function() {
           Notify.success(Translator.trans('site.save_success_hint'));
+          window.location.reload();
         }).fail(function (){
           Notify.danger(Translator.trans('site.save_error_hint'));
-      });
+        });
     });
 
     $('input[type=radio][name=notificationType]').change(function() {
@@ -48,11 +49,13 @@ define(function(require, exports, module) {
         $('#message-subscribe').show()
         $('#service-follow').hide()
         $('#message-subscribe-form').show()
+        $('#message-template-tip').hide();
       }
       if (type === 'serviceFollow') {
-        $('#service-follow').show()
-        $('#message-subscribe').hide()
-        $('#message-subscribe-form').hide()
+        $('#service-follow').show();
+        $('#message-subscribe').hide();
+        $('#message-subscribe-form').hide();
+        $('#message-template-tip').show();
       }
     });
   };

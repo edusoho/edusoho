@@ -688,6 +688,7 @@ class WebExtension extends \Twig_Extension
             'timestamp' => time(),
             'nonceStr' => uniqid($prefix = 'edusoho'),
             'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ', 'updateTimelineShareData', 'updateAppMessageShareData'],
+            'openTagList' => ['wx-open-subscribe'],
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
