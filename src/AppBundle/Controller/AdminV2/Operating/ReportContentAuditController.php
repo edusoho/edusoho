@@ -28,7 +28,7 @@ class ReportContentAuditController extends BaseController
 
         $reportAudits = $this->getReportAuditService()->searchReportAudits(
             $conditions,
-            ['reportCount' => 'DESC'],
+            ['reportCount' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
