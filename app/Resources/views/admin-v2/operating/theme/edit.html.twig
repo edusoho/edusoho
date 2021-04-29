@@ -14,5 +14,5 @@
     isActive: true,
   }%}
   {% include 'admin-v2/operating/theme/tab-panel/nav.html.twig' with {navigation: themeConfig.navigation|default() }%}
-  {% include 'admin-v2/operating/theme/tab-panel/maincolor.html.twig' with {maincolor: themeConfig.maincolor, navigationcolor: themeConfig.navigationcolor} %}
+  {% include 'admin-v2/operating/theme/tab-panel/maincolor.html.twig' with {maincolor: themeConfig.maincolor, navigationcolor: themeConfig.navigationcolor|default('')} %}
 {% endblock %}
