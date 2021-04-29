@@ -23,7 +23,7 @@ export default class BatchConfirm {
       });
 
       if (ids.length === 0) {
-        cd.message({ type: 'danger', message: Translator.trans('admin_v2.operation.user_content_audit.tip.checked_empty_hint',{name:name}) });
+        cd.message({ type: 'danger', message: Translator.trans('admin_v2.operation.audit_center.batch_operate_tips',{name:name}) });
         return ;
       }
 

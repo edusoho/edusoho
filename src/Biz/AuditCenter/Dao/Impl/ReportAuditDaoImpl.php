@@ -19,6 +19,11 @@ class ReportAuditDaoImpl extends AdvancedDaoImpl implements ReportAuditDao
         return $this->getByFields(['targetType' => $targetType, 'targetId' => $targetId]);
     }
 
+    public function findByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->findByFields(['targetType' => $targetType, 'targetId' => $targetId]);
+    }
+
     public function declares()
     {
         return [
