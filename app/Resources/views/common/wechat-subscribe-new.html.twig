@@ -1,7 +1,7 @@
 {% set wxconfig = wx_js_sdk_config() %}
 {% set template = data('SubscribeTemplate', {})%}
 
-{# {% if wxconfig|default(null) and template|default('') %} #}
+{% if wxconfig|default(null) and template|default('') %}
   {% do script(['app/js/wechat-subscribe-new/index.js']) %}
   <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
 
@@ -13,17 +13,22 @@
         <style>
           .subscribe-btn {
             color: #919191;
-            font-size: 12px;
+            font-size: 14px;
+            text-align: center;
+          }
+
+          .subscribe-btn span {
+            font-size: 18px;
           }
         </style>
       </template>
       <template>
         <span class="subscribe-btn">
-          &#10026;
+          <span>&#10026;</span>
           <br>
           订阅
         </span>
       </template>
     </wx-open-subscribe>
   </span>
-{# {% endif %} #}
+{% endif %}
