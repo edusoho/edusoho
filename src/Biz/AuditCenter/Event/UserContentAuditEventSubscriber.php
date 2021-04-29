@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\AuditCenter\Event;
-
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\Service\ContentAuditService;
@@ -10,12 +8,10 @@ use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use http\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserContentAuditEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-
     public static function getSubscribedEvents()
     {
         return [
@@ -35,7 +31,7 @@ class UserContentAuditEventSubscriber extends EventSubscriber implements EventSu
 
         $reportAudits = $this->getReportAuditService()->findReportAuditsByTargetTypeAndTargetId($reviewAuditTargetType, $review['id']);
         if ($reportAudits) {
-            $this->getReportAuditService()->deleteReportAuditsByIds(ArrayToolkit::column($reportAudits,'id'));
+            $this->getReportAuditService()->deleteReportAuditsByIds(ArrayToolkit::column($reportAudits, 'id'));
         }
     }
 
@@ -61,7 +57,6 @@ class UserContentAuditEventSubscriber extends EventSubscriber implements EventSu
         return $reviewTargetType;
     }
 
-
     /**
      * @return ContentAuditService
      */
@@ -85,5 +80,4 @@ class UserContentAuditEventSubscriber extends EventSubscriber implements EventSu
     {
         return $this->getBiz()->service('Goods:GoodsService');
     }
-
 }
