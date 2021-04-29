@@ -4,21 +4,26 @@ namespace Biz\AuditCenter\ReportSources;
 
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Service\ThreadService;
+use Biz\Course\ThreadException;
 
 class CourseThread extends AbstractSource
 {
     public function getReportContext($targetId)
     {
-        $thread = $this->getCourseThreadService()->getThreadByThreadId($targetId);
-        if (empty($thread)) {
+        try {
+            $thread = $this->getCourseThreadService()->getThreadByThreadId($targetId);
+            if (empty($thread)) {
+                return;
+            }
+
+            return [
+                'content' => $thread['content'],
+                'author' => $thread['userId'],
+                'createdTime' => $thread['createdTime'],
+            ];
+        } catch (ThreadException $e) {
             return;
         }
-
-        return [
-            'content' => $thread['content'],
-            'author' => $thread['userId'],
-            'createdTime' => $thread['createdTime'],
-        ];
     }
 
     public function handleSource($audit)
