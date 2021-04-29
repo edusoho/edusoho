@@ -1,13 +1,14 @@
 {% set wxconfig = wx_js_sdk_config() %}
 {% set template = data('SubscribeTemplate', {})%}
 
-{% if wxconfig|default(null) and template|default('') %}
+{# {% if wxconfig|default(null) and template|default('') %} #}
   {% do script(['app/js/wechat-subscribe-new/index.js']) %}
   <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
 
   <span class="js-wechat-subscribe" style="position: relative; display: inline-block; width: 50px; height: 44px; text-align: center;">
-    <i class="es-icon es-icon-subscribe"></i>
-    <br>
+    {# <i class="es-icon es-icon-subscribe"></i> #}
+    {# <br> #}
+    {# <span>订阅</span> #}
     <wx-open-subscribe template="{{template}}" id="subscribe-btn">
       <template slot="style">
         <style>
@@ -19,9 +20,10 @@
       </template>
       <template>
         <span class="subscribe-btn">
+          <svg t="1619704337148" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6884" width="128" height="128"><path d="M766.72 0H257.28a172.032 172.032 0 0 0-172.032 172.032v679.488a171.712 171.712 0 0 0 252.032 152.32l94.72-49.728a171.2 171.2 0 0 1 160 0l94.72 49.728c24.64 13.12 52.096 20.032 80 20.032a172.352 172.352 0 0 0 172.032-172.352V172.032A172.032 172.032 0 0 0 766.72 0z m117.632 851.52a118.08 118.08 0 0 1-117.76 117.952c-19.072-0.064-37.76-4.8-54.592-13.824l-94.72-49.728a225.6 225.6 0 0 0-210.56 0l-94.72 49.728c-16.768 9.024-35.52 13.76-54.592 13.824a118.08 118.08 0 0 1-117.76-117.952V172.032A117.76 117.76 0 0 1 257.28 54.4h509.44a117.76 117.76 0 0 1 117.632 117.568v679.552z" p-id="6885"></path><path d="M624 418.048l-44.8-6.4a29.12 29.12 0 0 1-21.76-16l-19.52-40.448a28.928 28.928 0 0 0-51.84 0l-20.032 40.64a29.12 29.12 0 0 1-21.76 16l-44.8 6.4a28.928 28.928 0 0 0-16 49.28l32 32a29.312 29.312 0 0 1 8.32 25.6l-7.808 44.032a28.8 28.8 0 0 0 41.92 30.336l40-21.12a29.44 29.44 0 0 1 26.88 0l40 21.12a28.8 28.8 0 0 0 43.2-30.4l-7.68-44.608a29.312 29.312 0 0 1 8.32-25.6l32-32a28.992 28.992 0 0 0-16.64-48.832z" p-id="6886"></path></svg>
           订阅
         </span>
       </template>
     </wx-open-subscribe>
   </span>
-{% endif %}
+{# {% endif %} #}
