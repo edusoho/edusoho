@@ -671,7 +671,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function synchronizeSubscriptionRecords()
     {
         $options = [
-            'createdTime' => $this->getLastCreatedTime(),
+            'createdTime_GT' => $this->getLastCreatedTime(),
         ];
 
         $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
@@ -685,9 +685,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             $createRecord = [
                 'toId' => $record['to_id'],
                 'templateCode' => $record['template_code'],
-                'templateType' => 'subscribe',
+                'templateType' => 'once',
                 'createdTime' => strtotime($record['created_time']),
-                'updatedTime' => time(),
             ];
             $batchUpdateHelper->add($createRecord);
         }
