@@ -4,9 +4,9 @@
       请点此订阅课程相关通知
     </div>
 
-    <div v-if="secondGuide" class="wechat-subscribe-second-guide">
+    <!-- <div v-if="secondGuide" class="wechat-subscribe-second-guide">
       <img src="static/images/course_guide.png" alt="" />
-    </div>
+    </div> -->
 
     <i class="iconfont icon-subscribe" />
     <wx-open-subscribe :template="templateId" id="subscribe-btn">
@@ -33,7 +33,7 @@ import Api from '@/api';
 
 const reg = /accept/;
 const WECHAT_SUBSCRIBE_FIRST_GUIDE = 'WECHAT_SUBSCRIBE_FIRST_GUIDE';
-const WECHAT_SUBSCRIBE_SECOND_GUIDE = 'WECHAT_SUBSCRIBE_SECOND_GUIDE';
+// const WECHAT_SUBSCRIBE_SECOND_GUIDE = 'WECHAT_SUBSCRIBE_SECOND_GUIDE';
 
 export default {
   name: 'WechatSubscribe',
@@ -54,9 +54,9 @@ export default {
       this.firstGuide = true;
     }
 
-    if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
-      this.secondGuide = true;
-    }
+    // if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
+    //   this.secondGuide = true;
+    // }
 
     this.initSubscribe();
   },
@@ -88,14 +88,9 @@ export default {
 
         wx.ready(() => {
           const btn = document.getElementById('subscribe-btn');
-          btn.addEventListener('click', function() {
-            console.log('点击了');
-            alert('dianjile ');
-          });
           const that = this;
           btn.addEventListener('success', function(e) {
             that.firstGuide = false;
-            that.secondGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
               that.$toast('订阅成功');
