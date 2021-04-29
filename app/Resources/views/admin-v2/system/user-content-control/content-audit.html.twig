@@ -54,8 +54,13 @@
                  value="0" {% if '0' == contentAuditSetting.enable_auto_audit|default(1) %} checked="checked" {% endif %}>
           {{ 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow'|trans }}
         </label>
-        <span class="text-muted text-sm js-auto-audit-mode-tips">
+        {# todo:二期不支持先审后发,因此文案调整 #}
+        {#<span class="text-muted text-sm js-auto-audit-mode-tips">
           {% set tip = 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.'~contentAuditSetting.mode|default('audit_after')~'.not_allow.tips' %}
+          {{ tip|trans }}
+        </span>#}
+        <span class="text-muted text-sm">
+          {% set tip = 'admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips' %}
           {{ tip|trans }}
         </span>
       </div>
