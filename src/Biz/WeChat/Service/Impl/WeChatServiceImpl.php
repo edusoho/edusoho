@@ -672,25 +672,34 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $options = [
             'createdTime_GT' => $this->getLastCreatedTime(),
+            'createdTime_LT' => time(),
         ];
 
-        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options);
+        $offset = 0;
+        $limit = 30;
 
+        $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options, $offset);
         if (empty($synchronizeRecords['data'])) {
             return;
         }
 
-        $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
-        foreach ($synchronizeRecords['data'] as $record) {
-            $createRecord = [
-                'toId' => $record['to_id'],
-                'templateCode' => $record['template_code'],
-                'templateType' => 'once',
-                'createdTime' => strtotime($record['created_time']),
-            ];
-            $batchUpdateHelper->add($createRecord);
+
+        $total = $synchronizeRecords['paging']['total'];
+        $totalPage = $total / $limit;
+        for ($page = 0; $page <= $totalPage; $page++) {
+            $synchronizeRecords = $this->getSDKNotificationService()->searchRecords($options, $offset * $page, $limit);
+            $batchUpdateHelper = new BatchCreateHelper($this->getSubscribeRecordDao());
+            foreach ($synchronizeRecords['data'] as $record) {
+                $createRecord = [
+                    'toId' => $record['to_id'],
+                    'templateCode' => $record['template_code'],
+                    'templateType' => 'once',
+                    'createdTime' => strtotime($record['created_time']),
+                ];
+                $batchUpdateHelper->add($createRecord);
+            }
+            $batchUpdateHelper->flush();
         }
-        $batchUpdateHelper->flush();
     }
 
     protected function getLastCreatedTime()
