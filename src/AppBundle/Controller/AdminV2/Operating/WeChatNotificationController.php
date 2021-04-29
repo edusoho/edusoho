@@ -25,9 +25,7 @@ class WeChatNotificationController extends BaseController
         $wechatNotificationSetting = array_merge($wechatNotificationDefault, $wechatNotificationSetting);
 
         $wechatAuth = $this->getAuthorizationInfo($wechatNotificationSetting);
-        if ($wechatAuth['isAuthorized']) {
-            $wechatNotificationSetting['is_authorization'] = 1;
-        }
+        $wechatNotificationSetting['is_authorization'] = $wechatAuth['isAuthorized'];
 
         $templates = $this->get('extension.manager')->getWeChatTemplates();
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
