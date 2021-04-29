@@ -30,6 +30,7 @@
 <script>
 import wx from 'weixin-js-sdk';
 import Api from '@/api';
+import { mapState } from 'vuex';
 
 const reg = /accept/;
 const WECHAT_SUBSCRIBE_FIRST_GUIDE = 'WECHAT_SUBSCRIBE_FIRST_GUIDE';
@@ -59,6 +60,12 @@ export default {
     // }
 
     this.initSubscribe();
+  },
+
+  computed: {
+    ...mapState({
+      user: state => state.user,
+    }),
   },
 
   methods: {
@@ -110,8 +117,8 @@ export default {
 
     isKeyLocalStorage(key) {
       const value = localStorage.getItem(key);
-      if (value) return value;
-      localStorage.setItem(key, true);
+      if (value == this.user.id) return true;
+      localStorage.setItem(key, this.user.id);
       return false;
     },
   },
