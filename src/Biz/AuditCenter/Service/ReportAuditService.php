@@ -37,7 +37,7 @@ interface ReportAuditService
 
     public function deleteReportAudit($id);
 
-    public function deleteReportAuditsByIds(array $ids);
+    public function deleteReportAuditsByIds($ids);
 
     public function getReportAuditRecord($id);
 
