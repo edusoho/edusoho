@@ -106,12 +106,12 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     public function createWeChatNotificationRecord($sn, $key, $data, $source, $batchId = 0)
     {
         global $kernel;
-        if ($source == 'wechat_template') {
+        if ('wechat_template' == $source) {
             $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
         } else {
             $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
         }
-        
+
         $template = $templates[$key];
         $content = $this->spliceContent($template['detail'], $data);
         $event = [
