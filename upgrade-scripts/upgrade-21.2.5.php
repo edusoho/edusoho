@@ -60,6 +60,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'addGroupThreadColumn',
             'addGroupThreadPostColumn',
             'addCourseNoteColumn',
+            'alterTableNotificationBatch',
+            'addSyncRecordJob',
         );
 
         $funcNames = array();
@@ -183,6 +185,19 @@ class EduSohoUpgrade extends AbstractUpdater
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         }
 
+        $this->getConnection()->exec("
+            CREATE TABLE IF NOT EXISTS `wechat_subscribe_record` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `toId` varchar(64) NOT NULL DEFAULT '' COMMENT '用户openId',
+              `templateCode` varchar(64) NOT NULL DEFAULT '' COMMENT '模板code',
+              `templateType` varchar(32) NOT NULL DEFAULT '' COMMENT '模板类型（一次性、长期）',
+              `isSend` tinyint NOT NULL DEFAULT 0 COMMENT '是否已发送',
+              `createdTime` int unsigned NOT NULL COMMENT '创建时间',
+              `updatedTime` int unsigned NOT NULL COMMENT '更新时间',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='微信订阅记录表';
+        ");
+
         return 1;
     }
 
@@ -247,6 +262,72 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_note', 'auditStatus')) {
             $this->getConnection()->exec("ALTER TABLE `course_note` ADD COLUMN `auditStatus` varchar(32) NOT NULL DEFAULT 'none_checked' COMMENT '外部审核状态:none_checked、pass、illegal' AFTER `userId`;");
         }
+        return 1;
+    }
+
+    public function alterTableNotificationBatch()
+    {
+        if (!$this->isFieldExist('notification_batch', 'source')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `notification_batch` ADD `source` varchar(32) NOT NULL DEFAULT '' COMMENT '通知来源' AFTER `status`;
+            ");
+        }
+
+        if (!$this->isFieldExist('notification_batch', 'smsEventId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `notification_batch` ADD `smsEventId` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'smsEventId' AFTER `eventId`;
+            ");
+        }
+
+        if ($this->isFieldExist('notification_batch', 'source')) {
+            $this->getConnection()->exec("
+                UPDATE `notification_batch` SET `source` = 'wechat_template';
+            ");
+        }
+
+        return 1;
+    }
+
+    public function addSyncRecordJob()
+    {
+        if (!empty($this->getSchedulerService()->getJobByName('WeChatSubscribeRecordSynJob'))) {
+            $this->logger('info', "定时任务已存在，直接跳过");
+            return 1;
+        }
+
+        $currentTime = time();
+        $expression = rand(0, 30).'/30 * * * *';
+        $this->getConnection()->exec("
+            INSERT INTO `biz_scheduler_job` (
+                `name`,
+                `expression`,
+                `class`,
+                `args`,
+                `priority`,
+                `next_fire_time`,
+                `misfire_threshold`,
+                `misfire_policy`,
+                `enabled`,
+                `creator_id`,
+                `updated_time`,
+                `created_time`
+            ) VALUES
+            (
+                'WeChatSubscribeRecordSynJob',
+                '{$expression}',
+                'Biz\\\\WeChat\\\\Job\\\\WeChatSubscribeRecordSynJob',
+                '',
+                '100',
+                '{$currentTime}',
+                '300',
+                'missed',
+                '1',
+                '0',
+                '{$currentTime}',
+                '{$currentTime}'
+            );
+        ");
+
         return 1;
     }
 
