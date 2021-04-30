@@ -11,7 +11,7 @@
         {{ "wechat.notification.status.finish"|trans }}<br>
         {{ 'wechat.notification.record_send_number'|trans }}：
         {% if event.reason %}
-          <a href="#modal" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_wechat_notification_record_detail', {'id':event.id}) }}">{{ event.succeedCount }}/{{ event.totalCount }}</a>
+          <a href="#modal" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_wechat_notification_record_detail', {'id':event.id}) }}">{{ event.succeedCount }}/{{ event.totalCount }}</a>
         {% else %}
           {{ event.succeedCount }}/{{ event.totalCount }}
         {% endif %}
