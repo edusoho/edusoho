@@ -23,6 +23,7 @@ class GroupController extends BaseController
             [
                 'createdTime' => time() - 30 * 24 * 60 * 60,
                 'status' => 'open',
+                'excludeAuditStatus' => 'illegal',
             ],
             $this->filterSort('byStick'), 0, 25
         );
