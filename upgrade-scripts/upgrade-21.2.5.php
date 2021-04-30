@@ -221,7 +221,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function addCourseThreadPostColumn()
     {
         if (!$this->isFieldExist('course_thread_post', 'auditStatus')) {
-            $this->getConnection()->exec("course_thread_post` ADD COLUMN `auditStatus` varchar(32) NOT NULL DEFAULT 'none_checked' COMMENT '外部审核状态:none_checked、pass、illegal' AFTER `userId`;");
+            $this->getConnection()->exec("ALTER TABLE `course_thread_post` ADD COLUMN `auditStatus` varchar(32) NOT NULL DEFAULT 'none_checked' COMMENT '外部审核状态:none_checked、pass、illegal' AFTER `userId`;");
         }
         return 1;
     }
