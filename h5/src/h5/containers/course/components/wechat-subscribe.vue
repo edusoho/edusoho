@@ -51,18 +51,26 @@ export default {
     };
   },
 
-  mounted() {
+  async created() {
     if (!this.isWeixin()) return;
 
     if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_FIRST_GUIDE)) {
       this.firstGuide = true;
     }
 
+    const { enable } = await Api.wechatSubscribe();
+    if (!enable) return;
+
+    this.templateId = await Api.wechatTemplate();
+    if (!this.templateId) return;
+
     // if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
     //   this.secondGuide = true;
     // }
 
-    this.initSubscribe();
+    this.$nextTick(res => {
+      this.initSubscribe();
+    });
   },
 
   computed: {
@@ -72,13 +80,7 @@ export default {
   },
 
   methods: {
-    async initSubscribe() {
-      const { enable } = await Api.wechatSubscribe();
-      if (!enable) return;
-
-      this.templateId = await Api.wechatTemplate();
-      if (!this.templateId) return;
-
+    initSubscribe() {
       const params = {
         url: window.location.href.split('#')[0],
       };
