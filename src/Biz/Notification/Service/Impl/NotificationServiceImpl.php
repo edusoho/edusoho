@@ -158,11 +158,12 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $strategy = $this->createStrategy($strategy);
 
         $batch = [
-            'eventId' => $event['id'],
+            'eventId' => 0,
             'strategyId' => $strategy['id'],
             'sn' => '',
             'status' => 'finished',
             'source' => $source,
+            'smsEventId' => $event['id']
         ];
 
         return $this->createBatch($batch);
