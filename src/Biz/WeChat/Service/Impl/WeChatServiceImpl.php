@@ -4,10 +4,12 @@ namespace Biz\WeChat\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
 use Biz\Sms\Service\SmsService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -367,13 +369,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'templateParams' => $params,
             ]);
         } catch (\Exception $e) {
-            $this->getLogger()->error("发送微信通知失败:template:{$smsType}", ['error' => $e->getMessage()]);
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_sms_notification', "发送微信通知失败:template:{$smsType}", ['error' => $e->getMessage()]);
 
             return [];
         }
 
         if (empty($result['sn'])) {
-            $this->getLogger()->error("发送微信通知失败:template:{$smsType}", $result);
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_sms_notification', "发送微信通知失败:template:{$smsType}", $result);
 
             return [];
         }
@@ -863,5 +865,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     protected function getNotificationService()
     {
         return $this->biz->service('Notification:NotificationService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }
