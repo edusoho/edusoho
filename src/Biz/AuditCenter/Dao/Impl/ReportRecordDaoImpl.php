@@ -23,7 +23,7 @@ class ReportRecordDaoImpl extends AdvancedDaoImpl implements ReportRecordDao
                 'targetType = :targetType',
                 'targetId = :targetId',
             ],
-            'orderbys' => ['id'],
+            'orderbys' => ['id', 'auditTime'],
         ];
     }
 
