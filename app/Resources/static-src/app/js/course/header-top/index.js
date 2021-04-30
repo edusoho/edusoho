@@ -96,7 +96,8 @@ const wechatIntro = () => {
 }
 
 var $notificationEnable = $('#wechat_notification_type').val();
-if ($notificationEnable == 'messageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INTRO) && !isMobileDevice()) {
-  store.set(WECHAT_SUBSCRIBE_INTRO, true);
+let $userId = $('#wechat_notification_user_id').val();
+if ($notificationEnable == 'messageSubscribe' && $userId != store.get(WECHAT_SUBSCRIBE_INTRO) && !isMobileDevice()) {
+  store.set(WECHAT_SUBSCRIBE_INTRO, $userId);
   wechatIntro();
 }
