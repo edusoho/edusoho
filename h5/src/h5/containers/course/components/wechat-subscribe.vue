@@ -102,6 +102,8 @@ export default {
           const btn = document.getElementById('subscribe-btn');
           const that = this;
           btn.addEventListener('success', function(e) {
+            alert(e.detail);
+            console.log(e.detail);
             that.firstGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
