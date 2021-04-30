@@ -21,9 +21,9 @@
         </style>
       </script>
       <script type="text/wxtag-template">
-        <button class="subscribe-btn">
+        <span class="subscribe-btn">
           订阅
-        </button>
+        </span>
       </script>
     </wx-open-subscribe>
   </div>
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       templateId: '',
-      isWechatSubscribe: false,
+      isWechatSubscribe: true,
       firstGuide: false,
       secondGuide: false,
       isSubscribe: false,
@@ -78,6 +78,8 @@ export default {
         url: window.location.href.split('#')[0],
       };
 
+      this.isWechatSubscribe = true;
+
       Api.wechatJsSdkConfig({ params }).then(res => {
         wx.config({
           debug: false,
@@ -89,27 +91,23 @@ export default {
           openTagList: ['wx-open-subscribe'],
         });
 
-        this.isWechatSubscribe = true;
-
         wx.ready(() => {
-          setTimeout(() => {
-            const btn = document.getElementById('subscribe-btn');
-            const that = this;
-            console.log(btn);
-            btn.addEventListener('success', function(e) {
-              alert('success');
-              console.log('success', e.detail);
-              that.firstGuide = false;
-              const subscribeDetails = e.detail.subscribeDetails;
-              if (reg.test(subscribeDetails)) {
-                that.isSubscribe = true;
-                that.$toast('订阅成功');
-              }
-            });
-            btn.addEventListener('error', function(e) {
-              console.log('fail', e.detail);
-            });
-          }, 1000);
+          const btn = document.getElementById('subscribe-btn');
+          const that = this;
+          console.log(btn);
+          btn.addEventListener('success', function(e) {
+            alert('success');
+            console.log('success', e.detail);
+            that.firstGuide = false;
+            const subscribeDetails = e.detail.subscribeDetails;
+            if (reg.test(subscribeDetails)) {
+              that.isSubscribe = true;
+              that.$toast('订阅成功');
+            }
+          });
+          btn.addEventListener('error', function(e) {
+            console.log('fail', e.detail);
+          });
         });
       });
     },
