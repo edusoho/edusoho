@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       templateId: '',
-      isWechatSubscribe: true,
+      isWechatSubscribe: false,
       firstGuide: false,
       secondGuide: false,
       isSubscribe: false,
@@ -63,6 +63,8 @@ export default {
     this.templateId = await Api.wechatTemplate();
     if (!this.templateId) return;
 
+    this.isWechatSubscribe = true;
+
     // if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
     //   this.secondGuide = true;
     // }
@@ -77,8 +79,6 @@ export default {
       const params = {
         url: window.location.href.split('#')[0],
       };
-
-      this.isWechatSubscribe = true;
 
       Api.wechatJsSdkConfig({ params }).then(res => {
         wx.config({
