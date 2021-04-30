@@ -79,9 +79,6 @@ export default {
       };
 
       Api.wechatJsSdkConfig({ params }).then(res => {
-        console.log(res);
-        alert('config');
-
         wx.config({
           debug: false,
           appId: res.appId,
@@ -95,24 +92,24 @@ export default {
         this.isWechatSubscribe = true;
 
         wx.ready(() => {
-          alert('ready');
-          // eslint-disable-next-line no-var
-          var btn = document.getElementById('subscribe-btn');
-          const that = this;
-          console.log(btn);
-          btn.addEventListener('success', function(e) {
-            alert('success');
-            console.log('success', e.detail);
-            that.firstGuide = false;
-            const subscribeDetails = e.detail.subscribeDetails;
-            if (reg.test(subscribeDetails)) {
-              that.isSubscribe = true;
-              that.$toast('订阅成功');
-            }
-          });
-          btn.addEventListener('error', function(e) {
-            console.log('fail', e.detail);
-          });
+          setTimeout(() => {
+            const btn = document.getElementById('subscribe-btn');
+            const that = this;
+            console.log(btn);
+            btn.addEventListener('success', function(e) {
+              alert('success');
+              console.log('success', e.detail);
+              that.firstGuide = false;
+              const subscribeDetails = e.detail.subscribeDetails;
+              if (reg.test(subscribeDetails)) {
+                that.isSubscribe = true;
+                that.$toast('订阅成功');
+              }
+            });
+            btn.addEventListener('error', function(e) {
+              console.log('fail', e.detail);
+            });
+          }, 1000);
         });
       });
     },
