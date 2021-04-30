@@ -1562,4 +1562,10 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
+t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "\u8bf7\u5148\u9009\u62e9\u8981\u6279\u91cf\u64cd\u4f5c\u7684\u5185\u5bb9", "js", "zh_CN");
+t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips", "\u4e0d\u5141\u8bb8\u540e\uff0c\u5ba1\u6838\u72b6\u6001\u4e3a\u7cfb\u7edf\u5df2\u5ba1-\u5f85\u4eba\u5de5\u5ba1\u6838", "js", "zh_CN");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips", "\u4e0d\u5141\u8bb8\u540e\uff0c\u5ba1\u6838\u72b6\u6001\u4e3a\u672a\u5ba1\u6838", "js", "zh_CN");
+t.add("admin_v2.operation.audit_center.batch_operate_tips", "\u672a\u9009\u4e2d\u4efb\u4f55\u5185\u5bb9", "js", "zh_CN");
+t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
 })(Translator);

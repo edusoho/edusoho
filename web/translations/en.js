@@ -1611,4 +1611,10 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>\n", "js", "en");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "Student Increasement", "js", "en");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "Auditor Increasement", "js", "en");
+t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "Please select the content to be operated in batches first", "js", "en");
+t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "Success", "js", "en");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips", "After not allowed, the review status is system reviewed-pending manual review", "js", "en");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips", "After disallowing, the review status is unreviewed", "js", "en");
+t.add("admin_v2.operation.audit_center.batch_operate_tips", "Please select the content to be operated in batches first", "js", "en");
+t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "Success", "js", "en");
 })(Translator);
