@@ -133,7 +133,7 @@ class WeChatSettingController extends BaseController
     {
         $biz = $this->getBiz();
         try {
-            $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+            $info = $biz['ESCloudSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
             if ($info['isAuthorized']) {
                 $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
                 $ids = ArrayToolkit::column($ids, 'id');

@@ -31,7 +31,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createBatch($batch)
     {
-        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source', 'smsEventId'])) {
+        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
