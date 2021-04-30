@@ -89,7 +89,7 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 
         return [
             'mode' => empty($setting['mode']) ? 'audit_after' : $setting['mode'],
-            'enable_auto_audit' => empty($setting['enable_auto_audit']) ? 0 : 1,
+            'enable_auto_audit' => isset($setting['enable_auto_audit']) ? $setting['enable_auto_audit'] : 1,
         ];
     }
 
