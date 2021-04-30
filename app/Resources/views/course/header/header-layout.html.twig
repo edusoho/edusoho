@@ -37,6 +37,7 @@
           {# 二维码标志 #}
           {% block course_header_qrcode %}
             <input type="hidden" name="wechat_notification_type" id="wechat_notification_type" value="{{setting('wechat_notification.notification_type')|default('')}}">
+            <input type="hidden" name="wechat_notification_user_id" id="wechat_notification_user_id" value="{{ app.user.id|default(0) }}">
             <span class="es-qrcode top pt5 hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
               <i class="es-icon es-icon-qrcode js-es-course-qrcode"></i>
               <span class="qrcode-popover">
