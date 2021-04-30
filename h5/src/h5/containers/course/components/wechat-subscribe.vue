@@ -86,6 +86,8 @@ export default {
       };
 
       Api.wechatJsSdkConfig({ params }).then(res => {
+        alert('config', res.appId);
+
         wx.config({
           debug: false,
           appId: res.appId,
@@ -99,11 +101,10 @@ export default {
         this.isWechatSubscribe = true;
 
         wx.ready(() => {
+          alert('ready');
           const btn = document.getElementById('subscribe-btn');
           const that = this;
           btn.addEventListener('success', function(e) {
-            alert(e.detail);
-            console.log(e.detail);
             that.firstGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
