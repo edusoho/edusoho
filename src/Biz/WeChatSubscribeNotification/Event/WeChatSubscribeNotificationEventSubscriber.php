@@ -400,7 +400,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             ];
             $subscribeRecordsCount = $this->getWeChatService()->searchSubscribeRecordCount($subscribeRecordConditions);
             $remainTime = $subscribeRecordsCount > 1 ? '（剩'.($subscribeRecordsCount - 1).'次通知）' : '（无剩余通知）';
-            $data['thing2'] = ['value' => $this->plainTextByLength($templateParams['thread']['title'].$remainTime, 20)];
+            $data['thing2'] = ['value' => $this->plainTextByLength($templateParams['thread']['title'], 11).$remainTime];
 
             $list[] = array_merge([
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
