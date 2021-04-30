@@ -3,8 +3,6 @@ import { isMobileDevice } from 'common/utils';
 import Api from 'common/api';
 import 'store';
 
-const WECHAT_SUBSCRIBE_INTRO = 'WECHAT_SUBSCRIBE_INTRO';
-
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
 let $loginModal = $('#login-modal');
@@ -97,7 +95,10 @@ const wechatIntro = () => {
 
 var $notificationEnable = $('#wechat_notification_type').val();
 let $userId = $('#wechat_notification_user_id').val();
-if ($notificationEnable == 'messageSubscribe' && $userId != store.get(WECHAT_SUBSCRIBE_INTRO) && !isMobileDevice()) {
-  store.set(WECHAT_SUBSCRIBE_INTRO, $userId);
+
+const WECHAT_SUBSCRIBE_INTRO = `WECHAT_SUBSCRIBE_INTRO_${$userId}`;
+
+if ($notificationEnable == 'messageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INTRO) && !isMobileDevice()) {
+  store.set(WECHAT_SUBSCRIBE_INTRO, true);
   wechatIntro();
 }
