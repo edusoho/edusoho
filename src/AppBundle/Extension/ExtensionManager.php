@@ -24,6 +24,10 @@ class ExtensionManager
 
     protected $favoriteTypes = [];
 
+    protected $reportSources = [];
+
+    protected $contentAuditSources = [];
+
     public function addExtension(ExtensionInterface $extension)
     {
         $this->extensions[] = $extension;
@@ -37,6 +41,18 @@ class ExtensionManager
         $this->wechatTemplates = array_merge($this->wechatTemplates, $extension->getWeChatTemplates());
         $this->newcomerTasks = array_merge($this->newcomerTasks, $extension->getNewcomerTasks());
         $this->favoriteTypes = array_merge($this->favoriteTypes, $extension->getFavoriteTypes());
+        $this->reportSources = array_merge($this->reportSources, $extension->getReportSources());
+        $this->contentAuditSources = array_merge($this->contentAuditSources, $extension->getContentAuditSources());
+    }
+
+    public function getContentAuditSources()
+    {
+        return $this->contentAuditSources;
+    }
+
+    public function getReportSources()
+    {
+        return $this->reportSources;
     }
 
     public function getQuestionTypes()

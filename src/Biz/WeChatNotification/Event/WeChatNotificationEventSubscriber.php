@@ -358,6 +358,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $classroom = $this->getClassroomService()->getClassroom($post['targetId']);
         $thread = $this->getThreadService()->getThread($post['threadId']);
 
+        if (empty($thread)) {
+            return;
+        }
+
         if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
             if (!$this->isUserLocked($thread['userId'])) {
                 $templateParams = [

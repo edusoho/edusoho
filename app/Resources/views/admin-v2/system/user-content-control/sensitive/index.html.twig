@@ -3,7 +3,7 @@
 {% set menu = 'admin_v2_keyword' %}
 
 
-{% set script_controller = 'topxiaadminbundle/controller/keyword/list' %}
+{% do script('app/js/admin-v2/system/user-content-control/sensitive/index.js') %}
 
 {% block main %}
   {{ web_macro.flash_messages() }}
@@ -38,7 +38,7 @@
       </thead>
       <tbody>
       {% for keyword in keywords %}
-        {% include 'admin-v2/operating/sensitive/table-tr.html.twig' %}
+        {% include 'admin-v2/system/user-content-control/sensitive/table-tr.html.twig' %}
       {% endfor %}
       </tbody>
 

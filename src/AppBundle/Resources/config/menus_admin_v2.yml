@@ -420,7 +420,7 @@ admin_v2:
                                     name: admin_v2.course.thread.classroom_thread_tab
                                     router_name: admin_v2_classroom_thread
                                     disable: true
-                        # 反馈管理模块
+                        # 评价管理模块
                         admin_v2_review:
                             name: admin_v2.course.review_menu
                             quick_entrance_icon: 'feedback'
@@ -816,6 +816,20 @@ admin_v2:
                                       admin_v2_certificate_template_create:
                                             name: admin_v2.operation.certificate.template.create_tab
                                             group: topBtn
+                        admin_v2_operation_user_content_audit:
+                            name: admin_v2.operation.user_content_audit_menu
+                            group: 2
+                            children:
+                                admin_v2_user_content_audit:
+                                    name: admin_v2.operation.user_content_audit_tab
+                                    disable: true
+                        admin_v2_operation_report_content_audit:
+                            name: admin_v2.operation.report_content_audit_menu
+                            group: 2
+                            children:
+                                admin_v2_report_content_audit:
+                                    name: admin_v2.operation.report_content_audit_tab
+                                    disable: true
                         admin_v2_operation_notification:
                             name: admin_v2.operation.notification_menu
                             group: 2
@@ -865,6 +879,10 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                                admin_v2_operation_article_review:
+                                  name: admin_v2.operation.article.review_tab
+                                  disable: true
+                                  router_name: admin_v2_article_review
                         admin_v2_operation_group_manage:
                             name: admin_v2.operation.group_menu
                             quick_entrance_icon: 'group'
@@ -900,20 +918,6 @@ admin_v2:
                             children:
                                 admin_v2_message:
                                     name: admin_v2.operation.message.basic_tab
-                                    disable: true
-                        admin_v2_operation_sensitive_words:
-                            name: admin_v2.operation.sensitive_words_menu
-                            children:
-                                admin_v2_keyword:
-                                    name: admin_v2.operation.sensitive_words.sensitive_words_list_tab
-                                    disable: true
-                                    children:
-                                        admin_v2_keyword_create:
-                                            name: admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn
-                                            mode: modal
-                                            group: topBtn
-                                admin_v2_keyword_banlogs:
-                                    name: admin_v2.operation.sensitive_words.banlogs_tab
                                     disable: true
         # 用户管理模块
         admin_v2_user:
@@ -1323,7 +1327,33 @@ admin_v2:
                                     name: admin_v2.system.user_content_ctrl.private_message
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
-
+                        # 用户内容审核设置
+                        admin_v2_user_content_audit_control:
+                            name: admin_v2.system.user_content_audit_menu
+                            children:
+                                admin_v2_user_content_audit_setting:
+                                    name: admin_v2.system.user_content_audit_tab
+                                    disable: true
+                        admin_v2_system_sensitive_words:
+                            name: admin_v2.system.sensitive_words_menu
+                            children:
+                                admin_v2_keyword:
+                                    name: admin_v2.system.sensitive_words.sensitive_words_list_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_keyword_create:
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                        admin_v2_keyword_import:
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn
+                                            router_name: importer_index
+                                            router_params: { 'type': 'sensitive' }
+                                            mode: modal
+                                            group: topBtn
+                                admin_v2_keyword_banlogs:
+                                    name: admin_v2.system.sensitive_words.banlogs_tab
+                                    disable: true
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group

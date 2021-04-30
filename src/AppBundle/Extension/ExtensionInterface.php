@@ -19,4 +19,8 @@ interface ExtensionInterface
     public function getWeChatTemplates();
 
     public function getFavoriteTypes();
+
+    public function getReportSources();
+
+    public function getContentAuditSources();
 }

@@ -2,21 +2,21 @@
 
 namespace Biz\Thread\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
-use Biz\Util\TextHelper;
+use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\Service\LogService;
 use Biz\Thread\Dao\ThreadDao;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Thread\Dao\ThreadMemberDao;
 use Biz\Thread\Dao\ThreadPostDao;
 use Biz\Thread\Dao\ThreadVoteDao;
-use Biz\User\Service\UserService;
-use Biz\System\Service\LogService;
-use Biz\Thread\Dao\ThreadMemberDao;
 use Biz\Thread\Service\ThreadService;
-use Codeages\Biz\Framework\Event\Event;
-use Biz\User\Service\NotificationService;
-use Biz\Sensitive\Service\SensitiveService;
 use Biz\Thread\ThreadException;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserService;
+use Biz\Util\TextHelper;
+use Codeages\Biz\Framework\Event\Event;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -43,7 +43,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::TARGETID_REQUIRED());
         }
 
-        if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question', 'event'))) {
+        if (empty($thread['type']) || !in_array($thread['type'], ['discussion', 'question', 'event'])) {
             $this->createNewException(ThreadException::TYPE_INVALID());
         }
 
@@ -55,18 +55,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
-        $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
+        $thread = ArrayToolkit::parts($thread, ['targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme']);
 
-        $thread['title'] = $this->sensitiveFilter($thread['title'], $thread['targetType'].'-thread-create');
-        $thread['content'] = $this->sensitiveFilter($thread['content'], $thread['targetType'].'-thread-create');
         $thread['title'] = $this->purifyHtml($thread['title']);
+        $thread['title'] = $this->sensitiveFilter($thread['title'], $thread['targetType'].'-thread-create');
         $thread['content'] = $this->purifyHtml($thread['content']);
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($thread['content'], $thread['targetType'].'-thread-create');
+        $thread['content'] = $sensitiveResult['content'];
+
         $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         $user = $this->getCurrentUser();
         $thread['userId'] = $user['id'];
 
-        if ('event' == $thread['type']) {
+        if ('event' === $thread['type']) {
             $this->tryAccess('thread.event.create', $thread);
 
             if (!empty($thread['location'])) {
@@ -90,16 +92,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                     continue;
                 }
 
-                $this->getNotifiactionService()->notify($userId, 'thread.at', array(
+                $this->getNotifiactionService()->notify($userId, 'thread.at', [
                     'id' => $thread['id'],
                     'title' => $thread['title'],
                     'content' => TextHelper::truncate($thread['content'], 50),
-                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
-                ));
+                    'user' => ['id' => $user['id'], 'nickname' => $user['nickname']],
+                ]);
             }
         }
 
-        $this->dispatchEvent('thread.create', $thread);
+        $this->dispatchEvent('thread.create', $thread, ['sensitiveResult' => $sensitiveResult]);
 
         return $thread;
     }
@@ -114,25 +116,25 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.update', $thread);
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture'));
+        $fields = ArrayToolkit::parts($fields, ['title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture']);
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
-
-        $fields['content'] = $this->sensitiveFilter($fields['content'], $thread['targetType'].'-thread-update');
-        $fields['title'] = $this->sensitiveFilter($fields['title'], $thread['targetType'].'-thread-update');
-
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], $thread['targetType'].'-thread-update');
+        $fields['content'] = $sensitiveResult['content'];
+        $fields['title'] = $this->sensitiveFilter($fields['title'], $thread['targetType'].'-thread-update');
 
         if (!empty($fields['startTime'])) {
             $fields['startTime'] = strtotime($fields['startTime']);
         }
 
-        $this->dispatchEvent('thread.update', new Event($thread));
+        $thread = $this->getThreadDao()->update($id, $fields);
+        $this->dispatchEvent('thread.update', new Event($thread, ['sensitiveResult' => $sensitiveResult]));
 
-        return $this->getThreadDao()->update($id, $fields);
+        return $thread;
     }
 
     public function deleteThread($threadId)
@@ -167,13 +169,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.sticky', $thread);
 
-        $fields = array(
+        $fields = [
             'sticky' => 1,
             'updateTime' => time(),
-        );
+        ];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
 
-        $this->dispatchEvent('thread.sticky', new Event($thread, array('sticky' => 'set')));
+        $this->dispatchEvent('thread.sticky', new Event($thread, ['sticky' => 'set']));
 
         return $threadUpdate;
     }
@@ -188,13 +190,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.sticky', $thread);
 
-        $fields = array(
+        $fields = [
             'sticky' => 0,
             'updateTime' => time(),
-        );
+        ];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
 
-        $this->dispatchEvent('thread.cancel.sticky', new Event($thread, array('nice' => 'cancel')));
+        $this->dispatchEvent('thread.cancel.sticky', new Event($thread, ['nice' => 'cancel']));
 
         return $threadUpdate;
     }
@@ -209,13 +211,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.nice', $thread);
 
-        $fields = array(
+        $fields = [
             'nice' => 1,
             'updateTime' => time(),
-        );
+        ];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
 
-        $this->dispatchEvent('thread.nice', new Event($thread, array('nice' => 'set')));
+        $this->dispatchEvent('thread.nice', new Event($thread, ['nice' => 'set']));
 
         return $threadUpdate;
     }
@@ -230,13 +232,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.nice', $thread);
 
-        $fields = array(
+        $fields = [
             'nice' => 0,
             'updateTime' => time(),
-        );
+        ];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
 
-        $this->dispatchEvent('thread.cancel.nice', new Event($thread, array('nice' => 'cancel')));
+        $this->dispatchEvent('thread.cancel.nice', new Event($thread, ['nice' => 'cancel']));
 
         return $threadUpdate;
     }
@@ -249,7 +251,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields = array('solved' => 1, 'updateTime' => time());
+        $fields = ['solved' => 1, 'updateTime' => time()];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
         // $this->dispatchEvent('thread.solved', new Event($thread, array('nice' => 'set')));
 
@@ -269,7 +271,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields = array('solved' => 0, 'updateTime' => time());
+        $fields = ['solved' => 0, 'updateTime' => time()];
         $threadUpdate = $this->getThreadDao()->update($thread['id'], $fields);
 
         // $this->dispatchEvent('thread.solved', new Event($thread, array('nice' => 'cancel')));
@@ -294,7 +296,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function waveThread($id, $field, $diff)
     {
-        return $this->getThreadDao()->wave(array($id), array($field => $diff));
+        return $this->getThreadDao()->wave([$id], [$field => $diff]);
     }
 
     /*
@@ -325,9 +327,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
-        $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
-
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], $fields['targetType'].'-thread-post-create');
+        $fields['content'] = $sensitiveResult['content'];
+
         $fields['ats'] = $this->getUserService()->parseAts($fields['content']);
         $user = $this->getCurrentUser();
         $fields['userId'] = $user['id'];
@@ -349,10 +352,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getThreadPostDao()->create($fields);
 
         if (!empty($fields['threadId'])) {
-            $this->getThreadDao()->update($thread['id'], array(
+            $this->getThreadDao()->update($thread['id'], [
                 'lastPostUserId' => $post['userId'],
                 'lastPostTime' => $post['createdTime'],
-            ));
+            ]);
 
             $this->waveThread($thread['id'], 'postNum', +1);
         }
@@ -382,7 +385,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
-        $this->dispatchEvent('thread.post.create', $post);
+        $this->dispatchEvent('thread.post.create', $post, ['sensitiveResult' => $sensitiveResult, 'thread' => $thread]);
 
         return $post;
     }
@@ -413,7 +416,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->waveThread($post['threadId'], 'postNum', 0 - $totalDeleted);
 
-        $this->dispatchEvent('thread.post.delete', new Event($post, array('deleted' => $totalDeleted)));
+        $this->dispatchEvent('thread.post.delete', new Event($post, ['deleted' => $totalDeleted]));
 
         return true;
     }
@@ -435,7 +438,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function wavePost($id, $field, $diff)
     {
-        return $this->getThreadPostDao()->wave(array($id), array($field => $diff));
+        return $this->getThreadPostDao()->wave([$id], [$field => $diff]);
     }
 
     public function setPostAdopted($postId)
@@ -447,7 +450,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->tryAccess('post.adopted', $post);
-        $this->getThreadPostDao()->update($post['id'], array('adopted' => 1));
+        $this->getThreadPostDao()->update($post['id'], ['adopted' => 1]);
     }
 
     public function cancelPostAdopted($postId)
@@ -460,7 +463,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.adopted', $post);
 
-        $this->getThreadPostDao()->update($post['id'], array('adopted' => 0));
+        $this->getThreadPostDao()->update($post['id'], ['adopted' => 0]);
     }
 
     /*
@@ -553,9 +556,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function countPartakeThreadsByUserIdAndTargetType($userId, $targetType)
     {
-        $threadIds = $this->findThreadIds(array('userId' => $userId, 'targetType' => $targetType));
+        $threadIds = $this->findThreadIds(['userId' => $userId, 'targetType' => $targetType]);
 
-        $postThreadIds = $this->findPostThreadIds(array('userId' => $userId, 'targetType' => $targetType));
+        $postThreadIds = $this->findPostThreadIds(['userId' => $userId, 'targetType' => $targetType]);
 
         return count(array_unique(array_merge($threadIds, $postThreadIds)));
     }
@@ -574,22 +577,22 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $existVote = $this->getThreadVoteDao()->getVoteByThreadIdAndPostIdAndUserId($post['threadId'], $post['id'], $user['id']);
 
         if ($existVote) {
-            return array('status' => 'votedError');
+            return ['status' => 'votedError'];
         }
 
-        $fields = array(
+        $fields = [
             'threadId' => $post['threadId'],
             'postId' => $post['id'],
             'action' => 'up',
             'userId' => $user['id'],
             'createdTime' => time(),
-        );
+        ];
 
         $this->getThreadVoteDao()->create($fields);
 
         $this->wavePost($post['id'], 'ups', 1);
 
-        return array('status' => 'ok');
+        return ['status' => 'ok'];
     }
 
     public function tryAccess($permision, $resource)
@@ -603,7 +606,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function canAccess($permision, $resource)
     {
-        $permisions = array(
+        $permisions = [
             'thread.create' => 'accessThreadCreate',
             'thread.read' => 'accessThreadRead',
             'thread.update' => 'accessThreadUpdate',
@@ -618,7 +621,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'post.adopted' => 'accessPostAdopted',
             'thread.event.create' => 'accessEventCreate',
             'thread.member.delete' => 'accessMemberDelete',
-        );
+        ];
 
         if (!array_key_exists($permision, $permisions)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
@@ -653,19 +656,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         switch ($sort) {
             case 'created':
-                $orderBys = array('sticky' => 'DESC', 'createdTime' => 'DESC');
+                $orderBys = ['sticky' => 'DESC', 'createdTime' => 'DESC'];
                 break;
             case 'posted':
-                $orderBys = array('sticky' => 'DESC', 'lastPostTime' => 'DESC');
+                $orderBys = ['sticky' => 'DESC', 'lastPostTime' => 'DESC'];
                 break;
             case 'createdNotStick':
-                $orderBys = array('createdTime' => 'DESC');
+                $orderBys = ['createdTime' => 'DESC'];
                 break;
             case 'postedNotStick':
-                $orderBys = array('lastPostTime' => 'DESC');
+                $orderBys = ['lastPostTime' => 'DESC'];
                 break;
             case 'popular':
-                $orderBys = array('hitNum' => 'DESC');
+                $orderBys = ['hitNum' => 'DESC'];
                 break;
 
             default:
@@ -683,7 +686,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
+            if (!in_array($conditions['keywordType'], ['title', 'content', 'targetId', 'targetTitle'])) {
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
@@ -708,13 +711,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getPostNotifyData($post, $thread, $user)
     {
-        return array(
+        return [
             'id' => $post['id'],
             'post' => $post,
             'content' => TextHelper::truncate($post['content'], 50),
-            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => $thread['title']),
-            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
-        );
+            'thread' => empty($thread) ? null : ['id' => $thread['id'], 'title' => $thread['title']],
+            'user' => ['id' => $user['id'], 'nickname' => $user['nickname']],
+        ];
     }
 
     /**
