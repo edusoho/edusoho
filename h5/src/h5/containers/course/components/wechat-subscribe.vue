@@ -51,7 +51,7 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
     if (!this.isWeixin()) return;
 
     if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_FIRST_GUIDE)) {
