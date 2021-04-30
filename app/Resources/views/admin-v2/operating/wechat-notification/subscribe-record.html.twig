@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     {% for notification in notifications %}
-      {% set event = notificationEvents[notification.eventId] %}
+      {% set event = notificationEvents[notification.eventId]|default([]) %}
       {% set smsEvent = smsNotificationEvents[notification.smsEventId]|default([]) %}
       {% include 'admin-v2/operating/wechat-notification/subscribe-record-tr.html.twig' with {event: event, smsEvent: smsEvent} %}
     {% else %}
