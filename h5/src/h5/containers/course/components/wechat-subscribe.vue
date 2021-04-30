@@ -11,7 +11,12 @@
     <i
       :class="['iconfont', isSubscribe ? 'icon-subscribed' : 'icon-subscribe']"
     />
-    <wx-open-subscribe :template="templateId" id="subscribe-btn">
+    <wx-open-subscribe
+      :template="templateId"
+      @success="success"
+      @error="subError"
+      id="subscribe-btn"
+    >
       <script type="text/wxtag-template" slot="style">
         <style>
           .subscribe-btn {
@@ -63,8 +68,6 @@ export default {
     this.templateId = await Api.wechatTemplate();
     if (!this.templateId) return;
 
-    this.isWechatSubscribe = true;
-
     // if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_SECOND_GUIDE)) {
     //   this.secondGuide = true;
     // }
@@ -81,6 +84,9 @@ export default {
       };
 
       Api.wechatJsSdkConfig({ params }).then(res => {
+        console.log(res);
+        alert('config');
+
         wx.config({
           debug: false,
           appId: res.appId,
@@ -92,24 +98,40 @@ export default {
         });
 
         wx.ready(() => {
-          const btn = document.getElementById('subscribe-btn');
-          const that = this;
-          console.log(btn);
-          btn.addEventListener('success', function(e) {
-            alert('success');
-            console.log('success', e.detail);
-            that.firstGuide = false;
-            const subscribeDetails = e.detail.subscribeDetails;
-            if (reg.test(subscribeDetails)) {
-              that.isSubscribe = true;
-              that.$toast('订阅成功');
-            }
-          });
-          btn.addEventListener('error', function(e) {
-            console.log('fail', e.detail);
-          });
+          this.isWechatSubscribe = true;
+
+          // alert('ready');
+          // const btn = document.getElementById('subscribe-btn');
+          // const that = this;
+          // console.log(btn);
+          // btn.addEventListener('success', function(e) {
+          //   alert('success');
+          //   console.log('success', e.detail);
+          //   that.firstGuide = false;
+          //   const subscribeDetails = e.detail.subscribeDetails;
+          //   if (reg.test(subscribeDetails)) {
+          //     that.isSubscribe = true;
+          //     that.$toast('订阅成功');
+          //   }
+          // });
+          // btn.addEventListener('error', function(e) {
+          //   console.log('fail', e.detail);
+          // });
         });
       });
+    },
+
+    success(e) {
+      this.firstGuide = false;
+      const subscribeDetails = e.detail.subscribeDetails;
+      if (reg.test(subscribeDetails)) {
+        this.isSubscribe = true;
+        this.$toast('订阅成功');
+      }
+    },
+
+    subError(e) {
+      console.log('fail', e.detail);
     },
 
     isWeixin() {
