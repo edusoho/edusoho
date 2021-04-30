@@ -21,9 +21,9 @@
         </style>
       </script>
       <script type="text/wxtag-template">
-        <span class="subscribe-btn">
+        <button class="subscribe-btn">
           订阅
-        </span>
+        </button>
       </script>
     </wx-open-subscribe>
   </div>
@@ -96,7 +96,8 @@ export default {
 
         wx.ready(() => {
           alert('ready');
-          const btn = document.getElementById('subscribe-btn');
+          // eslint-disable-next-line no-var
+          var btn = document.getElementById('subscribe-btn');
           const that = this;
           console.log(btn);
           btn.addEventListener('success', function(e) {
