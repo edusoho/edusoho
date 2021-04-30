@@ -50,7 +50,7 @@ export default {
     };
   },
 
-  async created() {
+  async mounted() {
     if (!this.isWeixin()) return;
 
     if (!this.isKeyLocalStorage(WECHAT_SUBSCRIBE_FIRST_GUIDE)) {
@@ -79,7 +79,8 @@ export default {
       };
 
       Api.wechatJsSdkConfig({ params }).then(res => {
-        alert('config', res.appId);
+        console.log(res);
+        alert('config');
 
         wx.config({
           debug: false,
@@ -97,9 +98,10 @@ export default {
           alert('ready');
           const btn = document.getElementById('subscribe-btn');
           const that = this;
+          console.log(btn);
           btn.addEventListener('success', function(e) {
-            alert('btn', btn);
-            console.log(btn);
+            alert('success');
+            console.log('success', e.detail);
             that.firstGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
