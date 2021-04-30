@@ -45,13 +45,14 @@ function initDatetimePicker() {
   $('[name=startTime]').datetimepicker().on('changeDate', function () {
     $('[name=endTime]').datetimepicker('setStartDate', $('[name=startTime]').val().substring(0, 16));
   });
+  $('[name=startTime]').datetimepicker('setEndDate', $('[name=endTime]').val().substring(0, 16));
 
   $('[name=endTime]').datetimepicker({
-    autoclose: true,
     language: document.documentElement.lang,
+    autoclose: true,
   });
-
   $('[name=endTime]').datetimepicker().on('changeDate', function () {
     $('[name=startTime]').datetimepicker('setEndDate', $('[name=endTime]').val().substring(0, 16));
   });
+  $('[name=endTime]').datetimepicker('setStartDate', $('[name=startTime]').val().substring(0, 16));
 }
