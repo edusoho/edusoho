@@ -385,7 +385,6 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
 
         $data = [
             'thing4' => ['value' => $this->plainTextByLength($templateParams['title'], 20)],
-            'name1' => ['value' => $user['nickname']],
             'thing2' => ['value' => $templateParams['thread']['title']],
             'date3' => ['value' => date('Y-m-d H:i', $templateParams['thread']['createdTime'])],
         ];

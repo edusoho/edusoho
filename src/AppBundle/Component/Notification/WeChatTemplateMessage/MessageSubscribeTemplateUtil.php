@@ -138,11 +138,11 @@ class MessageSubscribeTemplateUtil
                 'position' => 'wechat.notification.message_subscribe_template.position.lesson_page_teacher',
                 'sms_content' => 'wechat.notification.message_subscribe_sms.template.ask_question',
                 'rule' => 'wechat.notification.template.ask_question.rule',
-                'detail' => '课程名称：{{thing4.DATA}}<br>提问者：{{name1.DATA}}<br>提问问题：{{thing2.DATA}}<br>提问时间：{{date3.DATA}}',
+                'detail' => '课程名称：{{thing4.DATA}}<br>提问问题：{{thing2.DATA}}<br>提问时间：{{date3.DATA}}',
                 'smsDetail' => [
                     SmsType::ANSWER_QUESTION_NOTIFY => '尊敬的老师，《{{title.DATA}}》中有学员提问<br> 申请人：{{user.DATA}}<br> 问题内容：{{question.DATA}}<br> 时间：{{time.DATA}}',
                 ],
-                'kidList' => ['4', '1', '2', '3'],
+                'kidList' => ['4', '2', '3'],
                 'object' => '<br>课程/班级教师，<br>助教，班主任',
                 'sceneDesc' => '学生提问提醒',
                 'role' => 'ROLE_TEACHER',
