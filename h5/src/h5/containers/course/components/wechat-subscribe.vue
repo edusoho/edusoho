@@ -32,7 +32,6 @@
 <script>
 import wx from 'weixin-js-sdk';
 import Api from '@/api';
-import { mapState } from 'vuex';
 
 const reg = /accept/;
 const WECHAT_SUBSCRIBE_FIRST_GUIDE = 'WECHAT_SUBSCRIBE_FIRST_GUIDE';
@@ -73,12 +72,6 @@ export default {
     });
   },
 
-  computed: {
-    ...mapState({
-      user: state => state.user,
-    }),
-  },
-
   methods: {
     initSubscribe() {
       const params = {
@@ -100,24 +93,23 @@ export default {
 
         this.isWechatSubscribe = true;
 
-        // wx.ready(() => {
-
-        // });
-        alert('ready');
-        const btn = document.getElementById('subscribe-btn');
-        const that = this;
-        btn.addEventListener('success', function(e) {
-          alert('btn', btn);
-          console.log(btn);
-          that.firstGuide = false;
-          const subscribeDetails = e.detail.subscribeDetails;
-          if (reg.test(subscribeDetails)) {
-            that.isSubscribe = true;
-            that.$toast('订阅成功');
-          }
-        });
-        btn.addEventListener('error', function(e) {
-          console.log('fail', e.detail);
+        wx.ready(() => {
+          alert('ready');
+          const btn = document.getElementById('subscribe-btn');
+          const that = this;
+          btn.addEventListener('success', function(e) {
+            alert('btn', btn);
+            console.log(btn);
+            that.firstGuide = false;
+            const subscribeDetails = e.detail.subscribeDetails;
+            if (reg.test(subscribeDetails)) {
+              that.isSubscribe = true;
+              that.$toast('订阅成功');
+            }
+          });
+          btn.addEventListener('error', function(e) {
+            console.log('fail', e.detail);
+          });
         });
       });
     },
@@ -129,8 +121,8 @@ export default {
 
     isKeyLocalStorage(key) {
       const value = localStorage.getItem(key);
-      if (value == this.user.id) return true;
-      localStorage.setItem(key, this.user.id);
+      if (value) return true;
+      localStorage.setItem(key, true);
       return false;
     },
   },
