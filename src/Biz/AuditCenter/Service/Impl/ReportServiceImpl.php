@@ -44,7 +44,8 @@ class ReportServiceImpl extends BaseService implements ReportService
             $record = $this->getReportRecordService()->createReportRecord($data);
             $reportCount = $this->getReportRecordService()->searchReportRecordCount(['auditId' => $audit['id']]);
             $status = ($reportCount >= 20 && 'none_checked' === $audit['status']) ? 'illegal' : $audit['status'];
-            $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportCount' => $reportCount, 'status' => $status]);
+            $audit = $this->getReportAuditService()->updateReportAudit($audit['id'], ['reportCount' => $reportCount, 'status' => $status]);
+            $this->getReportSource($audit['targetType'])->handleSource($audit);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
