@@ -6,6 +6,7 @@ use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
+use Biz\WeChat\Dao\SubscribeRecordDao;
 use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
@@ -297,7 +298,13 @@ class WeChatServiceTest extends BaseTestCase
                 ],
             ],
         ];
+
+        $notificationSetting = [
+            'is_authorization' => 1,
+            'notification_type' => 'serviceFollow',
+        ];
         $this->getSettingService()->set('wechat', $wechatSetting);
+        $this->getSettingService()->set('wechat_notification', $notificationSetting);
         $result = $this->getWeChatService()->getTemplateId('abc');
         $this->assertEquals(123, $result);
     }
@@ -529,7 +536,7 @@ class WeChatServiceTest extends BaseTestCase
             'templateId' => 'testId',
             'status' => 1,
             'sendTime' => '11:20',
-        ]);
+        ], 'serviceFollow');
         $schedulerJobs = $this->getSchedulerService()->searchJobs(['name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview'], [], 0, 1);
         $this->assertEquals('WeChatNotificationJob_HomeWorkOrTestPaperReview', $schedulerJobs[0]['name']);
 
@@ -538,9 +545,25 @@ class WeChatServiceTest extends BaseTestCase
             'status' => 1,
             'sendTime' => '11:20',
             'sendDays' => ['Mon'],
-        ]);
+        ], 'serviceFollow');
         $schedulerJobs = $this->getSchedulerService()->searchJobs(['name' => 'WeChatNotificationJob_CourseRemind'], [], 0, 1);
         $this->assertEquals('WeChatNotificationJob_CourseRemind', $schedulerJobs[0]['name']);
+    }
+
+    public function testSynchronizeSubscriptionRecords()
+    {
+        $biz = $this->getBiz();
+        $mockNotificationService = \Mockery::mock('ESCloud\SDK\Service\NotificationService');
+        $mockNotificationService->shouldReceive('searchRecords')->andReturn(['data' => [['to_id' => 'test', 'template_code' => 'test', 'created_time' => '']], 'paging' => ['total' => 10]]);
+        $biz['ESCloudSdk.notification'] = $mockNotificationService;
+
+        $result = $this->getWeChatService()->synchronizeSubscriptionRecords();
+
+        $this->assertNull($result);
+
+        $result = $this->getSubscribeRecordDao()->count([]);
+
+        $this->assertNotEmpty($result);
     }
 
     protected function mockCreateWeChatUser($fields = [])
@@ -582,5 +605,13 @@ class WeChatServiceTest extends BaseTestCase
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return SubscribeRecordDao
+     */
+    protected function getSubscribeRecordDao()
+    {
+        return $this->createDao('WeChat:SubscribeRecordDao');
     }
 }
