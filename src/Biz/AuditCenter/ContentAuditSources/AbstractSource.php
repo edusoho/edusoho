@@ -27,6 +27,8 @@ abstract class AbstractSource
             $fields['content'] = $audit['content'];
         } elseif ('illegal' === $audit['status']) {
             $fields['auditStatus'] = 'illegal';
+        } elseif ('none_checked' === $audit['status']) {
+            $fields['auditStatus'] = 'none_checked';
         }
 
         return $fields;
