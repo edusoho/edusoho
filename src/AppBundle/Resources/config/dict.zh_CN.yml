@@ -594,7 +594,7 @@ userSelectedAuditTargetType:
   group_thread: 小组话题
   course_question: 课程问答
   classroom_question: 班级问答
-  classroom_event: 班级活动
+#  classroom_event: 班级活动
 
 #用户内容审核状态
 userAuditStatus:
