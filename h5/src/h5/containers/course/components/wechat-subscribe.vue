@@ -8,7 +8,9 @@
       <img src="static/images/course_guide.png" alt="" />
     </div> -->
 
-    <i class="iconfont icon-subscribe" />
+    <i
+      :class="['iconfont', isSubscribe ? 'icon-subscribed' : 'icon-subscribe']"
+    />
     <wx-open-subscribe :template="templateId" id="subscribe-btn">
       <script type="text/wxtag-template" slot="style">
         <style>
@@ -45,6 +47,7 @@ export default {
       isWechatSubscribe: false,
       firstGuide: false,
       secondGuide: false,
+      isSubscribe: false,
     };
   },
 
@@ -100,6 +103,7 @@ export default {
             that.firstGuide = false;
             const subscribeDetails = e.detail.subscribeDetails;
             if (reg.test(subscribeDetails)) {
+              that.isSubscribe = true;
               that.$toast('订阅成功');
             }
           });
