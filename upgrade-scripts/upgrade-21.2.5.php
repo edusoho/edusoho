@@ -62,6 +62,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addCourseNoteColumn',
             'alterTableNotificationBatch',
             'addSyncRecordJob',
+            'setNotificationSetting',
         );
 
         $funcNames = array();
@@ -327,6 +328,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 '{$currentTime}'
             );
         ");
+
+        return 1;
+    }
+
+    public function setNotificationSetting()
+    {
+        $setting = $this->getSettingService()->get('wechat', []);
+        if (!empty($setting['wechat_notification_enabled'])) {
+            $this->getSettingService()->set('wechat_notification', ['notification_type' => 'serviceFollow']);
+        }
 
         return 1;
     }
