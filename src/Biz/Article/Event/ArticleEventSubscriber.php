@@ -26,7 +26,7 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
         $article = $event->getSubject();
 
         // todo: 资讯删除,同时删除资讯评价
-        $threadPosts = $this->getThreadService()->searchPosts(['targetType' => 'article', 'targetId' => $article['id']], [], 0, PHP_INT_MAX);
+        $threadPosts = $this->getThreadService()->searchPosts(['targetType' => 'article', 'targetId' => $article['id'], 'parentId' => 0], [], 0, PHP_INT_MAX);
         foreach ($threadPosts as $threadPost) {
             $this->getThreadService()->deletePost($threadPost['id']);
         }
