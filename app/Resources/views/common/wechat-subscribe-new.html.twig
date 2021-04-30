@@ -6,34 +6,24 @@
   <div class="hidden js-wechat-data" data-config="{{wxconfig}}"></div>
 
   <span class="js-wechat-subscribe" style="position: relative; display: inline-block; width: 50px; height: 44px; text-align: center;">
-    {# <i class="es-icon es-icon-subscribe"></i> #}
-    {# <br> #}
     <wx-open-subscribe template="{{template}}" id="subscribe-btn">
       <template slot="style">
         <style>
           .subscribe-btn {
-            position: relative;
-            top: -2px;
             display: inline-block;
-            width: 50px;
-            color: rgb(145, 145, 145);
+            padding: 4px 8px;
+            margin-top: 10px;
+            line-height: 16px;
+            color: #fff;
+            background: #43bc60;
+            border-radius: 4px;
             font-size: 12px;
             text-align: center;
-          }
-
-          .icon {
-            display: inline-block;
-            width: 50px;
-            text-align: center;
-            color: rgb(145, 145, 145);
-            font-size: 18px;
           }
         </style>
       </template>
       <template>
         <span class="subscribe-btn">
-          <span class="icon">&#9733;</span>
-          <br>
           订阅
         </span>
       </template>
