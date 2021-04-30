@@ -35,7 +35,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source']);
+        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source', 'smsEventId']);
 
         return $this->getNotificationBatchDao()->create($batch);
     }
@@ -103,10 +103,15 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $this->batchUpdateRecord($batchs, $cloudRecords);
     }
 
-    public function createWeChatNotificationRecord($sn, $key, $data, $source)
+    public function createWeChatNotificationRecord($sn, $key, $data, $source, $batchId = 0)
     {
         global $kernel;
-        $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
+        if ('wechat_template' == $source) {
+            $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
+        } else {
+            $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
+        }
+
         $template = $templates[$key];
         $content = $this->spliceContent($template['detail'], $data);
         $event = [
@@ -130,10 +135,14 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'source' => $source,
         ];
 
-        return $this->createBatch($batch);
+        if (empty($batchId)) {
+            return $this->createBatch($batch);
+        }
+
+        return $this->updateBatch($batchId, $batch);
     }
 
-    public function createSmsNotificationRecord($batchId, $data, $smsParams)
+    public function createSmsNotificationRecord($data, $smsParams, $source)
     {
         global $kernel;
         $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
@@ -143,7 +152,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'title' => $this->trans($template['name']),
             'content' => $content,
             'totalCount' => $smsParams['sendNum'],
-            'status' => 'sending',
+            'status' => 'finish',
         ];
         $event = $this->createEvent($event);
         $strategy = [
@@ -153,13 +162,22 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         ];
         $strategy = $this->createStrategy($strategy);
 
-        return $this->updateBatch($batchId, ['smsEventId' => $event['id']]);
+        $batch = [
+            'eventId' => 0,
+            'strategyId' => $strategy['id'],
+            'sn' => '',
+            'status' => 'finished',
+            'source' => $source,
+            'smsEventId' => $event['id'],
+        ];
+
+        return $this->createBatch($batch);
     }
 
     protected function spliceContent($content, $data)
     {
         foreach ($data as $key => $value) {
-            $content = str_replace('{{'.$key.'.DATA}}', $value['value'], $content);
+            $content = str_replace('{{'.$key.'.DATA}}', empty($value['value']) ? $value : $value['value'], $content);
         }
 
         return $content;

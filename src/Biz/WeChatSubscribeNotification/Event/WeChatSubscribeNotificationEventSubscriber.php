@@ -123,7 +123,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
         }
 
-        $subscribeRecordConditions = ['templateCode' => $templateCode, 'templateType' => 'once', 'toId' => $weChatUser['openId'], 'isSend_LT' => 1];
+        $subscribeRecordConditions = ['templateCode' => $templateId, 'templateType' => 'once', 'toId' => $weChatUser['openId'], 'isSend_LT' => 1];
         $subscribeRecordsCount = $this->getWeChatService()->searchSubscribeRecordCount($subscribeRecordConditions);
         if (empty($subscribeRecordsCount)) {
             return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);
@@ -131,6 +131,9 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
 
         $subscribeRecords = $this->getWeChatService()->searchSubscribeRecords($subscribeRecordConditions, ['id' => 'ASC'], 0, 1);
         $remainTime = $subscribeRecordsCount > 1 ? '剩'.($subscribeRecordsCount - 1).'次通知' : '无剩余通知';
+        if ('testpaper' === $activity['mediaType']) {
+            $remainTime = $remainTime.'，请进入课程学习页订阅';
+        }
 
         if ('testpaper' === $activity['mediaType']) {
             $data = [
@@ -154,7 +157,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'goto' => ['type' => 'url', 'url' => $this->generateUrl('course_task_show', ['courseId' => $task['courseId'], 'id' => $task['id']], UrlGeneratorInterface::ABSOLUTE_URL)],
         ];
 
-        $result = $this->sendCloudWeChatNotification($templateCode, $logName, $list);
+        $result = $this->getWeChatService()->sendSubscribeWeChatNotification($templateCode, $logName, $list);
 
         if ($result) {
             $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
@@ -278,7 +281,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
                     'createdTime' => $thread['createdTime'],
                     'goto' => $this->generateUrl('course_thread_show', ['courseId' => $post['courseId'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
                 ];
-                $this->answerQuestionSendNotification($templateParams);
+                $this->answerQuestionSendSmsNotification($templateParams);
             }
         }
     }
@@ -303,12 +306,12 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
                     'createdTime' => $thread['createdTime'],
                     'goto' => $this->generateUrl('classroom_thread_show', ['classroomId' => $classroom['id'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
                 ];
-                $this->answerQuestionSendNotification($templateParams);
+                $this->answerQuestionSendSmsNotification($templateParams);
             }
         }
     }
 
-    protected function answerQuestionSendNotification($templateParams)
+    protected function answerQuestionSendSmsNotification($templateParams)
     {
         $templateParams = ArrayToolkit::filter($templateParams, [
             'userId' => null,
@@ -324,7 +327,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'content' => TextHelper::truncate($templateParams['content'], 30),
         ];
 
-        $this->getWeChatService()->sendSubscribeSms(MessageSubscribeTemplateUtil::TEMPLATE_ANSWER_QUESTION, [$templateParams['userId']], SmsType::QUESTION_ANSWER_NOTIFY, $data);
+        return $this->getWeChatService()->sendSubscribeSms(MessageSubscribeTemplateUtil::TEMPLATE_ANSWER_QUESTION, [$templateParams['userId']], SmsType::QUESTION_ANSWER_NOTIFY, $data);
     }
 
     protected function askQuestionSendNotification($templateParams)
@@ -352,9 +355,9 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
 
         $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
         if (empty($templateId)) {
-            $this->getWeChatService()->sendSubscribeSms(
+            return $this->getWeChatService()->sendSubscribeSms(
                 MessageSubscribeTemplateUtil::TEMPLATE_ASK_QUESTION,
-               $userIds,
+                $userIds,
                 SmsType::ANSWER_QUESTION_NOTIFY,
                 [
                     'title' => $templateParams['title'],
@@ -362,12 +365,10 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
                     'question' => $templateParams['thread']['title'],
                     'time' => date('Y-m-d H:i', $templateParams['thread']['createdTime']),
                 ]);
-
-            return;
         }
 
-        $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, $userIds);
-        $this->getWeChatService()->sendSubscribeSms(
+        $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateId, $userIds);
+        $smsBatch = $this->getWeChatService()->sendSubscribeSms(
             MessageSubscribeTemplateUtil::TEMPLATE_ASK_QUESTION,
             array_diff($userIds, array_column($subscribeRecords, 'userId')),
             SmsType::ANSWER_QUESTION_NOTIFY,
@@ -384,51 +385,37 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
 
         $data = [
             'thing4' => ['value' => $this->plainTextByLength($templateParams['title'], 20)],
-            'name1' => ['value' => $user['nickname']],
-            'thing2' => ['value' => $this->plainTextByLength($templateParams['thread']['title'], 20)],
+            'thing2' => ['value' => $templateParams['thread']['title']],
             'date3' => ['value' => date('Y-m-d H:i', $templateParams['thread']['createdTime'])],
-        ];
-
-        $templateData = [
-            'template_id' => $templateId,
-            'template_args' => $data,
         ];
 
         $list = [];
         foreach ($subscribeRecords as $record) {
+            $subscribeRecordConditions = [
+                'templateCode' => $record['templateCode'],
+                'templateType' => $record['templateType'],
+                'toId' => $record['toId'],
+                'isSend_LT' => 1,
+            ];
+            $subscribeRecordsCount = $this->getWeChatService()->searchSubscribeRecordCount($subscribeRecordConditions);
+            $remainTime = $subscribeRecordsCount > 1 ? '（剩'.($subscribeRecordsCount - 1).'次通知）' : '（无剩余通知）';
+            $data['thing2'] = ['value' => $this->plainTextByLength($templateParams['thread']['title'], 11).$remainTime];
+
             $list[] = array_merge([
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $record['toId'],
                 'goto' => ['type' => 'url', 'url' => $templateParams['goto']],
-            ], $templateData);
+            ], [
+                'template_id' => $templateId,
+                'template_args' => $data,
+            ]);
         }
 
-        $result = $this->sendCloudWeChatNotification($templateCode, 'wechat_subscribe_notify_ask_question', $list);
+        $result = $this->getWeChatService()->sendSubscribeWeChatNotification($templateCode, 'wechat_subscribe_notify_ask_question', $list, empty($smsBatch['id']) ? 0 : $smsBatch['id']);
 
         if ($result) {
             $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
         }
-    }
-
-    protected function sendCloudWeChatNotification($templateCode, $logName, $list)
-    {
-        try {
-            $result = $this->getCloudNotificationClient()->sendNotifications($list);
-        } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
-
-            return false;
-        }
-
-        if (empty($result['sn'])) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信订阅通知失败:template:{$templateCode}", $result);
-
-            return false;
-        }
-
-        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $templateCode, $list[0]['template_args'], 'wechat_subscribe');
-
-        return true;
     }
 
     protected function sendTasksPublishNotification($tasks)
@@ -476,7 +463,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
                     'templateCode' => MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN,
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'smsType' => 'sms_live_play_one_day',
+                    'cloudSmsType' => 'sms_live_play_one_day',
                 ],
             ];
             $this->getSchedulerService()->register($job);
@@ -492,7 +479,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
                     'templateCode' => MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN,
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'smsType' => 'sms_live_play_one_hour',
+                    'cloudSmsType' => 'sms_live_play_one_hour',
                 ],
             ];
             $this->getSchedulerService()->register($job);
@@ -611,13 +598,6 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             empty($templateCodes[$activity['mediaType']]) ? '' : $templateCodes[$activity['mediaType']],
             "wechat_subscribe_notify_{$activity['mediaType']}",
         ];
-    }
-
-    private function getCloudNotificationClient()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['ESCloudSdk.notification'];
     }
 
     /**

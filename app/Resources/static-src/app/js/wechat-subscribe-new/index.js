@@ -11,7 +11,7 @@ if (isWechatBrowser()) {
       'Accept':'application/vnd.edusoho.v2+json'
     }
   }).success(function (res) {
-    if (!res.enable || !$('.js-wechat-template').attr('template')) return;    
+    if (!res.enable) return;
     initWechatConfig();
   });
 };
@@ -28,7 +28,6 @@ function initWechatConfig() {
   const reg = /accept/;
   
   wx.ready(function() {
-    $('.js-wechat-subscribe').removeClass('hidden');
     var btn = document.getElementById('subscribe-btn');
     btn.addEventListener('success', function (e) {
       const subscribeDetails = e.detail.subscribeDetails;
@@ -40,4 +39,6 @@ function initWechatConfig() {
       console.log('fail', e.detail);
     });
   });
+
+  $('.js-wechat-subscribe').removeClass('hidden');
 }

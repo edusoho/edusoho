@@ -4,11 +4,12 @@ namespace Biz\WeChat\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
 use Biz\Sms\Service\SmsService;
-use Biz\Sms\SmsException;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -34,7 +35,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
      */
     public function getPreAuthUrl($platformType, $callbackUrl)
     {
-        $preAuthUrl = $this->biz['qiQiuYunSdk.wechat']->getPreAuthUrl($platformType, $callbackUrl);
+        $preAuthUrl = $this->biz['ESCloudSdk.wechat']->getPreAuthUrl($platformType, $callbackUrl);
 
         return $preAuthUrl['url'];
     }
@@ -349,7 +350,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [])
     {
         if (empty($userIds)) {
-            return true;
+            return [];
         }
 
         if (!$this->isSubscribeSmsEnabled($smsType)) {
@@ -358,23 +359,47 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         if (empty($mobiles)) {
-            return true;
+            return [];
         }
 
         try {
-            $this->getSmsNotificationClient()->sendToMany([
-                'mobiles' => $mobiles,
+            $result = $this->getSmsNotificationClient()->sendToMany([
+                'mobiles' => implode(',', $mobiles),
                 'templateId' => $templateId,
                 'templateParams' => $params,
             ]);
         } catch (\Exception $e) {
-            $this->createNewException(SmsException::FAILED_SEND());
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_sms_notification', "发送微信通知失败:template:{$smsType}", ['error' => $e->getMessage()]);
+
+            return [];
         }
 
-        $message = sprintf('对%s发送用于%s的订阅消息短信', implode(',', $mobiles), $smsType);
-        $this->getLogger()->info("{$message}成功");
+        if (empty($result['sn'])) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_sms_notification', "发送微信通知失败:template:{$smsType}", $result);
 
-        return true;
+            return [];
+        }
+
+        return $this->getNotificationService()->createSmsNotificationRecord($params, ['key' => $smsType, 'smsTemplateId' => $templateId, 'sendNum' => count($mobiles)], 'wechat_subscribe');
+    }
+
+    public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0)
+    {
+        try {
+            $result = $this->getSDKNotificationService()->sendNotifications($list);
+        } catch (\Exception $e) {
+            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
+
+            return false;
+        }
+
+        if (empty($result['sn'])) {
+            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", $result);
+
+            return false;
+        }
+
+        return $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $templateCode, $list[0]['template_args'], 'wechat_subscribe', $batchId);
     }
 
     /**
@@ -832,5 +857,21 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     private function getSmsNotificationClient()
     {
         return $this->biz['ESCloudSdk.sms'];
+    }
+
+    /**
+     * @return \Biz\Notification\Service\NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->biz->service('Notification:NotificationService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }
