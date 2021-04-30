@@ -364,7 +364,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         try {
             $result = $this->getSmsNotificationClient()->sendToMany([
-                'mobiles' => $mobiles,
+                'mobiles' => implode(',', $mobiles),
                 'templateId' => $templateId,
                 'templateParams' => $params,
             ]);
