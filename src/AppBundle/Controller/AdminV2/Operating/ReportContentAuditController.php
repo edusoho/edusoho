@@ -89,7 +89,7 @@ class ReportContentAuditController extends BaseController
             20
         );
 
-        $reportRecords = $this->getReportRecordService()->searchReportRecords($conditions, [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $reportRecords = $this->getReportRecordService()->searchReportRecords($conditions, ['auditTime' => 'DESC'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $userIds = array_column($reportRecords, 'reporter');
         $users = empty($userIds) ? [] : ArrayToolkit::index($this->getUserService()->searchUsers(['userIds' => $userIds], [], 0, count($userIds)), 'id');
 
