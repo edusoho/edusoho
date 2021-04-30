@@ -357,7 +357,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
         if (empty($templateId)) {
             return $this->getWeChatService()->sendSubscribeSms(
                 MessageSubscribeTemplateUtil::TEMPLATE_ASK_QUESTION,
-               $userIds,
+                $userIds,
                 SmsType::ANSWER_QUESTION_NOTIFY,
                 [
                     'title' => $templateParams['title'],
@@ -386,22 +386,30 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
         $data = [
             'thing4' => ['value' => $this->plainTextByLength($templateParams['title'], 20)],
             'name1' => ['value' => $user['nickname']],
-            'thing2' => ['value' => $this->plainTextByLength($templateParams['thread']['title'], 20)],
+            'thing2' => ['value' => $templateParams['thread']['title']],
             'date3' => ['value' => date('Y-m-d H:i', $templateParams['thread']['createdTime'])],
-        ];
-
-        $templateData = [
-            'template_id' => $templateId,
-            'template_args' => $data,
         ];
 
         $list = [];
         foreach ($subscribeRecords as $record) {
+            $subscribeRecordConditions = [
+                'templateCode' => $record['templateCode'],
+                'templateType' => $record['templateType'],
+                'toId' => $record['toId'],
+                'isSend_LT' => 1,
+            ];
+            $subscribeRecordsCount = $this->getWeChatService()->searchSubscribeRecordCount($subscribeRecordConditions);
+            $remainTime = $subscribeRecordsCount > 1 ? '剩'.($subscribeRecordsCount - 1).'次通知' : '无剩余通知';
+            $data['thing2'] = $this->plainTextByLength($data['thing2'].$remainTime, 20);
+
             $list[] = array_merge([
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $record['toId'],
                 'goto' => ['type' => 'url', 'url' => $templateParams['goto']],
-            ], $templateData);
+            ], [
+                'template_id' => $templateId,
+                'template_args' => $data,
+            ]);
         }
 
         $result = $this->getWeChatService()->sendSubscribeWeChatNotification($templateCode, 'wechat_subscribe_notify_ask_question', $list, empty($smsBatch['id']) ? 0 : $smsBatch['id']);
