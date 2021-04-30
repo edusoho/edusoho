@@ -100,23 +100,24 @@ export default {
 
         this.isWechatSubscribe = true;
 
-        wx.ready(() => {
-          alert('ready');
-          const btn = document.getElementById('subscribe-btn');
-          const that = this;
-          btn.addEventListener('success', function(e) {
-            alert('btn', btn);
-            console.log(btn);
-            that.firstGuide = false;
-            const subscribeDetails = e.detail.subscribeDetails;
-            if (reg.test(subscribeDetails)) {
-              that.isSubscribe = true;
-              that.$toast('订阅成功');
-            }
-          });
-          btn.addEventListener('error', function(e) {
-            console.log('fail', e.detail);
-          });
+        // wx.ready(() => {
+
+        // });
+        alert('ready');
+        const btn = document.getElementById('subscribe-btn');
+        const that = this;
+        btn.addEventListener('success', function(e) {
+          alert('btn', btn);
+          console.log(btn);
+          that.firstGuide = false;
+          const subscribeDetails = e.detail.subscribeDetails;
+          if (reg.test(subscribeDetails)) {
+            that.isSubscribe = true;
+            that.$toast('订阅成功');
+          }
+        });
+        btn.addEventListener('error', function(e) {
+          console.log('fail', e.detail);
         });
       });
     },
