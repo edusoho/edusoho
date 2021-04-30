@@ -31,11 +31,11 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createBatch($batch)
     {
-        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source'])) {
+        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source', 'smsEventId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source']);
+        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source', 'smsEventId']);
 
         return $this->getNotificationBatchDao()->create($batch);
     }
@@ -163,7 +163,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'sn' => '',
             'status' => 'finished',
             'source' => $source,
-            'smsEventId' => $event['id']
+            'smsEventId' => $event['id'],
         ];
 
         return $this->createBatch($batch);
