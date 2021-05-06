@@ -16,7 +16,7 @@
 
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ select_options(dict('selectUserAuditStatus'), app.request.query.get('status'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
+        {{ select_options(dict('selectUserAuditStatus'), app.request.query.get('status')|default('none_checked'), 'admin_v2.operation.user_content_audit_form.all_status_option'|trans) }}
       </select>
     </div>
 
