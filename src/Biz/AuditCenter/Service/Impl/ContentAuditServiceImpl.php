@@ -56,7 +56,6 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
 
         $audit = $this->getContentAuditDao()->update($id, $confirmFields);
         $source = $this->getContentAuditSource($audit['targetType']);
-
         if ($source) {
             $source->handleSource($audit);
         }

@@ -8,8 +8,8 @@ use Biz\AuditCenter\ContentAuditSources\CourseThread;
 use Biz\AuditCenter\ContentAuditSources\CourseThreadReply;
 use Biz\AuditCenter\ContentAuditSources\GroupThread;
 use Biz\AuditCenter\ContentAuditSources\GroupThreadPost;
+use Biz\AuditCenter\ContentAuditSources\Thread;
 use Biz\AuditCenter\ContentAuditSources\ThreadPostReview;
-use Biz\AuditCenter\ReportSources\Thread;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
