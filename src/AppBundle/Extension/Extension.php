@@ -46,6 +46,11 @@ abstract class Extension extends BizAware implements ExtensionInterface
         return [];
     }
 
+    public function getMessageSubscribeTemplates()
+    {
+        return [];
+    }
+
     public function getNewComerTasks()
     {
         return [];

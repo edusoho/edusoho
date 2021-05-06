@@ -2465,6 +2465,7 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.set_template: 'Set template'
 form.btn.confirm.normal: 'Confirm normal'
 form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
@@ -5147,7 +5148,7 @@ admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
-admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
@@ -5168,6 +5169,11 @@ admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wech
 admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
 admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
 admin.wechat.notification.go_authorizer: Authorizer now
+admin.wechat_notification.message_subscribe.template_content_sample: Wechat template content example
+admin.wechat_notification.message_subscribe.template_subscribe_position: Subscription location
+admin.wechat_notification.message_subscribe.sms_template_content_sample: Sample content of SMS template
+admin.wechat_notification.message_subscribe.disable_tip: Note:the first time you use it, you need to authorize the website to generate wechat notification template
+
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -6470,14 +6476,18 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: The l
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
 admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_notification_type: WeChat Account Notification Type
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: Users need to bind wechat, and need to subscribe many times to receive the corresponding number of wechat notifications
+admin.setting_wechat_auth.wechat_notification_sms: SMS notification
+admin.setting_wechat_auth.wechat_notification_sms_tip: After this configuration is enabled, users who do not subscribe will be notified by SMS
 admin.setting_wechat_auth.web_scan_login_hint: >
   After the opening, the PC side of the website will support WeChat scan code login, and the App side will support WeChat authorized login.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   If turned on, users can register or login the site with wechat id in wechat app.<br>
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  After opening, users who bind wechat and pay attention to service number or subscription notice can receive wechat service number template message.<br>
   Please enable web scan code login and authorized login on WeChat first, and <span class="text-danger">enable service number template message pluginin WeChat background</span> .
 admin.setting_wechat_auth.wechat_pay_hint: >
   After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
@@ -6498,6 +6508,8 @@ admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
+admin.setting_wechat_auth.message_template: Message template
+
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.s2b2c_api: S2B2C Server API
@@ -9523,8 +9535,15 @@ wechat.notification.pay_success: Pay Success
 wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+wechat.notification.subscribe_scan_and_bind: In order to enjoy better service, scan the code to bind wechat and pay attention to the service number.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
 wechat.notification.record_content: Notification content
+wechat.notification.wechat_record_content: WeChat notification content
+wechat.notification.sms_record_content: Text message notification content
+wechat.notification.wechat: WeChat
+wechat.notification.sms: Text message
+wechat.notification.record_send_number: receive/send
+wechat.notification.sms.record_send_number: send
 wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number
@@ -9577,6 +9596,27 @@ wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, y
 wechat.notification.template.remind_course: 'Dear students, keep learning today, too.<br>course name: [last study plan name]<br>time: [date of the day, accurate to day] progress: [study plan progress]<br>if you have completed the study plan today, please ignore this notice.'
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the [course name or class name]. <br>question time: [question time]<br>reply content: [reply content]'
 wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
+
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> <br> Course Title: [task name] <br> time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher's mobile phone number] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.homework_result: "<br>Assignment correction completion notice <br> <br> Title: [task name] <br> assignment status: [assignment status] ([n remaining] notices) <br> comments: [comments]"
+wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> <br> examination name: [task name] <br> score: [examination score] <br> warm tips: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.lesson_add: "<br>New notice on course <br> <br> Course: [Course name] ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.ask_question: "<br>Student question reminder <br> Course Name: ([if it is a class, show class 2 characters]) [Course name] or [class name] <br> questioner: [student user name] ([n times left] notice) <br> question: [question title] <br> question time: [question submission time] <br> <br> Course Name"
+wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Course learning page <br> (course / class <br> teacher, Ta, <br> head teacher)'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "<br>[online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address <br> "
+wechat.notification.message_subscribe_sms.template.homework_result: "<br>[online education] the homework of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look< br>"
+wechat.notification.message_subscribe_sms.template.exam_result: "<br>[online education] the test paper of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look< br>"
+wechat.notification.message_subscribe_sms.template.lesson_add: 'General course: <br> [online education] your course: [Course name] - learning task: [learning task name] has been published! Link address <br> live broadcast: <br> [online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address'
+wechat.notification.message_subscribe_sms.template.vip_expired: '[online education] Dear students, the membership you purchased is about to expire: <br> opening time: [opening time] <br> expiration time: [expiration time] <br> please renew it in time to avoid affecting your study'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time。'
+wechat.notification.message_subscribe_sms.template.remind_course: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time'
+wechat.notification.message_subscribe_sms.template.ask_question: "<br>[online education] Dear teacher, there is a student's question in [course or class name] <br> applicant: [questioner] <br> question content: [question title] <br> time: [question submission time] <br>"
+wechat.notification.message_subscribe_sms.template.answer_question: "<br>[online education] in [Course name or class name] <br> question time: [question time] <br> reply content: [reply content] <br> in [Course name or class name]"
+wechat.notification.message_subscribe_sms.template.charge_success: "<br>[online education] you have successfully purchased virtual currency face value and unit, and paid [order amount]< br>"
+wechat.notification.message_subscribe_sms.template.buy_success: "Course: <br> online education: you have successfully purchased the course name - teaching plan name, and paid the [order amount]<br> class: <br> online education: you have successfully purchased class name and paid [order amount]<br> member: <br> online education: you have successfully purchased the member name and paid the [order amount]."
 
 #微信通知规则
 Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'

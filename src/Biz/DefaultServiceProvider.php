@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use AppBundle\Component\Notification\WeChatSubscriberMessage\Client as WeChatSubscriberMessageClient;
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
 use AppBundle\Component\RateLimit\EmailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
@@ -236,6 +237,25 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $loginBind = $setting->get('login_bind', []);
             if (!empty($loginBind['weixinmob_enabled'])) {
                 $client = new Client([
+                    'key' => $loginBind['weixinmob_key'],
+                    'secret' => $loginBind['weixinmob_secret'],
+                ]);
+                $token = $client->getAccessToken();
+                if (!empty($token)) {
+                    $client->setAccessToken($token['access_token']);
+                }
+
+                return $client;
+            }
+
+            return null;
+        };
+
+        $biz['wechat.subscribe_template_message_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $loginBind = $setting->get('login_bind', []);
+            if (!empty($loginBind['weixinmob_enabled'])) {
+                $client = new WeChatSubscriberMessageClient([
                     'key' => $loginBind['weixinmob_key'],
                     'secret' => $loginBind['weixinmob_secret'],
                 ]);
