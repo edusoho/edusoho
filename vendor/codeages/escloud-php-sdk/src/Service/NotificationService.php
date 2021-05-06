@@ -177,4 +177,19 @@ class NotificationService extends BaseService
 
         return $this->request('GET', '/notifications', $params);
     }
+
+    /**
+     * @param $conditions |createdTime_GT|
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *               Records 集合
+     */
+    public function searchRecords($conditions, $offset = 0, $limit = 30)
+    {
+        $params = array_merge($conditions, array('offset' => $offset, 'limit' => $limit));
+
+        return $this->request('GET', '/subscribe_records', $params);
+    }
 }

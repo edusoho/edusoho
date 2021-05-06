@@ -556,6 +556,10 @@ certificateAuditSearchTypes:
     verifiedMobile: 手机号
     email: 邮箱
 
+WechatNotificationType:
+  serviceFollow: 服务号关注
+  messageSubscribe: 消息订阅
+
 #用户内容审核类型
 userAuditTargetType:
   course_review: 课程评价

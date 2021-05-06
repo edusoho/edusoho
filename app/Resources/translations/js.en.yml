@@ -1462,11 +1462,17 @@ wechat.notification.wechat_bind_hover: >
       <div>For better service, we recommend that you open the WeChat course notification.</div>
       <div>Click here to bind WeChat and follow the service number to start the course notification.</div>
     </div>
+wechat.notification.wechat_subscribe_bind_hover: >
+  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>Prompt</div>
+    <div class="wechat-intro-content">
+      <div>In order to enjoy better service, we suggest you pay attention to the service number.</div>
+      <div>Click here to bind wechat.</div>
+    </div>
 wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat notification" can be opened in "Personal Settings - Third Party Login"。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
 wechat.notification.cloud_open_tip: Please open ES Cloud
 admin.wechat_notification.send_days: Send Days
-
+admin.wechat_notification.message_subscribe.disable_setting_tip: Please authorize the website to generate wechat notification template
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1821,9 +1827,9 @@ course.task.out_focus_mask.anti_brush.tips: >
 classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
 classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement
 
+course.intro.wechat_subscribe: Please click here to subscribe to the course related notice
 admin_v2.operation.report_content_audit.batch_operate_tips: Please select the content to be operated in batches first
 admin_v2.operation.report_content_audit.batch_operate_success_tips: Success
-
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.operation.audit_center.batch_operate_tips: Please select the content to be operated in batches first

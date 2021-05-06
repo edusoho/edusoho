@@ -526,6 +526,10 @@ certificateSearchTypes:
     batch: batch
     code: code
 
+WechatNotificationType:
+  serviceFollow: service follow
+  messageSubscribe: Message subscribe
+
 userAuditTargetType:
   1: Course Review
   2: Classroom Review
