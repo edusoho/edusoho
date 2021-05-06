@@ -13,18 +13,18 @@ class UserContentAuditController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
-        $paginatorTotal = empty($conditions) ? 0 : $this->getContentAuditService()->searchAuditCount($conditions);
 
         $paginator = new Paginator(
             $request,
-            $paginatorTotal,
+            $this->getContentAuditService()->searchAuditCount($conditions),
             20
         );
 
         $userAudits = $this->getContentAuditService()->searchAudits($conditions,
-            ['createdTime' => 'DESC'],
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
+            $paginator->getPerPageCount()
+        );
 
         $userAudits = $this->auditContentSensitiveWordsMarker($userAudits);
 
@@ -97,21 +97,17 @@ class UserContentAuditController extends BaseController
 
     protected function prepareConditions($conditions)
     {
-        $conditions['minId'] = 0;
-
         if ('sys_checked' === $conditions['status']) {
             $conditions['auditor'] = -1;
-        }
-
-        $statusAll = ['none_checked', 'pass', 'illegal'];
-
-        if (!empty($conditions['status']) && !in_array($conditions['status'], $statusAll)) {
-            unset($conditions['status']);
         }
 
         if (!empty($conditions['author'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['author'] = $user['id'] ? $user['id'] : -1;
+        }
+
+        if (!empty($conditions['status']) && !in_array($conditions['status'], ['none_checked', 'pass', 'illegal'])) {
+            unset($conditions['status']);
         }
 
         if (!empty($conditions['startTime'])) {
