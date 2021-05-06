@@ -14,7 +14,7 @@ class UgcReportRateLimiterTest extends BaseTestCase
 
         $request = $this->mockRequest([]);
         $result = $limiter->handle($request);
-        $this->assertNull($result);
+        $this->assertEquals(UgcReportRateLimiter::USER_MAX_ALLOW_ATTEMPT_ONE_DAY, $result);
     }
 
     public function testCreateUgcReportMaxRequestOccurException()
