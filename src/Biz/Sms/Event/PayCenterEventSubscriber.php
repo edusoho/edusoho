@@ -29,27 +29,28 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
         $targetType = $event->getArgument('targetType');
         $smsType = 'sms_'.$targetType.'_buy_notify';
 
+        $userId = $order['userId'];
+        $parameters = [];
+        $parameters['order_title'] = $order['title'];
+        $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+
+        if ('coin' == $targetType) {
+            $parameters['totalPrice'] = $order['amount'].'元';
+        } else {
+            $parameters['totalPrice'] = $order['totalPrice'].'元';
+        }
+
         if ($this->getSmsService()->isOpen($smsType)) {
-            $userId = $order['userId'];
-            $parameters = [];
-            $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+            return $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+        }
 
-            if ('coin' == $targetType) {
-                $parameters['totalPrice'] = $order['amount'].'元';
-            } else {
-                $parameters['totalPrice'] = $order['totalPrice'].'元';
-            }
-
-            $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
-            if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
-                return $this->getWeChatService()->sendSubscribeSms(
-                    MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
-                    [$userId],
-                    SmsType::BUY_NOTIFY,
-                    $parameters
-                );
-            }
+        $templateCode = 'coin' == $targetType ? MessageSubscribeTemplateUtil::TEMPLATE_COIN_RECHARGE : MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS;
+        if ($this->getWeChatService()->isSubscribeSmsEnabled($templateCode)) {
+            return $this->getWeChatService()->sendSubscribeSms(
+                $templateCode[$userId],
+                SmsType::BUY_NOTIFY,
+                $parameters
+            );
         }
     }
 

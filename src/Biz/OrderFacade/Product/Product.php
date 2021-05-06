@@ -194,24 +194,24 @@ abstract class Product extends BizAware implements OrderStatusCallback
     {
         try {
             $smsType = 'sms_'.$this->targetType.'_buy_notify';
+            $userId = $orderItem['user_id'];
+            $parameters = [];
+            $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
+            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+            $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
+            $parameters['totalPrice'] = $price.'元';
 
             if ($this->getSmsService()->isOpen($smsType)) {
-                $userId = $orderItem['user_id'];
-                $parameters = [];
-                $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
-                $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
-                $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
-                $parameters['totalPrice'] = $price.'元';
+                return $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+            }
 
-                $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
-                if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
-                    return $this->getWeChatService()->sendSubscribeSms(
-                        MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
-                        [$userId],
-                        SmsType::BUY_NOTIFY,
-                        $parameters
-                    );
-                }
+            if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS)) {
+                return $this->getWeChatService()->sendSubscribeSms(
+                    MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
+                    [$userId],
+                    SmsType::BUY_NOTIFY,
+                    $parameters
+                );
             }
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", ['error' => $e->getMessage()]);
