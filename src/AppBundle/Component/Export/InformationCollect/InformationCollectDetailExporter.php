@@ -73,7 +73,7 @@ class InformationCollectDetailExporter extends Exporter
                 }
             }
             if (isset($exportData[$key]['province_city_area']) && !empty($exportData[$key]['province_city_area']['value'])) {
-                $exportData[$key]['province_city_area']['value'] = implode('-', $exportData[$key]['province_city_area']['value']);
+                $exportData[$key]['province_city_area']['value'] = implode('', $exportData[$key]['province_city_area']['value']);
             }
         }
 
