@@ -195,7 +195,9 @@ class EduSohoUpgrade extends AbstractUpdater
               `isSend` tinyint NOT NULL DEFAULT 0 COMMENT '是否已发送',
               `createdTime` int unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int unsigned NOT NULL COMMENT '更新时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              key `toId` (`toId`),
+              key `templateCode` (`templateCode`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='微信订阅记录表';
         ");
 
