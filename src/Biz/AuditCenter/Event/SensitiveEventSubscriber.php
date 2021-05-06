@@ -66,10 +66,11 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             $status = 'none_checked';
             $auditor = 0;
         } else {
-            $auditor = -1;
             if (!empty($sensitiveWords)) {
+                $auditor = 0;
                 $status = 'none_checked';
             } else {
+                $auditor = -1;
                 $status = 'pass';
             }
         }
@@ -332,7 +333,7 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             $targetType = '';
         }
         $sensitiveResult = $event->getArgument('sensitiveResult');
-        $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId('course_thread', $thread['id']);
+        $existAudit = $this->getContentAuditService()->getAuditByTargetTypeAndTargetId($targetType, $thread['id']);
         if ($existAudit) {
             $audit = $this->getContentAuditService()->updateAudit($existAudit['id'], array_merge([
                 'content' => $sensitiveResult['originContent'],

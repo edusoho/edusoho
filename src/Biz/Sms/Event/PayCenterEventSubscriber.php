@@ -47,7 +47,8 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
         $templateCode = 'coin' == $targetType ? MessageSubscribeTemplateUtil::TEMPLATE_COIN_RECHARGE : MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS;
         if ($this->getWeChatService()->isSubscribeSmsEnabled($templateCode)) {
             return $this->getWeChatService()->sendSubscribeSms(
-                $templateCode[$userId],
+                $templateCode,
+                [$userId],
                 SmsType::BUY_NOTIFY,
                 $parameters
             );
