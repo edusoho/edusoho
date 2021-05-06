@@ -52,8 +52,11 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
+        $source = $this->getContentAuditSource($audit['targetType']);
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     protected function checkContent($content, $sensitiveWords)
@@ -90,7 +93,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function getThreadTargetType($thread)
@@ -125,7 +131,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     private function getThreadPostTargetType($threadPost, $thread)
@@ -168,7 +177,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onReviewUpdate(Event $event)
@@ -193,7 +205,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     private function getReviewAuditTargetType($review)
@@ -238,7 +253,11 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onCourseThreadPostUpdate(Event $event)
@@ -271,8 +290,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
-
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -294,7 +315,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onCourseThreadUpdate(Event $event)
@@ -323,8 +347,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
-
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onGroupThreadPostCreate(Event $event)
@@ -339,7 +365,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onGroupThreadPostUpdate(Event $event)
@@ -364,8 +393,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
-
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onGroupThreadCreate(Event $event)
@@ -380,7 +411,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onGroupThreadUpdate(Event $event)
@@ -402,8 +436,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
                 'sensitiveWords' => $sensitiveResult['keywords'],
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
-
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -418,7 +454,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             'sensitiveWords' => $sensitiveResult['keywords'],
         ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     public function onCourseNoteUpdate(Event $event)
@@ -441,7 +480,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
             ], $this->checkContent($sensitiveResult['originContent'], $sensitiveResult['keywords'])));
         }
 
-        $this->getContentAuditSource($audit['targetType'])->handleSource($audit);
+        $source = $this->getContentAuditSource($audit['targetType']);
+        if ($source) {
+            $source->handleSource($audit);
+        }
     }
 
     /**
@@ -469,6 +511,10 @@ class SensitiveEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         global $kernel;
         $reportSources = $kernel->getContainer()->get('extension.manager')->getContentAuditSources();
+
+        if (empty($reportSources[$targetType])) {
+            return null;
+        }
 
         return new $reportSources[$targetType]($this->getBiz());
     }
