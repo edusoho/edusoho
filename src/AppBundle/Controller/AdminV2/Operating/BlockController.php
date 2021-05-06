@@ -151,11 +151,19 @@ class BlockController extends BaseController
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
-        return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
-            'block' => $block,
-            'action' => 'edit',
-            'type' => $type,
-        ]);
+        if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
+            return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+            ]);
+        } else {
+            return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+            ]);
+        }
     }
 
     public function editBlockTemplateAction(Request $request, $blockTemplateId)
