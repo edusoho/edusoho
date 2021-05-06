@@ -299,6 +299,9 @@ class ContentAuditServiceImpl extends BaseService implements ContentAuditService
     {
         global $kernel;
         $reportSources = $kernel->getContainer()->get('extension.manager')->getContentAuditSources();
+        if (empty($reportSources[$targetType])) {
+            return null;
+        }
 
         return new $reportSources[$targetType]($this->biz);
     }
