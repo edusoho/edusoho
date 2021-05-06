@@ -3,7 +3,6 @@ import EsWebUploader from 'common/es-webuploader';
 
 let $form = $('#thread-form');
 let validator = $form.validate({
-  ajax: true,
   rules: {
     'title': {
       required: true,
@@ -11,13 +10,6 @@ let validator = $form.validate({
     },
     'content': {
       required: true,
-    }
-  },
-  submitSuccess(data) {
-    if (data.status && data.status === 'error'){
-      cd.message({type: 'danger', message: data.message});
-    } else {
-      window.location.href = data.url;
     }
   }
 });
@@ -60,7 +52,7 @@ if (threadType == 'event') {
     $form.validate('[name=startTime]');
   });
   $form.find('[name="startTime"]').datetimepicker('setStartDate', new Date);
-  
+
   new EsWebUploader({
     element: '#js-activity-uploader',
     onUploadSuccess: function(file, response) {

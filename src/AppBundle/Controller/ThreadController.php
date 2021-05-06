@@ -162,12 +162,12 @@ class ThreadController extends BaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                return $this->createJsonResponse(['status' => 'success', 'url' => $this->generateUrl("{$target['type']}_thread_show", [
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", [
                     "{$target['type']}Id" => $thread['targetId'],
                     'threadId' => $thread['id'],
-                ])]);
+                ]));
             } catch (\Exception $e) {
-                return $this->createJsonResponse(['status' => 'error', 'message' => $this->trans($e->getMessage())]);
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
