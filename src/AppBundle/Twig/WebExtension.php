@@ -1950,7 +1950,7 @@ class WebExtension extends \Twig_Extension
     {
         $categories = $this->getArticleCategoryService()->getCategoryStructureTree();
         $choices = [];
-        if (empty($categories)){
+        if (empty($categories)) {
             return $choices;
         }
 
@@ -1959,11 +1959,11 @@ class WebExtension extends \Twig_Extension
 
     public function getArticleCategoryTree($choices, $categories, $depth)
     {
-        $depth++;
+        ++$depth;
         $indent = '　';
-        foreach ($categories as $category){
-            $choices[$category['id']] = str_repeat($indent, $depth) . $category['name'];
-            if (!empty($category['children'])){
+        foreach ($categories as $category) {
+            $choices[$category['id']] = str_repeat($indent, $depth).$category['name'];
+            if (!empty($category['children'])) {
                 $choices = $this->getArticleCategoryTree($choices, $category['children'], $depth);
             }
         }
