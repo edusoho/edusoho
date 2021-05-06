@@ -8,6 +8,7 @@ use AppBundle\Component\RateLimit\EmailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
+use AppBundle\Component\RateLimit\UgcReportRateLimiter;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Biz\Article\Event\ArticleEventSubscriber;
 use Biz\Certificate\ImgBuilder\HorizontalImgBuilder;
@@ -27,6 +28,7 @@ use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\Importer\ItemBankExerciseMemberImporter;
+use Biz\Importer\SensitiveImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\System\Template\TemplateFactory;
@@ -118,6 +120,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ClassroomMemberImporter($biz);
         };
 
+        $biz['importer.sensitive'] = function ($biz) {
+            return new SensitiveImporter($biz);
+        };
+
         $biz['course.strategy_context'] = function ($biz) {
             return new StrategyContext($biz);
         };
@@ -196,6 +202,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['email_rate_limiter'] = function ($biz) {
             return new EmailRateLimiter($biz);
+        };
+
+        $biz['ugc_report_rate_limiter'] = function ($biz) {
+            return new UgcReportRateLimiter($biz);
         };
 
         $biz['render_view_resolvers'] = function ($biz) {

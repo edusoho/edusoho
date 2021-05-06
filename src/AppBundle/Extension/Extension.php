@@ -60,4 +60,14 @@ abstract class Extension extends BizAware implements ExtensionInterface
     {
         return [];
     }
+
+    public function getReportSources()
+    {
+        return [];
+    }
+
+    public function getContentAuditSources()
+    {
+        return [];
+    }
 }

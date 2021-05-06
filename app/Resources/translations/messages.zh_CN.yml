@@ -434,6 +434,10 @@ form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 form.btn.continue: 完成并继续
 form.btn.set_template: 设置模板
+form.btn.confirm.normal: 确认正常
+form.btn.confirm.illegal: 确认违规
+form.btn.batch.normal: 批量正常
+form.btn.batch.illegal: 批量违规
 
 #财务通用
 finance.income: 收入
@@ -6288,6 +6292,15 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
+admin.operation_article.review.form.input.title.placeholer: 资讯名称
+admin.operation_article.review.form.input.author.placeholer: 作者
+admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
+admin.operation_article.review.content_th: 评论内容
+admin.operation_article.review.author_th: 作者
+admin.operation_article.review.operation_th: 操作
+admin.operation_article.review.expand_td: 展开
+admin.operation_article.review.collapse_td: 收起
+admin:operation_article.review.content: 评价
 
 # 小组话题管理
 admin.operation_group.groupstatus_option: 小组状态
@@ -10300,6 +10313,7 @@ exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
+exception.rate_limit_ugc_report_max_attempt_reach: 你当日举报次数已达上限!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
@@ -11777,3 +11791,83 @@ admin_v2.system.user_content_control.goto_private_message_manage: 前往私信�
 
 admin_v2.vip_close.block_tip: 会员功能未开启
 admin_v2.vip_close.to_open_vip: 去开启
+
+admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
+admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
+admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: 敏感词关键字
+admin_v2.operation.user_content_audit_form.author.placeholder: 发布者
+admin_v2.operation.user_content_audit_form.startTime: 起始时间
+admin_v2.operation.user_content_audit_form.endTime: 结束时间
+admin_v2.operation.user_content_audit.content_th: 用户发布内容
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: 关键敏感词
+admin_v2.operation.user_content_audit.type_th: 类型
+admin_v2.operation.user_content_audit.author_time_th: 发布者/时间
+admin_v2.operation.user_content_audit.status_th: 审核状态
+admin_v2.operation.user_content_audit.auditor_th: 审核人
+admin_v2.operation.user_content_audit.default_auditor: 系统
+admin_v2.operation.user_content_audit.operation_th: 操作
+admin_v2.operation.user_content_audit.expand_td: 展开
+admin_v2.operation.user_content_audit.collapse_td: 收起
+admin_v2.operation.user_content_audit.user_content: 用户内容
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: 确认将用户内容判定违规吗？
+admin_v2.operation.user_content_audit.modal.body.illegal_info: 确认违规后，用户内容在前台页面不展示
+admin_v2.operation.user_content_audit.modal.body.pass_warning: 确认将用户内容判定通过吗？
+admin_v2.operation.user_content_audit.modal.body.pass_info: 确认通过后，用户内容在前台页面展示
+admin_v2.operation.user_content_audit.select_all_btn: 全选
+admin_v2.operation.user_content_audit.modal.body.button.confirm: 确认
+admin_v2.operation.user_content_audit.modal.body.button.cancel: 取消
+admin_v2.operation.user_content_audit_form.all_type_option: 全部类型
+admin_v2.operation.user_content_audit_form.all_status_option: 全部状态
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: 敏感词过滤
+admin_v2.operation.user_content_audit_status.sys_pass_sub: 待人工审核
+
+admin_v2.operation.report_content_audit.target_type_placeholder: 全部类型
+admin_v2.operation.report_content_audit.status_placeholder: 全部状态
+admin_v2.operation.report_content_audit.report_tag_placeholder: 举报类型
+admin_v2.operation.report_content_audit.author_placeholder: 发布者
+admin_v2.operation.report_content_audit.table.content: 被举报内容
+admin_v2.operation.report_content_audit.table.type: 类型
+admin_v2.operation.report_content_audit.table.count: 被举报次数
+admin_v2.operation.report_content_audit.table.tag: 被举报标签
+admin_v2.operation.report_content_audit.table.author: 发布者/时间
+admin_v2.operation.report_content_audit.table.status: 审核状态
+admin_v2.operation.report_content_audit.table.auditor: 审核人
+admin_v2.operation.report_content_audit.table.operate: 操作
+admin_v2.operation.report_content_audit.table.auditor_default: 系统
+
+admin_v2.operation.report_content_audit.table.operate_item: 详情
+admin_v2.operation.report_content_audit.table.operate_pass: 确认正常
+admin_v2.operation.report_content_audit.table.operate_illegal: 确认违规
+admin_v2.operation.audit_center.table.batch_pass: 批量正常
+admin_v2.operation.audit_center.table.batch_illegal: 批量违规
+admin_v2.operation.audit_center.table.batch_pass.notice: 确认被举报的内容正常吗？
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
+admin_v2.operation.audit_center.table.batch_illegal.notice: 确认被举报的内容违规吗？
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+admin_v2.operation.report_content_audit.record.title: 举报详情
+admin_v2.operation.report_content_audit.record.type: 举报类型
+admin_v2.operation.report_content_audit.record.reporter: 举报者
+admin_v2.operation.report_content_audit.record.time: 举报时间
+admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
+
+exception.audit_center.report_audit_not_exist: 举报信息不存在
+exception.audit_center.report_audit_status_not_valid: 审核状态不合法
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为正常（系统已审）
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">审核设置项变更后，仅对变更后新产生的数据生效</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: 批量导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: 选择要导入的文件
+admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EXCEL文件模板导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
+
+site.content.illegal_status: 该条内容已违规处理

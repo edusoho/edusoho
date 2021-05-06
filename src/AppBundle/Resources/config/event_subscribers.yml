@@ -422,3 +422,16 @@ services:
       tags:
         - { name: codeages_plugin.event.subscriber }
 
+    sensitive_event_subscriber:
+      class: Biz\AuditCenter\Event\SensitiveEventSubscriber
+      arguments: ['@biz']
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }
+
+    user_content_audit_event_subscriber:
+      class: Biz\AuditCenter\Event\UserContentAuditEventSubscriber
+      arguments: [ '@biz' ]
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }

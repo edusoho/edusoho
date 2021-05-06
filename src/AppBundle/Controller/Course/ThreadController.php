@@ -34,6 +34,7 @@ class ThreadController extends CourseBaseController
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
+        $conditions['excludeAuditStatus'] = 'illegal';
 
         $paginator = new Paginator(
             $request,
@@ -225,12 +226,12 @@ class ThreadController extends CourseBaseController
                     $attachment = $request->request->get('attachment');
                     $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                    return $this->redirect($this->generateUrl('course_thread_show', [
+                    return $this->createJsonResponse(['status' => 'success', 'url' => $this->generateUrl('course_thread_show', [
                         'courseId' => $thread['courseId'],
                         'threadId' => $thread['id'],
-                    ]));
+                    ])]);
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
+                    return $this->createJsonResponse(['status' => 'error', 'message' => $this->trans($e->getMessage())]);
                 }
             }
         }

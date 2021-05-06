@@ -21,4 +21,8 @@ interface ExtensionInterface
     public function getMessageSubscribeTemplates();
 
     public function getFavoriteTypes();
+
+    public function getReportSources();
+
+    public function getContentAuditSources();
 }
