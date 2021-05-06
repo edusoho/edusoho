@@ -11,7 +11,7 @@ class ReportAuditServiceTest extends BaseTestCase
     public function testSearchReportAudits()
     {
         $audit1 = $this->mockReportAudit(['content' => '举报正文1']);
-        $audit2 = $this->mockReportAudit(['content' => '举报正文2', 'targetType' => 2, 'author' => 2]);
+        $audit2 = $this->mockReportAudit(['content' => '举报正文2', 'targetType' => 'classroom_review', 'author' => 2]);
         $audit3 = $this->mockReportAudit(['content' => '举报正文3', 'status' => 'passed', 'author' => 3]);
         $this->mockBiz('User:UserService', [
             [
@@ -21,7 +21,7 @@ class ReportAuditServiceTest extends BaseTestCase
             ],
         ]);
 
-        $result1 = $this->getReportAuditService()->searchReportAudits(['targetType' => 2], ['id' => 'ASC'], 0, 3);
+        $result1 = $this->getReportAuditService()->searchReportAudits(['targetType' => 'classroom_review'], ['id' => 'ASC'], 0, 3);
         $result2 = $this->getReportAuditService()->searchReportAudits(['author' => 'author1'], ['id' => 'ASC'], 0, 3);
         $result3 = $this->getReportAuditService()->searchReportAudits(['status' => 'passed'], ['id' => 'ASC'], 0, 3);
 
@@ -33,7 +33,7 @@ class ReportAuditServiceTest extends BaseTestCase
     public function testSearchReportAuditCount()
     {
         $this->mockReportAudit(['content' => '举报正文1']);
-        $this->mockReportAudit(['content' => '举报正文2', 'targetType' => 2, 'author' => 2]);
+        $this->mockReportAudit(['content' => '举报正文2', 'targetType' => 'classroom_review', 'author' => 2]);
         $this->mockReportAudit(['content' => '举报正文3', 'status' => 'passed', 'author' => 3]);
         $this->mockBiz('User:UserService', [
             [
@@ -43,7 +43,7 @@ class ReportAuditServiceTest extends BaseTestCase
             ],
         ]);
 
-        $result1 = $this->getReportAuditService()->searchReportAuditCount(['targetType' => 2], ['id' => 'ASC'], 0, 3);
+        $result1 = $this->getReportAuditService()->searchReportAuditCount(['targetType' => 'classroom_review'], ['id' => 'ASC'], 0, 3);
         $result2 = $this->getReportAuditService()->searchReportAuditCount(['author' => 'author1'], ['id' => 'ASC'], 0, 3);
         $result3 = $this->getReportAuditService()->searchReportAuditCount(['status' => 'passed'], ['id' => 'ASC'], 0, 3);
 
@@ -178,12 +178,12 @@ class ReportAuditServiceTest extends BaseTestCase
     protected function mockReportAudit($customFields = [])
     {
         return $this->getReportAuditService()->createReportAudit(array_merge([
-            'targetType' => 1,
+            'targetType' => 'course_review',
             'targetId' => 1,
             'author' => 1,
             'reportTags' => [1, 4],
             'content' => '举报正文',
-            'status' => 'none',
+            'status' => 'none_checked',
         ], $customFields));
     }
 
