@@ -18,7 +18,6 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
             ],
             'conditions' => [
                 'id = :id',
-                'id > :minId',
                 'author = :author',
                 'auditor = :auditor',
                 'targetType = :targetType',
