@@ -286,7 +286,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($this->isFieldExist('notification_batch', 'source')) {
             $this->getConnection()->exec("
-                UPDATE `notification_batch` SET `source` = 'wechat_template';
+                UPDATE `notification_batch` SET `source` = 'wechat_template' where `source` = '';
             ");
         }
 
@@ -339,7 +339,8 @@ class EduSohoUpgrade extends AbstractUpdater
     public function setNotificationSetting()
     {
         $setting = $this->getSettingService()->get('wechat', []);
-        if (!empty($setting['wechat_notification_enabled'])) {
+        $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
+        if (!empty($setting['wechat_notification_enabled']) && empty($notificationSetting)) {
             $this->getSettingService()->set('wechat_notification', ['notification_type' => 'serviceFollow']);
         }
 
