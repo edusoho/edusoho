@@ -6154,6 +6154,12 @@ admin.edu_cloud.edu_attachment.group: Group
 admin.edu_cloud.edu_attachment.testpaper: Tests
 admin.edu_cloud.edu_attachment.size: 'Attachment maximum size'
 admin.edu_cloud.edu_attachment.size_tips: 'Attachment size limit to 2048MB'
+admin.edu_cloud.edu_resource.download.setting: 'Cloud resource download settings'
+admin.edu_cloud.edu_resource.resource_tips: '<h4> You have not yet opened the cloud video service, so you can not use the cloud resource setting function,<a href="%videoUrl%">open it now</a> Or <a href="%detailUrl%" target="_blank"> learn about cloud video</a>'
+admin.edu_cloud.edu_resource.open_radio: Active
+admin.edu_cloud.edu_resource.close_radio: Disabled
+admin.edu_cloud.edu_resource.download.setting.enable.tips: 'After opening, all resources of the public database can be downloaded from the middle station as a teacher'
+admin.edu_cloud.edu_resource.download.setting.disable.tips: 'After closing, all resources of the public database cannot be downloaded from the middle station'
 admin.edu_cloud.key_info.key_error_tips: 'Authorization code is not correct, please try again! If you are a business user, please contact EduSoho official.'
 admin.edu_cloud.key_info.license_domain: 'Authorized domain name'
 admin.edu_cloud.key_info.not_license_tips: 'Not authorized'
@@ -10214,6 +10220,7 @@ admin_v2.operating.goods_show_data: Product page display data
 admin_v2.operating.goods_show.join_number: Show joins
 admin_v2.operating.goods_show.visitor_number: Show visitors
 admin_v2.operating.goods_show.none: Show none
+admin_v2.operating.goods_show_studen.review.data: Student review data
 admin_v2.operating.review_setting: Goods page show setting
 admin_v2.operating.review_show: Goods page show reviews
 

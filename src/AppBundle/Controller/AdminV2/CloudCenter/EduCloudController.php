@@ -930,6 +930,33 @@ class EduCloudController extends BaseController
         ]);
     }
 
+    public function resourceSettingAction(Request $request)
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+            if (empty($info['accessCloud'])) {
+                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', ['menu' => 'admin_v2_cloud_resource_setting']);
+            }
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', []);
+        }
+
+        $resource = $this->getSettingService()->get('cloud_resource', []);
+        $resource = array_merge(['enable' => 0], $resource);
+
+        if ('POST' == $request->getMethod()) {
+            $resource = $request->request->all();
+            $this->getSettingService()->set('cloud_resource', $resource);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud-resource.html.twig', [
+            'resource' => $resource,
+            'info' => $info,
+        ]);
+    }
+
     //授权页
     public function keyAction(Request $request)
     {

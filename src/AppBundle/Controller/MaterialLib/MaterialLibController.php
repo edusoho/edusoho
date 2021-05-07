@@ -140,7 +140,7 @@ class MaterialLibController extends BaseController
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
         return $this->render('material-lib/web/widget/thumb-list.html.twig', [
-            'files' => $files,
+            'files' => $this->fileDownManage($files),
             'collections' => $collections,
             'createdUsers' => $createdUsers,
             'source' => $request->query->get('sourceFrom', ''),
@@ -596,6 +596,18 @@ class MaterialLibController extends BaseController
         $second = $request->query->get('second');
 
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, ['seconds' => $second]));
+    }
+
+    public function fileDownManage(&$files)
+    {
+        $currentUser = $this->getCurrentUser()->getId();
+        $isAdmin = $this->getCurrentUser()->isSuperAdmin() || $this->getCurrentUser()->isAdmin();
+        $resource = $this->getSettingService()->get('cloud_resource', []);
+        foreach ($files as &$cloudFile) {
+            $cloudFile['fileDownPermission'] = $isAdmin || $resource['enable'] || ($cloudFile['createdUserId'] == $currentUser);
+        }
+
+        return $files;
     }
 
     protected function getUserService()
