@@ -36,8 +36,9 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
                 'minPrice > :minPrice_GT',
                 'minPrice < :minPrice_LT',
                 'recommendWeight < :recommendWeight_GT',
+                'recommendedTime > :recommendedTime_Gt',
             ],
-            'orderbys' => ['id', 'hotSeq', 'publishedTime', 'createdTime'],
+            'orderbys' => ['id', 'hotSeq', 'publishedTime', 'createdTime','recommendWeight'],
         ];
     }
 

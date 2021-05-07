@@ -464,7 +464,7 @@ class OpenCourseController extends BaseOpenCourseController
         $conditions = [
             [
                 'status' => 'published',
-                'recommendWeight_GT' => 0,
+                'recommendedTime_Gt' => 0,
             ],
             [
                 'status' => 'published',
@@ -476,7 +476,7 @@ class OpenCourseController extends BaseOpenCourseController
             if (count($goodses) < $num) {
                 $needNum = $num - count($goodses);
                 $condition['excludeIds'] = ArrayToolkit::column($goodses, 'id');
-                $newGoodses = $this->getGoodsService()->searchGoods($condition, [], 0, $needNum);
+                $newGoodses = $this->getGoodsService()->searchGoods($condition, ['recommendWeight' => 'asc'], 0, $needNum);
                 $goodses = array_merge($goodses, $newGoodses);
             }
         }
