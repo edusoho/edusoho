@@ -107,9 +107,12 @@ class Importer {
     `;
 
     const errors = [];
+
     res.errorInfo.map((item) => {
-      errors.push({
-        error: item
+      item.split('<br>').map((error) => {
+        errors.push({
+          error: error
+        });
       });
     });
 

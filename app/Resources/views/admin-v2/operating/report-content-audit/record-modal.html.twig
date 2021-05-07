@@ -1,0 +1,49 @@
+{% extends "bootstrap-modal-layout.html.twig" %}
+
+{% set hide_footer = true %}
+{% set modal_class = "modal-lg" %}
+{% block title %}
+  {{ 'admin_v2.operation.report_content_audit.record.title'|trans }}
+{% endblock %}
+{% block body %}
+  <table class="table table-bordered text-center">
+    <thead>
+    <tr class="active">
+      <td>{{ 'admin_v2.operation.report_content_audit.record.reporter'|trans }}</td>
+      <td>{{ 'admin_v2.operation.report_content_audit.record.type'|trans }}</td>
+      <td>{{ 'admin_v2.operation.report_content_audit.record.time'|trans }}</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% set reportTags = dict('reportTags')|default(null) %}
+
+    {% for record in reportRecords|default([]) %}
+      <tr>
+        <td>
+          {% set reporter = users[record.reporter]|default([]) %}
+          {% if reporter %}
+            {{ reporter.nickname }}
+          {% else %}
+            <span class="text-muted">{{ 'admin.macro.user_link.user_empty'|trans }}</span>
+          {% endif %}
+        </td>
+        <td>
+          {% for tag in record.reportTags %}
+            <div class="pts text-sm">{{ reportTags[tag] }}</div>
+          {% endfor %}
+        </td>
+        <td>{{ record.auditTime|date('Y-m-d H:i:s') }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{ 'site.datagrid.empty'|trans }}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ admin_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

@@ -8,11 +8,11 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class ReviewPostFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'userId', 'user', 'targetId', 'content', 'rating', 'parentId', 'updatedTime', 'createdTime',
+        'id', 'userId', 'user', 'targetId', 'content', 'rating', 'me_report', 'parentId', 'updatedTime', 'createdTime',
     ];
 
     protected $publicFields = [
-        'id', 'userId', 'user', 'targetId', 'targetType', 'content', 'rating', 'parentId', 'createdTime', 'updatedTime', 'template',
+        'id', 'userId', 'user', 'targetId', 'targetType', 'content', 'rating', 'me_report', 'parentId', 'createdTime', 'updatedTime', 'template',
     ];
 
     protected function simpleFields(&$data)

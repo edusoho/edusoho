@@ -3,63 +3,64 @@
 namespace Biz\Sensitive\Dao\Impl;
 
 use Biz\Sensitive\Dao\SensitiveDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
+class SensitiveDaoImpl extends AdvancedDaoImpl implements SensitiveDao
 {
     protected $table = 'keyword';
 
     public function getByName($name)
     {
-        return $this->getByFields(array('name' => $name));
+        return $this->getByFields(['name' => $name]);
     }
 
     public function findAllKeywords()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC";
 
-        return $this->db()->fetchAll($sql, array());
+        return $this->db()->fetchAll($sql, []);
     }
 
     public function findByState($state)
     {
-        return $this->findInField('state', array($state));
+        return $this->findInField('state', [$state]);
     }
 
     public function declares()
     {
-        $declares['orderbys'] = array(
-            'createdTime', 'id',
-        );
-
-        $declares['conditions'] = array(
-            'id = :id',
-            'state = :state',
-            'UPPER(name) LIKE :name',
-        );
-
-        return $declares;
+        return [
+            'orderbys' => ['createdTime', 'id'],
+            'timestamps' => ['createdTime'],
+            'conditions' => [
+                'id = :id',
+                'state = :state',
+                'UPPER(name) LIKE :name',
+                'name IN (:names)',
+            ],
+        ];
     }
 
     protected function createQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
+        $conditions = array_filter(
+            $conditions,
+            function ($v) {
+                if (0 === $v) {
+                    return true;
+                }
+
+                if (empty($v)) {
+                    return false;
+                }
+
                 return true;
             }
-
-            if (empty($v)) {
-                return false;
-            }
-
-            return true;
-        }
         );
 
         if (isset($conditions['keyword'])) {
-            if ($conditions['searchKeyWord'] == 'id') {
+            if ('id' === $conditions['searchKeyWord']) {
                 $conditions['id'] = $conditions['keyword'];
-            } elseif ($conditions['searchKeyWord'] == 'name') {
+            } elseif ('name' === $conditions['searchKeyWord']) {
                 $conditions['name'] = "%{$conditions['keyword']}%";
             }
         }
