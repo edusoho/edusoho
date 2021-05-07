@@ -1142,6 +1142,30 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
+    public function courseItemsHandle($courseId, $ids)
+    {
+        if (empty($ids)) {
+            return $ids;
+        }
+
+        $chapterIds = [];
+        $chapterType = '';
+        $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+            list($type, $chapterId) = explode('-', $k);
+            $chapterIds[] = $chapterId;
+            $chapterType = $type;
+        });
+        foreach ($courseChapters as $chapter) {
+            if (in_array($chapter['id'], $chapterIds)) {
+                continue;
+            }
+            array_push($ids, $chapterType.'-'.$chapter['id']);
+        }
+
+        return $ids;
+    }
+
     public function createChapter($chapter)
     {
         if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {
