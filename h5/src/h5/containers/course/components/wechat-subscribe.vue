@@ -20,6 +20,8 @@
       <script type="text/wxtag-template" slot="style">
         <style>
           .subscribe-btn {
+            display: inline-block;
+            min-width: 35px;
             color: #fff;
             font-size: 14px;
           }
