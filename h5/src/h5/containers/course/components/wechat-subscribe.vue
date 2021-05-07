@@ -21,7 +21,7 @@
         <style>
           .subscribe-btn {
             display: inline-block;
-            min-width: 35px;
+            min-width: 30px;
             color: #fff;
             font-size: 14px;
           }
