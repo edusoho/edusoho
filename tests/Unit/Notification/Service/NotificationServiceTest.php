@@ -207,6 +207,7 @@ class NotificationServiceTest extends BaseTestCase
             'sn' => 'test12345',
             'eventId' => 1,
             'strategyId' => 1,
+            'source' => 'test',
         ];
         $fields = array_merge($defaultFields, $fields);
 

@@ -11,6 +11,7 @@ class Template extends AbstractResource
     public function search(ApiRequest $request)
     {
         $userRoles = $this->getCurrentUser()->getRoles();
+        $userRole = in_array('ROLE_TEACHER', $userRoles) ? 'ROLE_TEACHER' : 'ROLE_USER';
 
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
         if (empty($wechatNotificationSetting['templates'])) {
@@ -24,7 +25,7 @@ class Template extends AbstractResource
         $templateCodes = [];
         $subscribeTemplates = $this->container->get('extension.manager')->getMessageSubscribeTemplates();
         foreach ($wechatNotificationSetting['templates'] as $key => $template) {
-            if (in_array($subscribeTemplates[$key]['role'], $userRoles) && !empty($template['templateId'])) {
+            if ($subscribeTemplates[$key]['role'] == $userRole && !empty($template['templateId'])) {
                 $templateCodes[] = $template['templateId'];
             }
         }

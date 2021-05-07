@@ -14,6 +14,7 @@ class SubscribeTemplateDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $userRoles = $this->getCurrentUser()->getRoles();
+        $userRole = in_array('ROLE_TEACHER', $userRoles) ? 'ROLE_TEACHER' : 'ROLE_USER';
 
         $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
         if (empty($wechatNotificationSetting['templates'])) {
@@ -28,7 +29,7 @@ class SubscribeTemplateDataTag extends BaseDataTag implements DataTag
         global $kernel;
         $subscribeTemplates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
         foreach ($wechatNotificationSetting['templates'] as $key => $template) {
-            if (in_array($subscribeTemplates[$key]['role'], $userRoles) && !empty($template['templateId'])) {
+            if ($subscribeTemplates[$key]['role'] == $userRole && !empty($template['templateId'])) {
                 $templateCodes[] = $template['templateId'];
             }
         }
