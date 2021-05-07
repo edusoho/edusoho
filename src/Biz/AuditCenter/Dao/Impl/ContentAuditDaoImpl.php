@@ -32,7 +32,7 @@ class ContentAuditDaoImpl extends AdvancedDaoImpl implements ContentAuditDao
                 'sensitiveWords LIKE :sensitiveWordsSearch',
                 'content LIKE :contentSearch',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'createdTime', 'updatedTime'],
         ];
     }
 

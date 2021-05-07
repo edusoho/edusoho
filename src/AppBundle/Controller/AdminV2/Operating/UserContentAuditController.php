@@ -21,7 +21,7 @@ class UserContentAuditController extends BaseController
         );
 
         $userAudits = $this->getContentAuditService()->searchAudits($conditions,
-            ['createdTime' => 'ASC'],
+            ['updatedTime' => 'ASC', 'id' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -97,6 +97,10 @@ class UserContentAuditController extends BaseController
 
     protected function prepareConditions($conditions)
     {
+        if (empty($conditions['status'])) {
+            $conditions['status'] = 'none_checked';
+        }
+
         if ('sys_checked' === $conditions['status']) {
             $conditions['auditor'] = -1;
         }
