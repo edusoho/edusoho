@@ -414,6 +414,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return array_slice($ret, 0, $num);
     }
 
+    public function findArticlesByLikeTitle($title)
+    {
+        return $this->getArticleDao()->findByLikeTitle($title);
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article = [];

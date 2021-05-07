@@ -13,6 +13,9 @@ switch ($action) {
     case 'finishUpload':
         finishUpload();
         break;
+    case 'upload':
+        upload();
+        break;
 }
 
 /*
@@ -46,4 +49,21 @@ function finishUpload()
     $no = $_POST['no'];
 
     echo json_encode($sdk->getResourceService()->finishUpload($no));
+}
+
+
+/*
+ * 上传文件接口
+ * 如果需要断点续传，$params再传一个resumeNo(即之前失败的no)
+ */
+function upload()
+{
+    Permission::check($_GET['exp'], $_GET['token']);
+
+    $sdk = Sdk::init();
+    $params['name'] = $_POST['name'];
+    $params['extno'] = $_POST['extno'];
+    $filepath = $_POST['filepath'];
+
+    echo json_encode($sdk->getResourceService()->upload($filepath, $params));
 }

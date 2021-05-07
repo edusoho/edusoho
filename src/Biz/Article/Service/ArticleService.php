@@ -160,4 +160,6 @@ interface ArticleService
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
 
     public function findRelativeArticles($articleId, $num = 3);
+
+    public function findArticlesByLikeTitle($title);
 }

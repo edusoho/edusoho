@@ -4,12 +4,14 @@ namespace Biz\OrderFacade\Product;
 
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\StringToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
 use Biz\AppLoggerConstant;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
@@ -192,16 +194,24 @@ abstract class Product extends BizAware implements OrderStatusCallback
     {
         try {
             $smsType = 'sms_'.$this->targetType.'_buy_notify';
+            $userId = $orderItem['user_id'];
+            $parameters = [];
+            $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
+            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+            $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
+            $parameters['totalPrice'] = $price.'元';
 
             if ($this->getSmsService()->isOpen($smsType)) {
-                $userId = $orderItem['user_id'];
-                $parameters = [];
-                $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
-                $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
-                $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
-                $parameters['totalPrice'] = $price.'元';
+                return $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+            }
 
-                $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+            if ($this->getWeChatService()->isSubscribeSmsEnabled(MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS)) {
+                return $this->getWeChatService()->sendSubscribeSms(
+                    MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS,
+                    [$userId],
+                    SmsType::BUY_NOTIFY,
+                    $parameters
+                );
             }
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", ['error' => $e->getMessage()]);
@@ -302,5 +312,13 @@ abstract class Product extends BizAware implements OrderStatusCallback
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->biz->service('WeChat:WeChatService');
     }
 }
