@@ -23,4 +23,9 @@ class SettingNames
      * UGC全局私信控制中心
      */
     const UGC_USER_CONTENT_CONTROL_PRIVATE_MESSAGE = 'ugc_private_message';
+
+    /**
+     * UGC用户内容审核配置
+     */
+    const UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT = 'ugc_content_audit';
 }

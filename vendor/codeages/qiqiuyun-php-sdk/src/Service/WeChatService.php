@@ -20,7 +20,7 @@ class WeChatService extends BaseService
      */
     public function getPreAuthUrl($platformType, $callbackUrl)
     {
-        return $this->request('GET', "/open_platform/{$platformType}/pre_auth_url", array('callbackUrl' => $callbackUrl));
+        return $this->request('GET', "/open_platform/{$platformType}/pre_auth_url", ['callbackUrl' => $callbackUrl]);
     }
 
     /**
@@ -38,7 +38,7 @@ class WeChatService extends BaseService
      */
     public function getUserList($nextOpenId = '')
     {
-        return $this->request('GET', '/official_account/user_list', array('nextOpenId' => $nextOpenId));
+        return $this->request('GET', '/official_account/user_list', ['nextOpenId' => $nextOpenId]);
     }
 
     /**
@@ -68,7 +68,7 @@ class WeChatService extends BaseService
      */
     public function getUserInfo($openId, $lang = 'zh_CN')
     {
-        return $this->request('GET', '/official_account/user_list', array('openId' => $openId, 'lang' => $lang));
+        return $this->request('GET', '/official_account/user_list', ['openId' => $openId, 'lang' => $lang]);
     }
 
     /**
@@ -82,9 +82,9 @@ class WeChatService extends BaseService
      */
     public function batchGetUserInfo($openIds, $lang = 'zh_CN')
     {
-        $result = $this->request('POST', '/official_account/user_infos', array('openIds' => $openIds, 'lang' => $lang));
+        $result = $this->request('POST', '/official_account/user_infos', ['openIds' => $openIds, 'lang' => $lang]);
 
-        return !empty($result['user_info_list']) ? $result['user_info_list'] : array();
+        return !empty($result['user_info_list']) ? $result['user_info_list'] : [];
     }
 
     /**
@@ -108,18 +108,19 @@ class WeChatService extends BaseService
      */
     public function getAuthorizationInfo($platformType)
     {
-        return $this->request('GET', "/open_platform/{$platformType}/authorization_info", array());
+        return $this->request('GET', "/open_platform/{$platformType}/authorization_info", []);
     }
 
     /**
      * @param $templateCode string 必填 模版识别码
+     * @param $templateParam 请求参数
      *
      * @return array 返回参数如下
      *               template_id  创建的模版id
      */
-    public function createNotificationTemplate($templateCode)
+    public function createNotificationTemplate($templateCode, $templateParam = [])
     {
-        return $this->request('POST', "/notification_template/{$templateCode}");
+        return $this->request('POST', "/notification_template/{$templateCode}", $templateParam);
     }
 
     /**
@@ -128,9 +129,9 @@ class WeChatService extends BaseService
      * @return array 返回参数如下
      *               success bool 是否删除成功
      */
-    public function deleteNotificationTemplate($templateId)
+    public function deleteNotificationTemplate($templateId, $templateParam = [])
     {
-        return $this->request('DELETE', "/notification_template/{$templateId}");
+        return $this->request('DELETE', "/notification_template/{$templateId}", $templateParam);
     }
 
     /**
@@ -144,11 +145,11 @@ class WeChatService extends BaseService
      *
      * @return array
      */
-    public function getMiniProgramCode($scene, $options = array())
+    public function getMiniProgramCode($scene, $options = [])
     {
-        return $this->request('POST', '/mini_program/generate_code', array(
+        return $this->request('POST', '/mini_program/generate_code', [
             'scene' => $scene,
             'options' => $options,
-        ));
+        ]);
     }
 }

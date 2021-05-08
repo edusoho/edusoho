@@ -41,6 +41,10 @@
         </div>
         {{'group.thread.created_time'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}
         <span class="mll"> {{'group.thread.hit_num'|trans({'%hitNum%':threadMain.hitNum})}}</span>
+        <span style="color: red;" id="{{ 'js-group-thread-after-' ~ threadMain.id }}"></span>
+        {% if app.user.isLogin() and app.user.id != threadMain.userId and is_reported('group_thread', threadMain.id)  %}
+          <span style="color: red;">({{ '已举报'|trans }})</span>
+        {% endif %}
       </div>
       <div class="editor-text">
         {{threadMain.content|cdn|raw}}
@@ -49,6 +53,9 @@
       {% include 'attachment/widget/list.html.twig' with {targetType:'group.thread', targetId:threadMain.id} %}
 
       <div class="mtl text-right">
+        {% if app.user.isLogin() and app.user.id != threadMain.userId and not is_reported('group_thread', threadMain.id) %}
+          <a class="btn btn-default btn-sm mrm" id="{{ 'js-group-thread-modal-'~ threadMain.id }}" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{ path('common_report_tags_modal', {targetType: 'group_thread', targetId: threadMain.id, modalTarget: 'js-group-thread-modal-'~ threadMain.id, contentTarget: 'js-group-thread-after-' ~ threadMain.id }) }}">{{'举报'|trans}}</a>
+        {% endif %}
         {% if is_feature_enabled('group_reward') and threadMain.count == 1 %}
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
           {% else %}
@@ -106,7 +113,7 @@
       <ul class="media-list">
         {% for post in post %}
           {% set subPosts = postReply[post.id]|default(null) %}
-          <li id="post-{{post.id}}" class="media">
+          <li id="post-{{post.id}}" class="media main_hover_item">
             <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-sm"></a>
             <div class="media-body">
               <div class="metas">
@@ -120,6 +127,10 @@
                 <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
                 <span class="divider mhm">•</span>
                 <span >{{post.createdTime|smart_time}} </span>
+                <span id="{{ 'js-group-thread-reply-after-' ~ post.id }}" style="color: red;"></span>
+                {% if app.user.isLogin() and app.user.id != post.userId and is_reported('group_thread_reply', post.id)  %}
+                  <span style="color: red;">({{ '已举报'|trans }})</span>
+                {% endif %}
               </div>
 
               <div class="content editor-text">
@@ -128,6 +139,9 @@
               </div>
 
               <div class="actions">
+                {% if app.user.isLogin() and app.user.id != post.userId and not is_reported('group_thread_reply', post.id) %}
+                  <a class="item-hover" id="{{ 'js-group-thread-reply-modal-'~ post.id }}" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{ path('common_report_tags_modal', {targetType: 'group_thread_reply', targetId: post.id, modalTarget: 'js-group-thread-reply-modal-'~ post.id, contentTarget: 'js-group-thread-reply-after-' ~ post.id }) }}">{{'举报'|trans}}</a>
+                {% endif %}
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
                   <a title="{{'group.thread.delete_tips'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'thread.delete_btn'|trans}}</a>
                 {% endif %}

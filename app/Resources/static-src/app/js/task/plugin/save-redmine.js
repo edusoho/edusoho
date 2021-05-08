@@ -13,7 +13,12 @@ const saveRedmineSuccess = () => {
   }, 3000);
 };
 
+const saveRedmineClear = () => {
+  $savedMessage.html('');
+};
+
 export {
   saveRedmineLoading,
   saveRedmineSuccess,
+  saveRedmineClear,
 };

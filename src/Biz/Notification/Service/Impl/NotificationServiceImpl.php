@@ -3,18 +3,18 @@
 namespace Biz\Notification\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\RuntimeException;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Notification\Dao\NotificationBatchDao;
 use Biz\Notification\Dao\NotificationEventDao;
 use Biz\Notification\Dao\NotificationStrategyDao;
 use Biz\Notification\Service\NotificationService;
-use AppBundle\Common\Exception\RuntimeException;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class NotificationServiceImpl extends BaseService implements NotificationService
 {
-    public function searchBatches($conditions, $orderbys, $start, $limit, $columns = array())
+    public function searchBatches($conditions, $orderbys, $start, $limit, $columns = [])
     {
         return $this->getNotificationBatchDao()->search($conditions, $orderbys, $start, $limit, $columns);
     }
@@ -31,13 +31,18 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createBatch($batch)
     {
-        if (!ArrayToolkit::requireds($batch, array('eventId', 'sn', 'strategyId'))) {
+        if (!ArrayToolkit::requireds($batch, ['eventId', 'sn', 'strategyId', 'source'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $batch = ArrayToolkit::parts($batch, array('eventId', 'sn', 'extra', 'strategyId'));
+        $batch = ArrayToolkit::parts($batch, ['eventId', 'sn', 'extra', 'strategyId', 'source', 'smsEventId']);
 
         return $this->getNotificationBatchDao()->create($batch);
+    }
+
+    public function updateBatch($id, $fields)
+    {
+        return $this->getNotificationBatchDao()->update($id, $fields);
     }
 
     public function getEvent($id)
@@ -52,22 +57,22 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createEvent($event)
     {
-        if (!ArrayToolkit::requireds($event, array('title', 'content', 'totalCount', 'status'))) {
+        if (!ArrayToolkit::requireds($event, ['title', 'content', 'totalCount', 'status'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $event = ArrayToolkit::parts($event, array('title', 'content', 'totalCount', 'status'));
+        $event = ArrayToolkit::parts($event, ['title', 'content', 'totalCount', 'status']);
 
         return $this->getNotificationEventDao()->create($event);
     }
 
     public function createStrategy($strategy)
     {
-        if (!ArrayToolkit::requireds($strategy, array('eventId', 'type', 'seq'))) {
+        if (!ArrayToolkit::requireds($strategy, ['eventId', 'type', 'seq'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $strategy = ArrayToolkit::parts($strategy, array('eventId', 'type', 'seq'));
+        $strategy = ArrayToolkit::parts($strategy, ['eventId', 'type', 'seq']);
 
         return $this->getNotificationStrategyDao()->create($strategy);
     }
@@ -75,7 +80,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     public function batchHandleNotificationResults($batchs)
     {
         if (empty($batchs)) {
-            return array();
+            return [];
         }
 
         $batchs = array_filter($batchs, function ($item) {
@@ -91,38 +96,80 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         }
 
         if (empty($result['data'])) {
-            return array();
+            return [];
         }
 
         $cloudRecords = ArrayToolkit::index($result['data'], 'sn');
         $this->batchUpdateRecord($batchs, $cloudRecords);
     }
 
-    public function createWeChatNotificationRecord($sn, $key, $data)
+    public function createWeChatNotificationRecord($sn, $key, $data, $source, $batchId = 0)
     {
         global $kernel;
-        $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
+        if ('wechat_template' == $source) {
+            $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
+        } else {
+            $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
+        }
+
         $template = $templates[$key];
         $content = $this->spliceContent($template['detail'], $data);
-        $event = array(
+        $event = [
             'title' => $this->trans($template['name']),
             'content' => $content,
             'totalCount' => 0,
             'status' => 'sending',
-        );
+        ];
         $event = $this->createEvent($event);
-        $strategy = array(
+        $strategy = [
             'eventId' => $event['id'],
             'type' => 'wechat',
             'seq' => 1,
-        );
+        ];
         $strategy = $this->createStrategy($strategy);
-        $batch = array(
+        $batch = [
             'eventId' => $event['id'],
             'strategyId' => $strategy['id'],
             'sn' => $sn,
             'status' => 'created',
-        );
+            'source' => $source,
+        ];
+
+        if (empty($batchId)) {
+            return $this->createBatch($batch);
+        }
+
+        return $this->updateBatch($batchId, $batch);
+    }
+
+    public function createSmsNotificationRecord($data, $smsParams, $source)
+    {
+        global $kernel;
+        $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
+        $template = $templates[$smsParams['key']];
+        $content = $this->spliceContent($template['smsDetail'][$smsParams['smsTemplateId']], $data);
+        $event = [
+            'title' => $this->trans($template['name']),
+            'content' => $content,
+            'totalCount' => $smsParams['sendNum'],
+            'status' => 'finish',
+        ];
+        $event = $this->createEvent($event);
+        $strategy = [
+            'eventId' => $event['id'],
+            'type' => 'sms',
+            'seq' => 1,
+        ];
+        $strategy = $this->createStrategy($strategy);
+
+        $batch = [
+            'eventId' => 0,
+            'strategyId' => $strategy['id'],
+            'sn' => '',
+            'status' => 'finished',
+            'source' => $source,
+            'smsEventId' => $event['id'],
+        ];
 
         return $this->createBatch($batch);
     }
@@ -130,7 +177,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     protected function spliceContent($content, $data)
     {
         foreach ($data as $key => $value) {
-            $content = str_replace('{{'.$key.'.DATA}}', $value['value'], $content);
+            $content = str_replace('{{'.$key.'.DATA}}', empty($value['value']) ? $value : $value['value'], $content);
         }
 
         return $content;
@@ -142,13 +189,13 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $batchHelper = new BatchUpdateHelper($this->getNotificationBatchDao());
         foreach ($batchs as $batch) {
             if (!empty($results[$batch['sn']]) && $results[$batch['sn']]['is_finished']) {
-                $eventHelper->add('id', $batch['eventId'], array(
+                $eventHelper->add('id', $batch['eventId'], [
                     'totalCount' => $results[$batch['sn']]['total_count'],
                     'succeedCount' => $results[$batch['sn']]['succeed_count'],
                     'status' => 'finish',
-                    'reason' => empty($results[$batch['sn']]['failure_reason']) ? array() : $results[$batch['sn']]['failure_reason'],
-                ));
-                $batchHelper->add('id', $batch['id'], array('status' => 'finished'));
+                    'reason' => empty($results[$batch['sn']]['failure_reason']) ? [] : $results[$batch['sn']]['failure_reason'],
+                ]);
+                $batchHelper->add('id', $batch['id'], ['status' => 'finished']);
             }
         }
         $eventHelper->flush();
@@ -157,7 +204,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     protected function getSDKNotificationService()
     {
-        return $this->biz['qiQiuYunSdk.notification'];
+        return $this->biz['ESCloudSdk.notification'];
     }
 
     /**

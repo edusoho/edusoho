@@ -15,7 +15,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     public function testCreateThread()
@@ -24,7 +24,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     /**
@@ -37,7 +37,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     /**
@@ -50,7 +50,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     /**
@@ -63,7 +63,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     /**
@@ -75,7 +75,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     public function testCreateThreadWithEventType()
@@ -88,7 +88,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
     }
 
     public function testCreateThreadWithAts()
@@ -103,7 +103,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threadNew = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertArrayEquals($thread, $threadNew);
+        $this->assertEquals($thread['id'], $threadNew['id']);
         $this->assertContains($newUser['id'], $threadNew['ats']);
     }
 

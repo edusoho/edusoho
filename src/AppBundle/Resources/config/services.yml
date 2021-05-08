@@ -30,6 +30,21 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension, priority: 10 }
+    report.extension:
+        class: AppBundle\Extension\ReportExtension
+        public: true
+        calls:
+          - [setBiz, ['@biz']]
+        tags:
+          - { name: extension, priority: 10 }
+
+    content_audit.extension:
+      class: AppBundle\Extension\ContentAuditExtension
+      public: true
+      calls:
+        - [ setBiz, [ '@biz' ] ]
+      tags:
+        - { name: extension, priority: 10 }
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
@@ -233,6 +248,13 @@ services:
         public: true
         tags:
             - { name: twig.extension }
+
+    web.twig.classroom_extension:
+      class: AppBundle\Twig\ClassroomExtension
+      arguments: [ '@service_container', '@biz' ]
+      public: true
+      tags:
+        - { name: twig.extension }
 
     web.twig.item_bank_exercise_extension:
       class: AppBundle\Twig\ItemBankExerciseExtension

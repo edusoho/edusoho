@@ -2,7 +2,9 @@
 
 namespace Biz\Sensitive\Dao;
 
-interface SensitiveDao
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
+
+interface SensitiveDao extends AdvancedDaoInterface
 {
     public function getByName($name);
 

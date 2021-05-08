@@ -400,7 +400,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: 优秀
     good: 良好
     passed: 合格
@@ -555,3 +555,107 @@ certificateAuditSearchTypes:
     nickname: 用户名
     verifiedMobile: 手机号
     email: 邮箱
+
+WechatNotificationType:
+  serviceFollow: 服务号关注
+  messageSubscribe: 消息订阅
+
+#用户内容审核类型
+userAuditTargetType:
+  course_review: 课程评价
+  course_review_reply: 课程评价回复
+  classroom_review: 班级评价
+  classroom_review_reply: 班级评价回复
+  item_bank_exercise_review: 题库练习评价
+  item_bank_exercise_review_reply: 题库练习评价回复
+  open_course_review: 公开课评价
+  open_course_review_reply: 公开课评价回复
+  article_review: 资讯评价
+  article_review_reply: 资讯评价回复
+  course_note: 课程笔记
+  course_thread: 课程话题
+  course_thread_post: 课程话题回复
+  classroom_thread: 班级话题
+  classroom_thread_reply: 班级话题回复
+  group_thread: 小组话题
+  group_thread_post: 小组话题回复
+  course_question: 课程问答
+  course_question_post: 课程问答回复
+  classroom_question: 班级问答
+  classroom_question_reply: 班级问答回复
+  classroom_event: 班级活动
+  classroom_event_reply: 班级活动回复
+
+userSelectedAuditTargetType:
+  course_review: 课程评价
+  classroom_review: 班级评价
+  item_bank_exercise_review: 题库练习评价
+  open_course_review: 公开课评价
+  article_review: 资讯评价
+  course_note: 课程笔记
+  course_thread: 课程话题
+  classroom_thread: 班级话题
+  group_thread: 小组话题
+  course_question: 课程问答
+  classroom_question: 班级问答
+#  classroom_event: 班级活动
+
+#用户内容审核状态
+userAuditStatus:
+  none_checked: 未审核
+  pass: 正常
+  illegal: 违规
+#用户内容审核状态
+selectUserAuditStatus:
+  sys_checked: 系统已审
+  none_checked: 未审核
+  pass: 正常
+  illegal: 违规
+
+#用户内容审核 敏感词
+sensitiveWordsFilter:
+  1: 含敏感词
+  2: 不含敏感词
+
+#用户举报原因标签
+reportTags:
+    1: 垃圾广告信息
+    2: 政治敏感信息
+    3: 色情低俗信息
+    4: 违法违规信息
+    5: 辱骂、人身攻击等不友善行为
+
+#用户举报目标类型标签
+reportTargetType:
+    1: 课程评价
+    2: 班级评价
+    3: 题库练习评价
+    4: 公开课评价
+    5: 资讯评价
+    6: 课程笔记
+    7: 班级笔记
+    8: 课程话题
+    9: 班级话题
+    10: 小组话题
+    11: 课程问答
+    12: 班级问答
+
+reportModule:
+  1: 课程评价
+  2: 班级评价
+  3: 题库练习评价
+  4: 公开课评价
+  5: 资讯评价
+  6: 课程笔记
+  7: 课程话题
+  8: 班级话题
+  9: 小组话题
+  10: 课程问答
+  11: 班级问答
+
+#用户举报内容审核状态
+reportAuditStatus:
+    none_checked: 未审核
+    pass: 正常
+    illegal: 违规
+

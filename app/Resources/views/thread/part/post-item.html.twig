@@ -1,5 +1,23 @@
 {% import "macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-post-{{ post.id }} media media-comment user-id-{{author.id}}">
+{% if post.targetType == 'article' %}
+  {% set reportType = 'article_review' %}
+{% elseif post.targetType == 'openCourse' %}
+  {% set reportType = 'open_course_review' %}
+{% elseif post.targetType == 'classroom' %}
+  {% set thread = get_classroom_thread(post.threadId) %}
+  {% if thread.type == 'discussion' %}
+    {% set reportType = 'classroom_thread_reply' %}
+  {% elseif thread.type == 'question' %}
+    {% set reportType = 'classroom_question_reply' %}
+  {% elseif thread.type == 'event' %}
+    {% set reportType = 'classroom_event_reply' %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+{% else %}
+  {% set reportType = post.targetType %}
+{% endif %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-post-{{ post.id }} media media-comment main_hover_item user-id-{{author.id}}">
   <div class="media-left">
     {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
   </div>
@@ -16,7 +34,7 @@
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
       {% if author.badgeTitle|default(null) %}<span class="mll color-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw|wrap_text() }}</div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw|wrap_text() }}{% if app.user.isLogin() and app.user.id != post.userId and is_reported(reportType, post.id) %}<span style="color:red;">({{ '已举报'|trans }})</span>{% endif %}<span id="{{ 'js-thread-after-' ~ post.id }}" style="color:red;"></span></div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'classroom.thread.post', targetId:post.id} %}
     <div class="comment-sns">
       {% include 'thread/post-interaction.html.twig' %}
