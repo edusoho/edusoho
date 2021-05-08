@@ -140,6 +140,7 @@ class BlockController extends BaseController
                 'code' => $condation['code'],
                 'mode' => $condation['mode'],
             ];
+
             if (empty($condation['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
             } else {
@@ -150,7 +151,6 @@ class BlockController extends BaseController
         }
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
-
         if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
             return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
                 'block' => $block,
