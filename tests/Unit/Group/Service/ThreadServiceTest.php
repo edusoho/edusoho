@@ -309,7 +309,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread1 = $this->getThreadService()->getThread($thread['id']);
 
-        $this->assertEquals($thread, $thread1);
+        $this->assertEquals($thread['id'], $thread1['id']);
     }
 
     public function testSearchThreads()
@@ -337,7 +337,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $threads = $this->getThreadService()->searchThreads(['title' => 'test1'], ['isStick' => 'DESC'], 0, 10);
         $this->assertCount(1, $threads);
-        $this->assertEquals($thread1, $threads[0]);
+        $this->assertEquals($thread1['id'], $threads[0]['id']);
     }
 
     public function testGetThreadsByIds()
@@ -460,7 +460,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $post1 = $this->getThreadService()->getPost($post['id']);
 
-        $this->assertEquals($post, $post1);
+        $this->assertEquals($post['id'], $post1['id']);
     }
 
     /**

@@ -382,7 +382,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
-    none: -
+    none: '-'
     excellent: Excellent
     good: Good
     passed: Passed
@@ -525,3 +525,73 @@ certificateSearchTypes:
     email: email
     batch: batch
     code: code
+
+WechatNotificationType:
+  serviceFollow: service follow
+  messageSubscribe: Message subscribe
+
+userAuditTargetType:
+  1: Course Review
+  2: Classroom Review
+  3: Exercise Review
+  4: Open Course Review
+  5: Article Review
+  6: Course Note
+  7: Classromm Note
+  8: Course Thread
+  9: Classroom Thread
+  10: Group Thread
+  11: Course Question
+  12: Classromm Question
+
+userAuditStatus:
+  sysPass: Syetem pass
+  none: Not pass
+  pass: Pass
+  illegal: Illegal
+
+sensitiveWordsFilter:
+  1: Contain Sensitive Words
+  2: Not Contain Sensitive Words
+
+#用户举报原因标签
+reportTags:
+    1: Invalid advertisement information
+    2: Politically sensitive information
+    3: Pornographic and vulgar information
+    4: Illegal information
+    5: Abusive, personal attacks and other unfriendly behavior
+
+#用户举报目标类型标签
+reportTargetType:
+    1: Course Review
+    2: Classroom Review
+    3: Question Bank Exervise Review
+    4: Open Course Review
+    5: Article Review
+    6: Course Note
+    7: Classroom Note
+    8: Course Thread
+    9: Classroom Thread
+    10: Group Thread
+    11: Course QA
+    12: Classroom QA
+
+reportModule:
+  1: Course Review
+  2: Classroom Review
+  3: Question Bank Exervise Review
+  4: Open Course Review
+  5: Article Review
+  6: Course Note
+  7: Course Thread
+  8: Classroom Thread
+  9: Group Thread
+  10: Course QA
+  11: Classroom QA
+
+#用户举报内容审核状态
+reportAuditStatus:
+    none: None
+    pass: Pass
+    illegal: Illegal

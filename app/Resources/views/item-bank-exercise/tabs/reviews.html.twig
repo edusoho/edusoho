@@ -2,4 +2,4 @@
 
 {% set hideRereview = (exercise.id == 0) or (not userReview) %}
 
-{% include 'review/widget/list.html.twig' with {targetType: 'item_bank_exercise', targetId: exercise.id} %}
+{% include 'review/widget/list.html.twig' with {targetType: 'item_bank_exercise', targetId: exercise.id, reportType: 'item_bank_exercise_review', replyReportType: 'item_bank_exercise_review_reply'} %}

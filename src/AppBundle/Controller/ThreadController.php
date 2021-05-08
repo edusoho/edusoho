@@ -42,6 +42,8 @@ class ThreadController extends BaseController
             $conditions['typeExcludes'] = $typeExcludes;
         }
 
+        $conditions['excludeAuditStatus'] = 'illegal';
+
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchThreadCount($conditions),
@@ -75,6 +77,7 @@ class ThreadController extends BaseController
         $conditions = [
             'threadId' => $thread['id'],
             'parentId' => 0,
+            'excludeAuditStatus' => 'illegal',
         ];
         $paginator = new Paginator(
             $request,
@@ -117,7 +120,7 @@ class ThreadController extends BaseController
     {
         $post = $this->getThreadService()->getPost($postId);
 
-        $conditions = ['parentId' => $postId];
+        $conditions = ['parentId' => $postId, 'excludeAuditStatus' => 'illegal'];
 
         $paginator = new Paginator(
             $request,

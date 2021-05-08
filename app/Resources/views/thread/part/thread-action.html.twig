@@ -1,4 +1,24 @@
 <div class="topic-action">
+  {% if thread.targetType == 'classroom' %}
+    {% if thread.type == 'discussion' %}
+      {% set reportType = 'classroom_thread' %}
+    {% elseif thread.type == 'question' %}
+      {% set reportType = 'classroom_question' %}
+    {% elseif thread.type == 'event' %}
+      {% set reportType = 'classroom_event' %}
+    {% else %}
+      {% set reportType = '' %}
+    {% endif %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+    {% if app.user.isLogin() and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
+      <a class="color-primary item-hover"
+         id="js-thread-modal-{{ thread.id }}"
+         href="#modal"
+         data-toggle="modal"
+         data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: thread.id, modalTarget: 'js-thread-modal-'~ thread.id, contentTarget: 'js-thread-after-' ~ thread.id }) }}"><i class="es-icon es-icon-warning"></i> 举报</a>
+    {% endif %}
     {% if service.canAccess('thread.update', thread) %}
       <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><i class="es-icon es-icon-edit"></i> {{'thread.edit_btn'|trans}}</a>
     {% endif %}
@@ -16,9 +36,9 @@
 
     {% if service.canAccess('thread.sticky', thread) %}
       {% if thread.nice %}
-        <a href="javascript:" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.cancel_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.cancel_essence_btn'|trans}}</a>
+        <a href="javascript:" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.cancel_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.cancel_essence_btn'|trans}}</a>
       {% else %}
-        <a href="javascript:" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.set_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.set_essence_btn'|trans}}</a>
+        <a href="javascript:" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.set_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.set_essence_btn'|trans}}</a>
       {% endif %}
     {% endif %}
 

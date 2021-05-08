@@ -3,7 +3,7 @@
 
 
 
-body { 
+body {
   background: @bg-new-color;
   word-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -80,8 +80,8 @@ html.nav-active body {
   line-height: 1;
 }
 
-// input:-webkit-autofill, 
-// textarea:-webkit-autofill, 
+// input:-webkit-autofill,
+// textarea:-webkit-autofill,
 // select:-webkit-autofill {
 //   -webkit-box-shadow: 0 0 0 100px @bg-color inset;
 // }
@@ -230,7 +230,7 @@ html.nav-active body {
 
 a {
   color: @brand-primary;
-  &:focus, 
+  &:focus,
   &:hover {
     color: darken(@brand-primary, 10%);
   }
@@ -260,4 +260,11 @@ a.transition {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
-} 
+}
+
+.main_hover_item:hover .item-hover {
+  display: inline;
+}
+.item-hover {
+  display: none;
+}
