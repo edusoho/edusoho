@@ -1,0 +1,39 @@
+{% extends "bootstrap-modal-layout.html.twig" %}
+{% do script(['app/js/admin-v2/operating/user-content-audit/modal/index.js']) %}
+
+{% set hide_footer = true %}
+{% set modal_class = "modal-md" %}
+{% block modal_header %}{% endblock %}
+{% block body %}
+  <form id="operate-confirm-form" class="text-center mbl">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    {% for name, param in params|default([]) %}
+      <input type="hidden" name="{{ name }}" value="{{ param }}">
+    {% endfor %}
+    <div>
+      <i class="es-icon es-icon-Explain color-info" style="font-size: 70px;"></i>
+    </div>
+    {% if status|default('pass') == 'pass' %}
+      <h4 class="mbl">
+        {{ 'admin_v2.operation.user_content_audit.modal.body.pass_warning'|trans }}
+      </h4>
+      <div class="help-block mbl pbs">
+        {{ 'admin_v2.operation.user_content_audit.modal.body.pass_info'|trans }}
+      </div>
+    {% else %}
+      <h4 class="mbl">
+        {{ 'admin_v2.operation.user_content_audit.modal.body.illegal_warning'|trans }}
+      </h4>
+      <div class="help-block mbl pbs">
+        {{ 'admin_v2.operation.user_content_audit.modal.body.illegal_info'|trans }}
+      </div>
+    {% endif %}
+
+    <div class="confirm-btn-group row">
+      <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal"
+              tabindex="6">{{ 'admin_v2.operation.user_content_audit.modal.body.button.cancel'|trans }}</button>
+      <button type="button" class="btn btn-primary btn-confirm js-confirm-submit col-md-4 pull-right"
+              data-url="{{ url }}" tabindex="4">{{ 'admin_v2.operation.user_content_audit.modal.body.button.confirm'|trans }}</button>
+    </div>
+  </form>
+{% endblock %}

@@ -1246,10 +1246,12 @@ t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "z
 t.add("course.stick.success", "\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
 t.add("course.cancel.stick.success", "\u53d6\u6d88\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
 t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>\u63d0\u793a<\/div>\n  <div class=\"wechat-intro-content\">\n    <div>\u4e3a\u4eab\u53d7\u66f4\u597d\u7684\u670d\u52a1\uff0c\u5efa\u8bae\u60a8\u5f00\u542f\u5fae\u4fe1\u8bfe\u7a0b\u901a\u77e5\u3002<\/div>\n    <div>\u70b9\u8fd9\u91cc\u7ed1\u5b9a\u5fae\u4fe1\uff0c\u5e76\u5173\u6ce8\u670d\u52a1\u53f7\u5373\u53ef\u5f00\u542f\u8bfe\u7a0b\u901a\u77e5\u3002<\/div>\n  <\/div>\n", "js", "zh_CN");
+t.add("wechat.notification.wechat_subscribe_bind_hover", "<div class=\"wechat-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>\u63d0\u793a<\/div>\n  <div class=\"wechat-intro-content\">\n    <div>\u4e3a\u4eab\u53d7\u66f4\u597d\u7684\u670d\u52a1\uff0c\u5efa\u8bae\u60a8\u5173\u6ce8\u670d\u52a1\u53f7\u3002<\/div>\n    <div>\u70b9\u8fd9\u91cc\u7ed1\u5b9a\u5fae\u4fe1\u3002<\/div>\n  <\/div>\n", "js", "zh_CN");
 t.add("wechat.notification.homepage.open_tip", "<span class=\"%messageClass%\">\u201c\u5fae\u4fe1\u901a\u77e5\u201d\u53ef\u5728\u201c\u4e2a\u4eba\u8bbe\u7f6e-\u7b2c\u4e09\u65b9\u767b\u5f55\u201d\u5f00\u542f\u3002<\/span>", "js", "zh_CN");
 t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">\u524d\u5f80\u5f00\u542f<\/span>", "js", "zh_CN");
 t.add("wechat.notification.cloud_open_tip", "\u8bf7\u5148\u5f00\u542f\u6559\u80b2\u4e91", "js", "zh_CN");
 t.add("admin.wechat_notification.send_days", "\u53d1\u9001\u65e5", "js", "zh_CN");
+t.add("admin.wechat_notification.message_subscribe.disable_setting_tip", "\u8bf7\u6388\u6743\u7f51\u7ad9\u751f\u6210\u5fae\u4fe1\u901a\u77e5\u6a21\u677f", "js", "zh_CN");
 t.add("document.import.intro_hover", "<div class=\"document-import-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>\u63d0\u793a<\/div> <div class=\"document-import-intro-content\">\n  <div align=\"center\">\u5168\u65b0\u5bfc\u5165\u529f\u80fd\uff0c\u5feb\u6765\u8bd5\u8bd5\u5427\u3002<\/div>\n<\/div>\n", "js", "zh_CN");
 t.add("document.import.skip_btn", "\u77e5\u9053\u4e86", "js", "zh_CN");
 t.add("subject.testpaper_title_empty_hint", "\u8bd5\u5377\u540d\u79f0\u4e0d\u80fd\u4e3a\u7a7a", "js", "zh_CN");
@@ -1562,4 +1564,11 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
+t.add("course.intro.wechat_subscribe", "\u8bf7\u70b9\u6b64\u8ba2\u9605\u8bfe\u7a0b\u76f8\u5173\u901a\u77e5", "js", "zh_CN");
+t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "\u8bf7\u5148\u9009\u62e9\u8981\u6279\u91cf\u64cd\u4f5c\u7684\u5185\u5bb9", "js", "zh_CN");
+t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips", "\u4e0d\u5141\u8bb8\u540e\uff0c\u5ba1\u6838\u72b6\u6001\u4e3a\u7cfb\u7edf\u5df2\u5ba1-\u5f85\u4eba\u5de5\u5ba1\u6838", "js", "zh_CN");
+t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips", "\u4e0d\u5141\u8bb8\u540e\uff0c\u5ba1\u6838\u72b6\u6001\u4e3a\u672a\u5ba1\u6838", "js", "zh_CN");
+t.add("admin_v2.operation.audit_center.batch_operate_tips", "\u672a\u9009\u4e2d\u4efb\u4f55\u5185\u5bb9", "js", "zh_CN");
+t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
 })(Translator);

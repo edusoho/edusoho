@@ -52,7 +52,7 @@ if (threadType == 'event') {
     $form.validate('[name=startTime]');
   });
   $form.find('[name="startTime"]').datetimepicker('setStartDate', new Date);
-  
+
   new EsWebUploader({
     element: '#js-activity-uploader',
     onUploadSuccess: function(file, response) {

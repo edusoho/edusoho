@@ -1,0 +1,10 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-md" %}
+
+{% block title %}{{ '举报限制提示' }}{% endblock %}
+
+{% block body %}
+  <div class="text-center text-normal color-danger">
+    {{ message|trans }}
+  </div>
+{% endblock %}
