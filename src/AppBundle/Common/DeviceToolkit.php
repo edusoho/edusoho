@@ -28,7 +28,7 @@ class DeviceToolkit
                 'nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
-                'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile',
+                'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile', 'ipad',
             ];
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
@@ -54,7 +54,7 @@ class DeviceToolkit
         //判断手机发送的客户端标志,兼容性有待提高
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = [
-                'iphone', 'ipod',
+                'iphone', 'ipod', 'ipad',
             ];
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字

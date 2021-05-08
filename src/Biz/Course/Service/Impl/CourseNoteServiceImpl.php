@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
@@ -11,13 +12,13 @@ use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Sensitive\Service\SensitiveService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 {
@@ -33,10 +34,10 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     public function countCourseNoteByCourseId($courseId)
     {
-        return $this->countCourseNotes(array(
+        return $this->countCourseNotes([
             'courseId' => $courseId,
             'status' => CourseNoteService::PUBLIC_STATUS,
-        ));
+        ]);
     }
 
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
@@ -46,16 +47,16 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
     public function findPublicNotesByCourseSetId($courseSetId)
     {
-        $conditions = array(
+        $conditions = [
             'courseSetId' => $courseSetId,
             'status' => 1,
-        );
+        ];
 
         return $this->searchNotes(
             $conditions,
-            array(
+            [
                 'createdTime' => 'DESC',
-            ),
+            ],
             0,
             $this->countCourseNotes($conditions)
         );
@@ -68,16 +69,16 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     public function findPublicNotesByCourseId($courseId)
     {
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
             'status' => CourseNoteService::PUBLIC_STATUS,
-        );
+        ];
 
         return $this->searchNotes(
             $conditions,
-            array(
+            [
                 'createdTime' => 'DESC',
-            ),
+            ],
             0,
             $this->countCourseNotes($conditions)
         );
@@ -104,7 +105,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
     public function saveNote(array $note)
     {
-        if (!ArrayToolkit::requireds($note, array('taskId', 'courseId', 'content'))) {
+        if (!ArrayToolkit::requireds($note, ['taskId', 'courseId', 'content'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -130,26 +131,28 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $note['courseSetId'] = $course['courseSetId'];
         }
 
-        $note = ArrayToolkit::filter($note, array(
+        $note = ArrayToolkit::filter($note, [
             'courseId' => 0,
             'courseSetId' => 0,
             'taskId' => 0,
             'content' => '',
             'status' => 0,
-        ));
+        ]);
 
         $note['content'] = $this->purifyHtml($note['content']) ?: '';
+        $sensitiveCheckResult = $this->getSensitiveService()->sensitiveCheckResult($note['content'], 'course_note');
+        $note['content'] = $sensitiveCheckResult['content'];
         $note['length'] = $this->calculateContentLength($note['content']);
 
         $existNote = $this->getCourseNoteByUserIdAndTaskId($user['id'], $note['taskId']);
         if (!$existNote) {
             $note['userId'] = $user['id'];
             $note = $this->getNoteDao()->create($note);
-            $this->dispatchEvent('course.note.create', $note);
+            $this->dispatchEvent('course.note.create', $note, ['sensitiveResult' => $sensitiveCheckResult]);
         } else {
             unset($note['id']);
             $note = $this->getNoteDao()->update($existNote['id'], $note);
-            $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
+            $this->dispatchEvent('course.note.update', new Event($note, ['preStatus' => $existNote['status'], 'sensitiveResult' => $sensitiveCheckResult]));
         }
 
         return $note;
@@ -187,9 +190,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
     public function waveLikeNum($id, $num)
     {
-        $this->getNoteDao()->wave(array($id), array(
+        $this->getNoteDao()->wave([$id], [
             'likeNum' => $num,
-        ));
+        ]);
     }
 
     public function like($noteId)
@@ -211,11 +214,11 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->createNewException(CourseNoteException::DUPLICATE_LIKE());
         }
 
-        $noteLike = array(
+        $noteLike = [
             'noteId' => $noteId,
             'userId' => $user['id'],
             'createdTime' => time(),
-        );
+        ];
 
         $this->dispatchEvent('course.note.liked', $note);
         $like = $this->getNoteLikeDao()->create($noteLike);
@@ -287,15 +290,15 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     public function countCourseNoteByCourseSetId($courseSetId)
     {
-        return $this->countCourseNotes(array(
+        return $this->countCourseNotes([
             'courseSetId' => $courseSetId,
             'status' => CourseNoteService::PUBLIC_STATUS,
-        ));
+        ]);
     }
 
     protected function calculateContentLength($content)
     {
-        $content = strip_tags(trim(str_replace(array('\\t', '\\r\\n', '\\r', '\\n'), '', $content)));
+        $content = strip_tags(trim(str_replace(['\\t', '\\r\\n', '\\r', '\\n'], '', $content)));
 
         return mb_strlen($content, 'utf-8');
     }
@@ -313,7 +316,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $conditions = array_filter($conditions);
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseSetId', 'courseTitle'))) {
+            if (!in_array($conditions['keywordType'], ['content', 'courseId', 'courseSetId', 'courseTitle'])) {
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
@@ -385,5 +388,13 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return SensitiveService
+     */
+    protected function getSensitiveService()
+    {
+        return $this->biz->service('Sensitive:SensitiveService');
     }
 }

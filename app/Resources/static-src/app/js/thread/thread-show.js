@@ -214,7 +214,8 @@ class ThreadShowWidget {
         $btn.button('reset');
         data = $.parseJSON(data.responseText);
         if (data.error) {
-          notify('danger', data.error.message);
+          // notify('danger', data.error.message);
+          return ;
         } else {
           notify('danger', Translator.trans('thread.post.reply_error_hint'));
         }

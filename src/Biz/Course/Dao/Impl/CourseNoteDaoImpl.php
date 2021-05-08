@@ -11,44 +11,44 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
 
     public function getByUserIdAndTaskId($userId, $taskId)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'userId' => $userId,
             'taskId' => $taskId,
-        ));
+        ]);
     }
 
     public function findByUserIdAndStatus($userId, $status)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? and status = ? ORDER BY `createdTime` DESC ";
 
-        return $this->db()->fetchAll($sql, array($userId, $status)) ?: array();
+        return $this->db()->fetchAll($sql, [$userId, $status]) ?: [];
     }
 
     public function findByUserIdAndCourseId($userId, $courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? and courseId = ? ORDER BY `createdTime` DESC ";
 
-        return $this->db()->fetchAll($sql, array($userId, $courseId)) ?: array();
+        return $this->db()->fetchAll($sql, [$userId, $courseId]) ?: [];
     }
 
     public function countByUserIdAndCourseId($userId, $courseId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE userId = ? AND courseId = ?";
 
-        return $this->db()->fetchColumn($sql, array($userId, $courseId));
+        return $this->db()->fetchColumn($sql, [$userId, $courseId]);
     }
 
     public function deleteByCourseId($courseId)
     {
-        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+        return $this->db()->delete($this->table(), ['courseId' => $courseId]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime', 'updatedTime', 'likeNum'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['createdTime', 'updatedTime', 'likeNum'],
+            'conditions' => [
                 'id IN (:ids)',
                 'courseId = :courseId',
                 'userId = :userId',
@@ -60,7 +60,9 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId',
                 'status = :status',
-            ),
-        );
+                'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
+            ],
+        ];
     }
 }

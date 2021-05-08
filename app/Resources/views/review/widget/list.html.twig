@@ -9,13 +9,15 @@
 {% endif %}
 
 {% set canAccess = canAccess|default(false) %}
+{% set reportType = reportType|default('') %}
+{% set replyReportType = replyReportType|default('') %}
 
 {% for review in reviews if users[review.userId]|default(false) %}
   {% set user = users[review.userId] %}
   {% set posts = data('ReviewPosts',{reviewId:review.id, targetType:targetType|default('course'), start:0,limit:5})|default(null) %}
 
   <div class="js-reviews">
-    <div class="media media-evaluate">
+    <div class="media media-evaluate main_hover_item">
       <div class="media-left">
         {{ web_macro.user_avatar_link(user,'small', ['card']) }}
       </div>
@@ -28,12 +30,13 @@
           {{ web_macro.star(review.rating) }}
         </div>
         <div class="content">
-          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}
-            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}
+          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}{% if app.user.isLogin() and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
+{#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
-          <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}
-            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}
+          <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}{% if app.user.isLogin() and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
+{#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
+
         </div>
         <div class="actions clearfix">
           <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'course.reviews.expand_btn'|trans}}]</a>
@@ -41,13 +44,18 @@
           {% if canAccess %}
             <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'course.reviews.reply_btn'|trans}}{% else %}{{'course.reviews.cancel_reply_btn'|trans}}{% endif %}</a>
           {% endif %}
+          {% if app.user.isLogin() and app.user.id != review.userId and not is_reported(reportType, review.id) %}
+            <span class="pull-right" style="position: relative;right: 10px;">
+              <a class="color-primary item-hover" id="js-review-modal-{{ review.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: review.id, modalTarget: 'js-review-modal-'~ review.id, contentTarget: 'js-review-after-' ~ review.id }) }}">举报</a>
+            </span>
+          {% endif %}
         </div>
 
         {% set goto = goto|default(path('homepage')) %}
 
         <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">
           <div class="thread-subpost-content">
-            {% include 'review/widget/subposts.html.twig' with {posts:posts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
+            {% include 'review/widget/subposts.html.twig' with {posts:posts,targetType:targetType|default('course'),canAccess:canAccess|default(false), replyReportType: replyReportType} %}
           </div>
 
           {% if canAccess %}
