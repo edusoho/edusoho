@@ -674,17 +674,17 @@
     },
     {
         "name": "codeages/escloud-php-sdk",
-        "version": "v1.1.5",
-        "version_normalized": "1.1.5.0",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/escloud-php-sdk.git",
-            "reference": "6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd"
+            "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd",
-            "reference": "6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd",
+            "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/6536acd34a0266c7fcd80ff72793e005c05d5f3f",
+            "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f",
             "shasum": "",
             "mirrors": [
                 {
@@ -705,9 +705,9 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2020-07-28T10:07:32+00:00",
+        "time": "2021-04-30T03:47:30+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "files": [
                 "src/functions.php"

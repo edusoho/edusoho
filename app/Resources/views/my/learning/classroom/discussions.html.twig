@@ -51,6 +51,9 @@
                   <span class="bullet">•</span>
                 {% endif %}
                 <span>{{ thread.hitNum }}{{'my.learning.thread.browse'|trans}}</span>
+                {% if thread.auditStatus == 'illegal' %}
+                  &nbsp;&nbsp;<span class="color-danger">({{ 'site.content.illegal_status'|trans }})</span>
+                {% endif %}
               </div>
             </div>
           </li>

@@ -1,7 +1,23 @@
 {{ render(controller('AppBundle:Thread/Event:showEventTitle', {request:app.request, thread:thread})) }}
-
+{% if thread.targetType == 'classroom' %}
+  {% if thread.type == 'discussion' %}
+    {% set reportType = 'classroom_thread' %}
+  {% elseif thread.type == 'question' %}
+    {% set reportType = 'classroom_question' %}
+  {% elseif thread.type == 'event' %}
+    {% set reportType = 'classroom_event' %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+{% else %}
+  {% set reportType = '' %}
+{% endif %}
 <div class="editor-text">
   {{ thread.content|at(thread.ats)|cdn|raw }}
+  {% if app.user.isLogin() and app.user.id == thread.userId and is_reported(reportType, thread.id) %}
+    <span style="color: red;">({{ '已举报'|trans }})</span>
+  {% endif %}
+  <span id="{{ 'js-thread-after-' ~ thread.id }}" style="color: red;"></span>
 </div>
 
 {{ render(controller('AppBundle:Thread/Member:showMembers', {request:app.request, thread:thread})) }}

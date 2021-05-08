@@ -5,9 +5,9 @@ namespace Biz\Importer;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use Biz\Common\CommonException;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class Importer
 {
@@ -17,12 +17,13 @@ abstract class Importer
     const MAX_IMPORTER_COMPLEXITY = 8; //单请求最大导入复杂度（例如：人数*单次课程|班级数量<8）
 
     protected $biz;
-    protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+    protected $necessaryFields = ['nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱'];
     protected $objWorksheet;
     protected $rowTotal = 0;
     protected $colTotal = 0;
-    protected $excelFields = array();
-    protected $passValidateUser = array();
+    protected $excelFields = [];
+    protected $passValidateUser = [];
+    protected $maxRowTotal = 1000;
 
     abstract public function import(Request $request);
 
@@ -40,7 +41,7 @@ abstract class Importer
         $this->biz = $biz;
     }
 
-    protected function render($view, $params = array())
+    protected function render($view, $params = [])
     {
         global $kernel;
 
@@ -53,27 +54,27 @@ abstract class Importer
             throw CommonException::ERROR_PARAMETER();
         }
 
-        return array(
+        return [
             'status' => self::DANGER_STATUS,
             'message' => $message,
-        );
+        ];
     }
 
     protected function createErrorResponse(array $errorInfo)
     {
-        return array(
+        return [
             'status' => self::ERROR_STATUS,
             'errorInfo' => $errorInfo,
-        );
+        ];
     }
 
-    protected function createSuccessResponse(array $importData, array $checkInfo, array $customParams = array())
+    protected function createSuccessResponse(array $importData, array $checkInfo, array $customParams = [])
     {
-        $response = array(
+        $response = [
             'status' => self::SUCCESS_STATUS,
             'importData' => $importData,
             'checkInfo' => $checkInfo,
-        );
+        ];
         $response = array_merge($customParams, $response);
 
         return $response;
@@ -92,12 +93,12 @@ abstract class Importer
 
     protected function checkRepeatData()
     {
-        $errorInfo = array();
+        $errorInfo = [];
         $checkFields = array_keys($this->necessaryFields);
         $fieldSort = $this->getFieldSort();
 
         foreach ($checkFields as $checkField) {
-            $nicknameData = array();
+            $nicknameData = [];
 
             foreach ($fieldSort as $key => $value) {
                 if ($value['fieldName'] == $checkField) {
@@ -121,7 +122,7 @@ abstract class Importer
 
     protected function getFieldSort()
     {
-        $fieldSort = array();
+        $fieldSort = [];
         $necessaryFields = $this->necessaryFields;
         $excelFields = $this->excelFields;
 
@@ -129,7 +130,7 @@ abstract class Importer
             if (in_array($value, $necessaryFields)) {
                 foreach ($necessaryFields as $fieldKey => $fieldValue) {
                     if ($value == $fieldValue) {
-                        $fieldSort[$fieldKey] = array('num' => $key, 'fieldName' => $fieldKey);
+                        $fieldSort[$fieldKey] = ['num' => $key, 'fieldName' => $fieldKey];
                         break;
                     }
                 }
@@ -165,8 +166,8 @@ abstract class Importer
     {
         $userCount = 0;
         $fieldSort = $this->getFieldSort();
-        $validate = array();
-        $allUserData = array();
+        $validate = [];
+        $allUserData = [];
 
         for ($row = 3; $row <= $this->rowTotal; ++$row) {
             for ($col = 0; $col < $this->colTotal; ++$col) {
@@ -206,7 +207,7 @@ abstract class Importer
                     $this->filterUser($user);
                 }
 
-                $validate[] = array_merge($user, array('row' => $row));
+                $validate[] = array_merge($user, ['row' => $row]);
             }
 
             unset($userData);
@@ -214,10 +215,10 @@ abstract class Importer
 
         $this->passValidateUser = $validate;
 
-        $data['errorInfo'] = empty($errorInfo) ? array() : $errorInfo;
-        $data['checkInfo'] = empty($checkInfo) ? array() : $checkInfo;
+        $data['errorInfo'] = empty($errorInfo) ? [] : $errorInfo;
+        $data['checkInfo'] = empty($checkInfo) ? [] : $checkInfo;
         $data['userCount'] = $userCount;
-        $data['allUserData'] = empty($this->passValidateUser) ? array() : $this->passValidateUser;
+        $data['allUserData'] = empty($this->passValidateUser) ? [] : $this->passValidateUser;
 
         return $data;
     }
@@ -234,8 +235,8 @@ abstract class Importer
 
         $this->excelAnalyse($file);
 
-        if ($this->rowTotal > 1000) {
-            return $this->createDangerResponse('Excel超过1000行数据!');
+        if ($this->rowTotal > $this->maxRowTotal) {
+            return $this->createDangerResponse('Excel超过'.$this->maxRowTotal.'行数据!');
         }
 
         if (!$this->checkNecessaryFields($this->excelFields)) {
@@ -261,21 +262,21 @@ abstract class Importer
         $highestRow = $objWorksheet->getHighestRow();
         $highestColumn = $objWorksheet->getHighestColumn();
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-        $excelFields = array();
+        $excelFields = [];
 
         for ($col = 0; $col < $highestColumnIndex; ++$col) {
             $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
             empty($fieldTitle) ? '' : $excelFields[$col] = $this->trim($fieldTitle);
         }
 
-        $rowAndCol = array('rowLength' => $highestRow, 'colLength' => $highestColumnIndex);
+        $rowAndCol = ['rowLength' => $highestRow, 'colLength' => $highestColumnIndex];
 
         $this->objWorksheet = $objWorksheet;
         $this->rowTotal = $highestRow;
         $this->colTotal = $highestColumnIndex;
         $this->excelFields = $excelFields;
 
-        return array($objWorksheet, $rowAndCol, $excelFields);
+        return [$objWorksheet, $rowAndCol, $excelFields];
     }
 
     protected function checkNecessaryFields($excelFields)
@@ -291,9 +292,9 @@ abstract class Importer
     protected function checkPassedRepeatData()
     {
         $passedUsers = $this->passValidateUser;
-        $ids = array();
-        $repeatRow = array();
-        $repeatIds = array();
+        $ids = [];
+        $repeatRow = [];
+        $repeatIds = [];
 
         foreach ($passedUsers as $key => $passedUser) {
             if (in_array($passedUser['id'], $ids) && !in_array($passedUser['id'], $repeatIds)) {
@@ -310,7 +311,7 @@ abstract class Importer
         }
 
         $repeatRowInfo = '';
-        $repeatArray = array();
+        $repeatArray = [];
 
         if (!empty($repeatRow)) {
             $repeatRowInfo .= '字段对应用户数据重复'.'</br>';
@@ -390,7 +391,7 @@ abstract class Importer
         return $this->createSuccessResponse(
             $importData['allUserData'],
             $importData['checkInfo'],
-            array_merge($request->request->all(), array('chunkNum' => $this->calculateChunkNum()))
+            array_merge($request->request->all(), ['chunkNum' => $this->calculateChunkNum()])
         );
     }
 

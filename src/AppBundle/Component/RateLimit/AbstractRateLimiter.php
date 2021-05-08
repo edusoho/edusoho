@@ -33,6 +33,11 @@ class AbstractRateLimiter
         return RateLimitException::FORBIDDEN_EMAIL_MAX_REQUEST();
     }
 
+    protected function createUgcReportMaxRequestOccurException()
+    {
+        return RateLimitException::FORBIDDEN_UGC_REPORT_MAX_REQUEST();
+    }
+
     protected function createCaptchaOccurException()
     {
         return new TooManyRequestsHttpException(null, RateLimiterInterface::CAPTCHA_OCCUR_MSG_KEY, null, RateLimiterInterface::CAPTCHA_OCCUR);
