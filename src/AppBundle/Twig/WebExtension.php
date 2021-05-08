@@ -230,6 +230,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
             new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
             new \Twig_SimpleFunction('is_group_member', [$this, 'isGroupMember']),
+            new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
         ];
     }
 
