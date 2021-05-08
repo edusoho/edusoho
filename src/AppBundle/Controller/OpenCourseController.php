@@ -248,6 +248,7 @@ class OpenCourseController extends BaseOpenCourseController
             'targetId' => $course['id'],
             'targetType' => 'openCourse',
             'parentId' => 0,
+            'excludeAuditStatus' => 'illegal',
         ];
 
         $paginator = new Paginator(

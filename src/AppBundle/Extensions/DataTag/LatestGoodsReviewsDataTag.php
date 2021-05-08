@@ -28,6 +28,7 @@ class LatestGoodsReviewsDataTag extends BaseDataTag implements DataTag
         $conditions = [
             'parentId' => 0,
             'targetType' => 'goods',
+            'excludeAuditStatus' => 'illegal',
         ];
 
         $reviews = $this->getReviewService()->searchReviews($conditions, ['createdTime' => 'DESC'], 0, $arguments['count']);

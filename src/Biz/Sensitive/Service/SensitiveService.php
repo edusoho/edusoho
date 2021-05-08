@@ -13,6 +13,8 @@ interface SensitiveService
 
     public function sensitiveCheck($text, $type = '');
 
+    public function sensitiveCheckResult($content, $targetType = '', $targetId = '');
+
     public function findAllKeywords();
 
     public function getKeywordByName($name);
@@ -25,7 +27,7 @@ interface SensitiveService
 
     public function searchkeywordsCount($conditions);
 
-    public function searchKeywords($conditions, $orderBy, $start, $limit);
+    public function searchKeywords($conditions, $orderBy, $start, $limit, array $columns = []);
 
     public function searchBanlogsCount($conditions);
 

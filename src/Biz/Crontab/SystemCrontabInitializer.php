@@ -95,6 +95,7 @@ class SystemCrontabInitializer
         $consultRandNum = rand(1, 59);
         $consultHourRandNum = rand(0, 6);
         $convertStatusRandNum = rand(0, 15);
+        $weChatSubscribeRecordRandNum = rand(0, 30);
         $jobMap = [
             'Order_FinishSuccessOrdersJob' => [
                 'expression' => '20 * * * *',
@@ -197,6 +198,10 @@ class SystemCrontabInitializer
                 'expression' => '0 1 * * *',
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
+            ],
+            'WechatSubscribeRecordSynJob' => [
+                'expression' => "{$weChatSubscribeRecordRandNum}/30 * * * *",
+                'class' => 'Biz\WeChat\Job\WechatSubscribeRecordSynJob',
             ],
 //            'StatisticsPageStayDailyDataJob' => [
 //                'expression' => '30 0 * * *',

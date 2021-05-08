@@ -20,6 +20,9 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\AuditCenter\Service\ReportAuditService;
+use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\AuditCenter\Service\ReportService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
@@ -165,9 +168,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('convert_ip', [$this, 'getConvertIP']),
             new \Twig_SimpleFunction('isHide', [$this, 'isHideThread']),
             new \Twig_SimpleFunction('user_coin_amount', [$this, 'userCoinAmount']),
-
             new \Twig_SimpleFunction('user_balance', [$this, 'getBalance']),
-
             new \Twig_SimpleFunction('blur_user_name', [$this, 'blurUserName']),
             new \Twig_SimpleFunction('blur_phone_number', [$this, 'blur_phone_number']),
             new \Twig_SimpleFunction('blur_idcard_number', [$this, 'blur_idcard_number']),
@@ -249,6 +250,21 @@ class WebExtension extends \Twig_Extension
         }
 
         if ($this->getGroupService()->isMember($groupId, $user['id'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isReported($targetType, $targetId)
+    {
+        $currentUser = $this->biz['user'];
+        if (!$currentUser->isLogin()) {
+            return false;
+        }
+
+        $record = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $targetType, $targetId);
+        if (!empty($record)) {
             return true;
         }
 
@@ -722,6 +738,7 @@ class WebExtension extends \Twig_Extension
             'timestamp' => time(),
             'nonceStr' => uniqid($prefix = 'edusoho'),
             'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ', 'updateTimelineShareData', 'updateAppMessageShareData'],
+            'openTagList' => ['wx-open-subscribe'],
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
@@ -2500,5 +2517,29 @@ class WebExtension extends \Twig_Extension
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->createService('AuditCenter:ReportService');
+    }
+
+    /**
+     * @return ReportRecordService
+     */
+    protected function getReportRecordService()
+    {
+        return $this->createService('AuditCenter:ReportRecordService');
+    }
+
+    /**
+     * @return ReportAuditService
+     */
+    protected function getReportAuditService()
+    {
+        return $this->createService('AuditCenter:ReportAuditService');
     }
 }

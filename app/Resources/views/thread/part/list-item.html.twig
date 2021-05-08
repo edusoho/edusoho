@@ -1,4 +1,28 @@
 <div class="media topic-item">
+  {# {% if thread['type'] == 'question' %}
+    {% set reportType = 'course_question' %}
+  {% else %}
+    {% set reportType = 'course_thread' %}
+  {% endif %} #}
+
+  {% if target.type|default() == 'course' %}
+    {% if thread['type'] == 'question' %}
+      {% set reportType = 'course_question' %}
+    {% else %}
+      {% set reportType = 'course_thread' %}
+    {% endif %}
+  {% elseif target.type|default() == 'classroom' %}
+    {% if thread['type'] == 'discussion' %}
+      {% set reportType = 'classroom_thread' %}
+    {% elseif thread['type'] == 'question' %}
+      {% set reportType = 'classroom_question' %}
+    {% elseif thread['type'] == 'event' %}
+      {% set reportType = 'classroom_event' %}
+    {% endif %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+
   <div class="media-left media-middle">
     {{ web_macro.user_avatar(author, 'pull-left', 'avatar-sm', true)}}
   </div>
@@ -50,6 +74,9 @@
       {% endif %}
 
       • <span>{{ thread.lastPostTime|smart_time }}</span>
+      {% if app.user.isLogin() and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
+        <span style="color: red;">({{ ('已举报')|trans }})</span>
+      {% endif %}
     </div>
   </div>
   <div class="media-data hidden-xs">

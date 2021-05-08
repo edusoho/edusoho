@@ -29,6 +29,7 @@
       </a>
       {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
     </li>
+     {% include 'common/wechat-subscribe-new.html.twig' %}
     {{ slot('course.header-marketing-btn.extension', {'course': course,'mobile': true}) }}
   </ul>
 </div>
