@@ -1408,17 +1408,10 @@ wechat.notification.wechat_bind_hover: >
       <div>为享受更好的服务，建议您开启微信课程通知。</div>
       <div>点这里绑定微信，并关注服务号即可开启课程通知。</div>
     </div>
-wechat.notification.wechat_subscribe_bind_hover: >
-  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
-    <div class="wechat-intro-content">
-      <div>为享受更好的服务，建议您关注服务号。</div>
-      <div>点这里绑定微信。</div>
-    </div>
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
 admin.wechat_notification.send_days: 发送日
-admin.wechat_notification.message_subscribe.disable_setting_tip: 请授权网站生成微信通知模板
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1782,10 +1775,4 @@ course.task.out_focus_mask.anti_brush.tips: >
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
 
-course.intro.wechat_subscribe: 请点此订阅课程相关通知
-admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
-admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
-admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
-admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
-admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功
+homepage: 首页
