@@ -75,14 +75,14 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
 
-        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
+        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args'], 'wechat_template');
     }
 
     protected function getCloudNotificationClient()
     {
         $biz = $this->biz;
 
-        return $biz['qiQiuYunSdk.notification'];
+        return $biz['ESCloudSdk.notification'];
     }
 
     /**

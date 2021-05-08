@@ -868,6 +868,10 @@ admin_v2_block_update:
     path:  /block/{blockTemplateId}/update
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:edit }
 
+admin_v2_block_tip:
+    path: /block/tip
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockTip }
+
 admin_v2_block_template_edit:
     path:  /block/{blockTemplateId}/edit
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:editBlockTemplate }
@@ -1158,6 +1162,36 @@ admin_v2_certificate_template_img_show:
     path:  /certificate/template/{id}/img
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
 
+# 运营-内容运营-用户内容审核
+admin_v2_user_content_audit:
+    path:  /user_content_audit
+    defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:index }
+
+admin_v2_user_content_audit_confirm:
+  path: /user_content_audit/confirm/{id}/{status}
+  defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:confirm }
+
+admin_v2_user_content_audit_batch_confirm:
+  path:  /user_content_audit/batchConfirm/{status}
+  defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:batchConfirm }
+
+# 运营-内容运营-举报内容审核
+admin_v2_report_content_audit:
+    path:  /report_content_audit
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:index }
+
+admin_v2_report_record:
+    path:  /report_record/{auditId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:reportRecord }
+
+admin_v2_report_content_audit_update_status:
+    path:  /report_content_audit/{id}/update_status/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:updateStatus }
+
+admin_v2_report_content_audit_batch_update:
+    path:  /report_content_audit/batch_update/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:batchUpdateStatus }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement
@@ -1304,6 +1338,21 @@ admin_v2_article_delete:
     methods:  [POST]
     permissions: [admin_v2_operation_article_manage]
 
+admin_v2_article_review:
+  path: /article/review
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:index }
+  permissions: [admin_v2_operation_article_review]
+
+admin_v2_article_review_delete:
+  path: /article/review/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:deleteReview }
+  methods: [POST]
+
+admin_v2_article_review_batch_delete:
+  path:  /article/review/batchDeleteReview
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:batchDeleteReview }
+  methods: [POST]
+
 #运营-内容运营-小组管理
 admin_v2_group:
     path:  /group
@@ -1381,6 +1430,10 @@ admin_v2_wechat_notification_manage:
     path: /wechat/notification/manage
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:manage }
 
+admin_v2_wechat_notification_manage_setting:
+  path: /wechat/notification/manage/setting
+  defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:settingNotification }
+
 admin_v2_wechat_notification_record_detail:
     path: /wechat/notification/record/{id}/detail
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:recordDetail }
@@ -1405,29 +1458,29 @@ admin_v2_message_delete_messages:
     methods: [POST]
     permissions: [admin_v2_message_manage]
 
-# 运营-内容运营-敏感词设置
+# 系统-合规经营管理-敏感词设置
 admin_v2_keyword:
     path:  /keyword
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:index }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:index }
 
 admin_v2_keyword_create:
     path:  /keyword/create
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:create }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:create }
 
 admin_v2_keyword_delete:
     path:  /keyword/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:delete }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:delete }
     methods:  [POST]
     permissions: [admin_v2_keyword]
 
 admin_v2_keyword_change:
     path:  /keyword/{id}/change
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:change }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:change }
     permissions: [admin_v2_keyword]
 
 admin_v2_keyword_banlogs:
     path:  /keyword/banlogs
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:banlogs }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:banlogs }
 
 # 用户-用户管理-用户管理
 admin_v2_user:
@@ -1733,16 +1786,6 @@ admin_v2_school_information_save:
     permissions: [admin_v2_school_information]
     methods: [POST]
 
-admin_v2_certificate_setting:
-    path:  /setting/certificate
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:certificate }
-    permissions: [admin_v2_school_information]
-
-admin_v2_setting_license_save:
-    path:  /setting/license/save
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveLicense }
-    permissions: [admin_v2_school_information]
-
 admin_v2_setting_license_picture_upload:
   path:  /setting/license_picture/upload
   defaults: { _controller: AppBundle:AdminV2/System/Setting:licensePictureUpload }
@@ -1975,6 +2018,22 @@ admin_v2_coin_model_ajax:
     path: /setting/coin/model/ajax
     defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinTableAjax}
     permissions: [admin_v2_coin_user_records]
+
+# 系统-合规经营与信息安全设置-经营资质设置
+admin_v2_setting_management:
+  path:  /setting/ugc/qualification
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:qualification }
+  permissions: [admin_v2_business_qualification]
+
+admin_v2_qualifications_information_save:
+  path:  /setting/ugc/qualifications/save
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:saveQualification }
+  permissions: [admin_v2_business_qualification]
+  methods: [POST]
+
+admin_v2_setting_business_license:
+  path:  /setting/ugc/license
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:license }
 
 # 系统-系统管理-系统优化
 admin_v2_optimize:
@@ -2873,3 +2932,26 @@ admin_v2_data_visualization_course_plan_learn_daily_statistics:
 admin_v2_api_security_setting:
   path: /api_security/action/setting
   defaults: { _controller: AppBundle:AdminV2/Developer/ApiSecurity:setting }
+
+admin_v2_user_content_control_review:
+    path: /setting/ugc/user_content_control/review
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
+
+admin_v2_user_content_control_note:
+    path: /setting/ugc/user_content_control/note
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:note }
+
+admin_v2_user_content_control_thread:
+    path: /setting/ugc/user_content_control/thread
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:thread }
+
+admin_v2_user_content_control_private_message:
+    path: /setting/ugc/user_content_control/private_message
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:privateMessage }
+
+# 系统-合规经营管理-内容审核设置
+admin_v2_user_content_audit_setting:
+    path: /setting/ugc/user_content_audit
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:contentAudit }
+
+>>>>>>> a830e4c4bf8caef26cbde90ecc2fb16dc6a925e4

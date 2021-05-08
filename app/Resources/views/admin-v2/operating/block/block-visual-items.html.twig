@@ -1,5 +1,20 @@
 {% for code,item in block.meta.items|default(null) %}
-  {% if item.type != 'poster' %}
+  {% if item.type == 'poster' %}
+    <ul class="nav nav-pills mvl sortable-list" id="btn-tabs">
+      {% include 'admin-v2/operating/block/label/' ~ item.type ~ '.html.twig' %}
+    </ul>
+    <div class="well">
+      <div class="tab-content">
+        {% include 'admin-v2/operating/block/tag/' ~ item.type ~ '.html.twig' %}
+      </div>
+    </div>
+  {% elseif item.type == 'vip' %}
+    <div class="well">
+      <div class="tab-content">
+        {% include 'admin-v2/operating/block/tag/' ~ item.type ~ '.html.twig' with {type: item.type} %}
+      </div>
+    </div>
+  {% else %}
     <section id="js-affix-{{ code }}">
       <div class="item-title">
         <strong>{{ item.title }}</strong>
@@ -46,15 +61,6 @@
       {% endif %}
 
     </section>
-  {% else %}
-    <ul class="nav nav-pills mvl sortable-list" id="btn-tabs">
-      {% include 'admin-v2/operating/block/label/' ~ item.type ~ '.html.twig' %}
-    </ul>
-    <div class="well">
-      <div class="tab-content">
-        {% include 'admin-v2/operating/block/tag/' ~ item.type ~ '.html.twig' %}
-      </div>
-    </div>
   {% endif %}
 
 {% endfor %}

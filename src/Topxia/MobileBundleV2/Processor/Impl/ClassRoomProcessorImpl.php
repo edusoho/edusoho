@@ -7,6 +7,8 @@ use Biz\Review\Service\ReviewService;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 {
@@ -733,6 +735,14 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         return $this->controller->getService('Classroom:LearningDataAnalysisService');
     }
 
+    /**
+     * @return VipRightService
+     */
+    public function getVipRightService()
+    {
+        return $this->controller->getService('VipPlugin:Marketing:VipRightService');
+    }
+
     private function isUserVipExpire($classroom, $member)
     {
         if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
@@ -749,10 +759,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         }
 
         //老VIP加入接口加入进来的用户
-        if ($classroom['vipLevelId'] > 0 && ((0 == $member['orderId'] && 0 == $member['levelId']) || $member['levelId'] > 0)) {
-            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+        if (!empty($vipRight) && ((0 == $member['orderId'] && 'vip_join' != $member['joinedChannel']) || 'vip_join' == $member['joinedChannel'])) {
+            $userVipStatus = $this->getVipService()->checkUserVipRight(
                 $member['userId'],
-                $classroom['vipLevelId']
+                ClassroomVipRightSupplier::CODE,
+                $classroom['id']
             );
 
             return 'ok' !== $userVipStatus;

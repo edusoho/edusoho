@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export\Classroom;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
@@ -13,6 +14,8 @@ class ClassroomMemberStatisticsExporter extends Exporter
     {
         return [
             'admin.classroom_manage.statistics.member.nickname_th',
+            'admin.classroom_manage.statistics.member.phone_number_th',
+            'admin.classroom_manage.statistics.member.id_number_th',
             'admin.classroom_manage.statistics.member.create_time_th',
             'admin.classroom_manage.statistics.member.finish_time_th',
             'admin.classroom_manage.statistics.member.learn_time_th',
@@ -27,7 +30,8 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $classroom = $this->getClassroomService()->getClassroom($this->conditions['classroomId']);
 
         $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], $start, $limit);
-        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
         $usersLearnedTime = [];
@@ -38,11 +42,24 @@ class ClassroomMemberStatisticsExporter extends Exporter
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
         }
 
+        $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
+        $usersApproval = $this->getUserService()->searchApprovals([
+            'userIds' => $userIds,
+            'status' => 'approved', ], [], 0, count($userIds));
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
+
+        foreach ($users as $key => &$user) {
+            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
+            $user['idcard'] = isset($usersApproval[$key]['idcard']) ? $usersApproval[$key]['idcard'] : '';
+        }
+
         $content = [];
         foreach ($members as $member) {
             $nickname = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $content[] = [
                 is_numeric($nickname) ? $nickname."\t" : $nickname,
+                empty($users[$member['userId']]['mobile']) ? '--' : $users[$member['userId']]['mobile']."\t",
+                empty($users[$member['userId']]['idcard']) ? '--' : $users[$member['userId']]['idcard']."\t",
                 date('Y-m-d H:i:s', $member['createdTime']),
                 empty($member['finishedTime']) ? '--' : date('Y-m-d H:i:s', $member['finishedTime']),
                 empty($usersLearnedTime[$member['userId']]) ? 0.0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1),

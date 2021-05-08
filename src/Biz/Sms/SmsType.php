@@ -50,4 +50,39 @@ class SmsType
      * 课程发布通知短信模板id  同学们，${course_title}现已开始报名！${url}
      */
     const COURSE_PUBLISH = 292;
+
+    /**
+     * 直播发布通知短信模板id  ${course_title}－${lesson_title}将在${startTime}开播！${url}
+     */
+    const LIVE_NOTIFY = 294;
+
+    /**
+     * 课时发布通知短信模板id  您的${course_title}－${lesson_title}已发布！${url}
+     */
+    const TASK_PUBLISH = 293;
+
+    /**
+     * 会员到期通知短信模板id  亲爱的学员，您购买的会员即将到期 开通时间：${startTime} 到期时间：${endTime} 请及时续费，以免影响您的学习
+     */
+    const VIP_EXPIRED = 2259;
+
+    /**
+     * 作业考试批改通知短信模板id  尊敬的老师，您今日仍有作业/试卷未批改 时间：${day} 数目：${num} 请及时批改。
+     */
+    const REVIEW_NOTIFY = 2260;
+
+    /**
+     * 上课提醒通知短信模板id  今日也要坚持学习哦 课程：${title} 时间：${day} 学习进度：${progress}
+     */
+    const STUDY_NOTIFY = 2261;
+
+    /**
+     * 答疑提醒通知短信模板id  尊敬的老师，《${title}》中有学员提问 申请人：${user} 问题内容：${question} 时间：${time}
+     */
+    const ANSWER_QUESTION_NOTIFY = 2262;
+
+    /**
+     * 问题回复通知短信模板id  您在${title}中的发表的问题有了新的回答。 提问时间：${day} 回复内容：${content}
+     */
+    const QUESTION_ANSWER_NOTIFY = 2263;
 }

@@ -133,6 +133,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             $course['rate'] = $this->getPercent($finishedTasksNum, $course['studentNum'] * $course['compulsoryTaskNum']);
             $courseList[] = $course;
         }
+
+        if (empty($filterConditions['orderBy'])) {
+            return array_slice($courseList, $start, $limit);
+        }
+
         if ('CompletionRateDesc' === $filterConditions['orderBy']) {
             $ascending = false;
         } else {

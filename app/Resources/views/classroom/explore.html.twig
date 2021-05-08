@@ -51,7 +51,7 @@
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'site.datagrid.filter.recommended'|trans}}</a></li>
     </ul>
     <div class="filter hidden-xs">
-      {% if is_plugin_installed('vip')%}
+      {% if is_plugin_installed('vip') and setting('vip.enabled', 1) %}
         <div class="btn-group">
           <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>
             {% if (currentLevelId == 'all') %}{{'explore.classroom.vip_name'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans) })}}{% endif %}

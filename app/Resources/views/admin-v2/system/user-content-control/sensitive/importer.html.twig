@@ -1,0 +1,32 @@
+{% extends 'importer/layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+{{'admin_v2.syetem.user_content_control.sensitive.import'|trans}}
+{% endblock %}
+{% do script(['libs/handlebars.js', 'libs/jquery-validation.js', 'app/js/admin-v2/system/user-content-control/sensitive/import/index.js']) %}
+{% block form_data %}
+<div class="form-group sensitive-form-group">
+  <label class="col-sm-3 control-label">
+    {{ 'admin_v2.syetem.user_content_control.sensitive.import.choose_file'|trans }}
+  </label>
+  <div class="col-sm-5 controls">
+    <div class="input-group uploader-btn-group">
+      <input type="text" class="js-filename form-control"/>
+      <input type="file" size="30" name="excel" class="file-input"/>
+      <div class="input-group-addon">
+        {{ 'admin_v2.syetem.user_content_control.sensitive.import.browser_btn'|trans }}...
+      </div>
+    </div>
+    <div class="mtm">
+      {{ 'admin_v2.syetem.user_content_control.sensitive.import.tips'|trans }}
+    </div>
+  </div>
+  <div class="col-sm-4 pts">
+    <a href="{{ asset('assets/files/sensitive_import_example.xls') }}">
+      {{ 'import.user_import.download_example_btn'|trans }}
+    </a>
+  </div>
+</div>
+{% endblock %}

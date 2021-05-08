@@ -4,6 +4,9 @@
   padding: 40px 0;
   background-color: @gray-darker;
   z-index: 1;
+  @media(max-width:@screen-xs-max) {
+    height: 270px !important;
+  }
   .mask {
     position: absolute;
     top: 0;
@@ -115,5 +118,16 @@
     line-height: 25px;
     // height: 60px;
     // overflow: auto;
+  }
+  .user-vip-btn {
+    padding: 7px;
+    margin-top: 8px;
+    width: 160px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #FFC25D 0%, #FF9700 100%);
+    border: none;
+  }
+  .user-vip-btn:hover{
+    box-shadow: 0px 4px 16px 0px #FF9B08;
   }
 }

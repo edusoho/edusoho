@@ -18,7 +18,9 @@
     {{ progress.percent|default(0)}}<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{ 'course_manage.student.views_detail_btn'|trans }}</a>
   </td>
   <td>
-    <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course_manage.student.send_message_btn'|trans}}</a>
+    {% if can_send_message(student.userId) %}
+      <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course_manage.student.send_message_btn'|trans}}</a>
+    {% endif %}
     {% if app.user.isAdmin() %}
       <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course_manage.student.view_material_btn'|trans}}</a>
     {% elseif setting("course.buy_fill_userinfo") %}

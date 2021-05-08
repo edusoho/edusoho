@@ -215,7 +215,7 @@
             <!--                </el-col>-->
 
             <!--            </el-form-item>-->
-            <el-form-item v-if="vipInstalled && vipEnabled" :label="'vip.level.free_learning'|trans">
+            <el-form-item v-if="vipInstalled && vipEnabled" :label="'vip.level.free_learning_new'|trans">
                 <el-select v-model="marketingForm.vipLevelId">
                     <el-option value="0" :label="'site.default.none'|trans"></el-option>
                     <el-option

@@ -80,11 +80,15 @@ class ClassroomController extends BaseController
     {
         $classroomSetting = $this->getSettingService()->get('classroom', []);
 
+        $threadEnabled = $this->getSettingService()->node('ugc_thread.enable_thread', '1');
+        $noteEnabled = $this->getSettingService()->node('ugc_note.enable_note', '1');
         $default = [
             'explore_default_orderBy' => 'createdTime',
             'show_review' => '1',
-            'show_thread' => '1',
-            'show_note' => '1',
+            'show_thread' => $threadEnabled &&
+                ($this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') || $this->getSettingService()->node('ugc_thread.enable_classroom_question', '1'))
+                ? '1' : '0',
+            'show_note' => $noteEnabled ? $this->getSettingService()->node('ugc_note.enable_classroom_note', '1') : 0,
         ];
 
         $classroomSetting = array_merge($default, $classroomSetting);
@@ -94,7 +98,7 @@ class ClassroomController extends BaseController
 
             $classroomSetting = array_merge($classroomSetting, $set);
 
-            $this->getSettingService()->set('classroom', $set);
+            $this->getSettingService()->set('classroom', $classroomSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -333,7 +337,8 @@ class ClassroomController extends BaseController
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
         $classroomMembers = $this->getClassroomService()->searchMembers(['classroomId' => $classroom['id'], 'role' => 'student'], [], 0, $memberCount, ['userId']);
 
-        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds($userIds);
         $totalLearnedTime = empty($classroomCourses) || empty($classroomMembers) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions(['courseIds' => array_column($classroomCourses, 'id'), 'userIds' => array_column($classroomMembers, 'userId')]);
 
         $usersLearnedTime = [];
@@ -342,6 +347,17 @@ class ClassroomController extends BaseController
                 'userIds' => array_column($members, 'userId'), 'courseIds' => array_column($classroomCourses, 'id'),
             ]);
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
+        }
+
+        $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
+        $usersApproval = $this->getUserService()->searchApprovals([
+            'userIds' => $userIds,
+            'status' => 'approved', ], [], 0, count($userIds));
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
+
+        foreach ($users as $key => &$user) {
+            $user['mobile'] = isset($usersProfile[$key]['mobile']) ? $usersProfile[$key]['mobile'] : '';
+            $user['idcard'] = isset($usersApproval[$key]['idcard']) ? $usersApproval[$key]['idcard'] : '';
         }
 
         foreach ($members as &$member) {

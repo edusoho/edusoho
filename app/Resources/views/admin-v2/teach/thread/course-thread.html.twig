@@ -13,7 +13,7 @@
         {{ select_options(dict('threadType'), app.request.get('type'), 'admin.course_thread.course_thread_manage_tab.form.type_option'|trans) }}
       </select>
     </div>
-    
+
     <span class="divider"></span>
 
     <div class="form-group">
@@ -51,6 +51,7 @@
           <th width="10%">{{'admin.course_thread.reply_or_review_th'|trans}}</th>
           <th width="10%">{{'admin.course_thread.type_th'|trans}}</th>
           <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="8%">{{'内容状态'|trans}}</th>
           <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
@@ -84,7 +85,7 @@
                 <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
                 <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
-              
+
               <div class="text-sm mts">
                 {% if courseSet %}
                   <a href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
@@ -107,7 +108,7 @@
                 <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label text-decoration-none">
                   <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isElite_btn'|trans}}</span>
                 </a>
-              
+
                 <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label text-decoration-none">
                   <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isStick_btn'|trans}}</span>
                 </a>
@@ -116,6 +117,15 @@
             <td>
               {{ admin_macro.user_link(author) }} <br />
               <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
+            </td>
+            <td>
+              {% if thread.auditStatus|default('none_checked') == 'pass' %}
+                <span class="text-success">{{ '正常'|trans }}</span>
+              {% elseif thread.auditStatus|default('none_checked') == 'illegal' %}
+                <span class="text-danger">{{ '违规'|trans }}</span>
+              {% elseif thread.auditStatus|default('none_checked') == 'none_checked' %}
+                <span class="text-muted">{{ '未审核'|trans }}</span>
+              {% endif %}
             </td>
             <td>
               <div class="btn-group">
@@ -136,6 +146,6 @@
     </div>
 
   </div>
-    
+
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

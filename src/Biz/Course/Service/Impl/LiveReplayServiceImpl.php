@@ -7,7 +7,9 @@ use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\LiveReplayException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Course\Service\MemberService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Util\EdusohoLiveClient;
@@ -107,6 +109,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'provider' => $liveProvider,
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
+            'role' => $user->isLogin() ? $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($replay['courseId'], $user['id']) : 'student',
         ];
 
         //用来计算当前直播用户数量
@@ -233,5 +236,21 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

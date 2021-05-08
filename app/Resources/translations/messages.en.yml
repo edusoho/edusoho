@@ -367,7 +367,7 @@ finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
-finance.max_deduction_rate: 'Maximum deduction rate'
+finance.max_deduction_rate: 'Maximum coin deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
@@ -595,7 +595,7 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
-pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.course.close: The course in this order has been closed.
 pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
 pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
@@ -1836,6 +1836,8 @@ course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
+course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.time: Time
@@ -2463,6 +2465,11 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.set_template: 'Set template'
+form.btn.confirm.normal: 'Confirm normal'
+form.btn.confirm.illegal: 'Confirm illegal'
+form.btn.batch.normal: 'Batch normal'
+form.btn.batch.illegal: 'Batch illegal'
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -4069,6 +4076,9 @@ item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You c
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.course.exit_btn: 'Exit'
+course.member.classroom_member.exit_btn: 'Exit'
+course.member.classroom_member.classroom_exit_btn: 'Exit Classroom'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
@@ -4337,6 +4347,8 @@ admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Tim
 admin.course_manage.statistics.optional_task: Optional
 
 admin.course_manage.statistics.data_detail.name: 'User Name'
+admin.course_manage.statistics.data_detail.phone_number: 'Phone Number'
+admin.course_manage.statistics.data_detail.id_number: 'ID Number'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
@@ -4345,6 +4357,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 'Pure Learned Time(m
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.course_manage.statistics.data_detail.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1. Re-joining the course by the student may cause the student’s study days to be cleared<br/>
+  2. The number of learning days of the students will be refreshed after the students have learned behaviors in the new class time task<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.This page is real-time data.<br/>
@@ -4782,6 +4797,8 @@ admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
 admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
+admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
@@ -4794,12 +4811,16 @@ admin.setting.site.copyright.help_block: 'You can enter website name and company
 admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
+admin.setting.site.icp_record_information: 'ICP record information'
+admin.setting.site.public_security_record_information:  'Public security record information'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
+admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
+admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
@@ -4830,6 +4851,13 @@ admin.setting.theme.manage.modal.setting_course_num: 'Coures Number Setting'
 admin.setting.theme.manage.modal.setting_custom_category_count: 'Course Category Number Setting'
 admin.setting.theme.manage.modal.setting_count: Count
 admin.setting.theme.manage.modal.setting_custom_orderby: 'Sort Setting'
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 'Marshalling Sequence'
+admin.setting.theme.manage.modal.orderby_low_to_high: 'From Low To High'
+admin.setting.theme.manage.modal.orderby_high_to_low: 'From High To Low'
+admin.setting.theme.manage.modal.setting_custom_vip_list: 'Latest Membership List'
+admin.setting.theme.manage.modal.vip_list_show: 'Show'
+admin.setting.theme.manage.modal.vip_list_hidden: 'Hidden'
+admin.setting.theme.manage.modal.vip_list_tip: 'Display a list of newly joined members on the member center page'
 admin.setting.theme.manage.modal.setting_ustom_background_color: 'Background Color Setting'
 admin.setting.theme.manage.modal.color_gray: Gray
 admin.setting.theme.manage.modal.color_wihte: White
@@ -4850,8 +4878,10 @@ admin.setting.theme.manage.navigation_num_tips: >
 admin.setting.license.headline: Electronic business license configuration
 admin.setting.license.name: Electronic business license name
 admin.setting.license.picture: Electronic Business License Picture
+admin.setting.upload.license.photo: Upload license photo
 admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.license.url: Electronic business license link
+admin.setting.license.prompt: (The net school can request according to each place policy and net school actual business and decide)
 admin.setting.permit.headline: Operating license configuration
 admin.setting.permit.name: Business license name
 admin.setting.permit.record.number: Case number
@@ -4864,7 +4894,6 @@ admin.setting.record.code: Public Security Record Number
 admin.setting.record.url: Public security record number link
 admin.setting.record.picture.help_block: >
   The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
 admin.setting.record.code.help_block: >
   <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 
@@ -5119,7 +5148,7 @@ admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
-admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
@@ -5140,6 +5169,11 @@ admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wech
 admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
 admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
 admin.wechat.notification.go_authorizer: Authorizer now
+admin.wechat_notification.message_subscribe.template_content_sample: Wechat template content example
+admin.wechat_notification.message_subscribe.template_subscribe_position: Subscription location
+admin.wechat_notification.message_subscribe.sms_template_content_sample: Sample content of SMS template
+admin.wechat_notification.message_subscribe.disable_tip: Note:the first time you use it, you need to authorize the website to generate wechat notification template
+
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -5360,6 +5394,15 @@ admin.operation_invite.register_coupon: 'Register Award'
 admin.operation_invite.invite_coupon: 'Invite Award'
 admin.operation_invite.invite_code_owner: 'inviter'
 admin.operation_invite.register_user: 'registered user'
+admin.operation_article.review.form.input.title.placeholer: 'Article Title Name'
+admin.operation_article.review.form.input.author.placeholer: 'author'
+admin:operation_article.review.form.input.content.placeholer: 'Key words in rate'
+admin.operation_article.review.content_th: 'Article Review Content'
+admin.operation_article.review.author_th: author
+admin.operation_article.review.operation_th: operation
+admin.operation_article.review.expand_td: unfold
+admin.operation_article.review.collapse_td: Folded
+admin:operation_article.review.content: 'Review Content'
 
 #用户信息采集
 admin.imformation_collection.create: 'Create'
@@ -6399,6 +6442,7 @@ admin.setting_course.questions_setting: 'Display answer and resolution after han
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
+admin.setting_course.questions_setting.submitted_tips: After it is turned on, the test task can be set to display the answer and analysis after the score is passed
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
 admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
@@ -6432,14 +6476,18 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: The l
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
 admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_notification_type: WeChat Account Notification Type
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: Users need to bind wechat, and need to subscribe many times to receive the corresponding number of wechat notifications
+admin.setting_wechat_auth.wechat_notification_sms: SMS notification
+admin.setting_wechat_auth.wechat_notification_sms_tip: After this configuration is enabled, users who do not subscribe will be notified by SMS
 admin.setting_wechat_auth.web_scan_login_hint: >
   After the opening, the PC side of the website will support WeChat scan code login, and the App side will support WeChat authorized login.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   If turned on, users can register or login the site with wechat id in wechat app.<br>
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  After opening, users who bind wechat and pay attention to service number or subscription notice can receive wechat service number template message.<br>
   Please enable web scan code login and authorized login on WeChat first, and <span class="text-danger">enable service number template message pluginin WeChat background</span> .
 admin.setting_wechat_auth.wechat_pay_hint: >
   After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
@@ -6460,6 +6508,8 @@ admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
+admin.setting_wechat_auth.message_template: Message template
+
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.s2b2c_api: S2B2C Server API
@@ -6864,6 +6914,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
+admin.wap_setting.responsive: Responsive
 admin.wap_setting.off: Off
 admin.wap_setting.tip: MicroSchool is an application that is opened through a browser and does not require a download. The link can be sent to students, or added to a push SMS, students can click on the link and immediately enter the micro-net school to study, purchase courses, course sharing, etc. The micro-net school is more suitable for the purpose of promoting student sharing, new promotion, and activation through marketing activities.
 admin.wap_setting.edit.tip: On the left side is a preview of the home page of your micro-net school, you can click "Edit Micro-net School" to enter the edit page. You can also select the appropriate theme application through the Theme Template. Build a personalized micro-net school home page through the free combination of components.
@@ -7830,6 +7881,7 @@ order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
 order.pay_check_msg.balance_not_enough: Your balance is insufficient
 order.pay_check_msg.pay_password_not_set: Pay password not set
 order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
+order.pay_check_msg.goods_closed: Goods is closed
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
@@ -8995,6 +9047,7 @@ exception.thread.not_found_member: Member does not exist
 exception.thread.access_denied: The permission or resource cannot be accessed
 exception.rate_limit_max_attempt_reach: Too many requests are sent, please try later!
 exception.rate_limit_email_max_attempt_reach: The delivery limit has been exceeded and try again after 1 hour!
+exception.rate_limit_ugc_report_max_attempt_reach: The report times has been exceeded, please try after 1 day!
 exception.rate_limit_error_captcha: Graphic verification code error!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
@@ -9366,6 +9419,7 @@ exception.reward_point.account.error_pay_password_format: The new payment passwo
 exception.question_marker.not_found: The question marker does not exist
 exception.order_pay_check.instance_error: Not a ProductDealerService instance
 exception.order_pay_check.unable_pay: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
+exception.order_pay_check.vip.app_upgrade: Please upgrade to the latest version to see the membership price
 exception.live_replay.not_found: Live replay does not exist
 exception.cloud_file.not_found: Cloud file does not exist
 exception.cloud_file.not_found_player: Cloud player does not exist
@@ -9486,8 +9540,15 @@ wechat.notification.pay_success: Pay Success
 wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+wechat.notification.subscribe_scan_and_bind: In order to enjoy better service, scan the code to bind wechat and pay attention to the service number.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
 wechat.notification.record_content: Notification content
+wechat.notification.wechat_record_content: WeChat notification content
+wechat.notification.sms_record_content: Text message notification content
+wechat.notification.wechat: WeChat
+wechat.notification.sms: Text message
+wechat.notification.record_send_number: receive/send
+wechat.notification.sms.record_send_number: send
 wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number
@@ -9540,6 +9601,27 @@ wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, y
 wechat.notification.template.remind_course: 'Dear students, keep learning today, too.<br>course name: [last study plan name]<br>time: [date of the day, accurate to day] progress: [study plan progress]<br>if you have completed the study plan today, please ignore this notice.'
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the [course name or class name]. <br>question time: [question time]<br>reply content: [reply content]'
 wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
+
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> <br> Course Title: [task name] <br> time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher's mobile phone number] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.homework_result: "Assignment correction completion notice <br> <br> Title: [task name] <br> assignment status: [assignment status] ([n remaining] notices) <br> comments: [comments]"
+wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> <br> examination name: [task name] <br> score: [examination score] <br> warm tips: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.lesson_add: "New notice on course <br> <br> Course: [Course name] ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.ask_question: "Student question reminder <br> Course Name: ([if it is a class, show class 2 characters]) [Course name] or [class name] <br> questioner: [student user name] ([n times left] notice) <br> question: [question title] <br> question time: [question submission time] <br> <br> Course Name"
+wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Course learning page <br> (course / class <br> teacher, Ta, <br> head teacher)'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "[online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address"
+wechat.notification.message_subscribe_sms.template.homework_result: "[online education] the homework of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.exam_result: "[online education] the test paper of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.lesson_add: 'General course: <br> [online education] your course: [Course name] - learning task: [learning task name] has been published! Link address <br> live broadcast: <br> [online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address'
+wechat.notification.message_subscribe_sms.template.vip_expired: '[online education] Dear students, the membership you purchased is about to expire: <br> opening time: [opening time] <br> expiration time: [expiration time] <br> please renew it in time to avoid affecting your study'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time。'
+wechat.notification.message_subscribe_sms.template.remind_course: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time'
+wechat.notification.message_subscribe_sms.template.ask_question: "[online education] Dear teacher, there is a student's question in [course or class name] <br> applicant: [questioner] <br> question content: [question title] <br> time: [question submission time]"
+wechat.notification.message_subscribe_sms.template.answer_question: "[online education] in [Course name or class name] <br> question time: [question time] <br> reply content: [reply content] <br> in [Course name or class name]"
+wechat.notification.message_subscribe_sms.template.charge_success: "[online education] you have successfully purchased virtual currency face value and unit, and paid [order amount]"
+wechat.notification.message_subscribe_sms.template.buy_success: "Course: <br> online education: you have successfully purchased the course name - teaching plan name, and paid the [order amount]<br> class: <br> online education: you have successfully purchased class name and paid [order amount]<br> member: <br> online education: you have successfully purchased the member name and paid the [order amount]."
 
 #微信通知规则
 Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
@@ -10380,6 +10462,8 @@ admin.classroom_manage.statistics.member_modal_title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 'All courses in the class are accumulated learning time (minutes): %mins%'
 admin.classroom_manage.statistics.member.nickname_th: Username
+admin.classroom_manage.statistics.member.phone_number_th: Phone Number
+admin.classroom_manage.statistics.member.id_number_th: ID Number
 admin.classroom_manage.statistics.member.create_time_th: Join Time
 admin.classroom_manage.statistics.member.finish_time_th: Finish Time
 admin.classroom_manage.statistics.member.learn_time_th: Learned Time
@@ -10429,6 +10513,123 @@ classroom.manage.data_statistics.finished_time: FinishedTime
 classroom.manage.data_statistics.finish_status.unlearn: UnLearn
 classroom.manage.data_statistics.finish_status.learning: Learning
 classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.course_detail_list.select_all: All
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
+admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: Mobile
+admin.edu_cloud.edu_video.finger_print_content_label.domain: Domain
+admin.edu_cloud.edu_video.finger_print_content_tips: >
+  For a better user experience, it is recommended to combine up to 2 information displays. Note: If the user's real name and mobile phone number are not available, it will be displayed as-
+admin.edu_cloud.edu_video.finger_print_embed_tips: After it is turned on, cloud video fingerprint information will be displayed at random times and locations during video playback.
+
+admin_v2.system.user_content_control.review_manage: Review Manage
+admin_v2.system.user_content_control.course_review_manage: Course Review Manage
+admin_v2.system.user_content_control.classroom_review_manage: Course Review Manage
+admin_v2.system.user_content_control.question_bank_review_manage: QuestionBank Review Manage
+admin_v2.system.user_content_control.open_course_review_manage: OpenCourse Review Manage
+admin_v2.system.user_content_control.article_review_manage: Article Review Manage
+admin_v2.system.user_content_control.goto_review_manage: Goto Review Manage List>>
+admin_v2.system.user_content_control.thread_manage: Thread Manage
+admin_v2.system.user_content_control.course_question_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
+admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
+admin_v2.system.user_content_control.private_message_manage: Private Message Manage
+admin_v2.system.user_content_control.note_manage: Note Manage
+admin_v2.system.user_content_control.goto_note_manage: Goto Note Manage>>
+admin_v2.system.user_content_control.classroom_note_manage: Classroom Note Manage
+admin_v2.system.user_content_control.course_note_manage: Course Note Manage
+admin_v2.system.user_content_control.pc_switch_tips: When it is turned on or off, it is only effective for PC terminal, and other terminals do not have this function
+admin_v2.system.user_content_control.course_note_tooltips: The course learning page notes display and class notes entry are controlled by this switch
+admin_v2.system.user_content_control.classroom_note_tooltips: The note display on the class learning page is controlled by this switch
+admin_v2.system.user_content_control.pc_app_switch_tips: When it is turned on or off, it only works for PC and app, and other terminals do not have this function
+admin_v2.system.user_content_control.goto_question_manage: Go to Q & a management>>
+admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
+admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
+admin_v2.system.user_content_control.goto_private_message_manage: Go to private message management>>
+
+admin_v2.vip_close.block_tip: Vip function is not activated.
+admin_v2.vip_close.to_open_vip: To open
+
+admin_v2.system.user_content_control.content_audit_setting.label: Audit Setting
+admin_v2.system.user_content_control.content_audit_setting.audit_before: Audit Before
+admin_v2.system.user_content_control.content_audit_setting.audit_after: Audit After
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: Sensitive Keywords
+admin_v2.operation.user_content_audit_form.author.placeholder: Author
+admin_v2.operation.user_content_audit_form.startTime: Start Time
+admin_v2.operation.user_content_audit_form.endTime: End Time
+admin_v2.operation.user_content_audit.content_th: User Published content
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: Sensitive Keywords
+admin_v2.operation.user_content_audit.type_th: Type
+admin_v2.operation.user_content_audit.author_time_th: Author/Time
+admin_v2.operation.user_content_audit.status_th: Audit Status
+admin_v2.operation.user_content_audit.auditor_th: Auditor
+admin_v2.operation.user_content_audit.default_auditor: System
+admin_v2.operation.user_content_audit.operation_th: Operation
+admin_v2.operation.user_content_audit.expand_td: Unfold
+admin_v2.operation.user_content_audit.collapse_td: Folded
+admin_v2.operation.user_content_audit.user_content: User Content
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: Are you sure to judge user content as illegal?
+admin_v2.operation.user_content_audit.modal.body.illegal_info: After confirming the violation, the user content will not be displayed on the foreground page
+admin_v2.operation.user_content_audit.modal.body.pass_warning: Are you sure to pass the user content judgment?
+admin_v2.operation.user_content_audit.modal.body.pass_info: After confirmation, the user content is displayed on the front page
+admin_v2.operation.user_content_audit.select_all_btn: All Select
+admin_v2.operation.user_content_audit.modal.body.button.confirm: Confirm
+admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel
+admin_v2.operation.user_content_audit_form.all_type_option: All type
+admin_v2.operation.user_content_audit_form.all_status_option: All status
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: Sensitive words filter
+
+admin_v2.operation.report_content_audit.target_type_placeholder: All
+admin_v2.operation.report_content_audit.status_placeholder: All
+admin_v2.operation.report_content_audit.report_tag_placeholder: Report Type
+admin_v2.operation.report_content_audit.author_placeholder: Author
+admin_v2.operation.report_content_audit.table.content: Content
+admin_v2.operation.report_content_audit.table.type: Type
+admin_v2.operation.report_content_audit.table.count: Count
+admin_v2.operation.report_content_audit.table.tag: Tags
+admin_v2.operation.report_content_audit.table.author: Author/Time
+admin_v2.operation.report_content_audit.table.status: Status
+admin_v2.operation.report_content_audit.table.auditor: Auditor
+admin_v2.operation.report_content_audit.table.operate: Operate
+admin_v2.operation.report_content_audit.table.auditor_default: System
+
+admin_v2.operation.report_content_audit.table.operate_item: Item
+admin_v2.operation.report_content_audit.table.operate_pass: Pass
+admin_v2.operation.report_content_audit.table.operate_illegal: Illegal
+admin_v2.operation.audit_center.table.batch_pass: Batch Pass
+admin_v2.operation.audit_center.table.batch_illegal: Batch Illegal
+admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported content normal?
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
+admin_v2.operation.audit_center.table.batch_illegal.notice: Confirm that the reported content violates the rules?
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.report_content_audit.record.title: Records
+admin_v2.operation.report_content_audit.record.type: Type
+admin_v2.operation.report_content_audit.record.reporter: Reporter
+admin_v2.operation.report_content_audit.record.time: Time
+admin_v2.operation.audit_center.table.status.sys_illegal: System illegal
+
+exception.audit_center.report_audit_not_exist: Report information does not exist
+exception.audit_center.report_audit_status_not_valid: Invalid review status
+
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the audit status is normal (system approved)
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in bulk
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
+admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse

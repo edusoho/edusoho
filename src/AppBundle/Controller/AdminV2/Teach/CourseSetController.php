@@ -30,6 +30,8 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
@@ -335,8 +337,12 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
-        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
+        $studentIds = ArrayToolkit::column($students, 'userId');
+        $userProfilesAndApprovedApprovals = $this->makeUserProfilesAndApprovedApprovals($studentIds);
+        $students = ArrayToolkit::index($students, 'userId');
+
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
+        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
 
         foreach ($students as $key => &$student) {
             $user = $this->getUserService()->getUser($student['userId']);
@@ -353,8 +359,12 @@ class CourseSetController extends BaseController
                 $student['fininshDay'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
+            $student['mobile'] = isset($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile'] : '';
+            $student['idcard'] = isset($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard'] : '';
+
             $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $student['pureLearnTime'] = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
+            $student['fininshDay'] <= 0 && $student['fininshDay'] = 0;
         }
 
         $coursePlanSumLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
@@ -488,11 +498,11 @@ class CourseSetController extends BaseController
             $isLearnedNum = 0;
             foreach ($courses as $course) {
                 $isLearnedNum = $isLearnedNum + $this->getMemberService()->countMembers([
-                    'finishedTime_GT' => 0,
-                    'courseId' => $course['id'],
-                    'role' => 'student',
-                    'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
-                ]);
+                        'finishedTime_GT' => 0,
+                        'courseId' => $course['id'],
+                        'role' => 'student',
+                        'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+                    ]);
             }
 
             if (!empty($courseSetIncomes[$courseSetId])) {
@@ -753,13 +763,21 @@ class CourseSetController extends BaseController
             $start,
             $limit
         );
-        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
+        $studentIds = ArrayToolkit::column($students, 'userId');
+
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $studentIds);
+
+        $userProfilesAndApprovedApprovals = $this->makeUserProfilesAndApprovedApprovals($studentIds);
+
+        $students = ArrayToolkit::index($students, 'userId');
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
             $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
+            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']."\t";
+            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']."\t";
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -785,6 +803,8 @@ class CourseSetController extends BaseController
 
         $titles = [
             $this->trans('admin.course_manage.statistics.data_detail.name'),
+            $this->trans('admin.course_manage.statistics.data_detail.phone_number'),
+            $this->trans('admin.course_manage.statistics.data_detail.id_number'),
             $this->trans('admin.course_manage.statistics.data_detail.join_time'),
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),
@@ -820,7 +840,7 @@ class CourseSetController extends BaseController
                 $conditions['isClassroomRef'] = 1;
                 break;
             case 'vip':
-                $conditions['isVip'] = 1;
+                $conditions = $this->getVipCourseSetConditions($conditions);
                 $conditions['parentId'] = 0;
                 $conditions['isClassroomRef'] = 0;
                 break;
@@ -843,6 +863,17 @@ class CourseSetController extends BaseController
             $conditions['tagIds'] = [$conditions['tagId']];
             $conditions = $this->getCourseConditionsByTags($conditions);
         }
+
+        return $conditions;
+    }
+
+    protected function getVipCourseSetConditions($conditions)
+    {
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCode('course');
+        $courseIds = ArrayToolkit::column($vipRights, 'uniqueCode');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $conditions['ids'] = ArrayToolkit::column($courses, 'courseSetId');
 
         return $conditions;
     }
@@ -878,8 +909,8 @@ class CourseSetController extends BaseController
     {
         foreach ($courseSets as &$courseSet) {
             $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-            $levelIds = ArrayToolkit::column($courses, 'vipLevelId');
-            $levelIds = array_unique($levelIds);
+            $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes(CourseVipRightSupplier::CODE, array_column($courses, 'id'));
+            $levelIds = array_column($vipRights, 'vipLevelId');
             $levels = $this->getVipLevelService()->searchLevels(
                 ['ids' => $levelIds],
                 ['seq' => 'ASC'],
@@ -890,6 +921,21 @@ class CourseSetController extends BaseController
         }
 
         return $courseSets;
+    }
+
+    private function makeUserProfilesAndApprovedApprovals($userIds)
+    {
+        $usersProfile = $this->getUserService()->findUserProfilesByIds($userIds);
+        $usersApproval = $this->getUserService()->searchApprovals(
+            ['userIds' => $userIds, 'status' => 'approved'], [], 0, count($userIds)
+        );
+        $usersProfile = ArrayToolkit::index($usersProfile, 'id');
+        $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
+
+        return [
+            'usersProfile' => $usersProfile,
+            'usersApproval' => $usersApproval,
+        ];
     }
 
     protected function filterCourseSetType($conditions)
@@ -1033,6 +1079,14 @@ class CourseSetController extends BaseController
     protected function getVipLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

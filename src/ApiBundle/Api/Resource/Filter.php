@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Util\CdnUrl;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class Filter
 {
@@ -120,5 +122,12 @@ abstract class Filter
         }
 
         return $url;
+    }
+
+    protected function isPluginInstalled($pluginName)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+
+        return $pluginManager->isPluginInstalled($pluginName);
     }
 }

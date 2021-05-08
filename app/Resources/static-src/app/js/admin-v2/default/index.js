@@ -157,7 +157,40 @@ const loadStep = () => {
 loadStep();
 window.onload = () => {
   showCloudAd();
+  setScrollEventListen();
 };
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });
+
+function setScrollEventListen () {
+  $('.js-steps').delegate($('.task-left'), 'click', function (event) {
+    const classList = Array.from(event.target.classList);
+    if (classList.includes('task-left')) {
+      handleScrollToLeft();
+    }
+  });
+  $('.js-steps').delegate($('.task-right'), 'click', function (event) {
+    const classList = Array.from(event.target.classList);
+    if (classList.includes('task-right')) {
+      handleScrollToRight();
+    }
+  });
+}
+
+function handleScrollToLeft () {
+  $('.task-ul').animate({scrollLeft: 0}, 400);
+  $('.task-left').css('opacity', 0);
+  $('.task-left').hide();
+  $('.task-right').css('opacity', 1);
+  $('.task-right').show();
+}
+
+function handleScrollToRight () {
+  const width = $('.task-ul')[0].scrollWidth;
+  $('.task-ul').animate({scrollLeft: width}, 400);
+  $('.task-left').css('opacity', 1);
+  $('.task-left').show();
+  $('.task-right').css('opacity', 0);
+  $('.task-right').hide();
+}

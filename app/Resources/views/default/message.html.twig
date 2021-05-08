@@ -11,7 +11,7 @@
     <div class="page-message-heading">
       <h2 class="page-message-title">{{ title|trans }}</h2>
     </div>
-    <div class="page-message-body">{{ message|default('')|trans }}</div>
+    <div class="page-message-body">{{ message|default('')|trans|raw }}</div>
   </div>
 </div>
 {% endblock %}

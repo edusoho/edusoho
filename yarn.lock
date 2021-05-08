@@ -3325,10 +3325,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch16:
-  version "4.7.2-patch16"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch16.tgz#1b100bce382478099452c241a7c709cacb3815e8"
-  integrity sha512-rfLVCWRYespVllrHGcts7D4urSUSMbXHWx2EWJGlkvZCvcfIVBDEJP5E6uIYE5dlzOtgD7ExrfJtfWgvfNGCWQ==
+es-ckeditor@4.7.2-patch18:
+  version "4.7.2-patch18"
+  resolved "https://registry.nlark.com/es-ckeditor/download/es-ckeditor-4.7.2-patch18.tgz#155b192b70eef583f2788772e60227af3028d791"
+  integrity sha1-FVsZK3Du9YPyeIdy5gInrzAo15E=
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5269,10 +5269,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.19.tgz#bd8c7a7dd19294a85a18016384480e4aac19f87d"
-  integrity sha1-vYx6fdGSlKhaGAFjhEgOSqwZ+H0=
+item-bank@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.nlark.com/item-bank/download/item-bank-1.0.23.tgz#46f1e2f956dc46a8844dd2330a0d7d9d1c7bf394"
+  integrity sha1-RvHi+VbcRqiETdIzCg19nRx785Q=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
@@ -9412,9 +9412,10 @@ websocket@^1.0.25:
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"
 
-weixin-js-sdk@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/weixin-js-sdk/-/weixin-js-sdk-1.2.0.tgz#5132949eb65b3d4e5f3e052bd3b6b10abdf47d55"
+weixin-js-sdk@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/weixin-js-sdk/-/weixin-js-sdk-1.6.0.tgz#ff50484d8118ce1208f11248cf4a1c0831577514"
+  integrity sha512-3IYQH7aalJGFJrwdT3epvTdR1MboMiH7vIZ5BRL2eYOJ12BNah7csoMkmSZzkq1+l92sSq29XdTCVjCJoK2sBQ==
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
   version "1.0.5"

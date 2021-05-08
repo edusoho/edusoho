@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
@@ -11,6 +12,7 @@ class MarketingActivity extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=true)
+     *
      * @return mixed
      */
     public function search(ApiRequest $request)

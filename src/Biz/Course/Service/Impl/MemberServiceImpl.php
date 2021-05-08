@@ -24,6 +24,7 @@ use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
@@ -31,6 +32,7 @@ use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
@@ -337,7 +339,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $vipNonExpired = true;
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             // 会员加入的情况下
             $vipNonExpired = $this->isVipMemberNonExpired($course, $member);
         }
@@ -371,9 +373,9 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
             $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], 'classroom', $classroom['id']);
         } else {
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], 'course', $course['id']);
         }
 
         return 'ok' === $status;
@@ -713,20 +715,20 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = null;
         }
 
+        $reason = $this->buildJoinReason($info, $order);
+
         $fields = [
             'courseId' => $courseId,
             'userId' => $userId,
             'courseSetId' => $course['courseSetId'],
             'orderId' => empty($order) ? 0 : $order['id'],
             'deadline' => $deadline,
-            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'joinedChannel' => $reason['reason_type'],
             'role' => 'student',
             'remark' => empty($info['remark']) ? '' : $info['remark'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         ];
-
-        $reason = $this->buildJoinReason($info, $order);
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
@@ -817,7 +819,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'userId' => $userId,
                 'courseSetId' => $course['courseSetId'],
                 'orderId' => 0,
-                'levelId' => 0,
                 'role' => 'student',
                 'learnedNum' => 0,
                 'noteNum' => 0,
@@ -829,6 +830,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             if ($classroomId > 0 && !empty($classroomMembers[$userId])) {
                 $member['classroomId'] = $classroomId;
                 $member['deadline'] = $classroomMembers[$userId]['deadline'];
+                $member['joinedChannel'] = $classroomMembers[$userId]['joinedChannel'];
             } else {
                 $member['deadline'] = $this->getMemberDeadline($course);
             }
@@ -1003,7 +1005,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $userId,
             'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
             'deadline' => $deadline,
-            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'joinedChannel' => empty($info['joinedChannel']) ? '' : $info['joinedChannel'],
             'role' => 'student',
             'remark' => empty($info['orderNote']) ? '' : $info['orderNote'],
             'createdTime' => time(),
@@ -1095,7 +1097,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
                     ['student', 'teacher', 'headTeacher', 'assistant'])
             ) {
-                $info = ArrayToolkit::parts($member, ['levelId']);
+                $info = ArrayToolkit::parts($member, ['joinedChannel']);
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
                 return $member;
@@ -1491,7 +1493,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         try {
             $this->beginTransaction();
-            $member = $this->getMemberDao()->create($member);
+            $member = $this->getMemberDao()->create(array_merge($member, $this->getMemberHistoryData($member['userId'], $member['courseId'])));
+
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'join', $reason);
             }
@@ -1502,6 +1505,41 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $member;
+    }
+
+    protected function getMemberHistoryData($userId, $courseId)
+    {
+        $course = $this->getCourseDao()->get($courseId);
+        $recordCount = $this->getMemberOperationService()->countRecords([
+            'user_id' => $userId,
+            'target_type' => 'course',
+            'target_id' => $courseId,
+            'operate_type' => 'join',
+        ]);
+
+        if (empty($recordCount) || empty($course)) {
+            return [];
+        }
+
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            ['courseId' => $courseId, 'userId' => $userId, 'status' => 'finish']
+        );
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
+        $courseMemberConditions = ['courseId' => $courseId, 'userId' => $userId];
+        $lastLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['updatedTime' => 'DESC'], 0, 1, ['updatedTime']);
+        $firstLearnTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['createdTime' => 'ASC'], 0, 1, ['createdTime']);
+        $lastFinishedTaskResult = $this->getTaskResultService()->searchTaskResults($courseMemberConditions, ['finishedTime' => 'DESC'], 0, 1, ['finishedTime']);
+
+        return [
+            'noteNum' => $this->getCourseNoteService()->countCourseNotes($courseMemberConditions),
+            'isLearned' => $course['compulsoryTaskNum'] - $learnedCompulsoryTaskNum > 0 ? 0 : 1,
+            'startLearnTime' => empty($firstLearnTaskResult) ? 0 : $firstLearnTaskResult[0]['createdTime'],
+            'finishedTime' => empty($lastFinishedTaskResult) ? 0 : $lastFinishedTaskResult[0]['finishedTime'],
+            'learnedNum' => $learnedNum,
+            'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+            'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum ? $learnedNum - $learnedCompulsoryTaskNum : 0,
+            'lastLearnTime' => empty($lastLearnTaskResult) ? 0 : $lastLearnTaskResult[0]['updatedTime'],
+        ];
     }
 
     private function removeMember($member, $reason = [])
@@ -1528,6 +1566,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         } catch (\Exception $e) {
             $this->createNewException(CourseException::SOURCE_COURSE_CLOSED_JOIN_DENIED());
         }
+    }
+
+    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
+    {
+        if ($this->isCourseTeacher($courseId, $userId)) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            if ($teacherId == $userId) {
+                return 'teacher';
+            } else {
+                return 'speaker';
+            }
+        }
+
+        return 'student';
     }
 
     /**
@@ -1605,6 +1659,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**
@@ -1702,5 +1764,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getProductService()
     {
         return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

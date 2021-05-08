@@ -865,7 +865,7 @@ validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
 validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
-validate_old.visible_character.message: %display%请输入可见性字符
+validate_old.visible_character.message: 请输入%display%
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
 validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
@@ -1408,10 +1408,17 @@ wechat.notification.wechat_bind_hover: >
       <div>为享受更好的服务，建议您开启微信课程通知。</div>
       <div>点这里绑定微信，并关注服务号即可开启课程通知。</div>
     </div>
+wechat.notification.wechat_subscribe_bind_hover: >
+  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+    <div class="wechat-intro-content">
+      <div>为享受更好的服务，建议您关注服务号。</div>
+      <div>点这里绑定微信。</div>
+    </div>
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
 admin.wechat_notification.send_days: 发送日
+admin.wechat_notification.message_subscribe.disable_setting_tip: 请授权网站生成微信通知模板
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1574,6 +1581,7 @@ site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
 vip.level.free_learning: 会员免费学
+vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
@@ -1750,8 +1758,12 @@ site.share: 分享
 site.manage: 管理
 goods.show_page.goto_learn: 去学习
 goods.show_page.vip_free_learn: 会员免费学
+goods.show_page.vip_free_learn_new: 会员免费兑换
+goods.show_page.vip_buy: %vipName%免费
+goods.show_page.vip_upgrade: 升级为%vipName%免费
 goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
-goods.show_page.not_buyable_tips: 抱歉，该商品为限制商品，请联系客服
+goods.show_page.course_not_buyable_tips: 抱歉，该课程无法学习，请联系学校老师
+goods.show_page.classroom_not_buyable_tips: 抱歉，该班级无法学习，请联系学校老师
 goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服
 goods.show_page.usage_expiry_tips: 超过学习截止日期，不允许加入和购买
 goods.show_page.free_join_btn: 免费加入
@@ -1769,3 +1781,11 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
+
+course.intro.wechat_subscribe: 请点此订阅课程相关通知
+admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
+admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
+admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功

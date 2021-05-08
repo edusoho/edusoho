@@ -30,7 +30,7 @@ class ReviewPostsDataTag extends BaseDataTag implements DataTag
         $limit = empty($arguments['limit']) ? 5 : intval($arguments['limit']);
 
         return $this->getReviewService()->searchReviews(
-            ['targetType' => $targetType, 'parentId' => $arguments['reviewId']],
+            ['targetType' => $targetType, 'parentId' => $arguments['reviewId'], 'excludeAuditStatus' => 'illegal'],
             ['createdTime' => 'ASC'],
             $start, $limit
         );

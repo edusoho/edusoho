@@ -107,7 +107,6 @@ class CourseSetCoursesCopy extends AbstractCopy
             'maxStudentNum',
             //'isFree',
             'price',
-            // 'vipLevelId',
             'buyable',
             'tryLookable',
             'tryLookLength',

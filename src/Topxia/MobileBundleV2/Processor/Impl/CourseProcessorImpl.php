@@ -9,6 +9,8 @@ use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -1401,7 +1403,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $params['liveId'] = $lesson['mediaId'];
         $params['provider'] = $lesson['liveProvider'];
-        $params['role'] = 'student';
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($lesson['courseId'], $user['id']);
 
         $params['user'] = $params['email'];
 
@@ -1760,10 +1762,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         //老VIP加入接口加入进来的用户
-        if ($course['vipLevelId'] > 0 && ((0 == $member['orderId'] && 0 == $member['levelId']) || $member['levelId'] > 0)) {
-            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+        if (!empty($vipRight) && ((0 == $member['orderId'] && 'vip_join' != $member['joinedChannel']) || 'vip_join' == $member['joinedChannel'])) {
+            $userVipStatus = $this->getVipService()->checkUserVipRight(
                 $member['userId'],
-                $course['vipLevelId']
+                CourseVipRightSupplier::CODE,
+                $course['id']
             );
 
             return 'ok' !== $userVipStatus;
@@ -1775,6 +1779,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     private function getVipService()
     {
         return $this->controller->getService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    public function getVipRightService()
+    {
+        return $this->controller->getService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

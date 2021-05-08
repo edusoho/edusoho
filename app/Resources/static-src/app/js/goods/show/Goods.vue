@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title|removeHtml}}</div>
-        <detail :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
+        <detail :vip-enabled="vipEnabled" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -54,13 +54,17 @@
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
-                        <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage" :target-type="'goods'"
+                        <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
+                                 :report-type="getReportType"
+                                 :reply-report-type="getReplyReportType"
+                                 :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
-                                 v-if="goodsSetting.show_review == 1"
+                                 v-if="ugcReviewSetting.enable_review == 1
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
                         >
                         </reviews>
-                        <div v-if="goodsSetting.show_review == 0" class="description-content"
+                        <div v-else class="description-content"
                              style="padding-left: 14px; padding-top: 10px;">{{ 'goods.show_page.tab.reviews_empty_tips'|trans }}</div>
                     </div>
                 </div>
@@ -133,6 +137,10 @@
                 type: Object,
                 default: null,
             },
+            ugcReviewSetting: {
+                type: Object,
+                default: null,
+            },
             activityMetas: {
                 type: Object,
                 default: null,
@@ -148,6 +156,10 @@
             drpRecruitSwitch: {
                 type: Number,
                 default: 0
+            },
+            vipEnabled: {
+                type: Number,
+                default: 1
             }
         },
         components: {
@@ -166,7 +178,25 @@
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
                 return this.goods.summary;
-            }
+            },
+            getReportType() {
+                if (this.goods.type === 'classroom') {
+                    return 'classroom_review';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return 'course_review';
+                }
+            },
+            getReplyReportType() {
+                if (this.goods.type === 'classroom') {
+                    return 'classroom_review_reply';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return 'course_review_reply';
+                }
+            },
         },
         methods: {
             getGoodsInfo() {

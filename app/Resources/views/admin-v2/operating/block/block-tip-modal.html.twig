@@ -1,0 +1,16 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'site.tips'|trans}}{% endblock %}
+
+{% set modal_class = 'modal-md' %}
+
+{% block body %}
+
+  <h5>{{ 'admin_v2.vip_close.block_tip'|trans }}</h5>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_v2_vip_setting') }}">{{'admin_v2.vip_close.to_open_vip'|trans}}</a>
+{% endblock %}

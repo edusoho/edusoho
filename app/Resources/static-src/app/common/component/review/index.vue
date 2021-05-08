@@ -21,10 +21,12 @@
                         {{ review.createdTime | createdTime }}
                     </div>
                     <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
-                    <div class="reviews-text__content">{{ review.content }}</div>
+                    <div class="reviews-text__content" :id="`review-content-${review.id}`" style="white-space: pre-wrap;">{{ review.content|removeHtml}}<span v-if="currentUserId > 0 && review.me_report" style="color: red;">(已举报)</span>
+                    </div>
                     <div class="reviews-text__reply">
+                        <a class="review-text__hover" :id="`js-review-modal-${review.id}`" v-if="currentUserId > 0 && review.user.id != currentUserId && !review.me_report" href="#modal" data-toggle="modal" :data-url="`/common/report/${reportType}/target_id/${review.id}/tags_modal?contentTarget=review-content-${review.id}&modalTarget=js-review-modal-${review.id}`">举报</a>
                         <a href="javascript:;"
-                           v-if="canCreate"
+                           v-if="canCreate || review.posts.length > 0"
                            :data-toggle="'reviews-text__reply-content-'+review.id"
                            @click="switchDisplay">
                             <span v-if="review.posts.length == 0">{{ 'thread.post.reply'|trans }}</span>
@@ -55,19 +57,26 @@
                                         >
                                     </a>
                                 </div>
-                                <div class="media-body">
+                                <div class="media-body" style="overflow: visible !important;">
                                     <div class="metas">
-                                        <div v-if="canOperate" class="thread-post-manage-dropdown dropdown pull-right">
+                                        <div v-if="canOperate || (currentUserId > 0 && post.user.id != currentUserId && !post.me_report)" class="thread-post-manage-dropdown dropdown pull-right">
                                             <a href="javascript:;" class="dropdown-toggle color-gray"
                                                data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-collapse-down"></span>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li>
+                                                <li v-if="canOperate">
                                                     <a href="javascript:"
                                                        class="js-delete-post"
                                                        :data-target="'thread-subpost-'+post.id"
                                                        :data-target-id="post.id">{{'site.delete'|trans}}</a>
+                                                </li>
+                                                <li v-if="currentUserId > 0 && post.user.id != currentUserId && !post.me_report" :id="`js-review-reply-modal-${post.id}`">
+                                                    <a href="#modal"
+                                                       class="js-report-post"
+                                                       data-toggle="modal"
+                                                       :data-url="`/common/report/${replyReportType}/target_id/${post.id}/tags_modal?contentTarget=review-reply-content-${post.id}&modalTarget=js-review-reply-modal-${post.id}`"
+                                                    >举报</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -78,7 +87,7 @@
                                         <span class="bullet">•</span>
                                         <span class="color-gray">{{post.createdTime|smart_time}} </span>
                                     </div>
-                                    <div class="editor-text">{{ post.content }}</div>
+                                    <div class="editor-text" :id="`review-reply-content-${post.id}`">{{ post.content|removeHtml }} <span v-if="currentUserId > 0 && post.me_report" style="color: red;">(已举报)</span>  </div>
                                     <div class="ptm pbl"></div>
                                 </div>
                             </li>
@@ -173,6 +182,14 @@
                 type: Number,
                 default: null
             },
+            reportType: {
+                type: String,
+                default: null
+            },
+            replyReportType: {
+                type: String,
+                default: null
+            },
             needPosts: {
                 type: Boolean,
                 default: true
@@ -262,7 +279,7 @@
                         >
                     </a>` +
                     '  </div>\n' +
-                    '  <div class="media-body">\n' +
+                    '  <div class="media-body" style="overflow: visible !important;">\n' +
                     '    <div class="metas">\n';
                 if (this.canOperate) {
                     html = html + ' <div class="thread-post-manage-dropdown dropdown pull-right">\n' +
@@ -400,6 +417,17 @@
             trans(value, params) {
                 if (!value) return '';
                 return Translator.trans(value, params);
+            },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
             },
             smart_time(value) {
                 let time = new Date(value);

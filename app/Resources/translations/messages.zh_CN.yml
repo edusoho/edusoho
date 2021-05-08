@@ -433,6 +433,11 @@ form.btn.reply_publish.submiting: 正在发表回复...
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 form.btn.continue: 完成并继续
+form.btn.set_template: 设置模板
+form.btn.confirm.normal: 确认正常
+form.btn.confirm.illegal: 确认违规
+form.btn.batch.normal: 批量正常
+form.btn.batch.illegal: 批量违规
 
 #财务通用
 finance.income: 收入
@@ -447,7 +452,7 @@ finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
-finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_rate: 虚拟币最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
@@ -685,7 +690,7 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
-pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.course.close: 该课程已被关闭
 pay_center.classroom.close: 该班级已关闭，请谨慎支付
 pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 
@@ -2118,6 +2123,8 @@ course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
 course.plan_task.activity_manage.testpaper.times.once: 单次
 course.plan_task.activity_manage.testpaper.times.always: 不限
+course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
+course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
@@ -4785,6 +4792,9 @@ item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无�
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
 item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
+course.member.course.exit_btn: 退出课程
+course.member.classroom_member.exit_btn: 退出
+course.member.classroom_member.classroom_exit_btn: 退出班级
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
@@ -5139,6 +5149,8 @@ admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
+admin.course_manage.statistics.data_detail.phone_number: 手机号
+admin.course_manage.statistics.data_detail.id_number: 身份证号
 admin.course_manage.statistics.data_detail.join_time: 加入时间
 admin.course_manage.statistics.data_detail.finished_time: 完成时间
 admin.course_manage.statistics.data_detail.study_days: 学习天数
@@ -5147,6 +5159,9 @@ admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长�
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
 admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1.学员重新加入课程可能导致学员的学习天数清零<br/>
+  2.新增课时任务学员产生学习行为后，学员的学习天数将会刷新<br/>
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1.该页面为实时数据。<br/>
@@ -5686,6 +5701,8 @@ admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
 admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
+admin.setting.site.icp.help_block: 根据《非经营性互联网信息服务备案管理办法》（原信息产业部令第33号令）规定，备案成功后需将工信部下发的主体备案号放置在网页底部并链接至工信部网址:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>供公众查询核对。若违反相关部门规定，会存在违法风险。
+admin.setting.site.public_security.help_block: 依据 《计算机信息网络国际联网安全保护管理办法》相关规定，各网站在工信部备案成功后，需在网站开通之日起30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>提交公安联网备案申请。公安联网备案审核通过后，您需在30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>，在您的已备案网站详情中，将网站公安机关备案号及图标信息编辑放置在网页底部。
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
@@ -5698,6 +5715,8 @@ admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名
 admin.setting.site.icp: ICP备案号
 admin.setting.site.icp_url: ICP备案链接
 admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
+admin.setting.site.icp_record_information: ICP备案信息
+admin.setting.site.public_security_record_information: 公安备案信息
 admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
@@ -5707,6 +5726,8 @@ admin.setting.site.website_status: 站点状态
 admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
+admin.setting.site.ICP_record: 如何将ICP备案号添加至网站底部？
+admin.setting.site.public_security_record : 如何将公安备案图标和编号添加至网站底部？
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
@@ -5742,6 +5763,13 @@ admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
 admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 排列顺序
+admin.setting.theme.manage.modal.orderby_low_to_high: 从低到高
+admin.setting.theme.manage.modal.orderby_high_to_low: 从高到低
+admin.setting.theme.manage.modal.setting_custom_vip_list: 最新会员列表
+admin.setting.theme.manage.modal.vip_list_show: 展示
+admin.setting.theme.manage.modal.vip_list_hidden: 不展示
+admin.setting.theme.manage.modal.vip_list_tip: 在会员中心页展示最新加入会员的用户列表
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
 admin.setting.theme.manage.modal.color_gray: 灰色
 admin.setting.theme.manage.modal.color_wihte: 白色
@@ -5758,8 +5786,10 @@ admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设�
 admin.setting.license.headline: 电子营业执照配置
 admin.setting.license.name: 电子营业执照名称
 admin.setting.license.picture: 电子营业执照图片
+admin.setting.upload.license.photo: 上传证件图片
 admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校电子营业图片设置后将显示在首页底栏。
 admin.setting.license.url: 电子营业执照链接
+admin.setting.license.prompt: (网校可根据各地方政策要求及网校实际业务而定)
 admin.setting.permit.headline: 经营许可配置
 admin.setting.permit.name: 经营许可证名称
 admin.setting.permit.record.number: 备案号
@@ -5772,9 +5802,8 @@ admin.setting.record.code: 公安备案号
 admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
-    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -6086,7 +6115,7 @@ admin.mobile_manage.discovery_upgrade.function: >
 admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
-admin.wechat_notification.switch: 微信通知开关
+admin.wechat_notification.switch: 微信通知设置
 admin.wechat_notification.template: 微信通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
@@ -6101,12 +6130,16 @@ admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
-admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
+admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信向学员发送消息，学员绑定微信并主动订阅时即可收取微信通知，一次订阅可收到一次消息通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
 admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
+admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
+admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
+admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
@@ -6259,6 +6292,15 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
+admin.operation_article.review.form.input.title.placeholer: 资讯名称
+admin.operation_article.review.form.input.author.placeholer: 作者
+admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
+admin.operation_article.review.content_th: 评论内容
+admin.operation_article.review.author_th: 作者
+admin.operation_article.review.operation_th: 操作
+admin.operation_article.review.expand_td: 展开
+admin.operation_article.review.collapse_td: 收起
+admin:operation_article.review.content: 评价
 
 # 小组话题管理
 admin.operation_group.groupstatus_option: 小组状态
@@ -6855,8 +6897,14 @@ admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
-  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
-admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
+  开启后，将在视频播放中随机时间、随机位置显示云视频指纹信息。
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_content_label: 云视频指纹信息
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: 用户名
+admin.edu_cloud.edu_video.finger_print_content_label.realname: 真实姓名
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: 手机号
+admin.edu_cloud.edu_video.finger_print_content_label.domain: 网校域名
+admin.edu_cloud.edu_video.finger_print_content_tips: 为了用户体验效果更佳，建议最多组合2项信息显示。注意：若用户的真实姓名和手机号没有则显示为-
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
@@ -7644,6 +7692,7 @@ admin.setting_course.questions_setting: 交卷后答案以及解析的显示
 admin.setting_course.questions_setting.hide: 不显示
 admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显示
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
+admin.setting_course.questions_setting.submitted_tips: 开启后，在考试任务中可设置分数合格后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
 admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
@@ -7701,15 +7750,20 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: 同�
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
 admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
+admin.setting_wechat_auth.wechat_notification_type: 通知模式
 admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: 用户需要绑定微信，且需要订阅多次才能接收到相应次数的微信通知
+admin.setting_wechat_auth.wechat_notification_message_tip: 用户只要绑定微信并关注服务号即可收到微信通知<br><span class="text-danger">注意：微信规定于2021-04-30完成对消息订阅通知模式的灰度测试，后续有可能会禁用服务号关注通知模式</span>
+admin.setting_wechat_auth.wechat_notification_sms: 短信通知
+admin.setting_wechat_auth.wechat_notification_sms_tip: 开启此项配置后会以短信的方式通知没有订阅的用户
 admin.setting_wechat_auth.web_scan_login_hint: >
   开通后，网站PC端将支持微信扫码登录，App端将支持微信授权登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
-  开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
-  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件</span>。
+  开通后，绑定微信并且关注服务号或订阅通知的用户即可收取微信服务号模板消息。<br>
+  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件。</span>
 admin.setting_wechat_auth.wechat_pay_hint: >
   开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
@@ -7732,6 +7786,7 @@ admin.setting_wechat_auth.account_code_download: 下载二维码
 admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
+admin.setting_wechat_auth.message_template: 消息模板
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
@@ -8205,6 +8260,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
 admin.wap_setting.old: 旧版微网校
+admin.wap_setting.responsive: 响应式微网校
 admin.wap_setting.off: 关闭
 admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
 admin.wap_setting.edit.tip: 左侧为您的微网校首页预览效果，可点击【编辑微网校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微网校首页。
@@ -9020,10 +9076,10 @@ my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
-task.learn_data_detail.createdTime: 加入学习时间
-task.learn_data_detail.join_time: 加入时间
-task.learn_data_detail.finishedTime: 完成%taskName%时间
-task.learn_data_detail.finished_time: 完成时间
+task.learn_data_detail.createdTime: 任务开始时间
+task.learn_data_detail.join_time: 任务开始时间
+task.learn_data_detail.finishedTime: 任务完成时间
+task.learn_data_detail.finished_time: 任务完成时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
@@ -10097,6 +10153,7 @@ order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
 order.pay_check_msg.pay_password_not_set: 支付密码未设置
 order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
+order.pay_check_msg.goods_closed: 该商品已被关闭
 order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
 
 site.join_by_import: 导入
@@ -10256,6 +10313,7 @@ exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
+exception.rate_limit_ugc_report_max_attempt_reach: 你当日举报次数已达上限!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
@@ -10632,6 +10690,7 @@ exception.reward_point.account.error_pay_password_format: 新支付密码不可�
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.order_pay_check.unable_pay: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
+exception.order_pay_check.vip.app_upgrade: 请升级至最新版本，查看会员售价
 exception.live_replay.not_found: 直播回放不存在
 exception.cloud_file.not_found: 云文件不存在
 exception.cloud_file.not_found_player: 云播放器不存在
@@ -10752,13 +10811,21 @@ classroom.back_btn_text: 返回班级
 # 微信通知
 wechat.notification.open_notification_hint_title: 为享受更好的服务，建议您开启微信课程通知。
 wechat.notification.open_notification_hint_content: 扫码关注服务号，即可成功开启课程通知。
+wechat.notification.open_subscribe_notification_hint_title: 为享受更好的服务，建议您关注服务号。
 wechat.notification.account_qrcode_scan: 请扫二维码，关注服务号
 wechat.notification.course_notification_open: 扫一扫，开启课程通知
 wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.subscribe_scan_and_bind: 为享受更好的服务，扫码绑定微信并关注服务号。
 wechat.notification.record_content: 通知内容
+wechat.notification.wechat_record_content: 微信通知内容
+wechat.notification.sms_record_content: 短信通知内容
+wechat.notification.wechat: 微信
+wechat.notification.sms: 短信
+wechat.notification.record_send_number: 接收/发送
+wechat.notification.sms.record_send_number: 发送
 wechat.notification.record_send_time: 发送时间
 wechat.notification.record_send_status: 发送状态
 wechat.notification.record_number: 接收/发送人数
@@ -10813,6 +10880,27 @@ wechat.notification.template.remind_course: '亲爱的学员，今日也要坚�
 wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
 wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
+wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]"
+wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: '课程学习页<br>（课程/班级<br>教师，助教，<br>班主任）'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
+wechat.notification.message_subscribe_sms.template.homework_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.exam_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
+wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.message_subscribe_sms.template.remind_course: '【 在线教育 】今日也要坚持学习哦<br>课程：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]'
+wechat.notification.message_subscribe_sms.template.ask_question: "【 在线教育 】尊敬的老师，[课程或班级名称]中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]"
+wechat.notification.message_subscribe_sms.template.answer_question: "【 在线教育 】您在[课程名或班级名]<br>提问时间：[提问的时间]<br>回复内容：[回复内容]"
+wechat.notification.message_subscribe_sms.template.charge_success: "【 在线教育 】 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。"
+wechat.notification.message_subscribe_sms.template.buy_success: "课程：<br>【 在线教育 】 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。<br>班级：<br>【 在线教育 】 你已成功购买班级《班级名称》，支付［订单金额］。<br>会员：<br>【 在线教育 】 你已成功购买《会员名称》，支付［订单金额］。"
+
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
 wechat.notification.template.answer_question.rule: '当教师回答了学员的问题，会发送通知给提问者。'
@@ -10822,7 +10910,7 @@ wechat.notification.template.homework_result.rule: '当作业中含有主观题�
 wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
-wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
+wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员时，会发送一条通知。'
 wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期，每晚8点来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
 wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
@@ -11110,7 +11198,7 @@ admin_v2.setting.navigation.foot.tips: >
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
-admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
+admin_v2.newcomer_task.helper_tip: 七步完成网校基础建设
 admin_v2.newcomer_task.collapse: 收起
 admin_v2.newcomer_task.todo: 前去完成
 admin_v2.newcomer_task.done: 已完成
@@ -11619,6 +11707,8 @@ admin.classroom_manage.statistics.member.title_tips: >
   </span>
 admin.classroom_manage.statistics.member.total_learn_time: 班级中所有课程被累加学习时长（分）：%mins%
 admin.classroom_manage.statistics.member.nickname_th: 用户名
+admin.classroom_manage.statistics.member.phone_number_th: 手机号
+admin.classroom_manage.statistics.member.id_number_th: 身份证号
 admin.classroom_manage.statistics.member.create_time_th: 加入时间
 admin.classroom_manage.statistics.member.finish_time_th: 完成时间
 admin.classroom_manage.statistics.member.learn_time_th: 累加学习时长（分）
@@ -11662,6 +11752,7 @@ classroom.manage.data_statistics.student_trendency.select_seven_days: 7天
 classroom.manage.data_statistics.student_trendency.select_thrity_days: 30天
 classroom.manage.data_statistics.student_detail_list.title: 学员详情
 classroom.manage.data_statistics.course_detail_list.title: 课程详情
+classroom.manage.data_statistics.course_detail_list.select_all: 默认
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: 完课率
 classroom.manage.data_statistics.student_detail_list.select_all: 全部
 classroom.manage.data_statistics.student_detail_list.select_un_finished: 未完成
@@ -11671,3 +11762,112 @@ classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname
 classroom.manage.sign_statictics.sign_type.classroom_sign: 班级签到
 classroom.manage.sign_statictics.empty: 暂无签到记录
 
+admin_v2.system.user_content_control.review_manage: 评价内容管理
+admin_v2.system.user_content_control.course_review_manage: 课程评价模块
+admin_v2.system.user_content_control.classroom_review_manage: 班级评价模块
+admin_v2.system.user_content_control.question_bank_review_manage: 题库练习评价模块
+admin_v2.system.user_content_control.open_course_review_manage: 公开课评价模块
+admin_v2.system.user_content_control.article_review_manage: 资讯评价模块
+admin_v2.system.user_content_control.goto_review_manage: 前往评价管理>>
+admin_v2.system.user_content_control.thread_manage: 话题问答内容管理
+admin_v2.system.user_content_control.course_question_manage: 课程问题(问答)模块
+admin_v2.system.user_content_control.classroom_question_manage: 班级问题(问答)模块
+admin_v2.system.user_content_control.course_thread_manage: 课程话题模块
+admin_v2.system.user_content_control.classroom_thread_manage:  班级话题模块
+admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
+admin_v2.system.user_content_control.private_message_manage: 私信内容管理
+admin_v2.system.user_content_control.note_manage: 笔记内容管理
+admin_v2.system.user_content_control.goto_note_manage: 前往笔记管理>>
+admin_v2.system.user_content_control.classroom_note_manage: 班级笔记模块
+admin_v2.system.user_content_control.course_note_manage: 课程笔记模块
+admin_v2.system.user_content_control.pc_switch_tips: 开启或关闭后，仅对PC端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.course_note_tooltips: 课程学习页笔记显示及课时笔记入口由此开关控制
+admin_v2.system.user_content_control.classroom_note_tooltips: 班级学习页的笔记显示由此开关控制
+admin_v2.system.user_content_control.pc_app_switch_tips: 开启或关闭后，仅对PC端和APP端生效，其他终端暂无此功能
+admin_v2.system.user_content_control.goto_question_manage: 前往问答管理>>
+admin_v2.system.user_content_control.goto_thread_manage: 前往话题管理>>
+admin_v2.system.user_content_control.goto_group_thread_manage: 前往小组话题管理>>
+admin_v2.system.user_content_control.goto_private_message_manage: 前往私信管理>>
+
+admin_v2.vip_close.block_tip: 会员功能未开启
+admin_v2.vip_close.to_open_vip: 去开启
+
+admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
+admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
+admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: 敏感词关键字
+admin_v2.operation.user_content_audit_form.author.placeholder: 发布者
+admin_v2.operation.user_content_audit_form.startTime: 起始时间
+admin_v2.operation.user_content_audit_form.endTime: 结束时间
+admin_v2.operation.user_content_audit.content_th: 用户发布内容
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: 关键敏感词
+admin_v2.operation.user_content_audit.type_th: 类型
+admin_v2.operation.user_content_audit.author_time_th: 发布者/时间
+admin_v2.operation.user_content_audit.status_th: 审核状态
+admin_v2.operation.user_content_audit.auditor_th: 审核人
+admin_v2.operation.user_content_audit.default_auditor: 系统
+admin_v2.operation.user_content_audit.operation_th: 操作
+admin_v2.operation.user_content_audit.expand_td: 展开
+admin_v2.operation.user_content_audit.collapse_td: 收起
+admin_v2.operation.user_content_audit.user_content: 用户内容
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: 确认将用户内容判定违规吗？
+admin_v2.operation.user_content_audit.modal.body.illegal_info: 确认违规后，用户内容在前台页面不展示
+admin_v2.operation.user_content_audit.modal.body.pass_warning: 确认将用户内容判定通过吗？
+admin_v2.operation.user_content_audit.modal.body.pass_info: 确认通过后，用户内容在前台页面展示
+admin_v2.operation.user_content_audit.select_all_btn: 全选
+admin_v2.operation.user_content_audit.modal.body.button.confirm: 确认
+admin_v2.operation.user_content_audit.modal.body.button.cancel: 取消
+admin_v2.operation.user_content_audit_form.all_type_option: 全部类型
+admin_v2.operation.user_content_audit_form.all_status_option: 全部状态
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: 敏感词过滤
+admin_v2.operation.user_content_audit_status.sys_pass_sub: 待人工审核
+
+admin_v2.operation.report_content_audit.target_type_placeholder: 全部类型
+admin_v2.operation.report_content_audit.status_placeholder: 全部状态
+admin_v2.operation.report_content_audit.report_tag_placeholder: 举报类型
+admin_v2.operation.report_content_audit.author_placeholder: 发布者
+admin_v2.operation.report_content_audit.table.content: 被举报内容
+admin_v2.operation.report_content_audit.table.type: 类型
+admin_v2.operation.report_content_audit.table.count: 被举报次数
+admin_v2.operation.report_content_audit.table.tag: 被举报标签
+admin_v2.operation.report_content_audit.table.author: 发布者/时间
+admin_v2.operation.report_content_audit.table.status: 审核状态
+admin_v2.operation.report_content_audit.table.auditor: 审核人
+admin_v2.operation.report_content_audit.table.operate: 操作
+admin_v2.operation.report_content_audit.table.auditor_default: 系统
+
+admin_v2.operation.report_content_audit.table.operate_item: 详情
+admin_v2.operation.report_content_audit.table.operate_pass: 确认正常
+admin_v2.operation.report_content_audit.table.operate_illegal: 确认违规
+admin_v2.operation.audit_center.table.batch_pass: 批量正常
+admin_v2.operation.audit_center.table.batch_illegal: 批量违规
+admin_v2.operation.audit_center.table.batch_pass.notice: 确认被举报的内容正常吗？
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
+admin_v2.operation.audit_center.table.batch_illegal.notice: 确认被举报的内容违规吗？
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+admin_v2.operation.report_content_audit.record.title: 举报详情
+admin_v2.operation.report_content_audit.record.type: 举报类型
+admin_v2.operation.report_content_audit.record.reporter: 举报者
+admin_v2.operation.report_content_audit.record.time: 举报时间
+admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
+
+exception.audit_center.report_audit_not_exist: 举报信息不存在
+exception.audit_center.report_audit_status_not_valid: 审核状态不合法
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为正常（系统已审）
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">审核设置项变更后，仅对变更后新产生的数据生效</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: 批量导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: 选择要导入的文件
+admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EXCEL文件模板导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
+
+site.content.illegal_status: 该条内容已违规处理

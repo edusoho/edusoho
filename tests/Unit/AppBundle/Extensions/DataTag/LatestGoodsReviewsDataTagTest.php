@@ -10,7 +10,7 @@ class LatestGoodsReviewsDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
-        $user1 = $this->getuserService()->register([
+        $user1 = $this->getUserService()->register([
             'email' => '1234@qq.com',
             'nickname' => 'user1',
             'password' => '123456',
@@ -18,7 +18,7 @@ class LatestGoodsReviewsDataTagTest extends BaseTestCase
             'createdIp' => '127.0.0.1',
         ]);
 
-        $user2 = $this->getuserService()->register([
+        $user2 = $this->getUserService()->register([
             'email' => '12345@qq.com',
             'nickname' => 'user2',
             'password' => '123456',
