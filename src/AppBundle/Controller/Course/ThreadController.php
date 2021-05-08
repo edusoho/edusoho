@@ -34,6 +34,7 @@ class ThreadController extends CourseBaseController
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
+        $conditions['excludeAuditStatus'] = 'illegal';
 
         $paginator = new Paginator(
             $request,

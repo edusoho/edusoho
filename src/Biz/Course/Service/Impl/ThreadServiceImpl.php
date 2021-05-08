@@ -2,21 +2,21 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
 use Biz\Course\Dao\ThreadDao;
-use Biz\User\Service\UserService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Course\ThreadException;
+use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\Service\LogService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserService;
 use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\User\Service\NotificationService;
-use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
-use Biz\Sensitive\Service\SensitiveService;
-use Biz\Course\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -72,8 +72,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function countPartakeThreadsByUserId($userId)
     {
-        $threadIds = $this->findThreadIds(array('userId' => $userId));
-        $postThreadIds = $this->findPostThreadIds(array('userId' => $userId));
+        $threadIds = $this->findThreadIds(['userId' => $userId]);
+        $postThreadIds = $this->findPostThreadIds(['userId' => $userId]);
 
         return count(array_unique(array_merge($threadIds, $postThreadIds)));
     }
@@ -81,30 +81,30 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function findThreadsByType($courseId, $type, $sort, $start, $limit)
     {
         if ('latestPosted' === $sort) {
-            $orderBy = array('latestPosted' => 'DESC');
+            $orderBy = ['latestPosted' => 'DESC'];
         } else {
-            $orderBy = array('createdTime' => 'DESC');
+            $orderBy = ['createdTime' => 'DESC'];
         }
 
-        if (!in_array($type, array('question', 'discussion'))) {
+        if (!in_array($type, ['question', 'discussion'])) {
             $type = 'all';
         }
 
         if ('all' === $type) {
-            return $this->getThreadDao()->search(array('courseId' => $courseId), $orderBy, $start, $limit);
+            return $this->getThreadDao()->search(['courseId' => $courseId], $orderBy, $start, $limit);
         }
 
-        return $this->getThreadDao()->search(array('courseId' => $courseId, 'type' => $type), $orderBy, $start, $limit);
+        return $this->getThreadDao()->search(['courseId' => $courseId, 'type' => $type], $orderBy, $start, $limit);
     }
 
     public function findLatestThreadsByType($type, $start, $limit)
     {
-        return $this->getThreadDao()->search(array('type' => $type), array('createdTime' => 'DESC'), $start, $limit);
+        return $this->getThreadDao()->search(['type' => $type], ['createdTime' => 'DESC'], $start, $limit);
     }
 
     public function findEliteThreadsByType($type, $status, $start, $limit)
     {
-        return $this->getThreadDao()->search(array('type' => $type, 'isElite' => $status), array('createdTime' => 'DESC'), $start, $limit);
+        return $this->getThreadDao()->search(['type' => $type, 'isElite' => $status], ['createdTime' => 'DESC'], $start, $limit);
     }
 
     public function searchThreadCountInCourseIds($conditions)
@@ -127,9 +127,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ('createdTimeByAsc' === $sort) {
-            $orderBy = array('createdTime' => 'ASC');
+            $orderBy = ['createdTime' => 'ASC'];
         } else {
-            $orderBy = array('createdTime' => 'DESC');
+            $orderBy = ['createdTime' => 'DESC'];
         }
 
         return $this->getThreadPostDao()->search($conditions, $orderBy, $start, $limit);
@@ -152,7 +152,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
-        if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
+        if (empty($thread['type']) || !in_array($thread['type'], ['discussion', 'question'])) {
             $this->createNewException(ThreadException::TYPE_INVALID());
         }
 
@@ -162,7 +162,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(\Biz\Thread\ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
-        $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($thread['content'], 'course-thread-create');
+        $thread['content'] = $sensitiveResult['content'];
         $thread['title'] = $this->sensitiveFilter($thread['title'], 'course-thread-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
@@ -196,7 +197,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 continue;
             }
 
-            $this->getNotifiactionService()->notify($teacherId, 'thread', array(
+            $this->getNotifiactionService()->notify($teacherId, 'thread', [
                 'threadId' => $thread['id'],
                 'threadUserId' => $thread['userId'],
                 'threadUserNickname' => $this->getCurrentUser()->nickname,
@@ -204,10 +205,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'threadType' => $thread['type'],
                 'courseId' => $course['id'],
                 'courseTitle' => !empty($course['title']) ? $courseSet['title'].'-'.$course['title'] : $courseSet['title'],
-            ));
+            ]);
         }
 
-        $this->dispatchEvent('course.thread.create', new Event($thread));
+        $this->dispatchEvent('course.thread.create', new Event($thread, ['sensitiveResult' => $sensitiveResult]));
 
         return $thread;
     }
@@ -220,14 +221,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : $thread['content'];
+        $fields['content'] = isset($fields['content']) ? $fields['content'] : $thread['content'];
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'course-thread-update');
+        $fields['content'] = $sensitiveResult['content'];
         $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : $thread['title'];
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'askVideoThumbnail'));
+        $fields = ArrayToolkit::parts($fields, ['title', 'content', 'askVideoThumbnail']);
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -241,7 +244,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['content'] = $this->filter_Emoji($thread['content']);
         $thread['title'] = $this->filter_Emoji($thread['title']);
         $thread = $this->getThreadDao()->update($threadId, $fields);
-        $this->dispatchEvent('course.thread.update', new Event($thread));
+        $this->dispatchEvent('course.thread.update', new Event($thread, ['sensitiveResult' => $sensitiveResult]));
 
         return $thread;
     }
@@ -271,7 +274,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 1));
+        $thread = $this->getThreadDao()->update($thread['id'], ['isStick' => 1]);
 
         $this->dispatchEvent('course.thread.stick', new Event($thread));
     }
@@ -286,7 +289,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 0));
+        $thread = $this->getThreadDao()->update($thread['id'], ['isStick' => 0]);
 
         $this->dispatchEvent('course.thread.unstick', new Event($thread));
     }
@@ -301,7 +304,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 1));
+        $thread = $this->getThreadDao()->update($thread['id'], ['isElite' => 1]);
 
         $this->dispatchEvent('course.thread.elite', new Event($thread));
     }
@@ -316,7 +319,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 0));
+        $thread = $this->getThreadDao()->update($thread['id'], ['isElite' => 0]);
 
         $this->dispatchEvent('course.thread.unelite', new Event($thread));
     }
@@ -328,7 +331,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             return;
         }
 
-        $this->getThreadDao()->wave(array($threadId), array('hitNum' => +1));
+        $this->getThreadDao()->wave([$threadId], ['hitNum' => +1]);
     }
 
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit)
@@ -336,45 +339,45 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            return array();
+            return [];
         }
 
         if ('best' === $sort) {
-            $orderBy = array('score' => 'DESC');
+            $orderBy = ['score' => 'DESC'];
         } elseif ('elite' === $sort) {
-            $orderBy = array('createdTime' => 'DESC', 'isElite' => 'ASC');
+            $orderBy = ['createdTime' => 'DESC', 'isElite' => 'ASC'];
         } else {
-            $orderBy = array('createdTime' => 'ASC');
+            $orderBy = ['createdTime' => 'ASC'];
         }
 
-        return $this->getThreadPostDao()->search(array('threadId' => $threadId), $orderBy, $start, $limit);
+        return $this->getThreadPostDao()->search(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal'], $orderBy, $start, $limit);
     }
 
     public function getThreadPostCount($courseId, $threadId)
     {
-        return $this->getThreadPostDao()->count(array('threadId' => $threadId));
+        return $this->getThreadPostDao()->count(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function findThreadElitePosts($courseId, $threadId, $start, $limit)
     {
-        return $this->getThreadPostDao()->search(array('threadId' => $threadId, 'isElite' => 1), array('createdTime' => 'ASC'), $start, $limit);
+        return $this->getThreadPostDao()->search(['threadId' => $threadId, 'isElite' => 1, 'excludeAuditStatus' => 'illegal'], ['createdTime' => 'ASC'], $start, $limit);
     }
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId)
     {
-        return $this->getThreadPostDao()->count(array('userId' => $userId, 'threadId' => $threadId));
+        return $this->getThreadPostDao()->count(['userId' => $userId, 'threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function getThreadPostCountByThreadId($threadId)
     {
-        return $this->getThreadPostDao()->count(array('threadId' => $threadId));
+        return $this->getThreadPostDao()->count(['threadId' => $threadId, 'excludeAuditStatus' => 'illegal']);
     }
 
     public function getMyReplyThreadCount()
     {
-        $conditions = array(
+        $conditions = [
             'userId' => $this->getCurrentUser()->getId(),
-        );
+        ];
 
         return $this->getThreadPostDao()->countGroupByThreadId($conditions);
     }
@@ -389,14 +392,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->get($id);
     }
 
+    public function getThreadPost($id)
+    {
+        return $this->getThreadPostDao()->get($id);
+    }
+
     public function postAtNotifyEvent($post, $users)
     {
-        $this->dispatchEvent('course.thread.post.at', $post, array('users' => $users));
+        $this->dispatchEvent('course.thread.post.at', $post, ['users' => $users]);
     }
 
     public function createPost($post)
     {
-        $requiredKeys = array('courseId', 'threadId', 'content');
+        $requiredKeys = ['courseId', 'threadId', 'content'];
 
         if (!ArrayToolkit::requireds($post, $requiredKeys)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -414,9 +422,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
-
-        $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
         $post['content'] = $this->filter_Emoji($post['content']);
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($post['content'], 'course-thread-post-create');
+        $post['content'] = $sensitiveResult['content'];
 
         $this->getCourseService()->tryTakeCourse($post['courseId']);
 
@@ -433,11 +441,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getThreadPostDao()->create($post);
 
         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
-        $threadFields = array(
+        $threadFields = [
             'postNum' => $thread['postNum'] + 1,
             'latestPostUserId' => $post['userId'],
             'latestPostTime' => $post['createdTime'],
-        );
+        ];
         $this->getThreadDao()->update($thread['id'], $threadFields);
         $user = $this->getCurrentUser();
 
@@ -445,36 +453,37 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             if ($user['id'] == $thread['userId']) {
                 foreach ($course['teacherIds'] as $teacherId) {
                     if ('question' == $thread['type']) {
-                        $this->getNotifiactionService()->notify($teacherId, 'question-post-ask', array(
-                            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                        $this->getNotifiactionService()->notify($teacherId, 'question-post-ask', [
+                            'user' => ['id' => $user['id'], 'nickname' => $user['nickname']],
                             'id' => $post['id'],
                             'content' => TextHelper::truncate($post['content'], 50),
-                            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                            'thread' => empty($thread) ? null : ['id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])],
                             'post' => $post,
                             'courseId' => $course['id'],
-                        ));
+                        ]);
                     }
                 }
             } else {
-                $this->getNotifiactionService()->notify($thread['userId'], 'question-answer', array(
-                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                $this->getNotifiactionService()->notify($thread['userId'], 'question-answer', [
+                    'user' => ['id' => $user['id'], 'nickname' => $user['nickname']],
                     'id' => $post['id'],
                     'content' => TextHelper::truncate($post['content'], 50),
-                    'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                    'thread' => empty($thread) ? null : ['id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])],
                     'post' => $post,
                     'courseId' => $course['id'],
-                ));
+                ]);
             }
         }
 
-        $this->dispatchEvent('course.thread.post.create', $post);
+        $this->dispatchEvent('course.thread.post.create', $post, ['thread' => $thread, 'sensitiveResult' => $sensitiveResult]);
 
         return $post;
     }
 
     public function updatePost($courseId, $id, $fields)
     {
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-post-update');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($fields['content'], 'course-thread-post-create');
+        $fields['content'] = $sensitiveResult['content'];
 
         $post = $this->getPost($courseId, $id);
 
@@ -485,7 +494,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $user = $this->getCurrentUser();
         ($user->isLogin() && $user->id == $post['userId']) || $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
-        $fields = ArrayToolkit::parts($fields, array('content'));
+        $fields = ArrayToolkit::parts($fields, ['content']);
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -498,14 +507,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
 
         $post = $this->getThreadPostDao()->update($id, $fields);
-        $this->dispatchEvent('course.thread.post.update', $post);
+        $thread = $this->getThreadByThreadId($post['threadId']);
+        $this->dispatchEvent('course.thread.post.update', $post, ['thread' => $thread, 'sensitiveResult' => $sensitiveResult]);
 
         return $post;
     }
 
     public function readPost($postId)
     {
-        return $this->getThreadPostDao()->update($postId, array('isRead' => 1));
+        return $this->getThreadPostDao()->update($postId, ['isRead' => 1]);
     }
 
     public function deletePost($courseId, $id)
@@ -523,7 +533,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->getThreadPostDao()->delete($post['id']);
-        $this->getThreadDao()->wave(array($post['threadId']), array('postNum' => -1));
+        $this->getThreadDao()->wave([$post['threadId']], ['postNum' => -1]);
         $this->dispatchEvent('course.thread.post.delete', $post);
     }
 
@@ -534,7 +544,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         if (isset($conditions['keywordType'], $conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
+            if (!in_array($conditions['keywordType'], ['title', 'content', 'courseId', 'courseTitle'])) {
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
@@ -553,7 +563,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function filterThread($thread)
     {
-        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source', 'questionType'));
+        return ArrayToolkit::parts($thread, ['title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source', 'questionType']);
     }
 
     protected function filterSort($sort)
@@ -564,19 +574,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         switch ($sort) {
             case 'created':
-                $orderBys = array('isStick' => 'DESC', 'createdTime' => 'DESC');
+                $orderBys = ['isStick' => 'DESC', 'createdTime' => 'DESC'];
                 break;
             case 'posted':
-                $orderBys = array('isStick' => 'DESC', 'latestPostTime' => 'DESC');
+                $orderBys = ['isStick' => 'DESC', 'latestPostTime' => 'DESC'];
                 break;
             case 'createdNotStick':
-                $orderBys = array('createdTime' => 'DESC');
+                $orderBys = ['createdTime' => 'DESC'];
                 break;
             case 'postedNotStick':
-                $orderBys = array('latestPostTime' => 'DESC');
+                $orderBys = ['latestPostTime' => 'DESC'];
                 break;
             case 'popular':
-                $orderBys = array('hitNum' => 'DESC');
+                $orderBys = ['hitNum' => 'DESC'];
                 break;
             default:
                 $this->createNewException(CommonException::ERROR_PARAMETER());

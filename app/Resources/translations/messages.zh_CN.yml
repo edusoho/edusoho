@@ -433,6 +433,11 @@ form.btn.reply_publish.submiting: 正在发表回复...
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 form.btn.continue: 完成并继续
+form.btn.set_template: 设置模板
+form.btn.confirm.normal: 确认正常
+form.btn.confirm.illegal: 确认违规
+form.btn.batch.normal: 批量正常
+form.btn.batch.illegal: 批量违规
 
 #财务通用
 finance.income: 收入
@@ -6110,7 +6115,7 @@ admin.mobile_manage.discovery_upgrade.function: >
 admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
-admin.wechat_notification.switch: 微信通知开关
+admin.wechat_notification.switch: 微信通知设置
 admin.wechat_notification.template: 微信通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
@@ -6125,12 +6130,16 @@ admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
-admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
+admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信向学员发送消息，学员绑定微信并主动订阅时即可收取微信通知，一次订阅可收到一次消息通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
 admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
+admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
+admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
+admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
@@ -6283,6 +6292,15 @@ admin.operation_article.category_title: 栏目名称
 admin.operation_article.category_addr: 栏目地址
 admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
+admin.operation_article.review.form.input.title.placeholer: 资讯名称
+admin.operation_article.review.form.input.author.placeholer: 作者
+admin:operation_article.review.form.input.content.placeholer: 评价内容关键词
+admin.operation_article.review.content_th: 评论内容
+admin.operation_article.review.author_th: 作者
+admin.operation_article.review.operation_th: 操作
+admin.operation_article.review.expand_td: 展开
+admin.operation_article.review.collapse_td: 收起
+admin:operation_article.review.content: 评价
 
 # 小组话题管理
 admin.operation_group.groupstatus_option: 小组状态
@@ -7732,15 +7750,20 @@ admin.setting_course.effective_learning_time.accumulated_merge.help_block: 同�
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
 admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
+admin.setting_wechat_auth.wechat_notification_type: 通知模式
 admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: 用户需要绑定微信，且需要订阅多次才能接收到相应次数的微信通知
+admin.setting_wechat_auth.wechat_notification_message_tip: 用户只要绑定微信并关注服务号即可收到微信通知<br><span class="text-danger">注意：微信规定于2021-04-30完成对消息订阅通知模式的灰度测试，后续有可能会禁用服务号关注通知模式</span>
+admin.setting_wechat_auth.wechat_notification_sms: 短信通知
+admin.setting_wechat_auth.wechat_notification_sms_tip: 开启此项配置后会以短信的方式通知没有订阅的用户
 admin.setting_wechat_auth.web_scan_login_hint: >
   开通后，网站PC端将支持微信扫码登录，App端将支持微信授权登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
-  开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
-  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件</span>。
+  开通后，绑定微信并且关注服务号或订阅通知的用户即可收取微信服务号模板消息。<br>
+  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件。</span>
 admin.setting_wechat_auth.wechat_pay_hint: >
   开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
@@ -7763,6 +7786,7 @@ admin.setting_wechat_auth.account_code_download: 下载二维码
 admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
+admin.setting_wechat_auth.message_template: 消息模板
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
@@ -10289,6 +10313,7 @@ exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
+exception.rate_limit_ugc_report_max_attempt_reach: 你当日举报次数已达上限!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
@@ -10786,13 +10811,21 @@ classroom.back_btn_text: 返回班级
 # 微信通知
 wechat.notification.open_notification_hint_title: 为享受更好的服务，建议您开启微信课程通知。
 wechat.notification.open_notification_hint_content: 扫码关注服务号，即可成功开启课程通知。
+wechat.notification.open_subscribe_notification_hint_title: 为享受更好的服务，建议您关注服务号。
 wechat.notification.account_qrcode_scan: 请扫二维码，关注服务号
 wechat.notification.course_notification_open: 扫一扫，开启课程通知
 wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.subscribe_scan_and_bind: 为享受更好的服务，扫码绑定微信并关注服务号。
 wechat.notification.record_content: 通知内容
+wechat.notification.wechat_record_content: 微信通知内容
+wechat.notification.sms_record_content: 短信通知内容
+wechat.notification.wechat: 微信
+wechat.notification.sms: 短信
+wechat.notification.record_send_number: 接收/发送
+wechat.notification.sms.record_send_number: 发送
 wechat.notification.record_send_time: 发送时间
 wechat.notification.record_send_status: 发送状态
 wechat.notification.record_number: 接收/发送人数
@@ -10847,6 +10880,27 @@ wechat.notification.template.remind_course: '亲爱的学员，今日也要坚�
 wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
 wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
+wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]"
+wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: '课程学习页<br>（课程/班级<br>教师，助教，<br>班主任）'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
+wechat.notification.message_subscribe_sms.template.homework_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.exam_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
+wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.message_subscribe_sms.template.remind_course: '【 在线教育 】今日也要坚持学习哦<br>课程：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]'
+wechat.notification.message_subscribe_sms.template.ask_question: "【 在线教育 】尊敬的老师，[课程或班级名称]中有学员提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]"
+wechat.notification.message_subscribe_sms.template.answer_question: "【 在线教育 】您在[课程名或班级名]<br>提问时间：[提问的时间]<br>回复内容：[回复内容]"
+wechat.notification.message_subscribe_sms.template.charge_success: "【 在线教育 】 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。"
+wechat.notification.message_subscribe_sms.template.buy_success: "课程：<br>【 在线教育 】 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。<br>班级：<br>【 在线教育 】 你已成功购买班级《班级名称》，支付［订单金额］。<br>会员：<br>【 在线教育 】 你已成功购买《会员名称》，支付［订单金额］。"
+
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
 wechat.notification.template.answer_question.rule: '当教师回答了学员的问题，会发送通知给提问者。'
@@ -10856,7 +10910,7 @@ wechat.notification.template.homework_result.rule: '当作业中含有主观题�
 wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
-wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
+wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员时，会发送一条通知。'
 wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期，每晚8点来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
 wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
@@ -11738,3 +11792,83 @@ admin_v2.system.user_content_control.goto_private_message_manage: 前往私信�
 
 admin_v2.vip_close.block_tip: 会员功能未开启
 admin_v2.vip_close.to_open_vip: 去开启
+
+admin_v2.system.user_content_control.content_audit_setting.label: 审核设置
+admin_v2.system.user_content_control.content_audit_setting.audit_before: 先审后发
+admin_v2.system.user_content_control.content_audit_setting.audit_after: 先发后审
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: 即用户发表公开内容后系统自动过滤敏感词即时显示至前台页面，再经人工抽样审核
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即用户发表公开内容后，先经人工审核通过后才能公开显示至前台页面
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: 敏感词关键字
+admin_v2.operation.user_content_audit_form.author.placeholder: 发布者
+admin_v2.operation.user_content_audit_form.startTime: 起始时间
+admin_v2.operation.user_content_audit_form.endTime: 结束时间
+admin_v2.operation.user_content_audit.content_th: 用户发布内容
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: 关键敏感词
+admin_v2.operation.user_content_audit.type_th: 类型
+admin_v2.operation.user_content_audit.author_time_th: 发布者/时间
+admin_v2.operation.user_content_audit.status_th: 审核状态
+admin_v2.operation.user_content_audit.auditor_th: 审核人
+admin_v2.operation.user_content_audit.default_auditor: 系统
+admin_v2.operation.user_content_audit.operation_th: 操作
+admin_v2.operation.user_content_audit.expand_td: 展开
+admin_v2.operation.user_content_audit.collapse_td: 收起
+admin_v2.operation.user_content_audit.user_content: 用户内容
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: 确认将用户内容判定违规吗？
+admin_v2.operation.user_content_audit.modal.body.illegal_info: 确认违规后，用户内容在前台页面不展示
+admin_v2.operation.user_content_audit.modal.body.pass_warning: 确认将用户内容判定通过吗？
+admin_v2.operation.user_content_audit.modal.body.pass_info: 确认通过后，用户内容在前台页面展示
+admin_v2.operation.user_content_audit.select_all_btn: 全选
+admin_v2.operation.user_content_audit.modal.body.button.confirm: 确认
+admin_v2.operation.user_content_audit.modal.body.button.cancel: 取消
+admin_v2.operation.user_content_audit_form.all_type_option: 全部类型
+admin_v2.operation.user_content_audit_form.all_status_option: 全部状态
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: 敏感词过滤
+admin_v2.operation.user_content_audit_status.sys_pass_sub: 待人工审核
+
+admin_v2.operation.report_content_audit.target_type_placeholder: 全部类型
+admin_v2.operation.report_content_audit.status_placeholder: 全部状态
+admin_v2.operation.report_content_audit.report_tag_placeholder: 举报类型
+admin_v2.operation.report_content_audit.author_placeholder: 发布者
+admin_v2.operation.report_content_audit.table.content: 被举报内容
+admin_v2.operation.report_content_audit.table.type: 类型
+admin_v2.operation.report_content_audit.table.count: 被举报次数
+admin_v2.operation.report_content_audit.table.tag: 被举报标签
+admin_v2.operation.report_content_audit.table.author: 发布者/时间
+admin_v2.operation.report_content_audit.table.status: 审核状态
+admin_v2.operation.report_content_audit.table.auditor: 审核人
+admin_v2.operation.report_content_audit.table.operate: 操作
+admin_v2.operation.report_content_audit.table.auditor_default: 系统
+
+admin_v2.operation.report_content_audit.table.operate_item: 详情
+admin_v2.operation.report_content_audit.table.operate_pass: 确认正常
+admin_v2.operation.report_content_audit.table.operate_illegal: 确认违规
+admin_v2.operation.audit_center.table.batch_pass: 批量正常
+admin_v2.operation.audit_center.table.batch_illegal: 批量违规
+admin_v2.operation.audit_center.table.batch_pass.notice: 确认被举报的内容正常吗？
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: 确认正常后，被举报的内容将正常显示
+admin_v2.operation.audit_center.table.batch_illegal.notice: 确认被举报的内容违规吗？
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: 确认违规后，被举报的内容将沉贴处理
+admin_v2.operation.report_content_audit.record.title: 举报详情
+admin_v2.operation.report_content_audit.record.type: 举报类型
+admin_v2.operation.report_content_audit.record.reporter: 举报者
+admin_v2.operation.report_content_audit.record.time: 举报时间
+admin_v2.operation.audit_center.table.status.sys_illegal: 预下架处理
+
+exception.audit_center.report_audit_not_exist: 举报信息不存在
+exception.audit_center.report_audit_status_not_valid: 审核状态不合法
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: 允许后，审核状态为正常（系统已审）
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">审核设置项变更后，仅对变更后新产生的数据生效</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: 批量导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: 选择要导入的文件
+admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EXCEL文件模板导入敏感词
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
+
+site.content.illegal_status: 该条内容已违规处理

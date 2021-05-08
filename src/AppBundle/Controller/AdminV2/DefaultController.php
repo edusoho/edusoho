@@ -565,7 +565,7 @@ class DefaultController extends BaseController
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.wechat'];
+        return $biz['ESCloudSdk.wechat'];
     }
 
     /**

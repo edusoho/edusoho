@@ -182,6 +182,15 @@
               <input type="hidden" id="account_code" name="wechatSetting[account_code]" value="{{ wechatSetting.account_code }}" class="form-control">
             </div>
           </div>
+
+          <div class="form-group group-field">
+            <div class="col-md-4 control-label">
+              <label for="account_code">{{'admin.setting_wechat_auth.message_template'|trans}}</label>
+            </div>
+            <div class="controls col-md-7">
+              <a class="btn btn-default btn-sm btn-primary" id="message-template" target="_blank" href="{{ path('admin_v2_wechat_notification_manage') }}">{{'form.btn.set_template'|trans}}</a>
+            </div>
+            </div>
         </div>
 
         <div data-sub="wxpay" class="{% if not payment.wxpay_enabled %}hidden{% endif %}">

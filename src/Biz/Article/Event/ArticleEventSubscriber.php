@@ -12,18 +12,24 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'article.liked' => 'onArticleLike',
             'article.delete' => 'onArticleDelete',
             'article.cancelLike' => 'onArticleCancelLike',
             'article.post_create' => 'onPostCreate',
             'article.post_delete' => 'onPostDelete',
-        );
+        ];
     }
 
     public function onArticleDelete(Event $event)
     {
         $article = $event->getSubject();
+
+        // todo: 资讯删除,同时删除资讯评价
+        $threadPosts = $this->getThreadService()->searchPosts(['targetType' => 'article', 'targetId' => $article['id'], 'parentId' => 0], [], 0, PHP_INT_MAX);
+        foreach ($threadPosts as $threadPost) {
+            $this->getThreadService()->deletePost($threadPost['id']);
+        }
 
         $tagOwnerManager = new TagOwnerManager('article', $article['id']);
         $tagOwnerManager->delete();
@@ -44,7 +50,7 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     public function onPostCreate(Event $event)
     {
         $post = $event->getSubject();
-        if ($post['parentId'] == 0) {
+        if (0 == $post['parentId']) {
             $this->getArticleService()->count($post['targetId'], 'postNum', +1);
         }
     }
@@ -52,7 +58,7 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     public function onPostDelete(Event $event)
     {
         $post = $event->getSubject();
-        if ($post['parentId'] == 0) {
+        if (0 == $post['parentId']) {
             $this->getArticleService()->count($post['targetId'], 'postNum', -1);
         }
     }
@@ -63,5 +69,13 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     protected function getArticleService()
     {
         return $this->getBiz()->service('Article:ArticleService');
+    }
+
+    /**
+     * @return ThreadServiceImpl
+     */
+    protected function getThreadService()
+    {
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 }

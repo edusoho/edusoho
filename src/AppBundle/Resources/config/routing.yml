@@ -3702,3 +3702,11 @@ exam_result_analysis_job_sync:
 exam_result_analysis_job_check:
   path: exam/{answerSceneId}/job_check
   defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:jobCheck }
+
+common_report:
+  path: /common/report
+  defaults: { _controller: AppBundle:Report:submit }
+
+common_report_tags_modal:
+  path: /common/report/{targetType}/target_id/{targetId}/tags_modal
+  defaults: { _controller: AppBundle:Report:tagsModal }
