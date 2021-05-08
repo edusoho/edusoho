@@ -2953,5 +2953,3 @@ admin_v2_user_content_control_private_message:
 admin_v2_user_content_audit_setting:
     path: /setting/ugc/user_content_audit
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:contentAudit }
-
->>>>>>> a830e4c4bf8caef26cbde90ecc2fb16dc6a925e4
