@@ -5,7 +5,7 @@ namespace ESCloud\SDK\Service;
 use ESCloud\SDK\Exception\ResponseException;
 use ESCloud\SDK\Exception\SDKException;
 use ESCloud\SDK\HttpClient\ClientException;
-use phpDocumentor\Reflection\Types\String_;
+use ESCloud\SDK\Helper\Upload\UploadManager;
 
 class ResourceService extends BaseService
 {
@@ -38,6 +38,16 @@ class ResourceService extends BaseService
     public function finishUpload($no)
     {
         return $this->request('POST', '/upload/finish', array('no' => $no));
+    }
+
+    public function upload($filePath, $params)
+    {
+        $token = $this->startUpload($params);
+
+        $uploadManager = new UploadManager();
+        $uploadManager->upload($filePath, $token['reskey'], $token['uploadToken']);
+
+        return $this->finishUpload($token['no']);
     }
 
     /**
