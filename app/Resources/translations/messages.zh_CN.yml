@@ -7394,14 +7394,11 @@ admin.edu_cloud.edu_attachment.group: 小组
 admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
-admin.edu_cloud.edu_resource.download.setting: 云资源下载设置
-admin.edu_cloud.edu_resource.resource_tips: >
-  <h4>您尚未开通云视频服务，无法使用云资源设置功能，<a href="%videoUrl%">立即开通</a>
-  或<a href="%detailUrl%" target="_blank">了解云视频</a>
-admin.edu_cloud.edu_resource.open_radio: 开启
-admin.edu_cloud.edu_resource.close_radio: 关闭
-admin.edu_cloud.edu_resource.download.setting.enable.tips: 开启后，教师身份在中台可以下载公共资料库的所有资源
-admin.edu_cloud.edu_resource.download.setting.disable.tips: 关闭后，教师身份在中台不能下载公共资料库的所有资源
+admin.edu_cloud.edu_file.download.setting: 云资源下载设置
+admin.edu_cloud.edu_file.open_radio: 开启
+admin.edu_cloud.edu_file.close_radio: 关闭
+admin.edu_cloud.edu_file.download.setting.enable.tips: 开启后，教师身份在中台可以下载公共资料库的所有资源
+admin.edu_cloud.edu_file.download.setting.disable.tips: 关闭后，教师身份在中台不能下载公共资料库的所有资源
 
 admin.edu_cloud.key_info.key_error_tips: 授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
 admin.edu_cloud.key_info.license_domain: 授权域名
