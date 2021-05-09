@@ -160,7 +160,7 @@
               {# 下载 #}
               <li>
                 {% if type|default is empty %}
-                  {% if uploadFile.fileDownPermission %}
+                  {% if uploadFile.createdUserId == app.user.id or setting('cloud_file_setting.enable',0) or app.user.isAdmin() %}
                     <a href="javascript:;" data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
                       {{'material_lib.btn.download'|trans}}
                     </a>

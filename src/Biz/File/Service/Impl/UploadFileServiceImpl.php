@@ -1108,6 +1108,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function tryAccessFile($fileId)
     {
         $file = $this->getFullFile($fileId);
+        $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $fileSetting = array_merge(['enable' => 0], $fileSetting);
 
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
@@ -1119,7 +1121,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if (1 == $file['isPublic']) {
+        if (1 == $fileSetting['enable']) {
             return $file;
         }
 
