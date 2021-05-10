@@ -472,12 +472,19 @@ class OpenCourseController extends BaseOpenCourseController
             ],
         ];
 
+        $orderBys = [
+            [
+                'recommendWeight' => 'asc',
+            ],
+            [],
+        ];
+
         //数量不够 凑数
-        foreach ($conditions as $condition) {
+        foreach ($conditions as $key => $condition) {
             if (count($goodses) < $num) {
                 $needNum = $num - count($goodses);
                 $condition['excludeIds'] = ArrayToolkit::column($goodses, 'id');
-                $newGoodses = $this->getGoodsService()->searchGoods($condition, ['recommendWeight' => 'asc'], 0, $needNum);
+                $newGoodses = $this->getGoodsService()->searchGoods($condition, $orderBys[$key], 0, $needNum);
                 $goodses = array_merge($goodses, $newGoodses);
             }
         }
