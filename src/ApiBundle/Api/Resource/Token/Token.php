@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\Token;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
-use Biz\System\Service\SettingService;
 
 class Token extends AbstractResource
 {
