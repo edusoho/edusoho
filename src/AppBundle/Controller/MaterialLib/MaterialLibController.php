@@ -506,7 +506,6 @@ class MaterialLibController extends BaseController
         }
 
         $this->getUploadFileService()->canDownLoadFile($fileId);
-        $this->getUploadFileService()->tryAccessFile($fileId);
 
         return $this->forward('AppBundle:UploadFile:download', [
             'request' => $request,

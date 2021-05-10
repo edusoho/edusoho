@@ -1138,12 +1138,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function canDownLoadFile($fileId)
     {
-        $file = $this->getFullFile($fileId);
-        $user = $this->getCurrentUser();
         $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
         $fileSetting = array_merge(['enable' => 0], $fileSetting);
 
-        if ($user->isAdmin() || $file['createdUserId'] == $user['id'] || 1 == $fileSetting['enable'] && 1 == $file['isPublic']) {
+        if ($this->tryAccessFile($fileId) || 1 == $fileSetting['enable']) {
             return true;
         }
 
