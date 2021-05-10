@@ -474,7 +474,7 @@ course_set.live_room.entry_error_with_message: >
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
 course_set.refund_cancel_success: Refund application cancelled!
 course_set.title_required_error_hint: Please enter a title
-course_set.learn_progress: Learning progress
+course_set.learn_progress: Learning Progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
 course_set.manage.publish_title: 发布课程
