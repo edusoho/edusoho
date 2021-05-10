@@ -465,7 +465,7 @@ class OpenCourseController extends BaseOpenCourseController
         $conditions = [
             [
                 'status' => 'published',
-                'recommendedTime_Gt' => 0,
+                'recommendedTime_GT' => 0,
             ],
             [
                 'status' => 'published',
@@ -474,7 +474,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $orderBys = [
             [
-                'recommendWeight' => 'asc',
+                'recommendWeight' => 'ASC',
             ],
             [],
         ];
