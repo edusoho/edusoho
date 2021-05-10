@@ -415,7 +415,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $result = $this->getThreadService()->getMyLatestReplyPerThread(0, 10);
 
-        $this->assertEquals($createdPost, array_shift($result));
+        $this->assertEquals($createdPost['id'], array_shift($result)['id']);
     }
 
     public function testFindThreadIds()
@@ -686,7 +686,7 @@ class ThreadServiceTest extends BaseTestCase
                 [
                     'functionName' => 'count',
                     'returnValue' => 5,
-                    'withParams' => [['threadId' => 1]],
+                    'withParams' => [['threadId' => 1, 'excludeAuditStatus' => 'illegal']],
                 ],
             ]
         );
@@ -702,7 +702,7 @@ class ThreadServiceTest extends BaseTestCase
                 [
                     'functionName' => 'search',
                     'returnValue' => [['threadId' => 1]],
-                    'withParams' => [['threadId' => 1, 'isElite' => 1], ['createdTime' => 'ASC'], 0, 5],
+                    'withParams' => [['threadId' => 1, 'isElite' => 1, 'excludeAuditStatus' => 'illegal'], ['createdTime' => 'ASC'], 0, 5],
                 ],
             ]
         );
@@ -718,7 +718,7 @@ class ThreadServiceTest extends BaseTestCase
                 [
                     'functionName' => 'count',
                     'returnValue' => 5,
-                    'withParams' => [['userId' => 1, 'threadId' => 1]],
+                    'withParams' => [['userId' => 1, 'threadId' => 1, 'excludeAuditStatus' => 'illegal']],
                 ],
             ]
         );
@@ -734,7 +734,7 @@ class ThreadServiceTest extends BaseTestCase
                 [
                     'functionName' => 'count',
                     'returnValue' => 5,
-                    'withParams' => [['threadId' => 1]],
+                    'withParams' => [['threadId' => 1, 'excludeAuditStatus' => 'illegal']],
                 ],
             ]
         );

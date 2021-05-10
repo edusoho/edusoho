@@ -358,6 +358,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $classroom = $this->getClassroomService()->getClassroom($post['targetId']);
         $thread = $this->getThreadService()->getThread($post['threadId']);
 
+        if (empty($thread)) {
+            return;
+        }
+
         if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
             if (!$this->isUserLocked($thread['userId'])) {
                 $templateParams = [
@@ -376,6 +380,22 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $fields = $event->getSubject();
         $key = $event->getArgument('key');
+        $notificationType = $event->getArgument('notificationType');
+
+        if ('serviceFollow' !== $notificationType) {
+            $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
+            if ($notificationJob) {
+                $this->getSchedulerService()->deleteJob($notificationJob['id']);
+            }
+
+            $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
+            if ($notificationJob) {
+                $this->getSchedulerService()->deleteJob($notificationJob['id']);
+            }
+
+            return;
+        }
+
         $wechatSetting = $this->getSettingService()->get('wechat', []);
         $templates = empty($wechatSetting['templates']) ? [] : $wechatSetting['templates'];
         if ('homeworkOrTestPaperReview' == $key) {
@@ -557,7 +577,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
+        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args'], 'wechat_template');
     }
 
     protected function sendTasksPublishNotification($tasks)
@@ -776,7 +796,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.notification'];
+        return $biz['ESCloudSdk.notification'];
     }
 
     private function findTargetIdByOrderItem(array $orderItem)

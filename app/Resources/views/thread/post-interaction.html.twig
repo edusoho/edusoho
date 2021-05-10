@@ -1,3 +1,21 @@
+{% if post.targetType == 'article' %}
+  {% set reportType = 'article_review' %}
+{% elseif post.targetType == 'openCourse' %}
+  {% set reportType = 'open_course_review' %}
+{% elseif post.targetType == 'classroom' %}
+  {% set thread = get_classroom_thread(post.threadId) %}
+  {% if thread.type == 'discussion' %}
+    {% set reportType = 'classroom_thread_reply' %}
+  {% elseif thread.type == 'question' %}
+    {% set reportType = 'classroom_question_reply' %}
+  {% elseif thread.type == 'event' %}
+    {% set reportType = 'classroom_event_reply' %}
+  {% else %}
+    {% set reportType = '' %}
+  {% endif %}
+{% else %}
+  {% set reportType = post.targetType %}
+{% endif %}
 <div class="thread-post-interaction">
   <a href="javascript:;" class="js-post-up interaction color-gray"
     data-url="{{ path('thread_post_up', {threadId:post.threadId, postId: post.id}) }}">
@@ -9,4 +27,11 @@
       <span class="subposts-num-wrap {% if not post.subposts %}hide{% endif %}">(<span class="subposts-num">{{ post.subposts }}</span>)</span>
     {% endif %}
   </a>
+  {% if app.user.isLogin() and app.user.id != post.userId and not is_reported(reportType, post.id)  %}
+  <a class="color-gray pull-right item-hover"
+     id="js-thread-modal-{{ post.id }}"
+     href="#modal"
+     data-toggle="modal"
+     data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: post.id, modalTarget: 'js-thread-modal-'~ post.id, contentTarget: 'js-thread-after-' ~ post.id }) }}">举报</a>
+  {% endif %}
 </div>

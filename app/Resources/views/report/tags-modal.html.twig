@@ -1,0 +1,31 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+{% set reportTags = dict('reportTags') %}
+
+{% do script(['app/js/report/modal/index.js']) %}
+
+{% block title %}{{ '举报' }}{% endblock %}
+
+{% block body %}
+  <div class="review-report js-review-report">
+    <div class="review-report__title">{{ '请选择举报理由' }}</div>
+    <form action="get" class="form-horizontal review-report__form js-report-form">
+
+      <div class="form-group report-form">
+        {% for key,reportTag in reportTags %}
+          <div class="controls radios report-form__item">
+            <label class="report-form__item__label">
+              <input class="pull-right report-form__item__input" type="radio" name="reportTag" value="{{ key }}">{{ reportTag }}
+              <span class="pull-right hidden report-form__item__icon">
+                <img src="{{ asset('static-dist/app/img/report_checked.png') }}" alt="">
+              </span>
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="report-form">
+        <a data-target-type="{{ targetType }}" data-target-id="{{ targetId }}" data-url="{{ path('common_report') }}" data-modal-target="{{ modalTarget }}" data-content-target="{{ contentTarget }}" class="btn btn-info report-from__submit js-report-submit">举报</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

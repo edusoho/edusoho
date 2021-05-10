@@ -209,6 +209,7 @@ class ExerciseController extends BaseController
             'parentId' => 0,
             'targetType' => 'item_bank_exercise',
             'targetId' => $id,
+            'excludeAuditStatus' => 'illegal',
         ];
 
         $paginator = new Paginator(

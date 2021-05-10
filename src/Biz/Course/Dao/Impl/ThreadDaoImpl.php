@@ -11,7 +11,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 
     public function deleteByCourseId($courseId)
     {
-        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+        return $this->db()->delete($this->table(), ['courseId' => $courseId]);
     }
 
     protected function createQueryBuilder($conditions)
@@ -30,35 +30,35 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     public function findLatestThreadsByType($type, $start, $limit)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE type = ? ORDER BY createdTime DESC";
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($type)) ?: array();
+        return $this->db()->fetchAll($sql, [$type]) ?: [];
     }
 
     public function findEliteThreadsByType($type, $status, $start, $limit)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE type = ? AND isElite = ? ORDER BY createdTime";
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($type, $status)) ?: array();
+        return $this->db()->fetchAll($sql, [$type, $status]) ?: [];
     }
 
     public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
     {
         $orderBy = implode(' ', $orderBy);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy}";
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+        return $this->db()->fetchAll($sql, [$courseId]) ?: [];
     }
 
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
     {
         $orderBy = implode(' ', $orderBy);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} ";
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
+        return $this->db()->fetchAll($sql, [$courseId, $type]) ?: [];
     }
 
     public function findThreadIds($conditions)
@@ -66,16 +66,16 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('id');
 
-        return $builder->execute()->fetchAll(0) ?: array();
+        return $builder->execute()->fetchAll(0) ?: [];
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array(),
-            'orderbys' => array('isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => [],
+            'orderbys' => ['isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum', 'updatedTime'],
+            'conditions' => [
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',
                 'courseSetId = :courseSetId',
@@ -98,7 +98,9 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'videoAskTime < :videoAskTime_LE',
                 'createdTime >= :startCreatedTime',
                 'createdTime < :endCreatedTime',
-            ),
-        );
+                'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
+            ],
+        ];
     }
 }

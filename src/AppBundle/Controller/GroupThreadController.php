@@ -191,6 +191,7 @@ class GroupThreadController extends BaseController
         $filters = $this->getPostSearchFilters($request);
 
         $condition = $this->getPostCondition($filters['type'], $threadMain['userId'], $threadId);
+        $condition['excludeAuditStatus'] = 'illegal';
 
         $sort = $this->getPostOrderBy($filters['sort']);
 
@@ -217,14 +218,14 @@ class GroupThreadController extends BaseController
         $postFiles = [];
 
         foreach ($postId as $value) {
-            $replyCount = $this->getThreadService()->searchPostsCount(['postId' => $value]);
+            $replyCount = $this->getThreadService()->searchPostsCount(['postId' => $value, 'excludeAuditStatus' => 'illegal']);
             $replyPaginator = new Paginator(
                 $this->get('request'),
                 $replyCount,
                 10
             );
 
-            $reply = $this->getThreadService()->searchPosts(['postId' => $value], ['createdTime' => 'ASC'],
+            $reply = $this->getThreadService()->searchPosts(['postId' => $value, 'excludeAuditStatus' => 'illegal'], ['createdTime' => 'ASC'],
                 $replyPaginator->getOffsetCount(),
                 $replyPaginator->getPerPageCount());
 

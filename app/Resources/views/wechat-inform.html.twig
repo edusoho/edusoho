@@ -21,7 +21,13 @@
           <div class="wechat-inform-qrcode__tip">{{'wechat.notification.open_notification_tip'|trans}}</div>
           <img class="wechat-inform-qrcode__img" src="{{ setting('wechat.account_code') }}">
         {% elseif not weChatUser %}
-          <div class="wechat-inform-qrcode__tip text-left">{{'wechat.notification.scan_and_bind'|trans}}</div>
+          <div class="wechat-inform-qrcode__tip text-left">
+            {% if setting('wechat_notification.notification_type')|default('')  == 'messageSubscribe' %}
+              {{'wechat.notification.subscribe_scan_and_bind'|trans}}
+            {% else %}
+              {{'wechat.notification.scan_and_bind'|trans}}
+            {% endif %}
+          </div>
           <img class="wechat-inform-qrcode__img" src="">
         {% endif %}
       </div>
