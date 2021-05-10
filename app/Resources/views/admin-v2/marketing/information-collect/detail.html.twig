@@ -1,0 +1,47 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_information_collect' %}
+{% set script_controller = 'invite/record' %}
+{% do script(['app/js/admin-v2/marketing/information-collect/index.js', 'app/js/admin-v2/marketing/information-collect/detail/index.js']) %}
+
+{% block page_title %}
+  {{ 'admin.information_collect.detail'|trans({'%listUrl%':path('admin_v2_information_collect')})|raw }}
+{% endblock %}
+
+{% block page_buttons %}{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default">
+    {% include 'admin-v2/marketing/information-collect/detail-basic.html.twig' %}
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <span class="h3 pull-left panel-title" style="margin-top: 8px">{{ 'admin.information_collect.collected_num_tab'|trans }}</span>
+      <form id="information-collect-detail" class="form-inline pull-right padding-no hidden-xs" action="{{path('admin_v2_information_collect_detail', {id:event.id})}}" method="get" novalidate>
+        <div class="form-group">
+          <select class="form-control" name="keywordType">
+            {{ select_options(information_collect_detail_select(event.id|default(0)), app.request.query.get('keywordType')) }}
+          </select>
+          <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="{{ 'form.placeholder.keyword'|trans }}">
+        </div>
+        <span class="panel-title">{{ 'admin.information_collect.collected_time'|trans }}：</span>
+        <div class="form-group ">
+          <input class="form-control" type="text" id="startDate" name="startDate"
+                 value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+          -
+          <input class="form-control" type="text" id="endDate" name="endDate"
+                 value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+        </div>
+        <button class="btn btn-primary" type="submit" style="margin-left: 10px">{{'form.btn.search'|trans}}</button>
+        {% include 'export/export-btn.html.twig' with
+        { 'exportFileName': 'information-collect-detail',
+        'targetFormId': 'information-collect-detail'}
+        %}
+        <input class="hidden" type="hidden" name="eventId" value="{{ event.id|default('') }}">
+      </form>
+    </div>
+    {% include 'admin-v2/marketing/information-collect/detail-collected-data.html.twig' %}
+  </div>
+  {{ admin_macro.paginator(paginator|default()) }}
+{% endblock %}

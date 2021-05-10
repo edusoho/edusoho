@@ -17,9 +17,9 @@ class VerticalImgBuilder extends ImgBuilder
 
     protected $imageYRatio = 1;
 
-    protected $DEFAULT_IMAGE_X = 2600;
+    protected $DEFAULT_IMAGE_X = 2480;
 
-    protected $DEFAULT_IMAGE_Y = 3600;
+    protected $DEFAULT_IMAGE_Y = 3508;
 
     protected function setCertificateTitle(Certificate $certificate)
     {
@@ -27,7 +27,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1300 * $this->imageXRatio - $length * 0.5 * $this->defaultFontSize,
+                'x' => 1220 * $this->imageXRatio - $length * 0.5 * $this->defaultFontSize,
                 'y' => 492 * $this->imageYRatio,
                 'fontSize' => $this->defaultFontSize,
                 'color' => 0,
@@ -65,7 +65,7 @@ class VerticalImgBuilder extends ImgBuilder
         foreach ($contents as $key => $content) {
             $this->imageTtfText(
                 [
-                    'x' => 494 * $this->imageXRatio,
+                    'x' => 454 * $this->imageXRatio,
                     'y' => 1456 * $this->imageYRatio + $key * 112,
                     'fontSize' => 0.5 * $this->defaultFontSize,
                     'color' => 51,
@@ -81,7 +81,7 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1700 * $this->imageXRatio,
+                'x' => 1520 * $this->imageXRatio,
                 'y' => 900 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
@@ -93,7 +93,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1934 * $this->imageXRatio,
+                'x' => 1754 * $this->imageXRatio,
                 'y' => 900 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
@@ -108,7 +108,7 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1700 * $this->imageXRatio,
+                'x' => 1510 * $this->imageXRatio,
                 'y' => 2796 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
@@ -120,7 +120,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 2034 * $this->imageXRatio,
+                'x' => 1844 * $this->imageXRatio,
                 'y' => 2796 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
@@ -135,7 +135,7 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1700 * $this->imageXRatio,
+                'x' => 1510 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
@@ -147,7 +147,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 2034 * $this->imageXRatio,
+                'x' => 1844 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
@@ -167,7 +167,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfStamp(
             $certificate->getCertificateStamp(),
             [
-                'dst_x' => 1650 * $this->imageXRatio,
+                'dst_x' => 1500 * $this->imageXRatio,
                 'dst_y' => 2410 * $this->imageYRatio,
                 'src_x' => 0,
                 'src_y' => 0,
@@ -189,7 +189,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 500 * $this->imageXRatio,
+                'x' => 450 * $this->imageXRatio,
                 'y' => 2610 * $this->imageYRatio,
                 'fontSize' => 40 / 160 * $this->defaultFontSize,
                 'color' => 102,

@@ -28,7 +28,7 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         finalOptions.wrapDom = options.wrapTarget;
         finalOptions.pageSize = this._getPageSizeByMaxLessonsNumOfChapter(finalOptions)
 
-        new ESInfiniteCachedScroll(finalOptions);
+        this.cachedScroll = new ESInfiniteCachedScroll(finalOptions);
 
         if (this._displayAllImmediately) {
           this._destroyPaging();
@@ -42,7 +42,16 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
           $('.course-tasks-show-more').removeClass('hidden');
         }
       });
+
+      $('body').on('click','.js-lesson-item-notify', function () {
+        let $this = $(this);
+        cd.message({type: 'warning', message: $this.data('notifyMessage')});
+      });
     }
+  }
+
+  _destroy() {
+    this.cachedScroll._destroy();
   }
 
 

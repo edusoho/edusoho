@@ -91,15 +91,25 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNull($savedTask);
     }
 
+    public function testFindTasksByCategoryIds()
+    {
+        $task = $this->mockTask();
+        $this->getTaskService()->createTask($task);
+
+        $result = $this->getTaskService()->findTasksByCategoryIds(['1']);
+
+        $this->assertCount(1, $result);
+    }
+
     public function testFindTasksByCourseId()
     {
         $task = $this->mockTask();
         $savedTask = $this->getTaskService()->createTask($task);
 
-        $task = $this->mockSimpleTask(1);
+        $task = $this->mockSimpleTask($task['fromCourseId']);
         $savedTask = $this->getTaskService()->createTask($task);
 
-        $tasks = $this->getTaskService()->findTasksByCourseId(1);
+        $tasks = $this->getTaskService()->findTasksByCourseId($task['fromCourseId']);
 
         $this->assertNotNull($tasks);
         $this->assertEquals(2, count($tasks));
@@ -153,7 +163,7 @@ class TaskServiceTest extends BaseTestCase
         $task['categoryId'] = $lesson['id'];
         $firstTask = $this->getTaskService()->createTask($task);
 
-        $task = $this->mockSimpleTask(1);
+        $task = $this->mockSimpleTask($task['fromCourseId']);
         $task['status'] = 'published';
         $task['seq'] = 2;
         $task['categoryId'] = $lesson['id'];
@@ -1067,6 +1077,14 @@ class TaskServiceTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
+    public function testFindTasksByCopyIdAndLockedCourseIds()
+    {
+        $this->getTaskService()->createTask($this->mockTask());
+        $tasks = $this->getTaskService()->findTasksByCopyIdAndLockedCourseIds(0, ['2']);
+
+        $this->assertCount(1, $tasks);
+    }
+
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
     {
         $taskFields = [
@@ -1087,9 +1105,10 @@ class TaskServiceTest extends BaseTestCase
 
     protected function mockTask()
     {
+        $courseSet = $this->getCourseSetService()->createCourseSet(['title' => 'courseSetTitle', 'type' => 'normal']);
         $course = $this->getCourseService()->createCourse([
             'title' => 'Demo Course',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
             'expiryMode' => 'forever',
             'courseType' => 'normal',
@@ -1099,7 +1118,7 @@ class TaskServiceTest extends BaseTestCase
             'title' => 'test task',
             'mediaType' => 'text',
             'fromCourseId' => $course['id'],
-            'fromCourseSetId' => 1,
+            'fromCourseSetId' => $courseSet['id'],
             'finishType' => 'time',
             'finishData' => '1',
             'status' => 'published',

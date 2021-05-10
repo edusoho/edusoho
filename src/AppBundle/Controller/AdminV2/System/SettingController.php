@@ -9,6 +9,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class SettingController extends BaseController
@@ -239,7 +240,23 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
+        $filesystem = new Filesystem();
+        $filesystem->copy('favicon-default.ico', 'favicon.ico', true);
+
         return $this->createJsonResponse(true);
+    }
+
+    public function recordPictureUploadAction(Request $request)
+    {
+        $fileId = $request->request->get('id');
+        $path = $this->replaceFile('recordPicture', $fileId);
+
+        $response = [
+            'path' => $path,
+            'url' => $this->container->get('assets.packages')->getUrl($path),
+        ];
+
+        return $this->createJsonResponse($response);
     }
 
     public function adminSyncAction(Request $request)

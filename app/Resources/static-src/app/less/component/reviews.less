@@ -1,0 +1,130 @@
+.reviews {
+  position: relative;
+  margin-top: 20px;
+
+  .reviews-item {
+    position: relative;
+    margin-top: 20px;
+
+    .reviews-item__img {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 40px;
+      height: 40px;
+      .border-radius(50%);
+    }
+
+    .reviews-item__text:hover .review-text__hover {
+      display: inline;
+    }
+    .review-text__hover {
+      display: none;
+    }
+    .reviews-item__text {
+      padding-left: 72px;
+      margin-top: 10px;
+      width: 100%;
+
+      .reviews-text__nickname {
+        color: #919191;
+
+        a,
+        span {
+          margin-right: 5px;
+        }
+      }
+
+      .reviews-text__rating {
+        margin-top: 5px;
+      }
+
+      .reviews-text__content {
+        margin-top: 10px;
+      }
+
+      .reviews-text__reply {
+        margin-top: 10px;
+        text-align: right;
+        color: #46C37B;
+        a {
+          margin-left: 10px;
+        }
+      }
+
+      .reviews-text__reply-content {
+        margin-top: 16px;
+        width: 100%;
+        .border-radius(4px);
+        padding: 12px;
+        background-color: #f5f5f5;
+
+        textarea {
+          width: 100%;
+          height: 60px;
+          outline-color: #46c37b;
+          outline-width: 1px;
+          border: 1px solid #e1e1e1;
+          .border-radius(4px);
+        }
+      }
+    }
+  }
+
+  .learn-more {
+    margin-top: 24px;
+    text-align: center;
+  }
+}
+
+.review-report {
+  .review-report__title {
+    margin: 10px 0;
+    text-align: center;
+    color: #333;
+  }
+
+  .review-report__form {
+    width: 300px;
+    margin: 0 auto;
+
+    .report-form {
+      text-align: center;
+
+      .report-form__item {
+        border-bottom: 1px solid #e1e1e1;
+        text-align: left;
+
+        .report-form__item__label {
+          padding: 10px 0 10px;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .report-form__item__icon {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .report-form__item__input {
+          width: 0;
+          height: 0;
+
+          &[type=radio]:checked + span {
+            display: block !important;
+          }
+        }
+      }
+
+      .report-from__submit {
+        padding: 6px 80px;
+      }
+    }
+  }
+}

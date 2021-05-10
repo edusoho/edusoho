@@ -22,71 +22,71 @@ class NormalStrategyTest extends BaseTestCase
      */
     public function testCreateTaskCategoryInvalidException()
     {
-        $task = array(
+        $task = [
             'fromCourseId' => 1,
             'categoryId' => 1,
-        );
+        ];
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getChapter',
-                'withParams' => array(1, 1),
-                'returnValue' => array(
+                'withParams' => [1, 1],
+                'returnValue' => [
                     'type' => 'exercise',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->getNormalStrategy()->createTask($task);
     }
 
     public function testCreateTask()
     {
-        $task = array(
+        $task = [
             'fromCourseId' => 1,
             'categoryId' => 1,
             'activityId' => 1,
-        );
+        ];
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getChapter',
-                'withParams' => array(1, 1),
-                'returnValue' => array(
+                'withParams' => [1, 1],
+                'returnValue' => [
                     'type' => 'lesson',
                     'status' => 'create',
                     'isOptional' => 0,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskDao', array(
-            array(
+        $this->mockBiz('Task:TaskDao', [
+            [
                 'functionName' => 'create',
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 2,
                     'status' => 'create',
                     'isOptional' => 0,
                     'activityId' => 1,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'withParams' => array(1, true),
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'withParams' => [1, true],
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
-        $expected = array(
+        $expected = [
             'id' => 2,
             'status' => 'create',
             'isOptional' => 0,
             'activityId' => 1,
-            'activity' => array('id' => 1),
-        );
+            'activity' => ['id' => 1],
+        ];
         $result = $this->getNormalStrategy()->createTask($task);
 
         $this->assertArraySternEquals($expected, $result);
@@ -94,37 +94,37 @@ class NormalStrategyTest extends BaseTestCase
 
     public function testUpdateTask()
     {
-        $this->mockBiz('Task:TaskDao', array(
-            array(
+        $this->mockBiz('Task:TaskDao', [
+            [
                 'functionName' => 'update',
-                'returnValue' => array(
+                'returnValue' => [
                     'courseId' => 1,
                     'categoryId' => 1,
                     'title' => 'updatedTaskTitle',
                     'isLesson' => 1,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskService', array(
-            array(
+        $this->mockBiz('Task:TaskService', [
+            [
                 'functionName' => 'countTasks',
                 'returnValue' => 1,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'updateChapter',
                 'runTimes' => 1,
-            ),
-        ));
+            ],
+        ]);
 
-        $task = array(
+        $task = [
             'courseId' => 1,
             'categoryId' => 2,
             'title' => 'testTaskTitle',
-        );
+        ];
 
         $result = $this->getNormalStrategy()->updateTask(1, $task);
 
@@ -134,72 +134,72 @@ class NormalStrategyTest extends BaseTestCase
 
     public function testGetTasksListJsonData()
     {
-        $tasks = array(
-            array(
+        $tasks = [
+            [
                 'id' => 1,
                 'categoryId' => 1,
                 'title' => 'task1 title',
                 'mode' => 'preparation',
                 'seq' => 1,
-            ),
-            array(
+            ],
+            [
                 'id' => 2,
                 'categoryId' => 1,
                 'title' => 'task2 title',
                 'mode' => 'lesson',
                 'seq' => 2,
-            ),
-            array(
+            ],
+            [
                 'id' => 3,
                 'categoryId' => 1,
                 'title' => 'task3 title',
                 'mode' => 'exercise',
                 'seq' => 3,
-            ),
-        );
+            ],
+        ];
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'id' => 1,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskService', array(
-            array(
+        $this->mockBiz('Task:TaskService', [
+            [
                 'functionName' => 'findTasksFetchActivityByCourseId',
                 'returnValue' => $tasks,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->mockBiz('Course:CourseChapterDao', array(
-            array(
+        $this->mockBiz('Course:CourseChapterDao', [
+            [
                 'functionName' => 'findChaptersByCourseId',
-                'returnValue' => array(
-                    array(
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'courseId' => 1,
                         'type' => 'lesson',
                         'seq' => 1,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'courseId' => 1,
                         'type' => 'lesson',
                         'seq' => 2,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 3,
                         'courseId' => 1,
                         'type' => 'exercise',
                         'seq' => 3,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $result = $this->getNormalStrategy()->getTasksListJsonData(1);
         $this->assertCount(3, $result['data']['items']);
@@ -208,78 +208,78 @@ class NormalStrategyTest extends BaseTestCase
 
     public function testGetTasksJsonData()
     {
-        $course = array('id' => 1);
-        $chapter = array('id' => 1);
-        $activity = array('id' => 1);
-        $tasks = array(
-            array('id' => 1),
-            array('id' => 2),
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $course = ['id' => 1];
+        $chapter = ['id' => 1];
+        $activity = ['id' => 1];
+        $tasks = [
+            ['id' => 1],
+            ['id' => 2],
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
                 'returnValue' => $course,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskService', array(
-            array(
+        $this->mockBiz('Task:TaskService', [
+            [
                 'functionName' => 'countTasksByChpaterId',
-                'withParams' => array(1),
+                'withParams' => [1],
                 'returnValue' => 1,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'countTasksByChpaterId',
-                'withParams' => array(2),
+                'withParams' => [2],
                 'returnValue' => 2,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'findTasksFetchActivityByChapterId',
                 'returnValue' => $tasks,
-            ),
-        ));
-        $this->mockBiz('Course:CourseChapterDao', array(
-            array(
+            ],
+        ]);
+        $this->mockBiz('Course:CourseChapterDao', [
+            [
                 'functionName' => 'get',
                 'returnValue' => $chapter,
-            ),
-        ));
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
                 'returnValue' => $activity,
-            ),
-        ));
+            ],
+        ]);
 
-        $task = array(
+        $task = [
             'courseId' => 1,
             'categoryId' => 1,
             'activityId' => 1,
-        );
+        ];
         $result = $this->getNormalStrategy()->getTasksJsonData($task);
         $this->assertEquals($course, $result['data']['course']);
         $this->assertEquals(1, $result['data']['lesson']['id']);
         $this->assertCount(1, $result['data']['tasks']);
         $this->assertEquals('lesson-manage/normal/lesson.html.twig', $result['template']);
 
-        $task = array(
+        $task = [
             'courseId' => 1,
             'categoryId' => 2,
             'activityId' => 1,
             'isLesson' => true,
-        );
+        ];
         $result = $this->getNormalStrategy()->getTasksJsonData($task);
         $this->assertEquals($course, $result['data']['course']);
         $this->assertEquals(1, $result['data']['lesson']['id']);
         $this->assertCount(2, $result['data']['tasks']);
         $this->assertEquals('lesson-manage/normal/lesson.html.twig', $result['template']);
 
-        $task = array(
+        $task = [
             'courseId' => 1,
             'categoryId' => 2,
             'activityId' => 1,
             'isLesson' => false,
-        );
+        ];
         $result = $this->getNormalStrategy()->getTasksJsonData($task);
         $this->assertEquals($course, $result['data']['course']);
         $this->assertEquals(1, $result['data']['lesson']['id']);
@@ -289,323 +289,323 @@ class NormalStrategyTest extends BaseTestCase
 
     public function testDeleteTaskWithEmptyTask()
     {
-        $result = $this->getNormalStrategy()->deleteTask(array());
+        $result = $this->getNormalStrategy()->deleteTask([]);
 
         $this->assertTrue($result);
     }
 
     public function testDeleteTask()
     {
-        $task = array(
+        $task = [
             'id' => 1,
             'courseId' => 1,
             'categoryId' => 1,
             'activityId' => 1,
-        );
-        $this->mockBiz('Task:TaskDao', array(
-            array(
+        ];
+        $this->mockBiz('Task:TaskDao', [
+            [
                 'functionName' => 'delete',
                 'runTimes' => 1,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'count',
                 'returnValue' => 0,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'findByCourseIdAndCategoryId',
-                'withParams' => array(1, 1),
-                'returnValue' => array(),
-            ),
-        ));
-        $this->mockBiz('Task:TaskResultService', array(
-            array(
-                'functionName' => 'deleteUserTaskResultByTaskId',
+                'withParams' => [1, 1],
+                'returnValue' => [],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskResultService', [
+            [
+                'functionName' => 'deleteTaskResultsByTaskId',
                 'runTimes' => 1,
-            ),
-        ));
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'deleteActivity',
                 'runTimes' => 1,
-            ),
-        ));
+            ],
+        ]);
 
         $result = $this->getNormalStrategy()->deleteTask($task);
 
         $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
-        $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
+        $this->getTaskResultService()->shouldHaveReceived('deleteTaskResultsByTaskId')->times(1);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
         $this->assertTrue($result);
     }
 
     public function testCanLearnTaskWithFreeModeCourse()
     {
-        $task = array(
+        $task = [
             'courseId' => 1,
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'freeMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithOptionalTask()
     {
-        $task = array(
+        $task = [
             'courseId' => 1,
             'isOptional' => 1,
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithLiveTask()
     {
-        $task = array(
+        $task = [
             'courseId' => 1,
             'isOptional' => 0,
             'type' => 'live',
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithTestpaperTask()
     {
-        $task = array(
+        $task = [
             'courseId' => 1,
             'isOptional' => 0,
             'type' => 'testpaper',
             'startTime' => time(),
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithStatusFinish()
     {
-        $task = array(
+        $task = [
             'id' => 1,
             'courseId' => 1,
             'isOptional' => 0,
             'type' => 'normal',
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskResultService', array(
-            array(
+        $this->mockBiz('Task:TaskResultService', [
+            [
                 'functionName' => 'getUserTaskResultByTaskId',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'status' => 'finish',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithPreTaskEmpty()
     {
-        $task = array(
+        $task = [
             'id' => 1,
             'courseId' => 1,
             'isOptional' => 0,
             'type' => 'normal',
             'seq' => 1,
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskResultService', array(
-            array(
+        $this->mockBiz('Task:TaskResultService', [
+            [
                 'functionName' => 'getUserTaskResultByTaskId',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'status' => 'doing',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskDao', array(
-            array(
+        $this->mockBiz('Task:TaskDao', [
+            [
                 'functionName' => 'count',
                 'returnValue' => 1,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'search',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testCanLearnTaskWithPreTaskFinished()
     {
-        $task = array(
+        $task = [
             'id' => 1,
             'courseId' => 1,
             'isOptional' => 0,
             'type' => 'normal',
             'seq' => 1,
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        ];
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'learnMode' => 'lockMode',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskResultService', array(
-            array(
+        $this->mockBiz('Task:TaskResultService', [
+            [
                 'functionName' => 'getUserTaskResultByTaskId',
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'status' => 'doing',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'findUserTaskResultsByTaskIds',
-                'returnValue' => array(
+                'returnValue' => [
                     'courseTaskId' => 1,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskDao', array(
-            array(
+        $this->mockBiz('Task:TaskDao', [
+            [
                 'functionName' => 'count',
                 'returnValue' => 1,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'search',
-                'returnValue' => array(
-                    array(
+                'returnValue' => [
+                    [
                         'id' => 1,
-                    ),
-                ),
-            ),
-        ));
-        $this->mockBiz('Task:TaskService', array(
-            array(
+                    ],
+                ],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskService', [
+            [
                 'functionName' => 'isPreTasksIsFinished',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($this->getNormalStrategy()->canLearnTask($task));
     }
 
     public function testPrepareCourseItemsWithLimitNumEmpty()
     {
-        $tasks = array(
-            array('id' => 1, 'seq' => 1),
-            array('id' => 2, 'seq' => 2),
-        );
-        $this->mockBiz('Course:CourseChapterDao', array(
-            array(
+        $tasks = [
+            ['id' => 1, 'seq' => 1],
+            ['id' => 2, 'seq' => 2],
+        ];
+        $this->mockBiz('Course:CourseChapterDao', [
+            [
                 'functionName' => 'findChaptersByCourseId',
-                'returnValue' => array(
-                    array(
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'title' => 'chapter1',
                         'seq' => 1,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'title' => 'chapter2',
                         'seq' => 2,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $result = $this->getNormalStrategy()->prepareCourseItems(1, $tasks, 0);
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => 1,
             'title' => 'chapter1',
             'seq' => 1,
             'itemType' => 'chapter',
-        ), $result['chapter-1']);
+        ], $result['chapter-1']);
         $this->assertCount(4, $result);
     }
 
     public function testPrepareCourseItems()
     {
-        $tasks = array(
-            array('id' => 1, 'seq' => 1),
-            array('id' => 2, 'seq' => 2),
-        );
-        $this->mockBiz('Course:CourseChapterDao', array(
-            array(
+        $tasks = [
+            ['id' => 1, 'seq' => 1],
+            ['id' => 2, 'seq' => 2],
+        ];
+        $this->mockBiz('Course:CourseChapterDao', [
+            [
                 'functionName' => 'findChaptersByCourseId',
-                'returnValue' => array(
-                    array(
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'title' => 'chapter1',
                         'seq' => 1,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'title' => 'chapter2',
                         'seq' => 2,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $result = $this->getNormalStrategy()->prepareCourseItems(1, $tasks, 1);
 
@@ -632,7 +632,7 @@ class NormalStrategyTest extends BaseTestCase
 
     private function createTask($taskId, $courseId, $status = 'create')
     {
-        $task = array(
+        $task = [
             'id' => $taskId,
             'courseId' => $courseId,
             'seq' => 2,
@@ -655,7 +655,7 @@ class NormalStrategyTest extends BaseTestCase
             'createdUserId' => 2,
             'createdTime' => time(),
             'updatedTime' => time(),
-        );
+        ];
 
         return $this->getTaskDao()->create($task);
     }

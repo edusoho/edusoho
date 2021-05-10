@@ -265,7 +265,7 @@
                             {% else %}
                               <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                             {% endif %}
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                            <h4><a href="{{ path('vip') }}" class="btn btn-success">立即购买</a></h4>
                           </div>
                         </div>
                       </li>
@@ -361,7 +361,7 @@
                             <a style="margin-top: 6px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
                           {% endif %}
                           <div class="course-title">
-                            {{ courseSet.title }}
+                            {{ courseSet.title|raw }}
                           </div>
                         </div>
                       </a>
@@ -396,7 +396,7 @@
           </div>
         {% endif %}
 
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
         {% endif %}
 
@@ -468,7 +468,7 @@
               {% if can_obtain_certificates(course.id, 'course') %}
                 <a style="margin: 10px -6px 0 10px;" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
               {% endif %}
-              <span class="title">{{ courseSet.title }}</span>
+              <span class="title">{{ courseSet.title|raw }}</span>
 
               {% if mode in ['default', 'teach'] %}
 
@@ -488,7 +488,7 @@
                  {% include "course/widgets/course-set-price.html.twig" %}
               </div>
             {% endif %}
-            {% if setting('course.show_review', '1') == 1 %}
+            {% if setting('goods_setting.show_review', '1') == 1 %}
               <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ courseSet.ratingNum }}</strong> {{ '评价'|trans }}</span>

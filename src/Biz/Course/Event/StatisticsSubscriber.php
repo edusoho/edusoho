@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
+use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
@@ -21,6 +22,8 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.create' => 'onTaskCreate',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
+            'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.update.sync' => 'onTaskUpdateSync',
             //'course.task.publish' => 'onPublishTaskNumberChange',
             //'course.task.unpublish' => 'onPublishTaskNumberChange',
 
@@ -49,6 +52,26 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ];
     }
 
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->getCourseService()->updateCourseStatistics($copiedTask['courseId'], ['lessonNum', 'taskNum', 'compulsoryTaskNum', 'electiveTaskNum']);
+        }
+    }
+
+    public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->getCourseService()->updateCourseStatistics($copiedTask['courseId'], ['lessonNum', 'taskNum', 'compulsoryTaskNum', 'electiveTaskNum']);
+        }
+    }
+
     public function onCourseMarketingChange(Event $event)
     {
         $subject = $event->getSubject();
@@ -65,7 +88,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskCreate(Event $event)
     {
-        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+        $this->onTaskNumberChange($event, ['taskNum', 'lessonNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onTaskUpdate(Event $event)
@@ -74,7 +97,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $oldTask = $event->getArguments();
         $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
         if ($isOptionalChange) {
-            $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+            $this->onTaskNumberChange($event, ['taskNum', 'lessonNum', 'compulsoryTaskNum', 'electiveTaskNum']);
         }
     }
 
@@ -82,12 +105,12 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $task = $event->getSubject();
         $this->getTaskResultService()->deleteTaskResultsByTaskId($task['id']);
-        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+        $this->onTaskNumberChange($event, ['taskNum', 'lessonNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onCourseTaskUpdateOptional(Event $event)
     {
-        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+        $this->onTaskNumberChange($event, ['taskNum', 'lessonNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onPublishTaskNumberChange(Event $event)
@@ -102,7 +125,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], [
-            'compulsoryTaskNum', 'publishLessonNum',
+            'compulsoryTaskNum', 'publishLessonNum', 'electiveTaskNum',
         ]);
     }
 
@@ -142,7 +165,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
 
-        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], ['compulsoryTaskNum']);
+        $this->getCourseService()->updateCourseStatistics($lesson['courseId'], ['compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onReviewChange(Event $event)
@@ -168,6 +191,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         foreach ($copiedCourseSetIds as $copiedCourseSetId) {
             $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($copiedCourseSetId);
         }
+    }
+
+    private function getCopiedTasks($task)
+    {
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
     }
 
     /**
@@ -200,6 +230,14 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
     }
 
     /**

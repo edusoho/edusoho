@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-md" %}
+
+{% block modal_content %}
+  <div class="modal-content">
+      <div class="cd-panel">
+        <div class="cd-panel-body">
+          {{ render(controller('AppBundle:InformationCollect/InformationCollect:eventForm', {eventId: eventId, inOrder:1})) }}
+        </div>
+      </div>
+  </div>
+{% endblock %}
+

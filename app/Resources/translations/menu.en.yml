@@ -94,6 +94,7 @@ admin.course.basic.basic_tab.delete_submit_btn: Delete
 ##班级管理模块
 admin.course.classroom.basic_tab: Classes
 admin.course.classroom.recommend_tab: Recommended
+admin_v2.teach.classroom.statistics_tab: Statistics
 
 admin.course.classroom.basic_tab.create_btn: Add
 admin.course.classroom.basic_tab.manage_btn: Manage
@@ -515,7 +516,7 @@ admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: Publish
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: Delete
 
 #公开课模块
-admin_v2.course.open_course_menu:  Public Courses
+admin_v2.course.open_course_menu:  Normal Public Courses
 admin_v2.course.open_course.basic_tab: Open courses
 admin_v2.course.open_course.basic_tab.create_btn: Create
 admin_v2.course.open_course.recommend_list_tab: Recommended
@@ -631,6 +632,14 @@ admin_v2.operation.certificate.member_list_tab: List Manage
 admin_v2.operation.certificate.audit_manage_tab: Audit manage
 admin_v2.operation.certificate.template.create_tab: Create
 
+# 运营-内容运营-用户内容审核
+admin_v2.operation.user_content_audit_menu: User Content Review
+admin_v2.operation.user_content_audit_tab: User Content Review
+
+# 运营-内容运营-举报内容审核
+admin_v2.operation.report_content_audit_menu: Report Content Review
+admin_v2.operation.report_content_audit_tab: Report Content Review
+
 # 运营-内容运营-全站站内通知
 admin_v2.operation.notification_menu: Site Notices
 admin_v2.operation.notification.basic_tab: Site Notices
@@ -648,6 +657,7 @@ admin_v2.operation.article.basic_tab: Article Manage
 admin_v2.operation.article.basic_tab.create_btn: Add Article
 admin_v2.operation.article.category_tab: Category Manage
 admin_v2.operation.article.category_tab.category_create_btn: Add Category
+admin_v2.operation.article.review_tab: Article Review
 
 # 运营-内容运营-微信通知
 admin_v2.operation.wechat_notification: WeChat Notification
@@ -655,11 +665,14 @@ admin_v2.operation.wechat.notification_record_tab: Send Record
 admin_v2.operation.wechat.notification_manage: Setting
 
 # 运营-内容运营-敏感词
-admin_v2.operation.sensitive_words_menu: Sensitive Words
-admin_v2.operation.sensitive_words.sensitive_words_list_tab: Sensitive Words List
-admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
-admin_v2.operation.sensitive_words.banlogs_tab: Processing History
+admin_v2.system.sensitive_words_menu: Sensitive Words
+admin_v2.system.sensitive_words.sensitive_words_list_tab: Sensitive Words List
+admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
+admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn: Import Sensitive Word
+admin_v2.system.sensitive_words.banlogs_tab: Processing History
 
+#营销-公开课管理
+admin_v2.open_course.basic_group: Open Course
 
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage
@@ -684,6 +697,17 @@ admin_v2.operation.invite.user_tab: Invitation Records
 admin_v2.operation.invite.coupon_tab: Rewards
 
 admin_v2.micromarketing.menu: Micromarketing
+
+#营销-营销管理-用户信息采集
+
+admin_v2.information_collect.menu: User Information Collection
+admin_v2.information_collect.tab: User Information Collection
+admin_v2.information_collect.operate.update_tab: 'Update'
+admin_v2.information_collect.operate.close_tab: 'Close the collection'
+admin_v2.information_collect.operate.open_tab: 'Open the collection'
+admin_v2.information_collect.export_excel_tab: 'Export Excel file'
+admin_v2.information_collec.detail: User Information Collection > Deatil
+admin_v2.information_collect.operate.update_tab: 'Update'
 
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: Group Discussions
@@ -839,6 +863,21 @@ admin_v2.system.operation.message_send_tab: Message Send
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
 
+# 系统-合规经营与信息安全
+admin_v2.operation.basic_group: Operation Settings
+
+#系统-经营资质
+admin_v2.system.business_management_menu: Business qualification
+admin_v2.system.business_qualification_tab: Setting of filing information
+admin_v2.system.management_qualifications.business_license_tab: Buiness License
+admin_v2.system.user_content_ctrl_tab: User Content Control
+admin_v2.system.user_content_ctrl.review: Review
+admin_v2.system.user_content_ctrl.note: Note
+admin_v2.system.user_content_ctrl.thread: Thread
+admin_v2.system.user_content_ctrl.private_message: Private Message
+admin_v2.system.user_content_audit_menu: Content Review Setting
+admin_v2.system.user_content_audit_tab: User Content Review Setting
+
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: Asset Setting
 admin_v2.system.asset.payment_tab: Payment
@@ -862,6 +901,8 @@ admin_v2.system.course.questions_tab: Question
 admin_v2.system.course.avatar_tab: Default Avatar
 admin_v2.system.course.classroom_tab: Class
 admin_v2.system.course.open_course_tab: Open Course
+admin_v2.system.course.task_multiple_open_tab: Task Multiple Open Configuration
+admin_v2.system.course.video_task_tab: Video Task Learning Configuration
 
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
@@ -945,3 +986,9 @@ admin_v2.developer.mobile_iap_product.basic_tab: iOS Purchase Setting
 # 新版后台结束
 
 admin_v2.course.basic.basic_tab.go_to_choose_btn: Go to the market
+
+admin_v2.operating.goods_setting: Goods Setting
+
+admin_v2.information.collection_menu: Information Collection
+admin_v2.information.collection_tab: Information Collection
+admin_v2.information_collect.create: Create

@@ -27,6 +27,7 @@ class PayServiceImpl extends BaseService implements PayService
             'notify_url',
             'return_url',
             'show_url',
+            'success_url',
             'create_ip',
             'platform_type',
             'platform',
@@ -37,6 +38,7 @@ class PayServiceImpl extends BaseService implements PayService
             'type',
             'rate',
             'app_pay',
+            'time_expire',
         ));
 
         if ('recharge' == $data['type']) {

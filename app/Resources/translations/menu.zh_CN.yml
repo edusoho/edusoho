@@ -90,6 +90,7 @@ admin.course.basic.basic_tab.delete_submit_btn: 删除课程
 ##班级管理模块
 admin.course.classroom.basic_tab: 班级管理
 admin.course.classroom.recommend_tab: 班级推荐
+admin_v2.teach.classroom.statistics_tab: 班级统计
 
 admin.course.classroom.basic_tab.create_btn: 创建班级
 admin.course.classroom.basic_tab.manage_btn: 管理班级
@@ -510,7 +511,7 @@ admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块
-admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course_menu: 常规公开课
 admin_v2.course.open_course.basic_tab: 公开课管理
 admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
 admin_v2.course.open_course.recommend_list_tab: 公开课推荐
@@ -538,11 +539,12 @@ admin_v2.course.thread.classroom_thread_tab: 班级话题
 
 
 # 教学模块-助学管理-反馈管理
-admin_v2.course.review_menu: 反馈管理
+admin_v2.course.review_menu: 评价管理
 
 admin_v2.course.review.course_review_tab: 课程评价
 admin_v2.course.review.classroom_review_tab: 班级评价
 admin_v2.course.review.exercise_review_tab: 题库练习评价
+
 
 # 教学模块-资源管理
 admin_v2.cloud_resource.basic_group: 资源管理
@@ -628,6 +630,14 @@ admin_v2.operation.certificate.audit_manage_tab: 审核管理
 admin_v2.operation.certificate.audit.basic_tab: 认证审核
 admin_v2.operation.certificate.template.create_tab: 创建模板
 
+# 运营-内容运营-用户内容审核
+admin_v2.operation.user_content_audit_menu: 用户内容审核
+admin_v2.operation.user_content_audit_tab: 用户内容审核
+
+# 运营-内容运营-举报内容审核
+admin_v2.operation.report_content_audit_menu: 举报内容复核
+admin_v2.operation.report_content_audit_tab: 举报内容复核
+
 # 运营-内容运营-全站站内通知
 admin_v2.operation.notification_menu: 全站站内通知
 admin_v2.operation.notification.basic_tab: 全站站内通知
@@ -645,6 +655,7 @@ admin_v2.operation.article.basic_tab: 资讯管理
 admin_v2.operation.article.basic_tab.create_btn: 添加资讯
 admin_v2.operation.article.category_tab: 栏目管理
 admin_v2.operation.article.category_tab.category_create_btn: 添加栏目
+admin_v2.operation.article.review_tab: 资讯评论
 
 # 运营-内容运营-微信通知
 admin_v2.operation.wechat_notification: 微信通知
@@ -652,12 +663,15 @@ admin_v2.operation.wechat.notification_record_tab: 发送记录
 admin_v2.operation.wechat.notification_manage: 设置
 
 # 运营-内容运营-敏感词
-admin_v2.operation.sensitive_words_menu: 敏感词管理
-admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
-admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
-admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
+admin_v2.system.sensitive_words_menu: 敏感词管理
+admin_v2.system.sensitive_words.sensitive_words_list_tab: 敏感词列表
+admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
+admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn: 导入敏感词
+admin_v2.system.sensitive_words.banlogs_tab: 屏蔽记录
 
 
+#营销-公开课管理
+admin_v2.open_course.basic_group: 公开课
 
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
@@ -683,6 +697,16 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 
 #营销-营销管理-微营销
 admin_v2.micromarketing.menu: 微营销
+
+#营销-营销管理-用户信息采集
+
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.operate.update_tab: 编辑
+admin_v2.information_collect.operate.close_tab: 关闭采集
+admin_v2.information_collect.operate.open_tab: 开启采集
+admin_v2.information_collect.export_excel_tab: 导出Excel文件
+admin_v2.information_collect.detail: 用户信息采集 > 详情
 
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: 小组管理
@@ -849,6 +873,21 @@ admin_v2.system.operation.message_send_tab: 私信发送
 # 系统-交易设置
 admin_v2.transaction.basic_group: 交易设置
 
+# 系统-合规经营与信息安全
+admin_v2.operation.basic_group: 合规经营管理
+
+#系统-经营资质
+admin_v2.system.business_management_menu: 经营资质
+admin_v2.system.business_qualification_tab: 备案信息设置
+admin_v2.system.management_qualifications.business_license_tab: 经营许可设置
+admin_v2.system.user_content_ctrl_tab: 用户内容设置
+admin_v2.system.user_content_ctrl.review: 评价
+admin_v2.system.user_content_ctrl.note: 笔记
+admin_v2.system.user_content_ctrl.thread: 话题问答
+admin_v2.system.user_content_ctrl.private_message: 私信
+admin_v2.system.user_content_audit_menu: 内容审核设置
+admin_v2.system.user_content_audit_tab: 用户内容审核设置
+
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置
 admin_v2.system.asset.payment_tab: 支付
@@ -872,6 +911,8 @@ admin_v2.system.course.questions_tab: 题库
 admin_v2.system.course.avatar_tab: 默认图片
 admin_v2.system.course.classroom_tab: 班级
 admin_v2.system.course.open_course_tab: 公开课
+admin_v2.system.course.task_multiple_open_tab: 课时多开配置
+admin_v2.system.course.video_task_tab: 视频课时学习配置
 
 admin_v2.system.roles_menu: 角色权限
 admin_v2.system.roles.basic_tab: 角色权限
@@ -958,5 +999,8 @@ admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purcha
 
 admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择
 
-exception.goods.not_found: 商品未找到
+admin_v2.operating.goods_setting: 商品页管理
 
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.create: 新建

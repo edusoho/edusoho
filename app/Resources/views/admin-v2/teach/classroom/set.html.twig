@@ -9,7 +9,7 @@
   {{ web_macro.flash_messages() }}
 
   <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
-    
+
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label >{{'admin.setting_course.classroom.setting_classroom_name'|trans}}</label>
@@ -22,7 +22,7 @@
 
     <div class="alert alert-warning col-md-offset-2" role="alert">{{'admin.setting_course.classroom.setting_classroom_name.tips'|trans}}
     </div>
-    
+
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label >{{'admin.setting_course.classroom.course_discount'|trans}}</label>
@@ -45,32 +45,17 @@
     </div>
 
     <div>
-      <div class="row form-group">
-        <div class="col-md-2 control-label"><label >{{'admin.setting_course.classroom.classroom_comments_manage'|trans}}</label></div>
+      {#  此处控制权限移交给商品剥离去控制，由于APP兼容老版本的原因，需要对配置进行隐藏同步 时间：2020-10-20，版本： 20.4.3  #}
+      <div class="row form-group hidden">
         <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_review'|trans }}：</div>
         <div class="controls col-md-7 radios">
           {{ radios('show_review', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_review|default('1')) }}
         </div>
       </div>
-
-      <div class="row form-group">
-        <div class="col-md-2 control-label"><label ></label></div>
-        <div class="col-md-2 control-label control-label--long">{{ 'admin.setting_course.classroom.classroom_thread'|trans }}：</div>
-        <div class="controls col-md-6 radios">
-            {{ radios('show_thread', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_thread|default('1')) }}
-        </div>
-      </div>
-
-      <div class="row form-group">
-        <div class="col-md-2 control-label"><label ></label></div>
-        <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_note'|trans }}：</div>
-        <div class="controls col-md-7 radios">
-            {{ radios('show_note', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_note|default('1')) }}
-        </div>
-      </div>
     </div>
 
-    <div class="row form-group">
+    {#  此处控制权限移交给商品剥离去控制，由于APP兼容老版本的原因，需要对配置进行隐藏同步 时间：2020-10-20，版本： 20.4.3 #}
+    <div class="row form-group hidden">
       <label class="col-md-2 control-label">{{ 'admin.setting_classroom.classroom_operation_mode.allow_show_user_count'|trans }}</label>
       <div class="col-md-7 controls radios">
         {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, setting('classroom').show_student_num_enabled|default('1') ) }}
@@ -80,7 +65,7 @@
     <div class="row form-group">
       <div class="col-md-2 control-label"></div>
       <div class="controls col-md-8">
-        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

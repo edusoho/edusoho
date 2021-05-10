@@ -1,17 +1,26 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
 
-const fileChooser = new FileChooser();
 const $fileId = $('#material-file-chooser').find('[name=fileId]');
-fileChooser.on('select', file => {
-  $fileId.val(file.id);
-  FileChooser.closeUI();
-  $('.jq-validate-error').remove();
-});
 
-$('.js-choose-trigger').click(event => {
-  FileChooser.openUI();
-  $fileId.val('');
-});
+function initFileChooser() {
+  const fileChooser = new FileChooser();
+  fileChooser.on('select', file => {
+    $fileId.val(file.id);
+    FileChooser.closeUI();
+    $('.jq-validate-error').remove();
+  });
+}
+
+if ($(".file-chooser-main").hasClass('hidden')) {
+  $('.js-choose-trigger').click(event => {
+    initFileChooser();
+    FileChooser.openUI();
+    $fileId.val('');
+  });
+} else {
+  initFileChooser();
+}
+
 
 const $form = $('#replay-material-form');
 
@@ -25,3 +34,5 @@ $form.validate({
     fileId: Translator.trans('course.manage.live_replay_upload_error_hint')
   }
 });
+
+$("[data-toggle='popover']").popover();

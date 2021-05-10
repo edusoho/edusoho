@@ -3,7 +3,10 @@
 namespace Biz\Sms\Event;
 
 use AppBundle\Common\StringToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsType;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,9 +18,9 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'order.pay.success' => 'onPaySuccess',
-        );
+        ];
     }
 
     public function onPaySuccess(Event $event)
@@ -26,21 +29,29 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
         $targetType = $event->getArgument('targetType');
         $smsType = 'sms_'.$targetType.'_buy_notify';
 
+        $userId = $order['userId'];
+        $parameters = [];
+        $parameters['order_title'] = $order['title'];
+        $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+
+        if ('coin' == $targetType) {
+            $parameters['totalPrice'] = $order['amount'].'元';
+        } else {
+            $parameters['totalPrice'] = $order['totalPrice'].'元';
+        }
+
         if ($this->getSmsService()->isOpen($smsType)) {
-            $userId = $order['userId'];
-            $parameters = array();
-            $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+            return $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
+        }
 
-            if ($targetType == 'coin') {
-                $parameters['totalPrice'] = $order['amount'].'元';
-            } else {
-                $parameters['totalPrice'] = $order['totalPrice'].'元';
-            }
-
-            $description = $parameters['order_title'].'成功回执';
-
-            $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+        $templateCode = 'coin' == $targetType ? MessageSubscribeTemplateUtil::TEMPLATE_COIN_RECHARGE : MessageSubscribeTemplateUtil::TEMPLATE_PAY_SUCCESS;
+        if ($this->getWeChatService()->isSubscribeSmsEnabled($templateCode)) {
+            return $this->getWeChatService()->sendSubscribeSms(
+                $templateCode,
+                [$userId],
+                SmsType::BUY_NOTIFY,
+                $parameters
+            );
         }
     }
 
@@ -50,5 +61,13 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 }

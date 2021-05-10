@@ -60,15 +60,16 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ]);
 
         $review['content'] = $this->purifyHtml($review['content']);
-        $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($review['content'], 'review');
+        $review['content'] = $sensitiveResult['content'];
 
         $review = $this->getReviewDao()->create($review);
-        $this->dispatchEvent('review.create', new Event($review));
+        $this->dispatchEvent('review.create', new Event($review, ['sensitiveResult' => $sensitiveResult]));
 
         return $review;
     }
 
-    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
+    public function getReviewByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
         return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
@@ -80,11 +81,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review = ArrayToolkit::parts($review, ['content', 'rating']);
 
         $review['content'] = $this->purifyHtml($review['content']);
-        $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
+        $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($review['content'], 'review');
+        $review['content'] = $sensitiveResult['content'];
 
         $review = $this->getReviewDao()->update($id, $review);
 
-        $this->dispatchEvent('review.update', new Event($review));
+        $this->dispatchEvent('review.update', new Event($review, ['sensitiveResult' => $sensitiveResult]));
 
         return $review;
     }
@@ -110,6 +112,26 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function countReviews($conditions)
     {
         return $this->getReviewDao()->count($conditions);
+    }
+
+    public function countCourseReviews($conditions)
+    {
+        return $this->getReviewDao()->countCourseReviews($conditions);
+    }
+
+    public function searchCourseReviews($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getReviewDao()->searchCourseReviews($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countClassroomReviews($conditions)
+    {
+        return $this->getReviewDao()->countClassroomReviews($conditions);
+    }
+
+    public function searchClassroomReviews($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getReviewDao()->searchClassroomReviews($conditions, $orderBys, $start, $limit);
     }
 
     public function searchReviews($conditions, $orderBys, $start, $limit, $columns = [])

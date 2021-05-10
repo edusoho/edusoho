@@ -25,11 +25,11 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array('tagIds' => 'json'),
-            'orderbys' => array('isStick', 'postNum', 'createdTime', 'lastPostTime', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => ['tagIds' => 'json'],
+            'orderbys' => ['isStick', 'postNum', 'createdTime', 'lastPostTime', 'updatedTime'],
+            'conditions' => [
                 'groupId = :groupId',
                 'createdTime > :createdTime',
                 'updatedTime >= :updatedTime_GE',
@@ -39,7 +39,9 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'userId = :userId',
                 'status = :status',
                 'title like :title',
-            ),
-        );
+                'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
+            ],
+        ];
     }
 }

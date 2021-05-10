@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Testpaper\BaseTestpaperController as BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
@@ -18,6 +18,9 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Biz\User\Service\TokenService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,7 +78,7 @@ class ManageController extends BaseController
         );
         $tasks = $this->getTaskService()->searchTasks(
             $conditions,
-            ['seq' => 'ASC'],
+            ['seq' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -93,6 +96,7 @@ class ManageController extends BaseController
             'resultStatusNum' => $resultStatusNum,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'type' => $type,
         ]);
     }
 
@@ -163,9 +167,10 @@ class ManageController extends BaseController
             10
         );
 
+        $orderBy = in_array($status, ['reviewing', 'finished']) ? ['end_time' => 'ASC'] : ['updated_time' => 'DESC'];
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            [],
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -255,6 +260,20 @@ class ManageController extends BaseController
             return $this->createMessageResponse('info', 'Paper not found');
         }
 
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerScene']['id']);
+        $needJob = 0; //是否要通过Job更新默认不需要
+        //判断如果存在新提交的内容
+        if (empty($answerScene['question_report_update_time']) || $answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
+            $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
+            $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
+            if (!$needJob) {
+                //判断当前阈值不需要定时任务来异步处理
+                !empty($answerCount) ? $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']) : null;
+            } else {
+                $jobSync = $this->handleJob($answerScene); //是否在次请求加载过程中存在同步执行中的Job
+            }
+        }
+
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
 
         return $this->render('testpaper/manage/result-analysis.html.twig', [
@@ -263,6 +282,9 @@ class ManageController extends BaseController
             'answerSceneReport' => $answerSceneReport,
             'assessment' => $activity['ext']['testpaper'],
             'targetType' => $targetType,
+            'answerScene' => $answerScene,
+            'jobSync' => !empty($jobSync) ? 1 : 0,
+            'needJob' => !empty($needJob) ? 1 : 0,
         ]);
     }
 
@@ -796,6 +818,9 @@ class ManageController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
@@ -817,16 +842,17 @@ class ManageController extends BaseController
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return AnswerRecordService
+     */
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 
-    protected function getAnswerSceneService()
-    {
-        return $this->createService('ItemBank:Answer:AnswerSceneService');
-    }
-
+    /**
+     * @return AnswerReportService
+     */
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');

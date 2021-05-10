@@ -8,7 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
     'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
-    'CallbackFilterIterator' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/CallbackFilterIterator.php',
     'Codeception\\Exception\\ExternalUrlException' => $vendorDir . '/codeception/lib-innerbrowser/src/Codeception/Exception/ExternalUrlException.php',
     'Codeception\\Lib\\Connector\\Guzzle' => $vendorDir . '/codeception/module-phpbrowser/src/Codeception/Lib/Connector/Guzzle.php',
     'Codeception\\Lib\\DbPopulator' => $vendorDir . '/codeception/module-db/src/Codeception/Lib/DbPopulator.php',
@@ -558,7 +557,6 @@ return array(
     'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactoryInterface' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactoryInterface.php',
     'PhpCsFixer\\Tests\\Test\\InternalIntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/InternalIntegrationCaseFactory.php',
     'PhpCsFixer\\Tests\\Test\\IsIdenticalConstraint' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IsIdenticalConstraint.php',
-    'RecursiveCallbackFilterIterator' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
     'SebastianBergmann\\CodeCoverage\\CodeCoverage' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage.php',
     'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => $vendorDir . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
     'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => $vendorDir . '/phpunit/php-code-coverage/src/Driver/Driver.php',
@@ -638,7 +636,6 @@ return array(
     'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => $vendorDir . '/sebastian/recursion-context/src/InvalidArgumentException.php',
     'SebastianBergmann\\ResourceOperations\\ResourceOperations' => $vendorDir . '/sebastian/resource-operations/src/ResourceOperations.php',
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
-    'SessionHandlerInterface' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
     'SessionUpdateTimestampHandlerInterface' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
     'SqlFormatter' => $vendorDir . '/jdorn/sql-formatter/lib/SqlFormatter.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',

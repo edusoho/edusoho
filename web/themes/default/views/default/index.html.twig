@@ -180,7 +180,7 @@
                           {% else %}
                             <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                           {% endif %}
-                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                          <h4><a href="{{ path('vip') }}" class="btn btn-success">立即购买</a></h4>
                         </div>
                       </div>
                     </li>
@@ -263,7 +263,7 @@
           </div>
         {% endif %}
 
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           {{ render(controller('AppBundle:Default:latestReviewsBlock',{number:5})) }}
         {% endif %}
 
@@ -322,9 +322,9 @@
           {% endif %}
         </a>
 
-        <div class="course-body">
+        <div class="course-body ellipsis">
 
-          <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+          <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
 
           </h4>
           <div class="course-price-info">
@@ -339,10 +339,10 @@
               {% endif %}
             </div>
           {% else %}
-            <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+            <div class="theme-default-course-about ellipsis">{{ courseSet.subtitle|raw }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = courseSet.teachers|first|default(null) %}
             {% if teacher %}
@@ -353,7 +353,7 @@
                 <span class="teacher-title ellipsis">{{ teacher.title }}</span>
               </div>
             {% endif %}
-            {% if setting('course.show_review', '1') == 1 %}
+            {% if setting('goods_setting.show_review', '1') == 1 %}
               <div class="course-metas">
                 <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
                 {% if setting('course.show_student_num_enabled', '1') == 1 %}
@@ -402,7 +402,7 @@
           {% if course.type == 'liveOpen' %}
             {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
 
-            <div class="live-course-lesson mbs">
+            <div class="theme-default-live-course live-course-lesson mbs">
               {% if lessons %}
                 <span
                   class="text-success fsm mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
@@ -410,10 +410,10 @@
             </div>
 
           {% else %}
-            <div class="course-about ellipsis">{{ course.subtitle }}</div>
+            <div class="theme-default-course-about ellipsis">{{ course.subtitle }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = course.teachers|first|default(null) %}
             {% if teacher %}

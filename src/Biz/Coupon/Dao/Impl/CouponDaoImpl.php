@@ -11,8 +11,8 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
 
     public function declares()
     {
-        return array(
-            'conditions' => array(
+        return [
+            'conditions' => [
                 'userId = :userId',
                 'targetId = :targetId',
                 'targetType = :targetType',
@@ -27,17 +27,18 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
                 'orderTime >= :useStartDateTime',
                 'orderTime < :useEndDateTime',
                 'id IN ( :ids)',
-            ),
-            'timestamps' => array('createdTime'),
-            'serializes' => array(
+            ],
+            'timestamps' => ['createdTime'],
+            'serializes' => [
                 'targetIds' => 'delimiter',
-            ),
-            'orderbys' => array(
+                'goodsIds' => 'delimiter',
+            ],
+            'orderbys' => [
                 'createdTime',
                 'orderTime',
                 'id',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findByIds(array $ids)
@@ -45,23 +46,23 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
         return $this->findInField('id', $ids);
     }
 
-    public function getByCode($code, array $options = array())
+    public function getByCode($code, array $options = [])
     {
         $lock = isset($options['lock']) && true === $options['lock'];
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
 
-        return $this->db()->fetchAssoc($sql, array($code)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$code]) ?: null;
     }
 
     public function findByBatchId($batchId, $start, $limit)
     {
         return $this->search(
-            array(
+            [
                 'batchId' => $batchId,
-            ),
-            array(
+            ],
+            [
                 'createdTime' => 'DESC',
-            ),
+            ],
             $start,
             $limit
         );
@@ -69,12 +70,12 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
 
     public function deleteByBatch($id)
     {
-        return $this->db()->delete($this->table, array('batchId' => $id));
+        return $this->db()->delete($this->table, ['batchId' => $id]);
     }
 
     protected function createQueryBuilder($conditions)
     {
-        $tmpConditions = array();
+        $tmpConditions = [];
 
         if (isset($conditions['batchIdNotEqual'])) {
             $tmpConditions['batchIdNotEqual'] = $conditions['batchIdNotEqual'];

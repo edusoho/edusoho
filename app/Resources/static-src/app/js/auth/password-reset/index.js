@@ -10,7 +10,11 @@ class Reset {
     this.event();
     this.dragHtml = $('.js-drag-box').html();
     $('.js-drag-box').remove();
-    $('#password-reset-form').prepend(this.dragHtml);
+    if ($('#password-reset-form').css('display') == 'none'){
+      $('#password-reset-by-mobile-form').prepend(this.dragHtml);
+    } else {
+      $('#password-reset-form').prepend(this.dragHtml);
+    }
     this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), {
       limitType: 'reset_password',
     });
@@ -45,7 +49,7 @@ class Reset {
     let $smsCode = $('.js-sms-send');
     let self = this;
     $smsCode.click(() => {
-      if(this.mobileValidator.element($('[name="dragCaptchaToken"]'))) {
+      if(this.mobileValidator.element($('[name="dragCaptchaToken"]')) && this.mobileValidator.element($('[name="mobile"]'))) {
         if($smsCode.hasClass('disabled')) {
           return ;
         }
@@ -134,16 +138,6 @@ class Reset {
         'mobile': {
           required: true,
           phone: true,
-          es_remote: {
-            type: 'get',
-            callback: (bool) => {
-              if (bool) {
-                $('.js-sms-send').removeClass('disabled');
-              } else {
-                $('.js-sms-send').addClass('disabled');
-              }
-            }
-          }
         },
         'sms_code': {
           required: true,

@@ -41,10 +41,10 @@
           {% if setting('course.show_cover_num_mode') == 'studentNum' %}
             <i class="es-icon es-icon-people"></i>{{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
           {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
-            <i class="es-icon es-icon-view"></i>{{ 'course.students_count'|trans({'%studentsNum%':course.hitNum|default(0)})|raw }}
+            <i class="es-icon es-icon-view"></i>{{ 'course.students_count'|trans({'%studentsNum%':courseSet.hitNum|default(0)})|raw }}
           {% endif %}
         {% endif %}
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           <div class="score pull-right mb0">
             {{ web_macro.star(courseSet.rating|default(0)) }}
             <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>
@@ -57,9 +57,9 @@
         {% set onDiscount =  is_discount(course) %}
         <div class="course-detail-info__title">
           {% if marketingPage %}
-            {{ courseSet.title }}
+            {{ courseSet.title|raw }}
           {% else %}
-            {{ course.title }}
+            {{ course.title|raw }}
           {% endif %}
         </div>
         {#添加admin_v2#}
@@ -239,7 +239,7 @@
 
           {% block course_member_exit %}{% endblock %}
         </ul>
-        <div class="text-right buy-btn-group course-operation-btn {% if classroom|default(null) %} course-classroom-tip{% endif %}">
+        <div class="text-right buy-btn-group course-operation-btn buy-btn-group--padding {% if classroom|default(null) %} course-classroom-tip{% endif %}">
           {% if member | default(false) %}
             {% if course.expiryMode == 'date' and course.expiryStartDate >= timestamp() %}
               {{ 'course.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':course.expiryStartDate|date('date.format'|trans)})|raw }}

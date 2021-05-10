@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Invite;
+namespace Tests\Unit\AppBundle\Component\Export\Course;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\Export\Course\OverviewTaskExporter;
+use Biz\BaseTestCase;
 
 class OverviewTaskExporterTest extends BaseTestCase
 {
@@ -12,97 +12,97 @@ class OverviewTaskExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getCourse',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'id' => 1,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'Course:ReportService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getCourseTaskLearnData',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'id' => '1',
                             'title' => 'lallll',
                             'finishedNum' => '11',
                             'notStartedNum' => '13',
                             'learnNum' => '14',
                             'rate' => 1,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
+        ]);
 
         $this->assertTrue(empty($data));
 
         $result = $expoter->getContent(0, 100);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'lallll',
             '11',
             '14',
             '13',
             '1',
-        ), $result[0]);
+        ], $result[0]);
     }
 
     public function testBuildCondition()
     {
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
-        $result = $expoter->buildCondition(array(
+        ]);
+        $result = $expoter->buildCondition([
             'courseId' => 1,
             'alal' => '1123',
             'titleLike' => '1123',
-        ));
+        ]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'courseId' => 1,
              'titleLike' => '1123',
-        ), $result);
+        ], $result);
     }
 
     public function testBuildParameter()
     {
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
-        $result = $expoter->buildParameter(array(
+        ]);
+        $result = $expoter->buildParameter([
             'courseId' => 1,
-        ));
+        ]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'start' => 0,
             'fileName' => '',
             'courseId' => 1,
-        ), $result);
+        ], $result);
     }
 
     public function testGetTitles()
     {
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
+        ]);
 
-        $title = array(
+        $title = [
             'task.learn_data_detail.task_title',
             'task.learn_data_detail.completed_number',
             'task.learn_data_detail.unfinished_number',
             'task.learn_data_detail.unstarted_number',
             'task.learn_data_detail.finished_rate',
-        );
+        ];
 
         $this->assertArrayEquals($title, $expoter->getTitles());
     }
@@ -112,16 +112,16 @@ class OverviewTaskExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'Task:TaskService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countTasks',
                     'returnValue' => 33,
-                ),
-            )
+                ],
+            ]
         );
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
+        ]);
 
         $this->assertEquals(33, $expoter->getCount());
     }
@@ -131,34 +131,34 @@ class OverviewTaskExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'tryManageCourse',
                     'returnValue' => false,
-                ),
-            )
+                ],
+            ]
         );
-        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), array(
+        $expoter = new OverviewTaskExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
-        ));
+        ]);
 
         $result = $expoter->canExport();
         $this->assertTrue($result);
 
         $biz = $this->getBiz();
         $user = $biz['user'];
-        $user->setPermissions(array());
+        $user->setPermissions([]);
         $result = $expoter->canExport();
         $this->assertNotTrue($result);
 
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'tryManageCourse',
                     'returnValue' => true,
-                ),
-            )
+                ],
+            ]
         );
         $result = $expoter->canExport();
         $this->assertTrue($result);

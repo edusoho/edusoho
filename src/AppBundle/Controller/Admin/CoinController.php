@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\FileToolkitException;
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\MathToolkit;
+use AppBundle\Common\Paginator;
 use Biz\Account\Service\AccountProxyService;
 use Biz\System\SettingException;
-use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ArrayToolkit;
+use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,9 +20,9 @@ class CoinController extends BaseController
     {
         $postedParams = $request->request->all();
 
-        $coinSettingsSaved = $this->getSettingService()->get('coin', array());
+        $coinSettingsSaved = $this->getSettingService()->get('coin', []);
 
-        $default = array(
+        $default = [
             'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
@@ -34,13 +34,13 @@ class CoinController extends BaseController
             'coin_picture_20_20' => '',
             'coin_picture_10_10' => '',
             'charge_coin_enabled' => '',
-        );
+        ];
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
-            $coinSettingsPosted = ArrayToolkit::parts($fields, array(
+            $coinSettingsPosted = ArrayToolkit::parts($fields, [
                 'coin_enabled',
                 'cash_model',
                 'cash_rate',
@@ -52,7 +52,7 @@ class CoinController extends BaseController
                 'coin_picture_20_20',
                 'coin_picture_10_10',
                 'charge_coin_enabled',
-            ));
+            ]);
 
             $coinSettings = array_merge($coinSettingsSaved, $coinSettingsPosted);
 
@@ -83,18 +83,18 @@ class CoinController extends BaseController
         $image->resize(new Box($size, $size));
         $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
         $imageName = "{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
-        $image = $image->save($filePath, array('quality' => 100));
+        $image = $image->save($filePath, ['quality' => 100]);
 
-        $coin = $this->getSettingService()->get('coin', array());
+        $coin = $this->getSettingService()->get('coin', []);
         $name = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$imageName}";
         $path = ltrim($name, '/');
 
-        return array($image, $path);
+        return [$image, $path];
     }
 
     public function modelAction(Request $request)
     {
-        $coinSettings = $this->getSettingService()->get('coin', array());
+        $coinSettings = $this->getSettingService()->get('coin', []);
 
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
@@ -110,15 +110,15 @@ class CoinController extends BaseController
                 goto response;
             }
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets(array(
+            $courseSets = $this->getCourseSetService()->searchCourseSets([
                 'parentId' => 0,
                 'maxCoursePrice_GT' => 0,
-            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
 
-            return $this->render('admin/coin/coin-course-set.html.twig', array(
+            return $this->render('admin/coin/coin-course-set.html.twig', [
                 'set' => $set,
                 'items' => $courseSets,
-            ));
+            ]);
         }
 
         if ($request->query->get('set')) {
@@ -127,9 +127,9 @@ class CoinController extends BaseController
 
         response :
 
-            return $this->render('admin/coin/coin-model.html.twig', array(
+            return $this->render('admin/coin/coin-model.html.twig', [
             'coinSettings' => $coinSettings,
-        ));
+        ]);
     }
 
     public function tableAjaxAction(Request $request)
@@ -139,32 +139,32 @@ class CoinController extends BaseController
         $set = $conditions['set'];
 
         if ('course' == $type) {
-            $items = $this->getCourseSetService()->searchCourseSets(array(
+            $items = $this->getCourseSetService()->searchCourseSets([
                 'maxCoursePrice_GT' => '0.00',
                 'parentId' => 0,
-            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
         } elseif ('classroom' == $type) {
             $items = $this->getClassroomService()->searchClassrooms(
-                array('private' => 0, 'price_GT' => '0.00'),
-                array('createdTime' => 'DESC'),
+                ['private' => 0, 'price_GT' => '0.00'],
+                ['createdTime' => 'DESC'],
                 0,
                 PHP_INT_MAX
             );
         } elseif ('vip' == $type) {
             // todo
-            $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
+            $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
         }
 
-        return $this->render('admin/coin/coin-table-setting.html.twig', array(
+        return $this->render('admin/coin/coin-table-setting.html.twig', [
             'type' => $conditions['type'],
             'items' => $items,
             'set' => $set,
-        ));
+        ]);
     }
 
     public function modelSaveAction(Request $request)
     {
-        $coinSettings = $this->getSettingService()->get('coin', array());
+        $coinSettings = $this->getSettingService()->get('coin', []);
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -176,7 +176,8 @@ class CoinController extends BaseController
                 $coinSettings['price_type'] = 'RMB';
                 $coinSettings['cash_model'] = 'deduction';
 
-                if (isset($data['item-rate'])) {
+                $data['item_rate'] = empty($data['item_rate']) ? [] : json_decode($data['item_rate'], true);
+                if (!empty($data['item_rate'])) {
                     $this->updateMaxRate($data);
                 }
             } else {
@@ -195,7 +196,7 @@ class CoinController extends BaseController
     protected function updateMaxRate($data)
     {
         $type = $data['type'];
-        $data = $data['item-rate'];
+        $data = $data['item_rate'];
 
         if ('course' == $type) {
             foreach ($data as $key => $value) {
@@ -203,11 +204,11 @@ class CoinController extends BaseController
             }
         } elseif ('classroom' == $type) {
             foreach ($data as $key => $value) {
-                $this->getClassroomService()->updateClassroom($key, array('maxRate' => $value));
+                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
             }
         } elseif ('vip' == $type) {
             foreach ($data as $key => $value) {
-                $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
+                $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
             }
         }
     }
@@ -237,7 +238,7 @@ class CoinController extends BaseController
         list($coin_picture_20_20, $url_20_20) = $this->savePicture($request, 20);
         list($coin_picture_10_10, $url_10_10) = $this->savePicture($request, 10);
 
-        $coin = $this->getSettingService()->get('coin', array());
+        $coin = $this->getSettingService()->get('coin', []);
 
         $coin['coin_picture'] = $coin['coin_picture_50_50'] = $url_50_50;
         $coin['coin_picture_30_30'] = $url_30_30;
@@ -246,7 +247,7 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $response = array(
+        $response = [
             'path' => $coin['coin_picture'],
             'path_50_50' => $coin['coin_picture_50_50'],
             'path_30_30' => $coin['coin_picture_30_30'],
@@ -257,7 +258,7 @@ class CoinController extends BaseController
             'coin_picture_30_30' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_30_30']),
             'coin_picture_20_20' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_20_20']),
             'coin_picture_10_10' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_10_10']),
-        );
+        ];
 
         return new Response(json_encode($response));
     }
@@ -289,22 +290,22 @@ class CoinController extends BaseController
 
         if (isset($conditions['user_id'])) {
             if (0 == $conditions['user_id']) {
-                $users = array();
-                $balances = array();
+                $users = [];
+                $balances = [];
                 goto response;
             }
             $user = $this->getUserService()->getUser($conditions['user_id']);
-            $users = array($conditions['user_id'] => $user);
-            $balances = array();
+            $users = [$conditions['user_id'] => $user];
+            $balances = [];
             $balances[] = $this->getAccountProxyService()->getUserBalanceByUserId($conditions['user_id']);
 
             response :
 
-                return $this->render('admin/coin/coin-user-records.html.twig', array(
+                return $this->render('admin/coin/coin-user-records.html.twig', [
                 'schoolBalance' => $schoolBalance,
                 'balances' => $balances,
                 'users' => $users,
-            ));
+            ]);
         }
 
         $systemUser = $this->getUserService()->getUserByType('system');
@@ -312,17 +313,17 @@ class CoinController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getAccountProxyService()->countBalances(
-                array(
-                    'except_user_ids' => array(0, $systemUser['id']),
-                )
+                [
+                    'except_user_ids' => [0, $systemUser['id']],
+                ]
             ),
             20
         );
         $balances = $this->getAccountProxyService()->searchBalances(
-            array(
-                'except_user_ids' => array(0, $systemUser['id']),
-            ),
-            array($sort => $direction),
+            [
+                'except_user_ids' => [0, $systemUser['id']],
+            ],
+            [$sort => $direction],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -331,12 +332,12 @@ class CoinController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/coin/coin-user-records.html.twig', array(
+        return $this->render('admin/coin/coin-user-records.html.twig', [
             'schoolBalance' => $schoolBalance,
             'balances' => $balances,
             'paginator' => $paginator,
             'users' => $users,
-        ));
+        ]);
     }
 
     public function flowDetailAction(Request $request)
@@ -354,29 +355,29 @@ class CoinController extends BaseController
 
         $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
+            $cash = MathToolkit::multiply($cash, ['amount'], 0.01);
         }
 
         $user = $this->getUserService()->getUser($userId);
 
-        return $this->render('admin/coin/flow-detail-modal.html.twig', array(
+        return $this->render('admin/coin/flow-detail-modal.html.twig', [
             'user' => $user,
             'cashes' => $cashes,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     protected function settingsRenderedPage($coinSettings)
     {
-        return $this->render('admin/coin/coin-settings.html.twig', array(
+        return $this->render('admin/coin/coin-settings.html.twig', [
             'coin_settings_posted' => $coinSettings,
-        ));
+        ]);
     }
 
     protected function convertFiltersToCondition($condition)

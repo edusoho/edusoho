@@ -43,13 +43,11 @@ interface TaskResultService
      */
     public function countTaskResults($conditions);
 
-    public function searchTaskResults($conditions, $orderbys, $start, $limit);
+    public function searchTaskResults($conditions, $orderbys, $start, $limit, $columns = []);
 
     public function countLearnNumByTaskId($taskId);
 
     public function findFinishedTimeByCourseIdGroupByUserId($courseId);
-
-    public function sumLearnTimeByCourseIdAndUserId($courseId, $userId);
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId);
 
@@ -63,9 +61,17 @@ interface TaskResultService
 
     public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
+    public function countFinishedCompulsoryTasksByUserIdAndCourseIds($userId, array $courseIds);
+
     public function findTaskresultsByTaskId($taskId);
+
+    public function findTaskResultsByUserId($userId);
 
     public function countTaskNumGroupByUserId($conditions);
 
     public function getTaskResultByTaskIdAndUserId($taskId, $userId);
+
+    public function batchUpdate($ids, $taskResults);
+
+    public function countFinishedCompulsoryTaskNumGroupByUserId($courseId);
 }

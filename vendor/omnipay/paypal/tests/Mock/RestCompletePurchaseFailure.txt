@@ -1,0 +1,12 @@
+HTTP/1.1 400 Bad Request
+Server: Apache-Coyote/1.1
+PROXY_SERVER_INFO: host=slcsbplatformapiserv3002.slc.paypal.com;threadId=533
+Paypal-Debug-Id: 65f24674659dc
+SERVER_INFO: paymentsplatformserv:v1.payments.payment&CalThreadId=166&TopLevelTxnStartTime=14b8c851ff1&Host=slcsbpaymentsplatformserv3001.slc.paypal.com&pid=12653
+Content-Language: *
+Date: Sun, 15 Feb 2015 09:15:09 GMT
+Connection: close, close
+Content-Type: application/json
+Content-Length: 235
+
+{"name":"PAYMENT_STATE_INVALID","message":"This request is invalid due to the current state of the payment","information_link":"https://developer.paypal.com/webapps/developer/docs/api/#PAYMENT_STATE_INVALID","debug_id":"65f24674659dc"}

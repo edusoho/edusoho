@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d62d4dd6183e7c9fc1437b991a79f0ba",
+    "content-hash": "2f9697c10db22b0c15157f763cf9041b",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -65,6 +65,7 @@
                 "extension",
                 "twig"
             ],
+            "abandoned": "twig/cache-extension",
             "time": "2020-01-01T20:47:37+00:00"
         },
         {
@@ -294,12 +295,12 @@
             "version": "v1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/php-stream-filter.git",
+                "url": "https://github.com/clue/stream-filter.git",
                 "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
+                "url": "https://api.github.com/repos/clue/stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
                 "reference": "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71",
                 "shasum": "",
                 "mirrors": [
@@ -396,16 +397,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.36",
+            "version": "v0.9.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf"
+                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
-                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/cd9c4e96e7c079771794b3da4837aad6182385ff",
+                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -455,7 +456,11 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2020-06-11T12:37:50+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-framework/issues",
+                "source": "https://github.com/codeages/biz-framework/tree/v0.9.37"
+            },
+            "time": "2021-01-21T00:44:26+00:00"
         },
         {
             "name": "codeages/biz-item-bank",
@@ -463,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083"
+                "reference": "197eee31aff0fff0b6174a42a6d46cd6c41feb78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/29e0f8791a0f4946690e5977df7c60fbfcc29083",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/197eee31aff0fff0b6174a42a6d46cd6c41feb78",
+                "reference": "197eee31aff0fff0b6174a42a6d46cd6c41feb78",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -479,7 +484,7 @@
             },
             "require": {
                 "cerdic/css-tidy": "1.7.1",
-                "codeages/biz-framework": "^0.9.33",
+                "codeages/biz-framework": ">=0.9.33",
                 "codeages/exam-parser": "dev-master",
                 "ext-json": "*",
                 "ezyang/htmlpurifier": "4.12.0",
@@ -502,7 +507,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-08-17T09:30:53+00:00"
+            "time": "2021-04-22T12:21:10+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -510,12 +515,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "6198c98d78b9e52d03088df8761bae5cbcc5c1ea"
+                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6198c98d78b9e52d03088df8761bae5cbcc5c1ea",
-                "reference": "6198c98d78b9e52d03088df8761bae5cbcc5c1ea",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/c2328cf3f6c317c368e85983825da6ac97fc105f",
+                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -546,7 +551,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2020-04-10T12:19:10+00:00"
+            "time": "2021-03-12T08:57:55+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -587,16 +592,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.1.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd"
+                "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd",
-                "reference": "6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/6536acd34a0266c7fcd80ff72793e005c05d5f3f",
+                "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -635,7 +640,7 @@
                 }
             ],
             "description": "ESCloud PHP SDK",
-            "time": "2020-07-28T10:07:32+00:00"
+            "time": "2021-04-30T03:47:30+00:00"
         },
         {
             "name": "codeages/exam-parser",
@@ -760,12 +765,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "6a438ba947bcceefeff9bd7808e9314bd70d648f"
+                "reference": "3c3b7f003d24f87571a941bc7dcc31b1c6012648"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/6a438ba947bcceefeff9bd7808e9314bd70d648f",
-                "reference": "6a438ba947bcceefeff9bd7808e9314bd70d648f",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/3c3b7f003d24f87571a941bc7dcc31b1c6012648",
+                "reference": "3c3b7f003d24f87571a941bc7dcc31b1c6012648",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -809,7 +814,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2020-03-13T03:57:02+00:00"
+            "time": "2021-02-24T07:12:11+00:00"
         },
         {
             "name": "codeages/plumber2",
@@ -873,12 +878,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c"
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/04268de4ab6a8d2496c4d81c55891b6460606b8c",
-                "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -914,7 +919,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2020-07-13T05:49:14+00:00"
+            "time": "2020-09-21T04:46:31+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -1870,6 +1875,7 @@
                 "cache",
                 "caching"
             ],
+            "abandoned": true,
             "time": "2018-11-09T06:25:35+00:00"
         },
         {
@@ -3390,6 +3396,72 @@
             "time": "2018-05-15T08:36:43+00:00"
         },
         {
+            "name": "omnipay/paypal",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/omnipay-paypal.git",
+                "reference": "519db61b32ff0c1e56cbec94762b970ee9674f65"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-paypal/zipball/519db61b32ff0c1e56cbec94762b970ee9674f65",
+                "reference": "519db61b32ff0c1e56cbec94762b970ee9674f65",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "omnipay/common": "^3"
+            },
+            "require-dev": {
+                "omnipay/tests": "^3",
+                "phpro/grumphp": "^0.14",
+                "squizlabs/php_codesniffer": "^3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\PayPal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Macneil",
+                    "email": "adrian@adrianmacneil.com"
+                },
+                {
+                    "name": "Omnipay Contributors",
+                    "homepage": "https://github.com/thephpleague/omnipay-paypal/contributors"
+                }
+            ],
+            "description": "PayPal gateway for Omnipay payment processing library",
+            "homepage": "https://github.com/thephpleague/omnipay-paypal",
+            "keywords": [
+                "gateway",
+                "merchant",
+                "omnipay",
+                "pay",
+                "payment",
+                "paypal",
+                "purchase"
+            ],
+            "time": "2018-05-15T10:35:58+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v2.0.18",
             "source": {
@@ -4399,6 +4471,7 @@
                 "parser",
                 "useragent"
             ],
+            "abandoned": "matomo/device-detector",
             "time": "2020-01-13T16:15:20+00:00"
         },
         {
@@ -4921,6 +4994,7 @@
                 "configuration",
                 "distribution"
             ],
+            "abandoned": true,
             "time": "2019-06-18T15:43:58+00:00"
         },
         {
@@ -5050,6 +5124,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
+            "abandoned": "https://github.com/fabpot/local-php-security-checker",
             "time": "2018-12-19T17:14:59+00:00"
         },
         {
@@ -6464,12 +6539,12 @@
             "version": "1.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": "",
                 "mirrors": [
@@ -7442,6 +7517,7 @@
                 }
             ],
             "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "abandoned": "softcreatr/jsonpath",
             "time": "2019-07-15T17:23:22+00:00"
         },
         {
@@ -8189,6 +8265,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {
@@ -9051,70 +9128,6 @@
             "time": "2020-01-31T09:56:34+00:00"
         },
         {
-            "name": "symfony/polyfill-php54",
-            "version": "v1.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php54.git",
-                "reference": "a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6",
-                "reference": "a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.14-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php54\\": ""
-                },
-                "files": [
-                    "bootstrap.php"
-                ],
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 5.4+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "time": "2020-01-13T11:15:53+00:00"
-        },
-        {
             "name": "symfony/polyfill-php72",
             "version": "v1.14.0",
             "source": {
@@ -9183,15 +9196,15 @@
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
         "codeages/biz-order-pay": 20,
+        "codeages/escloud-php-sdk": 20,
         "codeages/plumber2": 20,
         "codeages/biz-item-bank": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9",
+        "php": ">=5.6.0",
         "ext-json": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

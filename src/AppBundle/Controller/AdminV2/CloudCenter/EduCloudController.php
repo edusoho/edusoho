@@ -8,20 +8,20 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\Client\AbstractCloudAPI;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\KeyApplier;
+use Biz\CloudPlatform\Service\AppService;
 use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Content\Service\FileService;
 use Biz\EduCloud\Service\Impl\MicroyanConsultServiceImpl;
 use Biz\File\Service\UploadFileService;
-use Biz\Search\Service\SearchService;
 use Biz\IM\Service\ConversationService;
+use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\User\UserException;
 use Biz\System\SettingException;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
-use Biz\CloudPlatform\Service\AppService;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', []);
         }
 
         if (isset($info['accessCloud']) && 0 != $info['accessCloud']) {
@@ -46,17 +46,17 @@ class EduCloudController extends BaseController
         if (!isset($info['accessCloud']) || $this->getWebExtension()->isTrial() || 0 == $info['accessCloud']) {
             $trialHtml = $this->getCloudCenterExperiencePage();
 
-            return $this->render('admin/edu-cloud/cloud.html.twig', array(
+            return $this->render('admin/edu-cloud/cloud.html.twig', [
                 'content' => $trialHtml['content'],
-            ));
+            ]);
         }
 
         $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
         $unTrialHtml = json_decode($unTrial, true);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/cloud.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud.html.twig', [
             'content' => $unTrialHtml['content'],
-        ));
+        ]);
     }
 
     //概览页，服务概况页
@@ -68,16 +68,20 @@ class EduCloudController extends BaseController
             $isBinded = $this->getAppService()->getBinded();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', []);
         }
+
+        // 重置 cloud_status cache
+        $this->getCacheService()->set('cloud_status', json_encode($overview), time() + 3600);
+
         if (!isset($overview['error'])) {
-            $paidService = array();
-            $unPaidService = array();
-            $this->getSettingService()->set('cloud_status', array(
+            $paidService = [];
+            $unPaidService = [];
+            $this->getSettingService()->set('cloud_status', [
                 'enabled' => $overview['enabled'],
                 'locked' => $overview['locked'],
                 'accessCloud' => $overview['accessCloud'],
-            ));
+            ]);
 
             foreach ($overview['services'] as $key => $value) {
                 if (true == $value) {
@@ -94,18 +98,18 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', [
             'isBinded' => $isBinded,
             'overview' => $overview,
             'paidService' => isset($paidService) ? $paidService : false,
             'unPaidService' => isset($unPaidService) ? $unPaidService : false,
-        ));
+        ]);
     }
 
     public function getAdAction()
     {
         $api = CloudAPIFactory::create('root');
-        $result = $api->get('/edusoho-ad', array('adType' => 'newBackground'));
+        $result = $api->get('/edusoho-ad', ['adType' => 'newBackground']);
 
         return $this->createJsonResponse($result);
     }
@@ -121,7 +125,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
+        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', []);
         if ((isset($cloudSmsSettings['sms_enabled']) && 0 == $cloudSmsSettings['sms_enabled']) || !isset($cloudSmsSettings['sms_enabled'])) {
             return $this->redirect($this->generateUrl('admin_v2_edu_cloud_sms_overview'));
         }
@@ -137,12 +141,12 @@ class EduCloudController extends BaseController
             $this->checkSmsSign($smsInfo);
             $isBinded = $this->getAppService()->getBinded();
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/sms/setting.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms/setting.html.twig', [
                 'isBinded' => $isBinded,
                 'smsInfo' => $smsInfo,
-            ));
+            ]);
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', []);
         }
     }
 
@@ -160,24 +164,24 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/live/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', []);
         }
-        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $liveCourseSetting = $this->getSettingService()->get('live-course', []);
         $liveEnabled = isset($liveCourseSetting['live_course_enabled']) ? $liveCourseSetting['live_course_enabled'] : 0;
         $isLiveWithoutEnable = $this->isLiveWithoutEnable($overview, $liveEnabled);
         if ($isLiveWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/live/without-enable.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/live/without-enable.html.twig', [
                 'overview' => $overview,
-            ));
+            ]);
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/live/overview.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/live/overview.html.twig', [
             'account' => $overview['account'],
             'chartData' => $chartData,
-        ));
+        ]);
     }
 
     public function liveSettingAction(Request $request)
@@ -191,7 +195,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $liveCourseSetting = $this->getSettingService()->get('live-course', []);
         $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
@@ -200,7 +204,7 @@ class EduCloudController extends BaseController
                 $api = CloudAPIFactory::create('root');
                 $overview = $api->get('/me/live/overview');
             } catch (\RuntimeException $e) {
-                return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', array());
+                return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', []);
             }
 
             if (isset($overview['isBuy'])) {
@@ -211,7 +215,7 @@ class EduCloudController extends BaseController
             $liveCourseSetting = array_merge($liveCourseSetting, $live);
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
-            $courseSetting = $this->getSettingService()->get('course', array());
+            $courseSetting = $this->getSettingService()->get('course', []);
             $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
@@ -235,19 +239,19 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/live/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/live-error.html.twig', []);
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/live/setting.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/live/setting.html.twig', [
             'account' => $overview['account'],
             'liveCourseSetting' => $liveCourseSetting,
             'capacity' => $capacity,
-        ));
+        ]);
     }
 
     public function logoCropAction(Request $request, $type)
     {
-        if (!in_array($type, array('web', 'app'))) {
+        if (!in_array($type, ['web', 'app'])) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
@@ -257,7 +261,7 @@ class EduCloudController extends BaseController
             $image = $options['images'][0];
             $file = $this->getFileService()->getFile($image['id']);
 
-            $liveSetting = $this->getSettingService()->get('live-course', array());
+            $liveSetting = $this->getSettingService()->get('live-course', []);
             $url = $this->get('web.twig.extension')->getFurl($file['uri']);
 
             $oldFileId = empty($liveSetting["{$type}LogoFileId"]) ? '' : $liveSetting["{$type}LogoFileId"];
@@ -270,19 +274,19 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('live-course', $liveSetting);
 
-            return $this->createJsonResponse(array('fileId' => $file['id'], 'url' => $url, 'type' => $type));
+            return $this->createJsonResponse(['fileId' => $file['id'], 'url' => $url, 'type' => $type]);
         }
 
         $fileId = $request->getSession()->get('fileId');
 
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 100, 100);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/live/logo-crop-modal.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/live/logo-crop-modal.html.twig', [
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
             'type' => $type,
-        ));
+        ]);
     }
 
     //云视频概览页
@@ -290,20 +294,20 @@ class EduCloudController extends BaseController
     {
         //附件业务有用到只迁移了action需要后面修改云模块的修改
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video/trial.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video/trial.html.twig', []);
         }
 
         if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', []);
         //云端视频判断
         try {
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/storage/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', []);
         }
         if ((isset($storageSetting['upload_mode']) && 'local' == $storageSetting['upload_mode']) || !isset($storageSetting['upload_mode'])) {
             return $this->render('admin-v2/cloud-center/edu-cloud/video/without-enable.html.twig');
@@ -315,33 +319,33 @@ class EduCloudController extends BaseController
         $spaceItems = $this->dealItems($overview['video']['spaceItems']);
         $flowItems = $this->dealItems($overview['video']['flowItems']);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/video/overview.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/video/overview.html.twig', [
             'video' => $overview['video'],
             'space' => isset($overview['space']) ? $overview['space'] : null,
             'flow' => isset($overview['flow']) ? $overview['flow'] : null,
             'yearPackage' => $overview['yearPackage'],
             'spaceItems' => $spaceItems,
             'flowItems' => $flowItems,
-        ));
+        ]);
     }
 
     public function videoSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video/trial.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video/trial.html.twig', []);
         }
 
         if (!($this->isVisibleCloud())) {
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', []);
 
         if ((isset($storageSetting['upload_mode']) && 'local' == $storageSetting['upload_mode']) || !isset($storageSetting['upload_mode'])) {
             return $this->redirect($this->generateUrl('admin_v2_edu_cloud_video_overview'));
         }
 
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $default = array(
+        $storageSetting = $this->getSettingService()->get('storage', []);
+        $default = [
             'upload_mode' => 'local',
             'support_mobile' => 0,
             'video_h5_enable' => 1,
@@ -355,9 +359,10 @@ class EduCloudController extends BaseController
             'video_fingerprint' => 0,
             'video_fingerprint_time' => 0.5,
             'video_fingerprint_opacity' => 1,
+            'video_fingerprint_content' => ['domain', 'nickname'],
             'video_header' => null,
             'video_auto_play' => 'true',
-        );
+        ];
 
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
@@ -366,6 +371,11 @@ class EduCloudController extends BaseController
                 $this->deleteCloudMP4Files();
                 $storageSetting['delete_mp4_status'] = 'waiting';
             }
+
+            if (empty($set['video_fingerprint_content'])) {
+                $storageSetting['video_fingerprint_content'] = [];
+            }
+
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
 
@@ -379,7 +389,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/storage/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', []);
         }
 
         try {
@@ -388,18 +398,18 @@ class EduCloudController extends BaseController
             $headLeader = null;
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/video/setting.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/video/setting.html.twig', [
             'storageSetting' => $storageSetting,
             'headLeader' => $headLeader,
             'video' => $overview['video'],
-        ));
+        ]);
     }
 
     public function videoSwitchAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
-            $storageSetting = $this->getSettingService()->get('storage', array());
+            $storageSetting = $this->getSettingService()->get('storage', []);
             $storageSetting = array_merge($storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
 
@@ -412,7 +422,7 @@ class EduCloudController extends BaseController
         if ('POST' == $request->getMethod()) {
             $this->deleteCloudMP4Files();
 
-            $setting = $this->getSettingService()->get('storage', array());
+            $setting = $this->getSettingService()->get('storage', []);
             $setting['delete_mp4_status'] = 'waiting';
             $this->getSettingService()->set('storage', $setting);
 
@@ -432,9 +442,9 @@ class EduCloudController extends BaseController
     {
         $renewVideo = $request->query->get('renewVideo');
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/video/video-renew-modal.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/video/video-renew-modal.html.twig', [
             'renewVideo' => $renewVideo,
-        ));
+        ]);
     }
 
     public function headLeaderParamsAction(Request $request)
@@ -473,10 +483,10 @@ class EduCloudController extends BaseController
         $file = $file->move($directory, $filename);
         $path = "system/{$filename}";
 
-        $response = array(
+        $response = [
             'path' => $path,
             'url' => $this->get('web.twig.extension')->getFileUrl($path),
-        );
+        ];
 
         return new Response(json_encode($response));
     }
@@ -519,10 +529,10 @@ class EduCloudController extends BaseController
             $specialImage->save($filePath);
         }
 
-        $response = array(
+        $response = [
             'path' => $path,
             'url' => $this->get('web.twig.extension')->getFileUrl($path),
-        );
+        ];
 
         return new Response(json_encode($response));
     }
@@ -530,13 +540,13 @@ class EduCloudController extends BaseController
     public function smsStatusAction(Request $request)
     {
         $dataUserPosted = $request->request->all();
-        $settings = $this->getSettingService()->get('cloud_sms', array());
+        $settings = $this->getSettingService()->get('cloud_sms', []);
         try {
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/sms/overview');
             $cloudInfo = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', []);
         }
 
         if (isset($overview['isBuy'])) {
@@ -581,30 +591,30 @@ class EduCloudController extends BaseController
                 && ($this->calStrlen($dataUserPosted['name']) <= 16)
             ) {
                 $api = CloudAPIFactory::create('root');
-                $result = $api->post("/sms/{$api->getAccessKey()}/apply", array('name' => $dataUserPosted['name']));
+                $result = $api->post("/sms/{$api->getAccessKey()}/apply", ['name' => $dataUserPosted['name']]);
 
                 if (isset($result['status']) && ('ok' == $result['status'])) {
                     $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
                     $this->setCloudSmsKey('show_message', 'on');
 
-                    return $this->createJsonResponse(array('ACK' => 'ok'));
+                    return $this->createJsonResponse(['ACK' => 'ok']);
                 }
             }
 
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'ACK' => 'failed',
                 'message' => $result['error'].'|'.($this->calStrlen($dataUserPosted['name'])),
-            ));
+            ]);
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/apply-sms-form.html.twig', array());
+        return $this->render('admin-v2/cloud-center/edu-cloud/apply-sms-form.html.twig', []);
     }
 
     public function smsNoMessageAction(Request $request)
     {
         $this->setCloudSmsKey('show_message', 'off');
 
-        return $this->redirect($this->generateUrl('admin_v2_edu_cloud_sms_overview', array()));
+        return $this->redirect($this->generateUrl('admin_v2_edu_cloud_sms_overview', []));
     }
 
     public function emailOverviewAction(Request $request)
@@ -617,7 +627,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', 'admin.cloud.license.has_no_license');
 
@@ -628,23 +638,23 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/email/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', []);
         }
-        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', []);
         $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
         if ($isEmailWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/email/without-enable.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/email/without-enable.html.twig', [
                 'overview' => $overview,
-            ));
+            ]);
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/email/overview.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/email/overview.html.twig', [
             'account' => $overview['account'],
             'chartData' => $chartData,
-        ));
+        ]);
     }
 
     public function emailSettingAction(Request $request)
@@ -657,12 +667,12 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', []);
         if (!isset($emailSettings['status']) || (isset($emailSettings['status']) && 'disable' == $emailSettings['status'])) {
             return $this->redirect($this->generateUrl('admin_v2_edu_cloud_email_overview'));
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', 'admin.cloud.license.has_no_license');
@@ -673,11 +683,11 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $account = $api->get('/me/email_account');
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/email/setting.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/email/setting.html.twig', [
                 'account' => $account,
-            ));
+            ]);
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', []);
         }
     }
 
@@ -688,7 +698,7 @@ class EduCloudController extends BaseController
                 $api = CloudAPIFactory::create('root');
                 $overview = $api->get('/me/email/overview');
             } catch (\RuntimeException $e) {
-                return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', array());
+                return $this->render('admin-v2/cloud-center/edu-cloud/email-error.html.twig', []);
             }
 
             if (isset($overview['isBuy'])) {
@@ -723,7 +733,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', []);
         try {
             $api = CloudAPIFactory::create('root');
 
@@ -731,9 +741,9 @@ class EduCloudController extends BaseController
             $searchOverview = $api->get('/me/search/overview');
             $data = $this->initCloudSearch($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/search/without-enable.html.twig', array(
-                'data' => array('status' => 'unlink'),
-            ));
+            return $this->render('admin-v2/cloud-center/edu-cloud/search/without-enable.html.twig', [
+                'data' => ['status' => 'unlink'],
+            ]);
         }
 
         //判断云搜索状态
@@ -748,14 +758,14 @@ class EduCloudController extends BaseController
         if (!isset($searchOverview['isBuy']) && 1 == $data['search_enabled'] && ('ok' == $data['status'] || 'waiting' == $data['status'])) {
             $chartData = $this->dealChartData($searchOverview['data']);
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/search/overview.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/search/overview.html.twig', [
                 'searchOverview' => $searchOverview,
                 'chartData' => $chartData,
-            ));
+            ]);
         } else {
-            return $this->render('admin-v2/cloud-center/edu-cloud/search/without-enable.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/search/without-enable.html.twig', [
                 'data' => $data,
-            ));
+            ]);
         }
     }
 
@@ -769,17 +779,17 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
         }
 
-        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
+        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', []);
         if (!$cloudSearchSettting['search_enabled']) {
             return $this->redirect($this->generateUrl('admin_v2_edu_cloud_search_overview'));
         }
 
-        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', array());
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', []);
         $searchInitStatus = $this->checkCloudSearchStatus($cloudSearchSetting);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/search/setting.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/search/setting.html.twig', [
             'searchInitStatus' => $searchInitStatus,
-        ));
+        ]);
     }
 
     public function searchClauseAction(Request $request)
@@ -796,7 +806,7 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', []);
         if ('ok' == $cloud_search_setting['status'] || 'waiting' == $cloud_search_setting['status']) {
             $cloud_search_setting['search_enabled'] = 1;
             $this->getSettingService()->set('cloud_search', $cloud_search_setting);
@@ -807,7 +817,7 @@ class EduCloudController extends BaseController
 
     public function searchCloseAction()
     {
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', []);
         $cloud_search_setting['search_enabled'] = 0;
         $this->getSettingService()->set('cloud_search', $cloud_search_setting);
 
@@ -856,7 +866,7 @@ class EduCloudController extends BaseController
             $account = $this->getConsultService()->getAccount();
             $jsResource = $this->getConsultService()->getJsResource();
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/consult/consult-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/consult/consult-error.html.twig', []);
         }
 
         $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
@@ -884,9 +894,9 @@ class EduCloudController extends BaseController
             return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/consult/setting.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/consult/setting.html.twig', [
             'cloud_consult' => $cloudConsult,
-        ));
+        ]);
     }
 
     public function attachmentSettingAction(Request $request)
@@ -896,15 +906,15 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
             if (empty($info['accessCloud'])) {
-                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_attachment_setting'));
+                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', ['menu' => 'admin_v2_cloud_attachment_setting']);
             }
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', []);
         }
 
-        $attachment = $this->getSettingService()->get('cloud_attachment', array());
-        $defaultData = array('article' => 0, 'course' => 0, 'classroom' => 0, 'group' => 0, 'question' => 0);
-        $default = array_merge($defaultData, array('enable' => 0, 'fileSize' => 500));
+        $attachment = $this->getSettingService()->get('cloud_attachment', []);
+        $defaultData = ['article' => 0, 'course' => 0, 'classroom' => 0, 'group' => 0, 'question' => 0];
+        $default = array_merge($defaultData, ['enable' => 0, 'fileSize' => 500]);
         $attachment = array_merge($default, $attachment);
 
         if ('POST' == $request->getMethod()) {
@@ -914,22 +924,22 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/cloud-attachment.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud-attachment.html.twig', [
             'attachment' => $attachment,
             'info' => $info,
-        ));
+        ]);
     }
 
     //授权页
     public function keyAction(Request $request)
     {
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key_update'));
         }
 
-        $info = array();
+        $info = [];
         try {
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
@@ -937,9 +947,9 @@ class EduCloudController extends BaseController
             $info['error'] = 'error';
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/key.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/key.html.twig', [
             'info' => $info,
-        ));
+        ]);
     }
 
     public function keyUpdateAction(Request $request)
@@ -948,7 +958,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key'));
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         if ('POST' == $request->getMethod()) {
             $options = $request->request->all();
@@ -983,7 +993,7 @@ class EduCloudController extends BaseController
 
         render:
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/key-update.html.twig', array());
+        return $this->render('admin-v2/cloud-center/edu-cloud/key-update.html.twig', []);
     }
 
     public function keyApplyAction(Request $request)
@@ -992,10 +1002,10 @@ class EduCloudController extends BaseController
         $keys = $applier->applyKey($this->getUser());
 
         if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-            return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
+            return $this->createJsonResponse(['error' => 'Key生成失败，请检查服务器网络后，重试！']);
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         $settings['cloud_access_key'] = $keys['accessKey'];
         $settings['cloud_secret_key'] = $keys['secretKey'];
@@ -1003,7 +1013,7 @@ class EduCloudController extends BaseController
 
         $this->getSettingService()->set('storage', $settings);
 
-        return $this->createJsonResponse(array('status' => 'ok'));
+        return $this->createJsonResponse(['status' => 'ok']);
     }
 
     public function keyInfoAction(Request $request)
@@ -1012,7 +1022,7 @@ class EduCloudController extends BaseController
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
-            $settings = $this->getSettingService()->get('storage', array());
+            $settings = $this->getSettingService()->get('storage', []);
 
             if (empty($settings['cloud_key_applied'])) {
                 $settings['cloud_key_applied'] = 1;
@@ -1020,7 +1030,7 @@ class EduCloudController extends BaseController
             }
 
             if ($info['copyright']) {
-                $copyright = $this->getSettingService()->get('copyright', array());
+                $copyright = $this->getSettingService()->get('copyright', []);
                 $copyright['owned'] = 1;
                 $copyright['thirdCopyright'] = $info['thirdCopyright'];
                 $copyright['licenseDomains'] = $info['licenseDomains'];
@@ -1029,7 +1039,7 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->delete('copyright');
             }
         } else {
-            $settings = $this->getSettingService()->get('storage', array());
+            $settings = $this->getSettingService()->get('storage', []);
             $settings['cloud_key_applied'] = 0;
             $this->getSettingService()->set('storage', $settings);
         }
@@ -1040,18 +1050,18 @@ class EduCloudController extends BaseController
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/key-license-info.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/key-license-info.html.twig', [
             'info' => $info,
             'currentHost' => $currentHost,
             'isLocalAddress' => $this->isLocalAddress($currentHost),
-        ));
+        ]);
     }
 
     public function keyBindAction(Request $request)
     {
         $api = CloudAPIFactory::create('root');
         $currentHost = $request->server->get('HTTP_HOST');
-        $result = $api->post('/me/license-domain', array('domain' => $currentHost));
+        $result = $api->post('/me/license-domain', ['domain' => $currentHost]);
 
         if (!empty($result['licenseDomains'])) {
             $this->setFlashMessage('success', 'admin.cloud.license.activate_success');
@@ -1073,32 +1083,32 @@ class EduCloudController extends BaseController
 
         $name = $request->request->get('name');
 
-        $this->getSettingService()->set('copyright', array(
+        $this->getSettingService()->set('copyright', [
             'owned' => 1,
             'name' => $request->request->get('name', ''),
             'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0,
             'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : '',
-        ));
+        ]);
 
-        return $this->createJsonResponse(array('status' => 'ok'));
+        return $this->createJsonResponse(['status' => 'ok']);
     }
 
     public function appImAction(Request $request)
     {
-        $appImSetting = $this->getSettingService()->get('app_im', array());
+        $appImSetting = $this->getSettingService()->get('app_im', []);
         if (!$appImSetting) {
-            $appImSetting = array('enabled' => 0, 'convNo' => '');
+            $appImSetting = ['enabled' => 0, 'convNo' => ''];
             $this->getSettingService()->set('app_im', $appImSetting);
         }
 
-        $data = array('status' => 'success');
+        $data = ['status' => 'success'];
 
         try {
             $api = CloudAPIFactory::create('root');
 
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', []);
         }
 
         //是否接入教育云
@@ -1113,15 +1123,15 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/app-im-setting.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/app-im-setting.html.twig', [
             'data' => $data,
-        ));
+        ]);
     }
 
     public function appImUpdateStatusAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $appImSetting = $this->getSettingService()->get('app_im', array());
+            $appImSetting = $this->getSettingService()->get('app_im', []);
             $user = $this->getUser();
 
             //去云平台判断im帐号是否存在
@@ -1136,13 +1146,13 @@ class EduCloudController extends BaseController
             $imStatus = $status ? 'enable' : 'disable';
 
             //更改云IM帐号状态
-            $api->post('/me/account', array('status' => $imStatus));
+            $api->post('/me/account', ['status' => $imStatus]);
 
             $appImSetting['enabled'] = $status;
 
             //创建全站会话
             if ($status && empty($appImSetting['convNo'])) {
-                $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
+                $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, [$user]);
                 if ($conversation) {
                     $appImSetting['convNo'] = $conversation['no'];
                 }
@@ -1158,7 +1168,7 @@ class EduCloudController extends BaseController
 
     protected function isLocalAddress($address)
     {
-        if (in_array($address, array('localhost', '127.0.0.1'))) {
+        if (in_array($address, ['localhost', '127.0.0.1'])) {
             return true;
         }
 
@@ -1175,9 +1185,9 @@ class EduCloudController extends BaseController
 
     private function renderConsultWithoutEnable($cloudConsult)
     {
-        return $this->render('admin-v2/cloud-center/edu-cloud/consult/without-enable.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/consult/without-enable.html.twig', [
             'cloud_consult' => $cloudConsult,
-        ));
+        ]);
     }
 
     protected function checkCloudSearchStatus($cloudSearchSetting)
@@ -1203,10 +1213,10 @@ class EduCloudController extends BaseController
     protected function initCloudSearch(AbstractCloudAPI $api, $data)
     {
         if (!$data) {
-            $data = array(
+            $data = [
                 'search_enabled' => 0,
                 'status' => 'closed', //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
-            );
+            ];
         }
 
         if (empty($data['status'])) {
@@ -1217,20 +1227,20 @@ class EduCloudController extends BaseController
             $search_account = $api->get('/me/search_account');
 
             if ('yes' == $search_account['isInit']) {
-                $data = array(
+                $data = [
                     'search_enabled' => $data['search_enabled'],
                     'status' => 'ok',
-                );
+                ];
             }
         }
         if (empty($data['type'])) {
-            $data['type'] = array(
+            $data['type'] = [
                 'course' => 1,
                 'classroom' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
-            );
+            ];
         }
         $this->getSettingService()->set('cloud_search', $data);
 
@@ -1251,7 +1261,7 @@ class EduCloudController extends BaseController
 
     protected function setCloudSmsKey($key, $val)
     {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting = $this->getSettingService()->get('cloud_sms', []);
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
     }
@@ -1267,7 +1277,7 @@ class EduCloudController extends BaseController
     {
         $user = $this->getUser();
 
-        $callback = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('callback', array('type' => 'cloudFile', 'ac' => 'files.notify'));
+        $callback = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('callback', ['type' => 'cloudFile', 'ac' => 'files.notify']);
 
         $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
 
@@ -1277,7 +1287,7 @@ class EduCloudController extends BaseController
     protected function handleSmsSetting(Request $request, $api)
     {
         $dataUserPosted = $request->request->all();
-        $settings = $this->getSettingService()->get('cloud_sms', array());
+        $settings = $this->getSettingService()->get('cloud_sms', []);
 
         //如果要更改短信策略则同步到数据库
         if (isset($dataUserPosted['strategy_overwrite'])) {
@@ -1302,7 +1312,7 @@ class EduCloudController extends BaseController
      */
     private function handleUserSmsSetting($dataUserPosted)
     {
-        $defaultSetting = array(
+        $defaultSetting = [
             'sms_enabled' => '0',
             'sms_registration' => 'off',
             'sms_forget_password' => 'on',
@@ -1323,7 +1333,7 @@ class EduCloudController extends BaseController
             'sms_classroom_buy_notify' => 'off',
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
-        );
+        ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
 
@@ -1386,16 +1396,16 @@ class EduCloudController extends BaseController
 
     protected function setCloudLiveLogo($provider, $client)
     {
-        $setting = $this->getSettingService()->get('live-course', array());
+        $setting = $this->getSettingService()->get('live-course', []);
 
         $isSetLogo = !empty($setting['webLogoPath']) || !empty($setting['appLogoPath']) || !empty($setting['logoUrl']);
 
         if ('talkFun' == $provider && $isSetLogo) {
-            $logoData = array(
+            $logoData = [
                 'logoPcUrl' => empty($setting['webLogoPath']) ? '' : $setting['webLogoPath'],
                 'logoClientUrl' => empty($setting['appLogoPath']) ? '' : $setting['appLogoPath'],
                 'logoGotoUrl' => empty($setting['logoUrl']) ? 'http://www.talk-fun.com' : $setting['logoUrl'],
-            );
+            ];
             $result = $client->setLiveLogo($logoData);
 
             if (isset($result['error'])) {
@@ -1509,5 +1519,13 @@ class EduCloudController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

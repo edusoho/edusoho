@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -58,6 +59,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'doing_look_analysis' => ['integer', ['in', [0, 1]]],
             'pass_score' => ['numeric', ['min', 0]],
             'enable_facein' => ['integer', ['in', [0, 1]]],
+            'question_report_job_name' => [['lengthMax', 128]],
+            'last_review_time' => ['integer'],
+            'question_report_update_time' => ['integer'],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {
@@ -105,7 +109,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function getAnswerSceneReport($id)
     {
-        $this->buildAnswerSceneReport($id);
+//        $this->buildAnswerSceneReport($id);
         $answerReports = $this->getAnswerReportService()->findByAnswerSceneId($id);
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($id);
         $answerSceneRerport = [
@@ -127,7 +131,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerScene)) {
             throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
-        
+
         $answerSceneQuestionReports = $this->getAnswerSceneQuestionReportsByAnswerSceneId($id);
         $oldAnswerSceneQuestionReports  = ArrayToolkit::index($this->getAnswerSceneQuestionReportDao()->findByAnswerSceneId($id), 'question_id');
         $createAnswerSceneQuestionReports = [];
@@ -152,6 +156,8 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
                 $this->getAnswerSceneQuestionReportDao()->batchUpdate(ArrayToolkit::column($updateAnswerSceneQuestionReports, 'id'), $updateAnswerSceneQuestionReports, 'id');
             }
 
+            $this->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_update_time' => time()]);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -159,12 +165,17 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         }
     }
 
+    public function findNotStatisticsQuestionsReportScenes($limit = 100)
+    {
+        return $this->getAnswerSceneDao()->findNotStatisticsQuestionsReportScenes($limit);
+    }
+
     protected function getAvgScoreByAnswerReports($answerReports)
     {
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         return sprintf("%.1f", array_sum($scores) / count($answerReports));
     }
@@ -174,7 +185,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         rsort($scores);
         return sprintf("%.1f", $scores[0]);
@@ -185,7 +196,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         sort($scores);
         return sprintf("%.1f", $scores[0]);
@@ -295,6 +306,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         return $this->biz->service('ItemBank:Item:ItemService');
     }
 
+    /**
+     * @return AnswerSceneDao
+     */
     protected function getAnswerSceneDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerSceneDao');

@@ -1,0 +1,27 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'agreement-modal' %}
+{% do script(['app/js/admin-v2/edu-cloud/agreement/index.js']) %}
+
+{% block modal_content %}
+  <div class="agreement-modal-content">
+    <div class="agreement-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        <i class="cd-icon cd-icon-close"></i>
+      </button>
+    </div>
+    <div class="agreement-title">
+      {{ 'admin.app_upgrades.agreement.title'|trans }}
+    </div>
+    <div class="agreement-body">
+        {{ agreement|raw }}
+    </div>
+    <div class="agreement-check-label">
+      <label><input type="checkbox" class="js-agree-radio" name="agree"></label>
+      <label>{{ 'admin.app_upgrades.agreement.agree'|trans }}</label>
+    </div>
+    <div class="agreement-footer">
+      <button class="btn btn-primary disabled js-upgrade-btn" data-url="{{ path('admin_v2_app_package_update_agreement', {id: id}) }}">{{ 'admin.app_upgrades.agreement.btn'|trans }}</button>
+    </div>
+  </div>
+{% endblock %}

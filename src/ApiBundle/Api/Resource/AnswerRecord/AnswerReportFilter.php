@@ -23,6 +23,7 @@ class AnswerReportFilter extends Filter
         'review_time',
         'review_user_id',
         'section_reports',
+        'resultShow',
     ];
 
     protected function publicFields(&$data)
@@ -33,6 +34,7 @@ class AnswerReportFilter extends Filter
                     foreach ($questionReport['response'] as &$response) {
                         $response = $this->convertAbsoluteUrl($response);
                     }
+                    $questionReport['comment'] = $this->convertAbsoluteUrl($questionReport['comment']);
                 }
             }
         }

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\LiveroomController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -90,42 +89,24 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
-            $teachers = ArrayToolkit::index($teachers, 'userId');
-
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
-
-            $teacher = $teachers[$teacherId];
-
-            if ($teacher['userId'] == $user['id']) {
-                $params['role'] = 'teacher';
-            } else {
-                $params['role'] = 'speaker';
-            }
-        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $params['role'] = 'student';
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id'])) {
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
 
         $params['id'] = $user['id'];
+        /*
+         * displayName 用于直播间用户名展示
+         */
+        $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         /**
-         * @var int
-         *          last record: 2017-12-12
-         *          '1'=>'vhall',
-         *          '2'=>'soooner',
-         *          '3'=>'sanmang',
-         *          '4'=>'gensee',
-         *          '5'=>'longinus',
-         *          '6'=>'training',
-         *          '7'=>'talkFun',
-         *          '8'=>'athena', //ES直播
+         * provider code in wiki
          */
         $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
         $this->freshTaskLearnStat($request, $activity['id']);
@@ -133,8 +114,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->forward('AppBundle:Liveroom:_entry', [
             'roomId' => $activity['ext']['liveId'],
             'params' => [
+                'triggerEvent' => true,
                 'courseId' => $courseId,
                 'activityId' => $activityId,
+                'taskId' => $task['id'],
                 'provider' => $provider,
                 'startTime' => $activity['startTime'],
                 'endTime' => $activity['endTime'],
@@ -142,14 +125,49 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ], $params);
     }
 
+    /**
+     * @param $courseId
+     * @param $activityId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的回放播放入口
+     */
     public function liveReplayAction($courseId, $activityId)
     {
+        $user = $this->getUser();
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
 
         return $this->render('activity/live/replay-player.html.twig', [
+            'courseId' => $courseId,
+            'activityId' => $activityId,
+            'taskId' => $task['id'],
             'live' => $live,
+            'mediaId' => $live['mediaId'],
+            'role' => $role,
+        ]);
+    }
+
+    /**
+     * @param $mediaId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的视频回放链接
+     */
+    public function liveReplayEntryAction(Request $request, $mediaId)
+    {
+        return $this->render('activity/live/replay-player-show.html.twig', [
+            'mediaId' => $mediaId,
         ]);
     }
 
@@ -193,6 +211,38 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->render('activity/live/finish-condition.html.twig', []);
     }
 
+    /**
+     * @param $courseId
+     * @param $activityId
+     * @param $replayId
+     * 第三方供应商的直播播放
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $user = $this->getUser();
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $isTeacher = false;
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+            $isTeacher = $this->getUser()->isTeacher();
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
+
+        return $this->render('live-course/entry.html.twig', [
+            'courseId' => $courseId,
+            'replayId' => $replayId,
+            'activityId' => $activityId,
+            'task' => $task,
+            'isTeacher' => $isTeacher,
+            'role' => $role,
+        ]);
+    }
+
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
@@ -231,8 +281,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
-        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
-            $request->isSecure());
+        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [
@@ -317,7 +366,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
             $self = $this;
             $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('live_activity_replay_entry', [
+                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
                     'replayId' => $replay['id'],

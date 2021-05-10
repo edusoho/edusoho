@@ -16,7 +16,7 @@
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
       {% endfor %}
-      <li class="active">{{ classroom.title }}</li>
+      <li class="active">{{ classroom.title|raw }}</li>
     </ol>
 
     <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">
@@ -44,12 +44,12 @@
             </span>
           </h2>
           <div class="metas class-info__metas">
-            {% if setting('classroom.show_review', '1') == 1 %}
-              <div class="score">
-                {{ web_macro.star(classroom.rating) }}
-                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>
-              </div>
-            {% endif %}
+{#            {% if setting('classroom.show_review', '1') == 1 %}#}
+{#              <div class="score">#}
+{#                {{ web_macro.star(classroom.rating) }}#}
+{#                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>#}
+{#              </div>#}
+{#            {% endif %}#}
             <div class="price">
               {{ 'classroom.price'|trans }}：
               <span>
@@ -116,12 +116,12 @@
           </ul>
 
           <div class="bottom-metas class-info__bottom clearfix">
-            <div class="class-info__serve class-serve hidden-sm hidden-xs">
-              <div class="serve-label">
-                {{ 'classroom.showServices'|trans }}
-              </div>
-              {% include 'classroom/service-block.html.twig' with {'services':classroom.service } %}
-            </div>
+{#            <div class="class-info__serve class-serve hidden-sm hidden-xs">#}
+{#              <div class="serve-label">#}
+{#                {{ 'classroom.showServices'|trans }}#}
+{#              </div>#}
+{#              {% include 'classroom/service-block.html.twig' with {'services':classroom.service } %}#}
+{#            </div>#}
 
             {% if  classroom.showable and classroom.status != 'closed' %}
               <div class="btn-buy">

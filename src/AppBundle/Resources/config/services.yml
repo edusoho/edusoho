@@ -30,6 +30,21 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension, priority: 10 }
+    report.extension:
+        class: AppBundle\Extension\ReportExtension
+        public: true
+        calls:
+          - [setBiz, ['@biz']]
+        tags:
+          - { name: extension, priority: 10 }
+
+    content_audit.extension:
+      class: AppBundle\Extension\ContentAuditExtension
+      public: true
+      calls:
+        - [ setBiz, [ '@biz' ] ]
+      tags:
+        - { name: extension, priority: 10 }
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
@@ -234,6 +249,13 @@ services:
         tags:
             - { name: twig.extension }
 
+    web.twig.classroom_extension:
+      class: AppBundle\Twig\ClassroomExtension
+      arguments: [ '@service_container', '@biz' ]
+      public: true
+      tags:
+        - { name: twig.extension }
+
     web.twig.item_bank_exercise_extension:
       class: AppBundle\Twig\ItemBankExerciseExtension
       arguments:    ['@service_container', '@biz']
@@ -267,3 +289,8 @@ services:
         class: AppBundle\Component\QrCode\QrCodeWhiteListFilter
         arguments: ['@service_container']
         public: true
+
+    batch_exporter:
+      class: AppBundle\Component\Export\BatchExporter
+      arguments: ['@service_container']
+      public: true

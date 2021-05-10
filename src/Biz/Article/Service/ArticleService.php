@@ -4,8 +4,8 @@ namespace Biz\Article\Service;
 
 use Biz\Article\ArticleException;
 use Biz\Article\CategoryException;
-use Biz\User\UserException;
 use Biz\System\Annotation\Log;
+use Biz\User\UserException;
 
 interface ArticleService
 {
@@ -45,21 +45,8 @@ interface ArticleService
 
     public function countArticles($conditions);
 
-    /**
-     * @param $article
-     *
-     * @return mixed
-     * @Log(module="article",action="create")
-     */
     public function createArticle($article);
 
-    /**
-     * @param $id
-     * @param $article
-     *
-     * @return mixed
-     * @Log(module="article",action="update")
-     */
     public function updateArticle($id, $article);
 
     public function batchUpdateOrg($articleIds, $orgCode);
@@ -113,8 +100,6 @@ interface ArticleService
 
     /**
      * batch delete articles at trash.
-     *
-     * @param array $ids
      *
      * @throws ArticleException
      *
@@ -175,4 +160,6 @@ interface ArticleService
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
 
     public function findRelativeArticles($articleId, $num = 3);
+
+    public function findArticlesByLikeTitle($title);
 }

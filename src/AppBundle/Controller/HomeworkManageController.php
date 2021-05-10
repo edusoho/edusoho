@@ -4,19 +4,18 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\Testpaper\BaseTestpaperController;
 use Biz\Common\CommonException;
-use Biz\Question\Service\CategoryService;
-use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
-class HomeworkManageController extends BaseController
+class HomeworkManageController extends BaseTestpaperController
 {
     public function questionPickerAction(Request $request, $id)
     {
@@ -142,6 +141,21 @@ class HomeworkManageController extends BaseController
             return $this->createMessageResponse('info', 'Paper not found');
         }
 
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+
+        $needJob = 0; //是否要通过Job更新默认不需要
+        //判断如果存在新提交的内容
+        if (empty($answerScene['question_report_update_time']) || $answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
+            $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerSceneId'], 'status' => 'finished']);
+            $needJob = $this->needSyncJob($answerCount, $activity['ext']['assessment']['question_count']);
+            if (!$needJob) {
+                //判断当前阈值不需要定时任务来异步处理
+                !empty($answerCount) ? $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']) : null;
+            } else {
+                $jobSync = $this->handleJob($answerScene); //是否在次请求加载过程中存在同步执行中的Job
+            }
+        }
+
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
 
         return $this->render('homework/manage/result-analysis.html.twig', [
@@ -150,6 +164,9 @@ class HomeworkManageController extends BaseController
             'answerSceneReport' => $answerSceneReport,
             'assessment' => $activity['ext']['assessment'],
             'targetType' => $targetType,
+            'answerScene' => $answerScene,
+            'jobSync' => !empty($jobSync) ? 1 : 0,
+            'needJob' => !empty($needJob) ? 1 : 0,
         ]);
     }
 
@@ -299,22 +316,6 @@ class HomeworkManageController extends BaseController
     }
 
     /**
-     * @return CategoryService
-     */
-    protected function getQuestionCategoryService()
-    {
-        return $this->createService('Question:CategoryService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
@@ -328,11 +329,6 @@ class HomeworkManageController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    protected function getQuestionAnalysisService()
-    {
-        return $this->createService('Question:QuestionAnalysisService');
     }
 
     protected function getCourseSetService()
@@ -384,13 +380,11 @@ class HomeworkManageController extends BaseController
         return $this->createService('Activity:HomeworkActivityService');
     }
 
+    /**
+     * @return AssessmentService
+     */
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
-    }
-
-    protected function getAnswerSceneService()
-    {
-        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

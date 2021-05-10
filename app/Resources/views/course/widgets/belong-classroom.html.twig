@@ -12,7 +12,7 @@
             <a href="{{ path('classroom_show', {id: classroom.id}) }}"><img src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt=""></a>
           </div>
           <div class="media-body">
-            <a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.title }}</a>
+            <a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.title|raw }}</a>
           </div>
         </div>
     </div>

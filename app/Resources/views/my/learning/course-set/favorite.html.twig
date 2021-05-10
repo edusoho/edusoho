@@ -12,23 +12,27 @@
       {% include 'my/learning/course/nav-pill.html.twig' %}
 
       {% for courseFavorite in courseFavorites if courseFavorite %}
-
         {% if courseFavorite.targetType == 'course' %}
           {% set courseSet =  data('CourseSet',{id:courseFavorite.targetId}) %}
-          {% set course = data('Course',{courseId:courseSet.defaultCourseId }) %}
-          {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
-          {% include 'my/learning/my-course-set-grid.html.twig' %}
-
+          {% if courseSet.defaultCourseId|default(null) %}
+            {% set course = data('Course',{courseId:courseSet.defaultCourseId }) %}
+            {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
+            {% include 'my/learning/my-course-set-grid.html.twig' %}
+          {% endif %}
         {% elseif courseFavorite.targetType == 'openCourse' %}
           {% set course = data('OpenCourse',{courseId:courseFavorite.targetId})|default(null) %}
           {% if course %}
             {% include 'open-course/widget/my-open-course-grid.html.twig' %}
           {% endif %}
+        {% elseif courseFavorite.targetType == 'goods' %}
+          {% set goods = data('Goods',{id:courseFavorite.targetId})|default(null) %}
+          {% if goods %}
+            {% include 'my/learning/my-goods-grid.html.twig' %}
+          {% endif %}
         {% endif %}
       {% else %}
         <div class="cd-empty">{{'my.learning.course.favorite_empty'|trans}}</div>
       {% endfor %}
-
       {{ web_macro.paginator(paginator) }}
     </div>
   </div>

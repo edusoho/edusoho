@@ -509,9 +509,10 @@ raw_password_update:
     path: /raw/password/update
     defaults: { _controller: AppBundle:PasswordReset:changeRawPassword }
 
-password_reset_check_mobile:
-    path:  /password/reset/check/mobile
-    defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
+# 73172 漏洞修复-防止网校被爆破枚举用户手机号
+# password_reset_check_mobile:
+#     path:  /password/reset/check/mobile
+#     defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
 
 browser_upgrade:
     path:  /browser/upgrade
@@ -1755,6 +1756,10 @@ task_live_entry:
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
   h5: true
 
+custom_live_activity_replay_entry:
+  path: /course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry
+  defaults: { _controller: AppBundle:Activity/Live:customReplayEntry }
+
 live_activity_replay_entry:
   path: /course/{courseId}/activity/{activityId}/replay/{replayId}/entry
   defaults: { _controller: AppBundle:Activity/Live:replayEntry }
@@ -1767,7 +1772,9 @@ task_live_replay_player:
   path: /course/{courseId}/activity/{activityId}/replay
   defaults: {_controller: AppBundle:Activity/Live:liveReplay }
 
-
+task_live_replay_entry_player:
+  path: /task_live/{mediaId}/replay_entry
+  defaults: {_controller: AppBundle:Activity/Live:liveReplayEntry }
 
 # task_liveroom_ticket:
 #     path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
@@ -1839,6 +1846,11 @@ course_manage_lesson_valid_num:
     defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
     methods: [POST]
 
+course_manage_lesson_valid_type:
+    path: /course/lesson/valid_type
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonType }
+    methods: [POST]
+
 course_manage_lesson_update:
     path:  /course/{courseId}/lesson/{lessonId}/update
     defaults: { _controller: AppBundle:Course/LessonManage:update }
@@ -1854,6 +1866,21 @@ course_manage_lesson_unpublish:
 course_manage_lesson_delete:
     path:  /course/{courseId}/manage/lesson/{lessonId}/delete
     defaults: { _controller: AppBundle:Course/LessonManage:delete }
+
+course_manage_lesson_batch_delete:
+    path:  /course/{courseId}/manage/lesson/batch_delete
+    defaults: { _controller: AppBundle:Course/LessonManage:batchDelete }
+    methods: [POST]
+
+course_manage_lesson_batch_unpublish:
+    path:  /course/{courseId}/manage/lesson/batch_unpublish
+    defaults: { _controller: AppBundle:Course/LessonManage:batchUnpublish }
+    methods: [POST]
+
+course_manage_lesson_batch_publish:
+    path:  /course/{courseId}/manage/lesson/batch_publish
+    defaults: { _controller: AppBundle:Course/LessonManage:batchPublish }
+    methods: [POST]
 
 course_manage_lesson_set_optional:
     path:  /course/{courseId}/manage/lesson/{lessonId}/setoptional
@@ -2155,6 +2182,10 @@ course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
   methods: [POST]
+
+course_exit_no_reason:
+  path: /course/{id}/exit/not_reason
+  defaults: {_controller: AppBundle:Course/Course:exitForNoReason}
 
 course_exit_modal:
   path: /course/show_exit_modal
@@ -2524,34 +2555,23 @@ classroom_manage_items_sort:
 classroom_manage_set_info:
     path: /classroom/{id}/manage/set_info
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:setInfo }
-
-classroom_manage_set_picture:
-    path: /classroom/{id}/manage/set_picture
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPicture }
+    methods: ['POST']
 
 classroom_manage_picture_crop:
     path: /classroom/{id}/manage/picture_crop
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:pictureCrop }
-
-classroom_manage_set_price:
-    path: /classroom/{id}/manage/price/set
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPrice }
 
 classroom_manage_students:
     path: /classroom/{id}/manage/students
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:students }
 
 classroom_manage_aduitor:
-    path: /classroom/{id}/manage/aduitor
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+    path: /classroom/{id}/manage/auditor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:auditor }
 
 classroom_manage_record:
     path: /classroom/{id}/manage/record/{type}
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
-
-classroom_manage_service:
-    path: /classroom/{id}/manage/service
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:service}
 
 classroom_manage_teachers:
     path: /classroom/{id}/manage/teachers
@@ -2649,6 +2669,26 @@ classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
+classroom_data_statistics:
+  path:  /classroom/{id}/manage/data/statistics
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:statistics }
+
+classroom_data_statistics_student_detail:
+  path: /classroom/{id}/manage/statistics/student/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:studentDetailList }
+
+classroom_data_statistics_student_detail_modal:
+  path:  /classroom/{classroomId}/manage/statistics/student/{userId}/detail
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDetailModal }
+
+classroom_data_statistics_course_detail:
+  path: /classroom/{id}/manage/statistics/course/detail
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailList }
+
+classroom_data_statistics_course_detail_modal:
+  path: /classroom/{id}/manage/statistics/course/{courseId}/detail/modal
+  defaults: {_controller: AppBundle:Classroom/ClassroomManage:courseDetailModal }
+
 classroom_manage_students_defined_show:
     path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }
@@ -2664,6 +2704,15 @@ classroom_manage_member_deadline:
 classroom_manage_member_deadline_check_deadline:
     path: /classroom/{classroomId}/manage/member/deadline/check
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDeadline }
+
+classroom_sign_statistics:
+    path:  /classroom/{id}/manage/sign/statistics
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:signStatistics }
+
+classroom_sign_user_detail:
+    path:  /classroom/{id}/manage/sign/user/{userId}/detail
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:signDetail }
+    #
 
 classroom_manage_member_deadline_check_day:
     path: /classroom/{classroomId}/manage/member/day/check
@@ -2707,7 +2756,6 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
-    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2725,6 +2773,10 @@ classroom_exit:
     path: /classroom/{id}/exit
     defaults: { _controller: AppBundle:Classroom/Classroom:exit }
 
+classroom_exit_no_reason:
+    path: /classroom/{id}/exit/no_reason
+    defaults: { _controller: AppBundle:Classroom/Classroom:exitForNoReason }
+
 classroom_canview:
     path: /classroom/{classroomId}/canview
     defaults: { _controller: AppBundle:Classroom/Classroom:canview }
@@ -2732,6 +2784,10 @@ classroom_canview:
 classroom_courses:
     path: /classroom/{classroomId}/courses
     defaults: { _controller: AppBundle:Classroom/Course:list }
+
+classroom_member_access:
+    path: /classroom/{classroomId}/member/{memberId}/access
+    defaults: { _controller: AppBundle:Classroom/Classroom:memberAccess }
 #
 # 讨论区
 #
@@ -2974,7 +3030,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseBuy:buy }
-    methods: [POST]
 
 course_order_repay:
     path:  /course/order/repay
@@ -3378,6 +3433,10 @@ course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
 
+course_task_json_data:
+    path: /course/{courseId}/tasks/list_data
+    defaults: { _controller: AppBundle:Course/Course:getTaskListData }
+
 item_attachment_init_upload:
     path: /item/attachment/upload/init
     defaults: { _controller: AppBundle:Item/Attachment:initUpload }
@@ -3424,6 +3483,26 @@ facein_inspection_results:
 facein_inspection_results_detail:
     path:     /facein/{activityId}/inspection/{userId}/results
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
+
+category_choices:
+    path:     /category/choices/{type}
+    defaults: { _controller: AppBundle:Vue/Common:getCategoryChoices, type:'course' }
+
+get_current_user:
+    path:     /current/user
+    defaults: { _controller: AppBundle:Vue/Common:currentUser }
+
+get_data_tag:
+    path:     /data/tag/{name}
+    defaults: { _controller: AppBundle:Vue/Common:getDataTag }
+
+render_org:
+    path: /render/org
+    defaults: { _controller: AppBundle:Vue/Common:renderOrg }
+
+upload_image:
+    path: /render/upload/image
+    defaults: { _controller: AppBundle:Vue/Common:uploadImage }
 
 # item-bank-exercise
 item_bank_exercise_qrcode:
@@ -3538,6 +3617,16 @@ item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
 
+item_bank_exercise_manage_remove_student:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remove
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:removeStudent }
+  methods: [POST]
+
+item_bank_exercise_manage_remove_students:
+  path:  /item_bank_exercise/{exerciseId}/manage/students/remove
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:removeStudents }
+  methods: [POST]
+
 item_bank_exercise_buy:
     path: /item_bank_exercise/{id}/buy
     defaults: { _controller: AppBundle:ItemBankExercise/ExerciseBuy:buy }
@@ -3567,6 +3656,11 @@ item_bank_exercise_category_answer:
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }
+    h5: true
+
+render_buy_flow_modal:
+    path:     /goods/buy_flow/modal
+    defaults: { _controller: AppBundle:Goods/Goods:buyFLowModal }
 
 certificate_image_show:
     path:     /certificate/image/{id}/show
@@ -3588,3 +3682,35 @@ certificate_detail:
 face_inspection_select:
     path: /face/inspection/select
     defaults: { _controller: AppBundle:FaceInspection/Capture:selectFace }
+
+information_collect_event:
+  path: /information_collect/event/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:index }
+
+information_collect_event_form:
+  path: /information_collect/event/{eventId}/form
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:eventForm }
+
+information_collect_event_modal:
+  path: /information_collect/event_modal/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:indexModal }
+
+drp_info:
+  path: /drp_info/{targetId}/{type}
+  defaults: { _controller: AppBundle:DrpInfo:getDrpInfo }
+
+exam_result_analysis_job_sync:
+  path: exam/{answerSceneId}/job_sync
+  defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:syncJob }
+
+exam_result_analysis_job_check:
+  path: exam/{answerSceneId}/job_check
+  defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:jobCheck }
+
+common_report:
+  path: /common/report
+  defaults: { _controller: AppBundle:Report:submit }
+
+common_report_tags_modal:
+  path: /common/report/{targetType}/target_id/{targetId}/tags_modal
+  defaults: { _controller: AppBundle:Report:tagsModal }

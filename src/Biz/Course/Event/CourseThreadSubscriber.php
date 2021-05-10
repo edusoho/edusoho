@@ -2,13 +2,14 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\System\Service\LogService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -16,9 +17,10 @@ class CourseThreadSubscriber extends EventSubscriber implements EventSubscriberI
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.thread.create' => 'onCourseThreadAskVideoThumbnailUpdate',
-        );
+            'course.thread.delete' => 'onCourseThreadDelete',
+        ];
     }
 
     public function onCourseThreadAskVideoThumbnailUpdate(Event $event)
@@ -27,16 +29,30 @@ class CourseThreadSubscriber extends EventSubscriber implements EventSubscriberI
         if (!empty($thread['videoId'])) {
             $task = $this->getTaskService()->getTask($thread['taskId']);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            $fileId = ($activity['mediaType'] == 'video') ? $activity['ext']['file']['id'] : 0;
+            $fileId = ('video' == $activity['mediaType']) ? $activity['ext']['file']['id'] : 0;
             $file = $this->getUploadFileService()->getFile($fileId);
-            $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], array('seconds' => $thread['videoAskTime']));
-            while ($result['status'] == 'waiting') {
+            $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], ['seconds' => $thread['videoAskTime']]);
+            while ('waiting' == $result['status']) {
                 sleep(3);
-                $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], array('seconds' => $thread['videoAskTime']));
+                $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], ['seconds' => $thread['videoAskTime']]);
             }
-            if ($result['status'] == 'success') {
-                $this->getCourseThreadService()->updateThread($thread['courseId'], $thread['id'], array('askVideoThumbnail' => $result['url']));
+            if ('success' == $result['status']) {
+                $this->getCourseThreadService()->updateThread($thread['courseId'], $thread['id'], ['askVideoThumbnail' => $result['url']]);
             }
+        }
+
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($thread['courseId']);
+        if ($classroom) {
+            $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($classroom['id'], $thread['userId'], ['threadNum', 'questionNum']);
+        }
+    }
+
+    public function onCourseThreadDelete(Event $event)
+    {
+        $thread = $event->getSubject();
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($thread['courseId']);
+        if ($classroom) {
+            $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($classroom['id'], $thread['userId'], ['threadNum', 'questionNum']);
         }
     }
 
@@ -118,5 +134,13 @@ class CourseThreadSubscriber extends EventSubscriber implements EventSubscriberI
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

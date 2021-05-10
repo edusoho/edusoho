@@ -20,7 +20,8 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
   case 4030102:
     window.location.href = '/login';
     break;
-  case 4040101:
+  case 11: //api 登陆失败状态码
+  case 4040101: //普通请求异常状态码
     if($('meta[name=wechat_login_bind]').attr('content') != 0) {
       window.location.href = '/login';
     } else {

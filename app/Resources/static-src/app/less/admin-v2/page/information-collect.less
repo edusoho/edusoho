@@ -1,0 +1,147 @@
+.red-circle{
+  position: absolute;
+  margin: 8px -11px;
+  width: 7px;
+  height: 7px;
+  background: #FF0000;
+  border-radius: 50%;
+  border: 1px solid #FF6347;
+}
+
+.green-circle {
+  position: absolute;
+  margin: 8px -11px;
+  width: 7px;
+  height: 7px;
+  background: #3CB371;
+  border-radius: 50%;
+  border: 1px solid #3CB371;
+}
+
+.table-wrapper {
+  overflow-x: scroll;
+  width: 100%;
+
+  table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: none;
+    margin-left: -1px;
+    margin-bottom: -1px;
+  }
+
+  th, td {
+    text-align: center;
+    vertical-align: middle !important;
+    border-bottom-width: 1px !important;
+    width: 200px;
+    height: 51px;
+  }
+
+  th:nth-child(2){
+    padding-top: 6px;
+  }
+}
+
+.information-collect .display-inline {
+  display: inline;
+}
+
+.information-collect .margin-unset {
+  margin: unset !important;
+}
+
+.information-collect .form-items-panel {
+  padding: 0;
+}
+
+.form-items-panel .cd-alert-warning {
+  border-radius: 4px 4px 0 0;
+}
+
+.form-items-panel .cd-panel-body {
+  padding: 0 0 32px 0;
+}
+
+.color-black-title {
+  color: #333;
+}
+
+.information-collect-selected-item-operate {
+  display: inline-flex;
+}
+
+.information-collect .control-label-required {
+  position: relative;
+  &::after {
+    content: "*";
+    color: @brand-warning;
+  }
+}
+
+.information-collect .bg-gray-lighter {
+  background: #f5f5f5;
+}
+
+.selecte-form-item-group {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: solid 1px #CECECE;
+}
+
+.selected-form-item-list {
+  padding: 0 15px 0 15px;
+  min-height: 632px;
+}
+
+.selected-form-item-list .input-textarea {
+  height: 62px;
+}
+
+.information-collect .list-group-item {
+  border: unset !important;
+  cursor: move !important;
+}
+
+.list-group-item-placeholder {
+  height: 1.5em; 
+  line-height: 1.2em;
+}
+
+.information-collect .border-unset {
+  border: unset;
+  box-shadow: unset;
+}
+
+
+.information-collect .height-unset {
+  height: unset;
+}
+
+.list-group-item .form-control:hover .delete-form-item-btn{
+  display: block;
+}
+
+.delete-form-item-btn {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  right: 6px;
+  top: -8px;
+  border-radius: 10px 10px;
+  background: #CECECE;
+  line-height: 0px;
+  color: #fff;
+}
+
+.delete-form-item-btn .cd-icon {
+  font-size: 14px;
+}
+
+.selecte-form-items {
+  padding: 20px !important;
+}
+
+.selecte-form-items .btn {
+  width: 100%;
+}

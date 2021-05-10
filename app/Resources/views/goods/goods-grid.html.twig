@@ -1,0 +1,44 @@
+<div class="course-item">
+  <div class="course-img">
+    {% if is_plugin_installed('Vip') and setting('vip.enabled') and goods.isVipRight|default(0) != 0 %}
+      <span class="tag-vip-free"></span>
+    {% endif %}
+    <a href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
+      {{ lazy_img(filepath(goods_cover(goods, 'large'), 'courseSet.png'), 'img-responsive', goods.title|raw) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-darker" href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
+        {{ goods.title|raw }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="course-price-widget">
+        <span class="{% if goods.maxPrice == 0 %} free {% else %} price {% endif %}">
+           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+             {% if goods.maxPrice > 0 %}
+               {% if goods.minPrice == goods.maxPrice %}
+                 {{ 'goods.origin_price.unit'|trans({'%price%': goods.minPrice * setting('coin.cash_rate'), '%unit%': setting('coin.coin_name')|trans}) }}
+               {% else %}
+                 {{ 'goods.minimum_price.unit'|trans({'%price%': goods.minPrice * setting('coin.cash_rate'), '%unit%': setting('coin.coin_name')|trans}) }}
+               {% endif %}
+             {% else %}
+               {{ 'course.price.free'|trans }}
+             {% endif %}
+           {% else %}
+             {% if goods.maxPrice > 0 %}
+               {% if goods.minPrice == goods.maxPrice  %}
+                 {{ 'goods.origin_price.unit'|trans({'%price%': goods.minPrice, '%unit%': 'site.currency.CNY'|trans}) }}
+               {% else %}
+                 {{ 'course.minimum_price.unit'|trans({'%price%': goods.minPrice, '%unit%': 'site.currency.CNY'|trans}) }}
+               {% endif %}
+             {% else %}
+               {{ 'course.price.free'|trans }}
+             {% endif %}
+           {% endif %}
+        </span>
+      </span>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,7 @@
         </a>
       </li>
   {% endfor %}
+  {% if setting('ugc_review.enable_review')|default('1') == '1' and setting('ugc_review.enable_question_bank_review')|default('1') == '1' %}
   <li role="presentation" id="reviews"
       class="{% if route_params.tab|default('') == 'reviews'  or nav|default('') == 'reviews' %}active{% endif %}">
     <a
@@ -26,4 +27,5 @@
       <small>({{ exercise.ratingNum|default(0) }})</small>
     </a>
   </li>
+  {% endif %}
 </ul>

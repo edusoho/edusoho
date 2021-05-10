@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export;
+namespace Tests\Unit\AppBundle\Component\Export;
 
 use AppBundle\Component\Export\Course\OverviewStudentExporter;
 use Biz\BaseTestCase;
@@ -306,12 +306,12 @@ class OverviewStudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals(
             [
-                'test1'."\t", '50%', '学习中', '未开始',
+                'test1', '50%', '学习中', '未开始',
             ], $data[0]
         );
         $this->assertArrayEquals(
             [
-                'test2'."\t", '100%', '未开始', '已完成',
+                'test2', '100%', '未开始', '已完成',
             ], $data[1]
         );
     }

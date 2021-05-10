@@ -1,25 +1,23 @@
 {% import "macro.html.twig" as web_macro %}
-{% if reviews %}
+{% if reviews|default() %}
 	<div class="es-box">
 		<div class="es-box-heading">
 			<h2>{{ 'homepage.student_evaluate'|trans }}</h2>
 		</div>
 	<ul class="media-list latest-review-list">
 		{% for review in reviews %}
-		  {% set author = users[review.userId]|default(null) %}
-		  {% set course = courses[review.targetId]|default(null) %}
-      {% set courseSet = courseSets[course.courseSetId]|default(null) %}
-		  {% if author and course %}
+		  {% set author = review.user|default(null) %}
+		  {% set goods = review.goods|default(null) %}
+		  {% if author and goods %}
 			  <li class="media">
-
 			  	{{ web_macro.user_avatar(author,'author-picture-link','author-picture') }}
 			  	{{ web_macro.user_link(author, 'author-nickname')}}
 
 			  	<span class="color-gray">{{'homepage.reviewer_comment_course'|trans}}</span> <br>
-			  	<div class="review-content">{{ review.content|plain_text(50) }}</div>
+			  	<div class="review-content">{{ review.content|raw|wrap_text(30) }}</div>
 
 				  <div class="review-footer">
-					  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="course-title"> 《 {{ courseSet.title }} 》</a>
+					  <a href="{{ path('goods_show', {id: goods.id}) }}" class="course-title"> 《 {{ goods.title|raw }} 》</a>
 					  <span class="divider"></span>
 					  <span class="stars-{{ review.rating }}">&nbsp;</span>
 				  </div>

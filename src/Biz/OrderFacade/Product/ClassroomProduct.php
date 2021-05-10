@@ -7,8 +7,23 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
-class ClassroomProduct extends Product implements OrderStatusCallback
+class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
 {
+    public $goods;
+
+    public $goodsSpecs;
+
+    public $originalTargetId;
+
+    public $classroom;
+
+    /**
+     * 班级展示价格
+     *
+     * @var float
+     */
+    public $price;
+
     const TYPE = 'classroom';
 
     public $targetType = self::TYPE;
@@ -17,28 +32,52 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
     public function init(array $params)
     {
-        $classroom = $this->getClassroomService()->getClassroom($params['targetId']);
+        //获取核心商品以及规格数据
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $this->goodsSpecs = $goodsSpecs;
+        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
+        $this->goods = $goods;
+        $this->goodsId = $goods['id'];
 
-        $this->targetId = $params['targetId'];
-        $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
-        $this->successUrl = array('classroom_show', array('id' => $this->targetId));
-        $this->title = $classroom['title'];
-        $this->originPrice = $classroom['price'];
+        //声明购买目标ID，商品剥离改造之前targetId是计划ID,现在增加了goodsSpecsId
+        $this->goodsSpecsId = $params['targetId'];
+
+        $this->targetId = $goodsSpecs['targetId'];
+
+        //originalTargetId 兼容老数据，用来处理老数据的问题：这里originalTargetId对应的是classroom的id
+        $this->originalTargetId = $goodsSpecs['targetId'];
+
+        $classroom = $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
+        $this->classroom = $classroom;
+
+        //原有选项
         $this->middlePicture = $classroom['middlePicture'];
         $this->maxRate = $classroom['maxRate'];
-        $this->productEnable = 'published' === $classroom['status'] ? true : false;
-        $this->cover = array(
+
+        //供PC端返回商品页面用，商品剥离改造之前是班级概览页，现在是商品页
+        $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
+
+        //供支付成功后页面的跳转链接，改造前和改造后保持一致
+        $this->successUrl = $this->getSuccessUrl();
+
+        $this->title = $goodsSpecs['title'];
+        $this->cover = [
             'small' => $classroom['smallPicture'],
             'middle' => $classroom['middlePicture'],
             'large' => $classroom['largePicture'],
-        );
+        ];
+
+        //改造之前是班级发布才能购买。现在是商品和规格都发布才是可购买
+        $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
+
+        $this->originPrice = $goodsSpecs['price'];
     }
 
     public function validate()
     {
-        $access = $this->getClassroomService()->canJoinClassroom($this->targetId);
+        $access = $this->getClassroomService()->canJoinClassroom($this->goodsSpecs['targetId']);
 
-        $classroom = $this->getClassroomService()->getClassroom($this->targetId);
+        $classroom = $this->getClassroomService()->getClassroom($this->goodsSpecs['targetId']);
 
         if (!$classroom['buyable']) {
             throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
@@ -56,26 +95,27 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
-        $info = array(
+        $info = [
             'orderId' => $order['id'],
             'note' => $order['created_reason'],
-        );
+        ];
 
         try {
-            $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
+            $classroom = $this->getClassroomByGoodsSpecsId($orderItem['target_id']);
+
+            $isStudent = $this->getClassroomService()->isClassroomStudent($classroom['id'], $orderItem['user_id']);
             if (!$isStudent) {
-                $member = $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+                $member = $this->getClassroomService()->becomeStudent($classroom['id'], $orderItem['user_id'], $info);
             }
 
             if (isset($member)) {
-                $classroom = $this->getClassroomService()->getClassroom($orderItem['target_id']);
-                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']));
+                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", ['userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']]);
             }
 
             return OrderStatusCallback::SUCCESS;
         } catch (\Exception $e) {
             $this->getLogService()->error('order', 'classroom_callback', 'order.classroom_callback.fail',
-                array('error' => $e->getMessage(), 'context' => $orderItem));
+                ['error' => $e->getMessage(), 'context' => $orderItem]);
 
             return false;
         }
@@ -84,22 +124,27 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     public function onOrderRefundAuditing($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getClassroomService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $classroom = $this->getClassroomByGoodsSpecsId($orderItem['target_id']);
+
+        $this->getClassroomService()->lockStudent($classroom['id'], $orderItem['user_id']);
     }
 
     public function onOrderRefundCancel($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $classroom = $this->getClassroomByGoodsSpecsId($orderItem['target_id']);
+
+        $this->getClassroomService()->unlockStudent($classroom['id'], $orderItem['user_id']);
     }
 
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $classroom = $this->getClassroomByGoodsSpecsId($orderItem['target_id']);
 
-        $member = $this->getClassroomService()->getClassroomMember($orderItem['target_id'], $orderItem['user_id']);
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+            $this->getClassroomService()->removeStudent($classroom['id'], $orderItem['user_id']);
         }
 
         $this->updateMemberRecordByRefundItem($orderItem);
@@ -108,7 +153,30 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $classroom = $this->getClassroomByGoodsSpecsId($orderItem['target_id']);
+
+        $this->getClassroomService()->unlockStudent($classroom['id'], $orderItem['user_id']);
+    }
+
+    protected function getClassroomByGoodsSpecsId($id)
+    {
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($id);
+
+        return $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
+    }
+
+    protected function getSuccessUrl()
+    {
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', [
+            'targetType' => $this->targetType,
+            'targetId' => $this->targetId,
+        ]);
+
+        if (empty($event)) {
+            return ['classroom_show', ['id' => $this->targetId]];
+        }
+
+        return ['information_collect_event', ['eventId' => $event['id'], 'goto' => $this->generateUrl('classroom_show', ['id' => $this->targetId])]];
     }
 
     protected function getMemberOperationService()
@@ -127,5 +195,10 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    private function getInformationCollectEventService()
+    {
+        return $this->biz->service('InformationCollect:EventService');
     }
 }

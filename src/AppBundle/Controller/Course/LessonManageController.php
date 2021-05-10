@@ -2,12 +2,15 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use AppBundle\Util\UploaderToken;
+use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonManageController extends BaseController
@@ -39,10 +42,19 @@ class LessonManageController extends BaseController
     {
         $activityConfigManager = $this->get('activity_config_manager');
         $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+
         if (empty($activityConfig['finish_condition'])) {
             return [];
         }
-        $finishCondition = reset($activityConfig['finish_condition']);
+
+        if ('video' === $mediaType) {
+            $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
+            $finishType = empty($setting) ? 'end' : ('playing' === $setting['statistical_dimension'] ? 'watchTime' : 'time');
+            $activityFinishConditions = array_column($activityConfig['finish_condition'], null, 'type');
+            $finishCondition = $activityFinishConditions[$finishType];
+        } else {
+            $finishCondition = reset($activityConfig['finish_condition']);
+        }
 
         return [
             'finishType' => $finishCondition['type'],
@@ -59,7 +71,7 @@ class LessonManageController extends BaseController
             $fileId = $request->request->get('fileId');
             $file = $this->getUploadFileService()->getFile($fileId);
 
-            if (!in_array($file['type'], ['document', 'video', 'audio', 'ppt', 'flash'])) {
+            if (!in_array($file['type'], ['document', 'video', 'audio', 'ppt'])) {
                 return $this->createJsonResponse(['error' => '不支持的文件类型']);
             }
             $formData = $this->createTaskByFileAndCourse($file, $course);
@@ -89,7 +101,7 @@ class LessonManageController extends BaseController
             'course-manage/batch-create/batch-create-modal.html.twig',
             [
                 'token' => $token,
-                'targetType' => $params['targetType'],
+                'targetType' => 'course-batch-create-lesson',
                 'courseId' => $courseId,
                 'mode' => $mode,
                 'enableLessonCount' => $enableLessonCount,
@@ -107,6 +119,24 @@ class LessonManageController extends BaseController
         }
 
         return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function validLessonTypeAction(Request $request)
+    {
+        $fileIds = $request->request->get('fileIds');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+
+        foreach ($files as $file) {
+            if ('flash' == $file['type']) {
+                $invalidFileIds[] = $file['id'];
+            }
+        }
+
+        if (!empty($invalidFileIds)) {
+            return $this->createJsonResponse(['status' => false, 'invalidFileIds' => $invalidFileIds]);
+        }
+
+        return $this->createJsonResponse(['status' => true]);
     }
 
     public function updateAction(Request $request, $courseId, $lessonId)
@@ -145,11 +175,62 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function batchPublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'published');
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
+    }
+
+    public function batchUnpublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'unpublished');
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
+    }
+
     public function deleteAction(Request $request, $courseId, $lessonId)
     {
         $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
 
         return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function batchDeleteAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
     }
 
     public function setOptionalAction(Request $request, $courseId, $lessonId)
@@ -238,5 +319,13 @@ class LessonManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

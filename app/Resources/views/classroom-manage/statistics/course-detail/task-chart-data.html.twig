@@ -1,0 +1,64 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="row">
+    <div class="legend clearfix">
+        <div class="col-10">
+            {{ 'classroom.manage.data_statistics.course_detail.course_name'|trans }}
+        </div>
+        <div class="col-80">
+            {% include 'classroom-manage/statistics/course-detail/chart-data-legend.html.twig' %}
+        </div>
+        <div class="col-10">{{ 'classroom.manage.data_statistics.course_detail.rate.finish'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                data-content="{{ 'classroom.manage.data_statistics.course_detail.finish_rate_tips'|trans }}">
+          </span>
+        </div>
+    </div>
+    {% for task in tasks %}
+        <div class="chart-item clearfix">
+            <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ task.courseSetTitle|html_special_chars_decode }}">
+              {{ task.courseSetTitle|html_special_chars_decode }}
+            </div>
+            <div class="col-80">
+                <div class="progress"
+                     data-toggle="popover"
+                     data-trigger="hover"
+                     data-placement="top"
+                     data-html="true"
+                     data-delay="100"
+                     data-content="
+                        <div><p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.course_name'|trans  }} : {{ task.courseSetTitle|html_special_chars_decode }}</p>
+                        <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.task_num'|trans }} : {{ task.compulsoryTaskNum }}</p>
+                        <p class='mbs'>{{ 'classroom.manage.data_statistics.course_detail.learn_conditions'|trans }} : </p>
+                        <span class='legend-icon finish'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon start'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
+                        <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
+                    </div>">
+
+                    <div class="progress-bar finish-color" style="width: {{ percent(task.finishedNum, classroom.studentNum) }}">
+                    </div>
+                    <div class="progress-bar start-color" style="width: {{ percent(task.learnNum, classroom.studentNum) }}">
+                    </div>
+                    <div class="progress-bar learn-color" style="width: {{ percent(task.notStartedNum, classroom.studentNum) }}%">
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <span class="color-gray">{{ "%d"|format(task.rate) }}% </span>
+                <a class="js-task-chart-detail more"
+                   data-toggle="modal"
+                   data-target="#modal"
+                   data-url="{{ path('classroom_data_statistics_course_detail_modal',{courseId:task.id,id:classroom.id}) }}"
+                   href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
+            </div>
+        </div>
+    {% endfor %}
+    {% if not tasks %}
+        <div class="empty">
+            {{ 'site.datagrid.empty'|trans }}
+        </div>
+    {% endif %}
+</div>
+<div class="mtm">
+    {{ web_macro.paginator(paginator) }}
+</div>

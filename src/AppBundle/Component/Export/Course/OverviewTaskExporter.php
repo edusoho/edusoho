@@ -26,13 +26,13 @@ class OverviewTaskExporter extends Exporter
 
     public function getTitles()
     {
-        return array(
+        return [
             'task.learn_data_detail.task_title',
             'task.learn_data_detail.completed_number',
             'task.learn_data_detail.unfinished_number',
             'task.learn_data_detail.unstarted_number',
             'task.learn_data_detail.finished_rate',
-        );
+        ];
     }
 
     public function getContent($start, $limit)
@@ -40,16 +40,17 @@ class OverviewTaskExporter extends Exporter
         $course = $this->getCourseService()->getCourse($this->parameter['courseId']);
         $tasks = $this->getTaskservice()->searchTasks(
             $this->conditions,
-            array('seq' => 'asc'),
+            ['seq' => 'asc'],
             $start,
             $limit
         );
 
         $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
-        $datas = array();
+        $datas = [];
         foreach ($tasks as $task) {
-            $data = array();
-            $data[] = $task['title'];
+            $taskTitle = '1' == $task['isOptional'] ? $task['title'].'【选修】' : $task['title'];
+            $data = [];
+            $data[] = is_numeric($taskTitle) ? $taskTitle."\t" : $taskTitle;
             $data[] = $task['finishedNum'];
             $data[] = $task['learnNum'];
             $data[] = $task['notStartedNum'];
@@ -71,7 +72,7 @@ class OverviewTaskExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('titleLike', 'courseId'));
+        return ArrayToolkit::parts($conditions, ['titleLike', 'courseId']);
     }
 
     protected function getReportService()

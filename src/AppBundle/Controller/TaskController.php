@@ -20,6 +20,7 @@ use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
+use Biz\Visualization\Service\LearnControlService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -43,10 +44,10 @@ class TaskController extends BaseController
 
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
-            $activity = $this->getActivityService()->getActivity($task['activityId']);
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-            if (!empty($activity['ext']) && !empty($activity['ext']['mediaId'])) {
-                $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+            if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
+                $media = $activity['ext']['file'];
             }
 
             $media = !empty($media) ? $media : [];
@@ -65,11 +66,11 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', ['id' => $courseId]);
         }
 
-        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
-            return $this->redirectToRoute('course_show', ['id' => $courseId]);
-        }
+//        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
+//            return $this->redirectToRoute('course_show', ['id' => $courseId]);
+//        }
 
-        if (null !== $member && 'teacher' != $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
+        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
                 $course,
                 $member
             )
@@ -128,6 +129,8 @@ class TaskController extends BaseController
             }
         }
 
+        $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
+
         return $this->render(
             'task/show.html.twig',
             [
@@ -140,6 +143,7 @@ class TaskController extends BaseController
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
+                'learnControlSetting' => $learnControlSetting,
             ]
         );
     }
@@ -465,10 +469,12 @@ class TaskController extends BaseController
             }
 
             $conditions = empty($installedActivity['finish_condition']) ? [] : ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+            $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
 
             return $this->render('task/finish-tip.html.twig', [
                 'activity' => $activity,
                 'conditions' => $conditions,
+                'taskResult' => $taskResult,
             ]);
         }
 
@@ -617,11 +623,11 @@ class TaskController extends BaseController
     protected function isCourseExpired($course)
     {
         return (
-                'date' == $course['expiryMode']
+                'date' === $course['expiryMode']
                 && ($course['expiryStartDate'] > time() || $course['expiryEndDate'] < time())
             )
             || (
-                'endDate' == $course['expiryMode'] && $course['expiryEndDate'] < time()
+                'end_date' === $course['expiryMode'] && $course['expiryEndDate'] < time()
             );
     }
 
@@ -724,5 +730,13 @@ class TaskController extends BaseController
     protected function getFaceInspectionService()
     {
         return $this->createService('FaceInspection:FaceInspectionService');
+    }
+
+    /**
+     * @return LearnControlService
+     */
+    protected function getLearnControlService()
+    {
+        return $this->createService('Visualization:LearnControlService');
     }
 }

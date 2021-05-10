@@ -16,7 +16,9 @@
   <td style="vertical-align: middle;">{{student.createdTime|date('Y-n-d H:i')}}</td>
   <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
   <td style="vertical-align: middle;">
-    <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
+    {% if can_send_message(student.userId)  %}
+      <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
+    {% endif %}
     {% if app.user.isAdmin() %}
       <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('item_bank_exercise_manage_students_show', {'exerciseId': exercise.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
     {% endif %}
@@ -36,6 +38,9 @@
         {% if (app.user.isAdmin() or  app.user.isTeacher()) %}
           <li>
             <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id, ids: student.userId})}}">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
+          </li>
+          <li>
+            <a class="js-remove-student" href="javascript:;" data-url="{{path('item_bank_exercise_manage_remove_student', {exerciseId: exercise.id, userId: student.userId})}}" data-user="{{'site.default.student'|trans}}">{{'course.members_manage.official_student.remove_btn'|trans}}</a>
           </li>
         {% endif %}
 

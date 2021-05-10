@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 let validator = initValidator();
 initEvent(validator);
 initCkeditor(validator);
@@ -29,6 +31,11 @@ function initEvent() {
     $modal.html('').load($(this).data('url'));
   });
   $('.js-save-btn').click(function () {
+    if (Date.parse($('[name=startTime]').val()) > Date.parse($('[name=endTime]').val())) {
+      notify('danger', Translator.trans('announcement.create_datetime.error.hint'));
+      return;
+    }
+
     if (validator.form()) {
       $('.js-save-btn').button('loading');
       $.post($('#announcement-write-form').attr('action'), $('#announcement-write-form').serialize(), function (json) {
@@ -59,7 +66,7 @@ function initCkeditor(validator) {
 function initDatetimePicker(validator) {
   var now = new Date();
   $('[name=startTime]').datetimepicker({
-    language: 'zh',
+    language: document.documentElement.lang,
     autoclose: true
   }).on('hide', function (ev) {
     validator.form();
@@ -72,7 +79,7 @@ function initDatetimePicker(validator) {
 
   $('[name=endTime]').datetimepicker({
     autoclose: true,
-    language: 'zh',
+    language: document.documentElement.lang,
   }).on('hide', function (ev) {
     validator.form();
   });

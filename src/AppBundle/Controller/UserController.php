@@ -166,7 +166,7 @@ class UserController extends BaseController
 
         return $this->render('user/classroom-learning.html.twig', [
             'paginator' => $paginator,
-            'classrooms' => $classrooms,
+            'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
         ]);
     }
@@ -226,7 +226,7 @@ class UserController extends BaseController
 
         return $this->render('user/classroom-teaching.html.twig', [
             'paginator' => $paginator,
-            'classrooms' => $classrooms,
+            'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
         ]);
     }
@@ -241,8 +241,16 @@ class UserController extends BaseController
 
         $conditions = [
             'userId' => $user['id'],
-            'targetTypes' => ['course', 'openCourse'],
+            'targetTypes' => ['goods'],
+            'goodsType' => $request->query->get('goodsType', 'course'),
         ];
+
+        if ('course' === $conditions['goodsType']) {
+            // 获取收藏商品为"课程"时, 查询条件调整为: targetType in ['goods', 'course'], 且goodsType not in [classroom]
+            $conditions['targetTypes'][] = $conditions['goodsType'];
+            unset($conditions['goodsType']);
+            $conditions['excludeGoodsTypes'] = ['classroom'];
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -259,7 +267,7 @@ class UserController extends BaseController
 
         return $this->render('user/courses_favorited.html.twig', [
             'user' => $user,
-            'courseFavorites' => $favorites,
+            'favorites' => $favorites,
             'paginator' => $paginator,
             'type' => 'favorited',
         ]);
@@ -272,11 +280,17 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
         $user = array_merge($user, $userProfile);
-        $admins = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'admin'],
-            ['createdTime' => 'DESC'], 0, 1000
+        $admins = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'admin'],
+            ['createdTime' => 'DESC'],
+            0,
+            1000
         );
-        $owners = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'owner'],
-            ['createdTime' => 'DESC'], 0, 1000
+        $owners = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'owner'],
+            ['createdTime' => 'DESC'],
+            0,
+            1000
         );
         $members = array_merge($admins, $owners);
         $groupIds = ArrayToolkit::column($members, 'groupId');
@@ -288,8 +302,12 @@ class UserController extends BaseController
             20
         );
 
-        $members = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'member'], ['createdTime' => 'DESC'], $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
+        $members = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'member'],
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups = $this->getGroupService()->getGroupsByids($groupIds);
@@ -514,9 +532,19 @@ class UserController extends BaseController
          */
         $courseId = $request->request->get('courseId', 0);
         if ($courseId) {
+            $beforeEvent = $this->needInformationCollection('buy_before', $courseId);
+            if (!empty($beforeEvent)) {
+                return $this->createJsonResponse(['url' => $beforeEvent['url']]);
+            }
+
             $this->getCourseService()->tryFreeJoin($courseId);
             $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if ($member) {
+                $afterEvent = $this->needInformationCollection('buy_after', $courseId);
+                if (!empty($afterEvent)) {
+                    return $this->createJsonResponse(['url' => $afterEvent['url']]);
+                }
+
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl('my_course_show', ['id' => $courseId]),
                 ]);
@@ -531,6 +559,34 @@ class UserController extends BaseController
         return $this->createJsonResponse([
             'msg' => 'success',
         ]);
+    }
+
+    protected function needInformationCollection($action, $targetId)
+    {
+        $location = ['targetType' => 'course', 'targetId' => $targetId];
+        if ('0' != $targetId) {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $location['targetId'] = $course['courseSetId'];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation($action, $location);
+
+        if (empty($event)) {
+            return [];
+        }
+
+        $goto = 'buy_before' === $action ? $this->generateUrl('course_buy', ['id' => $targetId]) : $this->generateUrl('my_course_show', ['id' => $targetId]);
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $goto,
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     public function stickCourseSetAction(Request $request, $courseSetId)

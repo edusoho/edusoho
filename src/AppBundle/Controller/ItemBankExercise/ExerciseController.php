@@ -209,6 +209,7 @@ class ExerciseController extends BaseController
             'parentId' => 0,
             'targetType' => 'item_bank_exercise',
             'targetId' => $id,
+            'excludeAuditStatus' => 'illegal',
         ];
 
         $paginator = new Paginator(
@@ -230,7 +231,7 @@ class ExerciseController extends BaseController
             $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
         }
         if (!empty($member)) {
-            $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'item_bank_exercise', $exercise['id']);
+            $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'item_bank_exercise', $exercise['id']);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
@@ -311,11 +312,13 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $assessmentExercises = $this->getAssessmentExerciseService()->search(
                 ['moduleId' => $moduleId],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-            $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
+            $assessmentIds = ArrayToolkit::column($assessmentExercises, 'assessmentId');
+            $assessments = $this->getAssessmentService()->findAssessmentsByIds($assessmentIds);
+            $assessments = ArrayToolkit::orderByArray($assessments, $assessmentIds);
         }
 
         $records = [];

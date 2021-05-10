@@ -1,0 +1,129 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_information_collect' %}
+{% set event = event|default(null) %}
+{% set locationInfo = locationInfo|default(null) %}
+
+{% set formFields = information_collect_form_items() %}
+{% set selectedFormFields = event.id|default(0) ? information_collect_form_items(event.id) : [] %}
+
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/marketing/information-collect/edit/index.js']) %}
+	{% block page_title %}
+		<div class="information-collect"> <a class="color-black-title" href="{{ path('admin_v2_information_collect') }}">{{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}</a>
+		>
+		{% if not event %}
+			{{ 'admin_v2.information_collect.create'|trans }}{{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+		{% else %}
+			{{ 'admin_v2.information_collect.update'|trans }}{{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block page_buttons %}{% endblock %}
+
+{% block main %}
+	<form class="form-horizontal information-collect mbl" id="information-collect-form" action="{% if event %}{{ path('admin_v2_information_collect_update', {id:event.id}) }}{% else %}{{ path('admin_v2_information_collect_create') }}{% endif %}" method="post">
+		<fieldset>
+			<div class="row form-group">
+				<div class="col-md-2 control-label">
+					<label for="title">{{ 'admin_v2.information_collect.edit.title'|trans }}</label>
+				</div>
+				<div class="col-md-6 controls">
+					<input required type="text" name="title" class="form-control" id="title" value="{{ event.title|default('') }}">
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-2 control-label">
+					<label for="action">{{ 'admin_v2.information_collect.edit.action'|trans }}</label>
+				</div>
+				<div class="col-md-6 controls">
+					<div class="radios js-action-radio-group">
+						<input class="target-ids" type="hidden" name="selectedTargetTypes" value="">
+						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<input class="target-ids" type="hidden" name="classroomIds" value="">
+						<div class="js-action-radio">
+							<label>
+								<input type="radio" name="action" value="buy_before" {% if event.action|default('') == 'buy_before' %} checked="checked" {% endif %}>
+								<span>{{ 'admin_v2.information_collect.edit.action_before'|trans }}</span>
+								<label class="help-block display-inline">{{ 'admin_v2.information_collect.edit.action_before.tip'|trans }}</label>
+								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_before.help_block'|trans }})</label>
+								{% include "admin-v2/marketing/information-collect/edit/location.html.twig" with {action: 'buy_before'}%}
+							</label>
+						</div>
+						<div class="js-action-radio">
+							<label>
+								<input type="radio" name="action" value="buy_after" {% if event.action|default('') == 'buy_after' %} checked="checked" {% endif %}>
+								<span>{{ 'admin_v2.information_collect.edit.action_after'|trans }}</span>
+								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_after.help_block'|trans }})</label>
+								{% include "admin-v2/marketing/information-collect/edit/location.html.twig" with {action: 'buy_after'}%}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-2 control-label">
+					<label for="items">{{ 'admin_v2.information_collect.edit.form_items'|trans }}</label>
+				</div>
+				<div class="col-md-5 control-label text-left">
+					<div class="help-block margin-unset">{{ 'admin_v2.information_collect.edit.form_items.tip'|trans }}</div>
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-2 control-label"></div>
+				<div class="col-md-6 controls">
+					<div class="row form-group">
+						<div class="col-md-4 control-label text-left">
+							<label for="formTitle">{{ 'admin_v2.information_collect.edit.form_items.code'|trans }}</label>
+						</div>
+						<div class="col-md-8 controls">
+							<input type="text" name="formTitle" class="form-control" id="formTitle" value="{{ event.formTitle|default('') }}">
+						</div>
+					</div>
+					<div class="cd-panel form-items-panel form-control height-unset">
+						<div class="cd-panel-body">
+							<div class="cd-alert cd-alert-warning text-center">{{ 'admin_v2.information_collect.edit.form_items.warning_tip'|trans }}</div>
+							{% include "admin-v2/marketing/information-collect/edit/form/form-items-show.html.twig" %}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="cd-panel control">
+						<div class="cd-panel-body bg-gray-lighter form-control height-unset selecte-form-items">
+							<input type="hidden" name="items" value="{{ selectedFormFields|keys|length > 0 ? selectedFormFields|keys|json_encode : null }}">
+							{% include "admin-v2/marketing/information-collect/edit/form/form-items-select.html.twig" %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row form-group">
+				<label class="col-md-2 control-label" for="allowSkip">{{ 'admin_v2.information_collect.edit.form_items.allow_skip'|trans }}</label>
+				<div class="col-md-6 controls">
+
+					<div class="radios">
+						{% if event %}
+							{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans}, event.allowSkip) }}
+							{{ radios('allowSkip', { '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, event.allowSkip, (event.action == 'buy_after' ? 'disabled' : null)) }}
+						{% else %}
+							{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, -1) }}
+						{% endif %}
+						<div class="help-block allow-skip-help-block {% if not event or event.action|default(null) != 'buy_after' %}hidden{% endif %}">{{ 'admin_v2.information_collect.edit.form_items.allow_skip.tips'|trans }}</div>
+					</div>
+				</div>
+			</div>
+			<div class="row form-group">
+				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.enable'|trans }}</label>
+				<div class="col-md-6 controls">
+					<div class="radios">
+						{{ radios('status', {'open':'form.radio_btn.true'|trans, 'close':'form.radio_btn.false'|trans}, event.status|default('open')) }}
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+			<div class="cd-row-flex cd-row-flex-space-around">
+				<button type="button" class="btn btn-primary js-save-btn col-md-4" data-redirect-url="{{ path('admin_v2_information_collect') }}" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}

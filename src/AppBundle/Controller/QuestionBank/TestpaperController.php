@@ -343,7 +343,7 @@ class TestpaperController extends BaseController
         }
 
         $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
-        $fileName = str_replace('/', '_', $assessment['name']).'.docx';
+        $fileName = rawurlencode("{$assessment['name']}.docx");
         $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
 
@@ -426,7 +426,7 @@ class TestpaperController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -473,7 +473,7 @@ class TestpaperController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

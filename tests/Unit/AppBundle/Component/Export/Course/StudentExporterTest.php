@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Invite;
+namespace Tests\Unit\AppBundle\Component\Export\Course;
 
 use AppBundle\Component\Export\Course\StudentExporter;
 use Biz\BaseTestCase;
@@ -192,7 +192,7 @@ class StudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals([
             [
-                'nickname'."\t",
+                'nickname',
                 'email',
                 '1970-1-01 08:00:01',
                 '20%',
@@ -208,7 +208,7 @@ class StudentExporterTest extends BaseTestCase
                 '111',
             ],
             [
-                'nickname2'."\t",
+                'nickname2',
                 'email2',
                 '1970-1-01 08:00:33',
                 '30%',

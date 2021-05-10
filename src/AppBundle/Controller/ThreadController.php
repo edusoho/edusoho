@@ -2,14 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Thread\Service\ThreadService;
+use AppBundle\Common\Paginator;
 use Biz\File\Service\UploadFileService;
+use Biz\PostFilter\Service\TokenBucketService;
+use Biz\System\Service\SettingService;
+use Biz\Thread\Service\ThreadService;
 use Biz\Thread\ThreadException;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\PostFilter\Service\TokenBucketService;
 
 class ThreadController extends BaseController
 {
@@ -25,6 +26,23 @@ class ThreadController extends BaseController
     public function listAction(Request $request, $target, $filters)
     {
         $conditions = $this->convertFiltersToConditions($target['id'], $filters);
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+        $typeExcludes = [];
+        if (empty($threadSetting['enable_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question', 'discussion']);
+        }
+        if (empty($threadSetting['enable_classroom_question'])) {
+            $typeExcludes = array_merge($typeExcludes, ['question']);
+        }
+        if (empty($threadSetting['enable_classroom_thread'])) {
+            $typeExcludes = array_merge($typeExcludes, ['discussion']);
+        }
+
+        if (!empty($typeExcludes)) {
+            $conditions['typeExcludes'] = $typeExcludes;
+        }
+
+        $conditions['excludeAuditStatus'] = 'illegal';
 
         $paginator = new Paginator(
             $request,
@@ -45,21 +63,22 @@ class ThreadController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('thread/list.html.twig', array(
+        return $this->render('thread/list.html.twig', [
             'target' => $target,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-        ));
+        ]);
     }
 
-    public function showAction(Request $request, $target, $thread, $filter = array())
+    public function showAction(Request $request, $target, $thread, $filter = [])
     {
-        $conditions = array(
+        $conditions = [
             'threadId' => $thread['id'],
             'parentId' => 0,
-        );
+            'excludeAuditStatus' => 'illegal',
+        ];
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount(array_merge($conditions, $filter)),
@@ -68,7 +87,7 @@ class ThreadController extends BaseController
 
         $posts = $this->getThreadService()->searchPosts(
             array_merge($conditions, $filter),
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -76,7 +95,7 @@ class ThreadController extends BaseController
         $conditions['ups_GT'] = 5;
         $goodPosts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('ups' => 'DESC'),
+            ['ups' => 'DESC'],
             0,
             3
         );
@@ -85,7 +104,7 @@ class ThreadController extends BaseController
 
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
-        return $this->render('thread/show.html.twig', array(
+        return $this->render('thread/show.html.twig', [
             'target' => $target,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
@@ -94,14 +113,14 @@ class ThreadController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
-        ));
+        ]);
     }
 
     public function subpostsAction(Request $request, $threadId, $postId, $less = false)
     {
         $post = $this->getThreadService()->getPost($postId);
 
-        $conditions = array('parentId' => $postId);
+        $conditions = ['parentId' => $postId, 'excludeAuditStatus' => 'illegal'];
 
         $paginator = new Paginator(
             $request,
@@ -109,30 +128,30 @@ class ThreadController extends BaseController
             10
         );
 
-        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $post['threadId'], 'postId' => $postId)));
+        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', ['threadId' => $post['threadId'], 'postId' => $postId]));
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render('thread/subposts.html.twig', array(
+        return $this->render('thread/subposts.html.twig', [
             'parentId' => $postId,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,
             'less' => $less,
             'service' => $this->getThreadService(),
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             try {
                 $data = $request->request->all();
                 $data['targetType'] = $target['type'];
@@ -143,25 +162,25 @@ class ThreadController extends BaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", [
                     "{$target['type']}Id" => $thread['targetId'],
                     'threadId' => $thread['id'],
-                )));
+                ]));
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
-        return $this->render('thread/create.html.twig', array(
+        return $this->render('thread/create.html.twig', [
             'target' => $target,
             'thread' => $thread,
             'type' => $type,
-        ));
+        ]);
     }
 
     public function updateAction(Request $request, $target, $thread)
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             try {
                 $user = $this->getCurrentUser();
                 $data = $request->request->all();
@@ -175,31 +194,31 @@ class ThreadController extends BaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                $message = array(
+                $message = [
                     'title' => $thread['title'],
                     'targetType' => $target['type'],
                     'targetId' => $target['id'],
                     'type' => 'type-modify',
                     'userId' => $user['id'],
-                    'userName' => $user['nickname'], );
+                    'userName' => $user['nickname'], ];
 
                 if ($thread['userId'] != $user['id']) {
                     $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
                 }
 
-                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", [
                     "{$target['type']}Id" => $target['id'],
                     'threadId' => $thread['id'],
-                )));
+                ]));
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
-        return $this->render('thread/create.html.twig', array(
+        return $this->render('thread/create.html.twig', [
             'target' => $target,
             'thread' => $thread,
-        ));
+        ]);
     }
 
     public function deleteAction(Request $request, $threadId)
@@ -210,11 +229,11 @@ class ThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($thread['userId'] != $user['id']) {
-            $message = array(
+            $message = [
                 'title' => $thread['title'],
                 'type' => 'delete',
                 'userId' => $user['id'],
-                'userName' => $user['nickname'], );
+                'userName' => $user['nickname'], ];
 
             $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
@@ -255,7 +274,7 @@ class ThreadController extends BaseController
         $user = $this->getCurrentUser();
         $thread = $this->getThreadService()->getThread($threadId);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
             $fields['threadId'] = $threadId;
             unset($fields['attachment']);
@@ -264,17 +283,17 @@ class ThreadController extends BaseController
             $attachment = $request->request->get('attachment');
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
-            return $this->render('thread/part/post-item.html.twig', array(
+            return $this->render('thread/part/post-item.html.twig', [
                 'post' => $post,
                 'author' => $user,
                 'service' => $this->getThreadService(),
-            ));
+            ]);
         }
 
-        return $this->render('thread/post.html.twig', array(
+        return $this->render('thread/post.html.twig', [
             'thread' => $thread,
             'service' => $this->getThreadService(),
-        ));
+        ]);
     }
 
     public function postSaveAction(Request $request, $targetType, $targetId)
@@ -285,7 +304,7 @@ class ThreadController extends BaseController
             $this->createAccessDeniedException('用户没有登录,不能评论!');
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
 
             $post['content'] = $this->autoParagraph($fields['content']);
@@ -294,18 +313,18 @@ class ThreadController extends BaseController
 
             $post = $this->getThreadService()->createPost($post);
 
-            if ($targetType === 'openCourse') {
-                $postReplyUrl = $this->container->get('router')->generate('open_course_post_reply', array('id' => $targetId, 'postId' => $post['id'], 'targetType' => 'openCourse'));
+            if ('openCourse' === $targetType) {
+                $postReplyUrl = $this->container->get('router')->generate('open_course_post_reply', ['id' => $targetId, 'postId' => $post['id'], 'targetType' => 'openCourse']);
             } else {
-                $postReplyUrl = $this->container->get('router')->generate('thread_post_reply', array('threadId' => $post['threadId'], 'postId' => $post['id']));
+                $postReplyUrl = $this->container->get('router')->generate('thread_post_reply', ['threadId' => $post['threadId'], 'postId' => $post['id']]);
             }
 
-            return $this->render('thread/part/post-item.html.twig', array(
+            return $this->render('thread/part/post-item.html.twig', [
                 'post' => $post,
                 'author' => $user,
                 'service' => $this->getThreadService(),
                 'postReplyUrl' => $postReplyUrl,
-            ));
+            ]);
         }
     }
 
@@ -319,11 +338,11 @@ class ThreadController extends BaseController
 
         $post = $this->getThreadService()->createPost($fields);
 
-        return $this->render('thread/subpost-item.html.twig', array(
+        return $this->render('thread/subpost-item.html.twig', [
             'post' => $post,
             'author' => $this->getCurrentUser(),
             'service' => $this->getThreadService(),
-        ));
+        ]);
     }
 
     public function postDeleteAction(Request $request, $threadId, $postId)
@@ -348,10 +367,10 @@ class ThreadController extends BaseController
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", [
             "{$thread['targetType']}Id" => $thread['targetId'],
             'threadId' => $thread['id'],
-        )));
+        ]));
     }
 
     public function postJumpAction(Request $request, $threadId, $postId)
@@ -369,66 +388,66 @@ class ThreadController extends BaseController
         }
 
         if (empty($post)) {
-            return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+            return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", [
                 "{$thread['targetType']}Id" => $thread['targetId'],
                 'threadId' => $thread['id'],
-            )));
+            ]));
         }
 
-        $conditions = array(
+        $conditions = [
             'threadId' => $post['threadId'],
             'parentId' => 0,
             'lessThanId' => $post['id'],
-        );
+        ];
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
         $page = ceil($count / 20);
 
-        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", [
             "{$thread['targetType']}Id" => $thread['targetId'],
             'threadId' => $thread['id'],
             'page' => $page,
-        ))."#post-{$post['id']}");
+        ])."#post-{$post['id']}");
     }
 
     public function userOtherThreadsBlockAction(Request $request, $thread, $userId)
     {
-        $conditions = array(
+        $conditions = [
             'targetType' => $thread['targetType'],
             'targetId' => $thread['targetId'],
             'userId' => $userId,
-        );
-        $threads = $this->getThreadService()->searchThreads($conditions, array('createdTime' => 'DESC'), 0, 11);
+        ];
+        $threads = $this->getThreadService()->searchThreads($conditions, ['createdTime' => 'DESC'], 0, 11);
 
-        return $this->render('thread/user-threads-block.html.twig', array(
+        return $this->render('thread/user-threads-block.html.twig', [
             'currentThread' => $thread,
             'threads' => $threads,
-        ));
+        ]);
     }
 
     public function zeroPostThreadsBlockAction(Request $request, $thread)
     {
-        $conditions = array(
+        $conditions = [
             'targetType' => $thread['targetType'],
             'targetId' => $thread['targetId'],
             'postNum' => 0,
-        );
+        ];
         $threads = $this->getThreadService()->searchThreads(
             $conditions,
-            array('createdTime' => 'desc'),
+            ['createdTime' => 'desc'],
             0,
             11
         );
 
-        return $this->render('thread/zero-post-threads-block.html.twig', array(
+        return $this->render('thread/zero-post-threads-block.html.twig', [
             'currentThread' => $thread,
             'threads' => $threads,
-        ));
+        ]);
     }
 
     protected function convertFiltersToConditions($id, $filters)
     {
-        $conditions = array('targetId' => $id);
+        $conditions = ['targetId' => $id];
 
         switch ($filters['type']) {
             case 'question':
@@ -449,9 +468,9 @@ class ThreadController extends BaseController
      */
     protected function autoParagraph($text)
     {
-        if (trim($text) !== '') {
+        if ('' !== trim($text)) {
             $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
-            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $text = preg_replace("/\n\n+/", "\n\n", str_replace(["\r\n", "\r"], "\n", $text));
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
             $text = '';
 
@@ -495,5 +514,13 @@ class ThreadController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }

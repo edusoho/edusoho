@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\MaterialLib;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileShareHistoryService;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
+use Biz\File\UploadFileException;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\File\UploadFileException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MaterialLibController extends BaseController
@@ -23,14 +23,14 @@ class MaterialLibController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        return $this->render('material-lib/web/material-thumb-view.html.twig', array(
+        return $this->render('material-lib/web/material-thumb-view.html.twig', [
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
-        ));
+        ]);
     }
 
     public function matchAction(Request $request)
     {
-        $data = array();
+        $data = [];
 
         $currentUser = $this->getCurrentUser();
 
@@ -42,7 +42,7 @@ class MaterialLibController extends BaseController
         $tags = $this->getTagService()->findTagsByLikeName($queryString);
 
         foreach ($tags as $tag) {
-            $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
+            $data[] = ['id' => $tag['id'], 'name' => $tag['name']];
         }
 
         return $this->createJsonResponse($data);
@@ -75,7 +75,7 @@ class MaterialLibController extends BaseController
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -90,13 +90,13 @@ class MaterialLibController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('material-lib/web/widget/choose-table.html.twig', array(
+        return $this->render('material-lib/web/widget/choose-table.html.twig', [
             'files' => $files,
             'collections' => $collections,
             'createdUsers' => $createdUsers,
             'source' => $source,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function showMyMaterialLibFormAction(Request $request)
@@ -110,7 +110,12 @@ class MaterialLibController extends BaseController
         $currentUserId = $currentUser['id'];
         $conditions = $request->query->all();
         $conditions['status'] = 'ok';
-        $conditions['noTargetTypes'] = array('attachment', 'subtitle');
+        $conditions['noTargetTypes'] = ['attachment', 'subtitle'];
+
+        if (isset($conditions['type']) && 'other' == $conditions['type']) {
+            $conditions['types'] = ['other', 'flash'];
+            unset($conditions['type']);
+        }
 
         $paginator = new Paginator(
             $request,
@@ -119,7 +124,7 @@ class MaterialLibController extends BaseController
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -134,22 +139,22 @@ class MaterialLibController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('material-lib/web/widget/thumb-list.html.twig', array(
+        return $this->render('material-lib/web/widget/thumb-list.html.twig', [
             'files' => $files,
             'collections' => $collections,
             'createdUsers' => $createdUsers,
             'source' => $request->query->get('sourceFrom', ''),
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        return $this->render('material-lib/web/preview.html.twig', array(
+        return $this->render('material-lib/web/preview.html.twig', [
             'file' => $file,
-        ));
+        ]);
     }
 
     public function playerAction(Request $request, $fileId)
@@ -157,13 +162,13 @@ class MaterialLibController extends BaseController
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
         if ('cloud' == $file['storage']) {
-            return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
+            return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
                 'request' => $request,
                 'globalId' => $file['globalId'],
-            ));
+            ]);
         }
 
-        return $this->render('material-lib/web/local-player.html.twig', array());
+        return $this->render('material-lib/web/local-player.html.twig', []);
     }
 
     public function reconvertAction($globalId)
@@ -172,9 +177,9 @@ class MaterialLibController extends BaseController
 
         $uploadFile = $this->getMaterialLibService()->reconvert($globalId);
 
-        return $this->render('material-lib/web/widget/thumb-item.html.twig', array(
+        return $this->render('material-lib/web/widget/thumb-item.html.twig', [
             'uploadFile' => $uploadFile,
-        ));
+        ]);
     }
 
     public function detailAction(Request $request, $fileId)
@@ -187,26 +192,26 @@ class MaterialLibController extends BaseController
             $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
             $file['tags'] = ArrayToolkit::column($tags, 'name');
 
-            return $this->render('material-lib/web/static-detail.html.twig', array(
+            return $this->render('material-lib/web/static-detail.html.twig', [
                 'material' => $file,
                 'thumbnails' => '',
-                'editUrl' => $this->generateUrl('material_edit', array('fileId' => $file['id'])),
-            ));
+                'editUrl' => $this->generateUrl('material_edit', ['fileId' => $file['id']]),
+            ]);
         } else {
             try {
                 if ('video' == $file['type']) {
                     $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
                 }
             } catch (\RuntimeException $e) {
-                $thumbnails = array();
+                $thumbnails = [];
             }
 
-            return $this->render('admin/cloud-file/detail.html.twig', array(
+            return $this->render('admin/cloud-file/detail.html.twig', [
                 'material' => $file,
                 'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
                 'params' => $request->query->all(),
-                'editUrl' => $this->generateUrl('material_edit', array('fileId' => $file['id'])),
-            ));
+                'editUrl' => $this->generateUrl('material_edit', ['fileId' => $file['id']]),
+            ]);
         }
     }
 
@@ -219,26 +224,26 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
-            array('roles' => 'ROLE_TEACHER', 'locked' => 0),
-            array('nickname' => 'ASC'),
+            ['roles' => 'ROLE_TEACHER', 'locked' => 0],
+            ['nickname' => 'ASC'],
             0,
             1000
         );
 
-        $teacherData = array();
+        $teacherData = [];
 
         foreach ($allTeachers as $teacher) {
             if ($teacher['id'] != $currentUser['id']) {
-                array_push($teacherData, array(
+                array_push($teacherData, [
                     'id' => $teacher['id'],
                     'text' => $teacher['nickname'],
-                ));
+                ]);
             }
         }
 
-        return $this->render('material-lib/web/my-share/share-my-materials.html.twig', array(
+        return $this->render('material-lib/web/my-share/share-my-materials.html.twig', [
             'teacherData' => $teacherData,
-        ));
+        ]);
     }
 
     public function showShareHistoryAction(Request $request)
@@ -262,12 +267,12 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
             $conditions,
-            array('updatedTime' => 'DESC'),
+            ['updatedTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $targetUserIds = array();
+        $targetUserIds = [];
 
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
@@ -278,30 +283,30 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
-            array('roles' => 'ROLE_TEACHER', 'locked' => 0),
-            array('nickname' => 'ASC'),
+            ['roles' => 'ROLE_TEACHER', 'locked' => 0],
+            ['nickname' => 'ASC'],
             0,
             1000
         );
 
-        $teacherData = array();
+        $teacherData = [];
 
         foreach ($allTeachers as $teacher) {
             if ($teacher['id'] != $user['id']) {
-                array_push($teacherData, array(
+                array_push($teacherData, [
                     'id' => $teacher['id'],
                     'text' => $teacher['nickname'],
-                ));
+                ]);
             }
         }
 
-        return $this->render('material-lib/web/my-share/material-share-history.html.twig', array(
-            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
-            'targetUsers' => isset($targetUsers) ? $targetUsers : array(),
+        return $this->render('material-lib/web/my-share/material-share-history.html.twig', [
+            'shareHistories' => isset($shareHistories) ? $shareHistories : [],
+            'targetUsers' => isset($targetUsers) ? $targetUsers : [],
             'source' => 'myShareHistory',
             'teacherData' => $teacherData,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function historyUserShowAction(Request $request)
@@ -325,12 +330,12 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
             $conditions,
-            array('updatedTime' => 'DESC'),
+            ['updatedTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $targetUserIds = array();
+        $targetUserIds = [];
 
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
@@ -340,13 +345,13 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        return $this->render('material-lib/web/my-share/material-share-history-users.html.twig', array(
-            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
-            'targetUsers' => isset($targetUsers) ? $targetUsers : array(),
+        return $this->render('material-lib/web/my-share/material-share-history-users.html.twig', [
+            'shareHistories' => isset($shareHistories) ? $shareHistories : [],
+            'targetUsers' => isset($targetUsers) ? $targetUsers : [],
             'source' => 'myShareHistory',
             'currentUserId' => $user['id'],
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function historyDetailShowAction(Request $request)
@@ -369,12 +374,12 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $targetUserIds = array();
+        $targetUserIds = [];
 
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
@@ -384,13 +389,13 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        return $this->render('material-lib/web/my-share/material-share-history-detail.html.twig', array(
-            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
-            'targetUsers' => isset($targetUsers) ? $targetUsers : array(),
+        return $this->render('material-lib/web/my-share/material-share-history-detail.html.twig', [
+            'shareHistories' => isset($shareHistories) ? $shareHistories : [],
+            'targetUsers' => isset($targetUsers) ? $targetUsers : [],
             'source' => 'myShareHistory',
             'currentUserId' => $user['id'],
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function findMySharingContactsAction(Request $request)
@@ -432,7 +437,7 @@ class MaterialLibController extends BaseController
                     $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 1);
 
                     $targetUser = $this->getUserService()->getUser($targetUserId);
-                    $this->getNotificationService()->notify($targetUser['id'], 'share_materialLib', array('userId' => $currentUser['id'], 'nickname' => $currentUser['nickname']));
+                    $this->getNotificationService()->notify($targetUser['id'], 'share_materialLib', ['userId' => $currentUser['id'], 'nickname' => $currentUser['nickname']]);
                 }
             }
         }
@@ -456,8 +461,8 @@ class MaterialLibController extends BaseController
             $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 0);
 
             $targetUser = $this->getUserService()->getUser($targetUserId);
-            $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), UrlGeneratorInterface::ABSOLUTE_URL);
-            $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
+            $userUrl = $this->generateUrl('user_show', ['id' => $currentUser['id']], UrlGeneratorInterface::ABSOLUTE_URL);
+            $toMyShareUrl = $this->generateUrl('material_lib_browsing', ['type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared']);
             $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->trans('已取消分享资料给你，')."<a href='{$toMyShareUrl}'>".$this->trans('点击查看').'</a>');
         }
 
@@ -502,10 +507,10 @@ class MaterialLibController extends BaseController
 
         $this->getUploadFileService()->tryAccessFile($fileId);
 
-        return $this->forward('AppBundle:UploadFile:download', array(
+        return $this->forward('AppBundle:UploadFile:download', [
             'request' => $request,
             'fileId' => $fileId,
-        ));
+        ]);
     }
 
     public function deleteModalShowAction(Request $request)
@@ -516,12 +521,12 @@ class MaterialLibController extends BaseController
         $files = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
         $files = ArrayToolkit::index($files, 'id');
 
-        return $this->render('material-lib/web/delete-file-modal.html.twig', array(
+        return $this->render('material-lib/web/delete-file-modal.html.twig', [
             'materials' => $materials,
             'files' => $files,
             'ids' => $fileIds,
             'deleteFormUrl' => $this->generateUrl('material_batch_delete'),
-        ));
+        ]);
     }
 
     public function deleteAction(Request $request, $fileId)
@@ -590,7 +595,7 @@ class MaterialLibController extends BaseController
 
         $second = $request->query->get('second');
 
-        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
+        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, ['seconds' => $second]));
     }
 
     protected function getUserService()

@@ -7,7 +7,7 @@
     <th>{{ 'order.product_price'|trans }} </th>
     <th>{{ 'order.discount_amount'|trans }}</th>
     <th>{{ 'order.price'|trans }}</th>
-    <th width="10%">{{'order.buyers'|trans }}</th>
+    <th width="12%">{{'order.buyers'|trans }}</th>
     <th>
       {{ 'order.payment_pattern'|trans }}
     </th>
@@ -24,11 +24,19 @@
     <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
       <td>
         {% if order.item.target_type|default('') == 'course' %}
-          <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
-        {% elseif order.item.target_type|default('') == 'vip' %}
-          <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% set sku = goodsSpecs[order.item.target_id]|default() %}
+          {% if sku %}
+            <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId,targetId:sku.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% else %}
+            <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% endif %}
         {% elseif order.item.target_type|default('') == 'classroom' %}
-          <a class="link-primary" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% set sku = goodsSpecs[order.item.target_id]|default() %}
+          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+        {% elseif order.item.target_type|default('') == 'vip' %}
+            <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+        {% elseif order.item.target_type|default('') == 'item_bank_exercise' %}
+          <a class="cd-link-major" href="{{ path('item_bank_exercise_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{ order.title }}</strong></a>
         {% else %}
           <strong>{{order.title}}</strong>
         {% endif %}
@@ -44,6 +52,7 @@
       {% if has_permission('admin_v2_user_manage') %}
         <td>
           <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+          <p class="color-gray">{{ buyer.verifiedMobile|default('--') }}</p>
         </td>
       {% else %}
         <td>

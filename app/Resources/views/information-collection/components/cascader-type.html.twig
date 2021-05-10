@@ -1,0 +1,41 @@
+<input type="hidden" id="{{ name }}" name="{{ name }}"  class="form-control {{ class|default('') }}"
+{% if value %}value="{{ value|json_encode }}{% endif %}
+{% if required|default(false) %} required="required" {% endif %} 
+{% if disabled|default(false) %} disabled="disabled" {% endif %}">
+<div class="form-control border-unset control-border-unset cascader-select">
+	<div class="cd-select col-md-4 pl0" id="province">
+		<input type="hidden" name="province" value="{{ value[0]|default(null) }}"/>
+		<div class="select-value">
+			{% if not value[0]|default(null) %}
+				<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+			{% else %}
+				{{ value[0] }}
+			{% endif %}
+		</div>
+		<ul class="select-options province-select-options"></ul>
+	</div>
+
+	<div class="cd-select col-md-4 {% if not value[1]|default(null) %} hidden {% endif %}" id="city">
+		<input type="hidden" name="city" value="{{ value[1]|default(null) }}"/>
+		<div class="select-value">
+			{% if not value[1]|default(null) %}
+				<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+			{% else %}
+				{{ value[1] }}
+			{% endif %}
+		</div>
+		<ul class="select-options city-select-options"></ul>
+	</div>
+
+	<div class="cd-select col-md-4 {% if not value[2]|default(null) %} hidden {% endif %}" id="area">
+		<input type="hidden" name="area" value="{{ value[2]|default(null) }}"/>
+		<div class="select-value">
+			{% if not value[2]|default(null) %}
+				<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+			{% else %}
+				{{ value[2] }}
+			{% endif %}
+		</div>
+		<ul class="select-options area-select-options"></ul>
+	</div>
+</div>

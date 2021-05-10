@@ -188,6 +188,36 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.sms'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getSmsService();
+            }
+
+            return $service;
+        };
+
+        $biz['ESCloudSdk.wechat'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getWeChatService();
+            }
+
+            return $service;
+        };
+
+        $biz['ESCloudSdk.notification'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getNotificationService();
+            }
+
+            return $service;
+        };
     }
 
     /**

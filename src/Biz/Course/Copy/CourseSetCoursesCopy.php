@@ -7,6 +7,7 @@ use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -35,8 +36,13 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse['creator'] = $user['id'];
             $newCourse['parentId'] = $originCourse['id'];
             $newCourse['price'] = $originCourse['originPrice'];
+            $newCourse['seq'] = $originCourse['seq'];
             $newCourse = $this->getCourseDao()->create($newCourse);
-
+            $this->getCourseSpecsMediator()->onCreate($newCourse);
+            $this->getCourseSpecsMediator()->onUpdateNormalData($newCourse);
+            if ('published' === $newCourse['status']) {
+                $this->getCourseSpecsMediator()->onPublish($newCourse);
+            }
             $newCourses[] = $newCourse;
 
             if ($originCourse['id'] == $courseSet['defaultCourseId']) {
@@ -101,7 +107,6 @@ class CourseSetCoursesCopy extends AbstractCopy
             'maxStudentNum',
             //'isFree',
             'price',
-            // 'vipLevelId',
             'buyable',
             'tryLookable',
             'tryLookLength',
@@ -189,5 +194,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseSpecsMediator
+     */
+    protected function getCourseSpecsMediator()
+    {
+        return $this->biz['specs.mediator.course'];
     }
 }

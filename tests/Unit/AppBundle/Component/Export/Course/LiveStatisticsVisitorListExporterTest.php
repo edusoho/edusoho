@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\Export\Course;
+namespace Tests\Unit\AppBundle\Component\Export\Course;
 
 use AppBundle\Component\Export\Course\LiveStatisticsVisitorListExporter;
 use Biz\BaseTestCase;

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\CourseException;
@@ -34,6 +35,7 @@ class Course extends AbstractResource
 
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            empty($classroom) || $course['classroom'] = $this->getClassroomService()->appendSpecInfo($classroom);
         }
 
         if (!empty($classroom) && empty($member)) {
@@ -60,6 +62,7 @@ class Course extends AbstractResource
         $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         unset($course['enableAudio']);
+        $course = $this->getCourseService()->appendSpecInfo($course);
 
         return $course;
     }
@@ -76,7 +79,7 @@ class Course extends AbstractResource
         }
 
         $info = [
-            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'joinedChannel' => $classroomMember['joinedChannel'],
             'deadline' => $classroomMember['deadline'],
         ];
 
@@ -89,7 +92,7 @@ class Course extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        if (isset($conditions['type']) && 'all' == $conditions['type']) {
+        if (isset($conditions['type']) && 'all' === $conditions['type']) {
             unset($conditions['type']);
         }
 
@@ -107,6 +110,12 @@ class Course extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
+        if ($this->isPluginInstalled('Vip') && isset($conditions['vipLevelId'])) {
+            $vipCourseIds = $this->getVipCourseIdsByVipLevelId($conditions['vipLevelId']);
+            $conditions['ids'] = empty($vipCourseIds) ? [-1] : $vipCourseIds;
+            unset($conditions['vipLevelId']);
+        }
+
         $courses = $this->getCourseService()->searchBySort($conditions, $sort, $offset, $limit);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
@@ -114,8 +123,31 @@ class Course extends AbstractResource
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 
         $courses = $this->getCourseService()->appendHasCertificate($courses);
+        $courses = $this->getCourseService()->appendSpecsInfo($courses);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
+    protected function getVipCourseIdsByVipLevelId($vipLevelId)
+    {
+        if ('0' == $vipLevelId) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+            $vipLevelIds = ArrayToolkit::column($levels, 'id');
+        } else {
+            if (empty($this->getLevelService()->getLevel($vipLevelId))) {
+                return [];
+            }
+            $levels = $this->getLevelService()->findPrevEnabledLevels($vipLevelId);
+            $vipLevelIds = array_merge(ArrayToolkit::column($levels, 'id'), [$vipLevelId]);
+        }
+
+        if (empty($vipLevelIds)) {
+            return [];
+        }
+
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds('course', $vipLevelIds);
+
+        return empty($vipRights) ? [] : ArrayToolkit::column($vipRights, 'uniqueCode');
     }
 
     /**
@@ -140,5 +172,15 @@ class Course extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->service('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }

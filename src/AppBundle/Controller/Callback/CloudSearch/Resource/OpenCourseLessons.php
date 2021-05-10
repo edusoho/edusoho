@@ -15,7 +15,7 @@ class OpenCourseLessons extends BaseProvider
 
         $conditions['status'] = 'published';
         $conditions['updatedTime_GE'] = $conditions['cursor'];
-        $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime' => 'ASC'), $start, $limit);
+        $lessons = $this->getOpenCourseService()->searchLessons($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
 
         return $this->wrap($this->filter($lessons), $next);

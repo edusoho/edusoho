@@ -3,8 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ReportService;
+use Biz\Task\Service\TaskService;
+use Symfony\Component\HttpFoundation\Request;
 
 class TaskLearnDataController extends BaseController
 {
@@ -18,27 +22,27 @@ class TaskLearnDataController extends BaseController
 
         $config = $this->getActivityConfig($task['type']);
 
-        return $this->forward($config['controller'].':learnDataDetail', array(
+        return $this->forward($config['controller'].':learnDataDetail', [
             'request' => $request,
             'task' => $task,
-        ));
+        ]);
     }
 
     public function studentDataDetailModalAction(Request $request, $courseId, $userId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, array($userId), PHP_INT_MAX);
+        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, [$userId], PHP_INT_MAX);
         $user = reset($users);
 
         return $this->render('course-manage/overview/task-detail/student-data-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'user' => $user,
                 'tasks' => $tasks,
                 'taskResults' => $taskResults,
                 'member' => $member,
-            )
+            ]
         );
     }
 
@@ -70,14 +74,14 @@ class TaskLearnDataController extends BaseController
         list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, $userIds);
 
         $taskCount = $this->getTaskService()->countTasks(
-            array(
+            [
                 'courseId' => $courseId,
                 'isOptional' => 0,
                 'status' => 'published',
-            )
+            ]
         );
 
-        return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
+        return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', [
             'paginator' => $paginator,
             'users' => $users,
             'tasks' => $tasks,
@@ -85,7 +89,7 @@ class TaskLearnDataController extends BaseController
             'taskResults' => $taskResults,
             'course' => $course,
             'taskCount' => $taskCount,
-        ));
+        ]);
     }
 
     public function taskDetailListAction(Request $request, $courseId)
@@ -93,10 +97,10 @@ class TaskLearnDataController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         $page = 20;
-        $conditions = array(
+        $conditions = [
             'status' => 'published',
             'courseId' => $courseId,
-        );
+        ];
 
         $conditions['titleLike'] = $request->query->get('titleLike');
 
@@ -109,18 +113,18 @@ class TaskLearnDataController extends BaseController
 
         $tasks = $this->getTaskservice()->searchTasks(
             $conditions,
-            array('seq' => 'asc'),
+            ['seq' => 'asc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
 
-        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
+        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', [
             'course' => $course,
             'paginator' => $paginator,
             'tasks' => $tasks,
-        ));
+        ]);
     }
 
     /**
@@ -146,11 +150,17 @@ class TaskLearnDataController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ReportService
+     */
     protected function getReportService()
     {
         return $this->createService('Course:ReportService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');

@@ -1,0 +1,80 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['app/js/admin-v2/teach/classroom/statistics/member/index.js']) %}
+
+{% set modal_class = 'modal-lg' %}
+{% set hide_footer = true %}
+
+{% block title %}
+  {{ 'admin.classroom_manage.statistics.member.title'|trans({'%classroom%': classroom.title }) }}
+  <span data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-html="true" data-content="{{ 'admin.classroom_manage.statistics.member.title_tips'|trans }}" class="link-medium es-icon es-icon-help text-muted" data-original-title=""></span>
+{% endblock %}
+{% block body %}
+  <form id="member-search-form" class="hidden">
+    <input name="classroomId" value="{{ classroom.id }}">
+  </form>
+  <div class="clearfix mbl">
+    <div class="pull-left" style="line-height:32px;">{{ 'admin.classroom_manage.statistics.member.total_learn_time'|trans({'%mins%':totalLearnedTime|default(0)|number_format(1)}) }}</div>
+    {% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-member-statistics', targetFormId: 'member-search-form', exportClass: 'cd-btn-success cd-btn-sm pull-right js-modal-export-btn', exportWebpack: true} %}
+  </div>
+  <table class="table table-bordered text-center" id="classroom-table">
+    <thead>
+    <tr class="active">
+      <td>{{ 'admin.classroom_manage.statistics.member.nickname_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.phone_number_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.id_number_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.create_time_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.finish_time_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.learn_time_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.question_num_th'|trans }}</td>
+      <td>{{ 'admin.classroom_manage.statistics.member.note_num_th'|trans }}</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for member in members %}
+      <tr>
+        <td>
+          {% if users[member.userId] %}
+            {{ users[member.userId].nickname|default('') }}
+          {% endif %}
+        </td>
+        <td>
+          {% if users[member.userId].mobile|default() %}
+            {{ users[member.userId].mobile }}
+          {% else %}
+            ----
+          {% endif %}
+        </td>
+        <td>
+          {% if users[member.userId].idcard|default() %}
+            {{ users[member.userId].idcard }}
+          {% else %}
+            ----
+          {% endif %}
+        </td>
+        <td>{{ member.createdTime|date('Y-m-d H:i:s') }}</td>
+        <td>
+          {% if member.finishedTime|default(0) %}
+            {{ member.finishedTime|date('Y-m-d H:i:s') }}
+          {% else %}
+            ----
+          {% endif %}
+        </td>
+        <td>
+          {{ member.learnedTime|default(0)|number_format(1) }}
+        </td>
+        <td>{{ member.questionNum|default(0) }}</td>
+        <td>{{ member.noteNum|default(0) }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ admin_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

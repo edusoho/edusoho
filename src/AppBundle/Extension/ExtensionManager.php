@@ -4,23 +4,31 @@ namespace AppBundle\Extension;
 
 class ExtensionManager
 {
-    protected $extensions = array();
+    protected $extensions = [];
 
-    protected $questionTypes = array();
+    protected $questionTypes = [];
 
-    protected $payments = array();
+    protected $payments = [];
 
-    protected $activities = array();
+    protected $activities = [];
 
-    protected $callbacks = array();
+    protected $callbacks = [];
 
-    protected $taskToolbars = array();
+    protected $taskToolbars = [];
 
-    protected $courseTypes = array();
+    protected $courseTypes = [];
 
-    protected $wechatTemplates = array();
+    protected $wechatTemplates = [];
 
-    protected $newcomerTasks = array();
+    protected $messageSubscribeTemplates = [];
+
+    protected $newcomerTasks = [];
+
+    protected $favoriteTypes = [];
+
+    protected $reportSources = [];
+
+    protected $contentAuditSources = [];
 
     public function addExtension(ExtensionInterface $extension)
     {
@@ -33,7 +41,21 @@ class ExtensionManager
         $this->callbacks = array_merge($this->callbacks, $extension->getCallbacks());
         $this->courseTypes = array_merge($this->courseTypes, $extension->getCourseTypes());
         $this->wechatTemplates = array_merge($this->wechatTemplates, $extension->getWeChatTemplates());
+        $this->messageSubscribeTemplates = array_merge($this->messageSubscribeTemplates, $extension->getMessageSubscribeTemplates());
         $this->newcomerTasks = array_merge($this->newcomerTasks, $extension->getNewcomerTasks());
+        $this->favoriteTypes = array_merge($this->favoriteTypes, $extension->getFavoriteTypes());
+        $this->reportSources = array_merge($this->reportSources, $extension->getReportSources());
+        $this->contentAuditSources = array_merge($this->contentAuditSources, $extension->getContentAuditSources());
+    }
+
+    public function getContentAuditSources()
+    {
+        return $this->contentAuditSources;
+    }
+
+    public function getReportSources()
+    {
+        return $this->reportSources;
     }
 
     public function getQuestionTypes()
@@ -71,8 +93,18 @@ class ExtensionManager
         return $this->wechatTemplates;
     }
 
+    public function getMessageSubscribeTemplates()
+    {
+        return $this->messageSubscribeTemplates;
+    }
+
     public function getNewcomerTasks()
     {
         return $this->newcomerTasks;
+    }
+
+    public function getFavoriteTypes()
+    {
+        return $this->favoriteTypes;
     }
 }

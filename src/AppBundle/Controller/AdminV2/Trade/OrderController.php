@@ -7,6 +7,7 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\OrderToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
@@ -28,7 +29,7 @@ class OrderController extends BaseController
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -38,25 +39,28 @@ class OrderController extends BaseController
 
         $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+        $goodsSpecsIds = ArrayToolkit::column($orderItems, 'target_id');
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByIds($goodsSpecsIds);
 
         $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
         foreach ($orders as &$order) {
-            $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
-            $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
+            $order['item'] = empty($orderItems[$order['id']]) ? [] : $orderItems[$order['id']];
+            $order['trade'] = empty($paymentTrades[$order['sn']]) ? [] : $paymentTrades[$order['sn']];
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
 
         return $this->render(
             'admin-v2/trade/order/list.html.twig',
-            array(
+            [
                 'request' => $request,
                 'orders' => $orders,
                 'users' => $users,
+                'goodsSpecs' => $goodsSpecs,
                 'paginator' => $paginator,
-            )
+            ]
         );
     }
 
@@ -80,6 +84,11 @@ class OrderController extends BaseController
 
         if (isset($conditions['buyer'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+
+        if (isset($conditions['mobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
             $conditions['user_id'] = $user ? $user['id'] : -1;
         }
 
@@ -108,7 +117,7 @@ class OrderController extends BaseController
 
         $orderLogs = OrderToolkit::removeUnneededLogs($orderLogs);
 
-        return $this->render('admin-v2/trade/order/detail.html.twig', array(
+        return $this->render('admin-v2/trade/order/detail.html.twig', [
             'order' => $order,
             'user' => $user,
             'orderLogs' => $orderLogs,
@@ -116,7 +125,7 @@ class OrderController extends BaseController
             'orderDeducts' => $orderDeducts,
             'paymentTrade' => $paymentTrade,
             'users' => $users,
-        ));
+        ]);
     }
 
     public function adjustPriceAction(Request $request, $id)
@@ -126,16 +135,16 @@ class OrderController extends BaseController
                 $id, MathToolkit::simple($request->request->get('adjustPrice'), 100)
             );
 
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         }
 
         $order = $this->getOrderService()->getOrder($id);
         $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
 
-        return $this->render('admin-v2/trade/order/adjust-price-modal.html.twig', array(
+        return $this->render('admin-v2/trade/order/adjust-price-modal.html.twig', [
             'order' => $order,
             'adjustInfo' => $adjustInfo,
-        ));
+        ]);
     }
 
     /**
@@ -160,5 +169,13 @@ class OrderController extends BaseController
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

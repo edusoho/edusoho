@@ -32,8 +32,8 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         ];
 
         $progress['finishedCount'] = $learnedNum > $progress['total'] ? $progress['total'] : $learnedNum;
-        $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
-        $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
+        $progress['percent'] = $progress['finishedCount'] ? (int) ($progress['finishedCount'] / $progress['total'] * 100) : 0;
+        $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2, PHP_ROUND_HALF_DOWN) : 0;
         $progress['percent'] = $progress['percent'] > 100 ? 100 : $progress['percent'];
         $progress['decimal'] = $progress['decimal'] > 1 ? 1 : $progress['decimal'];
 
@@ -43,9 +43,16 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     public function getUserLearningProgressByCourseIds($courseIds, $userId)
     {
         $statisticData = $this->getLearningDataAnalysisDao()->sumStatisticDataByCourseIdsAndUserId($courseIds, $userId);
-        $taskNum = $this->getTaskService()->countTasks(['courseIds' => $courseIds]);
+        $taskNum = $this->getTaskService()->countTasks(['isOptional' => 0, 'courseIds' => $courseIds]);
 
         return $this->makeProgress($statisticData['learnedNum'], $taskNum);
+    }
+
+    public function getUserLearningCompulsoryProgressByCourseIds($courseIds, $userId)
+    {
+        $statisticData = $this->getLearningDataAnalysisDao()->sumCompulsoryStatisticDataByCourseIdsAndUserId($courseIds, $userId);
+
+        return $this->makeProgress($statisticData['learnedNum'], $statisticData['lessonNum']);
     }
 
     public function getUserLearningSchedule($courseId, $userId)

@@ -20,12 +20,26 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\AuditCenter\Service\ReportAuditService;
+use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\AuditCenter\Service\ReportService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
+use Biz\Content\Service\BlockService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
+use Biz\InformationCollect\FormItem\FormItemFectory;
+use Biz\InformationCollect\Service\EventService;
+use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -35,6 +49,8 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -78,6 +94,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text', [$this, 'plainTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -104,6 +121,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('convert_absolute_url', [$this, 'convertAbsoluteUrl']),
             new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
             new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
+            new \Twig_SimpleFilter('html_special_chars_decode', [$this, 'getHtmlSpecialCharsDecode']),
         ];
     }
 
@@ -200,7 +218,183 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
+            new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
+            new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
+            new \Twig_SimpleFunction('information_collect_detail_select', [$this, 'informationCollectDetailSelect']),
+            new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
+            new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
+            new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
+            new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
+            new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
+            new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
+            new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
+            new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
+            new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
         ];
+    }
+
+    public function isReported($targetType, $targetId)
+    {
+        $currentUser = $this->biz['user'];
+        if (!$currentUser->isLogin()) {
+            return false;
+        }
+        $record = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $targetType, $targetId);
+        if (!empty($record)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isShowNewMembers()
+    {
+        $theme = $this->getSetting('theme.uri');
+        if (in_array($theme, ['jianmo', 'graceful'])) {
+            $name = 'jianmo' == $theme ? '简墨' : '雅致简洁（商业主题）';
+            $config = $this->getThemeService()->getThemeConfigByName($name);
+            $config = ArrayToolkit::index($config['confirmConfig']['blocks']['left'], 'id');
+
+            return isset($config['vip']) && 'show' == $config['vip']['vipList'];
+        } elseif ('turing' == $theme) {
+            $template = $this->getBlockService()->getBlockTemplateByCode('turing:turing_vip');
+            if ($template) {
+                $block = $this->getBlockService()->getBlockByCode('turing:turing_vip');
+
+                return $block ? 'show' == $block['data']['vip']['vipList']['value'] : 'show' == $template['data']['vip']['vipList']['value'];
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return BlockService
+     */
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
+    }
+
+    public function vipLevelList($config, $slice = 1)
+    {
+        $count = 1 != $slice ? PHP_INT_MAX : $config['count'];
+        $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $count);
+
+        return $levels;
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    public function filterCourseVipRight($course)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCode' => $course['id']], [], 0, PHP_INT_MAX);
+            $course['vipLevelId'] = empty($vipRights) ? '0' : $vipRights[0]['vipLevelId'];
+        }
+
+        return $course;
+    }
+
+    public function filterCourseSetsVipRight($courseSets)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            foreach ($courseSets as &$courseSet) {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                $vipRights = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes('course', ArrayToolkit::column($courses, 'id'));
+                $courseSet['course']['vipLevelId'] = empty($vipRights) ? 0 : 1;
+            }
+        }
+
+        return $courseSets;
+    }
+
+    public function isVipRight($goodsId, $targetType)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        if ('classroom' == $targetType) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode($targetType, $product['targetId']);
+        } else {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($product['targetId']);
+            $vipRight = $this->getVipRightService()->findVipRightBySupplierCodeAndUniqueCodes($targetType, ArrayToolkit::column($courses, 'id'));
+        }
+
+        return empty($vipRight) ? 0 : 1;
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    public function filterCoursesVipRight($courses)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column($courses, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($courses as &$course) {
+                $course['vipLevelId'] = isset($vipRights[$course['id']]['vipLevelId']) ? $vipRights[$course['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $courses;
+    }
+
+    public function filterClassroomsVipRight($classrooms)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom', 'uniqueCodes' => ArrayToolkit::column($classrooms, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($classrooms as &$classroom) {
+                $classroom['vipLevelId'] = isset($vipRights[$classroom['id']]['vipLevelId']) ? $vipRights[$classroom['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $classrooms;
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function makeLocalMediaFileToken($file)
@@ -240,6 +434,11 @@ class WebExtension extends \Twig_Extension
     public function s2b2cFileConvert($file)
     {
         return $this->getS2b2cFileSourceService()->getFullFileInfo($file);
+    }
+
+    public function getHtmlSpecialCharsDecode($str)
+    {
+        return htmlspecialchars_decode($str);
     }
 
     public function getDays($days)
@@ -358,14 +557,12 @@ class WebExtension extends \Twig_Extension
 
         $host = $request->getHttpHost();
         if ($copyright) {
-            $result = !(
-                isset($copyright['owned'])
+            $result = !(isset($copyright['owned'])
                 && isset($copyright['thirdCopyright'])
                 && 2 != $copyright['thirdCopyright']
                 && isset($copyright['licenseDomains'])
                 && in_array($host, explode(';', $copyright['licenseDomains']))
-                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright'])
-            );
+                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright']));
 
             return $result;
         }
@@ -464,11 +661,13 @@ class WebExtension extends \Twig_Extension
             if ($imgs) {
                 $urls = array_unique($imgs[1]);
                 foreach ($urls as $img) {
-                    if (0 === strpos($img, $publicUrlPath)
+                    if (
+                        0 === strpos($img, $publicUrlPath)
                         || 0 === strpos($img, $themeUrlPath)
                         || 0 === strpos($img, $assetUrlPath)
                         || 0 === strpos($img, $bundleUrlPath)
-                        || 0 === strpos($img, $staticDistUrlPath)) {
+                        || 0 === strpos($img, $staticDistUrlPath)
+                    ) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -506,11 +705,12 @@ class WebExtension extends \Twig_Extension
             'appId' => $key,
             'timestamp' => time(),
             'nonceStr' => uniqid($prefix = 'edusoho'),
-            'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ'],
+            'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ', 'updateTimelineShareData', 'updateAppMessageShareData'],
+            'openTagList' => ['wx-open-subscribe'],
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
-        $url = empty($url) ? $this->requestStack->getMasterRequest()->getUri() : $url;
+        $url = empty($url) ? $this->requestStack->getMasterRequest()->getSchemeAndHttpHost().$this->requestStack->getMasterRequest()->getRequestUri() : $url;
         $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
         $config['string'] = $string;
         $config['signature'] = sha1($string);
@@ -600,20 +800,20 @@ class WebExtension extends \Twig_Extension
         }
 
         $user = $this->getUserService()->getUser($user['id']);
-
-        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
-        $pattern = $this->getSetting('magic.video_fingerprint');
+        $magicSetting = $this->getSetting('magic.video_fingerprint');
+        $request = $this->requestStack->getMasterRequest();
+        $host = $request->getHttpHost();
         $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
-        if ($pattern) {
-            $fingerprint = $this->parsePattern($pattern, $user);
+        if (!empty($magicSetting)) {
+            $fingerprint = $this->parsePattern($magicSetting, $user);
         } else {
-            $request = $this->requestStack->getMasterRequest();
-            $host = $request->getHttpHost();
-            $fingerprint = "<span style=\"opacity:{$opacity};\"> {$host} {$user['nickname']} </span>";
+            $pattern = $this->getSetting('storage.video_fingerprint_content', ['nickname', 'domain']);
+            $pattern = empty($pattern) ? '' : '{{'.implode('}} {{', $pattern).'}}';
+            $fingerprint = $this->parsePattern($pattern, $user, '-');
         }
 
-        return $fingerprint;
+        return "<span style=\"opacity:{$opacity}\";>".str_replace('{{domain}}', $host, $fingerprint).'</span>';
     }
 
     public function popRewardPointNotify()
@@ -631,7 +831,7 @@ class WebExtension extends \Twig_Extension
         return $message;
     }
 
-    protected function parsePattern($pattern, $user)
+    protected function parsePattern($pattern, $user, $default = null)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
@@ -643,7 +843,7 @@ class WebExtension extends \Twig_Extension
             }
         );
 
-        return $this->simpleTemplateFilter($pattern, $values);
+        return $this->simpleTemplateFilter($pattern, $values, $default);
     }
 
     public function subStr($text, $start, $length)
@@ -1216,7 +1416,8 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('assets.packages');
         $defaultSetting = $this->getSetting('default', []);
 
-        if (array_key_exists($defaultKey, $defaultSetting)
+        if (
+            array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
         ) {
             $path = $defaultSetting[$defaultKey];
@@ -1300,13 +1501,13 @@ class WebExtension extends \Twig_Extension
             $defaultSetting = $this->getSetting('default', []);
 
             if ((('course.png' == $defaultKey && array_key_exists(
-                            'defaultCoursePicture',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultCoursePicture'])
+                    'defaultCoursePicture',
+                    $defaultSetting
+                ) && 1 == $defaultSetting['defaultCoursePicture'])
                     || ('avatar.png' == $defaultKey && array_key_exists(
-                            'defaultAvatar',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultAvatar']))
+                        'defaultAvatar',
+                        $defaultSetting
+                    ) && 1 == $defaultSetting['defaultAvatar']))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1460,6 +1661,24 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
+    public function wrapTextFilter($text, $length = null)
+    {
+        $text = strip_tags($text);
+
+        $text = str_replace(["\n", "\r", "\t"], '<br/>', $text);
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+
+        if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+            $text .= '...';
+        }
+
+        return $text;
+    }
+
     public function getFileType($fileName, $string = null)
     {
         $fileName = explode('.', $fileName);
@@ -1536,9 +1755,10 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function simpleTemplateFilter($text, $variables)
+    public function simpleTemplateFilter($text, $variables, $default = null)
     {
         foreach ($variables as $key => $value) {
+            $value = (empty($value) && !empty($default)) ? $default : $value;
             $text = str_replace('{{'.$key.'}}', $value, $text);
         }
 
@@ -1908,6 +2128,12 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        $messageSetting = $this->getSetting('ugc_private_message', []);
+
+        if (empty($messageSetting['enable_private_message'])) {
+            return false;
+        }
+
         if ($user['id'] == $toUser['id']) {
             return false;
         }
@@ -1920,17 +2146,15 @@ class WebExtension extends \Twig_Extension
             return true;
         }
 
-        $messageSetting = $this->getSetting('message', []);
-
-        if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+        if (empty($messageSetting['teacher_to_student']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
         }
 
-        if (empty($messageSetting['studentToStudent']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
+        if (empty($messageSetting['student_to_student']) && $this->isOnlyStudent($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
         }
 
-        if (empty($messageSetting['studentToTeacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
+        if (empty($messageSetting['student_to_teacher']) && $this->isOnlyStudent($user['roles']) && $this->isTeacher($toUser['roles'])) {
             return false;
         }
 
@@ -2029,6 +2253,14 @@ class WebExtension extends \Twig_Extension
         return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
     }
 
+    public function mailSetting()
+    {
+        $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
+    }
+
     protected function makeToken($type, $fileId, $context = [])
     {
         $fields = [
@@ -2049,6 +2281,113 @@ class WebExtension extends \Twig_Extension
         }
 
         return $this->getTokenService()->makeToken($type, $fields);
+    }
+
+    public function informationCollectLocationInfo($eventId)
+    {
+        $locationInfos = $this->getEventService()->getEventLocations($eventId);
+
+        $locationInfo = '';
+        if (!empty($locationInfos['course'])) {
+            if (1 == count($locationInfos['course']) && '0' == $locationInfos['course'][0]) {
+                $locationInfo .= '全部课程；';
+            } else {
+                $courses = $this->getCourseSetService()->findCourseSetsByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'title')).'；';
+            }
+        }
+        if (!empty($locationInfos['classroom'])) {
+            if (1 == count($locationInfos['classroom']) && '0' == $locationInfos['classroom'][0]) {
+                $locationInfo .= '全部班级；';
+            } else {
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['classroom']);
+                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
+            }
+        }
+
+        return $locationInfo;
+    }
+
+    public function informationCollectFormItems($eventId = 0)
+    {
+        $selectFormItems = [];
+        if (!empty($eventId)) {
+            $selectFormItems = $this->getEventService()->findItemsByEventId($eventId);
+        }
+
+        $items = [];
+        if (empty($selectFormItems)) {
+            foreach (FormItemFectory::getFormItems() as $code => $itemInstanceClass) {
+                $instance = new $itemInstanceClass();
+                $item = $instance->getData();
+                $items[$item['group']][$code] = $item;
+            }
+
+            return $items;
+        }
+
+        foreach ($selectFormItems as  $item) {
+            $formItem = FormItemFectory::create($item['code'])->getData();
+            $items[$item['code']] = array_merge($formItem, $item);
+        }
+
+        return $items;
+    }
+
+    public function informationCollectDetailSelect($eventId = 0)
+    {
+        // 支持的编码
+        $codes = ['nickname', 'mobile', 'name', 'idcard'];
+        // 默认支持
+        $options = [
+            'nickname' => $this->trans('user.fields.username_label'),
+            'mobile' => $this->trans('user.fields.mobile_label'),
+        ];
+
+        if (!$eventId) {
+            return $options;
+        }
+
+        $items = $this->getEventService()->findItemsByEventId($eventId);
+        foreach ($items as $item) {
+            if (in_array($item['code'], $codes)) {
+                $options[$item['code']] = FormItemFectory::create($item['code'])->getData()['title'];
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * @return ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->createService('InformationCollect:ResultService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return EventService
+     */
+    protected function getEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     /**
@@ -2107,8 +2446,35 @@ class WebExtension extends \Twig_Extension
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');
+    }
+
+    /**
+     * @return ReportService
+     */
+    protected function getReportService()
+    {
+        return $this->createService('AuditCenter:ReportService');
+    }
+
+    /**
+     * @return ReportRecordService
+     */
+    protected function getReportRecordService()
+    {
+        return $this->createService('AuditCenter:ReportRecordService');
+    }
+
+    /**
+     * @return ReportAuditService
+     */
+    protected function getReportAuditService()
+    {
+        return $this->createService('AuditCenter:ReportAuditService');
     }
 }

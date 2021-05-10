@@ -42,7 +42,7 @@ class QuestionController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -192,7 +192,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -364,7 +364,7 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        return str_replace(',', '', $questionBank['name']).'-题目.docx';
+        return  rawurlencode("{$questionBank['name']}-题目.docx");
     }
 
     protected function convertCategoryTreeToArray($categoryTree)

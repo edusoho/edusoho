@@ -269,10 +269,12 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create_course',
                 'update_course',
                 'delete_course',
+                'copy_course',
                 'publish_course',
                 'close_course',
                 'update_draft',
                 'join_course',
+                'exit_course',
             ],
 
             self::PUSH => [
@@ -373,6 +375,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'close',
                 'update_head_teacher',
                 'join_classroom',
+                'exit_classroom',
             ],
             self::ARTICLE => [
                 'update_settings',

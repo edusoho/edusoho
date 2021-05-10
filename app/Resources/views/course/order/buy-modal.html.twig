@@ -2,7 +2,7 @@
 {% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/course/buy-modal/index.js']) %}
 
 {% if is_plugin_installed('Vip') %}
-  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'targetId': course.id, 'targetType': 'course'})%}
 {% endif %}
 
 {% block title %}
@@ -61,7 +61,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'course.btn.pay_tips'|trans}}" data-toggle="form-submit" data-target="#course-buy-form">
+  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'course.btn.pay_tips'|trans}}" data-toggle="form-submit" data-target="#course-buy-form" data-target-type="course" data-target-id="{{ course.courseSetId }}">
     {% if course.isFree or vipStatus|default(0) %}
       {{'course.btn.free_join'|trans}}
     {% else%}

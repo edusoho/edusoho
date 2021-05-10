@@ -8,41 +8,66 @@ abstract class Extension extends BizAware implements ExtensionInterface
 {
     public function getQuestionTypes()
     {
-        return array();
+        return [];
     }
 
     public function getPayments()
     {
-        return array();
+        return [];
     }
 
     public function getActivities()
     {
-        return array();
+        return [];
     }
 
     public function getCallbacks()
     {
-        return array();
+        return [];
     }
 
     public function getTaskToolbars()
     {
-        return array();
+        return [];
     }
 
     public function getCourseTypes()
     {
-        return array();
+        return [];
+    }
+
+    public function getTaskTypes()
+    {
+        return [];
     }
 
     public function getWeChatTemplates()
     {
-        return array();
+        return [];
+    }
+
+    public function getMessageSubscribeTemplates()
+    {
+        return [];
     }
 
     public function getNewComerTasks()
     {
-        return array();
+        return [];
+    }
+
+    public function getFavoriteTypes()
+    {
+        return [];
+    }
+
+    public function getReportSources()
+    {
+        return [];
+    }
+
+    public function getContentAuditSources()
+    {
+        return [];
     }
 }

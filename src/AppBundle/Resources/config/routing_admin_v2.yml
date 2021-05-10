@@ -188,6 +188,18 @@ admin_v2_classroom_chooser:
     path: /classroom/chooser
     defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:chooser }
 
+admin_v2_classroom_statistics:
+    path: /classroom/statistics
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:statistics }
+
+admin_v2_classroom_statistics_member:
+    path: /classroom/{id}/statistics/member
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:memberStatistics }
+
+admin_v2_classroom_statistics_course:
+    path: /classroom/{id}/statistics/course
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:courseStatistics }
+
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}
@@ -667,6 +679,48 @@ admin_v2_coupon_setting:
     path: /setting/coupon
     defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
 
+# 营销-营销管理-用户信息采集
+admin_v2_information_collect:
+  path: /information_collect
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:index }
+  permissions: [admin_v2_information_collect]
+
+admin_v2_information_collect_close:
+  path:  /information_collect/{id}/close
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:close }
+
+admin_v2_information_collect_open:
+  path:  /information_collect/{id}/open
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:open }
+
+admin_v2_information_collect_detail:
+  path:  /information_collect/{id}/detail
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:detail }
+
+admin_v2_information_collect_create:
+  path: /information_collect/create
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:create }
+
+admin_v2_information_collect_update:
+  path: /information_collect/{id}/update
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:update }
+
+admin_v2_information_collect_event_target_modal:
+  path: /information_collect/event/{action}/target/{type}/modal
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }
+
+admin_v2_information_collect_chooser:
+  path: /information_collect/{type}/chooser
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooser }
+
+admin_v2_information_collect_chooser_ajax:
+  path: /information_collect/{type}/chooser/ajax
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:ajaxChooser }
+
+admin_v2_information_collect_chooser_selected:
+  path: /information_collect/{type}/selected
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:selectedChooser }
+
 # 营销-营销管理-微营销-入口页
 admin_v2_login_micromarketing_boot:
   path: /login/marketing/boot
@@ -813,6 +867,10 @@ admin_v2_block_code_check_foredit:
 admin_v2_block_update:
     path:  /block/{blockTemplateId}/update
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:edit }
+
+admin_v2_block_tip:
+    path: /block/tip
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockTip }
 
 admin_v2_block_template_edit:
     path:  /block/{blockTemplateId}/edit
@@ -1104,6 +1162,36 @@ admin_v2_certificate_template_img_show:
     path:  /certificate/template/{id}/img
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
 
+# 运营-内容运营-用户内容审核
+admin_v2_user_content_audit:
+    path:  /user_content_audit
+    defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:index }
+
+admin_v2_user_content_audit_confirm:
+  path: /user_content_audit/confirm/{id}/{status}
+  defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:confirm }
+
+admin_v2_user_content_audit_batch_confirm:
+  path:  /user_content_audit/batchConfirm/{status}
+  defaults: { _controller: AppBundle:AdminV2/Operating/UserContentAudit:batchConfirm }
+
+# 运营-内容运营-举报内容审核
+admin_v2_report_content_audit:
+    path:  /report_content_audit
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:index }
+
+admin_v2_report_record:
+    path:  /report_record/{auditId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:reportRecord }
+
+admin_v2_report_content_audit_update_status:
+    path:  /report_content_audit/{id}/update_status/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:updateStatus }
+
+admin_v2_report_content_audit_batch_update:
+    path:  /report_content_audit/batch_update/{status}
+    defaults: { _controller: AppBundle:AdminV2/Operating/ReportContentAudit:batchUpdateStatus }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement
@@ -1250,6 +1338,21 @@ admin_v2_article_delete:
     methods:  [POST]
     permissions: [admin_v2_operation_article_manage]
 
+admin_v2_article_review:
+  path: /article/review
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:index }
+  permissions: [admin_v2_operation_article_review]
+
+admin_v2_article_review_delete:
+  path: /article/review/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:deleteReview }
+  methods: [POST]
+
+admin_v2_article_review_batch_delete:
+  path:  /article/review/batchDeleteReview
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleReview:batchDeleteReview }
+  methods: [POST]
+
 #运营-内容运营-小组管理
 admin_v2_group:
     path:  /group
@@ -1270,7 +1373,7 @@ admin_v2_groupThread_batch_delete:
 admin_v2_group_thread_cancel_elite:
     path:  /group/thread/{threadId}/removeElite
     defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeElite }
-    permissions: [admin_v2operation_group_manage]
+    permissions: [admin_v2_operation_group_manage]
 
 admin_v2_group_thread_set_elite:
     path:  /group/thread/{threadId}/setElite
@@ -1327,6 +1430,10 @@ admin_v2_wechat_notification_manage:
     path: /wechat/notification/manage
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:manage }
 
+admin_v2_wechat_notification_manage_setting:
+  path: /wechat/notification/manage/setting
+  defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:settingNotification }
+
 admin_v2_wechat_notification_record_detail:
     path: /wechat/notification/record/{id}/detail
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:recordDetail }
@@ -1351,29 +1458,29 @@ admin_v2_message_delete_messages:
     methods: [POST]
     permissions: [admin_v2_message_manage]
 
-# 运营-内容运营-敏感词设置
+# 系统-合规经营管理-敏感词设置
 admin_v2_keyword:
     path:  /keyword
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:index }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:index }
 
 admin_v2_keyword_create:
     path:  /keyword/create
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:create }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:create }
 
 admin_v2_keyword_delete:
     path:  /keyword/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:delete }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:delete }
     methods:  [POST]
     permissions: [admin_v2_keyword]
 
 admin_v2_keyword_change:
     path:  /keyword/{id}/change
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:change }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:change }
     permissions: [admin_v2_keyword]
 
 admin_v2_keyword_banlogs:
     path:  /keyword/banlogs
-    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:banlogs }
+    defaults: { _controller: AppBundle:AdminV2/System/Sensitive:banlogs }
 
 # 用户-用户管理-用户管理
 admin_v2_user:
@@ -1679,16 +1786,6 @@ admin_v2_school_information_save:
     permissions: [admin_v2_school_information]
     methods: [POST]
 
-admin_v2_certificate_setting:
-    path:  /setting/certificate
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:certificate }
-    permissions: [admin_v2_school_information]
-
-admin_v2_setting_license_save:
-    path:  /setting/license/save
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveLicense }
-    permissions: [admin_v2_school_information]
-
 admin_v2_setting_license_picture_upload:
   path:  /setting/license_picture/upload
   defaults: { _controller: AppBundle:AdminV2/System/Setting:licensePictureUpload }
@@ -1724,6 +1821,12 @@ admin_v2_setting_favicon_remove:
     defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconRemove }
     methods: [POST]
     permissions: [admin_v2_school_information]
+
+admin_v2_setting_record_upload:
+  path: /setting/record/upload
+  defaults: { _controller: AppBundle:AdminV2/System/Setting:recordPictureUpload }
+  methods: [POST]
+  permissions: [admin_v2_school_information]
 
 #系统-通用管理-用户设置
 admin_v2_setting_auth:
@@ -1815,6 +1918,21 @@ admin_v2_setting_default_course_picture_crop:
     defaults: { _controller: AppBundle:AdminV2/System/SystemDefaultSetting:defaultCoursePictureCrop }
     permissions: [admin_v2_setting_course_avatar,admin_v2_setting_avatar,course_manage_picture]
 
+admin_v2_task_multiple_open_setting:
+    path:  /setting/task-multiple-open-setting
+    defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:taskPlaySetting }
+    permissions: [admin_v2_task_multiple_open_setting]
+
+admin_v2_video_task_setting:
+  path:  /setting/video-task-setting
+  defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:videoEffectiveLearningTimeSetting }
+  permissions: [admin_v2_video_task_setting]
+
+admin_v2_video_task_setting_job_check:
+  path:  /setting/video_task_setting/job_check
+  defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:refreshJobCheck }
+  permissions: [admin_v2_video_task_setting]
+
 # 系统-通用管理-运营设置
 admin_v2_setting_mailer:
     path:  /setting/mailer
@@ -1900,6 +2018,22 @@ admin_v2_coin_model_ajax:
     path: /setting/coin/model/ajax
     defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinTableAjax}
     permissions: [admin_v2_coin_user_records]
+
+# 系统-合规经营与信息安全设置-经营资质设置
+admin_v2_setting_management:
+  path:  /setting/ugc/qualification
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:qualification }
+  permissions: [admin_v2_business_qualification]
+
+admin_v2_qualifications_information_save:
+  path:  /setting/ugc/qualifications/save
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:saveQualification }
+  permissions: [admin_v2_business_qualification]
+  methods: [POST]
+
+admin_v2_setting_business_license:
+  path:  /setting/ugc/license
+  defaults: { _controller: AppBundle:AdminV2/System/ManagementSetting:license }
 
 # 系统-系统管理-系统优化
 admin_v2_optimize:
@@ -2470,6 +2604,11 @@ admin_v2_setting_cloud_key_copyright:
     methods: [POST]
     permissions: [admin_v2_setting_my_cloud]
 
+admin_v2_app_package_update_agreement:
+    path:  /app/package_update/{id}/agreement
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:agreement }
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
+
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }
@@ -2722,6 +2861,7 @@ admin_v2_product_update_setting:
   path:  /app/resource_product/product/update/setting
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productUpdateSetting }
 
+
 # Plumber队列（隐藏路由）
 admin_v2_plumber:
   path: /plumber
@@ -2730,3 +2870,86 @@ admin_v2_plumber:
 admin_v2_plumber_queue:
   path: /plumber/queue
   defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
+
+# 商品设置
+admin_v2_goods_setting:
+  path: /goods/setting
+  defaults: { _controller: AppBundle:AdminV2/Operating/GoodsSetting:index }
+
+# 数据可视化老板后台
+admin_v2_data_visualization_activity_learn_flow:
+  path: /data_visualization/activity_vide_watch_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnFlow }
+
+admin_v2_data_visualization_activity_learn_record:
+  path: /data_visualization/activity_learn_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnRecord }
+
+admin_v2_data_visualization_activity_video_watch_record:
+  path: /data_visualization/activity_video_watch_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoWatchRecord }
+
+admin_v2_data_visualization_activity_stay_daily:
+  path: /data_visualization/action/activity_stay_daily
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDaily }
+
+admin_v2_data_visualization_activity_video_daily_statistics:
+  path: /data_visualization/action/activity_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoDailyStatistics }
+
+admin_v2_data_visualization_activity_stay_daily_statistics:
+  path: /data_visualization/action/activity_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDailyStatistics }
+
+admin_v2_data_visualization_course_plan_video_daily_statistics:
+  path: /data_visualization/action/course_plan_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanVideoDailyStatistics }
+
+admin_v2_data_visualization_course_plan_stay_daily_statistics:
+  path: /data_visualization/action/course_plan_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanStayDailyStatistics }
+
+admin_v2_data_visualization_user_video_daily_statistics:
+  path: /data_visualization/action/user_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userVideoDailyStatistics }
+
+admin_v2_data_visualization_user_stay_statistics:
+  path: /data_visualization/action/user_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userStayDailyStatistics }
+
+admin_v2_data_visualization_user_learn_daily_statistics:
+  path: /data_visualization/action/user_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userLearnDailyStatistics }
+
+admin_v2_data_visualization_activity_learn_daily_statistics:
+  path: /data_visualization/action/activity_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnDailyStatistics }
+
+admin_v2_data_visualization_course_plan_learn_daily_statistics:
+  path: /data_visualization/action/course_plan_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
+
+admin_v2_api_security_setting:
+  path: /api_security/action/setting
+  defaults: { _controller: AppBundle:AdminV2/Developer/ApiSecurity:setting }
+
+admin_v2_user_content_control_review:
+    path: /setting/ugc/user_content_control/review
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
+
+admin_v2_user_content_control_note:
+    path: /setting/ugc/user_content_control/note
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:note }
+
+admin_v2_user_content_control_thread:
+    path: /setting/ugc/user_content_control/thread
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:thread }
+
+admin_v2_user_content_control_private_message:
+    path: /setting/ugc/user_content_control/private_message
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:privateMessage }
+
+# 系统-合规经营管理-内容审核设置
+admin_v2_user_content_audit_setting:
+    path: /setting/ugc/user_content_audit
+    defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:contentAudit }

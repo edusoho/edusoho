@@ -5,6 +5,7 @@
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"
+   data-file-names="{{ fileNames|default([exportFileName])|json_encode }}"
 >
     <i class="es-icon es-icon-filedownload cd-text-sm"></i>
     {% if showDownLoadText|default(1) %}

@@ -48,6 +48,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $this->resetServices = false;
                 if ($this->debug) {
                     $this->startTime = microtime(true);
+                    error_reporting(3);
                 }
             }
 
@@ -55,6 +56,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
         if ($this->debug) {
             $this->startTime = microtime(true);
+            error_reporting(3);
         }
         if ($this->debug && !isset($_ENV['SHELL_VERBOSITY']) && !isset($_SERVER['SHELL_VERBOSITY'])) {
             putenv('SHELL_VERBOSITY=3');
@@ -230,6 +232,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
         $this->registerSessionServiceProvider($biz);
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
+        $biz->register(new \Biz\Goods\GoodsServiceProvider());
         $biz->boot();
 
         $activeTheme = $this->pluginConfigurationManager->getActiveThemeName();

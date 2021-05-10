@@ -1,0 +1,31 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class ='modal-lg' %}
+
+{% block modal_content %}
+  <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">
+              {{ 'classroom.manage.data_statistics.student_detail_list.user_all_courses'|trans({'%nickname%': user.nickname}) }}
+              <span class="mll">{{ 'course.task.completion_degree'|trans }}
+                  {{ percent(member.learnedCompulsoryTaskNum, classroom.compulsoryTaskNum) }}
+              </span>
+          </h4>
+      </div>
+      <div class="modal-body" style="overflow:visible">
+          {% block body %}
+              <div class="classroom-manage-statistics mvm">
+                  <ul class="student-detail clearfix sm">
+                    {% include 'classroom-manage/statistics/student-detail/student-chart-item.html.twig' %}
+                  </ul>
+              </div>
+              <script>
+                  $("[data-toggle='popover']").popover();
+              </script>
+          {% endblock %}
+      </div>
+  </div>
+{% endblock %}
+
+

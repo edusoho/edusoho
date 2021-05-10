@@ -19,8 +19,7 @@ class LearnCourseTaskAccessor extends AccessorAdapter
         $learnCourseChain = $this->biz['course.learn_chain'];
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $courseLearnResult = $learnCourseChain->process($course);
-
-        if ($courseLearnResult['code'] == AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS == $courseLearnResult['code']) {
             return null;
         } else {
             return $this->tryFreeLearn($task, $course, $courseLearnResult['code']);
@@ -34,10 +33,9 @@ class LearnCourseTaskAccessor extends AccessorAdapter
                 return null;
             }
 
-            if ($course['tryLookable']
-                && $task['type'] == 'video') {
+            if ($course['tryLookable'] && 'video' == $task['type']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                if (!empty($activity['ext']) && !empty($activity['ext']['file']) && in_array($activity['ext']['file']['storage'], ['cloud', 'supplier'])) {
                     return $this->buildResult('allow_trial');
                 }
             }
@@ -48,7 +46,9 @@ class LearnCourseTaskAccessor extends AccessorAdapter
 
     private function canAnonymousPreview()
     {
-        return $this->getSettingService()->get('course.allowAnonymousPreview', 1);
+        $allowAnonymousPreview = (int) $this->getSettingService()->node('course.allowAnonymousPreview', 1);
+
+        return $allowAnonymousPreview || (!$allowAnonymousPreview && $this->getCurrentUser()->isLogin());
     }
 
     /**

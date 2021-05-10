@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Component\Export;
+namespace Tests\Unit\AppBundle\Component\Export;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\Exporter;
+use Biz\BaseTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ExporterTest extends BaseTestCase
@@ -13,7 +13,7 @@ class ExporterTest extends BaseTestCase
     {
         $filesystem = new Filesystem();
         $biz = $this->getBiz();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
         $result = $expoter->export();
         $this->assertEquals(0, $result['success']);
         $this->assertEquals('export.not_allowed', $result['message']);
@@ -31,8 +31,8 @@ class ExporterTest extends BaseTestCase
         $biz = $this->getBiz();
         $filePath = $biz['topxia.upload.private_directory'].'/testcsv';
         $filesystem->remove($filePath);
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
-        ReflectionUtils::invokeMethod($expoter, 'addContent', array(array('test' => '123'), 0, $filePath));
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
+        ReflectionUtils::invokeMethod($expoter, 'addContent', [['test' => '123'], 0, $filePath]);
 
         $result = file_get_contents($filePath.'0');
         $result = unserialize($result);
@@ -44,10 +44,10 @@ class ExporterTest extends BaseTestCase
     {
         $filesystem = new Filesystem();
         $biz = $this->getBiz();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
         $filePath = $biz['topxia.upload.private_directory'].'/testcsv';
         $filesystem->remove($filePath);
-        $path = ReflectionUtils::invokeMethod($expoter, 'updateFilePaths', array($filePath, 1));
+        $path = ReflectionUtils::invokeMethod($expoter, 'updateFilePaths', [$filePath, 1]);
         $this->assertEquals($biz['topxia.upload.private_directory'].'/testcsv1', $path);
         $result = file_get_contents($filePath);
         $result = unserialize($result);
@@ -56,13 +56,13 @@ class ExporterTest extends BaseTestCase
 
     public function testBuildParameter()
     {
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
-        $result = $expoter->buildParameter(array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
+        $result = $expoter->buildParameter([]);
 
         $this->assertEquals(0, $result['start']);
         $this->assertEquals('', $result['fileName']);
 
-        $result = $expoter->buildParameter(array('start' => 1, 'fileName' => './../test.csv'));
+        $result = $expoter->buildParameter(['start' => 1, 'fileName' => './../test.csv']);
         $this->assertEquals(1, $result['start']);
         $this->assertEquals('test.csv', $result['fileName']);
     }
@@ -71,31 +71,31 @@ class ExporterTest extends BaseTestCase
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
         $path = ReflectionUtils::invokeMethod($expoter, 'exportFileRootPath');
 
         $this->assertTrue($filesystem->exists($path));
-        $this->assertEquals($biz['topxia.upload.private_directory'].'/', $path);
+        $this->assertEquals($biz['topxia.upload.private_directory'].'/tmp/', $path);
     }
 
     public function testTransTitles()
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
         $titles = ReflectionUtils::invokeMethod($expoter, 'transTitles');
 
-        $this->assertArrayEquals(array('标题'), $titles);
+        $this->assertArrayEquals(['标题'], $titles);
     }
 
     public function testGetPageConditions()
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), []);
         list($start, $limit) = ReflectionUtils::invokeMethod($expoter, 'getPageConditions');
         $this->assertEquals(1000, $limit);
-        $this->getSettingService()->set('magic', array('export_limit' => 10000));
+        $this->getSettingService()->set('magic', ['export_limit' => 10000]);
         // $this->mockBiz(
         //     'System:SettingService',
         //     array(
@@ -119,12 +119,12 @@ class ExpoertWrap extends Exporter
 {
     public function getTitles()
     {
-        return array('标题');
+        return ['标题'];
     }
 
     public function getContent($start, $limit)
     {
-        return array('test' => 'test1');
+        return ['test' => 'test1'];
     }
 
     public function canExport()

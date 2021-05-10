@@ -34,9 +34,6 @@
             <input type="text" id="buy-price" name="price" data-price="{{ course.price|currency }}"
                    value="{{ course.price|currency }}" class="form-control">
             <div class="input-group-addon">{{ 'site.currency.CNY'|trans }}</div>
-            {% if course.platform|default('self') != 'self' %}
-              <div type="hidden" id="min-price" data-price="0.01"></div>
-            {% endif %}
           </div>
           <div
             class="help-block">{{ 'course.members_manage.official_student.add.price_tips'|trans }}{{ course.price }}{{ 'site.currency.CNY'|trans }}</div>

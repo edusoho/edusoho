@@ -1,4 +1,7 @@
 import Emitter from 'component-emitter';
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
 class AudioPlayer extends Emitter {
 
   constructor(options) {
@@ -7,6 +10,8 @@ class AudioPlayer extends Emitter {
     this.playMode = 'sequence'; //默认开启
     this.player = {};
     this.setup();
+    this.duration = 0;
+    this.currentTime = 0;
   }
 
   setup() {
@@ -21,7 +26,7 @@ class AudioPlayer extends Emitter {
         playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
       });
     }
-    
+
     if (self.options.resNo) {
       extConfig = Object.assign(extConfig, {
         resNo: self.options.resNo
@@ -82,6 +87,8 @@ class AudioPlayer extends Emitter {
 
     player.on('timeupdate', function(e) {
       //    player.__events get all the event;
+      self.currentTime = e.currentTime;
+      self.duration = e.duration;
       self.emit('timechange', e);
     });
 
@@ -91,9 +98,10 @@ class AudioPlayer extends Emitter {
 
     player.on('ended', function(e) {
       let message = {
-        'mode' : self.playMode
+        'mode' : self.playMode,
+        'currentTime': self.currentTime,
+        'duration': self.duration,
       };
-      console.log(message);
       self.emit('ended', message);
     });
 
@@ -106,6 +114,7 @@ class AudioPlayer extends Emitter {
     });
 
     this.player = player;
+    this._registerChannel();
   }
 
   play() {
@@ -137,6 +146,31 @@ class AudioPlayer extends Emitter {
     return false;
   }
 
+  _registerChannel() {
+    postal.instanceId('task');
+
+    postal.fedx.addFilter([
+      {
+        channel: 'task-events', //接收 activity iframe的事件
+        topic: 'monitoringEvent',
+        direction: 'in'
+      }
+    ]);
+
+    postal.subscribe({
+      channel: 'task-events',
+      topic: 'monitoringEvent',
+      callback: (type) => {
+        if (type === 'pause') {
+          this.pause();
+        } else if (type === 'play') {
+          this.play();
+        }
+      }
+    });
+
+    return this;
+  }
 }
 
 export default AudioPlayer;

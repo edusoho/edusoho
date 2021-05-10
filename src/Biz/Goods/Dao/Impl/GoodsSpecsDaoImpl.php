@@ -15,13 +15,16 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'serializes' => [
                 'images' => 'json',
+                'services' => 'json',
             ],
             'conditions' => [
                 'id = :id',
                 'goodsId = :goodsId',
+                'goodsId IN (:goodsIds)',
                 'title = :title',
                 'targetId = :targetId',
                 'title LIKE :titleLike',
+                'status = :status',
             ],
             'orderbys' => ['id'],
         ];
@@ -34,7 +37,16 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
 
     public function findByGoodsId($goodsId)
     {
-        return $this->findByFields(['goodsId' => $goodsId]);
+        $sql = "SELECT * FROM {$this->table} WHERE goodsId = ? ORDER BY `seq` ASC;";
+
+        return $this->db()->fetchAll($sql, [$goodsId]);
+    }
+
+    public function findPublishedByGoodsId($goodsId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE goodsId = ? AND status = 'published' ORDER BY `seq` ASC;";
+
+        return $this->db()->fetchAll($sql, [$goodsId]);
     }
 
     public function deleteByGoodsIdAndTargetId($goodsId, $targetId)
@@ -45,5 +57,10 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
     public function deleteByGoodsId($goodsId)
     {
         return $this->db()->delete($this->table, ['goodsId' => $goodsId]);
+    }
+
+    public function findByIds(array $ids)
+    {
+        return $this->findInField('id', $ids);
     }
 }

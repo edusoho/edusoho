@@ -11,10 +11,15 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends BaseController
 {
@@ -123,6 +128,15 @@ class CourseController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
+        if (!$member || $member['locked']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
+        }
+        if ($this->isPluginInstalled('Vip')) {
+            $member['access'] = $this->getClassroomService()->canLearnClassroom($classroomId);
+        }
 
         $layout = 'classroom/layout.html.twig';
         $isCourseMember = false;
@@ -151,6 +165,30 @@ class CourseController extends BaseController
                 'isCourseMember' => $isCourseMember,
             ]
         );
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function searchAction(Request $request, $classroomId)
@@ -358,5 +396,21 @@ class CourseController extends BaseController
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

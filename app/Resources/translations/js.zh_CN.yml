@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
+site.flash_not_install_hint: 自2021年起，主流浏览器新出版本已不再支持Flash技术，请使用低版本浏览器或检查Flash是否已启用，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -15,7 +15,7 @@ site.save_error_hint: 保存失败
 site.searching_hint: 搜索中...
 site.search_hint: 搜索
 site.choose_gender_hint: 请选择性别
-site.captcha_code.required: 请输入验证码
+site.captcha_code.required: 请拖动图形验证码
 site.data.create: 添加
 site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
@@ -124,7 +124,6 @@ user.settings.unbind_success: 取消绑定成功
 user.settings.unbind_title: 取消绑定
 user.settings.unbind_content: 确定要取消绑定吗？
 
-material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -155,7 +154,7 @@ uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
-
+uploader.file.unsupported.type: 不支持的文件类型
 
 importer.import_verify_tips_start: 校验成功！一共包含
 importer.import_verify_tips_end: 条数据
@@ -217,9 +216,7 @@ activity.live.started_tip: 直播已经开始
 activity.live.started_or_ended_notice: 直播已经开始或者结束,无法编辑
 
 
-activity.audio_manage.length_required_error_hint: 请输入时长
-activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
-activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
+activity.audio_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
 activity.document_manage.media_error_hint: 请上传或选择文档
@@ -315,14 +312,15 @@ activity.video_manage.true_address_input: 请输入正确的视频网址
 activity.video_manage.video_validate_error_hint: 读取视频页面信息失败，请检查您输入的页面地址后重试
 activity.video_manage.finish_detail: 学习到最后
 activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频)
-activity.video_manage.length_required_error_hint: 请输入时长
-activity.video_manage.length_unsigned_integer_error_hint: 请输入时长
-activity.video_manage.second_range_error_hint: 秒数只能在0-59之间
+activity.video_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
 
 activity.manage.choose_teacher_hint: 请选择老师
+activity.manage.finished_tips: >
+  <span class="color-primary">恭喜！你已完成该任务</span>
 
+announcement.create_datetime.error.hint: 公告发布时间不能晚于结束时间
 announcement.delete_hint: 真的要删除该公告吗?
 
 auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
@@ -466,10 +464,6 @@ course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
 course.manage.deadline_end_date_error_hint: 请输入截至日期
 course.manage.max_student_num_error_hint: 请输入课程人数
-course.manage.deadline_end_date_error_hint: 请输入学习有效期
-course.manage.expiry_days_error_hint: 开始日期应早于结束日期
-course.manage.expiry_start_date_error_hint: 结束日期应晚于开始日期
-course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
 course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
@@ -483,7 +477,9 @@ course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
+course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任务将一并被删除。未发布状态下的课时将会被删除，已发布状态下的课时需取消发布后再删除。此次删除%length%课时，是否继续？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
+course.manage.chapter_batch_delete_hint: 已选中%length%个章节，是否确定删除？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
@@ -658,6 +654,7 @@ order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵�
 order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
 order.refund.reason_required_hint: 请输入退学原因。
 order.refund.reason_choose_hint: 请选择退学原因
+order.information_collect_error_hint: 请先提交信息后再提交订单
 
 settings.setup.set_success.hint: 设置帐号成功，正在跳转
 settings.setup.set_failed.hint: 设置帐号失败，请重试
@@ -720,8 +717,8 @@ validate.trim.message: 请输入%display%
 validate.idcard_number_input.message: 请正确输入您的身份证号码
 validate.visible_character_input.message: 请输入可见性字符
 validate.positive_integer.message: 请输入正整数
-validate.unsigned_integer.message: 请输入非负整数
-validate.second_range.message: 秒只能填写0-59之间的数字
+validate.unsigned_integer.message: 请输入非负整数，其中秒数只能在0-59之间
+validate.second_range.message: 请输入非负整数，其中秒数只能在0-59之间
 validate.course_title.message: 不支持输入<、>字符
 validate.float_input.message: 请输入正确的小数,只保留到两位小数
 validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
@@ -754,13 +751,13 @@ validate.password_check.message: 密码错误
 validate.sms_code_input.message: 请输入短信验证码
 validate.sms_code.message: 验证码错误
 validate.es_remote.message: 验证错误
-validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 validate.character_maxlength: 字数不能超过%max%字！
 validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
-validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【课程】-【标签管理】进行设置。
+validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【教学】-【分类标签】-【标签管理】进行设置。
+validate.tag_number_exceeds_limit: 你只能添加%limit%个项目
 validate.title_required_hint: 请输入标题，不能为空。
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -780,6 +777,10 @@ validate.have_spaces: 密码不能有空格哦
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
 validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+validate.custom_integer.message: 请输入正确的整数
+validate.int.message: 最多9位整数
+validate.float.message: 最多两位小数，整数位不超过8位！
+
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -864,11 +865,10 @@ validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
 validate_old.right_time_tip: 请输入正确的时间格式
 validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
-validate_old.visible_character.message: %display%请输入可见性字符
+validate_old.visible_character.message: 请输入%display%
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
 validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
-validate_old.mobile.message: 请输入有效的%display%（仅支持中国大陆手机号）。
 validate_old.chinese_alphanumeric.message: %display%支持中文字、英文字母、数字及_ . ·
 validate_old.reg_invite_code.message: %display%必须是5位数字、英文字母组成
 validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
@@ -931,8 +931,8 @@ oauth.register.error_message: 注册出现异常，请联系管理员
 
 
 ## 用户数据统计
-admin.user.statistics.data.learn_total_time: 学习总时长
-admin.user.statistics.data.learn_time: 学习时长/分钟
+admin.user.statistics.data.learn_total_time: 累加学习时长（分）
+admin.user.statistics.data.learn_time: 累加学习时长/分钟
 admin.user.statistics.data.time: 时长
 
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
@@ -966,7 +966,7 @@ admin.index.order_count: 订单量
 admin.index.finished_task_count: 学习任务数
 admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
 admin.index.upgrade_acceptance_hint: 升级受理中
-admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~
+admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信设置】中开启云短信哦~
 
 admin.account_center.cash_income: 现金收入
 admin.account_center.coin_income: 虚拟币收入
@@ -1027,7 +1027,6 @@ admin.block.edit_success_hint: 更新编辑区模板成功!
 admin.block.upload_failed_hint: 上传图片失败，请重试！
 admin.block.upload_success_hint: 上传图片成功！
 admin.block.delete_picture_success_hint: 删除图片成功！
-admin.block.edit_success_hint: 更新成功！
 admin.block.submit_success_hint: 提交成功!
 admin.block.select_picture_hint: 请先选择要上传的图片
 admin.block.upload_picture_success_hint: 插入图片成功！
@@ -1036,8 +1035,6 @@ admin.block.add_max_num_hint: 最多只能添加%panelGroup%个!
 admin.block.delete_tip: 你确定要删除吗?
 admin.block.delete_min_num_hint: 必须要有一个!
 admin.block.uploading_hint: 正在上传，请稍等！
-admin.block.upload_success_hint: 上传成功！
-admin.block.upload_failed_hint: 上传失败，请重试！
 admin.block.poster: 海报(%index%)
 admin.category.icon_delete_hint: 确认要删除图标吗？
 admin.category.icon_delete_success_hint: 删除分类图标成功！
@@ -1260,6 +1257,9 @@ admin.site.upload_favicon_success_hint: 上传网站浏览器图标成功！
 admin.site.delete_favicon_success_hint: 删除网站浏览器图标成功！
 admin.site.delete_favicon_fail_hint: 删除网站浏览器图标失败！
 admin.site.delete_hint: 确认要删除吗？
+admin.site.upload_record_picture_success_hint: 上传公安备案图标成功！
+admin.site.delete_record_picture_success_hint: 删除公安备案图标成功！
+admin.site.delete_record_picture_fail_hint: 删除公安备案图标失败！
 admin.setting.upload_license_picture_success_hint: 上传电子营业执照图片成功！
 admin.setting.delete_license_picture_success_hint: 删除电子营业执照图片成功！
 admin.setting.delete_license_picture_fail_hint: 删除电子营业执照图片失败！
@@ -1374,10 +1374,14 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 
 admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
+admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
+
+exercise.manage.student_delete_hint: 是否确定移除该学员
 
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
@@ -1404,10 +1408,17 @@ wechat.notification.wechat_bind_hover: >
       <div>为享受更好的服务，建议您开启微信课程通知。</div>
       <div>点这里绑定微信，并关注服务号即可开启课程通知。</div>
     </div>
+wechat.notification.wechat_subscribe_bind_hover: >
+  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+    <div class="wechat-intro-content">
+      <div>为享受更好的服务，建议您关注服务号。</div>
+      <div>点这里绑定微信。</div>
+    </div>
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
 admin.wechat_notification.send_days: 发送日
+admin.wechat_notification.message_subscribe.disable_setting_tip: 请授权网站生成微信通知模板
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1531,6 +1542,61 @@ course_manage.positive_currency.message: 请输入大于0的有效价格，最�
 merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
+validate.length_max.message: 最多只能输入 %length% 个字符
+validate.length_min.message: 至少输入 %length% 个字符
+course.manage.expiry_date.error_hint: 请输入时间范围
+
+classroom.title_label: 班级标题
+classroom.subtitle_label: 班级副标题
+classroom.basic_info: 基础信息
+classroom.tag_label: 标签
+classroom.category_label: 分类
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+category: 分类
+site.org: 组织机构
+classroom.about: 简介
+classroom.cover_image: 封面图片
+classroom.cover_image.upload_tips: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.upload_picture_btn: 修改封面图片
+
+classroom.marketing_setting: 营销设置
+classroom.price_label: 价格
+classroom.show_label: %name%展示
+classroom.buy_label: %name%购买
+classroom.expiry_mode_label: 班级有效期
+classroom.watch_expiry_mode_rule: 查看有效期规则
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
+classroom.expiry_mode_end_date_tips: 设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+classroom.expiry_mode_days_tips: 设置该值后，学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.expiry_mode_end_date: 截止日期
+classroom.expiry_mode_days: 有效期天数
+classroom.expiry_mode_forever: 长期有效
+
+classroom.price_tips: 当前共有 %courseNum% 个课程，原价共计 %price% 元。
+classroom.amount: 相当于
+
+
+site.open: 开启
+site.date.day: 天
+course.marketing_setup.services.provide_services: 承诺提供服务
+vip.level.free_learning: 会员免费学
+vip.level.free_learning_new: 会员免费兑换
+site.default.none: 无
+form.btn.save: 保存
+
+
+site.twig.extension.smarttime.future: 未来
+site.twig.extension.smarttime.hardly: 刚刚
+site.twig.extension.smarttime.previous_second: %diff%秒前
+site.twig.extension.smarttime.previous_minute: %diff%分钟前
+site.twig.extension.smarttime.previous_hour: %diff%小时前
+site.twig.extension.smarttime.previous_day: %diff%天前
+
+reviews.review_again: 重新评价
+classroom.courses.lesson_num: 共%num%课时
+classroom.courses.plan: 教学计划
+site.local_more: 加载更多
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 
 admin_v2.certificate.template.delete_hint: 模板被删除后，使用该模板的证书将不会受到影响。是否删除模板?
@@ -1559,3 +1625,167 @@ admin_v2.certificate.validate.description: 长度必须小于等于1000，一个
 admin_v2.certificate.record.audit.success_hint: 审核成功
 admin_v2.certificate.record.audit.failure_hint: 审核失败
 admin_v2.certificate.record.grant.issue_time_required: 请输入发证日期
+
+admin_v2.information_collect.close.hint: 确定关闭采集？关闭后，将停止采集用户信息。
+admin_v2.information_collect.open.hint: 确定开启采集？开启后，将开始采集用户信息。
+admin_v2.information_collect.close.success_hint: 采集关闭成功
+admin_v2.information_collect.close.failure_hint: 采集关闭失败
+admin_v2.information_collect.open.success_hint: 采集开启成功
+admin_v2.information_collect.open.failure_hint: 采集开启失败
+
+admin_v2.information_collect.chooser.tips: 已存在冲突的关联
+admin_v2.information_collect.chooser.success_hint: 选择成功
+admin_v2.information_collect.chooser.limit: 选择数不能超过200
+admin_v2.information_collect.chooser.target_hint:  请选择课程/班级
+admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
+admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
+admin_v2.information_collect.chooser.items.hint: 请选择采集表单
+user.fields.gender_label: 性别
+information_collect.form.check_age_invalid: 年龄不在正常范围内
+information_collect.form.check_format_invalid: %display%格式错误
+
+admin_v2.video_effective_time_setting.cancel.hint: 统计维度变更后，将按新的维度生成数据。可能导致数据有较大幅度变动，属正常现象。如无必要，不建议您频繁更改配置。如若需要，建议您晚上更改，更改后预计3小时完成更新。<br/>是否确认更改学习时长统计维度？
+admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
+admin_v2.video_effective_time_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
+admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: 以实际播放时长作为学习时长统计
+admin_v2.video_effective_time_setting.statistical_dimension.page.help_block: 以页面停留时长作为学习时长统计
+admin_v2.video_effective_time_setting.refreshing_hint: 数据更新中，请勿频繁更改配置
+
+course.marketing_setup: 营销设置
+site.currency.CNY: 元
+s2b2c.product.cooperation_price: 合作面额
+s2b2c.product.suggestion_price: 建议售价
+s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+site.price: 价格
+course.marketing_setup.setup.can_join: 可加入
+course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
+course.marketing_setup.expiry_date: 加入截止日期
+course.marketing_setup.rule.expiry_date: 学习有效期
+course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
+course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
+course.plan_task.start_time: 开始日期
+course.plan_task.end_time: 结束日期
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
+course.marketing_setup.approval: 实名认证
+course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
+course.marketing_setup.expiry_date.anytime: 不限时间
+course.marketing_setup.expiry_date.custom: 自定义
+site.datagrid.radios.yes: 是
+site.datagrid.radios.no: 否
+course.teaching_plan.expiry_date.end_date_mode: 按截止日期
+course.teaching_plan.expiry_date.days_mode: 按有效天数
+
+course.teaching_plan.expiry_date.anywhere_mode: 随到随学
+course.teaching_plan.expiry_date.date_mode: 固定周期
+course.teaching_plan.expiry_date.forever_mode: 长期有效
+course.teaching_plan.expiry_date.anytime: >
+  <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
+course.teaching_plan.expiry_date.real_time: >
+  <b>固定周期：</b>有固定的学习开始日期和结束日期
+course.teaching_plan.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学员。
+course.base_info: 基础信息
+course.plan_setup.name: 计划名称
+course.plan_setup.placeholder: 请输入计划名称
+course.plan_setup.subtitle: 计划副标题
+course.base.title: 课程标题
+course.base.sub_title: 课程副标题
+course.base.tag: 标签
+course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+course.base.category: 分类
+course.base.serialize_mode: 连载状态
+course.base.serialize_mode.none: 非连载课程
+course.base.serialize_mode.serialized: 更新中
+course.base.serialize_mode.finished: 已完结
+course.cover_image.content_title: 封面图片
+course.cover.change: 修改封面图片
+course.cover_image.upload_tips: >
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。
+course.detail.summary: 课程简介
+course.base_setup.rules: 基础规则
+course.plan_setup.mode: 学习模式
+course.plan_setup.mode.free: 自由式
+course.plan_setup.mode.locked: 解锁式
+course.plan_setup.mode.tips: <b>自由式：</b>学习过程自由安排<br><b>解锁式</b>：根据既定顺序逐个解锁学习
+course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
+course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
+course.plan_setup.finish_rule: %taskName%完成规则
+course.plan_setup.finish_rule.nothing: 无限制
+course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
+course.plan_setup.member_numbers: 课程人数
+site.data.people: 人
+course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
+course.marketing_setup.preview.set_task: 设置免费学习%taskName%
+course.marketing_setup.preview.set_task.task_name: %name%%taskName%
+course.marketing_setup.preview.set_task.free: 免费
+course.marketing_setup.preview.set_task.free_tips: 免费%taskName%仅支持
+course.marketing_setup.preview.try_watch: 视频试看
+course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.marketing_setup.preview.minutes.try_watch: 分钟试看
+course.marketing_setup.preview.not.support.try_watch: 不支持试看
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
+course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
+  例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
+  对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
+goods.show_page.tab.intro: 简介
+goods.show_page.tab.catalogue: 学习目录
+goods.show_page.tab.reviews: 学员评价
+goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
+goods.show_page.tab.summary_empty_tips: 暂无简介哦～
+goods.show_page.authentication_certificate: 认证证书
+site.favorited: 已收藏
+site.favorite: 收藏
+goods.show_page.components.recommends: 猜你想学
+goods.show_page.load_more: 查看更多
+goods.show_page.more: 更多
+goods.show_page.goto_school: 前往网校
+goods.show_page.components.teachers: 授课老师
+goods.show_page.components.expiry_mode: 学习有效期
+goods.show_page.components.expiry_mode.forever: 长期有效
+goods.show_page.components.expiry_mode.forever_tips: 随到随学
+goods.show_page.components.expiry_mode.date_start: 开始
+goods.show_page.components.expiry_mode.date_end: 截止
+goods.show_page.components.expiry_mode.date_end_label: 截止日期
+site.course_plan: 教学计划
+goods.show_page.components.services: 承诺服务
+site.share: 分享
+site.manage: 管理
+goods.show_page.goto_learn: 去学习
+goods.show_page.vip_free_learn: 会员免费学
+goods.show_page.vip_free_learn_new: 会员免费兑换
+goods.show_page.vip_buy: %vipName%免费
+goods.show_page.vip_upgrade: 升级为%vipName%免费
+goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
+goods.show_page.course_not_buyable_tips: 抱歉，该课程无法学习，请联系学校老师
+goods.show_page.classroom_not_buyable_tips: 抱歉，该班级无法学习，请联系学校老师
+goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服
+goods.show_page.usage_expiry_tips: 超过学习截止日期，不允许加入和购买
+goods.show_page.free_join_btn: 免费加入
+goods.show_page.buy_btn: 立即购买
+classroom.go_inside: 进去逛逛
+course.base.title.placeholder: 请输入课程标题
+course.unname_title: 未命名计划
+
+course.task.out_focus_mask.continue_studying: 继续学习
+course.task.out_focus_mask.stop.tips: >
+  <p class="ineffective-learning">学累了可以休息一会 :D</p>
+course.task.out_focus_mask.anti_brush.tips: >
+  <p class="kick-each-other">请勿同时多开任务学习</p>
+  <p class="kick-each-other">不要一心多用哦！</p>
+
+classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
+classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
+
+course.intro.wechat_subscribe: 请点此订阅课程相关通知
+admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
+admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: 不允许后，审核状态为系统已审-待人工审核
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
+admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
+admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功

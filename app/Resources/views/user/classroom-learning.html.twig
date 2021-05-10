@@ -13,10 +13,10 @@
             {% endif %}
             <div class="class-img-wrap">
               <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title|raw }}">
               </a>
             </div>
-            <h3 class="cd-mb8"><a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+            <h3 class="cd-mb8"><a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title|raw }}</a></h3>
             <div class="class-item-metas text-center cd-pb8">{{'classroom.courses_count'|trans({'%courseNum%':classroom.courseNum})}}</div>
           </div>
         </div>

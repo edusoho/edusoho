@@ -121,8 +121,6 @@ export default class UserInfoFieldsItemValidate {
   smsCodeValidate() {
     if ($('.js-captch-num').length > 0) {
       
-      //$('.js-captch-num').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
-
       $('input[name="captcha_num"]').rules('add', {
         required: true,
         alphanumeric: true,
@@ -172,16 +170,29 @@ export default class UserInfoFieldsItemValidate {
       }
     });
   }
-
+  
   getCustomFields() {
     for (var i = 1; i <= 5; i++) {
       $(`[name="intField${i}"]`).rules('add', {
         required: true,
-        positive_integer: true,
+        trim: true,
+        custom_integer: true,
+        min: -999999999,
+        max: 999999999,
+        messages: {
+          min: Translator.trans('validate.int.message'),
+          max: Translator.trans('validate.int.message'),
+        }
       });
       $(`[name="floatField${i}"]`).rules('add', {
         required: true,
         float: true,
+        min: -99999999.99,
+        max: 99999999.99,
+        messages: {
+          min: Translator.trans('validate.float.message'),
+          max: Translator.trans('validate.float.message'),
+        }
       });
       $(`[name="dateField${i}"]`).rules('add', {
         required: true,
@@ -191,9 +202,13 @@ export default class UserInfoFieldsItemValidate {
     for (i = 1; i <= 10; i++) {
       $(`[name="varcharField${i}"]`).rules('add', {
         required: true,
+        trim: true,
+        maxlength: 1024
       });
       $(`[name="textField${i}"]`).rules('add', {
         required: true,
+        trim: true,
+        maxlength: 1024
       });
     }
   }

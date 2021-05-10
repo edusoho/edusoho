@@ -124,7 +124,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
         $payAmount = $this->findUserPaidAmount($conditions);
         $refundAmount = $this->findUserRefundAmount($conditions);
 
@@ -133,8 +132,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $userIds = array_unique($conditions['userIds']);
         }
 
+        $electiveTasks = $this->getTaskService()->searchTasks(['isOptional' => 1], [], 0, PHP_INT_MAX, ['id']);
         $statisticMap = [
             'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId([
+                'notCourseTaskIds' => ArrayToolkit::column($electiveTasks, 'id'),
                 'status' => 'finish',
                 'finishedTime_GE' => $conditions['createdTime_GE'],
                 'finishedTime_LT' => $conditions['createdTime_LT'],
@@ -152,7 +153,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             foreach ($statisticMap as $key => $data) {
                 $userIds = array_merge($userIds, array_keys($data));
             }
-            $userIds = array_merge($userIds, array_keys($learnedSeconds));
+
             $userIds = array_merge($userIds, array_keys($payAmount));
             $userIds = array_merge($userIds, array_keys($refundAmount));
 
@@ -164,7 +165,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 continue;
             }
             $statistic = [];
-            $statistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
             $statistic['paidAmount'] = empty($payAmount[$userId]) ? 0 : $payAmount[$userId]['amount'];
             $statistic['refundAmount'] = empty($refundAmount[$userId]) ? 0 : $refundAmount[$userId]['amount'];
             $statistic['actualAmount'] = $statistic['paidAmount'] - $statistic['refundAmount'];

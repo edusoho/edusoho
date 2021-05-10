@@ -19,7 +19,7 @@ class CertificateRecord extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $record = $this->getCertificateRecordService()->get($id);
-        if (empty($record)) {
+        if (empty($record) || in_array($record['status'], ['reject', 'none', 'cancelled'])) {
             throw CertificateException::NOTFOUND_RECORD();
         }
         $record['certificate'] = $this->getCertificateService()->get($record['certificateId']);

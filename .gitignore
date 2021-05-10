@@ -47,6 +47,7 @@ web/php-performance.php
 chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
+!/web/static-dist/*.js
 !/web/static-dist/libs
 !/web/static-dist/app
 !/web/static-dist/jianmotheme
@@ -67,3 +68,5 @@ yarn-error.log
 /reports_tmp
 /edusoho-h5
 /app/config/plumber.php
+.package-lock.json
+/js-sdk

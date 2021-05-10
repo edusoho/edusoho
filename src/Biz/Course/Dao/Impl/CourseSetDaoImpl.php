@@ -14,6 +14,20 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $this->findByFields(['parentId' => $parentId, 'locked' => $locked]);
     }
 
+    public function findProductIdAndGoodsIdsByIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT csv8.id AS courseSetId, p.id AS productId, g.id AS goodsId  FROM {$this->table} csv8 
+                LEFT JOIN `product` p ON csv8.id=p.targetId AND p.targetType='course'
+                LEFT JOIN `goods` g ON g.productId=p.id
+                WHERE csv8.id in ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
+    }
+
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
@@ -109,6 +123,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'type IN (:types)',
                 'locked = :locked',
                 'platform = :platform',
+                'isClassroomRef = :isClassroomRef',
             ],
             'serializes' => [
                 'goals' => 'delimiter',

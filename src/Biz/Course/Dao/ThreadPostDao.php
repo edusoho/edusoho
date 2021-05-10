@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Dao;
 
-interface ThreadPostDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface ThreadPostDao extends GeneralDaoInterface
 {
     public function searchByUserIdGroupByThreadId($userId, $start, $limit);
 

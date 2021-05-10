@@ -2,8 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
-use Silex\Application;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Course\Service\MemberService;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonLiveTickets extends BaseResource
@@ -12,7 +13,7 @@ class LessonLiveTickets extends BaseResource
     {
         $task = $this->getTaskService()->getTask($id);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ($task['type'] != 'live') {
+        if ('live' != $task['type']) {
             return $this->error('5001', '非直播课程');
         }
 
@@ -24,10 +25,11 @@ class LessonLiveTickets extends BaseResource
 
         $user = $this->getCurrentUser();
 
-        $params = array();
+        $params = [];
         $params['id'] = $user['id'];
+        $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = 'student';
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
 
         // android, iphone
         if ($request->request->get('device')) {
@@ -73,6 +75,14 @@ class LessonLiveTickets extends BaseResource
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     public function filter($res)

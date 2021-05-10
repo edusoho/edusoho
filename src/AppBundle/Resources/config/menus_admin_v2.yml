@@ -212,6 +212,8 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                                admin_v2_classroom_statistics:
+                                    name: admin_v2.teach.classroom.statistics_tab
                         # 直播管理
                         admin_v2_live_course:
                             quick_entrance_icon: 'live'
@@ -317,31 +319,6 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
-                        # 公开课管理模块
-                        admin_v2_open_course_manage:
-                            name: admin_v2.course.open_course_menu
-                            quick_entrance_icon: 'open'
-                            router_name: admin_v2_open_course
-                            children:
-                                admin_v2_open_course:
-                                    name: admin_v2.course.open_course.basic_tab
-                                    disable: true
-                                    router_name: admin_v2_open_course
-                                    children:
-                                        admin_v2_open_course_add:
-                                            name: admin_v2.course.open_course.basic_tab.create_btn
-                                            router_name: course_set_manage_create
-                                            visible: (s2b2c_has_behaviour_permission('canAddOpenCourse'))
-                                            router_params:
-                                                default: 'open'
-                                            group: topBtn
-                                            blank: 1
-                                admin_v2_open_course_recommend_list:
-                                    name: admin_v2.course.open_course.recommend_list_tab
-                                    disable: true
-                                admin_v2_open_course_analysis:
-                                    name: admin_v2.course.open_course.analysis_tab
-                                    disable: true
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
@@ -443,7 +420,7 @@ admin_v2:
                                     name: admin_v2.course.thread.classroom_thread_tab
                                     router_name: admin_v2_classroom_thread
                                     disable: true
-                        # 反馈管理模块
+                        # 评价管理模块
                         admin_v2_review:
                             name: admin_v2.course.review_menu
                             quick_entrance_icon: 'feedback'
@@ -510,6 +487,36 @@ admin_v2:
             quick_entrance_icon_class: 'icon-color-yellow'
             name: admin_v2.nav.marketing
             children:
+                # 公开课管理
+                admin_v2_open_course_group:
+                    name: admin_v2.open_course.basic_group
+                    is_group: true
+                    children:
+                        # 公开课管理模块
+                        admin_v2_open_course_manage:
+                            name: admin_v2.course.open_course_menu
+                            quick_entrance_icon: 'open'
+                            router_name: admin_v2_open_course
+                            children:
+                                admin_v2_open_course:
+                                    name: admin_v2.course.open_course.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_open_course
+                                    children:
+                                        admin_v2_open_course_add:
+                                            name: admin_v2.course.open_course.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            visible: (s2b2c_has_behaviour_permission('canAddOpenCourse'))
+                                            router_params:
+                                              default: 'open'
+                                            group: topBtn
+                                            blank: 1
+                                admin_v2_open_course_recommend_list:
+                                    name: admin_v2.course.open_course.recommend_list_tab
+                                    disable: true
+                                admin_v2_open_course_analysis:
+                                    name: admin_v2.course.open_course.analysis_tab
+                                    disable: true
                 # 营销管理
                 admin_v2_marketing_group:
                     name: admin_v2.marketing.basic_group
@@ -570,6 +577,47 @@ admin_v2:
                                     name: admin_v2.micromarketing.menu
                                     router_name: admin_v2_login_micromarketing_boot
                                     disable: true
+                        # 用户信息采集
+                        admin_v2_information_collect_manage:
+                            name: admin_v2.information_collect.menu
+                            children:
+                                admin_v2_information_collect:
+                                    router_name: admin_v2_information_collect
+                                    name: admin_v2.information_collect.tab
+                                    children:
+                                        admin_v2_information_collect_create:
+                                            name: admin_v2.information_collect.create
+                                            disable: true
+                                            group: topBtn
+                                            target: '_blank'
+                                        admin_v2_information_collect_close:
+                                            name: admin_v2.information_collect.operate.close_tab
+                                            class: close-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status=='open' )
+                                        admin_v2_information_collect_open:
+                                            name: admin_v2.information_collect.operate.open_tab
+                                            class: open-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status!='open' )
+                                        admin_v2_information_collect_update:
+                                            name: admin_v2.information_collect.operate.update_tab
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                        admin_v2_information_collect_detail:
+                                            name: admin_v2.information_collect.detail
+                                            router_name: admin_v2_information_collect_detail
+                                            router_params:
+                                            id: id
+                                            disable: true
+                                            target: '_blank'
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -697,6 +745,13 @@ admin_v2:
                                     router_name: admin_v2_navigation
                                     router_params:
                                         type: friendlyLink
+                        admin_v2_goods_manage:
+                            name: admin_v2.operating.goods_setting
+                            router_name: admin_v2_goods_setting
+                            children:
+                                admin_v2_goods_setting:
+                                    name: admin_v2.operating.goods_setting
+                                    router_name: admin_v2_goods_setting
                 #内容运营(group)
                 admin_v2_content_operation_group:
                     name: admin_v2.operation.content_operation.basic_group
@@ -761,6 +816,20 @@ admin_v2:
                                       admin_v2_certificate_template_create:
                                             name: admin_v2.operation.certificate.template.create_tab
                                             group: topBtn
+                        admin_v2_operation_user_content_audit:
+                            name: admin_v2.operation.user_content_audit_menu
+                            group: 2
+                            children:
+                                admin_v2_user_content_audit:
+                                    name: admin_v2.operation.user_content_audit_tab
+                                    disable: true
+                        admin_v2_operation_report_content_audit:
+                            name: admin_v2.operation.report_content_audit_menu
+                            group: 2
+                            children:
+                                admin_v2_report_content_audit:
+                                    name: admin_v2.operation.report_content_audit_tab
+                                    disable: true
                         admin_v2_operation_notification:
                             name: admin_v2.operation.notification_menu
                             group: 2
@@ -772,7 +841,7 @@ admin_v2:
                                         admin_v2_batch_notification_create:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
-                        # 网站公告管理
+#                        # 网站公告管理
                         admin_v2_operation_announcement:
                             name: admin_v2.operation.announcement_menu
                             group: 2
@@ -810,6 +879,10 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                                admin_v2_operation_article_review:
+                                  name: admin_v2.operation.article.review_tab
+                                  disable: true
+                                  router_name: admin_v2_article_review
                         admin_v2_operation_group_manage:
                             name: admin_v2.operation.group_menu
                             quick_entrance_icon: 'group'
@@ -845,20 +918,6 @@ admin_v2:
                             children:
                                 admin_v2_message:
                                     name: admin_v2.operation.message.basic_tab
-                                    disable: true
-                        admin_v2_operation_sensitive_words:
-                            name: admin_v2.operation.sensitive_words_menu
-                            children:
-                                admin_v2_keyword:
-                                    name: admin_v2.operation.sensitive_words.sensitive_words_list_tab
-                                    disable: true
-                                    children:
-                                        admin_v2_keyword_create:
-                                            name: admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn
-                                            mode: modal
-                                            group: topBtn
-                                admin_v2_keyword_banlogs:
-                                    name: admin_v2.operation.sensitive_words.banlogs_tab
                                     disable: true
         # 用户管理模块
         admin_v2_user:
@@ -1154,9 +1213,6 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
-                                admin_v2_certificate_setting:
-                                    name: admin_v2.system.site.license_tab
-                                    disable: true
                         # 用户设置
                         admin_v2_setting_user:
                             name: admin_v2.system.user_menu
@@ -1206,8 +1262,12 @@ admin_v2:
                                     disable: true
                                     parent: admin_v2_setting_course_setting
                                     after: admin_v2_setting_live_course
-                                admin_v2_open_course_setting:
-                                    name: admin_v2.system.course.open_course_tab
+                                admin_v2_task_multiple_open_setting:
+                                    name: admin_v2.system.course.task_multiple_open_tab
+                                    disable: true
+                                    parent: admin_v2_setting_course_setting
+                                admin_v2_video_task_setting:
+                                    name: admin_v2.system.course.video_task_tab
                                     disable: true
                                     parent: admin_v2_setting_course_setting
                         # 运营设置
@@ -1224,10 +1284,76 @@ admin_v2:
                                     name: admin_v2.system.operation.group_tab
                                 admin_v2_invite_set:
                                     name: admin_v2.system.operation.invite_tab
-                                admin_v2_message_send_set:
-                                    name: admin_v2.system.operation.message_send_tab
-                                admin_v2_message_open_set:
-                                    name: admin_v2.system.operation.message_open_tab
+#                                admin_v2_message_send_set:
+#                                    name: admin_v2.system.operation.message_send_tab
+#                                admin_v2_message_open_set:
+#                                    name: admin_v2.system.operation.message_open_tab
+                # 合规经营与信息安全设置
+                admin_v2_operation_safety_group:
+                    name: admin_v2.operation.basic_group
+                    is_group: true
+                    children:
+                        # 经营资质
+                        admin_v2_management_setting:
+                            router_name: admin_v2_setting_management
+                            name: admin_v2.system.business_management_menu
+                            children:
+                                admin_v2_business_qualification:
+                                    name: admin_v2.system.business_qualification_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_management
+                                admin_v2_setting_business_license:
+                                    name: admin_v2.system.management_qualifications.business_license_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_business_license
+                        admin_v2_user_content_control:
+                            router_name: admin_v2_user_content_control
+                            name: admin_v2.system.user_content_ctrl_tab
+                            disable: true
+                            children:
+                                admin_v2_user_content_control_review:
+                                    name: admin_v2.system.user_content_ctrl.review
+                                    router_name: admin_v2_user_content_control_review
+                                    disable: true
+                                admin_v2_user_content_control_note:
+                                    name: admin_v2.system.user_content_ctrl.note
+                                    router_name: admin_v2_user_content_control_note
+                                    disable: true
+                                admin_v2_user_content_control_thread:
+                                    name: admin_v2.system.user_content_ctrl.thread
+                                    router_name: admin_v2_user_content_control_thread
+                                    disable: true
+                                admin_v2_user_content_control_private_message:
+                                    name: admin_v2.system.user_content_ctrl.private_message
+                                    router_name: admin_v2_user_content_control_private_message
+                                    disable: true
+                        # 用户内容审核设置
+                        admin_v2_user_content_audit_control:
+                            name: admin_v2.system.user_content_audit_menu
+                            children:
+                                admin_v2_user_content_audit_setting:
+                                    name: admin_v2.system.user_content_audit_tab
+                                    disable: true
+                        admin_v2_system_sensitive_words:
+                            name: admin_v2.system.sensitive_words_menu
+                            children:
+                                admin_v2_keyword:
+                                    name: admin_v2.system.sensitive_words.sensitive_words_list_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_keyword_create:
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                        admin_v2_keyword_import:
+                                            name: admin_v2.system.sensitive_words.sensitive_words_list_tab.import_btn
+                                            router_name: importer_index
+                                            router_params: { 'type': 'sensitive' }
+                                            mode: modal
+                                            group: topBtn
+                                admin_v2_keyword_banlogs:
+                                    name: admin_v2.system.sensitive_words.banlogs_tab
+                                    disable: true
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
@@ -1317,6 +1443,7 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
+
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
@@ -1638,3 +1765,21 @@ admin_v2:
                             children:
                                 admin_v2_queue_failed_logs:
                                     name: admin_v2.system.queue_failed_tab
+                        admin_v2_data_visualization:
+                            name: 数据可视化
+                            disable: true
+                            children:
+                                admin_v2_data_visualization_activity_learn_flow:
+                                    name: 教学活动流水数据
+                                admin_v2_data_visualization_activity_learn_record:
+                                    name: 教学活动原始停留数据上报
+                                admin_v2_data_visualization_activity_video_watch_record:
+                                    name: 教学活动原始观看数据上报
+                                admin_v2_data_visualization_activity_stay_daily:
+                                    name: 教学活动日统计记录
+                        admin_v2_api_security:
+                            name: API接口加固
+                            disable: true
+                            children:
+                                admin_v2_api_security_setting:
+                                    name: 接口安全配置项

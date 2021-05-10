@@ -187,7 +187,8 @@ class CourseController extends CourseBaseController
             $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
         }
 
-        if (empty($member)) {
+        // 非班级课程，点击介绍跳转到概览商品页
+        if (empty($member) || (0 == $course['parentId'] && 'summary' === $tab)) {
             return $this->redirect(
                 $this->generateUrl(
                     'course_show',
@@ -197,10 +198,6 @@ class CourseController extends CourseBaseController
                     ]
                 )
             );
-        }
-
-        if ('date' == $course['expiryMode'] && $course['expiryStartDate'] >= time()) {
-            return $this->redirectToRoute('course_show', ['id' => $course['id']]);
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
@@ -278,7 +275,7 @@ class CourseController extends CourseBaseController
         }
 
         $info = [
-            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'joinedChannel' => $classroomMember['joinedChannel'],
             'deadline' => $classroomMember['deadline'],
         ];
 
@@ -315,7 +312,7 @@ class CourseController extends CourseBaseController
             $currentCourses = $courses[$courseSet['id']];
             $courseIds = ArrayToolkit::column($currentCourses, 'id');
 
-            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($courseIds, $user['id']);
+            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningCompulsoryProgressByCourseIds($courseIds, $user['id']);
 
             $courseSets[$courseSetId]['percent'] = $learnProgress['percent'];
         }

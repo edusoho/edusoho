@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 
 class OpenCourses extends BaseProvider
 {
@@ -18,7 +18,7 @@ class OpenCourses extends BaseProvider
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $conditions['cursor'];
-        $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime' => 'ASC'), $start, $limit);
+        $openCourses = $this->getOpenCourseService()->searchCourses($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $openCourses = $this->build($openCourses);
         $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $openCourses);
 
@@ -40,12 +40,12 @@ class OpenCourses extends BaseProvider
 
         foreach ($openCourses as &$course) {
             if (isset($categories[$course['categoryId']])) {
-                $course['category'] = array(
+                $course['category'] = [
                     'id' => $categories[$course['categoryId']]['id'],
                     'name' => $categories[$course['categoryId']]['name'],
-                );
+                ];
             } else {
-                $course['category'] = array();
+                $course['category'] = [];
             }
         }
 
@@ -61,14 +61,14 @@ class OpenCourses extends BaseProvider
 
         foreach ($openCourses as &$openCourse) {
             $openCourseTagIds = $openCourse['tags'];
-            $openCourse['tags'] = array();
+            $openCourse['tags'] = [];
             if (!empty($openCourseTagIds)) {
                 foreach ($openCourseTagIds as $index => $openCourseTagId) {
                     if (isset($tags[$openCourseTagId])) {
-                        $openCourse['tags'][$index] = array(
+                        $openCourse['tags'][$index] = [
                             'id' => $tags[$openCourseTagId]['id'],
                             'name' => $tags[$openCourseTagId]['name'],
-                        );
+                        ];
                     }
                 }
             }

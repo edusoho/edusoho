@@ -15,6 +15,28 @@
           vertical-align: middle;
         }
       }
+      .user-avatar-tip {
+        position: absolute;
+        right: -20px;
+        display: inline-block;
+        width: 288px;
+        height: 42px;
+        line-height: 42px;
+        color: #fff;
+        background: #FE4040;
+        box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 3px 6px -4px rgba(0, 0, 0, 0.12);
+        text-align: center;
+
+        &:after {
+          position: absolute;
+          top: -20px;
+          right: 25px;
+          content: "";
+          border-style: solid;
+          border-width: 10px;
+          border-color: transparent transparent #FE4040 transparent;
+        }
+      }
     }
   }
 }
@@ -61,7 +83,7 @@
 }
 
 .user-dropdown-profile__rank {
-  width: 108px;
+  width: 110px;
   font-size: 12px;
   line-height: 1;
   color: @cd-dark-minor;

@@ -1,0 +1,25 @@
+<div class="table-responsive" id = "table-responsive">
+  <table class="table" style="table-layout:fixed;word-break:break-all">
+    <tr>
+      <th width="80%">{{'vip'|trans}}</th>
+      <th>{{'finance.max_deduction_rate'|trans}}</th>
+    </tr>
+    </tr>
+    {% if items %}
+      {% for item in items %}
+        <tr>
+          <td>
+            <div class="chearfix">
+              <img class="pull-left mrl" src="{{ item.picture|default(asset('assets/img/default/vip.png')) }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('vip') }}" target="_blank" >{{ item.name }}
+              </a>
+            </div>
+          </td>
+          <td>
+            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{ item.id }}]" data-id="{{ item.id }}"/> <label>%</label>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+</div>

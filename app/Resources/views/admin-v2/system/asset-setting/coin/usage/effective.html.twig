@@ -1,0 +1,24 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_coin_settings' %}
+
+{% set script_controller = "coin/save" %}
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  {% include 'admin-v2/system/asset-setting/coin/usage/effective-header.html.twig' %}
+  <div id="typelist">
+    {% include 'admin-v2/system/asset-setting/coin/usage/effective-nav.html.twig' %}
+    <div id="help-message" class="alert alert-danger mtl hidden" >{{'admin.coin_setting.price_set_tips'|trans}}</div>
+  </div>
+  <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_v2_coin_model_save')}}">
+      <input type="hidden" name="item_rate" value="">
+      <input type="hidden" name="cash_model" value="{{ set.cash_model }}">
+      <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">
+      <input type="hidden" name="type" value="{{type|default('course')}}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <p class="clearfix">
+        <button type="submit" class="btn btn-primary pull-right" id="finish" >{{'form.btn.finish'|trans}}</button>
+        <a type="button" href="{{ url('admin_v2_coin_model',{set:set}) }}" class="btn btn-link pull-right">{{'form.btn.back'|trans}}</a>
+      </p>
+  </form>
+{% endblock %}

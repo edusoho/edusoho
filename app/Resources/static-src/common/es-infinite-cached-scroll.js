@@ -108,13 +108,24 @@ export default class ESInfiniteCachedScroll extends Emitter {
     });
   }
 
+  _destroy() {
+    this._options['data'] = [];
+
+    const $target = $('.js-sidebar-pane');
+    if (!$target.length) {
+      return;
+    }
+    const $targetDom = $target[0];
+    $targetDom.removeEventListener('scroll', 'debounce', false);
+  }
+
   chapterAnimate(
     delegateTarget = 'body',
     target = '.js-task-chapter',
     $expandIconClass = 'es-icon-remove',
     $putIconClass = 'es-icon-anonymous-iconfont') {
     const self = this;
-    $(delegateTarget).off('click').on('click', target, (event) => {
+    $(delegateTarget).off('click', target).on('click', target, (event) => {
       let $this = $(event.currentTarget);
       self.toggleIcon($this, $expandIconClass, $putIconClass).then(() => {
         $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');

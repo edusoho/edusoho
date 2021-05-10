@@ -24,6 +24,20 @@ if ($selectFinish.length) {
         $('#watchTime').val($options.data('value'));
         $('#finish-data').val($options.data('value'));
       }
+
+      $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
+      $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
+      break;
+    case 'watchTime':
+      $('#conditions-time').show();
+      if (!$('#watchTime').val()) {
+        let $options = $('#finish-type option:selected');
+        $('#watchTime').val($options.data('value'));
+        $('#finish-data').val($options.data('value'));
+      }
+
+      $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
+      $('#timeLabel').hasClass('hidden') ? null :$('#timeLabel').addClass('hidden');
       break;
     case 'end':
       break;
@@ -44,8 +58,7 @@ let validate = $('#step3-form').validate({
     },
   }
 });
-
-if ($('#conditions-time').css('display') != 'none') {
+if (!$('#conditions-time').is(':hidden')) {
   $('#watchTime').rules('add', {
     required: true,
     positive_integer: true,

@@ -2,23 +2,24 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemWithLessonFilter;
-use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReviewFilter;
+use ApiBundle\Api\Resource\Filter;
 
 class PageCourseFilter extends Filter
 {
-    protected $simpleFields = array(
-        'id', 'title', 'courseSetTitle',
-    );
-    protected $publicFields = array(
+    protected $simpleFields = [
+        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId', 'spec',
+    ];
+    protected $publicFields = [
         'vipLevel', 'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum',
         'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary',
         'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers',
         'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
-        'reviews', 'enableFinish', 'hasCertificate',
-    );
+        'reviews', 'myReview', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom',
+    ];
 
     protected function publicFields(&$data)
     {
@@ -45,6 +46,8 @@ class PageCourseFilter extends Filter
         $reviewFilter = new CourseSetReviewFilter();
         $reviewFilter->setMode(Filter::PUBLIC_MODE);
         $reviewFilter->filters($reviews);
+        $review = $data['myReview'];
+        $reviewFilter->filter($review);
 
         $progress = $data['progress'];
         $allowAnonymousPreview = $data['allowAnonymousPreview'];
@@ -57,6 +60,13 @@ class PageCourseFilter extends Filter
         $data['courses'] = $courses;
         $data['member'] = $member;
         $data['reviews'] = $reviews;
+        $data['myReview'] = $review;
         $data['vipLevel'] = empty($vipLevel) ? null : $vipLevel;
+
+        if (!empty($data['classroom'])) {
+            $classroomFilter = new ClassroomFilter();
+            $classroomFilter->setMode(Filter::SIMPLE_MODE);
+            $classroomFilter->filter($data['classroom']);
+        }
     }
 }

@@ -1,0 +1,28 @@
+{% extends 'layout.html.twig' %}
+
+{%- block title -%}
+  {{'course.liveroom.content_title'|trans}}
+{%- endblock -%}
+
+{% block meta %}
+  {{ parent() }}
+{% endblock %}
+
+{% do script(['app/js/liveroom/entry/index.js']) %}
+
+{% block body %}
+  <div id="entry"
+       data-course-id="{{ courseId|default(0) }}"
+       data-task-id="{{ task.id|default(0) }}"
+       data-role="{{ role|default('') }}"
+  >
+    <iframe
+      name="classroom"
+      src="{{ path('live_activity_replay_entry', {courseId: courseId, activityId: activityId, replayId:replayId}) }}"
+      style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;"
+      scrolling="no"
+      allowfullscreen="true"
+      allow="microphone; camera; screen-wake-lock"
+    ></iframe>
+  </div>
+{% endblock %}

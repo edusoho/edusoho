@@ -1,14 +1,16 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    <script src="{{ cloud_sdk_url('player') }}"></script>
+    <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
     {% do script(['app/js/material-lib/global-player/index.js']) %}
     <div class="iframe-parent-content" id="global-player"
-         data-res-no="{{ file.globalId }}"
-         data-token="{{ player.token }}"
+         data-res-no="{{ playerContext.resNo }}"
+         data-token="{{ playerContext.token }}"
          data-user-id="{{app.user.id|default(0)}}"
          data-user-name="{{app.user.username|default('')}}"
          data-file-type="{{ file.type }}"
-    ></div>
+         data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(0) }}"
+    >
+    </div>
 {% endblock %}
 

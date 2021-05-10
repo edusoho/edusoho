@@ -55,6 +55,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         ]);
     }
 
+    public function findByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
+    }
+
     public function findByCourseSetIds($courseSetIds)
     {
         return $this->findInField('fromCourseSetId', $courseSetIds);
@@ -211,6 +216,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     public function analysisTaskDataByTime($startTime, $endTime)
     {
         $conditions = [
+            'isOptional' => 0,
             'createdTime_GE' => $startTime,
             'createdTime_LT' => $endTime,
         ];

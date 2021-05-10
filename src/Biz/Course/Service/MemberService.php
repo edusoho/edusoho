@@ -14,7 +14,7 @@ interface MemberService
 
     public function removeCourseStudents($courseId, array $userIs);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = array());
+    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = []);
 
     /**
      * @before searchMemberCount
@@ -91,14 +91,14 @@ interface MemberService
     /**
      * 成为学员，即加入课程的学习.
      */
-    public function becomeStudent($courseId, $userId, $info = array());
+    public function becomeStudent($courseId, $userId, $info = []);
 
     public function batchBecomeStudents($courseId, $memberIds);
 
     /**
      * 退学.
      */
-    public function removeStudent($courseId, $userId, $info = array());
+    public function removeStudent($courseId, $userId, $info = []);
 
     /**
      * 封锁学员，封锁之后学员不能再查看该课程.
@@ -114,7 +114,13 @@ interface MemberService
 
     public function batchCreateMembers($members);
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+    public function findCoursesByStudentIdAndCourseIds($userId, $courseIds);
+
+    public function findCourseMembersByUserIdAndCourseIds($userId, $courseIds);
+
+    public function findCourseMembersByUserIdAndClassroomId($userId, $classroomId);
+
+    public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId);
 
     public function becomeStudentByClassroomJoined($courseId, $userId);
 
@@ -164,9 +170,17 @@ interface MemberService
 
     public function findMembersByCourseIdAndRole($courseId, $role);
 
-    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d');
+    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = [], $format = '%Y-%m-%d');
 
     public function findMembersByIds($ids);
 
     public function countStudentMemberByCourseSetId($courseSetId);
+
+    public function recountLearningDataByCourseId($courseId);
+
+    public function refreshMemberFinishData($courseId, $userId);
+
+    public function refreshCourseMembersFinishData($courseId);
+
+    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
 }

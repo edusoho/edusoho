@@ -7,6 +7,11 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class PageCourse extends AbstractResource
 {
@@ -38,32 +43,63 @@ class PageCourse extends AbstractResource
             $course,
             $request->getHttpRequest()->isSecure(),
             $request->query->get('fetchSubtitlesUrls', 0),
-            $request->query->get('onlyPublished', 0)
+            $request->query->get('onlyPublished', 0),
+            $request->query->get('showOptionalNum', 1)
         );
 
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
+        $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
-        $course['reviews'] = $this->searchCourseReviews($course['id']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
+        $course = $this->getCourseService()->appendSpecInfo($course);
 
-        if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
-            $course['vipLevel'] = $this->invokeResource($apiRequest);
+        $goods = $this->getGoodsService()->getGoods($course['goodsId']);
+        $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
+
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            empty($classroom) || $course['classroom'] = $this->getClassroomService()->appendSpecInfo($classroom);
         }
+
+        if ($this->isPluginInstalled('vip')) {
+            if (!empty($course['classroom'])) {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $course['classroom']['id']);
+            } else {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+            }
+            empty($vipRight) || $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
+        }
+
+        $course['reviews'] = $this->searchCourseReviews($course);
+        $course['myReview'] = $this->getMyReview($course, $user);
 
         return $course;
     }
 
-    protected function searchCourseReviews($courseId)
+    protected function getVipLevel($levelId)
     {
+        $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$levelId, 'GET', []);
+
+        return $this->invokeResource($apiRequest);
+    }
+
+    protected function searchCourseReviews($course)
+    {
+        if (0 == $course['parentId']) {
+            $targetType = 'goods';
+            $targetId = $course['goodsId'];
+        } else {
+            $targetType = 'course';
+            $targetId = $course['id'];
+        }
         $result = $this->invokeResource(new ApiRequest(
             '/api/reviews',
             'GET',
             [
-                'targetType' => 'course',
-                'targetId' => $courseId,
+                'targetType' => $targetType,
+                'targetId' => $targetId,
                 'parentId' => 0,
                 'offset' => 0,
                 'limit' => self::DEFAULT_DISPLAY_COUNT,
@@ -75,6 +111,48 @@ class PageCourse extends AbstractResource
         return $result['data'];
     }
 
+    protected function getMyReview($course, $user)
+    {
+        if (empty($user['id'])) {
+            return null;
+        }
+
+        if (0 == $course['parentId']) {
+            $targetType = 'goods';
+            $targetId = $course['goodsId'];
+        } else {
+            $targetType = 'course';
+            $targetId = $course['id'];
+        }
+        $result = $this->invokeResource(new ApiRequest(
+            '/api/reviews',
+            'GET',
+            [
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+                'userId' => $user['id'],
+                'parentId' => 0,
+                'offset' => 0,
+                'limit' => self::DEFAULT_DISPLAY_COUNT,
+                'orderBys' => ['updatedTime' => 'DESC'],
+                'needPosts' => true,
+            ]
+        ));
+
+        return empty($result['data']) ? null : reset($result['data']);
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
@@ -98,5 +176,18 @@ class PageCourse extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }

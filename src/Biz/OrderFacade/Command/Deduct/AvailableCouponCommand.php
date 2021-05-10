@@ -5,14 +5,18 @@ namespace Biz\OrderFacade\Command\Deduct;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
+use VipPlugin\Biz\Marketing\Service\VipSellModeService;
 
 class AvailableCouponCommand extends Command
 {
-    public function execute(Product $product, $params = array())
+    public function execute(Product $product, $params = [])
     {
-        $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
+        $targetId = $product->targetId;
+
+        $availableCoupons = $this->availableCouponsByIdAndType($targetId, $product->targetType);
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
@@ -36,17 +40,23 @@ class AvailableCouponCommand extends Command
      *
      * @return array
      */
-    private function availableCouponsSort($availableCoupons = array(), $product)
+    private function availableCouponsSort($availableCoupons = [], $product)
     {
-        if ('course' == $product->targetType) {
-            $course = $this->getCourseService()->getCourse($product->targetId);
-            $targetId = $course['courseSetId'];
+        if ('course' === $product->targetType || 'classroom' === $product->targetType) {
+            $targetId = $product->originalTargetId;
+            //优惠券是基于课程的
+            if ('course' === $product->targetType) {
+                $course = $this->getCourseService()->getCourse($targetId);
+                $targetId = $course['courseSetId'];
+            }
+        } elseif ('vip' === $product->targetType) {
+            $targetId = $product->levelId;
         } else {
             $targetId = $product->targetId;
         }
 
-        $exclusiveCoupons = array();
-        $unexclusiveCoupons = array();
+        $exclusiveCoupons = [];
+        $unexclusiveCoupons = [];
 
         foreach ($availableCoupons as $availableCoupon) {
             if ($availableCoupon['targetType'] == $product->targetType && $availableCoupon['targetId'] == $targetId) {
@@ -56,9 +66,9 @@ class AvailableCouponCommand extends Command
             }
         }
 
-        usort($exclusiveCoupons, array($this, 'compareCoupon'));
+        usort($exclusiveCoupons, [$this, 'compareCoupon']);
 
-        usort($unexclusiveCoupons, array($this, 'compareCoupon'));
+        usort($unexclusiveCoupons, [$this, 'compareCoupon']);
 
         return array_merge($exclusiveCoupons, $unexclusiveCoupons);
     }
@@ -78,9 +88,14 @@ class AvailableCouponCommand extends Command
 
     private function availableCouponsByIdAndType($id, $type)
     {
-        if ('course' == $type) {
+        if ('course' === $type) {
             $course = $this->getCourseService()->getCourse($id);
             $id = $course['courseSetId'];
+        }
+
+        if ('vip' === $type) {
+            $sellMode = $this->getVipSellModeService()->getSellMode($id);
+            $id = empty($sellMode) ? 0 : $sellMode['vipLevelId'];
         }
 
         return $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
@@ -110,5 +125,21 @@ class AvailableCouponCommand extends Command
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return VipSellModeService
+     */
+    private function getVipSellModeService()
+    {
+        return $this->biz->service('VipPlugin:Marketing:VipSellModeService');
     }
 }

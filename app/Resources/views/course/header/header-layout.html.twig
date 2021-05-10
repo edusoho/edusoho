@@ -1,5 +1,6 @@
 {% import "macro.html.twig" as web_macro %}
-{% do script('app/js/course/header-top/index.js') %}
+{% do script(['libs/jquery-intro.js', 'app/js/course/header-top/index.js']) %}
+
 
 <!-- 3、加入后：任务式学习 -->
 <div class="container cd-container">
@@ -9,9 +10,9 @@
       <li><a href="{{ path('course_set_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
     {% endfor %}
     {% if page_type|default('guest') == 'member' %}
-      <li><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }} </a></li>
+      <li><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }} </a></li>
     {% else %}
-      <li class="active">{{ courseSet.title }} </li>
+      <li class="active">{{ courseSet.title|raw }} </li>
     {% endif %}
   </ol>
 
@@ -29,14 +30,15 @@
         </span>
         <span class="course-detail-heading">
           {% if not marketingPage and course.title %}
-            {{ course.title }}
+            {{ course.title|raw }}
           {% else %}
-            {{ courseSet.title }}
+            {{ courseSet.title|raw }}
           {% endif %}
           {# 二维码标志 #}
           {% block course_header_qrcode %}
+            <input type="hidden" name="wechat_notification_type" id="wechat_notification_type" value="{{setting('wechat_notification.notification_type')|default('')}}">
             <span class="es-qrcode top pt5 hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
-              <i class="es-icon es-icon-qrcode"></i>
+              <i class="es-icon es-icon-qrcode js-es-course-qrcode"></i>
               <span class="qrcode-popover">
                 <img src="" alt="">
                 {{ 'site.tips.scan_qrcode_tips'|trans }}

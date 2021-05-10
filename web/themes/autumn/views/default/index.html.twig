@@ -262,7 +262,7 @@
                           {% else %}
                             <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                           {% endif %}
-                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">{{ '立即购买'|trans }}</a></h4>
+                          <h4><a href="{{ path('vip') }}" class="btn btn-success">{{ '立即购买'|trans }}</a></h4>
                         </div>
                       </div>
                     </li>
@@ -379,7 +379,7 @@
       {% endif %}
 
       {# 学员评价 #}
-      {% if setting('course.show_review', '1') == 1 %}
+      {% if setting('goods_setting.show_review', '1') == 1 %}
         {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
       {% endif %}
 

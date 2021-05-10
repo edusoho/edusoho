@@ -3,8 +3,11 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
+use Biz\Review\Service\ReviewService;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -12,7 +15,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
             'courseSet.recommend' => 'onCourseSetRecommend',
             'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
@@ -21,7 +24,36 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.courses.sort' => 'onCourseSetCoursesSort',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
-        );
+            'review.create' => 'onReviewChanged',
+            'review.delete' => 'onReviewChanged',
+        ];
+    }
+
+    public function onReviewChanged(Event $event)
+    {
+        $review = $event->getSubject();
+        if (empty($review['targetId'])) {
+            return true;
+        }
+
+        $goods = $this->getGoodsService()->getGoods($review['targetId']);
+        if ('course' != $goods['type']) {
+            return true;
+        }
+
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        if (!empty($product)) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
+            if (!empty($courseSet)) {
+                $reviewCount = $this->getReviewService()->countReviews([
+                    'targetId' => $goods['id'],
+                    'targetType' => 'goods',
+                ]);
+                $this->getCourseSetService()->updateCourseSetRatingNum($courseSet['id'], [
+                    'ratingNum' => $reviewCount,
+                ]);
+            }
+        }
     }
 
     public function onCourseStatusChange(Event $event)
@@ -72,7 +104,17 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onCourseSetUnlock(Event $event)
     {
         $courseSet = $event->getSubject();
-        $this->getChapterDao()->update(array('courseId' => $courseSet['defaultCourseId']), array('copyId' => 0));
+        $this->getChapterDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+        $this->getTaskDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+        $this->getActivityDao()->update(['fromCourseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->getBiz()->service('Review:ReviewService');
     }
 
     /**
@@ -81,6 +123,22 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->getBiz()->service('Product:ProductService');
     }
 
     /**
@@ -105,5 +163,15 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getChapterDao()
     {
         return $this->getBiz()->dao('Course:CourseChapterDao');
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
+    }
+
+    protected function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

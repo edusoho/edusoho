@@ -13,6 +13,7 @@
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
+      :getCurrentTime="getCurrentTime"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @timeSaveAnswerData="timeSaveAnswerData"
@@ -62,6 +63,26 @@
         inspectionOpen: inspectionOpen,
         isNotMobile: !isMobileDevice(),
         errorMessage: comp.ok ? '' : comp.message,
+        getCurrentTime: () => {
+          let time = Date.parse(new Date());
+          $.ajax({
+            type: "GET",
+            beforeSend: request => {
+              request.setRequestHeader("Accept", "application/vnd.edusoho.v2+json");
+            },
+            url: "/api/system/timestamp",
+            async: false,
+            success: resp => {
+              if (!isNaN(resp)) {
+                time = resp * 1000;
+              }
+            },
+            error: error => {
+              console.log(error);
+            }
+          });
+          return time;
+        }
       };
     },
     created() {

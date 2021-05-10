@@ -18,8 +18,19 @@ class Setting extends AbstractResource
     private $supportTypes = [
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
-        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo',
+        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
+        'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'consult', 'wechat_message_subscribe',
     ];
+
+    public static function convertUnderline($str)
+    {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $str);
+
+        return $str;
+    }
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -27,6 +38,7 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         $this->checkType($type);
+        $type = self::convertUnderline($type);
         $method = "get${type}";
 
         return $this->$method($request);
@@ -51,6 +63,106 @@ class Setting extends AbstractResource
         return $result;
     }
 
+    public function getSignSecurity()
+    {
+        $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
+
+        return [
+            'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
+            'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
+    }
+
+    public function getUgc()
+    {
+        return [
+            'review' => $this->getUgcReview(),
+            'note' => $this->getUgcNote(),
+            'thread' => $this->getUgcThread(),
+            'private_message' => $this->getUgcPrivateMessage(),
+        ];
+    }
+
+    public function getUgcReview()
+    {
+        $reviewSetting = $this->getSettingService()->get('ugc_review', []);
+
+        return [
+            'enable' => empty($reviewSetting['enable_review']) ? 0 : 1,
+            'course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_course_review'])) ? 1 : 0,
+            'classroom_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_classroom_review'])) ? 1 : 0,
+            'question_bank_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_question_bank_review'])) ? 1 : 0,
+            'open_course_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_open_course_review'])) ? 1 : 0,
+            'article_enable' => (!empty($reviewSetting['enable_review']) && !empty($reviewSetting['enable_article_review'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcNote()
+    {
+        $noteSetting = $this->getSettingService()->get('ugc_note', []);
+
+        return [
+            'enable' => empty($noteSetting['enable_note']) ? 0 : 1,
+            'course_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_course_note'])) ? 1 : 0,
+            'classroom_enable' => (!empty($noteSetting['enable_note']) && !empty($noteSetting['enable_classroom_note'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcThread()
+    {
+        $threadSetting = $this->getSettingService()->get('ugc_thread', []);
+
+        return [
+            'enable' => empty($threadSetting['enable_thread']) ? 0 : 1,
+            'course_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_question'])) ? 1 : 0,
+            'course_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_course_thread'])) ? 1 : 0,
+            'classroom_question_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_question'])) ? 1 : 0,
+            'classroom_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_classroom_thread'])) ? 1 : 0,
+            'group_thread_enable' => (!empty($threadSetting['enable_thread']) && !empty($threadSetting['enable_group_thread'])) ? 1 : 0,
+        ];
+    }
+
+    public function getUgcPrivateMessage()
+    {
+        $privateMessageSetting = $this->getSettingService()->get('ugc_private_message', []);
+
+        return [
+            'enable' => empty($privateMessageSetting['enable_private_message']) ? 0 : 1,
+            'student_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_student'])) ? 1 : 0,
+            'student_to_teacher' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['student_to_teacher'])) ? 1 : 0,
+            'teacher_to_student' => (!empty($privateMessageSetting['enable_private_message']) && !empty($privateMessageSetting['teacher_to_student'])) ? 1 : 0,
+        ];
+    }
+
+    public function getConsult()
+    {
+        $consultSetting = $this->getSettingService()->get('consult', []);
+        if (1 == $consultSetting['enabled']) {
+            return [
+                'enabled' => $consultSetting['enabled'],
+                'qq' => $consultSetting['qq'],
+                'qqgroup' => $consultSetting['qqgroup'],
+                'phone' => $consultSetting['phone'],
+                'email' => $consultSetting['email'],
+            ];
+        }
+
+        return [
+            'enabled' => $consultSetting['enabled'],
+        ];
+    }
+
+    public function getGoods()
+    {
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+
+        return [
+            'show_number_data' => empty($goodsSetting['show_number_data']) ? 'join' : $goodsSetting['show_number_data'],
+            'show_review' => !isset($goodsSetting['show_review']) ? '1' : $goodsSetting['show_review'],
+            'recommend_rule' => empty($goodsSetting['recommend_rule']) ? 'hot' : $goodsSetting['recommend_rule'],
+        ];
+    }
+
     public function getCloudVideo()
     {
         $storageSetting = $this->getSettingService()->get('storage');
@@ -73,10 +185,15 @@ class Setting extends AbstractResource
             $storageSetting['video_fingerprint_time'] = strval($storageSetting['video_fingerprint_time']);
         }
 
+        if (isset($storageSetting['video_fingerprint_opacity'])) {
+            $storageSetting['video_fingerprint_opacity'] = strval($storageSetting['video_fingerprint_opacity']);
+        }
+
         if (!empty($storageSetting)) {
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, [
                 'video_fingerprint',
                 'video_fingerprint_time',
+                'video_fingerprint_opacity',
             ]);
 
             $watermarkSetting = ArrayToolkit::parts($storageSetting, [
@@ -223,6 +340,7 @@ class Setting extends AbstractResource
 
         return [
             'name' => $siteSetting['name'],
+            'analytics' => $siteSetting['analytics'],
             'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         ];
@@ -241,6 +359,26 @@ class Setting extends AbstractResource
         $filter->filter($result);
 
         return $result;
+    }
+
+    public function getWechatMessageSubscribe($request)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat');
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $enable = true;
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            $enable = false;
+        }
+        if ('messageSubscribe' != $wechatNotificationSetting['notification_type']) {
+            $enable = false;
+        }
+        if (empty($wechatNotificationSetting['is_authorization'])) {
+            $enable = false;
+        }
+
+        return [
+            'enable' => $enable,
+        ];
     }
 
     public function getWap($request = null)
@@ -289,30 +427,13 @@ class Setting extends AbstractResource
     {
         $vipSetting = $this->getSettingService()->get('vip', []);
 
-        if (!empty($vipSetting['buyType'])) {
-            switch ($vipSetting['buyType']) {
-                case 10:
-                    $buyType = 'year_and_month';
-                    break;
-                case 20:
-                    $buyType = 'year';
-                    break;
-                case 30:
-                    $buyType = 'month';
-                    break;
-                default:
-                    $buyType = 'month';
-                    break;
-            }
-        }
-
         return [
             'enabled' => empty($vipSetting['enabled']) ? false : true,
-            'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
-            'buyType' => empty($buyType) ? 'month' : $buyType,
-            'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
-            'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
-            'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
+            'h5Enabled' => empty($vipSetting['enabled']) ? false : true,
+            'buyType' => 'year_and_month', //兼容会员营销重构2.0
+            'upgradeMinDay' => '30', //兼容会员营销重构2.0
+            'defaultBuyYears' => '1', //兼容会员营销重构2.0
+            'defaultBuyMonths' => '30', //兼容会员营销重构2.0
         ];
     }
 
@@ -365,6 +486,8 @@ class Setting extends AbstractResource
             'show_review' => isset($courseSetting['show_review']) ? intval($courseSetting['show_review']) : 1,
             'show_question' => isset($courseSetting['show_question']) ? intval($courseSetting['show_question']) : 1,
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
+            'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
+            'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
         ];
     }
 
@@ -431,7 +554,15 @@ class Setting extends AbstractResource
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
             'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
             'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
+            'show_note' => isset($classroomSetting['show_note']) ? (bool) $classroomSetting['show_note'] : true,
         ];
+    }
+
+    public function getBackstage($request = null)
+    {
+        $backstage = $this->getSettingService()->get('backstage');
+
+        return ['is_v2' => isset($backstage['is_v2']) ? (int) $backstage['is_v2'] : 0];
     }
 
     private function checkType($type)
@@ -450,6 +581,41 @@ class Setting extends AbstractResource
         $couponSetting = array_merge($default, $couponSetting);
 
         return $couponSetting;
+    }
+
+    public function getMail()
+    {
+        $cloudEmailCrm = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return ['enabled' => (isset($cloudEmailCrm['status']) && 'enable' === $cloudEmailCrm['status']) || (isset($mailer['enabled']) && $mailer['enabled'])];
+    }
+
+    public function getOpenCourse()
+    {
+        $openCourseSetting = $this->getSettingService()->get('openCourse', []);
+
+        return [
+            'show_comment' => isset($openCourseSetting['show_comment']) ? intval($openCourseSetting['show_comment']) : 1,
+        ];
+    }
+
+    public function getArticle()
+    {
+        $articleSetting = $this->getSettingService()->get('article', []);
+
+        return [
+            'show_comment' => isset($articleSetting['show_comment']) ? intval($articleSetting['show_comment']) : 1,
+        ];
+    }
+
+    public function getGroup()
+    {
+        $groupSetting = $this->getSettingService()->get('group', []);
+
+        return [
+            'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
+        ];
     }
 
     private function getLoginConnect($clients)

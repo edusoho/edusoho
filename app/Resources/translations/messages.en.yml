@@ -230,6 +230,7 @@ user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
+user.fields.profile_mobile_label: Phone(from personal data)
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
 user.fields.mobile_label.apple_tip: Please go to the APP for binding
@@ -366,7 +367,7 @@ finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
-finance.max_deduction_rate: 'Maximum deduction rate'
+finance.max_deduction_rate: 'Maximum coin deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
@@ -446,7 +447,6 @@ order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
 order.due_pay: duePay(CNY)
-order.price_amount: PriceAmount
 order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
@@ -457,6 +457,7 @@ order.buyer.username: Username
 order.buyer.true_name: True name
 order.buyer.email: Email
 order.buyer.contact: Contact
+order.buyer.mobile: Mobile
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
@@ -503,6 +504,7 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.price: Product price
 order.confirm.bought_course_deduction: 'Purchased course deduction'
+order.confirm.information-collect-title: Information collect
 order.adjust_price_btn: 'Change price'
 order.adjust_price_modal_title: 'Change order price'
 order.adjust_price_modal.hint: 'Please fill the discount in inputbox'
@@ -557,6 +559,7 @@ pay_center.pay.coin_input_tips: 'Current use'
 pay_center.pay.coin_input_placeholder: 'Please input %coin_name% amount'
 pay_center.pay.password_input_placeholder: 'Please input pay password'
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
+pay_center.pay.unable_pay.tips: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
 pay_center.pay.mode: 'Payment methods'
 pay_center.pay.mode.tips: 'Choose the right cash payment method'
 pay_center.pay.cash_card: 'Deposit card'
@@ -592,7 +595,7 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
-pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.course.close: The course in this order has been closed.
 pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
 pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
@@ -833,7 +836,6 @@ course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled
 course.course_member_count: '%studentsNum% students'
 course.activity: %taskName%
 course.plan: Course plan
-course.activity: Activity
 course.teaching_plan.access_denied_hint: 'No permission'
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -1118,6 +1120,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.dashboard.student_chart.name_or_mobile_placeholder: nickname/mobile
 
 course.members_manage.add_btn: 'Add'
+course.announcements_manage.add_btn: 'Add Announcement'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the %type% is not published'
 course.members_manage.add_failed_tips: %type% is unpublished, students can't be added.
@@ -1292,10 +1295,8 @@ course.thread.question_type.image: image
 course.thread.question_type.audio: audio
 course.thread.question_type.content: content
 course.thread.question.title: This is a %questionType% question
-course.task.preview.free_learn_tips: 'Join for free'
 course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
-course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_number: %taskName%%number%
@@ -1328,8 +1329,6 @@ course.material.empty: 'No files for the course'
 course.btn.learn: Learn
 course.btn.join: Enroll
 course.btn.free_join: 'Enroll Free'
-course.btn.join: Join
-course.btn.free_join: 'Join Free'
 course.btn.pay_tips: 'creating the order'
 course.export: export course data
 course.btn.pay: Pay
@@ -1638,12 +1637,15 @@ course.files_manage.tips: "Tip：Course file could not be seen by students until
 course.plan_overview: 'Data Overview'
 
 course.plan_task: Lessons
+course.announcement_manage: Announcements
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
-course.plan_task.manage_btn: Config
+course.plan_task.manage_btn: Manage
+course.plan_task.cancel_manage_btn: Cancel Manage
 course.plan_task.publish_btn: Publish
+course.plan_task.publishing_btn: Publishing...
 course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Lessons
 course.plan_task.locked.task_locked: '%taskName% locked'
@@ -1674,7 +1676,9 @@ course.plan_task.more_btn: 'More'
 course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
+course.plan_task.unpublishing_btn: Unpublishing...
 course.plan_task.delete_btn: Delete
+course.plan_task.deleting_btn: Deleting...
 course.plan_task.preparation_tips: 'Students can learn to learn by looking at %taskName% such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
 course.plan_task.empty: 'It is empty, add a lesson now'
@@ -1724,14 +1728,19 @@ course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3
 course.plan_task.activity_manage.create: 'Add%taskName%'
 course.plan_task.activity_manage.modify: 'Edit%taskName%'
 course.plan_task.activity_manage.preview: 'Preview%taskName%'
+course.plan_task.all_choices: 'all choices'
+course.plan_task.lesson: 'lesson'
+course.plan_task.chapter: 'chapter'
+course.plan_task.selected: >
+  <span class="js-chosen-number">0</span> selected
 
-course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
 course.manage.edit_lesson: Edit the lesson
 course.manage.preview_lesson: Preview
 course.lesson_manage.set_optional: Set optional
 course.lesson_manage.unset_optional: Set compulsory
 course.lesson_manage.rename: Rename
+course.lesson_manage.set_optional_tips: The number of class tasks and learning progress will not be counted
 
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
@@ -1827,6 +1836,8 @@ course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
+course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.time: Time
@@ -1989,12 +2000,12 @@ file_chooser.upload_file.audio_quality.normal: Standard
 file_chooser.upload_file.audio_quality.high: 'High Quality'
 file_chooser.upload_file.convert: 'What''s transcode'
 file_chooser.upload_file.upload_tips: Tips
-file_chooser.upload_file.convert_tips: 'Upload will automatically transcoded to a better compatibility format for students to watch, it is recommended that you transcode is completed and then release the corresponding course'
-file_chooser.upload_file.suopprt_audio_tips: 'Support mp4, avi, flv, wmv, mov, m4v format video file upload, file size can not exceed 2GB. <br/>Support for HTTP (available only in Chrome, IE9 and above browsers that support HTML5).'
+file_chooser.upload_file.convert_tips: 'Upload will automatically transcoded to a better compatibility format for students to watch, it is recommended that you transcode is completed and then release the corresponding course.'
+file_chooser.upload_file.upload_video_tips: 'Support mp4, avi, flv, wmv, mov, m4v format video file upload, file size can not exceed 2GB. <br/>Support for HTTP (available only in Chrome, IE9 and above browsers that support HTML5).'
 file_chooser.upload_file.upload_audio_tips: 'Support mp3 format audio file upload, and the file size can not exceed 500M. <br/> Support for HTTP (only HTML5 browser support). <br/>The audio will be uploaded to the cloud server.'
-file_chooser.upload_file.upload_flash_tips: 'Support swf format file upload, and the file size can not exceed 100 MB. <br/>Flash will be uploaded to the cloud server'
-file_chooser.upload_file.upload_doc_tips: 'Support pdf, doc, docx, xls, xlsx format document upload, and the file size can not exceed 100 MB. <br/>The document will be uploaded to the cloud server'
-file_chooser.upload_file.upload_ppt_tips: 'Support ppt, pptx format PPT file upload, and the file size can not exceed 100 MB. <br/>The PPT will be uploaded to the cloud server'
+file_chooser.upload_file.upload_flash_tips: 'Support swf format file upload, and the file size can not exceed 100 MB. <br/>Flash will be uploaded to the cloud server.'
+file_chooser.upload_file.upload_doc_tips: 'Support pdf, doc, docx, xls, xlsx format document upload, and the file size can not exceed 100 MB. <br/>The document will be uploaded to the cloud server.'
+file_chooser.upload_file.upload_ppt_tips: 'Support ppt, pptx format PPT file upload, and the file size can not exceed 100 MB. <br/>The PPT will be uploaded to the cloud server.'
 testpaper.edit: Edit
 testpaper.edit.content_title: Edit
 testpaper.answer.count_donw_timer: 'Count Down'
@@ -2097,8 +2108,10 @@ classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access 
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
 classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
 classroom.courses_count: '%courseNum% courses in total'
+classroom.compulsory_count: '%compulsoryTaskNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
+classroom.status.published: Publish
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
 classroom.course.base: 'Basic info'
@@ -2214,7 +2227,7 @@ classroom.manage.reviews.empty: 'No review for %name%'
 classroom.manage.set_info: 'Basic Info'
 classroom.manage.set_info.name: Name
 classroom.manage.set_info.introduction: Introduction
-classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
+classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 classroom.manage.set_info.tags: Tag
 classroom.manage.set_info.tags.explain: 'Used to query classes by label, and managed by administrator'
 classroom.manage.set_info.tags.help_block: 'Used to query classes by label, and managed by administrator'
@@ -2328,6 +2341,7 @@ classroom.set_teachers: Teacher
 classroom.set_manage: 'Teachers'
 classroom.set_assistant: 'Assistants'
 classroom.course_manage: 'Courses'
+classroom.announcement_manage: 'Announcement'
 classroom.student_manage: 'Students'
 classroom.testpaper_check: 'Test Paper Review'
 classroom.my_check: 'My Review'
@@ -2340,35 +2354,22 @@ classroom.homework_check_tips: 'The current user is not the class teacher or ass
 classroom.yesterday: Yesterday
 classroom.today: Today
 classroom.name_label: Name
-classroom.about_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
+classroom.about_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 classroom.tag_label: Tag
 classroom.tag_tips: 'Used to query classes by label, and managed by administrator'
-classroom.show_label: "Show %name%\n"
 classroom.open_radio: Open
 classroom.close_radio: Close
 classroom.show_tips: "If close，%name% will be hidden\n"
-classroom.buy_label: Buy
 classroom.buy_tips: "If close, %name% will not be able to enroll\n"
 classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
-classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
 classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days' or the 'Expired on', and it will only affect the students who enrolled after the update.<br> 3. Closed：Cannot update<br> 4. In the student management, you can update the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
-classroom.expiry_mode_end_date: 'Expired on'
-classroom.expiry_mode_days: 'Effective days'
-classroom.expiry_mode_forever: Forever
 classroom.edit_expiry_mode: 'Update student expiry'
-classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
 classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
-classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
-classroom.expiry_mode_days_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
-classroom.watch_expiry_mode_rile: 'View the rule'
 classroom.category: Category
-classroom.price_label: Price(CNY)
-classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
-classroom.amount: "Equals to%price%\n"
 classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 540×304px. <br> The file limits to <strong>2MB</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity
@@ -2465,6 +2466,11 @@ form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 form.btn.continue: Continue
+form.btn.set_template: 'Set template'
+form.btn.confirm.normal: 'Confirm normal'
+form.btn.confirm.illegal: 'Confirm illegal'
+form.btn.batch.normal: 'Batch normal'
+form.btn.batch.illegal: 'Batch illegal'
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -2769,7 +2775,6 @@ user.settings.verification.approved_title_tips: 'Certified by real name'
 user.settings.verification.approved_content_tips: 'The real name information cannot be modified after the certification is passed.'
 
 user.settings.verification.unapprove_tips: 'To protect your account and get better service, please complete your real-name certification as soon as possible.'
-user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
 user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
 user.settings.verification.approve_failed_reason_tips: 'The review failed, due to: %reason%. Please check.'
 
@@ -2848,8 +2853,6 @@ user.account.other_invite_code.reward_tips: 'Input the invitation code, the invi
 user.account.my_invite_code.no_reward_tips: 'Send invitation code to your friends'
 user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after registeration。'
 user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after he or she  make a payment.'
-user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration。'
-user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after he or she  make a payment.'
 user.account.my_invite_code.reward_after_register_reward_tips: 'At the same time you will receive a %promote_user_value% CNY coupon.'
 user.account.my_invite_code.invitees: Invited
 user.account.my_invite_code.invite_time: 'Invited date'
@@ -2931,6 +2934,7 @@ user.homepage.learning_courses: 'Learning Courses'
 user.homepage.learning_question_bank: 'Learning Question bank'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Favorites
+user.homepage.favorite_goods: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
 user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
@@ -2939,6 +2943,7 @@ user.homepage.learning_courses.empty: 'No learning course.'
 user.homepage.learning_question_bank.empty: 'No learning question bank.'
 user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
 user.homepage.favorite_courses.empty: 'No bookmarked course.'
+user.homepage.favorite_goods.empty: 'No bookmarked goods.'
 user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
@@ -3456,6 +3461,9 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.open_course_menu: Open Course
+my.teaching.classroom.studen_count: Students
+my.teaching.classroom.course_count: Courses
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
 my.teaching.online_review_menu: 'Online review'
@@ -3467,12 +3475,12 @@ my.teaching.item_bank_exercise.item: 'Item Bank Exercise'
 my.teaching.course_set.normal: 'Normal'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.reservation: 'Reservation'
-my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
 my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.threads_question: 'Student question'
+my.teaching.classroom.preview: 'Preview Classroom'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
@@ -3481,7 +3489,6 @@ my.teaching.classroom.threads_question.nickname: 'Discussion owner'
 my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Edit %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
-my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; discussion %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
 my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
@@ -3563,7 +3570,7 @@ my.teaching.open_course.Basic_Info.tags.explain: 'Will be used for courses searc
 my.teaching.open_course.Basic_Info.tags.help_block: 'Will be used for courses searching'
 my.teaching.open_course.Basic_Info.category: Category
 my.teaching.open_course.Basic_Info.about: About
-my.teaching.open_course.Basic_Info.about.help_block: 'Please config the IFrame whitelist in [admin center] - [system] - [site setting] - [security] if you need'
+my.teaching.open_course.Basic_Info.about.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 my.teaching.open_course.course_picture.title: 'Course Cover'
 my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270px. <br>File size shouldn't larger than \n"
 my.teaching.open_course.lesson.add_btn: 'Add lesson'
@@ -3639,7 +3646,7 @@ my.teaching.open_course.files.cloud_file: 'Cloud file'
 my.teaching.open_course.files.dev_mode_btn: 'Reconversion(debug mode)'
 my.teaching.open_course.files.media_subtitle_btn: 'Subtitles'
 my.teaching.open_course.recommend_setting.title: 'Recommend Settings'
-my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course'
+my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course&Classroom'
 my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
 my.teaching.open_course.recommend_setting.serializeMode.finished: Finished
 my.teaching.open_course.recommend_setting.onlive: 'On live'
@@ -3678,7 +3685,7 @@ my.teaching.open_course.course_info: 'Course Info'
 my.teaching.open_course.live_manage: 'Lives'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others"
-my.teaching.open_course.show.recommend_course: 'Recommend Course'
+my.teaching.open_course.show.recommend_course: 'Recommend Course/Classroom'
 my.teaching.open_course.show.about_empty: 'No brief introduction temporarily'
 my.teaching.open_course.header.tips: 'Share it to your wechat friends'
 my.teaching.open_course.header.understand_btn: Okay
@@ -4070,9 +4077,13 @@ item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You c
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.course.exit_btn: 'Exit'
+course.member.classroom_member.exit_btn: 'Exit'
+course.member.classroom_member.classroom_exit_btn: 'Exit Classroom'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
+course.member.course.expiry_start_date_tips: 'You cannot learn %task Name% before the study time is up. Please study within the valid period of study~'
 
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
@@ -4317,20 +4328,55 @@ admin.course_manage.statistics.classroom.remove: Removed from %classroomName%
 admin.course_manage.statistics.watch_task: 'View %taskName%'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
 admin.course_manage.statistics.modal_title: '%title% Course Data'
-admin.course_manage.statistics.data.name: '%taskName% Name'
+admin.course_manage.statistics.tips: >
+  1.This page is real-time data.<br/>
+  2.Task quantity: the total number of tasks under multiple plans.<br/>
+  3.Total number of trainees: the total number of trainees under multiple plans. If a student joins multiple programs, the student is counted multiple times.<br/>
+  4.Number of participants: only when the participants have completed all the plans can they be considered as completed.<br/>
+
+admin.course_manage.statistics.task_tips: Only the number of required class tasks is counted, and the data in brackets is the number of elective class tasks
+
+admin.course_manage.statistics.data.name: 'Task Name'
+admin.course_manage.statistics.data.task_type: Task Type
 admin.course_manage.statistics.data.study_number: 'Study Num(Person)'
 admin.course_manage.statistics.data.finished_number: 'Finish Num(Person)'
-admin.course_manage.statistics.data.average_study_time: 'Avg Study Duration(mins)'
-admin.course_manage.statistics.data.video_and_music_study_time: 'Video/Audio Duration'
-admin.course_manage.statistics.data.video_and_music_average_study_time: 'Avg Video/Audio Watch Duration(mins)'
+admin.course_manage.statistics.data.average_study_time: 'Average Learning Time(mins)'
+admin.course_manage.statistics.data.video_length: 'Video Length'
+admin.course_manage.statistics.data.task_sum_study_time: 'The Task Is Accumulated Learning Time(mins)'
 admin.course_manage.statistics.data.average_score: 'Avg Test Points'
+admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.optional_task: Optional
+
 admin.course_manage.statistics.data_detail.name: 'User Name'
+admin.course_manage.statistics.data_detail.phone_number: 'Phone Number'
+admin.course_manage.statistics.data_detail.id_number: 'ID Number'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
-admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
+admin.course_manage.statistics.data_detail.study_time: 'Sum Learned Time(mins)'
+admin.course_manage.statistics.data_detail.pure_study_time: 'Pure Learned Time(mins)'
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
+admin.course_manage.statistics.data_detail.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.data_detail.study_days_tips: >
+  1. Re-joining the course by the student may cause the student’s study days to be cleared<br/>
+  2. The number of learning days of the students will be refreshed after the students have learned behaviors in the new class time task<br/>
+admin.course_manage.statistics.data_detail.tips: >
+  <span style='font-size:14px'>
+    1.This page is real-time data.<br/>
+    2.Cumulative learning duration of plan: the learning duration generated by the class hours under the learning plan of all users is accumulated. Among them, the statistics of learning duration of video class is subject to the system curriculum learning configuration rules.<br/>
+    3.Learning days: natural days from joining time to completion time.<br/>
+    4.Cumulative learning duration: the accumulated learning duration generated by the class hours of a user's learning plan.<br/>
+  </span>
+
+admin.course_manage.statistics.data_detail.task.tips: >
+  <span style='font-size:14px'>
+    1.This page is real-time data.<br/>
+    2.Cumulative learning duration of plan: the learning duration generated by the class hours under the learning plan of all users is accumulated. Among them, the statistics of learning duration of video class is subject to the system curriculum learning configuration rules.<br/>
+    3.Video length (min): the size of the video file.<br/>
+    4.Accumulated learning duration of task: the learning duration of task is accumulated when it is learned by students.<br/>
+    5.Learning duration per capita: cumulative learning duration of task / number of learners.<br/>
+  </span>
 
 ## 用户数据统计
 admin.user.statistics.data_detail.note_number: Note Number
@@ -4752,6 +4798,8 @@ admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
 admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
+admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
@@ -4764,13 +4812,18 @@ admin.setting.site.copyright.help_block: 'You can enter website name and company
 admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
+admin.setting.site.icp_record_information: 'ICP record information'
+admin.setting.site.public_security_record_information:  'Public security record information'
 admin.setting.site.analytics: 'Analytics Code'
-admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
+admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
+admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
+admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
+admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
 admin.setting.theme.author: Author
@@ -4799,6 +4852,13 @@ admin.setting.theme.manage.modal.setting_course_num: 'Coures Number Setting'
 admin.setting.theme.manage.modal.setting_custom_category_count: 'Course Category Number Setting'
 admin.setting.theme.manage.modal.setting_count: Count
 admin.setting.theme.manage.modal.setting_custom_orderby: 'Sort Setting'
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 'Marshalling Sequence'
+admin.setting.theme.manage.modal.orderby_low_to_high: 'From Low To High'
+admin.setting.theme.manage.modal.orderby_high_to_low: 'From High To Low'
+admin.setting.theme.manage.modal.setting_custom_vip_list: 'Latest Membership List'
+admin.setting.theme.manage.modal.vip_list_show: 'Show'
+admin.setting.theme.manage.modal.vip_list_hidden: 'Hidden'
+admin.setting.theme.manage.modal.vip_list_tip: 'Display a list of newly joined members on the member center page'
 admin.setting.theme.manage.modal.setting_ustom_background_color: 'Background Color Setting'
 admin.setting.theme.manage.modal.color_gray: Gray
 admin.setting.theme.manage.modal.color_wihte: White
@@ -4819,8 +4879,10 @@ admin.setting.theme.manage.navigation_num_tips: >
 admin.setting.license.headline: Electronic business license configuration
 admin.setting.license.name: Electronic business license name
 admin.setting.license.picture: Electronic Business License Picture
+admin.setting.upload.license.photo: Upload license photo
 admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.license.url: Electronic business license link
+admin.setting.license.prompt: (The net school can request according to each place policy and net school actual business and decide)
 admin.setting.permit.headline: Operating license configuration
 admin.setting.permit.name: Business license name
 admin.setting.permit.record.number: Case number
@@ -4828,6 +4890,13 @@ admin.setting.permit.picture: ID picture
 admin.setting.permit.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school ID picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.permit.setting.add: Add a column
 admin.setting.permit.setting.remove: Delete entire column
+admin.setting.record.picture: Public security filing icon
+admin.setting.record.code: Public Security Record Number
+admin.setting.record.url: Public security record number link
+admin.setting.record.picture.help_block: >
+  The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
+admin.setting.record.code.help_block: >
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
@@ -5080,7 +5149,7 @@ admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
-admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
@@ -5101,6 +5170,11 @@ admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wech
 admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
 admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
 admin.wechat.notification.go_authorizer: Authorizer now
+admin.wechat_notification.message_subscribe.template_content_sample: Wechat template content example
+admin.wechat_notification.message_subscribe.template_subscribe_position: Subscription location
+admin.wechat_notification.message_subscribe.sms_template_content_sample: Sample content of SMS template
+admin.wechat_notification.message_subscribe.disable_tip: Note:the first time you use it, you need to authorize the website to generate wechat notification template
+
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -5310,7 +5384,7 @@ admin.operation_invite.coupon.recieved_at: 'Recieved Time:'
 admin.operation_invite.coupon.start_time.placeholer: 'Start Time'
 admin.operation_invite.coupon.finished_time.placeholer: 'Finished Time'
 admin.operation_invite.coupon.recieved_at_th: 'Recieved Time'
-admin.operation_invite.coupon.rate_th: 'Coupon Value'
+admin.operation_invite.coupon.rate_th: 'Coupon Value / Discount'
 admin.operation_invite.coupon.use_status_th: 'Useage Status'
 admin.operation_invite.coupon.use_status.unused: Unused
 admin.operation_invite.coupon.use_status.receive: Recieved
@@ -5321,6 +5395,42 @@ admin.operation_invite.register_coupon: 'Register Award'
 admin.operation_invite.invite_coupon: 'Invite Award'
 admin.operation_invite.invite_code_owner: 'inviter'
 admin.operation_invite.register_user: 'registered user'
+admin.operation_article.review.form.input.title.placeholer: 'Article Title Name'
+admin.operation_article.review.form.input.author.placeholer: 'author'
+admin:operation_article.review.form.input.content.placeholer: 'Key words in rate'
+admin.operation_article.review.content_th: 'Article Review Content'
+admin.operation_article.review.author_th: author
+admin.operation_article.review.operation_th: operation
+admin.operation_article.review.expand_td: unfold
+admin.operation_article.review.collapse_td: Folded
+admin:operation_article.review.content: 'Review Content'
+
+#用户信息采集
+admin.imformation_collection.create: 'Create'
+admin.information_collect.title.placeholer: 'Name of user information collection'
+admin.information_collect.title_th: 'Collection Name'
+admin.information_collect.location_th: 'Collection Location'
+admin.information_collect.create_time_th: 'Create Time'
+admin.information_collect.status_th: 'Collection Status'
+admin.information_collect.collected_num_th: 'Collected Num'
+admin.information_collect.operate: 'Operate'
+admin.information_collect.operate.detail: 'Detail'
+admin.information_collect.action.buy_after: 'Course/class merchandise after payment'
+admin.information_collect.action.buy_before: 'Course/class merchandise before payment'
+admin.information_collect.status.open: '<div class="green-circle"></div>Is collecting'
+admin.information_collect.status.close: '<div class="red-circle"></div>Stop to collect'
+admin.information_collect.creator: 'Creator'
+admin.information_collect.collected_num: %collectedNum% copies
+admin.information_collect.detail: <a class="color-black-title" href="%listUrl%">User Information Collection</a> > Deatil
+admin.information_collect.basic_info: Basic Information
+admin.information_collect.close_btn: Close
+admin.information_collect.open_btn: Open
+admin.information_collect.update_btn: Update
+admin.information_collect.collected_num_tab: Collected Data
+admin.information_collect.collected_time: Collected time：
+admin.information_collect.export_btn: Export
+admin.information_collect.form_user_infomation: (From Personal Data)
+
 admin.money_records.content_title: 'Account Details'
 admin.money_records.transaction_no.input_placeholder: 'Transaction No.'
 admin.money_records.nickname.input_placeholder: Username
@@ -5348,8 +5458,8 @@ admin.operation_certificate.template.style.horizontal: horizontal
 admin.operation_certificate.template.style.vertical: vertical
 admin.operation_certificate.template.basemap: basemap
 admin.operation_certificate.template.basemap.upload: upload basemap
-admin.operation_certificate.template.basemap.vertical_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 2800 × 3508 px, the file size does not exceed 2 MB.
-admin.operation_certificate.template.basemap.horizontal_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 3508 × 2800 px, the file size does not exceed 2 MB.
+admin.operation_certificate.template.basemap.vertical_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 2480 × 3508 px, the file size does not exceed 2 MB.
+admin.operation_certificate.template.basemap.horizontal_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 3508 × 2480 px, the file size does not exceed 2 MB.
 admin.operation_certificate.template.stamp: stamp
 admin.operation_certificate.template.stamp.upload: upload stamp
 admin.operation_certificate.template.stamp.upload_hint: Please upload the stamp image with transparent background in png, etc. The recommended size is 650 × 650 px and the file size should not exceed 2 MB.
@@ -6333,6 +6443,7 @@ admin.setting_course.questions_setting: 'Display answer and resolution after han
 admin.setting_course.questions_setting.hide: Hide
 admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
+admin.setting_course.questions_setting.submitted_tips: After it is turned on, the test task can be set to display the answer and analysis after the score is passed
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
 admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
@@ -6352,17 +6463,32 @@ admin.setting_course.open_course.open_course_comments_manage: 'Open Course Comme
 admin.setting_course.open_course.open_course_review: 'Open Course review'
 admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
+admin.setting_course.effective_learning_time_rule: Statistical rules of effective learning time in online video class
+admin.setting_course.learning_time_statistical_dimension: Statistical dimension of learning time
+admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
+admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
+admin.setting_course.effective_learning_time.playing_time: Video playing time
+admin.setting_course.effective_learning_time.page_time: Page stay time
+admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
+admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
+admin.setting_course.effective_learning_time.reweighted_merge.help_block: The learning time generated in multiple places at the same time is automatically de-merged
+admin.setting_course.effective_learning_time.accumulated_merge.help_block: The learning hours generated in multiple places at the same time do not re-accumulate and merge
+
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
 admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_notification_type: WeChat Account Notification Type
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
+admin.setting_wechat_auth.wechat_notification_message_subscribe_tip: Users need to bind wechat, and need to subscribe many times to receive the corresponding number of wechat notifications
+admin.setting_wechat_auth.wechat_notification_sms: SMS notification
+admin.setting_wechat_auth.wechat_notification_sms_tip: After this configuration is enabled, users who do not subscribe will be notified by SMS
 admin.setting_wechat_auth.web_scan_login_hint: >
   After the opening, the PC side of the website will support WeChat scan code login, and the App side will support WeChat authorized login.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   If turned on, users can register or login the site with wechat id in wechat app.<br>
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  After opening, users who bind wechat and pay attention to service number or subscription notice can receive wechat service number template message.<br>
   Please enable web scan code login and authorized login on WeChat first, and <span class="text-danger">enable service number template message pluginin WeChat background</span> .
 admin.setting_wechat_auth.wechat_pay_hint: >
   After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
@@ -6383,6 +6509,8 @@ admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
+admin.setting_wechat_auth.message_template: Message template
+
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.s2b2c_api: S2B2C Server API
@@ -6434,6 +6562,8 @@ admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
 admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
 admin.magic_setting.live_entry_time_tip: second
+admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
+admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -6695,6 +6825,26 @@ admin.article_setting.pageNum: 'Articles per page'
 admin.article_setting.article_comments_manage: 'Articles comment manage'
 admin.article_setting.message_comments_manage: 'Message comment manage'
 admin.setting_course.article.article_comment: 'Article Comment'
+admin.setting_course.video_play_setting: Online Video Task Playback Configuration
+admin.setting_course.video_play_setting.multiple_open: Multiple Open
+admin.setting_course.video_play_setting.multiple_open.allow_tips: Allows users to access a time-learning page on one or more ends at the same time
+admin.setting_course.video_play_setting.multiple_open.not_allow_tips: Forbidden users to access a time-learning page on one or more ends at the same time
+admin.setting_course.video_play_setting.different_video_multiple: Multiple sessions of the different video lesson
+admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening prohibition effect
+admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page
+admin.setting_course.video_play_setting.kick_previous_play.tips: >
+  <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
+  <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
+  <p>require terminal upgrade to PC side V20.4.6, APP side V4.9.3</p>
+admin.setting_course.video_play_setting.reject_current_play: Reject this access to the study page
+admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.Only available in the micro online school for the start-up theme.
+admin.setting_course.video_play_setting.ineffective_learning: Ineffective Learning
+admin.setting_course.video_play_setting.play_rule: Unfocused Learning Play Rule
+admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active window on the screen (such as minimizing the window on the PC side, switching the window, etc.), or the playing window of the current video class on the PC side or micro-network school side has not detected the user's action behavior within 20 minutes.
+admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play.
+admin.setting_course.video_play_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play.
+admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
+admin.setting_course.video_play_setting.play_rule.no_action: no intervention
 admin.article_setting.edit: 'Edit articles'
 admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column
@@ -6765,6 +6915,7 @@ admin.wap_setting.hint: >
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
+admin.wap_setting.responsive: Responsive
 admin.wap_setting.off: Off
 admin.wap_setting.tip: MicroSchool is an application that is opened through a browser and does not require a download. The link can be sent to students, or added to a push SMS, students can click on the link and immediately enter the micro-net school to study, purchase courses, course sharing, etc. The micro-net school is more suitable for the purpose of promoting student sharing, new promotion, and activation through marketing activities.
 admin.wap_setting.edit.tip: On the left side is a preview of the home page of your micro-net school, you can click "Edit Micro-net School" to enter the edit page. You can also select the appropriate theme application through the Theme Template. Build a personalized micro-net school home page through the free combination of components.
@@ -7026,6 +7177,20 @@ admin.app_upgrades.package_description_open: Expand
 admin.app_upgrades.package_description_close: Collapse
 admin.app_upgrades.update_btn: Update
 admin.app_upgrades.latest_version_tips: 'This is already the newest version!'
+admin.app_upgrades.agreement.title: 'Upgrade Service Agreement'
+admin.app_upgrades.agreement.content.21.1.2: >
+  <p class="agreement-content-title">Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</p>
+  <p class="agreement-content-title cd-mt16">Upgrade new version of back office</p>
+  <p>&nbsp&nbsp&nbsp&nbsp This version can only be used in the new version of backend. If you agree to upgrade, <b>you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</b></p>
+admin.app_upgrades.agreement.content.21.1.7: >
+  <p class="agreement-content-title">The Edusoho Master System V21.1.7 version has functional optimization of the Member Marketing Plugin.</p>
+  <p>1.Support custom setting of time and price for member selling, more flexible selling method.</p>
+  <p>2.Add new customer privileges to stimulate non-member users to enjoy membership benefits trial with a lower threshold.</p>
+  <p>3.The member component is exposed on the user side home page by default to reduce the operation configuration after opening the member function.</p>
+  <p>4.The Member Center page is reorganized, with clearer member introduction and guidance.</p>
+  <p><b>After the main system is upgraded to the latest version of membership marketing, the user-side APP also needs to be upgraded to the latest version of APP V4.10.0, otherwise it may result in members not being able to purchase on the old version of APP.</b></p>
+admin.app_upgrades.agreement.agree: 'Have read and agree to the upgrade service agreement'
+admin.app_upgrades.agreement.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
 admin.cloud_license.business_license: 'Commercial Licence'
 admin.cloud_license.non_business_license: 'Non-commercial Licence'
@@ -7069,7 +7234,7 @@ admin.cloud.app.upgrades.app: Application
 admin.cloud.app.upgrades.tips: 'During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.'
 admin.cloud.app.upgrades_danger.tips: Warning! you are currently using the test channel to upgrade this application, it is highly recommended that you give up to rise your current operation, other wise, site collapse and so on can't unexpected consequences, you need to take the consequences yourself.
 admin.cloud.app.upgrades.app_name: 'Application Name'
-admin.cloud.app.upgrades.app_version: 'Application Name'
+admin.cloud.app.upgrades.app_version: 'Application Version'
 admin.cloud.app.upgrades.backupDB: 'Backup Database'
 admin.cloud.app.upgrades.backupFile: 'Backup Files'
 admin.cloud.app.upgrades.backupStatus.yes: 'Yes'
@@ -7124,7 +7289,6 @@ admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
 admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
 admin.xapi.title: Push details
 admin.xapi.id: Push id
-admin.xapi.status: Push status
 admin.xapi.version: xAPI version
 admin.xapi.body: Push body
 admin.xapi.status: Push status
@@ -7258,7 +7422,8 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
-
+course.homework_check.create.name: "Homework name"
+course.homework_check.homework_delete: "The homework has been deleted"
 
 course.question_marker_statistics: PopQuestion Statistics
 
@@ -7416,7 +7581,7 @@ notification.group-thread.uncollect: %who%  cancel to collect your discussion %t
 notification.group-thread.reply: %who% replied to you in discussion %thread%
 notification.group-thread.delete-post: Your reply to discussion %thread% was deleted.
 notification.group-thread.type-modify: You are edited by %who% on discussion %thread%.
-notification.global: System notification:
+notification.global: 'System notification:'
 notification.vip-deadline: The VIP you bought will expire at %deadline%.
 notification.thread: %who% posted %thread% in %where%.
 notification.live-course: 【Live】 You are learning %course% will be broadcast at %noticeDay%%minStartTime%, please arrange time to participate on time.
@@ -7664,11 +7829,15 @@ my.reward_point.mall.search_hint: Enter the title keyword
 
 task.learn_data_detail.nickname: name
 task.learn_data_detail.createdTime: Join Time
+task.learn_data_detail.join_time: Join Time
 task.learn_data_detail.finishedTime: Finished Time
+task.learn_data_detail.finished_time: Finished Time
 task.learn_data_detail.testpaper_firstUsedTime: First Used Time(minute)
 task.learn_data_detail.testpaper_firstScore: First Score
 task.learn_data_detail.testpaper_maxScore: Max Score
 task.learn_data_detail.learnTime: Learn Time(minute)
+task.learn_data_detail.learn_total_time: Length of incremental learning (minutes)
+task.learn_data_detail.learn_deWeight_time: Length of de-weight learning (minutes)
 task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
 task.learn_data_detail.contact_information: contact information
 task.learn_data_detail.task_title: Task Title
@@ -7680,7 +7849,6 @@ join.time: 'Join Time'
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 
-cashier.order.status.changed_tips: The order status has been changed, please reorder.
 cashflow.title: Name
 cashflow.sn: sn
 cashflow.order_sn: order sn
@@ -7714,6 +7882,7 @@ order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
 order.pay_check_msg.balance_not_enough: Your balance is insufficient
 order.pay_check_msg.pay_password_not_set: Pay password not set
 order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
+order.pay_check_msg.goods_closed: Goods is closed
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
@@ -7810,6 +7979,7 @@ log.action.course.sync_when_task_update: 'Sync task updating'
 log.action.course.sync_when_task_delete: 'Sync task deletion'
 log.action.course.clone_course_set: 'Copy course'
 log.action.course.unlock_course: 'Unlock course sync'
+log.action.course.copy_course: 'copy teaching plan'
 log.action.course.create_course: Create teaching plan
 log.action.course.update_course: Update teaching plan
 log.action.course.delete_course: Delete teaching plan
@@ -7817,6 +7987,7 @@ log.action.course.publish_course: Publish teaching plan
 log.action.course.close_course: Close teaching plan
 log.action.course.update_draft: Update draft
 log.action.course.join_course: Join teaching plan
+log.action.course.exit_course: Exit teaching plan
 log.action.user.exportCsv: 'Export'
 log.action.user.add: 'Add'
 log.action.user.edit: 'Edit'
@@ -7911,6 +8082,7 @@ log.action.classroom.publish: Publish classroom
 log.action.classroom.close: Close classroom
 log.action.classroom.update_head_teacher: Modify the head teacher of the classroom
 log.action.classroom.join_classroom: Join classroom
+log.action.classroom.exit_classroom: Exit classroom
 log.action.article.update_settings: 'Update settings'
 log.action.article.create: 'Create'
 log.action.article.update: 'Update'
@@ -7988,7 +8160,6 @@ log.action.tagGroup.delete: 'Delete'
 log.action.coin.update_settings: 'Settings'
 log.action.coin.add_coin: 'Add'
 log.action.coin.deduct_coin: 'deduction'
-log.action.announcement.delete: 'Delete announcement'
 log.action.open_course.create_course: 'Create open course'
 log.action.open_course.update_course: 'Update open course'
 log.action.open_course.delete_course: 'Delete course'
@@ -8038,6 +8209,7 @@ log.action.template.course.close: Closed the<strong class="color-success"> cours
 log.action.template.course.delete: Deleted the<strong class="color-success"> course </strong>《%title%》
 log.action.template.course.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the teaching plan《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.course.remove_student: Removed the<strong class="color-success"> student </strong>%nickname% from teaching plan《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.exit_course: <strong class="color-success">Student</strong> %nickname% exit from the teaching plan《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: Updated teacher information for the teaching plan 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_thread: Created a new topic《%title%》
 log.action.template.course.update_thread: Updated the topic《%title%》
@@ -8066,8 +8238,6 @@ log.action.template.course.update_task: Updated the task《%title%》
 log.action.template.course.update_draft: Updated the draft《%title%》
 log.action.template.course.recommend: Recommended<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.cancel_recommend: Recommended<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》 canceled.
-log.action.template.course.create_lesson: Created a new course lesson《<a href="%url%" target="_blank">%title%</a>》
-log.action.template.course.add_task: Created a new course task《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.join_course: Joined the teaching plan《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.join_classroom: Joined the classroom《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: Created a new<strong class="color-success"> classroom </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -8081,6 +8251,7 @@ log.action.template.classroom.update_picture: Updated the cover of <strong class
 log.action.template.classroom.update_head_teacher: Updated the head teacher of the <strong class="color-success"> classroom </strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.classroom.remove_student: Removed the <strong class="color-success"> student </strong>%nickname% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.exit_classroom: <strong class="color-success">student</strong>%nickname%exited<strong class="color-success">classroom</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: Removed the<strong class="color-success"> course </strong>%courseSetTitle% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_course: Added a new <strong class="color-success"> course </strong>%courseSetTitle% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: Created a new<strong class="color-success"> category </strong> 《%title%》
@@ -8625,7 +8796,6 @@ log.attr.system.update_settings.storage.video_quality: Video transcode quality
 log.attr.system.update_settings.storage.video_quality.low: Smooth
 log.attr.system.update_settings.storage.video_quality.normal: Standard
 log.attr.system.update_settings.storage.video_quality.high: High
-log.attr.system.update_settings.storage.video_quality.high: Super
 log.attr.system.update_settings.storage.video_audio_quality: Video transcoding sound quality
 log.attr.system.update_settings.storage.video_audio_quality.low: Smooth
 log.attr.system.update_settings.storage.video_audio_quality.normal: Standard
@@ -8754,21 +8924,68 @@ user.learn.statistics.start_time: 'Start Time'
 user.learn.statistics.end_time: 'End Time'
 user.learn.statistics.default.search: 'Default sort'
 user.learn.statistics.search: 'Search'
+user.learn.statistics.learn_statistics.export: 'Export of user data statistics'
+user.learn.statistics.course_statistics.export: 'Export of user course learning statistics'
+user.learn.statistics.lesson_statistics.export: 'Export of user lesson learning statistics'
+user.learn.statistics.all.export: 'Export all files'
+user.learn.statistics.export.tips: 'Please be patient as the data volume is large and the download is slow.'
 user.learn.statistics.nickname: 'Username'
+user.learn.statistics.mobile: 'Mobile'
+user.learn.statistics.course: 'Course'
+user.learn.statistics.course_name: 'Course Title'
+user.learn.statistics.sum_learn_time: 'Accumulated hours of study (minutes)'
+user.learn.statistics.pure_learn_time: 'Number of hours of de-learning (minutes)'
+user.learn.statistics.task_num: 'Number of tasks'
+user.learn.statistics.finish_task_num: 'Number of finished Tasks'
+user.learn.statistics.finish_rate: 'Course or class completion rate'
+user.learn.statistics.lesson_name: 'Lesson task title'
+user.learn.statistics.lesson_type: 'Lesson type'
+user.learn.statistics.type: 'type'
+user.learn.statistics.video_length: 'Length of video'
+user.learn.statistics.lesson_watch_time: 'Duration of broadcast (minutes)'
+user.learn.statistics.lesson_stay_time: 'Page stay length (minutes)'
+user.learn.statistics.lesson.finish_rate: 'Lesson completion rate'
+user.learn.statistics.lesson.video: Video Lesson
+user.learn.statistics.lesson.audio: Audio Lesson
+user.learn.statistics.lesson.live: Live Lesson
+user.learn.statistics.lesson.discuss: Discuss Lesson
+user.learn.statistics.lesson.flash: Flash Lesson
+user.learn.statistics.lesson.doc: Doc Lesson
+user.learn.statistics.lesson.ppt: PPT Lesson
+user.learn.statistics.lesson.testpaper: Exam Lesson
+user.learn.statistics.lesson.homework: Homework Lesson
+user.learn.statistics.lesson.exercise: Exercise Lesson
+user.learn.statistics.lesson.download: Download Materials Lesson
+user.learn.statistics.lesson.text: Text Lesson
+user.learn.statistics.lesson.compulsory: compulsory
+user.learn.statistics.lesson.optional: optional
+user.learn.statistics.lesson.finish: finish
+user.learn.statistics.lesson.un_finish: incomplete
+user.learn.statistics.user_learn_statistics: User statistics
+user.learn.statistics.user_course_statistics: User course learning statistics
+user.learn.statistics.user_lesson_statistics: User Lesson learning statistics
 user.learn.statistics.join.classroom.num: 'Number of join class'
 user.learn.statistics.exit.classroom.num: 'Number of exit class'
 user.learn.statistics.join.course.num: 'Number of plans added'
 user.learn.statistics.exit.course.num: 'Number of exit plans'
+user.learn.statistics.join.task.num: 'Number of join tasks'
 user.learn.statistics.finished.task.num: 'Number of tasks completed'
 user.learn.statistics.learned.seconds: 'Length of study (minutes)'
+user.learn.statistics.video_playing.seconds: 'Length of incremental learning (minutes)'
+user.learn.statistics.page_stay.seconds: 'Length of de-weight learning (minutes)'
 user.learn.statistics.actual.amount: 'Total amount (CNY)'
 user.learn.statistics.empty: 'No user statistics'
 user.learn.statistics.init: 'Data upgrading, please wait'
 user.learn.statistics.manage.describe_tips: >
   <div style='width:250px;'>
     <h5 style='color:blue;margin:5px 0;'>User data instruction</h5>
-    <P style='margin:0;'>User data update daily from 00:00-02:00.</p>
+    <P style='margin:0;'>The "accumulated learning duration" field in this page is real-time data, and the data of other fields will be updated between 00:00-02:00 every day.</p>
+    <P style='margin:0;'>The "accumulated learning duration" field in the export table "user data statistics" is real-time data, and the data of other fields will be updated between 00:00-02:00 every day; the "user course learning data" and "user class learning data" are real-time data.</p>
+    <P style='margin:0;'>Cumulative learning duration: it is the cumulative learning duration generated by the user's learning hours in the online school under the screening conditions. Among them, the statistics of learning duration of video class is subject to the system curriculum learning configuration rules.</p>
   </div>
+
+user.learn.statistics.manage.describe_detail.tips: >
+  <span style='font-size:14px;'>The details page is real-time data.</span>
 
 admin.datalab.setting.modal_title: 'Tips:'
 admin.datalab.setting.modal_enable_body: "When it is on, the data will update after 24 hours. Data doesn't update while it is off."
@@ -8815,6 +9032,7 @@ exception.user.register_error: 'User data is wrong, and failed to register!'
 exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: The number of registrations has reached the maximum limit!
 exception.user.not_match_auth: 'User is not match auth'
+exception.user.mobile_not_found: 'User mobile is not found'
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -8830,6 +9048,7 @@ exception.thread.not_found_member: Member does not exist
 exception.thread.access_denied: The permission or resource cannot be accessed
 exception.rate_limit_max_attempt_reach: Too many requests are sent, please try later!
 exception.rate_limit_email_max_attempt_reach: The delivery limit has been exceeded and try again after 1 hour!
+exception.rate_limit_ugc_report_max_attempt_reach: The report times has been exceeded, please try after 1 day!
 exception.rate_limit_error_captcha: Graphic verification code error!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
@@ -8909,9 +9128,11 @@ exception.user.unfollow_error: Unfollow user who you did not follow
 exception.user.idcard_invalid: ID number is invalid
 exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: No permission to ban the role
+exception.user.lock: The account is banned, please contact the administrator
 exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
+exception.user.file_permission_denied: No file access
 
 exception.parsed.failed.netease: Failed to get video information of Netease Open Class
 exception.parsed.failed.letv: Failed to get video information of Letv
@@ -8932,6 +9153,7 @@ exception.coupon.finished: Coupon finished
 exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
+exception.lesson.parameter_missing: Missing class number
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist
@@ -8965,6 +9187,7 @@ exception.course.not_found_chapter: Chapter does not exist
 exception.course.chain_not_registered: Access chain not registered
 exception.course.expirymode_invalid: Validity type error
 exception.course.expirydays_required: Valid days cannot be empty
+exception.course.expirydays_invalid: Valid days type error
 exception.course.expirystartdate_required: Validity period start date cannot be empty
 exception.course.expiryenddate_required: Validity period end date cannot be empty
 exception.course.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
@@ -8995,7 +9218,7 @@ exception.classroom.forbidden_take_classroom: Forbidden take classroom
 exception.classroom.forbidden_handle_classroom: Forbidden handle classroom
 exception.classroom.forbidden_look_classroom: Forbidden look classroom
 exception.classroom.unpublished_classroom: Classroom is unpublished
-exception.classroom.chain_not_registered: Chain not registered
+exception.classroom.chain_not_registered: Access chain not registered
 exception.classroom.unjoin: You have not join classroom
 exception.classroom.empty_title: Title is empty
 exception.classroom.forbidden_update_expiry_date: The published class is not allowed to modify the original validity mode of the class.
@@ -9015,6 +9238,7 @@ exception.classroom.expired_classroom: Classroom has expired
 exception.classroom.forbidden_auditor_learn: Auditors have no right to learn
 exception.classroom.expired_member: The student has expired
 exception.classroom.forbidden_create_thread_event: Create an activity without permission
+exception.classroom.at_least_one_course: At least one course in classroom
 exception.course.member.not_found: The course doesn't have this student
 exception.course.member.not_member: The user is not a member of this course
 exception.course.member.duplicate_member: User has joined the teaching plan
@@ -9195,6 +9419,8 @@ exception.reward_point.account.not_found_pay_password: pay password not found
 exception.reward_point.account.error_pay_password_format: The new payment password is not available, please try another password combination
 exception.question_marker.not_found: The question marker does not exist
 exception.order_pay_check.instance_error: Not a ProductDealerService instance
+exception.order_pay_check.unable_pay: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
+exception.order_pay_check.vip.app_upgrade: Please upgrade to the latest version to see the membership price
 exception.live_replay.not_found: Live replay does not exist
 exception.cloud_file.not_found: Cloud file does not exist
 exception.cloud_file.not_found_player: Cloud player does not exist
@@ -9236,6 +9462,8 @@ exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
+exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
+exception.item_bank.assessment.not.exist: Test paper does not exist
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -9251,6 +9479,12 @@ exception.certificate.record.notfound_record: Certificate not found
 exception.certificate.record.forbidden_cancel: Forbidden cancel
 exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
+exception.certificate.audit.forbidden_audit: Audit failure
+exception.certificate.valid.forbidden_audit: Failed to send audit
+exception.certificate.reject.forbidden_audit: Review rejected failure
+
+exception.information_collect.not_found: Collection not found
+exception.information_collect.closed: Collection is closed
 
 course.unname_title: unname course
 
@@ -9307,8 +9541,15 @@ wechat.notification.pay_success: Pay Success
 wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+wechat.notification.subscribe_scan_and_bind: In order to enjoy better service, scan the code to bind wechat and pay attention to the service number.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
 wechat.notification.record_content: Notification content
+wechat.notification.wechat_record_content: WeChat notification content
+wechat.notification.sms_record_content: Text message notification content
+wechat.notification.wechat: WeChat
+wechat.notification.sms: Text message
+wechat.notification.record_send_number: receive/send
+wechat.notification.sms.record_send_number: send
 wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number
@@ -9362,6 +9603,27 @@ wechat.notification.template.remind_course: 'Dear students, keep learning today,
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the [course name or class name]. <br>question time: [question time]<br>reply content: [reply content]'
 wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
 
+#微信消息订阅通知模板
+wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> <br> Course Title: [task name] <br> time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher's mobile phone number] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.homework_result: "Assignment correction completion notice <br> <br> Title: [task name] <br> assignment status: [assignment status] ([n remaining] notices) <br> comments: [comments]"
+wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> <br> examination name: [task name] <br> score: [examination score] <br> warm tips: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.lesson_add: "New notice on course <br> <br> Course: [Course name] ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.ask_question: "Student question reminder <br> Course Name: ([if it is a class, show class 2 characters]) [Course name] or [class name] <br> questioner: [student user name] ([n times left] notice) <br> question: [question title] <br> question time: [question submission time] <br> <br> Course Name"
+wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
+wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Course learning page <br> (course / class <br> teacher, Ta, <br> head teacher)'
+#微信消息订阅短信通知模板
+wechat.notification.message_subscribe_sms.template.live_start: "[online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address"
+wechat.notification.message_subscribe_sms.template.homework_result: "[online education] the homework of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.exam_result: "[online education] the test paper of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.lesson_add: 'General course: <br> [online education] your course: [Course name] - learning task: [learning task name] has been published! Link address <br> live broadcast: <br> [online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address'
+wechat.notification.message_subscribe_sms.template.vip_expired: '[online education] Dear students, the membership you purchased is about to expire: <br> opening time: [opening time] <br> expiration time: [expiration time] <br> please renew it in time to avoid affecting your study'
+wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time。'
+wechat.notification.message_subscribe_sms.template.remind_course: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time'
+wechat.notification.message_subscribe_sms.template.ask_question: "[online education] Dear teacher, there is a student's question in [course or class name] <br> applicant: [questioner] <br> question content: [question title] <br> time: [question submission time]"
+wechat.notification.message_subscribe_sms.template.answer_question: "[online education] in [Course name or class name] <br> question time: [question time] <br> reply content: [reply content] <br> in [Course name or class name]"
+wechat.notification.message_subscribe_sms.template.charge_success: "[online education] you have successfully purchased virtual currency face value and unit, and paid [order amount]"
+wechat.notification.message_subscribe_sms.template.buy_success: "Course: <br> online education: you have successfully purchased the course name - teaching plan name, and paid the [order amount]<br> class: <br> online education: you have successfully purchased class name and paid [order amount]<br> member: <br> online education: you have successfully purchased the member name and paid the [order amount]."
+
 #微信通知规则
 Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
 wechat.notification.template.answer_question.rule: When the teacher answers the student's question, a notification is sent to the questioner.
@@ -9392,25 +9654,27 @@ wechat.notification.template_name.buy_success: 'Buy Success'
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end
 mobile.task.finish_tips.discuss.join: Post or respond to a topic in this course
-mobile.task.finish_tips.doc.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.doc.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.download.download: Downloaded materials
 mobile.task.finish_tips.exercise.submit: submitted an exercise
-mobile.task.finish_tips.flash.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.flash.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.homework.submit: Submit
 mobile.task.finish_tips.live.join: participated in the live broadcast
 mobile.task.finish_tips.ppt.end: Learn at the end page
-mobile.task.finish_tips.ppt.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.ppt.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.testpapaer.submit: Submit
 mobile.task.finish_tips.testpapaer.score: 'Test score %finishData% points'
-mobile.task.finish_tips.text.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.text.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.video.end: Learning to the end
-mobile.task.finish_tips.video.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.video.time: 'At least stay %finishData% minutes'
+mobile.task.finish_tips.video.watchTime: 'At least watch %finishData% minutes'
 classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
-editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+editor.iframe_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Security Settings】-【Whitelist Domain】and set the value'
 #coupon
 coupon.usage_detail_title: Coupon usage details
+coupon.generate_log_title: Coupon generate logs
 coupon.enable_hint: The coupon is not open. Please enable it in <a href="%path%"> System - Operational Settings - Coupon </a>
 
 coupon.id: Coupon id
@@ -9443,6 +9707,7 @@ coupon.total_count: Sum
 coupon.expiry_date: Validity period
 coupon.amount: Preferential amount
 coupon.target_type: Type
+coupon.amonut: Amount
 
 coupon.type.minus: Price
 coupon.type.discount: Discount
@@ -9961,6 +10226,7 @@ exception.s2b2c_product.update_type_invalid: Update type invalid
 exception.s2b2c_product.not_found: Product not found
 exception.s2b2c_product.remove_failed: Product remove failed
 exception.s2b2c.hidden_permission_invalid: S2b2c hide permission invalid
+exception.s2b2c.settlement_report_not_found: S2b2c settlement report not found
 
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
@@ -9979,17 +10245,67 @@ s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
 
 exception.goods.not_found: Goods not found.
+exception.specs.not_found: Specs not found.
+exception.goods.forbidden_manage: Has no permission for goods
 
+vip.level.free_learning: Free for Vip
 exception.review.forbidden_create_review: Create review forbiddened.
 exception.review.forbidden_operate_review: Operate review forbiddened.
 exception.review.rating_limit: Rating no more than 5
 exception.review.not_found_review: Review not found
 exception.review.post_limit: Post no more than 5
 
+admin_v2.operating.goods_recommend_setting: Product recommendation settings
+admin_v2.operating.goods_recommend_rule: Recommended rules
+
+admin_v2.operating.goods_recommend.hot: Recommended by heat
+admin_v2.operating.goods_recommend.hot_tips: Recommendations are made based on the products with the largest number of purchases in the last 30 days.
+admin_v2.operating.goods_recommend.latest: According to the latest recommendation
+admin_v2.operating.goods_recommend.latest_tips: According to the product release time, the most recently released products are displayed.
+admin_v2.operating.goods_recommend.label: Recommended by tag
+admin_v2.operating.goods_recommend.label_tips: According to the classification tag of the goods, the related goods are displayed.
+
+
+admin_v2.operating.goods_show_setting: Sales display settings
+admin_v2.operating.goods_show_sales: Product page shows sales
+admin_v2.operating.goods_show_sales.course: Course merchandise page shows sales
+admin_v2.operating.goods_show_sales.classroom: Class product page shows sales
+admin_v2.operating.goods_show_data: Product page display data
+admin_v2.operating.goods_show.join_number: Show joins
+admin_v2.operating.goods_show.visitor_number: Show visitors
+admin_v2.operating.goods_show.none: Show none
+admin_v2.operating.review_setting: Goods page show setting
+admin_v2.operating.review_show: Goods page show reviews
+
+admin_v2.operating.goods_leading_setting: Product page guide
+admin_v2.operating.goods_leading.join_group: Product page guide join group
+admin_v2.operating.goods_leading.join_group.tips: Users who guide access to the product page can add a WeChat group, WeChat personal number or public number, and use the community and public number to undertake the possible loss of the product page for conversion. This function will display the same guide copy and QR code on all the product pages of all terminals and online schools. It is recommended to provide the public number of the online school and the WeChat group that converts traffic operations.
+admin_v2.operating.goods_leading.join_group.btn: View tutorial
+admin_v2.operating.goods_leading.join_group_label: Boot label settings
+admin_v2.operating.goods_leading.join_group_label.example_btn: View example
+admin_v2.operating.goods_leading.label_content: Boot label pop-up content settings
+admin_v2.operating.goods_leading.label_content.description: Boot description
+admin_v2.operating.goods_leading.label_content.description_tips: 'You can enter the relevant copy to guide the user, such as: free access to teaching materials into the group, free learning courses, etc.'
+admin_v2.operating.goods_leading.label_content.qrcode: QR code upload
+admin_v2.operating.goods_leading.label_content.qecode_upload: Upload QR code
+admin_v2.operating.goods_leading.label_content.qrcode_tips: 'Please upload pictures in jpg, gif, png format, the picture size is 1:1. It is recommended that the image size should not exceed 2MB.'
+admin_v2.operating.goods_leading_setting.tips: 'Note: After the number of WeChat groups exceeds 100, users will not be able to scan the code to enter the group and the WeChat group QR code is valid for 7 days. Please update the group QR code in time.'
+
 exception.favorite.forbidden_operate_favorite: Forbidden
-
+classroom.courses: Classroom course number
+classroom.member_number: Classroom member number
+classroom.preview_btn: Preview Classroom
+classroom.publish_btn: Publish Classroom
+classroom.subtitle_label: Subtitle
+classroom.basic_setting: Basic Setting
+classroom.cover_crop.title: Classroom Cover
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+exception.product.not_exist: Product does not exist
 
+
+goods.minimum_price.unit: From %price%%unit%
+goods.origin_price.unit: %price%%unit%
+goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
@@ -10017,3 +10333,304 @@ user.certificates.detail_cert_message: Certificate information
 user.certificates.unclaimed_list: Certificate to be received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
+
+admin_v2.information_collect.create: Create
+admin_v2.information_collect.update: Edit
+admin_v2.information_collect.edit.title: Title
+admin_v2.information_collect.edit.action: Action
+admin_v2.information_collect.edit.action_before: Before Course/Classroom Pay
+admin_v2.information_collect.edit.action_after: After Course/Classroom Pay
+admin_v2.information_collect.edit.action_before.help_block: Include free products before joining
+admin_v2.information_collect.edit.action_before.tip: Collect user information before payment, which may affect purchase conversion rate
+admin_v2.information_collect.edit.action_after.help_block: Include free products after joining
+admin_v2.information_collect.edit.form_items: Form items
+admin_v2.information_collect.edit.form_items.tip: Please click the optional information collect items from the right to the left, and you can drag up and down to sort
+admin_v2.information_collect.edit.form_items.warning_tip: Too many information collect items may affect user experience
+admin_v2.information_collect.edit.form_items.allow_skip: Allow Skip
+admin_v2.information_collect.edit.form_items.allow_skip.tips: Currently only supports the collection setting "Skip not allowed" for class/course goods before payment
+admin_v2.information_collect.edit.form_items.skip.allow: 'Yes'
+admin_v2.information_collect.edit.form_items.skip.not_allow: 'No'
+admin_v2.information_collect.edit.form_items.enable: Enable
+admin_v2.information_collect.edit.target_type.all: All Course/Classroom
+admin_v2.information_collect.edit.target_type.part: Selected Course/Classroom
+admin_v2.information_collect.edit.target_type.all_course: All Course
+admin_v2.information_collect.edit.target_type.all_classroom: All Classroom
+admin_v2.information_collect.edit.target_type.tip: Prioritize the execution of the collect events of the specified course/classroom
+admin_v2.information_collect.binded_tips: Linked to other collect events
+admin_v2.information_collect.more: See Details
+admin_v2.information_collect.selected_course_count: Selected Course Count
+admin_v2.information_collect.selecte_course: Selecte Course
+admin_v2.information_collect.selected_classroom_count: Selected Classroom Count
+admin_v2.information_collect.selecte_classroom: Selecte Classroom
+admin_v2.information_collect.course.chooser.limit: Support up to 200 courses
+admin_v2.information_collect.chooser.delete_item: Remove
+admin_v2.information_collect.chooser.tips: There is already a conflicting association
+admin_v2.information_collect.chooser.unbind_item: Unbind conficting association
+admin_v2.information_collect.chooser.empty: Empty
+admin_v2.information_collect.form_items.required: Required
+admin_v2.information_collect.form_items.select_group.base_info: Base Info
+admin_v2.information_collect.form_items.select_group.contact_info: Contact Info
+admin_v2.information_collect.form_items.select_group.company_info: Company Info
+admin_v2.information_collect.form_items.select_group.school_info: School Info
+admin_v2.information_collect.form_items.select_group.other_info: Other
+admin_v2.information_collect.form_items.confirm_submit: Submit
+
+information_collect.title: Information Collect
+information_collect.form_items.confirm_submit: Submit
+information_collect.form_items.skip: Skip
+information_collect.select_placeholeder: Choose
+information_collect.detail: Information Collect Detail
+
+task.learn_data_detail.stay_total_time: 页面累加时长（分）
+task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
+task.learn_data_detail.video_total_time: 播放累加时长（分）
+task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
+task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
+course.task.notify_message.join_and_buy: Please join or buy course
+course.task.notify_message.join_limit: Course buy limited
+
+exception.exercise.not_found: Practice doesn't exist
+exception.exercise.draft: This exercise is not published. If you have any questions, please contact the teacher!
+exception.exercise.closed: This exercise is closed. If you have any questions, please contact the teacher!
+exception.exercise.forbidden_access_exercise: No access to other students' exercises!
+exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
+exception.exercise.not_found_result: The result of the exercise does not exist
+
+exception.homework.not_found: Homework does not exist
+exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
+exception.homework.closed: This homework is closed. If you have any questions, please contact the teacher!
+exception.homework.forbidden_access_homework: Access to other students' work is not allowed!
+exception.homework.forbidden_duplicate_commit_homework: Homework has been finished and cannot be submitted again!
+exception.homework.reviewing: Homework is being marked! Can't start over!
+exception.homework.not_found_result: The homework result does not exist
+
+activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
+activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
++course.plan_task.activity_manage.video.time_at_least: Stay at least
++course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+activity_manage.time_last_tips: >
+  Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
+activity_manage.finished_tips: >
+  <span class="color-primary">Congratulations! You have completed this task</span>
+exam_bank.analysis.data_large_loading: Data is too large，loading
+exam_bank.analysis.data_large_loading_finish: Data loading finish
+exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
+exam_bank.analysis.data_large_loading_btn: Force refresh
+activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
+
+classroom.manage.sign_statictics: Sign Statistics
+classroom.manage.sign_statictics.user_th: Username
+classroom.manage.sign_statictics.sign_days_th: Sign Days
+classroom.manage.sign_statictics.keep_days_th: Keep Days
+classroom.manage.sign_statictics.sign_today_th: Sign Today
+classroom.manage.sign_statictics.operate_th: Operate
+classroom.manage.sign_statictics.item: Item
+classroom.manage.sign_statictics.name_placeholder: Please enter username
+classroom.manage.sign_statictics.search_btn: Search
+classroom.manage.sign_statictics.role.all: All
+classroom.manage.sign_statictics.role.header_teacher: Header Teacher
+classroom.manage.sign_statictics.role.teacher: Teacher
+classroom.manage.sign_statictics.role.assistant: Assistant
+classroom.manage.sign_statictics.role.student: Student
+classroom.manage.sign_statictics.role.auditor: Auditor
+classroom.manage.sign_statictics.modal_title: %nickname%Item
+classroom.manage.sign_statictics.sign_type: Sign Type
+classroom.manage.sign_statictics.sign_time: Sign Time
+classroom.manage.sign_statictics.nickname_th: Nickname
+classroom.manage.sign_statictics.role_th: Role
+classroom.manage.sign_statictics.join_time_th: Join Time
+
+admin.classroom_manage.statistics.creator_placeholder: Creator
+admin.classroom_manage.statistics.name_th: Classroom
+admin.classroom_manage.statistics.course_number_th: Course Number
+admin.classroom_manage.statistics.task_number_th: Task Number
+admin.classroom_manage.statistics.student_number_th: Student Number
+admin.classroom_manage.statistics.finish_number_th: Finish Number
+admin.classroom_manage.statistics.income_th: Income
+admin.classroom_manage.statistics.operation_th: Operate
+admin.classroom_manage.statistics.create_time_th: Create Time
+admin.classroom_manage.statistics.creator_th: Creator
+admin.classroom_manage.statistics.student_operation_btn: Student Operation
+admin.classroom_manage.statistics.course_operation_btn: Course Operation
+admin.classroom_manage.statistics.task_num_tips: Only count the number of required class hours and tasks, the numbers in parentheses are the number of optional class hours and tasks
+admin.classroom_manage.statistics.finish_number_tips: Take the number of people whose learning progress is 100% in all class hours. If new courses or hours are added to the class, the number of people completed will change accordingly.
+admin.classroom_manage.statistics.member_modal_title: <%classroom%> data from the student's perspective
+admin.classroom_manage.statistics.member_modal_title_tips: >
+  <span style='font-size:14px'>
+    1.Cumulative study time (minutes):accumulate all study time generated by the user under the class-course.<br/>
+    2.Among them, the statistical dimension of video lesson learning time (playing active time or page active time) is subject to the system-course settings-video lesson learning configuration.<br/>
+    3.Statistics are for yesterday and before.<br/>
+  </span>
+admin.classroom_manage.statistics.member.total_learn_time: 'All courses in the class are accumulated learning time (minutes): %mins%'
+admin.classroom_manage.statistics.member.nickname_th: Username
+admin.classroom_manage.statistics.member.phone_number_th: Phone Number
+admin.classroom_manage.statistics.member.id_number_th: ID Number
+admin.classroom_manage.statistics.member.create_time_th: Join Time
+admin.classroom_manage.statistics.member.finish_time_th: Finish Time
+admin.classroom_manage.statistics.member.learn_time_th: Learned Time
+admin.classroom_manage.statistics.member.question_num_th: Question Number
+admin.classroom_manage.statistics.member.note_num_th: Note Number
+admin.classroom_manage.statistics.course.title: <%classroom%> Course Data
+admin.classroom_manage.statistics.course.title_tips: >
+  <span style='font-size:14px'>
+    1.The data of the accumulated learning time and per capita learning time of the task are statistics of yesterday and before.<br/>
+    2.Other statistical data items are real-time data.<br/>
+  </span>
+admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+
+classroom.manage.data_statictics: Data Statistics
+classroom.manage.data_statistics.overview.student_num: Student Number
+classroom.manage.data_statistics.overview.auditor_num: Auditor
+classroom.manage.data_statistics.overview.finished_num: Finished Num
+classroom.manage.data_statistics.overview.sumtime: Sum LearnTime (minute)
+classroom.manage.data_statistics.overview.average_time: Average LearnTime (minute)
+classroom.manage.data_statistics.overview.finished_num_tips: Take the number of people who have reached 100% of the learning progress of all class hours in the class. If new courses or class hours are added to the class, the number of people who have completed the tasks will change accordingly.
+classroom.manage.data_statistics.student_trendency: Student trendency
+classroom.manage.data_statistics.student_trendency.select_seven_days: Seven Days
+classroom.manage.data_statistics.student_trendency.select_thrity_days: Thrity Days
+classroom.manage.data_statistics.student_detail_list.title: Student Detail
+classroom.manage.data_statistics.course_detail_list.title: Course Detail
+classroom.manage.data_statistics.student_detail_list.select_all: All
+classroom.manage.data_statistics.student_detail_list.select_un_finished: UnFinished
+classroom.manage.data_statistics.student_detail_list.select_un_learn_seven_days: UnLearn Seven Days
+classroom.manage.sign_statictics.sign_type.classroom_sign: Classroom Sign
+classroom.manage.sign_statictics.empty: No Sign Data
+
+classroom.manage.data_statistics.overview.sum_time_tips: The cumulative learning duration is the data of yesterday and before
+classroom.manage.data_statistics.course_detail.course_name: Course Name
+classroom.manage.data_statistics.course_detail.task_num: Task Number
+classroom.manage.data_statistics.course_detail.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.course_detail.learn_conditions_detail: 《%courseSetTitle%》Learn Detail
+classroom.manage.data_statistics.course_detail.finish_rate_tips: Completed class hours in the course / all class hours in the course = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.course_detail.rate.finish: Finished Rate
+classroom.manage.data_statistics.course_detail.learn_progress: Learn Progress
+classroom.manage.data_statistics.student_detail.finished_rate_tips: Completed class hours / all class hours = completion rate (excluding elective class hours)
+classroom.manage.data_statistics.header.user: UserName
+classroom.manage.data_statistics.header.learn_conditions: Learn Conditions
+classroom.manage.data_statistics.header.learn_progress: Learn Progress
+classroom.manage.data_statistics.header.finished_time: FinushedTime
+classroom.manage.data_statistics.start_time: Start Time
+classroom.manage.data_statistics.finished_time: FinishedTime
+classroom.manage.data_statistics.finish_status.unlearn: UnLearn
+classroom.manage.data_statistics.finish_status.learning: Learning
+classroom.manage.data_statistics.finish_status.learned: Finished
+classroom.manage.data_statistics.course_detail_list.select_all: All
+classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
+classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
+classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
+admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
+admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
+admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename
+admin.edu_cloud.edu_video.finger_print_content_label.mobile: Mobile
+admin.edu_cloud.edu_video.finger_print_content_label.domain: Domain
+admin.edu_cloud.edu_video.finger_print_content_tips: >
+  For a better user experience, it is recommended to combine up to 2 information displays. Note: If the user's real name and mobile phone number are not available, it will be displayed as-
+admin.edu_cloud.edu_video.finger_print_embed_tips: After it is turned on, cloud video fingerprint information will be displayed at random times and locations during video playback.
+
+admin_v2.system.user_content_control.review_manage: Review Manage
+admin_v2.system.user_content_control.course_review_manage: Course Review Manage
+admin_v2.system.user_content_control.classroom_review_manage: Course Review Manage
+admin_v2.system.user_content_control.question_bank_review_manage: QuestionBank Review Manage
+admin_v2.system.user_content_control.open_course_review_manage: OpenCourse Review Manage
+admin_v2.system.user_content_control.article_review_manage: Article Review Manage
+admin_v2.system.user_content_control.goto_review_manage: Goto Review Manage List>>
+admin_v2.system.user_content_control.thread_manage: Thread Manage
+admin_v2.system.user_content_control.course_question_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
+admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
+admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
+admin_v2.system.user_content_control.private_message_manage: Private Message Manage
+admin_v2.system.user_content_control.note_manage: Note Manage
+admin_v2.system.user_content_control.goto_note_manage: Goto Note Manage>>
+admin_v2.system.user_content_control.classroom_note_manage: Classroom Note Manage
+admin_v2.system.user_content_control.course_note_manage: Course Note Manage
+admin_v2.system.user_content_control.pc_switch_tips: When it is turned on or off, it is only effective for PC terminal, and other terminals do not have this function
+admin_v2.system.user_content_control.course_note_tooltips: The course learning page notes display and class notes entry are controlled by this switch
+admin_v2.system.user_content_control.classroom_note_tooltips: The note display on the class learning page is controlled by this switch
+admin_v2.system.user_content_control.pc_app_switch_tips: When it is turned on or off, it only works for PC and app, and other terminals do not have this function
+admin_v2.system.user_content_control.goto_question_manage: Go to Q & a management>>
+admin_v2.system.user_content_control.goto_thread_manage: Go to topic management>>
+admin_v2.system.user_content_control.goto_group_thread_manage: Go to group topic management>>
+admin_v2.system.user_content_control.goto_private_message_manage: Go to private message management>>
+
+admin_v2.vip_close.block_tip: Vip function is not activated.
+admin_v2.vip_close.to_open_vip: To open
+
+admin_v2.system.user_content_control.content_audit_setting.label: Audit Setting
+admin_v2.system.user_content_control.content_audit_setting.audit_before: Audit Before
+admin_v2.system.user_content_control.content_audit_setting.audit_after: Audit After
+admin_v2.system.user_content_control.content_audit_setting.audit_before.tips: That is, after the user publishes the public content, the system automatically filters sensitive words and displays them to the front page in real time, and then is manually sampled
+admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: That is, after the user publishes the public content, it can be publicly displayed on the front page after it is manually reviewed and approved.
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+
+admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: Sensitive Keywords
+admin_v2.operation.user_content_audit_form.author.placeholder: Author
+admin_v2.operation.user_content_audit_form.startTime: Start Time
+admin_v2.operation.user_content_audit_form.endTime: End Time
+admin_v2.operation.user_content_audit.content_th: User Published content
+admin_v2.operation.user_content_audit.contain_sensitive_words_th: Sensitive Keywords
+admin_v2.operation.user_content_audit.type_th: Type
+admin_v2.operation.user_content_audit.author_time_th: Author/Time
+admin_v2.operation.user_content_audit.status_th: Audit Status
+admin_v2.operation.user_content_audit.auditor_th: Auditor
+admin_v2.operation.user_content_audit.default_auditor: System
+admin_v2.operation.user_content_audit.operation_th: Operation
+admin_v2.operation.user_content_audit.expand_td: Unfold
+admin_v2.operation.user_content_audit.collapse_td: Folded
+admin_v2.operation.user_content_audit.user_content: User Content
+admin_v2.operation.user_content_audit.modal.body.illegal_warning: Are you sure to judge user content as illegal?
+admin_v2.operation.user_content_audit.modal.body.illegal_info: After confirming the violation, the user content will not be displayed on the foreground page
+admin_v2.operation.user_content_audit.modal.body.pass_warning: Are you sure to pass the user content judgment?
+admin_v2.operation.user_content_audit.modal.body.pass_info: After confirmation, the user content is displayed on the front page
+admin_v2.operation.user_content_audit.select_all_btn: All Select
+admin_v2.operation.user_content_audit.modal.body.button.confirm: Confirm
+admin_v2.operation.user_content_audit.modal.body.button.cancel: Cancel
+admin_v2.operation.user_content_audit_form.all_type_option: All type
+admin_v2.operation.user_content_audit_form.all_status_option: All status
+admin_v2.operation.user_content_audit_form.sensitive_words_filter_option: Sensitive words filter
+
+admin_v2.operation.report_content_audit.target_type_placeholder: All
+admin_v2.operation.report_content_audit.status_placeholder: All
+admin_v2.operation.report_content_audit.report_tag_placeholder: Report Type
+admin_v2.operation.report_content_audit.author_placeholder: Author
+admin_v2.operation.report_content_audit.table.content: Content
+admin_v2.operation.report_content_audit.table.type: Type
+admin_v2.operation.report_content_audit.table.count: Count
+admin_v2.operation.report_content_audit.table.tag: Tags
+admin_v2.operation.report_content_audit.table.author: Author/Time
+admin_v2.operation.report_content_audit.table.status: Status
+admin_v2.operation.report_content_audit.table.auditor: Auditor
+admin_v2.operation.report_content_audit.table.operate: Operate
+admin_v2.operation.report_content_audit.table.auditor_default: System
+
+admin_v2.operation.report_content_audit.table.operate_item: Item
+admin_v2.operation.report_content_audit.table.operate_pass: Pass
+admin_v2.operation.report_content_audit.table.operate_illegal: Illegal
+admin_v2.operation.audit_center.table.batch_pass: Batch Pass
+admin_v2.operation.audit_center.table.batch_illegal: Batch Illegal
+admin_v2.operation.report_content_audit.table.batch_pass.notice: Is the reported content normal?
+admin_v2.operation.audit_center.table.batch_pass.notice_tips: After confirming that it is normal, the reported content will be displayed normally
+admin_v2.operation.audit_center.table.batch_illegal.notice: Confirm that the reported content violates the rules?
+admin_v2.operation.audit_center.table.batch_illegal.notice_tips: After the violation is confirmed, the reported content will be processed
+admin_v2.operation.report_content_audit.record.title: Records
+admin_v2.operation.report_content_audit.record.type: Type
+admin_v2.operation.report_content_audit.record.reporter: Reporter
+admin_v2.operation.report_content_audit.record.time: Time
+admin_v2.operation.audit_center.table.status.sys_illegal: System illegal
+
+exception.audit_center.report_audit_not_exist: Report information does not exist
+exception.audit_center.report_audit_status_not_valid: Invalid review status
+
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow.tips: After permission, the audit status is normal (system approved)
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_after.not_allow.tips: After not allowed, the review status is system reviewed-pending manual review
+admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
+admin_v2.system.user_content_control.content_audit_setting.title_tips: >
+  <span style="font-size: 14px;">After reviewing the change of setting items, only the newly generated data after the change will take effect</span>
+
+admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in bulk
+admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
+admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
+admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
