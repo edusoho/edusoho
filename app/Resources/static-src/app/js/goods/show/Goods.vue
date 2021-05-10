@@ -54,7 +54,10 @@
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
-                        <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage" :target-type="'goods'"
+                        <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
+                                 :report-type="getReportType"
+                                 :reply-report-type="getReplyReportType"
+                                 :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
                                  v-if="ugcReviewSetting.enable_review == 1
@@ -175,7 +178,25 @@
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
                 return this.goods.summary;
-            }
+            },
+            getReportType() {
+                if (this.goods.type === 'classroom') {
+                    return 'classroom_review';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return 'course_review';
+                }
+            },
+            getReplyReportType() {
+                if (this.goods.type === 'classroom') {
+                    return 'classroom_review_reply';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return 'course_review_reply';
+                }
+            },
         },
         methods: {
             getGoodsInfo() {
