@@ -34,11 +34,11 @@
           {{ 'Android APP'|trans }}
         </label>
         <label>
-          <input type="checkbox" name="client[]" value="miniprogram" {% if 'miniprogram' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          <input type="checkbox" disabled name="client[]" value="miniprogram">
           {{ '小程序'|trans }}
         </label>
         <label>
-          <input type="checkbox" name="client[]" value="other" {% if 'other' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          <input type="checkbox" disabled name="client[]" value="other">
           {{ '其他'|trans }}
         </label>
       </div>
