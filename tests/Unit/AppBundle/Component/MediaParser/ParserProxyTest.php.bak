@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\AppBundle\Component\MediaParser;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\MediaParser\ParserProxy;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\MediaParser\ParserProxy;
+use Biz\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class ParserProxyTest extends BaseTestCase
 {
@@ -21,22 +21,22 @@ class ParserProxyTest extends BaseTestCase
     {
         $mockedParameterBag = $this->mockBiz(
             'Mock:ParameterBag',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'has',
-                    'withParams' => array('media_parser'),
+                    'withParams' => ['media_parser'],
                     'returnValue' => true,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array('media_parser'),
-                    'returnValue' => array(
-                        'item' => array(array(
+                    'withParams' => ['media_parser'],
+                    'returnValue' => [
+                        'item' => [[
                             'class' => 'AppBundle\Component\MediaParser\ItemParser\QQVideoItemParser',
-                        )),
-                    ),
-                ),
-            )
+                        ]],
+                    ],
+                ],
+            ]
         );
         $kernel = ServiceKernel::instance();
         $parameterBag = ReflectionUtils::getProperty($kernel, 'parameterBag');
@@ -53,7 +53,7 @@ class ParserProxyTest extends BaseTestCase
 
     public function testPrepareMediaUriWithSelf()
     {
-        $video = array('mediaSource' => 'self');
+        $video = ['mediaSource' => 'self'];
         $proxy = new ParserProxy();
         $result = $proxy->prepareMediaUri($video);
         $this->assertArrayEquals($video, $result);
@@ -65,22 +65,22 @@ class ParserProxyTest extends BaseTestCase
     public function testPrepareMediaUriWithUnsupportedParser()
     {
         $proxy = new ParserProxy();
-        $proxy->prepareMediaUri(array('mediaSource' => 'test'));
+        $proxy->prepareMediaUri(['mediaSource' => 'test']);
     }
 
     public function testPrepareMediaUriWithNeteaseOpenCourse()
     {
-        $video = array('mediaSource' => 'NeteaseOpenCourse');
+        $video = ['mediaSource' => 'NeteaseOpenCourse'];
 
         $mockedParser = $this->mockBiz(
             'youkuParser',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'prepareMediaUri',
-                    'withParams' => array($video),
-                    'returnValue' => array('url' => 'NeteaseOpenCourseUrl'),
-                ),
-            )
+                    'withParams' => [$video],
+                    'returnValue' => ['url' => 'NeteaseOpenCourseUrl'],
+                ],
+            ]
         );
         $proxy = new ParserProxy();
         ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
@@ -92,17 +92,17 @@ class ParserProxyTest extends BaseTestCase
 
     public function testPrepareMediaUriWithQqVideo()
     {
-        $video = array('mediaSource' => 'qqvideo');
+        $video = ['mediaSource' => 'qqvideo'];
 
         $mockedParser = $this->mockBiz(
             'youkuParser',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'prepareMediaUri',
-                    'withParams' => array($video),
-                    'returnValue' => array('url' => 'qqvideoUrl'),
-                ),
-            )
+                    'withParams' => [$video],
+                    'returnValue' => ['url' => 'qqvideoUrl'],
+                ],
+            ]
         );
         $proxy = new ParserProxy();
         ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
@@ -114,17 +114,17 @@ class ParserProxyTest extends BaseTestCase
 
     public function testPrepareYoukuMediaUri()
     {
-        $video = array('mediaSource' => 'youku');
+        $video = ['mediaSource' => 'youku'];
 
         $mockedParser = $this->mockBiz(
             'youkuParser',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'prepareMediaUri',
-                    'withParams' => array($video),
-                    'returnValue' => array('url' => 'youkuUrl'),
-                ),
-            )
+                    'withParams' => [$video],
+                    'returnValue' => ['url' => 'youkuUrl'],
+                ],
+            ]
         );
         $proxy = new ParserProxy();
         ReflectionUtils::setProperty($proxy, 'mockedParser', $mockedParser);
@@ -136,7 +136,7 @@ class ParserProxyTest extends BaseTestCase
 
     public function testPrepareYoukuMediaUriWithSelf()
     {
-        $video = array('mediaSource' => 'self');
+        $video = ['mediaSource' => 'self'];
 
         $proxy = new ParserProxy();
 
