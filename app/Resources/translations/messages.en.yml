@@ -2108,6 +2108,7 @@ classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access 
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
 classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
 classroom.courses_count: '%courseNum% courses in total'
+classroom.compulsory_count: '%compulsoryTaskNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.published: Publish
