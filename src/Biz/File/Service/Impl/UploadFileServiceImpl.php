@@ -1108,8 +1108,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function tryAccessFile($fileId)
     {
         $file = $this->getFullFile($fileId);
-        $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
-        $fileSetting = array_merge(['enable' => 0], $fileSetting);
 
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
@@ -1121,7 +1119,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if (1 == $fileSetting['enable']) {
+        if (1 == $file['isPublic']) {
             return $file;
         }
 
@@ -1136,6 +1134,20 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
         $this->createNewException(UploadFileException::PERMISSION_DENIED());
+    }
+
+    public function canDownLoadFile($fileId)
+    {
+        $file = $this->getFullFile($fileId);
+        $user = $this->getCurrentUser();
+        $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $fileSetting = array_merge(['enable' => 0], $fileSetting);
+
+        if ($user->isAdmin() || $file['createdUserId'] == $user['id'] || 1 == $fileSetting['enable'] && 1 == $file['isPublic']) {
+            return true;
+        }
+
+        $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
     }
 
     public function canManageFile($fileId)
