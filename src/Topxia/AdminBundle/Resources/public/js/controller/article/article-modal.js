@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   require('common/validator-rules').inject(Validator);
   require('jquery.select2-css');
   require('jquery.select2');
-  require('es-ckeditor');
+  // require('es-ckeditor');
 
   require('../attachment/upload-form.js').run();
 

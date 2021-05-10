@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import { saveRedmineLoading, saveRedmineSuccess } from '../save-redmine';
+import { saveRedmineLoading, saveRedmineSuccess, saveRedmineClear } from '../save-redmine';
 let heigth = ($('.js-sidebar-pane').height() - 175);
 let $content = $('#note-content-field');
 let lastNoteContent;
@@ -42,5 +42,9 @@ function saveNote($btn = null) {
         $btn.removeAttr('disabled');
       }
       lastNoteContent = data[0].value;
+    })
+    .catch((e) => {
+      $btn.removeAttr('disabled');
+      saveRedmineClear();
     });
 }

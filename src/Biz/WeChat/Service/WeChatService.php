@@ -18,7 +18,7 @@ interface WeChatService
 
     public function getPreAuthUrl($platformType, $callbackUrl);
 
-    public function saveWeChatTemplateSetting($key, $fields);
+    public function saveWeChatTemplateSetting($key, $fields, $notificationType);
 
     public function getWeChatUserByTypeAndUnionId($type, $unionId);
 
@@ -38,9 +38,17 @@ interface WeChatService
 
     public function getTemplateId($key, $scene = '');
 
-    public function addTemplate($template, $key);
+    public function isSubscribeSmsEnabled($smsType = '');
 
-    public function deleteTemplate($template, $key);
+    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = []);
+
+    public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0);
+
+    public function getSubscribeTemplateId($templateCode, $scene = '');
+
+    public function addTemplate($template, $key, $notificationType);
+
+    public function deleteTemplate($template, $key, $notificationType);
 
     public function createWeChatUser($fields);
 
@@ -55,4 +63,14 @@ interface WeChatService
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
 
     public function getWeChatSendChannel();
+
+    public function searchSubscribeRecords(array $conditions, array $orderBy, $start, $limit, array $columns = []);
+
+    public function searchSubscribeRecordCount(array $conditions);
+
+    public function findOnceSubscribeRecordsByTemplateCodeUserIds($templateCode, array $userIds);
+
+    public function updateSubscribeRecordsByIds(array $ids, array $fields);
+
+    public function synchronizeSubscriptionRecords();
 }

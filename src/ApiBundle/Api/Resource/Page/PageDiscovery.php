@@ -35,9 +35,9 @@ class PageDiscovery extends AbstractResource
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('slide_show' == $discoverySetting['type']) {
-                array_walk($discoverySetting['data'], function (&$slide){
-                    if (in_array($slide['link']['type'], ['course', 'classroom'])){
-                        $targetId = $slide['link']['type'] === 'classroom' ? $slide['link']['target']['id'] : $slide['link']['target']['courseSetId'];
+                array_walk($discoverySetting['data'], function (&$slide) {
+                    if (in_array($slide['link']['type'], ['course', 'classroom'])) {
+                        $targetId = 'classroom' === $slide['link']['type'] ? $slide['link']['target']['id'] : $slide['link']['target']['courseSetId'];
                         $product = $this->getProductService()->getProductByTargetIdAndType($targetId, $slide['link']['type']);
                         $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
                         $slide['link']['target']['goodsId'] = $goods['id'];
