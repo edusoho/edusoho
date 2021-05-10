@@ -59,6 +59,7 @@ site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.question.bank: Question Bank
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -2926,6 +2927,8 @@ message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
 user.homepage.introductions: About
+user.homepage.teaching: Teaching
+user.homepage.learning: Learning
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_question_bank: 'Teaching Question Bank'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
@@ -2957,7 +2960,7 @@ homepage.switch_language.chinese: Chinese (简体中文)
 homepage.switch_language.english: English
 homepage.header.search: Search
 homepage.header.login: Sign in
-homepage.header.logout: Log Out
+homepage.header.logout: Sign Out
 homepage.header.register: Sign Up
 homepage.header.my_course: 'My Teaching'
 homepage.header.my_learning: 'My Learning'
@@ -2993,6 +2996,7 @@ homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
+site.datagrid.filter.class_more : More
 homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"

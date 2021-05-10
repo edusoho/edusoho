@@ -752,7 +752,7 @@ intro.confirm_hint: Finish
 
 
 
-validate.required.message: Please input %display%.
+validate.required.message: Please input %display%
 validate.valid_email_input.message: Please enter a valid email address.
 validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.

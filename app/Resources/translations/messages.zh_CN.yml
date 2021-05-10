@@ -63,6 +63,7 @@ site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.question.bank: 题库
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -3374,6 +3375,8 @@ message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页
+user.homepage.teaching: 教学中
+user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
 user.homepage.teaching_question_bank: 在教题库
@@ -3467,6 +3470,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
+site.datagrid.filter.class_more : 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
