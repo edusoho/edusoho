@@ -19,8 +19,8 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult',
+        'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'consult', 'wechat_message_subscribe',
     ];
 
     public static function convertUnderline($str)
@@ -61,6 +61,16 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getSignSecurity()
+    {
+        $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
+
+        return [
+            'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
+            'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
     }
 
     public function getUgc()
@@ -349,6 +359,26 @@ class Setting extends AbstractResource
         $filter->filter($result);
 
         return $result;
+    }
+
+    public function getWechatMessageSubscribe($request)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat');
+        $wechatNotificationSetting = $this->getSettingService()->get('wechat_notification');
+        $enable = true;
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            $enable = false;
+        }
+        if ('messageSubscribe' != $wechatNotificationSetting['notification_type']) {
+            $enable = false;
+        }
+        if (empty($wechatNotificationSetting['is_authorization'])) {
+            $enable = false;
+        }
+
+        return [
+            'enable' => $enable,
+        ];
     }
 
     public function getWap($request = null)

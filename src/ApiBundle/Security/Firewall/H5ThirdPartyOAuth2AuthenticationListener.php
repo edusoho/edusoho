@@ -8,8 +8,9 @@
 
 namespace ApiBundle\Security\Firewall;
 
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\WeChat\Service\WeChatService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
@@ -25,19 +26,22 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
             $client = $this->createOAuthClient($type);
             $accessToken = $client->getAccessToken($code, '');
             $thirdPartyUser = $client->getUserInfo($accessToken);
-            $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type);
+            $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type, $accessToken);
 
             return;
         }
     }
 
-    private function getUserTokenFromAccessToken(Request $request, $thirdPartyUser, $type)
+    private function getUserTokenFromAccessToken(Request $request, $thirdPartyUser, $type, $accessToken)
     {
         $user = $this->getUserService()->getUserBindByTypeAndFromId($type, $thirdPartyUser['id']);
         if ($user) {
             $this->checkUserLocked($user['toId']);
             $token = $this->createTokenFromRequest($request, $user['toId']);
             $this->getTokenStorage()->setToken($token);
+            if ('weixinmob' == $type) {
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin(['id' => $user['toId']], $user, $accessToken);
+            }
         }
 
         return null;
@@ -64,7 +68,7 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
             throw new AccessDeniedHttpException(sprintf('第三方登录(%s)未开启', $type));
         }
 
-        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
 
         $client = OAuthClientFactory::create($type, $config);
 
@@ -77,6 +81,14 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    private function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 
     private function createService($service)
