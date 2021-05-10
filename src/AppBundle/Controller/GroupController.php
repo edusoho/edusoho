@@ -23,6 +23,7 @@ class GroupController extends BaseController
             [
                 'createdTime' => time() - 30 * 24 * 60 * 60,
                 'status' => 'open',
+                'excludeAuditStatus' => 'illegal',
             ],
             $this->filterSort('byStick'), 0, 25
         );
@@ -116,6 +117,7 @@ class GroupController extends BaseController
         $filters = $this->getThreadSearchFilters($request);
 
         $conditions = $this->convertFiltersToConditions($id, $filters);
+        $conditions['excludeAuditStatus'] = 'illegal';
 
         $threadSetting = $this->getSettingService()->get('ugc_thread', []);
         if (empty($threadSetting['enable_thread']) || empty(($threadSetting['enable_group_thread']))) {

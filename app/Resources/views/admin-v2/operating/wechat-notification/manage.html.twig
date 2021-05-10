@@ -25,72 +25,97 @@
         </div>
       </div>
       {% else %}
-        {% if not wechatSetting.is_authorization|default(0) %}
-          <div class="setting-comment alert alert-warning">
-            <div class="setting-comment-block">{{'admin.wechat.notification.un_authorized_after_open_tip'|trans}}</div>
-            <div class="pull-right" style="margin-top: -26px">
-              <a href="{{ path('admin_v2_setting_wechat_auth') }}" type="button" class="btn btn-default btn-large btn-primary" target="blank">{{'wechat.notification.goto_authorization'|trans}}</a>
-            </div>
+        <div class="form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
           </div>
-        {% else %}
+          <div class="controls col-md-1">
+            <p class="form-control-static">
+              {{ 'admin.payment_setting.api_open'|trans }}
+            </p>
+          </div>
+          <div class="controls col-md-2 form-control-static">
+            <a target="_blank" href="{{ path('admin_v2_setting_wechat_auth') }}">
+            {% if wechatSetting.wechat_notification_enabled %}
+              {{ 'admin.payment_setting.api_close.direct'|trans }}
+            {% else %}
+              {{ 'admin.payment_setting.api_open.direct'|trans }}
+            {% endif %}
+            </a>
+          </div>
+        </div>
+        <form class="form-horizontal" id="notification-form" data-url="{{ path('admin_v2_wechat_notification_manage_setting') }}" novalidate>
           <div class="form-group">
             <div class="col-md-3 control-label">
-              <label>{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
+              <label>{{ 'admin.setting_wechat_auth.wechat_notification_type'|trans }}</label>
             </div>
-            <div class="controls col-md-1">
-              <p class="form-control-static">
-                {{ 'admin.payment_setting.api_open'|trans }}
-              </p>
-            </div>
-            <div class="controls col-md-2 form-control-static">
-              <a target="_blank" href="{{ path('admin_v2_setting_wechat_auth') }}">
-              {% if wechatSetting.wechat_notification_enabled %}
-                {{ 'admin.payment_setting.api_close.direct'|trans }}
-              {% else %}
-                {{ 'admin.payment_setting.api_open.direct'|trans }}
-              {% endif %}
-              </a>
+            <div class="col-md-5">
+              <div class="radios">
+                {{ radios('notificationType', dict('WechatNotificationType'), wechatNotificationSetting.notification_type) }}
+              </div>
             </div>
           </div>
-        {% endif %}
+
+          <div id="message-template-tip" {% if wechatNotificationSetting.notification_type != 'serviceFollow' %}style="display:none;"{% endif %}>
+            <div class="row form-group">
+              <div class="col-md-5 col-md-offset-3">
+                <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_message_tip'|trans|raw }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="message-subscribe-form" {% if wechatNotificationSetting.notification_type == 'serviceFollow' %}style="display:none;"{% endif %}>
+            <div class="row form-group">
+              <div class="col-md-5 col-md-offset-3">
+                <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_message_subscribe_tip'|trans }}</span>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-3 control-label">
+                <label>{{ 'admin.setting_wechat_auth.wechat_notification_sms'|trans }}</label>
+              </div>
+              <div class="col-md-2">
+                <div class="radios">
+                  <label><input type="checkbox" name="notificationSms" {% if ( wechatNotificationSetting.notification_sms) %}checked{% endif %}></label>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-5 col-md-offset-3">
+                <span class='color-gray'>{{ 'admin.setting_wechat_auth.wechat_notification_sms_tip'|trans }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-3 control-label"></div>
+            <div class="controls col-md-8">
+              <button type="button" class="btn btn-primary js-notification-submit">{{'form.btn.submit'|trans}}</button>
+            </div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
       {% endif %}
     </fieldset>
 
-    <fieldset>
-      <legend>{{'admin.wechat_notification.template'|trans}}</legend>
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th width="20%">{{ 'admin.wechat_notification.template_name'|trans }}</th>
-            <th width="50%">{{ 'admin.wechat_notification.template_content_sample'|trans }}</th>
-            <th width="15%">{{ 'admin.wechat_notification.send_object'|trans }}</th>
-            <th width="10%">{{ 'admin.wechat_notification.template_status'|trans }}</th>
-            <th width="5%">{{ 'admin.wechat_notification.operation'|trans }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for key,template in templates %}
-            <tr>
-              <td width="20%">{{ template.name|trans|raw }}</td>
-              <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(30)|raw }}</td>
-              <td width="15%">{{ template.object }}</td>
-              <td width="10%">
-                {% if template.status == 1 %}
-                  <span class="text-success">{{ 'wechat.notification.template_opend'|trans }}</span>
-                {% else %}
-                  <span>{{ 'wechat.notification.template_closed'|trans }}</span>
-                {% endif %}
-              </td>
-              <td width="5%">
-                <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen and wechatSetting.wechat_notification_enabled %} href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
-                 {{ 'admin.wechat_notification.template_setting'|trans }}
-                </a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </fieldset>
+    {% include 'admin-v2/operating/wechat-notification/service-follow-templates.html.twig' %}
+    {% include 'admin-v2/operating/wechat-notification/message-subscribe.html.twig' %}
   </div>
     <div id="test" class="hidden"></div>
+  <div class="confirm-modal modal fade" id="confirm-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close js-confirm-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ 'site.tips'|trans }}</h4>
+        </div>
+        <div class="modal-body js-confirm-tip">
+          {{ 'admin.setting_wechat_auth.authorization_in_new_page_hint'|trans }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary confirm-modal__btn js-confirm-close" data-dismiss="modal">{{ 'admin.setting_wechat_auth.authorization_success'|trans }}</button>
+          <a type="button" href="#" target="_blank" class="btn btn-default js-confirm-close js-re-auth-btn">{{ 'admin.setting_wechat_auth.re_authorization_btn'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

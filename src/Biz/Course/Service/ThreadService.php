@@ -116,6 +116,8 @@ interface ThreadService
      */
     public function getPost($courseId, $id);
 
+    public function getThreadPost($id);
+
     public function createPost($post);
 
     public function postAtNotifyEvent($post, $users);

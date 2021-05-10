@@ -6,10 +6,12 @@
 
 {% block body %}
 
-  <label>{{'admin.wechat_notification.template_content'|trans}}</label>
-  <div class="clearfix well">
-    <div>{{ notification.content|raw }}</div>
-  </div>
+  {% if mode == 'wechat_template' %}
+    <label>{{'admin.wechat_notification.template_content'|trans}}</label>
+    <div class="clearfix well">
+      <div>{{ notification.content|raw }}</div>
+    </div>
+  {% endif %}
   {% if notification.reason %}
     <table class="table table-striped table-hover" id="notification-table" style="word-break:break-all;">
       <thead>

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Sensitive\Service;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 
 class SensitiveServiceTest extends BaseTestCase
 {
@@ -19,49 +19,49 @@ class SensitiveServiceTest extends BaseTestCase
         $service = $this->getSensitiveService();
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByState',
-                    'returnValue' => array(array('id' => 2, 'name' => '测试')),
-                    'withParams' => array('banned'),
-                ),
-                array(
+                    'returnValue' => [['id' => 2, 'name' => '测试']],
+                    'withParams' => ['banned'],
+                ],
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array(),
-                    'withParams' => array('测试'),
+                    'returnValue' => [],
+                    'withParams' => ['测试'],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array('id' => 2, 'name' => '测试', 'state' => 'banned'),
-                    'withParams' => array('测试'),
+                    'returnValue' => ['id' => 2, 'name' => '测试', 'state' => 'banned'],
+                    'withParams' => ['测试'],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'wave',
-                    'withParams' => array(array(2), array('bannedNum' => 1)),
-                ),
-            )
+                    'withParams' => [[2], ['bannedNum' => 1]],
+                ],
+            ]
         );
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUser',
-                    'returnValue' => array('id' => 1, 'loginIp' => '127.0.0.1'),
-                    'withParams' => array(1),
-                ),
-            )
+                    'returnValue' => ['id' => 1, 'loginIp' => '127.0.0.1'],
+                    'withParams' => [1],
+                ],
+            ]
         );
-        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', array('name', ''));
-        $this->assertEquals(array('success' => false, 'text' => 'name'), $result);
+        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', ['name', '']);
+        $this->assertEquals(['success' => false, 'text' => 'name'], $result);
 
-        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', array('测试的', ''));
-        $this->assertEquals(array('success' => false, 'text' => '测试的'), $result);
+        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', ['测试的', '']);
+        $this->assertEquals(['success' => false, 'text' => '测试的'], $result);
 
-        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', array('测试的', ''));
+        $result = ReflectionUtils::invokeMethod($service, 'bannedKeyword', ['测试的', '']);
         $this->getSensitiveDao()->shouldHaveReceived('wave');
-        $this->assertEquals(array('success' => true, 'text' => '测试的'), $result);
+        $this->assertEquals(['success' => true, 'text' => '测试的'], $result);
     }
 
     public function testReplaceText()
@@ -69,68 +69,68 @@ class SensitiveServiceTest extends BaseTestCase
         $service = $this->getSensitiveService();
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByState',
-                    'returnValue' => array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')),
-                    'withParams' => array('replaced'),
-                ),
-                array(
+                    'returnValue' => [['id' => 3, 'name' => '丑', 'state' => 'replaced']],
+                    'withParams' => ['replaced'],
+                ],
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array('id' => 3, 'name' => '丑', 'state' => 'replaced'),
-                    'withParams' => array('丑'),
-                ),
-                array(
+                    'returnValue' => ['id' => 3, 'name' => '丑', 'state' => 'replaced'],
+                    'withParams' => ['丑'],
+                ],
+                [
                     'functionName' => 'wave',
-                    'withParams' => array(array(3), array('bannedNum' => 1)),
-                ),
-            )
+                    'withParams' => [[3], ['bannedNum' => 1]],
+                ],
+            ]
         );
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUser',
-                    'returnValue' => array('id' => 1, 'loginIp' => '127.0.0.1'),
-                    'withParams' => array(1),
-                ),
-            )
+                    'returnValue' => ['id' => 1, 'loginIp' => '127.0.0.1'],
+                    'withParams' => [1],
+                ],
+            ]
         );
-        $result = ReflectionUtils::invokeMethod($service, 'replaceText', array('name', ''));
-        $this->assertEquals('name', $result);
+        $result = ReflectionUtils::invokeMethod($service, 'handleContent', ['name', '']);
+        $this->assertEquals('name', $result['content']);
 
-        $result = ReflectionUtils::invokeMethod($service, 'replaceText', array('丑的', ''));
+        $result = ReflectionUtils::invokeMethod($service, 'handleContent', ['丑的', '']);
         $this->getSensitiveDao()->shouldHaveReceived('wave');
-        $this->assertEquals('*的', $result);
+        $this->assertEquals('*的', $result['content']);
     }
 
     public function testscanTextWithRows()
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findAllKeywords',
-                    'returnValue' => array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')),
-                    'withParams' => array(),
-                ),
-                array(
+                    'returnValue' => [['id' => 3, 'name' => '丑', 'state' => 'replaced']],
+                    'withParams' => [],
+                ],
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array(),
-                    'withParams' => array('丑'),
+                    'returnValue' => [],
+                    'withParams' => ['丑'],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array('id' => 3, 'name' => '丑', 'state' => 'replaced'),
-                    'withParams' => array('丑'),
+                    'returnValue' => ['id' => 3, 'name' => '丑', 'state' => 'replaced'],
+                    'withParams' => ['丑'],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'wave',
-                    'withParams' => array(array(3), array('bannedNum' => 1)),
-                ),
-            )
+                    'withParams' => [[3], ['bannedNum' => 1]],
+                ],
+            ]
         );
         $result = $this->getSensitiveService()->scanText('test');
         $this->assertFalse($result);
@@ -147,32 +147,32 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getByName',
-                    'returnValue' => array('id' => 3, 'name' => '丑', 'state' => 'replaced'),
-                    'withParams' => array('丑'),
-                ),
-            )
+                    'returnValue' => ['id' => 3, 'name' => '丑', 'state' => 'replaced'],
+                    'withParams' => ['丑'],
+                ],
+            ]
         );
         $result = $this->getSensitiveService()->getKeywordByName('丑');
-        $this->assertEquals(array('id' => 3, 'name' => '丑', 'state' => 'replaced'), $result);
+        $this->assertEquals(['id' => 3, 'name' => '丑', 'state' => 'replaced'], $result);
     }
 
     public function testFindAllKeywords()
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findAllKeywords',
-                    'returnValue' => array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')),
-                    'withParams' => array(),
-                ),
-            )
+                    'returnValue' => [['id' => 3, 'name' => '丑', 'state' => 'replaced']],
+                    'withParams' => [],
+                ],
+            ]
         );
         $result = $this->getSensitiveService()->findAllKeywords();
-        $this->assertEquals(array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')), $result);
+        $this->assertEquals([['id' => 3, 'name' => '丑', 'state' => 'replaced']], $result);
     }
 
     public function testAddKeyword()
@@ -185,18 +185,18 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'returnValue' => array('id' => 3, 'name' => '丑', 'state' => 'replaced'),
-                    'withParams' => array(3),
-                ),
-                array(
+                    'returnValue' => ['id' => 3, 'name' => '丑', 'state' => 'replaced'],
+                    'withParams' => [3],
+                ],
+                [
                     'functionName' => 'delete',
                     'returnValue' => 1,
-                    'withParams' => array(3),
-                ),
-            )
+                    'withParams' => [3],
+                ],
+            ]
         );
         $result = $this->getSensitiveService()->deleteKeyword(3);
         $this->assertEquals(1, $result);
@@ -206,15 +206,15 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'update',
                     'returnValue' => 1,
-                    'withParams' => array(3, array()),
-                ),
-            )
+                    'withParams' => [3, []],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->updateKeyword(3, array());
+        $result = $this->getSensitiveService()->updateKeyword(3, []);
         $this->assertEquals(1, $result);
     }
 
@@ -222,15 +222,15 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'count',
                     'returnValue' => 1,
-                    'withParams' => array(array('id' => 2)),
-                ),
-            )
+                    'withParams' => [['id' => 2]],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->searchkeywordsCount(array('id' => 2));
+        $result = $this->getSensitiveService()->searchkeywordsCount(['id' => 2]);
         $this->assertEquals(1, $result);
     }
 
@@ -238,31 +238,31 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:SensitiveDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'search',
-                    'returnValue' => array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')),
-                    'withParams' => array(array('id' => 3), array(), 0, 5),
-                ),
-            )
+                    'returnValue' => [['id' => 3, 'name' => '丑', 'state' => 'replaced']],
+                    'withParams' => [['id' => 3], [], 0, 5],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->searchKeywords(array('id' => 3), array(), 0, 5);
-        $this->assertEquals(array(array('id' => 3, 'name' => '丑', 'state' => 'replaced')), $result);
+        $result = $this->getSensitiveService()->searchKeywords(['id' => 3], [], 0, 5);
+        $this->assertEquals([['id' => 3, 'name' => '丑', 'state' => 'replaced']], $result);
     }
 
     public function testSearchBanlogsCount()
     {
         $this->mockBiz(
             'Sensitive:KeywordBanlogDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'count',
                     'returnValue' => 1,
-                    'withParams' => array(array('id' => 2)),
-                ),
-            )
+                    'withParams' => [['id' => 2]],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->searchBanlogsCount(array('id' => 2));
+        $result = $this->getSensitiveService()->searchBanlogsCount(['id' => 2]);
         $this->assertEquals(1, $result);
     }
 
@@ -270,41 +270,41 @@ class SensitiveServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Sensitive:KeywordBanlogDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'search',
-                    'returnValue' => array(array('id' => 3, 'keywordId' => 2, 'userId' => 2)),
-                    'withParams' => array(array('id' => 3), array(), 0, 5),
-                ),
-            )
+                    'returnValue' => [['id' => 3, 'keywordId' => 2, 'userId' => 2]],
+                    'withParams' => [['id' => 3], [], 0, 5],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->searchBanlogs(array('id' => 3), array(), 0, 5);
-        $this->assertEquals(array(array('id' => 3, 'keywordId' => 2, 'userId' => 2)), $result);
+        $result = $this->getSensitiveService()->searchBanlogs(['id' => 3], [], 0, 5);
+        $this->assertEquals([['id' => 3, 'keywordId' => 2, 'userId' => 2]], $result);
     }
 
     public function testSearchBanlogsByUserIds()
     {
         $this->mockBiz(
             'Sensitive:KeywordBanlogDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchBanlogsByUserIds',
-                    'returnValue' => array(array('id' => 3, 'keywordId' => 2, 'userId' => 2)),
-                    'withParams' => array(array(2, 3), array(), 0, 5),
-                ),
-            )
+                    'returnValue' => [['id' => 3, 'keywordId' => 2, 'userId' => 2]],
+                    'withParams' => [[2, 3], [], 0, 5],
+                ],
+            ]
         );
-        $result = $this->getSensitiveService()->searchBanlogsByUserIds(array(2, 3), array(), 0, 5);
-        $this->assertEquals(array(array('id' => 3, 'keywordId' => 2, 'userId' => 2)), $result);
+        $result = $this->getSensitiveService()->searchBanlogsByUserIds([2, 3], [], 0, 5);
+        $this->assertEquals([['id' => 3, 'keywordId' => 2, 'userId' => 2]], $result);
     }
 
     public function testPlainTextFilter()
     {
-        $params = array('测试name &nbsp; ', false);
+        $params = ['测试name &nbsp; ', false];
         $result = ReflectionUtils::invokeMethod($this->getSensitiveService(), 'plainTextFilter', $params);
         $this->assertEquals($result, '测试name');
 
-        $params = array('测试name &nbsp; ', true);
+        $params = ['测试name &nbsp; ', true];
         $result = ReflectionUtils::invokeMethod($this->getSensitiveService(), 'plainTextFilter', $params);
         $this->assertEquals($result, '测试');
     }
