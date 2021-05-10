@@ -33,6 +33,9 @@
               {% else %}
                 <span>{{'my.learning.note.course_task_empty'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
               {% endif %}
+              {% if note.auditStatus == 'illegal' %}
+                &nbsp;&nbsp;<span class="color-danger">({{ 'site.content.illegal_status'|trans }})</span>
+              {% endif %}
               <span class="pull-right notebook-note-length">{{'my.learning.note.total_length'|trans({'%length%':note.length})}}</span>
             </div>
             <div class="notebook-note-summary">{{ note.content|plain_text(97) }}</div>

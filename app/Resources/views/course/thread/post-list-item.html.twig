@@ -1,5 +1,10 @@
 {% import "macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" name="post-{{ post.id }}" class="thread-post media clearfix">
+{% if thread['type'] == 'question' %}
+  {% set reportType = 'course_question_reply' %}
+{% else %}
+  {% set reportType = 'course_thread_reply' %}
+{% endif %}
+<li id="post-{{ post.id }}" name="post-{{ post.id }}" class="thread-post media clearfix main_hover_item">
   {{ web_macro.user_avatar(author, 'pull-left media-object') }}
 
   {% if isManager or app.user.id == author.id %}
@@ -14,7 +19,7 @@
   </div>
   {% endif %}
 
-  <div class="thread-post-body media-body" style="word-break:break-all;">
+  <div class="thread-post-body media-body clearfix" style="word-break:break-all;">
     <div class="media-heading">
       {% if not author.destroyed|default(0) %}
         <a href="javascript:">{{ author.nickname }}</a>
@@ -24,10 +29,24 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{ post.createdTime|smart_time }}</span>
     </div>
-    <div class="editor-text">{{ post.content|cdn|raw }}</div>
+    <div class="editor-text">{{ post.content|cdn|raw }}{% if app.user.id != author.id and is_reported(reportType, post.id) %}<span style="color: red;">({{ '已举报'|trans }})</span>{% endif %}<span style="color: red;" id="{{ 'js-course-thread-reply-after-' ~ post.id }}"></span></div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread.post', targetId:post.id|default(0)} %}
     {% if app.user.id != author.id and thread.type != 'question' %}
-    <div class="thread-post-action" data-user="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}"><a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>
+      <span class="thread-post-action pull-right" data-user="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}">
+        <a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a>
+      </span>
+    {% endif %}
+    {% if app.user.isLogin() and app.user.id != author.id and not is_reported(reportType, post.id) %}
+      <a id="js-course-thread-reply-modal-{{ thread.id }}" 
+          class="thread-tip-off pull-right item-hover"
+          href="#modal"
+          data-toggle="modal"
+          data-url="{{ path('common_report_tags_modal', 
+          { targetType: reportType, targetId: post.id, 
+            modalTarget: 'js-course-thread-reply-modal-'~ post.id, 
+            contentTarget: 'js-course-thread-reply-after-' ~ post.id }) 
+          }}"
+            >举报</a>
     {% endif %}
   </div>
 </li>

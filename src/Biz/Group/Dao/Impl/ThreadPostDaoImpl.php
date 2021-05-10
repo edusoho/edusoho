@@ -18,17 +18,17 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             ->setMaxResults($limit);
 
         $declares = $this->declares();
-        foreach ($orderbys ?: array() as $field => $direction) {
+        foreach ($orderbys ?: [] as $field => $direction) {
             if (!in_array($field, $declares['orderbys'])) {
                 throw new DaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$field}`.", implode(',', $declares['orderbys'])));
             }
-            if (!in_array(strtoupper($direction), array('ASC', 'DESC'))) {
+            if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
                 throw new DaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$direction}`.");
             }
             $builder->addOrderBy($field, $direction);
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function countPostsThreadIds($conditions)
@@ -41,22 +41,24 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 
     public function deleteByThreadId($threadId)
     {
-        return $this->db()->delete($this->table, array('threadId' => $threadId));
+        return $this->db()->delete($this->table, ['threadId' => $threadId]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime'),
-            'serializes' => array('tagIds' => 'json'),
-            'orderbys' => array('id', 'createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime'],
+            'serializes' => ['tagIds' => 'json'],
+            'orderbys' => ['id', 'createdTime'],
+            'conditions' => [
                 'id < :id',
                 'userId = :userId',
                 'postId = :postId',
                 'adopt = :adopt',
                 'threadId = :threadId',
-            ),
-        );
+                'auditStatus = :auditStatus',
+                'auditStatus != :excludeAuditStatus',
+            ],
+        ];
     }
 }
