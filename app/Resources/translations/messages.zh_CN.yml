@@ -2405,7 +2405,8 @@ classroom.vip_member_level_low_tips: >
   会员等级不够，不能学习此%classroomName%。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
 classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 classroom.cancle_refund_btn: 取消退款，继续学习！
-classroom.courses_count: 共%courseNum%课
+classroom.courses_count: 共 %courseNum% 课程
+classroom.compulsory_count: %compulsoryTaskNum% 课时
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
 classroom.status.published: 已发布
