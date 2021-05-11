@@ -52,7 +52,7 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: Class
+site.default.classroom: ''
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
