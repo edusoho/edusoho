@@ -55,7 +55,6 @@ class CardController extends BaseController
                 $cards = isset($groupCards['useable']) ? $groupCards['useable'] : null;
             }
         }
-
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType, $cardIds);
 
         return $this->render('card/index.html.twig', array(
