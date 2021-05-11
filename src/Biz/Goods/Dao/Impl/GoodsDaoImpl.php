@@ -38,7 +38,7 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
                 'recommendWeight > :recommendWeight_GT',
                 'recommendedTime > :recommendedTime_GT',
             ],
-            'orderbys' => ['id', 'hotSeq', 'publishedTime', 'createdTime', 'recommendWeight'],
+            'orderbys' => ['id', 'hotSeq', 'publishedTime', 'createdTime', 'recommendWeight', 'recommendedTime'],
         ];
     }
 
