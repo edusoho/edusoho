@@ -2,10 +2,10 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeThreadPost extends AbstractResource
 {
@@ -25,9 +25,9 @@ class MeThreadPost extends AbstractResource
             $members = $this->getCourseMemberService()->findTeacherMembersByUserId($currentUser['id']);
             $courseIds = ArrayToolkit::column($members, 'courseId');
             if (empty($courseIds)) {
-                $questionIds = array();
+                $questionIds = [];
             } else {
-                $threads = $this->getCourseThreadService()->searchThreads(array('courseIds' => $courseIds, 'type' => 'question'), array(), 0, PHP_INT_MAX);
+                $threads = $this->getCourseThreadService()->searchThreads(['courseIds' => $courseIds, 'type' => 'question'], [], 0, PHP_INT_MAX);
                 $questionIds = ArrayToolkit::column($threads, 'id');
             }
         }
@@ -58,7 +58,7 @@ class MeThreadPost extends AbstractResource
             return $this->makePagingObject([], 0, $offset, $limit);
         }
 
-        $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
+        $posts = $this->getCourseThreadService()->searchThreadPosts(['threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']], [], 0, PHP_INT_MAX);
         $posts = ArrayToolkit::group($posts, 'threadId');
 
         foreach ($courseThreads as &$thread) {
@@ -66,7 +66,7 @@ class MeThreadPost extends AbstractResource
             $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
         }
 
-        $this->getOCUtil()->multiple($courseThreads, array('courseId'), 'course');
+        $this->getOCUtil()->multiple($courseThreads, ['courseId'], 'course');
 
         return $this->makePagingObject($courseThreads, $total, $offset, $limit);
     }

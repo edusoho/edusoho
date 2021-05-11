@@ -345,6 +345,11 @@ class CourseSetManageController extends BaseController
                 'route' => 'course_set_manage_course_teachers',
                 'params' => ['courseSetId' => $courseSetId, 'courseId' => $courseId],
             ],
+            'students' => [
+                'title' => '学员管理',
+                'route' => 'course_set_manage_course_students',
+                'params' => ['courseSetId' => $courseSetId, 'courseId' => $courseId],
+            ],
             'live-statistics' => [
                 'title' => '直播统计',
                 'route' => 'course_set_manage_live_statistics',
