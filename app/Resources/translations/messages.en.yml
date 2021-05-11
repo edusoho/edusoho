@@ -10274,6 +10274,7 @@ admin_v2.operating.goods_show_data: Product page display data
 admin_v2.operating.goods_show.join_number: Show joins
 admin_v2.operating.goods_show.visitor_number: Show visitors
 admin_v2.operating.goods_show.none: Show none
+admin_v2.operating.goods_show_studen.review.data: Student review data
 admin_v2.operating.review_setting: Goods page show setting
 admin_v2.operating.review_show: Goods page show reviews
 
