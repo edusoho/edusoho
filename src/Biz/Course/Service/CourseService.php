@@ -362,5 +362,5 @@ interface CourseService
 
     public function hasCertificate($courseId);
 
-    public function courseItemsHandle($courseId, $ids);
+    public function courseItemIdsHandle($courseId, $ids);
 }

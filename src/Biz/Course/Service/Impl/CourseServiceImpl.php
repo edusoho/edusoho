@@ -1142,7 +1142,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function courseItemsHandle($courseId, $ids)
+    public function courseItemIdsHandle($courseId, $ids)
     {
         if (empty($ids)) {
             return $ids;
