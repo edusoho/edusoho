@@ -2644,7 +2644,7 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $user = $this->getCurrentUser();
         $fileSetting = ['enable' => 1];
-        $this->getSettingService()->set('cloud_file_setting',$fileSetting);
+        $this->getSettingService()->set('cloud_file_setting', $fileSetting);
 
         $params = [
             [
