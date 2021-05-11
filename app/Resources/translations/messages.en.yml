@@ -357,7 +357,7 @@ form.btn.yes: 'Yes'
 form.btn.no: 'No'
 
 finance.income: Income
-finance.total_incom: Total income
+finance.total_income: Total income
 finance.expense: Expense
 finance.recover: Recorvey
 finance.total_expense: Total expense
@@ -373,7 +373,8 @@ finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
 plugin.charge_coin.recharge: Recharge
-plugin.money_card: 'Recharge card'
+plugin.money_card: 'Recharge Card'
+plugin.money: 'Recharge'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
 plugin.acitivity: Acitivity
@@ -434,10 +435,10 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.refund.equal: equal
 order.refund.discount: discount
-order.created_time: 'Create time'
+order.created_time: 'Create Time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
-order.status: 'Order status'
+order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
@@ -487,6 +488,8 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
+order.confirm.pay_points: 'You can use %num% points, use '
+order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
@@ -2832,6 +2835,7 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin_zh: 'My Coin'
 user.account.my_coin.pay_coin: %coin_name% paid
 user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
@@ -7304,6 +7308,7 @@ site.data.num: ''
 site.date_format: 'Y-n-d H:i'
 site.date_coupon:  'F j, Y'
 site.date_format_H_i: 'Y-n-d H:i'
+site.date_format_H_i_s: 'F j, Y H:i:s'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
 es_bar.practice.homework: Homework
@@ -7710,6 +7715,12 @@ admin.reward_point_product.cover_message: You may upload JPG/GIF/PNG image, pict
 admin.reward_point_product.edit_product: Edit Product
 admin.reward_point_product.add_product: Add Product
 admin.reward_point_product.cover_crop: Image cropping
+admin.reward_point.my_points: My Points
+admin.reward_point.points_rank: Points Ranking
+admin.reward_point.points_rule: Points Rule
+admin.reward_points: Points
+my.reward_points: My Points
+
 
 
 admin.reward_point_account: Account
@@ -7747,6 +7758,8 @@ reward_point_product.address: Address
 reward_point_product.email: Email
 reward_point_account.behavior_record: Behavior Record
 reward_point_account.reward_record: %name% Record
+reward_point_account.points_record: Points Record
+reward_point_account.points_balance: Points Balance
 reward_point.create_question: Ask a Question
 reward_point.reply_question: Reply a Question
 reward_point.elite_thread: Featured
@@ -7822,7 +7835,7 @@ my.reward_point.exchange: Exchange
 my.reward_point.product_introduction: Product Introduction
 my.reward_point.product_introduction_empty: In the editorial, please look forward to.
 my.reward_point.rule_daily_limit: Daily Limit
-my.reward_point.rule_reward: reward
+my.reward_point.rule_reward: Reward
 my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
