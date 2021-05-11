@@ -2640,7 +2640,7 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals('cloud', $result['storage']);
     }
 
-    public function testCanDownLoadFile()
+    public function testCanDownloadFile()
     {
         $user = $this->getCurrentUser();
         $fileSetting = ['enable' => 1];
@@ -2671,7 +2671,7 @@ class UploadFileServiceTest extends BaseTestCase
         ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $result = $this->getUploadFileService()->canManageFile(1);
+        $result = $this->getUploadFileService()->canDownloadFile(1);
 
         $this->assertTrue($result);
     }
