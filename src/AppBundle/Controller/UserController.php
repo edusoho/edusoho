@@ -168,7 +168,7 @@ class UserController extends BaseController
             'paginator' => $paginator,
             'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
-            'type' => 'classroom_learning'
+            'type' => 'classroom_learning',
         ]);
     }
 
@@ -229,7 +229,7 @@ class UserController extends BaseController
             'paginator' => $paginator,
             'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
-            'type' => 'classroom_teaching'
+            'type' => 'classroom_teaching',
         ]);
     }
 
