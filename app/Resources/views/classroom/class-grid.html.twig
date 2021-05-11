@@ -24,6 +24,7 @@
   </h3>
   <div class="class-item-metas text-overflow">
     {{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}
+    {{ 'classroom.compulsory_count'|trans({'%compulsoryTaskNum%': '<span>%d</span>'|format(classroom.compulsoryTaskNum)|default(0) })|raw }}
     {% include 'classroom/classroom-price.html.twig' %}
   </div>
 </div>

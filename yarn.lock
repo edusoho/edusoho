@@ -3381,9 +3381,10 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-es-webpack-engine@4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-4.4.1.tgz#cff4b2007f5524851b7dcf2cb35e2cf131a6bc88"
+es-webpack-engine@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.nlark.com/es-webpack-engine/download/es-webpack-engine-4.5.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fes-webpack-engine%2Fdownload%2Fes-webpack-engine-4.5.1.tgz#c71336ae7711a80f2ec47705adbc0af609e01737"
+  integrity sha1-xxM2rncRqA8uxHcFrbwK9gngFzc=
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
