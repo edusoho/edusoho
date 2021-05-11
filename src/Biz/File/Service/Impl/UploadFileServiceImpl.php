@@ -1141,8 +1141,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
         $fileSetting = array_merge(['enable' => 0], $fileSetting);
 
-        if ($this->tryAccessFile($fileId) && 1 == $fileSetting['enable'])
-        {
+        if ($this->tryAccessFile($fileId) && 1 == $fileSetting['enable']) {
             return true;
         }
 
