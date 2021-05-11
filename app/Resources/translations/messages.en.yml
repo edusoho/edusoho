@@ -954,7 +954,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
-course.members_manage.official_student.progress: 'Learn progress'
+course.members_manage.official_student.progress: 'Learn Progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
@@ -3770,7 +3770,7 @@ my.teaching.question_bank.open_ensure: Are you sure to open the item bank exerci
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
-my.learning.question_bank_menu: 'Question bank'
+my.learning.question_bank_menu: 'Question Bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3879,11 +3879,11 @@ my.learning.note.course_task_empty: 'This %taskName% has been deleted'
 my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
-my.learning.class.question: 'My course Q&A'
-my.learning.classroom.question: 'My classroom Q&A'
+my.learning.class.question: 'My Course Q&A'
+my.learning.classroom.question: 'My Classroom Q&A'
 my.learning.question.empty: 'No record'
 my.learning.question.course_thread: 'Course Discussion'
-my.learning.question.classroom_thread: '%classroomName% discussion'
+my.learning.question.classroom_thread: '%classroomName% Discussion'
 my.learning.testpaper: 'My Test'
 my.learning.testpaper.record: 'Test Records'
 my.learning.testpaper.favorit_question: 'Favorited Questions'
@@ -4220,6 +4220,11 @@ admin.course_manage.manage.classroom_course_location: '%classroom%'
 admin.course_manage.manage.classroom_course_removed: Removed
 admin.course_manage.manage.vip_course: 'VIP Course'
 admin.course_manage.manage.vip_grade: 'VIP Level'
+admin.course_manage.manage.duration: 'Duration'
+admin.course_manage.manage.introduction: 'Introduction'
+admin.course_manage.manage.member_benefits: 'Member Benefits'
+admin.course_manage.manage.newest_member : 'Newest Member '
+notify.vip.no_course_or_classroom: 'No record'
 admin.course_manage.manage.vip_grade_removed: 'This VIP level has been removed'
 admin.course_manage.manage.vip_grade_count: '%count% VIP level'
 admin.course_manage.manage.live: Live
@@ -6050,6 +6055,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 'You have successfully purchased 
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 'You have successfully purchased "class name", paid [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 'You have successfully purchased "member name", pay [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 'You have successfully purchased "unit" of "virtual coin value", paid [order price]. %smsSchoolName%'
+admin.edu_cloud.edu_sms.member_judgment_notes: 'You are not a member yet, please activate'
 admin.edu_cloud.edu_email: 'Cloud email'
 admin.edu_cloud.edu_email.application: 'Email scenarios'
 admin.edu_cloud.edu_email.application.id: Id
@@ -7301,7 +7307,7 @@ admin.xapi.enable_label: Turn on xAPI
 admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
-site.date_format: 'Y-n-d H:i:s'
+site.date_format: 'F j, Y h:i'
 site.date_format_H_i: 'Y-n-d H:i'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
@@ -10310,10 +10316,10 @@ goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
-user.certificates.none_record: Certificate Empty
+user.certificates.none_record: Certificate empty
 user.certificates.only_valid: Show only valid
 user.certificates.date_range: Certificate acquisition tim
-user.certificates.placeholde_name: Enter certificate name search...
+user.certificates.placeholde_name: Enter certificate name
 user.certificates.cert_titile: Certificate name
 user.certificates.cert_code: Certificate number
 user.certificates.cert_issue_time: Acquisition time
@@ -10331,7 +10337,7 @@ user.certificates.detail_object: Authentication object
 user.certificates.detail_object_name: Name
 user.certificates.detail_object_usrename: Username
 user.certificates.detail_cert_message: Certificate information
-user.certificates.unclaimed_list: Certificate to be received
+user.certificates.unclaimed_list: Certificate to Be Received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
 
