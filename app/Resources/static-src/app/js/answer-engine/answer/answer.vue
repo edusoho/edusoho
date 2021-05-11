@@ -33,9 +33,12 @@
   import { isMobileDevice } from 'common/utils';
   import ActivityEmitter from '../../activity/activity-emitter';
   import dataURLToBlob from "dataurl-to-blob";
+  import {checkBrowserCompatibility} from '../../face-inspection/util';
+
   export default {
     data() {
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
+      let comp = checkBrowserCompatibility();
       return {
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
@@ -59,6 +62,7 @@
         fileId: 0,
         inspectionOpen: inspectionOpen,
         isNotMobile: !isMobileDevice(),
+        errorMessage: comp.ok ? '' : comp.message,
         getCurrentTime: () => {
           let time = Date.parse(new Date());
           $.ajax({
@@ -249,21 +253,23 @@
         if ($node.length > 0 && $node.val() !== '') {
           this.$refs['inspection'].captureModal({
             token: $('[name=token]').val(),
-            faceUrl: $node.val()
+            faceUrl: $node.val(),
+            errorMessage: this.errorMessage,
           });
         } else {
           this.$refs['inspection'].captureModal({
             token: $('[name=token]').val(),
+            errorMessage: this.errorMessage,
           });
         }
       },
       saveCheatRecord(cheating) {
         let data = new FormData();
-        data.append('status', cheating.status);
-        data.append('level', cheating.level);
-        data.append('duration', cheating.duration);
+        data.append('status', 'cheating');
+        data.append('level', '1');
+        data.append('duration','15000');
         data.append('behavior', cheating.behavior);
-        data.append('picture', dataURLToBlob(cheating.picture));
+        data.append('picture', dataURLToBlob(cheating.image));
 
         $.ajax({
           url: $('[name=inspection-save-url]').val(),
@@ -280,8 +286,6 @@
         });
       },
       captureHandler(data) {
-        let img = new Image(480);
-        img.src = data.capture;
         let params = new FormData();
         params.append('picture', dataURLToBlob(data.capture));
 
