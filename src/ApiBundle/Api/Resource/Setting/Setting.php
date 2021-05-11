@@ -19,7 +19,7 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
         'consult', 'wechat_message_subscribe',
     ];
 
@@ -61,6 +61,16 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getSignSecurity()
+    {
+        $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
+
+        return [
+            'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
+            'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
     }
 
     public function getUgc()

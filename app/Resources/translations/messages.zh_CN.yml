@@ -63,6 +63,7 @@ site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.question.bank: 题库
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -98,7 +99,7 @@ site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号�
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
-site.date_format: Y年n月d日 H:i:s
+site.date_format: Y年n月d日 H:i
 site.date_coupon: Y年n月d日
 site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
@@ -2406,7 +2407,8 @@ classroom.vip_member_level_low_tips: >
   会员等级不够，不能学习此%classroomName%。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
 classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 classroom.cancle_refund_btn: 取消退款，继续学习！
-classroom.courses_count: 共%courseNum%课
+classroom.courses_count: 共 %courseNum% 课程
+classroom.compulsory_count: %compulsoryTaskNum% 课时
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
 classroom.status.published: 已发布
@@ -3375,6 +3377,8 @@ message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页
+user.homepage.teaching: 教学中
+user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
 user.homepage.teaching_question_bank: 在教题库
@@ -3468,6 +3472,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
+site.datagrid.filter.class_more : 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
@@ -4988,8 +4993,13 @@ admin.course_manage.manage.classroom_course_removed: 已移除
 ## 会员课程
 admin.course_manage.manage.vip_course: 会员课程
 admin.course_manage.manage.vip_grade: 会员等级
+admin.course_manage.manage.duration: 会员时长
+admin.course_manage.manage.introduction: 会员介绍
+admin.course_manage.manage.member_benefits: 会员特权
+admin.course_manage.manage.newest_member : 最新会员
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
 admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
+notify.vip.no_course_or_classroom: 暂无会员课程或班级
 
 ## 直播课程
 admin.course_manage.manage.live: 直播
@@ -7158,6 +7168,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.member_judgment_notes: 您还不是会员，请开通会员享特权
 
 # 云邮件
 admin.edu_cloud.edu_email: 云邮件
@@ -7395,6 +7406,11 @@ admin.edu_cloud.edu_attachment.group: 小组
 admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
+admin.edu_cloud.edu_file.download.setting: 云资源下载设置
+admin.edu_cloud.edu_file.open_radio: 开启
+admin.edu_cloud.edu_file.close_radio: 关闭
+admin.edu_cloud.edu_file.download.setting.enable.tips: 开启后，教师身份在中台可以下载公共资料库的所有资源
+admin.edu_cloud.edu_file.download.setting.disable.tips: 关闭后，教师身份在中台不能下载公共资料库的所有资源
 
 admin.edu_cloud.key_info.key_error_tips: 授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
 admin.edu_cloud.key_info.license_domain: 授权域名
@@ -8970,11 +8986,6 @@ admin.reward_point_product.cover_message: 请上传jpg, gif, png格式的图片,
 admin.reward_point_product.edit_product: 编辑商品
 admin.reward_point_product.add_product: 添加商品
 admin.reward_point_product.cover_crop: 图片裁剪
-admin.reward_point.my_points: 我的积分
-admin.reward_point.points_rank: 积分排行
-admin.reward_point.points_rule: 积分规则
-admin.reward_points: 积分
-my.reward_points: 我的积分
 
 
 admin.reward_point_account: 账户
@@ -9013,8 +9024,6 @@ reward_point_product.address: 收货地址
 reward_point_product.email: 邮箱
 reward_point_account.behavior_record: 行为记录
 reward_point_account.reward_record: %name%记录
-reward_point_account.points_record: 积分记录
-reward_point_account.points_balance: 积分余额
 reward_point.create_question: 提出问题
 reward_point.reply_question: 回答问题
 reward_point.elite_thread: 话题加精
@@ -10452,6 +10461,7 @@ exception.course.not_found_chapter: 章节不存在
 exception.course.chain_not_registered: 访问链未注册
 exception.course.expirymode_invalid: 有效期类型错误
 exception.course.expirydays_required: 有效天数不能为空
+exception.course.expirydays_invalid: 有效天数类型错误
 exception.course.expirystartdate_required: 有效期开始日期不能为空
 exception.course.expiryenddate_required: 有效期结束日期不能为空
 exception.course.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
@@ -10481,7 +10491,7 @@ exception.classroom.forbidden_take_classroom: 不能在这个班级学习
 exception.classroom.forbidden_handle_classroom: 不能批阅这个班级的作业
 exception.classroom.forbidden_look_classroom: 不能查看这个班级
 exception.classroom.unpublished_classroom: 班级未发布
-exception.classroom.chain_not_registered:
+exception.classroom.chain_not_registered: 访问链未注册
 exception.classroom.unjoin: 未加入班级
 exception.classroom.empty_title: 班级名称不能为空！
 exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
@@ -10757,7 +10767,6 @@ exception.certificate.audit.forbidden_audit: 审核失败
 exception.certificate.valid.forbidden_audit: 审核发送失败
 exception.certificate.reject.forbidden_audit: 审核驳回失败
 
-exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
 
@@ -11575,6 +11584,7 @@ admin_v2.operating.goods_show_data: 商品页显示数据
 admin_v2.operating.goods_show.join_number: 显示加入人数
 admin_v2.operating.goods_show.visitor_number: 显示浏览人数
 admin_v2.operating.goods_show.none: 不显示
+admin_v2.operating.goods_show_studen.review.data: 学员评价数据
 admin_v2.operating.review_setting: 商品页评价设置
 admin_v2.operating.review_show: 商品页显示评价
 

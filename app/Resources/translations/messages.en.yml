@@ -39,7 +39,7 @@ site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
 site.datagrid.filter.recommended: Recommended
 site.datagrid.filter.category_more: More
-site.datagrid.filter.course_more: 'More courses'
+site.datagrid.filter.course_more: 'More'
 site.datagrid.radios.open: Open
 site.datagrid.radios.close: Close
 site.datagrid.radios.yes: 'Yes'
@@ -52,13 +52,14 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: Class
+site.default.classroom: ''
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.question.bank: Question Bank
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -138,7 +139,7 @@ site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
-site.user_password.error_tips: Bad credentials.
+site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
 site.mobile_bind.title: Bind phone number
@@ -237,7 +238,7 @@ user.fields.mobile_label.apple_tip: Please go to the APP for binding
 user.fileds.realname: Name
 user.fileds.me: Me
 user.fields.following: Following
-user.fields.fan: Follower
+user.fields.fan: Followers
 user.fields.no_title: 'No title'
 user.fields.no_sign: 'No signature'
 user.fields.no_introduction: 'No introduction'
@@ -372,7 +373,7 @@ finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
 plugin.charge_coin.recharge: Recharge
-plugin.money_card: 'Recharge Card'
+plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
 plugin.acitivity: Acitivity
@@ -433,10 +434,10 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.refund.equal: equal
 order.refund.discount: discount
-order.created_time: 'Create Time'
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
-order.status: 'Order Status'
+order.status: 'Order status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
@@ -2663,11 +2664,11 @@ user.settings.security.email_setting_tips: Can be used to retrieve the login pas
 user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
-user.settings.security.password_modify.current_password: 'Current password'
+user.settings.security.password_modify.current_password: 'Current Password'
 user.settings.security.password_modify.current_password_placeholder: Please input current password
-user.settings.security.password_modify.new_password: 'New password'
+user.settings.security.password_modify.new_password: 'New Password'
 user.settings.security.password_modify.new_password_placeholder: Please input new password
-user.settings.security.password_modify.confirm_password: 'Confirm password'
+user.settings.security.password_modify.confirm_password: 'Confirm Password'
 user.settings.security.password_modify.confirm_password_placeholder: Please input new password again
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
 user.settings.security.password_modify.incorrect_password: Incorrect password
@@ -7300,7 +7301,7 @@ admin.xapi.enable_label: Turn on xAPI
 admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
-site.date_format: 'Y-n-d H:i:s'
+site.date_format: 'Y-n-d H:i'
 site.date_coupon:  'F j, Y'
 site.date_format_H_i: 'Y-n-d H:i'
 site.date_more: More
@@ -7709,12 +7710,6 @@ admin.reward_point_product.cover_message: You may upload JPG/GIF/PNG image, pict
 admin.reward_point_product.edit_product: Edit Product
 admin.reward_point_product.add_product: Add Product
 admin.reward_point_product.cover_crop: Image cropping
-admin.reward_point.my_points: My Points
-admin.reward_point.points_rank: Points Ranking
-admin.reward_point.points_rule: Points Rule
-admin.reward_points: Points
-my.reward_points: My Points
-
 
 
 admin.reward_point_account: Account
@@ -7752,8 +7747,6 @@ reward_point_product.address: Address
 reward_point_product.email: Email
 reward_point_account.behavior_record: Behavior Record
 reward_point_account.reward_record: %name% Record
-reward_point_account.points_record: Points Record
-reward_point_account.points_balance: Points Balance
 reward_point.create_question: Ask a Question
 reward_point.reply_question: Reply a Question
 reward_point.elite_thread: Featured
@@ -7829,7 +7822,7 @@ my.reward_point.exchange: Exchange
 my.reward_point.product_introduction: Product Introduction
 my.reward_point.product_introduction_empty: In the editorial, please look forward to.
 my.reward_point.rule_daily_limit: Daily Limit
-my.reward_point.rule_reward: Reward
+my.reward_point.rule_reward: reward
 my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
