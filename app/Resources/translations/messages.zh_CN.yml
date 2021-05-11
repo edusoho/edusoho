@@ -57,6 +57,7 @@ site.default.must: 必须
 site.default.and: 和
 site.default.student: 学员
 site.default.classroom: 班级
+site.default.classroom.notempty: 班级
 site.default.reviewing: 已批阅
 site.default.unreviewing: 未批阅
 site.default.doing: 进行中

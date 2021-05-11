@@ -475,6 +475,7 @@ class OpenCourseController extends BaseOpenCourseController
         $orderBys = [
             [
                 'recommendWeight' => 'ASC',
+                'recommendedTime' => 'DESC',
             ],
             [],
         ];
