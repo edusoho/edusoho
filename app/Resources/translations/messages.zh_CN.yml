@@ -63,6 +63,7 @@ site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.question.bank: 题库
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -98,7 +99,7 @@ site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号�
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
-site.date_format: Y年n月d日 H:i:s
+site.date_format: Y年n月d日 H:i
 site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
@@ -3375,6 +3376,8 @@ message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页
+user.homepage.teaching: 教学中
+user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
 user.homepage.teaching_question_bank: 在教题库
@@ -3468,6 +3471,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
+site.datagrid.filter.class_more : 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
@@ -4988,8 +4992,13 @@ admin.course_manage.manage.classroom_course_removed: 已移除
 ## 会员课程
 admin.course_manage.manage.vip_course: 会员课程
 admin.course_manage.manage.vip_grade: 会员等级
+admin.course_manage.manage.duration: 会员时长
+admin.course_manage.manage.introduction: 会员介绍
+admin.course_manage.manage.member_benefits: 会员特权
+admin.course_manage.manage.newest_member : 最新会员
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
 admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
+notify.vip.no_course_or_classroom: 暂无会员课程或班级
 
 ## 直播课程
 admin.course_manage.manage.live: 直播
@@ -7158,6 +7167,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.member_judgment_notes: 您还不是会员，请开通会员享特权
 
 # 云邮件
 admin.edu_cloud.edu_email: 云邮件

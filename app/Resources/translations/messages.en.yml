@@ -39,7 +39,7 @@ site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
 site.datagrid.filter.recommended: Recommended
 site.datagrid.filter.category_more: More
-site.datagrid.filter.course_more: 'More courses'
+site.datagrid.filter.course_more: 'More'
 site.datagrid.radios.open: Open
 site.datagrid.radios.close: Close
 site.datagrid.radios.yes: 'Yes'
@@ -52,13 +52,14 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: Class
+site.default.classroom: ''
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.question.bank: Question Bank
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -138,7 +139,7 @@ site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
-site.user_password.error_tips: Bad credentials.
+site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
 site.mobile_bind.title: Bind phone number
@@ -237,7 +238,7 @@ user.fields.mobile_label.apple_tip: Please go to the APP for binding
 user.fileds.realname: Name
 user.fileds.me: Me
 user.fields.following: Following
-user.fields.fan: Follower
+user.fields.fan: Followers
 user.fields.no_title: 'No title'
 user.fields.no_sign: 'No signature'
 user.fields.no_introduction: 'No introduction'
@@ -954,7 +955,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
-course.members_manage.official_student.progress: 'Learn progress'
+course.members_manage.official_student.progress: 'Learn Progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
@@ -1694,7 +1695,7 @@ course.plan_task.create_part: 'Add %partName%'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
 course.plan_task.question_describe: Description
-course.plan_task.put_question: Ask
+course.plan_task.put_question: OK
 course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
@@ -2486,7 +2487,7 @@ user.login.submiting_tips: 'Login ...'
 user.login.find_password: 'Forgot password'
 user.login.ask_register: 'No account？'
 user.login.go_register: 'Sign up now'
-user.login.login_account: 'Log In'
+user.login.login_account: 'Sign in'
 user.bind.bind_choose_btn: 'Bind new account'
 user.bind.confirm_bind_btn: 'Confrim to bind'
 user.bind.email_or_mobile_hint: 'Please enter Email/Mobile same as %name% registered'
@@ -2541,7 +2542,7 @@ user.register.reset_email.input_placeholder: 'Please type in network school pass
 user.register.reset_email.display: 'Network school password'
 user.register.reset_email.new_email: 'New email address:'
 user.register.reset_email.new_email_tips: 'Please type in new email address'
-user.register.login_account: Account
+user.register.login_account: 'Sign in'
 user.register.register_account: 'Sign Up'
 user.register.system_close_tips: 'Registration stopped, please contact administrator'
 user.register.register_through_inviter: "Registering under %inviteUser%</span>`s invitation by <span class=\"color-gray mhs\">\n"
@@ -2596,7 +2597,7 @@ user.oauth.bind_existed_account: 'bind existing account?'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
 user.oauth.register.password__placeholder: '5-20 words, number or symbol'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
-user.oauth.register.confirm_password_label: 'confirm password'
+user.oauth.register.confirm_password_label: 'Confirm password'
 user.oauth.register.confirm_password_placeholder: 'input password again'
 user.oauth.register.input_sms_code_tips: 'input sms verify code'
 user.oauth.register.input_sms_code_placeholder: 'please input sms verify code'
@@ -2927,38 +2928,40 @@ message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
 user.homepage.introductions: About
+user.homepage.teaching: Teaching
+user.homepage.learning: Learning
 user.homepage.teaching_courses: 'Teaching Courses'
-user.homepage.teaching_question_bank: 'Teaching question bank'
+user.homepage.teaching_question_bank: 'Teaching Question Bank'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
-user.homepage.learning_question_bank: 'Learning Question bank'
-user.homepage.learning_classrooms: 'Learning in %classroomName%'
+user.homepage.learning_question_bank: 'Learning Question Bank'
+user.homepage.learning_classrooms: 'Learning In %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.favorite_goods: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
 user.homepage.following_fan: Following/Fans
-user.homepage.introductions.empty: 'No introduction'
-user.homepage.teaching_courses.empty: 'No teaching course.'
-user.homepage.learning_courses.empty: 'No learning course.'
-user.homepage.learning_question_bank.empty: 'No learning question bank.'
-user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
-user.homepage.favorite_courses.empty: 'No bookmarked course.'
-user.homepage.favorite_goods.empty: 'No bookmarked goods.'
-user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
-user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
+user.homepage.introductions.empty: 'No Introduction'
+user.homepage.teaching_courses.empty: 'No Teaching Course.'
+user.homepage.learning_courses.empty: 'No Learning Course.'
+user.homepage.learning_question_bank.empty: 'No Learning Question Bank.'
+user.homepage.teaching_question_bank.empty: 'No Teaching Question Bank.'
+user.homepage.favorite_courses.empty: 'No Bookmarked Course.'
+user.homepage.favorite_goods.empty: 'No Bookmarked Goods.'
+user.homepage.teaching_classrooms.empty: 'No Teaching %classroomName%'
+user.homepage.learning_classrooms.empty: 'No Learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
 user.homepage.joined_group.manage: 'Manage Groups'
-user.homepage.joined_group.empty: 'No group info'
-user.homepage.following_fan.following_empty: 'No following'
-user.homepage.following_fan.fan_empty: 'No fans'
+user.homepage.joined_group.empty: 'No Group Info'
+user.homepage.following_fan.following_empty: 'No Following'
+user.homepage.following_fan.fan_empty: 'No Fans'
 homepage: Home
 homepage.student_evaluate: 'Student''s review'
 homepage.reviewer_comment_course: 'Say'
-homepage.switch_language.chinese: Chinese (Simplified)
+homepage.switch_language.chinese: Chinese (简体中文)
 homepage.switch_language.english: English
 homepage.header.search: Search
-homepage.header.login: Log In
-homepage.header.logout: Log Out
+homepage.header.login: Sign in
+homepage.header.logout: Sign Out
 homepage.header.register: Sign Up
 homepage.header.my_course: 'My Teaching'
 homepage.header.my_learning: 'My Learning'
@@ -2979,12 +2982,12 @@ homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
-homepage.live_course.expect: 'Stay tuned'
+homepage.live_course.expect: 'Coming Soon'
 homepage.live_course.teacher: 'Teacher:'
 homepage.live_course.start_time: 'Live available at:'
 homepage.live_course.time_before_start: "<span>%minutes%</span> from the live broadcast\n"
 homepage.live_course.join_btn: 'Enroll the live'
-homepage.live_course.more: 'More lives'
+homepage.live_course.more: 'More'
 homepage.open_course.tips: 'Free Anytime, Anywhere'
 homepage.open_course.more: 'More'
 homepage.learning_course: Continue：%title%
@@ -2994,12 +2997,13 @@ homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
+site.datagrid.filter.class_more : More
 homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
 homepage.student_comment.empty: 'No review'
 homepage.student_dynamic.content_title: 'Latest updates'
-homepage.recommend_teacher.more: 'More teachers'
+homepage.recommend_teacher.more: 'More'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
 homepage.footer.course_copyright: "Copyright <a href=\"/\">\n  %copyRightUrl%\n</a>\n"
@@ -3023,7 +3027,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
-search.free_item_bank: Free Item Bank
+search.free_item_bank: Free
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3770,7 +3774,7 @@ my.teaching.question_bank.open_ensure: Are you sure to open the item bank exerci
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
-my.learning.question_bank_menu: 'Question bank'
+my.learning.question_bank_menu: 'Question Bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3879,11 +3883,11 @@ my.learning.note.course_task_empty: 'This %taskName% has been deleted'
 my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
-my.learning.class.question: 'My course Q&A'
-my.learning.classroom.question: 'My classroom Q&A'
+my.learning.class.question: 'My Course Q&A'
+my.learning.classroom.question: 'My Classroom Q&A'
 my.learning.question.empty: 'No record'
 my.learning.question.course_thread: 'Course Discussion'
-my.learning.question.classroom_thread: '%classroomName% discussion'
+my.learning.question.classroom_thread: '%classroomName% Discussion'
 my.learning.testpaper: 'My Test'
 my.learning.testpaper.record: 'Test Records'
 my.learning.testpaper.favorit_question: 'Favorited Questions'
@@ -3914,7 +3918,7 @@ explore.view_course_btn: 'View Course'
 explore.view_classroom_btn: 'View Class'
 explore.classroom.list: '%name% List'
 explore.classroom.vip_name: 'VIP %name%'
-explore.classroom.free_name: 'VIP %name%'
+explore.classroom.free_name: 'Free %name%'
 explore.classroom.empty: 'No record'
 explore.classroom.service_empty: 'No record'
 explore.open_course.title: 'Open Course'
@@ -4220,6 +4224,11 @@ admin.course_manage.manage.classroom_course_location: '%classroom%'
 admin.course_manage.manage.classroom_course_removed: Removed
 admin.course_manage.manage.vip_course: 'VIP Course'
 admin.course_manage.manage.vip_grade: 'VIP Level'
+admin.course_manage.manage.duration: 'Duration'
+admin.course_manage.manage.introduction: 'Introduction'
+admin.course_manage.manage.member_benefits: 'Member Benefits'
+admin.course_manage.manage.newest_member : 'Newest Member '
+notify.vip.no_course_or_classroom: 'No record'
 admin.course_manage.manage.vip_grade_removed: 'This VIP level has been removed'
 admin.course_manage.manage.vip_grade_count: '%count% VIP level'
 admin.course_manage.manage.live: Live
@@ -6050,6 +6059,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 'You have successfully purchased 
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 'You have successfully purchased "class name", paid [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 'You have successfully purchased "member name", pay [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 'You have successfully purchased "unit" of "virtual coin value", paid [order price]. %smsSchoolName%'
+admin.edu_cloud.edu_sms.member_judgment_notes: 'You are not a member yet, please activate'
 admin.edu_cloud.edu_email: 'Cloud email'
 admin.edu_cloud.edu_email.application: 'Email scenarios'
 admin.edu_cloud.edu_email.application.id: Id
@@ -6535,7 +6545,7 @@ admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.default_locale: language
-admin.developer_setting.default_locale.zh_CN: Chinese(Simplified)
+admin.developer_setting.default_locale.zh_CN: Chinese(简体中文)
 admin.developer_setting.default_locale.en: English
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.developer_setting.mp_service_url_label: Applet service platform address
@@ -7306,7 +7316,7 @@ admin.xapi.enable_label: Turn on xAPI
 admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
-site.date_format: 'Y-n-d H:i:s'
+site.date_format: 'F j, Y h:i'
 site.date_format_H_i: 'Y-n-d H:i'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
@@ -10315,10 +10325,10 @@ goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
-user.certificates.none_record: Certificate Empty
+user.certificates.none_record: Certificate empty
 user.certificates.only_valid: Show only valid
 user.certificates.date_range: Certificate acquisition tim
-user.certificates.placeholde_name: Enter certificate name search...
+user.certificates.placeholde_name: Enter certificate name
 user.certificates.cert_titile: Certificate name
 user.certificates.cert_code: Certificate number
 user.certificates.cert_issue_time: Acquisition time
@@ -10336,7 +10346,7 @@ user.certificates.detail_object: Authentication object
 user.certificates.detail_object_name: Name
 user.certificates.detail_object_usrename: Username
 user.certificates.detail_cert_message: Certificate information
-user.certificates.unclaimed_list: Certificate to be received
+user.certificates.unclaimed_list: Certificate to Be Received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
 

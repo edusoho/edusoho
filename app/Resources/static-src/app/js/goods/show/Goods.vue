@@ -1,6 +1,6 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title|removeHtml}}</div>
+        <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
         <detail :vip-enabled="vipEnabled" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
