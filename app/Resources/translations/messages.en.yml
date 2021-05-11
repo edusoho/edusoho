@@ -53,6 +53,7 @@ site.default.must: Must
 site.default.and: And
 site.default.student: Student
 site.default.classroom: ''
+site.default.classroom.notempty: 'Class'
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
@@ -10325,7 +10326,7 @@ goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
-user.certificates.none_record: Certificate empty
+user.certificates.none_record: Certificate Empty
 user.certificates.only_valid: Show only valid
 user.certificates.date_range: Certificate acquisition tim
 user.certificates.placeholde_name: Enter certificate name
