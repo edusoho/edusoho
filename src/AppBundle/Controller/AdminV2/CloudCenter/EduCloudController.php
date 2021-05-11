@@ -932,17 +932,17 @@ class EduCloudController extends BaseController
 
     public function cloudFilesSettingAction(Request $request)
     {
-        $fileSetting = $this->getSettingService()->get('cloud_file_setting', []);
-        $fileSetting = array_merge(['enable' => 0], $fileSetting);
+        $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $cloudFileSetting = array_merge(['enable' => 0], $cloudFileSetting);
 
         if ('POST' == $request->getMethod()) {
-            $fileSetting = $request->request->all();
-            $this->getSettingService()->set('cloud_file_setting', $fileSetting);
+            $cloudFileSetting = $request->request->all();
+            $this->getSettingService()->set('cloud_file_setting', $cloudFileSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin-v2/cloud-center/edu-cloud/cloud-file-setting.html.twig', [
-            'fileSetting' => $fileSetting,
+            'cloudFileSetting' => $cloudFileSetting,
         ]);
     }
 

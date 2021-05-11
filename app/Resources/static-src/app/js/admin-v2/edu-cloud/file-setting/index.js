@@ -1,5 +1,5 @@
 $('input[type=radio][name=enable]').change(function() {
-  var enable = $('input[type=radio][name=enable]:checked').val();
+  let enable = $('input[type=radio][name=enable]:checked').val();
   if (enable === '1') {
     $('#enableTips').show()
     $('#disableTips').hide()
