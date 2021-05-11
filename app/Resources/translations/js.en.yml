@@ -474,7 +474,7 @@ course_set.live_room.entry_error_with_message: >
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
 course_set.refund_cancel_success: Refund application cancelled!
 course_set.title_required_error_hint: Please enter a title
-course_set.learn_progress: Learning progress
+course_set.learn_progress: Learning Progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
 course_set.manage.publish_title: 发布课程
@@ -752,7 +752,7 @@ intro.confirm_hint: Finish
 
 
 
-validate.required.message: Please input %display%.
+validate.required.message: Please input %display%
 validate.valid_email_input.message: Please enter a valid email address.
 validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.
@@ -1834,3 +1834,4 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_afte
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.operation.audit_center.batch_operate_tips: Please select the content to be operated in batches first
 admin_v2.operation.audit_center.batch_operate_success_tips: Success
+homepage: Home
