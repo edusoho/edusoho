@@ -73,6 +73,7 @@ class ScrmGood extends AbstractResource
             'types',
             'title',
             'price',
+            'status', //unpublished,published
         ];
         $conditions['status'] = 'published';
 
