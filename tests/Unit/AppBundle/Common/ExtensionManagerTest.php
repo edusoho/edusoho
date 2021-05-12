@@ -96,11 +96,16 @@ class ExtensionManagerTest extends BaseTestCase
                     bok
                 </div>
                 <div class="notification-footer">
-                2018-04-15 11:15  
+                  {% if(app.request.locale == "en") %}
+                 {{ 1523762123 |date("F j, Y H:i:s"|trans) }}
+                {% else %}
+                {{ 1523762123 |date("Y-n-d H:i:s"|trans) }}
+                {% endif %}           
                 </div>
                 </div>
             </li>'
         );
+//        2018-04-15 11:15
         $actualHtml = $this->removeBlankAndNewLine($result);
         $this->assertEquals($expectedHtml, $actualHtml);
     }
