@@ -7721,6 +7721,8 @@ admin.reward_point.points_rank: Points Ranking
 admin.reward_point.points_rule: Points Rule
 admin.reward_points: Points
 my.reward_points: My Points
+my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
+my.reward_points_instructions: 'Points instructions'
 
 
 

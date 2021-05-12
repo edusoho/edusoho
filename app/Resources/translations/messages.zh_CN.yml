@@ -8996,6 +8996,8 @@ admin.reward_point.points_rank: 积分排行
 admin.reward_point.points_rule: 积分规则
 admin.reward_points: 积分
 my.reward_points: 我的积分
+my.reward_points_message: ￥%num%现金，积分使用后，申请退款时不退还积分
+my.reward_points_instructions: 积分说明
 
 
 admin.reward_point_account: 账户
