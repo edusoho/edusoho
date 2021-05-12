@@ -2,9 +2,11 @@
 
 namespace Tests\Unit\AppBundle\Common;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
@@ -16,7 +18,7 @@ class ExtensionManagerTest extends BaseTestCase
 
         $this->assertEquals(4, count($result));
         foreach ($result as $key => $value) {
-            $this->assertTrue(in_array($key, array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate')));
+            $this->assertTrue(in_array($key, ['DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate']));
         }
     }
 
@@ -24,11 +26,11 @@ class ExtensionManagerTest extends BaseTestCase
     {
         $instance = ExtensionManager::instance();
         $result = $instance->renderStatus(
-            array(
+            [
                 'type' => 'become_student',
                 'objectType' => 'course_set',
-                'properties' => array('course' => array('id' => 222)),
-            ),
+                'properties' => ['course' => ['id' => 222]],
+            ],
             'simple'
         );
 
@@ -38,7 +40,7 @@ class ExtensionManagerTest extends BaseTestCase
     public function testRenderStatusWithNonExistType()
     {
         $instance = ExtensionManager::instance();
-        $result = $instance->renderStatus(array('type' => 'ok'), 'simple');
+        $result = $instance->renderStatus(['type' => 'ok'], 'simple');
         $this->assertEquals('无法显示该动态。', $result);
     }
 
@@ -48,10 +50,10 @@ class ExtensionManagerTest extends BaseTestCase
         $result = $instance->getDataDict('nonOpenCourseCateogry');
 
         $this->assertArrayEquals(
-            array(
+            [
                 'live' => 'Living course',
                 'normal' => 'Course',
-            ),
+            ],
             $result
         );
     }
@@ -74,20 +76,22 @@ class ExtensionManagerTest extends BaseTestCase
         $result = $instance->getDataTag('DolldksOrg');
     }
 
-    public function testRenderNotification()
+    public function testRenderNotification(Request $request)
     {
         $instance = ExtensionManager::instance();
         $result = $instance->renderNotification(
-            array(
+            [
                 'type' => 'default',
-                'content' => array(
+                'content' => [
                     'message' => 'bok',
-                ),
+                ],
                 'createdTime' => 1523762123,
-            )
+            ]
         );
-        $expectedHtml = $this->removeBlankAndNewLine(
-            '<li class="media">
+        $language = $request->getSession()->get('_locale');
+        if ('zh_CN' == $language) {
+            $expectedHtml = $this->removeBlankAndNewLine(
+                '<li class="media">
                 <div class="pull-left">
                 <span class="glyphicon glyphicon-volume-down media-object"></span>
                 </div>
@@ -100,9 +104,37 @@ class ExtensionManagerTest extends BaseTestCase
                 </div>
                 </div>
             </li>'
-        );
+            );
+        } else {
+            $expectedHtml = $this->removeBlankAndNewLine(
+                '<li class="media">
+                <div class="pull-left">
+                <span class="glyphicon glyphicon-volume-down media-object"></span>
+                </div>
+                <div class="media-body">
+                <div class="notification-body">
+                    bok
+                </div>
+                <div class="notification-footer">
+                April 15,2018 11:15
+                </div>
+                </div>
+            </li>'
+            );
+        }
+
         $actualHtml = $this->removeBlankAndNewLine($result);
         $this->assertEquals($expectedHtml, $actualHtml);
+    }
+
+    /**
+     * Gets the Session.
+     *
+     * @return SessionInterface|null The session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 
     /*
