@@ -83,7 +83,10 @@ class OpenCourseEventSubscriber extends EventSubscriber
         $fields = $context['argument'];
         $member = $context['newMember'];
 
-        $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $fields['courseId']));
+        $memberNum = $this->getOpenCourseService()->countMembers(array(
+            'role' => 'student',
+            'courseId' => $fields['courseId'])
+        );
 
         $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
     }
