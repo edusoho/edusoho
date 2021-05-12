@@ -7720,9 +7720,7 @@ admin.reward_point.my_points: My Points
 admin.reward_point.points_rank: Points Ranking
 admin.reward_point.points_rule: Points Rule
 admin.reward_points: Points
-my.reward_points: My Points
-my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
-my.reward_points_instructions: 'Points instructions'
+
 
 
 
@@ -7843,6 +7841,9 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+my.reward_points: My Points
+my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
+my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
 task.learn_data_detail.createdTime: Join Time
