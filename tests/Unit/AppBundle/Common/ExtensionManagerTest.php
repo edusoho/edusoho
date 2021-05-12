@@ -5,8 +5,6 @@ namespace Tests\Unit\AppBundle\Common;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
@@ -76,7 +74,7 @@ class ExtensionManagerTest extends BaseTestCase
         $result = $instance->getDataTag('DolldksOrg');
     }
 
-    public function testRenderNotification(Request $request)
+    public function testRenderNotification()
     {
         $instance = ExtensionManager::instance();
         $result = $instance->renderNotification(
@@ -88,10 +86,7 @@ class ExtensionManagerTest extends BaseTestCase
                 'createdTime' => 1523762123,
             ]
         );
-
-        $language = $request->getSession()->get('_locale');
-        if ('zh_CN' == $language) {
-            $expectedHtml = $this->removeBlankAndNewLine(
+        $expectedHtml = $this->removeBlankAndNewLine(
                 '<li class="media">
                 <div class="pull-left">
                 <span class="glyphicon glyphicon-volume-down media-object"></span>
@@ -101,40 +96,13 @@ class ExtensionManagerTest extends BaseTestCase
                     bok
                 </div>
                 <div class="notification-footer">
-                          2018-04-15 11:15
+                          2018-4-15 11:15:23
                 </div>
                 </div>
             </li>'
             );
-        } else {
-            $expectedHtml = $this->removeBlankAndNewLine(
-                '<li class="media">
-                <div class="pull-left">
-                <span class="glyphicon glyphicon-volume-down media-object"></span>
-                </div>
-                <div class="media-body">
-                <div class="notification-body">
-                    bok
-                </div>
-                <div class="notification-footer">
-                     April 15, 2018 11:15
-                </div>
-                </div>
-            </li>'
-            );
-        }
         $actualHtml = $this->removeBlankAndNewLine($result);
         $this->assertEquals($expectedHtml, $actualHtml);
-    }
-
-    /**
-     * Gets the Session.
-     *
-     * @return SessionInterface|null The session
-     */
-    public function getSession()
-    {
-        return $this->session;
     }
 
     /*
