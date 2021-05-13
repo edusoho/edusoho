@@ -54,6 +54,9 @@
         @timesUp="expire"
         @sellOut="sellOut"
       />
+      <div class="wechat-subscribe-box">
+        <wechat-subscribe />
+      </div>
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div v-show="!isShowOutFocusMask">
@@ -116,6 +119,7 @@ import finishDialog from '../components/finish-dialog';
 import qs from 'qs';
 import report from '@/mixins/course/report';
 import VideoReportMask from '@/components/video-report-mask';
+import WechatSubscribe from '../components/wechat-subscribe';
 
 export default {
   components: {
@@ -123,6 +127,7 @@ export default {
     tagLink,
     finishDialog,
     VideoReportMask,
+    WechatSubscribe,
   },
   mixins: [report],
   props: {

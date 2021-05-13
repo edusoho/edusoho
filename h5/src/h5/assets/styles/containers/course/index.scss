@@ -223,10 +223,19 @@
 		background-color: #dcdbdc;
 
 		&--img {
+			position: relative;
+
 			> img {
 				width: 100%;
 				height: vw(210);
 				vertical-align: middle;
+			}
+
+			.wechat-subscribe-box {
+				position: absolute;
+				top: -34px;
+				right: 20px;
+				z-index: 1002;
 			}
 		}
 
