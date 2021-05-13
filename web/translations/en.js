@@ -340,6 +340,8 @@ t.add("auth.register.mobile_required_error_hint", "Please enter your mobile numb
 t.add("auth.register.email_or_mobile_required_error_hint", "Please enter your mobile number \/ email", "js", "en");
 t.add("auth.register.number_validate_error_hint", "11 numbers, the first number can not be 1", "js", "en");
 t.add("auth.register.drag_captcha_tips", "Please drag the left block to finish the puzzle", "js", "en");
+t.add("auth.register.name_required_error_hint", "Please input username", "js", "en");
+t.add("auth.register.password_required_error_hint", "Please input password", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
 t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
@@ -399,7 +401,7 @@ t.add("course_set.live_room.entry_error_with_message", "Enter live classroom err
 t.add("course_set.refund_cancel_hint", "Do you really want to cancel your refund application?", "js", "en");
 t.add("course_set.refund_cancel_success", "Refund application cancelled!", "js", "en");
 t.add("course_set.title_required_error_hint", "Please enter a title", "js", "en");
-t.add("course_set.learn_progress", "Learning progress", "js", "en");
+t.add("course_set.learn_progress", "Learning Progress", "js", "en");
 t.add("course_set.manage.tag_required_hint", "Please enter a label", "js", "en");
 t.add("course_set.manage.publish_hint", "Are you sure you want to post the course?", "js", "en");
 t.add("course_set.manage.publish_title", "\u53d1\u5e03\u8bfe\u7a0b", "js", "en");
@@ -628,7 +630,7 @@ t.add("homework_manage.result_graph.status_distribution", "Result Distribution",
 t.add("homework_manage.result_graph.first_status_num", "Number of first result", "js", "en");
 t.add("homework_manage.result_graph.max_status_num", "Number of max result", "js", "en");
 t.add("intro.confirm_hint", "Finish", "js", "en");
-t.add("validate.required.message", "Please input %display%.", "js", "en");
+t.add("validate.required.message", "Please input %display%", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
 t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en");
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
@@ -1620,4 +1622,5 @@ t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.aud
 t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips", "After disallowing, the review status is unreviewed", "js", "en");
 t.add("admin_v2.operation.audit_center.batch_operate_tips", "Please select the content to be operated in batches first", "js", "en");
 t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "Success", "js", "en");
+t.add("homepage", "Home", "js", "en");
 })(Translator);
