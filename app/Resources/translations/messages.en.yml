@@ -358,7 +358,7 @@ form.btn.yes: 'Yes'
 form.btn.no: 'No'
 
 finance.income: Income
-finance.total_incom: Total income
+finance.total_income: Total revenue
 finance.expense: Expense
 finance.recover: Recorvey
 finance.total_expense: Total expense
@@ -411,7 +411,7 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.product_name: Product name
+order.product_name: Product Name
 order.product_price: Product Price
 order.price_amount: Price payable
 order.paid_amount: Paid price
@@ -436,10 +436,10 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.refund.equal: equal
 order.refund.discount: discount
-order.created_time: 'Create time'
+order.created_time: 'Create Time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
-order.status: 'Order status'
+order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
@@ -489,6 +489,8 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
+order.confirm.pay_points:  'You can use %num% points, use'
+order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
@@ -957,7 +959,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
-course.members_manage.official_student.progress: 'Learn Progress'
+course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
@@ -2110,7 +2112,7 @@ classroom.vip_member_expired_tips: "You can not learn the course ' ~ %classroomN
 classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access the course ' ~ %classroomName% ~ '. Please <a class=\"alert-link\" href=\"%vipUpgrade%\" target=\"_blank\">upgrade</a>。\n"
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
 classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
-classroom.courses_count: '%courseNum% courses in total'
+classroom.courses_count: '%courseNum% courses'
 classroom.compulsory_count: '%compulsoryTaskNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
@@ -7845,6 +7847,9 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+my.reward_points: My Points
+my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
+my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
 task.learn_data_detail.createdTime: Join Time
