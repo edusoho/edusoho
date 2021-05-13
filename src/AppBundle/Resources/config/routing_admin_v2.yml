@@ -42,6 +42,18 @@ admin_v2_announcement_from_platform:
     path: /announcement_from_platform
     defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
 
+#教学-课程管理-产品库
+admin_v2_class_course_product:
+    path:  /class_course_product/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassCourseProduct:index }
+    permissions: [admin_v2_class_course_product_manage]
+
+#教学-课程管理-班课
+admin_v2_class_course:
+    path:  /class_course/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassCourse:index }
+    permissions: [admin_v2_class_course_manage]
+
 # 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index
