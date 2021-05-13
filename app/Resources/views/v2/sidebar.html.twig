@@ -8,7 +8,7 @@
     </li>
     {% if setting('coin.coin_enabled', 0) %}
       <li class="cd-sidebar__item  {% if side_nav == 'my-coin' %} active {% endif %}">
-        <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin_zh'|trans }}</a>
+        <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
       </li>
     {% endif %}
     {% if setting('invite.invite_code_setting', 0) %}
