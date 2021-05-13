@@ -9,7 +9,7 @@ class ClassCourseController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('admin-v2/teach/class-course/index.html.twig', array(
-        ));
+        return $this->render('admin-v2/teach/class-course/index.html.twig', [
+        ]);
     }
 }
