@@ -52,7 +52,7 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: 'Class'
+site.default.classroom: ''
 site.default.classroom.notempty: 'Class'
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
@@ -358,7 +358,7 @@ form.btn.yes: 'Yes'
 form.btn.no: 'No'
 
 finance.income: Income
-finance.total_incom: Total income
+finance.total_income: Total revenue
 finance.expense: Expense
 finance.recover: Recorvey
 finance.total_expense: Total expense
@@ -375,6 +375,7 @@ finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
+plugin.money: 'Recharge'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
 plugin.acitivity: Acitivity
@@ -410,7 +411,7 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.product_name: Product name
+order.product_name: Product Name
 order.product_price: Product Price
 order.price_amount: Price payable
 order.paid_amount: Paid price
@@ -435,10 +436,10 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.refund.equal: equal
 order.refund.discount: discount
-order.created_time: 'Create time'
+order.created_time: 'Create Time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
-order.status: 'Order status'
+order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
@@ -488,6 +489,8 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
+order.confirm.pay_points:  'You can use %num% points, use'
+order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
@@ -956,7 +959,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
-course.members_manage.official_student.progress: 'Learn Progress'
+course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
@@ -2109,7 +2112,7 @@ classroom.vip_member_expired_tips: "You can not learn the course ' ~ %classroomN
 classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access the course ' ~ %classroomName% ~ '. Please <a class=\"alert-link\" href=\"%vipUpgrade%\" target=\"_blank\">upgrade</a>。\n"
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
 classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
-classroom.courses_count: '%courseNum% courses in total'
+classroom.courses_count: '%courseNum% courses'
 classroom.compulsory_count: '%compulsoryTaskNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
@@ -2474,15 +2477,15 @@ form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
 
-user.login.account_type_label: 'Emails/Phone numbers/Username'
-user.login.content_title: Login
+user.login.account_type_label: 'Email/Phone numbers/Username'
+user.login.content_title: 'Sign in'
 user.login.page_title: 'Log In'
 user.login.login_link: 'Log In'
 user.login.account_label: Account
-user.login.account_placeholder: 'Emails/Phone numbers/Username'
+user.login.account_placeholder: 'Email/Phone numbers/Username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
-user.login.remember_me: 'Remember Password'
+user.login.remember_me: 'Remember password'
 user.login.submit_button: Login
 user.login.submiting_tips: 'Login ...'
 user.login.find_password: 'Forgot password'
@@ -2834,6 +2837,7 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin_zh: 'My coin'
 user.account.my_coin.pay_coin: %coin_name% paid
 user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
@@ -2928,7 +2932,7 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: About
+user.homepage.introductions: About me
 user.homepage.teaching: Teaching
 user.homepage.learning: Learning
 user.homepage.teaching_courses: 'Teaching Courses'
@@ -2939,15 +2943,15 @@ user.homepage.learning_question_bank: 'Learning Question Bank'
 user.homepage.learning_classrooms: 'Learning In %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.favorite_goods: Favorites
-user.homepage.joined_group: 'Enrolled Groups'
-user.homepage.following_fan: Following/Fans
+user.homepage.joined_group: 'Groups'
+user.homepage.following_fan: Followers/Following
 user.homepage.introductions.empty: 'No Introduction'
 user.homepage.teaching_courses.empty: 'No Teaching Course'
 user.homepage.learning_courses.empty: 'No Learning Course'
 user.homepage.learning_question_bank.empty: 'No Learning Question Bank'
 user.homepage.teaching_question_bank.empty: 'No Teaching Question Bank'
 user.homepage.favorite_courses.empty: 'No Bookmarked Course'
-user.homepage.favorite_goods.empty: 'No Bookmarked Goods.'
+user.homepage.favorite_goods.empty: 'No Bookmarked Goods'
 user.homepage.teaching_classrooms.empty: 'No Teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No Learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
@@ -7317,7 +7321,9 @@ admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'F j, Y h:i'
+site.date_coupon: 'F j, Y'
 site.date_format_H_i: 'Y-n-d H:i'
+site.date_format_H_i_s: 'F j, Y H:i:s'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
 es_bar.practice.homework: Homework
@@ -7841,6 +7847,9 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+my.reward_points: My Points
+my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
+my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
 task.learn_data_detail.createdTime: Join Time
