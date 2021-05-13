@@ -86,15 +86,10 @@
         </li>
 
         <li class="cd-sidebar__item {% if course_side_nav == 'students' %}active{% endif %}">
-          {% if courseSet.locked %}
-            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'students'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.members_manage'|trans }}
-            </a>
-          {% else %}
-            <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ 'course.student_manage'|trans }}
-            </a>
-          {% endif %}
+          <a
+            href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+            {{ 'course.student_manage'|trans }}
+          </a>
         </li>
 
 
