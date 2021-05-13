@@ -392,6 +392,8 @@ auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
 auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
 auth.register.drag_captcha_tips: Please drag the left block to finish the puzzle
+auth.register.name_required_error_hint: Please input username
+auth.register.password_required_error_hint: Please input password
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
