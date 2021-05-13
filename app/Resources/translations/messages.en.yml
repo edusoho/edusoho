@@ -52,7 +52,7 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: 'Class'
+site.default.classroom: ''
 site.default.classroom.notempty: 'Class'
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
@@ -2483,7 +2483,7 @@ user.login.account_label: Account
 user.login.account_placeholder: 'Email/Phone numbers/Username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
-user.login.remember_me: 'Remember Password'
+user.login.remember_me: 'Remember password'
 user.login.submit_button: Login
 user.login.submiting_tips: 'Login ...'
 user.login.find_password: 'Forgot password'
@@ -2930,7 +2930,7 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: About
+user.homepage.introductions: About me
 user.homepage.teaching: Teaching
 user.homepage.learning: Learning
 user.homepage.teaching_courses: 'Teaching Courses'
@@ -2941,15 +2941,15 @@ user.homepage.learning_question_bank: 'Learning Question Bank'
 user.homepage.learning_classrooms: 'Learning In %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.favorite_goods: Favorites
-user.homepage.joined_group: 'Enrolled Groups'
-user.homepage.following_fan: Following/Fans
+user.homepage.joined_group: 'Groups'
+user.homepage.following_fan: Followers/Following
 user.homepage.introductions.empty: 'No Introduction'
 user.homepage.teaching_courses.empty: 'No Teaching Course'
 user.homepage.learning_courses.empty: 'No Learning Course'
 user.homepage.learning_question_bank.empty: 'No Learning Question Bank'
 user.homepage.teaching_question_bank.empty: 'No Teaching Question Bank'
 user.homepage.favorite_courses.empty: 'No Bookmarked Course'
-user.homepage.favorite_goods.empty: 'No Bookmarked Goods.'
+user.homepage.favorite_goods.empty: 'No Bookmarked Goods'
 user.homepage.teaching_classrooms.empty: 'No Teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No Learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
