@@ -21,6 +21,6 @@
   {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
     <p>{{'coupon.Requirements'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('coupon.Accessible'|trans)})}}<span></span></p>
   {% endif %}
-  <div class="stamp stamp-used"></div>
+  <div class="stamp stamp-used {% if app.request.locale == 'en' %}{{ 'en-backgroundimg' }}{% endif %}"></div>
 </div>
 

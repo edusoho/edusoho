@@ -375,6 +375,7 @@ finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
+plugin.money: 'Recharge'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
 plugin.acitivity: Acitivity
@@ -2474,12 +2475,12 @@ form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
 
-user.login.account_type_label: 'Emails/Phone numbers/Username'
-user.login.content_title: Login
+user.login.account_type_label: 'Email/Phone numbers/Username'
+user.login.content_title: 'Sign in'
 user.login.page_title: 'Log In'
 user.login.login_link: 'Log In'
 user.login.account_label: Account
-user.login.account_placeholder: 'Emails/Phone numbers/Username'
+user.login.account_placeholder: 'Email/Phone numbers/Username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
 user.login.remember_me: 'Remember Password'
@@ -2834,6 +2835,7 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin_zh: 'My coin'
 user.account.my_coin.pay_coin: %coin_name% paid
 user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
@@ -7317,7 +7319,9 @@ admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'F j, Y h:i'
+site.date_coupon: 'F j, Y'
 site.date_format_H_i: 'Y-n-d H:i'
+site.date_format_H_i_s: 'F j, Y H:i:s'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
 es_bar.practice.homework: Homework
