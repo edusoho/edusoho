@@ -5088,7 +5088,7 @@ admin.custom_page_manage.table_type: Type
 admin.custom_page_manage.table_status: Status
 admin.custom_page_manage.table_publish_time_or_user: 'Published Time/Author'
 admin.custom_page_manage.table_operation: Action
-admin.custom_page_manage.empty: 'No Record'
+admin.custom_page_manage.empty: 'No record'
 admin.custom_page_manage.title_url: 'Title URL'
 admin.custom_page_manage.title_category: Category
 admin.custom_page_manage.edit_btn: Edit
@@ -10334,7 +10334,7 @@ goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
-user.certificates.none_record: Certificate Empty
+user.certificates.none_record: Certificate empty
 user.certificates.only_valid: Show only valid
 user.certificates.date_range: Certificate acquisition tim
 user.certificates.placeholde_name: Enter certificate name
