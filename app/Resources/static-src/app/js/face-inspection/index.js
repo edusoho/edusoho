@@ -57,6 +57,8 @@ class CaptureInit{
       success: function (response) {
         if (response) {
           notify('success', Translator.trans('恭喜！您已成功完成图像采集!'));
+          $('#inspection-collect-finish-btn').show();
+          $('.js-upload-url').find('button').hide();
         } else {
           notify('danger', Translator.trans('采集失败！请刷新页面重新采集'));
         }

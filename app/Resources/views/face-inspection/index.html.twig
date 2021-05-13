@@ -13,9 +13,13 @@
             <h4>考生头像采集</h4>
           </div>
           <div class="inspection-collect-row js-upload-url" style="margin-bottom: 20px;" id="inspection-collect-video" data-upload-url="{{path('facein_capture_upload',{code:code|default()})}}">
-          </div>
 
+          </div>
+          <div class="inspection-collect-row inspection-collect-actions js-btn-group" id="inspection-collect-actions">
+            <a class="btn btn-success" href="{% if goto|default(null) %}{{ goto }}{% else %}{{path('homepage')}}{% endif %}" id="inspection-collect-finish-btn" style="display: none;">完成采集</a>
+          </div>
         </div>
+
         <input type="hidden" name="token" value="{{ token }}">
       </div>
     </div>
