@@ -104,17 +104,7 @@ class ExtensionManagerTest extends BaseTestCase
         $actualHtml = $this->removeBlankAndNewLine($result);
         $this->assertEquals($expectedHtml, $actualHtml);
     }
-
-    /**
-     * Gets the Session.
-     *
-     * @return SessionInterface|null The session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
+    
     /*
      * 删除空格和换行符
      */
