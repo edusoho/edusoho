@@ -16,7 +16,7 @@
     "babel-istanbul": "^0.12.2",
     "chai": "^4.1.2",
     "es-commit-msg-validator": "1.0.2",
-    "es-webpack-engine": "4.4.1",
+    "es-webpack-engine": "4.5.1",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.6.2",
@@ -91,6 +91,7 @@
     "ua-parser-js": "^0.7.17",
     "video.js": "4.10.2",
     "vue": "^2.6.11",
+    "vue-router": "^3.5.1",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
     "weixin-js-sdk": "1.6.0"

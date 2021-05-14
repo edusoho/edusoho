@@ -3381,9 +3381,10 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-es-webpack-engine@4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-4.4.1.tgz#cff4b2007f5524851b7dcf2cb35e2cf131a6bc88"
+es-webpack-engine@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-4.5.1.tgz#c71336ae7711a80f2ec47705adbc0af609e01737"
+  integrity sha512-IQ3lTHmC7LnkjSIHqf/Ta6UCvrx3Q1w4kMir0cGgM9KYUVq5bPVW5D1OP7HhfCXU1S6AO74WMuU4gz5KefsfNw==
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
@@ -9255,6 +9256,11 @@ vue-ref@^2.0.0:
 vue-router@^3.1.5:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.3.4.tgz#4e38abc34a11c41b6c3d8244449a2e363ba6250b"
+
+vue-router@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.npmjs.org/vue-router/-/vue-router-3.5.1.tgz#edf3cf4907952d1e0583e079237220c5ff6eb6c9"
+  integrity sha512-RRQNLT8Mzr8z7eL4p7BtKvRaTSGdCbTy2+Mm5HTJvLGYSSeG9gDzNasJPP/yOYKLy+/cLG/ftrqq5fvkFwBJEw==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
