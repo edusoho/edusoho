@@ -20,10 +20,10 @@ class ArrayToolkit
         }
 
         if (empty($array)) {
-            return array();
+            return [];
         }
 
-        $column = array();
+        $column = [];
 
         foreach ($array as $item) {
             if (isset($item[$columnName])) {
@@ -37,10 +37,10 @@ class ArrayToolkit
     public static function columns(array $array, array $columnNames)
     {
         if (empty($array) || empty($columnNames)) {
-            return array();
+            return [];
         }
 
-        $columns = array();
+        $columns = [];
 
         foreach ($array as $item) {
             foreach ($columnNames as $key) {
@@ -79,7 +79,7 @@ class ArrayToolkit
 
     public static function changes(array $before, array $after)
     {
-        $changes = array('before' => array(), 'after' => array());
+        $changes = ['before' => [], 'after' => []];
 
         foreach ($after as $key => $value) {
             if (!isset($before[$key])) {
@@ -97,11 +97,11 @@ class ArrayToolkit
 
     public static function group(array $array, $key)
     {
-        $grouped = array();
+        $grouped = [];
 
         foreach ($array as $item) {
             if (empty($grouped[$item[$key]])) {
-                $grouped[$item[$key]] = array();
+                $grouped[$item[$key]] = [];
             }
 
             $grouped[$item[$key]][] = $item;
@@ -112,7 +112,7 @@ class ArrayToolkit
 
     public static function index(array $array, $name)
     {
-        $indexedArray = array();
+        $indexedArray = [];
 
         if (empty($array)) {
             return $indexedArray;
@@ -130,11 +130,11 @@ class ArrayToolkit
 
     public static function groupIndex(array $array, $key, $index)
     {
-        $grouped = array();
+        $grouped = [];
 
         foreach ($array as $item) {
             if (empty($grouped[$item[$key]])) {
-                $grouped[$item[$key]] = array();
+                $grouped[$item[$key]] = [];
             }
 
             $grouped[$item[$key]][$item[$index]] = $item;
@@ -159,7 +159,7 @@ class ArrayToolkit
 
     public static function filter(array $array, array $specialValues)
     {
-        $filtered = array();
+        $filtered = [];
 
         foreach ($specialValues as $key => $value) {
             if (!array_key_exists($key, $array)) {
@@ -234,7 +234,7 @@ class ArrayToolkit
      */
     public static function mergeArraysValue($doubleArrays)
     {
-        $values = array();
+        $values = [];
         foreach ($doubleArrays as $array) {
             if (empty($array)) {
                 continue;
@@ -252,7 +252,7 @@ class ArrayToolkit
 
     public static function thin(array $array, array $columns)
     {
-        $thinner = array();
+        $thinner = [];
         foreach ($array as $k => $v) {
             foreach ($columns as $v2) {
                 $thinner[$k][$v2] = $v[$v2];
@@ -269,7 +269,7 @@ class ArrayToolkit
      */
     public static function appendKeyPrefix($array, $prefix)
     {
-        $result = array();
+        $result = [];
         foreach ($array as $key => $value) {
             $result[$prefix.$key] = $value;
         }
@@ -360,5 +360,32 @@ class ArrayToolkit
         $array = array_merge($firstArray, $insertArray, $array);
 
         return $array;
+    }
+
+    /**
+     * @param $array
+     *
+     * @return array
+     *               将数组序列化深度遍历map,类似于form表单
+     */
+    public static function flatten($array)
+    {
+        $return = [];
+
+        $floor = static function ($val, $prefix) use (&$floor, &$return) {
+            if (is_array($val)) {
+                foreach ($val as $key => $item) {
+                    $keyPrefix = "{$prefix}[{$key}]";
+                    $floor($item, $keyPrefix);
+                }
+            } else {
+                $return[$prefix] = $val;
+            }
+        };
+        foreach ($array as $key => $value) {
+            $floor($value, (string) ($key));
+        }
+
+        return $return;
     }
 }

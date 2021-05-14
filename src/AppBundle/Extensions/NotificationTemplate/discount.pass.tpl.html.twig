@@ -9,7 +9,7 @@
       {{ 'notification.discount.pass'|trans({'%discount%':discount}) }}
     </div>
     <div class="notification-footer">
-     {{ notification.createdTime|date_format }}  
+     {{ notification.createdTime|date('site.date_format_H_i_s'|trans) }}
     </div>
   </div>
 </li>

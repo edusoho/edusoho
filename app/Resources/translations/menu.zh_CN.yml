@@ -554,6 +554,7 @@ admin_v2.cloud_resource.basic_tab: 云资源
 admin_v2.cloud.file.basic_tab: 云资源
 admin_v2.cloud.attachment.basic_tab: 云附件
 admin_v2.cloud.attachment_setting.basic_tab: 云附件设置
+admin_v2.cloud.file_setting.basic_tab: 云资源设置
 
 # 教学模块-资源管理-题库管理
 admin_v2.question_bank.menu: 题库管理
