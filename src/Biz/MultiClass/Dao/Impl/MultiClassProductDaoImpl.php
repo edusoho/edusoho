@@ -1,13 +1,13 @@
 <?php
 
-namespace Biz\ClassCourse\Dao\Impl;
+namespace Biz\MultiClass\Dao\Impl;
 
-use Biz\ClassCourse\Dao\ClassCourseProductDao;
+use Biz\MultiClass\Dao\MultiClassProductDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class ClassCourseProductDaoImpl extends GeneralDaoImpl implements ClassCourseProductDao
+class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProductDao
 {
-    protected $table = 'class_course_product';
+    protected $table = 'multi_class_product';
 
     public function declares()
     {
