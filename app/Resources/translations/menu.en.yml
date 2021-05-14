@@ -470,10 +470,10 @@ admin_v2.nav.system: System
 admin_v2.course.basic_group: Course Manage
 
 # 教学-课程管理-产品库
-admin_v2.class_course_product.basic_menu: Product Library
+admin_v2.multi_class_product.basic_menu: Product Library
 
 # 教学-课程管理-班课
-admin_v2.class_course.basic_menu: class course
+admin_v2.multi_class.basic_menu: Multi Class
 
 # 教学模块-课程管理-课程管理
 admin_v2.course.basic_menu: Courses

@@ -464,10 +464,10 @@ admin_v2.nav.system: 系统
 admin_v2.course.basic_group: 课程管理
 
 # 教学-课程管理-产品库
-admin_v2.class_course_product.basic_menu: 产品库
+admin_v2.multi_class_product.basic_menu: 产品库
 
 # 教学-课程管理-班课
-admin_v2.class_course.basic_menu: 班课
+admin_v2.multi_class.basic_menu: 班课
 
 # 教学-课程管理-课程管理
 admin_v2.course.basic_menu: 课程管理
