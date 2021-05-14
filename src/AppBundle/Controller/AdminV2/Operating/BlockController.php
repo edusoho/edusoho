@@ -54,9 +54,10 @@ class BlockController extends BaseController
 
     public function blockMatchAction(Request $request, $type)
     {
-        $likeString = $request->query->get('q');
+        list($conditions, $sort) = $this->dealQueryFields($type);
+        $conditions['title'] = $request->query->get('q');
 
-        $blocks = $this->getBlockService()->searchBlockTemplates(['title' => $likeString], ['updateTime' => 'DESC'], 0, 10);
+        $blocks = $this->getBlockService()->searchBlockTemplates($conditions, ['updateTime' => 'DESC'], 0, 10);
         foreach ($blocks as &$block) {
             $block['gotoUrl'] = $this->generateUrl('admin_v2_block_visual_edit', ['blockTemplateId' => $block['id'], 'type' => $type]);
         }
