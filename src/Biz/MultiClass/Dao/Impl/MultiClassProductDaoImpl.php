@@ -9,6 +9,11 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
 {
     protected $table = 'multi_class_product';
 
+    public function getProductByTitle($title)
+    {
+        return $this->getByFields(['title' => $title]);
+    }
+
     public function declares()
     {
         return [
@@ -16,6 +21,7 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'title = :title',
             ],
         ];
     }
