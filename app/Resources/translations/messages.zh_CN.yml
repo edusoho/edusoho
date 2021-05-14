@@ -11871,3 +11871,5 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EX
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
 
 site.content.illegal_status: 该条内容已违规处理
+
+exception.multi_class.multi_class_product_exist: 产品名称已存在
