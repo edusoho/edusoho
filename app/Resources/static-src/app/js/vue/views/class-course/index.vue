@@ -1,3 +1,5 @@
 <template>
-  <div>test</div>
+  <div>
+    <svg-icon icon="hbs-eye" />
+  </div>
 </template>
