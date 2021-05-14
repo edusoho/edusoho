@@ -25,7 +25,7 @@ class MultiClassProduct extends AbstractResource
         $existed = $this->getMultiClassProductService()->getProductByTitle($product['title']);
 
         if (!empty($existed['id'])) {
-            throw MultiClassException::MULTI_COURSE_PRODUCT_EXIST();
+            throw MultiClassException::MULTI_CLASS_PRODUCT_EXIST();
         }
 
         $product = $this->getMultiClassProductService()->createProduct($product);

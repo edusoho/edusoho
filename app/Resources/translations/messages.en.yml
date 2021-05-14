@@ -10615,4 +10615,4 @@ admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the fi
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
-exception.multi_course.multi_course_product_exist: The product name already exists
+exception.multi_class.multi_class_product_exist: The product name already exists
