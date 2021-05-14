@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\ScrmGood;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -11,6 +12,9 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class ScrmGood extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $id)
     {
         $goods = $this->getGoodsService()->getGoods($id);
@@ -27,6 +31,9 @@ class ScrmGood extends AbstractResource
         return $goods;
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request)
     {
         $conditions = $this->filterConditions($request->query->all());
