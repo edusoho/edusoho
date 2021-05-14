@@ -35,9 +35,9 @@ class AddMultiClassTables extends Migration
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='班课';
         ");
 
-        $biz['db']->exec("ALTER TABLE `course_member` ADD `classId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
+        $biz['db']->exec("ALTER TABLE `course_member` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
         $biz['db']->exec("ALTER TABLE `course_member` CHANGE `role` `role` enum('student','teacher', 'assistant') NOT NULL DEFAULT 'student' COMMENT '成员角色';");
-        $biz['db']->exec("ALTER TABLE `course_task` ADD `classId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
+        $biz['db']->exec("ALTER TABLE `course_task` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
     }
 
     /**
@@ -46,10 +46,10 @@ class AddMultiClassTables extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec('DROP TABLE `class_course_product`;');
-        $biz['db']->exec('DROP TABLE `class_course`;');
-        $biz['db']->exec('ALTER TABLE `course_member` DROP `classCourseId`;');
+        $biz['db']->exec('DROP TABLE `multi_class_product`;');
+        $biz['db']->exec('DROP TABLE `multi_class`;');
+        $biz['db']->exec('ALTER TABLE `course_member` DROP `multiClassId`;');
         $biz['db']->exec("ALTER TABLE `course_member` CHANGE `role` `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '成员角色';");
-        $biz['db']->exec('ALTER TABLE `course_task` DROP `classCourseId`;');
+        $biz['db']->exec('ALTER TABLE `course_task` DROP `multiClassId`;');
     }
 }
