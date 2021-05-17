@@ -1,12 +1,13 @@
 <template>
   <div>
     <svg-icon icon="hbs-eye" />
+    test
   </div>
 </template>
 
 
 <script>
-import User from '../../service/index';
+import User from 'common/vue/api/index.js';
 export default {
   name: 'ClassCourse',
 

@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'ClassCourse',
-    component: () => import('../views/class-course/index.vue')
+    component: () => import('../../views/class-course/index.vue')
   }
 ];
 

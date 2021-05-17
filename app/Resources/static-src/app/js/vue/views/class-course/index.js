@@ -1,5 +1,6 @@
-import Vue from '../../main.js';
-import router from '../../router/index.js';
+import Vue from 'common/vue/index.js';
+import router from '../../router/class-course/index.js';
+import '../../mock/index'
 
 new Vue({
   el: '#app',
