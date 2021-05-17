@@ -18,6 +18,16 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
         return $this->getMultiClassProductDao()->create($product);
     }
 
+    public function getProductById($id)
+    {
+        return $this->getMultiClassProductDao()->get($id);
+    }
+
+    public function updateProductById($id, $fields)
+    {
+        return $this->getMultiClassProductDao()->update($id, $fields);
+    }
+
     /**
      * @return MultiClassProductDao
      */

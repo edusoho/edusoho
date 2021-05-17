@@ -10616,3 +10616,4 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the pr
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
 exception.multi_class.multi_class_product_exist: The product name already exists
+exception.multi_class.product_not_found: The product not found

@@ -11,6 +11,26 @@ use Biz\MultiClass\Service\MultiClassProductService;
 
 class MultiClassProduct extends AbstractResource
 {
+    public function update(ApiRequest $request, $id)
+    {
+        $product = $this->getMultiClassProductService()->getProductById($id);
+
+        if (empty($product)){
+            throw MultiClassException::PRODUCT_NOT_FOUND();
+        }
+
+        $fields = [
+            'title' => $request->request->get('title'),
+            'remark' => $request->request->get('remark'),
+        ];
+
+        if (empty($fields['title'])){
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getMultiClassProductService()->updateProductById($product['id'], $fields);
+    }
+
     public function add(ApiRequest $request)
     {
         $product = [
