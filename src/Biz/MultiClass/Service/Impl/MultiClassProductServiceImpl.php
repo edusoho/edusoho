@@ -10,7 +10,7 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
 {
     public function getProductByTitle($title)
     {
-        return $this->getMultiClassProductDao()->getProductByTitle($title);
+        return $this->getMultiClassProductDao()->getByTitle($title);
     }
 
     public function createProduct($product)
