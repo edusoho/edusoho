@@ -9,36 +9,51 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
-    public function createMultiClass($multiClass)
+    public function createMultiClass($fields)
     {
         $teacherId = [
-            ['id' => $multiClass['teacherId']],
+            ['id' => $fields['teacherId']],
         ];
-        $assistantIds = $multiClass['assistantIds'];
-        $multiClass = $this->multiClassFilter($multiClass);
+        $assistantIds = $fields['assistantIds'];
+        $fields = $this->multiClassFieldsFilter($fields);
 
-        $multiClass = $this->getMultiClassDao()->create($multiClass);
-        $this->getCourseMemberService()->setCourseTeachers($multiClass['courseId'], $teacherId, $multiClass['id']);
-        $this->getCourseMemberService()->setMultiClassAssistant($multiClass['courseId'], $assistantIds, $multiClass['id']);
+        $multiClass = $this->getMultiClassDao()->create($fields);
+        $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
+        $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+
+        return $multiClass;
+    }
+
+    public function updateMultiClass($id, $fields)
+    {
+        $teacherId = [
+            ['id' => $fields['teacherId']],
+        ];
+        $assistantIds = $fields['assistantIds'];
+        $fields = $this->multiClassFieldsFilter($fields);
+
+        $multiClass = $this->getMultiClassDao()->update($id, $fields);
+        $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
+        $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
 
         return $multiClass;
     }
 
     public function getMultiClassByTitle($title)
     {
-        return $this->getMultiClassDao()->getMultiClassByTitle($title);
+        return $this->getMultiClassDao()->getByTitle($title);
     }
 
-    private function multiClassFilter($multiClass)
+    private function multiClassFieldsFilter($fields)
     {
-        if (!empty($multiClass['teacherId'])) {
-            unset($multiClass['teacherId']);
+        if (!empty($fields['teacherId'])) {
+            unset($fields['teacherId']);
         }
-        if (!empty($multiClass['assistantIds'])) {
-            unset($multiClass['assistantIds']);
+        if (!empty($fields['assistantIds'])) {
+            unset($fields['assistantIds']);
         }
 
-        return $multiClass;
+        return $fields;
     }
 
     /**

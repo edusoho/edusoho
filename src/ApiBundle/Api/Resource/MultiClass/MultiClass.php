@@ -19,11 +19,27 @@ class MultiClass extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        $multiClass = [
-            'copyId' => 0,
-        ];
+        $multiClass = $this->checkParameters($request->request->all());
 
-        $multiClass = array_merge($multiClass, $request->request->all());
+        $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
+
+        if ($existed) {
+            throw MultiClassException::MULTI_CLASS_EXIST();
+        }
+
+        return $this->getMultiClassService()->createMultiClass($multiClass);
+    }
+
+    public function update(ApiRequest $request, $id)
+    {
+        $multiClass = $this->checkParameters($request->request->all());
+
+        return $this->getMultiClassService()->updateMultiClass($id, $multiClass);
+    }
+
+    private function checkParameters($multiClass)
+    {
+        $multiClass = array_merge(['copyId' => 0], $multiClass);
 
         if (empty($multiClass['title']) || empty($multiClass['courseId']) || empty($multiClass['productId'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
@@ -41,13 +57,7 @@ class MultiClass extends AbstractResource
             throw MultiClassException::MULTI_CLASS_ASSISTANT_OUT_MAX_NUMBER();
         }
 
-        $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
-
-        if ($existed) {
-            throw MultiClassException::MULTI_CLASS_EXIST();
-        }
-
-        return $this->getMultiClassService()->createMultiClass($multiClass);
+        return $multiClass;
     }
 
     /**
