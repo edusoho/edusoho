@@ -21,6 +21,7 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'title = :title',
             ],
         ];
     }

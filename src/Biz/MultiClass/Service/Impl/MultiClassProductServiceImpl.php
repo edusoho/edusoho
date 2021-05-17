@@ -8,9 +8,14 @@ use Biz\MultiClass\Service\MultiClassProductService;
 
 class MultiClassProductServiceImpl extends BaseService implements MultiClassProductService
 {
-    public function getMultiClassProductByTitle($title)
+    public function getProductByTitle($title)
     {
         return $this->getMultiClassProductDao()->getByTitle($title);
+    }
+
+    public function createProduct($product)
+    {
+        return $this->getMultiClassProductDao()->create($product);
     }
 
     /**

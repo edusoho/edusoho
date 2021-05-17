@@ -22,7 +22,7 @@ class ValidationTitle extends AbstractResource
                 $result = $this->getMultiClassService()->getMultiClassByTitle($title);
                 break;
             case 'multiClassProduct':
-                $result = $this->getMultiClassProductService()->getMultiClassProductByTitle($title);
+                $result = $this->getMultiClassProductService()->getProductByTitle($title);
                 break;
             default:
                 break;
