@@ -251,6 +251,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
+                'multiClassId = :multiClassId',
                 'title LIKE :titleLike',
                 'fromCourseSetId = :fromCourseSetId',
                 'fromCourseSetId IN (:fromCourseSetIds)',

@@ -22,6 +22,7 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
             'conditions' => [
                 'id = :id',
                 'title = :title',
+                'title LIKE :keywords',
             ],
         ];
     }
