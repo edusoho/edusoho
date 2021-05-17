@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface MultiClassDao extends GeneralDaoInterface
 {
-    public function getByTitle($title);
+    public function getMultiClassByTitle($title);
 }

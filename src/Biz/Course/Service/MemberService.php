@@ -70,11 +70,12 @@ interface MemberService
     /**
      * @param $courseId
      * @param $teachers
+     * @param $multiClassId
      *
      * @return mixed
      * @Log(module="course",action="update_teacher",serviceName="Course:CourseService",funcName="getCourse",param="courseId")
      */
-    public function setCourseTeachers($courseId, $teachers);
+    public function setCourseTeachers($courseId, $teachers, $multiClassId = 0);
 
     public function cancelTeacherInAllCourses($userId);
 
@@ -183,4 +184,6 @@ interface MemberService
     public function refreshCourseMembersFinishData($courseId);
 
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
+
+    public function setMultiClassAssistant($courseId, $assistantIds, $multiClassId);
 }
