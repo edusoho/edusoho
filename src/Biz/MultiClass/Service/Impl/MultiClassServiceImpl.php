@@ -13,37 +13,75 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function createMultiClass($fields)
     {
         $teacherId = [
-            ['id' => $fields['teacherId']],
+            [
+                'id' => $fields['teacherId'],
+                'isVisable' => 1,
+            ],
         ];
         $assistantIds = $fields['assistantIds'];
-        $fields = $this->multiClassFieldsFilter($fields);
+        $fields = $this->filterMultiClassFields($fields);
 
-        $multiClass = $this->getMultiClassDao()->create($fields);
-        $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
-        $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+        $this->beginTransaction();
+        try {
+            $multiClass = $this->getMultiClassDao()->create($fields);
+            $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
+            $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
 
         return $multiClass;
     }
 
     public function updateMultiClass($id, $fields)
     {
-        $multiClass = $this->getMultiClassDao()->get($id);
-
-        if (empty($multiClass)) {
+        $multiClassExisted = $this->getMultiClassDao()->get($id);
+        if (empty($multiClassExisted)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
 
         $teacherId = [
-            ['id' => $fields['teacherId']],
+            [
+                'id' => $fields['teacherId'],
+                'isVisable' => 1,
+            ],
         ];
         $assistantIds = $fields['assistantIds'];
-        $fields = $this->multiClassFieldsFilter($fields);
 
-        $multiClass = $this->getMultiClassDao()->update($id, $fields);
-        $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
-        $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+        $fields = $this->filterMultiClassFields($fields);
+
+        $this->beginTransaction();
+        try {
+            $multiClass = $this->getMultiClassDao()->update($id, $fields);
+            $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
+            $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
 
         return $multiClass;
+    }
+
+    public function deleteMultiClass($id)
+    {
+        $multiClassExisted = $this->getMultiClassDao()->get($id);
+        if (empty($multiClassExisted)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $this->beginTransaction();
+        try {
+            $this->getMultiClassDao()->delete($id);
+            $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function getMultiClassByTitle($title)
@@ -51,12 +89,12 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByTitle($title);
     }
 
-    private function multiClassFieldsFilter($fields)
+    private function filterMultiClassFields($fields)
     {
-        if (!empty($fields['teacherId'])) {
+        if (isset($fields['teacherId'])) {
             unset($fields['teacherId']);
         }
-        if (!empty($fields['assistantIds'])) {
+        if (isset($fields['assistantIds'])) {
             unset($fields['assistantIds']);
         }
 

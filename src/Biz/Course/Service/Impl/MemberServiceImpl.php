@@ -556,6 +556,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchCreate($assistantMembers);
     }
 
+    public function releaseMultiClassMember($courseId, $multiClassId)
+    {
+        $conditions = [
+            'courseId' => $courseId,
+            'multiClassId' => $multiClassId,
+        ];
+
+        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
+    }
+
     private function updateCourseTeacherIds($courseId, $teachers)
     {
         $teachers = ArrayToolkit::group($teachers, 'isVisible');
@@ -596,7 +606,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $seq = 0;
         foreach ($assistantIds as $assistantId) {
             $user = $users[$assistantId];
-            if (in_array('ROLE_ASSISTANT', $user['roles']) || $course['creator'] == $user['id']) {
+            if (in_array('ROLE_ASSISTANT', $user['roles'])) {
                 $assistantMembers[] = [
                     'multiClassId' => $multiClassId,
                     'courseId' => $course['id'],

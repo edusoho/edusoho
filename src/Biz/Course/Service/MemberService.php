@@ -186,4 +186,6 @@ interface MemberService
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
 
     public function setMultiClassAssistant($courseId, $assistantIds, $multiClassId);
+
+    public function releaseMultiClassMember($courseId, $multiClassId);
 }

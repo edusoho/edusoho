@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
@@ -43,11 +44,16 @@ class MultiClass extends AbstractResource
         return $this->getMultiClassService()->updateMultiClass($id, $multiClass);
     }
 
+    public function remove(ApiRequest $request, $id)
+    {
+        $this->getMultiClassService()->deleteMultiClass($id);
+
+        return ['success' => true];
+    }
+
     private function checkParameters($multiClass)
     {
-        $multiClass = array_merge(['copyId' => 0], $multiClass);
-
-        if (empty($multiClass['title']) || empty($multiClass['courseId']) || empty($multiClass['productId'])) {
+        if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -59,8 +65,8 @@ class MultiClass extends AbstractResource
             throw MultiClassException::MULTI_CLASS_ASSISTANT_REQUIRE();
         }
 
-        if (!empty($multiClass['assistantIds']) && count($multiClass['assistantIds']) > self::MAX_ASSISTANT_NUMBER) {
-            throw MultiClassException::MULTI_CLASS_ASSISTANT_OUT_MAX_NUMBER();
+        if (count($multiClass['assistantIds']) > self::MAX_ASSISTANT_NUMBER) {
+            throw MultiClassException::MULTI_CLASS_ASSISTANT_NUMBER_EXCEED();
         }
 
         return $multiClass;
