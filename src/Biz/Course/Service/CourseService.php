@@ -361,6 +361,4 @@ interface CourseService
     public function appendHasCertificate(array $courses);
 
     public function hasCertificate($courseId);
-
-    public function sumPublishLessonNumByCourseSetIds($courseSetIds);
 }

@@ -47,6 +47,4 @@ interface CourseDao extends GeneralDaoInterface
     public function searchByRatingAndTimeZone($conditions, $start, $limit);
 
     public function countWithJoinCourseSet($conditions);
-
-    public function sumPublishLessonNumByCourseSetIds($courseSetIds);
 }
