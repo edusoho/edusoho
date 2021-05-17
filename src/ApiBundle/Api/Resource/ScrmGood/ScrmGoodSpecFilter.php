@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ServiceToolkit;
 
-class ScrmGoodSpecsFilter extends Filter
+class ScrmGoodSpecFilter extends Filter
 {
     protected $simpleFields = [
         'id', 'goodsId', 'targetId', 'title', 'seq', 'status',
@@ -16,7 +16,7 @@ class ScrmGoodSpecsFilter extends Filter
         'usageEndTime', 'showable', 'buyable', 'buyableStartTime',
         'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
         'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
-        'access', 'canVipJoin', 'hasCertificate',
+        'access', 'canVipJoin', 'hasCertificate', 'createdTime', 'updatedTime',
     ];
 
     protected $publicFields = [
@@ -25,7 +25,7 @@ class ScrmGoodSpecsFilter extends Filter
         'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable',
         'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum',
         'services', 'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
-        'access', 'canVipJoin', 'hasCertificate',
+        'access', 'canVipJoin', 'hasCertificate', 'createdTime', 'updatedTime',
     ];
 
     protected function simpleFields(&$data)

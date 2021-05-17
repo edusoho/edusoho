@@ -39,6 +39,9 @@ class ScrmGoodFilter extends Filter
         $userFilter->filter($data['creator']);
 
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+        $goodSpecsFilter = new GoodSpecsFilter();
+        $goodSpecsFilter->setMode(Filter::SIMPLE_MODE);
+        $goodSpecsFilter->filters($data['specs']);
         $this->transformImages($data['images']);
     }
 
