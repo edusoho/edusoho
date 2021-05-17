@@ -523,6 +523,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseId' => $courseId,
             'userIds' => $userIds,
         ]);
+        
         $this->getMemberDao()->batchCreate($teacherMembers);
         $this->updateCourseTeacherIds($courseId, $teachers);
         $addTeachers = array_values(array_diff($userIds, $existTeacherIds));

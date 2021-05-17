@@ -9,7 +9,7 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
 {
     protected $table = 'multi_class';
 
-    public function getMultiClassByTitle($title)
+    public function getByTitle($title)
     {
         return $this->getByFields(['title' => $title]);
     }
