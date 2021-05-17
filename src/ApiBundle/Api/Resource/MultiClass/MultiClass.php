@@ -34,6 +34,12 @@ class MultiClass extends AbstractResource
     {
         $multiClass = $this->checkParameters($request->request->all());
 
+        $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
+
+        if (!empty($existed) && $id != $existed['id']) {
+            throw MultiClassException::MULTI_CLASS_EXIST();
+        }
+
         return $this->getMultiClassService()->updateMultiClass($id, $multiClass);
     }
 

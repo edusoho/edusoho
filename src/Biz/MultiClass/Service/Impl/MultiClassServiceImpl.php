@@ -5,6 +5,7 @@ namespace Biz\MultiClass\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
@@ -26,6 +27,12 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
     public function updateMultiClass($id, $fields)
     {
+        $multiClass = $this->getMultiClassDao()->get($id);
+
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
         $teacherId = [
             ['id' => $fields['teacherId']],
         ];
