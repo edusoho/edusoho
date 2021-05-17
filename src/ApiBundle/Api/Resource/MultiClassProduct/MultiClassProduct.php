@@ -5,7 +5,9 @@ namespace ApiBundle\Api\Resource\MultiClassProduct;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
@@ -52,7 +54,6 @@ class MultiClassProduct extends AbstractResource
             $total = $this->getMultiClassProductService()->countProducts($conditions);
 
             $products = $this->makePagingObject($products, $total, $offset, $limit);
-
         }else{
             $products = $this->getMultiClassProductService()->searchProducts($conditions, [], 0, PHP_INT_MAX);;
         }
@@ -68,7 +69,7 @@ class MultiClassProduct extends AbstractResource
             $courseSetIds = array_column($multiClasses, 'courseId') ? array_column($multiClasses, 'courseId') : [-1];
             $product['estimatedIncome'] = $this->getOrderItemDao()->sumPayAmount(['target_ids' => $courseSetIds, 'target_type' => 'course', 'statuses' => ['success', 'paid', 'finished']]);
             $product['studentNum'] = $this->getCourseMemberService()->countMembers(['multiClassId' => $product['id'], 'joinedType' => 'course']);
-            $product['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $product['id'], 'status' => 'publish']);
+            $product['taskNum'] = $this->getCourseService()->sumPublishLessonNumByCourseSetIds($courseSetIds);
         }
 
         return $products;
@@ -104,6 +105,14 @@ class MultiClassProduct extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 
     /**

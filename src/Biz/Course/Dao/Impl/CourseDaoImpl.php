@@ -195,6 +195,14 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
+    public function sumPublishLessonNumByCourseSetIds($courseSetIds)
+    {
+        $builder = $this->createJoinCourseSetQueryBuilder(['courseSetIds' => $courseSetIds])
+            ->select('SUM(publishLessonNum)');
+
+        return (int) $builder->execute()->fetchColumn(0);
+    }
+
     public function declares()
     {
         return [
