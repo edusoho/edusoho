@@ -9,7 +9,7 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
 {
     protected $table = 'multi_class_product';
 
-    public function getProductByTitle($title)
+    public function getByTitle($title)
     {
         return $this->getByFields(['title' => $title]);
     }
