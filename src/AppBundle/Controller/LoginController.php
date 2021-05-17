@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\System\Service\SettingService;
+use Biz\User\CurrentUser;
+use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use Endroid\QrCode\QrCode;
-use Symfony\Component\HttpFoundation\Response;
-use Biz\User\CurrentUser;
-use Biz\System\Service\SettingService;
 
 class LoginController extends BaseController
 {
@@ -24,12 +24,12 @@ class LoginController extends BaseController
         $host = $request->getSchemeAndHttpHost();
         $token = $this->getTokenService()->makeToken(
             'face_login',
-            array(
+            [
                 'userId' => 0,
-                'data' => array(),
+                'data' => [],
                 'times' => 0,
                 'duration' => 240,
-            )
+            ]
         );
         $url = $host.'/h5/index.html#/login/qrcode?loginToken='.$token['token'].'&host='.$host;
 
@@ -39,10 +39,10 @@ class LoginController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'qrcode' => 'data:image/png;base64,'.base64_encode($img),
             'token' => $token['token'],
-        ));
+        ]);
     }
 
     public function faceTokenAction(Request $request, $token)
@@ -50,36 +50,36 @@ class LoginController extends BaseController
         $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
 
         if (!$faceLoginToken) {
-            $response = array(
+            $response = [
                 'status' => self::FACE_TOKEN_STATUS_EXPIRED,
-            );
+            ];
         } elseif (empty($faceLoginToken['data'])) {
-            $response = array(
+            $response = [
                 'status' => self::FACE_TOKEN_STATUS_CREATED,
-            );
+            ];
         } elseif (!empty($faceLoginToken['data']['lastFailed'])) {
-            $response = array(
+            $response = [
                 'status' => self::FACE_TOKEN_STATUS_FAILURES,
-            );
+            ];
         } else {
             switch ($faceLoginToken['data']['status']) {
                 case self::FACE_TOKEN_STATUS_CREATED:
-                    $response = array(
+                    $response = [
                         'status' => self::FACE_TOKEN_STATUS_PROCESSING,
-                    );
+                    ];
                     break;
 
                 case self::FACE_TOKEN_STATUS_SUCCESS:
-                    $response = array(
+                    $response = [
                         'status' => $faceLoginToken['data']['status'],
-                        'url' => $this->generateUrl('login_parse_face_token', array('token' => $token, 'goto' => $request->query->get('goto'))),
-                    );
+                        'url' => $this->generateUrl('login_parse_face_token', ['token' => $token, 'goto' => $request->query->get('goto')]),
+                    ];
                     break;
 
                 default:
-                    $response = array(
+                    $response = [
                         'status' => $faceLoginToken['data']['status'],
-                    );
+                    ];
                     break;
             }
         }
@@ -91,21 +91,21 @@ class LoginController extends BaseController
     {
         $faceLoginToken = $this->getTokenService()->verifyToken('face_login', $token);
         if (empty($faceLoginToken)) {
-            $content = $this->renderView('default/message.html.twig', array(
+            $content = $this->renderView('default/message.html.twig', [
                 'type' => 'error',
-                'goto' => $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL),
+                'goto' => $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'duration' => 1000,
                 'message' => 'user.login.sts_qrcode_invalid',
-            ));
+            ]);
 
             return new Response($content, '302');
         } elseif (empty($faceLoginToken['data']['status']) || self::FACE_TOKEN_STATUS_SUCCESS != $faceLoginToken['data']['status']) {
-            $content = $this->renderView('default/message.html.twig', array(
+            $content = $this->renderView('default/message.html.twig', [
                 'type' => 'error',
-                'goto' => $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL),
+                'goto' => $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'duration' => 1000,
                 'message' => 'user.login.sts_discovery_failed',
-            ));
+            ]);
 
             return new Response($content, '302');
         }
@@ -122,7 +122,7 @@ class LoginController extends BaseController
 
         $goto = $request->query->get('goto');
         if (empty($goto)) {
-            $goto = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $goto = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->redirect($goto);
@@ -142,21 +142,26 @@ class LoginController extends BaseController
         }
 
         if ($this->getWebExtension()->isWechatLoginBind()) {
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
+            return $this->redirect($this->generateUrl('login_bind', ['type' => 'weixinmob', '_target_path' => $this->getTargetPath($request)]));
         }
 
-        return $this->render('login/index.html.twig', array(
+        return $this->render('login/index.html.twig', [
             'last_username' => $request->getSession()->get(Security::LAST_USERNAME),
             'error' => $error,
             '_target_path' => $this->getTargetPath($request),
-        ));
+        ]);
     }
 
     public function ajaxAction(Request $request)
     {
-        return $this->render('login/ajax.html.twig', array(
+        return $this->render('login/ajax.html.twig', [
             '_target_path' => $this->getTargetPath($request),
-        ));
+        ]);
+    }
+
+    public function smsAction(Request $request)
+    {
+        return $this->render('login/sms.html.twig');
     }
 
     public function checkEmailAction(Request $request)
@@ -165,9 +170,9 @@ class LoginController extends BaseController
         $user = $this->getUserService()->getUserByEmail($email);
 
         if ($user) {
-            $response = array('success' => true, 'message' => '该Email地址可以登录');
+            $response = ['success' => true, 'message' => '该Email地址可以登录'];
         } else {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+            $response = ['success' => false, 'message' => '该Email地址尚未注册'];
         }
 
         return $this->createJsonResponse($response);
@@ -177,26 +182,26 @@ class LoginController extends BaseController
     {
         $clients = OAuthClientFactory::clients();
 
-        return $this->render('login/oauth2-logins-block.html.twig', array(
+        return $this->render('login/oauth2-logins-block.html.twig', [
             'clients' => $clients,
             'targetPath' => $targetPath,
             'displayName' => $displayName,
-        ));
+        ]);
     }
 
     public function wechatQrcodeAction(Request $request)
     {
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
         if (!empty($wechatSetting['wechat_notification_enabled'])) {
-            $loginUrl = $this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), UrlGeneratorInterface::ABSOLUTE_URL);
-            $response = array(
-                'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), UrlGeneratorInterface::ABSOLUTE_URL),
-            );
+            $loginUrl = $this->generateUrl('login_bind', ['type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')], UrlGeneratorInterface::ABSOLUTE_URL);
+            $response = [
+                'img' => $this->generateUrl('common_qrcode', ['text' => $loginUrl], UrlGeneratorInterface::ABSOLUTE_URL),
+            ];
 
             return $this->createJsonResponse($response);
         }
 
-        return $this->createJsonResponse(array('img' => ''));
+        return $this->createJsonResponse(['img' => '']);
     }
 
     protected function getTargetPath(Request $request)
@@ -209,18 +214,18 @@ class LoginController extends BaseController
             $targetPath = $request->headers->get('Referer');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($targetPath == $this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        if ($url[0] == $this->generateUrl('password_reset_update', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (0 === strpos($targetPath, '/app.php')) {
