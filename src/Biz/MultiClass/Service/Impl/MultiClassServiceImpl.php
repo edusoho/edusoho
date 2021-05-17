@@ -8,6 +8,11 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
+    public function getMultiClassByTitle($title)
+    {
+        return $this->getMultiClassDao()->getByTitle($title);
+    }
+
     /**
      * @return MultiClassDao
      */
