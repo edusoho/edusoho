@@ -7,13 +7,13 @@
 
 
 <script>
-import User from 'common/vue/service/index.js';
+import { User } from 'common/vue/service/index.js';
 export default {
   name: 'ClassCourse',
 
   created() {
     console.log(User);
-    User.User.test().then(res => {
+    User.test().then(res => {
       console.log(res);
     });
   }
