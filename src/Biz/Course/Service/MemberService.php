@@ -76,6 +76,8 @@ interface MemberService
      */
     public function setCourseTeachers($courseId, $teachers);
 
+    public function setCourseAssistants($courseId, $assistants);
+
     public function cancelTeacherInAllCourses($userId);
 
     public function remarkStudent($courseId, $userId, $remark);

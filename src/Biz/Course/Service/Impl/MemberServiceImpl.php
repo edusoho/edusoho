@@ -561,6 +561,46 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $teacherMembers;
     }
 
+    public function setCourseAssistants($courseId, $assistants)
+    {
+        if (empty($assistants)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $userIds = ArrayToolkit::column($assistants, 'id');
+
+        $this->getMemberDao()->batchDelete(['courseId' => $courseId, 'userIds' => $userIds]);
+
+        $assistants = $this->buildAssistants($course, $assistants);
+
+        $this->getMemberDao()->batchCreate($assistants);
+    }
+
+    private function buildAssistants($course, $assistants)
+    {
+        $assistantMembers = [];
+        $assistants = ArrayToolkit::index($assistants, 'id');
+        $users = $this->getUserService()->findUsersByIds(array_keys($assistants));
+        $seq = 0;
+        foreach ($assistants as $index => $assistant) {
+            $user = $users[$assistant['id']];
+            if (in_array('ROLE_TEACHER_ASSISTANT', $user['roles'])) {
+                $assistantMembers[] = [
+                    'courseId' => $course['id'],
+                    'courseSetId' => $course['courseSetId'],
+                    'userId' => $assistant['id'],
+                    'role' => 'assistant',
+                    'seq' => $seq++,
+                    'isVisible' => empty($assistant['isVisible']) ? 0 : 1,
+                ];
+            }
+        }
+
+        return $assistantMembers;
+    }
+
     /**
      * //这个方法应该是取消教师角色的时候退出课程用到的
      *
