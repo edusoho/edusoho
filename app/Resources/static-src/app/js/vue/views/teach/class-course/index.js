@@ -1,4 +1,4 @@
-import Vue from 'common/vue/index.js';
+import Vue from 'common/vue';
 import router from '../../../router/teach/class-course/index.js';
 
 new Vue({

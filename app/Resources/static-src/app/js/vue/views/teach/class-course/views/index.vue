@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg-icon icon="hbs-eye" />
+    <!-- <svg-icon icon="hbs-eye" /> -->
     test
   </div>
 </template>

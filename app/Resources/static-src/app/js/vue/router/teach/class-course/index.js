@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm.js';
+import Vue from 'common/vue';
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
