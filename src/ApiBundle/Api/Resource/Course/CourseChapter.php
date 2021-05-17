@@ -11,7 +11,6 @@ class CourseChapter extends AbstractResource
     /**
      * post /api/course/{courseId}/chapter
      *
-     * @see https://api.codeages.work/admin.do#/user/interface/detail?id=162091435782212000155&pageName=%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85&dataType=interface&menu_a=menu-project&menu_b=menu_interface&projectName=edusoho-v3&projectId=157231946487107000002&moduleId=162090722776209000153&timestamp=1620960004905
      */
     public function add(ApiRequest $request, $courseId)
     {
@@ -24,7 +23,6 @@ class CourseChapter extends AbstractResource
     /**
      * patch /api/course/{courseId}/chapter/{chapterId}
      *
-     * @see https://api.codeages.work/admin.do#/user/interface/detail?id=162091435782212000155&pageName=%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85&dataType=interface&menu_a=menu-project&menu_b=menu_interface&projectName=edusoho-v3&projectId=157231946487107000002&moduleId=162090722776209000153&timestamp=1620960004905
      */
     public function update(ApiRequest $request, $courseId, $chapterId)
     {
@@ -36,7 +34,6 @@ class CourseChapter extends AbstractResource
     /**
      * delete /api/course/{courseId}/chapter/{chapterId}
      *
-     * @see https://api.codeages.work/admin.do#/user/interface/detail?id=162124624860712000017&pageName=%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85&dataType=interface&menu_a=menu-project&menu_b=menu_interface&projectName=edusoho-v3&projectId=157231946487107000002&moduleId=162090722776209000153&timestamp=1621249979841
      */
     public function remove(ApiRequest $request, $courseId, $chapterId)
     {
