@@ -150,10 +150,15 @@ class BlockController extends BaseController
 
             $this->setFlashMessage('success', 'site.save.success');
         }
-
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
             return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+            ]);
+        }else if('imgcertificatelink' ==$block['meta']['items']['img']['type']){
+            return $this->render('admin-v2/operating/block/block-visual-imgcertificatelink-edit.html.twig', [
                 'block' => $block,
                 'action' => 'edit',
                 'type' => $type,

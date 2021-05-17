@@ -33,10 +33,11 @@
   {% endif %}
 
     <!-- 以下是简墨新版的样式 -->
-    <h4>{{ block.title }}</h4>
+    <h4>{{ block.data.honorText[0].value|default('荣誉') }}</h4>
     <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
       {{ web_macro.flash_messages() }}
-        {% include 'admin-v2/operating/block/block-visual-items.html.twig' %}
+        {% include 'admin-v2/operating/block/block-visual-certificate-items.html.twig' %}
+
     </form>
     <!-- 以上是新版的样式 -->
 

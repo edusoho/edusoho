@@ -1,7 +1,7 @@
 <div class="form-group">
-  <label class="control-label col-md-3 col-xs-3"></label>
+  <label class="control-label col-md-4 col-xs-4"></label>
   <label class="checkbox-show-picture show-type-radio"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][showType]" value="picture" {% if data.showType|default('picture') == 'picture' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_as_a_picture_radio'|trans}}</label>
-  <label class="checkbox-show-video show-type-radio"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][showType]" value="video" {% if data.showType|default('picture') == 'video' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_display_as_video_radio'|trans}}</label>
+  <label class="checkbox-show-video show-type-radio" style="padding-left: 5%"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][showType]" value="video" {% if data.showType|default('picture') == 'video' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_display_as_video_radio'|trans}}</label>
 </div>
 
 <div class="picture-div" style=" {% if data.showType|default('picture')=='video' %} display: none {% endif %}">
@@ -39,11 +39,6 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_open_new_window'|trans}}</label>
-    <label class="checkbox-inline"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][target]" value="_blank" {% if data.target|default('_self') == '_blank' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_yes_radio'|trans}}</label>
-    <label class="checkbox-inline"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][target]" value="_self" {% if data.target|default('_self') == '_self' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_no_radio'|trans}}</label>
-  </div>
 </div>
 <div class="video-div" style=" {% if data.showType|default('picture')=='picture' %} display: none {% endif %}">
 
@@ -53,12 +48,11 @@
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'material_lib.type.video'|trans}}</label>
     <div class="upload-mode">
     </div>
-    <div class="row form-group" id="upload-panel" data-params-url="{{ path('admin_v2_uploadfile_head_leader_params') }}" data-hls-encrypted="1">
-      <div class="col-md-3">
-      </div>
+    <div class="row form-group col-md-8 col-xs-8" id="upload-panel" data-params-url="{{ path('admin_v2_uploadfile_head_leader_params') }}" data-hls-encrypted="1">
       <div class="controls col-md-8">
 
-        <div class="col-md-7 col-xs-7 head-leader-edit">
+        <div class="col-md-7 col-xs-7 head-leader-edit" style="width: 158.333%">
+          <input name="data[{{ code }}][{{ dataId }}][fileId]" data-role="file-id" value="" type="hidden">
           <input class="form-control picture-url" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value=" {% if data.showType|default('picture')=='video' %} {{ data.src|default('') }} {% endif %}">
 
           <button class="btn btn-link btn-sm edit-btn video-buton" type="button"><i class="glyphicon glyphicon-edit"></i> {{ 'course.live.replay_manage.file_upload'|trans }}</button>
@@ -78,6 +72,17 @@
         </div>
       </div>
     </div>
+    </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][coversrc]">{{'admin.block_manage.visual_edit.tag_video_img'|trans}}</label>
+    <div class="col-md-7 col-xs-7">
+      <input class="form-control picture-url" type="text" name="data[{{ code }}][{{ dataId }}][coversrc]" id="data[{{ code }}][{{ dataId }}][coversrc]" data-role="img-url" value="{% if data.showType|default('picture')=='video' %} {{ data.coversrc|default('') }} {% endif %}">
+    </div>
+    <div class="col-md-2 col-xs-2">
+      <div class="btn btn-default btn-sm img-upload1 webuploader-container" id="item-{{ code }}-uploadId-{{ dataId }}-cover" data-url="{{ path('admin_v2_block_picture_upload', {blockId:block.id, code:code}) }}">{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}</div>
+    </div>
+  </div>
 
   <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">{{'admin.block_manage.visual_edit.tag_video_describe'|trans}}</label>
@@ -86,13 +91,4 @@
     </div>
 
   </div>
-
-  <div class="form-group">
-    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'admin.block_manage.visual_edit.tag_video_link'|trans}}</label>
-    <div class="col-md-8 col-xs-8">
-      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value=" {% if data.showType|default('picture')=='video' %} {{ data.href|default('') }} {% endif %}" placeholder="{{ app.request.getScheme() }}://">
-    </div>
-  </div>
-
 </div>
-

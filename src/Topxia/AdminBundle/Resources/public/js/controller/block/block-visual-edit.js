@@ -16,7 +16,7 @@ define(function(require, exports, module) {
       initFirstTab(selector);
       bindSortPoster();
     }
-    var radio=$('input:radio:checked').val();
+     radio=$('input:radio:checked').val();
     if(radio=='picture'){
       $(".video-div").attr('style','display:none');
       $(".picture-div").attr('style','');
@@ -53,13 +53,20 @@ define(function(require, exports, module) {
       $(".picture-div").attr('style','');
       $(".picture-div").find(":input").attr("disabled", false);
       $(".video-div").find(":input").attr("disabled", true);
-
+      radio='picture';
+      new editForm({
+        'element': '#block-edit-form'
+      });
     });
     $(".checkbox-show-video").on('click', function(e){
       $(".picture-div").attr('style','display:none');
       $(".video-div").attr('style','');
       $(".video-div").find(":input").attr("disabled", false);
       $(".picture-div").find(":input").attr("disabled", true);
+      radio='video';
+      new editForm({
+        'element': '#block-edit-form'
+      });
 
     });
 
@@ -77,6 +84,7 @@ define(function(require, exports, module) {
       uploader.on('file.uploaded', function(file){
         if (file) {
           $(".head-leader-edit").find('input[data-role=img-url]').val(file.name);
+          $(".head-leader-edit").find('input[data-role=file-id]').val(file.fileId);
           $(".file-chooser-main").hide();
           $(".head-leader-edit").show();
         }
@@ -103,7 +111,7 @@ define(function(require, exports, module) {
       },
 
       setup: function() {
-        //this._bindImgPreview(this.element);
+        // this._bindImgPreview(this.element);
         this._bindUploader(this.element);
         this._initForm();
         this._bindCollapseEvent(this.element);
@@ -198,7 +206,6 @@ define(function(require, exports, module) {
           var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + '[' + index + ']');
           $(this).replaceWith(replace);
         });
-
         this._bindUploader($panelGroup);
         this._bindCollapseEvent($panelGroup);
       },
@@ -209,7 +216,12 @@ define(function(require, exports, module) {
       },
       _bindUploader: function($element) {
         var thiz = this;
-        $element.find('.img-upload').each(function(){
+        if(radio=='picture'){
+         var imgType='.img-upload';
+        }else{
+         var imgType='.img-upload1';
+        }
+        $element.find(imgType).each(function(){
           var self = $(this);
           var uploader = WebUploader.create({
             swf: require.resolve('webuploader').match(/[^?#]*\//)[0] + 'Uploader.swf',
@@ -240,7 +252,6 @@ define(function(require, exports, module) {
           var id =$(this).attr('id');
           thiz.uploaders[id] = uploader;
         });
-
       },
       _bindCollapseEvent: function($element) {
         $element.find('[data-role=collapse]').each(function(){
