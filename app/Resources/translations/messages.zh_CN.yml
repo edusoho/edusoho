@@ -11874,3 +11874,4 @@ site.content.illegal_status: 该条内容已违规处理
 
 exception.multi_class.multi_class_product_exist: 产品名称已存在
 exception.multi_class.product_not_found: 产品未找到
+exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除

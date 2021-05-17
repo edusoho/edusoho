@@ -28,6 +28,11 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
         return $this->getMultiClassProductDao()->update($id, $fields);
     }
 
+    public function deleteProductById($id)
+    {
+        return $this->getMultiClassProductDao()->delete($id);
+    }
+
     /**
      * @return MultiClassProductDao
      */
