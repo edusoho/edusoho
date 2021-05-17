@@ -10,7 +10,7 @@ class GoodsException extends AbstractException
 
     const GOODS_NOT_FOUND = 4047201;
 
-    const SPECS_NOT_FOUND = 4027202;
+    const SPECS_NOT_FOUND = 4047202;
 
     const FORBIDDEN_MANAGE_GOODS = 4037203;
 

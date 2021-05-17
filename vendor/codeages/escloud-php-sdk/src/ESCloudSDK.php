@@ -2,7 +2,20 @@
 
 namespace ESCloud\SDK;
 
+use ESCloud\SDK\Service\AiService;
+use ESCloud\SDK\Service\DrpService;
+use ESCloud\SDK\Service\ESopService;
 use ESCloud\SDK\Service\InspectionService;
+use ESCloud\SDK\Service\MobileService;
+use ESCloud\SDK\Service\MpService;
+use ESCloud\SDK\Service\NotificationService;
+use ESCloud\SDK\Service\PlayService;
+use ESCloud\SDK\Service\PushService;
+use ESCloud\SDK\Service\ResourceService;
+use ESCloud\SDK\Service\ScrmService;
+use ESCloud\SDK\Service\SmsService;
+use ESCloud\SDK\Service\WeChatService;
+use ESCloud\SDK\Service\XAPIService;
 use Psr\Log\LoggerInterface;
 use ESCloud\SDK\HttpClient\ClientInterface;
 use ESCloud\SDK\Exception\SDKException;
@@ -44,7 +57,7 @@ class ESCloudSDK
     /**
      * 获取云资源播放服务
      *
-     * @return \ESCloud\SDK\Service\ResourceService
+     * @return ResourceService
      */
     public function getResourceService()
     {
@@ -54,7 +67,7 @@ class ESCloudSDK
     /**
      * 获取短信服务
      *
-     * @return \ESCloud\SDK\Service\SmsService
+     * @return SmsService
      */
     public function getSmsService()
     {
@@ -64,7 +77,7 @@ class ESCloudSDK
     /**
      * 获取云资源播放服务
      *
-     * @return \ESCloud\SDK\Service\PlayService
+     * @return PlayService
      */
     public function getPlayService()
     {
@@ -74,7 +87,7 @@ class ESCloudSDK
     /**
      * 获取XAPI服务
      *
-     * @return \ESCloud\SDK\Service\XAPIService
+     * @return XAPIService
      */
     public function getXAPIService()
     {
@@ -84,7 +97,7 @@ class ESCloudSDK
     /**
      * 获取分销服务
      *
-     * @return \ESCloud\SDK\Service\DrpService
+     * @return DrpService
      */
     public function getDrpService()
     {
@@ -92,7 +105,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\MpService
+     * @return MpService
      */
     public function getMpService()
     {
@@ -100,7 +113,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\ESopService
+     * @return ESopService
      */
     public function getESopService()
     {
@@ -108,7 +121,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\AiService
+     * @return AiService
      */
     public function getAiService()
     {
@@ -116,7 +129,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\PushService
+     * @return PushService
      */
     public function getPushService()
     {
@@ -124,7 +137,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\NotificationService
+     * @return NotificationService
      */
     public function getNotificationService()
     {
@@ -132,7 +145,7 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\WeChatService
+     * @return WeChatService
      */
     public function getWeChatService()
     {
@@ -148,11 +161,19 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\MobileService
+     * @return MobileService
      */
     public function getMobileService()
     {
         return $this->getService('Mobile');
+    }
+
+    /**
+     * @return ScrmService
+     */
+    public function getScrmService()
+    {
+        return $this->getService('Scrm');
     }
 
     /**
