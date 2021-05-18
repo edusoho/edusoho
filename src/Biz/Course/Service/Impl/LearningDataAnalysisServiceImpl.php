@@ -32,10 +32,6 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         return $members;
     }
 
-    public function fillHomeworkStatisics($members)
-    {
-    }
-
     public function makeProgress($learnedNum, $total)
     {
         $progress = [

@@ -8,8 +8,6 @@ interface LearningDataAnalysisService
 
     public function fillCourseProgress($members);
 
-    public function fillHomeworkStatisics($members);
-
     public function makeProgress($learnedNum, $total);
 
     /**
