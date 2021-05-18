@@ -545,16 +545,47 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchTestpaperTasks($conditions, $orderBy, $start, $limit)
+    public function findTestpapers($tasks, $type)
     {
-        $tasks = $this->getTaskService()->searchTasks(
-            $conditions,
-            $orderBy,
-            $start,
-            $limit
-        );
+        if (empty($tasks)) {
+            return [$tasks, []];
+        }
 
-        return $this->findTestpapers($tasks, $type);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        if ('testpaper' == $type) {
+            $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+            $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
+            $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+            $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
+
+            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
+                $task['answerSceneId'] = $testpaperActivities[$activity['mediaId']]['answerSceneId'];
+            });
+        } else {
+            $homeworkActivityIds = ArrayToolkit::column($activities, 'mediaId');
+            $homeworkActivities = $this->getHomeworkActivityService()->findByIds($homeworkActivityIds);
+            $homeworkActivities = ArrayToolkit::index($homeworkActivities, 'id');
+            $ids = ArrayToolkit::column($homeworkActivities, 'assessmentId');
+
+            array_walk($tasks, function (&$task, $key) use ($activities, $homeworkActivities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $homeworkActivities[$activity['mediaId']]['assessmentId'];
+                $task['answerSceneId'] = $homeworkActivities[$activity['mediaId']]['answerSceneId'];
+            });
+        }
+
+        $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
+
+        if (empty($testpapers)) {
+            return [$activities, []];
+        }
+
+        return [$tasks, $testpapers];
     }
 
     // 搜索课时任务及相关数据统计
@@ -1450,49 +1481,11 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function getHomeworkActivityService()
     {
-        return $this->getBiz()->service('Activity:HomeworkActivityService');
+        return $this->createService('Activity:HomeworkActivityService');
     }
 
-    protected function findTestpapers($tasks, $type)
+    protected function getAssessmentService()
     {
-        if (empty($tasks)) {
-            return [$tasks, []];
-        }
-
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        if ('testpaper' == $type) {
-            $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-            $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
-            $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
-            $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
-
-            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
-                $activity = $activities[$task['activityId']];
-                $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
-                $task['answerSceneId'] = $testpaperActivities[$activity['mediaId']]['answerSceneId'];
-            });
-        } else {
-            $homeworkActivityIds = ArrayToolkit::column($activities, 'mediaId');
-            $homeworkActivities = $this->getHomeworkActivityService()->findByIds($homeworkActivityIds);
-            $homeworkActivities = ArrayToolkit::index($homeworkActivities, 'id');
-            $ids = ArrayToolkit::column($homeworkActivities, 'assessmentId');
-
-            array_walk($tasks, function (&$task, $key) use ($activities, $homeworkActivities) {
-                $activity = $activities[$task['activityId']];
-                $task['testId'] = $homeworkActivities[$activity['mediaId']]['assessmentId'];
-                $task['answerSceneId'] = $homeworkActivities[$activity['mediaId']]['answerSceneId'];
-            });
-        }
-
-        $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
-
-        if (empty($testpapers)) {
-            return [$activities, []];
-        }
-
-        return [$tasks, $testpapers];
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

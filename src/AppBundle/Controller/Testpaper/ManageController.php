@@ -83,7 +83,7 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        list($tasks, $testpapers) = $this->findTestpapers($tasks, $type);
+        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
 
         $resultStatusNum = $this->findTestpapersStatusNum($tasks);
 

@@ -73,7 +73,7 @@ interface TaskService
 
     public function searchTasks($conditions, $orderBy, $start, $limit);
 
-    public function searchTestpaperTasks($conditions, $type);
+    public function findTestpapers($tasks, $type);
 
     public function countTasks($conditions);
 

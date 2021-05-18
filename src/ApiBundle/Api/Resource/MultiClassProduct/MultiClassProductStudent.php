@@ -40,11 +40,7 @@ class MultiClassProductStudent extends AbstractResource
         $assistantIds = ArrayToolkit::column($assistantMembers, 'userId');
 
         $assistants = $this->getUserService()->findUsersByIds($assistantIds);
-        $assistantInfos = ArrayToolkit::thin($assistants, ['id', 'nickname']);
-
-        foreach ($members as &$member) {
-            $member['assistants'] = $assistantInfos;
-        }
+        $assistantInfos = ArrayToolkit::thin(array_values($assistants), ['id', 'nickname']);
 
         $members = $this->getThreadService()->fillThreadCounts(['courseId' => $courseId, 'type' => 'question'], $members);
 
@@ -55,7 +51,97 @@ class MultiClassProductStudent extends AbstractResource
             ['mediaType' => 'testpaper', 'fromCourseId' => $courseId]
         );
 
+        $userHomeworkCount = $this->findUserTaskCount($courseId, 'homework');
+        $userTestpaperCount = $this->findUserTaskCount($courseId, 'testpaper');
+        foreach ($members as &$member) {
+            $member['assistants'] = $assistantInfos;
+            $member['finishedHomeworkCount'] = 0;
+            $member['homeworkCount'] = $homeworkCount;
+            if (!empty($userHomeworkCount[$member['userId']])) {
+                $member['finishedHomeworkCount'] = $userHomeworkCount[$member['userId']];
+            }
+
+            $member['finishedTestpaperCount'] = 0;
+            $member['testpaperCount'] = $testpaperCount;
+            if (!empty($userTestpaperCount[$member['userId']])) {
+                $member['finishedTestpaperCount'] = $userTestpaperCount[$member['userId']];
+            }
+        }
+
+        $members = $this->filterFields($members);
+
         return $this->makePagingObject($members, $total, $offset, $limit);
+    }
+
+    private function findUserTaskCount($courseId, $type)
+    {
+        $tasks = $this->getTaskService()->searchTasks(
+            ['courseId' => $courseId, 'type' => $type],
+            ['seq' => 'ASC', 'id' => 'ASC'],
+            0,
+            $homeworkCount
+        );
+
+        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
+
+        $userTaskCount = [];
+        foreach ($tasks as $task) {
+            if (empty($task['answerSceneId'])) {
+                continue;
+            }
+
+            $answerReports = $this->getAnswerReportService()->search(
+                ['answer_scene_id' => $task['answerSceneId']],
+                [],
+                0,
+                $this->getAnswerReportService()->count(['answer_scene_id' => $task['answerSceneId']])
+            );
+
+            foreach ($answerReports as $answerReport) {
+                if (empty($userTaskCount[$answerReport['user_id']])) {
+                    $userTaskCount[$answerReport['user_id']] = 0;
+                }
+
+                ++$userTaskCount[$answerReport['user_id']];
+            }
+        }
+
+        return $userTaskCount;
+    }
+
+    private function filterFields($members)
+    {
+        $results = [];
+        foreach ($members as $member) {
+            $filteredFields = ArrayToolkit::parts($member, [
+                'id',
+                'learningProgressPercent',
+                'threadCount',
+                'homeworkCount',
+                'finishedHomeworkCount',
+                'testpaperCount',
+                'finishedTestpaperCount',
+                'deadline',
+                'createdTime',
+            ]);
+
+            if (empty($filteredFields['deadline'])) {
+                unset($filteredFields['deadline']);
+            }
+
+            $filteredFields['user'] = [
+                'id' => $member['userId'],
+                'nickname' => $member['user']['nickname'],
+                'verifiedMobile' => $member['user']['verifiedMobile'],
+                'weixin' => $member['profile']['weixin'],
+            ];
+
+            $filteredFields['assistants'] = ArrayToolkit::thin($member['assistants'], ['id', 'nickname']);
+
+            $results[] = $filteredFields;
+        }
+
+        return $results;
     }
 
     /**
@@ -69,6 +155,21 @@ class MultiClassProductStudent extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    private function getTaskService()
+    {
+        return $this->service('Task:TaskService');
+    }
+
+    private function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
+    }
+
+    private function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
     }
 
     private function getUserService()
