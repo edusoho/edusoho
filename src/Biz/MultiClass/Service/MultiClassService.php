@@ -4,6 +4,8 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassService
 {
+    public function getMultiClassById($id);
+
     public function createMultiClass($fields);
 
     public function getMultiClassByTitle($title);

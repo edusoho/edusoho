@@ -22,6 +22,8 @@ class MultiClassException extends AbstractException
 
     const MULTI_CLASS_DATA_FIELDS_MISSING = 5008155;
 
+    const MULTI_CLASS_COURSE_NOT_MATCH = 5008156;
+
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
         5008151 => 'exception.multi_class.multi_class_exist',
@@ -30,5 +32,6 @@ class MultiClassException extends AbstractException
         5008153 => 'exception.multi_class.multi_class_assistant_require',
         5008154 => 'exception.multi_class.multi_class_assistant.number_exceed',
         5008155 => 'exception.multi_class.multi_class_data_fields_missing',
+        5008156 => 'exception.multi_class.multi_class_course_not_match',
     ];
 }

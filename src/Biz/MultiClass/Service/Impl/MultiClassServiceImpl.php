@@ -11,6 +11,11 @@ use Biz\System\Service\LogService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
+    public function getMultiClassById($id)
+    {
+        return $this->getMultiClassDao()->get($id);
+    }
+
     public function createMultiClass($fields)
     {
         $teacherId = [
@@ -92,8 +97,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
         $this->beginTransaction();
         try {
-            $this->getMultiClassDao()->delete($id);
             $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
+            $this->getMultiClassDao()->delete($id);
 
             $this->getLogService()->info(
                 'multiClass',

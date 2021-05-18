@@ -18,6 +18,8 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\CourseProductService;
@@ -554,14 +556,18 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userIds' => $assistantIds,
         ]);
 
+        $this->getMemberDao()->batchCreate($assistantMembers);
+
+        $infoData = [
+            'assistantIds' => $assistantIds,
+        ];
+
         $this->getLogService()->info(
             'course',
             'set_multi_class_assistant',
             "设置班课#{$multiClassId}下助教",
-            $assistantIds
+            $infoData
         );
-
-        $this->getMemberDao()->batchCreate($assistantMembers);
     }
 
     public function releaseMultiClassMember($courseId, $multiClassId)
@@ -570,18 +576,24 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        $multiClassExisted = $this->getMultiClassService()->getMultiClassById($multiClassId);
+
+        if ($courseId != $multiClassExisted['courseId']) {
+            throw MultiClassException::MULTI_CLASS_COURSE_NOT_MATCH();
+        }
+
         $conditions = [
             'courseId' => $courseId,
             'multiClassId' => $multiClassId,
         ];
+
+        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
 
         $this->getLogService()->info(
             'course',
             'release_multi_class_member',
             "释放班课#{$multiClassId}下成员关系"
         );
-
-        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
     }
 
     private function updateCourseTeacherIds($courseId, $teachers)
@@ -1851,5 +1863,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 }
