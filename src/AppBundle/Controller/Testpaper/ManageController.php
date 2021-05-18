@@ -658,49 +658,6 @@ class ManageController extends BaseController
         return $relatedData;
     }
 
-    protected function findTestpapers($tasks, $type)
-    {
-        if (empty($tasks)) {
-            return [$tasks, []];
-        }
-
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        if ('testpaper' == $type) {
-            $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-            $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
-            $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
-            $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
-
-            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
-                $activity = $activities[$task['activityId']];
-                $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
-                $task['answerSceneId'] = $testpaperActivities[$activity['mediaId']]['answerSceneId'];
-            });
-        } else {
-            $homeworkActivityIds = ArrayToolkit::column($activities, 'mediaId');
-            $homeworkActivities = $this->getHomeworkActivityService()->findByIds($homeworkActivityIds);
-            $homeworkActivities = ArrayToolkit::index($homeworkActivities, 'id');
-            $ids = ArrayToolkit::column($homeworkActivities, 'assessmentId');
-
-            array_walk($tasks, function (&$task, $key) use ($activities, $homeworkActivities) {
-                $activity = $activities[$task['activityId']];
-                $task['testId'] = $homeworkActivities[$activity['mediaId']]['assessmentId'];
-                $task['answerSceneId'] = $homeworkActivities[$activity['mediaId']]['answerSceneId'];
-            });
-        }
-
-        $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
-
-        if (empty($testpapers)) {
-            return [$activities, []];
-        }
-
-        return [$tasks, $testpapers];
-    }
-
     protected function findTestpapersStatusNum($tasks)
     {
         $resultStatusNum = [];
