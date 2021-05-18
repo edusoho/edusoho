@@ -44,23 +44,22 @@
 </script>
 
 <style lang="less">
-.product-card {
-  background-color: red;
-}
-  // .product-card {
-  //   // padding: @spacing-6x;
-  //   box-shadow: 0 0 16px 0 rgba(0,0,0,0.10);
-  //   background-color: #fff;
-  //   border-radius: 12px;
-  //   &__title {
-  //     font-size: 18px;
-  //     // color: @gray-darker;
-  //     font-weight: 500;
-  //   }
-  //   &__remark {
-  //     // margin-top: @spacing-2x;
-  //     // color: @gray;
-  //     font-size: 14px;
-  //   }
-  // }
+  @import '~common/variable.less';
+
+  .product-card {
+    padding: @spacing-6x;
+    box-shadow: 0 0 16px 0 rgba(0,0,0,0.10);
+    background-color: #fff;
+    border-radius: 12px;
+    &__title {
+      font-size: 18px;
+      color: @gray-darker;
+      font-weight: 500;
+    }
+    &__remark {
+      margin-top: @spacing-2x;
+      color: @gray;
+      font-size: 14px;
+    }
+  }
 </style>

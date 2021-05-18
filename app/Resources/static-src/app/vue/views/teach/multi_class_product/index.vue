@@ -46,6 +46,8 @@
         </a-button>
       </template>
     </a-modal>
+
+    <MultiClassModal title="系统默认" :visible="multiClassModalVisible" @close="event => multiClassModalVisible = event" />
   </div>
 </template>
 
@@ -53,16 +55,19 @@
   import _ from 'lodash';
   import { MultiClassProduct, ValidationTitle } from 'common/vue/service';
   import ProductCard from './ProductCard.vue';
+  import MultiClassModal from './MultiClassModal.vue';
 
   export default {
     name: '',
     components: {
       ProductCard,
+      MultiClassModal,
     },
     props: {},
     data () {
       return {
         modalVisible: false,
+        multiClassModalVisible: false,
         form: this.$form.createForm(this),
       };
     },
