@@ -1,7 +1,8 @@
 <template>
   <div>
-    <!-- <svg-icon icon="hbs-eye" /> -->
-    test
+     <a-button type="danger">
+      Danger
+    </a-button>
   </div>
 </template>
 
