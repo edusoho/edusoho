@@ -8,14 +8,13 @@
 
 
 <script>
-import { User } from 'common/vue/service/index.js';
+import { MultiClass } from 'common/vue/service/index.js';
+
 export default {
   name: 'ClassCourse',
 
   created() {
-    User.test().then(res => {
-      console.log(res);
-    });
+    console.log(MultiClass)
   }
 }
 </script>
