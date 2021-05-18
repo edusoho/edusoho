@@ -3422,10 +3422,10 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-es-webpack-engine@4.5.1:
-  version "4.5.1"
-  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-4.5.1.tgz#c71336ae7711a80f2ec47705adbc0af609e01737"
-  integrity sha512-IQ3lTHmC7LnkjSIHqf/Ta6UCvrx3Q1w4kMir0cGgM9KYUVq5bPVW5D1OP7HhfCXU1S6AO74WMuU4gz5KefsfNw==
+es-webpack-engine@4.5.2:
+  version "4.5.2"
+  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-4.5.2.tgz#5c135225d1f66dd935d1702daa69da82229d997e"
+  integrity sha512-D7j1irjqaxJe7c/KnpAZ2YHDhT4SbLMq1M32a8tiySZURWTAl9PI9KaycUHtIm2UhMXLPfb9FnTNhKQR0v7cCA==
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
