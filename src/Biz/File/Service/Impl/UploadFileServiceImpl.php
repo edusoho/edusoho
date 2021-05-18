@@ -1136,6 +1136,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->createNewException(UploadFileException::PERMISSION_DENIED());
     }
 
+    public function canDownloadFile($fileId)
+    {
+        $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $cloudFileSetting = array_merge(['enable' => 0], $cloudFileSetting);
+
+        if ($this->tryAccessFile($fileId) || 1 == $cloudFileSetting['enable']) {
+            return true;
+        }
+
+        $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
+    }
+
     public function canManageFile($fileId)
     {
         $user = $this->getCurrentUser();
