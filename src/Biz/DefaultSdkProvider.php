@@ -218,6 +218,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.scrm'] = function ($biz) use ($that) {
+            $sdk = $that->generateEsCloudSdk($biz, $this->getSCRMConfig($biz));
+
+            if (null !== $sdk) {
+                return $sdk->getScrmService();
+            }
+
+            return null;
+        };
     }
 
     /**
@@ -269,6 +279,24 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return $sdk;
+    }
+
+    public function getSCRMConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', []);
+        if (!empty($developerSetting['scrm_server'])) {
+            $urlSegments = explode('://', $developerSetting['scrm_server']);
+            if (2 === count($urlSegments)) {
+                $hostUrl = $urlSegments[1];
+            }
+        }
+
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return ['scrm' => ['host' => $hostUrl]];
     }
 
     public function getS2B2CConfig($biz)
