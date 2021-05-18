@@ -24,8 +24,14 @@ class MultiClassException extends AbstractException
 
     const MULTI_CLASS_COURSE_NOT_MATCH = 5008156;
 
+    const PRODUCT_NOT_FOUND = 4048102;
+
+    const CANNOT_DELETE_DEFAULT_PRODUCT = 4038103;
+
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
+        4048102 => 'exception.multi_class.product_not_found',
+        4038103 => 'exception.multi_class.cannot_delete_default_product',
         5008151 => 'exception.multi_class.multi_class_exist',
         4048151 => 'exception.multi_class.multi_class_not_exist',
         5008152 => 'exception.multi_class.multi_class_teacher_require',

@@ -11880,3 +11880,5 @@ exception.multi_class.multi_class_assistant_require: 班课需要设置助教
 exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
 exception.multi_class.multi_class_data_fields_missing : 班课参数缺失
 exception.multi_class.multi_class_course_not_match: 班课与课程不匹配
+exception.multi_class.product_not_found: 产品未找到
+exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除

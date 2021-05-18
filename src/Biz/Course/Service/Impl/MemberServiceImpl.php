@@ -559,7 +559,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchCreate($assistantMembers);
 
         $infoData = [
-            'assistantIds' => $assistantIds,
+            'assistantIds' => $assistantIds
         ];
 
         $this->getLogService()->info(
@@ -576,7 +576,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $multiClassExisted = $this->getMultiClassService()->getMultiClassById($multiClassId);
+        $multiClassExisted = $this->getMultiClassService()->getMultiClass($multiClassId);
 
         if ($courseId != $multiClassExisted['courseId']) {
             throw MultiClassException::MULTI_CLASS_COURSE_NOT_MATCH();
@@ -584,7 +584,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $conditions = [
             'courseId' => $courseId,
-            'multiClassId' => $multiClassId,
+            'multiClassId' => $multiClassId
         ];
 
         $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
