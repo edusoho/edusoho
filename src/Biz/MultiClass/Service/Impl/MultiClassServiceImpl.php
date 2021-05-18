@@ -13,7 +13,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
     public function getMultiClass($id)
     {
-
         return $this->getMultiClassDao()->get($id);
     }
 
@@ -69,7 +68,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
         $this->beginTransaction();
         try {
-            $multiClass = $this->getMultiClassDao()->update($id,$fields);
+            $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
 

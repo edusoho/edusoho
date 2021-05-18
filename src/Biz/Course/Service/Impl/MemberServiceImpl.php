@@ -559,7 +559,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchCreate($assistantMembers);
 
         $infoData = [
-            'assistantIds' => $assistantIds
+            'assistantIds' => $assistantIds,
         ];
 
         $this->getLogService()->info(
@@ -584,7 +584,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $conditions = [
             'courseId' => $courseId,
-            'multiClassId' => $multiClassId
+            'multiClassId' => $multiClassId,
         ];
 
         $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
