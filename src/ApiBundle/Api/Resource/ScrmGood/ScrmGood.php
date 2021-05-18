@@ -79,6 +79,7 @@ class ScrmGood extends AbstractResource
             'type',
             'types',
             'title',
+            'titleLike',
             'price',
             'status', //unpublished,published
         ];
