@@ -553,15 +553,33 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseId' => $courseId,
             'userIds' => $assistantIds,
         ]);
+
+        $this->getLogService()->info(
+            'course',
+            'set_multi_class_assistant',
+            "设置班课#{$multiClassId}下助教",
+            $assistantIds
+        );
+
         $this->getMemberDao()->batchCreate($assistantMembers);
     }
 
     public function releaseMultiClassMember($courseId, $multiClassId)
     {
+        if (empty($courseId) || empty($multiClassId)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
         $conditions = [
             'courseId' => $courseId,
             'multiClassId' => $multiClassId,
         ];
+
+        $this->getLogService()->info(
+            'course',
+            'release_multi_class_member',
+            "释放班课#{$multiClassId}下成员关系"
+        );
 
         $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
     }

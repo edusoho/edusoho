@@ -11878,3 +11878,4 @@ exception.multi_class.multi_class_not_exist: 班课不已存在
 exception.multi_class.multi_class_teacher_require: 班课需要设置教师
 exception.multi_class.multi_class_assistant_require: 班课需要设置助教
 exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
+exception.multi_class.multi_class_data_fields_missing' : 班课参数缺失

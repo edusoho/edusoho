@@ -7,6 +7,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\LogService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -26,6 +27,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+
+            $this->getLogService()->info(
+                'multiClass',
+                'create_multi_class',
+                "创建班课#{$multiClass['id']}《{$fields['title']}》",
+                $fields
+            );
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -57,6 +66,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+
+            $this->getLogService()->info(
+                'multiClass',
+                'update_multi_class',
+                "更新班课#{$multiClass['id']}《{$fields['title']}》",
+                $fields
+            );
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -77,6 +94,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         try {
             $this->getMultiClassDao()->delete($id);
             $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
+
+            $this->getLogService()->info(
+                'multiClass',
+                'delete_multi_class',
+                "删除班课#{$id}《{$multiClassExisted['title']}》"
+            );
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -107,6 +131,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

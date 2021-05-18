@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Common\CommonException;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 
@@ -20,7 +19,7 @@ class MultiClass extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        $multiClass = $this->checkParameters($request->request->all());
+        $multiClass = $this->checkDataFields($request->request->all());
 
         $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
 
@@ -33,7 +32,7 @@ class MultiClass extends AbstractResource
 
     public function update(ApiRequest $request, $id)
     {
-        $multiClass = $this->checkParameters($request->request->all());
+        $multiClass = $this->checkDataFields($request->request->all());
 
         $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
 
@@ -51,10 +50,10 @@ class MultiClass extends AbstractResource
         return ['success' => true];
     }
 
-    private function checkParameters($multiClass)
+    private function checkDataFields($multiClass)
     {
         if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
+            throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
         if (empty($multiClass['teacherId'])) {
