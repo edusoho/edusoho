@@ -434,7 +434,7 @@ class Setting extends AbstractResource
             'upgradeMinDay' => '30', //兼容会员营销重构2.0
             'defaultBuyYears' => '1', //兼容会员营销重构2.0
             'defaultBuyMonths' => '30', //兼容会员营销重构2.0
-            'upgrade_mode' => empty($vipSetting['upgrade_mode']) ? 'remain_period' : $vipSetting['upgrade_mode'],
+            'upgradeMode' => empty($vipSetting['upgrade_mode']) ? 'remain_period' : $vipSetting['upgrade_mode'],
         ];
     }
 
