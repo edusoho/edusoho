@@ -11,4 +11,10 @@ interface MultiClassProductService
     public function searchProducts(array $conditions, array $oderBy, $start, $limit);
 
     public function countProducts(array $conditions);
+
+    public function getProduct($id);
+
+    public function updateProduct($id, $fields);
+
+    public function deleteProduct($id);
 }

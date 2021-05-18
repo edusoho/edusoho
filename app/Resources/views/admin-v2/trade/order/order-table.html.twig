@@ -32,7 +32,7 @@
           {% endif %}
         {% elseif order.item.target_type|default('') == 'classroom' %}
           {% set sku = goodsSpecs[order.item.target_id]|default() %}
-          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId|default(0)}) }}" target="_blank"><strong>{{order.title}}</strong></a>
         {% elseif order.item.target_type|default('') == 'vip' %}
             <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
         {% elseif order.item.target_type|default('') == 'item_bank_exercise' %}
@@ -51,7 +51,7 @@
       <td><span class="color-warning">{{order.pay_amount|to_cash(0) }}</span></td>
       {% if has_permission('admin_v2_user_manage') %}
         <td>
-          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.id|default(0)}) }}">{{ buyer.nickname|default('--') }}</a>
           <p class="color-gray">{{ buyer.verifiedMobile|default('--') }}</p>
         </td>
       {% else %}

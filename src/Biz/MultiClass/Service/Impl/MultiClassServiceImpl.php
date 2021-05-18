@@ -8,9 +8,9 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
-    public function findByProductId($productId)
+    public function findByProductIds($productIds)
     {
-        return $this->getMultiClassDao()->findByProductId($productId);
+        return $this->getMultiClassDao()->findByProductIds($productIds);
     }
 
     public function getMultiClassByTitle($title)

@@ -2880,6 +2880,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
+    public function sumTotalIncomeByIds($ids)
+    {
+        return $this->getCourseDao()->sumTotalIncomeByIds($ids);
+    }
+
     /**
      * @return CertificateService
      */
