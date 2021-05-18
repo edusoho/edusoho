@@ -33,7 +33,7 @@ class MultiClassProduct extends AbstractResource
 
     public function remove(ApiRequest $request, $id)
     {
-        $product = $this->getMultiClassProductService()->getProductById($id);
+        $product = $this->getMultiClassProductService()->getProduct($id);
 
         if (empty($product)){
             throw MultiClassException::PRODUCT_NOT_FOUND();
@@ -43,7 +43,7 @@ class MultiClassProduct extends AbstractResource
             throw MultiClassException::CANNOT_DELETE_DEFAULT_PRODUCT();
         }
 
-        $this->getMultiClassProductService()->deleteProductById($product['id']);
+        $this->getMultiClassProductService()->deleteProduct($product['id']);
 
         return ['success' => true];
     }
