@@ -13,7 +13,7 @@ class MultiClassProduct extends AbstractResource
 {
     public function update(ApiRequest $request, $id)
     {
-        $product = $this->getMultiClassProductService()->getProductById($id);
+        $product = $this->getMultiClassProductService()->getProduct($id);
 
         if (empty($product)){
             throw MultiClassException::PRODUCT_NOT_FOUND();
@@ -26,6 +26,12 @@ class MultiClassProduct extends AbstractResource
 
         if (empty($fields['title'])){
             throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $existed = $this->getMultiClassProductService()->getProductByTitle($product['title']);
+
+        if (!empty($existed['id'])) {
+            throw MultiClassException::MULTI_CLASS_PRODUCT_EXIST();
         }
 
         return $this->getMultiClassProductService()->updateProductById($product['id'], $fields);

@@ -8,7 +8,7 @@ interface MultiClassProductService
 
     public function createProduct($product);
 
-    public function getProductById($id);
+    public function getProduct($id);
 
     public function updateProductById($id, $fields);
 }
