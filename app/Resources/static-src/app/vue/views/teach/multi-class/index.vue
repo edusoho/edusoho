@@ -12,7 +12,6 @@ export default {
   name: 'ClassCourse',
 
   created() {
-    console.log(User);
     User.test().then(res => {
       console.log(res);
     });

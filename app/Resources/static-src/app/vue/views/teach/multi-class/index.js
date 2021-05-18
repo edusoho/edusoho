@@ -1,5 +1,5 @@
 import Vue from 'common/vue';
-import router from '../../../router/teach/class-course/index.js';
+import router from '../../../router/teach/multi-class/index.js';
 
 new Vue({
   el: '#app',

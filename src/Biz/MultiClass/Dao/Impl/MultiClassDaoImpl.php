@@ -1,13 +1,18 @@
 <?php
 
-namespace Biz\ClassCourse\Dao\Impl;
+namespace Biz\MultiClass\Dao\Impl;
 
-use Biz\ClassCourse\Dao\ClassCourseDao;
+use Biz\MultiClass\Dao\MultiClassDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class ClassCourseDaoImpl extends GeneralDaoImpl implements ClassCourseDao
+class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
 {
-    protected $table = 'class_course';
+    protected $table = 'multi_class';
+
+    public function getByTitle($title)
+    {
+        return $this->getByFields(['title' => $title]);
+    }
 
     public function declares()
     {

@@ -1,4 +1,4 @@
-import { User } from './class-course/index.js';
+import { User } from './multi-class/index.js';
 
 export {
   User
