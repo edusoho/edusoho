@@ -28,6 +28,12 @@ class MultiClassProduct extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
+        $existed = $this->getMultiClassProductService()->getProductByTitle($fields['title']);
+
+        if (!empty($existed['id']) && $product['id'] != $existed['id']) {
+            throw MultiClassException::MULTI_CLASS_PRODUCT_EXIST();
+        }
+
         return $this->getMultiClassProductService()->updateProduct($product['id'], $fields);
     }
 

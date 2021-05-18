@@ -2,6 +2,7 @@
 
 namespace Biz\MultiClass\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\MultiClass\Dao\MultiClassProductDao;
 use Biz\MultiClass\Service\MultiClassProductService;
@@ -30,7 +31,12 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
 
     public function updateProduct($id, $fields)
     {
-        return $this->getMultiClassProductDao()->update($id, $fields);
+        $fields = ArrayToolkit::parts($fields, ['title', 'remark']);
+        $product = $this->getMultiClassProductDao()->update($id, $fields);
+
+        $this->getLogService()->info('multi_class_product', 'update_product', '更新', $product);
+
+        return $product;
     }
 
     public function deleteProduct($id)
