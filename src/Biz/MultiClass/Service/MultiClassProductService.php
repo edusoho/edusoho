@@ -10,5 +10,7 @@ interface MultiClassProductService
 
     public function getProduct($id);
 
-    public function updateProductById($id, $fields);
+    public function updateProduct($id, $fields);
+
+    public function deleteProduct($id);
 }

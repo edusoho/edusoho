@@ -28,13 +28,30 @@ class MultiClassProduct extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $existed = $this->getMultiClassProductService()->getProductByTitle($product['title']);
+        $existed = $this->getMultiClassProductService()->getProductByTitle($fields['title']);
 
-        if (!empty($existed['id'])) {
+        if (!empty($existed['id']) && $existed['title'] != $fields['title']) {
             throw MultiClassException::MULTI_CLASS_PRODUCT_EXIST();
         }
 
-        return $this->getMultiClassProductService()->updateProductById($product['id'], $fields);
+        return $this->getMultiClassProductService()->updateProduct($product['id'], $fields);
+    }
+
+    public function remove(ApiRequest $request, $id)
+    {
+        $product = $this->getMultiClassProductService()->getProduct($id);
+
+        if (empty($product)){
+            throw MultiClassException::PRODUCT_NOT_FOUND();
+        }
+
+        if ('default' === $product['type']){
+            throw MultiClassException::CANNOT_DELETE_DEFAULT_PRODUCT();
+        }
+
+        $this->getMultiClassProductService()->deleteProduct($product['id']);
+
+        return ['success' => true];
     }
 
     public function add(ApiRequest $request)
