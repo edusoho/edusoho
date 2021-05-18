@@ -32,8 +32,10 @@ class ScrmGoodSpecFilter extends Filter
     {
         $this->transTime($data);
         $this->transServices($data['services']);
+        $this->transformImages($data['images']);
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
+
         $userFilter->filters($data['teachers']);
     }
 
