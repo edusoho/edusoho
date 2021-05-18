@@ -30,7 +30,7 @@ class MultiClassProduct extends AbstractResource
 
         $existed = $this->getMultiClassProductService()->getProductByTitle($fields['title']);
 
-        if (!empty($existed['id']) && $existed['title'] != $fields['title']) {
+        if (!empty($existed['id']) && $product['id'] != $existed['id']) {
             throw MultiClassException::MULTI_CLASS_PRODUCT_EXIST();
         }
 
