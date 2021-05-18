@@ -5,9 +5,14 @@ namespace ApiBundle\Api\Resource\MultiClassProduct;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
+use Biz\MultiClass\Service\MultiClassService;
+use Biz\Task\Service\TaskService;
 
 class MultiClassProduct extends AbstractResource
 {
@@ -76,6 +81,40 @@ class MultiClassProduct extends AbstractResource
         return $product;
     }
 
+    public function search(ApiRequest $request)
+    {
+        $conditions = [
+            'keywords' => $request->query->get('keywords', '')
+        ];
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+
+        $products = $this->getMultiClassProductService()->searchProducts($conditions, [], $offset, $limit);
+        $products = $this->appendBaseInfo($products);
+        $total = $this->getMultiClassProductService()->countProducts($conditions);
+
+        $products = $this->makePagingObject($products, $total, $offset, $limit);
+
+        return $products;
+    }
+
+    protected function appendBaseInfo($products)
+    {
+        $multiClasses = $this->getMultiClassService()->findByProductIds(array_column($products, 'id'));
+        $multiClasses = ArrayToolkit::group($multiClasses, 'productId');
+        foreach ($products as &$product){
+            $classes = isset($multiClasses[$product['id']]) ? $multiClasses[$product['id']] : [];
+            $product['multiClassNum'] = count($classes);
+            $courseIds = ArrayToolkit::column($classes, 'courseId') ? ArrayToolkit::column($classes, 'courseId') : [-1];
+            $income = $this->getCourseService()->sumTotalIncomeByIds($courseIds)['income'];
+            $product['income'] = $income ? $income : 0;
+            $product['studentNum'] = $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds, 'role' => 'student']);
+            $product['taskNum'] = $this->getTaskService()->countTasks(['courseIds' => $courseIds, 'status' => 'published', 'isLesson' => 1]);
+        }
+
+        return $products;
+    }
+
     /**
      * @return MultiClassProductService
      */
@@ -84,4 +123,35 @@ class MultiClassProduct extends AbstractResource
         return $this->service('MultiClass:MultiClassProductService');
     }
 
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->service('Task:TaskService');
+    }
 }
