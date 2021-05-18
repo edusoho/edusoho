@@ -1,5 +1,2 @@
-import { User } from './multi-class/index.js';
+export * from 'common/vue/service/MultiClass/MultiClass.js';
 
-export {
-  User
-}
