@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 
@@ -19,6 +20,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function getMultiClass($id)
     {
         return $this->getMultiClassDao()->get($id);
+    }
+
+    public function countMultiClassCopyEd($id)
+    {
+        return $this->getMultiClassDao()->count(['copyId' => $id]);
     }
 
     public function createMultiClass($fields)
@@ -118,6 +124,40 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
+    public function cloneMultiClass($id)
+    {
+        $multiClass = $this->getMultiClassDao()->get($id);
+        $this->beginTransaction();
+        try {
+            $number = $this->countMultiClassCopyEd($id);
+            $number = 0 == $number ? '' : $number;
+            $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
+
+            $this->biz['multi_class_copy']->copy($multiClass, [
+                'number' => $number,
+                'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
+                ]);
+
+            $this->getLogService()->info(
+                'multiClass',
+                'clone_multi_class',
+                "复制班课 - {$multiClass['title']}(#{$id}) 成功",
+                ['multiClassId' => $id]);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+
+            $this->getLogService()->error(
+                'multiClass',
+                'clone_multi_class',
+                "复制班课 - {$multiClass['title']}(#{$id}) 失败",
+                ['error' => $e->getMessage()]);
+
+            throw $e;
+        }
+    }
+
     public function getMultiClassByTitle($title)
     {
         return $this->getMultiClassDao()->getByTitle($title);
@@ -157,5 +197,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getMultiClassDao()
     {
         return $this->createDao('MultiClass:MultiClassDao');
+    }
+
+    /**
+     * @return MultiClassProductService
+     */
+    protected function getMultiClassProductService()
+    {
+        return $this->createService('MultiClass:MultiClassProductService');
     }
 }

@@ -27,6 +27,7 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
             'conditions' => [
                 'id = :id',
                 'productId = :productId',
+                'copyId = :copyId',
             ],
         ];
     }
