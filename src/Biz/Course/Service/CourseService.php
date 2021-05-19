@@ -234,6 +234,8 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = []);
 
+    public function searchDefaultCourses($conditions);
+
     public function appendSpecsInfo($courses);
 
     public function appendSpecInfo($course);

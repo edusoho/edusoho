@@ -207,6 +207,16 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
+    public function searchDefaultCourses($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("id,title,courseSetTitle")
+            ->andWhere("title LIKE :titleLike")
+            ->orWhere("courseSetTitle LIKE :courseSetTitleLike");
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

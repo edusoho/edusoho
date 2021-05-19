@@ -1576,6 +1576,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchDefaultCourses($conditions)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getCourseDao()->searchDefaultCourses($conditions);
+    }
+
     public function appendSpecsInfo($courses)
     {
         $courses = $this->getGoodsEntityFactory()->create('course')->fetchSpecs($courses);
