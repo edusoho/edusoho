@@ -1,11 +1,3 @@
-<!-- <a-input
-  placeholder="请输入产品名称"
-  v-decorator="['title', { rules: [
-    { required: true, message: '产品名称不能为空' },
-    { max: 20, message: '产品名称不能超过20个字' },
-    { validator: validatorTitle }
-  ] }]"
-/> -->
 <template>
   <div>
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
@@ -28,10 +20,13 @@
       </a-form-item>
       <a-form-item label="封面图片">
         <a-upload
+          ref="upload"
+          accept="image/*"
+          :file-list="[]"
           list-type="picture-card"
           @change="uploadCourseCover"
         >
-        <img v-if="courseCoverUrl" :src="courseCoverUrl" />
+        <img style="width: 100%;" v-if="courseCoverUrl" :src="courseCoverUrl" />
         <div v-else>
           <a-icon :type="loading ? 'loading' : 'plus'" />
           <div class="ant-upload-text">
@@ -51,7 +46,9 @@
         />
       </a-form-item>
       <a-form-item label="助教" :assistants="[1, 2]">
-        <a-select mode="tags"  @change="searchAssistants">
+        <a-select mode="tags"  @change="searchAssistants" 
+          v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
+        >
           <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
             {{ (i + 9).toString(36) + i }}
           </a-select-option>
@@ -116,19 +113,33 @@
       </a-form-item>
     </a-form>
 
-    <a-modal :visible="cropModalVisible" @cancel="cropModalVisible = false">
+    <a-modal 
+      :visible="cropModalVisible" 
+      @cancel="cropModalVisible = false">
       <vue-cropper
         ref="cropper"
+        :aspect-ratio="16 / 9"
         :src="courseCoverUrl"
       >
       </vue-cropper>
+      <template slot="footer">
+        <a-button>重新选择</a-button>
+        <a-button type="primary" @click="saveCourseCover">保存图片</a-button>
+      </template>
     </a-modal>
   </div>
 </template>
 
 <script>
-  import { debounce } from 'lodash';
+  import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
+  import 'cropperjs/dist/cropper.css';
+
+  const images = {
+    large: [480, 270],
+    middle: [304, 171],
+    small: [96,]
+  }
 
   function getBase64(img, callback) {
     const reader = new FileReader();
@@ -155,6 +166,7 @@
         assistantsList: [],
         courseCoverUrl: '',
         cropModalVisible: false,
+        loading: false,
       };
     },
     mounted() {
@@ -169,19 +181,73 @@
       handleSubmit() {
         this.form.validateFields();
       },
-      searchTeachers: debounce(function() {
+      searchTeachers: _.debounce(function() {
       }, 300),
-      searchAssistants: debounce(function() {
+      searchAssistants: _.debounce(function() {
       }, 300),
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },
       uploadCourseCover(info) {
-        getBase64(info.file.originFileObj, imageUrl => {
-          this.courseCoverUrl = imageUrl;
-          this.cropModalVisible = true;
-        });
+        this.loading = true
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          this.courseCoverUrl = event.target.result;
+          this.cropModalVisible = true
+          this.loading = false;
+        };
+
+        reader.readAsDataURL(info.file.originFileObj);
+      },
+      saveCourseCover() {
+        this.$refs.cropper.getCroppedCanvas().toBlob(blob => {
+          const { x, y, width, height } = this.$refs.cropper.getData();
+          const imageData = this.$refs.cropper.getImageData();
+          const cropperData = {
+            x: _.ceil(_.max([0, x])),
+            y: _.ceil(_.max([0, y])),
+            width: _.ceil(width),
+            height: _.ceil(height)
+          }
+          const cropResult = {
+            x: cropperData.x,
+            y: cropperData.y,
+            x2: _.add(cropperData.x, cropperData.width),
+            y2: _.add(cropperData.y, cropperData.height),
+            w: cropperData.width, // 裁剪后宽度
+            h: cropperData.height, // 裁剪后高度
+            imgs: {
+              large: [480, 270],
+              middle: [304, 171],
+              small: [96,]
+            },
+            post: false,
+            width: imageData.naturalWidth, // 原图片宽度
+            height: imageData.naturalHeight, // 原图片高度
+            group: 'course',
+          }
+          const formData = new FormData();
+
+          formData.append(file, blob);
+        })
       }
     }
   }
 </script>
+
+<style>
+  .avatar-uploader > .ant-upload {
+    width: 128px;
+    height: 128px;
+  }
+  .ant-upload-select-picture-card i {
+    font-size: 32px;
+    color: #999;
+  }
+  
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+  }
+  </style>
