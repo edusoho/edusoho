@@ -11,7 +11,7 @@ use Biz\System\Service\LogService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
-    public function findByProductIds($productIds)
+    public function findByProductIds(array $productIds)
     {
         return $this->getMultiClassDao()->findByProductIds($productIds);
     }
