@@ -9,7 +9,7 @@ class MultiClassProductController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('admin-v2/teach/multi-class-product/index.html.twig', [
+        return $this->render('admin-v2/teach/multi_class_product/index.html.twig', [
         ]);
     }
 }
