@@ -1,4 +1,4 @@
-export * from 'common/vue/service/MultiClass/MultiClass.js';
-export * from 'common/vue/service/MultiClassProduct/MultiClassProduct.js';
-export * from 'common/vue/service/Validation/ValidationTitle.js';
+export * from './MultiClass/index.js';
+export * from './MultiClassProduct/index.js';
+export * from './Validation/index.js';
 

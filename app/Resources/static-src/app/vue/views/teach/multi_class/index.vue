@@ -5,7 +5,7 @@
       <a-button class="pull-right" type="primary">新建班课</a-button>
      </div>
 
-    <a-table :columns="columns" :data-source="data">
+    <a-table :columns="columns" :data-source="data" :locale="locale">
       <a slot="name" slot-scope="text" >
         {{ text }}
       </a>
@@ -18,7 +18,7 @@
       <a slot="num1" slot-scope="text">
         {{ text }}
       </a>
-      <template :size="8" slot="action" slot-scope="text, record">
+      <template slot="action" slot-scope="text, record">
         <a-button type="link">查看</a-button>
         <a-button type="link">编辑</a-button>
         <a-button type="link">数据概览</a-button>
@@ -40,11 +40,20 @@ const columns = [
   {
     title: '课程名称',
     dataIndex: 'name2',
-      scopedSlots: { customRender: 'name2' },
+    scopedSlots: { customRender: 'name2' },
+  },
+  {
+    title: '所属产品',
+    dataIndex: 'productInfo',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' },
+    ],
   },
   {
     title: '价格',
     dataIndex: 'price',
+    sorter: true,
   },
   {
     title: '已完成/课时',
@@ -62,11 +71,13 @@ const columns = [
   {
     title: '已报班人数',
     dataIndex: 'num1',
+    sorter: true,
     scopedSlots: { customRender: 'num1' },
   },
   {
     title: '创建时间',
     dataIndex: 'createdTime',
+    sorter: true,
   },
   {
     title: '操作',
@@ -94,6 +105,11 @@ export default {
     return {
       columns,
       data,
+      locale: {
+        filterConfirm: '确定',
+        filterReset: '重置',
+        emptyText: '暂无数据',
+      }
     }
   },
   created() {

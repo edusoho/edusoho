@@ -71,6 +71,9 @@
         form: this.$form.createForm(this),
       };
     },
+    created() {
+      console.log(MultiClassProduct)
+    },
     methods: {
       validatorTitle: _.debounce(function(rule, value, callback) {
         ValidationTitle.search({
