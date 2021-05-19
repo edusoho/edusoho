@@ -29,7 +29,11 @@ class DefaultCourse extends AbstractResource
             'courseSetTitleLike' => $request->query->get('titleLike', ''),
         ];
 
-        return $this->getCourseService()->searchDefaultCourses($conditions);
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $courses = $this->getCourseService()->searchDefaultCourses($conditions, $offset, $limit);
+        $total = count($this->getCourseService()->searchDefaultCourses($conditions, 0, PHP_INT_MAX));
+
+        return $this->makePagingObject($courses, $total, $offset, $limit);
     }
 
     /**
