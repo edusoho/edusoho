@@ -70,8 +70,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         if (!empty($options['newMultiClass'])) {
             $newMultiClass = $options['newMultiClass'];
-            $newMultiClass['courseId'] = $newMultiClassCourseId;
-            $this->getMultiClassDao()->update(['id' => $newMultiClass['id']], $newMultiClass);
+            $this->getMultiClassDao()->update($newMultiClass['id'], ['courseId' => $newMultiClassCourseId]);
         }
     }
 
