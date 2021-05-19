@@ -7,6 +7,8 @@ const router = new Router({
   routes
 })
 
+window.CKEDITOR_BASEPATH = app.basePath + '/static-dist/libs/es-ckeditor/';
+
 new Vue({
   el: '#app',
   router,

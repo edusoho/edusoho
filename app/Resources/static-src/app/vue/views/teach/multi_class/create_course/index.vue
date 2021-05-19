@@ -26,20 +26,32 @@
       <a-form-item label="课程副标题" >
         <a-textarea auto-size v-decorator="['subTitle']" />
       </a-form-item>
-      <a-form-item label="封面图片" imges>
+      <a-form-item label="封面图片">
+        <a-upload
+          list-type="picture-card"
+          @change="uploadCourseCover"
+        >
+        <img v-if="courseCoverUrl" :src="courseCoverUrl" />
+        <div v-else>
+          <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div class="ant-upload-text">
+            上传照片
+          </div>
+        </div>
+      </a-upload>
       </a-form-item>
-      <a-form-item label="课程简介" summary >
+      <a-form-item label="课程简介">
         <div id="summary"></div>
       </a-form-item>
-      <a-form-item label="授课教师" :teachers="[1]">
+      <a-form-item label="授课教师">
         <a-auto-complete
-          v-decorator="[teachers, {}]"
+          v-decorator="['teachers', { rules: [{ required: true, message: '请选择授课老师' }] }]"
           :data-source="teachersList"
           @search="searchTeachers"
         />
       </a-form-item>
       <a-form-item label="助教" :assistants="[1, 2]">
-        <a-select mode="tags" style="width: 100%" @change="searchAssistants">
+        <a-select mode="tags"  @change="searchAssistants">
           <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
             {{ (i + 9).toString(36) + i }}
           </a-select-option>
@@ -72,7 +84,8 @@
         </div>
       </a-form-item>
       <a-form-item label="是否可加入">
-        <a-switch v-model="form.buyable" />
+        <!-- @change="switchBuyAble" -->
+        <a-switch v-model="formInfo.buyable"  />
       </a-form-item>
       <a-form-item label="加入截止日期" buyExpiryTime="">
         <a-radio-group 
@@ -102,20 +115,36 @@
         <a-button @click="handleSubmit">确定</a-button>
       </a-form-item>
     </a-form>
+
+    <a-modal :visible="cropModalVisible" @cancel="cropModalVisible = false">
+      <vue-cropper
+        ref="cropper"
+        :src="courseCoverUrl"
+      >
+      </vue-cropper>
+    </a-modal>
   </div>
 </template>
 
 <script>
   import { debounce } from 'lodash';
+  import VueCropper from 'vue-cropperjs';
+
+  function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
 
   export default {
     name: '',
     props: {},
+    components: { VueCropper},
     data () {
       return {
         form: this.$form.createForm(this),
         formInfo: {
-          buyable: '',
+          buyable: false,
           deadline: '',
           deadlineType: '',
           expiryDays: '',
@@ -124,6 +153,8 @@
         },
         teachersList: [],
         assistantsList: [],
+        courseCoverUrl: '',
+        cropModalVisible: false,
       };
     },
     mounted() {
@@ -135,15 +166,22 @@
       });
     },
     methods: {
-      handleSubmit () {
+      handleSubmit() {
         this.form.validateFields();
       },
       searchTeachers: debounce(function() {
-
       }, 300),
       searchAssistants: debounce(function() {
-        
       }, 300),
+      switchBuyAble(checked) {
+        this.$set(this.formInfo, 'buyable', checked)
+      },
+      uploadCourseCover(info) {
+        getBase64(info.file.originFileObj, imageUrl => {
+          this.courseCoverUrl = imageUrl;
+          this.cropModalVisible = true;
+        });
+      }
     }
   }
 </script>
