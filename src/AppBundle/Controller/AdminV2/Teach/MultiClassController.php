@@ -9,7 +9,7 @@ class MultiClassController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('admin-v2/teach/multi-class/index.html.twig', [
+        return $this->render('admin-v2/teach/multi_class/index.html.twig', [
         ]);
     }
 }
