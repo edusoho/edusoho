@@ -48,9 +48,9 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
         return $result;
     }
 
-    public function searchProducts(array $conditions, array $oderBy, $start, $limit, $columns = [])
+    public function searchProducts(array $conditions, array $orderBy, $start, $limit, $columns = [])
     {
-        return $this->getMultiClassProductDao()->search($conditions, $oderBy, $start, $limit, $columns);
+        return $this->getMultiClassProductDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function countProducts(array $conditions)
