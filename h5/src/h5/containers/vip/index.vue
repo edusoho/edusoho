@@ -30,10 +30,7 @@
         :title="userLevelStatus == 'upgrade' ? '会员升级' : '选择开通时长'"
       />
       <div class="vip-open">
-        <swiper
-          v-if="userLevelStatus != 'upgrade'"
-          :options="vipOpenSwiperOption"
-        >
+        <swiper v-if="!vipUpgradeMode" :options="vipOpenSwiperOption">
           <template v-for="item in currentLevel.sellModes">
             <swiper-slide :key="item.id">
               <price-item
@@ -200,6 +197,7 @@ export default {
     ...mapState({
       userInfo: state => state.user,
       vipOpenStatus: state => state.vip.vipOpenStatus,
+      upgradeMode: state => state.vip.upgradeMode,
     }),
 
     vipDated() {
@@ -289,6 +287,12 @@ export default {
       };
       dataFormat.items = data.slice(0, 3);
       return dataFormat;
+    },
+
+    vipUpgradeMode() {
+      return (
+        this.userLevelStatus == 'upgrade' && this.upgradeMode == 'remain_period'
+      );
     },
   },
   async created() {
