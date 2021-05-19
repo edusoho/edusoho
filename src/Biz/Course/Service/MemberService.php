@@ -57,6 +57,8 @@ interface MemberService
 
     public function getCourseStudentCount($courseId);
 
+    public function getMultiClassMembers($courseId, $multiClassId, $role);
+
     public function isCourseTeacher($courseId, $userId);
 
     public function isCourseStudent($courseId, $userId);
