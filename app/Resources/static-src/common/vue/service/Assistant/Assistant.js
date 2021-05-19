@@ -1,8 +1,9 @@
 import { apiClient } from 'common/vue/service/api-client.js';
+import BaseService from '../BaseService'
 
-const baseUrl = '/api/multi_class';
+const baseUrl = '/api/assistants';
 const baseService = new BaseService({ baseUrl })
 
-export const MultiClass = {
+export const Assistant = {
   ...baseService
 }

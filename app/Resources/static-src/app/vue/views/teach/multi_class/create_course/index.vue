@@ -46,7 +46,7 @@
         />
       </a-form-item>
       <a-form-item label="助教" :assistants="[1, 2]">
-        <a-select mode="tags"  @change="searchAssistants" 
+        <a-select mode="tags" @change="searchAssistants" 
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
         >
           <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
