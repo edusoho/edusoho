@@ -492,6 +492,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'id NOT IN (:excludeIds)',
                 'userId = :userId',
                 'courseSetId = :courseSetId',
+                'multiClassId = :multiClassId',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',

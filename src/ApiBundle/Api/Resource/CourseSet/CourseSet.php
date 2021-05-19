@@ -91,17 +91,18 @@ class CourseSet extends AbstractResource
         $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
 
         $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
-        $this->getMemberService()->setCourseAssistants($course['id'], $this->filterCourseMember($data['assistants']));
+        $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
 
         $this->getCourseSetService()->publishCourseSet($courseSet['id']);
 
         return $this->getCourseSetService()->getCourseSet($courseSet['id']);
     }
 
-    private function filterCourseMember($members)
+    private function filterCourseMember($userIds)
     {
-        foreach ($members as &$member) {
-            $member['isVisible'] = 1;
+        $members = [];
+        foreach ($userIds as $userId) {
+            $members[] = ['id' => $userId, 'isVisible' => 1];
         }
 
         return $members;
