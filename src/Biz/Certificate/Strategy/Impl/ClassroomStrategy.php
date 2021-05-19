@@ -69,6 +69,16 @@ class ClassroomStrategy extends BaseStrategy
         }
     }
 
+    public function updateCertificateTargetStatus($targetId, $status)
+    {
+        if (in_array($status, ['published', 'unpublished'])) {
+            $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($targetId, 'classroom');
+            foreach ($certificates as $certificate) {
+                $this->getCertificateService()->update($certificate['id'], ['targetStatus' => $status]);
+            }
+        }
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {
