@@ -45,4 +45,6 @@ interface UserDao extends GeneralDaoInterface
     public function countUsersJoinUserFace($conditions);
 
     public function findUnLockedUsersByUserIds($userIds = []);
+
+    public function findUserLikeNickname($nickname);
 }

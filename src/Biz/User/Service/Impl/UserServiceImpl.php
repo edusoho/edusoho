@@ -148,6 +148,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserTokenDao()->count($conditions);
     }
 
+    public function findUserLikeNickname($nickname)
+    {
+        return $this->getUserDao()->findUserLikeNickname($nickname);
+    }
+
     public function findUserFollowing($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);

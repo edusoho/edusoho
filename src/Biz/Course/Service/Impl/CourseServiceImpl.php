@@ -62,6 +62,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    public function findCourseLikeCourseSetTitle($courseSetTitle)
+    {
+        return $this->getCourseDao()->findCourseLikeCourseSetTitle($courseSetTitle);
+    }
+
     public function findCourseByIdsWithMarketingInfo($ids)
     {
         $courses = $this->getCourseDao()->findCoursesByIds($ids);
@@ -2878,11 +2883,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         ];
 
         return !empty($this->getCertificateService()->count($conditions));
-    }
-
-    public function sumTotalIncomeByIds($ids)
-    {
-        return $this->getCourseDao()->sumTotalIncomeByIds($ids);
     }
 
     /**

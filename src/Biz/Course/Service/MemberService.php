@@ -188,4 +188,10 @@ interface MemberService
     public function setMultiClassAssistant($courseId, $assistantIds, $multiClassId);
 
     public function releaseMultiClassMember($courseId, $multiClassId);
+
+    public function findMultiClassTeachersByMultiClassIds($multiClassIds);
+
+    public function findMultiClassAssistantByMultiClassIds($multiClassIds);
+
+    public function searchMultiClassIds($conditions, $sort, $start, $limit);
 }

@@ -362,5 +362,5 @@ interface CourseService
 
     public function hasCertificate($courseId);
 
-    public function sumTotalIncomeByIds($ids);
+    public function findCourseLikeCourseSetTitle($courseSetTitle);
 }

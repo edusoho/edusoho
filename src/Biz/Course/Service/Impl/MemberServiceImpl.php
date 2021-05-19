@@ -314,6 +314,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($memberIds, 'userId');
     }
 
+    public function searchMultiClassIds($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareConditions($conditions);
+        $conditions = array_merge($conditions, ['multiClassId_NE' => 0]);
+
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } else {
+            $orderBy = ['createdTime' => 'DESC'];
+        }
+
+        $members = $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::column($members, 'multiClassId');
+    }
+
     public function findMemberUserIdsByCourseId($courseId)
     {
         return ArrayToolkit::column($this->getMemberDao()->findUserIdsByCourseId($courseId), 'userId');
@@ -444,6 +460,24 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findCourseSetTeachers($courseId)
     {
         return $this->getMemberDao()->findByCourseSetIdAndRole($courseId, 'teacher');
+    }
+
+    public function findMultiClassTeachersByMultiClassIds($multiClassIds)
+    {
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        return $this->getMemberDao()->findByMultiClassIdAndRole($multiClassIds, 'teacher');
+    }
+
+    public function findMultiClassAssistantByMultiClassIds($multiClassIds)
+    {
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        return $this->getMemberDao()->findByMultiClassIdAndRole($multiClassIds, 'assistant');
     }
 
     public function isCourseTeacher($courseId, $userId)

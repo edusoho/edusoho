@@ -118,9 +118,37 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
+    public function searchMultiClass($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countMultiClass($conditions)
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->count($conditions);
+    }
+
     public function getMultiClassByTitle($title)
     {
         return $this->getMultiClassDao()->getByTitle($title);
+    }
+
+    private function filterConditions($conditions)
+    {
+        if (empty($conditions)) {
+            return [];
+        }
+
+        if (empty($conditions['courseIds']) && empty($conditions['ids'])) {
+            $conditions['courseIds'] = [-1];
+            $conditions['ids'] = [-1];
+        }
+
+        return $conditions;
     }
 
     private function filterMultiClassFields($fields)
