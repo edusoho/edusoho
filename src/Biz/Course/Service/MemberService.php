@@ -79,6 +79,8 @@ interface MemberService
      */
     public function setCourseTeachers($courseId, $teachers, $multiClassId = 0);
 
+    public function setCourseAssistants($courseId, $assistantIds, $multiClassId = 0);
+
     public function cancelTeacherInAllCourses($userId);
 
     public function remarkStudent($courseId, $userId, $remark);
@@ -186,8 +188,6 @@ interface MemberService
     public function refreshCourseMembersFinishData($courseId);
 
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
-
-    public function setMultiClassAssistant($courseId, $assistantIds, $multiClassId);
 
     public function releaseMultiClassMember($courseId, $multiClassId);
 }
