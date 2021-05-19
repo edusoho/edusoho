@@ -42,7 +42,10 @@ class Course extends AbstractResource
             $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
         }
 
-        $this->getOCUtil()->single($course, ['creator', 'teacherIds']);
+        $assistants = $this->getMemberService()->findMembersByCourseIdAndRole($courseId, 'assistant');
+        $course['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
+
+        $this->getOCUtil()->single($course, ['creator', 'teacherIds', 'assistantIds']);
         $this->getOCUtil()->single($course, ['courseSetId'], 'courseSet');
 
         if (!empty($member)) {
