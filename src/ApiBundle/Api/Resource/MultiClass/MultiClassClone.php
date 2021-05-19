@@ -19,9 +19,6 @@ class MultiClassClone extends AbstractResource
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
 
-        $this->getMultiClassService()->cloneMultiClass($id);
-        die;
-
         $jobName = 'CloneMultiClassJob_'.$id;
         $jobs = $this->getSchedulerService()->countJobs(['name' => $jobName, 'deleted' => 0]);
 

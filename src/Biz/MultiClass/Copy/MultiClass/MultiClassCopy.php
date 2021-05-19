@@ -33,7 +33,7 @@ class MultiClassCopy extends AbstractCopy
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courseSet['title'] = $courseSet['title']."(复制{$options['number']})";
 
-        return ['multiClassCourseSet' => $courseSet, 'newMultiClassId' => $newMultiClass['id']];
+        return ['multiClassCourseSet' => $courseSet, 'newMultiClass' => $newMultiClass];
     }
 
     /**

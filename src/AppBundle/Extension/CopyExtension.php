@@ -127,6 +127,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     {
         return [
             'class' => 'Biz\MultiClass\Copy\MultiClass\MultiClassCopy',
+            'auto' => true,
             'children' => [
                 'multi-class-course' => [
                     'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',

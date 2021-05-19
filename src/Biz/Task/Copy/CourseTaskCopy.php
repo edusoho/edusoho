@@ -23,7 +23,7 @@ class CourseTaskCopy extends AbstractCopy
         $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
-        $newMultiClassId = $options['newMultiClassId'];
+        $newMultiClass = $options['newMultiClass'];
 
         $tasks = $this->getTaskDao()->findByCourseId($course['id']);
 
@@ -49,7 +49,7 @@ class CourseTaskCopy extends AbstractCopy
             $newTask = $this->partsFields($task);
             $newTask['courseId'] = $newCourse['id'];
             $newTask['fromCourseSetId'] = $newCourseSet['id'];
-            $newTask['multiClassId'] = $newMultiClassId;
+            $newTask['multiClassId'] = $newMultiClass['id'];
             if (!empty($chaptersMap[$task['categoryId']])) {
                 $chapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
@@ -66,6 +66,7 @@ class CourseTaskCopy extends AbstractCopy
             }
 
             $newTask['startTime'] = $task['startTime'] + $cycleDifference;
+            $newTask['endTime'] = $task['endTime'] + $cycleDifference;
 
             if (!empty($activitiesMap[$task['activityId']])) {
                 $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
