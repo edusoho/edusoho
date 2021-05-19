@@ -17,4 +17,6 @@ interface MultiClassProductService
     public function updateProduct($id, $fields);
 
     public function deleteProduct($id);
+
+    public function findProductByIds($ids);
 }
