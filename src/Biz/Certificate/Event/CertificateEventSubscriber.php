@@ -5,6 +5,7 @@ namespace Biz\Certificate\Event;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
+use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -27,7 +28,65 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
             'course.task.delete' => 'onCourseTaskDelete',
             'course.lesson.setOptional' => 'onLessonSetOptional',
             'course.task.update.sync' => 'onCourseTaskUpdateSync',
+            'course.publish' => 'onCoursePublish',
+            'course.close' => 'onCourseClose',
+            'classroom.publish' => 'onClassroomPublish',
+            'classroom.close' => 'onClassroomClose',
+            'course-set.publish' => 'onCourseSetPublish',
+            'course-set.closed' => 'onCourseSetClose',
         ];
+    }
+
+    /**
+     * @param Event $event
+     *                     如果课程发布了，则计划对应的证书的状态以计划为主
+     */
+    public function onCourseSetPublish(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        foreach ($courses as $course) {
+            $status = 'published' === $course['status'] ? 'published' : 'unpublished';
+            $this->getCertificateStrategy('course')->updateCertificateTargetStatus($course['id'], $status);
+        }
+    }
+
+    /**
+     * @param Event $event
+     *                     如果课程是关闭的，则所有计划对应的证书状态都可以关
+     */
+    public function onCourseSetClose(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        foreach ($courses as $course) {
+            $status = 'unpublished';
+            $this->getCertificateStrategy('course')->updateCertificateTargetStatus($course['id'], $status);
+        }
+    }
+
+    public function onCoursePublish(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->getCertificateStrategy('course')->updateCertificateTargetStatus($course['id'], 'published');
+    }
+
+    public function onCourseClose(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->getCertificateStrategy('course')->updateCertificateTargetStatus($course['id'], 'unpublished');
+    }
+
+    public function onClassroomPublish(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $this->getCertificateStrategy('classroom')->updateCertificateTargetStatus($classroom['id'], 'published');
+    }
+
+    public function onClassroomClose(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $this->getCertificateStrategy('classroom')->updateCertificateTargetStatus($classroom['id'], 'unpublished');
     }
 
     public function onClassroomCourseDelete(Event $event)
@@ -268,5 +327,15 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @param $type
+     *
+     * @return BaseStrategy
+     */
+    protected function getCertificateStrategy($type)
+    {
+        return $this->getBiz()->offsetGet('certificate.strategy_context')->createStrategy($type);
     }
 }
