@@ -18,6 +18,8 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\CourseProductService;
@@ -434,6 +436,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
 
+    public function findMultiClassAssistant($courseId)
+    {
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'assistant');
+    }
+
     public function findCourseSetTeachers($courseId)
     {
         return $this->getMemberDao()->findByCourseSetIdAndRole($courseId, 'teacher');
@@ -488,7 +495,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->dispatchEvent('course.teacher.create', new Event($course, ['teacher' => $teacher]));
     }
 
-    public function setCourseTeachers($courseId, $teachers)
+    public function setCourseTeachers($courseId, $teachers, $multiClassId = 0)
     {
         $userIds = ArrayToolkit::column($teachers, 'id');
         $existTeacherMembers = $this->findCourseTeachers($courseId);
@@ -506,13 +513,15 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $teacherMembers = $this->buildTeachers($course, $teachers);
+        $teacherMembers = $this->buildTeachers($course, $teachers, $multiClassId);
         if (empty($teacherMembers)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         // 删除老师
-        $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        if (!$multiClassId) {
+            $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        }
         // 删除目前还是学员的成员
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
@@ -529,6 +538,67 @@ class MemberServiceImpl extends BaseService implements MemberService
         ]));
     }
 
+    public function setCourseAssistants($courseId, $assistantIds, $multiClassId = 0)
+    {
+        if (empty($assistantIds)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $assistantMembers = $this->buildMultiClassAssistant($course, $assistantIds, $multiClassId);
+
+        if (empty($assistantMembers)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (!$multiClassId) {
+            $this->deleteMemberByCourseIdAndRole($courseId, 'assistant');
+        }
+        $this->getMemberDao()->batchDelete([
+            'courseId' => $courseId,
+            'userIds' => $assistantIds,
+        ]);
+
+        $this->getMemberDao()->batchCreate($assistantMembers);
+
+        $infoData = [
+            'assistantIds' => $assistantIds,
+        ];
+
+        $this->getLogService()->info(
+            'course',
+            'set_assistant',
+            "设置课程#{$courseId}下助教",
+            $infoData
+        );
+    }
+
+    public function releaseMultiClassMember($courseId, $multiClassId)
+    {
+        if (empty($courseId) || empty($multiClassId)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $multiClassExisted = $this->getMultiClassService()->getMultiClass($multiClassId);
+
+        if ($courseId != $multiClassExisted['courseId']) {
+            throw MultiClassException::MULTI_CLASS_COURSE_NOT_MATCH();
+        }
+
+        $conditions = [
+            'courseId' => $courseId,
+            'multiClassId' => $multiClassId,
+        ];
+
+        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
+
+        $this->getLogService()->info(
+            'course',
+            'release_multi_class_member',
+            "释放班课#{$multiClassId}下成员关系"
+        );
+    }
+
     private function updateCourseTeacherIds($courseId, $teachers)
     {
         $teachers = ArrayToolkit::group($teachers, 'isVisible');
@@ -538,7 +608,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseDao()->update($courseId, $fields);
     }
 
-    private function buildTeachers($course, $teachers)
+    private function buildTeachers($course, $teachers, $multiClassId)
     {
         $teacherMembers = [];
         $teachers = ArrayToolkit::index($teachers, 'id');
@@ -548,6 +618,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $user = $users[$teacher['id']];
             if (in_array('ROLE_TEACHER', $user['roles']) || $course['creator'] == $user['id']) {
                 $teacherMembers[] = [
+                    'multiClassId' => $multiClassId,
                     'courseId' => $course['id'],
                     'courseSetId' => $course['courseSetId'],
                     'userId' => $teacher['id'],
@@ -559,6 +630,29 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $teacherMembers;
+    }
+
+    private function buildMultiClassAssistant($course, $assistantIds, $multiClassId)
+    {
+        $assistantMembers = [];
+        $users = $this->getUserService()->findUsersByIds($assistantIds);
+        $seq = 0;
+        foreach ($assistantIds as $assistantId) {
+            $user = $users[$assistantId];
+            if (in_array('ROLE_TEACHER_ASSISTANT', $user['roles'])) {
+                $assistantMembers[] = [
+                    'multiClassId' => $multiClassId,
+                    'courseId' => $course['id'],
+                    'courseSetId' => $course['courseSetId'],
+                    'userId' => $assistantId,
+                    'role' => 'assistant',
+                    'seq' => $seq++,
+                    'isVisible' => 1,
+                ];
+            }
+        }
+
+        return $assistantMembers;
     }
 
     /**
@@ -1772,5 +1866,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 }

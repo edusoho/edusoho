@@ -105,6 +105,18 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
+    public function sumTotalIncomeByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT sum(`income`) as income FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
+    }
+
     public function analysisCourseDataByTime($startTime, $endTime)
     {
         $conditions = [
