@@ -9,6 +9,11 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
 {
     protected $table = 'multi_class';
 
+    public function findByProductIds($productIds)
+    {
+        return $this->findInField('productId', $productIds);
+    }
+
     public function getByTitle($title)
     {
         return $this->getByFields(['title' => $title]);
@@ -21,6 +26,7 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'productId = :productId',
             ],
         ];
     }
