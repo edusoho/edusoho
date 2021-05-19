@@ -1,18 +1,21 @@
 <?php
 
-namespace ApiBundle\Api\Resource\MultiClassProduct;
+namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 
-class MultiClassProductStudent extends AbstractResource
+class MultiClassStudent extends AbstractResource
 {
-    public function search(ApiRequest $request, $courseId)
+    /**
+     * get api/multi_class/{id}/students
+     */
+    public function search(ApiRequest $request, $id)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
+        $multiClass = $this->getMultiClassService()->getMultiClass($id);
         $conditions = $request->query->all();
-        $conditions['courseId'] = $courseId;
+        $conditions['courseId'] = $multiClass['courseId'];
         $conditions['role'] = 'student';
 
         if (!empty($conditions['keyword'])) {
@@ -36,23 +39,23 @@ class MultiClassProductStudent extends AbstractResource
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
         $maxAssistantsCount = 20;
-        $assistantMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $courseId, 'role' => 'assistant'], [], 0, $maxAssistantsCount);
+        $assistantMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $multiClass['courseId'], 'role' => 'assistant'], [], 0, $maxAssistantsCount);
         $assistantIds = ArrayToolkit::column($assistantMembers, 'userId');
 
         $assistants = $this->getUserService()->findUsersByIds($assistantIds);
         $assistantInfos = ArrayToolkit::thin(array_values($assistants), ['id', 'nickname']);
 
-        $members = $this->getThreadService()->fillThreadCounts(['courseId' => $courseId, 'type' => 'question'], $members);
+        $members = $this->getThreadService()->fillThreadCounts(['courseId' => $multiClass['courseId'], 'type' => 'question'], $members);
 
         $homeworkCount = $this->getActivityService()->count(
-            ['mediaType' => 'homework', 'fromCourseId' => $courseId]
+            ['mediaType' => 'homework', 'fromCourseId' => $multiClass['courseId']]
         );
         $testpaperCount = $this->getActivityService()->count(
-            ['mediaType' => 'testpaper', 'fromCourseId' => $courseId]
+            ['mediaType' => 'testpaper', 'fromCourseId' => $multiClass['courseId']]
         );
 
-        $userHomeworkCount = $this->findUserTaskCount($courseId, 'homework');
-        $userTestpaperCount = $this->findUserTaskCount($courseId, 'testpaper');
+        $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
+        $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
             $member['assistants'] = $assistantInfos;
             $member['finishedHomeworkCount'] = 0;
@@ -152,11 +155,6 @@ class MultiClassProductStudent extends AbstractResource
         return $this->service('Course:MemberService');
     }
 
-    private function getCourseService()
-    {
-        return $this->service('Course:CourseService');
-    }
-
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
@@ -185,5 +183,10 @@ class MultiClassProductStudent extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    private function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
     }
 }
