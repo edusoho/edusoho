@@ -140,6 +140,8 @@ interface CourseService
      */
     public function findCourseItems($courseId, $limitNum = 0);
 
+    public function searchMultiClassCourseItems($conditions, $sort, $start, $limit);
+
     /**
      * @param $courseId
      * @param array $paging array('direction' => 'up or down', 'offsetSeq' => '0', 'limit' => 10)

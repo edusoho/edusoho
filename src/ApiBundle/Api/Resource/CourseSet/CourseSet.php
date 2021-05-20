@@ -98,6 +98,25 @@ class CourseSet extends AbstractResource
         return $this->getCourseSetService()->getCourseSet($courseSet['id']);
     }
 
+    public function update(ApiRequest $request, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $data = $request->request->all();
+        $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
+        if (!empty($data['images'])) {
+            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+        }
+
+        $data = $this->prepareExpiryMode($data);
+        $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
+
+        $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
+        $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
+
+        return $this->getCourseSetService()->getCourseSet($courseSet['id']);
+    }
+
     private function filterCourseMember($userIds)
     {
         $members = [];
