@@ -23,7 +23,7 @@ class MultiClassClone extends AbstractResource
         $jobs = $this->getSchedulerService()->countJobs(['name' => $jobName, 'deleted' => 0]);
 
         if ($jobs) {
-            return ['success' => false];
+            throw MultiClassException::MULTI_CLASS_CLONE_ALREADY();
         } else {
             $this->getSchedulerService()->register([
                 'name' => $jobName,
