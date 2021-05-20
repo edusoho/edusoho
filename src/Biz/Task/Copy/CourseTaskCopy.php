@@ -56,16 +56,18 @@ class CourseTaskCopy extends AbstractCopy
             if ('live' == $task['type']) {
                 //$newTask['status'] = 'create';
                 $updateChapterIds[] = empty($chapter) ? 0 : $chapter['id'];
-                if (0 == $liveStartTime) {
+                if (0 == $liveStartTime && time() > $task['startTime']) {
                     $liveStartTime = $task['startTime'];
                 }
-                if (0 == $cycleDifference) {
+                if (0 == $cycleDifference && time() > $task['startTime']) {
                     $cycleDifference = time() - $liveStartTime;
                 }
             }
 
-            $newTask['startTime'] = $task['startTime'] + $cycleDifference;
-            $newTask['endTime'] = $task['endTime'] + $cycleDifference;
+            if (isset($options['newMultiClass'])) {
+                $newTask['startTime'] = $task['startTime'] + $cycleDifference;
+                $newTask['endTime'] = $task['endTime'] + $cycleDifference;
+            }
 
             if (!empty($activitiesMap[$task['activityId']])) {
                 $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
