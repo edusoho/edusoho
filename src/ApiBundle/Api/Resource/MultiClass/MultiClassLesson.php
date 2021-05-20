@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -33,15 +34,19 @@ class MultiClassLesson extends AbstractResource
         $items = $this->getCourseService()->searchMultiClassCourseItems($conditions, ['startTime' => $request->query->get('sort', 'ASC')], $offset, $limit);
         $total = $this->getTaskService()->countTasks($conditions);
 
-        $items = $this->getNecessaryItems($items, $course, $request);
+        $items = $this->getNecessaryItems($items, $multiClass['id'], $course, $request);
 
         return $this->makePagingObject($items, $total, $offset, $limit);
     }
 
-    protected function getNecessaryItems($items, $course, $request)
+    protected function getNecessaryItems($items, $multiClassId, $course, $request)
     {
         $items = $this->convertToLeadingItems($items, $course, $request->getHttpRequest()->isSecure(), 0);
         $items = $this->convertToTree($items);
+        $teacher = $this->getCourseMemberService()->getMultiClassMembers($course['id'], $multiClassId, 'teacher');
+        $assistants = $this->getCourseMemberService()->getMultiClassMembers($course['id'], $multiClassId,'assistant');
+        $questionNum = $this->getThreadService()->countThreads(['courseId' => $course['id'], 'type' => 'question']);
+        $totalStudentNum = $this->getCourseMemberService()->getCourseStudentCount($course['id']);
         $necessaryItems = [];
         foreach ($items as $item){
             $units = $item['children'];
@@ -56,12 +61,11 @@ class MultiClassLesson extends AbstractResource
                                 $lesson['tasks'] = $task;
                             }
                         }
-                        $teacher = $this->getCourseMemberService()->getMultiClassMembers($lesson['tasks']['courseId'], $lesson['tasks']['multiClassId'], 'teacher');
                         $lesson['teacher'] = $teacher ? $teacher[0] : [];
-                        $lesson['assistant'] = $this->getCourseMemberService()->getMultiClassMembers($lesson['tasks']['courseId'], $lesson['tasks']['multiClassId'],'assistant');
-                        $lesson['questions'] = $this->getThreadService()->countThreads(['courseId' => $lesson['tasks']['courseId'], 'type' => 'question']);
-                        $lesson['studyStudentNum'] = count(array_unique(array_column($this->getTaskResultService()->findTaskresultsByTaskId($lesson['tasks']['id']), 'userId')));
-                        $lesson['totalStudentNum'] = $this->getCourseMemberService()->getCourseStudentCount($lesson['tasks']['courseId']);
+                        $lesson['assistant'] = $assistants;
+                        $lesson['questionNum'] = $questionNum;
+                        $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $lesson['tasks']['id']]);
+                        $lesson['totalStudentNum'] = $totalStudentNum;
                         $necessaryItems[] = $lesson;
                     }
                 }
