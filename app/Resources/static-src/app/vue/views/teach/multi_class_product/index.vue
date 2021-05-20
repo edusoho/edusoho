@@ -111,7 +111,7 @@
         this.getListLoading = true;
         try {
           const { data, paging } = await MultiClassProduct.search({
-            title: params.title || this.title,
+            keywords: params.title || this.title,
             offset: params.offset || this.paging.offset || 0,
             limit: params.limit || this.paging.limit || 10,
           })
