@@ -6,18 +6,21 @@ namespace ApiBundle\Api\Resource\Assistant;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
+use ApiBundle\Api\Annotation\Access;
 
 class Assistant extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @return array
+     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function search(ApiRequest $request)
     {
-        $assistants = $this->getCourseMemberService()->searchMembers(['role' => 'assistant'], [], 0, PHP_INT_MAX);
-
         $conditions = [
             'nickname' => $request->query->get('nickname', ''),
-            'userIds' => array_unique(array_column($assistants, 'userId')),
+            'roles' => 'ROLE_TEACHER',
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -25,7 +28,6 @@ class Assistant extends AbstractResource
         $total = $this->getUserService()->countUsers($conditions);
 
         return $this->makePagingObject($users, $total, $offset, $limit);
-
     }
 
     /**
@@ -34,14 +36,5 @@ class Assistant extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
-    }
-
-
-    /**
-     * @return MemberService
-     */
-    protected function getCourseMemberService()
-    {
-        return $this->service('Course:MemberService');
     }
 }
