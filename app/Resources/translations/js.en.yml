@@ -384,9 +384,13 @@ auth.login_bind_exist.bind_success_hint: Bind account successfully, redirecting 
 auth.login_bind_exist_bind_failed_hint: Binding failed, the account or password  you entered is wrong.
 auth.login_bind_exist_bind_validate_hint: Please enter the correct format Email / mobile number
 
+auth.login.username_required_error_hint: Please input email / phone numbers / username
+auth.login.password_required_error_hint: Please input password
+
 auth.password_reset.sms_code_required_hint: Please enter sms code
 auth.password_reset.sms_code_validate_hint: The length of the verification code must be 6
 
+auth.register.nickname_required_error_hit: Please input username
 auth.register.email_required_error_hint: Please enter email
 auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
