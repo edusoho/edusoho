@@ -9,21 +9,21 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
 {
     public function testGetUserLearningProgress()
     {
-        $this->mockBiz('Course:CourseService', [
-            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1, 'compulsoryTaskNum' => 100]],
-            ['functionName' => 'recountLearningData', 'returnValue' => []],
-        ]);
-
-        $this->mockBiz('Course:MemberService', [
-            ['functionName' => 'getCourseMember', 'returnValue' => ['learnedCompulsoryTaskNum' => 30]],
-        ]);
-
+        $this->prepareUserLearnProgressData();
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(1, 1);
 
         $this->assertEquals(
             ['percent' => 30, 'decimal' => 0.3, 'finishedCount' => 30, 'total' => 100],
             $progress
         );
+    }
+
+    public function testFillCourseProgress()
+    {
+        $this->prepareUserLearnProgressData();
+        $result = $this->getLearningDataAnalysisService()->fillCourseProgress([['courseId' => 1, 'userId' => 1]]);
+
+        $this->assertEquals(30, $result[0]['learningProgressPercent']);
     }
 
     public function testGetUserLearningSchedule()
@@ -92,6 +92,18 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
             'decimal' => 0.7,
             'total' => 100,
         ], $result);
+    }
+
+    private function prepareUserLearnProgressData()
+    {
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1, 'compulsoryTaskNum' => 100]],
+            ['functionName' => 'recountLearningData', 'returnValue' => []],
+        ]);
+
+        $this->mockBiz('Course:MemberService', [
+            ['functionName' => 'getCourseMember', 'returnValue' => ['learnedCompulsoryTaskNum' => 30]],
+        ]);
     }
 
     /**

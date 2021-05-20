@@ -17,9 +17,26 @@ class MultiClass extends AbstractResource
 {
     const MAX_ASSISTANT_NUMBER = 20;
 
-    public function get(ApiRequest $request)
+    public function get(ApiRequest $request, $multiClassId)
     {
-        return [];
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $teachers = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
+        $multiClass['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
+
+        $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
+        $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
+
+        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
+        $this->getOCUtil()->single($multiClass, ['courseId'], 'course');
+
+        $product = $this->getMultiClassProductService()->getProduct($multiClass['productId']);
+        $multiClass['product'] = empty($product) ? [] : $product;
+
+        return $multiClass;
     }
 
     public function add(ApiRequest $request)
@@ -75,7 +92,7 @@ class MultiClass extends AbstractResource
                 $courses = $this->getCourSetService()->findCourseByCourseSetTitleLike($conditions['keywords']);
                 $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             } else {
-                $prepareConditions['ids'] = $this->getCourseMemberService()->searchMultiClassIds([
+                $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
                     'userIds' => $userIds,
                     'role' => 'teacher', ],
                     [], 0, PHP_INT_MAX
@@ -95,8 +112,8 @@ class MultiClass extends AbstractResource
         $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
         $productIds = ArrayToolkit::column($multiClasses, 'productId');
 
-        $teachers = $this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'teacher');
-        $assistants = $this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'assistant');
+        $teachers = $this->getMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'teacher');
+        $assistants = $this->getMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'assistant');
         $teacherUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teachers, 'userId'));
         $assistantUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
         $teachers = ArrayToolkit::index($teachers, 'multiClassId');
@@ -122,7 +139,7 @@ class MultiClass extends AbstractResource
             array_walk($assistantIds, function ($id) use (&$multiClass,$assistantUsers) {
                 $multiClass['assistant'][] = $assistantUsers[$id]['nickname'];
             });
-            $multiClass['studentNum'] = $this->getCourseMemberService()->countMembers(['multiClassId' => $multiClass['id'], 'role' => 'student']);
+            $multiClass['studentNum'] = $this->getMemberService()->countMembers(['multiClassId' => $multiClass['id'], 'role' => 'student']);
         }
 
         return $multiClasses;
@@ -166,14 +183,6 @@ class MultiClass extends AbstractResource
     }
 
     /**
-     * @return MemberService
-     */
-    protected function getCourseMemberService()
-    {
-        return $this->service('Course:MemberService');
-    }
-
-    /**
      * @return UserService
      */
     protected function getUserService()
@@ -195,5 +204,13 @@ class MultiClass extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }
