@@ -1089,37 +1089,37 @@ admin_v2:
                                             class: 'btn cancel-approval'
                                             mode: none
                                             group: groupButton
-                        admin_v2_teacher:
-                            quick_entrance_icon: 'teacher'
-                            router_name: admin_v2_teacher
-                            name: admin_v2.user.teacher_menu
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin_v2.user.teacher.basic_tab
-                                    router_name: admin_v2_teacher
-                                    disable: true
-                                    children:
-                                        admin_v2_teacher_promote:
-                                            name: admin_v2.user.teacher.basic_tab.promote_btn
-                                            class: promote-teacher
-                                            mode: modal
-                                            icon: 'glyphicon glyphicon-hand-up'
-                                            group: groupButton
-                                            visible: (user.promoted == 0)
-                                            router_params:
-                                                id: (user.id)
-                                                type: teacherList
-                                        admin_v2_teacher_promote_cancel:
-                                            name: admin_v2.btn.recommend_cancel_btn
-                                            class: cancel-promote-teacher
-                                            mode: none
-                                            group: groupButton
-                                            visible: (user.promoted == 1)
-                                            router_params:
-                                                id: (user.id)
-                                admin_v2_teacher_promote_list:
-                                    name: admin_v2.user.teacher.promote_list_tab
-                                    disable: true
+                        # admin_v2_teacher:
+                        #     quick_entrance_icon: 'teacher'
+                        #     router_name: admin_v2_teacher
+                        #     name: admin_v2.user.teacher_menu
+                        #     children:
+                        #         admin_v2_teacher_manage:
+                        #             name: admin_v2.user.teacher.basic_tab
+                        #             router_name: admin_v2_teacher
+                        #             disable: true
+                        #             children:
+                        #                 admin_v2_teacher_promote:
+                        #                     name: admin_v2.user.teacher.basic_tab.promote_btn
+                        #                     class: promote-teacher
+                        #                     mode: modal
+                        #                     icon: 'glyphicon glyphicon-hand-up'
+                        #                     group: groupButton
+                        #                     visible: (user.promoted == 0)
+                        #                     router_params:
+                        #                         id: (user.id)
+                        #                         type: teacherList
+                        #                 admin_v2_teacher_promote_cancel:
+                        #                     name: admin_v2.btn.recommend_cancel_btn
+                        #                     class: cancel-promote-teacher
+                        #                     mode: none
+                        #                     group: groupButton
+                        #                     visible: (user.promoted == 1)
+                        #                     router_params:
+                        #                         id: (user.id)
+                        #         admin_v2_teacher_promote_list:
+                        #             name: admin_v2.user.teacher.promote_list_tab
+                        #             disable: true
                         admin_v2_destroy_account:
                             router_name: admin_v2_destroy_account_record
                             name: admin_v2.user.destroy_account_manage_menu
