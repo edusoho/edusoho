@@ -477,6 +477,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return empty($result) ? false : true;
     }
 
+    public function getMultiClassMembers($courseId, $multiClassId, $role)
+    {
+        $sql = "SELECT m.userId,u.nickname from {$this->table} as m";
+        $sql .= " LEFT JOIN user as u ON m.userId = u.id";
+        $sql .= " where `courseId` = ? and `multiClassId` = ? and `role` = ?";
+
+        return $this->db()->fetchAll($sql, [$courseId, $multiClassId, $role]);
+    }
+
     public function declares()
     {
         return [
