@@ -36,7 +36,7 @@
 
       <tr>
         <th>性别</th>
-        <td>秘密</td>
+        <td>{{ formatGender() }}</td>
       </tr>
       <tr>
         <th>身份证号</th>
@@ -102,12 +102,6 @@ export default {
     user: {
       type: Object,
       default: {},
-    },
-  },
-  computed: {
-    formatedRoleNames() {
-      console.log('site: ' + user.site);
-      return this.user.roleNames.join(' ');
     },
   },
   methods: {
