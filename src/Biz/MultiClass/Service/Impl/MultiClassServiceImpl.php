@@ -130,11 +130,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $this->beginTransaction();
         try {
             $number = $this->countMultiClassCopyEd($id);
-            $number = 0 == $number ? '' : $number;
             $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
 
             $this->biz['multi_class_copy']->copy($multiClass, [
-                'number' => $number,
+                'number' => 0 == $number ? '' : $number,
                 'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
                 ]);
 

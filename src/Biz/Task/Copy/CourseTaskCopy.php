@@ -61,7 +61,7 @@ class CourseTaskCopy extends AbstractCopy
                     $liveStartTime = $task['startTime'];
                 }
                 if (0 == $cycleDifference) {
-                    $cycleDifference = time() - $task['startTime'];
+                    $cycleDifference = time() - $liveStartTime;
                 }
             }
 
