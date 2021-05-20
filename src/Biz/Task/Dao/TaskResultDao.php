@@ -48,5 +48,7 @@ interface TaskResultDao extends AdvancedDaoInterface
 
     public function countTaskNumGroupByUserId($conditions);
 
+    public function countUserNumByCourseTaskId($conditions);
+
     public function countFinishedCompulsoryTaskNumGroupByUserId($courseId);
 }

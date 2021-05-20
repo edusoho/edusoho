@@ -142,4 +142,6 @@ interface CourseMemberDao extends AdvancedDaoInterface
     public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d');
 
     public function isFieldExist($filedName);
+
+    public function getMultiClassMembers($courseId, $multiClassId, $role);
 }

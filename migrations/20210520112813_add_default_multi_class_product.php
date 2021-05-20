@@ -26,7 +26,7 @@ class AddDefaultMultiClassProduct extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            DELETE FROM `multi_class_product` where `type` = 'default' limit 1;
+            DELETE FROM `multi_class_product` where `type` = 'default';
         ");
     }
 }
