@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
