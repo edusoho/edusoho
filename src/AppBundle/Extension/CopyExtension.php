@@ -127,57 +127,6 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     {
         return [
             'class' => 'Biz\MultiClass\Copy\MultiClass\MultiClassCopy',
-            'auto' => true,
-            'children' => [
-                'multi-class-course' => [
-                    'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
-                    'priority' => 100,
-                    'isCopy' => 0,
-                    'children' => [
-                        'tag-owner' => [
-                            'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
-                            'priority' => 100,
-                        ],
-                        'material' => [
-                            'class' => 'Biz\Course\Copy\MaterialCopy',
-                            'priority' => 90,
-                        ],
-                        'course-set-courses' => [
-                            'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
-                            'priority' => 80,
-                            'auto' => false,
-                            'children' => [
-                                'course-member' => [
-                                    'class' => 'Biz\Course\Copy\CourseMemberCopy',
-                                    'priority' => 100,
-                                ],
-                                'course-task' => [
-                                    'class' => 'Biz\Task\Copy\CourseTaskCopy',
-                                    'priority' => 90,
-                                    'auto' => false,
-                                    'children' => [
-                                        'course-chapter' => [
-                                            'class' => 'Biz\Course\Copy\CourseChapterCopy',
-                                            'priority' => 100,
-                                        ],
-                                        'activity' => [
-                                            'class' => 'Biz\Activity\Copy\ActivityCopy',
-                                            'priority' => 90,
-                                            'auto' => false,
-                                            'children' => [
-                                                'activity-material' => [
-                                                    'class' => 'Biz\Activity\Copy\ActivityMaterialCopy',
-                                                    'priority' => 100,
-                                                ],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ];
     }
 }

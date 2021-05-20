@@ -2,38 +2,27 @@
 
 namespace Biz\MultiClass\Copy\MultiClass;
 
-use Biz\AbstractCopy;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
+use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\MultiClass\Dao\MultiClassDao;
 
-class MultiClassCopy extends AbstractCopy
+class MultiClassCopy extends AbstractEntityCopy
 {
     protected function getFields()
     {
         return [
-            'courseId',
-        ];
+           'courseId',
+       ];
     }
 
-    public function preCopy($source, $options)
+    protected function copyEntity($multiClass, $config = [])
     {
-        // TODO: Implement preCopy() method.
-    }
-
-    public function doCopy($multiClass, $options)
-    {
-        $newMultiClass = $this->partsFields($multiClass);
+        $newMultiClass = $this->filterFields($multiClass);
         $newMultiClass['copyId'] = $multiClass['id'];
-        $newMultiClass['title'] = $multiClass['title']."(复制{$options['number']})";
-        $newMultiClass['productId'] = $options['productId'];
+        $newMultiClass['title'] = $multiClass['title']."(复制{$config['number']})";
+        $newMultiClass['productId'] = $config['productId'];
         $newMultiClass = $this->getMultiClassDao()->create($newMultiClass);
 
-        $course = $this->getCourseService()->getCourse($multiClass['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courseSet['title'] = $courseSet['title']."(复制{$options['number']})";
-
-        return ['multiClassCourseSet' => $courseSet, 'newMultiClass' => $newMultiClass];
+        return $newMultiClass;
     }
 
     /**
@@ -42,21 +31,5 @@ class MultiClassCopy extends AbstractCopy
     private function getMultiClassDao()
     {
         return $this->biz->dao('MultiClass:MultiClassDao');
-    }
-
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
-    {
-        return $this->biz->service('Course:CourseService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    private function getCourseSetService()
-    {
-        return $this->biz->service('Course:CourseSetService');
     }
 }

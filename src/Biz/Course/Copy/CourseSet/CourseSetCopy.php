@@ -39,9 +39,6 @@ class CourseSetCopy extends AbstractCopy
     public function doCopy($courseSet, $options)
     {
         //tudo 班级复制课程的 teacherIds，materialNum有误，需要在复制结束前update
-        if (!empty($options['multiClassCourseSet'])) {
-            $courseSet = $options['multiClassCourseSet'];
-        }
         $currentNode = $this->getCopyChain();
         $currentUser = $this->biz['user'];
 
@@ -64,7 +61,7 @@ class CourseSetCopy extends AbstractCopy
             $this->getCourseSetGoodsMediator()->onPublish($newCourseSet);
         }
 
-        return ['newCourseSet' => $newCourseSet];
+        return  array_merge(['newCourseSet' => $newCourseSet], $options['params']);
     }
 
     /**

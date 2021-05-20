@@ -127,34 +127,22 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function cloneMultiClass($id)
     {
         $multiClass = $this->getMultiClassDao()->get($id);
-        $this->beginTransaction();
-        try {
-            $number = $this->countMultiClassCopyEd($id);
-            $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
+        $number = $this->countMultiClassCopyEd($id);
+        $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
+        $number = 0 == $number ? '' : $number;
+        $newMultiClass = $this->biz['multi_class_copy']->copy($multiClass, [
+            'number' => $number,
+            'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
+            ]);
+        $newMultiClass['number'] = $number;
 
-            $this->biz['multi_class_copy']->copy($multiClass, [
-                'number' => 0 == $number ? '' : $number,
-                'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
-                ]);
+        $this->getLogService()->info(
+            'multi_class',
+            'clone_multi_class',
+            "复制班课 - {$multiClass['title']}(#{$id}) 成功",
+            ['multiClassId' => $id]);
 
-            $this->getLogService()->info(
-                'multi_class',
-                'clone_multi_class',
-                "复制班课 - {$multiClass['title']}(#{$id}) 成功",
-                ['multiClassId' => $id]);
-
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-
-            $this->getLogService()->error(
-                'multi_class',
-                'clone_multi_class',
-                "复制班课 - {$multiClass['title']}(#{$id}) 失败",
-                ['error' => $e->getMessage()]);
-
-            throw $e;
-        }
+        return  $newMultiClass;
     }
 
     public function getMultiClassByTitle($title)
