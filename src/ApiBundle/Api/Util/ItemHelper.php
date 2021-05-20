@@ -105,6 +105,7 @@ class ItemHelper
             $item = [];
             if ('task' == $originItem['itemType']) {
                 $originItem['courseUrl'] = $targetUrl;
+                $item['id'] = $originItem['id'];
                 $item['type'] = 'task';
                 $item['seq'] = '0';
                 $item['number'] = strval($number++);
@@ -125,6 +126,7 @@ class ItemHelper
                     $item['type'] = 'task';
                     $item['seq'] = strval($taskSeq);
                     $item['number'] = strval($number);
+                    $item['id'] = $originItem['id'];
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
@@ -138,6 +140,7 @@ class ItemHelper
             $item['seq'] = '0';
             $item['number'] = $originItem['number'];
             $item['title'] = $originItem['title'];
+            $item['id'] = $originItem['id'];
             $item['task'] = null;
             $newItems[] = $item;
         }
