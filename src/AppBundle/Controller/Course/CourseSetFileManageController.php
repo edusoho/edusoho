@@ -43,7 +43,7 @@ class CourseSetFileManageController extends BaseController
 
         $fileIds = $this->getMaterialService()->searchFileIds(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('createdTime' => 'DESC', 'fileId' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
