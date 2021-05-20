@@ -54,8 +54,8 @@ class MultiClassStudent extends AbstractResource
             ['mediaType' => 'testpaper', 'fromCourseId' => $multiClass['courseId']]
         );
 
-        $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
-        $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
+        $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework', $homeworkCount);
+        $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper', $testpaperCount);
         foreach ($members as &$member) {
             $member['assistants'] = $assistantInfos;
             $member['finishedHomeworkCount'] = 0;
@@ -76,13 +76,13 @@ class MultiClassStudent extends AbstractResource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    private function findUserTaskCount($courseId, $type)
+    private function findUserTaskCount($courseId, $type, $count)
     {
         $tasks = $this->getTaskService()->searchTasks(
             ['courseId' => $courseId, 'type' => $type],
             ['seq' => 'ASC', 'id' => 'ASC'],
             0,
-            $homeworkCount
+            $count
         );
 
         list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
