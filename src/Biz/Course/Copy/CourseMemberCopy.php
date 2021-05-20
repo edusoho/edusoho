@@ -17,7 +17,6 @@ class CourseMemberCopy extends AbstractCopy
     {
         $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
-        $newMultiClass = $options['newMultiClass'];
 
         $courseMembers = array_merge($this->getMemberDao()->findByCourseIdAndRole($course['id'], 'teacher'),
             $this->getMemberDao()->findByCourseIdAndRole($course['id'], 'assistant')
@@ -31,7 +30,7 @@ class CourseMemberCopy extends AbstractCopy
                 $member = $this->partsFields($member);
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
-                $member['multiClassId'] = $newMultiClass['id'];
+                $member['multiClassId'] = isset($options['newMultiClass']) ? $options['newMultiClass']['id'] : 0;
 
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];
