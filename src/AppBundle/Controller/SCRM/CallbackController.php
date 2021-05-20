@@ -16,13 +16,14 @@ class CallbackController extends BaseController
         $query = $request->query->all();
         $this->filterQuery($query);
 
-//        $userInfo = $this->getScrmSdk()->getUserByToken($query['user_token']);
-//        if (!empty($userInfo)) {
-//            $this->getUserService()->register([
-//                '',
-//                '',
-//            ]);
-//        }
+        $userInfo = $this->getScrmSdk()->getUserByToken($query['user_token']);
+        if (!empty($userInfo)) {
+            $this->getUserService()->register([
+                'userToken',
+                'nickname',
+                'email'
+            ]);
+        }
         return $this->createJsonResponse(true);
     }
 
