@@ -7,9 +7,15 @@ namespace ApiBundle\Api\Resource\Teacher;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
+use ApiBundle\Api\Annotation\Access;
 
 class Teacher extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @return array
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function search(ApiRequest $request)
     {
         $conditions = [
