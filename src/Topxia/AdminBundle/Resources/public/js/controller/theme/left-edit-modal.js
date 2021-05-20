@@ -1,10 +1,13 @@
 define(function(require, exports, module) {
 
     require('jquery.serializeJSON');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     exports.run = function() {
       var $themeEditContent = $('#theme-edit-content');
       $("#save-btn").on('click', function(){
         var $form = $($(this).data('form'));
+
         var config = $form.serializeJSON();
         // 多选项为空时，置空
         var checkboxSetting = {};
@@ -35,6 +38,24 @@ define(function(require, exports, module) {
           $('.vip-list-block').removeClass('hidden')
         }
       });
+
+      $('[name="title"]').on('change', function (){
+        if (getTitleLength($(this).val()) > 100){
+          $('#save-btn').addClass('disabled');
+          $('.titleTip').removeClass('hidden');
+        }else{
+          $('#save-btn').removeClass('disabled');
+          $('.titleTip').addClass('hidden');
+        }
+      });
+
+      getTitleLength = function(title) {
+        if (title == null) return 0;
+        if (typeof title != "string"){
+          title += "";
+        }
+        return title.replace(/[^\x00-\xff]/g,"01").length;
+      }
 
       $('#addCategory').on('click', function (event) {
         var selectCount = $('#categories').children('select').length;

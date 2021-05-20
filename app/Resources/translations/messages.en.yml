@@ -10618,3 +10618,5 @@ admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in
 admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
+
+admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
