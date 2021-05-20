@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.esm.js';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon,
+  Pagination, Spin, Popconfirm
 } from 'ant-design-vue';
 
 if (!window.Vue) {
@@ -21,6 +22,9 @@ if (!window.Vue) {
   Vue.use(AutoComplete)
   Vue.use(Upload)
   Vue.use(Icon)
+  Vue.use(Pagination)
+  Vue.use(Spin)
+  Vue.use(Popconfirm)
 }
 
 window.Vue = window.Vue || Vue;

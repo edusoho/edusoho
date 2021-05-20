@@ -1,8 +1,8 @@
 import { apiClient } from './api-client.js';
 
-export default class ApiFactory {
+export default class BaseService {
   constructor(props) {
-    this.baseUrl = props.baseUrl;
+    this.baseUrl = props.baseUrl || '';
   }
 
   async add(params) {
@@ -10,11 +10,11 @@ export default class ApiFactory {
   }
 
   async update(params) {
-    return apiClient.put(`${this.baseUrl}/${id}`, params)
+    return apiClient.put(`${this.baseUrl}/${params.id}`, params)
   }
 
   async search(params) {
-    return apiClient.get(this.baseUrl, params)
+    return apiClient.get(this.baseUrl, { params })
   }
   
   async delete({ id }) {

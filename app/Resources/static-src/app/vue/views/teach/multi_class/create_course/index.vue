@@ -236,18 +236,18 @@
   }
 </script>
 
-<style>
-  .avatar-uploader > .ant-upload {
-    width: 128px;
-    height: 128px;
-  }
-  .ant-upload-select-picture-card i {
-    font-size: 32px;
-    color: #999;
+<style lang="less">
+  @import "~common/variable.less";
+
+  .ant-upload-select-picture-card {
+    i {
+      font-size: 32px;
+      color: @gray;
+    }
   }
   
   .ant-upload-select-picture-card .ant-upload-text {
     margin-top: 8px;
-    color: #666;
+    color: @gray-dark;
   }
-  </style>
+</style>

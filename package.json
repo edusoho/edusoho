@@ -73,7 +73,7 @@
     "jquery.countdown": "1.2.8",
     "jquery.cycle2": "2.1.7",
     "js-cookie": "2.1.3",
-    "lodash": "3.10.1",
+    "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "moment": "2.19.4",
     "nouislider": "9.1.0",
