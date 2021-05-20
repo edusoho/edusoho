@@ -8,38 +8,29 @@
       />
     </div>
 
-    <a-table
-      :columns="columns"
-      :data-source="pageData"
-      rowKey="id"
-    >
+    <a-table :columns="columns" :data-source="pageData" rowKey="id">
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
         <div class="color-gray text-sm">{{ item.loginTime }}</div>
       </div>
 
-      <a slot="action" slot-scope="item" @click="edit(item)"> 查看 </a>
+      <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
 
-    <a-modal
-      title="助教详细信息"
-      :visible="visible"
-      @cancel="close"
-    >
+    <a-modal title="助教详细信息" :visible="visible" @cancel="close">
+      <userInfoTable :user="user" />
 
       <template slot="footer">
-        <a-button key="back" @click="close">
-          关闭
-        </a-button>
+        <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-  
   </div>
 </template>
 
 
 <script>
-import { Assistant } from "common/vue/service/index.js";
+import { Assistant, User } from "common/vue/service/index.js";
+import userInfoTable from "../../components/userInfoTable";
 
 const columns = [
   {
@@ -58,20 +49,29 @@ const columns = [
 
 export default {
   name: "assistants",
+  components: {
+    userInfoTable
+  },
   data() {
     return {
       visible: false,
-      editInfo: {},
+      user: {},
       columns,
       pageData: [],
     };
   },
   created() {
     this.pageData = this.onSearch();
+    console.log(this.pageData);
     // console.log(Assistant.search());
   },
   methods: {
-    onSearch() {
+    onSearch(nickname) {
+      let params = {};
+      if (nickname) {
+        params['nickname'] = nickname;
+      }
+      // return Assistant.search(params);
       return [
         {
           id: "1",
@@ -81,12 +81,34 @@ export default {
         },
       ];
     },
-    edit(item) {
+    edit(id) {
       this.visible = true;
-      this.editInfo = item;
+      // this.user = User.get(id);
+      this.user = {
+        id: 1,
+        nickname: "nickname",
+        email: "email@edusoho.com",
+        roleNames: ['学员', '教师'],
+        createdTime: "1621328200",
+        createdIp: "127.0.0.1",
+        loginTime: "1621328400",
+        loginIp: "136.7.5.14",
+        truename: "张三",
+        gender: "secret",
+        idcard: "",
+        mobile: "13765442211",
+        company: "杭州阔知网络科技有限公司",
+        job: "高级工程师",
+        title: "架构师",
+        signature: "我的签名",
+        site: "http://kd.edusoho.cn",
+        weibo: "http://kd.edusoho.cn",
+        weixin: "13765442211",
+        qq: "11001",
+      };
     },
     close() {
-      console.log('Clicked cancel button');
+      console.log("Clicked cancel button");
       this.visible = false;
     },
   },
