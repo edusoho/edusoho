@@ -210,11 +210,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function searchDefaultCourses($conditions, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("id,title,courseSetTitle")
+            ->select('id,title,courseSetTitle')
             ->setFirstResult($start)
             ->setMaxResults($limit)
-            ->andWhere("title LIKE :titleLike")
-            ->orWhere("courseSetTitle LIKE :courseSetTitleLike");
+            ->andWhere('title LIKE :titleLike')
+            ->orWhere('courseSetTitle LIKE :courseSetTitleLike');
 
         return $builder->execute()->fetchAll();
     }
