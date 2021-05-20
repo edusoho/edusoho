@@ -23,15 +23,14 @@ class DefaultCourse extends AbstractResource
         $courseSets = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], $conditions, 0, PHP_INT_MAX);
 
         $conditions = [
-            'ids' => array_unique(array_column($courseSets, 'defaultCourseId')),
+            'ids' => array_column($courseSets, 'defaultCourseId'),
             'status' => 'published',
-            'titleLike' => $request->query->get('titleLike', ''),
             'courseSetTitleLike' => $request->query->get('titleLike', ''),
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getCourseService()->searchDefaultCourses($conditions, $offset, $limit);
-        $total = count($this->getCourseService()->searchDefaultCourses($conditions, 0, PHP_INT_MAX));
+        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle']);
+        $total = $this->getCourseService()->countCourses($conditions);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
