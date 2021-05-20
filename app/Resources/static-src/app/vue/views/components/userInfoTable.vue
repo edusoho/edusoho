@@ -131,7 +131,7 @@ export default {
     formatGender() {
       let allGenders = {'male': '男性', 'female': '女性', 'secret': '秘密'};
 
-      return typeof allGenders['secret'] == 'undefined' ? '秘密' : allGenders[user.gender];
+      return typeof allGenders['secret'] == 'undefined' ? '秘密' : allGenders[this.user.gender];
     },
   }
 };
