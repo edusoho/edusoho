@@ -37,9 +37,11 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   config => {
+    console.log(apiStore);
     if (apiStore.token.length > 0) {
       config.headers.Authorization = 'Bearer ' + apiStore.token;
     }
+    config.headers.Accept = 'application/vnd.edusoho.v2+json';
     return config;
   },
   error => {
