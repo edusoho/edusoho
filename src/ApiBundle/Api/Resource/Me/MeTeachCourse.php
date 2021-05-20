@@ -8,9 +8,15 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use ApiBundle\Api\Annotation\Access;
 
 class MeTeachCourse extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @return array
+     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
