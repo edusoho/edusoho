@@ -33,7 +33,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $ids);
     }
 
-    public function findCourseLikeCourseSetTitle($courseSetTitle)
+    public function findCourseByCourseSetTitleLike($courseSetTitle)
     {
         if (empty($courseSetTitle)) {
             $courseSetTitle = '';

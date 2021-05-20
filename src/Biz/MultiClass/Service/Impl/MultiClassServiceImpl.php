@@ -142,10 +142,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         if (empty($conditions)) {
             return [];
         }
-
-        if (empty($conditions['courseIds']) && empty($conditions['ids'])) {
-            $conditions['courseIds'] = [-1];
+        if (isset($conditions['ids']) && empty($conditions['ids'])) {
             $conditions['ids'] = [-1];
+        }
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            $conditions['courseIds'] = [-1];
         }
 
         return $conditions;

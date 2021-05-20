@@ -50,5 +50,5 @@ interface CourseDao extends GeneralDaoInterface
 
     public function countWithJoinCourseSet($conditions);
 
-    public function findCourseLikeCourseSetTitle($courseSetTitle);
+    public function findCourseByCourseSetTitleLike($courseSetTitle);
 }

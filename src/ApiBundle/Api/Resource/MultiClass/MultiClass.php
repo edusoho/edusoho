@@ -70,15 +70,20 @@ class MultiClass extends AbstractResource
     {
         $prepareConditions = [];
         if (!empty($conditions['keywords'])) {
-            $courses = $this->getCourSetService()->findCourseLikeCourseSetTitle($conditions['keywords']);
-            $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
-            $userIds = empty($userIds) ? [-1] : $userIds;
-            $prepareConditions['ids'] = $this->getCourseMemberService()->searchMultiClassIds([
-                'userIds' => $userIds,
-                'role' => 'teacher', ],
-                [], 0, PHP_INT_MAX
-            );
+            if (empty($userIds)) {
+                $courses = $this->getCourSetService()->findCourseByCourseSetTitleLike($conditions['keywords']);
+                $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            } else {
+                $prepareConditions['ids'] = $this->getCourseMemberService()->searchMultiClassIds([
+                    'userIds' => $userIds,
+                    'role' => 'teacher', ],
+                    [], 0, PHP_INT_MAX
+                );
+            }
+        }
+        if (!empty($conditions['productId'])) {
+            $prepareConditions['productId'] = $conditions['productId'];
         }
 
         return $prepareConditions;
@@ -90,33 +95,32 @@ class MultiClass extends AbstractResource
         $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
         $productIds = ArrayToolkit::column($multiClasses, 'productId');
 
-        $teachers = $this->getCourseMemberService()->findMultiClassTeachersByMultiClassIds($multiClassIds);
-        $assistants = $this->getCourseMemberService()->findMultiClassAssistantByMultiClassIds($multiClassIds);
-        $userIds = array_values(array_unique(array_merge(
-            ArrayToolkit::column($teachers, 'userId'),
-            ArrayToolkit::column($assistants, 'userId'))));
-        $teachersIndexByMultiClassId = ArrayToolkit::index($teachers, 'multiClassId');
-        $assistantGroupByMultiClassId = ArrayToolkit::group($assistants, 'multiClassId');
+        $teachers = $this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'teacher');
+        $assistants = $this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'assistant');
+        $teacherUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teachers, 'userId'));
+        $assistantUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
+        $teachers = ArrayToolkit::index($teachers, 'multiClassId');
+        $assistantGroup = ArrayToolkit::group($assistants, 'multiClassId');
 
         $courses = $this->getCourSetService()->findCoursesByIds($courseIds);
-        $users = $this->getUserService()->findUsersByIds($userIds);
         $products = $this->getMultiClassProductService()->findProductByIds($productIds);
 
         foreach ($multiClasses as &$multiClass) {
-            $teacher = $teachersIndexByMultiClassId[$multiClass['id']];
-            $assistantIds = ArrayToolkit::column($assistantGroupByMultiClassId[$multiClass['id']], 'userId');
+            $teacher = $teachers[$multiClass['id']];
+            $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
+            $assistantIds = ArrayToolkit::column($assistants, 'userId');
             $multiClass['course'] = $courses[$multiClass['courseId']]['courseSetTitle'];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['price'] = $courses[$multiClass['courseId']]['price'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1]);
             $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1, 'startTime_GT' => time()]);
 
-            $multiClass['teacherId'] = $users[$teacher['userId']]['id'];
-            $multiClass['teacher'] = $users[$teacher['userId']]['nickname'];
+            $multiClass['teacherId'] = $teacherUsers[$teacher['userId']]['id'];
+            $multiClass['teacher'] = $teacherUsers[$teacher['userId']]['nickname'];
             $multiClass['assistantIds'] = $assistantIds;
             $multiClass['assistant'] = [];
-            array_walk($assistantIds, function ($id) use (&$multiClass,$users) {
-                $multiClass['assistant'][] = $users[$id]['nickname'];
+            array_walk($assistantIds, function ($id) use (&$multiClass,$assistantUsers) {
+                $multiClass['assistant'][] = $assistantUsers[$id]['nickname'];
             });
             $multiClass['studentNum'] = $this->getCourseMemberService()->countMembers(['multiClassId' => $multiClass['id'], 'role' => 'student']);
         }
