@@ -519,7 +519,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         // 删除老师
-        $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        if (!$multiClassId) {
+            $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        }
         // 删除目前还是学员的成员
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
@@ -536,7 +538,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         ]));
     }
 
-    public function setMultiClassAssistant($courseId, $assistantIds, $multiClassId)
+    public function setCourseAssistants($courseId, $assistantIds, $multiClassId = 0)
     {
         if (empty($assistantIds)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -549,8 +551,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $this->deleteMemberByCourseIdAndRole($courseId, 'assistant');
-
+        if (!$multiClassId) {
+            $this->deleteMemberByCourseIdAndRole($courseId, 'assistant');
+        }
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
             'userIds' => $assistantIds,
@@ -564,8 +567,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getLogService()->info(
             'course',
-            'set_multi_class_assistant',
-            "设置班课#{$multiClassId}下助教",
+            'set_assistant',
+            "设置课程#{$courseId}下助教",
             $infoData
         );
     }
@@ -636,7 +639,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $seq = 0;
         foreach ($assistantIds as $assistantId) {
             $user = $users[$assistantId];
-            if (in_array('ROLE_ASSISTANT', $user['roles'])) {
+            if (in_array('ROLE_TEACHER_ASSISTANT', $user['roles'])) {
                 $assistantMembers[] = [
                     'multiClassId' => $multiClassId,
                     'courseId' => $course['id'],

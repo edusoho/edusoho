@@ -1,9 +1,9 @@
 //此处为通用变量，用于各个bundle的引用，只具有方法，不生成样式；
 
 @gray-base:             #000;
-@gray-darker:           #313131;
-@gray-dark:             #616161;
-@gray:                  #919191;
+@gray-darker:           #333;
+@gray-dark:             #666;
+@gray:                  #999;
 @gray-medium:           #c1c1c1;
 @gray-light:            #e1e1e1;
 @gray-lighter:          #f5f5f5;
@@ -12,11 +12,12 @@
 @border-color:          #e4ecf3;
 @tip-color:             #adadad;
 
-@brand-primary:         #43bc60;
+@brand-primary:         #46c37B;
+@brand-primary-link:    #31a1ff;
 @brand-success:         #43bc60;
 @brand-info:            #278bf5;
 @brand-warning:         #ffa51f;
-@brand-danger:          #ed3e3e;
+@brand-danger:          #fe4040;
 
 /* =========================== main-color =========================== */
 
@@ -41,3 +42,20 @@
 @screen-xs-max:              (@screen-sm-min - 1);
 @screen-sm-max:              (@screen-md-min - 1);
 @screen-md-max:              (@screen-lg-min - 1);
+
+/******************************* spacing ****************************************/
+
+@base-spacing: 4px;
+
+@spacing-1x: @base-spacing;
+@spacing-2x: @base-spacing * 2;
+@spacing-3x: @base-spacing * 3;
+@spacing-4x: @base-spacing * 4;
+@spacing-5x: @base-spacing * 5;
+@spacing-6x: @base-spacing * 6;
+@spacing-8x: @base-spacing * 8;
+@spacing-10x: @base-spacing * 10;
+@spacing-12x: @base-spacing * 12;
+@spacing-15x: @base-spacing * 15;
+
+@border-radius: @base-spacing;

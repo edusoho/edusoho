@@ -12,7 +12,7 @@ use Biz\System\Service\LogService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
-    public function findByProductIds($productIds)
+    public function findByProductIds(array $productIds)
     {
         return $this->getMultiClassDao()->findByProductIds($productIds);
     }
@@ -42,7 +42,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         try {
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
-            $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
 
             $this->getLogService()->info(
                 'multi_class',
@@ -81,7 +81,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         try {
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
-            $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
 
             $this->getLogService()->info(
                 'multi_class',
