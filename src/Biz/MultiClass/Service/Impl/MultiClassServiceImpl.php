@@ -45,7 +45,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'create_multi_class',
                 "创建班课#{$multiClass['id']}《{$fields['title']}》",
                 $fields
@@ -84,7 +84,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getCourseMemberService()->setMultiClassAssistant($fields['courseId'], $assistantIds, $multiClass['id']);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'update_multi_class',
                 "更新班课#{$multiClass['id']}《{$fields['title']}》",
                 $fields
@@ -112,7 +112,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getMultiClassDao()->delete($id);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'delete_multi_class',
                 "删除班课#{$id}《{$multiClassExisted['title']}》"
             );
@@ -139,7 +139,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
                 ]);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'clone_multi_class',
                 "复制班课 - {$multiClass['title']}(#{$id}) 成功",
                 ['multiClassId' => $id]);
@@ -149,7 +149,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->rollback();
 
             $this->getLogService()->error(
-                'multiClass',
+                'multi_class',
                 'clone_multi_class',
                 "复制班课 - {$multiClass['title']}(#{$id}) 失败",
                 ['error' => $e->getMessage()]);
