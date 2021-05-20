@@ -79,7 +79,7 @@ class Setting extends AbstractResource
         $locale = empty($developer['default_locale']) ? 'zh_CN' : $developer['default_locale'];
 
         return [
-            'locale' => $locale
+            'locale' => $locale,
         ];
     }
 
