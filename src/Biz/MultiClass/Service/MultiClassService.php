@@ -4,7 +4,7 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassService
 {
-    public function findByProductIds($productIds);
+    public function findByProductIds(array $productIds);
 
     public function getMultiClass($id);
 
