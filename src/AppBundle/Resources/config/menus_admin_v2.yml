@@ -148,7 +148,17 @@ admin_v2:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
                                     name: admin_v2.course.basic.analysis_tab
-                        # 班课
+                        
+                        # 教师管理
+                        admin_v2_teacher:
+                            name: admin_v2.teacher.basic_menu
+                            router_name: admin_v2_teacher
+                            children:
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.teacher.basic_menu
+                                    router_name: admin_v2_teacher
+                        
+                        # 助教管理
                         admin_v2_assistant:
                             name: admin_v2.assistant.basic_menu
                             router_name: admin_v2_assistant
