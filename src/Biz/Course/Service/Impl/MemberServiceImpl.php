@@ -43,6 +43,8 @@ use VipPlugin\Biz\Vip\Service\VipService;
  */
 class MemberServiceImpl extends BaseService implements MemberService
 {
+    const ASSISTANT_LIMIT_NUM = 20;
+
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
         //        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
@@ -436,9 +438,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
 
-    public function findMultiClassAssistant($courseId)
+    public function findMultiClassMemberByMultiClassIdAndRole($multiClassId, $role)
     {
-        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'assistant');
+        return $this->getMemberDao()->findByMultiClassIdAndRole($multiClassId, $role);
     }
 
     public function findCourseSetTeachers($courseId)
@@ -543,6 +545,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($assistantIds)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
+
+        if (count($assistantIds) > self::ASSISTANT_LIMIT_NUM) {
+            $this->createNewException(MultiClassException::MULTI_CLASS_ASSISTANT_NUMBER_EXCEED());
+        }
+
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $assistantMembers = $this->buildMultiClassAssistant($course, $assistantIds, $multiClassId);

@@ -49,6 +49,8 @@ interface MemberService
 
     public function findCourseTeachers($courseId);
 
+    public function findMultiClassMemberByMultiClassIdAndRole($multiClassId, $role);
+
     public function findCourseSetTeachers($courseSetId);
 
     public function findCourseStudentsByCourseIds($courseIds);
