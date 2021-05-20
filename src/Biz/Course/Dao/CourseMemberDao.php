@@ -144,4 +144,6 @@ interface CourseMemberDao extends AdvancedDaoInterface
     public function isFieldExist($filedName);
 
     public function getMultiClassMembers($courseId, $multiClassId, $role);
+
+    public function findByMultiClassIdsAndRole($multiClassIds, $role);
 }

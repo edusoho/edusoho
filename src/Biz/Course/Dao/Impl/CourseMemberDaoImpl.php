@@ -85,7 +85,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, [$courseSetId, $role]);
     }
 
-    public function findByMultiClassIdAndRole($multiClassIds, $role)
+    public function findByMultiClassIdsAndRole($multiClassIds, $role)
     {
         if (empty($multiClassIds)) {
             return [];
@@ -493,8 +493,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function getMultiClassMembers($courseId, $multiClassId, $role)
     {
         $sql = "SELECT m.userId,u.nickname from {$this->table} as m";
-        $sql .= " LEFT JOIN user as u ON m.userId = u.id";
-        $sql .= " where `courseId` = ? and `multiClassId` = ? and `role` = ?";
+        $sql .= ' LEFT JOIN user as u ON m.userId = u.id';
+        $sql .= ' where `courseId` = ? and `multiClassId` = ? and `role` = ?';
 
         return $this->db()->fetchAll($sql, [$courseId, $multiClassId, $role]);
     }
