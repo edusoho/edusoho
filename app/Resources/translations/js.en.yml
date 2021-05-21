@@ -392,6 +392,8 @@ auth.register.mobile_required_error_hint: Please enter your mobile number
 auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
 auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
 auth.register.drag_captcha_tips: Please drag the left block to finish the puzzle
+auth.register.name_required_error_hint: Please input username
+auth.register.password_required_error_hint: Please input password
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
@@ -474,7 +476,7 @@ course_set.live_room.entry_error_with_message: >
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
 course_set.refund_cancel_success: Refund application cancelled!
 course_set.title_required_error_hint: Please enter a title
-course_set.learn_progress: Learning progress
+course_set.learn_progress: Learning Progress
 course_set.manage.tag_required_hint: Please enter a label
 course_set.manage.publish_hint: Are you sure you want to post the course?
 course_set.manage.publish_title: 发布课程
@@ -752,7 +754,7 @@ intro.confirm_hint: Finish
 
 
 
-validate.required.message: Please input %display%.
+validate.required.message: Please input %display%
 validate.valid_email_input.message: Please enter a valid email address.
 validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.
@@ -760,11 +762,11 @@ validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
 validate.valid_number_input.message: Please enter a valid number
 validate.valid_digits_input.message: Please enter only digits
 validate.valid_creditcard_input.message: Please enter a valid credit card number.
-validate.valid_equal_to_input.message: Please enter the same value again.
+validate.valid_equal_to_input.message: Please enter the same value again
 validate.valid_extension_input.message: Please enter a valid suffix
 validate.valid_policy_input.message: Please agree to the terms
-validate.max_length.message: Please enter no more than {0} characters.
-validate.min_length.message: Please enter at least {0} characters.
+validate.max_length.message: Please enter no more than {0} characters
+validate.min_length.message: Please enter at least {0} characters
 validate.range_length.message: Please enter a value between {0} and {1} characters long.
 validate.range.message: Please enter a value between {0} and {1}.
 validate.max.message: Please enter a value less than or equal to {0}.
@@ -1834,3 +1836,4 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_afte
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: After disallowing, the review status is unreviewed
 admin_v2.operation.audit_center.batch_operate_tips: Please select the content to be operated in batches first
 admin_v2.operation.audit_center.batch_operate_success_tips: Success
+homepage: Home

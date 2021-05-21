@@ -136,7 +136,7 @@ class CertificateServiceImpl extends BaseService implements CertificateService
             'statuses' => ['valid', 'expired', 'cancelled'],
         ], [], 0, PHP_INT_MAX);
 
-        $conditions = ['status' => 'published'];
+        $conditions = ['status' => 'published', 'targetStatus' => 'published'];
         $conditions['notIds'] = ArrayToolkit::column($records, 'certificateId');
         !empty($nameLike) && $conditions['nameLike'] = $nameLike;
 
@@ -156,6 +156,7 @@ class CertificateServiceImpl extends BaseService implements CertificateService
                 'autoIssue',
                 'targetType',
                 'targetId',
+                'targetStatus',
             ]
         );
     }

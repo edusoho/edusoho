@@ -505,7 +505,7 @@ class MaterialLibController extends BaseController
             $this->createNewException(UploadFileException::PERMISSION_DENIED());
         }
 
-        $this->getUploadFileService()->tryAccessFile($fileId);
+        $this->getUploadFileService()->canDownloadFile($fileId);
 
         return $this->forward('AppBundle:UploadFile:download', [
             'request' => $request,

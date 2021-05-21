@@ -47,6 +47,18 @@
           }, setting.show_number_data|default('join')) }}
         </div>
       </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_show_studen.review.data'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('show_student_review_num_enable', {
+            '1':'form.radio_btn.open'|trans,
+            '0':'form.radio_btn.close'|trans,
+          }, setting.show_student_review_num_enable|default('1')) }}
+        </div>
+      </div>
     </fieldset>
 
 {#    <fieldset>#}

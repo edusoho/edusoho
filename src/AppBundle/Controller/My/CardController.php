@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\My;
 
-use Biz\Card\Service\CardService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Card\Service\CardService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
 
 class CardController extends BaseController
 {
@@ -22,17 +22,17 @@ class CardController extends BaseController
 
         if ('moneyCard' == $cardType) {
             if (!$this->isPluginInstalled('moneyCard') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
-                return $this->render('card/index.html.twig', array(
+                return $this->render('card/index.html.twig', [
                     'cards' => null,
-                ));
+                ]);
             }
         }
 
-        if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
+        if (empty($cardType) || !in_array($cardType, ['coupon', 'moneyCard'])) {
             $cardType = 'coupon';
         }
 
-        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $couponSetting = $this->getSettingService()->get('coupon', []);
         if ('coupon' == $cardType && empty($couponSetting['enabled'])) {
             return $this->createMessageResponse('error', '无法访问该页面');
         }
@@ -55,13 +55,12 @@ class CardController extends BaseController
                 $cards = isset($groupCards['useable']) ? $groupCards['useable'] : null;
             }
         }
-
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType, $cardIds);
 
-        return $this->render('card/index.html.twig', array(
+        return $this->render('card/index.html.twig', [
             'cards' => empty($cards) ? null : $cards,
             'cardDetails' => ArrayToolkit::index($cardsDetail, 'id'),
-        ));
+        ]);
     }
 
     public function availableCouponsAction($targetType, $targetId, $totalPrice, $priceType)
@@ -69,8 +68,8 @@ class CardController extends BaseController
         $availableCoupons = $this->availableCouponsByIdAndType($targetId, $targetType);
 
         if ($availableCoupons) {
-            $higherTop = array();
-            $lowerTop = array();
+            $higherTop = [];
+            $lowerTop = [];
 
             foreach ($availableCoupons as $key => &$coupon) {
                 if ('minus' == $coupon['type']) {
@@ -93,13 +92,13 @@ class CardController extends BaseController
             $availableCoupons = array_merge(array_reverse($higherTop), $lowerTop);
         }
 
-        return $this->render('order/order-item-coupon.html.twig', array(
+        return $this->render('order/order-item-coupon.html.twig', [
             'targetType' => $targetType,
             'targetId' => $targetId,
             'totalPrice' => $totalPrice,
             'priceType' => $priceType,
             'coupons' => $availableCoupons,
-        ));
+        ]);
     }
 
     private function availableCouponsByIdAndType($id, $type)
@@ -121,11 +120,11 @@ class CardController extends BaseController
         $card = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
-        $response = $this->render('card/receive-show.html.twig', array(
+        $response = $this->render('card/receive-show.html.twig', [
             'cardType' => $cardType,
             'cardId' => $cardId,
             'cardDetail' => $cardDetail,
-        ));
+        ]);
 
         $response->headers->setCookie(new Cookie('modalOpened', '0'));
 
@@ -136,13 +135,13 @@ class CardController extends BaseController
     {
         $cards = $this->getCardService()->sortArrayByField($cards, 'createdTime');
         $cards = ArrayToolkit::group($cards, 'status');
-        $sortedCards = array();
+        $sortedCards = [];
 
         $currentTime = time();
-        $usedCards = isset($cards['used']) ? $cards['used'] : array();
-        $invalidCards = isset($cards['invalid']) ? $cards['invalid'] : array();
-        $outDateCards = array();
-        $receiveCards = array();
+        $usedCards = isset($cards['used']) ? $cards['used'] : [];
+        $invalidCards = isset($cards['invalid']) ? $cards['invalid'] : [];
+        $outDateCards = [];
+        $receiveCards = [];
 
         if (isset($cards['receive'])) {
             foreach ($cards['receive'] as $card) {

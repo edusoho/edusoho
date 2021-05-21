@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Common;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManagerTest extends BaseTestCase
@@ -16,7 +16,7 @@ class ExtensionManagerTest extends BaseTestCase
 
         $this->assertEquals(4, count($result));
         foreach ($result as $key => $value) {
-            $this->assertTrue(in_array($key, array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate')));
+            $this->assertTrue(in_array($key, ['DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate']));
         }
     }
 
@@ -24,11 +24,11 @@ class ExtensionManagerTest extends BaseTestCase
     {
         $instance = ExtensionManager::instance();
         $result = $instance->renderStatus(
-            array(
+            [
                 'type' => 'become_student',
                 'objectType' => 'course_set',
-                'properties' => array('course' => array('id' => 222)),
-            ),
+                'properties' => ['course' => ['id' => 222]],
+            ],
             'simple'
         );
 
@@ -38,7 +38,7 @@ class ExtensionManagerTest extends BaseTestCase
     public function testRenderStatusWithNonExistType()
     {
         $instance = ExtensionManager::instance();
-        $result = $instance->renderStatus(array('type' => 'ok'), 'simple');
+        $result = $instance->renderStatus(['type' => 'ok'], 'simple');
         $this->assertEquals('无法显示该动态。', $result);
     }
 
@@ -48,10 +48,10 @@ class ExtensionManagerTest extends BaseTestCase
         $result = $instance->getDataDict('nonOpenCourseCateogry');
 
         $this->assertArrayEquals(
-            array(
+            [
                 'live' => 'Living course',
                 'normal' => 'Course',
-            ),
+            ],
             $result
         );
     }
@@ -78,16 +78,16 @@ class ExtensionManagerTest extends BaseTestCase
     {
         $instance = ExtensionManager::instance();
         $result = $instance->renderNotification(
-            array(
+            [
                 'type' => 'default',
-                'content' => array(
+                'content' => [
                     'message' => 'bok',
-                ),
+                ],
                 'createdTime' => 1523762123,
-            )
+            ]
         );
         $expectedHtml = $this->removeBlankAndNewLine(
-            '<li class="media">
+                '<li class="media">
                 <div class="pull-left">
                 <span class="glyphicon glyphicon-volume-down media-object"></span>
                 </div>
@@ -96,11 +96,11 @@ class ExtensionManagerTest extends BaseTestCase
                     bok
                 </div>
                 <div class="notification-footer">
-                2018-04-15 11:15  
+                          2018-4-15 11:15:23
                 </div>
                 </div>
             </li>'
-        );
+            );
         $actualHtml = $this->removeBlankAndNewLine($result);
         $this->assertEquals($expectedHtml, $actualHtml);
     }

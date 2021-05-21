@@ -13,6 +13,10 @@
     </thead>
     <tbody>
     {% for uploadFile in files %}
+      {% set  downloadPermission = uploadFile.createdUserId == app.user.id or setting('cloud_file_setting.enable',0) or app.user.isAdmin() %}
+      {% set  deletePermission = uploadFile.createdUserId == app.user.id %}
+      {% set  subtitlePermission = uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+      {% set  hasDataToggle = downloadPermission or deletePermission or subtitlePermission %}
       <tr class="js-tr-item">
         <td class="vertical-middle">
           <input class="" value="{{uploadFile.id}}" type="checkbox"  data-role="batch-item"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
@@ -151,7 +155,7 @@
                 {{'material_lib.btn.view'|trans}}
               {% endif %}
             </a>
-            <button type="button" class="cd-btn cd-btn-primary dropdown-toggle {% if size|default('') == 'sm' %}cd-btn-sm{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <button type="button" class="cd-btn cd-btn-primary dropdown-toggle {% if size|default('') == 'sm' %}cd-btn-sm{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" {% if hasDataToggle == false %}disabled="disabled"{% endif %}>
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
             </button>
@@ -160,9 +164,11 @@
               {# 下载 #}
               <li>
                 {% if type|default is empty %}
-                  <a href="javascript:;" data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
-                    {{'material_lib.btn.download'|trans}}
-                  </a>
+                  {% if uploadFile.createdUserId == app.user.id or setting('cloud_file_setting.enable',0) or app.user.isAdmin() %}
+                    <a href="javascript:;" data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
+                      {{'material_lib.btn.download'|trans}}
+                    </a>
+                    {% endif %}
                   {% else %}
                     {% if courseSet.type in ['open','liveOpen'] %}
                       {% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}

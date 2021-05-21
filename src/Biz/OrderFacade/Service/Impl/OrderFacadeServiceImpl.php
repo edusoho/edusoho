@@ -2,6 +2,7 @@
 
 namespace Biz\OrderFacade\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\MathToolkit;
 use Biz\BaseService;
 use Biz\Order\OrderException;
@@ -287,6 +288,22 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             }
 
             return $product;
+        }
+    }
+
+    public function closeOrders($conditions)
+    {
+        if (empty($conditions['target_type']) || empty($conditions['status'])) {
+            return;
+        }
+        $orderItems = $this->getOrderService()->searchOrderItems($conditions, [], [], PHP_INT_MAX);
+        if (empty($orderItems)) {
+            return;
+        }
+
+        $orderIds = ArrayToolkit::column($orderItems, 'order_id');
+        foreach ($orderIds as $orderId) {
+            $this->getWorkflowService()->close($orderId);
         }
     }
 
