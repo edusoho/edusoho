@@ -20,7 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe',
+        'consult', 'wechat_message_subscribe', 'locale',
     ];
 
     public static function convertUnderline($str)
@@ -70,6 +70,16 @@ class Setting extends AbstractResource
         return [
             'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
             'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
+    }
+
+    public function getLocale($request)
+    {
+        $developer = $this->getSettingService()->get('developer', []);
+        $locale = empty($developer['default_locale']) ? 'zh_CN' : $developer['default_locale'];
+
+        return [
+            'locale' => $locale,
         ];
     }
 
