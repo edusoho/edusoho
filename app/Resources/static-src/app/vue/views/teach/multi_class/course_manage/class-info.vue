@@ -14,20 +14,52 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="teacher" slot-scope="teacher">{{ teacher.nickname }}</template>
-      <template slot="assistant" slot-scope="assistant">
-        <template v-for="item in assistant">{{ item.nickname }}</template>
+
+      <template slot="type" slot-scope="type, record">
+        <span>{{ record.tasks.type | teachType }}</span>
+        <span class="class-status-tag">已结束</span>
+        <!-- <span class="class-status-tag" style="color: #43bc60;">直播中</span> -->
+        <!-- <span class="class-status-tag" style="color: #fb8d4d;">未开始</span> -->
+        <br>
+        <a-tag color="green" style="margin-top: 4px;">有回放</a-tag>
       </template>
+
+      <template slot="teacher" slot-scope="teacher">{{ teacher.nickname || '- -' }}</template>
+
+      <template slot="assistant" slot-scope="assistant">
+        {{ assistant | assistant }}
+      </template>
+
       <template slot="actions" slot-scope="actions, record">
-        <span :id="record.id">复制</span>
+        <a-dropdown :trigger="['click']" placement="bottomRight">
+          <a-icon type="copy" />
+          <a-menu slot="overlay">
+            <a-menu-item>
+              复制课程链接
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
         <span>编辑</span>
-        <a-icon type="ellipsis" />
+        <a-dropdown :trigger="['click']" placement="bottomRight">
+          <!-- <a class="ant-dropdown-link" @click="e => e.preventDefault()"> -->
+            <a-icon type="caret-down" />
+          <!-- </a> -->
+          <a-menu slot="overlay">
+            <a-menu-item>
+              立即发布
+            </a-menu-item>
+            <a-menu-item>
+              删除
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </template>
     </a-table>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 const data = {
     "id":"26",
     "courseId":"121",
@@ -110,6 +142,22 @@ const data = {
         {
             "userId":"225",
             "nickname":"教师1"
+        },
+         {
+            "userId":"225",
+            "nickname":"教师2"
+        },
+         {
+            "userId":"225",
+            "nickname":"教师3"
+        },
+         {
+            "userId":"225",
+            "nickname":"教师2"
+        },
+         {
+            "userId":"225",
+            "nickname":"教师3"
         }
     ],
     "questions":0,
@@ -137,11 +185,7 @@ const columns = [
       { text: '直播', value: 'live' }
     ],
     width: '10%',
-    customRender: (value, row, index) => {
-      return {
-        children: row.tasks.type
-      };
-    }
+    scopedSlots: { customRender: 'type' }
   },
   {
     title: '开课时间',
@@ -150,7 +194,8 @@ const columns = [
     width: '10%',
     customRender: (value, row, index) => {
       return {
-        children: row.tasks.activity.startTime
+        // children: row.tasks.activity.startTime
+        children: '2002/10/03 10:39'
       };
     }
   },
@@ -174,6 +219,7 @@ const columns = [
     title: '助教老师',
     dataIndex: 'assistant',
     width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'assistant' }
   },
   {
@@ -184,7 +230,13 @@ const columns = [
   {
     title: '学习人数',
     dataIndex: 'studyStudentNum',
-    width: '10%'
+    width: '10%',
+    customRender: (value, row, index) => {
+      const { studyStudentNum, totalStudentNum } = row;
+      return {
+        children: `${studyStudentNum}/${totalStudentNum}`
+      };
+    }
   },
   {
     title: '操作',
@@ -195,11 +247,31 @@ const columns = [
 ];
 
 export default {
+  filters: {
+    assistant(value) {
+      if (!_.size(value)) return '- -';
+      let temp = [];
+      _.forEach(value, (assistant, index) => {
+        temp.push(assistant.nickname);
+      });
+      return _.join(temp, '、');
+    },
+
+    teachType(value) {
+      const type = {
+        text: '文本',
+        video: '视频',
+        live: '直播'
+      };
+      return type[value];
+    }
+  },
+
   data() {
     return {
       data: [data],
       loading: false,
-      columns,
+      columns
     }
   },
 
@@ -216,5 +288,20 @@ export default {
 </script>
 
 <style lang="less">
+.class-status-tag {
+  position: relative;
+  padding-left: 16px;
+  color: #999;
 
+  &::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background-color: #999;
+  }
+}
 </style>
