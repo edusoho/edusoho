@@ -1,6 +1,6 @@
 <template>
   <div class="course-manage">
-    <div class="clearfix">
+    <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
           <router-link to="/course_manage">课时信息</router-link>
