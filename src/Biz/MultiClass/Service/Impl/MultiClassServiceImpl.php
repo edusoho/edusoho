@@ -3,9 +3,12 @@
 namespace Biz\MultiClass\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 
@@ -73,10 +76,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
         $this->beginTransaction();
         try {
+            $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-
             $this->getLogService()->info(
                 'multiClass',
                 'update_multi_class',
@@ -161,7 +164,36 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             unset($fields['assistantIds']);
         }
 
+        if (isset($fields['courseId']) && !empty($fields['courseId'])) {
+            $course = $this->getCourseService()->getCourse($fields['courseId']);
+            if (empty($course)) {
+                throw CourseException::NOTFOUND_COURSE();
+            }
+        }
+        if (isset($fields['productId']) && !empty($fields['productId'])) {
+            $course = $this->getMultiClassProductService()->getProduct($fields['productId']);
+            if (empty($course)) {
+                throw MultiClassException::PRODUCT_NOT_FOUND();
+            }
+        }
+
         return $fields;
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return MultiClassProductService
+     */
+    protected function getMultiClassProductService()
+    {
+        return $this->createService('MultiClass:MultiClassProductService');
     }
 
     /**

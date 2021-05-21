@@ -130,8 +130,19 @@ class MultiClass extends AbstractResource
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['price'] = $courses[$multiClass['courseId']]['price'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1]);
-            $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1, 'startTime_GT' => time()]);
-
+            $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks([
+                'multiClassId' => $multiClass['id'],
+                'status' => 'published',
+                'isLesson' => 1,
+                'type' => 'live',
+                'startTime_GT' => time(),
+            ]);
+            $multiClass['endTaskNum'] = $this->getTaskService()->countTasks([
+                'multiClassId' => $multiClass['id'],
+                'status' => 'published',
+                'isLesson' => 1,
+                'endTime_LT' => time(),
+            ]);
             $multiClass['teacherId'] = $teacherUsers[$teacher['userId']]['id'];
             $multiClass['teacher'] = $teacherUsers[$teacher['userId']]['nickname'];
             $multiClass['assistantIds'] = $assistantIds;
