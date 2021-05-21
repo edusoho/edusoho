@@ -1,4 +1,6 @@
 import Vue from 'vue/dist/vue.esm.js';
+import _ from 'lodash';
+import 'moment';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon,
@@ -26,6 +28,24 @@ if (!window.Vue) {
   Vue.use(Spin)
   Vue.use(Popconfirm)
   Vue.use(Dropdown)
+}
+
+if (!window.Vue) {
+  Vue.filter('trans', (value) => {
+    if (_.isObject(value)) {
+      Translator.trans(value.text, value.options || {})
+    } else if (_.isString(value)) {
+      Translator.trans(value)
+    }
+  })
+
+  Vue.filter('YYYY-MM-DD', value => {
+    return moment(value, 'YYYY-MM-DD')
+  })
+
+  Vue.filter('YYYY-MM-DD HH:ss', value => {
+    return moment(value, 'YYYY-MM-DD HH:ss')
+  })
 }
 
 window.Vue = window.Vue || Vue;
