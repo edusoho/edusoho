@@ -47,4 +47,6 @@ interface OrderFacadeService
     public function getOrderAdjustInfo($order);
 
     public function addDealer($dealer);
+
+    public function closeOrders($conditions);
 }
