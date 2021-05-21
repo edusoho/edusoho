@@ -11,4 +11,3 @@ new LocalImageCrop({
     small: [96, 54],
   }
 });
-

@@ -1,7 +1,7 @@
 <template>
-  <div>
-     <div class="clearfix cd-mb24">
-      <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="onSearch" />
+  <a-spin :loading="getListLoading">
+     <div class="clearfix mb6">
+      <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary">新建班课</a-button>
      </div>
 
@@ -20,11 +20,23 @@
       </a>
       <template slot="action" slot-scope="text, record">
         <a-button type="link">查看</a-button>
-        <a-button type="link">编辑</a-button>
+        <a-dropdown>
+          <a @click="e => e.preventDefault()">
+            编辑 <a-icon type="down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;">复制班课</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="javascript:;">删除</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
         <a-button type="link">数据概览</a-button>
       </template>
     </a-table>
-  </div>
+  </a-spin>
 </template>
 
 
@@ -105,6 +117,12 @@ export default {
     return {
       columns,
       data,
+      getListLoading: false,
+      keywords: '',
+      paging: {
+        offset: 0,
+        limit: 10,
+      },
       locale: {
         filterConfirm: '确定',
         filterReset: '重置',
@@ -113,11 +131,40 @@ export default {
     }
   },
   created() {
-    console.log(MultiClass)
+    this.getMultiClassList()
   },
   methods: {
-    onSearch () {
+    async getMultiClassList (params = {}) {
+      this.getListLoading = true;
+      try {
+        const { data, paging } = await MultiClass.search({
+          keywords: params.keywords || this.keywords,
+          offset: params.offset || this.paging.offset || 0,
+          limit: params.limit || this.paging.limit || 10,
+        })
+        paging.page = (paging.offset / paging.limit) + 1;
+        
+        this.productList = data;
+        this.paging = paging;
+      } finally {
+        this.getListLoading = false;
+      }
+    },
+    searchMultiClass (keywords) {
+      this.getMultiClassList({ keywords })
+    },
+    deleteMultiClass (multiClass) {
+      this.$confirm({
+        title: '删除班课',
+        content: '确认要删除该班课？',
+        async onOk() {
+          const { success } = await MultiClass.delete({ id: multiClass.id })
 
+          if (success) {
+            this.getMultiClassList()
+          }
+        },
+      });
     }
   }
 }
