@@ -151,6 +151,7 @@ admin_v2:
                         
                         # 教师管理
                         admin_v2_teacher:
+                            quick_entrance_icon: 'teacher'
                             name: admin_v2.teacher.basic_menu
                             router_name: admin_v2_teacher
                             children:
