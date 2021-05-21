@@ -28,6 +28,8 @@ class MultiClassException extends AbstractException
 
     const CANNOT_DELETE_DEFAULT_PRODUCT = 4038103;
 
+    const MULTI_CLASS_CLONE_ALREADY = 5008157;
+
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
         4048102 => 'exception.multi_class.product_not_found',
@@ -39,5 +41,6 @@ class MultiClassException extends AbstractException
         5008154 => 'exception.multi_class.multi_class_assistant.number_exceed',
         5008155 => 'exception.multi_class.multi_class_data_fields_missing',
         5008156 => 'exception.multi_class.multi_class_course_not_match',
+        5008157 => 'exception.multi_class.multi_class_clone_already',
     ];
 }

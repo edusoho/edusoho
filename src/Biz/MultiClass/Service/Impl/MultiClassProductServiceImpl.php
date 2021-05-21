@@ -29,6 +29,11 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
         return $this->getMultiClassProductDao()->get($id);
     }
 
+    public function getDefaultProduct()
+    {
+        return $this->getMultiClassProductDao()->getByType('default');
+    }
+
     public function updateProduct($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, ['title', 'remark']);
