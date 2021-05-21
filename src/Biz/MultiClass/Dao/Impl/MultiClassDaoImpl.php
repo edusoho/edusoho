@@ -29,6 +29,7 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
                 'id IN ( :ids)',
                 'productId = :productId',
                 'courseId IN ( :courseIds)',
+                'copyId = :copyId',
             ],
         ];
     }

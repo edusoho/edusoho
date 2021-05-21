@@ -37,9 +37,10 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   config => {
-    if (apiStore.token.length > 0) {
-      config.headers.Authorization = 'Bearer ' + apiStore.token;
-    }
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    config.headers['X-CSRF-Token'] = 'nnZLBiWvAi4QekJH0leTFf8RC7bMZVCD2JlJFcbp1_k';
+    config.headers.Accept = 'application/vnd.edusoho.v2+json';
+    
     return config;
   },
   error => {
@@ -49,6 +50,7 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   response => {
+    console.log('response： ', response)
     return response.data;
   },
   error => {

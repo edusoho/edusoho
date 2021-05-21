@@ -24,6 +24,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->get($id);
     }
 
+    public function countMultiClassCopyEd($id)
+    {
+        return $this->getMultiClassDao()->count(['copyId' => $id]);
+    }
+
     public function createMultiClass($fields)
     {
         $teacherId = [
@@ -42,7 +47,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'create_multi_class',
                 "创建班课#{$multiClass['id']}《{$fields['title']}》",
                 $fields
@@ -81,7 +86,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'update_multi_class',
                 "更新班课#{$multiClass['id']}《{$fields['title']}》",
                 $fields
@@ -109,7 +114,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getMultiClassDao()->delete($id);
 
             $this->getLogService()->info(
-                'multiClass',
+                'multi_class',
                 'delete_multi_class',
                 "删除班课#{$id}《{$multiClassExisted['title']}》"
             );
@@ -133,6 +138,27 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $conditions = $this->filterConditions($conditions);
 
         return $this->getMultiClassDao()->count($conditions);
+    }
+
+    public function cloneMultiClass($id)
+    {
+        $multiClass = $this->getMultiClassDao()->get($id);
+        $number = $this->countMultiClassCopyEd($id);
+        $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
+        $number = 0 == $number ? '' : $number;
+        $newMultiClass = $this->biz['multi_class_copy']->copy($multiClass, [
+            'number' => $number,
+            'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
+            ]);
+        $newMultiClass['number'] = $number;
+
+        $this->getLogService()->info(
+            'multi_class',
+            'clone_multi_class',
+            "复制班课 - {$multiClass['title']}(#{$id}) 成功",
+            ['multiClassId' => $id]);
+
+        return  $newMultiClass;
     }
 
     public function getMultiClassByTitle($title)

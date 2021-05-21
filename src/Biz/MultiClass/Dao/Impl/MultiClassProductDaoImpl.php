@@ -19,6 +19,11 @@ class MultiClassProductDaoImpl extends GeneralDaoImpl implements MultiClassProdu
         return $this->findInField('id', $ids);
     }
 
+    public function getByType($type)
+    {
+        return $this->getByFields(['type' => $type]);
+    }
+
     public function declares()
     {
         return [

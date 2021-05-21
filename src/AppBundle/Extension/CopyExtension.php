@@ -14,15 +14,16 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     {
         $self = $this;
 
-        $copyNodes = array(
+        $copyNodes = [
             'course_copy' => 'generateCourseNodes',
             'classroom_course_copy' => 'generateClassroomNodes',
             'course_set_courses_copy' => 'generateCourseSetCoursesCopy',
-        );
+            'multi_class_copy' => 'generateMultiClassCopy',
+        ];
 
         foreach ($copyNodes as $key => $copyNode) {
             $biz[$key] = function ($biz) use ($self, $copyNode) {
-                $copyNode = call_user_func(array($self, $copyNode));
+                $copyNode = call_user_func([$self, $copyNode]);
                 $copyClass = $copyNode['class'];
 
                 return new $copyClass($biz, $copyNode);
@@ -32,93 +33,100 @@ class CopyExtension extends Extension implements ServiceProviderInterface
 
     public function generateCourseNodes()
     {
-        return array(
+        return [
             'class' => 'Biz\Course\Copy\Entry\CourseCopy',
-            'children' => array(
-                'course-member' => array(
+            'children' => [
+                'course-member' => [
                     'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
-                ),
-                'task' => array(
+                ],
+                'task' => [
                     'class' => 'Biz\Course\Copy\Chain\TaskCopy',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function generateClassroomNodes()
     {
-        return array(
+        return [
             'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
-            'children' => array(
-                'material' => array(
+            'children' => [
+                'material' => [
                     'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
                     'priority' => 100,
-                ),
-                'course-member' => array(
+                ],
+                'course-member' => [
                     'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
                     'priority' => 90,
-                ),
-                'classroom-teacher' => array(
+                ],
+                'classroom-teacher' => [
                     'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
                     'priority' => 80,
-                ),
-                'task' => array(
+                ],
+                'task' => [
                     'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                     'priority' => 50,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function generateCourseSetCoursesCopy()
     {
-        return array(
+        return [
             'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
             'priority' => 100,
             'isCopy' => 0,
-            'children' => array(
-                'tag-owner' => array(
+            'children' => [
+                'tag-owner' => [
                     'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
                     'priority' => 100,
-                ),
-                'material' => array(
+                ],
+                'material' => [
                     'class' => 'Biz\Course\Copy\MaterialCopy',
                     'priority' => 90,
-                ),
-                'course-set-courses' => array(
+                ],
+                'course-set-courses' => [
                     'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
                     'priority' => 80,
                     'auto' => false,
-                    'children' => array(
-                        'course-member' => array(
+                    'children' => [
+                        'course-member' => [
                             'class' => 'Biz\Course\Copy\CourseMemberCopy',
                             'priority' => 100,
-                        ),
-                        'course-task' => array(
+                        ],
+                        'course-task' => [
                             'class' => 'Biz\Task\Copy\CourseTaskCopy',
                             'priority' => 90,
                             'auto' => false,
-                            'children' => array(
-                                'course-chapter' => array(
+                            'children' => [
+                                'course-chapter' => [
                                     'class' => 'Biz\Course\Copy\CourseChapterCopy',
                                     'priority' => 100,
-                                ),
-                                'activity' => array(
+                                ],
+                                'activity' => [
                                     'class' => 'Biz\Activity\Copy\ActivityCopy',
                                     'priority' => 90,
                                     'auto' => false,
-                                    'children' => array(
-                                        'activity-material' => array(
+                                    'children' => [
+                                        'activity-material' => [
                                             'class' => 'Biz\Activity\Copy\ActivityMaterialCopy',
                                             'priority' => 100,
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function generateMultiClassCopy()
+    {
+        return [
+            'class' => 'Biz\MultiClass\Copy\MultiClass\MultiClassCopy',
+        ];
     }
 }
