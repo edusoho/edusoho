@@ -95,6 +95,21 @@ class MultiClassServiceTest extends BaseTestCase
         $this->assertEquals(1, $countMultiClass);
     }
 
+    public function testGetMultiClassByTitle()
+    {
+        $createMultiClass = $this->createMultiClass();
+        $getMultiClass = $this->getMultiClassService()->getMultiClassByTitle('multi class 1');
+
+        $this->assertArrayValueEquals($createMultiClass, $getMultiClass);
+    }
+
+    public function testCloneMultiClass()
+    {
+        $multiClass = $this->createMultiClass();
+        $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
+        $this->assertEquals($multiClass['title'].'(复制)', $newMultiClass['title']);
+    }
+
     protected function createMultiClass()
     {
         $product = $this->createMultiClassProduct();
@@ -129,9 +144,9 @@ class MultiClassServiceTest extends BaseTestCase
     protected function createUser($role)
     {
         $userInfo = [
-            'nickname' => 'test_nickname'.rand(0, 999),
+            'nickname' => 'test_nickname'.rand(0, 99999),
             'password' => 'test_password',
-            'email' => rand(0, 999).'@email.com',
+            'email' => rand(0, 99999).'@email.com',
         ];
         $user = $this->getUserService()->register($userInfo);
         $this->getUserDao()->update($user['id'], ['roles' => $role]);
