@@ -10,6 +10,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\InformationCollect\Service\EventService;
 use Biz\System\Service\SettingService;
@@ -43,7 +44,14 @@ class GoodCheck extends AbstractResource
         }
 
         $goods = $this->getGoodsService()->getGoods($id);
+        if ('published' !== $goods['status']) {
+            throw GoodsException::FORBIDDEN_JOIN_UNPUBLISHED_GOODS();
+        }
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+
+        if ('published' !== $goodsSpecs['status']) {
+            throw GoodsException::FORBIDDEN_JOIN_UNPUBLISHED_SPECS();
+        }
 
         if ($this->needNoStudentNumTip($goods['type'], $goodsSpecs['targetId'])) {
             return ['success' => false, 'code' => self::NO_REMAIN];

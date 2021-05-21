@@ -10271,6 +10271,8 @@ s2b2c.resource.sync.has_new.notify: 有价格更新
 exception.goods.not_found: Goods not found.
 exception.specs.not_found: Specs not found.
 exception.goods.forbidden_manage: Has no permission for goods
+exception.goods.forbidden_join_unpublished_goods: Can not join unpublisehd goods
+exception.goods.forbidden_join_unpublished_specs: Goods not published, can not buy
 
 vip.level.free_learning: Free for Vip
 exception.review.forbidden_create_review: Create review forbiddened.
