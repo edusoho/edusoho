@@ -36,6 +36,7 @@ module.exports = {
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
     'province-city-area': ['libs/province-city-area.js'],
     'element-ui': ['element-ui'],
+    'vue': ['libs/vue.js'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
