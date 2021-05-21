@@ -41,6 +41,10 @@ export default {
     return {
       current: ['class-info'],
     }
+  },
+
+  created() {
+    this.current = [this.$route.meta.current];
   }
 }
 </script>
