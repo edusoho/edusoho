@@ -91,6 +91,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function findByUserIdAndJoinType($userId, $joinedType);
 
+    public function findByMultiClassIdAndRole($multiClassId, $role);
+
     public function searchMemberIds($conditions, $orderBys, $start, $limit);
 
     public function updateMembers($conditions, $updateFields);
@@ -140,4 +142,6 @@ interface CourseMemberDao extends AdvancedDaoInterface
     public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d');
 
     public function isFieldExist($filedName);
+
+    public function getMultiClassMembers($courseId, $multiClassId, $role);
 }

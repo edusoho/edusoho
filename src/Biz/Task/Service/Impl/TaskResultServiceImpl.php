@@ -345,6 +345,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->batchUpdate($ids, $taskResults);
     }
 
+    public function countUserNumByCourseTaskId($conditions)
+    {
+        return $this->getTaskResultDao()->countUserNumByCourseTaskId($conditions);
+    }
+
     /**
      * @return TaskResultDao
      */

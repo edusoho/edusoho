@@ -15,7 +15,7 @@ class AddMultiClassTables extends Migration
               `id` int unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(64) NOT NULL COMMENT '产品名称',
               `type` varchar(64) NOT NULL DEFAULT 'normal' COMMENT '产品类型',
-              `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
+              `remark` varchar(64) DEFAULT '' COMMENT '备注',
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`)
@@ -28,7 +28,7 @@ class AddMultiClassTables extends Migration
               `title` varchar(64) NOT NULL COMMENT '班课名称',
               `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
               `productId` int(10) unsigned NOT NULL COMMENT '产品ID',
-              `copyId` int(10) unsigned NOT NULL COMMENT '复制来源ID',
+              `copyId` int(10) unsigned default 0 COMMENT '复制来源ID',
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`)

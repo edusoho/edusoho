@@ -16,6 +16,7 @@ class ValidationTitle extends AbstractResource
     public function search(ApiRequest $request, $type)
     {
         $title = $request->query->get('title', '');
+        $exceptId = $request->query->get('exceptId', 0);
 
         switch ($type) {
             case 'multiClass':
@@ -28,7 +29,7 @@ class ValidationTitle extends AbstractResource
                 break;
         }
 
-        return ['result' => empty($result) ? true : false];
+        return ['result' => empty($result) || $result['id'] != $exceptId ? true : false];
     }
 
     /**

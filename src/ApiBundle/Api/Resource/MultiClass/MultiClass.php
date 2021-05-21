@@ -5,16 +5,35 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClass extends AbstractResource
 {
     const MAX_ASSISTANT_NUMBER = 20;
 
-    public function get(ApiRequest $request)
+    public function get(ApiRequest $request, $multiClassId)
     {
-        return [];
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $teachers = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
+        $multiClass['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
+
+        $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');;
+        $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
+
+        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
+        $this->getOCUtil()->single($multiClass, ['courseId'], 'course');
+
+        $product = $this->getMultiClassProductService()->getProduct($multiClass['productId']);
+        $multiClass['product'] = empty($product) ? [] : $product;
+
+        return $multiClass;
     }
 
     public function add(ApiRequest $request)
@@ -77,5 +96,21 @@ class MultiClass extends AbstractResource
     protected function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return MultiClassProductService
+     */
+    protected function getMultiClassProductService()
+    {
+        return $this->service('MultiClass:MultiClassProductService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }
