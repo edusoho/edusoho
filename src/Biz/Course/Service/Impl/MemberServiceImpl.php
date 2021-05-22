@@ -553,7 +553,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         // 删除老师
         if (!$multiClassId) {
             $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        } else {
+            $this->deleteMemberByMultiClassIdAndRole($multiClassId, 'teacher');
         }
+
         // 删除目前还是学员的成员
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
@@ -590,7 +593,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (!$multiClassId) {
             $this->deleteMemberByCourseIdAndRole($courseId, 'assistant');
+        } else {
+            $this->deleteMemberByMultiClassIdAndRole($multiClassId, 'assistant');
         }
+
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
             'userIds' => $assistantIds,
@@ -614,12 +620,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         if (empty($courseId) || empty($multiClassId)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
-        $multiClassExisted = $this->getMultiClassService()->getMultiClass($multiClassId);
-
-        if ($courseId != $multiClassExisted['courseId']) {
-            throw MultiClassException::MULTI_CLASS_COURSE_NOT_MATCH();
         }
 
         $conditions = [
@@ -731,6 +731,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
         return $this->getMemberDao()->deleteByCourseIdAndRole($courseId, $role);
+    }
+
+    public function deleteMemberByMultiClassIdAndRole($multiClassId, $role)
+    {
+        return $this->getMemberDao()->deleteByMultiClassAndRole($multiClassId, $role);
     }
 
     public function deleteMemberByCourseId($courseId)

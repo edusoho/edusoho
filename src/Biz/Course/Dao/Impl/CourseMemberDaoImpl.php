@@ -115,6 +115,11 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->delete($this->table(), ['courseId' => $courseId, 'role' => $role]);
     }
 
+    public function deleteByMultiClassAndRole($multiClassId, $role)
+    {
+        return $this->db()->delete($this->table(), ['multiClassId' => $multiClassId, 'role' => $role]);
+    }
+
     public function deleteByCourseId($courseId)
     {
         return $this->db()->delete($this->table(), ['courseId' => $courseId]);
