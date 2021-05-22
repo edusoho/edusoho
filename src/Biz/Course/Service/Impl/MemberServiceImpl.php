@@ -622,6 +622,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        $multiClassExisted = $this->getMultiClassService()->getMultiClass($multiClassId);
+
+        if ($courseId != $multiClassExisted['courseId']) {
+            throw MultiClassException::MULTI_CLASS_COURSE_NOT_MATCH();
+        }
+
         $conditions = [
             'courseId' => $courseId,
             'multiClassId' => $multiClassId,
