@@ -4,8 +4,9 @@ $('.js-generate-replay').on('click', (event) => {
   if (!url) return;
   Promise.resolve($.post(url))
     .then(success => {
+      console.log(res)
       cd.message({ type: 'success', message: Translator.trans('course.manage.live_replay_generate_success')});
-      window.location.reload();
+      // window.location.reload();
     })
     .catch(response => {
       const error = JSON.parse(response.responseText);

@@ -12,6 +12,7 @@ use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\BlockService;
 use Biz\System\Service\SettingService;
+use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -129,6 +130,16 @@ class BlockController extends BaseController
         $user = $this->getUser();
         if ('POST' == $request->getMethod()) {
             $condation = $request->request->all();
+            if(isset($condation['data']['honorText'][0]['value']) && !empty($condation['data']['honorText'][0]['value'])){
+                $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+                foreach ($themeConfig['confirmConfig']['blocks']['left'] as  &$value){
+                    if($value['code']=='four-ads'){
+                        $value['code']=$condation['data']['honorText'][0]['value'];
+                    }
+                }
+                $themeConfig['confirmConfig']['blocks']['left'][9]['title']=$condation['data']['honorText'][0]['value'];
+                $this->getThemeService()->editThemeConfig($themeConfig['name'],$themeConfig);
+            }
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
@@ -359,5 +370,14 @@ class BlockController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
     }
 }
