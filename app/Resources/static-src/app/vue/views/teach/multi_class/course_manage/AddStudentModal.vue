@@ -12,7 +12,8 @@
       <a-form-item label="学员" extra="只能添加系统中已经注册的用户">
         <a-input
           v-decorator="['name', { rules: [
-            { required: true, message: '请输入学员' }
+            { required: true, message: '请输入学员' },
+            { validator: validatorName }
           ]}]"
           placeholder="邮箱／手机／用户名"
         />
@@ -30,9 +31,7 @@
 
       <a-form-item label="备注" extra="选填">
         <a-input
-          v-decorator="['price1', { rules: [
-            {  }
-          ]}]"
+          v-decorator="['price1']"
         />
       </a-form-item>
     </a-form>
@@ -49,6 +48,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   props: {
     visible: {
@@ -60,28 +61,13 @@ export default {
 
   data() {
     return {
-      form: this.$form.createForm(this, { name: 'dynamic_rule' })
+      form: this.$form.createForm(this, { name: 'add_student' })
     };
   },
 
   methods: {
     handleCancel() {
       this.$emit('handle-cancel');
-    },
-
-    check() {
-      this.form.validateFields(err => {
-        if (!err) {
-          console.info('success');
-        }
-      });
-    },
-
-    handleChange(e) {
-      this.checkNick = e.target.checked;
-      this.$nextTick(() => {
-        this.form.validateFields(['nickname'], { force: true });
-      });
     },
 
     handleSubmit() {
@@ -91,6 +77,22 @@ export default {
         }
       });
     },
+
+    validatorName: _.debounce(async function(rule, value, callback) {
+      const { result } = await ValidationTitle.search({
+        type: 'multiClassProduct',
+        title: value
+      })
+
+      if (!result) {
+        this.form.setFields({
+          title: { value, errors: [new Error('产品名称不能与已创建的相同')] }
+        })
+        return
+      }
+
+      callback();
+    }, 300),
 
     validatorPrice(rule, value, callback) {
       if (value > 0) {
