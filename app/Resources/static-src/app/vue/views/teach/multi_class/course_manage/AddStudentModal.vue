@@ -20,17 +20,17 @@
 
       <a-form-item label="购买价格" extra="本课程的价格为 0.00 元">
         <a-input
+          type="number"
           v-decorator="['price', { rules: [
-            { required: false, message: 'Please input your nickname' }
+            { validator: validatorPrice }
           ]}]"
-          placeholder="Please input your nickname"
           addon-after="元"
         />
       </a-form-item>
 
       <a-form-item label="备注" extra="选填">
         <a-input
-          v-decorator="['price', { rules: [
+          v-decorator="['price1', { rules: [
             {  }
           ]}]"
         />
@@ -90,6 +90,14 @@ export default {
           console.info('success');
         }
       });
+    },
+
+    validatorPrice(rule, value, callback) {
+      if (value > 0) {
+        callback();
+        return;
+      }
+      callback('请输入正整数');
     }
   }
 }
