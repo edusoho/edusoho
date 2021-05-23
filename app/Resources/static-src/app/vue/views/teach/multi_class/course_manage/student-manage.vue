@@ -30,7 +30,7 @@
       :row-key="record => record.id"
       :data-source="data"
     >
-      <a slot="name" slot-scope="name, record" @click="showModal">{{ record.user.nickname }}</a>
+      <a slot="name" slot-scope="name, record" @click="clickStudentName(record.user.id)">{{ record.user.nickname }}</a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
@@ -58,43 +58,13 @@
       </template>
     </a-table>
 
-    <a-modal
-      title="学员信息"
-      :visible="visible"
-      :footer="null"
-      @cancel="handleCancel"
-    >
-      <a-descriptions bordered :column="1">
-        <a-descriptions-item label="用户名">
-          Zhou Maomao
-        </a-descriptions-item>
-        <a-descriptions-item label="Email">
-          1810000000
-        </a-descriptions-item>
-        <a-descriptions-item label="用户组">
-          Hangzhou, Zhejiang
-        </a-descriptions-item>
-        <a-descriptions-item label="用户名">
-          Zhou Maomao
-        </a-descriptions-item>
-        <a-descriptions-item label="Email">
-          1810000000
-        </a-descriptions-item>
-        <a-descriptions-item label="用户组">
-          Hangzhou, Zhejiang
-        </a-descriptions-item>
-        <a-descriptions-item label="Address">
-          No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-        </a-descriptions-item>
-        <a-descriptions-item label="Remark">
-          empty
-        </a-descriptions-item>
-      </a-descriptions>
-    </a-modal>
+    <student-info-modal :visible="visible" @handle-cancel="handleCancel" />
   </div>
 </template>
 
 <script>
+import StudentInfoModal from './StudentInfoModal.vue';
+
 const columns = [
   {
     title: '学员',
@@ -181,13 +151,16 @@ const data = [
 
 
 export default {
+  components: {
+    StudentInfoModal
+  },
+
   data() {
     return {
       data,
       columns,
       selectedRowKeys: [],
       loading: false,
-      ModalText: 'Content of the modal',
       visible: false
     };
   },
@@ -217,7 +190,7 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
     },
 
-    showModal() {
+    clickStudentName(id) {
       this.visible = true;
     },
 
