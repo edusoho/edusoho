@@ -54,9 +54,10 @@ class BlockController extends BaseController
 
     public function blockMatchAction(Request $request, $type)
     {
-        $likeString = $request->query->get('q');
+        list($conditions, $sort) = $this->dealQueryFields($type);
+        $conditions['title'] = $request->query->get('q');
 
-        $blocks = $this->getBlockService()->searchBlockTemplates(['title' => $likeString], ['updateTime' => 'DESC'], 0, 10);
+        $blocks = $this->getBlockService()->searchBlockTemplates($conditions, ['updateTime' => 'DESC'], 0, 10);
         foreach ($blocks as &$block) {
             $block['gotoUrl'] = $this->generateUrl('admin_v2_block_visual_edit', ['blockTemplateId' => $block['id'], 'type' => $type]);
         }
@@ -151,11 +152,19 @@ class BlockController extends BaseController
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
-        return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
-            'block' => $block,
-            'action' => 'edit',
-            'type' => $type,
-        ]);
+        if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
+            return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+            ]);
+        } else {
+            return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+            ]);
+        }
     }
 
     public function editBlockTemplateAction(Request $request, $blockTemplateId)

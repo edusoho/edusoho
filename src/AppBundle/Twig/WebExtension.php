@@ -30,6 +30,7 @@ use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
+use Biz\Group\Service\GroupService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
@@ -150,6 +151,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('build_category_choices', [$this, 'buildCategoryChoices']),
             new \Twig_SimpleFunction('question_category_choices', [$this, 'getQuestionCategoryChoices']),
             new \Twig_SimpleFunction('item_category_choices', [$this, 'getItemCategoryChoices']),
+            new \Twig_SimpleFunction('article_category_choices', [$this, 'getArticleCategoryChoices']),
             new \Twig_SimpleFunction('upload_max_filesize', [$this, 'getUploadMaxFilesize']),
             new \Twig_SimpleFunction('js_paths', [$this, 'getJsPaths']),
             new \Twig_SimpleFunction('is_plugin_installed', [$this, 'isPluginInstalled']),
@@ -166,9 +168,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('convert_ip', [$this, 'getConvertIP']),
             new \Twig_SimpleFunction('isHide', [$this, 'isHideThread']),
             new \Twig_SimpleFunction('user_coin_amount', [$this, 'userCoinAmount']),
-
             new \Twig_SimpleFunction('user_balance', [$this, 'getBalance']),
-
             new \Twig_SimpleFunction('blur_user_name', [$this, 'blurUserName']),
             new \Twig_SimpleFunction('blur_phone_number', [$this, 'blur_phone_number']),
             new \Twig_SimpleFunction('blur_idcard_number', [$this, 'blur_idcard_number']),
@@ -229,8 +229,32 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
             new \Twig_SimpleFunction('is_show_new_members', [$this, 'isShowNewMembers']),
             new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
+            new \Twig_SimpleFunction('is_group_member', [$this, 'isGroupMember']),
             new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
         ];
+    }
+
+    public function isGroupMember($groupId)
+    {
+        $user = $this->biz['user'];
+
+        if (!$user['id']) {
+            return false;
+        }
+
+        if ($this->getGroupService()->isOwner($groupId, $user['id'])) {
+            return true;
+        }
+
+        if ($this->getGroupService()->isAdmin($groupId, $user['id'])) {
+            return true;
+        }
+
+        if ($this->getGroupService()->isMember($groupId, $user['id'])) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isReported($targetType, $targetId)
@@ -239,12 +263,21 @@ class WebExtension extends \Twig_Extension
         if (!$currentUser->isLogin()) {
             return false;
         }
+
         $record = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $targetType, $targetId);
         if (!empty($record)) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->createService('Group:GroupService');
     }
 
     public function isShowNewMembers()
@@ -1929,6 +1962,39 @@ class WebExtension extends \Twig_Extension
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();
+    }
+
+    public function getArticleCategoryChoices()
+    {
+        $categories = $this->getArticleCategoryService()->getCategoryStructureTree();
+        $choices = [];
+        if (empty($categories)) {
+            return $choices;
+        }
+
+        return $this->getArticleCategoryTree([], $categories, -1);
+    }
+
+    public function getArticleCategoryTree($choices, $categories, $depth)
+    {
+        ++$depth;
+        $indent = '　';
+        foreach ($categories as $category) {
+            $choices[$category['id']] = str_repeat($indent, $depth).$category['name'];
+            if (!empty($category['children'])) {
+                $choices = $this->getArticleCategoryTree($choices, $category['children'], $depth);
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @return \Biz\Article\Service\CategoryService
+     */
+    protected function getArticleCategoryService()
+    {
+        return $this->createService('Article:CategoryService');
     }
 
     public function getNextExecutedTime()
