@@ -19,7 +19,17 @@
 
       <teach-mode slot="mode" slot-scope="mode, record" :record="record" />
 
+      <template slot="createdTime" slot-scope="createdTime">{{ createdTime }}</template>
+
+      <template slot="time" slot-scope="time">60min</template>
+
+      <template slot="teacher" slot-scope="teacher">{{ teacher.nickname }}</template>
+
       <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
+
+      <template slot="studyStudentNum" slot-scope="studyStudentNum, record">
+        {{ studyStudentNum }}/{{ record.totalStudentNum }}
+      </template>
 
       <template slot="actions" slot-scope="actions, record">
         <a-dropdown :trigger="['hover']" placement="bottomRight" style="margin-right: 12px;">
@@ -82,35 +92,22 @@ const columns = [
   },
   {
     title: '开课时间',
-    dataIndex: 'startTime',
+    dataIndex: 'createdTime',
     sorter: true,
     width: '10%',
-    customRender: (value, row, index) => {
-      return {
-        // children: row.tasks.activity.startTime
-        children: '2002/10/03 10:39'
-      };
-    }
+    scopedSlots: { customRender: 'createdTime' }
   },
   {
     title: '时长',
     dataIndex: 'time',
     width: '10%',
-    customRender: (value, row, index) => {
-      return {
-        children: '60min'
-      };
-    }
+    scopedSlots: { customRender: 'time' }
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
     width: '10%',
-    customRender: (value, row, index) => {
-      return {
-        children: value.nickname || '- -'
-      };
-    }
+    scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
@@ -127,19 +124,14 @@ const columns = [
     title: '学习人数',
     dataIndex: 'studyStudentNum',
     width: '10%',
-    customRender: (value, row, index) => {
-      const { studyStudentNum, totalStudentNum } = row;
-      return {
-        children: `${studyStudentNum}/${totalStudentNum}`
-      };
-    }
+    scopedSlots: { customRender: 'studyStudentNum' }
   },
   {
     title: '操作',
     dataIndex: 'actions',
     width: '10%',
-    scopedSlots: { customRender: 'actions' },
-  },
+    scopedSlots: { customRender: 'actions' }
+  }
 ];
 
 export default {
