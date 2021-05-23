@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.esm.js';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon,
-  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions
+  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, message
 } from 'ant-design-vue';
 
 if (!window.Vue) {
@@ -28,6 +28,7 @@ if (!window.Vue) {
   Vue.use(Dropdown)
   Vue.use(Space)
   Vue.use(Descriptions)
+  Vue.prototype.$message = message;
 }
 
 window.Vue = window.Vue || Vue;

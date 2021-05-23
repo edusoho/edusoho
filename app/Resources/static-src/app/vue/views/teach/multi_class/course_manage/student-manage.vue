@@ -53,7 +53,14 @@
       <template slot="actions" slot-scope="actions, record">
         <a-space size="middle">
           <a class="ant-dropdown-link">查看</a>
-          <a>删除</a>
+          <a-popconfirm
+            title="确定移除?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="confirm"
+          >
+            <a href="#">移除</a>
+          </a-popconfirm>
         </a-space>
       </template>
     </a-table>
@@ -199,7 +206,11 @@ export default {
 
     viewStudentInfo(id) {
       this.viewStudentInfoVisible = true;
-    }
+    },
+
+    confirm() {
+      this.$message.success('Click on Yes');
+    },
   }
 }
 </script>
