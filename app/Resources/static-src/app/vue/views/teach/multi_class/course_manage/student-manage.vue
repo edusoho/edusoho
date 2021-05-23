@@ -9,7 +9,7 @@
       </a-space>
 
       <a-space class="pull-right" size="middle">
-        <a-button type="primary">
+        <a-button type="primary" @click="addStudent()">
           添加学员
         </a-button>
         <a-button type="primary" icon="download">
@@ -30,7 +30,7 @@
       :row-key="record => record.id"
       :data-source="data"
     >
-      <a slot="name" slot-scope="name, record" @click="clickStudentName(record.user.id)">{{ record.user.nickname }}</a>
+      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user.id)">{{ record.user.nickname }}</a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
@@ -57,12 +57,13 @@
         </a-space>
       </template>
     </a-table>
-
-    <student-info-modal :visible="visible" @handle-cancel="handleCancel" />
+    <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
+    <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />
   </div>
 </template>
 
 <script>
+import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
 
 const columns = [
@@ -152,6 +153,7 @@ const data = [
 
 export default {
   components: {
+    AddStudentModal,
     StudentInfoModal
   },
 
@@ -161,7 +163,8 @@ export default {
       columns,
       selectedRowKeys: [],
       loading: false,
-      visible: false
+      addStudentVisible: false,
+      viewStudentInfoVisible: false
     };
   },
 
@@ -190,12 +193,12 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
     },
 
-    clickStudentName(id) {
-      this.visible = true;
+    addStudent() {
+      this.addStudentVisible = true;
     },
 
-    handleCancel() {
-      this.visible = false;
+    viewStudentInfo(id) {
+      this.viewStudentInfoVisible = true;
     }
   }
 }
