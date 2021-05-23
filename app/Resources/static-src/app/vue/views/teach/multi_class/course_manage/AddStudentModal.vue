@@ -1,35 +1,51 @@
 <template>
   <a-modal
-    title="学员信息"
+    title="添加学员"
     :visible="visible"
     @cancel="handleCancel"
   >
-    <a-descriptions bordered :column="1">
-      <a-descriptions-item label="用户名">
-        Zhou Maomao
-      </a-descriptions-item>
-      <a-descriptions-item label="Email">
-        1810000000
-      </a-descriptions-item>
-      <a-descriptions-item label="用户组">
-        Hangzhou, Zhejiang
-      </a-descriptions-item>
-      <a-descriptions-item label="用户名">
-        Zhou Maomao
-      </a-descriptions-item>
-      <a-descriptions-item label="Email">
-        1810000000
-      </a-descriptions-item>
-      <a-descriptions-item label="用户组">
-        Hangzhou, Zhejiang
-      </a-descriptions-item>
-      <a-descriptions-item label="Address">
-        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-      </a-descriptions-item>
-      <a-descriptions-item label="Remark">
-        empty
-      </a-descriptions-item>
-    </a-descriptions>
+    <a-form
+      :form="form"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 20 }"
+      @submit="handleSubmit"
+    >
+      <a-form-item label="学员" extra="只能添加系统中已经注册的用户">
+        <a-input
+          v-decorator="['name', { rules: [
+            { required: true, message: '请输入学员' }
+          ]}]"
+          placeholder="邮箱／手机／用户名"
+        />
+      </a-form-item>
+
+      <a-form-item label="购买价格" extra="本课程的价格为 0.00 元">
+        <a-input
+          v-decorator="['price', { rules: [
+            { required: false, message: 'Please input your nickname' }
+          ]}]"
+          placeholder="Please input your nickname"
+          addon-after="元"
+        />
+      </a-form-item>
+
+      <a-form-item label="备注" extra="选填">
+        <a-input
+          v-decorator="['price', { rules: [
+            {  }
+          ]}]"
+        />
+      </a-form-item>
+    </a-form>
+
+    <template slot="footer">
+      <a-button key="back" @click="handleCancel">
+        取消
+      </a-button>
+      <a-button key="submit" type="primary" @click="handleSubmit">
+        确认
+      </a-button>
+    </template>
   </a-modal>
 </template>
 
@@ -43,9 +59,38 @@ export default {
     }
   },
 
+  data() {
+    return {
+      form: this.$form.createForm(this, { name: 'dynamic_rule' })
+    };
+  },
+
   methods: {
     handleCancel() {
-      this.$emit('handle-cancel')
+      this.$emit('handle-cancel');
+    },
+
+    check() {
+      this.form.validateFields(err => {
+        if (!err) {
+          console.info('success');
+        }
+      });
+    },
+
+    handleChange(e) {
+      this.checkNick = e.target.checked;
+      this.$nextTick(() => {
+        this.form.validateFields(['nickname'], { force: true });
+      });
+    },
+
+    handleSubmit() {
+      this.form.validateFields(err => {
+        if (!err) {
+          console.info('success');
+        }
+      });
     }
   }
 }
