@@ -468,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "197eee31aff0fff0b6174a42a6d46cd6c41feb78"
+                "reference": "92b5cb28f6c90304254c20c8c5c5a938425e3e29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/197eee31aff0fff0b6174a42a6d46cd6c41feb78",
-                "reference": "197eee31aff0fff0b6174a42a6d46cd6c41feb78",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/92b5cb28f6c90304254c20c8c5c5a938425e3e29",
+                "reference": "92b5cb28f6c90304254c20c8c5c5a938425e3e29",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -507,7 +507,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2021-04-22T12:21:10+00:00"
+            "time": "2021-05-13T08:47:37+00:00"
         },
         {
             "name": "codeages/biz-order-pay",

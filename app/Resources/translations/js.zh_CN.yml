@@ -339,6 +339,8 @@ auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
+auth.register.name_required_error_hint: 请输入帐号
+auth.register.password_required_error_hint: 请输入密码
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -1789,3 +1791,4 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_afte
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
 admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
 admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功
+homepage: 首页
