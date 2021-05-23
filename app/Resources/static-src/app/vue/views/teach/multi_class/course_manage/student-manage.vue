@@ -51,8 +51,10 @@
       <template slot="createdTime" slot-scope="createdTime">{{ createdTime }}</template>
 
       <template slot="actions" slot-scope="actions, record">
-        <a class="ant-dropdown-link">查看</a>
-        <a>删除</a>
+        <a-space size="middle">
+          <a class="ant-dropdown-link">查看</a>
+          <a>删除</a>
+        </a-space>
       </template>
     </a-table>
   </div>
