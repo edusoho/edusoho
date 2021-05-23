@@ -1,6 +1,6 @@
 <template>
   <div class="student-manage">
-    <div class="clearfix">
+    <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入课时或老师关键字搜索" style="width: 260px" @search="onSearch" />
         <a-button type="primary" icon="upload">
@@ -27,6 +27,7 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
+      :row-key="record => record.id"
       :data-source="data"
     >
       <a slot="name" slot-scope="name, record">{{ record.user.nickname }}</a>
