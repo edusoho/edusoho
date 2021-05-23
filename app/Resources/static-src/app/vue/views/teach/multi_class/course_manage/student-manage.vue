@@ -30,7 +30,7 @@
       :row-key="record => record.id"
       :data-source="data"
     >
-      <a slot="name" slot-scope="name, record">{{ record.user.nickname }}</a>
+      <a slot="name" slot-scope="name, record" @click="showModal">{{ record.user.nickname }}</a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
@@ -57,6 +57,40 @@
         </a-space>
       </template>
     </a-table>
+
+    <a-modal
+      title="学员信息"
+      :visible="visible"
+      :footer="null"
+      @cancel="handleCancel"
+    >
+      <a-descriptions bordered :column="1">
+        <a-descriptions-item label="用户名">
+          Zhou Maomao
+        </a-descriptions-item>
+        <a-descriptions-item label="Email">
+          1810000000
+        </a-descriptions-item>
+        <a-descriptions-item label="用户组">
+          Hangzhou, Zhejiang
+        </a-descriptions-item>
+        <a-descriptions-item label="用户名">
+          Zhou Maomao
+        </a-descriptions-item>
+        <a-descriptions-item label="Email">
+          1810000000
+        </a-descriptions-item>
+        <a-descriptions-item label="用户组">
+          Hangzhou, Zhejiang
+        </a-descriptions-item>
+        <a-descriptions-item label="Address">
+          No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+        </a-descriptions-item>
+        <a-descriptions-item label="Remark">
+          empty
+        </a-descriptions-item>
+      </a-descriptions>
+    </a-modal>
   </div>
 </template>
 
@@ -152,7 +186,9 @@ export default {
       data,
       columns,
       selectedRowKeys: [],
-      loading: false
+      loading: false,
+      ModalText: 'Content of the modal',
+      visible: false
     };
   },
 
@@ -179,6 +215,14 @@ export default {
     onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
+    },
+
+    showModal() {
+      this.visible = true;
+    },
+
+    handleCancel() {
+      this.visible = false;
     }
   }
 }
