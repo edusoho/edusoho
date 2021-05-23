@@ -27,8 +27,18 @@
       </a>
     </div>
     <div class="metas clearfix">
-      <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-      {% if setting('openCourse.show_comment', '1') == 1 %}
+      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+        {% if setting('course.show_cover_num_mode') == 'studentNum' %}
+          <span class="num">
+              <i class="es-icon es-icon-people"></i>{{ course.studentNum }}
+            </span>
+        {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
+          <span><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+        {% endif %}
+        </span>
+      {% endif %}
+
+      {% if setting('course.show_student_review_num_enable', '1') == 1 %}
         <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
       {% endif %}
     </div>

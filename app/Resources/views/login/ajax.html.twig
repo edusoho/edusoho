@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{ 'user.login.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
+{% block title %}{{ 'user.login.content_title'|trans }} {{ setting('site.name') }}{% endblock %}
 {% set modal_class = 'login-modal js-login-modal' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 

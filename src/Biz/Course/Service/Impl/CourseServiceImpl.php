@@ -779,7 +779,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
             if (empty($publishedCourses)) {
-                $this->getCourseSetDao()->update($course['courseSetId'], ['status' => 'closed']);
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if ('published' === $courseSet['status']) {
+                    $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
+                }
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
@@ -1140,6 +1143,30 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function courseItemIdsHandle($courseId, $ids)
+    {
+        if (empty($ids)) {
+            return $ids;
+        }
+
+        $chapterIds = [];
+        $chapterType = '';
+        $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+            list($type, $chapterId) = explode('-', $k);
+            $chapterIds[] = $chapterId;
+            $chapterType = $type;
+        });
+        foreach ($courseChapters as $chapter) {
+            if (in_array($chapter['id'], $chapterIds)) {
+                continue;
+            }
+            array_push($ids, $chapterType.'-'.$chapter['id']);
+        }
+
+        return $ids;
     }
 
     public function createChapter($chapter)
