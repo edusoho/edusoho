@@ -8,7 +8,6 @@
       :form="form"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
-      @submit="handleSubmit"
     >
       <a-form-item label="学员" extra="只能添加系统中已经注册的用户">
         <a-input
