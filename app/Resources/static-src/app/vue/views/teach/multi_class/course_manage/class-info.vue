@@ -12,6 +12,7 @@
       :row-key="record => record.id"
       :data-source="data"
       :loading="loading"
+      :pagination="pagination"
       @change="handleTableChange"
     >
       <template slot="type" slot-scope="type, record">
@@ -274,18 +275,33 @@ export default {
   data() {
     return {
       data: [data],
+      pagination: {},
       loading: false,
       columns
     }
   },
 
   methods: {
-    onSearch() {
-
+    onSearch(value) {
+      console.log(value);
     },
 
-    handleTableChange() {
+    handleTableChange(pagination, filters, sorter) {
+      const pager = { ...this.pagination };
+      console.log(pager);
+      pager.current = pagination.current;
+      this.pagination = pager;
+      this.fetch({
+        results: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters,
+      });
+    },
 
+    fetch(params = {}) {
+      this.loading = true;
     },
 
     // actions: 复制, 发布, 取消发布, 删除
