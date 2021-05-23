@@ -250,8 +250,6 @@ class BlockServiceImpl extends BaseService implements BlockService
             return $blockTemplate;
         }
         $blockTemplate = $this->getBlockTemplate($blockTemplateId);
-//        $blockTemplate['meta']['items']['img']['title']='23232';
-
         $block['blockId'] = $block['id'];
         $block['blockTemplateId'] = $blockTemplate['id'];
         $block['code'] = $blockTemplate['code'];
