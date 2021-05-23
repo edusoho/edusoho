@@ -14,7 +14,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-
       <template slot="type" slot-scope="type, record">
         <span>{{ record.tasks.type | teachType }}</span>
         <span class="class-status-tag">已结束</span>
@@ -31,24 +30,29 @@
       </template>
 
       <template slot="actions" slot-scope="actions, record">
-        <a-dropdown :trigger="['click']" placement="bottomRight">
-          <a-icon type="copy" />
-          <a-menu slot="overlay">
-            <a-menu-item>
+        <a-dropdown :trigger="['click']" placement="bottomRight" style="margin-right: 12px;">
+          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+            <a-icon type="copy" />
+          </a>
+          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record.id)">
+            <a-menu-item key="copy">
               复制课程链接
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-        <span>编辑</span>
+        <a class="ant-dropdown-link" @click="e => e.preventDefault()">编辑</a>
         <a-dropdown :trigger="['click']" placement="bottomRight">
-          <!-- <a class="ant-dropdown-link" @click="e => e.preventDefault()"> -->
+          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
-          <!-- </a> -->
-          <a-menu slot="overlay">
-            <a-menu-item>
+          </a>
+          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record.id)">
+            <a-menu-item key="publish">
               立即发布
             </a-menu-item>
-            <a-menu-item>
+            <a-menu-item key="unpublish">
+              取消发布
+            </a-menu-item>
+            <a-menu-item key="delete">
               删除
             </a-menu-item>
           </a-menu>
@@ -282,6 +286,27 @@ export default {
 
     handleTableChange() {
 
+    },
+
+    // actions: 复制, 发布, 取消发布, 删除
+    handleMenuClick(key, value) {
+      this[key](value);
+    },
+
+    copy(link) {
+      console.log(link);
+    },
+
+    publish(id) {
+      console.log(id)
+    },
+
+    unpublish(id) {
+      console.log(id)
+    },
+
+    delete(id) {
+      console.log(id)
     }
   }
 }
