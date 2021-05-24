@@ -5,6 +5,10 @@ export default class BaseService {
     this.baseUrl = props.baseUrl || '';
   }
 
+  async get(target, params) {
+    return apiClient.get(`${this.baseUrl}/${target}`, params)
+  }
+
   async add(params) {
     return apiClient.post(this.baseUrl, params)
   }
@@ -16,7 +20,7 @@ export default class BaseService {
   async search(params) {
     return apiClient.get(this.baseUrl, { params })
   }
-  
+
   async delete({ id }) {
     return apiClient.delete(`${this.baseUrl}/${id}`)
   }

@@ -2,7 +2,7 @@
   <div class="create-course">
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
       <a-form-item label="课程类型">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '普通课程', value: 'normal' }, { label: '直播课程', value: 'live' }]"
           v-decorator="['type', {
             initialValue: 'normal'
@@ -39,7 +39,7 @@
         <div id="summary"></div>
       </a-form-item>
       <a-form-item label="授课教师">
-        <a-select 
+        <a-select
           show-search
           :default-active-first-option="false"
           :show-arrow="false"
@@ -54,13 +54,13 @@
         </a-select>
       </a-form-item>
       <a-form-item label="助教">
-        <a-select 
-          mode="multiple" 
+        <a-select
+          mode="multiple"
           :default-active-first-option="false"
           :show-arrow="false"
           :filter-option="false"
           :not-found-content="null"
-          @search="searchAssistants" 
+          @search="searchAssistants"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
         >
           <a-select-option v-for="assistant in assistantsList" :key="assistant.id">
@@ -72,7 +72,7 @@
         <a-input suffix="元" v-decorator="['originPrice', {}]" />
       </a-form-item>
       <a-form-item label="学习模式">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '自由式', value: 'freeMode' }, { label: '解锁式', value: 'lockMode' }]"
           v-decorator="['learnMode', {
             initialValue: 'lockMode'
@@ -84,7 +84,7 @@
         </div>
       </a-form-item>
       <a-form-item label="任务完成规则">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '无限制', value: '1' }, { label: '任务完成', value: '2' }]"
           v-decorator="['enableFinish', {
             initialValue: '2'
@@ -115,9 +115,9 @@
         </div>
       </a-form-item>
       <a-form-item label="学习有效期" >
-        <a-radio-group 
+        <a-radio-group
           :options="[
-            { label: '随到随学', value: 'days' }, 
+            { label: '随到随学', value: 'days' },
             { label: '固定周期', value: 'date' },
             { label: '长期有效', value: 'forever' },
           ]"
@@ -127,18 +127,18 @@
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'days'"
         style="position: relative;left: 12.5%;"
       >
-        <a-radio-group 
+        <a-radio-group
           :options="[
-            { label: '按截止日期', value: 'end_date' }, 
+            { label: '按截止日期', value: 'end_date' },
             { label: '按有效天数', value: 'days' },
           ]"
           v-decorator="['deadlineType', { initialValue: 'days' }]"
         />
         <a-form-item v-if="form.getFieldValue('deadlineType') === 'end_date'">
-          <a-date-picker 
+          <a-date-picker
             v-decorator="['deadline', {
               rules: [{ validator: requiredValidator, message: '请输入截止日期' }]
-            }]" /> 
+            }]" />
           在此日期前，学员可进行学习。
         </a-form-item>
         <a-form-item v-if="form.getFieldValue('deadlineType') !== 'end_date'">
@@ -146,7 +146,7 @@
             style="width: 200px;"
             v-decorator="['expiryDays', {
               rules: [{ required: true, message: '请输入有效期天数' }]
-            }]" /> 
+            }]" />
           从加入当天起，在几天内可进行学习。
         </a-form-item>
       </a-form-item>
@@ -154,13 +154,13 @@
         style="position: relative;left: 12.5%;overflow: hidden"
       >
       <a-form-item class="pull-left">
-        开始日期 
+        开始日期
         <a-date-picker v-decorator="['expiryStartDate', {
           rules: [{ required: true, message: '请输入开始日期' }]
         }]" />
       </a-form-item>
       <a-form-item class="pull-left ml2">
-        结束日期 
+        结束日期
         <a-date-picker v-decorator="['expiryEndDate', {
           rules: [{ required: true, message: '请输入结束日期' }]
         }]" />
@@ -173,8 +173,8 @@
       <a-button class="ml2" @click="saveCourseSet">取消</a-button>
     </div>
 
-    <a-modal 
-      :visible="cropModalVisible" 
+    <a-modal
+      :visible="cropModalVisible"
       @cancel="cropModalVisible = false">
       <vue-cropper
         ref="cropper"
@@ -194,7 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teachers, Assistants, CourseSet } from 'common/vue/service/index.js';
+  import { Teachers, Assistants, CourseSet, UploadToken } from 'common/vue/service/index.js';
 
   const images = {
     large: [480, 270],
@@ -251,7 +251,7 @@
 
           try {
             const { error } = await CourseSet.add(values);
-            
+
             if (!error) {
               this.$message.success('创建成功')
               // TODO 页面跳转
@@ -263,7 +263,7 @@
       },
       searchTeachers: _.debounce(async function(nickname) {
         const { data } = await Teachers.search({ nickname })
-        
+
         this.teachersList = data
       }, 300),
       searchAssistants: _.debounce(async function(nickname) {
@@ -338,7 +338,7 @@
       color: @gray;
     }
   }
-  
+
   .ant-upload-select-picture-card .ant-upload-text {
     margin-top: 8px;
     color: @gray-dark;
