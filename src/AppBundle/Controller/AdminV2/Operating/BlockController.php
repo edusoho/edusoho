@@ -130,15 +130,14 @@ class BlockController extends BaseController
         $user = $this->getUser();
         if ('POST' == $request->getMethod()) {
             $condation = $request->request->all();
-            if(isset($condation['data']['honorText'][0]['value']) && !empty($condation['data']['honorText'][0]['value'])){
+            if (isset($condation['data']['honorText'][0]['value']) && !empty($condation['data']['honorText'][0]['value'])) {
                 $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-                foreach ($themeConfig['confirmConfig']['blocks']['left'] as  &$value){
-                    if($value['code']=='four-ads'){
-                        $value['code']=$condation['data']['honorText'][0]['value'];
+                foreach ($themeConfig['confirmConfig']['blocks']['left'] as  &$value) {
+                    if ('four-ads' == $value['code']) {
+                        $value['title'] = $condation['data']['honorText'][0]['value'];
                     }
                 }
-                $themeConfig['confirmConfig']['blocks']['left'][9]['title']=$condation['data']['honorText'][0]['value'];
-                $this->getThemeService()->editThemeConfig($themeConfig['name'],$themeConfig);
+                $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
             }
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
@@ -168,7 +167,7 @@ class BlockController extends BaseController
                 'action' => 'edit',
                 'type' => $type,
             ]);
-        }else if('imgcertificatelink' ==$block['meta']['items']['img']['type']){
+        } elseif ('imgcertificatelink' == $block['meta']['items']['img']['type']) {
             return $this->render('admin-v2/operating/block/block-visual-imgcertificatelink-edit.html.twig', [
                 'block' => $block,
                 'action' => 'edit',
@@ -371,7 +370,6 @@ class BlockController extends BaseController
     {
         return $this->createService('System:SettingService');
     }
-
 
     /**
      * @return ThemeService
