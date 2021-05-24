@@ -2477,12 +2477,12 @@ form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
 
-user.login.account_type_label: 'Email/Phone numbers/Username'
+user.login.account_type_label: 'Email / phone numbers / username'
 user.login.content_title: 'Sign in'
 user.login.page_title: 'Log In'
 user.login.login_link: 'Log In'
 user.login.account_label: Account
-user.login.account_placeholder: 'Email/Phone numbers/Username'
+user.login.account_placeholder: 'Email / phone numbers / username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
 user.login.remember_me: 'Remember password'
@@ -2968,8 +2968,8 @@ homepage.header.search: Search
 homepage.header.login: Sign in
 homepage.header.logout: Sign Out
 homepage.header.register: Sign Up
-homepage.header.my_course: 'My Teaching'
-homepage.header.my_learning: 'My Learning'
+homepage.header.my_course: 'Teaching'
+homepage.header.my_learning: 'Learning'
 homepage.header.notice: Notification
 homepage.header.check_all_notifications: 'View all notification'
 homepage.header.no_new_notifications: 'No new notification'
@@ -2977,7 +2977,7 @@ homepage.header.message: Message
 homepage.header.check_all_messages: 'View all messages'
 homepage.header.no_new_messages: 'No new messages'
 homepage.header.personal_menu: 'My Home'
-homepage.header.settings_menu: 'Profile Setting'
+homepage.header.settings_menu: 'Profile'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
@@ -9919,7 +9919,7 @@ admin_v2.homepage.school_info.app_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
-admin_v2.homepage.school_info.access_web: Access Homepage
+admin_v2.homepage.school_info.access_web: Home
 admin_v2.homepage.school_info.access_mobile_app: Access App
 admin_v2.homepage.school_info.access_wechat_app: Access wechat app
 admin_v2.homepage.school_info.level.none: Open source
