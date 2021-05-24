@@ -15,4 +15,8 @@ interface MultiClassService
     public function updateMultiClass($id, $fields);
 
     public function deleteMultiClass($id);
+
+    public function cloneMultiClass($id);
+
+    public function countMultiClassCopyEd($id);
 }
