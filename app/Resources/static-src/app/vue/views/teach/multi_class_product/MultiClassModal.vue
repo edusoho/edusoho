@@ -1,13 +1,14 @@
 <template>
   <a-modal
-      :title="title + '-班课列表'"
-      :width="1240"
-      :footer="null"
-      :visible="visible"
-      @cancel="handleCancel"
-    >
-    <a-spin :spinning="!multiClassList">
-      <a-table :columns="columns" :data-source="multiClassList">
+    :title="product.title + '-班课列表'"
+    :width="1240"
+    :footer="null"
+    :visible="visible"
+    @cancel="handleCancel"
+  >
+    <a-spin :spinning="ajaxLoading">
+      <!-- TODO -->
+      <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
         <a slot="title" slot-scope="text" >
           {{ text }}
         </a>
@@ -17,10 +18,10 @@
         <a slot="taskNum" slot-scope="text, record">
           {{ record.taskNum - record.notStartLiveTaskNum }}/{{ record.taskNum }}
         </a>
-        <a slot="num1" slot-scope="text">
+        <a slot="studentNum" slot-scope="text">
           {{ text }}
         </a>
-        <template :size="8" slot="action" slot-scope="text, record">
+        <template :size="8" slot="action" slot-scope="text, record"> 
           <a-button type="link">查看</a-button>
           <a-button type="link">编辑</a-button>
           <a-button type="link">数据概览</a-button>
@@ -64,8 +65,8 @@
     },
     {
       title: '已报班人数',
-      dataIndex: 'num1',
-      scopedSlots: { customRender: 'num1' },
+      dataIndex: 'studentNum',
+      scopedSlots: { customRender: 'studentNum' },
     },
     {
       title: '创建时间',
@@ -92,7 +93,9 @@
     },
     data() {
       return {
-        multiClassList,
+        multiClassList: [],
+        paging: [],
+        ajaxLoading: false,
         columns,
       };
     },
@@ -102,6 +105,34 @@
         handler: 'searchMultiClassList',
       }
     },
+    created() {
+      this.multiClassList = [
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+        { title: '1' },
+      ]
+    },
     methods: {
       handleCancel() {
         this.$emit('close', false)
@@ -110,11 +141,13 @@
         if (!this.product) return
 
         try {
-          const res = await MultiClass.search({ id: this.id })
+          this.ajaxLoading = true;
+          const { data, paging } = await MultiClass.search({ productId: this.product.id })
 
-          console.log(res)
+          this.multiClassList = data;
+          this.paging = paging;
         } finally {
-
+          this.ajaxLoading = false;
         }
       }
     }

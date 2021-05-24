@@ -105,7 +105,7 @@
         getListLoading: false,
         ajaxProductLoading: false,
         editingProduct: null,
-        currentProduct: null
+        currentProduct: {}
       };
     },
     created() {
@@ -212,6 +212,7 @@
       },
       async lookoverMultiClass (product) {
         this.currentProduct = product;
+        this.multiClassModalVisible = true;
       },
       closeModal() {
         this.form.resetFields();
