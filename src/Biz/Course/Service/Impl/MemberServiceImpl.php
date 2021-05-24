@@ -316,6 +316,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($memberIds, 'userId');
     }
 
+    public function searchMultiClassIds($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareConditions($conditions);
+        $conditions = array_merge($conditions, ['multiClassId_NE' => 0]);
+
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } else {
+            $orderBy = ['createdTime' => 'DESC'];
+        }
+
+        $members = $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::column($members, 'multiClassId');
+    }
+
     public function findMemberUserIdsByCourseId($courseId)
     {
         return ArrayToolkit::column($this->getMemberDao()->findUserIdsByCourseId($courseId), 'userId');
@@ -453,6 +469,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseSetIdAndRole($courseId, 'teacher');
     }
 
+    public function findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, $role)
+    {
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        return $this->getMemberDao()->findByMultiClassIdsAndRole($multiClassIds, $role);
+    }
+
     public function isCourseTeacher($courseId, $userId)
     {
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -528,7 +553,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         // 删除老师
         if (!$multiClassId) {
             $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
+        } else {
+            $this->deleteMemberByMultiClassIdAndRole($multiClassId, 'teacher');
         }
+
         // 删除目前还是学员的成员
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
@@ -565,7 +593,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (!$multiClassId) {
             $this->deleteMemberByCourseIdAndRole($courseId, 'assistant');
+        } else {
+            $this->deleteMemberByMultiClassIdAndRole($multiClassId, 'assistant');
         }
+
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
             'userIds' => $assistantIds,
@@ -706,6 +737,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
         return $this->getMemberDao()->deleteByCourseIdAndRole($courseId, $role);
+    }
+
+    public function deleteMemberByMultiClassIdAndRole($multiClassId, $role)
+    {
+        return $this->getMemberDao()->deleteByMultiClassAndRole($multiClassId, $role);
     }
 
     public function deleteMemberByCourseId($courseId)
