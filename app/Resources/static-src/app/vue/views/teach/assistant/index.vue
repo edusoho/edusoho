@@ -29,7 +29,7 @@
 
 
 <script>
-import { Assistant, User } from "common/vue/service/index.js";
+import { Assistants, User } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
 const columns = [

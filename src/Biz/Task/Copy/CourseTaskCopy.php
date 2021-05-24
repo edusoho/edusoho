@@ -6,9 +6,9 @@ use Biz\AbstractCopy;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class CourseTaskCopy extends AbstractCopy
 {
@@ -23,6 +23,7 @@ class CourseTaskCopy extends AbstractCopy
         $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
+
         $tasks = $this->getTaskDao()->findByCourseId($course['id']);
 
         $this->doChildrenProcess($source, $options);
@@ -36,15 +37,18 @@ class CourseTaskCopy extends AbstractCopy
         $activitiesMap = ArrayToolkit::index($activities, 'copyId');
 
         if (empty($tasks)) {
-            return array();
+            return [];
         }
 
-        $newTasks = array();
-        $updateChapterIds = array();
+        $newTasks = [];
+        $updateChapterIds = [];
+        $liveStartTime = 0;
+        $cycleDifference = 0;
         foreach ($tasks as $task) {
             $newTask = $this->partsFields($task);
             $newTask['courseId'] = $newCourse['id'];
             $newTask['fromCourseSetId'] = $newCourseSet['id'];
+            $newTask['multiClassId'] = isset($options['newMultiClass']) ? $options['newMultiClass']['id'] : 0;
             if (!empty($chaptersMap[$task['categoryId']])) {
                 $chapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
@@ -52,6 +56,17 @@ class CourseTaskCopy extends AbstractCopy
             if ('live' == $task['type']) {
                 //$newTask['status'] = 'create';
                 $updateChapterIds[] = empty($chapter) ? 0 : $chapter['id'];
+                if (0 == $liveStartTime && time() > $task['startTime']) {
+                    $liveStartTime = $task['startTime'];
+                }
+                if (0 == $cycleDifference && time() > $task['startTime']) {
+                    $cycleDifference = time() - $liveStartTime;
+                }
+            }
+
+            if (isset($options['newMultiClass'])) {
+                $newTask['startTime'] = $task['startTime'] + $cycleDifference;
+                $newTask['endTime'] = $task['endTime'] + $cycleDifference;
             }
 
             if (!empty($activitiesMap[$task['activityId']])) {
@@ -82,7 +97,7 @@ class CourseTaskCopy extends AbstractCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'seq',
             'activityId',
             'categoryId',
@@ -98,7 +113,7 @@ class CourseTaskCopy extends AbstractCopy
             'mediaSource',
             'status',
             'length',
-        );
+        ];
     }
 
     /**
@@ -115,12 +130,12 @@ class CourseTaskCopy extends AbstractCopy
 
         $chapterBatchHelper = new BatchUpdateHelper($this->getChapterDao());
         foreach ($chapterIds as $chapterId) {
-            $fields = array('status' => 'create');
+            $fields = ['status' => 'create'];
             $chapterBatchHelper->add('id', $chapterId, $fields);
         }
 
         $chapterBatchHelper->flush();
-        $this->getTaskDao()->update(array('courseId' => $courseId, 'categoryIds' => $chapterIds), array('status' => 'create'));
+        $this->getTaskDao()->update(['courseId' => $courseId, 'categoryIds' => $chapterIds], ['status' => 'create']);
     }
 
     /**

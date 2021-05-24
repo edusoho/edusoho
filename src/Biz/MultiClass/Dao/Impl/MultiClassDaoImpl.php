@@ -26,7 +26,10 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'id IN ( :ids)',
                 'productId = :productId',
+                'courseId IN ( :courseIds)',
+                'copyId = :copyId',
             ],
         ];
     }

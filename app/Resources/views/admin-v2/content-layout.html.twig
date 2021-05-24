@@ -1,0 +1,12 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% block content %}
+  {% include 'admin-v2/widget/side-bar.html.twig' %}
+  <div class="cd-layout-aside">
+    <div class="cd-layout-aside_bread"></div>
+    <div class="cd-layout-adside_content">
+      {% block main %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
