@@ -86,7 +86,7 @@ class MultiClassProduct extends AbstractResource
     {
         $product = [
             'title' => $request->request->get('title'),
-            'remark' => $request->request->get('remark'),
+            'remark' => $request->request->get('remark', ''),
         ];
 
         if (empty($product['title'])){
