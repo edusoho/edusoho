@@ -155,7 +155,6 @@ export default {
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
-        title: '删除班课',
         content: '确认要删除该班课？',
         async onOk() {
           const { success } = await MultiClass.delete({ id: multiClass.id })

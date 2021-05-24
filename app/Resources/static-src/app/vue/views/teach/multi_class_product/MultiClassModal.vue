@@ -6,38 +6,42 @@
       :visible="visible"
       @cancel="handleCancel"
     >
-    <a-table :columns="columns" :data-source="data">
-      <a slot="name" slot-scope="text" >
-        {{ text }}
-      </a>
-      <a slot="name2" slot-scope="text">
-        {{ text }}
-      </a>
-      <a slot="lessons" slot-scope="text">
-        {{ text }}
-      </a>
-      <a slot="num1" slot-scope="text">
-        {{ text }}
-      </a>
-      <template :size="8" slot="action" slot-scope="text, record">
-        <a-button type="link">查看</a-button>
-        <a-button type="link">编辑</a-button>
-        <a-button type="link">数据概览</a-button>
-      </template>
-    </a-table>
+    <a-spin :spinning="!multiClassList">
+      <a-table :columns="columns" :data-source="multiClassList">
+        <a slot="title" slot-scope="text" >
+          {{ text }}
+        </a>
+        <a slot="course" slot-scope="text">
+          {{ text }}
+        </a>
+        <a slot="taskNum" slot-scope="text, record">
+          {{ record.taskNum - record.notStartLiveTaskNum }}/{{ record.taskNum }}
+        </a>
+        <a slot="num1" slot-scope="text">
+          {{ text }}
+        </a>
+        <template :size="8" slot="action" slot-scope="text, record">
+          <a-button type="link">查看</a-button>
+          <a-button type="link">编辑</a-button>
+          <a-button type="link">数据概览</a-button>
+        </template>
+      </a-table>
+    </a-spin>
   </a-modal>
 </template>
 
 <script>
+  import { MultiClass } from 'common/vue/service/index.js';
+
   const columns = [
     {
       title: '班课名称',
-      dataIndex: 'name',
+      dataIndex: 'title',
       scopedSlots: { customRender: 'name' },
     },
     {
       title: '课程名称',
-      dataIndex: 'name2',
+      dataIndex: 'course',
        scopedSlots: { customRender: 'name2' },
     },
     {
@@ -46,16 +50,17 @@
     },
     {
       title: '已完成/课时',
-      dataIndex: 'lessons',
-      scopedSlots: { customRender: 'lessons' },
+      dataIndex: 'taskNum', // taskNum、notStartLiveTaskNum
+      scopedSlots: { customRender: 'taskNum' },
     },
     {
       title: '授课老师',
-      dataIndex: 'teacher1',
+      dataIndex: 'teacher',
     },
     {
       title: '助教老师',
-      dataIndex: 'teacher2',
+      dataIndex: 'assistant',
+      scopedSlots: { customRender: 'assistant' },
     },
     {
       title: '已报班人数',
@@ -73,40 +78,44 @@
     },
   ];
   
-  const data = [
-    {
-      name: '11',
-      name2: '222',
-      price: 100,
-      lessons: 100,
-      teacher1: '123',
-      teacher2: '123',
-      num1: '123',
-      createdTime: 123214213213
-    },
-  ];
-  
   export default {
     props: {
-      title: {
-        type: String,
-        require: true,
+      product: {
+        type: Object,
+        required: true,
       },
       visible: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
       },
     },
     data() {
       return {
-        data,
+        multiClassList,
         columns,
       };
+    },
+    watch: {
+      product: {
+        immediate: true,
+        handler: 'searchMultiClassList',
+      }
     },
     methods: {
       handleCancel() {
         this.$emit('close', false)
+      },
+      async searchMultiClassList() {
+        if (!this.product) return
+
+        try {
+          const res = await MultiClass.search({ id: this.id })
+
+          console.log(res)
+        } finally {
+
+        }
       }
     }
   };

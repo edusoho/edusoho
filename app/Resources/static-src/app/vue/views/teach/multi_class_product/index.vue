@@ -17,6 +17,7 @@
           :product="product"
           @edit="startEditMultiClassProduct"
           @delete="deleteMultiClassProduct"
+          @lookover="lookoverMultiClass"
         />
       </a-col>
     </a-row>
@@ -36,7 +37,7 @@
       cancelText="取消"
       :width="920"
       :visible="modalVisible"
-      @cancel="modalVisible = false"
+      @cancel="closeModal"
     >
       <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
         <a-form-item label="产品名称">
@@ -57,7 +58,7 @@
         </a-form-item>
       </a-form>
       <template slot="footer">
-        <a-button key="back" @click="modalVisible = false">
+        <a-button key="back" @click="closeModal">
           取消
         </a-button>
         <a-button key="submit" type="primary" 
@@ -69,7 +70,10 @@
       </template>
     </a-modal>
 
-    <MultiClassModal title="系统默认" :visible="multiClassModalVisible" @close="event => multiClassModalVisible = event" />
+    <MultiClassModal
+      :product="currentProduct"
+      :visible="multiClassModalVisible" 
+      @close="event => multiClassModalVisible = event" />
   </a-spin>
 </template>
 
@@ -100,7 +104,8 @@
         title: '',
         getListLoading: false,
         ajaxProductLoading: false,
-        editingProduct: null
+        editingProduct: null,
+        currentProduct: null
       };
     },
     created() {
@@ -204,6 +209,14 @@
         if (success) {
           this.getProductList()
         }
+      },
+      async lookoverMultiClass (product) {
+        this.currentProduct = product;
+      },
+      closeModal() {
+        this.form.resetFields();
+        this.modalVisible = false;
+        this.editingProduct = null;
       }
     }
   }
