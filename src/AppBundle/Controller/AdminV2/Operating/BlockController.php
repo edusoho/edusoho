@@ -12,6 +12,7 @@ use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\BlockService;
 use Biz\System\Service\SettingService;
+use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -129,6 +130,15 @@ class BlockController extends BaseController
         $user = $this->getUser();
         if ('POST' == $request->getMethod()) {
             $condation = $request->request->all();
+            if (isset($condation['data']['honorText'][0]['value']) && !empty($condation['data']['honorText'][0]['value'])) {
+                $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+                foreach ($themeConfig['confirmConfig']['blocks']['left'] as  &$value) {
+                    if ('four-ads' == $value['code']) {
+                        $value['title'] = $condation['data']['honorText'][0]['value'];
+                    }
+                }
+                $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
+            }
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
@@ -141,6 +151,7 @@ class BlockController extends BaseController
                 'code' => $condation['code'],
                 'mode' => $condation['mode'],
             ];
+
             if (empty($condation['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
             } else {
@@ -149,20 +160,20 @@ class BlockController extends BaseController
 
             $this->setFlashMessage('success', 'site.save.success');
         }
-
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
-
         if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
             return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
                 'block' => $block,
                 'action' => 'edit',
                 'type' => $type,
+                'showType' => 'no',
             ]);
         } else {
             return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
                 'block' => $block,
                 'action' => 'edit',
                 'type' => $type,
+                'showType' => isset($block['meta']['items']['img']['type']) ? $block['meta']['items']['img']['type'] : 'no',
             ]);
         }
     }
@@ -354,5 +365,13 @@ class BlockController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
     }
 }
