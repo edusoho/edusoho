@@ -77,7 +77,7 @@ class CourseSet extends AbstractResource
     public function add(ApiRequest $request)
     {
         $data = $request->request->all();
-        if (!ArrayToolkit::requireds($data, ['type', 'title'])) {
+        if (!ArrayToolkit::requireds($data, ['type', 'title', 'teachers', 'assistants'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -103,6 +103,11 @@ class CourseSet extends AbstractResource
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $data = $request->request->all();
+
+        if (!ArrayToolkit::requireds($data, ['title', 'teachers', 'assistants'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
         $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
         if (!empty($data['images'])) {
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
