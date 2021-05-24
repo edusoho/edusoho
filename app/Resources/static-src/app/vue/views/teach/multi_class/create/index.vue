@@ -28,16 +28,10 @@
             placeholder="请选择课程"
             option-filter-prop="children"
             :filter-option="filterOption"
-            @change="changeCourse"
+            @change="handleChangeCourse"
           >
-            <a-select-option value="jack">
-              Jack
-            </a-select-option>
-            <a-select-option value="lucy">
-              Lucy
-            </a-select-option>
-            <a-select-option value="tom">
-              Tom
+            <a-select-option v-for="course in courses" :key="course.id">
+              {{ course.title }}
             </a-select-option>
           </a-select>
         </a-col>
@@ -57,7 +51,6 @@
         ]}]"
         mode="multiple"
         placeholder="请选择归属产品"
-        @change="changeProduct"
       >
         <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
           {{ (i + 9).toString(36) + i }}
@@ -71,13 +64,9 @@
           { required: true, message: '请选择授课老师' }
         ]}]"
         placeholder="请选择授课教师"
-        @change="changeTeacher"
       >
-        <a-select-option value="male">
-          male
-        </a-select-option>
-        <a-select-option value="female">
-          female
+         <a-select-option v-for="teacher in teachers" :key="teacher.id">
+          {{ teacher.user.nickname }}
         </a-select-option>
       </a-select>
     </a-form-item>
@@ -91,8 +80,8 @@
         placeholder="请选择助教"
         @change="changeAssistant"
       >
-        <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-          {{ (i + 9).toString(36) + i }}
+        <a-select-option v-for="assistant in assistants" :key="assistant.id">
+          {{ assistant }}
         </a-select-option>
       </a-select>
     </a-form-item>
@@ -115,7 +104,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle } from 'common/vue/service';
+import { ValidationTitle, Create } from 'common/vue/service';
 
 
 export default {
@@ -123,11 +112,48 @@ export default {
 
   data() {
     return {
-      form: this.$form.createForm(this, { name: 'multi_class_create' })
+      form: this.$form.createForm(this, { name: 'multi_class_create' }),
+      courses: [],
+      teachers: [],
+      assistants: []
     }
   },
 
+  created() {
+    this.fetchCourse();
+    this.fetchAssistants();
+    this.fetchProducts();
+  },
+
   methods: {
+    fetchCourse() {
+      Create.teachCourses().then(res => {
+        this.courses = res.data;
+      });
+    },
+
+    fetchTeacher(id) {
+      Create.teacher(id, { role: 'teacher' }).then(res => {
+        this.teachers = res.data;
+      });
+    },
+
+    fetchAssistants() {
+      Create.assistants().then(res => {
+        this.assistants = res.data;
+      });
+    },
+
+    fetchProducts() {
+      Create.products().then(res => {
+        console.log(res.data);
+      })
+    },
+
+    handleChangeCourse(value) {
+      this.fetchTeacher(value);
+    },
+
     validatorName: _.debounce(async (rule, value, callback) => {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
@@ -137,6 +163,13 @@ export default {
       result ? callback() : callback('产品名称不能与已创建的相同');
     }, 300),
 
+    filterOption(input, option) {
+      console.log(input, option);
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
+
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
@@ -144,17 +177,6 @@ export default {
           console.log('Received values of form: ', values);
         }
       });
-    },
-
-    changeCourse(value) {
-      console.log(`changeCourse ${value}`);
-    },
-
-    filterOption(input, option) {
-      console.log(input, option);
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
     },
 
     changeTeacher() {
