@@ -6004,7 +6004,7 @@ admin.block_manage.visual_edit.tag_img: 图片
 admin.block_manage.visual_edit.tag_img_describe: 图片描述
 admin.block_manage.visual_edit.tag_img_link: 图片链接
 admin.block_manage.visual_edit.tag_video_describe: 视频描述
-admin.block_manage.visual_edit.tag_video_link: 视频链接
+admin.block_manage.visual_edit.tag_video_img: 视频封面图
 admin.block_manage.visual_edit.tag_img_background_color: 背景色填充
 admin.block_manage.visual_edit.tag_img_upload: 上传
 admin.block_manage.visual_edit.tag_open_new_window: 打开新窗口

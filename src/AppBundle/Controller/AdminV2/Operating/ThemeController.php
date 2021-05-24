@@ -55,7 +55,6 @@ class ThemeController extends BaseController
         if (!$this->getThemeService()->isAllowedConfig()) {
             return $this->redirect($this->generateUrl('admin_v2_setting_theme'));
         }
-
         $this->getThemeService()->resetCurrentConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
