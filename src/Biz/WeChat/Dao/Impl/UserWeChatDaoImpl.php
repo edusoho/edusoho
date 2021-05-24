@@ -11,9 +11,9 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
 
     public function declares()
     {
-        return array(
-            'orderbys' => array('createdTime', 'updatedTime', 'lastRefreshTime', 'subscribeTime'),
-            'conditions' => array(
+        return [
+            'orderbys' => ['createdTime', 'updatedTime', 'lastRefreshTime', 'subscribeTime'],
+            'conditions' => [
                 'id = :id',
                 'appId = :appId',
                 'userId = :userId',
@@ -30,15 +30,15 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
                 'user_wechat.subscribeTime != :subscribeTimeNotEqual',
                 'u.nickname LIKE :nickname',
                 'user_wechat.nickname LIKE :wechatname',
-            ),
-            'timestamps' => array(
+            ],
+            'timestamps' => [
                 'createdTime',
                 'updatedTime',
-            ),
-            'serializes' => array(
+            ],
+            'serializes' => [
                 'data' => 'json',
-            ),
-        );
+            ],
+        ];
     }
 
     public function countWeChatUserJoinUser($conditions)
@@ -58,11 +58,11 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        foreach ($orderBys ?: array() as $order => $sort) {
+        foreach ($orderBys ?: [] as $order => $sort) {
             $builder->addOrderBy($order, $sort);
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function findByIds(array $ids)
@@ -72,12 +72,12 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
 
     public function findByUserId($userId)
     {
-        return $this->findByFields(array('userId' => $userId));
+        return $this->findByFields(['userId' => $userId]);
     }
 
     public function findByUserIdAndType($userId, $type)
     {
-        return $this->findByFields(array('userId' => $userId, 'type' => $type));
+        return $this->findByFields(['userId' => $userId, 'type' => $type]);
     }
 
     public function findAllBindUserIds()
@@ -87,42 +87,47 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         return $this->db()->fetchAll($sql);
     }
 
+    public function getByNickname($nickname)
+    {
+        return $this->getByFields(['nickname' => $nickname]);
+    }
+
     public function getByUserIdAndType($userId, $type)
     {
-        return $this->getByFields(array('userId' => $userId, 'type' => $type));
+        return $this->getByFields(['userId' => $userId, 'type' => $type]);
     }
 
     public function getByTypeAndUnionId($type, $unionId)
     {
-        return $this->getByFields(array('unionId' => $unionId, 'type' => $type));
+        return $this->getByFields(['unionId' => $unionId, 'type' => $type]);
     }
 
     public function getByTypeAndOpenId($type, $openId)
     {
-        return $this->getByFields(array('openId' => $openId, 'type' => $type));
+        return $this->getByFields(['openId' => $openId, 'type' => $type]);
     }
 
     public function findOpenIdsInListsByType($openIds, $type)
     {
         if (empty($openIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($openIds) - 1).'?';
         $sql = "SELECT openId FROM {$this->table} WHERE openId IN ({$marks}) AND type = ?";
 
-        return $this->db()->fetchAll($sql, array_merge($openIds, array($type))) ?: array();
+        return $this->db()->fetchAll($sql, array_merge($openIds, [$type])) ?: [];
     }
 
     public function findSubscribedUsersByUserIdsAndType($userIds, $type)
     {
         if (empty($userIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql = "SELECT openId, userId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
 
-        return $this->db()->fetchAll($sql, array_merge($userIds, array($type))) ?: array();
+        return $this->db()->fetchAll($sql, array_merge($userIds, [$type])) ?: [];
     }
 }

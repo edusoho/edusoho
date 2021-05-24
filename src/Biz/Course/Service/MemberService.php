@@ -8,7 +8,7 @@ interface MemberService
 {
     const MAX_TEACHER = 100;
 
-    public function becomeStudentAndCreateOrder($userId, $courseId, $data);
+    public function becomeStudentAndCreateOrder($userId, $courseId, $data, $multiClassId = 0);
 
     public function removeCourseStudent($courseId, $userId);
 
@@ -98,7 +98,7 @@ interface MemberService
     /**
      * 成为学员，即加入课程的学习.
      */
-    public function becomeStudent($courseId, $userId, $info = []);
+    public function becomeStudent($courseId, $userId, $info = [], $multiClassId);
 
     public function batchBecomeStudents($courseId, $memberIds);
 
@@ -198,4 +198,6 @@ interface MemberService
     public function searchMultiClassIds($conditions, $sort, $start, $limit);
 
     public function deleteMemberByMultiClassIdAndRole($multiClassId, $role);
+
+    public function getMultiClassMember($multiClass, $courseId, $userId);
 }

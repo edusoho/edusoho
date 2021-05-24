@@ -64,6 +64,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         ]);
     }
 
+    public function getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId)
+    {
+        return $this->getByFields([
+            'multiClassId' => $multiClassId,
+            'courseId' => $courseId,
+            'userId' => $userId,
+        ]);
+    }
+
     public function findLearnedByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";

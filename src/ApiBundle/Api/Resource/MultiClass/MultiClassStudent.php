@@ -5,9 +5,34 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MemberService;
+use Biz\MultiClass\MultiClassException;
 
 class MultiClassStudent extends AbstractResource
 {
+    public function add(ApiRequest $request, $id)
+    {
+        $studentData = $request->request->all();
+        if (!ArrayToolkit::requireds($studentData, ['queryfield', 'price'])) {
+            throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
+        }
+
+        $multiClass = $this->getMultiClassService()->getMultiClass($id);
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $courseId = $multiClass['courseId'];
+        $studentData['source'] = 'outside';
+        $operateUser = $this->getCurrentUser();
+        $studentData['remark'] = empty($studentData['remark']) ? $operateUser['nickname'].'添加' : $studentData['remark'];
+        $user = $this->getUserService()->getUserByLoginField($studentData['queryfield'], true);
+
+        $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $studentData, $id);
+
+        return ['success' => true];
+    }
+
     /**
      * get api/multi_class/{id}/students
      */
