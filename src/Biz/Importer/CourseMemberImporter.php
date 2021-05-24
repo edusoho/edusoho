@@ -19,10 +19,10 @@ class CourseMemberImporter extends Importer
         $price = $request->request->get('price');
         $remark = $request->request->get('remark', '通过批量导入添加');
         $course = $this->getCourseService()->getCourse($courseId);
-        $orderData = array(
+        $orderData = [
             'amount' => $price,
             'remark' => $remark,
-        );
+        ];
 
         return $this->excelDataImporting($course, $importData, $orderData);
     }
@@ -53,18 +53,18 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                $data = array(
+                $data = [
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
-                );
+                ];
                 $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
 
                 ++$successCount;
             }
         }
 
-        return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
+        return ['existsUserCount' => $existsUserCount, 'successCount' => $successCount];
     }
 
     public function getTemplate(Request $request)
@@ -74,10 +74,10 @@ class CourseMemberImporter extends Importer
 
         return $this->render(
             'course-manage/student/import.html.twig',
-            array(
+            [
                 'course' => $course,
                 'importerType' => $this->type,
-            )
+            ]
         );
     }
 
