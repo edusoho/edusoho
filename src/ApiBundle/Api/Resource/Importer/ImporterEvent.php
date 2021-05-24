@@ -26,28 +26,28 @@ class ImporterEvent extends AbstractResource
         }
 
         if (self::CHECK_EVENT == $event) {
-            return $this->check($request, $event);
+            return $this->check($type);
         }
 
         if (self::IMPORT_EVENT == $event) {
-            return $this->import($request, $event);
+            return $this->import($type);
         }
     }
 
-    protected function check($request, $type)
+    protected function import($type)
     {
         $importer = $this->getImporterFactory($type);
-        $importer->tryImport($request);
-        $importerResult = $importer->import($request);
+        $importer->tryImport($this->container->get('request'));
+        $importerResult = $importer->import($this->container->get('request'));
 
         return $importerResult;
     }
 
-    protected function import($request, $type)
+    protected function check($type)
     {
         $importer = $this->getImporterFactory($type);
-        $importer->tryImport($request);
-        $checkResult = $importer->check($request);
+        $importer->tryImport($this->container->get('request'));
+        $checkResult = $importer->check($this->container->get('request'));
         if (!empty($checkResult['message'])) {
             $checkResult['message'] = $this->container->get('translator')->trans($checkResult['message']);
         }
