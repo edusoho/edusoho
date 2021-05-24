@@ -26,12 +26,12 @@ export default [
       },
       {
         path: 'homework_review',
-        component: () => import('app/vue/views/teach/multi_class/course_manage/homework-review.vue'),
+        component: () => import('app/vue/views/teach/multi_class/course_manage/homework_review.vue'),
         meta: { current: 'homework-review' }
       },
       {
         path: 'data_preview',
-        component: () => import('app/vue/views/teach/multi_class/course_manage/data-preview.vue'),
+        component: () => import('app/vue/views/teach/multi_class/course_manage/data_preview.vue'),
         meta: { current: 'data-preview' }
       }
     ]

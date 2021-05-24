@@ -228,7 +228,8 @@
         courseCoverUrl: '',
         cropModalVisible: false,
         loading: false,
-        editor: {}
+        editor: {},
+        ajaxLoading: false,
       };
     },
     mounted() {
