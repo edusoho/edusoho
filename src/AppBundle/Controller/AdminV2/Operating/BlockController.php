@@ -166,18 +166,14 @@ class BlockController extends BaseController
                 'block' => $block,
                 'action' => 'edit',
                 'type' => $type,
-            ]);
-        } elseif ('imgcertificatelink' == $block['meta']['items']['img']['type']) {
-            return $this->render('admin-v2/operating/block/block-visual-imgcertificatelink-edit.html.twig', [
-                'block' => $block,
-                'action' => 'edit',
-                'type' => $type,
+                'showType' => 'no',
             ]);
         } else {
             return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
                 'block' => $block,
                 'action' => 'edit',
                 'type' => $type,
+                'showType' => isset($block['meta']['items']['img']['type']) ? $block['meta']['items']['img']['type'] : 'no',
             ]);
         }
     }

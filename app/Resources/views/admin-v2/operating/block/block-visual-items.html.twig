@@ -17,7 +17,7 @@
   {% else %}
     <section id="js-affix-{{ code }}">
       <div class="item-title">
-        <strong>{{ item.title }}</strong>
+        <strong>{% if showType=='imgcertificatelink' %} {{ block.data.honorText[0].value|default('荣誉') }} {% else %} {{ item.title }} {% endif %}</strong>
         <p class="text-muted">{{ item.desc }}
           {% if code == 'carousel' %}
             <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
@@ -35,7 +35,7 @@
                  aria-expanded="false" aria-controls="{{ code }}-collapse-{{ loop.index }}-{{ dataId }}">
               <h4 class="panel-title clearfix">
                 <i class="js-move-seq glyphicon glyphicon-move pull-left mrs"></i>
-                <span class="panel-item-title ellipsis">{{ item.title }}</span>
+                <span class="panel-item-title ellipsis">{% if showType=='imgcertificatelink' %} {{ block.data.honorText[0].value|default('荣誉') }} {% else %} {{ item.title }} {% endif %}</span>
                 <span class="pull-left">&nbsp;-&nbsp;</span>
                 {% include 'admin-v2/operating/block/label/' ~ item.type ~ '.html.twig' %}
                 <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="{{ 'admin.block_manage.visual_edit.panel_expand'|trans }}"></i>
