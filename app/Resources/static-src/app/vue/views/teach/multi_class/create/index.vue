@@ -9,7 +9,9 @@
     <a-form-item label="班课名称">
       <a-input
         v-decorator="['name', { rules: [
-          { required: true, message: '请填写班课名称' }
+          { required: true, message: '请填写班课名称' },
+          { max: 40, message: '班课名称不能超过40个字' },
+          { validator: validatorName }
         ]}]"
         placeholder="请输入班课名称"
       />
@@ -112,6 +114,9 @@
 </template>
 
 <script>
+import _ from '@codeages/utils';
+import { ValidationTitle } from 'common/vue/service';
+
 
 export default {
   name: 'MultiClassCreate',
@@ -123,6 +128,15 @@ export default {
   },
 
   methods: {
+    validatorName: _.debounce(async (rule, value, callback) => {
+      const { result } = await ValidationTitle.search({
+        type: 'multiClass',
+        title: value
+      });
+
+      result ? callback() : callback('产品名称不能与已创建的相同');
+    }, 300),
+
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
