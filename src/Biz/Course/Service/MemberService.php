@@ -192,4 +192,10 @@ interface MemberService
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
 
     public function releaseMultiClassMember($courseId, $multiClassId);
+
+    public function findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, $role);
+
+    public function searchMultiClassIds($conditions, $sort, $start, $limit);
+
+    public function deleteMemberByMultiClassIdAndRole($multiClassId, $role);
 }

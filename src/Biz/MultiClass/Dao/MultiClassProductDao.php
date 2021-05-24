@@ -8,5 +8,7 @@ interface MultiClassProductDao extends GeneralDaoInterface
 {
     public function getByTitle($title);
 
+    public function findByIds($ids);
+
     public function getByType($type);
 }
