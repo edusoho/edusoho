@@ -18,8 +18,13 @@ export const Create = {
     return apiClient.get(`/api/assistants`)
   },
 
-   // 产品列表
-   async products() {
+  // 产品列表
+  async products() {
     return apiClient.get(`/api/multi_class_product`)
+  },
+
+  // 创建班课
+  async createMultiClass(params) {
+    return apiClient.post(`/api/multi_class`, params)
   }
 }

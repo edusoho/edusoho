@@ -8,10 +8,10 @@
   >
     <a-form-item label="班课名称">
       <a-input
-        v-decorator="['name', { rules: [
+        v-decorator="['title', { rules: [
           { required: true, message: '请填写班课名称' },
           { max: 40, message: '班课名称不能超过40个字' },
-          { validator: validatorName }
+          { validator: validatorＴitle }
         ]}]"
         placeholder="请输入班课名称"
       />
@@ -22,7 +22,7 @@
         <a-col :span="19">
           <a-select
             show-search
-            v-decorator="['course_name', { rules: [
+            v-decorator="['courseId', { rules: [
               { required: true, message: '请选择课程' }
             ]}]"
             placeholder="请选择课程"
@@ -46,26 +46,25 @@
 
     <a-form-item label="所属产品">
       <a-select
-        v-decorator="['product', { rules: [
+        v-decorator="['productId', { rules: [
           { required: true, message: '请选择归属产品' }
         ]}]"
-        mode="multiple"
         placeholder="请选择归属产品"
       >
-        <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-          {{ (i + 9).toString(36) + i }}
+        <a-select-option v-for="product in products" :key="product.id">
+          {{ product.title }}
         </a-select-option>
       </a-select>
     </a-form-item>
 
     <a-form-item label="授课老师">
       <a-select
-        v-decorator="['teacher', { rules: [
+        v-decorator="['teacherId', { rules: [
           { required: true, message: '请选择授课老师' }
         ]}]"
         placeholder="请选择授课教师"
       >
-         <a-select-option v-for="teacher in teachers" :key="teacher.id">
+         <a-select-option v-for="teacher in teachers" :key="teacher.user.id">
           {{ teacher.user.nickname }}
         </a-select-option>
       </a-select>
@@ -73,7 +72,7 @@
 
     <a-form-item label="助教">
       <a-select
-        v-decorator="['assistant', { rules: [
+        v-decorator="['assistantIds', { rules: [
           { required: true, message: '至少选择一位助教' }
         ]}]"
         mode="multiple"
@@ -81,12 +80,9 @@
         @change="changeAssistant"
       >
         <a-select-option v-for="assistant in assistants" :key="assistant.id">
-          {{ assistant }}
+          {{ assistant.nickname }}
         </a-select-option>
       </a-select>
-    </a-form-item>
-
-    <a-form-item label="排课">
     </a-form-item>
 
     <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
@@ -115,7 +111,8 @@ export default {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       courses: [],
       teachers: [],
-      assistants: []
+      assistants: [],
+      products: []
     }
   },
 
@@ -146,7 +143,7 @@ export default {
 
     fetchProducts() {
       Create.products().then(res => {
-        console.log(res.data);
+        this.products = res.data;
       })
     },
 
@@ -154,7 +151,7 @@ export default {
       this.fetchTeacher(value);
     },
 
-    validatorName: _.debounce(async (rule, value, callback) => {
+    validatorＴitle: _.debounce(async (rule, value, callback) => {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
         title: value
@@ -174,7 +171,9 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          Create.createMultiClass(values).then(res => {
+            this.clickCancelCreate();
+          });
         }
       });
     },
