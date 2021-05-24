@@ -56,10 +56,10 @@ class CourseTaskCopy extends AbstractCopy
             if ('live' == $task['type']) {
                 //$newTask['status'] = 'create';
                 $updateChapterIds[] = empty($chapter) ? 0 : $chapter['id'];
-                if (0 == $liveStartTime && time() > $task['startTime']) {
+                if (0 == $liveStartTime) {
                     $liveStartTime = $task['startTime'];
                 }
-                if (0 == $cycleDifference && time() > $task['startTime']) {
+                if (time() > $liveStartTime && 0 == $cycleDifference) {
                     $cycleDifference = time() - $liveStartTime;
                 }
             }
