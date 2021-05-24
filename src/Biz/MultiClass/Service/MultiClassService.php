@@ -6,6 +6,8 @@ interface MultiClassService
 {
     public function findByProductIds(array $productIds);
 
+    public function findByProductId($productId);
+
     public function getMultiClass($id);
 
     public function createMultiClass($fields);
