@@ -5049,11 +5049,15 @@ admin.block_manage.visual_edit.tag_link_url: 'Link Address'
 admin.block_manage.visual_edit.tag_img: Image
 admin.block_manage.visual_edit.tag_img_describe: 'Image Description'
 admin.block_manage.visual_edit.tag_img_link: 'Image Link'
+admin.block_manage.visual_edit.tag_video_describe: 'Video Description'
+admin.block_manage.visual_edit.tag_video_link: 'Video Link'
 admin.block_manage.visual_edit.tag_img_background_color: 'Fill With Background Color'
 admin.block_manage.visual_edit.tag_img_upload: Upload
 admin.block_manage.visual_edit.tag_open_new_window: 'Open New Window'
 admin.block_manage.visual_edit.tag_yes_radio: 'Yes'
 admin.block_manage.visual_edit.tag_no_radio: 'No'
+admin.block_manage.visual_edit.tag_as_a_picture_radio: 'As a picture'
+admin.block_manage.visual_edit.tag_display_as_video_radio: 'Display as video'
 admin.block_manage.visual_edit.add_panel: New
 admin.block_manage.visual_edit.save: Save
 admin.block_manage.visual_edit.poster_open_btn: Switch
@@ -10661,3 +10665,5 @@ admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in
 admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
+
+admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters

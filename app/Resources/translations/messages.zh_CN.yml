@@ -6003,11 +6003,15 @@ admin.block_manage.visual_edit.tag_link_url: 链接地址
 admin.block_manage.visual_edit.tag_img: 图片
 admin.block_manage.visual_edit.tag_img_describe: 图片描述
 admin.block_manage.visual_edit.tag_img_link: 图片链接
+admin.block_manage.visual_edit.tag_video_describe: 视频描述
+admin.block_manage.visual_edit.tag_video_link: 视频链接
 admin.block_manage.visual_edit.tag_img_background_color: 背景色填充
 admin.block_manage.visual_edit.tag_img_upload: 上传
 admin.block_manage.visual_edit.tag_open_new_window: 打开新窗口
 admin.block_manage.visual_edit.tag_yes_radio: 是
 admin.block_manage.visual_edit.tag_no_radio: 否
+admin.block_manage.visual_edit.tag_as_a_picture_radio: 以图片显示
+admin.block_manage.visual_edit.tag_display_as_video_radio: 以视频显示
 admin.block_manage.visual_edit.add_panel: +新增
 admin.block_manage.visual_edit.save: 保存设置
 admin.block_manage.visual_edit.poster_open_btn: 是否开启
@@ -11905,3 +11909,4 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EX
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
 
 site.content.illegal_status: 该条内容已违规处理
+admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符

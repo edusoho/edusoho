@@ -1,0 +1,98 @@
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3"></label>
+  <label class="checkbox-show-picture show-type-radio"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][showType]" value="picture" {% if data.showType|default('picture') == 'picture' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_as_a_picture_radio'|trans}}</label>
+  <label class="checkbox-show-video show-type-radio"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][showType]" value="video" {% if data.showType|default('picture') == 'video' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_display_as_video_radio'|trans}}</label>
+</div>
+
+<div class="picture-div" style=" {% if data.showType|default('picture')=='video' %} display: none {% endif %}">
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'admin.block_manage.visual_edit.tag_img'|trans}}</label>
+    <div class="col-md-7 col-xs-7">
+      <input class="form-control picture-url" readonly="readonly" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{% if data.showType|default('picture')=='picture' %} {{ data.src|default('') }} {% endif %}">
+    </div>
+    <div class="col-md-2 col-xs-2">
+      <div class="btn btn-default btn-sm img-upload webuploader-container" id="item-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_v2_block_picture_upload', {blockId:block.id, code:code}) }}">{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">{{'admin.block_manage.visual_edit.tag_img_describe'|trans}}</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{% if data.showType|default('picture')=='picture' %} {{ data.alt|default('') }} {% endif %}" >
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'admin.block_manage.visual_edit.tag_img_link'|trans}}</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value="{% if data.showType|default('picture')=='picture' %} {{ data.href|default('') }} {% endif %}" placeholder="{{ app.request.getScheme() }}://">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_img_background_color'|trans}}</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control colorpicker-input width-input-small"
+             name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]"
+             placeholder="{{ data.background|default('') }}" value="{% if data.showType|default('picture')=='picture' %} {{ data.background|default('') }} {% endif %}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_open_new_window'|trans}}</label>
+    <label class="checkbox-inline"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][target]" value="_blank" {% if data.target|default('_self') == '_blank' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_yes_radio'|trans}}</label>
+    <label class="checkbox-inline"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][target]" value="_self" {% if data.target|default('_self') == '_self' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_no_radio'|trans}}</label>
+  </div>
+</div>
+<div class="video-div" style=" {% if data.showType|default('picture')=='picture' %} display: none {% endif %}">
+
+
+  <div class="form-group">
+
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'material_lib.type.video'|trans}}</label>
+    <div class="upload-mode">
+    </div>
+    <div class="row form-group" id="upload-panel" data-params-url="{{ path('admin_v2_uploadfile_head_leader_params') }}" data-hls-encrypted="1">
+      <div class="col-md-3">
+      </div>
+      <div class="controls col-md-8">
+
+        <div class="col-md-7 col-xs-7 head-leader-edit">
+          <input class="form-control picture-url" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value=" {% if data.showType|default('picture')=='video' %} {{ data.src|default('') }} {% endif %}">
+
+          <button class="btn btn-link btn-sm edit-btn video-buton" type="button"><i class="glyphicon glyphicon-edit"></i> {{ 'course.live.replay_manage.file_upload'|trans }}</button>
+        </div>
+
+        <div class="file-chooser-main"
+             style="display:none;"
+        >
+          {% set token = uploader_token('headLeader', 0, 'private') %}
+          <div id="balloon-uploader"
+               data-init-url="{{ path('uploader_init', {uploaderToken:token}) }}"
+               data-finish-url="{{ path('uploader_finished', {uploaderToken:token}) }}"
+               data-upload-auth-url="{{ path('uploader_auth', {token:token}) }}"
+               data-accept="{{ uploader_accept('attachment', 'video')|json_encode }}"
+               data-process="{{ uploader_process('headLeader') }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">{{'admin.block_manage.visual_edit.tag_video_describe'|trans}}</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value=" {% if data.showType|default('picture')=='video' %} {{ data.alt|default('') }} {% endif %}" >
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'admin.block_manage.visual_edit.tag_video_link'|trans}}</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value=" {% if data.showType|default('picture')=='video' %} {{ data.href|default('') }} {% endif %}" placeholder="{{ app.request.getScheme() }}://">
+    </div>
+  </div>
+
+</div>
+
