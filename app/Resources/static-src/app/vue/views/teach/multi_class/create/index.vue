@@ -48,6 +48,21 @@
       </a-row>
     </a-form-item>
 
+    <a-form-item label="所属产品">
+      <a-select
+        v-decorator="['product', { rules: [
+          { required: true, message: '请选择归属产品' }
+        ]}]"
+        mode="multiple"
+        placeholder="请选择归属产品"
+        @change="changeProduct"
+      >
+        <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
+          {{ (i + 9).toString(36) + i }}
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+
     <a-form-item label="授课老师">
       <a-select
         v-decorator="['teacher', { rules: [
