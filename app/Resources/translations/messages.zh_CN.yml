@@ -9,6 +9,8 @@ site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
+site.not_support_cloud_video_upgrade: >
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
@@ -6926,7 +6928,8 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
 admin.edu_cloud.edu_video.start_buy: >
@@ -7886,6 +7889,7 @@ admin.magic_setting.live_entry_time: 直播开始前可进入时间
 admin.magic_setting.live_entry_time_tip: 秒为单位
 admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
 admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
+admin.magic_setting.security_video_player: 安全播放器开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭

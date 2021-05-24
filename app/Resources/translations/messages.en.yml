@@ -6,6 +6,7 @@ site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
 site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
+site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
 site.date.month: Month
@@ -5849,6 +5850,7 @@ admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint o
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view.'
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser except Wechat, the system will guide the user to use Wechat or App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
 admin.edu_cloud.edu_video.start_buy: "Contact official immediately opened: <span class = \"text-primary\"> 4008041114 </ span> \n"
 admin.edu_cloud.edu_video.buy_year_flow: 'Traffic year package'
@@ -6583,6 +6585,7 @@ admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
 admin.magic_setting.live_entry_time_tip: second
 admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
 admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
+admin.magic_setting.security_video_player: Security video player switch
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
