@@ -2,7 +2,7 @@
   <a-spin :spinning="getListLoading">
      <div class="clearfix mb6">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
-      <a-button class="pull-right" type="primary">新建班课</a-button>
+      <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
      </div>
 
     <a-table :columns="columns" 
@@ -146,6 +146,11 @@ export default {
     this.getMultiClassList()
   },
   methods: {
+    goToCreateMultiClassPage() {
+      this.$router.push({
+        name: 'MultiClassCreate'
+      })
+    },
     async getMultiClassList (params = {}) {
       this.getListLoading = true;
       try {
