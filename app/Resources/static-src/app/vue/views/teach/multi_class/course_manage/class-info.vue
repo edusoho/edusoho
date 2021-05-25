@@ -13,6 +13,7 @@
       :data-source="data"
       :loading="loading"
       :pagination="pagination"
+      :locale="locale"
       @change="handleTableChange"
     >
       <class-name slot="name" slot-scope="name, record" :record="record" />
@@ -143,6 +144,11 @@ export default {
       pagination: {},
       loading: false,
       columns,
+      locale: {
+        filterConfirm: '确定',
+        filterReset: '重置',
+        emptyText: '暂无数据'
+      },
       multiClassId: this.$route.params.id,
       keywords: ''
     }
