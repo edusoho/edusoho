@@ -1,10 +1,10 @@
 <template>
   <div>
-    <span>{{ record.tasks.type | teachType }}</span>
+    {{ record.tasks.type | teachType }}
     <a-divider type="vertical" />
-    <span style="color: #999;">已结束</span>
-    <!-- <span class="class-status-tag" style="color: #43bc60;">直播中</span> -->
-    <!-- <span class="class-status-tag" style="color: #fb8d4d;">未开始</span> -->
+    <a-checkable-tag>已结束</a-checkable-tag>
+    <a-checkable-tag style="color: #43bc60;">直播中</a-checkable-tag>
+    <a-checkable-tag style="color: #fb8d4d;">未开始</a-checkable-tag>
     <br>
     <a-tag color="green" style="margin-top: 4px;">有回放</a-tag>
   </div>
@@ -12,9 +12,11 @@
 
 <script>
 const type = {
-  text: '文本',
+  text: '图文',
   video: '视频',
-  live: '直播'
+  live: '直播',
+  testpaper: '考试',
+  homework: '作业'
 };
 
 export default {
