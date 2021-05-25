@@ -5,6 +5,11 @@ export default [
     component: () => import('app/vue/views/teach/multi_class/index.vue')
   },
   {
+    path: '/create',
+    name: 'MultiClassCreate',
+    component: () => import('app/vue/views/teach/multi_class/create/index.vue')
+  },
+  {
     path: '/create_course',
     name: 'MultiClassCreateCourse',
     component: () => import('app/vue/views/teach/multi_class/create_course/index.vue')
@@ -26,12 +31,12 @@ export default [
       },
       {
         path: 'homework_review',
-        component: () => import('app/vue/views/teach/multi_class/course_manage/homework-review.vue'),
+        component: () => import('app/vue/views/teach/multi_class/course_manage/homework_review.vue'),
         meta: { current: 'homework-review' }
       },
       {
         path: 'data_preview',
-        component: () => import('app/vue/views/teach/multi_class/course_manage/data-preview.vue'),
+        component: () => import('app/vue/views/teach/multi_class/course_manage/data_preview.vue'),
         meta: { current: 'data-preview' }
       }
     ]

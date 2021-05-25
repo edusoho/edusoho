@@ -5,6 +5,6 @@ import BaseService from '../BaseService'
 const baseUrl = '/api/teachers';
 const baseService = new BaseService({ baseUrl })
 
-export const Teachers = _.assignIn(baseService, {
-  
+export const Teacher = _.assignIn(baseService, {
+
 })
