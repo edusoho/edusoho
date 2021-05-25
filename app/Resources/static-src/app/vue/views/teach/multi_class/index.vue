@@ -1,9 +1,9 @@
 <template>
   <a-spin :spinning="getListLoading">
-     <div class="clearfix mb6">
+    <div class="clearfix mb6">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
-     </div>
+    </div>
 
     <a-table :columns="columns"
       :pagination="false"
@@ -23,6 +23,9 @@
       </template>
       <template slot="assistant" slot-scope="assistant">
         {{ assistant ? assistant.join('、') : '' }}
+      </template>
+      <template slot="createdTime" slot-scope="createdTime">
+        {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
       </template>
       <template slot="action" slot-scope="text, record">
         <a-button type="link" @click="goToMultiClassManage">查看</a-button>
@@ -106,6 +109,7 @@ const columns = [
     title: '创建时间',
     dataIndex: 'createdTime',
     sorter: true,
+    scopedSlots: { customRender: 'createdTime' },
   },
   {
     title: '操作',

@@ -54,13 +54,9 @@ if (!window.Vue) {
     }
   })
 
-  Vue.filter('YYYY-MM-DD', value => {
-    return moment(value, 'YYYY-MM-DD')
-  })
-
-  Vue.filter('YYYY-MM-DD HH:ss', value => {
-    return moment(value, 'YYYY-MM-DD HH:ss')
-  })
+  Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
+    return moment(value * 1000).format(format)
+  }
 }
 
 window.Vue = window.Vue || Vue;

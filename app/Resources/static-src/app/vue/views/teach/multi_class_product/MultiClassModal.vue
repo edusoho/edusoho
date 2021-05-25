@@ -21,6 +21,9 @@
         <a slot="studentNum" slot-scope="text">
           {{ text }}
         </a>
+        <template slot="createdTime" slot-scope="createdTime">
+          {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
+        </template>
         <template :size="8" slot="action" slot-scope="text, record"> 
           <a-button type="link">查看</a-button>
           <a-button type="link">编辑</a-button>
@@ -71,6 +74,7 @@
     {
       title: '创建时间',
       dataIndex: 'createdTime',
+      scopedSlots: { customRender: 'createdTime' },
     },
     {
       title: '操作',

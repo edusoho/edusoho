@@ -5,9 +5,11 @@
         <div class="product-card__title">{{ product.title }}</div>
         <div class="product-card__remark">{{ product.remark }}</div>
       </div>
-      <div class="product-card__operation pull-right" v-if="product.type !== 'default'">
+      <div class="product-card__operation pull-right">
         <i class="es-icon es-icon-bianjimian mr6 color-primary" @click="editMultiClassProduct"></i>
-        <i class="es-icon es-icon-shanchu1 color-danger" @click="deleteMultiClassProduct"></i>
+        <i v-if="product.type !== 'default'"
+          class="es-icon es-icon-shanchu1 color-danger" 
+          @click="deleteMultiClassProduct"></i>
       </div>
     </div>
     <a-row class="mt6">
