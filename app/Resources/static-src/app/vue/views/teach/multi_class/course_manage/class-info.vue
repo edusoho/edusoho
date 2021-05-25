@@ -79,7 +79,6 @@ const columns = [
   {
     title: '课时名称',
     dataIndex: 'name',
-    ellipsis: true,
     scopedSlots: { customRender: 'name' }
   },
   {
