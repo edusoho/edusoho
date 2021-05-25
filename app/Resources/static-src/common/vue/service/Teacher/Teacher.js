@@ -1,7 +1,10 @@
 import { apiClient } from 'common/vue/service/api-client.js';
+import _ from 'lodash';
+import BaseService from '../BaseService'
 
-export const Teacher = {
-  async search(params) {
-    return apiClient.get('/api/teachers', params);
-  },
-}
+const baseUrl = '/api/teachers';
+const baseService = new BaseService({ baseUrl })
+
+export const Teacher = _.assignIn(baseService, {
+
+})
