@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import _ from '@codeages/utils';
 import { MultiClass } from 'common/vue/service';
 
 import ClassName from './ClassName.vue';
@@ -84,9 +85,11 @@ const columns = [
     title: '教学模式',
     dataIndex: 'mode',
     filters: [
-      { text: '文本', value: 'text' },
+      { text: '图文', value: 'text' },
       { text: '视频', value: 'video' },
-      { text: '直播', value: 'live' }
+      { text: '直播', value: 'live' },
+      { text: '考试', value: 'testpaper' },
+      { text: '作业', value: 'homework' }
     ],
     scopedSlots: { customRender: 'mode' }
   },
@@ -151,13 +154,26 @@ export default {
 
   methods: {
     handleTableChange(pagination, filters, sorter) {
+      const order = sorter.order;
+
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
-      this.fetchLessons({
+
+      const params = {
         limit: pagination.pageSize,
         offset: (pagination.current - 1) * pagination.pageSize
-      });
+      };
+
+      if (_.size(filters)) {
+        params.types = filters.mode;
+      }
+
+      if (order) {
+        params.sort = order == 'ascend' ? 'ASC' : 'DESC';
+      }
+
+      this.fetchLessons(params);
     },
 
     fetchLessons(params = {}) {
