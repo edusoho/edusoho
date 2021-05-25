@@ -99,7 +99,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Create } from 'common/vue/service';
+import { ValidationTitle, Assistants, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
 
 
 export default {
@@ -123,27 +123,27 @@ export default {
 
   methods: {
     fetchCourse() {
-      Create.teachCourses().then(res => {
+      Me.get('teach_courses').then(res => {
         this.courses = res.data;
       });
     },
 
     fetchTeacher(id) {
-      Create.teacher(id, { role: 'teacher' }).then(res => {
+      Course.getTeacher(id, { role: 'teacher' }).then(res => {
         this.teachers = res.data;
       });
     },
 
     fetchAssistants() {
-      Create.assistants().then(res => {
+      Assistants.search().then(res => {
         this.assistants = res.data;
       });
     },
 
     fetchProducts() {
-      Create.products().then(res => {
+      MultiClassProduct.search().then(res => {
         this.products = res.data;
-      })
+      });
     },
 
     handleChangeCourse(value) {
@@ -170,7 +170,7 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          Create.createMultiClass(values).then(res => {
+          MultiClass.add(values).then(res => {
             this.clickCancelCreate();
           });
         }
