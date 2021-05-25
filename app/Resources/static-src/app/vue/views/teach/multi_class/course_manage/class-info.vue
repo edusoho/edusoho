@@ -45,7 +45,7 @@
 
         <a class="ant-dropdown-link" @click="e => e.preventDefault()">编辑</a>
 
-        <a-dropdown :trigger="['click']" placement="bottomRight">
+        <a-dropdown :trigger="['hover']" placement="bottomRight">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
