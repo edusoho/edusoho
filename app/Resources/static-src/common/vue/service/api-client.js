@@ -38,9 +38,9 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   config => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
-    config.headers['X-CSRF-Token'] = 'nnZLBiWvAi4QekJH0leTFf8RC7bMZVCD2JlJFcbp1_k';
+    config.headers['X-CSRF-Token'] = localStorage.getItem('csrf-token');
     config.headers.Accept = 'application/vnd.edusoho.v2+json';
-    
+
     return config;
   },
   error => {

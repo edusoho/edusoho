@@ -2,7 +2,7 @@
   <div class="create-course">
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
       <a-form-item label="课程类型">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '普通课程', value: 'normal' }, { label: '直播课程', value: 'live' }]"
           v-decorator="['type', {
             initialValue: 'normal'
@@ -26,7 +26,7 @@
           list-type="picture-card"
           @change="uploadCourseCover"
         >
-        <img style="width: 100%;" v-if="courseCoverUrl" :src="courseCoverUrl" />
+        <img v-if="courseCoverUrl" :src="courseCoverUrl" style="width: 100%;" />
         <div v-else>
           <a-icon :type="loading ? 'loading' : 'plus'" />
           <div class="ant-upload-text">
@@ -39,7 +39,7 @@
         <div id="summary"></div>
       </a-form-item>
       <a-form-item label="授课教师">
-        <a-select 
+        <a-select
           show-search
           :default-active-first-option="false"
           :show-arrow="false"
@@ -54,13 +54,13 @@
         </a-select>
       </a-form-item>
       <a-form-item label="助教">
-        <a-select 
-          mode="multiple" 
+        <a-select
+          mode="multiple"
           :default-active-first-option="false"
           :show-arrow="false"
           :filter-option="false"
           :not-found-content="null"
-          @search="searchAssistants" 
+          @search="searchAssistants"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
         >
           <a-select-option v-for="assistant in assistantsList" :key="assistant.id">
@@ -72,7 +72,7 @@
         <a-input suffix="元" v-decorator="['originPrice', {}]" />
       </a-form-item>
       <a-form-item label="学习模式">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '自由式', value: 'freeMode' }, { label: '解锁式', value: 'lockMode' }]"
           v-decorator="['learnMode', {
             initialValue: 'lockMode'
@@ -84,7 +84,7 @@
         </div>
       </a-form-item>
       <a-form-item label="任务完成规则">
-        <a-radio-group 
+        <a-radio-group
           :options="[{ label: '无限制', value: '1' }, { label: '任务完成', value: '2' }]"
           v-decorator="['enableFinish', {
             initialValue: '2'
@@ -115,9 +115,9 @@
         </div>
       </a-form-item>
       <a-form-item label="学习有效期" >
-        <a-radio-group 
+        <a-radio-group
           :options="[
-            { label: '随到随学', value: 'days' }, 
+            { label: '随到随学', value: 'days' },
             { label: '固定周期', value: 'date' },
             { label: '长期有效', value: 'forever' },
           ]"
@@ -127,18 +127,18 @@
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'days'"
         style="position: relative;left: 12.5%;"
       >
-        <a-radio-group 
+        <a-radio-group
           :options="[
-            { label: '按截止日期', value: 'end_date' }, 
+            { label: '按截止日期', value: 'end_date' },
             { label: '按有效天数', value: 'days' },
           ]"
           v-decorator="['deadlineType', { initialValue: 'days' }]"
         />
         <a-form-item v-if="form.getFieldValue('deadlineType') === 'end_date'">
-          <a-date-picker 
+          <a-date-picker
             v-decorator="['deadline', {
               rules: [{ validator: requiredValidator, message: '请输入截止日期' }]
-            }]" /> 
+            }]" />
           在此日期前，学员可进行学习。
         </a-form-item>
         <a-form-item v-if="form.getFieldValue('deadlineType') !== 'end_date'">
@@ -146,7 +146,7 @@
             style="width: 200px;"
             v-decorator="['expiryDays', {
               rules: [{ required: true, message: '请输入有效期天数' }]
-            }]" /> 
+            }]" />
           从加入当天起，在几天内可进行学习。
         </a-form-item>
       </a-form-item>
@@ -154,13 +154,13 @@
         style="position: relative;left: 12.5%;overflow: hidden"
       >
       <a-form-item class="pull-left">
-        开始日期 
+        开始日期
         <a-date-picker v-decorator="['expiryStartDate', {
           rules: [{ required: true, message: '请输入开始日期' }]
         }]" />
       </a-form-item>
       <a-form-item class="pull-left ml2">
-        结束日期 
+        结束日期
         <a-date-picker v-decorator="['expiryEndDate', {
           rules: [{ required: true, message: '请输入结束日期' }]
         }]" />
@@ -173,9 +173,9 @@
       <a-button class="ml2" @click="saveCourseSet">取消</a-button>
     </div>
 
-    <a-modal 
-      :visible="cropModalVisible" 
-      @cancel="cropModalVisible = false">
+    <a-modal
+      :visible="cropModalVisible"
+      @cancel="cropModalVisible = false;courseCoverUrl = ''">
       <vue-cropper
         ref="cropper"
         :aspect-ratio="16 / 9"
@@ -183,7 +183,7 @@
       >
       </vue-cropper>
       <template slot="footer">
-        <a-button>重新选择</a-button>
+        <a-button @click="reSelectCourseCover">重新选择</a-button>
         <a-button type="primary" @click="saveCourseCover">保存图片</a-button>
       </template>
     </a-modal>
@@ -194,7 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teachers, Assistants, CourseSet } from 'common/vue/service/index.js';
+  import { Teachers, Assistants, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
 
   const images = {
     large: [480, 270],
@@ -228,8 +228,13 @@
         courseCoverUrl: '',
         cropModalVisible: false,
         loading: false,
-        editor: {}
+        editor: {},
+        ajaxLoading: false,
+        uploadToken: {},
+        courseCoverName: '',
       };
+    },
+    created() {
     },
     mounted() {
       this.editor = CKEDITOR.replace('summary', {
@@ -240,6 +245,11 @@
       });
     },
     methods: {
+      async getUploadToken() {
+        this.uploadToken = await UploadToken.get('default')
+
+        return Promise.resolve(1);
+      },
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
@@ -250,7 +260,7 @@
 
           try {
             const { error } = await CourseSet.add(values);
-            
+
             if (!error) {
               this.$message.success('创建成功')
               // TODO 页面跳转
@@ -262,7 +272,7 @@
       },
       searchTeachers: _.debounce(async function(nickname) {
         const { data } = await Teachers.search({ nickname })
-        
+
         this.teachersList = data
       }, 300),
       searchAssistants: _.debounce(async function(nickname) {
@@ -274,19 +284,33 @@
         this.$set(this.formInfo, 'buyable', checked)
       },
       uploadCourseCover(info) {
-        this.loading = true
         const reader = new FileReader();
 
+        this.loading = true;
         reader.onload = (event) => {
           this.courseCoverUrl = event.target.result;
-          this.cropModalVisible = true
+          this.cropModalVisible = true;
           this.loading = false;
         };
 
+        this.courseCoverName = info.file.originFileObj.name
         reader.readAsDataURL(info.file.originFileObj);
       },
-      saveCourseCover() {
-        this.$refs.cropper.getCroppedCanvas().toBlob(blob => {
+      reSelectCourseCover () {
+        const $inputs = this.$refs.upload.$el.getElementsByTagName('input');
+
+        this.cropModalVisible = false;
+        
+        if ($inputs.length > 0) {
+          $inputs[0].click()
+        }
+      },
+      async saveCourseCover() {
+        if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
+          await this.getUploadToken()
+        }
+
+        this.$refs.cropper.getCroppedCanvas().toBlob(async blob => {
           const { x, y, width, height } = this.$refs.cropper.getData();
           const imageData = this.$refs.cropper.getImageData();
           const cropperData = {
@@ -305,18 +329,22 @@
             imgs: {
               large: [480, 270],
               middle: [304, 171],
-              small: [96,]
+              small: [96, 54]
             },
             post: false,
             width: imageData.naturalWidth, // 原图片宽度
             height: imageData.naturalHeight, // 原图片高度
             group: 'course',
+            post: false,
           }
           const formData = new FormData();
 
-          formData.append(file, blob);
+          formData.append('file', blob, this.courseCoverName);
+          formData.append('token', this.uploadToken.token);
 
           // TODO 上传图片接口；现在差token
+          await File.uploadFile(formData)
+          await File.imgCrop(cropResult)
         })
       },
       requiredValidator(rule, value, callback) {
@@ -337,7 +365,7 @@
       color: @gray;
     }
   }
-  
+
   .ant-upload-select-picture-card .ant-upload-text {
     margin-top: 8px;
     color: @gray-dark;

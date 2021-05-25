@@ -14,5 +14,9 @@ $('.js-safari-modal-click').on('click', function (e) {
     maskClosable: true,
   }).on('ok', ($modal, modal) => {
     modal.trigger('close');
-  })
-})
+  });
+});
+let csrfToken = document.getElementsByTagName('meta')['csrf-token'];
+if (csrfToken) {
+  localStorage.setItem('csrf-token', csrfToken.content);
+}

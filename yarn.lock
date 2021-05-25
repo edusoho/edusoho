@@ -979,6 +979,14 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@codeages/utils@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@codeages/utils/-/utils-1.0.2.tgz#0073689529f666f4730df1570a7b040392ceb860"
+  integrity sha512-GEa+SyRlECNueB+u+hNmG2qvFKYNPS6HfKUY5EqIhe3+dO9VJM2+qnZStpAQooBlfrM2a2xlMlPUCGl0YnMefA==
+  dependencies:
+    dayjs "^1.10.4"
+    lodash "^4.17.21"
+
 "@simonwep/pickr@~1.7.0":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@simonwep/pickr/-/pickr-1.7.2.tgz#99c73a3852633f749c8c187c82627a448b76b1ef"
@@ -2997,6 +3005,11 @@ date-now@^0.1.4:
 dateformat@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
+
+dayjs@^1.10.4:
+  version "1.10.4"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
 
 de-indent@^1.0.2:
   version "1.0.2"

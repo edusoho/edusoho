@@ -1,1 +1,1 @@
-export * from './MultiClass'
+export * from './MultiClass';

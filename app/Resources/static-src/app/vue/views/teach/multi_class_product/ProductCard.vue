@@ -5,16 +5,11 @@
         <div class="product-card__title">{{ product.title }}</div>
         <div class="product-card__remark">{{ product.remark }}</div>
       </div>
-      <div class="pull-right">
-        <span @click="editMultiClassProduct">编辑</span>
-         <a-popconfirm
-          :title="`确定要删除【${this.product.title}】吗?`"
-          ok-text="确定"
-          cancel-text="取消"
-          @confirm="deleteMultiClassProduct"
-        >
-          <a href="#">删除</a>
-        </a-popconfirm>
+      <div class="product-card__operation pull-right">
+        <i class="es-icon es-icon-bianjimian mr8" @click="editMultiClassProduct">编辑</i>
+        <i v-if="product.type !== 'default'"
+          class="es-icon es-icon-shanchu1 color-danger" 
+          @click="deleteMultiClassProduct">删除</i>
       </div>
     </div>
     <a-row class="mt6">
@@ -35,10 +30,14 @@
         <div class="color-gray text-14 mt1">班课</div>
       </a-col>
     </a-row>
+    <div class="product-card__lookover-multiclass" @click="lookoverMultiClass">
+      查看班课列表
+    </div>
   </div>
 </template>
 
 <script>
+
   export default {
     name: 'ProductCard',
     props: {
@@ -56,7 +55,22 @@
         this.$emit('edit', this.product)
       },
       deleteMultiClassProduct() {
-        this.$emit('delete', this.product)
+        if (this.product.type === 'default') return
+        
+        const title = this.product.title
+
+        this.$confirm({
+          content: `确认要删除${title}`,
+          okType: 'danger',
+          okText: '确认',
+          cancelText: '取消',
+          onOk: () => {
+            this.$emit('delete', this.product)
+          }
+        })
+      },
+      lookoverMultiClass() {
+        this.$emit('lookover', this.product)
       }
     }
   }
@@ -66,13 +80,16 @@
   @import '~common/variable.less';
 
   .product-card {
-    padding: @spacing-6x;
+    padding: @spacing-6x @spacing-6x 0;
     box-shadow: 0 0 16px 0 rgba(0,0,0,0.10);
     background-color: #fff;
     border-radius: 12px;
     cursor: pointer;
     &:hover {
       box-shadow: 0 0 16px 0 rgba(70,195,123,0.30);
+    }
+    &:hover &__operation {
+      display: block;
     }
     &__title {
       font-size: 18px;
@@ -83,6 +100,20 @@
       margin-top: @spacing-2x;
       color: @gray;
       font-size: 14px;
+    }
+    &__operation {
+      display: none;
+    }
+    &__lookover-multiclass {
+      margin: @spacing-6x -24px 0;
+      color: @gray-darker;
+      font-size: 14px;
+      text-align: center;
+      line-height: 52px;
+      border-top: solid 1px @border;
+      &:hover {
+        color: @brand-primary;
+      }
     }
   }
 </style>
