@@ -13,9 +13,16 @@ use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
+use ApiBundle\Api\Annotation\Access;
 
 class MultiClassProduct extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @param $id
+     * @return mixed
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function update(ApiRequest $request, $id)
     {
         $product = $this->getMultiClassProductService()->getProduct($id);
@@ -42,6 +49,12 @@ class MultiClassProduct extends AbstractResource
         return $this->getMultiClassProductService()->updateProduct($product['id'], $fields);
     }
 
+    /**
+     * @param ApiRequest $request
+     * @param $id
+     * @return bool[]
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function remove(ApiRequest $request, $id)
     {
         $product = $this->getMultiClassProductService()->getProduct($id);
@@ -54,16 +67,26 @@ class MultiClassProduct extends AbstractResource
             throw MultiClassException::CANNOT_DELETE_DEFAULT_PRODUCT();
         }
 
+        $multiClass = $this->getMultiClassService()->findByProductId($product['id']);
+        if (!empty($multiClass)){
+            throw MultiClassException::CAN_NOT_DELETE_PRODUCT();
+        }
+
         $this->getMultiClassProductService()->deleteProduct($product['id']);
 
         return ['success' => true];
     }
 
+    /**
+     * @param ApiRequest $request
+     * @return mixed
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function add(ApiRequest $request)
     {
         $product = [
             'title' => $request->request->get('title'),
-            'remark' => $request->request->get('remark'),
+            'remark' => $request->request->get('remark', ''),
         ];
 
         if (empty($product['title'])){
@@ -81,6 +104,11 @@ class MultiClassProduct extends AbstractResource
         return $product;
     }
 
+    /**
+     * @param ApiRequest $request
+     * @return array
+     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function search(ApiRequest $request)
     {
         $conditions = [

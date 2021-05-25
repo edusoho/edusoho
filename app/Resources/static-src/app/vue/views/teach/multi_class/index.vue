@@ -1,5 +1,5 @@
 <template>
-  <a-spin :loading="getListLoading">
+  <a-spin :spinning="getListLoading">
      <div class="clearfix mb6">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary">新建班课</a-button>
@@ -155,7 +155,6 @@ export default {
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
-        title: '删除班课',
         content: '确认要删除该班课？',
         async onOk() {
           const { success } = await MultiClass.delete({ id: multiClass.id })

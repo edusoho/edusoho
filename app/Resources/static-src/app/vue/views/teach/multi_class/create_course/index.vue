@@ -194,7 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teachers, Assistants, CourseSet, UploadToken } from 'common/vue/service/index.js';
+  import { Teachers, Assistants, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
 
   const images = {
     large: [480, 270],
@@ -228,8 +228,12 @@
         courseCoverUrl: '',
         cropModalVisible: false,
         loading: false,
-        editor: {}
+        editor: {},
+        ajaxLoading: false,
+        uploadToken: {}
       };
+    },
+    created() {
     },
     mounted() {
       this.editor = CKEDITOR.replace('summary', {
@@ -240,6 +244,11 @@
       });
     },
     methods: {
+      async getUploadToken() {
+        this.uploadToken = await UploadToken.get('default')
+
+        return Promise.resolve(1);
+      },
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
@@ -285,8 +294,12 @@
 
         reader.readAsDataURL(info.file.originFileObj);
       },
-      saveCourseCover() {
-        this.$refs.cropper.getCroppedCanvas().toBlob(blob => {
+      async saveCourseCover() {
+        if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
+          await this.getUploadToken()
+        }
+
+        this.$refs.cropper.getCroppedCanvas().toBlob(async blob => {
           const { x, y, width, height } = this.$refs.cropper.getData();
           const imageData = this.$refs.cropper.getImageData();
           const cropperData = {
@@ -314,9 +327,12 @@
           }
           const formData = new FormData();
 
-          formData.append(file, blob);
+          formData.append('file', blob);
+          formData.append('token', this.uploadToken.token);
 
           // TODO 上传图片接口；现在差token
+          await File.uploadFile(formData)
+          await File.imgCrop(cropResult)
         })
       },
       requiredValidator(rule, value, callback) {

@@ -284,6 +284,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.type NOT IN (:excludeTypes)',
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
+                'course_v8.isDefault = :isDefault',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];
