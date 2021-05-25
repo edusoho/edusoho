@@ -234,6 +234,7 @@ class CourseTaskMedia extends AbstractResource
     {
         $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
+        $playerContext['securityVideoPlayer'] = (int) $this->getSettingService()->node('magic.security_video_player', 0);
 
         return $playerContext;
     }
