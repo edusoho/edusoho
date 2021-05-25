@@ -12,6 +12,11 @@ window.CKEDITOR_BASEPATH = app.basePath + '/static-dist/libs/es-ckeditor/';
 new Vue({
   el: '#app',
   router,
-  template: '<router-view></router-view>'
+  template: `
+    <keep-alive v-if="!$route.meta.isAlive">
+      <router-view></router-view>
+    </keep-alive>
+    <router-view v-else></router-view>
+  `
 });
 

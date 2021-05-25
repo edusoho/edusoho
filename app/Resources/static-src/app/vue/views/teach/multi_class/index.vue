@@ -22,15 +22,19 @@
         {{ record.endTaskNum }}/{{ record.taskNum }}
       </template>
       <template slot="assistant" slot-scope="assistant">
-        {{ assistant.join('、') }}
+        {{ assistant ? assistant.join('、') : '' }}
       </template>
       <template slot="action" slot-scope="text, record">
         <a-button type="link" @click="goToMultiClassManage">查看</a-button>
+        <a-button type="link">数据概览</a-button>
         <a-dropdown>
           <a @click="e => e.preventDefault()">
-            编辑 <a-icon type="down" />
+            更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;">编辑</a>
+            </a-menu-item>
             <a-menu-item>
               <a href="javascript:;">复制班课</a>
             </a-menu-item>
@@ -39,7 +43,6 @@
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-        <a-button type="link">数据概览</a-button>
       </template>
     </a-table>
 
@@ -111,25 +114,12 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    name: '11',
-    name2: '222',
-    price: 100,
-    lessons: 100,
-    teacher1: '123',
-    teacher2: '123',
-    num1: '123',
-    createdTime: 123214213213
-  },
-];
-
 export default {
   name: 'MultiClassList',
   data () {
     return {
       columns,
-      multiClassList: data,
+      multiClassList: [],
       getListLoading: false,
       keywords: '',
       paging: {

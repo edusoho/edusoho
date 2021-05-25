@@ -6,8 +6,8 @@
         <div class="product-card__remark">{{ product.remark }}</div>
       </div>
       <div class="product-card__operation pull-right" v-if="product.type !== 'default'">
-        <i class="es-icon es-icon-bianjimian mr8" @click="editMultiClassProduct">编辑</i>
-        <i class="es-icon es-icon-shanchu1 color-danger" @click="deleteMultiClassProduct">删除</i>
+        <i class="es-icon es-icon-bianjimian mr6 color-primary" @click="editMultiClassProduct"></i>
+        <i class="es-icon es-icon-shanchu1 color-danger" @click="deleteMultiClassProduct"></i>
       </div>
     </div>
     <a-row class="mt6">

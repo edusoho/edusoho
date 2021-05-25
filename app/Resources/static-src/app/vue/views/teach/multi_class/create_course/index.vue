@@ -184,7 +184,7 @@
       </vue-cropper>
       <template slot="footer">
         <a-button @click="reSelectCourseCover">重新选择</a-button>
-        <a-button type="primary" @click="saveCourseCover">保存图片</a-button>
+        <a-button type="primary" @click="saveCourseCover" :loading="uploading">保存图片</a-button>
       </template>
     </a-modal>
   </div>
@@ -194,19 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teachers, Assistants, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
-
-  const images = {
-    large: [480, 270],
-    middle: [304, 171],
-    small: [96,]
-  }
-
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
+  import { Teacher, Assistant, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
 
   export default {
     name: 'CreateCourse',
@@ -232,6 +220,8 @@
         ajaxLoading: false,
         uploadToken: {},
         courseCoverName: '',
+        uploading: false,
+        imgs: null,
       };
     },
     created() {
@@ -257,13 +247,17 @@
           this.ajaxLoading = true
           values.summary = this.editor.getData()
           values.teachers = [values.teachers]
+          
+          if (this.imgs) {
+            values.imgs = this.imgs;
+          }
 
           try {
             const { error } = await CourseSet.add(values);
 
             if (!error) {
               this.$message.success('创建成功')
-              // TODO 页面跳转
+              this.$router.go(-1);
             }
           } finally {
             this.ajaxLoading = false;
@@ -271,12 +265,12 @@
         })
       },
       searchTeachers: _.debounce(async function(nickname) {
-        const { data } = await Teachers.search({ nickname })
+        const { data } = await Teacher.search({ nickname })
 
         this.teachersList = data
       }, 300),
       searchAssistants: _.debounce(async function(nickname) {
-        const { data } = await Assistants.search({ nickname })
+        const { data } = await Assistant.search({ nickname })
 
         this.assistantsList = data
       }, 300),
@@ -326,11 +320,12 @@
             y2: _.add(cropperData.y, cropperData.height),
             w: cropperData.width, // 裁剪后宽度
             h: cropperData.height, // 裁剪后高度
-            imgs: {
-              large: [480, 270],
-              middle: [304, 171],
-              small: [96, 54]
-            },
+            'imgs[large][0]': 480,
+            'imgs[large][1]': 270,
+            'imgs[middle][0]': 304,
+            'imgs[middle][1]': 171,
+            'imgs[small][0]': 96,
+            'imgs[small][1]': 54,
             post: false,
             width: imageData.naturalWidth, // 原图片宽度
             height: imageData.naturalHeight, // 原图片高度
@@ -342,9 +337,22 @@
           formData.append('file', blob, this.courseCoverName);
           formData.append('token', this.uploadToken.token);
 
-          // TODO 上传图片接口；现在差token
-          await File.uploadFile(formData)
-          await File.imgCrop(cropResult)
+          this.uploading = true;
+          try {
+            const { url } = await File.uploadFile(formData)
+
+            this.courseCoverUrl = url;
+
+            const formData1 = new FormData();
+            for(const key in cropResult) {
+              formData1.append(key, cropResult[key])
+            }
+
+            this.imgs = await File.imgCrop(formData1);
+          } finally {
+            this.uploading = false;
+            this.cropModalVisible = false;
+          }
         })
       },
       requiredValidator(rule, value, callback) {
