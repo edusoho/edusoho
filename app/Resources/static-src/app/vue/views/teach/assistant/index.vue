@@ -8,7 +8,7 @@
       />
     </div>
 
-    <a-table :columns="columns" :data-source="pageData" rowKey="id">
+    <a-table :columns="columns" :data-source="pageData" rowKey="id" :pagination="false">
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
         <div class="color-gray text-sm">{{ item.loginTime }}</div>
@@ -16,6 +16,15 @@
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
+
+    <div class="text-center">
+      <a-pagination class="mt6"
+        v-if="paging" 
+        v-model="paging.page" 
+        :total="paging.total"
+        show-less-items 
+      />
+    </div>
 
     <a-modal title="助教详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
@@ -29,7 +38,7 @@
 
 
 <script>
-import { Assistants, User } from "common/vue/service/index.js";
+import { Assistant, User } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
 const columns = [
@@ -58,28 +67,27 @@ export default {
       user: {},
       columns,
       pageData: [],
+      paging: {
+        offset: 0,
+        limit: 10,
+        total: 0,
+      },
     };
   },
   created() {
-    this.pageData = this.onSearch();
-    console.log(this.pageData);
-    // console.log(Assistant.search());
+    this.onSearch();
   },
   methods: {
-    onSearch(nickname) {
-      let params = {};
-      if (nickname) {
-        params['nickname'] = nickname;
-      }
-      // return Assistant.search(params);
-      return [
-        {
-          id: "1",
-          nickname: "teacher",
-          loginTime: "1621328400",
-          loginIp: "136.7.5.14",
-        },
-      ];
+    async onSearch(nickname) {
+      const { data, paging } = await Assistant.search({
+        nickname: nickname,
+        offset: this.paging.offset || 0,
+        limit: this.paging.limit || 10,
+      });
+      paging.page = (paging.offset / paging.limit) + 1;
+          
+      this.pageData = data;
+      this.paging = paging;
     },
     edit(id) {
       this.visible = true;

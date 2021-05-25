@@ -8,14 +8,29 @@
       />
     </div>
 
-    <a-table :columns="columns" :data-source="pageData" rowKey="id">
+    <a-table :columns="columns" :data-source="pageData" rowKey="id" :pagination="false">
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
         <div class="color-gray text-sm">{{ item.loginTime }}</div>
       </div>
 
+      <div slot="promoteInfo" slot-scope="item">
+        <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
+        <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
+        <a href="javascript:;">序号设置</a>
+      </div>
+
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
+
+    <div class="text-center">
+      <a-pagination class="mt6"
+        v-if="paging" 
+        v-model="paging.page" 
+        :total="paging.total"
+        show-less-items 
+      />
+    </div>
 
     <a-modal title="教师详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
@@ -39,7 +54,7 @@ const columns = [
   },
   {
     title: "是否推荐",
-    dataIndex: "seq",
+    scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
@@ -62,29 +77,31 @@ export default {
       user: {},
       columns,
       pageData: [],
+      paging: {
+        offset: 0,
+        limit: 10,
+        total: 0,
+      },
     };
   },
   created() {
-    this.pageData = this.onSearch();
-    console.log(this.pageData);
-    // console.log(Assistant.search());
+    this.onSearch();
   },
   methods: {
-    onSearch(keyword) {
-      let params = {};
-      if (keyword) {
-        params['keyword'] = keyword;
-      }
-      // return Teacher.search(params);
-      return [
-        {
-          id: "1",
-          nickname: "teacher",
-          seq: "1",
-          loginTime: "1621328400",
-          loginIp: "136.7.5.14",
-        },
-      ];
+    async onSearch(nickname) {
+      const { data, paging } = await Teacher.search({
+        nickname: nickname,
+        offset: this.paging.offset || 0,
+        limit: this.paging.limit || 10,
+      });
+      paging.page = (paging.offset / paging.limit) + 1;
+
+      data.forEach(element => {
+        element.isPromoted = element.promoted == 1;
+      });
+          
+      this.pageData = data;
+      this.paging = paging;
     },
     edit(id) {
       this.visible = true;

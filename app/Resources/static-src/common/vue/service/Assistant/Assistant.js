@@ -1,7 +1,9 @@
 import { apiClient } from 'common/vue/service/api-client.js';
+import _ from 'lodash';
+import BaseService from '../BaseService'
 
-export const Assistant = {
-  async search(params) {
-    return apiClient.get('/api/assistants', params);
-  },
-}
+const baseUrl = '/api/assistants';
+const baseService = new BaseService({ baseUrl })
+
+export const Assistant = _.assignIn(baseService, {
+})
