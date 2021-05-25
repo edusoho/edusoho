@@ -39,7 +39,7 @@ site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
 site.datagrid.filter.recommended: Recommended
 site.datagrid.filter.category_more: More
-site.datagrid.filter.course_more: 'More courses'
+site.datagrid.filter.course_more: 'More'
 site.datagrid.radios.open: Open
 site.datagrid.radios.close: Close
 site.datagrid.radios.yes: 'Yes'
@@ -52,13 +52,15 @@ site.power_by: howzhi.com
 site.default.must: Must
 site.default.and: And
 site.default.student: Student
-site.default.classroom: Class
+site.default.classroom: ''
+site.default.classroom.notempty: 'Class'
 site.default.reviewing: Reviewed
 site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
 site.default.course: Course
+site.default.question.bank: Question Bank
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -138,7 +140,7 @@ site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
-site.user_password.error_tips: Bad credentials.
+site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
 site.mobile_bind.title: Bind phone number
@@ -237,7 +239,7 @@ user.fields.mobile_label.apple_tip: Please go to the APP for binding
 user.fileds.realname: Name
 user.fileds.me: Me
 user.fields.following: Following
-user.fields.fan: Follower
+user.fields.fan: Followers
 user.fields.no_title: 'No title'
 user.fields.no_sign: 'No signature'
 user.fields.no_introduction: 'No introduction'
@@ -356,7 +358,7 @@ form.btn.yes: 'Yes'
 form.btn.no: 'No'
 
 finance.income: Income
-finance.total_incom: Total income
+finance.total_income: Total revenue
 finance.expense: Expense
 finance.recover: Recorvey
 finance.total_expense: Total expense
@@ -373,6 +375,7 @@ finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
+plugin.money: 'Recharge'
 plugin.money_card.use: 'Use recharge card'
 plugin.discount: Discount
 plugin.acitivity: Acitivity
@@ -408,7 +411,7 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.product_name: Product name
+order.product_name: Product Name
 order.product_price: Product Price
 order.price_amount: Price payable
 order.paid_amount: Paid price
@@ -433,10 +436,10 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.refund.equal: equal
 order.refund.discount: discount
-order.created_time: 'Create time'
+order.created_time: 'Create Time'
 order.pay_time: 'Payment time'
 order.closed_time: 'Closed time'
-order.status: 'Order status'
+order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
@@ -486,6 +489,8 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
+order.confirm.pay_points:  'You can use %num% points, use'
+order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
@@ -1694,7 +1699,7 @@ course.plan_task.create_part: 'Add %partName%'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
 course.plan_task.question_describe: Description
-course.plan_task.put_question: Ask
+course.plan_task.put_question: OK
 course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
@@ -2107,7 +2112,8 @@ classroom.vip_member_expired_tips: "You can not learn the course ' ~ %classroomN
 classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access the course ' ~ %classroomName% ~ '. Please <a class=\"alert-link\" href=\"%vipUpgrade%\" target=\"_blank\">upgrade</a>。\n"
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
 classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
-classroom.courses_count: '%courseNum% courses in total'
+classroom.courses_count: '%courseNum% courses'
+classroom.compulsory_count: '%compulsoryTaskNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.published: Publish
@@ -2471,21 +2477,21 @@ form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
 
-user.login.account_type_label: 'Emails/Phone numbers/Username'
-user.login.content_title: Login
+user.login.account_type_label: 'Email/Phone numbers/Username'
+user.login.content_title: 'Sign in'
 user.login.page_title: 'Log In'
 user.login.login_link: 'Log In'
 user.login.account_label: Account
-user.login.account_placeholder: 'Emails/Phone numbers/Username'
+user.login.account_placeholder: 'Email/Phone numbers/Username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
-user.login.remember_me: 'Remember Password'
+user.login.remember_me: 'Remember password'
 user.login.submit_button: Login
 user.login.submiting_tips: 'Login ...'
 user.login.find_password: 'Forgot password'
 user.login.ask_register: 'No account？'
 user.login.go_register: 'Sign up now'
-user.login.login_account: 'Log In'
+user.login.login_account: 'Sign in'
 user.bind.bind_choose_btn: 'Bind new account'
 user.bind.confirm_bind_btn: 'Confrim to bind'
 user.bind.email_or_mobile_hint: 'Please enter Email/Mobile same as %name% registered'
@@ -2540,7 +2546,7 @@ user.register.reset_email.input_placeholder: 'Please type in network school pass
 user.register.reset_email.display: 'Network school password'
 user.register.reset_email.new_email: 'New email address:'
 user.register.reset_email.new_email_tips: 'Please type in new email address'
-user.register.login_account: Account
+user.register.login_account: 'Sign in'
 user.register.register_account: 'Sign Up'
 user.register.system_close_tips: 'Registration stopped, please contact administrator'
 user.register.register_through_inviter: "Registering under %inviteUser%</span>`s invitation by <span class=\"color-gray mhs\">\n"
@@ -2595,7 +2601,7 @@ user.oauth.bind_existed_account: 'bind existing account?'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
 user.oauth.register.password__placeholder: '5-20 words, number or symbol'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
-user.oauth.register.confirm_password_label: 'confirm password'
+user.oauth.register.confirm_password_label: 'Confirm password'
 user.oauth.register.confirm_password_placeholder: 'input password again'
 user.oauth.register.input_sms_code_tips: 'input sms verify code'
 user.oauth.register.input_sms_code_placeholder: 'please input sms verify code'
@@ -2831,6 +2837,7 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin_zh: 'My coin'
 user.account.my_coin.pay_coin: %coin_name% paid
 user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
@@ -2925,39 +2932,41 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: About
+user.homepage.introductions: About me
+user.homepage.teaching: Teaching
+user.homepage.learning: Learning
 user.homepage.teaching_courses: 'Teaching Courses'
-user.homepage.teaching_question_bank: 'Teaching question bank'
+user.homepage.teaching_question_bank: 'Teaching Question Bank'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
-user.homepage.learning_question_bank: 'Learning Question bank'
-user.homepage.learning_classrooms: 'Learning in %classroomName%'
+user.homepage.learning_question_bank: 'Learning Question Bank'
+user.homepage.learning_classrooms: 'Learning In %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.favorite_goods: Favorites
-user.homepage.joined_group: 'Enrolled Groups'
-user.homepage.following_fan: Following/Fans
-user.homepage.introductions.empty: 'No introduction'
-user.homepage.teaching_courses.empty: 'No teaching course.'
-user.homepage.learning_courses.empty: 'No learning course.'
-user.homepage.learning_question_bank.empty: 'No learning question bank.'
-user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
-user.homepage.favorite_courses.empty: 'No bookmarked course.'
-user.homepage.favorite_goods.empty: 'No bookmarked goods.'
-user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
-user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
+user.homepage.joined_group: 'Groups'
+user.homepage.following_fan: Followers/Following
+user.homepage.introductions.empty: 'No Introduction'
+user.homepage.teaching_courses.empty: 'No Teaching Course'
+user.homepage.learning_courses.empty: 'No Learning Course'
+user.homepage.learning_question_bank.empty: 'No Learning Question Bank'
+user.homepage.teaching_question_bank.empty: 'No Teaching Question Bank'
+user.homepage.favorite_courses.empty: 'No Bookmarked Course'
+user.homepage.favorite_goods.empty: 'No Bookmarked Goods'
+user.homepage.teaching_classrooms.empty: 'No Teaching %classroomName%'
+user.homepage.learning_classrooms.empty: 'No Learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
 user.homepage.joined_group.manage: 'Manage Groups'
-user.homepage.joined_group.empty: 'No group info'
-user.homepage.following_fan.following_empty: 'No following'
-user.homepage.following_fan.fan_empty: 'No fans'
+user.homepage.joined_group.empty: 'No Group Info'
+user.homepage.following_fan.following_empty: 'No Following'
+user.homepage.following_fan.fan_empty: 'No Fans'
 homepage: Home
 homepage.student_evaluate: 'Student''s review'
 homepage.reviewer_comment_course: 'Say'
-homepage.switch_language.chinese: Chinese (Simplified)
+homepage.switch_language.chinese: Chinese (简体中文)
 homepage.switch_language.english: English
 homepage.header.search: Search
-homepage.header.login: Log In
-homepage.header.logout: Log Out
+homepage.header.login: Sign in
+homepage.header.logout: Sign Out
 homepage.header.register: Sign Up
 homepage.header.my_course: 'My Teaching'
 homepage.header.my_learning: 'My Learning'
@@ -2978,12 +2987,12 @@ homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
-homepage.live_course.expect: 'Stay tuned'
+homepage.live_course.expect: 'Coming Soon'
 homepage.live_course.teacher: 'Teacher:'
 homepage.live_course.start_time: 'Live available at:'
 homepage.live_course.time_before_start: "<span>%minutes%</span> from the live broadcast\n"
 homepage.live_course.join_btn: 'Enroll the live'
-homepage.live_course.more: 'More lives'
+homepage.live_course.more: 'More'
 homepage.open_course.tips: 'Free Anytime, Anywhere'
 homepage.open_course.more: 'More'
 homepage.learning_course: Continue：%title%
@@ -2993,12 +3002,13 @@ homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
+site.datagrid.filter.class_more : More
 homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
 homepage.student_comment.empty: 'No review'
 homepage.student_dynamic.content_title: 'Latest updates'
-homepage.recommend_teacher.more: 'More teachers'
+homepage.recommend_teacher.more: 'More'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
 homepage.footer.course_copyright: "Copyright <a href=\"/\">\n  %copyRightUrl%\n</a>\n"
@@ -3022,7 +3032,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
-search.free_item_bank: Free Item Bank
+search.free_item_bank: Free
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3769,7 +3779,7 @@ my.teaching.question_bank.open_ensure: Are you sure to open the item bank exerci
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
-my.learning.question_bank_menu: 'Question bank'
+my.learning.question_bank_menu: 'Question Bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3878,11 +3888,11 @@ my.learning.note.course_task_empty: 'This %taskName% has been deleted'
 my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
-my.learning.class.question: 'My course Q&A'
-my.learning.classroom.question: 'My classroom Q&A'
+my.learning.class.question: 'My Course Q&A'
+my.learning.classroom.question: 'My Classroom Q&A'
 my.learning.question.empty: 'No record'
 my.learning.question.course_thread: 'Course Discussion'
-my.learning.question.classroom_thread: '%classroomName% discussion'
+my.learning.question.classroom_thread: '%classroomName% Discussion'
 my.learning.testpaper: 'My Test'
 my.learning.testpaper.record: 'Test Records'
 my.learning.testpaper.favorit_question: 'Favorited Questions'
@@ -3913,7 +3923,7 @@ explore.view_course_btn: 'View Course'
 explore.view_classroom_btn: 'View Class'
 explore.classroom.list: '%name% List'
 explore.classroom.vip_name: 'VIP %name%'
-explore.classroom.free_name: 'VIP %name%'
+explore.classroom.free_name: 'Free %name%'
 explore.classroom.empty: 'No record'
 explore.classroom.service_empty: 'No record'
 explore.open_course.title: 'Open Course'
@@ -4219,6 +4229,10 @@ admin.course_manage.manage.classroom_course_location: '%classroom%'
 admin.course_manage.manage.classroom_course_removed: Removed
 admin.course_manage.manage.vip_course: 'VIP Course'
 admin.course_manage.manage.vip_grade: 'VIP Level'
+admin.course_manage.manage.duration: 'Duration'
+admin.course_manage.manage.introduction: 'Introduction'
+admin.course_manage.manage.member_benefits: 'Member Benefits'
+admin.course_manage.manage.newest_member : 'Newest Member'
 admin.course_manage.manage.vip_grade_removed: 'This VIP level has been removed'
 admin.course_manage.manage.vip_grade_count: '%count% VIP level'
 admin.course_manage.manage.live: Live
@@ -5074,7 +5088,7 @@ admin.custom_page_manage.table_type: Type
 admin.custom_page_manage.table_status: Status
 admin.custom_page_manage.table_publish_time_or_user: 'Published Time/Author'
 admin.custom_page_manage.table_operation: Action
-admin.custom_page_manage.empty: 'No Record'
+admin.custom_page_manage.empty: 'No record'
 admin.custom_page_manage.title_url: 'Title URL'
 admin.custom_page_manage.title_category: Category
 admin.custom_page_manage.edit_btn: Edit
@@ -6049,6 +6063,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 'You have successfully purchased 
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 'You have successfully purchased "class name", paid [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 'You have successfully purchased "member name", pay [ order price]. %smsSchoolName%'
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 'You have successfully purchased "unit" of "virtual coin value", paid [order price]. %smsSchoolName%'
+admin.edu_cloud.edu_sms.member_judgment_notes: 'You are not a member yet, please activate'
 admin.edu_cloud.edu_email: 'Cloud email'
 admin.edu_cloud.edu_email.application: 'Email scenarios'
 admin.edu_cloud.edu_email.application.id: Id
@@ -6173,6 +6188,11 @@ admin.edu_cloud.edu_attachment.group: Group
 admin.edu_cloud.edu_attachment.testpaper: Tests
 admin.edu_cloud.edu_attachment.size: 'Attachment maximum size'
 admin.edu_cloud.edu_attachment.size_tips: 'Attachment size limit to 2048MB'
+admin.edu_cloud.edu_file.download.setting: 'Cloud resource download settings'
+admin.edu_cloud.edu_file.open_radio: Active
+admin.edu_cloud.edu_file.close_radio: Disabled
+admin.edu_cloud.edu_file.download.setting.enable.tips: 'After opening, all resources of the public database can be downloaded from the middle station as a teacher'
+admin.edu_cloud.edu_file.download.setting.disable.tips: 'After closing, all resources of the public database cannot be downloaded from the middle station'
 admin.edu_cloud.key_info.key_error_tips: 'Authorization code is not correct, please try again! If you are a business user, please contact EduSoho official.'
 admin.edu_cloud.key_info.license_domain: 'Authorized domain name'
 admin.edu_cloud.key_info.not_license_tips: 'Not authorized'
@@ -6530,7 +6550,7 @@ admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.co
 admin_v2.developer_setting.scrm_url: 'SCRM(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.default_locale: language
-admin.developer_setting.default_locale.zh_CN: Chinese(Simplified)
+admin.developer_setting.default_locale.zh_CN: Chinese(简体中文)
 admin.developer_setting.default_locale.en: English
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.developer_setting.mp_service_url_label: Applet service platform address
@@ -7301,8 +7321,10 @@ admin.xapi.enable_label: Turn on xAPI
 admin.xapi.push_url_label: Set the xAPI address
 admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
-site.date_format: 'Y-n-d H:i:s'
+site.date_format: 'F j, Y h:i'
+site.date_coupon: 'F j, Y'
 site.date_format_H_i: 'Y-n-d H:i'
+site.date_format_H_i_s: 'F j, Y H:i:s'
 site.date_more: More
 site.data_last_picture: 'Already the last picture'
 es_bar.practice.homework: Homework
@@ -7826,6 +7848,9 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+my.reward_points: My Points
+my.reward_points_message: '$ %num% in cash, the credits will not be refunded when applying for refund'
+my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
 task.learn_data_detail.createdTime: Join Time
@@ -9128,6 +9153,7 @@ exception.user.unfollow_error: Unfollow user who you did not follow
 exception.user.idcard_invalid: ID number is invalid
 exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: No permission to ban the role
+exception.user.lock: The account is banned, please contact the administrator
 exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
@@ -9186,6 +9212,7 @@ exception.course.not_found_chapter: Chapter does not exist
 exception.course.chain_not_registered: Access chain not registered
 exception.course.expirymode_invalid: Validity type error
 exception.course.expirydays_required: Valid days cannot be empty
+exception.course.expirydays_invalid: Valid days type error
 exception.course.expirystartdate_required: Validity period start date cannot be empty
 exception.course.expiryenddate_required: Validity period end date cannot be empty
 exception.course.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
@@ -9216,7 +9243,7 @@ exception.classroom.forbidden_take_classroom: Forbidden take classroom
 exception.classroom.forbidden_handle_classroom: Forbidden handle classroom
 exception.classroom.forbidden_look_classroom: Forbidden look classroom
 exception.classroom.unpublished_classroom: Classroom is unpublished
-exception.classroom.chain_not_registered: Chain not registered
+exception.classroom.chain_not_registered: Access chain not registered
 exception.classroom.unjoin: You have not join classroom
 exception.classroom.empty_title: Title is empty
 exception.classroom.forbidden_update_expiry_date: The published class is not allowed to modify the original validity mode of the class.
@@ -9477,6 +9504,9 @@ exception.certificate.record.notfound_record: Certificate not found
 exception.certificate.record.forbidden_cancel: Forbidden cancel
 exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
+exception.certificate.audit.forbidden_audit: Audit failure
+exception.certificate.valid.forbidden_audit: Failed to send audit
+exception.certificate.reject.forbidden_audit: Review rejected failure
 
 exception.information_collect.not_found: Collection not found
 exception.information_collect.closed: Collection is closed
@@ -10242,6 +10272,8 @@ s2b2c.resource.sync.has_new.notify: 有价格更新
 exception.goods.not_found: Goods not found.
 exception.specs.not_found: Specs not found.
 exception.goods.forbidden_manage: Has no permission for goods
+exception.goods.forbidden_join_unpublished_goods: Can not join unpublisehd goods
+exception.goods.forbidden_join_unpublished_specs: Goods not published, can not buy
 
 vip.level.free_learning: Free for Vip
 exception.review.forbidden_create_review: Create review forbiddened.
@@ -10269,6 +10301,7 @@ admin_v2.operating.goods_show_data: Product page display data
 admin_v2.operating.goods_show.join_number: Show joins
 admin_v2.operating.goods_show.visitor_number: Show visitors
 admin_v2.operating.goods_show.none: Show none
+admin_v2.operating.goods_show_studen.review.data: Student review data
 admin_v2.operating.review_setting: Goods page show setting
 admin_v2.operating.review_show: Goods page show reviews
 
@@ -10304,10 +10337,10 @@ goods.description: Goods description
 # 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
-user.certificates.none_record: Certificate Empty
+user.certificates.none_record: Certificate empty
 user.certificates.only_valid: Show only valid
 user.certificates.date_range: Certificate acquisition tim
-user.certificates.placeholde_name: Enter certificate name search...
+user.certificates.placeholde_name: Enter certificate name
 user.certificates.cert_titile: Certificate name
 user.certificates.cert_code: Certificate number
 user.certificates.cert_issue_time: Acquisition time
@@ -10325,7 +10358,7 @@ user.certificates.detail_object: Authentication object
 user.certificates.detail_object_name: Name
 user.certificates.detail_object_usrename: Username
 user.certificates.detail_cert_message: Certificate information
-user.certificates.unclaimed_list: Certificate to be received
+user.certificates.unclaimed_list: Certificate to Be Received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
 
@@ -10383,6 +10416,21 @@ task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
+
+exception.exercise.not_found: Practice doesn't exist
+exception.exercise.draft: This exercise is not published. If you have any questions, please contact the teacher!
+exception.exercise.closed: This exercise is closed. If you have any questions, please contact the teacher!
+exception.exercise.forbidden_access_exercise: No access to other students' exercises!
+exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
+exception.exercise.not_found_result: The result of the exercise does not exist
+
+exception.homework.not_found: Homework does not exist
+exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
+exception.homework.closed: This homework is closed. If you have any questions, please contact the teacher!
+exception.homework.forbidden_access_homework: Access to other students' work is not allowed!
+exception.homework.forbidden_duplicate_commit_homework: Homework has been finished and cannot be submitted again!
+exception.homework.reviewing: Homework is being marked! Can't start over!
+exception.homework.not_found_result: The homework result does not exist
 
 activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
 activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
@@ -10498,7 +10546,6 @@ classroom.manage.data_statistics.course_detail_list.select_all: All
 classroom.manage.data_statistics.student_detail_list.select_finish_rate: Finished Rate
 classroom.manage.data_statistics.name_or_mobile_placeholder: UserName/mobile
 classroom.manage.data_statistics.student_detail_list.user_all_courses: %nickname% All Courses
-
 admin.edu_cloud.edu_video.finger_print_content_label: FingerPrint
 admin.edu_cloud.edu_video.finger_print_content_label.nickname: Nickname
 admin.edu_cloud.edu_video.finger_print_content_label.realname: Truename

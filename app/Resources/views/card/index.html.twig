@@ -60,7 +60,7 @@
           </div>
         {% endfor %}
       {% else %}
-      <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if isCoupon %}{{'plugin.coupon'|trans}}{% elseif isMoneyCard %}{{'plugin.money_card'|trans}}{% endif %}</div>
+      <div class="cd-empty">{{'admin.custom_page_manage.empty'|trans}}</div>
       {% endif %}
     {% else %}
     <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>

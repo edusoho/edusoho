@@ -6,6 +6,19 @@
 
 {% block main %}
 
+  <ul class="nav nav-pills mbl">
+      {% if pageNav == 'teach' %}
+        <li class="active"><a href="{{ path('user_teach', {id:user.id}) }}">{{'site.default.course'|trans}}</a></li>
+        <li><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'site.default.classroom.notempty'|trans}}</a></li>
+        <li><a href="{{ path('user_question_bank_teach', {id:user.id}) }}">{{'site.default.question.bank'|trans}}</a></li>
+      {% endif %}
+      {% if pageNav == 'learn' %}
+        <li><li class="active"><a href="{{ path('user_learn', {id:user.id}) }}">{{'site.default.course'|trans}}</a></li>
+        <li><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'site.default.classroom.notempty'|trans}}</a></li>
+        <li><a href="{{ path('user_question_bank_learn', {id:user.id}) }}">{{'site.default.question.bank'|trans}}</a></li>
+      {% endif %}
+  </ul>
+
   {% if courseSets %}
 
     {% if app.user and app.user.isTeacher() and app.user.id == user.id and type == 'teach' %}
