@@ -5270,10 +5270,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.24:
-  version "1.0.24"
-  resolved "https://registry.nlark.com/item-bank/download/item-bank-1.0.24.tgz#1a816980cc4465997721be1fe38cedd3f13bb5f1"
-  integrity sha1-GoFpgMxEZZl3Ib4f44zt0/E7tfE=
+item-bank@^1.0.25:
+  version "1.0.25"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.25.tgz#2597b1d7406d9dac246c7cf6347d4915f32f47b2"
+  integrity sha512-omZPgrnYPg7GppLXsS0dlbQf4RF1Lx9CUPiWoXj/pHN9Qo2qc+xMsUF7rFBz3Po4Fz7E+2TmfNI13YIwrOsmYA==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
