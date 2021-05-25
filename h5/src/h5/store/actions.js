@@ -200,12 +200,3 @@ export const setCloudAddress = ({ commit }) =>
     .catch(err => {
       console.log(err);
     });
-
-export const isWechat = () => {
-  const ua = navigator.userAgent.toLowerCase();
-  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-    return true;
-  } else {
-    return false;
-  }
-};

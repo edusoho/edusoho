@@ -221,7 +221,7 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
-    ...mapActions(['setCloudAddress', 'isWechat']),
+    ...mapActions(['setCloudAddress']),
 
     toToast() {
       const condition = this.finishCondition;
@@ -395,7 +395,7 @@ export default {
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
-      const securityVideoPlayer = player.securityVideoPlayer;
+      const securityVideoPlayer = media.securityVideoPlayer;
       // 视频试看判断
       const canTryLookable =
         !this.joinStatus && Number(this.details.tryLookable);
@@ -491,6 +491,14 @@ export default {
           }
         });
       });
+    },
+    isWechat() {
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+      } else {
+        return false;
+      }
     },
     expire() {
       this.counting = false;
