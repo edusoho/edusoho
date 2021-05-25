@@ -979,6 +979,14 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@codeages/utils@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@codeages/utils/-/utils-1.0.2.tgz#0073689529f666f4730df1570a7b040392ceb860"
+  integrity sha512-GEa+SyRlECNueB+u+hNmG2qvFKYNPS6HfKUY5EqIhe3+dO9VJM2+qnZStpAQooBlfrM2a2xlMlPUCGl0YnMefA==
+  dependencies:
+    dayjs "^1.10.4"
+    lodash "^4.17.21"
+
 "@simonwep/pickr@~1.7.0":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@simonwep/pickr/-/pickr-1.7.2.tgz#99c73a3852633f749c8c187c82627a448b76b1ef"
@@ -2997,6 +3005,11 @@ date-now@^0.1.4:
 dateformat@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
+
+dayjs@^1.10.4:
+  version "1.10.4"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -5889,13 +5902,18 @@ lodash.uniq@^4.3.0, lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@3.10.1, lodash@3.x:
+lodash@3.x:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@^4.12.0, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@~4.17.11:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lolex@^2.2.0:
   version "2.7.5"
@@ -9296,10 +9314,10 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
 
-vue-cropperjs@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/vue-cropperjs/-/vue-cropperjs-5.0.0.tgz#7f8cbc460737af3831b4ded634c95905198e329e"
-  integrity sha512-RhnC8O33uRZNkn74aiHZwNHnBJOXWlS4P6gsRI0lw4cZlWjKSCywZI9oSI9POlIPI6OYv30jvnHMXGch85tw7w==
+vue-cropperjs@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/vue-cropperjs/-/vue-cropperjs-4.2.0.tgz#6bce4c17478cecec56571d4060892a386307c60e"
+  integrity sha512-dvwCBtjGMiznkNIK2GFd1SQm1x+wmtWg4g4t+NrJSPj/fpHnubXxAUOIvY7lMFeR2lawRLsigCaGZrcXCzuTKA==
   dependencies:
     cropperjs "^1.5.6"
 

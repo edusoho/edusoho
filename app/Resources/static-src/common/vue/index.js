@@ -1,7 +1,10 @@
 import Vue from 'vue/dist/vue.esm.js';
+import _ from 'lodash';
+import 'moment';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
-  FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch
+  FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon,
+  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip, Divider, Message, Notification
 } from 'ant-design-vue';
 
 if (!window.Vue) {
@@ -20,6 +23,43 @@ if (!window.Vue) {
   Vue.use(Switch)
   Vue.use(AutoComplete)
   Vue.use(Upload)
+  Vue.use(Icon)
+  Vue.use(Pagination)
+  Vue.use(Spin)
+  Vue.use(Popconfirm)
+  Vue.use(Dropdown)
+  Vue.use(Space)
+  Vue.use(Descriptions)
+  Vue.use(Tag)
+  Vue.use(Tooltip)
+  Vue.use(Divider)
+
+  Vue.prototype.$message = Message;
+  Vue.prototype.$notification = Notification;
+  Vue.prototype.$info = Modal.info;
+  Vue.prototype.$success = Modal.success;
+  Vue.prototype.$error = Modal.error;
+  Vue.prototype.$warning = Modal.warning;
+  Vue.prototype.$confirm = Modal.confirm;
+  Vue.prototype.$destroyAll = Modal.destroyAll;
+}
+
+if (!window.Vue) {
+  Vue.filter('trans', (value) => {
+    if (_.isObject(value)) {
+      Translator.trans(value.text, value.options || {})
+    } else if (_.isString(value)) {
+      Translator.trans(value)
+    }
+  })
+
+  Vue.filter('YYYY-MM-DD', value => {
+    return moment(value, 'YYYY-MM-DD')
+  })
+
+  Vue.filter('YYYY-MM-DD HH:ss', value => {
+    return moment(value, 'YYYY-MM-DD HH:ss')
+  })
 }
 
 window.Vue = window.Vue || Vue;

@@ -5,10 +5,13 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 
 class MultiClass extends AbstractResource
 {
@@ -24,7 +27,7 @@ class MultiClass extends AbstractResource
         $teachers = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
         $multiClass['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
 
-        $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');;
+        $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
         $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
         $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
@@ -69,6 +72,90 @@ class MultiClass extends AbstractResource
         return ['success' => true];
     }
 
+    public function search(ApiRequest $request)
+    {
+        $conditions = $this->prepareConditions($request->query->all());
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $multiClassesCount = $this->getMultiClassService()->countMultiClass($conditions);
+        $multiClasses = $this->makeMultiClassesInfo($multiClasses);
+
+        return $this->makePagingObject($multiClasses, $multiClassesCount, $offset, $limit);
+    }
+
+    private function prepareConditions($conditions)
+    {
+        $prepareConditions = [];
+        if (!empty($conditions['keywords'])) {
+            $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
+            if (empty($userIds)) {
+                $courses = $this->getCourSetService()->findCourseByCourseSetTitleLike($conditions['keywords']);
+                $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            } else {
+                $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
+                    'userIds' => $userIds,
+                    'role' => 'teacher', ],
+                    [], 0, PHP_INT_MAX
+                );
+            }
+        }
+        if (!empty($conditions['productId'])) {
+            $prepareConditions['productId'] = $conditions['productId'];
+        }
+
+        return $prepareConditions;
+    }
+
+    private function makeMultiClassesInfo($multiClasses)
+    {
+        $multiClassIds = ArrayToolkit::column($multiClasses, 'id');
+        $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
+        $productIds = ArrayToolkit::column($multiClasses, 'productId');
+
+        $teachers = $this->getMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'teacher');
+        $assistants = $this->getMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'assistant');
+        $teacherUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teachers, 'userId'));
+        $assistantUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
+        $teachers = ArrayToolkit::index($teachers, 'multiClassId');
+        $assistantGroup = ArrayToolkit::group($assistants, 'multiClassId');
+
+        $courses = $this->getCourSetService()->findCoursesByIds($courseIds);
+        $products = $this->getMultiClassProductService()->findProductByIds($productIds);
+
+        foreach ($multiClasses as &$multiClass) {
+            $teacher = $teachers[$multiClass['id']];
+            $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
+            $assistantIds = ArrayToolkit::column($assistants, 'userId');
+            $multiClass['course'] = $courses[$multiClass['courseId']]['courseSetTitle'];
+            $multiClass['product'] = $products[$multiClass['productId']]['title'];
+            $multiClass['price'] = $courses[$multiClass['courseId']]['price'];
+            $multiClass['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1]);
+            $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks([
+                'multiClassId' => $multiClass['id'],
+                'status' => 'published',
+                'isLesson' => 1,
+                'type' => 'live',
+                'startTime_GT' => time(),
+            ]);
+            $multiClass['endTaskNum'] = $this->getTaskService()->countTasks([
+                'multiClassId' => $multiClass['id'],
+                'status' => 'published',
+                'isLesson' => 1,
+                'endTime_LT' => time(),
+            ]);
+            $multiClass['teacherId'] = $teacherUsers[$teacher['userId']]['id'];
+            $multiClass['teacher'] = $teacherUsers[$teacher['userId']]['nickname'];
+            $multiClass['assistantIds'] = $assistantIds;
+            $multiClass['assistant'] = [];
+            array_walk($assistantIds, function ($id) use (&$multiClass,$assistantUsers) {
+                $multiClass['assistant'][] = $assistantUsers[$id]['nickname'];
+            });
+            $multiClass['studentNum'] = $this->getMemberService()->countMembers(['multiClassId' => $multiClass['id'], 'role' => 'student']);
+        }
+
+        return $multiClasses;
+    }
+
     private function checkDataFields($multiClass)
     {
         if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId'])) {
@@ -99,11 +186,35 @@ class MultiClass extends AbstractResource
     }
 
     /**
+     * @return CourseService
+     */
+    protected function getCourSetService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    /**
      * @return MultiClassProductService
      */
     protected function getMultiClassProductService()
     {
         return $this->service('MultiClass:MultiClassProductService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 
     /**

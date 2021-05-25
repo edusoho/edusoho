@@ -11874,7 +11874,7 @@ site.content.illegal_status: 该条内容已违规处理
 
 exception.multi_class.multi_class_product_exist: 产品名称已存在
 exception.multi_class.multi_class_exist: 班课名称已存在
-exception.multi_class.multi_class_not_exist: 班课不已存在
+exception.multi_class.multi_class_not_exist: 班课不存在
 exception.multi_class.multi_class_teacher_require: 班课需要设置教师
 exception.multi_class.multi_class_assistant_require: 班课需要设置助教
 exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
@@ -11882,3 +11882,5 @@ exception.multi_class.multi_class_data_fields_missing : 班课参数缺失
 exception.multi_class.multi_class_course_not_match: 班课与课程不匹配
 exception.multi_class.product_not_found: 产品未找到
 exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除
+exception.multi_class.multi_class_clone_already: 班课复制中
+exception.multi_class.can_not_delete_product: 该产品含有班课，不能删除

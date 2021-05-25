@@ -177,6 +177,8 @@ class Logger
      */
     const MULTI_CLASS_PRODUCT = 'multi_class_product';
 
+    const MULTI_CLASS = 'multi_class';
+
     const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
 
     const ACTION_SYNC_WHEN_TASK_CREATE = 'sync_when_task_create';
@@ -397,6 +399,13 @@ class Logger
                 'update_product' => '更新大班课产品',
                 'delete_product' => '删除大班课产品',
             ],
+
+            self::MULTI_CLASS => [
+                'create_multi_class' => '创建班课',
+                'update_multi_class' => '更新班课',
+                'delete_multi_class' => '删除班课',
+                'clone_multi_class' => '复制班课',
+            ],
         ];
     }
 
@@ -484,6 +493,7 @@ class Logger
             self::OPEN_COURSE => '公开课',
             self::LIVE => '直播',
             self::MULTI_CLASS_PRODUCT => '大班课产品',
+            self::MULTI_CLASS => '大班课',
         ];
     }
 }
