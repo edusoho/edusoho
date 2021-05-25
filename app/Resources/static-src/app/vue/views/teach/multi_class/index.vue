@@ -25,7 +25,7 @@
         {{ assistant.join('、') }}
       </template>
       <template slot="action" slot-scope="text, record">
-        <a-button type="link" @click="goToMultiClassManage">查看</a-button>
+        <a-button type="link" @click="goToMultiClassManage(record.id)">查看</a-button>
         <a-dropdown>
           <a @click="e => e.preventDefault()">
             编辑 <a-icon type="down" />
@@ -184,9 +184,9 @@ export default {
       });
     },
 
-    goToMultiClassManage() {
+    goToMultiClassManage(id) {
       this.$router.push({
-        path: '/course_manage'
+        path: `/course_manage/${id}`
       })
     }
   }

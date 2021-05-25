@@ -231,6 +231,10 @@ export default {
   },
 
   methods: {
+    fetchLessons() {
+
+    },
+
     onSearch(value) {
       console.log(value);
     },

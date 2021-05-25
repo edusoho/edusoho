@@ -15,7 +15,7 @@ export default [
     component: () => import('app/vue/views/teach/multi_class/create_course/index.vue')
   },
   {
-    path: '/course_manage',
+    path: '/course_manage/:id',
     name: 'MultiClassCourseManage',
     component: () => import('app/vue/views/teach/multi_class/course_manage/index.vue'),
     children: [

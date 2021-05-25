@@ -3,16 +3,16 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
-          <router-link to="/course_manage">课时信息</router-link>
+          <router-link :to="`/course_manage/${multiClassId}`">课时信息</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item" key="student-manage">
-          <router-link to="/course_manage/student_manage">学员管理</router-link>
+          <router-link :to="`/course_manage/${multiClassId}/student_manage`">学员管理</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item" key="homework-review">
-          <router-link to="/course_manage/homework_review">作业批阅</router-link>
+          <router-link :to="`/course_manage/${multiClassId}/homework_review`">作业批阅</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
-          <router-link to="/course_manage/data_preview">数据预览</router-link>
+          <router-link :to="`/course_manage/${multiClassId}/data_preview`">数据预览</router-link>
         </a-menu-item>
       </a-menu>
 
@@ -40,10 +40,12 @@ export default {
   data() {
     return {
       current: ['class-info'],
+      multiClassId: 0
     }
   },
 
   created() {
+    this.multiClassId = this.$route.params.id;
     this.current = [this.$route.meta.current];
   }
 }
