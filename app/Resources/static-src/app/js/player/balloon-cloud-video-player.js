@@ -11,7 +11,6 @@ class BalloonCloudVideoPlayer extends Emitter {
     this.options = options;
     this.player = {};
     this.setup();
-    console.log(123);
   }
 
   setup() {
