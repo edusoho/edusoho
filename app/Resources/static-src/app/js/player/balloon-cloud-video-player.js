@@ -75,6 +75,12 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
+    if (self.options.playerType) {
+      extConfig = Object.assign(extConfig, {
+        playerType: self.options.playerType
+      });
+    }
+
     if (self.options.controlBar) {
       extConfig = Object.assign(extConfig, {
         controlBar: self.options.controlBar
@@ -111,6 +117,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       strictMode: !self.options.strictMode,
       language: lang
     });
+    console.log(extConfig);
     var player = new QiQiuYun.Player(extConfig);
     player.on('ready', function(e) {
       self.emit('ready', e);
