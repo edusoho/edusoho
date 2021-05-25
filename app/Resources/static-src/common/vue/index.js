@@ -4,7 +4,7 @@ import 'moment';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon,
-  Pagination, Spin, Popconfirm, Dropdown, Checkbox
+  Pagination, Spin, Popconfirm, Dropdown, Checkbox, Message, Notification
 } from 'ant-design-vue';
 
 if (!window.Vue) {
@@ -29,6 +29,15 @@ if (!window.Vue) {
   Vue.use(Popconfirm)
   Vue.use(Dropdown)
   Vue.use(Checkbox)
+
+  Vue.prototype.$message = Message;
+  Vue.prototype.$notification = Notification;
+  Vue.prototype.$info = Modal.info;
+  Vue.prototype.$success = Modal.success;
+  Vue.prototype.$error = Modal.error;
+  Vue.prototype.$warning = Modal.warning;
+  Vue.prototype.$confirm = Modal.confirm;
+  Vue.prototype.$destroyAll = Modal.destroyAll;
 }
 
 if (!window.Vue) {
