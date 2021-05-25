@@ -1,11 +1,14 @@
 <template>
-  <a-spin :loading="getListLoading">
+  <a-spin :spinning="getListLoading">
      <div class="clearfix mb6">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary">新建班课</a-button>
      </div>
 
-    <a-table :columns="columns" :data-source="data" :locale="locale">
+    <a-table :columns="columns" 
+      :pagination="false"
+      :data-source="multiClassList" 
+      :locale="locale">
       <a slot="name" slot-scope="text" >
         {{ text }}
       </a>
@@ -36,6 +39,15 @@
         <a-button type="link">数据概览</a-button>
       </template>
     </a-table>
+
+    <div class="text-center">
+      <a-pagination class="mt6"
+        v-if="paging" 
+        v-model="paging.page" 
+        :total="paging.total"
+        show-less-items 
+      />
+    </div>
   </a-spin>
 </template>
 
@@ -116,7 +128,7 @@ export default {
   data () {
     return {
       columns,
-      data,
+      multiClassList: data,
       getListLoading: false,
       keywords: '',
       paging: {
@@ -144,7 +156,7 @@ export default {
         })
         paging.page = (paging.offset / paging.limit) + 1;
         
-        this.productList = data;
+        this.multiClassList = data;
         this.paging = paging;
       } finally {
         this.getListLoading = false;
@@ -155,7 +167,6 @@ export default {
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
-        title: '删除班课',
         content: '确认要删除该班课？',
         async onOk() {
           const { success } = await MultiClass.delete({ id: multiClass.id })

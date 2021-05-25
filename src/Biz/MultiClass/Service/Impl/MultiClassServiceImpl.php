@@ -3,6 +3,8 @@
 namespace Biz\MultiClass\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
@@ -15,6 +17,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function findByProductIds(array $productIds)
     {
         return $this->getMultiClassDao()->findByProductIds($productIds);
+    }
+
+    public function findByProductId($productId)
+    {
+        return $this->getMultiClassDao()->findByProductId($productId);
     }
 
     public function getMultiClass($id)
@@ -82,7 +89,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-
             $this->getLogService()->info(
                 'multi_class',
                 'update_multi_class',
@@ -124,6 +130,20 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
+    public function searchMultiClass($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countMultiClass($conditions)
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->count($conditions);
+    }
+
     public function cloneMultiClass($id)
     {
         $multiClass = $this->getMultiClassDao()->get($id);
@@ -150,6 +170,21 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByTitle($title);
     }
 
+    private function filterConditions($conditions)
+    {
+        if (empty($conditions)) {
+            return [];
+        }
+        if (isset($conditions['ids']) && empty($conditions['ids'])) {
+            $conditions['ids'] = [-1];
+        }
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            $conditions['courseIds'] = [-1];
+        }
+
+        return $conditions;
+    }
+
     private function filterMultiClassFields($fields)
     {
         if (isset($fields['teacherId'])) {
@@ -159,7 +194,36 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             unset($fields['assistantIds']);
         }
 
+        if (isset($fields['courseId']) && !empty($fields['courseId'])) {
+            $course = $this->getCourseService()->getCourse($fields['courseId']);
+            if (empty($course)) {
+                throw CourseException::NOTFOUND_COURSE();
+            }
+        }
+        if (isset($fields['productId']) && !empty($fields['productId'])) {
+            $course = $this->getMultiClassProductService()->getProduct($fields['productId']);
+            if (empty($course)) {
+                throw MultiClassException::PRODUCT_NOT_FOUND();
+            }
+        }
+
         return $fields;
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return MultiClassProductService
+     */
+    protected function getMultiClassProductService()
+    {
+        return $this->createService('MultiClass:MultiClassProductService');
     }
 
     /**
@@ -184,13 +248,5 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getMultiClassDao()
     {
         return $this->createDao('MultiClass:MultiClassDao');
-    }
-
-    /**
-     * @return MultiClassProductService
-     */
-    protected function getMultiClassProductService()
-    {
-        return $this->createService('MultiClass:MultiClassProductService');
     }
 }

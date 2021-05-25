@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['libs/echarts.js','app/js/course-manage/overview/index.js']) %}
+
+{% block body %}
+  <div class="course-statictics">
+    {% include 'course-manage/overview/dashboard.html.twig' %}
+
+    {% include 'course-manage/overview/student-trendency.html.twig' %}
+
+    {% include 'course-manage/overview/finished-rate-trend.html.twig' %}
+
+    {% include 'course-manage/overview/task-detail.htm.twig' %}
+  </div>
+{% endblock %}
