@@ -6,10 +6,10 @@
         <div class="product-card__remark">{{ product.remark }}</div>
       </div>
       <div class="product-card__operation pull-right">
-        <i class="es-icon es-icon-bianjimian mr8" @click="editMultiClassProduct">编辑</i>
+        <i class="es-icon es-icon-bianjimian mr6 color-primary" @click="editMultiClassProduct"></i>
         <i v-if="product.type !== 'default'"
           class="es-icon es-icon-shanchu1 color-danger" 
-          @click="deleteMultiClassProduct">删除</i>
+          @click="deleteMultiClassProduct"></i>
       </div>
     </div>
     <a-row class="mt6">
@@ -80,6 +80,7 @@
   @import '~common/variable.less';
 
   .product-card {
+    height: 234px;
     padding: @spacing-6x @spacing-6x 0;
     box-shadow: 0 0 16px 0 rgba(0,0,0,0.10);
     background-color: #fff;
