@@ -31,7 +31,7 @@
             @change="handleChangeCourse"
           >
             <a-select-option v-for="course in courses" :key="course.id">
-              {{ course.title }}
+              {{ course.courseSetTitle }}
             </a-select-option>
           </a-select>
         </a-col>

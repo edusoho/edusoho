@@ -5,10 +5,9 @@
       <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
      </div>
 
-    <a-table :columns="columns" 
-      title=""
+    <a-table :columns="columns"
       :pagination="false"
-      :data-source="multiClassList" 
+      :data-source="multiClassList"
       :locale="locale">
       <a slot="title" slot-scope="text" >
         {{ text }}
@@ -26,7 +25,7 @@
         {{ assistant.join('、') }}
       </template>
       <template slot="action" slot-scope="text, record">
-        <a-button type="link">查看</a-button>
+        <a-button type="link" @click="goToMultiClassManage">查看</a-button>
         <a-dropdown>
           <a @click="e => e.preventDefault()">
             编辑 <a-icon type="down" />
@@ -46,10 +45,10 @@
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging" 
-        v-model="paging.page" 
+        v-if="paging"
+        v-model="paging.page"
         :total="paging.total"
-        show-less-items 
+        show-less-items
       />
     </div>
   </a-spin>
@@ -111,7 +110,7 @@ const columns = [
     scopedSlots: { customRender: 'action' },
   },
 ];
-  
+
 const data = [
   {
     name: '11',
@@ -162,7 +161,7 @@ export default {
           limit: params.limit || this.paging.limit || 10,
         })
         paging.page = (paging.offset / paging.limit) + 1;
-        
+
         this.multiClassList = data;
         this.paging = paging;
       } finally {
@@ -183,6 +182,12 @@ export default {
           }
         },
       });
+    },
+
+    goToMultiClassManage() {
+      this.$router.push({
+        path: '/course_manage'
+      })
     }
   }
 }
