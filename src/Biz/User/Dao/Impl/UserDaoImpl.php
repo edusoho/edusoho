@@ -41,6 +41,11 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(['uuid' => $uuid]);
     }
 
+    public function getByScrmUuid($scrmUuid)
+    {
+        return $this->getByFields(['scrmUuid' => $scrmUuid]);
+    }
+
     public function countByMobileNotEmpty()
     {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";

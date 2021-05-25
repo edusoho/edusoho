@@ -16,7 +16,7 @@ class ScrmService extends BaseService
 
     public function verifyOrder($orderId, $token)
     {
-        return $this->request('GET', '/api/console/order/verify_data', array('orderId' => $orderId, 'token' => $token));
+        return $this->request('GET', '/api/console/order/verifyData', array('orderId' => $orderId, 'token' => $token));
     }
 
     public function callbackTrading($callbackData)

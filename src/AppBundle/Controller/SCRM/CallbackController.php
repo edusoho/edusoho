@@ -17,8 +17,9 @@ class CallbackController extends BaseController
         $this->filterQuery($query);
 
         $userInfo = $this->getScrmSdk()->getUserByToken($query['user_token']);
-        var_dump($userInfo);
-        exit();
+        $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
+        $return = $this->getScrmSdk()->callbackTrading(['orderId' => 1, 'status' => 'success']);
+        $this->getUserService()->getUserByScrmUuid($userInfo['unionid']);
         if (!empty($userInfo)) {
             $this->getUserService()->register([
                 'userToken',
@@ -32,9 +33,10 @@ class CallbackController extends BaseController
 
     private function filterQuery($query)
     {
-        if (ArrayToolkit::requireds($query, [
+        if (!ArrayToolkit::requireds($query, [
             'user_token',
             'receipt_token',
+            'order_id'
         ])) {
             throw new InvalidArgumentException('参数不正确！');
         }
