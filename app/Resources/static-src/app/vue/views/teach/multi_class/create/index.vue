@@ -77,7 +77,6 @@
         ]}]"
         mode="multiple"
         placeholder="请选择助教"
-        @change="changeAssistant"
       >
         <a-select-option v-for="assistant in assistants" :key="assistant.id">
           {{ assistant.nickname }}
@@ -176,14 +175,6 @@ export default {
           });
         }
       });
-    },
-
-    changeTeacher() {
-
-    },
-
-    changeAssistant() {
-
     },
 
     clickCancelCreate() {
