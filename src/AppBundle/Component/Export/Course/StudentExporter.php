@@ -4,6 +4,9 @@ namespace AppBundle\Component\Export\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\ThreadService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
 class StudentExporter extends Exporter
 {
@@ -38,6 +41,9 @@ class StudentExporter extends Exporter
             'user.fields.email_label',
             'task.learn_data_detail.createdTime',
             'course.plan_task.study_rate',
+            'course.plan_task.put_question',
+            'student.report_card.homework',
+            'course.testpaper_manage.testpaper',
             'user.fields.truename_label',
             'user.fields.gender_label',
             'user.fileds.qq',
@@ -69,6 +75,8 @@ class StudentExporter extends Exporter
             $limit
         );
 
+        $courseMembers = $this->getThreadService()->fillThreadCounts(['courseId' => $course['id'], 'type' => 'question'], $courseMembers);
+
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
 
@@ -82,17 +90,32 @@ class StudentExporter extends Exporter
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $fields = ArrayToolkit::column($fields, 'fieldName');
 
+        $homeworkCount = $this->getActivityService()->count(
+            ['mediaType' => 'homework', 'fromCourseId' => $course['id']]
+        );
+        $testpaperCount = $this->getActivityService()->count(
+            ['mediaType' => 'testpaper', 'fromCourseId' => $course['id']]
+        );
+
+        $userHomeworkCounts = $this->findUserTaskCount($course['id'], 'homework');
+        $userTestpaperCounts = $this->findUserTaskCount($course['id'], 'testpaper');
+
         $datas = [];
         foreach ($courseMembers as $courseMember) {
             $member = [];
             $userId = $courseMember['userId'];
             $profile = $profiles[$userId];
             $user = $users[$userId];
+            $userHomeworkCount = empty($userHomeworkCounts[$courseMember['userId']]) ? 0 : $userHomeworkCounts[$courseMember['userId']];
+            $userTestpaperCount = empty($userTestpaperCounts[$courseMember['userId']]) ? 0 : $userTestpaperCounts[$courseMember['userId']];
 
             $member[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
             $member[] = $courseMember['learningProgressPercent'].'%';
+            $member[] = $courseMember['threadCount'];
+            $member[] = $userHomeworkCount . '/' . $homeworkCount."\t";
+            $member[] = $userTestpaperCount . '/' . $testpaperCount."\t";
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
@@ -111,6 +134,37 @@ class StudentExporter extends Exporter
         }
 
         return $datas;
+    }
+
+    private function findUserTaskCount($courseId, $type)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
+
+        $userTaskCount = [];
+        foreach ($activities as $activity) {
+            if (empty($activity['ext']['answerSceneId'])) {
+                continue;
+            }
+
+            $answerReports = $this->getAnswerReportService()->search(
+                ['answer_scene_id' => $activity['ext']['answerSceneId']],
+                [],
+                0,
+                $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerSceneId']])
+            );
+
+            $answerReports = ArrayToolkit::group($answerReports, 'user_id');
+
+            foreach ($answerReports as $userId => $answerReport) {
+                if (empty($userTaskCount[$userId])) {
+                    $userTaskCount[$userId] = 0;
+                }
+
+                ++$userTaskCount[$userId];
+            }
+        }
+
+        return $userTaskCount;
     }
 
     public function buildParameter($conditions)
@@ -160,6 +214,30 @@ class StudentExporter extends Exporter
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->getBiz()->service('Course:ThreadService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 
     protected function getCourseMemberService()
