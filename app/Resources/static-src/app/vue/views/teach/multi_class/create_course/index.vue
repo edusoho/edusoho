@@ -26,7 +26,7 @@
           list-type="picture-card"
           @change="uploadCourseCover"
         >
-        <img style="width: 100%;" v-if="courseCoverUrl" :src="courseCoverUrl" />
+        <img v-if="courseCoverUrl" :src="courseCoverUrl" style="width: 100%;" />
         <div v-else>
           <a-icon :type="loading ? 'loading' : 'plus'" />
           <div class="ant-upload-text">
@@ -175,7 +175,7 @@
 
     <a-modal
       :visible="cropModalVisible"
-      @cancel="cropModalVisible = false">
+      @cancel="cropModalVisible = false;courseCoverUrl = ''">
       <vue-cropper
         ref="cropper"
         :aspect-ratio="16 / 9"
@@ -183,7 +183,7 @@
       >
       </vue-cropper>
       <template slot="footer">
-        <a-button>重新选择</a-button>
+        <a-button @click="reSelectCourseCover">重新选择</a-button>
         <a-button type="primary" @click="saveCourseCover">保存图片</a-button>
       </template>
     </a-modal>
@@ -230,7 +230,8 @@
         loading: false,
         editor: {},
         ajaxLoading: false,
-        uploadToken: {}
+        uploadToken: {},
+        courseCoverName: '',
       };
     },
     created() {
@@ -283,16 +284,26 @@
         this.$set(this.formInfo, 'buyable', checked)
       },
       uploadCourseCover(info) {
-        this.loading = true
         const reader = new FileReader();
 
+        this.loading = true;
         reader.onload = (event) => {
           this.courseCoverUrl = event.target.result;
-          this.cropModalVisible = true
+          this.cropModalVisible = true;
           this.loading = false;
         };
 
+        this.courseCoverName = info.file.originFileObj.name
         reader.readAsDataURL(info.file.originFileObj);
+      },
+      reSelectCourseCover () {
+        const $inputs = this.$refs.upload.$el.getElementsByTagName('input');
+
+        this.cropModalVisible = false;
+        
+        if ($inputs.length > 0) {
+          $inputs[0].click()
+        }
       },
       async saveCourseCover() {
         if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
@@ -318,16 +329,17 @@
             imgs: {
               large: [480, 270],
               middle: [304, 171],
-              small: [96,]
+              small: [96, 54]
             },
             post: false,
             width: imageData.naturalWidth, // 原图片宽度
             height: imageData.naturalHeight, // 原图片高度
             group: 'course',
+            post: false,
           }
           const formData = new FormData();
 
-          formData.append('file', blob);
+          formData.append('file', blob, this.courseCoverName);
           formData.append('token', this.uploadToken.token);
 
           // TODO 上传图片接口；现在差token

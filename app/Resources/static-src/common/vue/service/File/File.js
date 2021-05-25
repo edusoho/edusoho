@@ -6,7 +6,7 @@ export const File = _.assignIn({
   async uploadFile(params) {
     return apiClient.post('/file/upload', params)
   },
-  async ImgCrop(params) {
+  async imgCrop(params) {
     return apiClient.post('/file/img/crop', params)
   }
 })
