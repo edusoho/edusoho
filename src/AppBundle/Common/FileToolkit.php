@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Common;
+namespace AppBundle\Common ;
 
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\Exception\InvalidArgumentException;
