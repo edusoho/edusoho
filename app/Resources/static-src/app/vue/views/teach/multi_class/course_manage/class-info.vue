@@ -50,16 +50,18 @@
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
-          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record.id)">
-            <a-menu-item key="publish">
-              立即发布
-            </a-menu-item>
-            <a-menu-item key="unpublish">
+          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
+            <a-menu-item v-if="record.status == 'published'" key="unpublish" >
               取消发布
             </a-menu-item>
-            <a-menu-item key="delete">
-              删除
-            </a-menu-item>
+            <template v-else>
+              <a-menu-item key="publish">
+                立即发布
+              </a-menu-item>
+              <a-menu-item key="delete">
+                删除
+              </a-menu-item>
+            </template>
           </a-menu>
         </a-dropdown>
       </template>
@@ -69,7 +71,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { MultiClass } from 'common/vue/service';
+import { MultiClass, Courses } from 'common/vue/service';
 
 import ClassName from './ClassName.vue';
 import TeachMode from './TeachMode.vue';
@@ -116,7 +118,7 @@ const columns = [
   },
   {
     title: '问题讨论',
-    dataIndex: 'questions'
+    dataIndex: 'questionNum'
   },
   {
     title: '学习人数',
@@ -200,23 +202,48 @@ export default {
 
     // actions: 复制, 发布, 取消发布, 删除
     handleMenuClick(key, value) {
-      this[key](value);
+      if (key === 'copy') {
+        this.copy(value);
+        return;
+      }
+
+      if (['publish', 'unpublish'].includes(key)) {
+        this.updateTaskStatus(key, value);
+        return;
+      }
+
+      if (key === 'delete') {
+        this.deleteTask(value);
+      }
     },
 
     copy(link) {
       console.log(link);
     },
 
-    publish(id) {
-      console.log(id)
+    updateTaskStatus(type, value) {
+      const { tasks: { courseId, id } } = value;
+      const message = type == 'publish' ? `发布成功` : `取消发布成功`;
+      Courses.updateTaskStatus(courseId, id, { type }).then(res => {
+        this.$message.success(message);
+      });
     },
 
-    unpublish(id) {
-      console.log(id)
-    },
-
-    delete(id) {
-      console.log(id)
+    deleteTask(value) {
+      const { tasks: { courseId, id } } = value;
+      this.$confirm({
+        title: '删除',
+        content: '是否确定删除该课时吗?',
+        okText: '确认',
+        cancelText: '取消',
+        onOk() {
+          Courses.deleteTask(courseId, id).then(res => {
+            if (res.success) {
+              this.$message.success('删除成功');
+            }
+          });
+        }
+      });
     }
   }
 }
