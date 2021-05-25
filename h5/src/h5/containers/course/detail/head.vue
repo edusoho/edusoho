@@ -221,7 +221,7 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
-    ...mapActions(['setCloudAddress']),
+    ...mapActions(['setCloudAddress', 'isWechat']),
 
     toToast() {
       const condition = this.finishCondition;
@@ -395,6 +395,7 @@ export default {
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
+      const securityVideoPlayer = player.securityVideoPlayer;
       // 视频试看判断
       const canTryLookable =
         !this.joinStatus && Number(this.details.tryLookable);
@@ -404,7 +405,10 @@ export default {
         return;
       }
       this.isEncryptionPlus = media.isEncryptionPlus;
-      if (media.isEncryptionPlus) {
+      if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
+        Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
+        return;
+      } else if (media.isEncryptionPlus && !securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请下载App');
         return;
       }
@@ -429,6 +433,10 @@ export default {
         rememberLastPos: true,
         playlist: media.url,
       };
+
+      if (media.isEncryptionPlus && this.isWechat && securityVideoPlayer) {
+        options.playerType = 'wasm';
+      }
 
       if (!canTryLookable) {
         delete options.pluck;
