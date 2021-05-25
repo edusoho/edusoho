@@ -4,17 +4,18 @@
 {% set menu = 'admin_v2_multi_class_manage' %}
 
 {% block main %}
-  {% include 'course-manage/overview/dashboard.html.twig' %}
+  <div class="course-statictics">
+    {% include 'course-manage/overview/dashboard.html.twig' %}
 
-  {% include 'course-manage/overview/student-trendency.html.twig' %}
+    {% include 'course-manage/overview/student-trendency.html.twig' %}
 
-  {% include 'course-manage/overview/finished-rate-trend.html.twig' %}
+    {% include 'course-manage/overview/finished-rate-trend.html.twig' %}
 
-  {% include 'course-manage/overview/task-detail.htm.twig' %}
+    {% include 'course-manage/overview/task-detail.htm.twig' %}
+  </div>
 {% endblock %}
 
 {% block stylesheets %}
-  <link href="/static-dist/app/css/bootstrap.css" rel="stylesheet">
   <link href="/static-dist/app/css/main.css" rel="stylesheet">
   <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
   {{ parent() }}
