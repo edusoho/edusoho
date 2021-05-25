@@ -9,18 +9,21 @@
       :pagination="false"
       :data-source="multiClassList"
       :locale="locale">
-      <a slot="name" slot-scope="text" >
+      <a slot="title" slot-scope="text" >
         {{ text }}
       </a>
-      <a slot="name2" slot-scope="text">
+      <a slot="course" slot-scope="text">
         {{ text }}
       </a>
-      <a slot="lessons" slot-scope="text">
+      <a slot="product" slot-scope="text">
         {{ text }}
       </a>
-      <a slot="num1" slot-scope="text">
-        {{ text }}
-      </a>
+      <template slot="taskNum" slot-scope="text, record">
+        {{ record.endTaskNum }}/{{ record.taskNum }}
+      </template>
+      <template slot="assistant" slot-scope="assistant">
+        {{ assistant.join('、') }}
+      </template>
       <template slot="action" slot-scope="text, record">
         <a-button type="link" @click="goToMultiClassManage">查看</a-button>
         <a-dropdown>
@@ -58,20 +61,18 @@ import { MultiClass } from 'common/vue/service/index.js';
 const columns = [
   {
     title: '班课名称',
-    dataIndex: 'name',
-    scopedSlots: { customRender: 'name' },
+    dataIndex: 'title',
+    scopedSlots: { customRender: 'title' },
   },
   {
     title: '课程名称',
-    dataIndex: 'name2',
-    scopedSlots: { customRender: 'name2' },
+    dataIndex: 'course',
+    scopedSlots: { customRender: 'course' },
   },
   {
     title: '所属产品',
-    dataIndex: 'productInfo',
+    dataIndex: 'product',
     filters: [
-      { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' },
     ],
   },
   {
@@ -81,22 +82,22 @@ const columns = [
   },
   {
     title: '已完成/课时',
-    dataIndex: 'lessons',
-    scopedSlots: { customRender: 'lessons' },
+    dataIndex: 'taskNum',
+    scopedSlots: { customRender: 'taskNum' },
   },
   {
     title: '授课老师',
-    dataIndex: 'teacher1',
+    dataIndex: 'teacher',
   },
   {
     title: '助教老师',
-    dataIndex: 'teacher2',
+    dataIndex: 'assistant',
+    scopedSlots: { customRender: 'assistant' },
   },
   {
     title: '已报班人数',
-    dataIndex: 'num1',
+    dataIndex: 'studentNum',
     sorter: true,
-    scopedSlots: { customRender: 'num1' },
   },
   {
     title: '创建时间',
