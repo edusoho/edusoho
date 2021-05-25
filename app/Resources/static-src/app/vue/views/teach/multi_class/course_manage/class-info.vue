@@ -71,6 +71,95 @@ import ClassName from './ClassName.vue';
 import TeachMode from './TeachMode.vue';
 import Assistant from './Assistant.vue';
 
+const data = {
+  "id": "26",
+  "courseId": "121",
+  "type": "lesson",
+  "number": 1,
+  "seq": "8",
+  "title": "223",
+  "createdTime": "1621236030",
+  "updatedTime": "1621393523",
+  "copyId": "0",
+  "status": "published",
+  "isOptional": "0",
+  "published_number": "3",
+  "syncId": "0",
+  "itemType": "chapter",
+  "tasks": {
+      "id": "24",
+      "courseId": "121",
+      "multiClassId": "1",
+      "seq": "9",
+      "categoryId": "26",
+      "activityId": "24",
+      "title": "223",
+      "isFree": "0",
+      "isOptional": "0",
+      "startTime": "0",
+      "endTime": "0",
+      "mode": "lesson",
+      "isLesson": "1",
+      "status": "published",
+      "number": "3-1",
+      "type": "text",
+      "mediaSource": "",
+      "maxOnlineNum": "0",
+      "fromCourseSetId": "121",
+      "length": "0",
+      "copyId": "0",
+      "createdUserId": "2",
+      "createdTime": "1621236030",
+      "updatedTime": "1621393523",
+      "syncId": "0",
+      "activity": {
+          "id": "24",
+          "title": "223",
+          "remark": null,
+          "mediaId": "1",
+          "mediaType": "text",
+          "length": "0",
+          "fromCourseId": "121",
+          "fromCourseSetId": "121",
+          "fromUserId": "2",
+          "copyId": "0",
+          "startTime": "0",
+          "endTime": "0",
+          "createdTime": "1621236030",
+          "updatedTime": "0",
+          "finishType": "time",
+          "finishData": "1",
+          "syncId": "0",
+          "ext": {
+              "id": "1",
+              "finishType": "time",
+              "finishDetail": "0",
+              "createdTime": "1621236030",
+              "createdUserId": "2",
+              "updatedTime": "1621236030",
+              "syncId": "0"
+          }
+      },
+      "courseUrl": "http://es.dev.cn/my/course/121"
+  },
+  "isExist": 1,
+  "chapterTitle": "1",
+  "unitTitle": null,
+  "teacher": {
+      "userId": "2",
+      "nickname": "super"
+  },
+  "assistant": [
+      {
+          "userId": "225",
+          "nickname": "教师1"
+      }
+  ],
+  "questions": 0,
+  "studyStudentNum": 0,
+  "totalStudentNum": 0
+}
+
 const columns = [
   {
     title: '课时名称',
@@ -143,7 +232,7 @@ export default {
 
   data() {
     return {
-      data: [],
+      data: [data],
       pagination: {},
       loading: false,
       columns

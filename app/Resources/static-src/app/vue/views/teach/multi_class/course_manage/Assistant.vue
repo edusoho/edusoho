@@ -44,14 +44,8 @@ export default {
   },
 
   mounted() {
-    this.isEllipsis();
-  },
-
-  methods: {
-    isEllipsis() {
-      const assistantRef = this.$refs.assistant;
-      this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
-    }
+    const assistantRef = this.$refs.assistant;
+    this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
   }
 }
 </script>
