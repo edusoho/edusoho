@@ -114,8 +114,8 @@ class StudentExporter extends Exporter
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
             $member[] = $courseMember['learningProgressPercent'].'%';
             $member[] = $courseMember['threadCount'];
-            $member[] = $userHomeworkCount . '/' . $homeworkCount."\t";
-            $member[] = $userTestpaperCount . '/' . $testpaperCount."\t";
+            $member[] = $userHomeworkCount.'/'.$homeworkCount."\t";
+            $member[] = $userTestpaperCount.'/'.$testpaperCount."\t";
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
