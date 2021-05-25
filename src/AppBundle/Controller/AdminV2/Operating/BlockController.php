@@ -139,6 +139,10 @@ class BlockController extends BaseController
                 }
                 $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
             }
+            if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
+                $this->getBlockService()->updateFile($condation['data']['ad'][0]['fileId']);
+            }
+
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);

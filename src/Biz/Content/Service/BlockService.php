@@ -26,6 +26,8 @@ interface BlockService
 
     public function createBlock($block);
 
+    public function updateFile($block);
+
     public function updateBlock($id, $fields);
 
     public function deleteBlock($id);
