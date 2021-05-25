@@ -16,26 +16,29 @@ export default [
   },
   {
     path: '/course_manage/:id',
-    name: 'MultiClassCourseManage',
     component: () => import('app/vue/views/teach/multi_class/course_manage/index.vue'),
     children: [
       {
         path: '',
+        name: 'MultiClassCourseManage',
         component: () => import('app/vue/views/teach/multi_class/course_manage/class-info.vue'),
         meta: { current: 'class-info' }
       },
       {
         path: 'student_manage',
+        name: 'MultiClassStudentManage',
         component: () => import('app/vue/views/teach/multi_class/course_manage/student-manage.vue'),
         meta: { current: 'student-manage' }
       },
       {
         path: 'homework_review',
+        name: 'MultiClassHomewordReview',
         component: () => import('app/vue/views/teach/multi_class/course_manage/homework_review.vue'),
         meta: { current: 'homework-review' }
       },
       {
         path: 'data_preview',
+        name: 'MultiClassDataPreview',
         component: () => import('app/vue/views/teach/multi_class/course_manage/data_preview.vue'),
         meta: { current: 'data-preview' }
       }

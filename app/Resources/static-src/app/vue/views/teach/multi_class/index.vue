@@ -186,7 +186,10 @@ export default {
 
     goToMultiClassManage(id) {
       this.$router.push({
-        path: `/course_manage/${id}`
+        name: 'MultiClassCourseManage',
+        params: {
+          id
+        }
       })
     }
   }
