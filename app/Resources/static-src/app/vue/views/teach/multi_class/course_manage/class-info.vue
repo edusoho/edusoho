@@ -164,7 +164,6 @@ const columns = [
   {
     title: '课时名称',
     dataIndex: 'name',
-    width: '20%',
     ellipsis: true,
     scopedSlots: { customRender: 'name' }
   },
@@ -176,49 +175,41 @@ const columns = [
       { text: '视频', value: 'video' },
       { text: '直播', value: 'live' }
     ],
-    width: '10%',
     scopedSlots: { customRender: 'mode' }
   },
   {
     title: '开课时间',
     dataIndex: 'createdTime',
     sorter: true,
-    width: '10%',
     scopedSlots: { customRender: 'createdTime' }
   },
   {
     title: '时长',
     dataIndex: 'time',
-    width: '10%',
     scopedSlots: { customRender: 'time' }
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
-    width: '10%',
     scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
     dataIndex: 'assistant',
-    width: '10%',
     scopedSlots: { customRender: 'assistant' }
   },
   {
     title: '问题讨论',
-    dataIndex: 'questions',
-    width: '10%'
+    dataIndex: 'questions'
   },
   {
     title: '学习人数',
     dataIndex: 'studyStudentNum',
-    width: '10%',
     scopedSlots: { customRender: 'studyStudentNum' }
   },
   {
     title: '操作',
     dataIndex: 'actions',
-    width: '10%',
     scopedSlots: { customRender: 'actions' }
   }
 ];
