@@ -1060,8 +1060,6 @@ class FileToolkit
         $naturalSize = $rawImage->getSize();
         $naturalWidth = $naturalSize->getWidth();
         $naturalHeight = $naturalSize->getHeight();
-        var_dump($naturalSize)；
-        var_dump($options);
         $rate = $naturalSize->getWidth() / $options['width'];
 
         $options['w'] = $rate * $options['w'];
