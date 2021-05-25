@@ -6,4 +6,6 @@ export * from './Teacher/index.js';
 export * from './User/index.js';
 export * from './CourseSet/index.js';
 export * from './UploadToken/index.js';
+export * from './Course/index.js';
+export * from './Me/index.js';
 export * from './File/index.js';
