@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 
-class TeacherPromote extends AbstractResource
+class TeacherSeq extends AbstractResource
 {
     public function update(ApiRequest $request, $id, $promoteType)
     {
