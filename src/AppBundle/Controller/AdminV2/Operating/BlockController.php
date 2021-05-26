@@ -11,11 +11,11 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\BlockService;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\File\Service\UploadFileService;
 
 class BlockController extends BaseController
 {
