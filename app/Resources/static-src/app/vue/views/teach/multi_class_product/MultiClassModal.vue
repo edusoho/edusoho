@@ -7,9 +7,9 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="ajaxLoading">
-      <!-- TODO -->
+      <!-- TODO 添加链接地址 -->
       <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
-        <a slot="title" slot-scope="text" >
+        <a slot="class_title" slot-scope="text">
           {{ text }}
         </a>
         <a slot="course" slot-scope="text">
@@ -41,12 +41,12 @@
     {
       title: '班课名称',
       dataIndex: 'title',
-      scopedSlots: { customRender: 'name' },
+      scopedSlots: { customRender: 'class_title' },
     },
     {
       title: '课程名称',
       dataIndex: 'course',
-       scopedSlots: { customRender: 'name2' },
+       scopedSlots: { customRender: 'course' },
     },
     {
       title: '价格',
@@ -110,32 +110,6 @@
       }
     },
     created() {
-      this.multiClassList = [
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-      ]
     },
     methods: {
       handleCancel() {

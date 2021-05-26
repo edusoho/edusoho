@@ -7,42 +7,51 @@
 
     <a-table :columns="columns"
       :pagination="false"
-      :data-source="multiClassList"
-      :locale="locale">
-      <a slot="title" slot-scope="text" >
+      :data-source="multiClassList">
+      <a slot="class_title" slot-scope="text, record" 
+        href="javascript:;"
+        @click="goToMultiClassManage(record.id)">
         {{ text }}
       </a>
-      <a slot="course" slot-scope="text">
+      <a slot="course" slot-scope="text, record"
+        :href="`/course_set/${record.courseId}/manage/base`">
         {{ text }}
       </a>
-      <a slot="product" slot-scope="text">
-        {{ text }}
-      </a>
-      <template slot="taskNum" slot-scope="text, record">
+      <a slot="taskNum" slot-scope="text, record"
+        href="javascript:;"
+        @click="goToMultiClassManage(record.id)">
         {{ record.endTaskNum }}/{{ record.taskNum }}
-      </template>
+      </a>
       <template slot="assistant" slot-scope="assistant">
         {{ assistant ? assistant.join('、') : '' }}
       </template>
+      <a slot="studentNum" slot-scope="text, record"
+        href="javascript:;"
+        @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
+        {{ text }}
+      </a>
       <template slot="createdTime" slot-scope="createdTime">
         {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
       </template>
       <template slot="action" slot-scope="text, record">
-        <a-button type="link" @click="goToMultiClassManage">查看</a-button>
-        <a-button type="link">数据概览</a-button>
+        <a href="javascript:;" @click="goToMultiClassManage(record.id)">查看</a>
+        <a href="javascript:;" @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
         <a-dropdown>
           <a @click="e => e.preventDefault()">
             更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;">编辑</a>
+              <a href="javascript:;" 
+                @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
+                编辑
+              </a>
             </a-menu-item>
             <a-menu-item>
               <a href="javascript:;">复制班课</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">删除</a>
+              <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -51,7 +60,7 @@
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging"
+        v-if="paging && multiClassList.length > 0"
         v-model="paging.page"
         :total="paging.total"
         show-less-items
@@ -68,7 +77,7 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
-    scopedSlots: { customRender: 'title' },
+    scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
@@ -104,6 +113,7 @@ const columns = [
     title: '已报班人数',
     dataIndex: 'studentNum',
     sorter: true,
+    scopedSlots: { customRender: 'studentNum' },
   },
   {
     title: '创建时间',
@@ -130,11 +140,6 @@ export default {
         offset: 0,
         limit: 10,
       },
-      locale: {
-        filterConfirm: '确定',
-        filterReset: '重置',
-        emptyText: '暂无数据',
-      }
     }
   },
   created() {
@@ -168,19 +173,23 @@ export default {
     deleteMultiClass (multiClass) {
       this.$confirm({
         content: '确认要删除该班课？',
-        async onOk() {
+        okType: 'danger',
+        maskClosable: true,
+        onOk: async () => {
           const { success } = await MultiClass.delete({ id: multiClass.id })
 
           if (success) {
+            this.$message.success('删除成功')
             this.getMultiClassList()
           }
         },
       });
     },
 
-    goToMultiClassManage() {
+    goToMultiClassManage(id) {
       this.$router.push({
-        path: '/course_manage'
+        name: 'MultiClassCourseManage',
+        params: { id }
       })
     }
   }

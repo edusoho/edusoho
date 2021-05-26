@@ -1,6 +1,8 @@
 import Vue from 'common/vue';
 import Router from 'vue-router';
 import routes from 'app/vue/router/teach/multi_class/index.js';
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
+
 
 const router = new Router({
   mode: 'hash',
@@ -12,11 +14,16 @@ window.CKEDITOR_BASEPATH = app.basePath + '/static-dist/libs/es-ckeditor/';
 new Vue({
   el: '#app',
   router,
+  data: {
+    locale: zhCN
+  },
   template: `
-    <keep-alive v-if="!$route.meta.isAlive">
-      <router-view></router-view>
-    </keep-alive>
-    <router-view v-else></router-view>
+    <a-config-provider :locale="locale">
+      <keep-alive v-if="!$route.meta.isAlive">
+        <router-view></router-view>
+      </keep-alive>
+      <router-view v-else></router-view>
+    </a-config-provider>
   `
 });
 
