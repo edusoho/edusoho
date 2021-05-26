@@ -125,6 +125,7 @@ export default {
 
 <style lang="less">
 .lesson-directory {
+  min-height: 600px;
   background-color: #fff;
   border: 1px solid #ebebeb;
 

@@ -23,12 +23,25 @@
 
 <script>
 import LessonDirectory  from './LessonDirectory.vue';
+import { apiClient } from 'common/vue/service/api-client.js';
 
 export default {
   name: 'Schedule',
 
   components: {
     LessonDirectory
+  },
+
+  data() {
+    return {
+      lessonDirectory: []
+    }
+  },
+
+  created() {
+    apiClient.get(`/api/courses/6/item_with_lessons?format=1`).then(res => {
+      this.lessonDirectory = res;
+    });
   }
 }
 </script>
