@@ -95,6 +95,70 @@ class ItemHelper
         return $treeItems;
     }
 
+    public function convertToTreeV2($items)
+    {
+        $treeItems = [];
+        if (empty($items)) {
+            return $treeItems;
+        }
+
+        $nowChapterIndex = $nowUnitIndex = -1;
+        $depth = 1;
+
+        $lastItem = $items[0]['type'];
+        $bottomItem = $items[0]['type'];
+
+        foreach ($items as $index => $item) {
+            switch ($item['type']) {
+                case 'chapter':
+                    $depth = 1;
+                    break;
+                case 'unit':
+                    if ('chapter' == $lastItem) {
+                        ++$depth;
+                    }
+
+                    if ('lesson' == $lastItem && 2 == $depth && 'unit' == $bottomItem) {
+                        --$depth;
+                    }
+
+                    if ('lesson' == $lastItem && 3 == $depth) {
+                        --$depth;
+                    }
+                    break;
+                case 'lesson':
+                    if (in_array($lastItem, ['chapter', 'unit'])) {
+                        ++$depth;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            if (1 == $depth) {
+                ++$nowChapterIndex;
+                $bottomItem = $item['type'];
+                $nowUnitIndex = -1;
+                $treeItems[] = $item;
+                'lesson' == $item['type'] ? null : $treeItems[$nowChapterIndex]['children'] = [];
+            }
+
+            if (2 == $depth) {
+                ++$nowUnitIndex;
+                $treeItems[$nowChapterIndex]['children'][] = $item;
+                'lesson' == $item['type'] ? null : $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
+            }
+
+            if (3 == $depth) {
+                $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+            }
+
+            $lastItem = $item['type'];
+        }
+
+        return $treeItems;
+    }
+
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $courseId = $course['id'];

@@ -14,6 +14,12 @@
         <div class="color-gray text-sm">{{ item.loginTime }}</div>
       </div>
 
+      <div slot="promoteInfo" slot-scope="item">
+        <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
+        <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
+        <a href="javascript:;">序号设置</a>
+      </div>
+
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
 
@@ -26,7 +32,7 @@
       />
     </div>
 
-    <a-modal title="助教详细信息" :visible="visible" @cancel="close">
+    <a-modal title="教师详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
 
       <template slot="footer">
@@ -38,13 +44,17 @@
 
 
 <script>
-import { Assistant, User } from "common/vue/service/index.js";
+import { Teacher, User } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
 const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
+  },
+  {
+    title: "是否推荐",
+    scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
@@ -57,7 +67,7 @@ const columns = [
 ];
 
 export default {
-  name: "assistants",
+  name: "teachers",
   components: {
     userInfoTable
   },
@@ -79,12 +89,16 @@ export default {
   },
   methods: {
     async onSearch(nickname) {
-      const { data, paging } = await Assistant.search({
+      const { data, paging } = await Teacher.search({
         nickname: nickname,
         offset: this.paging.offset || 0,
         limit: this.paging.limit || 10,
       });
       paging.page = (paging.offset / paging.limit) + 1;
+
+      data.forEach(element => {
+        element.isPromoted = element.promoted == 1;
+      });
           
       this.pageData = data;
       this.paging = paging;
