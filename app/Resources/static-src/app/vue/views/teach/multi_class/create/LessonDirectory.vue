@@ -16,7 +16,7 @@
       <a-icon slot="switcherIcon" type="down" />
 
       <template v-for="firstLesson in lessonDirectory">
-        <a-tree-node :key="firstLesson.id">
+        <a-tree-node :class="`tree-node-${firstLesson.type}`" :key="firstLesson.id">
           <template slot="title">
             <lesson-directory-item :lesson="firstLesson" class-name='first' />
           </template>
@@ -196,6 +196,26 @@ export default {
   li .ant-tree-node-content-wrapper {
     line-height: 30px;
     height: 34px;
+  }
+
+  .tree-node-chapter {
+    .title,
+    .start-time,
+    .duration {
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .tree-node-unit,
+  .tree-node-lesson,
+  .tree-node-task {
+    .title,
+    .start-time,
+    .duration {
+      font-weight: 400;
+      color: #666;
+    }
   }
 }
 </style>
