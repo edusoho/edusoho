@@ -16,11 +16,19 @@
         批量排课
       </a-button>
     </div>
+
+    <lesson-directory />
   </div>
 </template>
 
 <script>
+import LessonDirectory  from './LessonDirectory.vue';
+
 export default {
-  name: 'Schedule'
+  name: 'Schedule',
+
+  components: {
+    LessonDirectory
+  }
 }
 </script>

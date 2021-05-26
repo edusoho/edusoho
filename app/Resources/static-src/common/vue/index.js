@@ -4,7 +4,7 @@ import 'moment';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
-  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip, Divider, Message, Notification
+  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip, Divider, Message, Notification, Tree
 } from 'ant-design-vue';
 
 if (!window.Vue) {
@@ -34,6 +34,7 @@ if (!window.Vue) {
   Vue.use(Tag)
   Vue.use(Tooltip)
   Vue.use(Divider)
+  Vue.use(Tree)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;
