@@ -11,26 +11,27 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudentDeadLine extends AbstractResource
 {
-    public function update(ApiRequest $request, $id, $deadline)
+    public function update(ApiRequest $request, $multiClassId, $updateType)
     {
-        $multiClass = $this->getMultiClassService()->getMultiClass($id);
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
 
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['ids', 'updateType'])) {
+        if (!ArrayToolkit::requireds($fields, ['ids', 'deadline']) || !is_array($fields['ids'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
         $ids = $request->request->get('ids');
+        $deadline = $request->request->get('ids');
         $courseId = $multiClass['courseId'];
-        if ('day' == $fields['updateType']) {
-            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $deadline, $fields['waveType'], $id);
 
-            return ['success' => true];
+        if ('day' == $updateType) {
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $deadline, $fields['waveType']);
+        } elseif ('date' == $updateType) {
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $ids, $deadline);
         }
-        $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $ids, $deadline, $id);
 
         return ['success' => true];
     }

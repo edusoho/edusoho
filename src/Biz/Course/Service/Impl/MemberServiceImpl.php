@@ -1390,16 +1390,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType, $multiClassId)) {
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
             foreach ($userIds as $userId) {
-                if ($multiClassId) {
-                    $member = $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId, $multiClassId);
-                } else {
-                    $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-                }
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
                 $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
                 $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
@@ -1414,21 +1410,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
         if ('forever' == $course['expiryMode']) {
             return false;
         }
-
-        if ($multiClassId) {
-            $conditions = ['userIds' => $userIds, 'courseId' => $courseId, 'multiClassId' => $multiClassId];
-        } else {
-            $conditions = ['userIds' => $userIds, 'courseId' => $courseId];
-        }
         $members = $this->searchMembers(
-            $conditions,
+            ['userIds' => $userIds, 'courseId' => $courseId],
             ['deadline' => 'ASC'],
             0,
             PHP_INT_MAX
@@ -1444,17 +1434,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         return true;
     }
 
-    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date, $multiClassId = 0)
+    public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
-        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date, $multiClassId = 0)) {
+        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
             foreach ($userIds as $userId) {
-                if ($multiClassId) {
-                    $member = $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId);
-                } else {
-                    $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-                }
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
                 $this->getMemberDao()->update(
                     $member['id'],
                     [
@@ -1465,16 +1451,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date, $multiClassId = 0)
+    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
     {
-        if ($multiClassId) {
-            $conditions = ['userIds' => $userIds, 'courseId' => $courseId, 'multiClassId' => $multiClassId];
-        } else {
-            $conditions = ['userIds' => $userIds, 'courseId' => $courseId];
-        }
-
         $members = $this->searchMembers(
-            $conditions,
+            ['userIds' => $userIds, 'courseId' => $courseId],
             ['deadline' => 'ASC'],
             0,
             PHP_INT_MAX
