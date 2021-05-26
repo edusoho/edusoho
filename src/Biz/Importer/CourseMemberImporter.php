@@ -2,15 +2,12 @@
 
 namespace Biz\Importer;
 
-use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseMemberImporter extends Importer
 {
     protected $type = 'course-member';
-
-    protected $necessaryFields = ['nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱', 'weixin' => '微信号'];
 
     public function import(Request $request)
     {
@@ -41,10 +38,6 @@ class CourseMemberImporter extends Importer
                 } else {
                     $user = $this->getUserService()->getUserByVerifiedMobile($data['verifiedMobile']);
                 }
-            }
-
-            if (!empty($data['weixin'])) {
-                $this->getUserService()->updateUserProfile($user['id'], ['weixin' => $data['weixin']]);
             }
 
             $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($course['id'], $user['id']);
@@ -90,102 +83,6 @@ class CourseMemberImporter extends Importer
         }
 
         $this->getCourseService()->tryManageCourse($courseId);
-    }
-
-    protected function getUserData()
-    {
-        $userCount = 0;
-        $fieldSort = $this->getFieldSort();
-        $validate = [];
-        $allUserData = [];
-
-        for ($row = 3; $row <= $this->rowTotal; ++$row) {
-            for ($col = 0; $col < $this->colTotal; ++$col) {
-                $infoData = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $columnsData[$col] = $infoData.'';
-            }
-
-            foreach ($fieldSort as $sort) {
-                $userData[$sort['fieldName']] = trim($columnsData[$sort['num']]);
-                $fieldCol[$sort['fieldName']] = $sort['num'] + 1;
-            }
-
-            $emptyData = array_count_values($userData);
-
-            if (isset($emptyData['']) && count($userData) == $emptyData['']) {
-                $checkInfo[] = sprintf('第%s行为空行，已跳过', $row);
-                continue;
-            }
-
-            $info = $this->validExcelFieldValue($userData, $row, $fieldCol);
-            empty($info) ? '' : $errorInfo[] = $info;
-
-            $userCount = $userCount + 1;
-
-            $allUserData[] = $userData;
-
-            if (empty($errorInfo)) {
-                if (!empty($userData['nickname'])) {
-                    $user = $this->getUserService()->getUserByNickname($userData['nickname']);
-                } elseif (!empty($userData['email'])) {
-                    $user = $this->getUserService()->getUserByEmail($userData['email']);
-                } elseif (!empty($userData['verifiedMobile'])) {
-                    $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
-                }
-
-                if (!empty($user)) {
-                    $this->filterUser($user);
-                }
-
-                $validate[] = array_merge($user, ['row' => $row, 'weixin' => $userData['weixin']]);
-            }
-
-            unset($userData);
-        }
-
-        $this->passValidateUser = $validate;
-
-        $data['errorInfo'] = empty($errorInfo) ? [] : $errorInfo;
-        $data['checkInfo'] = empty($checkInfo) ? [] : $checkInfo;
-        $data['userCount'] = $userCount;
-        $data['allUserData'] = empty($this->passValidateUser) ? [] : $this->passValidateUser;
-
-        return $data;
-    }
-
-    protected function validExcelFieldValue($userData, $row, $fieldCol)
-    {
-        $errorInfo = '';
-
-        if (!empty($userData['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($userData['nickname']);
-        } elseif (!empty($userData['email'])) {
-            $user = $this->getUserService()->getUserByEmail($userData['email']);
-        } elseif (!empty($userData['verifiedMobile'])) {
-            $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
-        }
-
-        if (!empty($user) && !empty($userData['email']) && !in_array($userData['email'], $user)) {
-            $user = null;
-        }
-
-        if (!empty($user) && !empty($userData['verifiedMobile']) && !in_array($userData['verifiedMobile'], $user)) {
-            $user = null;
-        }
-
-        if (!empty($user) && !empty($userData['nickname']) && !in_array($userData['nickname'], $user)) {
-            $user = null;
-        }
-
-        if (!SimpleValidator::weixin($userData['weixin'])) {
-            $errorInfo = sprintf('第%s行的信息有误，微信号错误，请检查。', $row);
-        }
-
-        if (!$user) {
-            $errorInfo = sprintf('第%s行的信息有误，用户数据不存在，请检查。', $row);
-        }
-
-        return $errorInfo;
     }
 
     /**
