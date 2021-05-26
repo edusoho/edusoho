@@ -19,7 +19,7 @@ new Vue({
   },
   template: `
     <a-config-provider :locale="locale">
-      <keep-alive v-if="!$route.meta.isAlive">
+      <keep-alive v-if="$route.meta.keepAlive">
         <router-view></router-view>
       </keep-alive>
       <router-view v-else></router-view>

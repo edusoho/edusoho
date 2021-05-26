@@ -7,7 +7,6 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="ajaxLoading">
-      <!-- TODO 添加链接地址 -->
       <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
         <a slot="class_title" slot-scope="text, record" 
           href="javascript:;"

@@ -2,9 +2,6 @@ export default [
   {
     path: '/',
     name: 'MultiClass',
-    meta: {
-      isAlive: true,
-    },
     component: () => import('app/vue/views/teach/multi_class/index.vue')
   },
   {
@@ -15,7 +12,8 @@ export default [
   {
     path: '/create_course',
     name: 'MultiClassCreateCourse',
-    component: () => import('app/vue/views/teach/multi_class/create_course/index.vue')
+    component: () => import('app/vue/views/teach/multi_class/create_course/index.vue'),
+    meta: { keepAlive: true }
   },
   {
     path: '/course_manage/:id',
