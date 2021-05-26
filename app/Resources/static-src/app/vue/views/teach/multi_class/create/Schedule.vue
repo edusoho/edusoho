@@ -3,7 +3,7 @@
     排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
     <div class="clearfix">
       <a-space size="large">
-        <a-button type="primary">
+        <a-button type="primary" @click="showCreateLiveModal">
           <a-icon type="plus" />
           添加直播课时
         </a-button>
@@ -18,23 +18,27 @@
     </div>
 
     <lesson-directory :lesson-directory="lessonDirectory" />
+    <create-live-modal :visible="createLiveModalVisible" @handle-cancel="hideCreateLiveModal" />
   </div>
 </template>
 
 <script>
 import LessonDirectory  from './LessonDirectory.vue';
+import CreateLiveModal from './CreateLiveModal.vue';
 import { apiClient } from 'common/vue/service/api-client.js';
 
 export default {
   name: 'Schedule',
 
   components: {
-    LessonDirectory
+    LessonDirectory,
+    CreateLiveModal
   },
 
   data() {
     return {
-      lessonDirectory: []
+      lessonDirectory: [],
+      createLiveModalVisible: false
     }
   },
 
@@ -42,6 +46,16 @@ export default {
     apiClient.get(`/api/courses/6/item_with_lessons?format=1`).then(res => {
       this.lessonDirectory = res;
     });
+  },
+
+  methods: {
+    showCreateLiveModal() {
+      this.createLiveModalVisible = true;
+    },
+
+    hideCreateLiveModal() {
+      this.createLiveModalVisible = false;
+    }
   }
 }
 </script>
