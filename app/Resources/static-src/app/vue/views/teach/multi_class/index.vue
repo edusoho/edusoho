@@ -14,7 +14,7 @@
         {{ text }}
       </a>
       <a slot="course" slot-scope="text, record"
-        :href="`/course_set/${record.courseId}/manage/base`">
+        :href="`/course/${record.courseId}`">
         {{ text }}
       </a>
       <a slot="taskNum" slot-scope="text, record"
@@ -34,12 +34,14 @@
         {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
       </template>
       <template slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="goToMultiClassManage(record.id)">查看</a>
-        <a href="javascript:;" @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
+        <a href="javascript:;" class="mr2"
+          @click="goToMultiClassManage(record.id)">查看</a>
+        <a href="javascript:;" class="mr2"
+          @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
         <a-dropdown>
-          <a-button type="link" @click="e => e.preventDefault()">
+          <a href="javascript:;" @click="e => e.preventDefault()">
             更多 <a-icon type="down" />
-          </a-button>
+          </a>
           <a-menu slot="overlay">
             <a-menu-item>
               <a href="javascript:;" 

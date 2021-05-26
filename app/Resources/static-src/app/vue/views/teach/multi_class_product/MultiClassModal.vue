@@ -15,7 +15,7 @@
           {{ text }}
         </a>
         <a slot="course" slot-scope="text, record"
-          :href="`/course_set/${record.courseId}/manage/base`">
+          :href="`/course/${record.courseId}`">
           {{ text }}
         </a>
         <a slot="taskNum" slot-scope="text, record"
@@ -31,10 +31,10 @@
           {{ text }}
         </a>
         <template :size="8" slot="action" slot-scope="text, record"> 
-          <a-button type="link" @click="goToMultiClassManage(record.id)">查看</a-button>
-          <a-button type="link" @click="goToEditMultiClass(record.id)">编辑</a-button>
-          <a-button type="link" 
-            @click="goToMultiClassDataPreview(record.id)">数据概览</a-button>
+          <a href="javascript:;" class="mr2" @click="goToMultiClassManage(record.id)">查看</a>
+          <a href="javascript:;" class="mr2" @click="goToEditMultiClass(record.id)">编辑</a>
+          <a href="javascript:;" 
+            @click="goToMultiClassDataPreview(record.id)">数据概览</a>
         </template>
       </a-table>
     </a-spin>
