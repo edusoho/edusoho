@@ -140,9 +140,10 @@ class BlockController extends BaseController
                 }
                 $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
             }
-            if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
-                $this->getUploadFileService()->update($condation['data']['ad'][0]['fileId'], ['isPublic' => 1]);
-            }
+            // todo: why update ? can remove !!!
+            // if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
+            //     $this->getUploadFileService()->update($condation['data']['ad'][0]['fileId'], ['isPublic' => 1]);
+            // }
 
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
