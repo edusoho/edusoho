@@ -9,51 +9,60 @@
     <a-tree
       class="lesson-directory-tree"
       draggable
-      :tree-data="gData"
       :blockNode="true"
       @dragenter="onDragEnter"
       @drop="onDrop"
     >
       <a-icon slot="switcherIcon" type="down" />
+
+      <template v-for="(firstLesson, index) in lessonDirectory">
+        <a-tree-node :class="`tree-node-${firstLesson.type}`" :key="index">
+          <template slot="title">
+            <lesson-directory-item :lesson="firstLesson" />
+          </template>
+
+          <template v-if="firstLesson.children">
+            <template v-for="(secondLesson, index) in firstLesson.children">
+              <a-tree-node :class="`tree-node-${secondLesson.type}`" :key="index">
+                <template v-if="secondLesson.isExist" slot="title">
+                  <lesson-directory-item :lesson="secondLesson" />
+                </template>
+
+                <template v-if="secondLesson.children">
+                  <template v-for="(thirdLesson, index) in secondLesson.children">
+                    <a-tree-node :class="`tree-node-${thirdLesson.type}`" :key="index">
+                      <template v-if="thirdLesson.isExist" slot="title">
+                        <lesson-directory-item :lesson="thirdLesson" />
+                      </template>
+                    </a-tree-node>
+                  </template>
+                </template>
+              </a-tree-node>
+            </template>
+          </template>
+        </a-tree-node>
+      </template>
+
     </a-tree>
   </div>
 </template>
 
 <script>
-const x = 3;
-const y = 2;
-const z = 1;
-const gData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || '0';
-  const tns = _tns || gData;
-
-  const children = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    tns.push({ title: key, key });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
-
+import LessonDirectoryItem from './LessonDirectoryItem.vue';
 export default {
   name: 'LessonDirectory',
 
-  data() {
-    return {
-      gData
+  components: {
+    LessonDirectoryItem
+  },
+
+  props: {
+    lessonDirectory: {
+      type: Array,
+      required: true,
+      default() {
+        return []
+      }
     }
   },
 
@@ -65,59 +74,59 @@ export default {
     },
     onDrop(info) {
       console.log(info);
-      const dropKey = info.node.eventKey;
-      const dragKey = info.dragNode.eventKey;
-      const dropPos = info.node.pos.split('-');
-      const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
-      const loop = (data, key, callback) => {
-        data.forEach((item, index, arr) => {
-          if (item.key === key) {
-            return callback(item, index, arr);
-          }
-          if (item.children) {
-            return loop(item.children, key, callback);
-          }
-        });
-      };
-      const data = [...this.gData];
+      // const dropKey = info.node.eventKey;
+      // const dragKey = info.dragNode.eventKey;
+      // const dropPos = info.node.pos.split('-');
+      // const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
+      // const loop = (data, key, callback) => {
+      //   data.forEach((item, index, arr) => {
+      //     if (item.key === key) {
+      //       return callback(item, index, arr);
+      //     }
+      //     if (item.children) {
+      //       return loop(item.children, key, callback);
+      //     }
+      //   });
+      // };
+      // const data = [...this.gData];
 
-      // Find dragObject
-      let dragObj;
-      loop(data, dragKey, (item, index, arr) => {
-        arr.splice(index, 1);
-        dragObj = item;
-      });
-      if (!info.dropToGap) {
-        // Drop on the content
-        loop(data, dropKey, item => {
-          item.children = item.children || [];
-          // where to insert 示例添加到尾部，可以是随意位置
-          item.children.push(dragObj);
-        });
-      } else if (
-        (info.node.children || []).length > 0 && // Has children
-        info.node.expanded && // Is expanded
-        dropPosition === 1 // On the bottom gap
-      ) {
-        loop(data, dropKey, item => {
-          item.children = item.children || [];
-          // where to insert 示例添加到尾部，可以是随意位置
-          item.children.unshift(dragObj);
-        });
-      } else {
-        let ar;
-        let i;
-        loop(data, dropKey, (item, index, arr) => {
-          ar = arr;
-          i = index;
-        });
-        if (dropPosition === -1) {
-          ar.splice(i, 0, dragObj);
-        } else {
-          ar.splice(i + 1, 0, dragObj);
-        }
-      }
-      this.gData = data;
+      // // Find dragObject
+      // let dragObj;
+      // loop(data, dragKey, (item, index, arr) => {
+      //   arr.splice(index, 1);
+      //   dragObj = item;
+      // });
+      // if (!info.dropToGap) {
+      //   // Drop on the content
+      //   loop(data, dropKey, item => {
+      //     item.children = item.children || [];
+      //     // where to insert 示例添加到尾部，可以是随意位置
+      //     item.children.push(dragObj);
+      //   });
+      // } else if (
+      //   (info.node.children || []).length > 0 && // Has children
+      //   info.node.expanded && // Is expanded
+      //   dropPosition === 1 // On the bottom gap
+      // ) {
+      //   loop(data, dropKey, item => {
+      //     item.children = item.children || [];
+      //     // where to insert 示例添加到尾部，可以是随意位置
+      //     item.children.unshift(dragObj);
+      //   });
+      // } else {
+      //   let ar;
+      //   let i;
+      //   loop(data, dropKey, (item, index, arr) => {
+      //     ar = arr;
+      //     i = index;
+      //   });
+      //   if (dropPosition === -1) {
+      //     ar.splice(i, 0, dragObj);
+      //   } else {
+      //     ar.splice(i + 1, 0, dragObj);
+      //   }
+      // }
+      // this.gData = data;
     },
   }
 }
@@ -126,15 +135,17 @@ export default {
 <style lang="less">
 .lesson-directory {
   min-height: 600px;
+  margin-top: 16px;
   background-color: #fff;
   border: 1px solid #ebebeb;
 
   &__header {
+    padding: 0 5px;
     background: #f5f5f5;
 
     .title {
-      width: 400px;
-      padding-left: 40px;
+      width: 388px;
+      padding-left: 24px;
     }
 
     .start-time {
@@ -145,7 +156,15 @@ export default {
       width: 80px;
     }
   }
+
+  li span.ant-tree-switcher {
+    line-height: 34px;
+    height: 34px;
+  }
+
+  li .ant-tree-node-content-wrapper {
+    line-height: 30px;
+    height: 34px;
+  }
 }
-
-
 </style>

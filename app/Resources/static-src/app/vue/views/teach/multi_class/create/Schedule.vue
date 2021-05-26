@@ -17,7 +17,7 @@
       </a-button>
     </div>
 
-    <lesson-directory />
+    <lesson-directory :lesson-directory="lessonDirectory" />
   </div>
 </template>
 
