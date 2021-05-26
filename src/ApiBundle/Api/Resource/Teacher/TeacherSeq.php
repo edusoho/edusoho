@@ -9,7 +9,7 @@ use Biz\User\UserException;
 
 class TeacherSeq extends AbstractResource
 {
-    public function update(ApiRequest $request, $id, $promoteType)
+    public function update(ApiRequest $request, $id, $type)
     {
         $teacher = $this->getUserService()->getUser($id);
 
@@ -17,10 +17,10 @@ class TeacherSeq extends AbstractResource
             throw UserException::NOTFOUND_USER();
         }
 
-        if ('promoted' == $promoteType) {
+        if ('promoted' == $type) {
             $number = $request->request->get('number', 0);
             $this->getUserService()->promoteUser($id, $number);
-        } elseif ('cancel' == $promoteType) {
+        } elseif ('cancel' == $type) {
             $this->getUserService()->cancelPromoteUser($id);
         }
 
