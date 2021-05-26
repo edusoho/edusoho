@@ -99,7 +99,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Assistants, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
 
 
 export default {
@@ -135,7 +135,7 @@ export default {
     },
 
     fetchAssistants() {
-      Assistants.search().then(res => {
+      Assistant.search().then(res => {
         this.assistants = res.data;
       });
     },

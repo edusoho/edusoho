@@ -194,7 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teachers, Assistants, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
+  import { Teacher, Assistant, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
 
   const images = {
     large: [480, 270],
@@ -271,12 +271,12 @@
         })
       },
       searchTeachers: _.debounce(async function(nickname) {
-        const { data } = await Teachers.search({ nickname })
+        const { data } = await Teacher.search({ nickname })
 
         this.teachersList = data
       }, 300),
       searchAssistants: _.debounce(async function(nickname) {
-        const { data } = await Assistants.search({ nickname })
+        const { data } = await Assistant.search({ nickname })
 
         this.assistantsList = data
       }, 300),
@@ -300,7 +300,7 @@
         const $inputs = this.$refs.upload.$el.getElementsByTagName('input');
 
         this.cropModalVisible = false;
-        
+
         if ($inputs.length > 0) {
           $inputs[0].click()
         }
