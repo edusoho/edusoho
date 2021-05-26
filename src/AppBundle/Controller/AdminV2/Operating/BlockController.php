@@ -15,6 +15,7 @@ use Biz\System\Service\SettingService;
 use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Biz\File\Service\UploadFileService;
 
 class BlockController extends BaseController
 {
@@ -140,7 +141,7 @@ class BlockController extends BaseController
                 $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
             }
             if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
-                $this->getBlockService()->updateFile($condation['data']['ad'][0]['fileId']);
+                $this->getUploadFileService()->update($condation['data']['ad'][0]['fileId'], ['isPublic' => 1]);
             }
 
             $block['data'] = $condation['data'];
@@ -377,5 +378,13 @@ class BlockController extends BaseController
     protected function getThemeService()
     {
         return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

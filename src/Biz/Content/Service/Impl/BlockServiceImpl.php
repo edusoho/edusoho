@@ -10,7 +10,6 @@ use Biz\Content\Dao\BlockDao;
 use Biz\Content\Dao\BlockHistoryDao;
 use Biz\Content\Dao\BlockTemplateDao;
 use Biz\Content\Service\BlockService;
-use Biz\File\Dao\UploadFileDao;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 
@@ -142,11 +141,6 @@ class BlockServiceImpl extends BaseService implements BlockService
         $createdBlock['mode'] = $blockTemplate['mode'];
 
         return $createdBlock;
-    }
-
-    public function updateFile($id)
-    {
-        $this->getUploadFileDao()->update($id, ['isPublic' => 1]);
     }
 
     public function updateBlock($id, $fields)
@@ -382,13 +376,5 @@ class BlockServiceImpl extends BaseService implements BlockService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    /**
-     * @return UploadFileDao
-     */
-    protected function getUploadFileDao()
-    {
-        return $this->createDao('File:UploadFileDao');
     }
 }
