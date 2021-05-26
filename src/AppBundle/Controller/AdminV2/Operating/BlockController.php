@@ -11,6 +11,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\BlockService;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
@@ -139,6 +140,10 @@ class BlockController extends BaseController
                 }
                 $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
             }
+            if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
+                $this->getUploadFileService()->update($condation['data']['ad'][0]['fileId'], ['isPublic' => 1]);
+            }
+
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
@@ -373,5 +378,13 @@ class BlockController extends BaseController
     protected function getThemeService()
     {
         return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }
