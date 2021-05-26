@@ -23,14 +23,12 @@ class MultiClassStudentDeadLine extends AbstractResource
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
-        $ids = $request->request->get('ids');
-        $deadline = $request->request->get('ids');
         $courseId = $multiClass['courseId'];
 
         if ('day' == $updateType) {
-            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $deadline, $fields['waveType']);
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $fields['ids'], $fields['deadline'], $fields['waveType']);
         } elseif ('date' == $updateType) {
-            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $ids, $deadline);
+            $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($courseId, $fields['ids'], $fields['deadline']);
         }
 
         return ['success' => true];
