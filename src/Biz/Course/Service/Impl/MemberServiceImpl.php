@@ -1390,16 +1390,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType, $multiClassId)) {
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
             foreach ($userIds as $userId) {
-                if ($multiClassId) {
-                    $member = $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId);
-                } else {
-                    $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-                }
+                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
                 $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
                 $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
@@ -1414,7 +1410,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
