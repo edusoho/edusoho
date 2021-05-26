@@ -10,14 +10,14 @@ use Biz\MultiClass\MultiClassException;
 
 class MultiClassStudent extends AbstractResource
 {
-    public function add(ApiRequest $request, $id)
+    public function add(ApiRequest $request, $multiClassId)
     {
         $studentData = $request->request->all();
-        if (!ArrayToolkit::requireds($studentData, ['queryfield', 'price'])) {
+        if (!ArrayToolkit::requireds($studentData, ['userInfo', 'price'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
-        $multiClass = $this->getMultiClassService()->getMultiClass($id);
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
@@ -26,9 +26,9 @@ class MultiClassStudent extends AbstractResource
         $studentData['source'] = 'outside';
         $operateUser = $this->getCurrentUser();
         $studentData['remark'] = empty($studentData['remark']) ? $operateUser['nickname'].'添加' : $studentData['remark'];
-        $user = $this->getUserService()->getUserByLoginField($studentData['queryfield'], true);
+        $user = $this->getUserService()->getUserByLoginField($studentData['userInfo'], true);
 
-        $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $studentData, $id);
+        $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $studentData);
 
         return ['success' => true];
     }

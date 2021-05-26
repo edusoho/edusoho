@@ -36,7 +36,6 @@ use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
-use Biz\WeChat\Dao\UserWeChatDao;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -265,10 +264,6 @@ class UserServiceImpl extends BaseService implements UserService
             $user = $this->getUserDao()->getByVerifiedMobile($keyword);
         } else {
             $user = $this->getUserDao()->getByNickname($keyword);
-        }
-        if (empty($user)) {
-            $userWeChat = $this->getUserWeChatDao()->getByNickname($keyword);
-            $user = $this->getUser($userWeChat['userId']);
         }
 
         if (isset($user['type']) && 'system' == $user['type']) {
@@ -2423,14 +2418,6 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getOrgService()
     {
         return $this->createService('Org:OrgService');
-    }
-
-    /**
-     * @return UserWeChatDao
-     */
-    protected function getUserWeChatDao()
-    {
-        return $this->createService('User:UserWeChatDao');
     }
 
     public function getKernel()

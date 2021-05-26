@@ -45,7 +45,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 {
     const ASSISTANT_LIMIT_NUM = 20;
 
-    public function becomeStudentAndCreateOrder($userId, $courseId, $data, $multiClassId = 0)
+    public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
         //        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
 
@@ -65,13 +65,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (empty($course)) {
             $this->createNewException(CourseException::NOTFOUND_COURSE());
-        }
-
-        if ($multiClassId) {
-            $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
-            if (empty($multiClass)) {
-                throw MultiClassException::MULTI_CLASS_NOT_EXIST();
-            }
         }
 
         if ($this->isCourseStudent($course['id'], $user['id'])) {
@@ -109,19 +102,14 @@ class MemberServiceImpl extends BaseService implements MemberService
                     'reason' => 'site.join_by_import',
                     'reason_type' => 'import_join',
                 ];
-                $this->becomeStudent($course['id'], $user['id'], $info, $multiClassId);
+                $this->becomeStudent($course['id'], $user['id'], $info);
             }
 
-            if ($multiClassId) {
-                $member = $this->getMultiClassMember($multiClassId, $course['id'], $user['id']);
-            } else {
-                $member = $this->getCourseMember($course['id'], $user['id']);
-            }
+            $member = $this->getCourseMember($course['id'], $user['id']);
 
             $currentUser = $this->getCurrentUser();
             if (isset($data['isAdminAdded']) && 1 == $data['isAdminAdded']) {
                 $message = [
-                    'multiClassId' => $multiClassId,
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
                     'userId' => $currentUser['id'],
@@ -132,7 +120,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             }
 
             $infoData = [
-                'multiClassId' => $multiClassId,
                 'courseSetId' => $courseSet['id'],
                 'courseId' => $course['id'],
                 'title' => CourseTitleUtils::getDisplayedTitle($course),
@@ -307,11 +294,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function getCourseMember($courseId, $userId)
     {
         return $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-    }
-
-    public function getMultiClassMember($multiClass, $courseId, $userId)
-    {
-        return $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClass, $courseId, $userId);
     }
 
     public function waveMember($id, $diffs)
@@ -828,7 +810,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
     }
 
-    public function becomeStudent($courseId, $userId, $info = [], $multiClassId = 0)
+    public function becomeStudent($courseId, $userId, $info = [])
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -840,27 +822,16 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
 
-        if ($multiClassId) {
-            $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
-            if (empty($multiClass)) {
-                throw MultiClassException::MULTI_CLASS_NOT_EXIST();
-            }
-        }
-
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
-        if ($multiClassId) {
-            $member = $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId);
-        } else {
-            $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-        }
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            if ('teacher' == $member['role'] || 'assistant' == $member['role']) {
+            if ('teacher' == $member['role']) {
                 return $member;
             } else {
                 $this->createNewException(MemberException::DUPLICATE_MEMBER());
@@ -890,7 +861,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $fields = [
             'courseId' => $courseId,
-            'multiClassId' => $multiClassId,
             'userId' => $userId,
             'courseSetId' => $course['courseSetId'],
             'orderId' => empty($order) ? 0 : $order['id'],
@@ -1420,12 +1390,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
-    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
+    public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType)) {
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType, $multiClassId)) {
             foreach ($userIds as $userId) {
-                $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+                if ($multiClassId) {
+                    $member = $this->getMemberDao()->getByMultiClassIdAndCourseIdAndUserId($multiClassId, $courseId, $userId);
+                } else {
+                    $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+                }
 
                 $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
                 $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
@@ -1440,7 +1414,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
+    public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus', $multiClassId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
