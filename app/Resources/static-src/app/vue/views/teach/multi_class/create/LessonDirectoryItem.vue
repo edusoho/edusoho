@@ -1,7 +1,9 @@
 <template>
   <div :class="`lesson-directory-${className} clearfix`">
-    <div class="title pull-left">{{ lesson.title }}</div>
-    <div class="start-time pull-left">2021/08/23 10:12:00</div>
+    <div class="title pull-left">
+      {{ getTitle }}
+    </div>
+    <div class="start-time pull-left">{{ getStartTime }}</div>
     <div class="duration pull-left">60min</div>
     <div class="actions pull-left">
       <a-space size="large">
@@ -29,6 +31,22 @@ export default {
       type: String,
       required: true,
       default: ''
+    }
+  },
+
+  computed: {
+    getTitle() {
+      const { type, title, number } = this.lesson;
+      if (type === 'chapter') return `第${number}章 ${title}`;
+      if (type === 'unit') return `第${number}节 ${title}`;
+      if (type === 'lesson') return `课时${number} ${title}`;
+      return `任务${number} ${title}`;
+    },
+
+    getStartTime() {
+      const { type, startTime } = this.lesson;
+      if (type === 'live') return startTime;
+      return '- -';
     }
   },
 
