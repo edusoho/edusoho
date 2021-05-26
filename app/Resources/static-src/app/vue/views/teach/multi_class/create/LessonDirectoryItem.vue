@@ -1,21 +1,14 @@
 <template>
   <div :class="`lesson-directory-${lesson.type} clearfix`">
-    <!-- <template v-if="lesson.type === 'chapter'">
-      <a-col :span="12">{{ lesson.title }}</a-col>
-    </template>
-
-    <template v-if="lesson.type === 'unit'">
-      <a-col :span="10" :offset="2">{{ lesson.title }}</a-col>
-    </template>
-
-    <template v-if="lesson.type === 'lesson'">
-      <a-col :span="8" :offset="4">{{ lesson.title }}</a-col>
-    </template> -->
     <div class="title pull-left">{{ lesson.title }}</div>
-
     <div class="start-time pull-left">2021/08/23 10:12:00</div>
     <div class="duration pull-left">60min</div>
-    <div class="actions pull-left">编辑, 删除</div>
+    <div class="actions pull-left">
+      <a-space size="large">
+        <a-icon type="edit" style="color: #46c37b;" @click="handleEditClick" />
+        <a-icon type="delete" style="color: #fe4040;" @click="handleDeleteClick" />
+      </a-space>
+    </div>
   </div>
 </template>
 
@@ -30,6 +23,16 @@ export default {
       default() {
         return {}
       }
+    }
+  },
+
+  methods: {
+    handleEditClick() {
+      console.log('click edit');
+    },
+
+    handleDeleteClick() {
+      console.log('click delete');
     }
   }
 }
@@ -52,7 +55,14 @@ export default {
   }
 
   .actions {
+    display: none;
     width: 100px;
+  }
+
+  &:hover {
+    .actions {
+      display: block;
+    }
   }
 }
 
