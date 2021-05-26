@@ -5,6 +5,11 @@ export default [
     component: () => import('app/vue/views/teach/multi_class/index.vue')
   },
   {
+    path: '/create',
+    name: 'MultiClassCreate',
+    component: () => import('app/vue/views/teach/multi_class/create/index.vue')
+  },
+  {
     path: '/create_course',
     name: 'MultiClassCreateCourse',
     component: () => import('app/vue/views/teach/multi_class/create_course/index.vue')
