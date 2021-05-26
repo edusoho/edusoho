@@ -2,7 +2,6 @@
 
 namespace Biz\Importer;
 
-use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 
