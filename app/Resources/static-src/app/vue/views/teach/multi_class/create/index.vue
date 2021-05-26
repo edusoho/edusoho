@@ -84,6 +84,27 @@
       </a-select>
     </a-form-item>
 
+    <a-form-item label="排课">
+      排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
+      <div class="clearfix">
+        <a-space size="large" class="pull-left">
+          <a-button type="primary">
+            <a-icon type="plus" />
+            添加直播课时
+          </a-button>
+          <a-button type="primary">
+            <a-icon type="plus" />
+            章/节
+          </a-button>
+        </a-space>
+        <a-button class="pull-right">
+          批量排课
+        </a-button>
+      </div>
+
+      <Schedule />
+    </a-form-item>
+
     <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
       <a-space size="large">
         <a-button type="primary" html-type="submit">
@@ -100,10 +121,15 @@
 <script>
 import _ from '@codeages/utils';
 import { ValidationTitle, Assistants, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import Schedule from './Schedule.vue';
 
 
 export default {
   name: 'MultiClassCreate',
+
+  components: {
+    Schedule
+  },
 
   data() {
     return {
