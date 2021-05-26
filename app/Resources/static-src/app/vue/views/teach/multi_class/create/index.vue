@@ -4,7 +4,7 @@
     :label-col="{ span: 4 }"
     :wrapper-col="{ span: 20 }"
     @submit="handleSubmit"
-    style="max-width: 860px;"
+    style="max-width: 900px;"
   >
     <a-form-item label="班课名称">
       <a-input
@@ -85,23 +85,6 @@
     </a-form-item>
 
     <a-form-item label="排课">
-      排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
-      <div class="clearfix">
-        <a-space size="large" class="pull-left">
-          <a-button type="primary">
-            <a-icon type="plus" />
-            添加直播课时
-          </a-button>
-          <a-button type="primary">
-            <a-icon type="plus" />
-            章/节
-          </a-button>
-        </a-space>
-        <a-button class="pull-right">
-          批量排课
-        </a-button>
-      </div>
-
       <Schedule />
     </a-form-item>
 

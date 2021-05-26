@@ -1,6 +1,21 @@
 <template>
   <div>
-    schedule
+    排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
+    <div class="clearfix">
+      <a-space size="large">
+        <a-button type="primary">
+          <a-icon type="plus" />
+          添加直播课时
+        </a-button>
+        <a-button type="primary">
+          <a-icon type="plus" />
+          章/节
+        </a-button>
+      </a-space>
+      <a-button class="pull-right">
+        批量排课
+      </a-button>
+    </div>
   </div>
 </template>
 
