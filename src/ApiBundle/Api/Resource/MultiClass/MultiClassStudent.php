@@ -54,8 +54,8 @@ class MultiClassStudent extends AbstractResource
             ['mediaType' => 'testpaper', 'fromCourseId' => $multiClass['courseId']]
         );
 
-        $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework', $homeworkCount);
-        $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper', $testpaperCount);
+        $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
+        $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
             $member['assistants'] = $assistantInfos;
             $member['finishedHomeworkCount'] = 0;
@@ -76,36 +76,31 @@ class MultiClassStudent extends AbstractResource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    private function findUserTaskCount($courseId, $type, $count)
+    private function findUserTaskCount($courseId, $type)
     {
-        $tasks = $this->getTaskService()->searchTasks(
-            ['courseId' => $courseId, 'type' => $type],
-            ['seq' => 'ASC', 'id' => 'ASC'],
-            0,
-            $count
-        );
-
-        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
 
         $userTaskCount = [];
-        foreach ($tasks as $task) {
-            if (empty($task['answerSceneId'])) {
+        foreach ($activities as $activity) {
+            if (empty($activity['ext']['answerSceneId'])) {
                 continue;
             }
 
             $answerReports = $this->getAnswerReportService()->search(
-                ['answer_scene_id' => $task['answerSceneId']],
+                ['answer_scene_id' => $activity['ext']['answerSceneId']],
                 [],
                 0,
-                $this->getAnswerReportService()->count(['answer_scene_id' => $task['answerSceneId']])
+                $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerSceneId']])
             );
 
-            foreach ($answerReports as $answerReport) {
-                if (empty($userTaskCount[$answerReport['user_id']])) {
-                    $userTaskCount[$answerReport['user_id']] = 0;
+            $answerReports = ArrayToolkit::group($answerReports, 'user_id');
+
+            foreach ($answerReports as $userId => $answerReport) {
+                if (empty($userTaskCount[$userId])) {
+                    $userTaskCount[$userId] = 0;
                 }
 
-                ++$userTaskCount[$answerReport['user_id']];
+                ++$userTaskCount[$userId];
             }
         }
 
