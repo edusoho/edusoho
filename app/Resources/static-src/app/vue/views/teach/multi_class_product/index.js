@@ -1,6 +1,7 @@
 import Vue from 'common/vue';
 import Router from 'vue-router'
 import routes from 'app/vue/router/teach/multi_class_product/index.js'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
 
 const router = new Router({
   mode: 'hash',
@@ -10,6 +11,13 @@ const router = new Router({
 new Vue({
   el: '#app',
   router,
-  template: '<router-view></router-view>'
+  data: {
+    locale: zhCN
+  },
+  template: `
+    <a-config-provider :locale="locale">
+      <router-view></router-view>
+    </a-config-provider>
+  `
 })
 
