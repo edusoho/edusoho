@@ -37,9 +37,9 @@
         <a href="javascript:;" @click="goToMultiClassManage(record.id)">查看</a>
         <a href="javascript:;" @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
         <a-dropdown>
-          <a @click="e => e.preventDefault()">
+          <a-button type="link" @click="e => e.preventDefault()">
             更多 <a-icon type="down" />
-          </a>
+          </a-button>
           <a-menu slot="overlay">
             <a-menu-item>
               <a href="javascript:;" 

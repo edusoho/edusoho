@@ -294,7 +294,7 @@
         const $inputs = this.$refs.upload.$el.getElementsByTagName('input');
 
         this.cropModalVisible = false;
-        
+
         if ($inputs.length > 0) {
           $inputs[0].click()
         }

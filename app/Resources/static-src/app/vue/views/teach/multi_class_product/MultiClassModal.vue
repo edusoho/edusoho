@@ -9,25 +9,32 @@
     <a-spin :spinning="ajaxLoading">
       <!-- TODO 添加链接地址 -->
       <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
-        <a slot="class_title" slot-scope="text">
+        <a slot="class_title" slot-scope="text, record" 
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
           {{ text }}
         </a>
-        <a slot="course" slot-scope="text">
+        <a slot="course" slot-scope="text, record"
+          :href="`/course_set/${record.courseId}/manage/base`">
           {{ text }}
         </a>
-        <a slot="taskNum" slot-scope="text, record">
-          {{ record.taskNum - record.notStartLiveTaskNum }}/{{ record.taskNum }}
+        <a slot="taskNum" slot-scope="text, record"
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
+          {{ record.endTaskNum }}/{{ record.taskNum }}
         </a>
-        <a slot="studentNum" slot-scope="text">
-          {{ text }}
-        </a>
-        <template slot="createdTime" slot-scope="createdTime">
-          {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
+        <template slot="assistant" slot-scope="assistant">
+          {{ assistant ? assistant.join('、') : '' }}
         </template>
+        <a slot="studentNum" slot-scope="text, record"
+          :href="`/admin/v2/multi_class/index#/course_manage/${record.id}/student_manage`">
+          {{ text }}
+        </a>
         <template :size="8" slot="action" slot-scope="text, record"> 
-          <a-button type="link">查看</a-button>
-          <a-button type="link">编辑</a-button>
-          <a-button type="link">数据概览</a-button>
+          <a-button type="link" @click="goToMultiClassManage(record.id)">查看</a-button>
+          <a-button type="link" @click="goToEditMultiClass(record.id)">编辑</a-button>
+          <a-button type="link" 
+            @click="goToMultiClassDataPreview(record.id)">数据概览</a-button>
         </template>
       </a-table>
     </a-spin>
@@ -127,6 +134,15 @@
         } finally {
           this.ajaxLoading = false;
         }
+      },
+      goToMultiClassManage(id) {
+        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}`
+      },
+      goToEditMultiClass(id) {
+        window.location.href = `/admin/v2/multi_class/index#/create?id=${id}`
+      },
+      goToMultiClassDataPreview(id) {
+        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}/data_preview`
       }
     }
   };
