@@ -1,6 +1,6 @@
 <template>
   <div class="create-course">
-    <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
+    <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="max-width: 860px;">
       <a-form-item label="课程类型">
         <a-radio-group
           :options="[{ label: '普通课程', value: 'normal' }, { label: '直播课程', value: 'live' }]"
@@ -69,13 +69,13 @@
         </a-select>
       </a-form-item>
       <a-form-item label="价格">
-        <a-input suffix="元" v-decorator="['originPrice', {}]" />
+        <a-input suffix="元" v-decorator="['originPrice', { initialValue: 0 }]" />
       </a-form-item>
       <a-form-item label="学习模式">
         <a-radio-group
           :options="[{ label: '自由式', value: 'freeMode' }, { label: '解锁式', value: 'lockMode' }]"
           v-decorator="['learnMode', {
-            initialValue: 'lockMode'
+            initialValue: 'freeMode'
           }]"
         />
         <div class="color-gray cd-mt8">
@@ -85,9 +85,9 @@
       </a-form-item>
       <a-form-item label="任务完成规则">
         <a-radio-group
-          :options="[{ label: '无限制', value: '1' }, { label: '任务完成', value: '2' }]"
+          :options="[{ label: '无限制', value: '1' }, { label: '由任务完成条件决定', value: '2' }]"
           v-decorator="['enableFinish', {
-            initialValue: '2'
+            initialValue: '1'
           }]"
         />
         <div class="color-gray cd-mt8">
@@ -114,7 +114,7 @@
           </a-form-item>
         </div>
       </a-form-item>
-      <a-form-item label="学习有效期" >
+      <a-form-item label="学习有效期" style="margin-bottom: 0;">
         <a-radio-group
           :options="[
             { label: '随到随学', value: 'days' },
@@ -139,38 +139,38 @@
             v-decorator="['deadline', {
               rules: [{ validator: requiredValidator, message: '请输入截止日期' }]
             }]" />
-          在此日期前，学员可进行学习。
+          <span class="ml2">在此日期前，学员可进行学习。</span>
         </a-form-item>
-        <a-form-item v-if="form.getFieldValue('deadlineType') !== 'end_date'">
+        <a-form-item v-if="form.getFieldValue('deadlineType') === 'dayjs'">
           <a-input
             style="width: 200px;"
             v-decorator="['expiryDays', {
               rules: [{ required: true, message: '请输入有效期天数' }]
             }]" />
-          从加入当天起，在几天内可进行学习。
+          <span class="ml2">从加入当天起，在几天内可进行学习。</span>
         </a-form-item>
       </a-form-item>
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'date'"
         style="position: relative;left: 12.5%;overflow: hidden"
       >
-      <a-form-item class="pull-left">
-        开始日期
-        <a-date-picker v-decorator="['expiryStartDate', {
-          rules: [{ required: true, message: '请输入开始日期' }]
-        }]" />
-      </a-form-item>
-      <a-form-item class="pull-left ml2">
-        结束日期
-        <a-date-picker v-decorator="['expiryEndDate', {
-          rules: [{ required: true, message: '请输入结束日期' }]
-        }]" />
-      </a-form-item>
+        <a-form-item class="pull-left">
+          <span class="mr2">开始日期</span>
+          <a-date-picker v-decorator="['expiryStartDate', {
+            rules: [{ required: true, message: '请输入开始日期' }]
+          }]" />
+        </a-form-item>
+        <a-form-item class="pull-left ml3">
+          <span class="mr2">结束日期</span>
+          <a-date-picker v-decorator="['expiryEndDate', {
+            rules: [{ required: true, message: '请输入结束日期' }]
+          }]" />
+        </a-form-item>
       </a-form-item>
     </a-form>
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="saveCourseSet">取消</a-button>
+      <a-button class="ml2" @click="goToLastPage">取消</a-button>
     </div>
 
     <a-modal
@@ -184,7 +184,7 @@
       </vue-cropper>
       <template slot="footer">
         <a-button @click="reSelectCourseCover">重新选择</a-button>
-        <a-button type="primary" @click="saveCourseCover">保存图片</a-button>
+        <a-button type="primary" @click="saveCourseCover" :loading="uploading">保存图片</a-button>
       </template>
     </a-modal>
   </div>
@@ -194,19 +194,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teacher, Assistant, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
-
-  const images = {
-    large: [480, 270],
-    middle: [304, 171],
-    small: [96,]
-  }
-
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
+  import { Teacher, Assistant, Course, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
 
   export default {
     name: 'CreateCourse',
@@ -216,12 +204,7 @@
       return {
         form: this.$form.createForm(this),
         formInfo: {
-          buyable: false,
-          deadline: '',
-          deadlineType: '',
-          expiryDays: '',
-          expiryStartDate: '',
-          expiryEndDate: '',
+          buyable: true,
         },
         teachersList: [],
         assistantsList: [],
@@ -232,9 +215,13 @@
         ajaxLoading: false,
         uploadToken: {},
         courseCoverName: '',
+        uploading: false,
+        imgs: null,
       };
     },
     created() {
+      this.searchTeachers();
+      this.searchAssistants();
     },
     mounted() {
       this.editor = CKEDITOR.replace('summary', {
@@ -257,25 +244,30 @@
           this.ajaxLoading = true
           values.summary = this.editor.getData()
           values.teachers = [values.teachers]
+          values = _.assignIn(values, this.formInfo)
+          
+          if (this.imgs) {
+            values.imgs = this.imgs;
+          }
 
           try {
             const { error } = await CourseSet.add(values);
 
             if (!error) {
               this.$message.success('创建成功')
-              // TODO 页面跳转
+              this.$router.go(-1);
             }
           } finally {
             this.ajaxLoading = false;
           }
         })
       },
-      searchTeachers: _.debounce(async function(nickname) {
+      searchTeachers: _.debounce(async function(nickname = '') {
         const { data } = await Teacher.search({ nickname })
 
         this.teachersList = data
       }, 300),
-      searchAssistants: _.debounce(async function(nickname) {
+      searchAssistants: _.debounce(async function(nickname = '') {
         const { data } = await Assistant.search({ nickname })
 
         this.assistantsList = data
@@ -326,11 +318,12 @@
             y2: _.add(cropperData.y, cropperData.height),
             w: cropperData.width, // 裁剪后宽度
             h: cropperData.height, // 裁剪后高度
-            imgs: {
-              large: [480, 270],
-              middle: [304, 171],
-              small: [96, 54]
-            },
+            'imgs[large][0]': 480,
+            'imgs[large][1]': 270,
+            'imgs[middle][0]': 304,
+            'imgs[middle][1]': 171,
+            'imgs[small][0]': 96,
+            'imgs[small][1]': 54,
             post: false,
             width: imageData.naturalWidth, // 原图片宽度
             height: imageData.naturalHeight, // 原图片高度
@@ -342,15 +335,32 @@
           formData.append('file', blob, this.courseCoverName);
           formData.append('token', this.uploadToken.token);
 
-          // TODO 上传图片接口；现在差token
-          await File.uploadFile(formData)
-          await File.imgCrop(cropResult)
+          this.uploading = true;
+          try {
+            const { url } = await File.uploadFile(formData)
+
+            this.courseCoverUrl = url;
+
+            const formData1 = new FormData();
+            for(const key in cropResult) {
+              formData1.append(key, cropResult[key])
+            }
+
+            this.imgs = await File.imgCrop(formData1);
+          } finally {
+            this.uploading = false;
+            this.cropModalVisible = false;
+          }
         })
       },
       requiredValidator(rule, value, callback) {
         if (!value) {
           callback(rule.message)
         }
+      },
+      goToLastPage() {
+        // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
+        this.$router.go(-1)
       }
     }
   }

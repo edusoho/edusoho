@@ -24,7 +24,7 @@
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging" 
+        v-if="paging && productList.length > 0" 
         v-model="paging.page" 
         :total="paging.total"
         show-less-items 
@@ -226,5 +226,6 @@
 <style>
 .multi-class-product {
   min-height: 300px;
+  margin-top: 24px;
 }
 </style>

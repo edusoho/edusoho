@@ -36,7 +36,7 @@
           </a-select>
         </a-col>
         <a-col :span="5">
-          <a-button type="primary" :block="true">
+          <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
             <a-icon type="plus" />
             创建新课程
           </a-button>
@@ -101,7 +101,6 @@
 import _ from '@codeages/utils';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
 
-
 export default {
   name: 'MultiClassCreate',
 
@@ -160,7 +159,6 @@ export default {
     }, 300),
 
     filterOption(input, option) {
-      console.log(input, option);
       return (
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       );
