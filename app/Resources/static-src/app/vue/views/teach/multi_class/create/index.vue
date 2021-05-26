@@ -104,6 +104,7 @@
 <script>
 import _ from '@codeages/utils';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import Schedule from './Schedule.vue';
 
 export default {
   name: 'MultiClassCreate',

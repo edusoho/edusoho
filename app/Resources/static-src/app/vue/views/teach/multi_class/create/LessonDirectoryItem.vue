@@ -1,5 +1,5 @@
 <template>
-  <div :class="`lesson-directory-${lesson.type} clearfix`">
+  <div :class="getClassName">
     <div class="title pull-left">{{ lesson.title }}</div>
     <div class="start-time pull-left">2021/08/23 10:12:00</div>
     <div class="duration pull-left">60min</div>
@@ -23,6 +23,17 @@ export default {
       default() {
         return {}
       }
+    },
+
+    task: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  computed: {
+    getClassName() {
+      return this.task ? `lesson-directory-task clearfix` : `lesson-directory-${this.lesson.type} clearfix`;
     }
   },
 
@@ -41,7 +52,8 @@ export default {
 <style lang="less">
 .lesson-directory-chapter,
 .lesson-directory-unit,
-.lesson-directory-lesson {
+.lesson-directory-lesson,
+.lesson-directory-task {
   line-height: 30px;
   height: 30px;
   border-bottom: 1px solid #ebebeb;
@@ -81,6 +93,12 @@ export default {
 .lesson-directory-lesson {
   .title {
     width: 328px;
+  }
+}
+
+.lesson-directory-task {
+  .title {
+    width: 310px;
   }
 }
 </style>

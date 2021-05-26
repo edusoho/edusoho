@@ -25,7 +25,7 @@
 <script>
 import LessonDirectory  from './LessonDirectory.vue';
 import CreateLiveModal from './CreateLiveModal.vue';
-import { apiClient } from 'common/vue/service/api-client.js';
+import { Course } from 'common/vue/service';
 
 export default {
   name: 'Schedule',
@@ -43,12 +43,16 @@ export default {
   },
 
   created() {
-    apiClient.get(`/api/courses/6/item_with_lessons?format=1`).then(res => {
-      this.lessonDirectory = res;
-    });
+    this.fetchCourseLesson();
   },
 
   methods: {
+    fetchCourseLesson() {
+      Course.getCourseLesson(35, { format: 1 }).then(res => {
+        this.lessonDirectory = res;
+      });
+    },
+
     showCreateLiveModal() {
       this.createLiveModalVisible = true;
     },

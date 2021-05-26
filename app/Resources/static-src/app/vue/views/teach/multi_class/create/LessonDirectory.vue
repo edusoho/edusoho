@@ -15,24 +15,34 @@
     >
       <a-icon slot="switcherIcon" type="down" />
 
-      <template v-for="(firstLesson, index) in lessonDirectory">
-        <a-tree-node :class="`tree-node-${firstLesson.type}`" :key="index">
+      <template v-for="firstLesson in lessonDirectory">
+        <a-tree-node :key="firstLesson.id">
           <template slot="title">
             <lesson-directory-item :lesson="firstLesson" />
           </template>
 
           <template v-if="firstLesson.children">
-            <template v-for="(secondLesson, index) in firstLesson.children">
-              <a-tree-node :class="`tree-node-${secondLesson.type}`" :key="index">
-                <template v-if="secondLesson.isExist" slot="title">
+            <template v-for="secondLesson in firstLesson.children">
+              <a-tree-node :class="`tree-node-${secondLesson.type}`" :key="secondLesson.id">
+                <template slot="title">
                   <lesson-directory-item :lesson="secondLesson" />
                 </template>
 
                 <template v-if="secondLesson.children">
-                  <template v-for="(thirdLesson, index) in secondLesson.children">
-                    <a-tree-node :class="`tree-node-${thirdLesson.type}`" :key="index">
-                      <template v-if="thirdLesson.isExist" slot="title">
+                  <template v-for="thirdLesson in secondLesson.children">
+                    <a-tree-node :class="`tree-node-${thirdLesson.type}`" :key="thirdLesson.id">
+                      <template slot="title">
                         <lesson-directory-item :lesson="thirdLesson" />
+                      </template>
+
+                      <template v-if="thirdLesson.tasks">
+                        <template v-for="fourLesson in thirdLesson.tasks">
+                          <a-tree-node class="tree-node-tasks" :key="fourLesson.id">
+                            <template slot="title">
+                              <lesson-directory-item :lesson="fourLesson" :task="true" />
+                            </template>
+                          </a-tree-node>
+                        </template>
                       </template>
                     </a-tree-node>
                   </template>
