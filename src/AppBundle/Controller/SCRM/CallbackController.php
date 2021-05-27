@@ -33,7 +33,6 @@ class CallbackController extends BaseController
         $adminUser = $this->getUserService()->getUserByType('system');
         $this->authenticateUser($adminUser);
         $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-        $orderInfo['specsId'] = 294;
         $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
         $courseMember = $this->getCourseMemberService()->getCourseMember($specs['targetId'], $existUser['id']);
         if (empty($courseMember)) {
@@ -51,7 +50,7 @@ class CallbackController extends BaseController
             }
         }
 
-//        $return = $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
+        $return = $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
         $this->authenticateUser($existUser);
 
         return $this->redirect($this->generateUrl('my_course_show', ['id' => $specs['targetId']]));
