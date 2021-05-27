@@ -10,7 +10,6 @@
       class="lesson-directory-tree"
       draggable
       :blockNode="true"
-      @dragenter="onDragEnter"
       @drop="onDrop"
     >
       <a-icon slot="switcherIcon" type="down" />
@@ -100,14 +99,22 @@ export default {
   },
 
   methods: {
-    supportDrag(type) {
-      return _.includes(['chapter', 'unit', 'lesson'], type);
-    },
+    allowDrag(dragType, dragEnterType, dropPosition) {
+      if (!['chapter', 'unit', 'lesson'].includes(dragType)) return false;
 
-    onDragEnter(info) {
-      // console.log(info);
-      // expandedKeys 需要受控时设置
-      // this.expandedKeys = info.expandedKeys
+      if (dragType === 'chapter' && dragEnterType === 'chapter' && dropPosition != 0) return true;
+
+      if (dragType === 'unit') {
+        if (dragEnterType === 'chapter') return true;
+        if (dragEnterType === 'unit' && dropPosition != 0) return true;
+      }
+
+      if (dragType === 'lesson') {
+        if (['chapter', 'unit'].includes(dragEnterType)) return true;
+        if (dragEnterType === 'lesson' && dropPosition != 0) return true;
+      }
+
+      return false;
     },
 
     onDrop(info) {
@@ -129,47 +136,42 @@ export default {
           }
         });
       };
+
       const data = [...this.lessonDirectory];
 
-      let dragObj;
-      loop(data, dragKey, (item, index, arr) => {
-        if (this.supportDrag(item.type)) {
-          arr.splice(index, 1);
-        }
+      let dragObj, dragIndex, dragArr, dragEnterObj, dragEnterIndex, dragEnterArr;
 
+      loop(data, dragKey, (item, index, arr) => {
         dragObj = item;
+        dragIndex = index;
+        dragArr = arr;
       });
 
-      if (!this.supportDrag(dragObj.type)) return;
+      loop(data, dropKey, (item, index, arr) => {
+        dragEnterObj = item;
+        dragEnterIndex = index;
+        dragEnterArr = arr;
+      });
+
+      if (!this.allowDrag(dragObj.type, dragEnterObj.type, dropPosition)) return;
+
+      dragArr.splice(dragIndex, 1);
 
       if (!info.dropToGap) {
-        // Drop on the content
-        loop(data, dropKey, item => {
-
-          item.children = item.children || [];
-          item.children.push(dragObj);
-        });
+        dragEnterObj.children = dragEnterObj.children || [];
+        dragEnterObj.children.push(dragObj);
       } else if (
         (info.node.children || []).length > 0 && // Has children
         info.node.expanded && // Is expanded
         dropPosition === 1 // On the bottom gap
       ) {
-        loop(data, dropKey, item => {
-          item.children = item.children || [];
-          // where to insert 示例添加到尾部，可以是随意位置
-          item.children.unshift(dragObj);
-        });
+          dragEnterObj.children = dragEnterObj.children || [];
+          dragEnterObj.children.unshift(dragObj);
       } else {
-        let ar;
-        let i;
-        loop(data, dropKey, (item, index, arr) => {
-          ar = arr;
-          i = index;
-        });
         if (dropPosition === -1) {
-          ar.splice(i, 0, dragObj);
+          dragEnterArr.splice(dragEnterIndex, 0, dragObj);
         } else {
-          ar.splice(i + 1, 0, dragObj);
+          dragEnterArr.splice(dragEnterIndex + 1, 0, dragObj);
         }
       }
       this.lessonDirectory = data;
