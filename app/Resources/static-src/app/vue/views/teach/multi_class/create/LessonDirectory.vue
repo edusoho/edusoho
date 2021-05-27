@@ -174,7 +174,7 @@ export default {
           dragEnterArr.splice(dragEnterIndex + 1, 0, dragObj);
         }
       }
-      this.lessonDirectory = data;
+      this.$emit('change-lesson-directory', data);
     },
   }
 }

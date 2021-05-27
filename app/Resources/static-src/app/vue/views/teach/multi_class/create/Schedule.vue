@@ -17,7 +17,7 @@
       </a-button>
     </div>
 
-    <lesson-directory :lesson-directory="lessonDirectory" />
+    <lesson-directory :lesson-directory="lessonDirectory" :change-lesson-directory="changeLessonDirectory" />
     <create-live-modal :visible="createLiveModalVisible" @handle-cancel="hideCreateLiveModal" />
   </div>
 </template>
@@ -59,6 +59,10 @@ export default {
 
     hideCreateLiveModal() {
       this.createLiveModalVisible = false;
+    },
+
+    changeLessonDirectory(data) {
+      this.lessonDirectory = data;
     }
   }
 }
