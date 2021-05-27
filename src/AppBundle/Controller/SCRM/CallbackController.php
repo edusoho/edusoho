@@ -5,7 +5,11 @@ namespace AppBundle\Controller\SCRM;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\OperateReason;
+use Biz\User\Dao\UserDao;
 use ESCloud\SDK\Service\ScrmService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,18 +21,56 @@ class CallbackController extends BaseController
         $this->filterQuery($query);
 
         $userInfo = $this->getScrmSdk()->getUserByToken($query['user_token']);
+
+        $existUser = $this->getUserService()->getUserByScrmUuid($userInfo['unionId']);
+        if (empty($existUser)) {
+            try {
+                $existUser = $this->registerUser($userInfo);
+            } catch (\Exception $e) {
+                return $this->createJsonResponse(['message' => $e->getMessage(), 'trans' => $e->getTraceAsString()]);
+            }
+        }
+        $adminUser = $this->getUserService()->getUserByType('system');
+        $this->authenticateUser($adminUser);
         $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-        $return = $this->getScrmSdk()->callbackTrading(['orderId' => 1, 'status' => 'success']);
-        $this->getUserService()->getUserByScrmUuid($userInfo['unionid']);
-        if (!empty($userInfo)) {
-            $this->getUserService()->register([
-                'userToken',
-                'nickname',
-                'email',
-            ]);
+        $orderInfo['specsId'] = 294;
+        $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
+        $courseMember = $this->getCourseMemberService()->getCourseMember($specs['targetId'], $existUser['id']);
+        if (empty($courseMember)) {
+            $data = [
+                'price' => $orderInfo['payAmount'],
+                'remark' => '通过SCRM添加',
+                'source' => 'outside',
+                'reason' => OperateReason::JOIN_BY_IMPORT,
+                'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
+            ];
+            try {
+                $courseMember = $this->getCourseMemberService()->becomeStudent($specs['targetId'], $existUser['id'], $data);
+            } catch (\Exception $e) {
+                return $this->createJsonResponse(['message' => $e->getMessage(), 'trans' => $e->getTraceAsString()]);
+            }
         }
 
-        return $this->createJsonResponse(true);
+//        $return = $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
+        $this->authenticateUser($existUser);
+
+        return $this->redirect($this->generateUrl('my_course_show', ['id' => $specs['targetId']]));
+    }
+
+    protected function registerUser($userInfo)
+    {
+        $registration = [];
+        $registration['nickname'] = 'scrm_'.$this->getRandomString(5);
+        $registration['email'] = 'scrm_'.$this->getRandomString(5).'@edusoho.net';
+        $registration['password'] = '';
+        $registration['createdIp'] = '';
+
+        $user = $this->getUserService()->register(
+            $registration
+        );
+        $this->getUserService()->updateUserProfile($user['id'], ['mobile' => $userInfo['phone']]);
+
+        return $this->getUserDao()->update($user['id'], ['scrmUuid' => $userInfo['unionId']]);
     }
 
     private function filterQuery($query)
@@ -36,7 +78,7 @@ class CallbackController extends BaseController
         if (!ArrayToolkit::requireds($query, [
             'user_token',
             'receipt_token',
-            'order_id'
+            'order_id',
         ])) {
             throw new InvalidArgumentException('参数不正确！');
         }
@@ -51,6 +93,14 @@ class CallbackController extends BaseController
     }
 
     /**
+     * @return UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->getBiz()->dao('User:UserDao');
+    }
+
+    /**
      * @return ScrmService
      */
     protected function getScrmSdk()
@@ -58,5 +108,33 @@ class CallbackController extends BaseController
         $biz = $this->getBiz();
 
         return $biz['ESCloudSdk.scrm'];
+    }
+
+    protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    {
+        $s = '';
+        $cLength = strlen($chars);
+
+        while (strlen($s) < $length) {
+            $s .= $chars[mt_rand(0, $cLength - 1)];
+        }
+
+        return $s;
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }
