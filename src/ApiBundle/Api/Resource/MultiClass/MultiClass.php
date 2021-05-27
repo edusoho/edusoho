@@ -82,8 +82,9 @@ class MultiClass extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
+        $orderBys = $this->prepareOrderBy($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, $orderBys, $offset, $limit);
         $multiClassesCount = $this->getMultiClassService()->countMultiClass($conditions);
         $multiClasses = $this->makeMultiClassesInfo($multiClasses);
 
@@ -96,7 +97,7 @@ class MultiClass extends AbstractResource
         if (!empty($conditions['keywords'])) {
             $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
             if (empty($userIds)) {
-                $courses = $this->getCourSetService()->findCourseByCourseSetTitleLike($conditions['keywords']);
+                $courses = $this->getCourseService()->findCourseByCourseSetTitleLike($conditions['keywords']);
                 $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             } else {
                 $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
@@ -113,6 +114,23 @@ class MultiClass extends AbstractResource
         return $prepareConditions;
     }
 
+    private function prepareOrderBy($orderBys)
+    {
+        $prepareOrderBys = [];
+
+        if (!empty($orderBys['priceSort'])) {
+            $prepareOrderBys['price'] = 'DESC' == $orderBys['priceSort'] ? 'DESC' : 'ASC';
+        }
+
+        if (!empty($orderBys['studentNumberSort'])) {
+            $prepareOrderBys['studentNum'] = 'DESC' == $orderBys['studentNumberSort'] ? 'DESC' : 'ASC';
+        }
+
+        $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+
+        return $prepareOrderBys;
+    }
+
     private function makeMultiClassesInfo($multiClasses)
     {
         $multiClassIds = ArrayToolkit::column($multiClasses, 'id');
@@ -126,7 +144,7 @@ class MultiClass extends AbstractResource
         $teachers = ArrayToolkit::index($teachers, 'multiClassId');
         $assistantGroup = ArrayToolkit::group($assistants, 'multiClassId');
 
-        $courses = $this->getCourSetService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $products = $this->getMultiClassProductService()->findProductByIds($productIds);
 
         foreach ($multiClasses as &$multiClass) {
@@ -135,7 +153,6 @@ class MultiClass extends AbstractResource
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
             $multiClass['course'] = $courses[$multiClass['courseId']]['courseSetTitle'];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
-            $multiClass['price'] = $courses[$multiClass['courseId']]['price'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1]);
             $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks([
                 'multiClassId' => $multiClass['id'],
@@ -157,7 +174,6 @@ class MultiClass extends AbstractResource
             array_walk($assistantIds, function ($id) use (&$multiClass,$assistantUsers) {
                 $multiClass['assistant'][] = $assistantUsers[$id]['nickname'];
             });
-            $multiClass['studentNum'] = $this->getMemberService()->countMembers(['multiClassId' => $multiClass['id'], 'role' => 'student']);
         }
 
         return $multiClasses;
@@ -195,7 +211,7 @@ class MultiClass extends AbstractResource
     /**
      * @return CourseService
      */
-    protected function getCourSetService()
+    protected function getCourseService()
     {
         return $this->service('Course:CourseService');
     }

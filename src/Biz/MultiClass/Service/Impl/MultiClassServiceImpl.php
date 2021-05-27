@@ -130,11 +130,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
-    public function searchMultiClass($conditions, $orderBy, $start, $limit)
+    public function searchMultiClass($conditions, $orderBys, $start, $limit)
     {
         $conditions = $this->filterConditions($conditions);
 
-        return $this->getMultiClassDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getMultiClassDao()->searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
     }
 
     public function countMultiClass($conditions)
@@ -198,6 +198,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $course = $this->getCourseService()->getCourse($fields['courseId']);
             if (empty($course)) {
                 throw CourseException::NOTFOUND_COURSE();
+            }
+            $courseExisted = $this->getMultiClassDao()->getByCourseId($fields['courseId']);
+
+            if ($courseExisted) {
+                throw MultiClassException::MULTI_CLASS_COURSE_ALREADY();
             }
         }
         if (isset($fields['productId']) && !empty($fields['productId'])) {
