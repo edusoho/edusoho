@@ -60,7 +60,17 @@ class MultiClassLesson extends AbstractResource
                         $lesson['questionNum'] = $questionNum;
                         $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $lesson['tasks']['id']]);
                         $lesson['totalStudentNum'] = $totalStudentNum;
+                        array_multisort(array_column($lesson['tasks'], 'seq'), SORT_ASC, $lesson['tasks']);
                         foreach ($lesson['tasks'] as $key => $task){
+                            if (isset($task['type']) && $task['type'] === 'live'){
+                                if (time() < $task['activity']['startTime']){
+                                    $task['activity']['ext']['progressStatus'] = 'created';
+                                }elseif (time() >= $task['activity']['startTime'] && time() < $task['activity']['endTime']){
+                                    $task['activity']['ext']['progressStatus'] = 'start';
+                                }elseif (time() > $task['activity']['endTime']){
+                                    $task['activity']['ext']['progressStatus'] = 'closed';
+                                }
+                            }
                             $lesson['tasks'] = $task;
                             $necessaryItems[] = $lesson;
                         }
