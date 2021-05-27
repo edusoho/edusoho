@@ -21,6 +21,11 @@ define(function(require, exports, module) {
               });
             }
           }
+          if(brr.length == 0){
+            brr.push({
+              categoryId: 0
+            });
+          }
           config.categoryIds = brr;
         }
 
@@ -78,10 +83,11 @@ define(function(require, exports, module) {
           return;
         }
         var categoryChoices = JSON.parse($('#categoryChoices').val());
+        var categoryChoicesIds = $('#categoryChoicesIds').val().split(',');
         var html = "<div class='articleCategory clearfix'>\n ";
         html += '<select class="form-control width-input-large pull-left" name="categoryIds[][categoryId]" style="margin-bottom: 12px">\n <option value="0">请选择所属栏目</option>';
-        for (var categoryId in categoryChoices) {
-          html += '<option value="' + categoryId + '">' + categoryChoices[categoryId] + '</option>';
+        for (var i = 0; i < categoryChoicesIds.length; i++) {
+          html += '<option value="' + categoryChoicesIds[i] + '">' + categoryChoices[categoryChoicesIds[i]] + '</option>';
         }
         html += '</select>\n <span class="delete-item-btn"><i class="cd-icon cd-icon-close"></i></span>\n </div>';
         $('#categories').append(html);
