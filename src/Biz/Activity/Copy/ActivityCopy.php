@@ -45,7 +45,7 @@ class ActivityCopy extends AbstractCopy
                     if (time() > $liveStartTime && 0 == $cycleDifference) {
                         $cycleDifference = time() - $liveStartTime;
                     }
-                    $newActivity['startTime'] = $activity['startTime'] + $cycleDifference + 10; //当前时间无法创建 延迟10s
+                    $newActivity['startTime'] = $activity['startTime'] + $cycleDifference + 86400; //当前时间无法创建 延迟 1天
                     $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
                 }
             }
