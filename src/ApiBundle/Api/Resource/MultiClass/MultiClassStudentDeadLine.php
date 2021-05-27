@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\MultiClass;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -11,6 +12,13 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudentDeadLine extends AbstractResource
 {
+    /**
+     * @param $multiClassId
+     * @param $updateType
+     *
+     * @return bool[]
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
     public function update(ApiRequest $request, $multiClassId, $updateType)
     {
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
@@ -19,7 +27,7 @@ class MultiClassStudentDeadLine extends AbstractResource
         }
 
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['ids', 'deadline']) || !is_array($fields['ids'])) {
+        if (!ArrayToolkit::requireds($fields, ['ids', 'deadline']) || !is_array($fields['ids']) || !in_array($updateType, ['day', 'date'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
