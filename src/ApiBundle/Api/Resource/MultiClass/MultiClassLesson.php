@@ -55,17 +55,15 @@ class MultiClassLesson extends AbstractResource
                     if ($lesson['isExist']){
                         $lesson['chapterTitle'] = $item['title'];
                         $lesson['unitTitle'] = $unit['title'];
-                        foreach ($lesson['tasks'] as $key => $task){
-                            if ($task['mode'] === 'lesson' && $task['isLesson']){
-                                $lesson['tasks'] = $task;
-                            }
-                        }
                         $lesson['teacher'] = $teacher ? $teacher[0] : [];
                         $lesson['assistant'] = $assistants;
                         $lesson['questionNum'] = $questionNum;
                         $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $lesson['tasks']['id']]);
                         $lesson['totalStudentNum'] = $totalStudentNum;
-                        $necessaryItems[] = $lesson;
+                        foreach ($lesson['tasks'] as $key => $task){
+                            $lesson['tasks'] = $task;
+                            $necessaryItems[] = $lesson;
+                        }
                     }
                 }
             }
