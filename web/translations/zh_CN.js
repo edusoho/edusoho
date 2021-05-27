@@ -273,8 +273,11 @@ t.add("auth.login_bind_choose.login_failed_hint", "\u767b\u5f55\u5931\u8d25\uff0
 t.add("auth.login_bind_exist.bind_success_hint", "\u7ed1\u5b9a\u5e10\u53f7\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c\u81f3\u9996\u9875\uff01", "js", "zh_CN");
 t.add("auth.login_bind_exist_bind_failed_hint", "\u7ed1\u5b9a\u5931\u8d25\uff0c\u5e10\u53f7\u6216\u5bc6\u7801\u9519\u8bef\u3002", "js", "zh_CN");
 t.add("auth.login_bind_exist_bind_validate_hint", "\u8bf7\u8f93\u5165\u6b63\u786e\u683c\u5f0f\u7684Email\/\u624b\u673a", "js", "zh_CN");
+t.add("auth.login.username_required_error_hint", "\u8bf7\u8f93\u5165\u90ae\u7bb1\/\u624b\u673a\/\u7528\u6237\u540d", "js", "zh_CN");
+t.add("auth.login.password_required_error_hint", "\u8bf7\u8f93\u5165\u5bc6\u7801", "js", "zh_CN");
 t.add("auth.password_reset.sms_code_required_hint", "\u8f93\u5165\u77ed\u4fe1\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.password_reset.sms_code_validate_hint", "\u9a8c\u8bc1\u7801\u7684\u957f\u5ea6\u5fc5\u987b\u7b49\u4e8e6", "js", "zh_CN");
+t.add("auth.register.nickname_required_error_hit", "\u8bf7\u8f93\u5165\u7528\u6237\u540d", "js", "zh_CN");
 t.add("auth.register.email_required_error_hint", "\u8bf7\u8f93\u5165\u90ae\u7bb1", "js", "zh_CN");
 t.add("auth.register.mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a", "js", "zh_CN");
 t.add("auth.register.email_or_mobile_required_error_hint", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");
