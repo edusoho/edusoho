@@ -202,7 +202,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $courseExisted = $this->getMultiClassDao()->getByCourseId($fields['courseId']);
 
             if ($courseExisted) {
-                throw MultiClassException::MULTI_CLASS_COURSE_ALREADY();
+                throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
             }
         }
         if (isset($fields['productId']) && !empty($fields['productId'])) {

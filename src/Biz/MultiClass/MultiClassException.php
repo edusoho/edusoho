@@ -32,7 +32,7 @@ class MultiClassException extends AbstractException
 
     const CAN_NOT_DELETE_PRODUCT = 4038112;
 
-    const MULTI_CLASS_COURSE_ALREADY = 5008112;
+    const MULTI_CLASS_COURSE_EXIST = 5008112;
 
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
