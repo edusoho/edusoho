@@ -82,7 +82,7 @@ class MultiClass extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
-        $orderBys = $this->prepareOrderBy($request->query->all());
+        $orderBys = $this->prepareOrderBys($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, $orderBys, $offset, $limit);
         $multiClassesCount = $this->getMultiClassService()->countMultiClass($conditions);
@@ -114,7 +114,7 @@ class MultiClass extends AbstractResource
         return $prepareConditions;
     }
 
-    private function prepareOrderBy($orderBys)
+    private function prepareOrderBys($orderBys)
     {
         $prepareOrderBys = [];
 
@@ -122,7 +122,7 @@ class MultiClass extends AbstractResource
             $prepareOrderBys['price'] = 'DESC' == $orderBys['priceSort'] ? 'DESC' : 'ASC';
         }
 
-        if (!empty($orderBys['studentNumberSort'])) {
+        if (!empty($orderBys['studentNumbSort'])) {
             $prepareOrderBys['studentNum'] = 'DESC' == $orderBys['studentNumberSort'] ? 'DESC' : 'ASC';
         }
 
