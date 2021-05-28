@@ -161,9 +161,9 @@ export default {
         dragEnterObj.children = dragEnterObj.children || [];
         dragEnterObj.children.push(dragObj);
       } else if (
-        (info.node.children || []).length > 0 && // Has children
-        info.node.expanded && // Is expanded
-        dropPosition === 1 // On the bottom gap
+        (info.node.children || []).length > 0 &&
+        info.node.expanded &&
+        dropPosition === 1
       ) {
           dragEnterObj.children = dragEnterObj.children || [];
           dragEnterObj.children.unshift(dragObj);
