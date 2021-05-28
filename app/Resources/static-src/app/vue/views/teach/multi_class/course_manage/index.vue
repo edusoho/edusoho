@@ -43,6 +43,11 @@ export default {
     }
   },
 
+  befeoreRouteUpdate(to, from, next) {
+    this.id = to.params.id
+    next()
+  },
+
   created() {
     this.current = [this.$route.meta.current];
   }

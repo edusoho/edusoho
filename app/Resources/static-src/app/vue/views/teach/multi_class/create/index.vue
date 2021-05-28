@@ -4,7 +4,7 @@
     :label-col="{ span: 4 }"
     :wrapper-col="{ span: 20 }"
     @submit="handleSubmit"
-    style="max-width: 860px;"
+    style="max-width: 900px;"
   >
     <a-form-item label="班课名称">
       <a-input
@@ -36,7 +36,7 @@
           </a-select>
         </a-col>
         <a-col :span="5">
-          <a-button type="primary" :block="true">
+          <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
             <a-icon type="plus" />
             创建新课程
           </a-button>
@@ -84,6 +84,10 @@
       </a-select>
     </a-form-item>
 
+    <a-form-item label="排课">
+      <Schedule :course-id="selectedCourseId" />
+    </a-form-item>
+
     <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
       <a-space size="large">
         <a-button type="primary" html-type="submit">
@@ -99,15 +103,20 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Assistants, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
-
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import Schedule from './Schedule.vue';
 
 export default {
   name: 'MultiClassCreate',
 
+  components: {
+    Schedule
+  },
+
   data() {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
+      selectedCourseId: 0,
       courses: [],
       teachers: [],
       assistants: [],
@@ -135,7 +144,7 @@ export default {
     },
 
     fetchAssistants() {
-      Assistants.search().then(res => {
+      Assistant.search().then(res => {
         this.assistants = res.data;
       });
     },
@@ -147,6 +156,7 @@ export default {
     },
 
     handleChangeCourse(value) {
+      this.selectedCourseId = value;
       this.fetchTeacher(value);
     },
 
@@ -160,7 +170,6 @@ export default {
     }, 300),
 
     filterOption(input, option) {
-      console.log(input, option);
       return (
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       );

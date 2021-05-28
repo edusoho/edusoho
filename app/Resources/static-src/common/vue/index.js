@@ -4,8 +4,9 @@ import 'moment';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
-  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip, Divider, Message, Notification
-} from 'ant-design-vue';
+  Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
+  Divider, Message, Notification, Tabs, Tree
+} from '@codeages/design-vue';
 
 if (!window.Vue) {
   Vue.use(Menu)
@@ -34,6 +35,8 @@ if (!window.Vue) {
   Vue.use(Tag)
   Vue.use(Tooltip)
   Vue.use(Divider)
+  Vue.use(Tree)
+  Vue.use(Tabs)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;
@@ -54,13 +57,12 @@ if (!window.Vue) {
     }
   })
 
-  Vue.filter('YYYY-MM-DD', value => {
-    return moment(value, 'YYYY-MM-DD')
-  })
-
-  Vue.filter('YYYY-MM-DD HH:ss', value => {
-    return moment(value, 'YYYY-MM-DD HH:ss')
-  })
+  Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
+    if (value == 0) {
+      return '';
+    }
+    return moment(value * 1000).format(format)
+  }
 }
 
 window.Vue = window.Vue || Vue;
