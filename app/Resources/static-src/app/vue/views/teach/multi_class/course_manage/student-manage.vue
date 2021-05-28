@@ -12,12 +12,20 @@
         <a-button type="primary" @click="addStudent()">
           添加学员
         </a-button>
-        <a-button type="primary" icon="download">
+        <a-button type="primary"
+                  icon="download"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  data-backdrop="static"
+                  data-keyboard="false"
+                  data-url="/importer/course-member/index?courseId=5"
+        >
           批量导入
         </a-button>
-        <a-button type="primary" icon="upload">
+        <a-button type="primary" icon="upload" @click="onBatchRemoveStudent">
           批量移除
         </a-button>
+
         <a-button type="primary">
           批量修改有效期
         </a-button>
@@ -235,6 +243,31 @@ export default {
 
     viewStudentInfo(id) {
       this.viewStudentInfoVisible = true;
+    },
+
+    onRemoveStudent(studentId) {
+
+    },
+
+    onBatchRemoveStudent() {
+      if (this.selectedRowKeys.length === 0) {
+        this.$message.error('请至少选中一项后移除', 3);
+        return;
+      }
+      this.$confirm({
+        title: '是否移除这些学员？',
+        // content: '删除后，学员将不能学习课程内的所有内容。',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+
     },
 
     confirm() {

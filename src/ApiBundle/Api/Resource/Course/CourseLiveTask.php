@@ -12,7 +12,6 @@ use Biz\Course\CourseException;
 use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LessonService;
-use Biz\Task\Service\TaskService;
 
 class CourseLiveTask extends AbstractResource
 {
@@ -110,7 +109,7 @@ class CourseLiveTask extends AbstractResource
 
         $lessons = [];
         $limitTaskNum = ($start + $limit) > $data['taskNum'] ? $data['taskNum'] : ($start + $limit);
-        for ($num = $start; $num < $limitTaskNum; $num++) {
+        for ($num = $start; $num < $limitTaskNum; ++$num) {
             $key = $num % $repeatCount;
             $weekDiff = floor($num / $repeatCount);
             $weekDay = ucfirst($data['repeatData'][$key]);
@@ -118,7 +117,7 @@ class CourseLiveTask extends AbstractResource
             if ($todayWeek === $weekDay && date('Y-m-d') == date('Y-m-d', $dateTime)) {
                 $startTime = $dateTime + $weekDiff * self::WEEK_TIME;
             } else {
-                $weekTime = strtotime(date("Y-m-d", strtotime($weekDay, $dateTime)) . ' ' . $clock);
+                $weekTime = strtotime(date('Y-m-d', strtotime($weekDay, $dateTime)).' '.$clock);
                 $startTime = $weekDiff * self::WEEK_TIME + $weekTime;
             }
 
@@ -128,7 +127,7 @@ class CourseLiveTask extends AbstractResource
                 'fromCourseId' => $courseId,
                 'fromCourseSetId' => $course['courseSetId'],
                 'title' => $data['title'],
-                'startTime' => date("Y-m-d H:i", $startTime),
+                'startTime' => date('Y-m-d H:i', $startTime),
                 'length' => $data['length'],
                 'finishType' => 'join',
                 'finishData' => '',
@@ -163,7 +162,7 @@ class CourseLiveTask extends AbstractResource
 
         $lessons = [];
         $limitTaskNum = ($start + $limit) > $data['taskNum'] ? $data['taskNum'] : ($start + $limit);
-        for ($num = $start; $num < $limitTaskNum; $num++) {
+        for ($num = $start; $num < $limitTaskNum; ++$num) {
             $startTime = $dateTime + $data['repeatData'] * self::DAY_TIME * $num;
             $lesson = [
                 'fromUserId' => $user['id'],
@@ -171,7 +170,7 @@ class CourseLiveTask extends AbstractResource
                 'fromCourseId' => $courseId,
                 'fromCourseSetId' => $course['courseSetId'],
                 'title' => $data['title'],
-                'startTime' => date("Y-m-d H:i", $startTime),
+                'startTime' => date('Y-m-d H:i', $startTime),
                 'length' => $data['length'],
                 'finishType' => 'join',
                 'finishData' => '',
