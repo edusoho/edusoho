@@ -14,6 +14,7 @@ use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use ApiBundle\Api\Annotation\Access;
 
 class MultiClass extends AbstractResource
 {
