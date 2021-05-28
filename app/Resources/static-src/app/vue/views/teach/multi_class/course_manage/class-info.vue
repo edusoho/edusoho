@@ -28,8 +28,8 @@
       </template>
       <!-- TODO -->
       <template slot="time" slot-scope="time, record">
-        <template v-if="record.tasks.type === 'video'">
-          {{ record.tasks.length }}
+        <template v-if="['video', 'live'].includes(record.tasks.type)">
+          {{ record.tasks.length }}min
         </template>
         <template v-else>--</template>
       </template>
