@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudent extends AbstractResource
 {
@@ -74,6 +76,11 @@ class MultiClassStudent extends AbstractResource
         $members = $this->filterFields($members);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
+    }
+
+    public function remove(ApiRequest $request, $id, $userId)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClass($id);
     }
 
     private function findUserTaskCount($courseId, $type, $count)
@@ -185,6 +192,9 @@ class MultiClassStudent extends AbstractResource
         return $this->service('Course:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MultiClassService
+     */
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
