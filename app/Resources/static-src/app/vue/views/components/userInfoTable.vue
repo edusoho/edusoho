@@ -112,7 +112,7 @@ export default {
     formatTimeIp(time, ip) {
       let formatedStr = '';
       if (time != 0) {
-        formatedStr += this.$dateFormat(time, 'YYYY-MM-DD hh:mm');
+        formatedStr += this.$dateFormat(time, 'YYYY-MM-DD HH:mm');
       } else {
         formatedStr += ' -- ';
       }
