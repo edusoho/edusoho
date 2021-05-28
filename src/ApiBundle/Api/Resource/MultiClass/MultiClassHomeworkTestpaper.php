@@ -5,17 +5,10 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\HomeworkActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
-use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
@@ -145,30 +138,6 @@ class MultiClassHomeworkTestpaper extends AbstractResource
     }
 
     /**
-     * @return HomeworkActivityService
-     */
-    protected function getHomeworkActivityService()
-    {
-        return $this->service('Activity:HomeworkActivityService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->biz->service('Activity:ActivityService');
-    }
-
-    /**
      * @return MultiClassService
      */
     protected function getMultiClassService()
@@ -182,37 +151,5 @@ class MultiClassHomeworkTestpaper extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->service('User:UserService');
-    }
-
-    /**
-     * @return MultiClassProductService
-     */
-    protected function getMultiClassProductService()
-    {
-        return $this->service('MultiClass:MultiClassProductService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->service('Task:TaskService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getMemberService()
-    {
-        return $this->service('Course:MemberService');
     }
 }
