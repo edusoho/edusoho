@@ -82,7 +82,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         ];
         $assistantIds = $fields['assistantIds'];
 
-        $fields = $this->filterMultiClassFields($fields);
+        $fields = $this->filterMultiClassFields($fields, $id);
 
         $this->beginTransaction();
         try {
@@ -185,7 +185,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $conditions;
     }
 
-    private function filterMultiClassFields($fields)
+    private function filterMultiClassFields($fields, $multiClassId = 0)
     {
         if (isset($fields['teacherId'])) {
             unset($fields['teacherId']);
@@ -201,7 +201,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             }
             $courseExisted = $this->getMultiClassDao()->getByCourseId($fields['courseId']);
 
-            if ($courseExisted) {
+            if ($multiClassId > 0 && $courseExisted && $courseExisted['id'] != $multiClassId) {
+                throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
+            }
+
+            if (!$multiClassId && $courseExisted) {
                 throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
             }
         }
