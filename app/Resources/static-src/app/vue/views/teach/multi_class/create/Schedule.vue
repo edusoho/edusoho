@@ -35,10 +35,24 @@ export default {
     CreateLiveModal
   },
 
+  props: {
+    courseId: {
+      type: [Number, String],
+      required: true,
+      default: 0
+    }
+  },
+
   data() {
     return {
       lessonDirectory: [],
       createLiveModalVisible: false
+    }
+  },
+
+  watch: {
+    courseId(newValue, oldValue) {
+      this.fetchCourseLesson(newValue);
     }
   },
 
@@ -48,7 +62,8 @@ export default {
 
   methods: {
     fetchCourseLesson() {
-      Course.getCourseLesson(35, { format: 1 }).then(res => {
+      if (!this.courseId) return;
+      Course.getCourseLesson(this.courseId, { format: 1 }).then(res => {
         this.lessonDirectory = res;
       });
     },
@@ -62,7 +77,7 @@ export default {
     },
 
     changeLessonDirectory(sortInfos) {
-      Course.courseSort(35, { sortInfos }).then(res => {
+      Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });
     }

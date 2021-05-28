@@ -85,7 +85,7 @@
     </a-form-item>
 
     <a-form-item label="排课">
-      <Schedule />
+      <Schedule :course-id="selectedCourseId" />
     </a-form-item>
 
     <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
@@ -116,6 +116,7 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
+      selectedCourseId: 0,
       courses: [],
       teachers: [],
       assistants: [],
@@ -155,6 +156,7 @@ export default {
     },
 
     handleChangeCourse(value) {
+      this.selectedCourseId = value;
       this.fetchTeacher(value);
     },
 
