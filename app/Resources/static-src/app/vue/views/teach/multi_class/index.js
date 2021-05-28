@@ -1,8 +1,8 @@
 import Vue from 'common/vue';
 import Router from 'vue-router';
 import routes from 'app/vue/router/teach/multi_class/index.js';
-import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
-import { ConfigProvider } from 'ant-design-vue';
+import zhCN from '@codeages/design-vue/lib/locale-provider/zh_CN';
+import { ConfigProvider } from '@codeages/design-vue';
 
 const router = new Router({
   mode: 'hash',
