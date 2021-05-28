@@ -864,6 +864,12 @@ class CourseSetController extends BaseController
             $conditions = $this->getCourseConditionsByTags($conditions);
         }
 
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $members = $this->getMemberService()->findTeacherMembersByUserId($user['id']);
+            $conditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId');
+        }
+
         return $conditions;
     }
 

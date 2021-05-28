@@ -20,7 +20,9 @@ class Teacher extends AbstractResource
     {
         $conditions = [
             'nickname' => $request->query->get('nickname', ''),
-            'roles' => 'ROLE_TEACHER'
+            'roles' => 'ROLE_TEACHER',
+            'destroyed' => 0,
+            'locked' => 0,
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

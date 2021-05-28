@@ -198,4 +198,8 @@ interface MemberService
     public function searchMultiClassIds($conditions, $sort, $start, $limit);
 
     public function deleteMemberByMultiClassIdAndRole($multiClassId, $role);
+
+    public function findMembersByUserIdAndRoles($userId, $roles);
+
+    public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
 }

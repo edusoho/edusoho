@@ -98,6 +98,23 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array_merge([$role], $multiClassIds));
     }
 
+    public function findByUserIdAndRoles($userId, $roles)
+    {
+        if (empty($roles)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($roles) - 1).'?';
+        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role in ($marks);";
+
+        return $this->db()->fetchAll($sql, array_merge([$userId], $roles));
+    }
+
+    public function getByMultiClassIdAndUserId($multiClassId, $userId)
+    {
+        return $this->getByFields(['multiClassId' => $multiClassId, 'userId' => $userId]);
+    }
+
     public function findByUserIdAndJoinType($userId, $joinedType)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";

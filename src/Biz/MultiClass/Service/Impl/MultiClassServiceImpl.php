@@ -36,6 +36,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
     public function createMultiClass($fields)
     {
+        if (!$this->canCreateMultiClass()) {
+            throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
+        }
+
         $teacherId = [
             [
                 'id' => $fields['teacherId'],
@@ -72,6 +76,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $multiClassExisted = $this->getMultiClassDao()->get($id);
         if (empty($multiClassExisted)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        if (!$this->canManageMultiClass($id, 'multi_class_edit')) {
+            throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
         $teacherId = [
@@ -112,6 +120,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
 
+        if (!$this->canManageMultiClass($id, 'multi_class_delete')) {
+            throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
+        }
+
         $this->beginTransaction();
         try {
             $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
@@ -146,6 +158,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
     public function cloneMultiClass($id)
     {
+        if (!$this->canManageMultiClass($id, 'multi_class_copy')) {
+            throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
+        }
+
         $multiClass = $this->getMultiClassDao()->get($id);
         $number = $this->countMultiClassCopyEd($id);
         $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
@@ -168,6 +184,47 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function getMultiClassByTitle($title)
     {
         return $this->getMultiClassDao()->getByTitle($title);
+    }
+
+    public function canManageMultiClass($multiClassId, $action = '')
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isSuperAdmin() || $user->isAdmin()) {
+            return true;
+        }
+
+        $member = $this->getCourseMemberService()->getMemberByMultiClassIdAndUserId($multiClassId, $user['id']);
+        if (!empty($member)) {
+            if ('teacher' === $member['role']) {
+                return true;
+            }
+
+            $assistant = $this->biz['assistant_permission'];
+            if ('assistant' === $member['role'] && $assistant->hasActionPermission($action)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function canCreateMultiClass()
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isSuperAdmin() || $user->isAdmin()) {
+            return true;
+        }
+
+        if (in_array('ROLE_TEACHER', $user['roles'])) {
+            return true;
+        }
+
+        $assistant = $this->biz['assistant_permission'];
+        if (in_array('ROLE_TEACHER_ASSISTANT', $user['roles']) && $assistant->hasActionPermission('multi_class_create')) {
+            return true;
+        }
+
+        return false;
     }
 
     private function filterConditions($conditions)
