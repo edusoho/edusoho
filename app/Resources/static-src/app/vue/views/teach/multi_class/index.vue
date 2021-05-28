@@ -137,7 +137,6 @@ export default {
       columns,
       multiClassList: [],
       getListLoading: false,
-      keywords: '',
       paging: {
         offset: 0,
         limit: 10,
@@ -157,7 +156,7 @@ export default {
       this.getListLoading = true;
       try {
         const { data, paging } = await MultiClass.search({
-          keywords: params.keywords || this.keywords,
+          keywords: params.keywords || '',
           offset: params.offset || this.paging.offset || 0,
           limit: params.limit || this.paging.limit || 10,
         })

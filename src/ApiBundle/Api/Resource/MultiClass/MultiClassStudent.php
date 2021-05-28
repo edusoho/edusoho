@@ -11,6 +11,7 @@ use Biz\MultiClass\MultiClassException;
 use Biz\Role\Service\RoleService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudent extends AbstractResource
 {
@@ -111,7 +112,12 @@ class MultiClassStudent extends AbstractResource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    private function findUserTaskCount($courseId, $type)
+    public function remove(ApiRequest $request, $id, $userId)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClass($id);
+    }
+
+    private function findUserTaskCount($courseId, $type, $count)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
 
@@ -288,6 +294,9 @@ class MultiClassStudent extends AbstractResource
         return $this->service('Course:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MultiClassService
+     */
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
