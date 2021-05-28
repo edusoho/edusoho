@@ -57,6 +57,9 @@ if (!window.Vue) {
   })
 
   Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
+    if (value == 0) {
+      return '';
+    }
     return moment(value * 1000).format(format)
   }
 }

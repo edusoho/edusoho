@@ -14,7 +14,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 class CourseItemSort extends AbstractResource
 {
     /**
-     * post /api/course/{courseId}/course_item_sort
+     * post /api/course/{courseId}/item_sort
      */
     public function add(ApiRequest $request, $courseId)
     {
