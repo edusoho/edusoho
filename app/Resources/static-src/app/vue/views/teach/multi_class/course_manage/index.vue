@@ -3,9 +3,19 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
-          <router-link :to="`/course_manage/${id}`">课时信息</router-link>
+          <router-link :to="{ name: 'MultiClassCourseManage' }">课时信息</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item" key="student-manage">
+          <router-link :to="{ name: 'MultiClassStudentManage' }">学员管理</router-link>
+        </a-menu-item>
+        <a-menu-item class="manage-menu-item" key="homework-review">
+          <router-link :to="{ name: 'MultiClassHomewordReview' }">作业批阅</router-link>
+        </a-menu-item>
+        <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
+          <router-link :to="{ name: 'MultiClassDataPreview'}">数据预览</router-link>
+          <!-- <router-link :to="`/course_manage/${id}`">课时信息</router-link> -->
+        </a-menu-item>
+        <!-- <a-menu-item class="manage-menu-item" key="student-manage">
           <router-link :to="`/course_manage/${id}/student_manage`">学员管理</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item" key="homework-review">
@@ -13,7 +23,7 @@
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
           <router-link :to="`/course_manage/${id}/data_preview`">数据预览</router-link>
-        </a-menu-item>
+        </a-menu-item> -->
       </a-menu>
 
       <a-menu class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
