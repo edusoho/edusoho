@@ -25,6 +25,9 @@
         <template slot="assistant" slot-scope="assistant">
           {{ assistant ? assistant.join('、') : '' }}
         </template>
+        <template slot="createdTime" slot-scope="createdTime">
+          {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
+        </template>
         <a slot="studentNum" slot-scope="text, record"
           :href="`/admin/v2/multi_class/index#/course_manage/${record.id}/student_manage`">
           {{ text }}

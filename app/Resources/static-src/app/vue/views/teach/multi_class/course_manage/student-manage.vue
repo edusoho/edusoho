@@ -28,7 +28,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :row-key="record => record.id"
-      :data-source="data"
+      :data-source="students"
     >
       <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user.id)">{{ record.user.nickname }}</a>
 
@@ -64,6 +64,9 @@
         </a-space>
       </template>
     </a-table>
+
+
+
     <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
     <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />
   </div>
@@ -72,6 +75,7 @@
 <script>
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
+import { MultiClassStudent } from 'common/vue/service';
 
 const columns = [
   {
@@ -166,12 +170,19 @@ export default {
 
   data() {
     return {
-      data,
+      students: [],
       columns,
       selectedRowKeys: [],
       loading: false,
       addStudentVisible: false,
-      viewStudentInfoVisible: false
+      viewStudentInfoVisible: false,
+      id: this.$route.params.id,
+      getListLoading: false,
+      keywords: '',
+      paging: {
+        offset: 0,
+        limit: 10,
+      },
     };
   },
 
@@ -181,9 +192,27 @@ export default {
     }
   },
 
+  created() {
+    this.getMultiClassStudents()
+  },
+
+  befeoreRouteUpdate(to, from, next) {
+    this.id = to.params.id;
+    next();
+  },
+
   methods: {
-    onSearch(value) {
-      console.log(value);
+    async getMultiClassStudents(params = {}) {
+      this.students = await MultiClassStudent.search({ 
+        id: this.id, 
+        keyword: params.keyword || '',
+        offset: params.offset || this.paging.offset || 0,
+        limit: params.limit || this.paging.limit || 10,
+      })
+    },
+
+    onSearch(keyword) {
+      this.getMultiClassStudents({ keyword })
     },
 
     start() {

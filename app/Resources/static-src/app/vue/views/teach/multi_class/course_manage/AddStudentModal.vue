@@ -49,6 +49,7 @@
 
 <script>
 import _ from 'lodash';
+import { ValidationTitle, MultiClassStudent } from 'common/vue/service';
 
 export default {
   props: {
