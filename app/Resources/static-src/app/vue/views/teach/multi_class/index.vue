@@ -13,9 +13,9 @@
         @click="goToMultiClassManage(record.id)">
         {{ text }}
       </a>
-      <a slot="course" slot-scope="text, record"
-        :href="`/course/${record.courseId}`">
-        {{ text }}
+      <a slot="course" slot-scope="course"
+        :href="`/course/${courseId.id}`">
+        {{ course.title || course.courseSetTitle }}
       </a>
       <a slot="taskNum" slot-scope="text, record"
         href="javascript:;"

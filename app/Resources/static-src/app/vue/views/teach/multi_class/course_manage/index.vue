@@ -3,7 +3,7 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
-          <router-link :to="{ name: 'MultiClassCourseManage' }">课时信息</router-link>
+          <router-link :to="{ name: 'MultiClassCourseManage' }">课时管理</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item" key="student-manage">
           <router-link :to="{ name: 'MultiClassStudentManage' }">学员管理</router-link>
@@ -16,7 +16,7 @@
         </a-menu-item>
       </a-menu>
 
-      <a-menu class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
+      <a-menu v-if="course" class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
         <a-menu-item class="manage-menu-item">
           <a :href="`/announcement/course/${id}/list`">公告管理</a>
         </a-menu-item>
@@ -43,7 +43,7 @@ export default {
     return {
       current: ['class-info'],
       id: this.$route.params.id,
-      course: {}
+      course: null,
     }
   },
 
@@ -91,4 +91,5 @@ export default {
     }
   }
 }
+
 </style>
