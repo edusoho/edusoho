@@ -16,5 +16,15 @@ export const Course = {
   // 课时列表排序
   async courseSort(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/item_sort`, params)
+  },
+
+  // 删除课时
+  async deleteTask(courseId, taskId) {
+    return apiClient.delete(`${baseUrl}/${courseId}/task/${taskId}`)
+  },
+
+  // 更新课时状态
+  async updateTaskStatus(courseId, taskId, params) {
+    return apiClient.patch(`${baseUrl}/${courseId}/task_status/${taskId}`, params)
   }
 }

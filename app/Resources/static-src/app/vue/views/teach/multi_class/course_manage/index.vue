@@ -13,25 +13,15 @@
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
           <router-link :to="{ name: 'MultiClassDataPreview'}">数据预览</router-link>
-          <!-- <router-link :to="`/course_manage/${id}`">课时信息</router-link> -->
         </a-menu-item>
-        <!-- <a-menu-item class="manage-menu-item" key="student-manage">
-          <router-link :to="`/course_manage/${id}/student_manage`">学员管理</router-link>
-        </a-menu-item>
-        <a-menu-item class="manage-menu-item" key="homework-review">
-          <router-link :to="`/course_manage/${id}/homework_review`">作业批阅</router-link>
-        </a-menu-item>
-        <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
-          <router-link :to="`/course_manage/${id}/data_preview`">数据预览</router-link>
-        </a-menu-item> -->
       </a-menu>
 
       <a-menu class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
         <a-menu-item class="manage-menu-item">
-          公告管理
+          <a :href="`/announcement/course/${id}/list`">公告管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item">
-          录播管理
+          <a :href="`/announcement/course/${id}/list`">录播管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space">
           订单管理
