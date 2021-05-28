@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       lessonDirectory: [],
-      createLiveVisible: true,
+      createLiveVisible: false,
       addChapterOrUnitVisible: false,
       addType: ''
     }
