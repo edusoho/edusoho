@@ -48,6 +48,8 @@ class Show {
     this.strictMode = container.data('strict');
     this.url = container.data('url');
     this.fileStorage = container.data('fileStorage');
+    this.microMessenger = container.data('microMessenger');
+    this.securityVideoPlayer = container.data('securityVideoPlayer');
     this.initView();
     this.initEvent();
   }
@@ -107,6 +109,11 @@ class Show {
       options = Object.assign(options, {
         resNo: this.fileGlobalId,
         token: this.token,
+      });
+    }
+    if (this.securityVideoPlayer == '1' && this.microMessenger) {
+      options = Object.assign(options, {
+        playerType: 'wasm',
       });
     }
     return window.player = PlayerFactory.create(

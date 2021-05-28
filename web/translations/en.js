@@ -333,8 +333,11 @@ t.add("auth.login_bind_choose.login_failed_hint", "Log in failed, please try aga
 t.add("auth.login_bind_exist.bind_success_hint", "Bind account successfully, redirecting to the home page!", "js", "en");
 t.add("auth.login_bind_exist_bind_failed_hint", "Binding failed, the account or password  you entered is wrong.", "js", "en");
 t.add("auth.login_bind_exist_bind_validate_hint", "Please enter the correct format Email \/ mobile number", "js", "en");
+t.add("auth.login.username_required_error_hint", "Please input email \/ phone numbers \/ username", "js", "en");
+t.add("auth.login.password_required_error_hint", "Please input password", "js", "en");
 t.add("auth.password_reset.sms_code_required_hint", "Please enter sms code", "js", "en");
 t.add("auth.password_reset.sms_code_validate_hint", "The length of the verification code must be 6", "js", "en");
+t.add("auth.register.nickname_required_error_hit", "Please input username", "js", "en");
 t.add("auth.register.email_required_error_hint", "Please enter email", "js", "en");
 t.add("auth.register.mobile_required_error_hint", "Please enter your mobile number", "js", "en");
 t.add("auth.register.email_or_mobile_required_error_hint", "Please enter your mobile number \/ email", "js", "en");
