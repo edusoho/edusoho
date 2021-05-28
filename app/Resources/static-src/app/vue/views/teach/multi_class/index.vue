@@ -1,51 +1,68 @@
 <template>
   <a-spin :spinning="getListLoading">
-     <div class="clearfix mb6">
+    <div class="clearfix mb6">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
-     </div>
+    </div>
 
     <a-table :columns="columns"
       :pagination="false"
-      :data-source="multiClassList"
-      :locale="locale">
-      <a slot="title" slot-scope="text" >
+      :data-source="multiClassList">
+      <a slot="class_title" slot-scope="text, record" 
+        href="javascript:;"
+        @click="goToMultiClassManage(record.id)">
         {{ text }}
       </a>
-      <a slot="course" slot-scope="text">
+      <a slot="course" slot-scope="text, record"
+        :href="`/course/${record.courseId}`">
         {{ text }}
       </a>
-      <a slot="product" slot-scope="text">
-        {{ text }}
-      </a>
-      <template slot="taskNum" slot-scope="text, record">
+      <a slot="taskNum" slot-scope="text, record"
+        href="javascript:;"
+        @click="goToMultiClassManage(record.id)">
         {{ record.endTaskNum }}/{{ record.taskNum }}
-      </template>
+      </a>
       <template slot="assistant" slot-scope="assistant">
-        {{ assistant.join('、') }}
+        {{ assistant ? assistant.join('、') : '' }}
+      </template>
+      <a slot="studentNum" slot-scope="text, record"
+        href="javascript:;"
+        @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
+        {{ text }}
+      </a>
+      <template slot="createdTime" slot-scope="createdTime">
+        {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
       </template>
       <template slot="action" slot-scope="text, record">
-        <a-button type="link" @click="goToMultiClassManage">查看</a-button>
+        <a href="javascript:;" class="mr2"
+          @click="goToMultiClassManage(record.id)">查看</a>
+        <a href="javascript:;" class="mr2"
+          @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
         <a-dropdown>
-          <a @click="e => e.preventDefault()">
-            编辑 <a-icon type="down" />
+          <a href="javascript:;" @click="e => e.preventDefault()">
+            更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;" 
+                @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
+                编辑
+              </a>
+            </a-menu-item>
             <a-menu-item>
               <a href="javascript:;">复制班课</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">删除</a>
+              <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-        <a-button type="link">数据概览</a-button>
       </template>
     </a-table>
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging"
+        v-if="paging && multiClassList.length > 0"
         v-model="paging.page"
         :total="paging.total"
         show-less-items
@@ -62,7 +79,7 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
-    scopedSlots: { customRender: 'title' },
+    scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
@@ -98,11 +115,13 @@ const columns = [
     title: '已报班人数',
     dataIndex: 'studentNum',
     sorter: true,
+    scopedSlots: { customRender: 'studentNum' },
   },
   {
     title: '创建时间',
     dataIndex: 'createdTime',
     sorter: true,
+    scopedSlots: { customRender: 'createdTime' },
   },
   {
     title: '操作',
@@ -111,36 +130,17 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    name: '11',
-    name2: '222',
-    price: 100,
-    lessons: 100,
-    teacher1: '123',
-    teacher2: '123',
-    num1: '123',
-    createdTime: 123214213213
-  },
-];
-
 export default {
   name: 'MultiClassList',
   data () {
     return {
       columns,
-      multiClassList: data,
+      multiClassList: [],
       getListLoading: false,
-      keywords: '',
       paging: {
         offset: 0,
         limit: 10,
       },
-      locale: {
-        filterConfirm: '确定',
-        filterReset: '重置',
-        emptyText: '暂无数据',
-      }
     }
   },
   created() {
@@ -156,7 +156,7 @@ export default {
       this.getListLoading = true;
       try {
         const { data, paging } = await MultiClass.search({
-          keywords: params.keywords || this.keywords,
+          keywords: params.keywords || '',
           offset: params.offset || this.paging.offset || 0,
           limit: params.limit || this.paging.limit || 10,
         })
@@ -174,19 +174,23 @@ export default {
     deleteMultiClass (multiClass) {
       this.$confirm({
         content: '确认要删除该班课？',
-        async onOk() {
+        okType: 'danger',
+        maskClosable: true,
+        onOk: async () => {
           const { success } = await MultiClass.delete({ id: multiClass.id })
 
           if (success) {
+            this.$message.success('删除成功')
             this.getMultiClassList()
           }
         },
       });
     },
 
-    goToMultiClassManage() {
+    goToMultiClassManage(id) {
       this.$router.push({
-        path: '/course_manage'
+        name: 'MultiClassCourseManage',
+        params: { id }
       })
     }
   }

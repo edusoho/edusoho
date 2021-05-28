@@ -4,6 +4,8 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -30,8 +32,13 @@ class MultiClass extends AbstractResource
         $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
         $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
+        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds'], 'user');
         $this->getOCUtil()->single($multiClass, ['courseId'], 'course');
+
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filters($multiClass['teachers']);
+        $userFilter->filters($multiClass['assistants']);
 
         $product = $this->getMultiClassProductService()->getProduct($multiClass['productId']);
         $multiClass['product'] = empty($product) ? [] : $product;

@@ -2,12 +2,45 @@
 
 namespace ApiBundle\Api\Resource\MultiClass;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MemberService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudent extends AbstractResource
 {
+    /**
+     * @param $multiClassId
+     *
+     * @return bool[]
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
+    public function add(ApiRequest $request, $multiClassId)
+    {
+        $studentData = $request->request->all();
+        if (!ArrayToolkit::requireds($studentData, ['userInfo', 'price'])) {
+            throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
+        }
+
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $courseId = $multiClass['courseId'];
+        $studentData['source'] = 'outside';
+        $operateUser = $this->getCurrentUser();
+        $studentData['remark'] = empty($studentData['remark']) ? $operateUser['nickname'].'添加' : $studentData['remark'];
+        $user = $this->getUserService()->getUserByLoginField($studentData['userInfo'], true);
+
+        $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $studentData);
+
+        return ['success' => true];
+    }
+
     /**
      * get api/multi_class/{id}/students
      */
@@ -76,7 +109,12 @@ class MultiClassStudent extends AbstractResource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    private function findUserTaskCount($courseId, $type)
+    public function remove(ApiRequest $request, $id, $userId)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClass($id);
+    }
+
+    private function findUserTaskCount($courseId, $type, $count)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
 
@@ -180,6 +218,9 @@ class MultiClassStudent extends AbstractResource
         return $this->service('Course:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MultiClassService
+     */
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');

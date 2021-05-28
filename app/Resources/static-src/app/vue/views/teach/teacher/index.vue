@@ -11,7 +11,7 @@
     <a-table :columns="columns" :data-source="pageData" rowKey="id" :pagination="false">
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
-        <div class="color-gray text-sm">{{ item.loginTime }}</div>
+        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
       </div>
 
       <div slot="promoteInfo" slot-scope="item">

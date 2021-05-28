@@ -6,9 +6,9 @@ use ApiBundle\Api\Resource\Filter;
 
 class CourseItemWithLessonFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'type', 'number', 'seq', 'title', 'isOptional', 'tasks',  'isExist', 'children', 'id',
-    );
+    ];
 
     protected function publicFields(&$data)
     {
