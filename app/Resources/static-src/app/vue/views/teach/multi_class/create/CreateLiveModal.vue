@@ -5,7 +5,7 @@
     :confirm-loading="confirmLoading"
     ok-text="确认"
     cancel-text="取消"
-    @ok="handleOk"
+    @ok="handleCreateLive"
     @cancel="handleCancel"
     width="900px"
   >
@@ -109,7 +109,7 @@
       >
         <template v-if="repeatType === 'day'">
           <a-select
-            v-decorator="['repeatData', { initialValue: '每2天一次课' }]"
+            v-decorator="['repeatData', { initialValue: ['2'] }]"
             placeholder="选择上课时长"
           >
             <a-select-option value="2">
@@ -197,8 +197,12 @@ export default {
       });
     },
 
-    handleOk() {
-
+    handleCreateLive() {
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          this.confirmLoading = true;
+        }
+      });
     },
 
     handleCancel() {
