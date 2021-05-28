@@ -7,24 +7,33 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="ajaxLoading">
-      <!-- TODO -->
       <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
-        <a slot="title" slot-scope="text" >
+        <a slot="class_title" slot-scope="text, record" 
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
           {{ text }}
         </a>
-        <a slot="course" slot-scope="text">
+        <a slot="course" slot-scope="text, record"
+          :href="`/course/${record.courseId}`">
           {{ text }}
         </a>
-        <a slot="taskNum" slot-scope="text, record">
-          {{ record.taskNum - record.notStartLiveTaskNum }}/{{ record.taskNum }}
+        <a slot="taskNum" slot-scope="text, record"
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
+          {{ record.endTaskNum }}/{{ record.taskNum }}
         </a>
-        <a slot="studentNum" slot-scope="text">
+        <template slot="assistant" slot-scope="assistant">
+          {{ assistant ? assistant.join('、') : '' }}
+        </template>
+        <a slot="studentNum" slot-scope="text, record"
+          :href="`/admin/v2/multi_class/index#/course_manage/${record.id}/student_manage`">
           {{ text }}
         </a>
         <template :size="8" slot="action" slot-scope="text, record"> 
-          <a-button type="link">查看</a-button>
-          <a-button type="link">编辑</a-button>
-          <a-button type="link">数据概览</a-button>
+          <a href="javascript:;" class="mr2" @click="goToMultiClassManage(record.id)">查看</a>
+          <a href="javascript:;" class="mr2" @click="goToEditMultiClass(record.id)">编辑</a>
+          <a href="javascript:;" 
+            @click="goToMultiClassDataPreview(record.id)">数据概览</a>
         </template>
       </a-table>
     </a-spin>
@@ -38,12 +47,12 @@
     {
       title: '班课名称',
       dataIndex: 'title',
-      scopedSlots: { customRender: 'name' },
+      scopedSlots: { customRender: 'class_title' },
     },
     {
       title: '课程名称',
       dataIndex: 'course',
-       scopedSlots: { customRender: 'name2' },
+       scopedSlots: { customRender: 'course' },
     },
     {
       title: '价格',
@@ -71,6 +80,7 @@
     {
       title: '创建时间',
       dataIndex: 'createdTime',
+      scopedSlots: { customRender: 'createdTime' },
     },
     {
       title: '操作',
@@ -106,32 +116,6 @@
       }
     },
     created() {
-      this.multiClassList = [
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-        { title: '1' },
-      ]
     },
     methods: {
       handleCancel() {
@@ -149,6 +133,15 @@
         } finally {
           this.ajaxLoading = false;
         }
+      },
+      goToMultiClassManage(id) {
+        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}`
+      },
+      goToEditMultiClass(id) {
+        window.location.href = `/admin/v2/multi_class/index#/create?id=${id}`
+      },
+      goToMultiClassDataPreview(id) {
+        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}/data_preview`
       }
     }
   };

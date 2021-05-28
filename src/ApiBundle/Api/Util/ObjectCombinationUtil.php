@@ -150,7 +150,7 @@ class ObjectCombinationUtil
         return ArrayToolkit::index($targetObjects, 'id');
     }
 
-    private function replaceSourceObject($targetObjects, &$sourceObj, $targetIdFields, $newFieldName = '', $keepFields)
+    private function replaceSourceObject($targetObjects, &$sourceObj, $targetIdFields, $newFieldName = '', $keepFields = true)
     {
         foreach ($targetIdFields as $targetIdField) {
             $newField = $newFieldName;
