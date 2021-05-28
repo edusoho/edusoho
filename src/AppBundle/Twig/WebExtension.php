@@ -1972,7 +1972,7 @@ class WebExtension extends \Twig_Extension
             return $choices;
         }
 
-        $choices =  $this->getArticleCategoryTree([], $categories, -1);
+        $choices = $this->getArticleCategoryTree([], $categories, -1);
         $categoryIds = implode(',', array_keys($choices));
 
         return ['choices' => $choices, 'categoryIds' => $categoryIds];
