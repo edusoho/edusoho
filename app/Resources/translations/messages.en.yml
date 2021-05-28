@@ -6,6 +6,7 @@ site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
 site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
+site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
 site.date.month: Month
@@ -2477,12 +2478,12 @@ form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
 
-user.login.account_type_label: 'Email/Phone numbers/Username'
+user.login.account_type_label: 'Email / phone numbers / username'
 user.login.content_title: 'Sign in'
 user.login.page_title: 'Log In'
 user.login.login_link: 'Log In'
 user.login.account_label: Account
-user.login.account_placeholder: 'Email/Phone numbers/Username'
+user.login.account_placeholder: 'Email / phone numbers / username'
 user.login.password_label: Password
 user.login.password_placeholder: Password
 user.login.remember_me: 'Remember password'
@@ -2968,8 +2969,8 @@ homepage.header.search: Search
 homepage.header.login: Sign in
 homepage.header.logout: Sign Out
 homepage.header.register: Sign Up
-homepage.header.my_course: 'My Teaching'
-homepage.header.my_learning: 'My Learning'
+homepage.header.my_course: 'Teaching'
+homepage.header.my_learning: 'Learning'
 homepage.header.notice: Notification
 homepage.header.check_all_notifications: 'View all notification'
 homepage.header.no_new_notifications: 'No new notification'
@@ -2977,7 +2978,7 @@ homepage.header.message: Message
 homepage.header.check_all_messages: 'View all messages'
 homepage.header.no_new_messages: 'No new messages'
 homepage.header.personal_menu: 'My Home'
-homepage.header.settings_menu: 'Profile Setting'
+homepage.header.settings_menu: 'Profile'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
@@ -5049,11 +5050,15 @@ admin.block_manage.visual_edit.tag_link_url: 'Link Address'
 admin.block_manage.visual_edit.tag_img: Image
 admin.block_manage.visual_edit.tag_img_describe: 'Image Description'
 admin.block_manage.visual_edit.tag_img_link: 'Image Link'
+admin.block_manage.visual_edit.tag_video_describe: 'Video Description'
+admin.block_manage.visual_edit.tag_video_img: 'Video Cover Photo'
 admin.block_manage.visual_edit.tag_img_background_color: 'Fill With Background Color'
 admin.block_manage.visual_edit.tag_img_upload: Upload
 admin.block_manage.visual_edit.tag_open_new_window: 'Open New Window'
 admin.block_manage.visual_edit.tag_yes_radio: 'Yes'
 admin.block_manage.visual_edit.tag_no_radio: 'No'
+admin.block_manage.visual_edit.tag_as_a_picture_radio: 'As a picture'
+admin.block_manage.visual_edit.tag_display_as_video_radio: 'Display as video'
 admin.block_manage.visual_edit.add_panel: New
 admin.block_manage.visual_edit.save: Save
 admin.block_manage.visual_edit.poster_open_btn: Switch
@@ -5849,6 +5854,7 @@ admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint o
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view.'
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser except Wechat, the system will guide the user to use Wechat or App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
 admin.edu_cloud.edu_video.start_buy: "Contact official immediately opened: <span class = \"text-primary\"> 4008041114 </ span> \n"
 admin.edu_cloud.edu_video.buy_year_flow: 'Traffic year package'
@@ -6583,6 +6589,7 @@ admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
 admin.magic_setting.live_entry_time_tip: second
 admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
 admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
+admin.magic_setting.security_video_player: Security video player switch
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -9915,7 +9922,7 @@ admin_v2.homepage.school_info.app_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
-admin_v2.homepage.school_info.access_web: Access Homepage
+admin_v2.homepage.school_info.access_web: Home
 admin_v2.homepage.school_info.access_mobile_app: Access App
 admin_v2.homepage.school_info.access_wechat_app: Access wechat app
 admin_v2.homepage.school_info.level.none: Open source
@@ -10661,3 +10668,5 @@ admin_v2.syetem.user_content_control.sensitive.import: Import sensitive words in
 admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the file to import
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
+
+admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters

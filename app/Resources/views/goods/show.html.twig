@@ -16,7 +16,7 @@
        data-ugc-review-setting="{{ setting('ugc_review', {})|json_encode }}"
        data-vip-enabled="{{ setting('vip.enabled')|default(1) }}"
   ></div>
-  <div class="hidden js-hidden-i18n">
+  <div class="js-hidden-i18n" style="display:none;">
     {
     "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
     "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
@@ -24,7 +24,7 @@
     "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
     }
   </div>
-  <div class="hidden js-hidden-activity-metas">
+  <div class="js-hidden-activity-metas" style="display:none;">
     {
     {% set allMetas = activity_meta() %}
     {% for key, item in allMetas %}
@@ -40,7 +40,7 @@
     }
   </div>
 
-  <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
+  <div class="js-hidden-current-timestamp" style="display:none;">{{ date().timestamp }}</div>
 
   {%
     include 'common/weixin-share.html.twig' with {
