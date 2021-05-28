@@ -28,7 +28,7 @@
         :label-col="{ span: 3 }"
         :wrapper-col="{ span: 21 }"
       >
-        <a-switch @change="onChangeCreateMode" />
+        <a-switch :checked="createMode" @change="onChangeCreateMode" />
       </a-form-item>
 
       <a-form-item
