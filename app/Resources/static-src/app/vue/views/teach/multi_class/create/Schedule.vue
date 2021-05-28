@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       lessonDirectory: [],
-      createLiveModalVisible: false
+      createLiveModalVisible: true
     }
   },
 
