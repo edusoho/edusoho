@@ -50,6 +50,10 @@ login_ajax:
     path:  /login/ajax
     defaults: { _controller: AppBundle:Login:ajax }
 
+login_sms:
+  path:  /login/sms
+  defaults: { _controller: AppBundle:Login:sms }
+
 login_qrcode:
     path: /login/qrcode
     defaults: { _controller: AppBundle:Login:qrcode }

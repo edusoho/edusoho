@@ -161,7 +161,14 @@ class LoginController extends BaseController
 
     public function smsAction(Request $request)
     {
-        return $this->render('login/sms.html.twig');
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
+        }
+
+        return $this->render('login/sms.html.twig', [
+            '_target_path' => $this->getTargetPath($request),
+        ]);
     }
 
     public function checkEmailAction(Request $request)
