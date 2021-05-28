@@ -2,7 +2,6 @@
 
 namespace Biz\MultiClass;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;

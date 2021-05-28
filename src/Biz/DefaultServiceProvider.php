@@ -52,8 +52,6 @@ use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use function Clue\StreamFilter\fun;
-use function foo\func;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
