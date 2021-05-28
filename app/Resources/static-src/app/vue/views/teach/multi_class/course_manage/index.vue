@@ -21,10 +21,10 @@
           <a :href="`/announcement/course/${id}/list`">公告管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item">
-          <a :href="`/announcement/course/${id}/list`">录播管理</a>
+          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/live_statistics`">录播管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space">
-          订单管理
+          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/orders`">订单管理</a>
         </a-menu-item>
       </a-menu>
     </div>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { Course } from 'common/vue/service';
+
 export default {
   name: 'MultiClassCourseManage',
 
@@ -41,16 +43,25 @@ export default {
     return {
       current: ['class-info'],
       id: this.$route.params.id,
+      course: {}
     }
   },
 
   befeoreRouteUpdate(to, from, next) {
     this.id = to.params.id
+    this.getSingleCourse()
     next()
   },
 
   created() {
     this.current = [this.$route.meta.current];
+    this.getSingleCourse()
+  },
+
+  methods: {
+    async getSingleCourse() {
+      this.course = await Course.getSingleCourse(this.id)
+    }
   }
 }
 </script>

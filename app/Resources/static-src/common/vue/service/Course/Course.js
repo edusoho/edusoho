@@ -26,5 +26,9 @@ export const Course = {
   // 更新课时状态
   async updateTaskStatus(courseId, taskId, params) {
     return apiClient.patch(`${baseUrl}/${courseId}/task_status/${taskId}`, params)
+  },
+
+  async getSingleCourse(id) {
+    return apiClient.get(`${baseUrl}/${id}`)
   }
 }
