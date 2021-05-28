@@ -17,7 +17,7 @@
       >
         <a-input
           v-decorator="['title', { rules: [
-            { required: true, message: '课时名称不能为空' }
+            { required: true, message: '请填写课时名称' }
           ]}]"
           placeholder="请输入课时名称"
         />
@@ -43,7 +43,7 @@
             { required: true, message: '请输入批量生成课时数量' }
           ]}]"
           :min="1"
-          placeholder="请输入批量生成课时数量"
+          placeholder="请输入课时数量"
         />
       </a-form-item>
 
@@ -73,12 +73,7 @@
           ]}]"
           placeholder="选择上课时长"
         >
-          <a-select-option value="90">
-            90分钟
-          </a-select-option>
-          <a-select-option value="120">
-            120分钟
-          </a-select-option>
+          <a-select-option v-for="i in 10" :key="`length${i}`" :value="30 * i">{{ 30 * i }} 分钟</a-select-option>
         </a-select>
       </a-form-item>
 
