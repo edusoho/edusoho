@@ -9,6 +9,7 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
@@ -32,16 +33,11 @@ class MultiClassHomeworkTestpaper extends AbstractResource
         ];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $tasks = $this->getCourseService()->searchMultiClassCourseItems($conditions, [], $offset, $limit);
+        $total = $this->getTaskService()->countTasks($conditions);
         $tasks = $this->getCourseTaskTree($tasks, $course, $request->getHttpRequest()->isSecure());
+        $tasks = $this->findTestpapersAndStatusNum($tasks);
 
-        $testpapers = $this->findTestpapers($tasks);
-        $testpapersStatusNum = $this->findTestpapersStatusNum($tasks);
-
-        return [
-            'lessons' => $tasks,
-            'assessments' => $testpapers,
-            'assessmentStatusNum' => $testpapersStatusNum
-        ];
+        return $this->makePagingObject($tasks, $total, $offset, $limit);
     }
 
     protected function getCourseTaskTree($tasks, $course, $isSsl)
@@ -76,7 +72,7 @@ class MultiClassHomeworkTestpaper extends AbstractResource
         return $necessaryTasks;
     }
 
-    protected function findTestpapers($tasks)
+    protected function findTestpapersAndStatusNum($tasks)
     {
         if (empty($tasks)) {
             return [$tasks, []];
@@ -84,8 +80,14 @@ class MultiClassHomeworkTestpaper extends AbstractResource
 
         $ids = ArrayToolkit::column($tasks, 'assessmentId');
         $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
+        $testpapersStatusNum = $this->findTestpapersStatusNum($tasks);
 
-        return empty($testpapers) ? [] : $testpapers;
+        array_walk($tasks, function (&$task, $key) use ($testpapers, $testpapersStatusNum) {
+            $task['assessment'] = isset($testpapers[$task['assessmentId']]) ? $testpapers[$task['assessmentId']] : [];
+            $task['assessmentStatusNum'] = isset($testpapersStatusNum[$task['activityId']]) ? $testpapersStatusNum[$task['activityId']] : [];
+        });
+
+        return $tasks;
     }
 
     protected function findTestpapersStatusNum($tasks)
@@ -151,5 +153,13 @@ class MultiClassHomeworkTestpaper extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }
