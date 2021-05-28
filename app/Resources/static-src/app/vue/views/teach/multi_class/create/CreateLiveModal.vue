@@ -5,7 +5,7 @@
     :confirm-loading="confirmLoading"
     ok-text="确认"
     cancel-text="取消"
-    @ok="handleCreateLive"
+    @ok="handleOk"
     @cancel="handleCancel"
     width="900px"
   >
@@ -197,7 +197,7 @@ export default {
       });
     },
 
-    handleCreateLive() {
+    handleOk() {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.confirmLoading = true;

@@ -7,24 +7,32 @@
           <a-icon type="plus" />
           添加直播课时
         </a-button>
-        <a-button type="primary">
-          <a-icon type="plus" />
-          章/节
-        </a-button>
+        <a-dropdown :trigger="['click']">
+          <a-button type="primary">
+            <a-icon type="plus" />
+            章/节
+          </a-button>
+          <a-menu slot="overlay" @click="showAddChapterOrUnitModal">
+            <a-menu-item key="chapter">添加章</a-menu-item>
+            <a-menu-item key="unit">添加节</a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </a-space>
-      <a-button class="pull-right">
+      <a-button v-if="false" class="pull-right">
         批量排课
       </a-button>
     </div>
 
     <lesson-directory :lesson-directory="lessonDirectory" @change-lesson-directory="changeLessonDirectory" />
-    <create-live-modal :visible="createLiveModalVisible" @handle-cancel="hideCreateLiveModal" />
+    <create-live-modal :visible="createLiveVisible" @handle-cancel="hideCreateLiveModal" />
+    <add-chapter-or-unit-modal :visible="addChapterOrUnitVisible" :type="addType" @handle-cancel="hideAddChapterOrUnitModal" />
   </div>
 </template>
 
 <script>
 import LessonDirectory  from './LessonDirectory.vue';
 import CreateLiveModal from './CreateLiveModal.vue';
+import AddChapterOrUnitModal from './AddChapterOrUnitModal.vue';
 import { Course } from 'common/vue/service';
 
 export default {
@@ -32,7 +40,8 @@ export default {
 
   components: {
     LessonDirectory,
-    CreateLiveModal
+    CreateLiveModal,
+    AddChapterOrUnitModal
   },
 
   props: {
@@ -46,7 +55,9 @@ export default {
   data() {
     return {
       lessonDirectory: [],
-      createLiveModalVisible: true
+      createLiveVisible: true,
+      addChapterOrUnitVisible: false,
+      addType: ''
     }
   },
 
@@ -69,18 +80,27 @@ export default {
     },
 
     showCreateLiveModal() {
-      this.createLiveModalVisible = true;
+      this.createLiveVisible = true;
     },
 
     hideCreateLiveModal() {
-      this.createLiveModalVisible = false;
+      this.createLiveVisible = false;
     },
 
     changeLessonDirectory(sortInfos) {
       Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });
-    }
+    },
+
+    showAddChapterOrUnitModal({ key }) {
+      this.addChapterOrUnitVisible = true;
+      this.addType = key;
+    },
+
+    hideAddChapterOrUnitModal() {
+      this.addChapterOrUnitVisible = false;
+    },
   }
 }
 </script>
