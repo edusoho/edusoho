@@ -61,8 +61,10 @@ export default {
       this.createLiveModalVisible = false;
     },
 
-    changeLessonDirectory(data) {
-      this.lessonDirectory = data;
+    changeLessonDirectory(sortInfos) {
+      Course.courseSort(35, { sortInfos }).then(res => {
+        this.fetchCourseLesson();
+      });
     }
   }
 }
