@@ -21,4 +21,6 @@ interface MultiClassService
     public function cloneMultiClass($id);
 
     public function countMultiClassCopyEd($id);
+
+    public function getMultiClassByCourseId($courseId);
 }
