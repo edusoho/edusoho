@@ -118,7 +118,9 @@
         <template v-else>
           <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
           <a-checkbox-group
-            v-decorator="['repeatData', { initialValue: defaultCheckedList }]"
+            v-decorator="['repeatData', { rules: [
+              { required: true, message: '请选择每周重复天数' }
+            ]}]"
             :options="repeatDataOptions"
             @change="onChangeCheckedList"
           />
@@ -141,7 +143,6 @@ const repeatDataOptions = [
   { label: '周六', value: 'Saturday' },
   { label: '周日', value: 'Sunday' }
 ];
-const defaultCheckedList = ['Monday', 'Friday'];
 const checkedListAll = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export default {
@@ -161,9 +162,8 @@ export default {
       form: this.$form.createForm(this, { name: 'create_live' }),
       createMode: false,
       repeatType: 'day',
-      indeterminate: true,
+      indeterminate: false,
       checkAll: false,
-      defaultCheckedList,
       repeatDataOptions
     }
   },
