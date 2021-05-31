@@ -8,7 +8,7 @@
     <a-table :columns="columns"
       :pagination="false"
       :data-source="multiClassList">
-      <a slot="class_title" slot-scope="text, record" 
+      <a slot="class_title" slot-scope="text, record"
         href="javascript:;"
         @click="goToMultiClassManage(record.id)">
         {{ text }}
@@ -44,7 +44,7 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;" 
+              <a href="javascript:;"
                 @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
                 编辑
               </a>
