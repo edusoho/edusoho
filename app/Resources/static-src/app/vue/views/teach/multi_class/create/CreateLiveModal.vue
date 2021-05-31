@@ -124,7 +124,7 @@
         <template v-else>
           <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
           <a-checkbox-group
-            v-decorator="['repeatDataWeek', {
+            v-decorator="['repeatData', {
               initialValue: checkedList,
               rules: [{ required: true, message: '请选择每周重复天数' }]
             }]"
@@ -184,6 +184,7 @@ export default {
     },
 
     onChangeRepeatType(e) {
+      this.form.resetFields(['repeatData']);
       this.repeatType = e.target.value;
     },
 
@@ -195,7 +196,7 @@ export default {
 
     onCheckAllChange(e) {
       const checkedList = e.target.checked ? checkedListAll : [];
-      this.form.setFieldsValue({ ['repeatDataWeek']: checkedList });
+      this.form.setFieldsValue({ ['repeatData']: checkedList });
       Object.assign(this, {
         checkedList,
         indeterminate: false,
@@ -235,13 +236,6 @@ export default {
           Object.assign(values, {
             startTime: moment(values.startTime).valueOf()
           });
-          if (this.createMode) {
-            Object.assign(values, {
-              repeatData: this.repeatType === 'day' ? values.repeatData : values.repeatDataWeek
-            });
-          }
-          console.log(values)
-
           // Course.addLiveTask().then(res => {
 
           // });
