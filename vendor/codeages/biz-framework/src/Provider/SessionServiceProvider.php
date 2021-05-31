@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Session\Storage\DbSessionStorage;
 use Codeages\Biz\Framework\Session\Storage\RedisSessionStorage;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Redis;
 
 class SessionServiceProvider implements ServiceProviderInterface
 {
@@ -14,6 +15,27 @@ class SessionServiceProvider implements ServiceProviderInterface
         $container['autoload.aliases']['Session'] = 'Codeages\Biz\Framework\Session';
 
         $container['session.redis.options'] = isset($container['session.redis.options']) ? $container['session.redis.options'] : [];
+
+        # session redis
+        $container['session.redis'] = function () use ($container) {
+            if (empty($container['session.redis.options'])) {
+                return null;
+            }
+
+            $options = $container['session.redis.options'];
+
+            $redis = new Redis();
+            $redis->connect($options['host'], $options['port'], $options['timeout'], $options['reserved'], $options['retry_interval']);
+            $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+            if ($options['key_prefix']) {
+                $redis->setOption(Redis::OPT_PREFIX, $options['key_prefix']);
+            }
+            if (!empty($options['password'])) {
+                $redis->auth($options['password']);
+            }
+
+            return $redis;
+        };
 
         $container['session.options'] = isset($container['session.options']) ? $container['session.options'] : array(
             'max_life_time' => 7200,
