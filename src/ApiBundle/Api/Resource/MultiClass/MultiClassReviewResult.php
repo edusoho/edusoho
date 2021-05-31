@@ -28,9 +28,14 @@ class MultiClassReviewResult extends AbstractResource
         if (empty($activityId)){
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $answerScene = $this->getAnswerSceneByActivityId($activityId);
-        $status = $request->query->get('status', 'finished');
 
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        if (!in_array($activity['mediaType'], ['homework', 'testpaper'])){
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+
+        $status = $request->query->get('status', 'finished');
         if (!in_array($status, ['all', 'finished', 'reviewing', 'doing'])) {
             $status = 'all';
         }
@@ -69,13 +74,6 @@ class MultiClassReviewResult extends AbstractResource
         }
 
         return $answerRecords;
-    }
-
-    protected function getAnswerSceneByActivityId($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId, true);
-
-        return $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
     }
 
     /**
