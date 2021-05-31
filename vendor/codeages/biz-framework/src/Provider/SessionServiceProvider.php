@@ -13,6 +13,7 @@ class SessionServiceProvider implements ServiceProviderInterface
     {
         $container['autoload.aliases']['Session'] = 'Codeages\Biz\Framework\Session';
 
+        $container['session.redis.options'] = isset($container['session.redis.options']) ? $container['session.redis.options'] : [];
 
         $container['session.options'] = isset($container['session.options']) ? $container['session.options'] : array(
             'max_life_time' => 7200,

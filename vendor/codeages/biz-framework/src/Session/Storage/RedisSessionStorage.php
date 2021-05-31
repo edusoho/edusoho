@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\Framework\Session\Storage;
 
+use Redis;
+
 class RedisSessionStorage implements SessionStorage
 {
     private $biz;
@@ -57,6 +59,29 @@ class RedisSessionStorage implements SessionStorage
 
     protected function getRedis()
     {
-        return $this->biz['redis'];
+        return $this->getSessionRedis() ?: $this->biz['redis'];
+
+        // return $this->biz['redis'];
+    }
+
+    protected function getSessionRedis()
+    {
+        if (empty($this->biz['session.redis.options'])) {
+            return null;
+        }
+
+        $options = $this->biz['session.redis.options'];
+
+        $redis = new Redis();
+        $redis->connect($options['host'], $options['port'], $options['timeout'], $options['reserved'], $options['retry_interval']);
+        $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        if ($options['key_prefix']) {
+            $redis->setOption(Redis::OPT_PREFIX, $options['key_prefix']);
+        }
+        if (!empty($options['password'])) {
+            $redis->auth($options['password']);
+        }
+
+        return $redis;
     }
 }
