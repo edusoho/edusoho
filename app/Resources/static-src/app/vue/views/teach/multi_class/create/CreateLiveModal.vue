@@ -17,7 +17,8 @@
       >
         <a-input
           v-decorator="['title', { rules: [
-            { required: true, message: '请填写课时名称' }
+            { required: true, message: '请填写课时名称' },
+            { max: 40, message: '最长 40 个字符' }
           ]}]"
           placeholder="请输入课时名称"
         />
@@ -40,7 +41,8 @@
         <a-input-number
           style="width: 100%;"
           v-decorator="['taskNum', { rules: [
-            { required: true, message: '请输入批量生成课时数量' }
+            { required: true, message: '请输入批量生成课时数量' },
+            { validator: validatorTaskNum }
           ]}]"
           :min="1"
           placeholder="请输入课时数量"
@@ -68,8 +70,9 @@
         :wrapper-col="{ span: 21 }"
       >
         <a-select
-          v-decorator="['length', { rules: [
-            { required: true, message: '上课时长不能为空' }
+          v-decorator="['length', {
+            initialValue: 60,
+            rules: [{ required: true, message: '上课时长不能为空' }
           ]}]"
           placeholder="选择上课时长"
         >
@@ -104,14 +107,11 @@
       >
         <template v-if="repeatType === 'day'">
           <a-select
-            v-decorator="['repeatData', { initialValue: ['2'] }]"
+            v-decorator="['repeatData', { initialValue: [1] }]"
             placeholder="选择上课时长"
           >
-            <a-select-option value="2">
-              每2天一次课
-            </a-select-option>
-            <a-select-option value="3">
-              每3天一次课
+            <a-select-option v-for="i in 6" :value="i" :key="i">
+              每 {{ i }} 天一次课
             </a-select-option>
           </a-select>
         </template>
@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import _ from '@codeages/utils';
 import moment from 'moment';
 
 const repeatDataOptions = [
@@ -158,7 +159,7 @@ export default {
     return {
       confirmLoading: false,
       form: this.$form.createForm(this, { name: 'create_live' }),
-      createMode: true,
+      createMode: false,
       repeatType: 'day',
       indeterminate: true,
       checkAll: false,
@@ -192,10 +193,15 @@ export default {
       });
     },
 
+    validatorTaskNum: _.debounce((rule, value, callback) => {
+      value > 50 ? callback('一次批量生成最大为50个课时') : callback();
+    }, 300),
+
     handleOk() {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.confirmLoading = true;
+          console.log(values)
         }
       });
     },
