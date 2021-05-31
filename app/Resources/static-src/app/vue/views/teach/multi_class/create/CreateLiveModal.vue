@@ -55,11 +55,17 @@
         :wrapper-col="{ span: 21 }"
       >
         <a-date-picker
-          show-time
-          format="YYYY-MM-DD HH:mm:ss"
-          v-decorator="['startTime', { rules: [
-            { type: 'object', required: true, message: '日期时间不能为空' }
-          ]}]"
+          :show-time="{ format: 'HH:mm' }"
+          format="YYYY-MM-DD HH:mm"
+          :disabled-date="disabledDate"
+          :disabled-time="disabledDateTime"
+          v-decorator="['startTime', {
+            initialValue: moment(),
+            rules: [
+              { type: 'object', required: true, message: '日期时间不能为空' },
+              { validator: validatorStartTime }
+            ]
+          }]"
           placeholder="请选择日期时间"
         />
       </a-form-item>
@@ -132,7 +138,6 @@
 
 <script>
 import _ from '@codeages/utils';
-import moment from 'moment';
 
 const repeatDataOptions = [
   { label: '周一', value: 'Monday' },
@@ -196,6 +201,28 @@ export default {
     validatorTaskNum: _.debounce((rule, value, callback) => {
       value > 50 ? callback('一次批量生成最大为50个课时') : callback();
     }, 300),
+
+    validatorStartTime: _.debounce((rule, value, callback) => {
+      value._d <= moment() ? callback('开始时间不能小于当前时间') : callback();
+    }, 300),
+
+    range(start, end) {
+      const result = [];
+      for (let i = start; i < end; i++) {
+        result.push(i);
+      }
+      return result;
+    },
+
+    disabledDate(current) {
+      return current && current < moment().startOf('day');
+    },
+
+    disabledDateTime() {
+      return {
+        disabledHours: () => this.range(0, moment().hour())
+      };
+    },
 
     handleOk() {
       this.form.validateFields((err, values) => {
