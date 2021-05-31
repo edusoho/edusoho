@@ -60,7 +60,7 @@
           :disabled-date="disabledDate"
           :disabled-time="disabledDateTime"
           v-decorator="['startTime', {
-            initialValue: moment(),
+            initialValue: moment().add(5, 'minutes'),
             rules: [
               { type: 'object', required: true, message: '日期时间不能为空' },
               { validator: validatorStartTime }
@@ -113,7 +113,7 @@
       >
         <template v-if="repeatType === 'day'">
           <a-select
-            v-decorator="['repeatData', { initialValue: [1] }]"
+            v-decorator="['repeatData', { initialValue: 1 }]"
             placeholder="选择上课时长"
           >
             <a-select-option v-for="i in 6" :value="i" :key="i">
@@ -124,9 +124,10 @@
         <template v-else>
           <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
           <a-checkbox-group
-            v-decorator="['repeatData', { rules: [
-              { required: true, message: '请选择每周重复天数' }
-            ]}]"
+            v-decorator="['repeatDataWeek', {
+              initialValue: checkedList,
+              rules: [{ required: true, message: '请选择每周重复天数' }]
+            }]"
             :options="repeatDataOptions"
             @change="onChangeCheckedList"
           />
@@ -138,6 +139,7 @@
 
 <script>
 import _ from '@codeages/utils';
+import { Course } from 'common/vue/service';
 
 const repeatDataOptions = [
   { label: '周一', value: 'Monday' },
@@ -167,6 +169,7 @@ export default {
       form: this.$form.createForm(this, { name: 'create_live' }),
       createMode: false,
       repeatType: 'day',
+      checkedList: [],
       indeterminate: false,
       checkAll: false,
       repeatDataOptions
@@ -182,17 +185,19 @@ export default {
 
     onChangeRepeatType(e) {
       this.repeatType = e.target.value;
-      this.form.resetFields(['repeatData']);
     },
 
     onChangeCheckedList(checkedList) {
+      this.checkedList = checkedList;
       this.indeterminate = !!checkedList.length && checkedList.length < repeatDataOptions.length;
       this.checkAll = checkedList.length === repeatDataOptions.length;
     },
 
     onCheckAllChange(e) {
-      this.form.setFieldsValue({ ['repeatData']: e.target.checked ? checkedListAll : [] });
+      const checkedList = e.target.checked ? checkedListAll : [];
+      this.form.setFieldsValue({ ['repeatDataWeek']: checkedList });
       Object.assign(this, {
+        checkedList,
         indeterminate: false,
         checkAll: e.target.checked
       });
@@ -227,8 +232,19 @@ export default {
     handleOk() {
       this.form.validateFields((err, values) => {
         if (!err) {
-          this.confirmLoading = true;
+          Object.assign(values, {
+            startTime: moment(values.startTime).valueOf()
+          });
+          if (this.createMode) {
+            Object.assign(values, {
+              repeatData: this.repeatType === 'day' ? values.repeatData : values.repeatDataWeek
+            });
+          }
           console.log(values)
+
+          // Course.addLiveTask().then(res => {
+
+          // });
         }
       });
     },

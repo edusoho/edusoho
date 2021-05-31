@@ -22,4 +22,9 @@ export const Course = {
   async addChapter(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/chapter`, params)
   },
+
+  // 新增直播课时（包括批量）
+  async addLiveTask(courseId, params) {
+    return apiClient.post(`${baseUrl}/${courseId}/live_task`, params)
+  }
 }
