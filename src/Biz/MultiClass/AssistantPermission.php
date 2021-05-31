@@ -38,7 +38,7 @@ class Assistant
                     ['title' => '编辑班课', 'code' => 'multi_class_edit', 'disabled' => 0],
                     ['title' => '复制班课', 'code' => 'multi_class_copy', 'disabled' => 0],
                     ['title' => '删除班课', 'code' => 'multi_class_delete', 'disabled' => 0],
-                ]
+                ],
             ],
             [
                 'title' => '课程管理',
@@ -53,7 +53,7 @@ class Assistant
                             ['title' => '创建课时', 'code' => 'course_lesson_create', 'disabled' => 0],
                             ['title' => '编辑课时', 'code' => 'course_lesson_edit', 'disabled' => 0],
                             ['title' => '删除课时', 'code' => 'course_lesson_delete', 'disabled' => 0],
-                        ]
+                        ],
                     ],
                     [
                         'title' => '学员管理',
@@ -65,7 +65,7 @@ class Assistant
                             ['title' => '修改学员有效期', 'code' => 'course_member_deadline_edit', 'disabled' => 0],
                             ['title' => '导入学员', 'code' => 'course_member_import', 'disabled' => 0],
                             ['title' => '导出学员', 'code' => 'course_member_export', 'disabled' => 0],
-                        ]
+                        ],
                     ],
                     [
                         'title' => '直播统计',
@@ -73,7 +73,7 @@ class Assistant
                         'disabled' => 0,
                         'children' => [
                             ['title' => '导出数据', 'code' => 'course_live_data_export', 'disabled' => 0],
-                        ]
+                        ],
                     ],
                     ['title' => '作业批阅', 'code' => 'course_homework_review', 'disabled' => 0],
                     ['title' => '考试批阅', 'code' => 'course_exam_review', 'disabled' => 0],
@@ -82,8 +82,8 @@ class Assistant
                     ['title' => '录播管理', 'code' => 'course_replay_manage', 'disabled' => 0],
                     ['title' => '弹题统计', 'code' => 'course_question_marker_manage', 'disabled' => 0],
                     ['title' => '订单统计', 'code' => 'course_order_manage', 'disabled' => 0],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
