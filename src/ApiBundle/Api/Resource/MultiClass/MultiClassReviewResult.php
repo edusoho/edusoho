@@ -57,11 +57,12 @@ class MultiClassReviewResult extends AbstractResource
         $studentIds = ArrayToolkit::column($answerRecords, 'user_id');
         $teacherIds = ArrayToolkit::column($answerReports, 'review_user_id');
         $userIds = array_merge($studentIds, $teacherIds);
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
 
         foreach ($answerRecords as &$answerRecord){
-            $answerRecord['answerReportInfo'] = isset($answerRecords[$answerRecord['answer_report_id']]) ? $answerRecords[$answerRecord['answer_report_id']] : [];
+            $answerRecord['answerReportInfo'] = isset($answerReports[$answerRecord['answer_report_id']]) ? $answerReports[$answerRecord['answer_report_id']] : [];
             $answerRecord['userInfo'] = isset($users[$answerRecord['user_id']]) ? $users[$answerRecord['user_id']] : [];
+            $answerRecord['teacherInfo'] = isset($users[$answerRecord['answerReportInfo']['review_user_id']]) ? $users[$answerRecord['answerReportInfo']['review_user_id']] : [];
         }
 
         return $answerRecords;
