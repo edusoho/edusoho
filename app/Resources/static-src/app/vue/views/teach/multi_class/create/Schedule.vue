@@ -24,7 +24,12 @@
     </div>
 
     <lesson-directory :lesson-directory="lessonDirectory" @change-lesson-directory="changeLessonDirectory" />
-    <create-live-modal :visible="createLiveVisible" @handle-cancel="hideCreateLiveModal" />
+    <create-live-modal
+      :courseId="courseId"
+      :visible="createLiveVisible"
+      @handle-cancel="hideCreateLiveModal"
+      @change-lesson-directory="changeLessonDirectory"
+    />
     <add-chapter-or-unit-modal
       :type="addType"
       :courseId="courseId"

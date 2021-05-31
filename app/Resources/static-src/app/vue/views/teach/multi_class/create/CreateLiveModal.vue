@@ -59,11 +59,11 @@
           format="YYYY-MM-DD HH:mm"
           :disabled-date="disabledDate"
           :disabled-time="disabledDateTime"
-          v-decorator="['startTime', {
+          v-decorator="['startDate', {
             initialValue: moment().add(5, 'minutes'),
             rules: [
               { type: 'object', required: true, message: '日期时间不能为空' },
-              { validator: validatorStartTime }
+              { validator: validatorStartDate }
             ]
           }]"
           placeholder="请选择日期时间"
@@ -160,6 +160,12 @@ export default {
       type: Boolean,
       required: true,
       default: false
+    },
+
+    courseId: {
+      type: [Number, String],
+      required: true,
+      default: 0
     }
   },
 
@@ -208,7 +214,7 @@ export default {
       value > 50 ? callback('一次批量生成最大为50个课时') : callback();
     }, 300),
 
-    validatorStartTime: _.debounce((rule, value, callback) => {
+    validatorStartDate: _.debounce((rule, value, callback) => {
       value._d <= moment() ? callback('开始时间不能小于当前时间') : callback();
     }, 300),
 
@@ -231,14 +237,16 @@ export default {
     },
 
     handleOk() {
-      this.form.validateFields((err, values) => {
+      this.form.validateFields(async (err, values) => {
         if (!err) {
-          Object.assign(values, {
-            startTime: moment(values.startTime).valueOf()
-          });
-          // Course.addLiveTask().then(res => {
+          let result = null;
+          if (this.createMode) {
 
-          // });
+          } else {
+            result = await Course.addLiveTask(this.courseId, values);
+          }
+          const { data } = result;
+          console.log(data);
         }
       });
     },
