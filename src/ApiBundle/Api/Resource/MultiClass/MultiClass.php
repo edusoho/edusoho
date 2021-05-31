@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\MultiClass;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Filter;
@@ -14,7 +15,6 @@ use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class MultiClass extends AbstractResource
 {
@@ -56,9 +56,13 @@ class MultiClass extends AbstractResource
         $multiClass = $this->checkDataFields($request->request->all());
 
         $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
-
         if ($existed) {
             throw MultiClassException::MULTI_CLASS_EXIST();
+        }
+
+        $courseExisted = $this->getMultiClassService()->getMultiClassByCourseId($multiClass['courseId']);
+        if ($courseExisted) {
+            throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
         }
 
         return $this->getMultiClassService()->createMultiClass($multiClass);
@@ -73,9 +77,13 @@ class MultiClass extends AbstractResource
         $multiClass = $this->checkDataFields($request->request->all());
 
         $existed = $this->getMultiClassService()->getMultiClassByTitle($multiClass['title']);
-
         if (!empty($existed) && $id != $existed['id']) {
             throw MultiClassException::MULTI_CLASS_EXIST();
+        }
+
+        $courseExisted = $this->getMultiClassService()->getMultiClassByCourseId($multiClass['courseId']);
+        if ($courseExisted && $id != $courseExisted['id']) {
+            throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
         }
 
         return $this->getMultiClassService()->updateMultiClass($id, $multiClass);

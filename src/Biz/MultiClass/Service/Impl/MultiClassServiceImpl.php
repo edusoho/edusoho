@@ -170,6 +170,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByTitle($title);
     }
 
+    public function getMultiClassByCourseId($courseId)
+    {
+        return $this->getMultiClassDao()->getByCourseId($courseId);
+    }
+
     private function filterConditions($conditions)
     {
         if (empty($conditions)) {
@@ -185,7 +190,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $conditions;
     }
 
-    private function filterMultiClassFields($fields, $multiClassId = 0)
+    private function filterMultiClassFields($fields)
     {
         if (isset($fields['teacherId'])) {
             unset($fields['teacherId']);
@@ -198,15 +203,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $course = $this->getCourseService()->getCourse($fields['courseId']);
             if (empty($course)) {
                 throw CourseException::NOTFOUND_COURSE();
-            }
-            $courseExisted = $this->getMultiClassDao()->getByCourseId($fields['courseId']);
-
-            if ($multiClassId > 0 && $courseExisted && $courseExisted['id'] != $multiClassId) {
-                throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
-            }
-
-            if (!$multiClassId && $courseExisted) {
-                throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
             }
         }
         if (isset($fields['productId']) && !empty($fields['productId'])) {
