@@ -13,6 +13,7 @@
       :data-source="data"
       :loading="loading"
       :pagination="pagination"
+      :locale="locale"
       @change="handleTableChange"
     >
       <class-name slot="name" slot-scope="name, record" :record="record" />
@@ -45,20 +46,22 @@
 
         <a class="ant-dropdown-link" @click="e => e.preventDefault()">编辑</a>
 
-        <a-dropdown :trigger="['click']" placement="bottomRight">
+        <a-dropdown :trigger="['hover']" placement="bottomRight">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
-          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record.id)">
-            <a-menu-item key="publish">
-              立即发布
-            </a-menu-item>
-            <a-menu-item key="unpublish">
+          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
+            <a-menu-item v-if="record.status == 'published'" key="unpublish" >
               取消发布
             </a-menu-item>
-            <a-menu-item key="delete">
-              删除
-            </a-menu-item>
+            <template v-else>
+              <a-menu-item key="publish">
+                立即发布
+              </a-menu-item>
+              <a-menu-item key="delete">
+                删除
+              </a-menu-item>
+            </template>
           </a-menu>
         </a-dropdown>
       </template>
@@ -67,158 +70,64 @@
 </template>
 
 <script>
+import _ from '@codeages/utils';
+import { MultiClass, Courses } from 'common/vue/service';
+
 import ClassName from './ClassName.vue';
 import TeachMode from './TeachMode.vue';
 import Assistant from './Assistant.vue';
-
-const data = {
-  "id": "26",
-  "courseId": "121",
-  "type": "lesson",
-  "number": 1,
-  "seq": "8",
-  "title": "223",
-  "createdTime": "1621236030",
-  "updatedTime": "1621393523",
-  "copyId": "0",
-  "status": "published",
-  "isOptional": "0",
-  "published_number": "3",
-  "syncId": "0",
-  "itemType": "chapter",
-  "tasks": {
-      "id": "24",
-      "courseId": "121",
-      "multiClassId": "1",
-      "seq": "9",
-      "categoryId": "26",
-      "activityId": "24",
-      "title": "223",
-      "isFree": "0",
-      "isOptional": "0",
-      "startTime": "0",
-      "endTime": "0",
-      "mode": "lesson",
-      "isLesson": "1",
-      "status": "published",
-      "number": "3-1",
-      "type": "text",
-      "mediaSource": "",
-      "maxOnlineNum": "0",
-      "fromCourseSetId": "121",
-      "length": "0",
-      "copyId": "0",
-      "createdUserId": "2",
-      "createdTime": "1621236030",
-      "updatedTime": "1621393523",
-      "syncId": "0",
-      "activity": {
-          "id": "24",
-          "title": "223",
-          "remark": null,
-          "mediaId": "1",
-          "mediaType": "text",
-          "length": "0",
-          "fromCourseId": "121",
-          "fromCourseSetId": "121",
-          "fromUserId": "2",
-          "copyId": "0",
-          "startTime": "0",
-          "endTime": "0",
-          "createdTime": "1621236030",
-          "updatedTime": "0",
-          "finishType": "time",
-          "finishData": "1",
-          "syncId": "0",
-          "ext": {
-              "id": "1",
-              "finishType": "time",
-              "finishDetail": "0",
-              "createdTime": "1621236030",
-              "createdUserId": "2",
-              "updatedTime": "1621236030",
-              "syncId": "0"
-          }
-      },
-      "courseUrl": "http://es.dev.cn/my/course/121"
-  },
-  "isExist": 1,
-  "chapterTitle": "1",
-  "unitTitle": null,
-  "teacher": {
-      "userId": "2",
-      "nickname": "super"
-  },
-  "assistant": [
-      {
-          "userId": "225",
-          "nickname": "教师1"
-      }
-  ],
-  "questions": 0,
-  "studyStudentNum": 0,
-  "totalStudentNum": 0
-}
 
 const columns = [
   {
     title: '课时名称',
     dataIndex: 'name',
-    width: '20%',
-    ellipsis: true,
     scopedSlots: { customRender: 'name' }
   },
   {
     title: '教学模式',
     dataIndex: 'mode',
     filters: [
-      { text: '文本', value: 'text' },
+      { text: '图文', value: 'text' },
       { text: '视频', value: 'video' },
-      { text: '直播', value: 'live' }
+      { text: '直播', value: 'live' },
+      { text: '考试', value: 'testpaper' },
+      { text: '作业', value: 'homework' }
     ],
-    width: '10%',
     scopedSlots: { customRender: 'mode' }
   },
   {
     title: '开课时间',
     dataIndex: 'createdTime',
     sorter: true,
-    width: '10%',
     scopedSlots: { customRender: 'createdTime' }
   },
   {
     title: '时长',
     dataIndex: 'time',
-    width: '10%',
     scopedSlots: { customRender: 'time' }
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
-    width: '10%',
     scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
     dataIndex: 'assistant',
-    width: '10%',
     scopedSlots: { customRender: 'assistant' }
   },
   {
     title: '问题讨论',
-    dataIndex: 'questions',
-    width: '10%'
+    dataIndex: 'questionNum'
   },
   {
     title: '学习人数',
     dataIndex: 'studyStudentNum',
-    width: '10%',
     scopedSlots: { customRender: 'studyStudentNum' }
   },
   {
     title: '操作',
     dataIndex: 'actions',
-    width: '10%',
     scopedSlots: { customRender: 'actions' }
   }
 ];
@@ -232,55 +141,109 @@ export default {
 
   data() {
     return {
-      data: [data],
+      data: [],
       pagination: {},
       loading: false,
-      columns
+      columns,
+      locale: {
+        filterConfirm: '确定',
+        filterReset: '重置',
+        emptyText: '暂无数据'
+      },
+      multiClassId: this.$route.params.id,
+      keywords: ''
     }
   },
 
-  methods: {
-    onSearch(value) {
-      console.log(value);
-    },
+  mounted() {
+    this.fetchLessons();
+  },
 
+  methods: {
     handleTableChange(pagination, filters, sorter) {
+      const order = sorter.order;
+
       const pager = { ...this.pagination };
-      console.log(pager);
       pager.current = pagination.current;
       this.pagination = pager;
-      this.fetch({
-        results: pagination.pageSize,
-        page: pagination.current,
-        sortField: sorter.field,
-        sortOrder: sorter.order,
-        ...filters,
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      if (_.size(filters)) {
+        params.types = filters.mode;
+      }
+
+      if (order) {
+        params.sort = order == 'ascend' ? 'ASC' : 'DESC';
+      }
+
+      this.fetchLessons(params);
+    },
+
+    fetchLessons(params = {}) {
+      this.loading = true;
+      MultiClass.getLessons(this.multiClassId, { limit: 10, titleLike: this.keywords, ...params }).then(res => {
+        const pagination = { ...this.pagination };
+        pagination.total = res.paging.total;
+        this.loading = false;
+        this.data = res.data;
+        this.pagination = pagination;
       });
     },
 
-    fetch(params = {}) {
-      this.loading = true;
+    onSearch(value) {
+      this.keywords = value;
+      this.pagination.current = 1;
+      this.fetchLessons();
     },
 
     // actions: 复制, 发布, 取消发布, 删除
     handleMenuClick(key, value) {
-      this[key](value);
+      if (key === 'copy') {
+        this.copy(value);
+        return;
+      }
+
+      if (['publish', 'unpublish'].includes(key)) {
+        this.updateTaskStatus(key, value);
+        return;
+      }
+
+      if (key === 'delete') {
+        this.deleteTask(value);
+      }
     },
 
     copy(link) {
       console.log(link);
     },
 
-    publish(id) {
-      console.log(id)
+    updateTaskStatus(type, value) {
+      const { tasks: { courseId, id } } = value;
+      const message = type == 'publish' ? `发布成功` : `取消发布成功`;
+      Courses.updateTaskStatus(courseId, id, { type }).then(res => {
+        this.$message.success(message);
+      });
     },
 
-    unpublish(id) {
-      console.log(id)
-    },
-
-    delete(id) {
-      console.log(id)
+    deleteTask(value) {
+      const { tasks: { courseId, id } } = value;
+      this.$confirm({
+        title: '删除',
+        content: '是否确定删除该课时吗?',
+        okText: '确认',
+        cancelText: '取消',
+        onOk() {
+          Courses.deleteTask(courseId, id).then(res => {
+            if (res.success) {
+              this.$message.success('删除成功');
+            }
+          });
+        }
+      });
     }
   }
 }

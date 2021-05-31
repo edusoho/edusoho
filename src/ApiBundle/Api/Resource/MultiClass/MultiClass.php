@@ -14,6 +14,7 @@ use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use ApiBundle\Api\Annotation\Access;
 
 class MultiClass extends AbstractResource
 {
@@ -46,6 +47,10 @@ class MultiClass extends AbstractResource
         return $multiClass;
     }
 
+    /**
+     * @return array
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
     public function add(ApiRequest $request)
     {
         $multiClass = $this->checkDataFields($request->request->all());
@@ -59,6 +64,10 @@ class MultiClass extends AbstractResource
         return $this->getMultiClassService()->createMultiClass($multiClass);
     }
 
+    /**
+     * @return array
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
     public function update(ApiRequest $request, $id)
     {
         $multiClass = $this->checkDataFields($request->request->all());
@@ -72,6 +81,10 @@ class MultiClass extends AbstractResource
         return $this->getMultiClassService()->updateMultiClass($id, $multiClass);
     }
 
+    /**
+     * @return array
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
     public function remove(ApiRequest $request, $id)
     {
         $this->getMultiClassService()->deleteMultiClass($id);
@@ -79,6 +92,10 @@ class MultiClass extends AbstractResource
         return ['success' => true];
     }
 
+    /**
+     * @return array
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT")
+     */
     public function search(ApiRequest $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
@@ -107,8 +124,15 @@ class MultiClass extends AbstractResource
                 );
             }
         }
+
         if (!empty($conditions['productId'])) {
             $prepareConditions['productId'] = $conditions['productId'];
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher', 'assistant']);
+            $prepareConditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'multiClassId');
         }
 
         return $prepareConditions;
@@ -151,7 +175,7 @@ class MultiClass extends AbstractResource
             $teacher = $teachers[$multiClass['id']];
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
-            $multiClass['course'] = $courses[$multiClass['courseId']]['courseSetTitle'];
+            $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['multiClassId' => $multiClass['id'], 'status' => 'published', 'isLesson' => 1]);
             $multiClass['notStartLiveTaskNum'] = $this->getTaskService()->countTasks([
