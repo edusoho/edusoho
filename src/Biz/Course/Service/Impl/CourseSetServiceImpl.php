@@ -152,7 +152,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
-        $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSetId);
+        $teachers = $this->getCourseMemberService()->findCourseSetTeachersAndAssistant($courseSetId);
         $teacherIds = ArrayToolkit::column($teachers, 'userId');
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
@@ -251,7 +251,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: countTeachingCourseSets
     public function countUserTeachingCourseSets($userId, array $conditions)
     {
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $members = $this->getCourseMemberService()->findMembersByUserIdAndRoles($userId, ['teacher', 'assistant']);
         $ids = ArrayToolkit::column($members, 'courseSetId');
 
         if (empty($ids)) {
@@ -268,7 +268,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: searchTeachingCourseSets
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $members = $this->getCourseMemberService()->findMembersByUserIdAndRoles($userId, ['teacher', 'assistant']);
         $ids = ArrayToolkit::column($members, 'courseSetId');
 
         if (empty($ids)) {

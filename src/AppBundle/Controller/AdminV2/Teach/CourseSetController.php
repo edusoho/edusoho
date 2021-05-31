@@ -278,6 +278,8 @@ class CourseSetController extends BaseController
             $conditions['parentId_GT'] = 0;
         }
 
+        $conditions = $this->filterRoleConditions($conditions);
+
         $conditions = $this->fillOrgCode($conditions);
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
@@ -864,8 +866,15 @@ class CourseSetController extends BaseController
             $conditions = $this->getCourseConditionsByTags($conditions);
         }
 
+        $conditions = $this->filterRoleConditions($conditions);
+
+        return $conditions;
+    }
+
+    protected function filterRoleConditions($conditions)
+    {
         $user = $this->getCurrentUser();
-        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+        if (empty(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles())) && in_array('ROLE_TEACHER', $user->getRoles())) {
             $members = $this->getMemberService()->findTeacherMembersByUserId($user['id']);
             $conditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId');
         }

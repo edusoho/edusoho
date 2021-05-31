@@ -89,6 +89,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function findByCourseSetIdAndRole($courseSetId, $role);
 
+    public function findByCourseSetIdAndRoles($courseSetId, $roles);
+
     public function findByUserIdAndJoinType($userId, $joinedType);
 
     public function findByMultiClassIdAndRole($multiClassId, $role);

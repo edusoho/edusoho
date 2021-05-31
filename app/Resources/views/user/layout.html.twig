@@ -20,11 +20,11 @@
   {% if not user.destroyed|default(0) %}
   <ul class="nav nav-tabs clearfix" {% if 'ROLE_TEACHER' in user.roles %} style="width: 1260px" {% endif %}>
     <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.id}) }}">{{'user.homepage.introductions'|trans}}</a></li>
-  	{% if 'ROLE_TEACHER' in user.roles %}
+  	{% if 'ROLE_TEACHER' in user.roles or 'ROLE_TEACHER_ASSISTANT' in user.roles %}
 	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">{{'user.homepage.teaching_courses'|trans}}</a></li>
     {% endif %}
 
-    {% if 'ROLE_TEACHER' in user.roles %}
+    {% if 'ROLE_TEACHER' in user.roles or 'ROLE_TEACHER_ASSISTANT' in user.roles %}
       <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>
       <li {% if pageNav == 'question_bank_teaching' %}class="active"{% endif %}><a href="{{ path('user_question_bank_teach', {id:user.id}) }}">{{'user.homepage.teaching_question_bank'|trans }}</a></li>
     {% endif %}

@@ -6,6 +6,7 @@ namespace ApiBundle\Api\Resource\AssistantPermission;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -51,6 +52,9 @@ class AssistantPermission extends AbstractResource
     public function add(ApiRequest $request)
     {
         $permissions = $request->request->get('permissions');
+        if (empty($permissions)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
 
         $this->getSettingService()->set('assistant_permission', $permissions);
 
