@@ -203,7 +203,8 @@ class CourseTaskMedia extends AbstractResource
 
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
-        $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
+        $supportMobile = (int) $this->getSettingService()->node('storage.support_mobile', 0);
+        $securityVideoPlayer = (int) $this->getSettingService()->node('magic.security_video_player', 0);
 
         return [
             'resId' => $file['globalId'],
@@ -214,6 +215,7 @@ class CourseTaskMedia extends AbstractResource
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
             'supportMobile' => $supportMobile,
+            'securityVideoPlayer' => $securityVideoPlayer,
         ];
     }
 
@@ -232,6 +234,7 @@ class CourseTaskMedia extends AbstractResource
     {
         $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
+        $playerContext['securityVideoPlayer'] = (int) $this->getSettingService()->node('magic.security_video_player', 0);
 
         return $playerContext;
     }
