@@ -2,9 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\Common\BizSms;
+use Biz\Common\CommonException;
+use Biz\Sms\SmsException;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
+use Biz\User\UserException;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -166,6 +171,32 @@ class LoginController extends BaseController
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+
+            if (!ArrayToolkit::requireds($fields, ['mobile', 'sms_token', 'sms_code'])) {
+                throw CommonException::ERROR_PARAMETER();
+            }
+
+            $mobile = $fields['mobile'];
+
+            // 检查短信验证码
+            $status = $this->getBizSms()->check(BizSms::SMS_LOGIN, $mobile, $fields['sms_token'], $fields['sms_code']);
+            if (BizSms::STATUS_SUCCESS !== $status) {
+                throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
+            }
+
+            // 按手机号获取用户，没有就注册
+            $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
+
+            if ($user['locked']) {
+                throw UserException::LOCKED_USER();
+            }
+            $this->authenticateUser($user);
+
+            return $this->redirect($this->getTargetPath($request));
+        }
+
         return $this->render('login/sms.html.twig', [
             '_target_path' => $this->getTargetPath($request),
         ]);
@@ -225,6 +256,10 @@ class LoginController extends BaseController
             return $this->generateUrl('homepage');
         }
 
+        if ($targetPath == $this->generateUrl('login_sms', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
+            return $this->generateUrl('homepage');
+        }
+
         $url = explode('?', $targetPath);
 
         if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
@@ -261,5 +296,13 @@ class LoginController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return BizSms
+     */
+    private function getBizSms()
+    {
+        return $this->getBiz()['biz_sms'];
     }
 }

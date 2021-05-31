@@ -16,7 +16,7 @@
       <a href="{{ path('register', {goto:'_target_path'}) }}">{{ 'user.register.register_account'|trans }}</a>
     </div>
     <div class="login-main js-login-main">
-      <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
+      <form id="login-form" class="form-vertical" method="post" action="{{ path('login_sms') }}">
 
 {#        {% if error %}#}
 {#          <div class="alert alert-danger">#}
@@ -70,8 +70,9 @@
           <button type="button" class="btn btn-primary btn-lg btn-block js-btn-login">{{ 'user.login.submit_button'|trans }}</button>
         </div>
 
-{#        <input type="hidden" name="_target_path" value="{{ _target_path }}">#}
+        <input type="hidden" name="_target_path" value="{{ _target_path }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="sms_token" value="">
       </form>
 
       <div class="mbl">

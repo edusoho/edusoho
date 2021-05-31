@@ -1,9 +1,14 @@
 import Drag from 'app/common/drag';
+import Api from 'common/api';
+import notify from 'common/notify';
+import { countDown } from 'app/common/new-count-down.js';
 
 let $form = $('#login-form');
 let drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
   limitType: 'user_login'
 }) : null;
+
+let smsToken = '';
 let validator = $form.validate({
   rules: {
     mobile: {
@@ -14,7 +19,6 @@ let validator = $form.validate({
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
-      passwordSms: true,
     },
     dragCaptchaToken: {
       required: true,
@@ -30,6 +34,43 @@ let validator = $form.validate({
     },
   }
 });
+
+$('.js-btn-login').click((event) => {
+  if (validator.form()) {
+    $(event.currentTarget).button('loadding');
+    $form.submit();
+  }
+});
+
+let smsEvent = () => {
+  let $smsCode = $('.js-sms-send');
+  $smsCode.click(() => {
+    if(validator.element($('[name="dragCaptchaToken"]')) && validator.element($('[name="mobile"]'))) {
+      if($smsCode.hasClass('disabled')) {
+        return ;
+      }
+      $smsCode.addClass('disabled');
+
+      Api.fastLoginSms.send({
+        data: {
+          type: 'sms_login',
+          mobile: $('#mobile').val(),
+          allowNotExistMobile: 0,
+          dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
+        }
+      }).then((res) => {
+        notify('success', Translator.trans('notify.sms_send_success.message'));
+        $smsCode.removeClass('disabled');
+        countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 20);
+        $('[name="sms_token"]').val(res.smsToken);
+      }).catch(()=> {
+        $smsCode.removeClass('disabled');
+        drag.initDragCaptcha();
+      });
+    }
+  });
+};
+smsEvent();
 
 $('.js-btn-login').click((event) => {
   if (validator.form()) {
