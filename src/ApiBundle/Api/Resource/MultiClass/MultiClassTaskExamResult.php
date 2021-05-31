@@ -6,30 +6,27 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
-use Biz\Testpaper\TestpaperException;
+use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
-class MultiClassReviewResult extends AbstractResource
+class MultiClassTaskExamResult extends AbstractResource
 {
-    public function search(ApiRequest $request, $multiClassId, $assessmentId)
+    public function search(ApiRequest $request, $multiClassId, $taskId)
     {
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if (!$assessment) {
-            throw TestpaperException::NOTFOUND_TESTPAPER();
+        $task = $this->getTaskService()->getTask($taskId);
+        if (!$task) {
+            throw TaskException::NOTFOUND_TASK();
         }
 
-        $activityId = $request->query->get('activityId');
-        if (empty($activityId)){
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
-        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if (!in_array($activity['mediaType'], ['homework', 'testpaper'])){
             throw CommonException::ERROR_PARAMETER();
         }
@@ -66,6 +63,9 @@ class MultiClassReviewResult extends AbstractResource
         $teacherIds = ArrayToolkit::column($answerReports, 'review_user_id');
         $userIds = array_merge($studentIds, $teacherIds);
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filters($users);
 
         foreach ($answerRecords as &$answerRecord){
             $answerRecord['answerReportInfo'] = isset($answerReports[$answerRecord['answer_report_id']]) ? $answerReports[$answerRecord['answer_report_id']] : [];
@@ -74,14 +74,6 @@ class MultiClassReviewResult extends AbstractResource
         }
 
         return $answerRecords;
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 
     /**
@@ -122,5 +114,13 @@ class MultiClassReviewResult extends AbstractResource
     protected function getAnswerReportService()
     {
         return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }
