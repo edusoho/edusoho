@@ -25,7 +25,13 @@
 
     <lesson-directory :lesson-directory="lessonDirectory" @change-lesson-directory="changeLessonDirectory" />
     <create-live-modal :visible="createLiveVisible" @handle-cancel="hideCreateLiveModal" />
-    <add-chapter-or-unit-modal :visible="addChapterOrUnitVisible" :type="addType" @handle-cancel="hideAddChapterOrUnitModal" />
+    <add-chapter-or-unit-modal
+      :type="addType"
+      :courseId="courseId"
+      :visible="addChapterOrUnitVisible"
+      @handle-cancel="hideAddChapterOrUnitModal"
+      @change-lesson-directory="changeLessonDirectory"
+    />
   </div>
 </template>
 
@@ -87,7 +93,27 @@ export default {
       this.createLiveVisible = false;
     },
 
-    changeLessonDirectory(sortInfos) {
+    changeLessonDirectory(params) {
+      const sortInfos = [];
+
+      const { data = this.lessonDirectory, add } = params;
+
+      const loop = (sortInfos, data) => {
+        _.forEach(data, lesson => {
+          const { type, id } = lesson;
+          sortInfos.push(`${type}-${id}`);
+          if (lesson.children) {
+            loop(sortInfos, lesson.children)
+          }
+        });
+      };
+
+      loop(sortInfos, data);
+
+      if (add) {
+        sortInfos.push(add);
+      }
+
       Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });

@@ -16,5 +16,10 @@ export const Course = {
   // 课时列表排序
   async courseSort(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/item_sort`, params)
-  }
+  },
+
+  // 新增章节
+  async addChapter(courseId, params) {
+    return apiClient.post(`${baseUrl}/${courseId}/chapter`, params)
+  },
 }
