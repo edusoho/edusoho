@@ -78,13 +78,12 @@
 </template>
 <script>
 import EDrag from '&/components/e-drag';
-import rulesConfig from '@/utils/rule-config.js';
-import XXTEA from '@/utils/xxtea.js';
 import Api from '@/api';
+import { Toast } from 'vant';
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import fastLoginMixin from '@/mixins/fastLogin';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'FastLogin',
@@ -105,7 +104,7 @@ export default {
       privacyPolicy: false, // 隐私协议
       registerSettings: null,
       agreement: true,
-      dragEnable: false,
+      dragEnable: true,
       dragKey: 0,
       errorMessage: {
         mobile: '',
@@ -158,7 +157,10 @@ export default {
     // 校验成功
     handleSmsSuccess(token) {
       this.userinfo.dragCaptchaToken = token;
-      this.handleSendSms();
+      this.validateMobileOrPsw('mobile');
+      if (this.errorMessage.mobile.length === 0) {
+        this.handleSendSms();
+      }
     },
     // 登录
     handleSubmitSuccess() {

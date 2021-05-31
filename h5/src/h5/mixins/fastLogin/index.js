@@ -74,7 +74,6 @@ export default {
         .then(res => {
           this.userinfo.smsToken = res.smsToken;
           this.countDown();
-          this.dragEnable = false;
           this.userinfo.dragCaptchaToken = '';
         })
         .catch(err => {
@@ -103,16 +102,17 @@ export default {
       if (this.count.codeBtnDisable || !this.validated.mobile) {
         return;
       }
-      if (!this.dragEnable) {
-        this.handleSendSms();
-        return;
-      }
+      // console.log(this.dragEnable);
+      // if (!this.dragEnable) {
+      //
+      // }
       // 验证码组件更新数据
       if (!this.$refs.dragComponent.dragToEnd) {
         Toast('请先完成拼图验证');
         return;
       }
-      this.$refs.dragComponent.initDragCaptcha();
+      this.handleSendSms();
+      // this.$refs.dragComponent.initDragCaptcha();
     },
   },
 };
