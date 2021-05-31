@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\CourseException;
@@ -15,6 +16,12 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class MultiClassExam extends AbstractResource
 {
+    /**
+     * @param ApiRequest $request
+     * @param $multiClassId
+     * @return array
+     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
     public function search(ApiRequest $request, $multiClassId)
     {
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
