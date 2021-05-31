@@ -8,8 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\HomeworkActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Common\CommonException;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -25,7 +24,11 @@ class MultiClassReviewResult extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $answerScene = $this->getAnswerSceneByActivityId($request->query->get('activityId'));
+        $activityId = $request->query->get('activityId');
+        if (empty($activityId)){
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $answerScene = $this->getAnswerSceneByActivityId($activityId);
         $status = $request->query->get('status', 'finished');
 
         if (!in_array($status, ['all', 'finished', 'reviewing', 'doing'])) {
@@ -70,18 +73,9 @@ class MultiClassReviewResult extends AbstractResource
 
     protected function getAnswerSceneByActivityId($activityId)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        if ('testpaper' == $activity['mediaType']) {
-            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
 
-            return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
-        }
-
-        if ('homework' == $activity['mediaType']) {
-            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
-
-            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
-        }
+        return $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
     }
 
     /**
@@ -101,27 +95,11 @@ class MultiClassReviewResult extends AbstractResource
     }
 
     /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
-
-    /**
      * @return AnswerSceneService
      */
     protected function getAnswerSceneService()
     {
         return $this->service('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
-     * @return HomeworkActivityService
-     */
-    protected function getHomeworkActivityService()
-    {
-        return $this->service('Activity:HomeworkActivityService');
     }
 
     /**
