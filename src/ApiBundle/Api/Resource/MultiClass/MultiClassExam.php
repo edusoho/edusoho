@@ -13,7 +13,7 @@ use Biz\Task\Service\TaskService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
-class MultiClassHomeworkTestpaper extends AbstractResource
+class MultiClassExam extends AbstractResource
 {
     public function search(ApiRequest $request, $multiClassId)
     {
