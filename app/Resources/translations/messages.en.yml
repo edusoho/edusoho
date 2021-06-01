@@ -10671,3 +10671,6 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the pr
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
 admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
+
+site.login.change_to_pwd: Change to account login
+site.login.change_to_sms: Change to sms login

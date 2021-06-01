@@ -11915,3 +11915,5 @@ admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
 
 site.content.illegal_status: 该条内容已违规处理
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
+site.login.change_to_pwd: 切换帐号密码登录
+site.login.change_to_sms: 切换手机快捷登录
