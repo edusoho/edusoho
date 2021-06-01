@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '新建班课' }]">
+  <aside-layout :breadcrumbs="[{ name: '新建班课' }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
@@ -89,7 +89,7 @@
         <Schedule :course-id="selectedCourseId" />
       </a-form-item>
 
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
+      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
         <a-space size="large">
           <a-button type="primary" html-type="submit">
             立即创建
@@ -198,3 +198,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.create-multi-class-btn-group {
+  position: fixed;
+  bottom: 0;
+  right: 64px;
+  left: 200px;
+  padding: 24px 0;
+  margin: 0;
+  border-top: solid 1px #ebebeb;
+  background-color: #ffffff;
+}
+</style>
