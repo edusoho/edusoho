@@ -5,8 +5,9 @@ import 'moment';
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
-  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber
+  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb
 } from '@codeages/design-vue';
+import Clipboard from 'v-clipboard';
 
 if (!window.Vue) {
   Vue.use(Menu)
@@ -39,6 +40,9 @@ if (!window.Vue) {
   Vue.use(Tabs)
   Vue.use(TimePicker)
   Vue.use(InputNumber)
+  Vue.use(Breadcrumb)
+
+  Vue.use(Clipboard)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;

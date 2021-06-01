@@ -94,6 +94,7 @@
     "swiper": "2.7.6",
     "typeahead.js": "0.11.1",
     "ua-parser-js": "^0.7.17",
+    "v-clipboard": "^2.2.3",
     "video.js": "4.10.2",
     "vue": "^2.6.11",
     "vue-cropperjs": "4.2.0",

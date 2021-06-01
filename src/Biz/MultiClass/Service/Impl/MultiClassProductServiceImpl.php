@@ -4,6 +4,7 @@ namespace Biz\MultiClass\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\MultiClass\Dao\MultiClassProductDao;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\System\Service\LogService;
@@ -17,6 +18,13 @@ class MultiClassProductServiceImpl extends BaseService implements MultiClassProd
 
     public function createProduct($product)
     {
+        if (!ArrayToolkit::requireds($product, ['title'])) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $product = ArrayToolkit::parts($product, ['title', 'remark']);
+
+        $product['type'] = 'normal';
         $product = $this->getMultiClassProductDao()->create($product);
 
         $this->getLogService()->info('multi_class_product', 'create_product', '新增', $product);

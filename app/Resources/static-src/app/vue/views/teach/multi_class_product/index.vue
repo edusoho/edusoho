@@ -1,83 +1,86 @@
 <template>
-  <a-spin class="multi-class-product" :spinning="getListLoading || ajaxProductLoading">
-    <div class="clearfix">
-      <a-input-search placeholder="请输入产品名称"
-        v-model="title" 
-        style="width: 262px" @search="searchProductList" />
-      
-      <a-button class="pull-right" type="primary" @click="modalVisible = true">
-        新建产品
-      </a-button>
-    </div>
+  <aside-layout :breadcrumbs="[{ name: '产品库' }]">
+    <a-spin class="multi-class-product" :spinning="getListLoading || ajaxProductLoading">
+      <div class="clearfix">
+        <a-input-search placeholder="请输入产品名称"
+          v-model="title"
+          style="width: 262px" @search="searchProductList" />
 
-    <a-row :gutter="24">
-      <a-col :sm="24" :lg="12" :xl="8" v-for="product in productList" :key="product.id">
-        <product-card 
-          class="cd-mt24" 
-          :product="product"
-          @edit="startEditMultiClassProduct"
-          @delete="deleteMultiClassProduct"
-          @lookover="lookoverMultiClass"
+        <a-button class="pull-right" type="primary" @click="modalVisible = true">
+          新建产品
+        </a-button>
+      </div>
+
+      <a-row :gutter="24">
+        <a-col :sm="24" :lg="12" :xl="8" v-for="product in productList" :key="product.id">
+          <product-card
+            class="cd-mt24"
+            :product="product"
+            @edit="startEditMultiClassProduct"
+            @delete="deleteMultiClassProduct"
+            @lookover="lookoverMultiClass"
+          />
+        </a-col>
+      </a-row>
+
+      <div class="text-center">
+        <a-pagination class="mt6"
+          v-if="paging && productList.length > 0"
+          v-model="paging.page"
+          :total="paging.total"
+          show-less-items
         />
-      </a-col>
-    </a-row>
+      </div>
 
-    <div class="text-center">
-      <a-pagination class="mt6"
-        v-if="paging && productList.length > 0" 
-        v-model="paging.page" 
-        :total="paging.total"
-        show-less-items 
-      />
-    </div>
+      <a-modal
+        title="新建产品"
+        okText="确认"
+        cancelText="取消"
+        :width="920"
+        :visible="modalVisible"
+        @cancel="closeModal"
+      >
+        <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
+          <a-form-item label="产品名称">
+            <a-input
+              placeholder="请输入产品名称"
+              v-decorator="['title', { rules: [
+                { required: true, message: '产品名称不能为空' },
+                { max: 20, message: '产品名称不能超过20个字' },
+                { validator: validatorTitle }
+              ] }]"
+            />
+          </a-form-item>
+          <a-form-item label="备注">
+            <a-input
+              placeholder="备注30个字以内"
+              v-decorator="['remark', { rules: [{ max: 30, message: '备注不能超过30个字' }] }]"
+            />
+          </a-form-item>
+        </a-form>
+        <template slot="footer">
+          <a-button key="back" @click="closeModal">
+            取消
+          </a-button>
+          <a-button key="submit" type="primary"
+            :loading="ajaxProductLoading"
+            :disabled="!form.getFieldValue('title')"
+            @click="ajaxMultiClassProduct">
+            确认
+          </a-button>
+        </template>
+      </a-modal>
 
-    <a-modal
-      title="新建产品"
-      okText="确认"
-      cancelText="取消"
-      :width="920"
-      :visible="modalVisible"
-      @cancel="closeModal"
-    >
-      <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
-        <a-form-item label="产品名称">
-          <a-input
-            placeholder="请输入产品名称"
-            v-decorator="['title', { rules: [
-              { required: true, message: '产品名称不能为空' },
-              { max: 20, message: '产品名称不能超过20个字' },
-              { validator: validatorTitle }
-            ] }]"
-          />
-        </a-form-item>
-        <a-form-item label="备注">
-          <a-input
-            placeholder="备注30个字以内"
-            v-decorator="['remark', { rules: [{ max: 30, message: '备注不能超过30个字' }] }]"
-          />
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <a-button key="back" @click="closeModal">
-          取消
-        </a-button>
-        <a-button key="submit" type="primary" 
-          :loading="ajaxProductLoading"
-          :disabled="!form.getFieldValue('title')" 
-          @click="ajaxMultiClassProduct">
-          确认
-        </a-button>
-      </template>
-    </a-modal>
-
-    <MultiClassModal
-      :product="currentProduct"
-      :visible="multiClassModalVisible" 
-      @close="event => multiClassModalVisible = event" />
-  </a-spin>
+      <MultiClassModal
+        :product="currentProduct"
+        :visible="multiClassModalVisible"
+        @close="event => multiClassModalVisible = event" />
+    </a-spin>
+  </aside-layout>
 </template>
 
 <script>
+  import AsideLayout from 'app/vue/views/layouts/aside.vue';
   import _ from 'lodash';
   import { MultiClassProduct, ValidationTitle } from 'common/vue/service';
   import ProductCard from './ProductCard.vue';
@@ -88,6 +91,7 @@
     components: {
       ProductCard,
       MultiClassModal,
+      AsideLayout
     },
     props: {},
     data () {
@@ -121,7 +125,7 @@
             limit: params.limit || this.paging.limit || 10,
           })
           paging.page = (paging.offset / paging.limit) + 1;
-          
+
           this.productList = data;
           this.paging = paging
         } finally {
@@ -161,10 +165,10 @@
 
           try {
             const { error } = await MultiClassProduct.add(values)
-            
+
             this.ajaxProductLoading = false;
             this.modalVisible = false;
-            
+
             if (!error) {
               this.getProductList({ title: this.title })
             }
@@ -191,10 +195,10 @@
 
           try {
             const { error } = await MultiClassProduct.update({...values, id: this.editingProduct.id })
-            
+
             this.editingProduct = null;
             this.modalVisible = false;
-            
+
             if (!error) {
               this.getProductList({ title: this.title })
             }

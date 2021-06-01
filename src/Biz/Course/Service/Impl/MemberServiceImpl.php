@@ -469,6 +469,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseSetIdAndRole($courseId, 'teacher');
     }
 
+    public function findCourseSetTeachersAndAssistant($courseSetId)
+    {
+        return $this->getMemberDao()->findByCourseSetIdAndRoles($courseSetId, ['teacher', 'assistant']);
+    }
+
     public function findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, $role)
     {
         if (empty($multiClassIds)) {
@@ -486,6 +491,17 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         } else {
             return empty($member) || 'teacher' != $member['role'] ? false : true;
+        }
+    }
+
+    public function isCourseAssistant($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if (!$member) {
+            return false;
+        } else {
+            return empty($member) || 'assistant' != $member['role'] ? false : true;
         }
     }
 
@@ -1724,6 +1740,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return 'student';
+    }
+
+    public function findMembersByUserIdAndRoles($userId, $roles)
+    {
+        return $this->getMemberDao()->findByUserIdAndRoles($userId, $roles);
+    }
+
+    public function getMemberByMultiClassIdAndUserId($multiClassId, $userId)
+    {
+        return $this->getMemberDao()->getByMultiClassIdAndUserId($multiClassId, $userId);
     }
 
     /**
