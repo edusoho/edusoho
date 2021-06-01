@@ -1,5 +1,5 @@
 <template>
-  <div class="create-course">
+  <aside-layout :breadcrumbs="['新建课程']" class="create-course">
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="max-width: 860px;">
       <a-form-item label="课程类型">
         <a-radio-group
@@ -187,10 +187,11 @@
         <a-button type="primary" @click="saveCourseCover" :loading="uploading">保存图片</a-button>
       </template>
     </a-modal>
-  </div>
+  </aside-layout>
 </template>
 
 <script>
+  import AsideLayout from 'app/vue/views/layouts/aside.vue';
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
@@ -199,7 +200,12 @@
   export default {
     name: 'CreateCourse',
     props: {},
-    components: { VueCropper },
+
+    components: {
+      VueCropper,
+      AsideLayout
+    },
+
     data () {
       return {
         form: this.$form.createForm(this),
@@ -245,7 +251,7 @@
           values.summary = this.editor.getData()
           values.teachers = [values.teachers]
           values = _.assignIn(values, this.formInfo)
-          
+
           if (this.imgs) {
             values.imgs = this.imgs;
           }
