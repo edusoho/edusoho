@@ -82,7 +82,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         ];
         $assistantIds = $fields['assistantIds'];
 
-        $fields = $this->filterMultiClassFields($fields);
+        $fields = $this->filterMultiClassFields($fields, $id);
 
         $this->beginTransaction();
         try {
@@ -130,11 +130,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
-    public function searchMultiClass($conditions, $orderBy, $start, $limit)
+    public function searchMultiClass($conditions, $orderBys, $start, $limit)
     {
         $conditions = $this->filterConditions($conditions);
 
-        return $this->getMultiClassDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getMultiClassDao()->searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
     }
 
     public function countMultiClass($conditions)
@@ -168,6 +168,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function getMultiClassByTitle($title)
     {
         return $this->getMultiClassDao()->getByTitle($title);
+    }
+
+    public function getMultiClassByCourseId($courseId)
+    {
+        return $this->getMultiClassDao()->getByCourseId($courseId);
     }
 
     private function filterConditions($conditions)
