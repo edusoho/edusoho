@@ -29,7 +29,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->get($id);
     }
 
-    public function countMultiClassCopyEd($id)
+    public function countMultiClassByCopyId($id)
     {
         return $this->getMultiClassDao()->count(['copyId' => $id]);
     }
@@ -163,14 +163,10 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
 
         $multiClass = $this->getMultiClassDao()->get($id);
-        $number = $this->countMultiClassCopyEd($id);
         $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
-        $number = 0 == $number ? '' : $number;
         $newMultiClass = $this->biz['multi_class_copy']->copy($multiClass, [
-            'number' => $number,
-            'productId' => $defaultProduct ? $defaultProduct['id'] : 1,
-            ]);
-        $newMultiClass['number'] = $number;
+            'productId' => $defaultProduct['id'],
+        ]);
 
         $this->getLogService()->info(
             'multi_class',
@@ -178,7 +174,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             "复制班课 - {$multiClass['title']}(#{$id}) 成功",
             ['multiClassId' => $id]);
 
-        return  $newMultiClass;
+        return $newMultiClass;
     }
 
     public function getMultiClassByTitle($title)
@@ -234,9 +230,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
     private function filterConditions($conditions)
     {
-        if (empty($conditions)) {
-            return [];
-        }
         if (isset($conditions['ids']) && empty($conditions['ids'])) {
             $conditions['ids'] = [-1];
         }
@@ -256,13 +249,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             unset($fields['assistantIds']);
         }
 
-        if (isset($fields['courseId']) && !empty($fields['courseId'])) {
+        if (isset($fields['courseId'])) {
             $course = $this->getCourseService()->getCourse($fields['courseId']);
             if (empty($course)) {
                 throw CourseException::NOTFOUND_COURSE();
             }
         }
-        if (isset($fields['productId']) && !empty($fields['productId'])) {
+        if (isset($fields['productId'])) {
             $course = $this->getMultiClassProductService()->getProduct($fields['productId']);
             if (empty($course)) {
                 throw MultiClassException::PRODUCT_NOT_FOUND();
