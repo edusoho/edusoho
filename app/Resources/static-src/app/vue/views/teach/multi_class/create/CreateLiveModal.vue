@@ -203,7 +203,7 @@ export default {
     onCheckAllChange(e) {
       const checkedList = e.target.checked ? checkedListAll : [];
       this.form.setFieldsValue({ ['repeatData']: checkedList });
-      Object.assign(this, {
+      _.assign(this, {
         checkedList,
         indeterminate: false,
         checkAll: e.target.checked
@@ -236,17 +236,38 @@ export default {
       };
     },
 
-    handleOk() {
-      this.form.validateFields(async (err, values) => {
-        if (!err) {
-          let result = null;
-          if (this.createMode) {
+    async createTask(params) {
+      let result = await Course.addLiveTask(this.courseId, params);
+      const { data } = result;
+      this.$emit('change-lesson-directory', { addData: data });
+      this.handleCancel();
+    },
 
+    batchCreation(params) {
+      const { taskNum } = params;
+      let loopNum = _.floor(taskNum / 5);
+
+      if (taskNum % 5 != 0) {
+        loopNum++;
+      }
+
+      for (let index = 0; index < loopNum; index++) {
+        this.createTask(_.assign({}, _.assign(params, {
+          start: index * 5,
+          limit: 5
+        })));
+      }
+    },
+
+    handleOk() {
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          values.startDate = values.startDate._d;
+          if (this.createMode) {
+            this.batchCreation(values);
           } else {
-            result = await Course.addLiveTask(this.courseId, values);
+            this.createTask(values);
           }
-          const { data } = result;
-          console.log(data);
         }
       });
     },

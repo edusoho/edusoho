@@ -101,7 +101,7 @@ export default {
     changeLessonDirectory(params) {
       const sortInfos = [];
 
-      const { data = this.lessonDirectory, add } = params;
+      const { data = this.lessonDirectory, addData } = params;
 
       const loop = (sortInfos, data) => {
         _.forEach(data, lesson => {
@@ -115,8 +115,8 @@ export default {
 
       loop(sortInfos, data);
 
-      if (add) {
-        sortInfos.push(add);
+      if (addData) {
+        loop(sortInfos, addData);
       }
 
       Course.courseSort(this.courseId, { sortInfos }).then(res => {

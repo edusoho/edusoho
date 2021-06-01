@@ -73,7 +73,7 @@ export default {
             title: values.title
           }
           Course.addChapter(this.courseId, params).then(res => {
-            this.$emit('change-lesson-directory', { add: `${this.type}-${res.id}` });
+            this.$emit('change-lesson-directory', { addData: [res] });
             this.handleCancel();
           });
         }
