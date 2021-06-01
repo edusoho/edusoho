@@ -12,7 +12,6 @@ class AssistantPermissionDataTag extends BaseDataTag implements DataTag
      * @param array $arguments 参数
      *
      * @return array
-     *
      */
     public function getData(array $arguments)
     {
