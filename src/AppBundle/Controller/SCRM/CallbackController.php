@@ -48,21 +48,21 @@ class CallbackController extends BaseController
                 $this->getCourseMemberService()->becomeStudent($specs['targetId'], $existUser['id'], $data);
             }
         } catch (\Exception $e) {
-            $this->authenticateUser(array(
+            $this->authenticateUser([
                 'id' => 0,
                 'nickname' => '游客',
-                'currentIp' =>  '',
-                'roles' => array(),
-            ));
+                'currentIp' => '',
+                'roles' => [],
+            ]);
+
             return $this->createJsonResponse(['message' => $e->getMessage()]);
         }
-
 
         $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
         $this->authenticateUser($existUser);
 
         $param = ['id' => $specs['targetId']];
-        if($this->setting('wap.version') == 2 && DeviceToolkit::isMobileClient()) {
+        if (2 == $this->setting('wap.version') && DeviceToolkit::isMobileClient()) {
             $token = $this->getUserService()->makeToken('mobile_login', $existUser['id'], time() + 3600 * 24 * 30, []);
             $param['loginToken'] = $token;
         }
@@ -72,6 +72,10 @@ class CallbackController extends BaseController
 
     protected function registerUser($userInfo)
     {
+        $mobileUser = $this->getUserService()->getUserByVerifiedMobile($userInfo['phone']);
+        if (!empty($mobileUser)) {
+            return $mobileUser;
+        }
         $registration = [];
         $registration['nickname'] = 'scrm_'.$this->getRandomString(5);
         $registration['email'] = 'scrm_'.$this->getRandomString(5).'@edusoho.net';
