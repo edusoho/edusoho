@@ -69,7 +69,7 @@ class CallbackController extends BaseController
         );
         $this->getUserService()->updateUserProfile($user['id'], ['mobile' => $userInfo['phone']]);
 
-        return $this->getUserDao()->update($user['id'], ['scrmUuid' => $userInfo['unionId']]);
+        return $this->getUserDao()->update($user['id'], ['scrmUuid' => $userInfo['unionId'], 'verifyMobile' => $userInfo['phone']]);
     }
 
     private function filterQuery($query)
