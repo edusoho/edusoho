@@ -124,13 +124,19 @@ class MultiClass extends AbstractResource
         if (!empty($conditions['keywords'])) {
             if (!$searchPrepare) {
                 $multiClass = $this->getMultiClassService()->findMultiClassByTitleLike($conditions['keywords']);
-                $prepareConditions['ids'] = ArrayToolkit::column($multiClass, 'id');
-                $searchPrepare = !$searchPrepare;
+                $ids = ArrayToolkit::column($multiClass, 'id');
+                if (!empty($ids)) {
+                    $prepareConditions['ids'] = $ids;
+                    $searchPrepare = !$searchPrepare;
+                }
             }
             if (!$searchPrepare) {
                 $courses = $this->getCourseService()->findCourseByCourseSetTitleLike($conditions['keywords']);
-                $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-                $searchPrepare = !$searchPrepare;
+                $courseIds = ArrayToolkit::column($courses, 'id');
+                if (!empty($courseIds)) {
+                    $prepareConditions['courseIds'] = $courseIds;
+                    $searchPrepare = !$searchPrepare;
+                }
             }
             if (!$searchPrepare) {
                 $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
