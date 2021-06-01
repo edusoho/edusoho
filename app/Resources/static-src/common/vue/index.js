@@ -7,6 +7,7 @@ import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
   Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty
 } from '@codeages/design-vue';
+import Clipboard from 'v-clipboard';
 
 if (!window.Vue) {
   Vue.use(Menu)
@@ -41,6 +42,8 @@ if (!window.Vue) {
   Vue.use(InputNumber)
   Vue.use(Breadcrumb)
   Vue.use(Empty)
+
+  Vue.use(Clipboard)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;
