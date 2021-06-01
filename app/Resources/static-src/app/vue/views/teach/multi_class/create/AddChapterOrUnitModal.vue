@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { Course } from 'common/vue/service';
+
 export default {
   name: 'AddChapterOrUnitModal',
 
@@ -31,7 +33,13 @@ export default {
       default: false
     },
 
-    type: String
+    type: String,
+
+    courseId: {
+      type: [Number, String],
+      required: true,
+      default: 0
+    }
   },
 
   data() {
@@ -60,7 +68,14 @@ export default {
     handleOk() {
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          const params = {
+            type: this.type,
+            title: values.title
+          }
+          Course.addChapter(this.courseId, params).then(res => {
+            this.$emit('change-lesson-directory', { addData: [res] });
+            this.handleCancel();
+          });
         }
       });
     },
