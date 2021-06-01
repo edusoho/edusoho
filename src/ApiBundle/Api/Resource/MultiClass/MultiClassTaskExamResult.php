@@ -32,7 +32,7 @@ class MultiClassTaskExamResult extends AbstractResource
         }
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
 
-        $status = $request->query->get('status', 'finished');
+        $status = $request->query->get('status', 'all');
         if (!in_array($status, ['all', 'finished', 'reviewing', 'doing'])) {
             $status = 'all';
         }
