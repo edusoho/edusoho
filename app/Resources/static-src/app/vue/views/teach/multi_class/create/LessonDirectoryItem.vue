@@ -4,7 +4,7 @@
       {{ getTitle }}
     </div>
     <div class="start-time pull-left">{{ getStartTime }}</div>
-    <div class="duration pull-left">60min</div>
+    <div class="duration pull-left">{{ getLength }}</div>
     <div class="actions pull-left">
       <a-space size="large">
         <a-icon type="edit" style="color: #46c37b;" @click="handleEditClick" />
@@ -45,7 +45,13 @@ export default {
 
     getStartTime() {
       const { type, startTime } = this.lesson;
-      if (type === 'live') return startTime;
+      if (type === 'live') return this.$dateFormat(startTime, 'YYYY/MM/DD HH:mm:ss');
+      return '- -';
+    },
+
+    getLength() {
+      const { type, length } = this.lesson;
+      if (type === 'live') return `${length} 分钟`;
       return '- -';
     }
   },
