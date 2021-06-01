@@ -28,7 +28,8 @@
               ]}]"
               placeholder="请选择课程"
               option-filter-prop="children"
-              :filter-option="filterOption"
+              :filter-option="false"
+              @search="handleSearchCourse"
               @change="handleChangeCourse"
             >
               <a-select-option v-for="course in courses" :key="course.id">
@@ -135,8 +136,11 @@ export default {
   },
 
   methods: {
-    fetchCourse() {
-      Me.get('teach_courses').then(res => {
+    fetchCourse(params = {}) {
+      _.assign(params, {
+        isDefault: 1
+      });
+      Me.get('teach_courses', { params }).then(res => {
         this.courses = res.data;
       });
     },
@@ -173,11 +177,11 @@ export default {
       result ? callback() : callback('产品名称不能与已创建的相同');
     }, 300),
 
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
-    },
+    handleSearchCourse: _.debounce(function(input) {
+      this.fetchCourse({
+        titleLike: input
+      });
+    }, 300),
 
     handleSubmit(e) {
       e.preventDefault();
