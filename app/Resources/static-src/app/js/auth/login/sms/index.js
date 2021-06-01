@@ -61,7 +61,7 @@ let smsEvent = () => {
       }).then((res) => {
         notify('success', Translator.trans('notify.sms_send_success.message'));
         $smsCode.removeClass('disabled');
-        countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 20);
+        countDown($('.js-sms-send'), $('#js-fetch-btn-text'), 120);
         $('[name="sms_token"]').val(res.smsToken);
       }).catch(()=> {
         $smsCode.removeClass('disabled');
