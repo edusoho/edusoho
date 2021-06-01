@@ -52,6 +52,7 @@
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
+          @popupScroll="popupScroll"
         >
           <a-select-option v-for="product in products" :key="product.id">
             {{ product.title }}
@@ -162,6 +163,13 @@ export default {
         this.products = res.data;
       });
     },
+
+    popupScroll: _.debounce((e) => {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      if (scrollHeight - offsetHeight) {
+
+      }
+    }, 300),
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
