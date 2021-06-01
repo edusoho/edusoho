@@ -70,13 +70,19 @@ export default {
         });
     },
     handleSendSms() {
+      if (this.userinfo.dragCaptchaToken === '') {
+        this.$refs.dragComponent.initDragCaptcha();
+        Toast.fail('拖动验证码失效，请重新验证！');
+        return;
+      }
       this.sendSmsSend(this.userinfo)
         .then(res => {
           this.userinfo.smsToken = res.smsToken;
-          this.countDown();
           this.userinfo.dragCaptchaToken = '';
+          this.countDown();
         })
         .catch(err => {
+          this.$refs.dragComponent.initDragCaptcha();
           switch (err.code) {
             case 4030301:
             case 4030302:
