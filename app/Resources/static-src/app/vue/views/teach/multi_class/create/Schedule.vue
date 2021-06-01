@@ -3,11 +3,11 @@
     排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
     <div class="clearfix">
       <a-space size="large">
-        <a-button type="primary" @click="showCreateLiveModal">
+        <a-button type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
           <a-icon type="plus" />
           添加直播课时
         </a-button>
-        <a-dropdown :trigger="['click']">
+        <a-dropdown :disabled="courseId == 0" :trigger="['click']">
           <a-button type="primary">
             <a-icon type="plus" />
             章/节
