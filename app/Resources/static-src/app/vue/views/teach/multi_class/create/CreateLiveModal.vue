@@ -264,7 +264,20 @@ export default {
         if (!err) {
           values.startDate = values.startDate._d;
           if (this.createMode) {
-            this.batchCreation(values);
+            this.handleCancel();
+
+            let that = this;
+
+            this.$confirm({
+              title: '提醒',
+              content: `确定批量新增 ${values.taskNum} 个直播课时吗?`,
+              onOk() {
+                that.batchCreation(values);
+              },
+              onCancel() {
+                that.handleCancel(true);
+              }
+            });
           } else {
             this.createTask(values);
           }
@@ -272,8 +285,8 @@ export default {
       });
     },
 
-    handleCancel() {
-      this.$emit('handle-cancel');
+    handleCancel(visible = false) {
+      this.$emit('handle-cancel', visible);
     }
   }
 }

@@ -94,8 +94,8 @@ export default {
       this.createLiveVisible = true;
     },
 
-    hideCreateLiveModal() {
-      this.createLiveVisible = false;
+    hideCreateLiveModal(visible) {
+      this.createLiveVisible = visible;
     },
 
     changeLessonDirectory(params) {
