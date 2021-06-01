@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\SCRM;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
@@ -30,30 +31,43 @@ class CallbackController extends BaseController
                 return $this->createJsonResponse(['message' => $e->getMessage(), 'trans' => $e->getTraceAsString()]);
             }
         }
-        $adminUser = $this->getUserService()->getUserByType('system');
-        $this->authenticateUser($adminUser);
-        $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-        $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
-        $courseMember = $this->getCourseMemberService()->getCourseMember($specs['targetId'], $existUser['id']);
-        if (empty($courseMember)) {
-            $data = [
-                'price' => $orderInfo['payAmount'],
-                'remark' => '通过SCRM添加',
-                'source' => 'outside',
-                'reason' => OperateReason::JOIN_BY_IMPORT,
-                'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
-            ];
-            try {
-                $courseMember = $this->getCourseMemberService()->becomeStudent($specs['targetId'], $existUser['id'], $data);
-            } catch (\Exception $e) {
-                return $this->createJsonResponse(['message' => $e->getMessage(), 'trans' => $e->getTraceAsString()]);
+        try {
+            $adminUser = $this->getUserService()->getUserByType('system');
+            $this->authenticateUser($adminUser);
+            $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
+            $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($specs['targetId'], $existUser['id']);
+            if (empty($courseMember)) {
+                $data = [
+                    'price' => $orderInfo['payAmount'],
+                    'remark' => '通过SCRM添加',
+                    'source' => 'outside',
+                    'reason' => OperateReason::JOIN_BY_IMPORT,
+                    'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
+                ];
+                $this->getCourseMemberService()->becomeStudent($specs['targetId'], $existUser['id'], $data);
             }
+        } catch (\Exception $e) {
+            $this->authenticateUser(array(
+                'id' => 0,
+                'nickname' => '游客',
+                'currentIp' =>  '',
+                'roles' => array(),
+            ));
+            return $this->createJsonResponse(['message' => $e->getMessage()]);
         }
 
-        $return = $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
+
+        $this->getScrmSdk()->callbackTrading(['orderId' => $query['order_id'], 'status' => 'success']);
         $this->authenticateUser($existUser);
 
-        return $this->redirect($this->generateUrl('my_course_show', ['id' => $specs['targetId']]));
+        $param = ['id' => $specs['targetId']];
+        if($this->setting('wap.version') == 2 && DeviceToolkit::isMobileClient()) {
+            $token = $this->getUserService()->makeToken('mobile_login', $existUser['id'], time() + 3600 * 24 * 30, []);
+            $param['loginToken'] = $token;
+        }
+
+        return $this->redirect($this->generateUrl('my_course_show', $param));
     }
 
     protected function registerUser($userInfo)
