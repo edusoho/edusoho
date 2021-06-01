@@ -5,19 +5,17 @@ namespace ApiBundle\Api\Resource\AssistantPermission;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Common\CommonException;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class AssistantPermission extends AbstractResource
 {
     /**
      * @param ApiRequest $request
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT")
      */
     public function get(ApiRequest $request, $portal)
     {
@@ -32,7 +30,6 @@ class AssistantPermission extends AbstractResource
     /**
      * @param ApiRequest $request
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
@@ -47,10 +44,14 @@ class AssistantPermission extends AbstractResource
     /**
      * @param ApiRequest $request
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function add(ApiRequest $request)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2_assistant_manage')) {
+            throw new AccessDeniedException();
+        }
+
         $permissions = $request->request->get('permissions');
         if (empty($permissions)) {
             throw CommonException::ERROR_PARAMETER();
