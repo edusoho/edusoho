@@ -4,7 +4,7 @@ namespace ESCloud\SDK\Service;
 
 class ScrmService extends BaseService
 {
-    protected $host = 'scrm-service.qiqiquyu.net';
+    protected $host = 'scrm.edusoho.com';
 
     protected $service = 'scrm';
 

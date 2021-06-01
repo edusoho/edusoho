@@ -177,6 +177,14 @@ class ESCloudSDK
     }
 
     /**
+     * @return \ESCloud\SDK\Service\SearchService
+     */
+    public function getSearchService()
+    {
+        return $this->getService('Search', true);
+    }
+
+    /**
      * 根据服务名获得服务实例
      *
      * @param string $name 服务名
@@ -192,8 +200,8 @@ class ESCloudSDK
         $lowerName = strtolower($name);
         $options = empty($this->options['service'][$lowerName]) ? array() : $this->options['service'][$lowerName];
 
-        $class = __NAMESPACE__.'\\Service\\'.$name.'Service';
-        $auth = new Auth($this->options['access_key'], $this->options['secret_key'],  $useJwt);
+        $class = __NAMESPACE__ . '\\Service\\' . $name . 'Service';
+        $auth = new Auth($this->options['access_key'], $this->options['secret_key'], $useJwt);
         $this->services[$name] = new $class($auth, $options, $this->logger, $this->httpClient);
 
         return $this->services[$name];
