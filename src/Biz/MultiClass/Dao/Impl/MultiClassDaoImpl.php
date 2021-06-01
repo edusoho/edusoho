@@ -3,9 +3,9 @@
 namespace Biz\MultiClass\Dao\Impl;
 
 use Biz\MultiClass\Dao\MultiClassDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
+class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
 {
     protected $table = 'multi_class';
 
