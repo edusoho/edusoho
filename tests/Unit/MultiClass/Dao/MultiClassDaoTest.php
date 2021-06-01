@@ -85,6 +85,6 @@ class MultiClassDaoTest extends BaseTestCase
      */
     protected function getMultiClassDao()
     {
-        return $this->createDao('MultiClassDao');
+        return $this->createDao('MultiClass:MultiClassDao');
     }
 }
