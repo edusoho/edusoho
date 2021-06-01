@@ -7,7 +7,13 @@
     <div class="duration pull-left">{{ getLength }}</div>
     <div class="actions pull-left">
       <a-space size="large">
-        <a-icon type="edit" style="color: #46c37b;" @click="handleEditClick" />
+        <a-icon
+          type="edit"
+          data-toggle="modal"
+          data-target="#modal"
+          :data-url="`/course/${courseId}/task/${lesson.id}/update`"
+          style="color: #46c37b;"
+        />
         <a-icon type="delete" style="color: #fe4040;" @click="handleDeleteClick" />
       </a-space>
     </div>
@@ -21,17 +27,18 @@ export default {
   props: {
     lesson: {
       type: Object,
-      required: true,
-      default() {
-        return {}
-      }
+      required: true
     },
 
     className: {
       type: String,
-      required: true,
-      default: ''
-    }
+      required: true
+    },
+
+    courseId: {
+      type: [Number, String],
+      required: true
+    },
   },
 
   computed: {

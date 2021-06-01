@@ -23,7 +23,11 @@
       </a-button>
     </div>
 
-    <lesson-directory :lesson-directory="lessonDirectory" @change-lesson-directory="changeLessonDirectory" />
+    <lesson-directory
+      :courseId="courseId"
+      :lesson-directory="lessonDirectory"
+      @change-lesson-directory="changeLessonDirectory"
+    />
     <create-live-modal
       :courseId="courseId"
       :visible="createLiveVisible"

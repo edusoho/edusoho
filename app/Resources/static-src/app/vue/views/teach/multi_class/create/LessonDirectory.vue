@@ -17,28 +17,28 @@
       <template v-for="firstLesson in lessonDirectory">
         <a-tree-node :class="`tree-node-${firstLesson.type}`" :key="firstLesson.id">
           <template slot="title">
-            <lesson-directory-item :lesson="firstLesson" class-name='first' />
+            <lesson-directory-item :courseId="courseId" :lesson="firstLesson" class-name='first' />
           </template>
 
           <template v-if="firstLesson.children">
             <template v-for="secondLesson in firstLesson.children">
               <a-tree-node :class="`tree-node-${secondLesson.type}`" :key="secondLesson.id">
                 <template slot="title">
-                  <lesson-directory-item :lesson="secondLesson" class-name='second' />
+                  <lesson-directory-item :courseId="courseId" :lesson="secondLesson" class-name='second' />
                 </template>
 
                 <template v-if="secondLesson.children">
                   <template v-for="thirdLesson in secondLesson.children">
                     <a-tree-node :class="`tree-node-${thirdLesson.type}`" :key="thirdLesson.id">
                       <template slot="title">
-                        <lesson-directory-item :lesson="thirdLesson" class-name='third' />
+                        <lesson-directory-item :courseId="courseId" :lesson="thirdLesson" class-name='third' />
                       </template>
 
                       <template v-if="thirdLesson.tasks">
                         <template v-for="fourLesson in thirdLesson.tasks">
                           <a-tree-node class="tree-node-task" :key="fourLesson.id">
                             <template slot="title">
-                              <lesson-directory-item :lesson="fourLesson" class-name='four' />
+                              <lesson-directory-item :courseId="courseId" :lesson="fourLesson" class-name='four' />
                             </template>
                           </a-tree-node>
                         </template>
@@ -51,7 +51,7 @@
                   <template v-for="thirdLesson in secondLesson.tasks">
                     <a-tree-node class="tree-node-task" :key="thirdLesson.id">
                       <template slot="title">
-                        <lesson-directory-item :lesson="thirdLesson" class-name='third' />
+                        <lesson-directory-item :courseId="courseId" :lesson="thirdLesson" class-name='third' />
                       </template>
                     </a-tree-node>
                   </template>
@@ -64,7 +64,7 @@
             <template v-for="secondLesson in firstLesson.tasks">
               <a-tree-node class="tree-node-task" :key="secondLesson.id">
                 <template slot="title">
-                  <lesson-directory-item :lesson="secondLesson" class-name='second' />
+                  <lesson-directory-item :courseId="courseId" :lesson="secondLesson" class-name='second' />
                 </template>
               </a-tree-node>
             </template>
@@ -90,12 +90,14 @@ export default {
   },
 
   props: {
+    courseId: {
+      type: [Number, String],
+      required: true
+    },
+
     lessonDirectory: {
       type: Array,
-      required: true,
-      default() {
-        return []
-      }
+      required: true
     }
   },
 
