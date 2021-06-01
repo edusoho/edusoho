@@ -2,9 +2,9 @@
 
 namespace Biz\MultiClass\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MultiClassProductDao extends GeneralDaoInterface
+interface MultiClassProductDao extends AdvancedDaoInterface
 {
     public function getByTitle($title);
 
