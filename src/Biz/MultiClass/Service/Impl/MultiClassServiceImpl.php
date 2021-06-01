@@ -14,6 +14,11 @@ use Biz\System\Service\LogService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
+    public function findMultiClassByTitleLike($title)
+    {
+        return $this->getMultiClassDao()->findMultiClassByTitleLike($title);
+    }
+
     public function findByProductIds(array $productIds)
     {
         return $this->getMultiClassDao()->findByProductIds($productIds);

@@ -13,6 +13,17 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
 
     const MULTI_CLASS_ORDER_BY = ['createdTime'];
 
+    public function findMultiClassByTitleLike($title)
+    {
+        if (empty($title)) {
+            $title = '';
+        }
+        $title = '%'.$title.'%';
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+
+        return $this->db()->fetchAll($sql, [$title]);
+    }
+
     public function findByProductIds(array $productIds)
     {
         return $this->findInField('productId', array_values($productIds));
@@ -62,7 +73,7 @@ class MultiClassDaoImpl extends GeneralDaoImpl implements MultiClassDao
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
-                'id IN ( :ids)',
+                'multi_class.id IN ( :ids)',
                 'productId = :productId',
                 'courseId IN ( :courseIds)',
                 'copyId = :copyId',

@@ -6,6 +6,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ReportService;
+use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Symfony\Component\HttpFoundation\Request;
 

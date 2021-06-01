@@ -119,12 +119,21 @@ class MultiClass extends AbstractResource
     private function prepareConditions($conditions)
     {
         $prepareConditions = [];
+        $searchPrepare = false;
+
         if (!empty($conditions['keywords'])) {
-            $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
-            if (empty($userIds)) {
+            if (!$searchPrepare) {
+                $multiClass = $this->getMultiClassService()->findMultiClassByTitleLike($conditions['keywords']);
+                $prepareConditions['ids'] = ArrayToolkit::column($multiClass, 'id');
+                $searchPrepare = !$searchPrepare;
+            }
+            if (!$searchPrepare) {
                 $courses = $this->getCourseService()->findCourseByCourseSetTitleLike($conditions['keywords']);
                 $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            } else {
+                $searchPrepare = !$searchPrepare;
+            }
+            if (!$searchPrepare) {
+                $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
                 $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
                     'userIds' => $userIds,
                     'role' => 'teacher', ],
@@ -151,14 +160,14 @@ class MultiClass extends AbstractResource
         $prepareOrderBys = [];
 
         if (!empty($orderBys['priceSort'])) {
-            $prepareOrderBys['price'] = 'DESC' == $orderBys['priceSort'] ? 'DESC' : 'ASC';
+            $prepareOrderBys['price'] = 'ASC' == $orderBys['priceSort'] ? 'ASC' : 'DESC';
         }
 
-        if (!empty($orderBys['studentNumbSort'])) {
-            $prepareOrderBys['studentNum'] = 'DESC' == $orderBys['studentNumberSort'] ? 'DESC' : 'ASC';
+        if (!empty($orderBys['studentNumSort'])) {
+            $prepareOrderBys['studentNum'] = 'ASC' == $orderBys['studentNumSort'] ? 'ASC' : 'DESC';
         }
 
-        $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+        $prepareOrderBys['createdTime'] = 'ASC' == $orderBys['createdTimeSort'] ? 'ASC' : 'DESC';
 
         return $prepareOrderBys;
     }
