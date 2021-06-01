@@ -14,6 +14,28 @@ use Biz\User\Service\UserService;
 
 class MultiClassServiceTest extends BaseTestCase
 {
+    public function testFindMultiClassByTitleLike()
+    {
+        $this->createMultiClass();
+        $findMultiClass = $this->getMultiClassService()->findMultiClassByTitleLike('multi class');
+        $this->assertCount(1, $findMultiClass);
+    }
+
+    public function testFindByProductIds()
+    {
+        $multiClass1 = $this->createMultiClass();
+        $multiClass2 = $this->createMultiClass();
+        $findMultiClass = $this->getMultiClassService()->findByProductIds([$multiClass1['productId'], $multiClass2['productId']]);
+        $this->assertCount(2, $findMultiClass);
+    }
+
+    public function testFindByProductId()
+    {
+        $multiClass = $this->createMultiClass();
+        $findMultiClass = $this->getMultiClassService()->findByProductIds($multiClass);
+        $this->assertCount(1, $findMultiClass);
+    }
+
     public function testGetMultiClass()
     {
         $createMultiClass = $this->createMultiClass();
@@ -21,6 +43,14 @@ class MultiClassServiceTest extends BaseTestCase
         $getMultiClass = $this->getMultiClassService()->getMultiClass($createMultiClass['id']);
 
         $this->assertArrayValueEquals($createMultiClass, $getMultiClass);
+    }
+
+    public function testCountMultiClassCopyEd()
+    {
+        $multiClass = $this->createMultiClass();
+        $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
+        $multiClassCount = $this->getMultiClassService()->countMultiClassCopyEd($multiClass['id']);
+        $this->assertEquals(1, $multiClassCount);
     }
 
     public function testCreateMultiClass()
@@ -108,6 +138,13 @@ class MultiClassServiceTest extends BaseTestCase
         $multiClass = $this->createMultiClass();
         $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
         $this->assertEquals($multiClass['title'].'(复制)', $newMultiClass['title']);
+    }
+
+    public function testGetMultiClassByCourseId()
+    {
+        $createMultiClass = $this->createMultiClass();
+        $getMultiClass = $this->getMultiClassService()->getMultiClassByCourseId($createMultiClass['courseId']);
+        $this->assertNotEmpty($getMultiClass);
     }
 
     protected function createMultiClass()
