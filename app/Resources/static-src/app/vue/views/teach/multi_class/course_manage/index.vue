@@ -1,5 +1,5 @@
 <template>
-  <div class="course-manage">
+  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: 'XXX课程' }]" class="course-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
@@ -40,12 +40,18 @@
     </div>
 
     <router-view />
-  </div>
+  </aside-layout>
 </template>
 
 <script>
+import AsideLayout from 'app/vue/views/layouts/aside.vue';
+
 export default {
   name: 'MultiClassCourseManage',
+
+  components: {
+    AsideLayout
+  },
 
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-   <aside-layout :breadcrumbs="['班课管理']">
+   <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
     <a-spin :spinning="getListLoading">
       <div class="clearfix mb6">
         <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />

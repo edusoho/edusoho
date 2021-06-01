@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="['产品库']">
+  <aside-layout :breadcrumbs="[{ name: '产品库' }]">
     <a-spin class="multi-class-product" :spinning="getListLoading || ajaxProductLoading">
       <div class="clearfix">
         <a-input-search placeholder="请输入产品名称"

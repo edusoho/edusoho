@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="['新建班课']">
+  <aside-layout :breadcrumbs="[{ name: '新建班课' }]">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"

@@ -1,7 +1,7 @@
 <template>
   <div class="aside-layout">
     <a-breadcrumb class="aside-layout-header" separator=">">
-      <a-breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb">{{ breadcrumb }}</a-breadcrumb-item>
+      <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">{{ breadcrumb.name }}</a-breadcrumb-item>
     </a-breadcrumb>
     <div class="aside-layout-main">
       <slot />

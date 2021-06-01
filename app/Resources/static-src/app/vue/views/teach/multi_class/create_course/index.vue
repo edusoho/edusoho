@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="['新建课程']" class="create-course">
+  <aside-layout :breadcrumbs="[{ name: '新建课程' }]" class="create-course">
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="max-width: 860px;">
       <a-form-item label="课程类型">
         <a-radio-group
