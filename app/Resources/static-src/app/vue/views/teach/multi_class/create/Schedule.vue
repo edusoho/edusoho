@@ -131,7 +131,7 @@ export default {
 
     hideAddChapterOrUnitModal() {
       this.addChapterOrUnitVisible = false;
-    },
+    }
   }
 }
 </script>
