@@ -11,4 +11,8 @@ interface MultiClassDao extends GeneralDaoInterface
     public function findByProductId($productId);
 
     public function getByTitle($title);
+
+    public function getByCourseId($courseId);
+
+    public function searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
 }

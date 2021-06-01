@@ -43,29 +43,37 @@ class MultiClassLesson extends AbstractResource
         $items = $this->convertToLeadingItems($items, $course, $request->getHttpRequest()->isSecure(), 0);
         $items = $this->convertToTree($items);
         $teacher = $this->getCourseMemberService()->getMultiClassMembers($course['id'], $multiClassId, 'teacher');
-        $assistants = $this->getCourseMemberService()->getMultiClassMembers($course['id'], $multiClassId,'assistant');
+        $assistants = $this->getCourseMemberService()->getMultiClassMembers($course['id'], $multiClassId, 'assistant');
         $questionNum = $this->getThreadService()->countThreads(['courseId' => $course['id'], 'type' => 'question']);
         $totalStudentNum = $this->getCourseMemberService()->getCourseStudentCount($course['id']);
         $necessaryItems = [];
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $units = $item['children'];
-            foreach ($units as $unit){
+            foreach ($units as $unit) {
                 $lessons = $unit['children'];
-                foreach ($lessons as &$lesson){
-                    if ($lesson['isExist']){
+                foreach ($lessons as &$lesson) {
+                    if ($lesson['isExist']) {
                         $lesson['chapterTitle'] = $item['title'];
                         $lesson['unitTitle'] = $unit['title'];
-                        foreach ($lesson['tasks'] as $key => $task){
-                            if ($task['mode'] === 'lesson' && $task['isLesson']){
-                                $lesson['tasks'] = $task;
-                            }
-                        }
                         $lesson['teacher'] = $teacher ? $teacher[0] : [];
                         $lesson['assistant'] = $assistants;
                         $lesson['questionNum'] = $questionNum;
                         $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $lesson['tasks']['id']]);
                         $lesson['totalStudentNum'] = $totalStudentNum;
-                        $necessaryItems[] = $lesson;
+                        array_multisort(array_column($lesson['tasks'], 'seq'), SORT_ASC, $lesson['tasks']);
+                        foreach ($lesson['tasks'] as $key => $task) {
+                            if (isset($task['type']) && $task['type'] === 'live') {
+                                if (time() < $task['activity']['startTime']) {
+                                    $task['activity']['ext']['progressStatus'] = 'created';
+                                } elseif (time() >= $task['activity']['startTime'] && time() < $task['activity']['endTime']) {
+                                    $task['activity']['ext']['progressStatus'] = 'start';
+                                } elseif (time() > $task['activity']['endTime']) {
+                                    $task['activity']['ext']['progressStatus'] = 'closed';
+                                }
+                            }
+                            $lesson['tasks'] = $task;
+                            $necessaryItems[] = $lesson;
+                        }
                     }
                 }
             }
