@@ -8,13 +8,6 @@ use ESCloud\SDK\Service\ScrmService;
 
 class SCRMTradeServiceImpl extends BaseService implements SCRMTradeService
 {
-    public function verifyOrder($orderId, $token)
-    {
-        $orderInfo = $this->getSCRMService()->verifyOrder($orderId, $token);
-        if (empty($orderInfo['uuid'])) {
-        }
-    }
-
     /**
      * @return ScrmService
      */

@@ -7,11 +7,6 @@ use Biz\SCRM\Service\SCRMTradeService;
 
 class SCRMTradeServiceTest extends BaseTestCase
 {
-    public function testGetUserByToken()
-    {
-        return $this->getSCRMTradeService()->getStatus();
-    }
-
     /**
      * @return SCRMTradeService
      */

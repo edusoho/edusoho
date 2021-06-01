@@ -8,12 +8,6 @@ use ESCloud\SDK\Service\ScrmService;
 
 class SCRMUserServiceImpl extends BaseService implements SCRMUserService
 {
-    public function getUserByToken($token)
-    {
-        $result = $this->getSCRMSdk()->getUserByToken($token);
-        $user = $this->formatUser($result);
-    }
-
     protected function formatUser($user)
     {
         return $user;
