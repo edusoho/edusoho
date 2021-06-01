@@ -1,27 +1,29 @@
 <template>
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
     <a-spin :spinning="getListLoading">
-      <div class="clearfix mb6">
+      <div class="clearfix cd-mb24">
         <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
         <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
 
       <a-table :columns="columns"
-        :pagination="false"
-        :data-source="multiClassList">
+        :pagination="paging"
+        :data-source="multiClassList"
+        @change="change"
+        :rowKey="record => record.id">
         <a slot="class_title" slot-scope="text, record"
           href="javascript:;"
           @click="goToMultiClassManage(record.id)">
-          {{ text }}
-        </a>
-        <a slot="course" slot-scope="text, record"
-          :href="`/course/${record.courseId}`">
           {{ text }}
         </a>
         <a slot="taskNum" slot-scope="text, record"
           href="javascript:;"
           @click="goToMultiClassManage(record.id)">
           {{ record.endTaskNum }}/{{ record.taskNum }}
+        </a>
+        <a slot="course" slot-scope="course"
+          :href="`/course/${course.id}`">
+          {{ course.title || course.courseSetTitle }}
         </a>
         <template slot="assistant" slot-scope="assistant">
           {{ assistant ? assistant.join('、') : '' }}
@@ -60,19 +62,9 @@
           </a-dropdown>
         </template>
       </a-table>
-
-      <div class="text-center">
-        <a-pagination class="mt6"
-          v-if="paging && multiClassList.length > 0"
-          v-model="paging.page"
-          :total="paging.total"
-          show-less-items
-        />
-      </div>
     </a-spin>
    </aside-layout>
 </template>
-
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
@@ -92,8 +84,7 @@ const columns = [
   {
     title: '所属产品',
     dataIndex: 'product',
-    filters: [
-    ],
+    filters: [],
   },
   {
     title: '价格',
@@ -146,8 +137,9 @@ export default {
       multiClassList: [],
       getListLoading: false,
       paging: {
+        total: 0,
         offset: 0,
-        limit: 10,
+        pageSize: 10,
       },
     }
   },
@@ -166,9 +158,10 @@ export default {
         const { data, paging } = await MultiClass.search({
           keywords: params.keywords || '',
           offset: params.offset || this.paging.offset || 0,
-          limit: params.limit || this.paging.limit || 10,
+          limit: params.pageSize || this.paging.pageSize || 10,
         })
         paging.page = (paging.offset / paging.limit) + 1;
+        paging.pageSize = Number(paging.limit);
 
         this.multiClassList = data;
         this.paging = paging;
@@ -200,6 +193,19 @@ export default {
         name: 'MultiClassCourseManage',
         params: { id }
       })
+    },
+
+    change(pagination, filters, sorter) {
+      const params = {}
+
+      if (pagination) {
+        params.offset = pagination.pageSize * (pagination.current - 1)
+        params.pageSize = pagination.pageSize
+      }
+
+      if (Object.keys(params).length > 0) {
+        this.getMultiClassList(params)
+      }
     }
   }
 }

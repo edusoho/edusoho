@@ -18,6 +18,20 @@ export const Course = {
     return apiClient.post(`${baseUrl}/${courseId}/item_sort`, params)
   },
 
+  // 删除课时
+  async deleteTask(courseId, taskId) {
+    return apiClient.delete(`${baseUrl}/${courseId}/task/${taskId}`)
+  },
+
+  // 更新课时状态
+  async updateTaskStatus(courseId, taskId, params) {
+    return apiClient.patch(`${baseUrl}/${courseId}/task_status/${taskId}`, params)
+  },
+
+  async getSingleCourse(courseId) {
+    return apiClient.get(`${baseUrl}/${courseId}`)
+  },
+
   // 新增章节
   async addChapter(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/chapter`, params)

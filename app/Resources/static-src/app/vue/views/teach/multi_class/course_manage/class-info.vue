@@ -20,9 +20,19 @@
 
       <teach-mode slot="mode" slot-scope="mode, record" :record="record" />
 
-      <template slot="createdTime" slot-scope="createdTime">{{ createdTime }}</template>
-
-      <template slot="time" slot-scope="time">60min</template>
+      <template slot="startTime" slot-scope="startTime, record">
+        <template v-if="record.tasks.type === 'live'">
+          {{ $dateFormat(record.tasks.startTime, 'YYYY-MM-DD HH:mm') }}
+        </template>
+        <template v-else> -- </template>
+      </template>
+      <!-- TODO -->
+      <template slot="time" slot-scope="time, record">
+        <template v-if="['video', 'live'].includes(record.tasks.type)">
+          {{ record.tasks.length }}min
+        </template>
+        <template v-else>--</template>
+      </template>
 
       <template slot="teacher" slot-scope="teacher">{{ teacher.nickname }}</template>
 
@@ -37,14 +47,18 @@
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="copy" />
           </a>
-          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record.id)">
-            <a-menu-item key="copy">
+          <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
+            <a-menu-item key="copy" >
               复制课程链接
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-
-        <a class="ant-dropdown-link" @click="e => e.preventDefault()">编辑</a>
+       
+        <a class="ant-dropdown-link" 
+          href="javascript:;" 
+          data-toggle="modal" 
+          data-target="#modal" 
+          :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a>
 
         <a-dropdown :trigger="['hover']" placement="bottomRight">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
@@ -71,7 +85,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { MultiClass, Courses } from 'common/vue/service';
+import { MultiClass, Course } from 'common/vue/service';
 
 import ClassName from './ClassName.vue';
 import TeachMode from './TeachMode.vue';
@@ -97,9 +111,9 @@ const columns = [
   },
   {
     title: '开课时间',
-    dataIndex: 'createdTime',
+    dataIndex: 'startTime',
     sorter: true,
-    scopedSlots: { customRender: 'createdTime' }
+    scopedSlots: { customRender: 'startTime' }
   },
   {
     title: '时长',
@@ -157,6 +171,10 @@ export default {
 
   mounted() {
     this.fetchLessons();
+
+    $('#modal').on('hide.bs.modal', () => {
+      this.fetchLessons()
+    })
   },
 
   methods: {
@@ -201,31 +219,34 @@ export default {
     },
 
     // actions: 复制, 发布, 取消发布, 删除
-    handleMenuClick(key, value) {
+    handleMenuClick(key, record) {
       if (key === 'copy') {
-        this.copy(value);
+        this.copy(record);
         return;
       }
 
       if (['publish', 'unpublish'].includes(key)) {
-        this.updateTaskStatus(key, value);
+        this.updateTaskStatus(key, record.id);
         return;
       }
 
       if (key === 'delete') {
-        this.deleteTask(value);
+        this.deleteTask(record.id);
       }
     },
 
-    copy(link) {
-      console.log(link);
+    copy(record) {
+      this.$clipboard(this.copyTaskUrl(record));
+      this.$message.success('复制成功')
+      this.$message.success('复制成功')
     },
 
     updateTaskStatus(type, value) {
       const { tasks: { courseId, id } } = value;
       const message = type == 'publish' ? `发布成功` : `取消发布成功`;
-      Courses.updateTaskStatus(courseId, id, { type }).then(res => {
+      Course.updateTaskStatus(courseId, id, { type }).then(() => {
         this.$message.success(message);
+        this.fetchLessons()
       });
     },
 
@@ -234,18 +255,50 @@ export default {
       this.$confirm({
         title: '删除',
         content: '是否确定删除该课时吗?',
-        okText: '确认',
-        cancelText: '取消',
-        onOk() {
-          Courses.deleteTask(courseId, id).then(res => {
+        okType: 'danger',
+        onOk: () => {
+          Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
+              this.fetchLessons()
             }
           });
         }
       });
-    }
+    },
+
+    copyTaskUrl(record) {
+      let url = `${window.location.origin}/course/${record.courseId}/task/${record.tasks.id}/show`
+
+      if (record.status === 'unpublished') {
+        url += `?preview=1`
+      }
+
+      return url;
+    },
+
   }
 }
 </script>
 
+<style lang="less">
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
+.es-transition {
+  .es-transition()
+}
+
+.border-radius(@radius) {
+  border-radius: @radius;
+}
+
+@import "~app/less/admin-v2/variables.less";
+@import "~app/less/page/course-manage/task/create.less";
+@import "~app/less/component/es-step.less";
+
+</style>
