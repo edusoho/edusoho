@@ -74,6 +74,7 @@
       </template>
 
     </a-tree>
+     <a-empty style="margin-top: 200px;" v-if="!lessonDirectory.length" />
   </div>
 </template>
 

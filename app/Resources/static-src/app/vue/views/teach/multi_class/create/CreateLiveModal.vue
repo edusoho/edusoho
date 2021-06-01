@@ -6,7 +6,7 @@
     ok-text="确认"
     cancel-text="取消"
     @ok="handleOk"
-    @cancel="handleCancel"
+    @cancel="handleCancel(false)"
     width="900px"
   >
     <a-form :form="form">
