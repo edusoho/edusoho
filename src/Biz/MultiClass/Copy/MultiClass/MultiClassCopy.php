@@ -16,11 +16,14 @@ class MultiClassCopy extends AbstractEntityCopy
 
     protected function copyEntity($multiClass, $config = [])
     {
+        $number = $this->getMultiClassDao()->count(['copyId' => $multiClass['id']]);
+        $number = empty($number) ? '' : $number;
         $newMultiClass = $this->filterFields($multiClass);
         $newMultiClass['copyId'] = $multiClass['id'];
-        $newMultiClass['title'] = $multiClass['title']."(复制{$config['number']})";
+        $newMultiClass['title'] = $multiClass['title']."(复制{$number})";
         $newMultiClass['productId'] = $config['productId'];
         $newMultiClass = $this->getMultiClassDao()->create($newMultiClass);
+        $newMultiClass['number'] = $number;
 
         return $newMultiClass;
     }

@@ -12,7 +12,7 @@ class MultiClassException extends AbstractException
 
     const PRODUCT_NOT_FOUND = 4048102;
 
-    const CANNOT_DELETE_DEFAULT_PRODUCT = 4038103;
+    const CANNOT_DELETE_DEFAULT_PRODUCT = 5008103;
 
     const MULTI_CLASS_EXIST = 5008104;
 
@@ -30,9 +30,11 @@ class MultiClassException extends AbstractException
 
     const MULTI_CLASS_CLONE_ALREADY = 5008111;
 
-    const CAN_NOT_DELETE_PRODUCT = 4038112;
+    const CAN_NOT_DELETE_PRODUCT = 5008112;
 
-    const MULTI_CLASS_COURSE_EXIST = 5008113;
+    const CAN_NOT_MANAGE_MULTI_CLASS = 4038113;
+
+    const MULTI_CLASS_COURSE_EXIST = 5008114;
 
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
@@ -46,7 +48,8 @@ class MultiClassException extends AbstractException
         5008109 => 'exception.multi_class.multi_class_data_fields_missing',
         5008110 => 'exception.multi_class.multi_class_course_not_match',
         5008111 => 'exception.multi_class.multi_class_clone_already',
-        4038112 => 'exception.multi_class.can_not_delete_product',
-        5008113 => 'exception.multi_class.multi_class_course_exist',
+        5008112 => 'exception.multi_class.can_not_delete_product',
+        4038113 => 'exception.multi_class.can_not_manage_multi_class',
+        5008114 => 'exception.multi_class.multi_class_course_exist',
     ];
 }

@@ -63,7 +63,7 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
         $user = array_merge($user, $userProfile);
 
-        if (in_array('ROLE_TEACHER', $user['roles'])) {
+        if (!empty(array_intersect(['ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT'], $user['roles']))) {
             return $this->_teachAction($user);
         }
 

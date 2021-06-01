@@ -132,7 +132,11 @@ class CourseLiveTask extends AbstractResource
                 'finishType' => 'join',
                 'finishData' => '',
             ];
-            list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+            try {
+                list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+            } catch (\Exception $e) {
+
+            }
 
             $lesson['task'] = $task;
 
@@ -176,7 +180,11 @@ class CourseLiveTask extends AbstractResource
                 'finishData' => '',
             ];
 
-            list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+            try {
+                list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+            } catch (\Exception $e) {
+
+            }
 
             $lesson['task'] = $task;
 
