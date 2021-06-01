@@ -8,6 +8,7 @@
     <div class="actions pull-left">
       <a-space size="large">
         <a-icon
+          v-if="lesson.mode"
           type="edit"
           data-toggle="modal"
           data-target="#modal"
