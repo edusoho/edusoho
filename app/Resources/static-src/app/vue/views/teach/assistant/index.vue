@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <aside-layout :breadcrumbs="[{ name: '助教管理' }]">
     <div class="clearfix cd-mb24">
       <a-input-search
         placeholder="请输入用户名搜索"
@@ -19,10 +19,10 @@
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging" 
-        v-model="paging.page" 
+        v-if="paging"
+        v-model="paging.page"
         :total="paging.total"
-        show-less-items 
+        show-less-items
       />
     </div>
 
@@ -33,11 +33,12 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-  </div>
+  </aside-layout>
 </template>
 
 
 <script>
+import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, User } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
@@ -59,7 +60,8 @@ const columns = [
 export default {
   name: "assistants",
   components: {
-    userInfoTable
+    userInfoTable,
+    AsideLayout
   },
   data() {
     return {
@@ -85,7 +87,7 @@ export default {
         limit: this.paging.limit || 10,
       });
       paging.page = (paging.offset / paging.limit) + 1;
-          
+
       this.pageData = data;
       this.paging = paging;
     },
