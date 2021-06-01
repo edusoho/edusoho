@@ -28,7 +28,17 @@ export const Course = {
     return apiClient.patch(`${baseUrl}/${courseId}/task_status/${taskId}`, params)
   },
 
-  async getSingleCourse(id) {
-    return apiClient.get(`${baseUrl}/${id}`)
+  async getSingleCourse(courseId) {
+    return apiClient.get(`${baseUrl}/${courseId}`)
+  },
+
+  // 新增章节
+  async addChapter(courseId, params) {
+    return apiClient.post(`${baseUrl}/${courseId}/chapter`, params)
+  },
+
+  // 新增直播课时（包括批量）
+  async addLiveTask(courseId, params) {
+    return apiClient.post(`${baseUrl}/${courseId}/live_task`, params)
   }
 }

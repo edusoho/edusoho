@@ -174,25 +174,7 @@ export default {
           dragEnterArr.splice(dragEnterIndex + 1, 0, dragObj);
         }
       }
-      this.lessonSort(data);
-    },
-
-    lessonSort(data) {
-      const sortInfos = [];
-
-      const loop = (sortInfos, data) => {
-        _.forEach(data, lesson => {
-          const { type, id } = lesson;
-          sortInfos.push(`${type}-${id}`);
-          if (lesson.children) {
-            loop(sortInfos, lesson.children)
-          }
-        });
-      };
-
-      loop(sortInfos, data);
-
-      this.$emit('change-lesson-directory', sortInfos);
+      this.$emit('change-lesson-directory', { data });
     }
   }
 }

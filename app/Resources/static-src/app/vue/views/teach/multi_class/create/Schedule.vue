@@ -3,11 +3,11 @@
     排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
     <div class="clearfix">
       <a-space size="large">
-        <a-button type="primary" @click="showCreateLiveModal">
+        <a-button type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
           <a-icon type="plus" />
           添加直播课时
         </a-button>
-        <a-dropdown :trigger="['click']">
+        <a-dropdown :disabled="courseId == 0" :trigger="['click']">
           <a-button type="primary">
             <a-icon type="plus" />
             章/节
@@ -24,8 +24,19 @@
     </div>
 
     <lesson-directory :lesson-directory="lessonDirectory" @change-lesson-directory="changeLessonDirectory" />
-    <create-live-modal :visible="createLiveVisible" @handle-cancel="hideCreateLiveModal" />
-    <add-chapter-or-unit-modal :visible="addChapterOrUnitVisible" :type="addType" @handle-cancel="hideAddChapterOrUnitModal" />
+    <create-live-modal
+      :courseId="courseId"
+      :visible="createLiveVisible"
+      @handle-cancel="hideCreateLiveModal"
+      @change-lesson-directory="changeLessonDirectory"
+    />
+    <add-chapter-or-unit-modal
+      :type="addType"
+      :courseId="courseId"
+      :visible="addChapterOrUnitVisible"
+      @handle-cancel="hideAddChapterOrUnitModal"
+      @change-lesson-directory="changeLessonDirectory"
+    />
   </div>
 </template>
 
@@ -83,11 +94,31 @@ export default {
       this.createLiveVisible = true;
     },
 
-    hideCreateLiveModal() {
-      this.createLiveVisible = false;
+    hideCreateLiveModal(visible) {
+      this.createLiveVisible = visible;
     },
 
-    changeLessonDirectory(sortInfos) {
+    changeLessonDirectory(params) {
+      const sortInfos = [];
+
+      const { data = this.lessonDirectory, addData } = params;
+
+      const loop = (sortInfos, data) => {
+        _.forEach(data, lesson => {
+          const { type, id } = lesson;
+          sortInfos.push(`${type}-${id}`);
+          if (lesson.children) {
+            loop(sortInfos, lesson.children)
+          }
+        });
+      };
+
+      loop(sortInfos, data);
+
+      if (addData) {
+        loop(sortInfos, addData);
+      }
+
       Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });
@@ -100,7 +131,7 @@ export default {
 
     hideAddChapterOrUnitModal() {
       this.addChapterOrUnitVisible = false;
-    },
+    }
   }
 }
 </script>

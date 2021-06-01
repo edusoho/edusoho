@@ -1,26 +1,27 @@
 <template>
   <a-spin :spinning="getListLoading">
-    <div class="clearfix mb6">
+    <div class="clearfix cd-mb24">
       <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
       <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
     </div>
 
     <a-table :columns="columns"
-      :pagination="false"
-      :data-source="multiClassList">
+      :pagination="paging"
+      :data-source="multiClassList"
+      :rowKey="record => record.id">
       <a slot="class_title" slot-scope="text, record"
         href="javascript:;"
         @click="goToMultiClassManage(record.id)">
         {{ text }}
       </a>
-      <a slot="course" slot-scope="course"
-        :href="`/course/${courseId.id}`">
-        {{ course.title || course.courseSetTitle }}
-      </a>
       <a slot="taskNum" slot-scope="text, record"
         href="javascript:;"
         @click="goToMultiClassManage(record.id)">
         {{ record.endTaskNum }}/{{ record.taskNum }}
+      </a>
+      <a slot="course" slot-scope="course"
+        :href="`/course/${course.id}`">
+        {{ course.title || course.courseSetTitle }}
       </a>
       <template slot="assistant" slot-scope="assistant">
         {{ assistant ? assistant.join('、') : '' }}
@@ -60,8 +61,8 @@
       </template>
     </a-table>
 
-    <div class="text-center">
-      <a-pagination class="mt6"
+    <div class="text-center cd-mt24">
+      <a-pagination
         v-if="paging && multiClassList.length > 0"
         v-model="paging.page"
         :total="paging.total"
@@ -89,8 +90,7 @@ const columns = [
   {
     title: '所属产品',
     dataIndex: 'product',
-    filters: [
-    ],
+    filters: [],
   },
   {
     title: '价格',
@@ -138,6 +138,7 @@ export default {
       multiClassList: [],
       getListLoading: false,
       paging: {
+        total: 0,
         offset: 0,
         limit: 10,
       },
