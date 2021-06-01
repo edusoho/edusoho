@@ -34,6 +34,8 @@ class MultiClassException extends AbstractException
 
     const CAN_NOT_MANAGE_MULTI_CLASS = 4038113;
 
+    const MULTI_CLASS_COURSE_EXIST = 5008114;
+
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
         4048102 => 'exception.multi_class.product_not_found',
@@ -48,5 +50,6 @@ class MultiClassException extends AbstractException
         5008111 => 'exception.multi_class.multi_class_clone_already',
         5008112 => 'exception.multi_class.can_not_delete_product',
         4038113 => 'exception.multi_class.can_not_manage_multi_class',
+        5008114 => 'exception.multi_class.multi_class_course_exist',
     ];
 }

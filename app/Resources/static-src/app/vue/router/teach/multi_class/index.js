@@ -33,6 +33,7 @@ export default [
       },
       {
         path: 'homework_review',
+        name: 'MultiClassHomewordReview',
         component: () => import('app/vue/views/teach/multi_class/course_manage/homework_review.vue'),
         meta: { current: 'homework-review' }
       },

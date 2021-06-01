@@ -11885,3 +11885,4 @@ exception.multi_class.cannot_delete_default_product: 系统默认产品不能删
 exception.multi_class.multi_class_clone_already: 班课复制中
 exception.multi_class.can_not_delete_product: 该产品含有班课，不能删除
 exception.multi_class.can_not_manage_multi_class: 无权管理班课
+exception.multi_class.multi_class_course_exist: 班课中已存在此课程
