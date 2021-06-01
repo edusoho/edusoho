@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <aside-layout :breadcrumbs="[{ name: '教师管理' }]">
     <div class="clearfix cd-mb24">
       <a-input-search
         placeholder="请输入用户名搜索"
@@ -25,10 +25,10 @@
 
     <div class="text-center">
       <a-pagination class="mt6"
-        v-if="paging" 
-        v-model="paging.page" 
+        v-if="paging"
+        v-model="paging.page"
         :total="paging.total"
-        show-less-items 
+        show-less-items
       />
     </div>
 
@@ -39,11 +39,12 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-  </div>
+  </aside-layout>
 </template>
 
 
 <script>
+import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, User } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
@@ -69,7 +70,8 @@ const columns = [
 export default {
   name: "teachers",
   components: {
-    userInfoTable
+    userInfoTable,
+    AsideLayout
   },
   data() {
     return {
@@ -99,7 +101,7 @@ export default {
       data.forEach(element => {
         element.isPromoted = element.promoted == 1;
       });
-          
+
       this.pageData = data;
       this.paging = paging;
     },

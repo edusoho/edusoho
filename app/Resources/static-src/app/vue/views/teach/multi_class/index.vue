@@ -1,71 +1,73 @@
 <template>
-  <a-spin :spinning="getListLoading">
-    <div class="clearfix cd-mb24">
-      <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
-      <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
-    </div>
+   <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
+    <a-spin :spinning="getListLoading">
+      <div class="clearfix cd-mb24">
+        <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
+        <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
+      </div>
 
-    <a-table :columns="columns"
-      :pagination="paging"
-      :data-source="multiClassList"
-      @change="change"
-      :rowKey="record => record.id">
-      <a slot="class_title" slot-scope="text, record"
-        href="javascript:;"
-        @click="goToMultiClassManage(record.id)">
-        {{ text }}
-      </a>
-      <a slot="taskNum" slot-scope="text, record"
-        href="javascript:;"
-        @click="goToMultiClassManage(record.id)">
-        {{ record.endTaskNum }}/{{ record.taskNum }}
-      </a>
-      <a slot="course" slot-scope="course"
-        :href="`/course/${course.id}`">
-        {{ course.title || course.courseSetTitle }}
-      </a>
-      <template slot="assistant" slot-scope="assistant">
-        {{ assistant ? assistant.join('、') : '' }}
-      </template>
-      <a slot="studentNum" slot-scope="text, record"
-        href="javascript:;"
-        @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
-        {{ text }}
-      </a>
-      <template slot="createdTime" slot-scope="createdTime">
-        {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
-      </template>
-      <template slot="action" slot-scope="text, record">
-        <a href="javascript:;" class="mr2"
-          @click="goToMultiClassManage(record.id)">查看</a>
-        <a href="javascript:;" class="mr2"
-          @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
-        <a-dropdown>
-          <a href="javascript:;" @click="e => e.preventDefault()">
-            更多 <a-icon type="down" />
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item>
-              <a href="javascript:;"
-                @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
-                编辑
-              </a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;">复制班课</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </template>
-    </a-table>
-  </a-spin>
+      <a-table :columns="columns"
+        :pagination="paging"
+        :data-source="multiClassList"
+        @change="change"
+        :rowKey="record => record.id">
+        <a slot="class_title" slot-scope="text, record"
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
+          {{ text }}
+        </a>
+        <a slot="taskNum" slot-scope="text, record"
+          href="javascript:;"
+          @click="goToMultiClassManage(record.id)">
+          {{ record.endTaskNum }}/{{ record.taskNum }}
+        </a>
+        <a slot="course" slot-scope="course"
+          :href="`/course/${course.id}`">
+          {{ course.title || course.courseSetTitle }}
+        </a>
+        <template slot="assistant" slot-scope="assistant">
+          {{ assistant ? assistant.join('、') : '' }}
+        </template>
+        <a slot="studentNum" slot-scope="text, record"
+          href="javascript:;"
+          @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
+          {{ text }}
+        </a>
+        <template slot="createdTime" slot-scope="createdTime">
+          {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
+        </template>
+        <template slot="action" slot-scope="text, record">
+          <a href="javascript:;" class="mr2"
+            @click="goToMultiClassManage(record.id)">查看</a>
+          <a href="javascript:;" class="mr2"
+            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
+          <a-dropdown>
+            <a href="javascript:;" @click="e => e.preventDefault()">
+              更多 <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a href="javascript:;"
+                  @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
+                  编辑
+                </a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;">复制班课</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </template>
+      </a-table>
+    </a-spin>
+   </aside-layout>
 </template>
 
-
 <script>
+import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { MultiClass } from 'common/vue/service/index.js';
 
 const columns = [
@@ -124,6 +126,11 @@ const columns = [
 
 export default {
   name: 'MultiClassList',
+
+  components: {
+    AsideLayout
+  },
+
   data () {
     return {
       columns,
