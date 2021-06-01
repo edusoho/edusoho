@@ -9,11 +9,107 @@ use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 
 class MemberServiceTest extends BaseTestCase
 {
+    public function testFindMultiClassMemberByMultiClassIdAndRole()
+    {
+        $multiClass = $this->getMultiClassDao()->create([
+            'title' => 'multi class 1',
+            'courseId' => 1,
+            'productId' => 1,
+            'copyId' => 0,
+        ]);
+        $member = [
+            'courseId' => 1,
+            'multiClassId' => $multiClass['id'],
+            'userId' => 1,
+            'role' => 'teacher',
+            'courseSetId' => 1,
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+
+        $this->getMemberDao()->create($member);
+        $teachers = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
+        $this->assertCount(1, $teachers);
+    }
+
+    public function testSearchMultiClassIds()
+    {
+        $multiClass = $this->getMultiClassDao()->create([
+            'title' => 'multi class 2',
+            'courseId' => 1,
+            'productId' => 1,
+            'copyId' => 0,
+        ]);
+        $member = [
+            'courseId' => 1,
+            'multiClassId' => $multiClass['id'],
+            'userId' => 1,
+            'courseSetId' => 1,
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+        $courseMember = $this->getMemberDao()->create($member);
+        $multiClassIds = $this->getMemberService()->searchMultiClassIds([
+            'userId' => $courseMember['id'],
+        ], [], 0, PHP_INT_MAX);
+
+        $this->assertArrayValueEquals([$multiClass['id']], $multiClassIds);
+    }
+
+    public function testReleaseMultiClassMember()
+    {
+        $multiClass = $this->getMultiClassDao()->create([
+            'title' => 'multi class 3',
+            'courseId' => 1,
+            'productId' => 1,
+            'copyId' => 0,
+        ]);
+        $member = [
+            'courseId' => 1,
+            'multiClassId' => $multiClass['id'],
+            'userId' => 1,
+            'courseSetId' => 1,
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+        $this->getMemberDao()->create($member);
+        $this->getMemberService()->releaseMultiClassMember(1, $multiClass['id']);
+        $multiClassIds = $this->getMemberService()->searchMultiClassIds([
+            'multiClassId' => $multiClass['id'],
+        ], [], 0, PHP_INT_MAX);
+
+        $this->assertEmpty($multiClassIds);
+    }
+
+    public function testDeleteMemberByMultiClassIdAndRole()
+    {
+        $multiClass = $this->getMultiClassDao()->create([
+            'title' => 'multi class 4',
+            'courseId' => 1,
+            'productId' => 1,
+            'copyId' => 0,
+        ]);
+        $member = [
+            'courseId' => 1,
+            'multiClassId' => $multiClass['id'],
+            'userId' => 1,
+            'role' => 'teacher',
+            'courseSetId' => 1,
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+        $courseMember = $this->getMemberDao()->create($member);
+        $this->getMemberService()->deleteMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
+        $courseMember = $this->getCourseDao()->get($courseMember['id']);
+        $this->assertEmpty($courseMember);
+    }
+
     public function testRecountLearningDataByCourseId()
     {
         $time = time();
@@ -1547,5 +1643,13 @@ class MemberServiceTest extends BaseTestCase
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
+    }
+
+    /**
+     * @return MultiClassDao
+     */
+    protected function getMultiClassDao()
+    {
+        return $this->createDao('MultiClass:MultiClassDao');
     }
 }
