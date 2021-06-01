@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\User\CurrentUser;
+use Biz\User\Dao\UserDao;
 use Biz\User\Service\UserService;
 
 class MemberServiceTest extends BaseTestCase
@@ -108,6 +109,25 @@ class MemberServiceTest extends BaseTestCase
         $this->getMemberService()->deleteMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
         $courseMember = $this->getCourseDao()->get($courseMember['id']);
         $this->assertEmpty($courseMember);
+    }
+
+    public function testSetCourseAssistants()
+    {
+        $course = $this->mockNewCourse();
+        $multiClass = $this->getMultiClassDao()->create([
+            'title' => 'multi class 5',
+            'courseId' => 1,
+            'productId' => 1,
+            'copyId' => 0,
+        ]);
+        $assistant1 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
+        $assistant2 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
+        $this->getMemberService()->setCourseAssistants($course['id'], [$assistant1['id'], $assistant2['id']], $multiClass['id']);
+        $multiClassIds = $this->getMemberService()->searchMultiClassIds([
+            'role' => 'assistant',
+        ], [], 0, PHP_INT_MAX);
+
+        $this->assertCount(2, $multiClassIds);
     }
 
     public function testRecountLearningDataByCourseId()
@@ -1570,6 +1590,19 @@ class MemberServiceTest extends BaseTestCase
         return $user;
     }
 
+    private function createUser($role)
+    {
+        $userInfo = [
+            'nickname' => 'test_nickname'.rand(0, 99999),
+            'password' => 'test_password',
+            'email' => rand(0, 99999).'@email.com',
+        ];
+        $user = $this->getUserService()->register($userInfo);
+        $this->getUserDao()->update($user['id'], ['roles' => $role]);
+
+        return $user;
+    }
+
     private function mockUnLoginUser()
     {
         $currentUser = new CurrentUser();
@@ -1591,6 +1624,14 @@ class MemberServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->createService('User:UserDao');
     }
 
     /**
