@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\MultiClass\Service;
-
 
 use Biz\BaseTestCase;
 use Biz\MultiClass\Dao\MultiClassProductDao;
@@ -23,7 +21,7 @@ class MultiClassProductServiceTest extends BaseTestCase
     {
         $expect = [
             'title' => '班课产品1',
-            'remark' => '班课产品111'
+            'remark' => '班课产品111',
         ];
         $result = $this->getMultiClassProductService()->createProduct($expect);
 
@@ -33,11 +31,11 @@ class MultiClassProductServiceTest extends BaseTestCase
 
     public function testSearchProducts()
     {
-       $this->batchCreateProduct();
+        $this->batchCreateProduct();
 
-       $result = $this->getMultiClassProductService()->searchProducts(['keywords' => 'product'], [], 0, PHP_INT_MAX);
+        $result = $this->getMultiClassProductService()->searchProducts(['keywords' => 'product'], [], 0, PHP_INT_MAX);
 
-       $this->assertEquals(2, count($result));
+        $this->assertEquals(2, count($result));
     }
 
     public function testCountProducts()
@@ -118,7 +116,7 @@ class MultiClassProductServiceTest extends BaseTestCase
                 'title' => '班课产品',
                 'type' => 'normal',
                 'remark' => 'product 3',
-            ]
+            ],
         ]);
     }
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\MultiClass\Dao;
-
 
 use Biz\BaseTestCase;
 use Biz\MultiClass\Dao\MultiClassProductDao;
@@ -58,7 +56,7 @@ class MultiClassProductDaoTest extends BaseTestCase
                 'title' => '班课产品',
                 'type' => 'normal',
                 'remark' => 'product 3',
-            ]
+            ],
         ]);
     }
 
