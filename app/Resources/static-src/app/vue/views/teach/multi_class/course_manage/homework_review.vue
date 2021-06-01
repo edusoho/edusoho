@@ -256,7 +256,7 @@ export default {
       const params = {}
 
       if (filters && _.isArray(filters.name)) {
-        params[types] = filters.name
+        params.types = filters.name
       }
 
       if (pagination) {

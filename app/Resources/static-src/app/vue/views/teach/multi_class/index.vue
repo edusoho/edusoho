@@ -8,6 +8,7 @@
     <a-table :columns="columns"
       :pagination="paging"
       :data-source="multiClassList"
+      @change="change"
       :rowKey="record => record.id">
       <a slot="class_title" slot-scope="text, record"
         href="javascript:;"
@@ -60,15 +61,6 @@
         </a-dropdown>
       </template>
     </a-table>
-
-    <div class="text-center cd-mt24">
-      <a-pagination
-        v-if="paging && multiClassList.length > 0"
-        v-model="paging.page"
-        :total="paging.total"
-        show-less-items
-      />
-    </div>
   </a-spin>
 </template>
 
@@ -140,7 +132,7 @@ export default {
       paging: {
         total: 0,
         offset: 0,
-        limit: 10,
+        pageSize: 10,
       },
     }
   },
@@ -159,9 +151,10 @@ export default {
         const { data, paging } = await MultiClass.search({
           keywords: params.keywords || '',
           offset: params.offset || this.paging.offset || 0,
-          limit: params.limit || this.paging.limit || 10,
+          limit: params.pageSize || this.paging.pageSize || 10,
         })
         paging.page = (paging.offset / paging.limit) + 1;
+        paging.pageSize = Number(paging.limit);
 
         this.multiClassList = data;
         this.paging = paging;
@@ -193,6 +186,19 @@ export default {
         name: 'MultiClassCourseManage',
         params: { id }
       })
+    },
+
+    change(pagination, filters, sorter) {
+      const params = {}
+
+      if (pagination) {
+        params.offset = pagination.pageSize * (pagination.current - 1)
+        params.pageSize = pagination.pageSize
+      }
+
+      if (Object.keys(params).length > 0) {
+        this.getMultiClassList(params)
+      }
     }
   }
 }
