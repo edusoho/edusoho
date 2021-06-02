@@ -10,12 +10,13 @@ use Biz\Common\CommonException;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 
 class SmsSend extends AbstractResource
 {
-    private $supportSmsTypes = array(
+    private $supportSmsTypes = [
         'sms_login' => BizSms::SMS_LOGIN,
-    );
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -24,6 +25,11 @@ class SmsSend extends AbstractResource
     {
         $smsType = $request->request->get('type', '');
         $mobile = $request->request->get('mobile', '');
+        $allowNotExistMobile = $request->request->get('allowNotExistMobile', 1);
+
+        if (!$allowNotExistMobile && !$this->getUserService()->getUserByVerifiedMobile($mobile)) {
+            throw UserException::MOBILE_NOT_FOUND();
+        }
 
         if (empty($smsType) || empty($mobile)) {
             throw CommonException::ERROR_PARAMETER();
@@ -41,9 +47,9 @@ class SmsSend extends AbstractResource
 
         $this->updateSmsStatus($request->getHttpRequest()->getClientIp(), $smsType);
 
-        return array(
+        return [
             'smsToken' => $smsToken['token'],
-        );
+        ];
     }
 
     private function checkSettingsEnable($smsType)

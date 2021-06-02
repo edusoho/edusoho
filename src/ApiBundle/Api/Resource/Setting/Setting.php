@@ -630,6 +630,12 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @param $clients
+     *
+     * @return array
+     *               login_bind直接合并输出存在较大风险，并不是所有的网站私密字段都会以 '_secret'结尾，一旦存在，后果不堪设想
+     */
     private function getLoginConnect($clients)
     {
         $default = $this->getDefaultLoginConnect($clients);

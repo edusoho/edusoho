@@ -333,6 +333,20 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
+    public function testGetUserByScrmUuid()
+    {
+        $userInfo = [
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+        ];
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $updatedUser = $this->getUserService()->setUserScrmUuid($registeredUser['id'], '12345');
+        $res = $this->getUserService()->getUserByScrmUuid('12345');
+        self::assertEquals($registeredUser['id'], $res['id']);
+        self::assertEquals($updatedUser['scrmUuid'], $res['scrmUuid']);
+    }
+
     public function testGetUserByEmailWithEmptyEmail()
     {
         $foundUser = $this->getUserService()->getUserByEmail('');

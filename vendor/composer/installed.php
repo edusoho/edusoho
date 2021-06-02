@@ -7,7 +7,7 @@
     array (
       0 => '2.8.x-dev',
     ),
-    'reference' => 'd891940a22523f97d808d5bbc87caf0f90864820',
+    'reference' => 'f30f3ab008d4fafb382c6bf26c228e73680fa4f2',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -99,9 +99,8 @@
       'version' => 'dev-master',
       'aliases' => 
       array (
-        0 => '9999999-dev',
       ),
-      'reference' => '01459fffd77d28458d3b1b7c5c13a0d20353333b',
+      'reference' => '92b5cb28f6c90304254c20c8c5c5a938425e3e29',
     ),
     'codeages/biz-order-pay' => 
     array (
@@ -109,7 +108,6 @@
       'version' => 'dev-master',
       'aliases' => 
       array (
-        0 => '9999999-dev',
       ),
       'reference' => 'c2328cf3f6c317c368e85983825da6ac97fc105f',
     ),
@@ -124,12 +122,12 @@
     ),
     'codeages/escloud-php-sdk' => 
     array (
-      'pretty_version' => 'v1.1.5',
-      'version' => '1.1.5.0',
+      'pretty_version' => 'v1.2.0',
+      'version' => '1.2.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6c691b269c6cfef9f5f9d337f6afd7e43a5ae9cd',
+      'reference' => 'bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7',
     ),
     'codeages/exam-parser' => 
     array (
@@ -1741,7 +1739,7 @@
       array (
         0 => '2.8.x-dev',
       ),
-      'reference' => 'd891940a22523f97d808d5bbc87caf0f90864820',
+      'reference' => 'f30f3ab008d4fafb382c6bf26c228e73680fa4f2',
     ),
     'twig/twig' => 
     array (

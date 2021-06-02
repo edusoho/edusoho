@@ -6309,7 +6309,7 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 'A IP  e
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 'Will be temporarily blocked'
 admin.login_connect.User_login_protection.after: After
 admin.login_connect.User_login_captcha: 'User login captcha'
-admin.login_connect.User_login_captcha.help_block: 'When enabled, users are required to validate verification code when logging in.'
+admin.login_connect.User_login_captcha.help_block: 'After opening, users need to drag the verification code to check when they log in; If you switch to "mobile quick login", you always need to drag the verification code'
 admin.login_connect.User_login_protection.after.unblock: 'Minutes, unblock user /IP'
 admin.login_connect.weixinmob.frist.help_block: 'If turned on, users can register or login the site with wechat id in wechat app.'
 admin.login_connect.weixinmob.help_block: 'How to access:1. You need a certified <a target= "_blank" HREF = "https://MP.weixin.QQ.com" > wechat service account, </a>;2. A certified <a target= "_blank" HREF = "https://open.weixin.QQ.com" > wechat open platform </a> account;3. Bind the wechat service account with <a target=, "_blank" HREF = "https://open.weixin.QQ.com" > the open platform </a>.'
@@ -6553,6 +6553,7 @@ admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN 
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
+admin_v2.developer_setting.scrm_url: 'SCRM(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.default_locale: language
 admin.developer_setting.default_locale.zh_CN: Chinese(简体中文)
@@ -10670,3 +10671,6 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the pr
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
 admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
+
+site.login.change_to_pwd: Change to account login
+site.login.change_to_sms: Change to sms login
