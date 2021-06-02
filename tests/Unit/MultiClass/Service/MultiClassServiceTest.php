@@ -14,13 +14,6 @@ use Biz\User\Service\UserService;
 
 class MultiClassServiceTest extends BaseTestCase
 {
-    public function testFindMultiClassByTitleLike()
-    {
-        $this->createMultiClass();
-        $findMultiClass = $this->getMultiClassService()->findMultiClassByTitleLike('multi class');
-        $this->assertCount(1, $findMultiClass);
-    }
-
     public function testFindByProductIds()
     {
         $multiClass1 = $this->createMultiClass();
