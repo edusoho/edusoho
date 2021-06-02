@@ -20,7 +20,7 @@ class MultiClassDaoTest extends BaseTestCase
     {
         $this->batchCreateMultiClass();
 
-        $result = $this->getMultiClassDao()->findByProductIds(1);
+        $result = $this->getMultiClassDao()->findByProductId(1);
 
         $this->assertEquals(2, count($result));
     }
@@ -40,7 +40,7 @@ class MultiClassDaoTest extends BaseTestCase
     {
         $this->batchCreateMultiClass();
 
-        $result = $this->getMultiClassDao()->getByCourseId('班课1');
+        $result = $this->getMultiClassDao()->getByCourseId(1);
 
         $this->assertEquals('班课1', $result['title']);
         $this->assertEquals(1, $result['courseId']);
@@ -51,9 +51,9 @@ class MultiClassDaoTest extends BaseTestCase
     {
         $this->batchCreateMultiClass();
 
-        $result = $this->getMultiClassDao()->searchMultiClassJoinCourse(['productId' => 1], [], 0, 1);
+        $result = $this->getMultiClassDao()->searchMultiClassJoinCourse(['productId' => 1], [], 0, PHP_INT_MAX);
 
-        $this->assertEmpty($result);
+        $this->assertEquals(2, count($result));
     }
 
     protected function batchCreateMultiClass()
