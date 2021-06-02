@@ -1,10 +1,9 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '新建班课' }]" style="padding-bottom: 88px;">
+  <aside-layout :breadcrumbs="[{ name: breadcrumbName }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
-      @submit="handleSubmit"
       style="max-width: 900px;"
     >
       <a-form-item label="班课名称">
@@ -20,14 +19,18 @@
 
       <a-form-item label="选择课程">
         <a-row :gutter="16">
-          <a-col :span="19">
+          <a-col :span="mode === 'editor' ? 24 : 19">
             <a-select
               show-search
-              v-decorator="['courseId', { rules: [
-                { required: true, message: '请选择课程' }
-              ]}]"
+              v-decorator="['courseId', {
+                initialValue: course.initialValue,
+                rules: [
+                  { required: true, message: '请选择课程' }
+                ]
+              }]"
               :filter-option="false"
               placeholder="请选择课程"
+              :disabled="mode === 'editor'"
               @popupScroll="courseScroll"
               @search="handleSearchCourse"
               @change="handleChangeCourse"
@@ -37,7 +40,7 @@
               </a-select-option>
             </a-select>
           </a-col>
-          <a-col :span="5">
+          <a-col :span="5" v-if="mode !== 'editor'">
             <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
               <a-icon type="plus" />
               创建新课程
@@ -48,9 +51,12 @@
 
       <a-form-item label="所属产品">
         <a-select
-          v-decorator="['productId', { rules: [
-            { required: true, message: '请选择归属产品' }
-          ]}]"
+          v-decorator="['productId', {
+            initialValue: product.initialValue,
+            rules: [
+              { required: true, message: '请选择归属产品' }
+            ]
+          }]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
         >
@@ -64,9 +70,12 @@
         <a-select
           show-search
           :filter-option="false"
-          v-decorator="['teacherId', { rules: [
-            { required: true, message: '请选择授课老师' }
-          ]}]"
+          v-decorator="['teacherId', {
+            initialValue: teacher.initialValue,
+            rules: [
+              { required: true, message: '请选择授课老师' }
+            ]
+          }]"
           placeholder="请选择授课教师"
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
@@ -81,9 +90,12 @@
         <a-select
           show-search
           :filter-option="false"
-          v-decorator="['assistantIds', { rules: [
-            { required: true, message: '至少选择一位助教' }
-          ]}]"
+          v-decorator="['assistantIds', {
+            initialValue: assistant.initialValue,
+            rules: [
+              { required: true, message: '至少选择一位助教' }
+            ]
+          }]"
           mode="multiple"
           placeholder="请选择助教"
           @popupScroll="assistantScroll"
@@ -98,18 +110,18 @@
       <a-form-item label="排课">
         <Schedule :course-id="selectedCourseId" />
       </a-form-item>
-
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
-        <a-space size="large">
-          <a-button type="primary" html-type="submit">
-            立即创建
-          </a-button>
-          <a-button @click="clickCancelCreate">
-            取消
-          </a-button>
-        </a-space>
-      </a-form-item>
     </a-form>
+
+    <div class="create-multi-class-btn-group">
+      <a-space size="large">
+        <a-button type="primary" @click="handleSubmit">
+          {{ mode === 'editor' ? '确定' : '立即创建' }}
+        </a-button>
+        <a-button @click="clickCancelCreate">
+          取消
+        </a-button>
+      </a-space>
+    </div>
   </aside-layout>
 </template>
 
@@ -131,10 +143,12 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
+      mode: 'create', // create, editor, copy
       course: {
         list: [],
         title: '',
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -143,6 +157,7 @@ export default {
       product: {
         list: [],
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -152,6 +167,7 @@ export default {
         list: [],
         title: '',
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -161,6 +177,7 @@ export default {
         list: [],
         title: '',
         flag: true,
+        initialValue: [],
         paging: {
           pageSize: 10,
           current: 0
@@ -169,14 +186,61 @@ export default {
     }
   },
 
+  computed: {
+    breadcrumbName() {
+      const names = {
+        create: '新建班课',
+        editor: '编辑班课'
+      }
+      return names[this.mode];
+    }
+  },
+
   created() {
-    this.fetchCourse();
-    this.fetchAssistants();
-    this.fetchProducts();
-    this.fetchTeacher();
+    const id = this.$route.query.id;
+    if (id) {
+      this.selectedCourseId = id;
+      this.mode = 'editor';
+      this.fetchEditorCourse();
+    } else {
+      this.initFetch();
+    }
   },
 
   methods: {
+    initFetch() {
+      this.fetchCourse();
+      this.fetchAssistants();
+      this.fetchProducts();
+      this.fetchTeacher();
+    },
+
+    // 编辑模式下, 下拉选择数据去除默认值
+    duplicateRemoval(data, id) {
+      _.forEach(data, (item, index) => {
+        if (item.id == id) {
+          data.splice(index, 1);
+          return false;
+        }
+      });
+    },
+
+    fetchEditorCourse() {
+      MultiClass.get(this.selectedCourseId).then(res => {
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
+        this.form.setFieldsValue({ 'title': title });
+        this.course.list = [course];
+        this.course.initialValue = courseId;
+        this.product.list = [product];
+        this.product.initialValue = productId;
+        this.teacher.list = teachers;
+        this.teacher.initialValue = teacherIds[0];
+        this.assistant.list = assistants;
+        this.assistant.initialValue = assistantIds;
+        this.initFetch();
+      });
+    },
+
     fetchCourse() {
       const { title, paging: { pageSize, current } } = this.course;
 
@@ -192,6 +256,11 @@ export default {
 
       Me.get('teach_courses', { params }).then(res => {
         this.course.paging.current++;
+
+        if (this.course.initialValue) {
+          this.duplicateRemoval(res.data, this.course.initialValue);
+        }
+
         this.course.list = _.concat(this.course.list, res.data);
         if (_.size(this.course.list) >= res.paging.total) {
           this.course.flag = false;
@@ -230,6 +299,11 @@ export default {
 
       MultiClassProduct.search(params).then(res => {
         this.product.paging.current++;
+
+        if (this.product.initialValue) {
+          this.duplicateRemoval(res.data, this.product.initialValue);
+        }
+
         this.product.list = _.concat(this.product.list, res.data);
         if (_.size(this.product.list) >= res.paging.total) {
           this.product.flag = false;
@@ -256,6 +330,9 @@ export default {
       }
       Teacher.search(params).then(res => {
         this.teacher.paging.current++;
+        if (this.teacher.initialValue) {
+          this.duplicateRemoval(res.data, this.teacher.initialValue);
+        }
         this.teacher.list = _.concat(this.teacher.list, res.data);
         if (_.size(this.teacher.list) >= res.paging.total) {
           this.teacher.flag = false;
@@ -297,6 +374,9 @@ export default {
 
       Assistant.search(params).then(res => {
         this.assistant.paging.current++;
+        _.forEach(this.assistant.initialValue, item => {
+          this.duplicateRemoval(res.data, item);
+        });
         this.assistant.list = _.concat(this.assistant.list, res.data);
         if (_.size(this.assistant.list) >= res.paging.total) {
           this.assistant.flag = false;
@@ -340,12 +420,28 @@ export default {
 
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
+      this.form.validateFields((err, values) => {
         if (!err) {
-          MultiClass.add(values).then(res => {
-            this.clickCancelCreate();
-          });
+          if (this.mode === 'create') {
+            this.createMultiClass(values);
+            return;
+          }
+          if (this.mode === 'editor') {
+            this.editorMultiClass(values);
+          }
         }
+      });
+    },
+
+    createMultiClass(values) {
+      MultiClass.add(values).then(res => {
+        this.clickCancelCreate();
+      });
+    },
+
+    editorMultiClass(values) {
+      MultiClass.editorMultiClass(this.selectedCourseId, values).then(res => {
+        this.clickCancelCreate();
       });
     },
 
