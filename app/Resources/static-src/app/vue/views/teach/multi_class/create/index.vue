@@ -71,8 +71,8 @@
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
         >
-          <a-select-option v-for="item in teacher.list" :key="item.user.id">
-            {{ item.user.nickname }}
+          <a-select-option v-for="item in teacher.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -115,7 +115,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -174,6 +174,7 @@ export default {
     this.fetchCourse();
     this.fetchAssistants();
     this.fetchProducts();
+    this.fetchTeacher();
   },
 
   methods: {
@@ -248,11 +249,13 @@ export default {
     fetchTeacher() {
       const { title, paging: { pageSize, current } } = this.teacher;
       const params = {
-        role: 'teacher',
         limit: pageSize,
         offset: pageSize * current
       };
-      Course.getTeacher(this.selectedCourseId, { params }).then(res => {
+      if (title) {
+        params.nickname = title;
+      }
+      Teacher.search(params).then(res => {
         this.teacher.paging.current++;
         this.teacher.list = _.concat(this.teacher.list, res.data);
         if (_.size(this.teacher.list) >= res.paging.total) {
@@ -325,7 +328,6 @@ export default {
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
-      this.handleSearchTeacher();
     },
 
     validatorＴitle: _.debounce(async (rule, value, callback) => {
