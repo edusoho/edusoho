@@ -27,8 +27,6 @@
                 { required: true, message: '请选择课程' }
               ]}]"
               placeholder="请选择课程"
-              option-filter-prop="children"
-              :filter-option="false"
               @popupScroll="courseScroll"
               @search="handleSearchCourse"
               @change="handleChangeCourse"
@@ -49,14 +47,16 @@
 
       <a-form-item label="所属产品">
         <a-select
+          show-search
           v-decorator="['productId', { rules: [
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
+          @search="handleSearchProduct"
         >
-          <a-select-option v-for="product in products" :key="product.id">
-            {{ product.title }}
+          <a-select-option v-for="item in product.list" :key="item.id">
+            {{ item.title }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -133,14 +133,17 @@ export default {
           current: 0
         }
       },
+      product: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
       teachers: [],
       assistants: [],
-      products: [],
-      productPaging: {
-        pageSize: 10,
-        current: 0,
-        flag: true
-      }
     }
   },
 
@@ -194,6 +197,44 @@ export default {
       }
     }, 300),
 
+    fetchProducts() {
+      const { title, paging: { pageSize, current } } = this.product;
+
+      const params = {
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      MultiClassProduct.search(params).then(res => {
+        this.product.paging.current++;
+        this.product.list = _.concat(this.product.list, res.data);
+        if (_.size(this.product.list) >= res.paging.total) {
+          this.product.flag = false;
+        }
+      });
+    },
+
+    handleSearchProduct: _.debounce(function(input) {
+      this.product = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchProducts();
+    }, 300),
+
+    productScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.product.flag) {
+        this.fetchProducts();
+      }
+    }, 300),
+
     fetchTeacher(id) {
       Course.getTeacher(id, { role: 'teacher' }).then(res => {
         this.teachers = res.data;
@@ -206,27 +247,7 @@ export default {
       });
     },
 
-    fetchProducts() {
-      const { pageSize, current } = this.productPaging;
-      MultiClassProduct.search({
-        limit: pageSize,
-        offset: pageSize * current
-      }).then(res => {
-        this.productPaging.current++;
-        this.products = _.concat(this.products, res.data);
-        if (_.size(this.products) >= res.paging.total) {
-          this.productPaging.flag = false;
-        }
-      });
-    },
 
-    productScroll: _.debounce(function (e) {
-      const { scrollHeight, offsetHeight, scrollTop } = e.target;
-      const maxScrollTop = scrollHeight - offsetHeight - 20;
-      if (maxScrollTop < scrollTop && this.productPaging.flag) {
-        this.fetchProducts();
-      }
-    }, 300),
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
