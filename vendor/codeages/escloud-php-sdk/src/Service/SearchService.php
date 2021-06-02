@@ -12,7 +12,7 @@ class SearchService extends BaseService
     protected $service = 'search';
 
 
-    /**git
+    /**
      * 接入云搜索账号接口
      * @return mixed
      * @throws ClientException
@@ -22,6 +22,18 @@ class SearchService extends BaseService
     public function createAccount()
     {
         return $this->request('POST', '/accounts');
+    }
+
+    /**
+     * 接入云搜索账号接口
+     * @return mixed
+     * @throws ClientException
+     * @throws ResponseException
+     * @throws SDKException
+     */
+    public function upgradeVersion()
+    {
+        return $this->request('POST', '/accounts/upgrade_version');
     }
 
     /**

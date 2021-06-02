@@ -29,7 +29,9 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
             'orderbys' => [],
             'serializes' => [],
             'conditions' => [
+                'user_id = :user_id',
                 'answer_scene_id = :answer_scene_id',
+                'assessment_id = :assessment_id',
                 'status = :status',
                 'review_user_id != :exclude_review_user_id',
                 'review_user_id = :review_user_id',

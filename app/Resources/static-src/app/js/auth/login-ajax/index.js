@@ -19,6 +19,12 @@ let validator = $form.validate({
     }
   },
   messages: {
+    _username: {
+      required: Translator.trans('auth.login.username_required_error_hint')
+    },
+    _password: {
+      required: Translator.trans('auth.login.password_required_error_hint')
+    },
     dragCaptchaToken: {
       required: Translator.trans('auth.register.drag_captcha_tips')
     },

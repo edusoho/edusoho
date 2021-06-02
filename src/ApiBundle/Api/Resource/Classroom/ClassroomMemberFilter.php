@@ -12,9 +12,9 @@ class ClassroomMemberFilter extends Filter
      *            isOldUser 移动端需要，老接口使用的User对象avatar是个字符串，所有临时换个字符串
      * @TODO 下个大版本恢复simpleUser
      */
-    protected $publicFields = array(
+    protected $publicFields = [
         'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access', 'user', 'isOldUser', 'expire',
-    );
+    ];
 
     protected function publicFields(&$data)
     {
@@ -23,7 +23,7 @@ class ClassroomMemberFilter extends Filter
         }
 
         // 去掉长期有效
-        if (isset($data['expire']['deadline']) && $data['expire']['deadline'] == 0) {
+        if (isset($data['expire']['deadline']) && 0 == $data['expire']['deadline']) {
             unset($data['expire']['deadline']);
         }
 
