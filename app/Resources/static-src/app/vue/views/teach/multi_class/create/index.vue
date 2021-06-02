@@ -48,13 +48,11 @@
 
       <a-form-item label="所属产品">
         <a-select
-          show-search
           v-decorator="['productId', { rules: [
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
-          @search="handleSearchProduct"
         >
           <a-select-option v-for="item in product.list" :key="item.id">
             {{ item.title }}
@@ -223,7 +221,7 @@ export default {
     }, 300),
 
     fetchProducts() {
-      const { title, paging: { pageSize, current } } = this.product;
+      const { paging: { pageSize, current } } = this.product;
 
       const params = {
         limit: pageSize,
@@ -238,19 +236,6 @@ export default {
         }
       });
     },
-
-    handleSearchProduct: _.debounce(function(input) {
-      this.product = {
-        list: [],
-        title: input,
-        flag: true,
-        paging: {
-          pageSize: 10,
-          current: 0
-        }
-      };
-      this.fetchProducts();
-    }, 300),
 
     productScroll: _.debounce(function (e) {
       const { scrollHeight, offsetHeight, scrollTop } = e.target;
