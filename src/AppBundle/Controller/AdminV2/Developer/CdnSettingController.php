@@ -48,6 +48,10 @@ class CdnSettingController extends BaseController
         }, array_values($cdn));
 
         $security = $this->getSettingService()->get('security', []);
+        if (is_null($security['safe_iframe_domains'])) {
+            $security['safe_iframe_domains'] = [];
+        }
+
         $security['safe_iframe_domains'] = array_merge($security['safe_iframe_domains'], $cdn);
         $security['safe_iframe_domains'] = array_filter(array_unique($security['safe_iframe_domains']));
 

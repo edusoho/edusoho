@@ -11,7 +11,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'open.course.update' => 'onCourseUpdate',
             'open.course.delete' => 'onCourseDelete',
             'open.course.lesson.create' => 'onLessonCreate',
@@ -21,7 +21,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
             'course.material.update' => 'onMaterialUpdate',
             'course.material.delete' => 'onMaterialDelete',
             'live.replay.generate' => 'onLiveReplayGenerate',
-        );
+        ];
     }
 
     public function onCourseDelete(Event $event)
@@ -64,8 +64,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 
-        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
-        $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
+        $lessonNum = $this->getOpenCourseService()->countLessons(['courseId' => $lesson['courseId']]);
+        $this->getOpenCourseService()->updateCourse($lesson['courseId'], ['lessonNum' => $lessonNum]);
     }
 
     public function onLessonDelete(Event $event)
@@ -73,8 +73,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
         $context = $event->getSubject();
         $lesson = $context['lesson'];
 
-        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
-        $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
+        $lessonNum = $this->getOpenCourseService()->countLessons(['courseId' => $lesson['courseId']]);
+        $this->getOpenCourseService()->updateCourse($lesson['courseId'], ['lessonNum' => $lessonNum]);
     }
 
     public function onMemberCreate(Event $event)
@@ -83,9 +83,12 @@ class OpenCourseEventSubscriber extends EventSubscriber
         $fields = $context['argument'];
         $member = $context['newMember'];
 
-        $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $fields['courseId']));
+        $memberNum = $this->getOpenCourseService()->countMembers([
+            'role' => 'student',
+            'courseId' => $fields['courseId'], ]
+        );
 
-        $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
+        $this->getOpenCourseService()->updateCourse($fields['courseId'], ['studentNum' => $memberNum]);
     }
 
     public function onMaterialCreate(Event $event)
@@ -148,9 +151,9 @@ class OpenCourseEventSubscriber extends EventSubscriber
         $courseId = $replay['courseId'];
         $lessonId = $replay['lessonId'];
 
-        $lessonFields = array(
+        $lessonFields = [
             'replayStatus' => 'generated',
-        );
+        ];
 
         $this->getOpenCourseService()->updateLesson($courseId, $lessonId, $lessonFields);
     }
@@ -158,14 +161,14 @@ class OpenCourseEventSubscriber extends EventSubscriber
     private function _waveLessonMaterialNum($material)
     {
         if ($material['lessonId'] && 'opencoursematerial' == $material['source'] && 'openCourse' == $material['type']) {
-            $count = $this->getMaterialService()->countMaterials(array(
+            $count = $this->getMaterialService()->countMaterials([
                     'courseId' => $material['courseId'],
                     'lessonId' => $material['lessonId'],
                     'source' => 'opencoursematerial',
                     'type' => 'openCourse',
-                )
+                ]
             );
-            $this->getOpenCourseService()->updateLesson($material['courseId'], $material['lessonId'], array('materialNum' => $count));
+            $this->getOpenCourseService()->updateLesson($material['courseId'], $material['lessonId'], ['materialNum' => $count]);
 
             return true;
         }

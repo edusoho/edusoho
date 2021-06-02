@@ -569,6 +569,7 @@ admin_v2.cloud_resource.basic_tab: Cloud Resources
 admin_v2.cloud.file.basic_tab: Cloud Resources
 admin_v2.cloud.attachment.basic_tab: Cloud Attachement
 admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
+admin_v2.cloud.file_setting.basic_tab: Cloud File Setting
 
 # 教学模块-资源管理-题库管理
 admin_v2.question_bank.menu: Question Bank

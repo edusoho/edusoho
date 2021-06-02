@@ -7,8 +7,18 @@
     <div class="media-body">
       <div class="title">{{ course.title }}</div>
       <div class="metas">
-        <span><i class="es-icon es-icon-removeredeye mrs"></i>{{ course.hitNum }}</span>
-        {% if setting('openCourse.show_comment', '1') == 1 %}
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          {% if setting('course.show_cover_num_mode') == 'studentNum' %}
+            <span class="num">
+              <i class="es-icon es-icon-people mrs"></i>{{ course.studentNum }}
+            </span>
+          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
+            <span><i class="es-icon es-icon-removeredeye mrs"></i>{{ course.hitNum }}</span>
+          {% endif %}
+          </span>
+        {% endif %}
+
+        {% if setting('course.show_student_review_num_enable', '1') == 1 %}
           <span><i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}</span>
         {% endif %}
       </div>

@@ -930,6 +930,22 @@ class EduCloudController extends BaseController
         ]);
     }
 
+    public function cloudFilesSettingAction(Request $request)
+    {
+        $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $cloudFileSetting = array_merge(['enable' => 0], $cloudFileSetting);
+
+        if ('POST' == $request->getMethod()) {
+            $cloudFileSetting = $request->request->all();
+            $this->getSettingService()->set('cloud_file_setting', $cloudFileSetting);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud-file-setting.html.twig', [
+            'cloudFileSetting' => $cloudFileSetting,
+        ]);
+    }
+
     //授权页
     public function keyAction(Request $request)
     {

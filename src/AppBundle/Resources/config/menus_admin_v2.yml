@@ -490,6 +490,8 @@ admin_v2:
                                     router_name: admin_v2_cloud_file
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
+                                admin_v2_cloud_file_setting:
+                                  name: admin_v2.cloud.file_setting.basic_tab
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
                         # 题库管理
@@ -1812,3 +1814,9 @@ admin_v2:
                                     name: 教学活动原始观看数据上报
                                 admin_v2_data_visualization_activity_stay_daily:
                                     name: 教学活动日统计记录
+                        admin_v2_api_security:
+                            name: API接口加固
+                            disable: true
+                            children:
+                                admin_v2_api_security_setting:
+                                    name: 接口安全配置项

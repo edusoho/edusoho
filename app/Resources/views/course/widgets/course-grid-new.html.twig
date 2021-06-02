@@ -63,7 +63,9 @@
         </span>
       {% endif %}
       {% if setting('goods_setting.show_review', '1') == 1 %}
-        <span {% if setting('course.show_student_num_enabled', '1') == 1 %} class="comment" {% endif %}><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
+        <span class="comment">
+          {% if setting('course.show_student_review_num_enable', '1') == 1 %}<i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}{% endif %}
+        </span>
       {% endif %}
 
       {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}

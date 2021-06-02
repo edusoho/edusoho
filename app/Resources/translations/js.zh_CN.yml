@@ -331,14 +331,20 @@ auth.login_bind_exist.bind_success_hint: 绑定帐号成功，正在跳转至首
 auth.login_bind_exist_bind_failed_hint: 绑定失败，帐号或密码错误。
 auth.login_bind_exist_bind_validate_hint: 请输入正确格式的Email/手机
 
+auth.login.username_required_error_hint: 请输入邮箱/手机/用户名
+auth.login.password_required_error_hint: 请输入密码
+
 auth.password_reset.sms_code_required_hint: 输入短信验证码
 auth.password_reset.sms_code_validate_hint: 验证码的长度必须等于6
 
+auth.register.nickname_required_error_hit: 请输入用户名
 auth.register.email_required_error_hint: 请输入邮箱
 auth.register.mobile_required_error_hint: 请输入手机
 auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
 auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
+auth.register.name_required_error_hint: 请输入帐号
+auth.register.password_required_error_hint: 请输入密码
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -1789,3 +1795,4 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_afte
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_before.not_allow.tips: 不允许后，审核状态为未审核
 admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
 admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功
+homepage: 首页

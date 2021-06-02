@@ -5,8 +5,8 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
-use Codeages\Biz\Pay\Service\AccountService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class Me extends AbstractResource
 {
@@ -40,13 +40,13 @@ class Me extends AbstractResource
             $vip = $this->service('VipPlugin:Vip:VipService')->getMemberByUserId($user['id']);
             $level = $this->service('VipPlugin:Vip:LevelService')->getLevel($vip['levelId']);
             if ($vip) {
-                $user['vip'] = array(
+                $user['vip'] = [
                     'levelId' => $vip['levelId'],
                     'vipName' => $level['name'],
                     'deadline' => date('c', $vip['deadline']),
                     'seq' => $level['seq'],
                     'icon' => empty($level['icon']) ? AssetHelper::uriForPath('/assets/v2/img/vip/vip_icon_bronze.png') : AssetHelper::uriForPath($level['icon']),
-                );
+                ];
             } else {
                 $user['vip'] = null;
             }

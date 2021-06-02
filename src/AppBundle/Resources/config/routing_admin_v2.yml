@@ -519,6 +519,10 @@ admin_v2_cloud_attachment_setting:
     path: /setting/edu_cloud/attachment
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:attachmentSetting }
 
+admin_v2_cloud_file_setting:
+  path: /cloud_file/setting
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:cloudFilesSetting }
+
 admin_v2_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
@@ -2955,6 +2959,10 @@ admin_v2_data_visualization_course_plan_learn_daily_statistics:
   path: /data_visualization/action/course_plan_learn_daily_statistics
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
 
+admin_v2_api_security_setting:
+  path: /api_security/action/setting
+  defaults: { _controller: AppBundle:AdminV2/Developer/ApiSecurity:setting }
+
 admin_v2_user_content_control_review:
     path: /setting/ugc/user_content_control/review
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
@@ -2975,4 +2983,3 @@ admin_v2_user_content_control_private_message:
 admin_v2_user_content_audit_setting:
     path: /setting/ugc/user_content_audit
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:contentAudit }
-
