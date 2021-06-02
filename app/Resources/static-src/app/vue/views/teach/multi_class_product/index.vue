@@ -168,6 +168,7 @@
 
             this.ajaxProductLoading = false;
             this.modalVisible = false;
+            this.form.resetFields();
 
             if (!error) {
               this.getProductList({ title: this.title })
@@ -198,6 +199,7 @@
 
             this.editingProduct = null;
             this.modalVisible = false;
+            this.form.resetFields();
 
             if (!error) {
               this.getProductList({ title: this.title })
