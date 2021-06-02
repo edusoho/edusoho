@@ -29,11 +29,12 @@
               placeholder="请选择课程"
               option-filter-prop="children"
               :filter-option="false"
+              @popupScroll="courseScroll"
               @search="handleSearchCourse"
               @change="handleChangeCourse"
             >
-              <a-select-option v-for="course in courses" :key="course.id">
-                {{ course.courseSetTitle }}
+              <a-select-option v-for="item in course.list" :key="item.id">
+                {{ item.courseSetTitle }}
               </a-select-option>
             </a-select>
           </a-col>
@@ -123,7 +124,15 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
-      courses: [],
+      course: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
       teachers: [],
       assistants: [],
       products: [],
@@ -142,14 +151,48 @@ export default {
   },
 
   methods: {
-    fetchCourse(params = {}) {
-      _.assign(params, {
-        isDefault: 1
-      });
+    fetchCourse() {
+      const { title, paging: { pageSize, current } } = this.course;
+
+      const params = {
+        isDefault: 1,
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      if (title) {
+        params.titleLike = title;
+      }
+
       Me.get('teach_courses', { params }).then(res => {
-        this.courses = res.data;
+        this.course.paging.current++;
+        this.course.list = _.concat(this.course.list, res.data);
+        if (_.size(this.course.list) >= res.paging.total) {
+          this.course.flag = false;
+        }
       });
     },
+
+    handleSearchCourse: _.debounce(function(input) {
+      this.course = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchCourse();
+    }, 300),
+
+    courseScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if ((maxScrollTop < scrollTop) && this.course.flag) {
+        this.fetchCourse();
+      }
+    }, 300),
 
     fetchTeacher(id) {
       Course.getTeacher(id, { role: 'teacher' }).then(res => {
@@ -197,12 +240,6 @@ export default {
       });
 
       result ? callback() : callback('产品名称不能与已创建的相同');
-    }, 300),
-
-    handleSearchCourse: _.debounce(function(input) {
-      this.fetchCourse({
-        titleLike: input
-      });
     }, 300),
 
     handleSubmit(e) {
