@@ -13,8 +13,12 @@ class GoodsController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $request->query->get('preview', 0)]);
+        $preview = $request->query->get('preview', 0);
+        $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $preview]);
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
+        if (1 != $preview && 'published' !== $goods['status']) {
+            return $this->createMessageResponse('info', '你访问的课程不存在', null, 3000, $this->generateUrl('homepage'));
+        }
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
 

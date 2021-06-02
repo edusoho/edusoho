@@ -1,0 +1,160 @@
+{% extends 'admin-v2/operating/block/block-visual-layout.html.twig' %}
+
+{% set menu = 'admin_v2_block_'~type|default('theme') %}
+
+{% set currentPage = 'admin_v2_block_visual_edit' %}
+
+{% block page_title %} {{'admin.block_manage.visual_edit.title'|trans}} {% endblock %}
+
+{% set script_controller = 'block/block-visual-edit' %}
+
+{% block blockVisual %}
+  <style type="text/css">
+    .sortable-list .placeholder {
+      margin: 10px 0;
+      width: 100%;
+      height: 40px;
+      background: #FCFFC0;
+      border: 1px dashed #ccc;
+      list-style: none;
+    }
+    .nav.sortable-list .placeholder {
+      width: 80px;
+      padding: 10px 15px;
+      background: #eee;
+      margin: 0;
+    }
+    .nav.nav-pills .dragged{
+      position: absolute!important;
+    }
+
+
+
+    .balloon-uploader {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .balloon-uploader-heading {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      display: none;
+    }
+
+    .balloon-uploader-footer {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-top: 1px solid #ddd;
+      text-align: right;
+    }
+
+    .balloon-filelist {
+      width: 100%;
+    }
+
+    .balloon-filelist-heading {
+      padding: 8px 10px;
+      position: relative;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .balloon-uploader-body {
+      position: relative;
+
+    }
+
+    .balloon-filelist .file-name,
+    .balloon-filelist .file-size,
+    .balloon-filelist .file-status,
+    .balloon-filelist .file-manage {
+      display: inline-block;
+    }
+
+    .balloon-filelist .file-name {
+      width:40%
+    }
+
+    .balloon-filelist .file-size {
+      width: 20%;
+    }
+
+    .balloon-filelist .file-status {
+      width: 18%;
+    }
+
+    .balloon-filelist .file-manage {
+      width: 20%;
+      z-index: 9999;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .balloon-filelist ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
+    .balloon-filelist ul li {
+      position: relative;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .balloon-uploader .start-upload-btn {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #5bc0de;
+      padding: 5px 10px;
+      color: #fff;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #46b8da;
+      overflow: hidden;
+    }
+
+    .balloon-uploader .start-upload-btn:hover {
+      background: #31b0d5;
+      border-color: #269abc;
+    }
+
+    .balloon-filelist .file-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .balloon-filelist .file-progress-bar {
+      background: rgb(219, 242, 215);
+      background: rgba(59, 181, 33, 0.18);
+      float: left;
+      height: 100%;
+    }
+  </style>
+  {% if app.debug %}
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_v2_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'admin.block_manage.visual_edit.watch_json_config'|trans}}</a>
+  {% endif %}
+
+    <!-- 以下是简墨新版的样式 -->
+    <h4>{{ block.title }}</h4>
+    <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+      {{ web_macro.flash_messages() }}
+      {% include 'admin-v2/operating/block/block-visual-items.html.twig' %}
+    </form>
+    <!-- 以上是新版的样式 -->
+
+  <!-- <div class="col-md-4">
+    {% include 'admin-v2/operating/block/affix-nav.html.twig' %}
+  </div> -->
+
+{% endblock %}

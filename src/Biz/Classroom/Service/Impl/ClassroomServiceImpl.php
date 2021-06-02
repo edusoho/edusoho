@@ -792,6 +792,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateClassroom($id, ['status' => 'published']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
+        $this->dispatchEvent('classroom.publish', new Event($classroom));
 
         return $classroom;
     }
@@ -802,6 +803,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateClassroom($id, ['status' => 'closed']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
+        $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
     }

@@ -442,7 +442,12 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('enable_hls_encryption_plus', {'0':'admin.edu_cloud.edu_video.close_radio'|trans, '1':'admin.edu_cloud.edu_video.open_radio'|trans}, storageSetting.enable_hls_encryption_plus|default(0)) }}
-        <div class="help-block">{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips'|trans }}</div>
+
+        {% if setting('magic.security_video_player', 0) == '0' %}
+          <div class="help-block">{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips'|trans }}</div>
+        {% else %}
+          <div class="help-block">{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips'|trans }}</div>
+        {% endif %}
       </div>
     </div>
     <div class="row form-group">

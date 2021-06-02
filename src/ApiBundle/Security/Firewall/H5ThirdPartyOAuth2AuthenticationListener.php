@@ -8,9 +8,9 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
@@ -68,7 +68,7 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
             throw new AccessDeniedHttpException(sprintf('第三方登录(%s)未开启', $type));
         }
 
-        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
 
         $client = OAuthClientFactory::create($type, $config);
 

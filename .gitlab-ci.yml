@@ -156,7 +156,7 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 3000M/g' /etc/php/7.1/phpdbg/php.ini
     - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
