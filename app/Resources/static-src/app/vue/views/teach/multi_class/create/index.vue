@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '新建班课' }]">
+  <aside-layout :breadcrumbs="[{ name: '新建班课' }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
@@ -28,7 +28,8 @@
               ]}]"
               placeholder="请选择课程"
               option-filter-prop="children"
-              :filter-option="filterOption"
+              :filter-option="false"
+              @search="handleSearchCourse"
               @change="handleChangeCourse"
             >
               <a-select-option v-for="course in courses" :key="course.id">
@@ -51,6 +52,7 @@
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
+          @popupScroll="productScroll"
         >
           <a-select-option v-for="product in products" :key="product.id">
             {{ product.title }}
@@ -89,7 +91,7 @@
         <Schedule :course-id="selectedCourseId" />
       </a-form-item>
 
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
+      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
         <a-space size="large">
           <a-button type="primary" html-type="submit">
             立即创建
@@ -124,7 +126,11 @@ export default {
       courses: [],
       teachers: [],
       assistants: [],
-      products: []
+      products: [],
+      productPaging: {
+        pageSize: 20,
+        current: 0
+      }
     }
   },
 
@@ -135,8 +141,11 @@ export default {
   },
 
   methods: {
-    fetchCourse() {
-      Me.get('teach_courses').then(res => {
+    fetchCourse(params = {}) {
+      _.assign(params, {
+        isDefault: 1
+      });
+      Me.get('teach_courses', { params }).then(res => {
         this.courses = res.data;
       });
     },
@@ -159,6 +168,14 @@ export default {
       });
     },
 
+    productScroll: _.debounce((e) => {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop ) {
+        console.log('加载更多');
+      }
+    }, 300),
+
     handleChangeCourse(value) {
       this.selectedCourseId = value;
       this.fetchTeacher(value);
@@ -173,11 +190,11 @@ export default {
       result ? callback() : callback('产品名称不能与已创建的相同');
     }, 300),
 
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
-    },
+    handleSearchCourse: _.debounce(function(input) {
+      this.fetchCourse({
+        titleLike: input
+      });
+    }, 300),
 
     handleSubmit(e) {
       e.preventDefault();
@@ -198,3 +215,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.create-multi-class-btn-group {
+  position: fixed;
+  bottom: 0;
+  right: 64px;
+  left: 200px;
+  padding: 24px 0;
+  margin: 0;
+  border-top: solid 1px #ebebeb;
+  background-color: #ffffff;
+}
+</style>
