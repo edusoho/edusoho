@@ -10298,6 +10298,7 @@ exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
+exception.user.user_is_destroyed: 用户已注销
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
