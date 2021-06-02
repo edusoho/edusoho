@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '新建班课' }]">
+  <aside-layout :breadcrumbs="[{ name: '新建班课' }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
@@ -26,13 +26,14 @@
               v-decorator="['courseId', { rules: [
                 { required: true, message: '请选择课程' }
               ]}]"
+              :filter-option="false"
               placeholder="请选择课程"
-              option-filter-prop="children"
-              :filter-option="filterOption"
+              @popupScroll="courseScroll"
+              @search="handleSearchCourse"
               @change="handleChangeCourse"
             >
-              <a-select-option v-for="course in courses" :key="course.id">
-                {{ course.courseSetTitle }}
+              <a-select-option v-for="item in course.list" :key="item.id">
+                {{ item.courseSetTitle }}
               </a-select-option>
             </a-select>
           </a-col>
@@ -51,36 +52,45 @@
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
+          @popupScroll="productScroll"
         >
-          <a-select-option v-for="product in products" :key="product.id">
-            {{ product.title }}
+          <a-select-option v-for="item in product.list" :key="item.id">
+            {{ item.title }}
           </a-select-option>
         </a-select>
       </a-form-item>
 
       <a-form-item label="授课老师">
         <a-select
+          show-search
+          :filter-option="false"
           v-decorator="['teacherId', { rules: [
             { required: true, message: '请选择授课老师' }
           ]}]"
           placeholder="请选择授课教师"
+          @popupScroll="teacherScroll"
+          @search="handleSearchTeacher"
         >
-          <a-select-option v-for="teacher in teachers" :key="teacher.user.id">
-            {{ teacher.user.nickname }}
+          <a-select-option v-for="item in teacher.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
 
       <a-form-item label="助教">
         <a-select
+          show-search
+          :filter-option="false"
           v-decorator="['assistantIds', { rules: [
             { required: true, message: '至少选择一位助教' }
           ]}]"
           mode="multiple"
           placeholder="请选择助教"
+          @popupScroll="assistantScroll"
+          @search="handleSearchAssistant"
         >
-          <a-select-option v-for="assistant in assistants" :key="assistant.id">
-            {{ assistant.nickname }}
+          <a-select-option v-for="item in assistant.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -89,7 +99,7 @@
         <Schedule :course-id="selectedCourseId" />
       </a-form-item>
 
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }">
+      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
         <a-space size="large">
           <a-button type="primary" html-type="submit">
             立即创建
@@ -105,7 +115,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Course, Me } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -121,10 +131,41 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
-      courses: [],
-      teachers: [],
-      assistants: [],
-      products: []
+      course: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
+      product: {
+        list: [],
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
+      teacher: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
+      assistant: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      }
     }
   },
 
@@ -132,36 +173,160 @@ export default {
     this.fetchCourse();
     this.fetchAssistants();
     this.fetchProducts();
+    this.fetchTeacher();
   },
 
   methods: {
     fetchCourse() {
-      Me.get('teach_courses').then(res => {
-        this.courses = res.data;
+      const { title, paging: { pageSize, current } } = this.course;
+
+      const params = {
+        isDefault: 1,
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      if (title) {
+        params.titleLike = title;
+      }
+
+      Me.get('teach_courses', { params }).then(res => {
+        this.course.paging.current++;
+        this.course.list = _.concat(this.course.list, res.data);
+        if (_.size(this.course.list) >= res.paging.total) {
+          this.course.flag = false;
+        }
       });
     },
 
-    fetchTeacher(id) {
-      Course.getTeacher(id, { role: 'teacher' }).then(res => {
-        this.teachers = res.data;
-      });
-    },
+    handleSearchCourse: _.debounce(function(input) {
+      this.course = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchCourse();
+    }, 300),
 
-    fetchAssistants() {
-      Assistant.search().then(res => {
-        this.assistants = res.data;
-      });
-    },
+    courseScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if ((maxScrollTop < scrollTop) && this.course.flag) {
+        this.fetchCourse();
+      }
+    }, 300),
 
     fetchProducts() {
-      MultiClassProduct.search().then(res => {
-        this.products = res.data;
+      const { paging: { pageSize, current } } = this.product;
+
+      const params = {
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      MultiClassProduct.search(params).then(res => {
+        this.product.paging.current++;
+        this.product.list = _.concat(this.product.list, res.data);
+        if (_.size(this.product.list) >= res.paging.total) {
+          this.product.flag = false;
+        }
       });
     },
+
+    productScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.product.flag) {
+        this.fetchProducts();
+      }
+    }, 300),
+
+    fetchTeacher() {
+      const { title, paging: { pageSize, current } } = this.teacher;
+      const params = {
+        limit: pageSize,
+        offset: pageSize * current
+      };
+      if (title) {
+        params.nickname = title;
+      }
+      Teacher.search(params).then(res => {
+        this.teacher.paging.current++;
+        this.teacher.list = _.concat(this.teacher.list, res.data);
+        if (_.size(this.teacher.list) >= res.paging.total) {
+          this.teacher.flag = false;
+        }
+      });
+    },
+
+    handleSearchTeacher: _.debounce(function(input) {
+      this.teacher = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchTeacher();
+    }, 300),
+
+    teacherScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.teacher.flag) {
+        this.fetchTeacher();
+      }
+    }, 300),
+
+    fetchAssistants() {
+      const { title, paging: { pageSize, current } } = this.assistant;
+      const params = {
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      if (title) {
+        params.nickname = title;
+      }
+
+      Assistant.search(params).then(res => {
+        this.assistant.paging.current++;
+        this.assistant.list = _.concat(this.assistant.list, res.data);
+        if (_.size(this.assistant.list) >= res.paging.total) {
+          this.assistant.flag = false;
+        }
+      });
+    },
+
+    handleSearchAssistant: _.debounce(function(input) {
+      this.assistant = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchAssistants();
+    }, 300),
+
+    assistantScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.assistant.flag) {
+        this.fetchAssistants();
+      }
+    }, 300),
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
-      this.fetchTeacher(value);
     },
 
     validatorＴitle: _.debounce(async (rule, value, callback) => {
@@ -172,12 +337,6 @@ export default {
 
       result ? callback() : callback('产品名称不能与已创建的相同');
     }, 300),
-
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
-    },
 
     handleSubmit(e) {
       e.preventDefault();
@@ -198,3 +357,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.create-multi-class-btn-group {
+  position: fixed;
+  bottom: 0;
+  right: 64px;
+  left: 200px;
+  padding: 24px 0;
+  margin: 0;
+  border-top: solid 1px #ebebeb;
+  background-color: #ffffff;
+}
+</style>
