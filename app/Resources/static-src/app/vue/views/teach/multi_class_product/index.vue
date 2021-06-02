@@ -76,6 +76,8 @@
         :visible="multiClassModalVisible"
         @close="event => multiClassModalVisible = event" />
     </a-spin>
+
+    <a-empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
   </aside-layout>
 </template>
 
