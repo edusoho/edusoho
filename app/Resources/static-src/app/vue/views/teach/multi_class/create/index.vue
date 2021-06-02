@@ -128,8 +128,9 @@ export default {
       assistants: [],
       products: [],
       productPaging: {
-        pageSize: 20,
-        current: 0
+        pageSize: 10,
+        current: 0,
+        flag: true
       }
     }
   },
@@ -163,16 +164,24 @@ export default {
     },
 
     fetchProducts() {
-      MultiClassProduct.search().then(res => {
-        this.products = res.data;
+      const { pageSize, current } = this.productPaging;
+      MultiClassProduct.search({
+        limit: pageSize,
+        offset: pageSize * current
+      }).then(res => {
+        this.productPaging.current++;
+        this.products = _.concat(this.products, res.data);
+        if (_.size(this.products) >= res.paging.total) {
+          this.productPaging.flag = false;
+        }
       });
     },
 
-    productScroll: _.debounce((e) => {
+    productScroll: _.debounce(function (e) {
       const { scrollHeight, offsetHeight, scrollTop } = e.target;
       const maxScrollTop = scrollHeight - offsetHeight - 20;
-      if (maxScrollTop < scrollTop ) {
-        console.log('加载更多');
+      if (maxScrollTop < scrollTop && this.productPaging.flag) {
+        this.fetchProducts();
       }
     }, 300),
 
