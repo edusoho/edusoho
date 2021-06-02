@@ -52,7 +52,7 @@
             { required: true, message: '请选择归属产品' }
           ]}]"
           placeholder="请选择归属产品"
-          @popupScroll="popupScroll"
+          @popupScroll="productScroll"
         >
           <a-select-option v-for="product in products" :key="product.id">
             {{ product.title }}
@@ -126,7 +126,11 @@ export default {
       courses: [],
       teachers: [],
       assistants: [],
-      products: []
+      products: [],
+      productPaging: {
+        pageSize: 20,
+        current: 0
+      }
     }
   },
 
@@ -164,10 +168,11 @@ export default {
       });
     },
 
-    popupScroll: _.debounce((e) => {
+    productScroll: _.debounce((e) => {
       const { scrollHeight, offsetHeight, scrollTop } = e.target;
-      if (scrollHeight - offsetHeight) {
-
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop ) {
+        console.log('加载更多');
       }
     }, 300),
 
