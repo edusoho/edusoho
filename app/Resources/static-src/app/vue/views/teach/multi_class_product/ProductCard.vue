@@ -53,7 +53,12 @@
         this.$emit('edit', this.product)
       },
       deleteMultiClassProduct() {
-        if (this.product.type === 'default') return
+        if (this.product.type === 'default') return;
+
+        if (this.product.multiClassNum) {
+          this.$message.warning('该产品含有班课，不能删除');
+          return;
+        }
 
         const title = this.product.title
 
