@@ -328,6 +328,16 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getUserByScrmUuid($scrmUuid)
+    {
+        if (empty($scrmUuid)) {
+            return null;
+        }
+        $user = $this->getUserDao()->getByScrmUuid($scrmUuid);
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
     public function findUsersByIds(array $ids)
     {
         $users = UserSerialize::unserializes(
@@ -558,6 +568,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function updateUserUpdatedTime($id)
     {
         return $this->getUserDao()->update($id, []);
+    }
+
+    public function setUserScrmUuid($userId, $scrmUuid)
+    {
+        return $this->getUserDao()->update($userId, ['scrmUuid' => $scrmUuid]);
     }
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = [])

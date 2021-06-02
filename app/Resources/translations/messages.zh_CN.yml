@@ -7538,7 +7538,7 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 同一IP
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 次，将暂时封禁IP
 admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_captcha: 用户登录验证码设置
-admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验
+admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验；如果切换为"手机快捷登录"，则一直需要拖动验证码
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
@@ -7835,6 +7835,7 @@ admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
+admin_v2.developer_setting.scrm_url: 'SCRM地址(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
 admin.developer_setting.default_locale.zh_CN: 中文
@@ -11914,3 +11915,5 @@ admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
 
 site.content.illegal_status: 该条内容已违规处理
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
+site.login.change_to_pwd: 切换帐号密码登录
+site.login.change_to_sms: 切换手机快捷登录

@@ -18,6 +18,8 @@ interface UserDao extends GeneralDaoInterface
 
     public function getByUUID($uuid);
 
+    public function getByScrmUuid($scrmUuid);
+
     public function countByMobileNotEmpty();
 
     public function findUnlockedUsersWithMobile($start, $limit);

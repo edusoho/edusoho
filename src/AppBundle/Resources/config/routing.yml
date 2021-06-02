@@ -50,6 +50,10 @@ login_ajax:
     path:  /login/ajax
     defaults: { _controller: AppBundle:Login:ajax }
 
+login_sms:
+  path:  /login/sms
+  defaults: { _controller: AppBundle:Login:sms }
+
 login_qrcode:
     path: /login/qrcode
     defaults: { _controller: AppBundle:Login:qrcode }
@@ -3714,3 +3718,7 @@ common_report:
 common_report_tags_modal:
   path: /common/report/{targetType}/target_id/{targetId}/tags_modal
   defaults: { _controller: AppBundle:Report:tagsModal }
+
+scrm_buy_goods_callback:
+  path: /scrm/buy/goods/callback
+  defaults: { _controller: AppBundle:SCRM/Callback:goods }
