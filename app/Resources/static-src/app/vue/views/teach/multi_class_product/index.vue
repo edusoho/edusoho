@@ -29,6 +29,7 @@
           v-model="paging.page"
           :total="paging.total"
           show-less-items
+          @change="onChangePagination"
         />
       </div>
 
@@ -104,7 +105,7 @@
         productList: [],
         paging: {
           offset: 0,
-          limit: 10,
+          limit: 9,
           total: 0,
         },
         title: '',
@@ -124,7 +125,7 @@
           const { data, paging } = await MultiClassProduct.search({
             keywords: params.title || this.title,
             offset: params.offset || this.paging.offset || 0,
-            limit: params.limit || this.paging.limit || 10,
+            limit: params.limit || this.paging.limit || 9,
           })
           paging.page = (paging.offset / paging.limit) + 1;
 
@@ -226,6 +227,11 @@
         this.form.resetFields();
         this.modalVisible = false;
         this.editingProduct = null;
+      },
+
+      onChangePagination(current) {
+        this.paging.offset = (current - 1) * this.paging.limit;
+        this.getProductList();
       }
     }
   }
@@ -234,6 +240,5 @@
 <style>
 .multi-class-product {
   min-height: 300px;
-  margin-top: 24px;
 }
 </style>
