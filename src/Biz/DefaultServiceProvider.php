@@ -29,6 +29,7 @@ use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\Importer\ItemBankExerciseMemberImporter;
 use Biz\Importer\SensitiveImporter;
+use Biz\MultiClass\AssistantPermission;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\System\Template\TemplateFactory;
@@ -306,6 +307,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['certificate.img_builder.horizontal'] = function ($biz) {
             return new HorizontalImgBuilder($biz);
+        };
+
+        $biz['assistant_permission'] = function ($biz) {
+            return new AssistantPermission($biz);
         };
     }
 }

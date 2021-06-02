@@ -21,6 +21,8 @@ class Assistant extends AbstractResource
         $conditions = [
             'nickname' => $request->query->get('nickname', ''),
             'roles' => 'ROLE_TEACHER_ASSISTANT',
+            'destroyed' => 0,
+            'locked' => 0,
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

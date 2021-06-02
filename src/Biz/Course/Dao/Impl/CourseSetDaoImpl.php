@@ -61,7 +61,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
             ->andWhere("{$courseSetAlias}.status = :{$courseSetAlias}_status")
             ->andWhere("{$courseSetAlias}.parentId = :{$courseSetAlias}_parentId")
             ->andWhere("{$courseSetAlias}.type NOT IN (:{$courseSetAlias}_excludeTypes)")
-            ->andStaticWhere("course_member.role = 'teacher'")
+            ->andStaticWhere("course_member.role in ('teacher', 'assistant')")
             ->andStaticWhere("course_member.userId = {$userId}");
 
         foreach ($orderBy ?: [] as $order => $sort) {
