@@ -1,14 +1,12 @@
 <template>
   <div class="product-card">
-    <div class="clearfix">
-      <div class="pull-left">
-        <div class="product-card__title">{{ product.title }}</div>
-        <div class="product-card__remark">{{ product.remark }}</div>
-      </div>
-      <div class="product-card__operation pull-right">
+    <div style="position: relative; padding-right: 60px;">
+      <div class="product-card__title text-overflow">{{ product.title }}</div>
+      <div class="product-card__remark text-overflow">{{ product.remark }}</div>
+      <div class="product-card__operation">
         <i class="es-icon es-icon-bianjimian mr6 color-primary" @click="editMultiClassProduct"></i>
         <i v-if="product.type !== 'default'"
-          class="es-icon es-icon-shanchu1 color-danger" 
+          class="es-icon es-icon-shanchu1 color-danger"
           @click="deleteMultiClassProduct"></i>
       </div>
     </div>
@@ -56,7 +54,7 @@
       },
       deleteMultiClassProduct() {
         if (this.product.type === 'default') return
-        
+
         const title = this.product.title
 
         this.$confirm({
@@ -86,6 +84,8 @@
     background-color: #fff;
     border-radius: 12px;
     cursor: pointer;
+    transition: all 0.3 ease;
+
     &:hover {
       box-shadow: 0 0 16px 0 rgba(70,195,123,0.30);
     }
@@ -93,17 +93,24 @@
       display: block;
     }
     &__title {
+      height: 25px;
+      line-height: 25px;
       font-size: 18px;
       color: @gray-darker;
       font-weight: 500;
     }
     &__remark {
+      height: 20px;
+      line-height: 20px;
       margin-top: @spacing-2x;
       color: @gray;
       font-size: 14px;
     }
     &__operation {
       display: none;
+      position: absolute;
+      right: 0px;
+      top: 8px;
     }
     &__lookover-multiclass {
       margin: @spacing-6x -24px 0;
@@ -112,6 +119,7 @@
       text-align: center;
       line-height: 52px;
       border-top: solid 1px @border;
+      transition: all 0.3 ease;
       &:hover {
         color: @brand-primary;
       }
