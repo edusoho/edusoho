@@ -23,9 +23,12 @@
           <a-col :span="19">
             <a-select
               show-search
-              v-decorator="['courseId', { rules: [
-                { required: true, message: '请选择课程' }
-              ]}]"
+              v-decorator="['courseId', {
+                initialValue: course.initialValue,
+                rules: [
+                  { required: true, message: '请选择课程' }
+                ]
+              }]"
               :filter-option="false"
               placeholder="请选择课程"
               @popupScroll="courseScroll"
@@ -48,9 +51,12 @@
 
       <a-form-item label="所属产品">
         <a-select
-          v-decorator="['productId', { rules: [
-            { required: true, message: '请选择归属产品' }
-          ]}]"
+          v-decorator="['productId', {
+            initialValue: product.initialValue,
+            rules: [
+              { required: true, message: '请选择归属产品' }
+            ]
+          }]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
         >
@@ -64,9 +70,12 @@
         <a-select
           show-search
           :filter-option="false"
-          v-decorator="['teacherId', { rules: [
-            { required: true, message: '请选择授课老师' }
-          ]}]"
+          v-decorator="['teacherId', {
+            initialValue: teacher.initialValue,
+            rules: [
+              { required: true, message: '请选择授课老师' }
+            ]
+          }]"
           placeholder="请选择授课教师"
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
@@ -81,9 +90,12 @@
         <a-select
           show-search
           :filter-option="false"
-          v-decorator="['assistantIds', { rules: [
-            { required: true, message: '至少选择一位助教' }
-          ]}]"
+          v-decorator="['assistantIds', {
+            initialValue: assistant.initialValue,
+            rules: [
+              { required: true, message: '至少选择一位助教' }
+            ]
+          }]"
           mode="multiple"
           placeholder="请选择助教"
           @popupScroll="assistantScroll"
@@ -131,10 +143,12 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
+      mode: 'create', // create, editor, copy
       course: {
         list: [],
         title: '',
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -143,6 +157,7 @@ export default {
       product: {
         list: [],
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -152,6 +167,7 @@ export default {
         list: [],
         title: '',
         flag: true,
+        initialValue: '',
         paging: {
           pageSize: 10,
           current: 0
@@ -161,6 +177,7 @@ export default {
         list: [],
         title: '',
         flag: true,
+        initialValue: [],
         paging: {
           pageSize: 10,
           current: 0
@@ -170,13 +187,35 @@ export default {
   },
 
   created() {
-    this.fetchCourse();
-    this.fetchAssistants();
-    this.fetchProducts();
-    this.fetchTeacher();
+    const id = this.$route.query.id;
+    if (id) {
+      this.selectedCourseId = id;
+      this.mode = 'editor';
+      this.fetchEditorCourse();
+    } else {
+      this.fetchCourse();
+      this.fetchAssistants();
+      this.fetchProducts();
+      this.fetchTeacher();
+    }
   },
 
   methods: {
+    fetchEditorCourse() {
+      MultiClass.get(this.selectedCourseId).then(res => {
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
+        this.form.setFieldsValue({ 'title': title });
+        this.course.list = [course];
+        this.course.initialValue = courseId;
+        this.product.list = [product];
+        this.product.initialValue = productId;
+        this.teacher.list = teachers;
+        this.teacher.initialValue = teacherIds[0];
+        this.assistant.list = assistants;
+        this.assistant.initialValue = assistantIds;
+      });
+    },
+
     fetchCourse() {
       const { title, paging: { pageSize, current } } = this.course;
 
