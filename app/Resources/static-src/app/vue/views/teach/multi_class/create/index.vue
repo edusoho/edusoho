@@ -63,13 +63,16 @@
 
       <a-form-item label="授课老师">
         <a-select
+          show-search
           v-decorator="['teacherId', { rules: [
             { required: true, message: '请选择授课老师' }
           ]}]"
           placeholder="请选择授课教师"
+          @popupScroll="teacherScroll"
+          @search="handleSearchTeacher"
         >
-          <a-select-option v-for="teacher in teachers" :key="teacher.user.id">
-            {{ teacher.user.nickname }}
+          <a-select-option v-for="item in teacher.list" :key="item.user.id">
+            {{ item.user.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -142,7 +145,15 @@ export default {
           current: 0
         }
       },
-      teachers: [],
+      teacher: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      },
       assistants: [],
     }
   },
@@ -235,11 +246,42 @@ export default {
       }
     }, 300),
 
-    fetchTeacher(id) {
-      Course.getTeacher(id, { role: 'teacher' }).then(res => {
-        this.teachers = res.data;
+    fetchTeacher() {
+      const { title, paging: { pageSize, current } } = this.teacher;
+      const params = {
+        role: 'teacher',
+        limit: pageSize,
+        offset: pageSize * current
+      };
+      Course.getTeacher(this.selectedCourseId, { params }).then(res => {
+        this.teacher.paging.current++;
+        this.teacher.list = _.concat(this.teacher.list, res.data);
+        if (_.size(this.teacher.list) >= res.paging.total) {
+          this.teacher.flag = false;
+        }
       });
     },
+
+    handleSearchTeacher: _.debounce(function(input) {
+      this.teacher = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchTeacher();
+    }, 300),
+
+    teacherScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.teacher.flag) {
+        this.fetchTeacher();
+      }
+    }, 300),
 
     fetchAssistants() {
       Assistant.search().then(res => {
@@ -247,11 +289,9 @@ export default {
       });
     },
 
-
-
     handleChangeCourse(value) {
       this.selectedCourseId = value;
-      this.fetchTeacher(value);
+      this.handleSearchTeacher();
     },
 
     validatorＴitle: _.debounce(async (rule, value, callback) => {
