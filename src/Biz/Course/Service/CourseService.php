@@ -140,6 +140,8 @@ interface CourseService
      */
     public function findCourseItems($courseId, $limitNum = 0);
 
+    public function searchMultiClassCourseItems($conditions, $sort, $start, $limit);
+
     /**
      * @param $courseId
      * @param array $paging array('direction' => 'up or down', 'offsetSeq' => '0', 'limit' => 10)
@@ -361,6 +363,10 @@ interface CourseService
     public function appendHasCertificate(array $courses);
 
     public function hasCertificate($courseId);
+
+    public function sumTotalIncomeByIds($ids);
+
+    public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
 }

@@ -9065,6 +9065,7 @@ exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: The number of registrations has reached the maximum limit!
 exception.user.not_match_auth: 'User is not match auth'
 exception.user.mobile_not_found: 'User mobile is not found'
+exception.user.user_is_destroyed: User is destroyed
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -10670,6 +10671,20 @@ admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the fi
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
+exception.multi_class.multi_class_product_exist: The product name already exists
+exception.multi_class.multi_class_exist: The Multi class name already exists
+exception.multi_class.multi_class_not_exist: The Multi class name not exists
+exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
+exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
+exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
+exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing
+exception.multi_class.multi_class_course_not_match: The Multi class course not match
+exception.multi_class.product_not_found: The product not found
+exception.multi_class.cannot_delete_default_product: The default product can not delete
+exception.multi_class.multi_class_clone_already: The Multi class clone already
+exception.multi_class.can_not_delete_product: This product contains classes and cannot be deleted
+exception.multi_class.can_not_manage_multi_class: No right to manage the multi class
+exception.multi_class.multi_class_course_exist: The Multi class course already exists
 admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
 
 site.login.change_to_pwd: Change to account login

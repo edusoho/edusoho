@@ -469,6 +469,18 @@ admin_v2.nav.system: System
 
 admin_v2.course.basic_group: Course Manage
 
+# 教学-课程管理-产品库
+admin_v2.multi_class_product.basic_menu: Product Library
+
+# 教学-课程管理-班课
+admin_v2.multi_class.basic_menu: Multi Class
+
+# 教学-课程管理-教师管理
+admin_v2.teacher.basic_menu: Teachers
+
+# 教学-课程管理-助教管理
+admin_v2.assistant.basic_menu: Assistants
+
 # 教学模块-课程管理-课程管理
 admin_v2.course.basic_menu: Courses
 

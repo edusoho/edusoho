@@ -27,6 +27,22 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->count($conditions);
     }
 
+    public function fillThreadCounts($conditions, $courseMembers)
+    {
+        $userThreads = $this->getThreadDao()->countThreadsGroupedByUserId($conditions);
+
+        $idIndexedCounts = ArrayToolkit::index($userThreads, 'userId');
+
+        foreach ($courseMembers as &$courseMember) {
+            $courseMember['threadCount'] = 0;
+            if (!empty($idIndexedCounts[$courseMember['userId']])) {
+                $courseMember['threadCount'] = $idIndexedCounts[$courseMember['userId']]['count'];
+            }
+        }
+
+        return $courseMembers;
+    }
+
     public function searchThreads($conditions, $sort, $start, $limit)
     {
         $orderBys = $this->filterSort($sort);

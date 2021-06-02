@@ -14,6 +14,15 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $this->db()->delete($this->table(), ['courseId' => $courseId]);
     }
 
+    public function countThreadsGroupedByUserId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(*) as count, `userId`')
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

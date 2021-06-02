@@ -33,6 +33,17 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $ids);
     }
 
+    public function findCourseByCourseSetTitleLike($courseSetTitle)
+    {
+        if (empty($courseSetTitle)) {
+            $courseSetTitle = '';
+        }
+        $courseSetTitle = '%'.$courseSetTitle.'%';
+        $sql = "SELECT * FROM {$this->table} WHERE courseSetTitle LIKE ?";
+
+        return $this->db()->fetchAll($sql, [$courseSetTitle]);
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
@@ -103,6 +114,18 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $sql = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
+    }
+
+    public function sumTotalIncomeByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT sum(`income`) as income FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
     }
 
     public function analysisCourseDataByTime($startTime, $endTime)
@@ -261,6 +284,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.type NOT IN (:excludeTypes)',
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
+                'course_v8.isDefault = :isDefault',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];

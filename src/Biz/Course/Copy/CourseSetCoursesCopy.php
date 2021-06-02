@@ -8,6 +8,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Mediator\CourseSpecsMediator;
+use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -28,6 +29,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $defaultCourseId = 0;
         $newCourses = [];
+        $newMultiClassCourseId = 0;
 
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
@@ -52,6 +54,10 @@ class CourseSetCoursesCopy extends AbstractCopy
             $options['newCourse'] = $newCourse;
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
+
+            if (0 == $newMultiClassCourseId) {
+                $newMultiClassCourseId = $newCourse['id'];
+            }
         }
 
         // 原课程defaultCourse被删除时，复制后defaultCourseId为课程下第一个计划的ID
@@ -61,6 +67,11 @@ class CourseSetCoursesCopy extends AbstractCopy
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
 
         $this->resetCopyId($newCourseSet['id']);
+
+        if (!empty($options['newMultiClass'])) {
+            $newMultiClass = $options['newMultiClass'];
+            $this->getMultiClassDao()->update($newMultiClass['id'], ['courseId' => $newMultiClassCourseId]);
+        }
     }
 
     /**
@@ -202,5 +213,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getCourseSpecsMediator()
     {
         return $this->biz['specs.mediator.course'];
+    }
+
+    /**
+     * @return MultiClassDao
+     */
+    private function getMultiClassDao()
+    {
+        return $this->biz->dao('MultiClass:MultiClassDao');
     }
 }

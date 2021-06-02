@@ -62,6 +62,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    public function findCourseByCourseSetTitleLike($courseSetTitle)
+    {
+        return $this->getCourseDao()->findCourseByCourseSetTitleLike($courseSetTitle);
+    }
+
     public function findCourseByIdsWithMarketingInfo($ids)
     {
         $courses = $this->getCourseDao()->findCoursesByIds($ids);
@@ -925,6 +930,34 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
+    public function searchMultiClassCourseItems($conditions, $sort, $start, $limit)
+    {
+        $course = $this->getCourse($conditions['courseId']);
+        if (empty($course)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+        $tasks = $this->searchCourseTasks($conditions, $sort, $start, $limit);
+
+        return $this->createCourseStrategy($course)->prepareCourseItems($conditions['courseId'], $tasks, $limit);
+    }
+
+    protected function searchCourseTasks($conditions, $sort, $start, $limit)
+    {
+        $tasks = $this->getTaskService()->searchTasks($conditions, $sort, $start, $limit);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true, 0);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        array_walk(
+            $tasks,
+            function (&$task) use ($activities) {
+                $task['activity'] = $activities[$task['activityId']];
+            }
+        );
+
+        return $tasks;
+    }
+
     protected function findTasksByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
@@ -1436,9 +1469,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
         //不是课程教师，无权限管理
-        if ($teacher) {
+        if ($this->getMemberService()->isCourseTeacher($courseId, $user->getId())) {
+            return true;
+        }
+
+        if ($this->getMemberService()->isCourseAssistant($courseId, $user->getId())) {
             return true;
         }
 
@@ -2905,6 +2941,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         ];
 
         return !empty($this->getCertificateService()->count($conditions));
+    }
+
+    public function sumTotalIncomeByIds($ids)
+    {
+        return $this->getCourseDao()->sumTotalIncomeByIds($ids);
     }
 
     /**
