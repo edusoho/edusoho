@@ -193,14 +193,18 @@ export default {
       this.mode = 'editor';
       this.fetchEditorCourse();
     } else {
-      this.fetchCourse();
-      this.fetchAssistants();
-      this.fetchProducts();
-      this.fetchTeacher();
+      this.initFetch();
     }
   },
 
   methods: {
+    initFetch() {
+      this.fetchCourse();
+      this.fetchAssistants();
+      this.fetchProducts();
+      this.fetchTeacher();
+    },
+
     fetchEditorCourse() {
       MultiClass.get(this.selectedCourseId).then(res => {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
@@ -213,6 +217,7 @@ export default {
         this.teacher.initialValue = teacherIds[0];
         this.assistant.list = assistants;
         this.assistant.initialValue = assistantIds;
+        this.initFetch();
       });
     },
 
