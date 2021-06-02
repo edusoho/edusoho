@@ -6,8 +6,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface MultiClassDao extends GeneralDaoInterface
 {
-    public function findMultiClassByTitleLike($title);
-
     public function findByProductIds(array $productIds);
 
     public function findByProductId($productId);

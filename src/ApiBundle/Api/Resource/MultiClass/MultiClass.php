@@ -119,33 +119,9 @@ class MultiClass extends AbstractResource
     private function prepareConditions($conditions)
     {
         $prepareConditions = [];
-        $searchPrepare = false;
 
         if (!empty($conditions['keywords'])) {
-            if (!$searchPrepare) {
-                $multiClass = $this->getMultiClassService()->findMultiClassByTitleLike($conditions['keywords']);
-                $ids = ArrayToolkit::column($multiClass, 'id');
-                if (!empty($ids)) {
-                    $prepareConditions['ids'] = $ids;
-                    $searchPrepare = !$searchPrepare;
-                }
-            }
-            if (!$searchPrepare) {
-                $courses = $this->getCourseService()->findCourseByCourseSetTitleLike($conditions['keywords']);
-                $courseIds = ArrayToolkit::column($courses, 'id');
-                if (!empty($courseIds)) {
-                    $prepareConditions['courseIds'] = $courseIds;
-                    $searchPrepare = !$searchPrepare;
-                }
-            }
-            if (!$searchPrepare) {
-                $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
-                $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
-                    'userIds' => $userIds,
-                    'role' => 'teacher', ],
-                    [], 0, PHP_INT_MAX
-                );
-            }
+            $prepareConditions['titleLike'] = $conditions['keywords'];
         }
 
         if (!empty($conditions['productId'])) {
