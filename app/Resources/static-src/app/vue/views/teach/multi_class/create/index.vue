@@ -26,6 +26,7 @@
               v-decorator="['courseId', { rules: [
                 { required: true, message: '请选择课程' }
               ]}]"
+              :filter-option="false"
               placeholder="请选择课程"
               @popupScroll="courseScroll"
               @search="handleSearchCourse"
@@ -64,6 +65,7 @@
       <a-form-item label="授课老师">
         <a-select
           show-search
+          :filter-option="false"
           v-decorator="['teacherId', { rules: [
             { required: true, message: '请选择授课老师' }
           ]}]"
@@ -79,14 +81,18 @@
 
       <a-form-item label="助教">
         <a-select
+          show-search
+          :filter-option="false"
           v-decorator="['assistantIds', { rules: [
             { required: true, message: '至少选择一位助教' }
           ]}]"
           mode="multiple"
           placeholder="请选择助教"
+          @popupScroll="assistantScroll"
+          @search="handleSearchAssistant"
         >
-          <a-select-option v-for="assistant in assistants" :key="assistant.id">
-            {{ assistant.nickname }}
+          <a-select-option v-for="item in assistant.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -154,7 +160,15 @@ export default {
           current: 0
         }
       },
-      assistants: [],
+      assistant: {
+        list: [],
+        title: '',
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      }
     }
   },
 
@@ -284,10 +298,45 @@ export default {
     }, 300),
 
     fetchAssistants() {
-      Assistant.search().then(res => {
-        this.assistants = res.data;
+      const { title, paging: { pageSize, current } } = this.assistant;
+      const params = {
+        limit: pageSize,
+        offset: pageSize * current
+      };
+
+      if (title) {
+        params.nickname = title;
+      }
+
+      Assistant.search(params).then(res => {
+        this.assistant.paging.current++;
+        this.assistant.list = _.concat(this.assistant.list, res.data);
+        if (_.size(this.assistant.list) >= res.paging.total) {
+          this.assistant.flag = false;
+        }
       });
     },
+
+    handleSearchAssistant: _.debounce(function(input) {
+      this.assistant = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchAssistants();
+    }, 300),
+
+    assistantScroll: _.debounce(function (e) {
+      const { scrollHeight, offsetHeight, scrollTop } = e.target;
+      const maxScrollTop = scrollHeight - offsetHeight - 20;
+      if (maxScrollTop < scrollTop && this.assistant.flag) {
+        this.fetchAssistants();
+      }
+    }, 300),
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
