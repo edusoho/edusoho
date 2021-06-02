@@ -142,7 +142,6 @@ export default {
       },
       product: {
         list: [],
-        title: '',
         flag: true,
         paging: {
           pageSize: 10,
