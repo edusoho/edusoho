@@ -1,10 +1,9 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '新建班课' }]" style="padding-bottom: 88px;">
+  <aside-layout :breadcrumbs="[{ name: breadcrumbName }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
-      @submit="handleSubmit"
       style="max-width: 900px;"
     >
       <a-form-item label="班课名称">
@@ -20,7 +19,7 @@
 
       <a-form-item label="选择课程">
         <a-row :gutter="16">
-          <a-col :span="19">
+          <a-col :span="mode === 'editor' ? 24 : 19">
             <a-select
               show-search
               v-decorator="['courseId', {
@@ -31,6 +30,7 @@
               }]"
               :filter-option="false"
               placeholder="请选择课程"
+              :disabled="mode === 'editor'"
               @popupScroll="courseScroll"
               @search="handleSearchCourse"
               @change="handleChangeCourse"
@@ -40,7 +40,7 @@
               </a-select-option>
             </a-select>
           </a-col>
-          <a-col :span="5">
+          <a-col :span="5" v-if="mode !== 'editor'">
             <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
               <a-icon type="plus" />
               创建新课程
@@ -110,18 +110,18 @@
       <a-form-item label="排课">
         <Schedule :course-id="selectedCourseId" />
       </a-form-item>
-
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
-        <a-space size="large">
-          <a-button type="primary" html-type="submit">
-            立即创建
-          </a-button>
-          <a-button @click="clickCancelCreate">
-            取消
-          </a-button>
-        </a-space>
-      </a-form-item>
     </a-form>
+
+    <div class="create-multi-class-btn-group">
+      <a-space size="large">
+        <a-button type="primary" @click="handleSubmit">
+          {{ mode === 'editor' ? '确定' : '立即创建' }}
+        </a-button>
+        <a-button @click="clickCancelCreate">
+          取消
+        </a-button>
+      </a-space>
+    </div>
   </aside-layout>
 </template>
 
@@ -183,6 +183,16 @@ export default {
           current: 0
         }
       }
+    }
+  },
+
+  computed: {
+    breadcrumbName() {
+      const names = {
+        create: '新建班课',
+        editor: '编辑班课'
+      }
+      return names[this.mode];
     }
   },
 
@@ -410,12 +420,28 @@ export default {
 
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
+      this.form.validateFields((err, values) => {
         if (!err) {
-          MultiClass.add(values).then(res => {
-            this.clickCancelCreate();
-          });
+          if (this.mode === 'create') {
+            this.createMultiClass(values);
+            return;
+          }
+          if (this.mode === 'editor') {
+            this.editorMultiClass(values);
+          }
         }
+      });
+    },
+
+    createMultiClass(values) {
+      MultiClass.add(values).then(res => {
+        this.clickCancelCreate();
+      });
+    },
+
+    editorMultiClass(values) {
+      MultiClass.editorMultiClass(this.selectedCourseId, values).then(res => {
+        this.clickCancelCreate();
       });
     },
 
