@@ -205,6 +205,16 @@ export default {
       this.fetchTeacher();
     },
 
+    // 编辑模式下, 下拉选择数据去除默认值
+    duplicateRemoval(data, id) {
+      _.forEach(data, (item, index) => {
+        if (item.id == id) {
+          data.splice(index, 1);
+          return false;
+        }
+      });
+    },
+
     fetchEditorCourse() {
       MultiClass.get(this.selectedCourseId).then(res => {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
@@ -236,6 +246,11 @@ export default {
 
       Me.get('teach_courses', { params }).then(res => {
         this.course.paging.current++;
+
+        if (this.course.initialValue) {
+          this.duplicateRemoval(res.data, this.course.initialValue);
+        }
+
         this.course.list = _.concat(this.course.list, res.data);
         if (_.size(this.course.list) >= res.paging.total) {
           this.course.flag = false;
@@ -274,6 +289,11 @@ export default {
 
       MultiClassProduct.search(params).then(res => {
         this.product.paging.current++;
+
+        if (this.product.initialValue) {
+          this.duplicateRemoval(res.data, this.product.initialValue);
+        }
+
         this.product.list = _.concat(this.product.list, res.data);
         if (_.size(this.product.list) >= res.paging.total) {
           this.product.flag = false;
@@ -300,6 +320,9 @@ export default {
       }
       Teacher.search(params).then(res => {
         this.teacher.paging.current++;
+        if (this.teacher.initialValue) {
+          this.duplicateRemoval(res.data, this.teacher.initialValue);
+        }
         this.teacher.list = _.concat(this.teacher.list, res.data);
         if (_.size(this.teacher.list) >= res.paging.total) {
           this.teacher.flag = false;
@@ -341,6 +364,9 @@ export default {
 
       Assistant.search(params).then(res => {
         this.assistant.paging.current++;
+        _.forEach(this.assistant.initialValue, item => {
+          this.duplicateRemoval(res.data, item);
+        });
         this.assistant.list = _.concat(this.assistant.list, res.data);
         if (_.size(this.assistant.list) >= res.paging.total) {
           this.assistant.flag = false;
