@@ -86,6 +86,12 @@ export default {
     this.fetchCourseLesson();
   },
 
+  mounted() {
+    $('#modal').on('hide.bs.modal', () => {
+      this.fetchCourseLesson();
+    });
+  },
+
   methods: {
     fetchCourseLesson() {
       if (!this.courseId) return;
