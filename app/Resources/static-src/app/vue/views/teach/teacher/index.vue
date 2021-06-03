@@ -43,7 +43,8 @@
       cancelText="取消"
       :width="920"
       :visible="modalVisible"
-      @cancel="closeModal"
+      @ok="handleOk"
+      @cancel="handleCancel"
     >
       <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
         <a-form-item label="序号">
@@ -109,6 +110,7 @@ export default {
         total: 0,
       },
       modalVisible: false,
+      confirmLoading: false,
     };
   },
   created() {
@@ -159,6 +161,17 @@ export default {
     close() {
       console.log("Clicked cancel button");
       this.visible = false;
+    },
+    handleOk(e) {
+      this.confirmLoading = true;
+      setTimeout(() => {
+        this.modalVisible = false;
+        this.confirmLoading = false;
+      }, 1000);
+    },
+    handleCancel(e) {
+      console.log('Clicked cancel button');
+      this.modalVisible = false;
     },
   },
 };
