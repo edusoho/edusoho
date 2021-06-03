@@ -108,7 +108,10 @@
       </a-form-item>
 
       <a-form-item label="排课">
-        <Schedule :course-id="selectedCourseId" />
+        <Schedule
+          :course-id="selectedCourseId"
+          :course-set-id="selectedCourseSetId"
+        />
       </a-form-item>
     </a-form>
 
@@ -143,6 +146,7 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
+      selectedCourseSetId: 0,
       mode: 'create', // create, editor, copy
       course: {
         list: [],
@@ -407,6 +411,12 @@ export default {
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
+      _.forEach(this.course.list, item => {
+        if (item.id == value) {
+          this.selectedCourseSetId = item.courseSetId;
+          return false;
+        }
+      });
     },
 
     validatorＴitle: _.debounce(async (rule, value, callback) => {
