@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: 'XXX课程' }]" class="course-manage">
+  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: course.courseSet.title }]" class="course-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">

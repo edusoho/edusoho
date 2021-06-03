@@ -162,7 +162,6 @@ export default {
         })
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
-
         this.multiClassList = data;
         this.paging = paging;
       } finally {

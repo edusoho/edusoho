@@ -112,6 +112,15 @@ class MultiClassStudent extends AbstractResource
     public function remove(ApiRequest $request, $id, $userId)
     {
         $multiClass = $this->getMultiClassService()->getMultiClass($id);
+        if (empty($multiClass)) {
+            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        $courseId = $multiClass['courseId'];
+
+        $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
+
+        return ['success' => true];
     }
 
     private function findUserTaskCount($courseId, $type)
