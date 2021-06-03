@@ -25,9 +25,9 @@ class UserProfile extends AbstractResource
 
         $roles = $this->getRoleService()->findRolesByCodes($user['roles']);
         $userFilter = new UserFilter();
-        $userFilter->setMode(Filter::AUTHENTICATED_MODE);
-        $userFilter->filters($user);
-        $user['roles'][0] = $roles;
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filter($user);
+        $user['roles'] = $roles;
 
         $profile = $this->getUserService()->getUserProfile($userId);
         $fields = $this->getFields();
