@@ -6,7 +6,7 @@
           v-model="title"
           style="width: 262px" @search="searchProductList" />
 
-        <a-button class="pull-right" type="primary" @click="modalVisible = true">
+        <a-button class="pull-right" type="primary" @click="createMultiClassProduct">
           新建产品
         </a-button>
       </div>
@@ -34,7 +34,7 @@
       </div>
 
       <a-modal
-        title="新建产品"
+        :title="modalTitle"
         okText="确认"
         cancelText="取消"
         :width="920"
@@ -112,7 +112,8 @@
         getListLoading: false,
         ajaxProductLoading: false,
         editingProduct: null,
-        currentProduct: {}
+        currentProduct: {},
+        modalTitle: ''
       };
     },
     created() {
@@ -137,6 +138,10 @@
       },
       searchProductList (title = '') {
         this.getProductList({ title })
+      },
+      createMultiClassProduct(){
+        this.modalVisible = true;
+        this.modalTitle = '新建产品'
       },
       validatorTitle: _.debounce(async function(rule, value, callback) {
         const { result } = await ValidationTitle.search({
@@ -184,6 +189,7 @@
       startEditMultiClassProduct (product) {
         this.editingProduct = product;
         this.modalVisible = true;
+        this.modalTitle = '编辑产品';
         this.$nextTick(() => {
           this.form.setFieldsValue({
             title: product.title || '',
