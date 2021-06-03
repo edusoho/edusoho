@@ -2,9 +2,9 @@
 
 namespace Biz\MultiClass\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MultiClassDao extends GeneralDaoInterface
+interface MultiClassDao extends AdvancedDaoInterface
 {
     public function findByProductIds(array $productIds);
 
