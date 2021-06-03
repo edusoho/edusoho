@@ -467,7 +467,7 @@ admin_v2.nav.system: System
 
 # 教学模块-课程管理
 
-admin_v2.course.basic_group: Course Manage
+admin_v2.course.basic_group: Teach Manage
 
 # 教学-课程管理-产品库
 admin_v2.multi_class_product.basic_menu: Product Library
