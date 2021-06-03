@@ -74,52 +74,68 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
     dataIndex: 'course',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'course' },
   },
   {
     title: '所属产品',
     dataIndex: 'product',
+    width: '10%',
+    ellipsis: true,
     filters: [],
   },
   {
     title: '价格',
     dataIndex: 'price',
+    width: '10%',
     sorter: true,
   },
   {
     title: '已完成/课时',
     dataIndex: 'taskNum',
+    width: '10%',
     scopedSlots: { customRender: 'taskNum' },
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
+    width: '8%',
+    ellipsis: true
   },
   {
     title: '助教老师',
     dataIndex: 'assistant',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'assistant' },
   },
   {
     title: '已报班人数',
     dataIndex: 'studentNum',
+    width: '8%',
+    ellipsis: true,
     sorter: true,
     scopedSlots: { customRender: 'studentNum' },
   },
   {
     title: '创建时间',
     dataIndex: 'createdTime',
+    width: '10%',
     sorter: true,
     scopedSlots: { customRender: 'createdTime' },
   },
   {
     title: '操作',
     dataIndex: 'action',
+    width: '14%',
     scopedSlots: { customRender: 'action' },
   },
 ];
