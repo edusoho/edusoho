@@ -165,7 +165,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $multiClass = $this->getMultiClassDao()->get($id);
         $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
         $newMultiClass = $this->biz['multi_class_copy']->copy($multiClass, [
-            'productId' => $defaultProduct['id'],
+            'productId' => !empty($defaultProduct) ? $defaultProduct['id'] : 1,
         ]);
 
         $this->getLogService()->info(

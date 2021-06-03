@@ -38,14 +38,6 @@ class MultiClassServiceTest extends BaseTestCase
         $this->assertArrayValueEquals($createMultiClass, $getMultiClass);
     }
 
-    public function testCountMultiClassCopyEd()
-    {
-        $multiClass = $this->createMultiClass();
-        $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
-        $multiClassCount = $this->getMultiClassService()->countMultiClassCopyEd($multiClass['id']);
-        $this->assertEquals(1, $multiClassCount);
-    }
-
     public function testCreateMultiClass()
     {
         $multiClass = $this->createMultiClass();

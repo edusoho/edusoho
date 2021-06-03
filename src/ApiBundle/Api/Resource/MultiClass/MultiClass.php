@@ -220,6 +220,10 @@ class MultiClass extends AbstractResource
             throw MultiClassException::MULTI_CLASS_ASSISTANT_NUMBER_EXCEED();
         }
 
+        if (in_array($multiClass['teacherId'], $multiClass['assistantIds'])) {
+            throw MultiClassException::MULTI_CLASS_ASSISTANT_NUMBER_EXCEED();
+        }
+
         return $multiClass;
     }
 
