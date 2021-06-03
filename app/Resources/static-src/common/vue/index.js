@@ -53,6 +53,10 @@ if (!window.Vue) {
   Vue.prototype.$warning = Modal.warning;
   Vue.prototype.$confirm = Modal.confirm;
   Vue.prototype.$destroyAll = Modal.destroyAll;
+
+  Message.config({
+    top: `100px`
+  });
 }
 
 if (!window.Vue) {

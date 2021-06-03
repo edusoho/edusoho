@@ -53,7 +53,7 @@
                 </a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;">复制班课</a>
+                <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
               <a-menu-item>
                 <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
@@ -186,6 +186,14 @@ export default {
           }
         },
       });
+    },
+
+    async copyMultiClass(multiClass) {
+      const { success } = await MultiClass.copyMultiClass(multiClass.id);
+      if ('success') {
+        this.$message.success('复制成功');
+        this.getMultiClassList();
+      }
     },
 
     goToMultiClassManage(id) {
