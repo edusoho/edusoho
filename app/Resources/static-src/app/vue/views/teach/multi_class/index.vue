@@ -157,8 +157,8 @@ export default {
       try {
         const { data, paging } = await MultiClass.search({
           keywords: params.keywords || '',
-          offset: params.offset || this.paging.offset || 0,
-          limit: params.pageSize || this.paging.pageSize || 10,
+          offset: params.offset || 0,
+          limit: params.pageSize || 10,
         })
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
