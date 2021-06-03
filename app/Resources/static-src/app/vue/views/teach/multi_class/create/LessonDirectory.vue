@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-directory">
     <div class="clearfix lesson-directory__header">
-      <div class="pull-left title">课时（8）</div>
+      <div class="pull-left title">课时</div>
       <div class="pull-left start-time">开始时间</div>
       <div class="pull-left duration">持续时间</div>
     </div>
@@ -17,28 +17,48 @@
       <template v-for="firstLesson in lessonDirectory">
         <a-tree-node :class="`tree-node-${firstLesson.type}`" :key="firstLesson.id">
           <template slot="title">
-            <lesson-directory-item :courseId="courseId" :lesson="firstLesson" class-name='first' />
+            <lesson-directory-item
+              :courseId="courseId"
+              :lesson="firstLesson"
+              class-name="first"
+              @update-lesson="updateLesson"
+            />
           </template>
 
           <template v-if="firstLesson.children">
             <template v-for="secondLesson in firstLesson.children">
               <a-tree-node :class="`tree-node-${secondLesson.type}`" :key="secondLesson.id">
                 <template slot="title">
-                  <lesson-directory-item :courseId="courseId" :lesson="secondLesson" class-name='second' />
+                  <lesson-directory-item
+                    :courseId="courseId"
+                    :lesson="secondLesson"
+                    class-name="second"
+                    @update-lesson="updateLesson"
+                  />
                 </template>
 
                 <template v-if="secondLesson.children">
                   <template v-for="thirdLesson in secondLesson.children">
                     <a-tree-node :class="`tree-node-${thirdLesson.type}`" :key="thirdLesson.id">
                       <template slot="title">
-                        <lesson-directory-item :courseId="courseId" :lesson="thirdLesson" class-name='third' />
+                        <lesson-directory-item
+                          :courseId="courseId"
+                          :lesson="thirdLesson"
+                          class-name="third"
+                          @update-lesson="updateLesson"
+                        />
                       </template>
 
                       <template v-if="thirdLesson.tasks">
                         <template v-for="fourLesson in thirdLesson.tasks">
                           <a-tree-node class="tree-node-task" :key="fourLesson.id">
                             <template slot="title">
-                              <lesson-directory-item :courseId="courseId" :lesson="fourLesson" class-name='four' />
+                              <lesson-directory-item
+                                :courseId="courseId"
+                                :lesson="fourLesson"
+                                class-name="four"
+                                @update-lesson="updateLesson"
+                              />
                             </template>
                           </a-tree-node>
                         </template>
@@ -51,7 +71,12 @@
                   <template v-for="thirdLesson in secondLesson.tasks">
                     <a-tree-node class="tree-node-task" :key="thirdLesson.id">
                       <template slot="title">
-                        <lesson-directory-item :courseId="courseId" :lesson="thirdLesson" class-name='third' />
+                        <lesson-directory-item
+                          :courseId="courseId"
+                          :lesson="thirdLesson"
+                          class-name="third"
+                          @update-lesson="updateLesson"
+                        />
                       </template>
                     </a-tree-node>
                   </template>
@@ -64,7 +89,12 @@
             <template v-for="secondLesson in firstLesson.tasks">
               <a-tree-node class="tree-node-task" :key="secondLesson.id">
                 <template slot="title">
-                  <lesson-directory-item :courseId="courseId" :lesson="secondLesson" class-name='second' />
+                  <lesson-directory-item
+                    :courseId="courseId"
+                    :lesson="secondLesson"
+                    class-name="second"
+                    @update-lesson="updateLesson"
+                  />
                 </template>
               </a-tree-node>
             </template>
@@ -79,6 +109,7 @@
 </template>
 
 <script>
+import { Course } from 'common/vue/service';
 import _ from '@codeages/utils';
 import LessonDirectoryItem from './LessonDirectoryItem.vue';
 
@@ -178,6 +209,32 @@ export default {
         }
       }
       this.$emit('change-lesson-directory', { data });
+    },
+
+    updateLesson(type, id) {
+      if (['chapter', 'unit'].includes(type)) {
+        this.deleteChapter(id);
+        return;
+      }
+
+      this.deleteTask(id);
+    },
+
+
+    async deleteChapter(id) {
+      const { success } = await Course.deleteChapter(this.courseId, id);
+      if (success) {
+        this.$emit('change-lesson-directory', { type: 'update' });
+        this.$message.success('删除成功');
+      }
+    },
+
+    async deleteTask(id) {
+      const success = await Course.deleteTask(this.courseId, id);
+      if (success) {
+        this.$emit('change-lesson-directory', { type: 'update' });
+        this.$message.success('删除成功');
+      }
     }
   }
 }

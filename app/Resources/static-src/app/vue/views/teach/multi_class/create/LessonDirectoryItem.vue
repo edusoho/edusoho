@@ -1,6 +1,8 @@
 <template>
   <div :class="`lesson-directory-${className} clearfix`">
     <div class="title pull-left">
+      <a-tag v-if="lesson.mode && lesson.type !== 'live'">非直播</a-tag>
+      <a-tag v-if="lesson.mode && lesson.status !== 'published'">未发布</a-tag>
       {{ getTitle }}
     </div>
     <div class="start-time pull-left">{{ getStartTime }}</div>
@@ -15,7 +17,12 @@
           :data-url="`/course/${courseId}/task/${lesson.id}/update`"
           style="color: #46c37b;"
         />
-        <a-icon type="delete" style="color: #fe4040;" @click="handleDeleteClick" />
+        <a-icon
+          v-if="lesson.type !== 'lesson' && lesson.status !== 'published'"
+          type="delete"
+          style="color: #fe4040;"
+          @click="handleDeleteClick"
+        />
       </a-space>
     </div>
   </div>
@@ -65,12 +72,19 @@ export default {
   },
 
   methods: {
-    handleEditClick() {
-      console.log('click edit');
-    },
-
     handleDeleteClick() {
-      console.log('click delete');
+      const { type, id } = this.lesson;
+      const that = this;
+      this.$confirm({
+        title: '删除',
+        content: `确认删除?`,
+        okText: '确认',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          that.$emit('update-lesson', type, id)
+        }
+      });
     }
   }
 }

@@ -148,7 +148,7 @@ export default {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -157,7 +157,7 @@ export default {
       product: {
         list: [],
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -167,7 +167,7 @@ export default {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -460,7 +460,7 @@ export default {
   bottom: 0;
   right: 64px;
   left: 200px;
-  padding: 24px 0;
+  padding: 24px 0 24px 164px;
   margin: 0;
   border-top: solid 1px #ebebeb;
   background-color: #ffffff;
