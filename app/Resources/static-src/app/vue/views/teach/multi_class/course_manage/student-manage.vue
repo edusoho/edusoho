@@ -59,7 +59,7 @@
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
-<!--      <template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
+<!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
@@ -71,9 +71,9 @@
 
       <a slot="finishedTestpaperCount" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
 
-      <template slot="deadline" slot-scope="deadline">{{ deadline }}</template>
+      <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') }}</template>
 
-      <template slot="createdTime" slot-scope="createdTime">{{ createdTime }}</template>
+      <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}</template>
 
       <template slot="actions" slot-scope="actions, record">
         <a-space size="middle">
@@ -112,11 +112,6 @@ const columns = [
     title: '手机号',
     dataIndex: 'phone',
     scopedSlots: { customRender: 'phone' }
-  },
-  {
-    title: '微信号',
-    dataIndex: 'wechat',
-    scopedSlots: { customRender: 'wechat' }
   },
   {
     title: '学习进度',
@@ -168,7 +163,11 @@ export default {
   data() {
     return {
       students: [],
-      multiClass: {},
+      multiClass: {
+        course: {
+          id: 0
+        }
+      },
       columns,
       selectedRowKeys: [],
       loading: false,
