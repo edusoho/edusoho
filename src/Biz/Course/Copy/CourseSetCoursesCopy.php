@@ -29,7 +29,6 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $defaultCourseId = 0;
         $newCourses = [];
-        $newMultiClassCourseId = 0;
 
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
@@ -54,10 +53,6 @@ class CourseSetCoursesCopy extends AbstractCopy
             $options['newCourse'] = $newCourse;
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
-
-            if (0 == $newMultiClassCourseId) {
-                $newMultiClassCourseId = $newCourse['id'];
-            }
         }
 
         // 原课程defaultCourse被删除时，复制后defaultCourseId为课程下第一个计划的ID
@@ -70,7 +65,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         if (!empty($options['newMultiClass'])) {
             $newMultiClass = $options['newMultiClass'];
-            $this->getMultiClassDao()->update($newMultiClass['id'], ['courseId' => $newMultiClassCourseId]);
+            $this->getMultiClassDao()->update($newMultiClass['id'], ['courseId' => $defaultCourseId]);
         }
     }
 

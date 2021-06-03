@@ -1,6 +1,6 @@
 <template>
   <div>
-    排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
+    排课只涉及直播课时，其他类型课时设置，请点击-<a :href="courseSetId ? `/course_set/${courseSetId}/manage/course/${courseId}/tasks` : 'javascript:;'">更多课时设置</a>
     <div class="clearfix">
       <a-space size="large">
         <a-button type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
@@ -62,8 +62,12 @@ export default {
   props: {
     courseId: {
       type: [Number, String],
-      required: true,
-      default: 0
+      required: true
+    },
+
+    courseSetId: {
+      type: [Number, String],
+      required: true
     }
   },
 
@@ -86,6 +90,12 @@ export default {
     this.fetchCourseLesson();
   },
 
+  mounted() {
+    $('#modal').on('hide.bs.modal', () => {
+      this.fetchCourseLesson();
+    });
+  },
+
   methods: {
     fetchCourseLesson() {
       if (!this.courseId) return;
@@ -103,9 +113,14 @@ export default {
     },
 
     changeLessonDirectory(params) {
-      const sortInfos = [];
+      const { data = this.lessonDirectory, addData, type } = params;
 
-      const { data = this.lessonDirectory, addData } = params;
+      if (type === 'update') {
+        this.fetchCourseLesson();
+        return;
+      }
+
+      const sortInfos = [];
 
       const loop = (sortInfos, data) => {
         _.forEach(data, lesson => {

@@ -23,15 +23,14 @@ class UserProfile extends AbstractResource
             throw UserException::USER_IS_DESTROYED();
         }
 
-        $user['roles'] = $this->getRoleService()->findRolesByCodes($user['roles']);
+        $roles = $this->getRoleService()->findRolesByCodes($user['roles']);
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filter($user);
+        $user['roles'] = $roles;
 
         $profile = $this->getUserService()->getUserProfile($userId);
-        $profile['title'] = $user['title'];
-
         $fields = $this->getFields();
-        $userFilter = new UserFilter();
-        $userFilter->setMode(Filter::AUTHENTICATED_MODE);
-        $userFilter->filters($user);
 
         return ['user' => $user, 'profile' => $profile, 'fields' => $fields];
     }

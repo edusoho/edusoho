@@ -237,8 +237,7 @@ export default {
 
     copy(record) {
       this.$clipboard(this.copyTaskUrl(record));
-      this.$message.success('复制成功')
-      this.$message.success('复制成功')
+      this.$message.success('复制成功');
     },
 
     updateTaskStatus(type, value) {

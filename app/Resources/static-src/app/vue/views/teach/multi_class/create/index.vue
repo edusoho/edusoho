@@ -108,7 +108,10 @@
       </a-form-item>
 
       <a-form-item label="排课">
-        <Schedule :course-id="selectedCourseId" />
+        <Schedule
+          :course-id="selectedCourseId"
+          :course-set-id="selectedCourseSetId"
+        />
       </a-form-item>
     </a-form>
 
@@ -143,12 +146,13 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
+      selectedCourseSetId: 0,
       mode: 'create', // create, editor, copy
       course: {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -157,7 +161,7 @@ export default {
       product: {
         list: [],
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -167,7 +171,7 @@ export default {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -407,6 +411,12 @@ export default {
 
     handleChangeCourse(value) {
       this.selectedCourseId = value;
+      _.forEach(this.course.list, item => {
+        if (item.id == value) {
+          this.selectedCourseSetId = item.courseSetId;
+          return false;
+        }
+      });
     },
 
     validatorＴitle: _.debounce(async (rule, value, callback) => {
@@ -460,7 +470,7 @@ export default {
   bottom: 0;
   right: 64px;
   left: 200px;
-  padding: 24px 0;
+  padding: 24px 0 24px 164px;
   margin: 0;
   border-top: solid 1px #ebebeb;
   background-color: #ffffff;

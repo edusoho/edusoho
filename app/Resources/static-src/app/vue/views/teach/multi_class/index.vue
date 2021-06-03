@@ -53,7 +53,7 @@
                 </a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;">复制班课</a>
+                <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
               <a-menu-item>
                 <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
@@ -74,52 +74,68 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
     dataIndex: 'course',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'course' },
   },
   {
     title: '所属产品',
     dataIndex: 'product',
+    width: '10%',
+    ellipsis: true,
     filters: [],
   },
   {
     title: '价格',
     dataIndex: 'price',
+    width: '10%',
     sorter: true,
   },
   {
     title: '已完成/课时',
     dataIndex: 'taskNum',
+    width: '10%',
     scopedSlots: { customRender: 'taskNum' },
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
+    width: '8%',
+    ellipsis: true
   },
   {
     title: '助教老师',
     dataIndex: 'assistant',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'assistant' },
   },
   {
     title: '已报班人数',
     dataIndex: 'studentNum',
+    width: '8%',
+    ellipsis: true,
     sorter: true,
     scopedSlots: { customRender: 'studentNum' },
   },
   {
     title: '创建时间',
     dataIndex: 'createdTime',
+    width: '10%',
     sorter: true,
     scopedSlots: { customRender: 'createdTime' },
   },
   {
     title: '操作',
     dataIndex: 'action',
+    width: '14%',
     scopedSlots: { customRender: 'action' },
   },
 ];
@@ -157,12 +173,11 @@ export default {
       try {
         const { data, paging } = await MultiClass.search({
           keywords: params.keywords || '',
-          offset: params.offset || this.paging.offset || 0,
-          limit: params.pageSize || this.paging.pageSize || 10,
+          offset: params.offset || 0,
+          limit: params.pageSize || 10,
         })
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
-
         this.multiClassList = data;
         this.paging = paging;
       } finally {
@@ -186,6 +201,14 @@ export default {
           }
         },
       });
+    },
+
+    async copyMultiClass(multiClass) {
+      const { success } = await MultiClass.copyMultiClass(multiClass.id);
+      if ('success') {
+        this.$message.success('复制成功');
+        this.getMultiClassList();
+      }
     },
 
     goToMultiClassManage(id) {

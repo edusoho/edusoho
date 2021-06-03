@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: 'XXX课程' }]" class="course-manage">
+  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: multiClass.title }]" class="course-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { Course } from 'common/vue/service';
+import { Course, MultiClass } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 
 export default {
@@ -49,6 +49,7 @@ export default {
       current: ['class-info'],
       id: this.$route.params.id,
       course: null,
+      multiClass: {}
     }
   },
 
@@ -60,12 +61,17 @@ export default {
 
   created() {
     this.current = [this.$route.meta.current];
-    this.getSingleCourse()
+    this.getSingleCourse();
+    this.getMultiClass();
   },
 
   methods: {
     async getSingleCourse() {
-      this.course = await Course.getSingleCourse(this.id)
+      this.course = await Course.getSingleCourse(this.id);
+    },
+
+    async getMultiClass() {
+      this.multiClass = await MultiClass.get(this.id);
     }
   }
 }

@@ -29,14 +29,14 @@ class MeTeachCourse extends AbstractResource
         $courseSets = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], $conditions, 0, PHP_INT_MAX);
 
         $conditions = [
-            'courseSetIds' => array_column($courseSets, 'id'),
+            'courseSetIds' => empty($courseSets) ? [-1] : array_column($courseSets, 'id'),
             'status' => 'published',
             'courseSetTitleLike' => $request->query->get('titleLike', ''),
             'isDefault' => $request->query->get('isDefault', 1)
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle']);
+        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle', 'courseSetId']);
         $total = $this->getCourseService()->countCourses($conditions);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);

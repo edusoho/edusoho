@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\MultiClass\Dao\MultiClassProductDao;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Dao\UserDao;
@@ -106,6 +107,7 @@ class MultiClassServiceTest extends BaseTestCase
     public function testCloneMultiClass()
     {
         $multiClass = $this->createMultiClass();
+        $this->getMultiClassProductDao()->create(['title' => '系统默认', 'type' => 'default']);
         $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
         $this->assertEquals($multiClass['title'].'(复制)', $newMultiClass['title']);
     }
@@ -196,6 +198,14 @@ class MultiClassServiceTest extends BaseTestCase
     protected function getMultiClassProductService()
     {
         return $this->createService('MultiClass:MultiClassProductService');
+    }
+
+    /**
+     * @return MultiClassProductDao
+     */
+    protected function getMultiClassProductDao()
+    {
+        return $this->createDao('MultiClass:MultiClassProductDao');
     }
 
     /**
