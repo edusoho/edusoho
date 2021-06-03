@@ -114,7 +114,7 @@ class MultiClassProduct extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $products = $this->getMultiClassProductService()->searchProducts($conditions, [], $offset, $limit);
+        $products = $this->getMultiClassProductService()->searchProducts($conditions, ['createdTime' => 'DESC'], $offset, $limit);
         $products = $this->appendBaseInfo($products);
         $total = $this->getMultiClassProductService()->countProducts($conditions);
 

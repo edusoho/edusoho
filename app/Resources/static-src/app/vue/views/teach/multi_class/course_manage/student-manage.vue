@@ -36,6 +36,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :row-key="record => record.id"
+      :pagination="paging"
       :data-source="students"
     >
       <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user.id)">{{ record.user.nickname }}</a>
@@ -65,9 +66,9 @@
             title="确定移除?"
             ok-text="确定"
             cancel-text="取消"
-            @confirm="confirm"
+            @confirm="confirm(record.user.id)"
           >
-            <a href="#">移除</a>
+            <a href="#" >移除</a>
           </a-popconfirm>
         </a-space>
       </template>
@@ -143,33 +144,6 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-      "id": "3",  //courseMemberId
-      "createdTime": "1621251872",
-      "learningProgressPercent": 33,
-      "threadCount": "1",
-      "finishedHomeworkCount": 2,
-      "homeworkCount": 3,
-      "finishedTestpaperCount": 0,
-      "testpaperCount": 2,
-      "user": {
-          "id": "1",
-          "nickname": "用户名",
-          "weixin": "dddsss",
-          "verifiedMobile": "16755221122",
-      },
-      "learningProgressPercent": "25",  // 0~ 100, 表示相应的百分比
-      "assistants": [{
-          "id": "2", //用户id
-          "truename": "李老师",
-      }],
-      "deadline": "1622115872", //unix_time, 没有此属性表示永不过期
-      "createdTime": "1620912792" // 加入时间
-  }
-]
-
-
 export default {
   components: {
     AddStudentModal,
@@ -186,10 +160,11 @@ export default {
       viewStudentInfoVisible: false,
       id: this.$route.params.id,
       getListLoading: false,
-      keywords: '',
+      keyword: '',
       paging: {
+        total: 0,
         offset: 0,
-        limit: 10,
+        pageSize: 10,
       },
     };
   },
@@ -212,16 +187,15 @@ export default {
 
   methods: {
     async getMultiClassStudents(params = {}) {
-      await MultiClassStudent.search({
+      const { data, paging } = await MultiClassStudent.search({
         id: this.id,
-        keyword: params.keyword || '',
+        keyword: params.keyword ||this.keyword || '',
         offset: params.offset || this.paging.offset || 0,
         limit: params.limit || this.paging.limit || 10,
-      }).then(res => {
-        this.students = res.data;
-      }).catch(err => {
-
       });
+      this.students = data;
+      paging.page = (paging.offset / paging.limit) + 1;
+      this.paging = paging;
     },
 
     async getMultiClass() {
@@ -231,8 +205,15 @@ export default {
 
       });
     },
-
+    onRemoveStudent(userId) {
+      MultiClassStudent.deleteMultiClassMember(this.multiClass.id, userId).then(res => {
+        this.getMultiClassStudents();
+      }).catch(err => {
+        this.$message.warning('移除学员失败！');
+      })
+    },
     onSearch(keyword) {
+      this.keyword = keyword;
       this.getMultiClassStudents({ keyword })
     },
 
@@ -257,11 +238,6 @@ export default {
     viewStudentInfo(id) {
       this.viewStudentInfoVisible = true;
     },
-
-    onRemoveStudent(studentId) {
-
-    },
-
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后移除', 3);
@@ -283,8 +259,9 @@ export default {
 
     },
 
-    confirm() {
-      this.$message.success('Click on Yes');
+    confirm(userId) {
+      this.onRemoveStudent(userId);
+      this.$message.success('移除学员成功！', 2);
     },
   }
 }
