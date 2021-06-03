@@ -2025,9 +2025,6 @@ course_set_manage_course_students_deadline_batch_deadline_check:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline/check
   defaults: { _controller: AppBundle:Course/StudentManage:checkDeadline }
 
-
-
-
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
   defaults: {_controller: AppBundle:Course/StudentManage:studyProcess}
