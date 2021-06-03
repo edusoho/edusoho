@@ -19,6 +19,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->findByProductIds($productIds);
     }
 
+    public function findMultiClassesByCourseIds($courseIds)
+    {
+        return $this->getMultiClassDao()->findByCourseIds($courseIds);
+    }
+
     public function findByProductId($productId)
     {
         return $this->getMultiClassDao()->findByProductId($productId);

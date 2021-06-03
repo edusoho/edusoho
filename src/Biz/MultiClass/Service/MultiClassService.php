@@ -6,6 +6,8 @@ interface MultiClassService
 {
     public function findByProductIds(array $productIds);
 
+    public function findMultiClassesByCourseIds($courseIds);
+
     public function findByProductId($productId);
 
     public function getMultiClass($id);

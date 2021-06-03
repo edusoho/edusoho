@@ -18,6 +18,11 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
         return $this->findInField('productId', array_values($productIds));
     }
 
+    public function findByCourseIds(array $courseIds)
+    {
+        return $this->findInField('courseId', array_values($courseIds));
+    }
+
     public function findByProductId($productId)
     {
         return $this->findByFields(['productId' => $productId]);
