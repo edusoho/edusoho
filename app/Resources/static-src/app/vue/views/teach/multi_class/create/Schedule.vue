@@ -109,9 +109,14 @@ export default {
     },
 
     changeLessonDirectory(params) {
-      const sortInfos = [];
+      const { data = this.lessonDirectory, addData, type } = params;
 
-      const { data = this.lessonDirectory, addData } = params;
+      if (type === 'update') {
+        this.fetchCourseLesson();
+        return;
+      }
+
+      const sortInfos = [];
 
       const loop = (sortInfos, data) => {
         _.forEach(data, lesson => {
