@@ -12,7 +12,7 @@
       :columns="columns"
       :data-source="pageData"
       rowKey="id"
-      :pagination="false"
+      :pagination="pagination"
       rowClassName="teacher-manage-row"
     >
       <div slot="loginInfo" slot-scope="item">
@@ -28,15 +28,6 @@
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
-
-    <div class="text-center">
-      <a-pagination class="mt6"
-        v-if="paging"
-        v-model="paging.page"
-        :total="paging.total"
-        show-less-items
-      />
-    </div>
 
     <a-modal title="教师详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
