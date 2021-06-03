@@ -47,15 +47,13 @@
       @cancel="handleCancel"
     >
       <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
-        <a-form-item label="序号">
+        <a-form-item label="序号" extra="请输入0-10000的整数">
           <a-input
             v-decorator="['title', { rules: [
-              { required: true, message: '序号不能为空' },
-              { max: 5, message: '序号不能超过5个字符' },
-              { validator: validatorTitle }
+              { required: true, message: '请输入序号' },
+              { max: 5, message: '序号不能超过5个字符' }
             ] }]"
           />
-          请输入0-10000的整数
         </a-form-item>
       </a-form>
     </a-modal>
@@ -109,8 +107,10 @@ export default {
         limit: 10,
         total: 0,
       },
+      pagination: {},
       modalVisible: false,
       confirmLoading: false,
+      form: this.$form.createForm(this, { name: 'set_number' }),
     };
   },
   created() {
