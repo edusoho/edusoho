@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\UserProfile;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -17,7 +15,7 @@ class UserProfile extends AbstractResource
     public function get(ApiRequest $request, $userId)
     {
         $user = $this->getUserService()->getUser($userId);
-        if (empty($user)){
+        if (empty($user)) {
             throw UserException::NOTFOUND_USER();
         }
 

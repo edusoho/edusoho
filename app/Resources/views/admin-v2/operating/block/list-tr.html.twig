@@ -31,8 +31,11 @@
 
         {% if setting('developer.debug') %}
 
-        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_v2_block_template_edit', {blockTemplateId:blockTemplate.id,type:type}) }}" data-toggle="modal" data-target="#modal" >{{'admin.block_manage.set_up'|trans}}</button>
-        <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_v2_block_delete', {id:blockTemplate.id}) }}" data-target="{{ blockTemplate.id }}">{{'admin.block_manage.delete'|trans}}</button>
+          <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_v2_block_template_edit', {blockTemplateId:blockTemplate.id,type:type}) }}" data-toggle="modal" data-target="#modal" >{{'admin.block_manage.set_up'|trans}}</button>
+{#          行业主题（考试考证类）不展示删除按钮#}
+          {% if blockTemplate.category != 'certificate' %}
+            <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_v2_block_delete', {id:blockTemplate.id}) }}" data-target="{{ blockTemplate.id }}">{{'admin.block_manage.delete'|trans}}</button>
+          {% endif %}
         {% endif %}
     </td>
 </tr>

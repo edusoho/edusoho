@@ -126,6 +126,8 @@ interface UploadFileService
 
     public function tryAccessFile($fileId);
 
+    public function canDownloadFile($fileId);
+
     public function canManageFile($fileId);
 
     public function findMySharingContacts($targetUserId);

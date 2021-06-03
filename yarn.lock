@@ -3484,10 +3484,17 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
+<<<<<<< HEAD
 es-webpack-engine@4.5.2:
   version "4.5.2"
   resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-4.5.2.tgz#5c135225d1f66dd935d1702daa69da82229d997e"
   integrity sha512-D7j1irjqaxJe7c/KnpAZ2YHDhT4SbLMq1M32a8tiySZURWTAl9PI9KaycUHtIm2UhMXLPfb9FnTNhKQR0v7cCA==
+=======
+es-webpack-engine@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.nlark.com/es-webpack-engine/download/es-webpack-engine-4.5.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fes-webpack-engine%2Fdownload%2Fes-webpack-engine-4.5.1.tgz#c71336ae7711a80f2ec47705adbc0af609e01737"
+  integrity sha1-xxM2rncRqA8uxHcFrbwK9gngFzc=
+>>>>>>> ce7be3f220ddd6bbfa85a7cc30d339680b51f868
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
@@ -5373,10 +5380,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.23:
-  version "1.0.23"
-  resolved "https://registry.nlark.com/item-bank/download/item-bank-1.0.23.tgz#46f1e2f956dc46a8844dd2330a0d7d9d1c7bf394"
-  integrity sha1-RvHi+VbcRqiETdIzCg19nRx785Q=
+item-bank@^1.0.27:
+  version "1.0.27"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.27.tgz#2af01c487bda5d2378a8da787c74c685de2c5d0a"
+  integrity sha512-8hn5HvN+0NlfZ964FqzgradLeOn9s5CzQi1tS1JsTCanvJJPExPAQrnRnyERiNJVzvt00cmzHHMHDO4IjdYwwQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"

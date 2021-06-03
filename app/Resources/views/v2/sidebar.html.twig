@@ -37,13 +37,13 @@
     <li class="cd-sidebar__item {% if side_nav == 'profile' %}active{% endif %}">
       <a href="{{ path('settings') }}">{{'user.settings.personal_info_menu'|trans}}</a>
     </li>
-    <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}">
+    <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}" {% if app.request.locale == 'en' %} style="display: none" {% endif %}>
       <a href="{{ path('setting_approval_submit') }}">{{'user.settings.verification_menu'|trans}}</a>
     </li>
     <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
       <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
     </li>
-    {% if is_plugin_installed('TeacherAudit') %}   
+    {% if is_plugin_installed('TeacherAudit') %}
     <li class="cd-sidebar__item {% if side_nav == 'teacheraudit' %}active{% endif %}">
       <a href="{{ path('teacher_audit_submit') }}">{{'user.settings.teachers_qualification_menu'|trans}}</a>
     </li>
