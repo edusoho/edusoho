@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-directory">
     <div class="clearfix lesson-directory__header">
-      <div class="pull-left title">课时（8）</div>
+      <div class="pull-left title">课时</div>
       <div class="pull-left start-time">开始时间</div>
       <div class="pull-left duration">持续时间</div>
     </div>
