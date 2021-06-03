@@ -93,6 +93,9 @@
 
     &:hover {
       box-shadow: 0 0 16px 0 rgba(70,195,123,0.30);
+      .product-card__lookover-multiclass {
+        color: @brand-primary;
+      }
     }
     &:hover &__operation {
       display: block;
@@ -125,9 +128,6 @@
       line-height: 52px;
       border-top: solid 1px @border;
       transition: all 0.3 ease;
-      &:hover {
-        color: @brand-primary;
-      }
     }
   }
 </style>
