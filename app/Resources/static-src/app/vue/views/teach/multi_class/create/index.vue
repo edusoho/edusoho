@@ -148,7 +148,7 @@ export default {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -157,7 +157,7 @@ export default {
       product: {
         list: [],
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
@@ -167,7 +167,7 @@ export default {
         list: [],
         title: '',
         flag: true,
-        initialValue: '',
+        initialValue: undefined,
         paging: {
           pageSize: 10,
           current: 0
