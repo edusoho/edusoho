@@ -33,6 +33,7 @@ import favoriteModule from './modules/favorite';
 import reviewModule from './modules/review';
 import courseTaskEventModule from './modules/courseTaskEvent';
 import courseTaskResultModule from './modules/courseTaskResult';
+import fastLoginSmsModule from './modules/fastLoginSms';
 
 const API_URL_PREFIX = '/api';
 
@@ -49,6 +50,7 @@ const Api = {
   dragCaptcha: dragCaptchaModule(API_URL_PREFIX),
   //短信
   sms: smsModule(API_URL_PREFIX),
+  fastLoginSms: fastLoginSmsModule(API_URL_PREFIX),
   teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
   studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
   conversation: conversationModule(API_URL_PREFIX),

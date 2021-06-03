@@ -201,6 +201,9 @@ export default class Register {
         },
       },
       messages: {
+        nickname: {
+          required: Translator.trans('auth.register.nickname_required_error_hit'),
+        },
         verifiedMobile: {
           required: Translator.trans('validate.phone.message'),
         },
@@ -215,6 +218,9 @@ export default class Register {
         },
         agree_policy: {
           required: Translator.trans('validate.valid_policy_input.message'),
+        },
+        password: {
+          required: Translator.trans('auth.register.password_required_error_hint'),
         },
       },
     };

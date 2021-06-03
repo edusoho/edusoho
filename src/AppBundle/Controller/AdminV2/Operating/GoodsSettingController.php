@@ -39,6 +39,7 @@ class GoodsSettingController extends BaseController
         } else {
             $courseSetting['show_cover_num_mode'] = 'visitor' === $setting['show_number_data'] ? 'hitNum' : 'studentNum';
         }
+        $courseSetting['show_student_review_num_enable'] = $setting['show_student_review_num_enable'];
         $this->getSettingService()->set('course', $courseSetting);
 
         //班级 商品剥离设置项整合到此处，需要在此处生效后同步更新到班级设置（时间：2020-10-20，版本： 20.4.3）

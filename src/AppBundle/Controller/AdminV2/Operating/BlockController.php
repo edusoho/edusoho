@@ -11,7 +11,9 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\BlockService;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
+use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -54,9 +56,10 @@ class BlockController extends BaseController
 
     public function blockMatchAction(Request $request, $type)
     {
-        $likeString = $request->query->get('q');
+        list($conditions, $sort) = $this->dealQueryFields($type);
+        $conditions['title'] = $request->query->get('q');
 
-        $blocks = $this->getBlockService()->searchBlockTemplates(['title' => $likeString], ['updateTime' => 'DESC'], 0, 10);
+        $blocks = $this->getBlockService()->searchBlockTemplates($conditions, ['updateTime' => 'DESC'], 0, 10);
         foreach ($blocks as &$block) {
             $block['gotoUrl'] = $this->generateUrl('admin_v2_block_visual_edit', ['blockTemplateId' => $block['id'], 'type' => $type]);
         }
@@ -128,6 +131,19 @@ class BlockController extends BaseController
         $user = $this->getUser();
         if ('POST' == $request->getMethod()) {
             $condation = $request->request->all();
+            if (isset($condation['data']['honorText'][0]['value']) && !empty($condation['data']['honorText'][0]['value'])) {
+                $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+                foreach ($themeConfig['confirmConfig']['blocks']['left'] as  &$value) {
+                    if ('four-ads' == $value['code']) {
+                        $value['title'] = $condation['data']['honorText'][0]['value'];
+                    }
+                }
+                $this->getThemeService()->editThemeConfig($themeConfig['name'], $themeConfig);
+            }
+            if (isset($condation['data']['ad'][0]['showType']) && 'video' == $condation['data']['ad'][0]['showType']) {
+                $this->getUploadFileService()->update($condation['data']['ad'][0]['fileId'], ['isPublic' => 1]);
+            }
+
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
@@ -140,6 +156,7 @@ class BlockController extends BaseController
                 'code' => $condation['code'],
                 'mode' => $condation['mode'],
             ];
+
             if (empty($condation['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
             } else {
@@ -148,14 +165,22 @@ class BlockController extends BaseController
 
             $this->setFlashMessage('success', 'site.save.success');
         }
-
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
-
-        return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
-            'block' => $block,
-            'action' => 'edit',
-            'type' => $type,
-        ]);
+        if ('imgOrVideolink' == $block['meta']['items']['ad']['type']) {
+            return $this->render('admin-v2/operating/block/block-visual-certificate-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+                'showType' => 'no',
+            ]);
+        } else {
+            return $this->render('admin-v2/operating/block/block-visual-edit.html.twig', [
+                'block' => $block,
+                'action' => 'edit',
+                'type' => $type,
+                'showType' => isset($block['meta']['items']['img']['type']) ? $block['meta']['items']['img']['type'] : 'no',
+            ]);
+        }
     }
 
     public function editBlockTemplateAction(Request $request, $blockTemplateId)
@@ -345,5 +370,21 @@ class BlockController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

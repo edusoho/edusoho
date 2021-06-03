@@ -141,13 +141,13 @@ class ClassroomEntity extends BaseGoodsEntity
     public function isSpecsTeacher($goods, $specs, $userId)
     {
         return $this->getClassroomService()->isClassroomTeacher($specs['targetId'], $userId)
-            && $this->getClassroomService()->isClassroomHeadTeacher($specs['targetId'], $userId)
-            && $this->getClassroomService()->isClassroomAssistant($specs['targetId'], $userId);
+            || $this->getClassroomService()->isClassroomHeadTeacher($specs['targetId'], $userId)
+            || $this->getClassroomService()->isClassroomAssistant($specs['targetId'], $userId);
     }
 
     public function isSpecsMember($goods, $specs, $userId)
     {
-        return $this->isSpecsStudent($goods, $specs, $userId);
+        return $this->isSpecsStudent($goods, $specs, $userId) || $this->isSpecsTeacher($goods, $specs, $userId);
     }
 
     /**

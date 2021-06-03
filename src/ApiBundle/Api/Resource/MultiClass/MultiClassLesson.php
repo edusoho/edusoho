@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
@@ -28,7 +27,7 @@ class MultiClassLesson extends AbstractResource
         $conditions = [
             'courseId' => $course['id'],
             'titleLike' => $request->query->get('titleLike', ''),
-            'types' => $request->query->get('types', [])
+            'types' => $request->query->get('types', []),
         ];
         $items = $this->getCourseService()->searchMultiClassCourseItems($conditions, ['startTime' => $request->query->get('sort', 'ASC')], $offset, $limit);
         $total = $this->getTaskService()->countTasks($conditions);
@@ -58,11 +57,11 @@ class MultiClassLesson extends AbstractResource
                         $lesson['teacher'] = $teacher ? $teacher[0] : [];
                         $lesson['assistant'] = $assistants;
                         $lesson['questionNum'] = $questionNum;
-                        $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $lesson['tasks']['id']]);
                         $lesson['totalStudentNum'] = $totalStudentNum;
                         array_multisort(array_column($lesson['tasks'], 'seq'), SORT_ASC, $lesson['tasks']);
                         foreach ($lesson['tasks'] as $key => $task) {
-                            if (isset($task['type']) && $task['type'] === 'live') {
+                            $lesson['studyStudentNum'] = $this->getTaskResultService()->countUserNumByCourseTaskId(['courseTaskId' => $task['id']]);
+                            if (isset($task['type']) && 'live' === $task['type']) {
                                 if (time() < $task['activity']['startTime']) {
                                     $task['activity']['ext']['progressStatus'] = 'created';
                                 } elseif (time() >= $task['activity']['startTime'] && time() < $task['activity']['endTime']) {
