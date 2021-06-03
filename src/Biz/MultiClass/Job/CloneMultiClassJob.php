@@ -5,6 +5,7 @@ namespace Biz\MultiClass\Job;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class CloneMultiClassJob extends AbstractJob
@@ -26,7 +27,16 @@ class CloneMultiClassJob extends AbstractJob
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
+            $this->getLogService()->error('multi_class', 'multi_class_clone', "复制班课{$multiClassId}失败", $e->getMessage());
         }
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 
     /**

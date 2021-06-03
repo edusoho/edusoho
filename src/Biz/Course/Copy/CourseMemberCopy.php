@@ -30,9 +30,9 @@ class CourseMemberCopy extends AbstractCopy
                 $member = $this->partsFields($member);
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
-                $member['multiClassId'] = isset($options['newMultiClass']) ? $options['newMultiClass']['id'] : 0;
+                $member['multiClassId'] = !empty($member['multiClassId']) && !empty($options['newMultiClass']) ? $options['newMultiClass']['id'] : 0;
 
-                if ($member['isVisible']) {
+                if ($member['isVisible'] && 'teacher' == $member['role']) {
                     $teacherIds[] = $member['userId'];
                 }
 
@@ -64,6 +64,7 @@ class CourseMemberCopy extends AbstractCopy
             'deadline',
             'deadlineNotified',
             'role',
+            'multiClassId',
         ];
     }
 
