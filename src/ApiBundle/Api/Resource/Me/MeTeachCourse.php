@@ -29,7 +29,7 @@ class MeTeachCourse extends AbstractResource
         $courseSets = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], $conditions, 0, PHP_INT_MAX);
 
         $conditions = [
-            'courseSetIds' => array_column($courseSets, 'id'),
+            'courseSetIds' => empty($courseSets) ? [-1] : array_column($courseSets, 'id'),
             'status' => 'published',
             'courseSetTitleLike' => $request->query->get('titleLike', ''),
             'isDefault' => $request->query->get('isDefault', 1)
