@@ -8,7 +8,13 @@
       />
     </div>
 
-    <a-table :columns="columns" :data-source="pageData" rowKey="id" :pagination="false">
+    <a-table
+      :columns="columns"
+      :data-source="pageData"
+      rowKey="id"
+      :pagination="false"
+      rowClassName="teacher-manage-row"
+    >
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
         <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
@@ -17,7 +23,7 @@
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
         <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
-        <a href="javascript:;">序号设置</a>
+        <a class="set-number" href="javascript:;" @click="modalVisible = true">序号设置</a>
       </div>
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
@@ -39,6 +45,29 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
+
+    <a-modal
+      title="设置推荐教师"
+      okText="确认"
+      cancelText="取消"
+      :width="920"
+      :visible="modalVisible"
+      @cancel="closeModal"
+    >
+      <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
+        <a-form-item label="序号">
+          <a-input
+            v-decorator="['title', { rules: [
+              { required: true, message: '序号不能为空' },
+              { max: 5, message: '序号不能超过5个字符' },
+              { validator: validatorTitle }
+            ] }]"
+          />
+          请输入0-10000的整数
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
   </aside-layout>
 </template>
 
@@ -52,17 +81,21 @@ const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
+    width: '25%'
   },
   {
     title: "是否推荐",
+    width: '25%',
     scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
+    width: '25%',
     scopedSlots: { customRender: "loginInfo" },
   },
   {
     title: "操作",
+    width: '25%',
     scopedSlots: { customRender: "action" },
   },
 ];
@@ -84,6 +117,7 @@ export default {
         limit: 10,
         total: 0,
       },
+      modalVisible: false,
     };
   },
   created() {
@@ -138,3 +172,15 @@ export default {
   },
 };
 </script>
+
+<style lang="less">
+.teacher-manage-row {
+  .set-number {
+    display: none;
+  }
+
+  &:hover .set-number {
+    display: inline-block;
+  }
+}
+</style>
