@@ -16,9 +16,9 @@
       :row-class-name="record => 'teacher-manage-row'"
     >
       <div slot="promoteInfo" slot-scope="item">
-        <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
+        <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
         <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
-        <a class="set-number" href="javascript:;" @click="modalVisible = true">序号设置</a>
+        <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
       <div slot="loginInfo" slot-scope="item">
@@ -41,7 +41,6 @@
       title="设置推荐教师"
       okText="确认"
       cancelText="取消"
-      :width="920"
       :visible="modalVisible"
       @ok="handleOk"
       @cancel="handleCancel"
@@ -50,9 +49,11 @@
         <a-form-item label="序号" extra="请输入0-10000的整数">
           <a-input-number
             style="width: 100%;"
-            v-decorator="['title', { rules: [
+            v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' }
             ]}]"
+            :min="0"
+            :max="10000"
           />
         </a-form-item>
       </a-form>
@@ -63,8 +64,9 @@
 
 
 <script>
+import _ from '@codeages/utils';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, User } from "common/vue/service/index.js";
+import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
 const columns = [
@@ -109,8 +111,8 @@ export default {
         limit: 10,
         total: 0,
       },
+      setNumId: 0,
       modalVisible: false,
-      confirmLoading: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
     };
   },
@@ -137,7 +139,7 @@ export default {
     },
 
     async edit(id) {
-      this.user = await User.get(id);
+      this.user = await UserProfiles.get(id);
       this.visible = true;
     },
 
@@ -145,18 +147,43 @@ export default {
       this.visible = false;
     },
 
+    clickSetNumberModal(id) {
+      this.setNumId = id;
+      this.modalVisible = true;
+    },
+
     handleOk(e) {
-      this.confirmLoading = true;
-      setTimeout(() => {
-        this.modalVisible = false;
-        this.confirmLoading = false;
-      }, 1000);
+      this.form.validateFields(async (err, values) => {
+        if (!err) {
+          const { success } = await Teacher.promotion(this.setNumId, values);
+          if (success) {
+            _.forEach(this.pageData, item => {
+              if (item.id == this.setNumId) {
+                item.promotedSeq = values.number;
+                return false;
+              }
+            });
+            this.handleCancel();
+          }
+        }
+      });
     },
 
     handleCancel(e) {
-      console.log('Clicked cancel button');
       this.modalVisible = false;
     },
+
+    async changePromoted(checked, id) {
+      let { success } = checked ? await Teacher.promotion(id) : await Teacher.cancelPromotion(id);
+      if (success) {
+        _.forEach(this.pageData, item => {
+          if (item.id == id) {
+            item.isPromoted = checked;
+            return false;
+          }
+        });
+      }
+    }
   },
 };
 </script>
