@@ -11,19 +11,19 @@
     <a-table
       :columns="columns"
       :data-source="pageData"
-      rowKey="id"
-      :pagination="pagination"
-      rowClassName="teacher-manage-row"
+      :row-key="record => record.id"
+      :pagination="paging"
+      :row-class-name="record => 'teacher-manage-row'"
     >
-      <div slot="loginInfo" slot-scope="item">
-        <div>{{ item.loginIp }}</div>
-        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
-      </div>
-
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
         <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
         <a class="set-number" href="javascript:;" @click="modalVisible = true">序号设置</a>
+      </div>
+
+      <div slot="loginInfo" slot-scope="item">
+        <div>{{ item.loginIp }}</div>
+        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
       </div>
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
@@ -48,11 +48,11 @@
     >
       <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
         <a-form-item label="序号" extra="请输入0-10000的整数">
-          <a-input
+          <a-input-number
+            style="width: 100%;"
             v-decorator="['title', { rules: [
-              { required: true, message: '请输入序号' },
-              { max: 5, message: '序号不能超过5个字符' }
-            ] }]"
+              { required: true, message: '请输入序号' }
+            ]}]"
           />
         </a-form-item>
       </a-form>
@@ -91,11 +91,13 @@ const columns = [
 ];
 
 export default {
-  name: "teachers",
+  name: "Teachers",
+
   components: {
     userInfoTable,
     AsideLayout
   },
+
   data() {
     return {
       visible: false,
@@ -107,15 +109,16 @@ export default {
         limit: 10,
         total: 0,
       },
-      pagination: {},
       modalVisible: false,
       confirmLoading: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
     };
   },
+
   created() {
     this.onSearch();
   },
+
   methods: {
     async onSearch(nickname) {
       const { data, paging } = await Teacher.search({
@@ -132,36 +135,16 @@ export default {
       this.pageData = data;
       this.paging = paging;
     },
-    edit(id) {
+
+    async edit(id) {
+      this.user = await User.get(id);
       this.visible = true;
-      // this.user = User.get(id);
-      this.user = {
-        id: 1,
-        nickname: "nickname",
-        email: "email@edusoho.com",
-        roleNames: ['学员', '教师'],
-        createdTime: "1621328200",
-        createdIp: "127.0.0.1",
-        loginTime: "1621328400",
-        loginIp: "136.7.5.14",
-        truename: "张三",
-        gender: "secret",
-        idcard: "",
-        mobile: "13765442211",
-        company: "杭州阔知网络科技有限公司",
-        job: "高级工程师",
-        title: "架构师",
-        signature: "我的签名",
-        site: "http://kd.edusoho.cn",
-        weibo: "http://kd.edusoho.cn",
-        weixin: "13765442211",
-        qq: "11001",
-      };
     },
+
     close() {
-      console.log("Clicked cancel button");
       this.visible = false;
     },
+
     handleOk(e) {
       this.confirmLoading = true;
       setTimeout(() => {
@@ -169,6 +152,7 @@ export default {
         this.confirmLoading = false;
       }, 1000);
     },
+
     handleCancel(e) {
       console.log('Clicked cancel button');
       this.modalVisible = false;
@@ -181,6 +165,7 @@ export default {
 .teacher-manage-row {
   .set-number {
     display: none;
+    margin-left: 8px;
   }
 
   &:hover .set-number {
