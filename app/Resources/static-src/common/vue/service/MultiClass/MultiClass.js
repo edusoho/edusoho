@@ -14,5 +14,10 @@ export const MultiClass = _.assignIn(baseService, {
   // 编辑班课
   async editorMultiClass(multiClassId, params) {
     return apiClient.patch(`${this.baseUrl}/${multiClassId}`, params)
+  },
+
+  // 复制班课
+  async copyMultiClass(multiClassId) {
+    return apiClient.post(`${this.baseUrl}/${multiClassId}/clone`)
   }
 })
