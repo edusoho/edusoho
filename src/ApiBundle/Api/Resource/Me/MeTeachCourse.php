@@ -36,7 +36,7 @@ class MeTeachCourse extends AbstractResource
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle']);
+        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle', 'courseSetId']);
         $total = $this->getCourseService()->countCourses($conditions);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
