@@ -19,7 +19,6 @@ class ActivityCopy extends AbstractCopy
         $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
-        $liveStartTime = 0;
         $cycleDifference = 0;
         $activities = $this->getActivityDao()->findByCourseId($course['id']);
         if (empty($activities)) {
@@ -38,14 +37,12 @@ class ActivityCopy extends AbstractCopy
                 $newActivity['startTime'] = time();
                 $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
 
-                if (isset($options['newMultiClass'])) {
-                    if (0 == $liveStartTime) {
-                        $liveStartTime = $activity['startTime'];
+                if (!empty($options['newMultiClass'])) {
+                    if (0 == $cycleDifference) {
+                        $cycleDifference = abs(round((time() - $activity['startTime']) / 86400));
                     }
-                    if (time() > $liveStartTime && 0 == $cycleDifference) {
-                        $cycleDifference = time() - $liveStartTime;
-                    }
-                    $newActivity['startTime'] = $activity['startTime'] + $cycleDifference + 86400; //当前时间无法创建 延迟 1天
+                    $startTime = $activity['startTime'] + $cycleDifference * 86400;
+                    $newActivity['startTime'] = $startTime < time() ? $startTime + 86400 : $startTime; //当前时间无法创建 延迟 1天
                     $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
                 }
             }
@@ -54,7 +51,7 @@ class ActivityCopy extends AbstractCopy
                 'refLiveroom' => false,
                 'newActivity' => $newActivity,
                 'isCopy' => true,
-                'newMultiClass' => isset($options['newMultiClass']),
+                'newMultiClass' => !empty($options['newMultiClass']) ? $options['newMultiClass'] : [],
             ]);
 
             if (!empty($ext)) {
