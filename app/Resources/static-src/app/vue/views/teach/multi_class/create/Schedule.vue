@@ -1,6 +1,6 @@
 <template>
   <div>
-    排课只涉及直播课时，其他类型课时设置，请点击-<a :href="`/course_set/${1}/manage/course/${courseId}/tasks`">更多课时设置</a>
+    排课只涉及直播课时，其他类型课时设置，请点击-<a>更多课时设置</a>
     <div class="clearfix">
       <a-space size="large">
         <a-button type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
