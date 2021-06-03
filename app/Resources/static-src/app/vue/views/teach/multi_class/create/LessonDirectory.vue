@@ -217,22 +217,24 @@ export default {
         return;
       }
 
-      if (type === 'lesson') {
-        this.deleteLesson(id);
-      }
+      this.deleteTask(id);
     },
 
 
-    deleteChapter(id) {
-      const { success } = Course.deleteChapter(this.courseId, id);
+    async deleteChapter(id) {
+      const { success } = await Course.deleteChapter(this.courseId, id);
       if (success) {
         this.$emit('change-lesson-directory', { type: 'update' });
         this.$message.success('删除成功');
       }
     },
 
-    deleteLesson(id) {
-
+    async deleteTask(id) {
+      const success = await Course.deleteTask(this.courseId, id);
+      if (success) {
+        this.$emit('change-lesson-directory', { type: 'update' });
+        this.$message.success('删除成功');
+      }
     }
   }
 }
