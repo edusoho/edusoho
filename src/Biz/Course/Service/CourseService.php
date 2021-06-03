@@ -367,4 +367,6 @@ interface CourseService
     public function sumTotalIncomeByIds($ids);
 
     public function findCourseByCourseSetTitleLike($courseSetTitle);
+
+    public function courseItemIdsHandle($courseId, $ids);
 }

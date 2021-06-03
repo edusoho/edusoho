@@ -44,5 +44,10 @@ export default [
         meta: { current: 'data-preview' }
       }
     ]
-  }
+  },
+  {
+    path: '/course_manage/editor_lesson/:id',
+    name: 'MultiClassEditorLesson',
+    component: () => import('app/vue/views/teach/multi_class/course_manage/editor-lesson.vue')
+  },
 ];

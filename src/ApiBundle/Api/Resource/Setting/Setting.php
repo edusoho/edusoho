@@ -19,8 +19,8 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
-        'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe',
+        'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
+        'consult', 'wechat_message_subscribe', 'locale',
     ];
 
     public static function convertUnderline($str)
@@ -61,6 +61,26 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getSignSecurity()
+    {
+        $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
+
+        return [
+            'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
+            'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
+    }
+
+    public function getLocale($request)
+    {
+        $developer = $this->getSettingService()->get('developer', []);
+        $locale = empty($developer['default_locale']) ? 'zh_CN' : $developer['default_locale'];
+
+        return [
+            'locale' => $locale,
+        ];
     }
 
     public function getUgc()
@@ -424,6 +444,7 @@ class Setting extends AbstractResource
             'upgradeMinDay' => '30', //兼容会员营销重构2.0
             'defaultBuyYears' => '1', //兼容会员营销重构2.0
             'defaultBuyMonths' => '30', //兼容会员营销重构2.0
+            'upgradeMode' => empty($vipSetting['upgrade_mode']) ? 'remain_period' : $vipSetting['upgrade_mode'],
         ];
     }
 
@@ -437,6 +458,7 @@ class Setting extends AbstractResource
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
             'iosExchangeCouponClose' => isset($magicSetting['ios_exchange_coupon_close']) ? $magicSetting['ios_exchange_coupon_close'] : 0,
+            'securityVideoPlayer' => isset($magicSetting['security_video_player']) ? $magicSetting['security_video_player'] : 0,
         ];
     }
 
@@ -608,6 +630,12 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @param $clients
+     *
+     * @return array
+     *               login_bind直接合并输出存在较大风险，并不是所有的网站私密字段都会以 '_secret'结尾，一旦存在，后果不堪设想
+     */
     private function getLoginConnect($clients)
     {
         $default = $this->getDefaultLoginConnect($clients);

@@ -118,7 +118,7 @@ class ClassroomEntityTest extends BaseTestCase
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
         $isMember = $this->getGoodsEntityFactory()->create('classroom')->isSpecsMember($goods, $specs, $this->getCurrentUser()->getId());
-        self::assertFalse($isMember);
+        self::assertTrue($isMember);
     }
 
     public function testIsSpecsStudent()
@@ -146,7 +146,7 @@ class ClassroomEntityTest extends BaseTestCase
         $isMember = $this->getGoodsEntityFactory()->create('classroom')->isSpecsTeacher($goods, $specs, $this->getCurrentUser()->getId());
 
         // 班级的创建者只是班级的班主任，但是不是班级的教师
-        self::assertFalse($isMember);
+        self::assertTrue($isMember);
     }
 
     private function getProductAndGoods($classroom)

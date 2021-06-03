@@ -2,12 +2,11 @@
 
 namespace Biz\MultiClass;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 
-class Assistant
+class AssistantPermission
 {
     private $biz;
 
@@ -16,11 +15,18 @@ class Assistant
         $this->biz = $biz;
     }
 
-    public function isMultiClassAssistant($userId, $multiClassId)
+    public function isAssistant($multiClassId = 0)
     {
-        $members = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClassId, 'assistant');
-        if (in_array($userId, ArrayToolkit::column($members, 'userId'))) {
+        $user = $this->biz['user'];
+        $member = $this->getMemberService()->getMemberByMultiClassIdAndUserId($multiClassId, $user['id']);
+        if (!empty($member) && 'assistant' === $member['role']) {
             return true;
+        }
+
+        if (empty($multiClassId) && in_array('ROLE_TEACHER_ASSISTANT', $user['roles'])) {
+            if (empty(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER']))) {
+                return true;
+            }
         }
 
         return false;
@@ -112,6 +118,13 @@ class Assistant
         }
 
         return $permission;
+    }
+
+    public function hasActionPermission($action)
+    {
+        $permissions = $this->getPermissions();
+
+        return in_array($action, $permissions);
     }
 
     /**

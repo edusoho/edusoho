@@ -38,6 +38,15 @@ abstract class BaseStrategy
 
     abstract public function issueCertificate($certificate);
 
+    /**
+     * @param $targetId
+     * @param $status
+     *
+     * @return mixed
+     *               标记源资源状态，这样可以在搜索时过滤掉未发布资源关联的证书
+     */
+    abstract public function updateCertificateTargetStatus($targetId, $status);
+
     public function getCertificateImg($record)
     {
         $certificate = $this->getCertificateService()->get($record['certificateId']);

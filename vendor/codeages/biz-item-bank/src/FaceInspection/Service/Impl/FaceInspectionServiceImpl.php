@@ -59,13 +59,13 @@ class FaceInspectionServiceImpl extends BaseService implements FaceInspectionSer
         return $results;
     }
 
-    public function makeToken($userId, $accessKey, $secretKey)
+    public function makeToken($username, $accessKey, $secretKey)
     {
         $payload = array(
-            'aud' => 'inspection-service',
-            'exp' => time() + 600,
-            'subject_no' => 'capture_face',
-            'user_no' => $userId,
+            'iss' => 'exam supervisor',
+            'exp' => time() + 86400,
+            "uid" => 1001,
+            'uname' => $username,
         );
 
         return JWT::encode($payload, $secretKey, 'HS256', $accessKey);

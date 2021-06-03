@@ -8,14 +8,14 @@
   >
     <a-spin :spinning="ajaxLoading">
       <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
-        <a slot="class_title" slot-scope="text, record" 
+        <a slot="class_title" slot-scope="text, record"
           href="javascript:;"
           @click="goToMultiClassManage(record.id)">
           {{ text }}
         </a>
         <a slot="course" slot-scope="text, record"
           :href="`/course/${record.courseId}`">
-          {{ text }}
+          {{ record.course ? record.course.courseSetTitle : '' }}
         </a>
         <a slot="taskNum" slot-scope="text, record"
           href="javascript:;"
@@ -32,10 +32,10 @@
           :href="`/admin/v2/multi_class/index#/course_manage/${record.id}/student_manage`">
           {{ text }}
         </a>
-        <template :size="8" slot="action" slot-scope="text, record"> 
+        <template :size="8" slot="action" slot-scope="text, record">
           <a href="javascript:;" class="mr2" @click="goToMultiClassManage(record.id)">查看</a>
           <a href="javascript:;" class="mr2" @click="goToEditMultiClass(record.id)">编辑</a>
-          <a href="javascript:;" 
+          <a href="javascript:;"
             @click="goToMultiClassDataPreview(record.id)">数据概览</a>
         </template>
       </a-table>
@@ -91,7 +91,7 @@
       scopedSlots: { customRender: 'action' },
     },
   ];
-  
+
   export default {
     props: {
       product: {

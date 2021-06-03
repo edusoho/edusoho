@@ -2,7 +2,7 @@
   <div class="class-info">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-input-search class="pull-left" placeholder="请输入课时或老师关键字搜索" style="width: 260px" @search="onSearch" />
-      <a-button class="pull-right" type="primary">
+      <a-button class="pull-right" type="primary" @click="$router.push({ name: 'MultiClassEditorLesson', params: { id: multiClassId } })">
         重排课时/新增课时
       </a-button>
     </div>
@@ -53,11 +53,11 @@
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-       
-        <a class="ant-dropdown-link" 
-          href="javascript:;" 
-          data-toggle="modal" 
-          data-target="#modal" 
+
+        <a class="ant-dropdown-link"
+          href="javascript:;"
+          data-toggle="modal"
+          data-target="#modal"
           :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a>
 
         <a-dropdown :trigger="['hover']" placement="bottomRight">

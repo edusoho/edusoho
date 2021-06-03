@@ -784,7 +784,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
             if (empty($publishedCourses)) {
-                $this->getCourseSetDao()->update($course['courseSetId'], ['status' => 'closed']);
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if ('published' === $courseSet['status']) {
+                    $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
+                }
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
@@ -1175,6 +1178,30 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
+    public function courseItemIdsHandle($courseId, $ids)
+    {
+        if (empty($ids)) {
+            return $ids;
+        }
+
+        $chapterIds = [];
+        $chapterType = '';
+        $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+            list($type, $chapterId) = explode('-', $k);
+            $chapterIds[] = $chapterId;
+            $chapterType = $type;
+        });
+        foreach ($courseChapters as $chapter) {
+            if (in_array($chapter['id'], $chapterIds)) {
+                continue;
+            }
+            array_push($ids, $chapterType.'-'.$chapter['id']);
+        }
+
+        return $ids;
+    }
+
     public function createChapter($chapter)
     {
         if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {
@@ -1442,9 +1469,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
         //不是课程教师，无权限管理
-        if ($teacher) {
+        if ($this->getMemberService()->isCourseTeacher($courseId, $user->getId())) {
+            return true;
+        }
+
+        if ($this->getMemberService()->isCourseAssistant($courseId, $user->getId())) {
             return true;
         }
 

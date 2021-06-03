@@ -2,9 +2,27 @@
 
 {% block title %}{{ parent() }}{% endblock %}
 
-{% set pageNav = type %}
+{% if type == 'question_bank_learning' %}
+ {% set pageNav = 'learn' %}
+{% endif %}
+{% if type == 'question_bank_teaching' %}
+  {% set pageNav = 'teach' %}
+{% endif %}
 
 {% block main %}
+
+  <ul class="nav nav-pills mbl">
+    <li><a href="{{ path('user_learn', {id:user.id}) }}">{{'site.default.course'|trans}}</a></li>
+    <li><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'site.default.classroom.notempty'|trans}}</a></li>
+    <li class="active">
+      {% if type == 'question_bank_learning' %}
+        <a href="{{ path('user_question_bank_learn', {id:user.id}) }}">{{'site.default.question.bank'|trans}}</a>
+      {% endif %}
+      {% if type == 'question_bank_teaching' %}
+        <a href="{{ path('user_question_bank_teach', {id:user.id}) }}">{{'site.default.question.bank'|trans}}</a>
+      {% endif %}
+    </li>
+  </ul>
 
   {% if exercises %}
 
@@ -13,7 +31,7 @@
       {{ web_macro.paginator(paginator) }}
     </nav>
   {% else %}
-    {% if pageNav == 'question_bank_learn' %}
+    {% if pageNav == 'learn' %}
       <div class="empty">{{'user.homepage.learning_question_bank.empty'|trans}}</div>
     {% else %}
       <div class="empty">{{'user.homepage.teaching_question_bank.empty'|trans}}</div>

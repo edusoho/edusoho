@@ -114,7 +114,7 @@ class MultiClassStudent extends AbstractResource
         $multiClass = $this->getMultiClassService()->getMultiClass($id);
     }
 
-    private function findUserTaskCount($courseId, $type, $count)
+    private function findUserTaskCount($courseId, $type)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
 

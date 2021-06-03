@@ -89,7 +89,7 @@
     <div class="es-setting">
       <span class="setting-icon"><i class="cd-icon cd-icon-iphone"></i></span>
       <span class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</span>
-      <span class="setting-content">
+      <span class="setting-content" style="max-width: 365px; display:inline-block;line-height:20px">
         {% if hasVerifiedMobile %}
           {{'site.bind.mobile_finished'|trans}}：{{ blur_phone_number(verifiedMobile) }}
         {% else %}

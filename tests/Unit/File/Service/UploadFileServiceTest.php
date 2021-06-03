@@ -7,6 +7,7 @@ use Biz\BaseTestCase;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 
 class UploadFileServiceTest extends BaseTestCase
@@ -2639,6 +2640,42 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals('cloud', $result['storage']);
     }
 
+    public function testCanDownloadFile()
+    {
+        $user = $this->getCurrentUser();
+        $fileSetting = ['enable' => 1];
+        $this->getSettingService()->set('cloud_file_setting', $fileSetting);
+
+        $params = [
+            [
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+            [
+                'arguments' => true,
+                'functionName' => 'findByUserId',
+                'runTimes' => 1,
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = [
+            [
+                'functionName' => 'getFullFile',
+                'runTimes' => 1,
+                'returnValue' => ['id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']],
+            ],
+        ];
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $result = $this->getUploadFileService()->canDownloadFile(1);
+
+        $this->assertTrue($result);
+    }
+
     public function testCanManageFile()
     {
         $user = $this->getCurrentUser();
@@ -2812,5 +2849,13 @@ class UploadFileServiceTest extends BaseTestCase
     protected function getCourseMaterialDao()
     {
         return $this->createDao('Course:CourseMaterialDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

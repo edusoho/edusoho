@@ -9,6 +9,8 @@ site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
+site.not_support_cloud_video_upgrade: >
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
@@ -57,12 +59,14 @@ site.default.must: 必须
 site.default.and: 和
 site.default.student: 学员
 site.default.classroom: 班级
+site.default.classroom.notempty: 班级
 site.default.reviewing: 已批阅
 site.default.unreviewing: 未批阅
 site.default.doing: 进行中
 site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
+site.default.question.bank: 题库
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -98,8 +102,10 @@ site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号�
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
-site.date_format: Y年n月d日 H:i:s
+site.date_format: Y年n月d日 H:i
+site.date_coupon: Y年n月d日
 site.date_format_H_i: Y年n月d日 H:i
+site.date_format_H_i_s: Y-n-d H:i:s
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
 site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
@@ -373,7 +379,6 @@ form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
-form.btn.add: 新增一栏
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
@@ -460,6 +465,7 @@ finance.max_can_use_coin: 最大可用%coinName%
 vip: 会员
 plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
+plugin.money: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠券
 plugin.discount: 打折
@@ -577,6 +583,8 @@ order.export_btn: 导出订单
 order.confirm: 订单确认
 order.confirm.pay_total: 合计
 order.confirm.pay_rmb: 应付
+order.confirm.pay_points:  您有可使用的 %num% 点，使用
+order.confirm.point: 点
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
@@ -2405,7 +2413,8 @@ classroom.vip_member_level_low_tips: >
   会员等级不够，不能学习此%classroomName%。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
 classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 classroom.cancle_refund_btn: 取消退款，继续学习！
-classroom.courses_count: 共%courseNum%课
+classroom.courses_count: 共 %courseNum% 课程
+classroom.compulsory_count: %compulsoryTaskNum% 课时
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
 classroom.status.published: 已发布
@@ -3260,6 +3269,7 @@ user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
 user.account.my_coin: %coin_name%账户
+user.account.my_coin_zh: 虚拟币账户
 user.account.my_coin.pay_coin: 实付%coin_name%
 user.account.my_coin.refunded_coin: 已退%coin_name%
 user.account.my_coin.inflow: 充值记录
@@ -3374,6 +3384,8 @@ message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页
+user.homepage.teaching: 教学中
+user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
 user.homepage.teaching_question_bank: 在教题库
@@ -3467,6 +3479,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
+site.datagrid.filter.class_more : 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
@@ -4987,8 +5000,13 @@ admin.course_manage.manage.classroom_course_removed: 已移除
 ## 会员课程
 admin.course_manage.manage.vip_course: 会员课程
 admin.course_manage.manage.vip_grade: 会员等级
+admin.course_manage.manage.duration: 会员时长
+admin.course_manage.manage.introduction: 会员介绍
+admin.course_manage.manage.member_benefits: 会员特权
+admin.course_manage.manage.newest_member : 最新会员
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
 admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
+notify.vip.no_course_or_classroom: 暂无会员课程或班级
 
 ## 直播课程
 admin.course_manage.manage.live: 直播
@@ -5987,11 +6005,15 @@ admin.block_manage.visual_edit.tag_link_url: 链接地址
 admin.block_manage.visual_edit.tag_img: 图片
 admin.block_manage.visual_edit.tag_img_describe: 图片描述
 admin.block_manage.visual_edit.tag_img_link: 图片链接
+admin.block_manage.visual_edit.tag_video_describe: 视频描述
+admin.block_manage.visual_edit.tag_video_img: 视频封面图
 admin.block_manage.visual_edit.tag_img_background_color: 背景色填充
 admin.block_manage.visual_edit.tag_img_upload: 上传
 admin.block_manage.visual_edit.tag_open_new_window: 打开新窗口
 admin.block_manage.visual_edit.tag_yes_radio: 是
 admin.block_manage.visual_edit.tag_no_radio: 否
+admin.block_manage.visual_edit.tag_as_a_picture_radio: 以图片显示
+admin.block_manage.visual_edit.tag_display_as_video_radio: 以视频显示
 admin.block_manage.visual_edit.add_panel: +新增
 admin.block_manage.visual_edit.save: 保存设置
 admin.block_manage.visual_edit.poster_open_btn: 是否开启
@@ -6910,7 +6932,8 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
 admin.edu_cloud.edu_video.start_buy: >
@@ -7157,6 +7180,7 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.member_judgment_notes: 您还不是会员，请开通会员享特权
 
 # 云邮件
 admin.edu_cloud.edu_email: 云邮件
@@ -7394,6 +7418,11 @@ admin.edu_cloud.edu_attachment.group: 小组
 admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
+admin.edu_cloud.edu_file.download.setting: 云资源下载设置
+admin.edu_cloud.edu_file.open_radio: 开启
+admin.edu_cloud.edu_file.close_radio: 关闭
+admin.edu_cloud.edu_file.download.setting.enable.tips: 开启后，教师身份在中台可以下载公共资料库的所有资源
+admin.edu_cloud.edu_file.download.setting.disable.tips: 关闭后，教师身份在中台不能下载公共资料库的所有资源
 
 admin.edu_cloud.key_info.key_error_tips: 授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
 admin.edu_cloud.key_info.license_domain: 授权域名
@@ -7509,7 +7538,7 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 同一IP
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 次，将暂时封禁IP
 admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_captcha: 用户登录验证码设置
-admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验
+admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验；如果切换为"手机快捷登录"，则一直需要拖动验证码
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
@@ -7806,6 +7835,7 @@ admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
+admin_v2.developer_setting.scrm_url: 'SCRM地址(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
 admin.developer_setting.default_locale.zh_CN: 中文
@@ -7864,6 +7894,7 @@ admin.magic_setting.live_entry_time: 直播开始前可进入时间
 admin.magic_setting.live_entry_time_tip: 秒为单位
 admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
 admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
+admin.magic_setting.security_video_player: 安全播放器开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8969,6 +9000,10 @@ admin.reward_point_product.cover_message: 请上传jpg, gif, png格式的图片,
 admin.reward_point_product.edit_product: 编辑商品
 admin.reward_point_product.add_product: 添加商品
 admin.reward_point_product.cover_crop: 图片裁剪
+admin.reward_point.my_points: 我的积分
+admin.reward_point.points_rank: 积分排行
+admin.reward_point.points_rule: 积分规则
+admin.reward_points: 积分
 
 
 admin.reward_point_account: 账户
@@ -9007,6 +9042,8 @@ reward_point_product.address: 收货地址
 reward_point_product.email: 邮箱
 reward_point_account.behavior_record: 行为记录
 reward_point_account.reward_record: %name%记录
+reward_point_account.points_record: 积分记录
+reward_point_account.points_balance: 积分余额
 reward_point.create_question: 提出问题
 reward_point.reply_question: 回答问题
 reward_point.elite_thread: 话题加精
@@ -9074,6 +9111,9 @@ my.reward_point.rule_reward_behavior: 奖励行为
 my.reward_point.mall.search: 共找到
 my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
+my.reward_points: 我的积分
+my.reward_points_message: ￥%num%现金，积分使用后，申请退款时不退还积分
+my.reward_points_instructions: 积分说明
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 任务开始时间
@@ -10298,6 +10338,7 @@ exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
+exception.user.user_is_destroyed: 用户已注销
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10444,6 +10485,7 @@ exception.course.not_found_chapter: 章节不存在
 exception.course.chain_not_registered: 访问链未注册
 exception.course.expirymode_invalid: 有效期类型错误
 exception.course.expirydays_required: 有效天数不能为空
+exception.course.expirydays_invalid: 有效天数类型错误
 exception.course.expirystartdate_required: 有效期开始日期不能为空
 exception.course.expiryenddate_required: 有效期结束日期不能为空
 exception.course.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
@@ -10473,7 +10515,7 @@ exception.classroom.forbidden_take_classroom: 不能在这个班级学习
 exception.classroom.forbidden_handle_classroom: 不能批阅这个班级的作业
 exception.classroom.forbidden_look_classroom: 不能查看这个班级
 exception.classroom.unpublished_classroom: 班级未发布
-exception.classroom.chain_not_registered:
+exception.classroom.chain_not_registered: 访问链未注册
 exception.classroom.unjoin: 未加入班级
 exception.classroom.empty_title: 班级名称不能为空！
 exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
@@ -10749,7 +10791,6 @@ exception.certificate.audit.forbidden_audit: 审核失败
 exception.certificate.valid.forbidden_audit: 审核发送失败
 exception.certificate.reject.forbidden_audit: 审核驳回失败
 
-exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
 
@@ -11567,6 +11608,7 @@ admin_v2.operating.goods_show_data: 商品页显示数据
 admin_v2.operating.goods_show.join_number: 显示加入人数
 admin_v2.operating.goods_show.visitor_number: 显示浏览人数
 admin_v2.operating.goods_show.none: 不显示
+admin_v2.operating.goods_show_studen.review.data: 学员评价数据
 admin_v2.operating.review_setting: 商品页评价设置
 admin_v2.operating.review_show: 商品页显示评价
 
@@ -11597,6 +11639,8 @@ classroom.cover_crop.title: 班级封面上传
 exception.goods.not_found: 商品未找到
 exception.specs.not_found: 商品规格未找到
 exception.goods.forbidden_manage: 无管理商品权限
+exception.goods.forbidden_join_unpublished_goods: 不能加入未发布的商品
+exception.goods.forbidden_join_unpublished_specs: 商品未发布，不能购买此规格
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
@@ -11884,4 +11928,9 @@ exception.multi_class.product_not_found: 产品未找到
 exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除
 exception.multi_class.multi_class_clone_already: 班课复制中
 exception.multi_class.can_not_delete_product: 该产品含有班课，不能删除
+exception.multi_class.can_not_manage_multi_class: 无权管理班课
 exception.multi_class.multi_class_course_exist: 班课中已存在此课程
+
+admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
+site.login.change_to_pwd: 切换帐号密码登录
+site.login.change_to_sms: 切换手机快捷登录

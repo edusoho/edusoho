@@ -50,6 +50,10 @@ login_ajax:
     path:  /login/ajax
     defaults: { _controller: AppBundle:Login:ajax }
 
+login_sms:
+  path:  /login/sms
+  defaults: { _controller: AppBundle:Login:sms }
+
 login_qrcode:
     path: /login/qrcode
     defaults: { _controller: AppBundle:Login:qrcode }
@@ -2025,9 +2029,6 @@ course_set_manage_course_students_deadline_batch_deadline_check:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/deadline/check
   defaults: { _controller: AppBundle:Course/StudentManage:checkDeadline }
 
-
-
-
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
   defaults: {_controller: AppBundle:Course/StudentManage:studyProcess}
@@ -3679,6 +3680,10 @@ certificate_detail:
   path: /certificate/{id}/detail
   defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }
 
+face_inspection_select:
+    path: /face/inspection/select
+    defaults: { _controller: AppBundle:FaceInspection/Capture:selectFace }
+
 information_collect_event:
   path: /information_collect/event/{eventId}
   defaults: { _controller: AppBundle:InformationCollect/InformationCollect:index }
@@ -3710,3 +3715,7 @@ common_report:
 common_report_tags_modal:
   path: /common/report/{targetType}/target_id/{targetId}/tags_modal
   defaults: { _controller: AppBundle:Report:tagsModal }
+
+scrm_buy_goods_callback:
+  path: /scrm/buy/goods/callback
+  defaults: { _controller: AppBundle:SCRM/Callback:goods }

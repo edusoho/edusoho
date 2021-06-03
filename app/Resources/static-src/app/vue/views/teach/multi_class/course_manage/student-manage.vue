@@ -2,7 +2,7 @@
   <div class="student-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
-        <a-input-search placeholder="请输入课时或老师关键字搜索" style="width: 260px" @search="onSearch" />
+        <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
         <a-button type="primary" icon="upload">
           批量导出
         </a-button>
@@ -42,9 +42,9 @@
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
-      <template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>
+<!--      <template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
-      <a slot="learningProgressPercent" slot-scope="value">{{ value }}%</a>
+      <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
       <template slot="assistants" slot-scope="assistants">{{ assistants[0].truename }}</template>
 
@@ -83,7 +83,7 @@
 <script>
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
-import { MultiClassStudent } from 'common/vue/service';
+import { MultiClassStudent, MultiClass } from 'common/vue/service';
 
 const columns = [
   {
@@ -175,10 +175,10 @@ export default {
     AddStudentModal,
     StudentInfoModal
   },
-
   data() {
     return {
       students: [],
+      multiClass: {},
       columns,
       selectedRowKeys: [],
       loading: false,
@@ -201,7 +201,8 @@ export default {
   },
 
   created() {
-    this.getMultiClassStudents()
+    this.getMultiClassStudents();
+    this.getMultiClass();
   },
 
   befeoreRouteUpdate(to, from, next) {
@@ -211,12 +212,24 @@ export default {
 
   methods: {
     async getMultiClassStudents(params = {}) {
-      this.students = await MultiClassStudent.search({ 
-        id: this.id, 
+      await MultiClassStudent.search({
+        id: this.id,
         keyword: params.keyword || '',
         offset: params.offset || this.paging.offset || 0,
         limit: params.limit || this.paging.limit || 10,
-      })
+      }).then(res => {
+        this.students = res.data;
+      }).catch(err => {
+
+      });
+    },
+
+    async getMultiClass() {
+      await MultiClass.get(this.id).then(res => {
+        this.multiClass = res;
+      }).catch(err => {
+
+      });
     },
 
     onSearch(keyword) {
@@ -276,3 +289,79 @@ export default {
   }
 }
 </script>
+
+
+<style lang="less">
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+  -moz-border-radius: @border-radius;
+  border-radius: @border-radius;
+}
+
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+  -moz-box-shadow: @box-shadow;
+  box-shadow: @box-shadow;
+}
+
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+  -moz-transition: @property @time ease;
+  -o-transition: @property @time ease;
+  transition: @property @time ease;
+}
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+.border-top-left-radius(@border-radius:4px) {
+  border-top-left-radius: @border-radius;
+}
+.border-top-right-radius(@border-radius:4px) {
+  border-top-right-radius: @border-radius;
+}
+.border-bottom-left-radius(@border-radius:4px) {
+  border-bottom-left-radius: @border-radius;
+}
+.border-bottom-right-radius(@border-radius:4px) {
+  border-bottom-right-radius: @border-radius;
+}
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+.text-overflow() {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+@screen-xs-min:              480px;
+@screen-sm-min:              768px;
+@screen-md-min:              992px;
+@screen-lg-min:              1200px;
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
+@tip-color:             #adadad;
+@gray-dark:             #666;
+@gray-darker:           #333;
+@gray:                  #999;
+@gray-lighter:          #f5f5f5;
+@bg-color:              #fafafa;
+@brand-primary:         #46c37B;
+@gray-light:            #e1e1e1;
+@brand-danger:          #ed3e3e;
+@import "~app/less/page/course-manage/students.less";
+@import "~app/less/page/class/class-detail.less";
+</style>
