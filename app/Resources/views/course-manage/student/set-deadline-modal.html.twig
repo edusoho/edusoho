@@ -50,7 +50,7 @@
         <label><input type="radio" name="updateType" value="date" {% if 'forever' == course.expiryMode %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
       </div>
       <div class="col-sm-7 controls pl0 pr0">
-        <input type="text" id="deadline" name="deadline" {% if 'forever' != course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
+        <input type="text" autocomplete="off" id="deadline" name="deadline" {% if 'forever' != course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
   {% else %}

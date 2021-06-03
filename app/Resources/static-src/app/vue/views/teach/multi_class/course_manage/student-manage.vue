@@ -13,20 +13,36 @@
           添加学员
         </a-button>
         <a-button type="primary"
-                  icon="download"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
                   data-keyboard="false"
-                  data-url="/importer/course-member/index?courseId=5"
+                  :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
         >
           批量导入
         </a-button>
-        <a-button type="primary" icon="upload" @click="onBatchRemoveStudent">
+        <a-button type="primary"
+                  icon="upload"
+                  @click="onBatchRemoveStudent"
+        >
           批量移除
         </a-button>
 
-        <a-button type="primary">
+        <a-button v-if="this.selectedRowKeys.length === 0"
+                  type="primary"
+                  @click="onSelectEmpty"
+        >
+          批量修改有效期
+        </a-button>
+
+        <a-button v-if="this.selectedRowKeys.length > 0"
+                  type="primary"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  data-backdrop="static"
+                  data-keyboard="false"
+                  :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline`"
+        >
           批量修改有效期
         </a-button>
       </a-space>
@@ -240,7 +256,7 @@ export default {
     },
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
-        this.$message.error('请至少选中一项后移除', 3);
+        this.$message.error('请至少选中一项后移除', 1);
         return;
       }
       this.$confirm({
@@ -258,7 +274,9 @@ export default {
       });
 
     },
-
+    onSelectEmpty() {
+      this.$message.error('请至少选中一项后进行修改！', 1);
+    },
     confirm(userId) {
       this.onRemoveStudent(userId);
       this.$message.success('移除学员成功！', 2);
