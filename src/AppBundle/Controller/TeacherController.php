@@ -11,7 +11,7 @@ class TeacherController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'locked' => 0,
         );
 
@@ -49,7 +49,7 @@ class TeacherController extends BaseController
     public function searchAction($request, $keyword)
     {
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'locked' => 0,
         );
 

@@ -13,7 +13,7 @@ class TeacherController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions = $this->fillOrgCode($conditions);
-        $conditions['roles'] = 'ROLE_TEACHER';
+        $conditions['roles'] = '|ROLE_TEACHER|';
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->countUsers($conditions),
@@ -63,7 +63,7 @@ class TeacherController extends BaseController
         $user = $this->getUser();
         $fields = $request->query->all();
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'promoted' => 1,
         );
         $conditions = array_merge($conditions, $fields);

@@ -15,7 +15,7 @@ class UtilityController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'excludeIds' => array($classroom['headTeacherId']),
         ), array('createdTime' => 'DESC'), 0, 10
         );

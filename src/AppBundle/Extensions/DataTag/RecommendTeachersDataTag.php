@@ -20,7 +20,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'promoted' => '1',
             'locked' => 0,
         );

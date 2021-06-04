@@ -19,7 +19,7 @@ class LatestTeachersDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
         );
         $users = $this->getUserService()->searchUsers($conditions, array('promotedTime' => 'DESC'), 0, $arguments['count']);
 
