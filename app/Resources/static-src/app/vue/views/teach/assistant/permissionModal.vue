@@ -6,43 +6,21 @@
     cancelText="取消"
     @ok="handleOk"
     @cancel="handleCancel"
+    destroyOnClose
   >
     <a-tree
       checkable
       :tree-data="treeData"
-      :default-expanded-keys="['0-0-0', '0-0-1']"
-      :default-selected-keys="['0-0-0', '0-0-1']"
-      :default-checked-keys="['0-0-0', '0-0-1']"
+      :default-checked-keys="permissions"
       :replace-fields="replaceFields"
-      @select="onSelect"
       @check="onCheck"
     />
   </a-modal>
 </template>
 
 <script>
-const treeData = [
-  {
-    name: 'parent 1',
-    key: '0-0',
-    child: [
-      {
-        name: '张晨成',
-        key: '0-0-0',
-        disabled: true,
-        child: [
-          { name: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-          { name: 'leaf', key: '0-0-0-1' },
-        ],
-      },
-      {
-        name: 'parent 1-1',
-        key: '0-0-1',
-        child: [{ key: '0-0-1-0', name: 'zcvc' }],
-      },
-    ],
-  },
-];
+import { AssistantPermission } from 'common/vue/service';
+import _ from '@codeages/utils';
 
 export default {
   name: 'PermissionModal',
@@ -51,33 +29,45 @@ export default {
     visible: {
       type: Boolean,
       required: true
+    },
+
+    treeData: {
+      type: Array,
+      required: true
+    },
+
+    permissions: {
+      type: Array,
+      required: true
     }
   },
 
   data() {
     return {
-      treeData,
       replaceFields: {
-        children: 'child',
-        title: 'name',
+        title: 'title',
+        key: 'code'
       },
+      checkedKeys: []
     }
   },
 
   methods: {
-    handleOk(e) {
+    handleOk() {
+      AssistantPermission.add({
+        permissions: this.checkedKeys
+      }).then(res => {
+        this.$message.success('更新成功');
+        this.handleCancel();
+      });
     },
 
     handleCancel() {
       this.$emit('cancel-permission-modal');
     },
 
-    onSelect(selectedKeys, info) {
-      console.log('selected', selectedKeys, info);
-    },
-
-    onCheck(checkedKeys, info) {
-      console.log('onCheck', checkedKeys, info);
+    onCheck(checkedKeys) {
+      this.checkedKeys = checkedKeys;
     },
   }
 }

@@ -9,3 +9,4 @@ export * from './UploadToken/index.js';
 export * from './Course/index.js';
 export * from './Me/index.js';
 export * from './File/index.js';
+export * from './AssistantPermission/index.js';

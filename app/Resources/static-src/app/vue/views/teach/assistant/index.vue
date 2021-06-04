@@ -33,14 +33,19 @@
       </template>
     </a-modal>
 
-    <permission-modal :visible="permissionModalVisible" @cancel-permission-modal="hidePermissionModal" />
+    <permission-modal
+      :treeData="treeData"
+      :permissions="permissions"
+      :visible="permissionModalVisible"
+      @cancel-permission-modal="hidePermissionModal"
+    />
   </aside-layout>
 </template>
 
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Assistant, UserProfiles } from "common/vue/service/index.js";
+import { Assistant, UserProfiles, AssistantPermission } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 import PermissionModal from './permissionModal.vue';
 
@@ -75,7 +80,9 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
-      permissionModalVisible: false
+      permissionModalVisible: false,
+      treeData: [],
+      permissions: [],
     };
   },
   created() {
@@ -121,7 +128,24 @@ export default {
       this.visible = false;
     },
 
+    getAssistantPermission() {
+      AssistantPermission.search().then(res => {
+        const loop = (treeData) => {
+          _.forEach(treeData, item => {
+            item.disabled = !!item.disabled;
+            if (item.children) {
+              loop(item.children);
+            }
+          });
+        };
+        loop(res.menu);
+        this.treeData = res.menu;
+        this.permissions = res.permissions;
+      });
+    },
+
     showPermissionModal() {
+      this.getAssistantPermission();
       this.permissionModalVisible = true;
     },
 
