@@ -21,12 +21,12 @@
 
       <tr>
         <th>注册时间/IP</th>
-        <td>{{ 'formatTimeIp(user.createdTime, user.createdIp)' }}</td>
+        <td>{{ formatTimeIp(user.user.createdTime, user.user.createdIp) }}</td>
       </tr>
 
       <tr>
         <th>最近登录时间/IP</th>
-        <td>{{ 'formatTimeIp(user.loginTime, user.loginIp)' }}</td>
+        <td>{{ formatTimeIp(user.user.loginTime, user.user.loginIp) }}</td>
       </tr>
 
       <tr>
