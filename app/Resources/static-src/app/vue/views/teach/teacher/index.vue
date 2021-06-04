@@ -12,13 +12,15 @@
       :columns="columns"
       :data-source="pageData"
       :row-key="record => record.id"
-      :pagination="paging"
+      :pagination="pagination"
       :row-class-name="record => 'teacher-manage-row'"
+      :loading="loading"
+      @change="handleTableChange"
     >
       <div slot="promoteInfo" slot-scope="item">
-        <a-checkbox :name="item.id" v-model="item.isPromoted"></a-checkbox>
+        <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
         <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
-        <a class="set-number" href="javascript:;" @click="modalVisible = true">序号设置</a>
+        <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
       <div slot="loginInfo" slot-scope="item">
@@ -41,7 +43,6 @@
       title="设置推荐教师"
       okText="确认"
       cancelText="取消"
-      :width="920"
       :visible="modalVisible"
       @ok="handleOk"
       @cancel="handleCancel"
@@ -50,9 +51,11 @@
         <a-form-item label="序号" extra="请输入0-10000的整数">
           <a-input-number
             style="width: 100%;"
-            v-decorator="['title', { rules: [
+            v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' }
             ]}]"
+            :min="0"
+            :max="10000"
           />
         </a-form-item>
       </a-form>
@@ -63,8 +66,9 @@
 
 
 <script>
+import _ from '@codeages/utils';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, User } from "common/vue/service/index.js";
+import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 
 const columns = [
@@ -104,40 +108,60 @@ export default {
       user: {},
       columns,
       pageData: [],
-      paging: {
-        offset: 0,
-        limit: 10,
-        total: 0,
-      },
+      loading: false,
+      pagination: {},
+      keyWord: '',
+      setNumId: 0,
       modalVisible: false,
-      confirmLoading: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
     };
   },
 
   created() {
-    this.onSearch();
+    this.fetchTeacher();
   },
 
   methods: {
-    async onSearch(nickname) {
+     handleTableChange(pagination) {
+      const pager = { ...this.pagination };
+      pager.current = pagination.current;
+      this.pagination = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.fetchTeacher(params);
+    },
+
+    async fetchTeacher(params) {
+      this.loading = true;
       const { data, paging } = await Teacher.search({
-        nickname: nickname,
-        offset: this.paging.offset || 0,
-        limit: this.paging.limit || 10,
+        limit: 10,
+        nickname: this.keyWord,
+        ...params
       });
-      paging.page = (paging.offset / paging.limit) + 1;
+      const pagination = { ...this.pagination };
+      pagination.total = paging.total;
 
-      data.forEach(element => {
-        element.isPromoted = element.promoted == 1;
+      _.forEach(data, item => {
+        item.isPromoted = item.promoted == 1;
       });
 
+      this.loading = false;
       this.pageData = data;
-      this.paging = paging;
+      this.pagination = pagination;
+    },
+
+    async onSearch(nickname) {
+      this.keyWord = nickname;
+      this.pagination.current = 1;
+      this.fetchTeacher();
     },
 
     async edit(id) {
-      this.user = await User.get(id);
+      this.user = await UserProfiles.get(id);
       this.visible = true;
     },
 
@@ -145,18 +169,43 @@ export default {
       this.visible = false;
     },
 
-    handleOk(e) {
-      this.confirmLoading = true;
-      setTimeout(() => {
-        this.modalVisible = false;
-        this.confirmLoading = false;
-      }, 1000);
+    clickSetNumberModal(id) {
+      this.setNumId = id;
+      this.modalVisible = true;
     },
 
-    handleCancel(e) {
-      console.log('Clicked cancel button');
+    handleOk(e) {
+      this.form.validateFields(async (err, values) => {
+        if (!err) {
+          const { success } = await Teacher.promotion(this.setNumId, values);
+          if (success) {
+            _.forEach(this.pageData, item => {
+              if (item.id == this.setNumId) {
+                item.promotedSeq = values.number;
+                return false;
+              }
+            });
+            this.handleCancel();
+          }
+        }
+      });
+    },
+
+    handleCancel() {
       this.modalVisible = false;
     },
+
+    async changePromoted(checked, id) {
+      let { success } = checked ? await Teacher.promotion(id) : await Teacher.cancelPromotion(id);
+      if (success) {
+        _.forEach(this.pageData, item => {
+          if (item.id == id) {
+            item.isPromoted = checked;
+            return false;
+          }
+        });
+      }
+    }
   },
 };
 </script>

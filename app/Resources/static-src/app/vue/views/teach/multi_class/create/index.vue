@@ -147,6 +147,7 @@ export default {
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
       selectedCourseSetId: 0,
+      multiClassId: 0,
       mode: 'create', // create, editor, copy
       course: {
         list: [],
@@ -203,9 +204,9 @@ export default {
   created() {
     const id = this.$route.query.id;
     if (id) {
-      this.selectedCourseId = id;
+      this.multiClassId = id;
       this.mode = 'editor';
-      this.fetchEditorCourse();
+      this.fetchEditorMultiClass();
     } else {
       this.initFetch();
     }
@@ -229,10 +230,11 @@ export default {
       });
     },
 
-    fetchEditorCourse() {
-      MultiClass.get(this.selectedCourseId).then(res => {
+    fetchEditorMultiClass() {
+      MultiClass.get(this.multiClassId).then(res => {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
         this.form.setFieldsValue({ 'title': title });
+        this.selectedCourseId = courseId;
         this.course.list = [course];
         this.course.initialValue = courseId;
         this.product.list = [product];
@@ -419,10 +421,11 @@ export default {
       });
     },
 
-    validatorＴitle: _.debounce(async (rule, value, callback) => {
+    validatorＴitle: _.debounce(async function(rule, value, callback) {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
-        title: value
+        title: value,
+        exceptId: this.multiClassId
       });
 
       result ? callback() : callback('产品名称不能与已创建的相同');
@@ -450,7 +453,7 @@ export default {
     },
 
     editorMultiClass(values) {
-      MultiClass.editorMultiClass(this.selectedCourseId, values).then(res => {
+      MultiClass.editorMultiClass(this.multiClassId, values).then(res => {
         this.clickCancelCreate();
       });
     },

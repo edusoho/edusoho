@@ -3,7 +3,18 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-        <a-button type="primary" icon="upload">
+        <a-button
+          type="primary"
+          class="js-export-btn"
+          icon="upload"
+          href="javascript:;"
+          data-try-url="/try/export/course-students"
+          data-url="/export/course-students"
+          data-pre-url="/pre/export/course-students"
+          data-loading-text="正在导出..."
+          data-target-form="#course-students-export"
+          data-file-names='["course-students"]'
+        >
           批量导出
         </a-button>
       </a-space>
@@ -59,7 +70,7 @@
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
-<!--      <template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
+<!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
@@ -71,9 +82,9 @@
 
       <a slot="finishedTestpaperCount" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
 
-      <template slot="deadline" slot-scope="deadline">{{ deadline }}</template>
+      <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') }}</template>
 
-      <template slot="createdTime" slot-scope="createdTime">{{ createdTime }}</template>
+      <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}</template>
 
       <template slot="actions" slot-scope="actions, record">
         <a-space size="middle">
@@ -94,7 +105,12 @@
 
     <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
     <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />
+    <form id="course-students-export" class="hide">
+      <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
+      <input type="hidden" name="courseId" :value="multiClass.course.id">
+    </form>
   </div>
+
 </template>
 
 <script>
@@ -112,11 +128,6 @@ const columns = [
     title: '手机号',
     dataIndex: 'phone',
     scopedSlots: { customRender: 'phone' }
-  },
-  {
-    title: '微信号',
-    dataIndex: 'wechat',
-    scopedSlots: { customRender: 'wechat' }
   },
   {
     title: '学习进度',
@@ -168,7 +179,11 @@ export default {
   data() {
     return {
       students: [],
-      multiClass: {},
+      multiClass: {
+        course: {
+          id: 0
+        }
+      },
       columns,
       selectedRowKeys: [],
       loading: false,
