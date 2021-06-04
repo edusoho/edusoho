@@ -39,19 +39,15 @@
         <template slot="action" slot-scope="text, record">
           <a href="javascript:;" class="mr2"
             @click="goToMultiClassManage(record.id)">查看</a>
+          <a href="javascript:;"
+            @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
           <a href="javascript:;" class="mr2"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
           <a-dropdown>
             <a href="javascript:;" @click="e => e.preventDefault()">
-              更多 <a-icon type="down" />
+              <a-icon type="ellipsis" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;"
-                  @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
-                  编辑
-                </a>
-              </a-menu-item>
               <a-menu-item>
                 <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
