@@ -82,7 +82,7 @@ class MultiClassExam extends AbstractResource
     protected function findTestpapersAndStatusNum($tasks)
     {
         if (empty($tasks)) {
-            return [$tasks, []];
+            return [];
         }
 
         $ids = ArrayToolkit::column($tasks, 'assessmentId');
