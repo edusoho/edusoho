@@ -108,7 +108,7 @@
 
 
 
-    <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
+    <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
 <!--    <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />-->
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
