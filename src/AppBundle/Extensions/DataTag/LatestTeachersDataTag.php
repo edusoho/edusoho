@@ -18,10 +18,10 @@ class LatestTeachersDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $conditions = array(
-            'roles' => 'ROLE_TEACHER',
-        );
-        $users = $this->getUserService()->searchUsers($conditions, array('promotedTime' => 'DESC'), 0, $arguments['count']);
+        $conditions = [
+            'roles' => '|ROLE_TEACHER|',
+        ];
+        $users = $this->getUserService()->searchUsers($conditions, ['promotedTime' => 'DESC'], 0, $arguments['count']);
 
         return $this->unsetUserPasswords($users);
     }
