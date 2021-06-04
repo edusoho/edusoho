@@ -82,7 +82,7 @@ import Api from '@/api';
 import { Toast } from 'vant';
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
-import fastLoginMixin from '@/mixins/fastLogin';
+import fastLoginMixin from '@/mixins/fastLoginWithDrag';
 import { mapActions } from 'vuex';
 
 export default {
