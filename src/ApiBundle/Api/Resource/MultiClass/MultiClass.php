@@ -148,7 +148,7 @@ class MultiClass extends AbstractResource
 
     private function prepareOrderBys($orderBys)
     {
-        $prepareOrderBys = [];
+        $prepareOrderBys = ['createdTime' => 'DESC'];
 
         if (!empty($orderBys['priceSort'])) {
             $prepareOrderBys['price'] = 'DESC' == $orderBys['priceSort'] ? 'DESC' : 'ASC';
@@ -158,7 +158,9 @@ class MultiClass extends AbstractResource
             $prepareOrderBys['studentNum'] = 'DESC' == $orderBys['studentNumberSort'] ? 'DESC' : 'ASC';
         }
 
-        $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+        if (!empty($orderBys['createdTimeSort'])) {
+            $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+        }
 
         return $prepareOrderBys;
     }
