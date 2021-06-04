@@ -102,11 +102,18 @@ const columns = [
     title: '教学模式',
     dataIndex: 'mode',
     filters: [
-      { text: '图文', value: 'text' },
       { text: '视频', value: 'video' },
+      { text: '音频', value: 'audio' },
       { text: '直播', value: 'live' },
+      { text: '讨论', value: 'discuss' },
+      { text: 'flash', value: 'Flash' },
+      { text: '文档', value: 'doc' },
+      { text: 'PPT', value: 'ppt' },
       { text: '考试', value: 'testpaper' },
-      { text: '作业', value: 'homework' }
+      { text: '作业', value: 'homework' },
+      { text: '练习', value: 'exercise' },
+      { text: '下载资料', value: 'download' },
+      { text: '图文', value: 'text' }
     ],
     width: '12%',
     scopedSlots: { customRender: 'mode' }

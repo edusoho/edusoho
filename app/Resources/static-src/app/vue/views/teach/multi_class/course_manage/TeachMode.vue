@@ -20,10 +20,16 @@
 const type = {
   video: '视频',
   audio: '音频',
-  text: '图文',
   live: '直播',
+  discuss: '讨论',
+  flash: 'Flash',
+  doc: '文档',
+  ppt: 'PPT',
   testpaper: '考试',
-  homework: '作业'
+  homework: '作业',
+  exercise: '练习',
+  download: '下载资料',
+  text: '图文'
 };
 
 export default {
