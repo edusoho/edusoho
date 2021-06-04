@@ -65,7 +65,7 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
-            <a-menu-item v-if="record.status == 'published'" key="unpublish" >
+            <a-menu-item v-if="record.tasks.status == 'published'" key="unpublish" >
               取消发布
             </a-menu-item>
             <template v-else>
@@ -226,12 +226,12 @@ export default {
       }
 
       if (['publish', 'unpublish'].includes(key)) {
-        this.updateTaskStatus(key, record.id);
+        this.updateTaskStatus(key, record);
         return;
       }
 
       if (key === 'delete') {
-        this.deleteTask(record.id);
+        this.deleteTask(record);
       }
     },
 
@@ -245,7 +245,11 @@ export default {
       const message = type == 'publish' ? `发布成功` : `取消发布成功`;
       Course.updateTaskStatus(courseId, id, { type }).then(() => {
         this.$message.success(message);
-        this.fetchLessons()
+        _.forEach(this.data, item => {
+          if (item.tasks.id == id) {
+            item.tasks.status = type === 'publish' ? 'published' : 'create';
+          }
+        });
       });
     },
 
@@ -259,7 +263,7 @@ export default {
           Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
-              this.fetchLessons()
+              this.fetchLessons();
             }
           });
         }
