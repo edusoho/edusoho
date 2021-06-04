@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 class TeacherController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = array(
+        $conditions = [
             'roles' => '|ROLE_TEACHER|',
             'locked' => 0,
-        );
+        ];
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -23,12 +23,12 @@ class TeacherController extends BaseController
         $teachersCount = $this->getUserService()->countUsers($conditions);
         $teachers = $this->getUserService()->searchUsers(
             $conditions,
-            array(
+            [
                 'promoted' => 'DESC',
                 'promotedSeq' => 'ASC',
                 'promotedTime' => 'DESC',
                 'createdTime' => 'DESC',
-            ),
+            ],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -38,28 +38,28 @@ class TeacherController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $myFollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
 
-        return $this->render('teacher/index.html.twig', array(
+        return $this->render('teacher/index.html.twig', [
             'teachers' => $teachers,
             'profiles' => $profiles,
             'paginator' => $paginator,
             'Myfollowings' => $myFollowings,
-        ));
+        ]);
     }
 
     public function searchAction($request, $keyword)
     {
-        $conditions = array(
+        $conditions = [
             'roles' => '|ROLE_TEACHER|',
             'locked' => 0,
-        );
+        ];
 
         if (!empty($keyword)) {
             $conditions['nickname'] = $keyword;
         }
 
-        $teachers = $this->getUserService()->searchUsers($conditions, array(
+        $teachers = $this->getUserService()->searchUsers($conditions, [
             'nickname' => 'ASC',
-        ), 0, 1000);
+        ], 0, 1000);
 
         return $this->createJsonResponse($teachers);
     }

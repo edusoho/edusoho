@@ -19,18 +19,18 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
-        $conditions = array(
+        $conditions = [
             'roles' => '|ROLE_TEACHER|',
             'promoted' => '1',
             'locked' => 0,
-        );
+        ];
 
-        $users = $this->getUserService()->searchUsers($conditions, array(
+        $users = $this->getUserService()->searchUsers($conditions, [
             'promoted' => 'DESC',
             'promotedSeq' => 'ASC',
             'promotedTime' => 'DESC',
             'createdTime' => 'DESC',
-        ), 0, $arguments['count']);
+        ], 0, $arguments['count']);
 
         $promotedSeq = ArrayToolkit::column($users, 'promotedSeq');
         $promotedTime = ArrayToolkit::column($users, 'promotedTime');
@@ -42,7 +42,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         if ($user->isLogin()) {
             $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], ArrayToolkit::column($users, 'id'));
         } else {
-            $myfollowings = array();
+            $myfollowings = [];
         }
 
         foreach ($users as $key => $user) {
