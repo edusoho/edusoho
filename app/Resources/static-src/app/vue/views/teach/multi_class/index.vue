@@ -25,9 +25,7 @@
           :href="`/course/${course.id}`" target="_blank">
           {{ course.title || course.courseSetTitle }}
         </a>
-        <template slot="assistant" slot-scope="assistant">
-          {{ assistant ? assistant.join('、') : '' }}
-        </template>
+        <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
           href="javascript:;"
           @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
@@ -69,6 +67,7 @@
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { MultiClass } from 'common/vue/service/index.js';
+import Assistant from './course_manage/Assistant.vue';
 
 const columns = [
   {
@@ -144,7 +143,8 @@ export default {
   name: 'MultiClassList',
 
   components: {
-    AsideLayout
+    AsideLayout,
+    Assistant
   },
 
   data () {
