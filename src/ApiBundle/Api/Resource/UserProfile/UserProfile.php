@@ -4,16 +4,24 @@ namespace ApiBundle\Api\Resource\UserProfile;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Filter;
-use ApiBundle\Api\Resource\User\UserFilter;
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Role\Service\RoleService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class UserProfile extends AbstractResource
 {
+    /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\UserProfile\UserProfileFilter", mode="simple")
+     */
     public function get(ApiRequest $request, $userId)
     {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->hasPermission('admin_v2_teacher_manage')) {
+            throw new AccessDeniedException();
+        }
+
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
             throw UserException::NOTFOUND_USER();
@@ -24,10 +32,7 @@ class UserProfile extends AbstractResource
         }
 
         $roles = $this->getRoleService()->findRolesByCodes($user['roles']);
-        $userFilter = new UserFilter();
-        $userFilter->setMode(Filter::SIMPLE_MODE);
-        $userFilter->filter($user);
-        $user['roles'] = $roles;
+        $user['roles'] = array_column($roles, 'name');
 
         $profile = $this->getUserService()->getUserProfile($userId);
         $fields = $this->getFields();
