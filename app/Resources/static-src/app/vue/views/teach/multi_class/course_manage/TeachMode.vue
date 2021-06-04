@@ -4,9 +4,9 @@
 
     <template v-if="progressStatus">
       <a-divider type="vertical" />
-      <a-checkable-tag v-if="progressStatus">已结束</a-checkable-tag>
-      <a-checkable-tag v-if="progressStatus" style="color: #43bc60;">直播中</a-checkable-tag>
-      <a-checkable-tag v-if="progressStatus" style="color: #fb8d4d;">未开始</a-checkable-tag>
+      <a-checkable-tag v-if="progressStatus == 'created'" style="color: #fb8d4d;">未开始</a-checkable-tag>
+      <a-checkable-tag v-else-if="progressStatus == 'start'" style="color: #43bc60;">直播中</a-checkable-tag>
+      <a-checkable-tag v-else-if="progressStatus == 'closed'">已结束</a-checkable-tag>
     </template>
 
     <template v-if="replayStatus">
@@ -18,11 +18,18 @@
 
 <script>
 const type = {
-  text: '图文',
   video: '视频',
+  audio: '音频',
   live: '直播',
+  discuss: '讨论',
+  flash: 'Flash',
+  doc: '文档',
+  ppt: 'PPT',
   testpaper: '考试',
-  homework: '作业'
+  homework: '作业',
+  exercise: '练习',
+  download: '下载资料',
+  text: '图文'
 };
 
 export default {

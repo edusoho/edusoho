@@ -478,4 +478,23 @@ export default {
   border-top: solid 1px #ebebeb;
   background-color: #ffffff;
 }
+
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
+.es-transition {
+  .es-transition()
+}
+
+.border-radius(@radius) {
+  border-radius: @radius;
+}
+
+@import "~app/less/admin-v2/variables.less";
+@import "~app/less/page/course-manage/task/create.less";
+@import "~app/less/component/es-step.less";
 </style>

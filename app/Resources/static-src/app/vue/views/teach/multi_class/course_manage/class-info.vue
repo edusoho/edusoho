@@ -26,7 +26,7 @@
         </template>
         <template v-else> -- </template>
       </template>
-      <!-- TODO -->
+
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
           {{ record.tasks.length }}min
@@ -65,7 +65,7 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
-            <a-menu-item v-if="record.status == 'published'" key="unpublish" >
+            <a-menu-item v-if="record.tasks.status == 'published'" key="unpublish" >
               取消发布
             </a-menu-item>
             <template v-else>
@@ -95,52 +95,70 @@ const columns = [
   {
     title: '课时名称',
     dataIndex: 'name',
+    width: '15%',
     scopedSlots: { customRender: 'name' }
   },
   {
     title: '教学模式',
     dataIndex: 'mode',
     filters: [
-      { text: '图文', value: 'text' },
       { text: '视频', value: 'video' },
+      { text: '音频', value: 'audio' },
       { text: '直播', value: 'live' },
+      { text: '讨论', value: 'discuss' },
+      { text: 'flash', value: 'Flash' },
+      { text: '文档', value: 'doc' },
+      { text: 'PPT', value: 'ppt' },
       { text: '考试', value: 'testpaper' },
-      { text: '作业', value: 'homework' }
+      { text: '作业', value: 'homework' },
+      { text: '练习', value: 'exercise' },
+      { text: '下载资料', value: 'download' },
+      { text: '图文', value: 'text' }
     ],
+    width: '12%',
     scopedSlots: { customRender: 'mode' }
   },
   {
     title: '开课时间',
     dataIndex: 'startTime',
+    width: '13%',
     sorter: true,
     scopedSlots: { customRender: 'startTime' }
   },
   {
     title: '时长',
+    width: '10%',
     dataIndex: 'time',
     scopedSlots: { customRender: 'time' }
   },
   {
     title: '授课老师',
+    width: '10%',
+    ellipsis: true,
     dataIndex: 'teacher',
     scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
+    width: '10%',
+    ellipsis: true,
     dataIndex: 'assistant',
     scopedSlots: { customRender: 'assistant' }
   },
   {
     title: '问题讨论',
+    width: '10%',
     dataIndex: 'questionNum'
   },
   {
     title: '学习人数',
+    width: '10%',
     dataIndex: 'studyStudentNum',
     scopedSlots: { customRender: 'studyStudentNum' }
   },
   {
     title: '操作',
+    width: '10%',
     dataIndex: 'actions',
     scopedSlots: { customRender: 'actions' }
   }
@@ -173,7 +191,7 @@ export default {
     this.fetchLessons();
 
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchLessons()
+      this.fetchLessons();
     })
   },
 
@@ -226,12 +244,12 @@ export default {
       }
 
       if (['publish', 'unpublish'].includes(key)) {
-        this.updateTaskStatus(key, record.id);
+        this.updateTaskStatus(key, record);
         return;
       }
 
       if (key === 'delete') {
-        this.deleteTask(record.id);
+        this.deleteTask(record);
       }
     },
 
@@ -245,7 +263,11 @@ export default {
       const message = type == 'publish' ? `发布成功` : `取消发布成功`;
       Course.updateTaskStatus(courseId, id, { type }).then(() => {
         this.$message.success(message);
-        this.fetchLessons()
+        _.forEach(this.data, item => {
+          if (item.tasks.id == id) {
+            item.tasks.status = type === 'publish' ? 'published' : 'create';
+          }
+        });
       });
     },
 
@@ -259,7 +281,7 @@ export default {
           Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
-              this.fetchLessons()
+              this.fetchLessons();
             }
           });
         }

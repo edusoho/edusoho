@@ -2,7 +2,7 @@
   <div class="text-overflow">
     {{ className }}
     <br>
-    <a-tag v-if="record.status != 'published'" style="margin-top: 4px;">未发布</a-tag>
+    <a-tag v-if="record.tasks.status != 'published'" style="margin-top: 4px;">未发布</a-tag>
   </div>
 </template>
 

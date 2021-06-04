@@ -17,6 +17,8 @@
       :loading="loading"
       @change="handleTableChange"
     >
+      <a slot="nickname" slot-scope="text, item" @click="edit(item.id)">{{ text }}</a>
+
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
         <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
@@ -75,7 +77,8 @@ const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
-    width: '25%'
+    width: '25%',
+    scopedSlots: { customRender: "nickname" },
   },
   {
     title: "是否推荐",
