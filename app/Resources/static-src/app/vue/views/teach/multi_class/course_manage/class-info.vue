@@ -108,7 +108,6 @@ const columns = [
       { text: '音频', value: 'audio' },
       { text: '直播', value: 'live' },
       { text: '讨论', value: 'discuss' },
-      { text: 'flash', value: 'Flash' },
       { text: '文档', value: 'doc' },
       { text: 'PPT', value: 'ppt' },
       { text: '考试', value: 'testpaper' },
