@@ -107,12 +107,7 @@ export default {
 
   computed: {
     getUserRoles() {
-      const roles = [];
-      _.forEach(this.user.user.roles, role => {
-        roles.push(role.name);
-      });
-
-      return _.join(roles, ' ');
+      return _.join(this.user.user.roles, ' ');
     }
   },
 
