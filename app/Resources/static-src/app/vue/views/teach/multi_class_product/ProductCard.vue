@@ -72,9 +72,6 @@
             this.$emit('delete', this.product)
           }
         })
-        setTimeout(function(){
-          $('.ant-btn-danger').addClass("ant-css-btn");
-        },100)
       },
       lookoverMultiClass() {
         this.$emit('lookover', this.product)
@@ -133,9 +130,5 @@
       border-top: solid 1px @border;
       transition: all 0.3 ease;
     }
-  }
-  .ant-css-btn{
-    float: left;
-    margin-right: 8px;
   }
 </style>
