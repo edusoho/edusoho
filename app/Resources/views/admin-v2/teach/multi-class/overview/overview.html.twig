@@ -3,16 +3,22 @@
 
 {% set menu = 'admin_v2_multi_class_manage' %}
 
-{% block main %}
-  <div class="course-statictics">
-    {% include 'course-manage/overview/dashboard.html.twig' %}
+{% block body %}
+  <body style="padding-top: 0;">
+    <div class="course-statictics" style="background-color: #ffffff">
+      {% include 'course-manage/overview/dashboard.html.twig' %}
 
-    {% include 'course-manage/overview/student-trendency.html.twig' %}
+      {% include 'course-manage/overview/student-trendency.html.twig' %}
 
-    {% include 'course-manage/overview/finished-rate-trend.html.twig' %}
+      {% include 'course-manage/overview/finished-rate-trend.html.twig' %}
 
-    {% include 'course-manage/overview/task-detail.htm.twig' %}
-  </div>
+      {% include 'course-manage/overview/task-detail.htm.twig' %}
+    </div>
+    {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js')} %}
+    {% include 'admin-v2/default/script-webpack.html.twig' %}
+    {% include 'admin-v2/script_boot.html.twig'  with {state :0} %}
+  </body>
+
 {% endblock %}
 
 {% block stylesheets %}
