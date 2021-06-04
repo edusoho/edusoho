@@ -16,7 +16,7 @@
 
       <tr>
         <th>用户组</th>
-        <td>{{ '用户组' }}</td>
+        <td>{{ getUserRoles }}</td>
       </tr>
 
       <tr>
@@ -104,6 +104,18 @@ export default {
       default: {},
     },
   },
+
+  computed: {
+    getUserRoles() {
+      const roles = [];
+      _.forEach(this.user.user.roles, role => {
+        roles.push(role.name);
+      });
+
+      return _.join(roles, ' ');
+    }
+  },
+
   methods: {
     toPersonalHomepage(id) {
       window.open('/user/' + id + '/about', '_blank');
