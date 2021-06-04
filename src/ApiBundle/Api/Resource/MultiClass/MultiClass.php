@@ -119,18 +119,9 @@ class MultiClass extends AbstractResource
     private function prepareConditions($conditions)
     {
         $prepareConditions = [];
+
         if (!empty($conditions['keywords'])) {
-            $userIds = ArrayToolkit::column($this->getUserService()->findUserLikeNickname($conditions['keywords']), 'id');
-            if (empty($userIds)) {
-                $courses = $this->getCourseService()->findCourseByCourseSetTitleLike($conditions['keywords']);
-                $prepareConditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            } else {
-                $prepareConditions['ids'] = $this->getMemberService()->searchMultiClassIds([
-                    'userIds' => $userIds,
-                    'role' => 'teacher', ],
-                    [], 0, PHP_INT_MAX
-                );
-            }
+            $prepareConditions['titleLike'] = $conditions['keywords'];
         }
 
         if (!empty($conditions['productId'])) {
@@ -151,14 +142,14 @@ class MultiClass extends AbstractResource
         $prepareOrderBys = [];
 
         if (!empty($orderBys['priceSort'])) {
-            $prepareOrderBys['price'] = 'DESC' == $orderBys['priceSort'] ? 'DESC' : 'ASC';
+            $prepareOrderBys['price'] = 'ASC' == $orderBys['priceSort'] ? 'ASC' : 'DESC';
         }
 
-        if (!empty($orderBys['studentNumbSort'])) {
-            $prepareOrderBys['studentNum'] = 'DESC' == $orderBys['studentNumberSort'] ? 'DESC' : 'ASC';
+        if (!empty($orderBys['studentNumSort'])) {
+            $prepareOrderBys['studentNum'] = 'ASC' == $orderBys['studentNumSort'] ? 'ASC' : 'DESC';
         }
 
-        $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+        $prepareOrderBys['createdTime'] = 'ASC' == $orderBys['createdTimeSort'] ? 'ASC' : 'DESC';
 
         return $prepareOrderBys;
     }
@@ -227,6 +218,10 @@ class MultiClass extends AbstractResource
 
         if (count($multiClass['assistantIds']) > self::MAX_ASSISTANT_NUMBER) {
             throw MultiClassException::MULTI_CLASS_ASSISTANT_NUMBER_EXCEED();
+        }
+
+        if (in_array($multiClass['teacherId'], $multiClass['assistantIds'])) {
+            throw MultiClassException::MULTI_CLASS_TEACHER_CANNOT_BE_ASSISTANT();
         }
 
         return $multiClass;
