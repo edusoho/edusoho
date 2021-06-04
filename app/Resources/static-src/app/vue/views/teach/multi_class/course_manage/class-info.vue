@@ -95,6 +95,7 @@ const columns = [
   {
     title: '课时名称',
     dataIndex: 'name',
+    width: '15%',
     scopedSlots: { customRender: 'name' }
   },
   {
@@ -107,40 +108,48 @@ const columns = [
       { text: '考试', value: 'testpaper' },
       { text: '作业', value: 'homework' }
     ],
+    width: '12%',
     scopedSlots: { customRender: 'mode' }
   },
   {
     title: '开课时间',
     dataIndex: 'startTime',
+    width: '13%',
     sorter: true,
     scopedSlots: { customRender: 'startTime' }
   },
   {
     title: '时长',
+    width: '10%',
     dataIndex: 'time',
     scopedSlots: { customRender: 'time' }
   },
   {
     title: '授课老师',
+    width: '10%',
     dataIndex: 'teacher',
     scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
+    width: '10%',
     dataIndex: 'assistant',
     scopedSlots: { customRender: 'assistant' }
   },
   {
     title: '问题讨论',
+    width: '10%',
     dataIndex: 'questionNum'
   },
   {
     title: '学习人数',
+    width: '10%',
     dataIndex: 'studyStudentNum',
     scopedSlots: { customRender: 'studyStudentNum' }
   },
   {
     title: '操作',
+    width: '10%',
     dataIndex: 'actions',
     scopedSlots: { customRender: 'actions' }
   }
