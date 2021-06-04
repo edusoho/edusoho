@@ -6,4 +6,25 @@
 
 {% block main %}
   <div id="app"></div>
+  <div id="export-modal" class="hide">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress progress-striped active">
+            <div  id="progress-bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if exportWebpack|default() %}
+    {% do script(['app/js/exporter/index.js']) %}
+  {% else %}
+    {% do load_script('topxiaadminbundle/controller/export/export.js') %}
+  {% endif %}
 {% endblock %}
