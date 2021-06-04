@@ -37,7 +37,11 @@ export default {
       if (!_.size(this.assistant)) return '- -';
       let temp = [];
       _.forEach(this.assistant, (assistant, index) => {
-        temp.push(assistant.nickname);
+        if(assistant.nickname){
+          temp.push(assistant.nickname);
+        }else {
+          temp.push(assistant);
+        }
       });
       return _.join(temp, '、');
     },
