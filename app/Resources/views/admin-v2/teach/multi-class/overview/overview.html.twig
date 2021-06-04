@@ -14,11 +14,19 @@
 
       {% include 'course-manage/overview/task-detail.htm.twig' %}
     </div>
+    <div id="modal" class="modal" ></div>
     {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js')} %}
     {% include 'admin-v2/default/script-webpack.html.twig' %}
     {% include 'admin-v2/script_boot.html.twig'  with {state :0} %}
-  </body>
+    <script type="application/javascript">
+      $('[data-toggle="tooltip"]').tooltip({html: true});
 
+      $('[data-toggle="popover"]').popover({
+        html: true,
+        trigger: 'hover',
+      });
+    </script>
+  </body>
 {% endblock %}
 
 {% block stylesheets %}
