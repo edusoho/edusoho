@@ -3,7 +3,18 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-        <a-button type="primary" icon="upload">
+        <a-button
+          type="primary"
+          class="js-export-btn"
+          icon="upload"
+          href="javascript:;"
+          data-try-url="/try/export/course-students"
+          data-url="/export/course-students"
+          data-pre-url="/pre/export/course-students"
+          data-loading-text="正在导出..."
+          data-target-form="#course-students-export"
+          data-file-names='["course-students"]'
+        >
           批量导出
         </a-button>
       </a-space>
@@ -94,7 +105,12 @@
 
     <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
     <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />
+    <form id="course-students-export" class="hide">
+      <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
+      <input type="hidden" name="courseId" :value="multiClass.course.id">
+    </form>
   </div>
+
 </template>
 
 <script>
