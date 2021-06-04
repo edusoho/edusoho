@@ -58,7 +58,12 @@
         </a-button>
       </a-space>
     </div>
-
+    <a-modal title="学员详细信息" :visible="viewStudentInfoVisible" @cancel="close">
+      <userInfoTable :user="modalShowUser" />
+      <template slot="footer">
+        <a-button key="back" @click="close"> 关闭 </a-button>
+      </template>
+    </a-modal>
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
@@ -66,7 +71,7 @@
       :pagination="paging"
       :data-source="students"
     >
-      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user.id)">{{ record.user.nickname }}</a>
+      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}</a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
 
@@ -88,7 +93,7 @@
 
       <template slot="actions" slot-scope="actions, record">
         <a-space size="middle">
-          <a class="ant-dropdown-link">查看</a>
+          <a class="ant-dropdown-link" @click="viewStudentInfo(record.user)">查看</a>
           <a-popconfirm
             title="确定移除?"
             ok-text="确定"
@@ -104,7 +109,7 @@
 
 
     <add-student-modal :visible="addStudentVisible" @handle-cancel="addStudentVisible = false;" />
-    <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />
+<!--    <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />-->
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -116,7 +121,8 @@
 <script>
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
-import { MultiClassStudent, MultiClass } from 'common/vue/service';
+import userInfoTable from "../../../components/userInfoTable";
+import { MultiClassStudent, MultiClass, UserProfiles } from 'common/vue/service';
 
 const columns = [
   {
@@ -174,11 +180,13 @@ const columns = [
 export default {
   components: {
     AddStudentModal,
-    StudentInfoModal
+    StudentInfoModal,
+    userInfoTable,
   },
   data() {
     return {
       students: [],
+      modalShowUser: {},
       multiClass: {
         course: {
           id: 0
@@ -265,8 +273,12 @@ export default {
     addStudent() {
       this.addStudentVisible = true;
     },
+    close() {
+      this.viewStudentInfoVisible = false;
+    },
 
-    viewStudentInfo(id) {
+    async viewStudentInfo(user) {
+      this.modalShowUser = await UserProfiles.get(user.id);;
       this.viewStudentInfoVisible = true;
     },
     onBatchRemoveStudent() {

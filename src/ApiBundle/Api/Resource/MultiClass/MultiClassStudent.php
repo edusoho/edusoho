@@ -52,7 +52,7 @@ class MultiClassStudent extends AbstractResource
         $conditions['role'] = 'student';
 
         if (!empty($conditions['keyword'])) {
-            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($keyword);
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['keyword']);
             unset($conditions['keyword']);
         }
 
