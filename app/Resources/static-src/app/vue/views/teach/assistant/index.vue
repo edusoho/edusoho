@@ -43,7 +43,7 @@
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Assistant, UserProfiles, AssistantPermission } from "common/vue/service/index.js";
+import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 import PermissionModal from './permissionModal.vue';
 
