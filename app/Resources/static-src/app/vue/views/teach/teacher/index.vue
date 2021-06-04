@@ -12,8 +12,10 @@
       :columns="columns"
       :data-source="pageData"
       :row-key="record => record.id"
-      :pagination="paging"
+      :pagination="pagination"
       :row-class-name="record => 'teacher-manage-row'"
+      :loading="loading"
+      @change="handleTableChange"
     >
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
@@ -106,11 +108,9 @@ export default {
       user: {},
       columns,
       pageData: [],
-      paging: {
-        offset: 0,
-        limit: 10,
-        total: 0,
-      },
+      loading: false,
+      pagination: {},
+      keyWord: '',
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
@@ -118,24 +118,46 @@ export default {
   },
 
   created() {
-    this.onSearch();
+    this.fetchTeacher();
   },
 
   methods: {
-    async onSearch(nickname) {
+     handleTableChange(pagination) {
+      const pager = { ...this.pagination };
+      pager.current = pagination.current;
+      this.pagination = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.fetchTeacher(params);
+    },
+
+    async fetchTeacher(params) {
+      this.loading = true;
       const { data, paging } = await Teacher.search({
-        nickname: nickname,
-        offset: this.paging.offset || 0,
-        limit: this.paging.limit || 10,
+        limit: 10,
+        nickname: this.keyWord,
+        ...params
       });
-      paging.page = (paging.offset / paging.limit) + 1;
+      const pagination = { ...this.pagination };
+      pagination.total = paging.total;
 
-      data.forEach(element => {
-        element.isPromoted = element.promoted == 1;
+      _.forEach(data, item => {
+        item.isPromoted = item.promoted == 1;
       });
 
+      this.loading = false;
       this.pageData = data;
-      this.paging = paging;
+      this.pagination = pagination;
+    },
+
+    async onSearch(nickname) {
+      this.keyWord = nickname;
+      this.pagination.current = 1;
+      this.fetchTeacher();
     },
 
     async edit(id) {
@@ -169,7 +191,7 @@ export default {
       });
     },
 
-    handleCancel(e) {
+    handleCancel() {
       this.modalVisible = false;
     },
 
