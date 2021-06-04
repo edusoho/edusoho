@@ -6,7 +6,7 @@
         style="width: 224px"
         @search="onSearch"
       />
-      <a-button class="pull-right" type="primary" @click="setAssistantRoles">助教权限设置</a-button>
+      <a-button class="pull-right" type="primary" @click="showPermissionModal">助教权限设置</a-button>
     </div>
 
     <a-table
@@ -25,15 +25,6 @@
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
 
-    <div class="text-center">
-      <a-pagination class="mt6"
-        v-if="paging"
-        v-model="paging.page"
-        :total="paging.total"
-        show-less-items
-      />
-    </div>
-
     <a-modal title="助教详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
 
@@ -41,6 +32,8 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
+
+    <permission-modal :visible="permissionModalVisible" @cancel-permission-modal="hidePermissionModal" />
   </aside-layout>
 </template>
 
@@ -49,6 +42,7 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
+import PermissionModal from './permissionModal.vue';
 
 const columns = [
   {
@@ -69,7 +63,8 @@ export default {
   name: "assistants",
   components: {
     userInfoTable,
-    AsideLayout
+    AsideLayout,
+    PermissionModal
   },
   data() {
     return {
@@ -80,6 +75,7 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
+      permissionModalVisible: false
     };
   },
   created() {
@@ -122,12 +118,16 @@ export default {
       this.visible = true;
     },
     close() {
-      console.log("Clicked cancel button");
       this.visible = false;
     },
-    setAssistantRoles() {
-     console.log('set assistant roles')
+
+    showPermissionModal() {
+      this.permissionModalVisible = true;
     },
+
+    hidePermissionModal() {
+      this.permissionModalVisible = false;
+    }
   },
 };
 </script>
