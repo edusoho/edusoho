@@ -18,13 +18,13 @@
 
       <a-menu v-if="course" class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
         <a-menu-item class="manage-menu-item">
-          <a :href="`/announcement/course/${id}/list`">公告管理</a>
+          <a :href="`/announcement/course/${id}/list`" target="_blank">公告管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item">
-          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/live_statistics`">录播管理</a>
+          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/live_statistics`" target="_blank">录播管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space">
-          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/orders`">订单管理</a>
+          <a :href="`/course_set/${course.courseSet.id}/manage/course/${id}/orders`" target="_blank">订单管理</a>
         </a-menu-item>
       </a-menu>
     </div>
