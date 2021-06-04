@@ -26,7 +26,7 @@
         </template>
         <template v-else> -- </template>
       </template>
-      <!-- TODO -->
+
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
           {{ record.tasks.length }}min
@@ -173,7 +173,7 @@ export default {
     this.fetchLessons();
 
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchLessons()
+      this.fetchLessons();
     })
   },
 
