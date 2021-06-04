@@ -4,34 +4,34 @@
       <tr>
         <th width="30%">用户名</th>
         <td width="70%">
-          <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.id)">个人主页</a>
-          {{ user.nickname }}
+          <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.user.id)">个人主页</a>
+          {{ user.user.nickname }}
         </td>
       </tr>
 
       <tr>
         <th>Email</th>
-        <td>{{ user.email }}</td>
+        <td>{{ user.profile.email || '- -' }}</td>
       </tr>
 
       <tr>
         <th>用户组</th>
-        <td>{{ user.roleNames.join(' ') }}</td>
+        <td>{{ '用户组' }}</td>
       </tr>
 
       <tr>
         <th>注册时间/IP</th>
-        <td>{{ formatTimeIp(user.createdTime, user.createdIp) }}</td>
+        <td>{{ 'formatTimeIp(user.createdTime, user.createdIp)' }}</td>
       </tr>
 
       <tr>
         <th>最近登录时间/IP</th>
-        <td>{{ formatTimeIp(user.loginTime, user.loginIp) }}</td>
+        <td>{{ 'formatTimeIp(user.loginTime, user.loginIp)' }}</td>
       </tr>
 
       <tr>
         <th>姓名</th>
-        <td>{{ formatStr(user.truename) }}</td>
+        <td>{{ formatStr(user.profile.truename) }}</td>
       </tr>
 
       <tr>
@@ -40,56 +40,56 @@
       </tr>
       <tr>
         <th>身份证号</th>
-        <td>{{ formatStr(user.idcard) }}</td>
+        <td>{{ formatStr(user.profile.idcard) }}</td>
       </tr>
 
       <tr>
         <th>手机号码</th>
-        <td>{{ formatStr(user.mobile) }}</td>
+        <td>{{ formatStr(user.profile.mobile) }}</td>
       </tr>
       <tr>
         <th>公司</th>
-        <td>{{ formatStr(user.company) }}</td>
+        <td>{{ formatStr(user.profile.company) }}</td>
       </tr>
 
       <tr>
         <th>职业</th>
-        <td>{{ formatStr(user.job) }}</td>
+        <td>{{ formatStr(user.profile.job) }}</td>
       </tr>
 
       <tr>
         <th>头衔</th>
-        <td>{{ formatStr(user.title) }}</td>
+        <td>{{ formatStr(user.user.title) }}</td>
       </tr>
 
       <tr>
         <th>个人签名</th>
-        <td>{{ formatStr(user.signature) }}</td>
+        <td>{{ formatStr(user.profile.signature) }}</td>
       </tr>
 
       <tr>
         <th>自我介绍</th>
-        <td>{{ formatStr(user.about) }}</td>
+        <td v-html="user.profile.about || '暂无'"></td>
       </tr>
 
       <tr>
         <th>个人网站</th>
-        <td>{{ formatStr(user.site) }}</td>
+        <td>{{ formatStr(user.profile.site) }}</td>
       </tr>
 
       <tr>
         <th>微博</th>
-        <td>{{ formatStr(user.weibo) }}</td>
+        <td>{{ formatStr(user.profile.weibo) }}</td>
       </tr>
 
       <tr>
         <th>微信</th>
-        <td>{{ formatStr(user.weixin) }}</td>
+        <td>{{ formatStr(user.profile.weixin) }}</td>
       </tr>
 
       <tr>
         <th>QQ</th>
-        <td>{{ formatStr(user.qq) }}</td>
+        <td>{{ formatStr(user.profile.qq) }}</td>
       </tr>
     </tbody>
   </table>
@@ -125,13 +125,13 @@ export default {
     },
 
     formatStr(str) {
-      return (typeof str == 'undefined' || str == '') ? '暂无' : str;
+      return (typeof str == 'undefined' || str == '' || str == null) ? '暂无' : str;
     },
 
     formatGender() {
-      let allGenders = {'male': '男性', 'female': '女性', 'secret': '秘密'};
+      const allGenders = { male: '男性', female: '女性', secret: '秘密' };
 
-      return typeof allGenders['secret'] == 'undefined' ? '秘密' : allGenders[this.user.gender];
+      return allGenders[this.user.profile.gender];
     },
   }
 };
