@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface MultiClassDao extends AdvancedDaoInterface
 {
+    public function findAll();
+
     public function findByProductIds(array $productIds);
 
     public function findByCourseIds(array $courseIds);
