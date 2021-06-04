@@ -16,7 +16,7 @@
     "babel-istanbul": "^0.12.2",
     "chai": "^4.1.2",
     "es-commit-msg-validator": "1.0.2",
-    "es-webpack-engine": "4.5.2",
+    "es-webpack-engine": "^4.6.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.6.2",
