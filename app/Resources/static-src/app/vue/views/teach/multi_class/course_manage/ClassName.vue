@@ -25,9 +25,9 @@ export default {
       const { chapterTitle, unitTitle, number, title, tasks } = this.record;
       let className = '';
 
-      if (tasks.isLesson == 1){
-        className = `${number}. ${title}`
-      }else{
+      if (tasks.isLesson == 1) {
+        className = `${number}. ${title}`;
+      } else {
         let taskNum = tasks.number.split('-');
         className = `${number}.${taskNum[1]-1} [任务]${tasks.title}`;
       }
@@ -39,7 +39,7 @@ export default {
       if (chapterTitle) {
         if (unitTitle) {
           className = `${chapterTitle} - ${className}`;
-        }else{
+        } else {
           className = `${chapterTitle} ${className}`;
         }
       }
