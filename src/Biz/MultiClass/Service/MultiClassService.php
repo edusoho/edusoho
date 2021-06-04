@@ -20,7 +20,7 @@ interface MultiClassService
 
     public function deleteMultiClass($id);
 
-    public function cloneMultiClass($id);
+    public function cloneMultiClass($id, $cloneMultiClass);
 
     public function countMultiClassByCopyId($id);
 

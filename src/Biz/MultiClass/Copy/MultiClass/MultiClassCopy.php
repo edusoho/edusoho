@@ -4,6 +4,7 @@ namespace Biz\MultiClass\Copy\MultiClass;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\MultiClass\Service\MultiClassProductService;
 
 class MultiClassCopy extends AbstractEntityCopy
 {
@@ -20,12 +21,20 @@ class MultiClassCopy extends AbstractEntityCopy
         $number = empty($number) ? '' : $number;
         $newMultiClass = $this->filterFields($multiClass);
         $newMultiClass['copyId'] = $multiClass['id'];
-        $newMultiClass['title'] = $multiClass['title']."(复制{$number})";
-        $newMultiClass['productId'] = $config['productId'];
+        $newMultiClass['title'] = empty($config['cloneMultiClass']) ? $multiClass['title']."(复制{$number})" : $config['cloneMultiClass']['title'];
+        $newMultiClass['productId'] = empty($config['cloneMultiClass']) ? $this->getMultiClassProductService()->getDefaultProduct()['id'] : $config['cloneMultiClass']['productId'];
         $newMultiClass = $this->getMultiClassDao()->create($newMultiClass);
         $newMultiClass['number'] = $number;
 
         return $newMultiClass;
+    }
+
+    /**
+     * @return MultiClassProductService
+     */
+    private function getMultiClassProductService()
+    {
+        return $this->biz->service('MultiClass:MultiClassProductService');
     }
 
     /**
