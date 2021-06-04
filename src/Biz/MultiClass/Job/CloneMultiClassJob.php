@@ -4,6 +4,7 @@ namespace Biz\MultiClass\Job;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -16,13 +17,19 @@ class CloneMultiClassJob extends AbstractJob
             $this->biz['db']->beginTransaction();
 
             $multiClassId = $this->args['multiClassId'];
-            $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClassId);
+            $cloneMultiClass = $this->args['cloneMultiClass'];
+            $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClassId, $cloneMultiClass);
             $course = $this->getCourseService()->getCourse($newMultiClass['courseId']);
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
             $this->getCourseSetService()->cloneCourseSet($course['courseSetId'], [
-                'title' => $courseSet['title']."(复制{$newMultiClass['number']})",
+                'title' => empty($cloneMultiClass['courseSetTitle']) ? $courseSet['title']."(复制{$newMultiClass['number']})" : $cloneMultiClass['courseSetTitle'],
                 'newMultiClass' => $newMultiClass,
             ]);
+            $multiClass = $this->getMultiClassService()->getMultiClass($newMultiClass['id']);
+            $this->getCourseMemberService()->setCourseTeachers($multiClass['courseId'], [[
+                'id' => $cloneMultiClass['teacherId'],
+                'isVisable' => 1, ]], $multiClass['id']);
+            $this->getCourseMemberService()->setCourseAssistants($multiClass['courseId'], $cloneMultiClass['assistantIds'], $multiClass['id']);
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
@@ -61,5 +68,13 @@ class CloneMultiClassJob extends AbstractJob
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

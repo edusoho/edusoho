@@ -161,16 +161,15 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->count($conditions);
     }
 
-    public function cloneMultiClass($id)
+    public function cloneMultiClass($id, $cloneMultiClass)
     {
         if (!$this->canManageMultiClass($id, 'multi_class_copy')) {
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
         $multiClass = $this->getMultiClassDao()->get($id);
-        $defaultProduct = $this->getMultiClassProductService()->getDefaultProduct();
         $newMultiClass = $this->biz['multi_class_copy']->copy($multiClass, [
-            'productId' => $defaultProduct['id'],
+            'cloneMultiClass' => $cloneMultiClass,
         ]);
 
         $this->getLogService()->info(
