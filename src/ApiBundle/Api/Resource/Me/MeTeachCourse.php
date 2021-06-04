@@ -18,19 +18,20 @@ class MeTeachCourse extends AbstractResource
     /**
      * @param ApiRequest $request
      * @return array
-     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
 
-        $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher']);
-
         $conditions = [
             'parentId' => 0,
             'status' => 'published',
-            'ids' => empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId'),
         ];
+
+        if (!in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher']);
+            $conditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId');
+        }
 
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, [], 0, PHP_INT_MAX);
 
@@ -44,7 +45,7 @@ class MeTeachCourse extends AbstractResource
             $conditions['isDefault'] = 1;
         }
 
-        $multiClasses = $this->getMultiClassService()->findMultiClassesByCourseIds(ArrayToolkit::column($members, 'courseId'));
+        $multiClasses = $this->getMultiClassService()->findAllMultiClass();
         if (!empty($multiClasses)) {
             $conditions['excludeIds'] = array_column($multiClasses, 'courseId');
         }
