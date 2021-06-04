@@ -289,11 +289,7 @@ export default {
     },
 
     copyTaskUrl(record) {
-      let url = `${window.location.origin}/course/${record.courseId}/task/${record.tasks.id}/show`
-
-      if (record.status === 'unpublished') {
-        url += `?preview=1`
-      }
+      let url = `${window.location.origin}/course/${record.courseId}`
 
       return url;
     },
