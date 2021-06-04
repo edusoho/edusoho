@@ -23,6 +23,7 @@ class Teacher extends AbstractResource
             'roles' => 'ROLE_TEACHER',
             'destroyed' => 0,
             'locked' => 0,
+            'excludeIds' => $request->query->get('excludeIds', []),
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

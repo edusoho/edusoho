@@ -170,10 +170,6 @@ class MultiClassStudent extends AbstractResource
                 'createdTime',
             ]);
 
-            if (empty($filteredFields['deadline'])) {
-                unset($filteredFields['deadline']);
-            }
-
             $filteredFields['user'] = [
                 'id' => $member['userId'],
                 'nickname' => $member['user']['nickname'],

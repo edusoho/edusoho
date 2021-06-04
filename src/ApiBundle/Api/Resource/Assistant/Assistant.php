@@ -23,6 +23,7 @@ class Assistant extends AbstractResource
             'roles' => 'ROLE_TEACHER_ASSISTANT',
             'destroyed' => 0,
             'locked' => 0,
+            'excludeIds' => $request->query->get('excludeIds', []),
         ];
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

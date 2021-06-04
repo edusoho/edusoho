@@ -6,9 +6,12 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use ApiBundle\Api\Annotation\Access;
+use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Service\MultiClassService;
 
 class MeTeachCourse extends AbstractResource
 {
@@ -21,19 +24,30 @@ class MeTeachCourse extends AbstractResource
     {
         $user = $this->getCurrentUser();
 
+        $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher']);
+
         $conditions = [
             'parentId' => 0,
             'status' => 'published',
+            'ids' => empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId'),
         ];
 
-        $courseSets = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], $conditions, 0, PHP_INT_MAX);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, [], 0, PHP_INT_MAX);
 
         $conditions = [
             'courseSetIds' => empty($courseSets) ? [-1] : array_column($courseSets, 'id'),
             'status' => 'published',
             'courseSetTitleLike' => $request->query->get('titleLike', ''),
-            'isDefault' => $request->query->get('isDefault', 1)
         ];
+
+        if ($request->query->get('isDefault')) {
+            $conditions['isDefault'] = 1;
+        }
+
+        $multiClasses = $this->getMultiClassService()->findMultiClassesByCourseIds(ArrayToolkit::column($members, 'courseId'));
+        if (!empty($multiClasses)) {
+            $conditions['excludeIds'] = array_column($multiClasses, 'courseId');
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle', 'courseSetId']);
@@ -56,5 +70,21 @@ class MeTeachCourse extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
     }
 }

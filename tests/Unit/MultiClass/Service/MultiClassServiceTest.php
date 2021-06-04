@@ -15,6 +15,21 @@ use Biz\User\Service\UserService;
 
 class MultiClassServiceTest extends BaseTestCase
 {
+    public function testFindByProductIds()
+    {
+        $multiClass1 = $this->createMultiClass();
+        $multiClass2 = $this->createMultiClass();
+        $findMultiClass = $this->getMultiClassService()->findByProductIds([$multiClass1['productId'], $multiClass2['productId']]);
+        $this->assertCount(2, $findMultiClass);
+    }
+
+    public function testFindByProductId()
+    {
+        $multiClass = $this->createMultiClass();
+        $findMultiClass = $this->getMultiClassService()->findByProductIds($multiClass);
+        $this->assertCount(1, $findMultiClass);
+    }
+
     public function testGetMultiClass()
     {
         $createMultiClass = $this->createMultiClass();
@@ -106,10 +121,18 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testCloneMultiClass()
     {
+        $this->createMultiClassDefaultProduct();
         $multiClass = $this->createMultiClass();
         $this->getMultiClassProductDao()->create(['title' => '系统默认', 'type' => 'default']);
         $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
         $this->assertEquals($multiClass['title'].'(复制)', $newMultiClass['title']);
+    }
+
+    public function testGetMultiClassByCourseId()
+    {
+        $createMultiClass = $this->createMultiClass();
+        $getMultiClass = $this->getMultiClassService()->getMultiClassByCourseId($createMultiClass['courseId']);
+        $this->assertNotEmpty($getMultiClass);
     }
 
     protected function createMultiClass()
@@ -130,6 +153,16 @@ class MultiClassServiceTest extends BaseTestCase
         ];
 
         return $this->getMultiClassService()->createMultiClass($fields);
+    }
+
+    public function createMultiClassDefaultProduct()
+    {
+        $fields = [
+            'title' => '默认产品',
+            'type' => 'default',
+        ];
+
+        return $this->getMultiClassProductDao()->create($fields);
     }
 
     public function createMultiClassProduct($fields = [])
@@ -246,5 +279,13 @@ class MultiClassServiceTest extends BaseTestCase
     protected function getUserDao()
     {
         return $this->createService('User:UserDao');
+    }
+
+    /**
+     * @return MultiClassProductDao
+     */
+    protected function getMultiClassProductDao()
+    {
+        return $this->createDao('MultiClass:MultiClassProductDao');
     }
 }
