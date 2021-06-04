@@ -22,7 +22,7 @@
           {{ record.endTaskNum }}/{{ record.taskNum }}
         </a>
         <a slot="course" slot-scope="course"
-          :href="`/course/${course.id}`">
+          :href="`/course/${course.id}`" target="_blank">
           {{ course.title || course.courseSetTitle }}
         </a>
         <template slot="assistant" slot-scope="assistant">
