@@ -20,10 +20,13 @@ class MultiClassClone extends AbstractResource
         }
         $cloneMultiClass = $this->checkDataFields($request->request->all());
 
+        $existed = $this->getMultiClassService()->getMultiClassByTitle($cloneMultiClass['title']);
+        if ($existed) {
+            throw MultiClassException::MULTI_CLASS_EXIST();
+        }
+
         $jobName = 'CloneMultiClassJob_'.$id;
         $jobs = $this->getSchedulerService()->countJobs(['name' => $jobName, 'deleted' => 0]);
-
-//        $this->getMultiClassService()->cloneMultiClass($id,$cloneMultiClass);die;
 
         if ($jobs) {
             throw MultiClassException::MULTI_CLASS_CLONE_ALREADY();
