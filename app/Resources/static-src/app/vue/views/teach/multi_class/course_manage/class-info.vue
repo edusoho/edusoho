@@ -127,12 +127,14 @@ const columns = [
   {
     title: '授课老师',
     width: '10%',
+    ellipsis: true,
     dataIndex: 'teacher',
     scopedSlots: { customRender: 'teacher' }
   },
   {
     title: '助教老师',
     width: '10%',
+    ellipsis: true,
     dataIndex: 'assistant',
     scopedSlots: { customRender: 'assistant' }
   },
