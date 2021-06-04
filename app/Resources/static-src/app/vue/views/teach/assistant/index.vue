@@ -34,8 +34,6 @@
     </a-modal>
 
     <permission-modal
-      :treeData="treeData"
-      :permissions="permissions"
       :visible="permissionModalVisible"
       @cancel-permission-modal="hidePermissionModal"
     />
@@ -80,9 +78,7 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
-      permissionModalVisible: false,
-      treeData: [],
-      permissions: [],
+      permissionModalVisible: false
     };
   },
   created() {
@@ -128,24 +124,7 @@ export default {
       this.visible = false;
     },
 
-    getAssistantPermission() {
-      AssistantPermission.search().then(res => {
-        const loop = (treeData) => {
-          _.forEach(treeData, item => {
-            item.disabled = !!item.disabled;
-            if (item.children) {
-              loop(item.children);
-            }
-          });
-        };
-        loop(res.menu);
-        this.treeData = res.menu;
-        this.permissions = res.permissions;
-      });
-    },
-
     showPermissionModal() {
-      this.getAssistantPermission();
       this.permissionModalVisible = true;
     },
 

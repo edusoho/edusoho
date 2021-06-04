@@ -6,7 +6,7 @@
     cancelText="取消"
     @ok="handleOk"
     @cancel="handleCancel"
-    destroyOnClose
+    :destroyOnClose="true"
   >
     <a-tree
       checkable
@@ -29,16 +29,6 @@ export default {
     visible: {
       type: Boolean,
       required: true
-    },
-
-    treeData: {
-      type: Array,
-      required: true
-    },
-
-    permissions: {
-      type: Array,
-      required: true
     }
   },
 
@@ -48,11 +38,33 @@ export default {
         title: 'title',
         key: 'code'
       },
-      checkedKeys: []
+      checkedKeys: [],
+      treeData: [],
+      permissions: [],
     }
   },
 
+  created() {
+    this.getAssistantPermission();
+  },
+
   methods: {
+    getAssistantPermission() {
+      AssistantPermission.search().then(res => {
+        const loop = (treeData) => {
+          _.forEach(treeData, item => {
+            item.disabled = !!item.disabled;
+            if (item.children) {
+              loop(item.children);
+            }
+          });
+        };
+        loop(res.menu);
+        this.treeData = res.menu;
+        this.permissions = res.permissions;
+      });
+    },
+
     handleOk() {
       AssistantPermission.add({
         permissions: this.checkedKeys
@@ -63,6 +75,7 @@ export default {
     },
 
     handleCancel() {
+      this.getAssistantPermission();
       this.$emit('cancel-permission-modal');
     },
 
