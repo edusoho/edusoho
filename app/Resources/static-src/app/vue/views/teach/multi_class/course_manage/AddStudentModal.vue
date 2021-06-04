@@ -57,6 +57,11 @@ export default {
       type: Boolean,
       required: true,
       default: false
+    },
+    multiClass: {
+      type: Object,
+      required: true,
+      default: {}
     }
   },
 
@@ -70,11 +75,20 @@ export default {
     handleCancel() {
       this.$emit('handle-cancel');
     },
-
-    handleSubmit() {
-      this.form.validateFields(err => {
+    async handleSubmit() {
+      this.form.validateFields((err, values) => {
         if (!err) {
-          console.info('success');
+          MultiClassStudent.add({
+            id: this.multiClass.id,
+            userInfo: values.name,
+            price: values.price,
+          }).then((res) => {
+            this.$message.success('学员创建成功！', 2);
+            this.visible = false;
+            window.location.reload();
+          }).catch(err => {
+            this.$message.success('学员创建失败', 2);
+          });
         }
       });
     },
