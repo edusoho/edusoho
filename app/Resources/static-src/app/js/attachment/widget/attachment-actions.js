@@ -16,7 +16,8 @@ class AttachmentActions {
         notify('success', Translator.trans('site.delete_success_hint'));
         $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
         $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
-        $target.closest('div').remove();
+        // $target.closest('div').remove();
+        $target.closest('div').parent().remove(); // 移除attachment
         $target.closest('.form-control').find('.js-upload-file').show();
       }
     }).error(function(response){
