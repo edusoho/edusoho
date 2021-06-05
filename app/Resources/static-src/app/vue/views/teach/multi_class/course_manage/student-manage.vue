@@ -311,6 +311,7 @@ export default {
       columns,
       selectedRowKeys: [],
       selectedRowKeysStr: '',
+      selectedUserIds: [],
       loading: false,
       addStudentVisible: false,
       viewStudentInfoVisible: false,
@@ -409,6 +410,7 @@ export default {
     onRemoveStudent(userId) {
       MultiClassStudent.deleteMultiClassMember(this.multiClass.id, userId).then(res => {
         this.getMultiClassStudents();
+        this.$message.success('移除学员成功！');
       }).catch(err => {
         this.$message.warning('移除学员失败！');
       })
@@ -479,6 +481,7 @@ export default {
         this.$message.error('请至少选中一项后移除', 1);
         return;
       }
+      let self = this;
       this.$confirm({
         title: '是否移除这些学员？',
         // content: '删除后，学员将不能学习课程内的所有内容。',
@@ -486,7 +489,14 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk() {
-
+          MultiClassStudent.batchDeleteClassMember(self.multiClass.id, {
+            userIds: self.selectedUserIds,
+          }).then(res => {
+            self.getMultiClassStudents();
+            self.$message.success('移除学员成功！');
+          }).catch(err => {
+            self.$message.warning('移除学员失败！');
+          })
         },
         onCancel() {
           console.log('Cancel');
@@ -503,18 +513,21 @@ export default {
     },
     getSelectedRowKeysQueryStr() {
       let str = '';
+      let userIds = [];
       if (this.selectedRowKeys) {
         this.selectedRowKeys.forEach((item, index) => {
           this.students.forEach((item1, index1) => {
             if (item1.id == item) {
               str =  `${str}&ids[]=${item1.user.id}`;
+              userIds.push(item1.user.id);
             }
           })
         });
       }
       console.log(str);
       this.selectedRowKeysStr = str;
-    }
+      this.selectedUserIds = userIds;
+    },
   }
 }
 </script>
