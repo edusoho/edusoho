@@ -43,7 +43,7 @@ class MultiClassStudentExamResult extends AbstractResource
             $status = 'all';
         }
 
-        $conditions = ['answer_scene_ids' => $answerSceneIds];
+        $conditions = ['answer_scene_ids' => $answerSceneIds, 'user_id' => $studentId];
 
         if ('all' !== $status) {
             $conditions['status'] = $status;

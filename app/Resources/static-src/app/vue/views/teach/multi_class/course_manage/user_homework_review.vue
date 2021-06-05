@@ -70,10 +70,10 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-            :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`" 
+            :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
             target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-            :href="`/homework/result/${record.id}/show?action=check`" 
+            :href="`/homework/result/${record.id}/show?action=check`"
             target="_blank">查看结果</a>
         </template>
       </a-table>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { MultiClassExam } from 'common/vue/service';
+import { MultiClassStudentExam } from 'common/vue/service';
 import ClassName from './ClassName.vue';
 import _ from '@codeages/utils';
 
@@ -168,7 +168,7 @@ const resultColumns = [
 
 export default {
   name: "HomeWorkReview",
-  components: { 
+  components: {
     ClassName
   },
   data() {
@@ -243,10 +243,8 @@ export default {
     getExamResults(currentTab = 0) {
       const status = this.status[currentTab]
 
-      MultiClassExam.getExamResults({ 
+      MultiClassStudentExam.searchStudentExamResults(this.$route.params.id,{
         status,
-        multiClassId: this.$route.params.id,
-        taskId: this.currentTask.id,
       }).then(res => {
         res.paging.pageSize = res.paging.limit
         this.$set(this.examResultList, status, res);

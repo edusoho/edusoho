@@ -52,7 +52,7 @@
                   data-target="#modal"
                   data-backdrop="static"
                   data-keyboard="false"
-                  :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline`"
+                  :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline?${selectedRowKeysStr}`"
         >
           批量修改有效期
         </a-button>
@@ -79,13 +79,13 @@
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
-      <template slot="assistants" slot-scope="assistants">{{ assistants[0].truename }}</template>
+      <template slot="assistants" slot-scope="assistants">{{ assistants[0].nickname }}</template>
 
       <a slot="threadCount" slot-scope="threadCount">{{ threadCount }}</a>
 
-      <a slot="finishedHomeworkCount" slot-scope="value, record">{{ value }}/{{ record.homeworkCount }}</a>
+      <a slot="finishedHomeworkCount" @click="onClickHomeworkModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.homeworkCount }}</a>
 
-      <a slot="finishedTestpaperCount" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
+      <a slot="finishedTestpaperCount" @click="onClickTestpaperModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
 
       <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') }}</template>
 
@@ -109,11 +109,93 @@
 
 
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
-<!--    <student-info-modal :visible="viewStudentInfoVisible" @handle-cancel="viewStudentInfoVisible = false;" />-->
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
     </form>
+
+    <a-modal
+      :visible="homeworkModalVisible"
+      :footer="null"
+      :title="`${selectedUser.nickname} - 作业`"
+      :width="920"
+      @cancel="homeworkModalVisible = false"
+    >
+      <a-tabs v-model="currentHomeworkTab">
+        <a-tab-pane :key="0" tab="全部"></a-tab-pane>
+        <a-tab-pane :key="1" tab="未批阅"></a-tab-pane>
+        <a-tab-pane :key="2" tab="进行中"></a-tab-pane>
+        <a-tab-pane :key="3" tab="已批阅"></a-tab-pane>
+      </a-tabs>
+      <!-- TODO 翻页未做 -->
+      <a-table
+        v-if="homeworkResults"
+        :columns="resultColumns"
+        :data-source="homeworkResults.data"
+        :pagination="homeworkResults.paging"
+      >
+        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
+        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
+        <template slot="status" slot-scope="status">
+          {{ statusMap[status] }}
+        </template>
+        <template slot="end_time" slot-scope="end_time">
+          {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
+        </template>
+        <template slot="action" slot-scope="text, record">
+          <!-- TODO 这里要判断是不是老师 -->
+          <!-- TODO 这里要判断来源是classroom还是course -->
+          <a v-if="record.status === 'reviewing'"
+             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             target="_blank">去批阅</a>
+          <a v-else-if="record.status === 'finished'"
+             :href="`/homework/result/${record.id}/show?action=check`"
+             target="_blank">查看结果</a>
+        </template>
+      </a-table>
+    </a-modal>
+    <a-modal
+      :visible="testpaperModalVisible"
+      :footer="null"
+      :title="`${selectedUser.nickname} - 试卷`"
+      :width="920"
+      @cancel="testpaperModalVisible = false"
+    >
+      <a-tabs v-model="currentTestpaperTab">
+        <a-tab-pane :key="0" tab="全部"></a-tab-pane>
+        <a-tab-pane :key="1" tab="未批阅"></a-tab-pane>
+        <a-tab-pane :key="2" tab="进行中"></a-tab-pane>
+        <a-tab-pane :key="3" tab="已批阅"></a-tab-pane>
+      </a-tabs>
+      <!-- TODO 翻页未做 -->
+      <a-table
+        v-if="testpaperResults"
+        :columns="resultColumns"
+        :data-source="testpaperResults.data"
+        :pagination="testpaperResults.paging"
+      >
+        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
+        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
+        <template slot="status" slot-scope="status">
+          {{ statusMap[status] }}
+        </template>
+        <template slot="end_time" slot-scope="end_time">
+          {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
+        </template>
+        <template slot="action" slot-scope="text, record">
+          <!-- TODO 这里要判断是不是老师 -->
+          <!-- TODO 这里要判断来源是classroom还是course -->
+          <a v-if="record.status === 'reviewing'"
+             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             target="_blank">去批阅</a>
+          <a v-else-if="record.status === 'finished'"
+             :href="`/homework/result/${record.id}/show?action=check`"
+             target="_blank">查看结果</a>
+        </template>
+      </a-table>
+    </a-modal>
   </div>
 
 </template>
@@ -122,7 +204,7 @@
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
 import userInfoTable from "../../../components/userInfoTable";
-import { MultiClassStudent, MultiClass, UserProfiles } from 'common/vue/service';
+import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
 
 const columns = [
   {
@@ -176,6 +258,38 @@ const columns = [
     scopedSlots: { customRender: 'actions' }
   }
 ];
+const resultColumns = [
+  {
+    title: '姓名',
+    dataIndex: 'nickname',
+    scopedSlots: { customRender: "nickname" },
+  },
+  {
+    title: '成绩',
+    dataIndex: 'grade',
+    scopedSlots: { customRender: "grade" },
+  },
+  {
+    title: '提交时间',
+    dataIndex: 'end_time',
+    scopedSlots: { customRender: "end_time" },
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    scopedSlots: { customRender: "status" },
+  },
+  {
+    title: '批阅人',
+    dataIndex: 'teacherInfo',
+    scopedSlots: { customRender: "teacherInfo" },
+  },
+  {
+    title: '操作',
+    dataIndex: "action",
+    scopedSlots: { customRender: "action" },
+  }
+];
 
 export default {
   components: {
@@ -185,8 +299,10 @@ export default {
   },
   data() {
     return {
+      resultColumns,
       students: [],
       modalShowUser: {},
+      selectedUser: {},
       multiClass: {
         course: {
           id: 0
@@ -194,6 +310,7 @@ export default {
       },
       columns,
       selectedRowKeys: [],
+      selectedRowKeysStr: '',
       loading: false,
       addStudentVisible: false,
       viewStudentInfoVisible: false,
@@ -205,12 +322,57 @@ export default {
         offset: 0,
         pageSize: 10,
       },
+      status: ['all', 'doing', 'reviewing', 'finished'],
+      statusMap: {
+        doing: '进行中',
+        paused: '暂停',
+        reviewing: '未批阅',
+        finished: '已批阅',
+      },
+      gradeMap: {
+        excellent: '优秀',
+        good: '良好',
+        passed: '合格',
+        unpassed: '不合格'
+      },
+      homeworkResultList: {
+        type: Object,
+        required: true,
+        default: {}
+      },
+      testpaperResultList: {
+        type: Object,
+        required: true,
+        default: {}
+      },
+      currentHomeworkTab: 0,
+      currentTestpaperTab: 0,
+      homeworkModalVisible: false,
+      testpaperModalVisible: false,
     };
   },
 
   computed: {
     hasSelected() {
       return this.selectedRowKeys.length > 0;
+    },
+    testpaperResults() {
+      const key = this.status[this.currentTestpaperTab];
+
+      return this.testpaperResultList[key]
+    },
+    homeworkResults() {
+      const key = this.status[this.currentHomeworkTab];
+      return this.homeworkResultList[key];
+    }
+  },
+
+  watch: {
+    currentTestpaperTab(currentTestpaperTab) {
+      this.getTestpaperResults(currentTestpaperTab);
+    },
+    currentHomeworkTab(currentHomeworkTab) {
+      this.getHomeworkResults(currentHomeworkTab);
     }
   },
 
@@ -255,7 +417,16 @@ export default {
       this.keyword = keyword;
       this.getMultiClassStudents({ keyword })
     },
-
+    onClickHomeworkModal(user) {
+      this.selectedUser = user;
+      this.getHomeworkResults();
+      this.homeworkModalVisible = true;
+    },
+    onClickTestpaperModal(user) {
+      this.selectedUser = user;
+      this.getTestpaperResults();
+      this.testpaperModalVisible = true;
+    },
     start() {
       this.loading = true;
       // ajax request after empty completing
@@ -268,8 +439,30 @@ export default {
     onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
+      this.getSelectedRowKeysQueryStr();
     },
+    getHomeworkResults(currentHomeworkTab = 0) {
+      const status = this.status[currentHomeworkTab]
 
+      MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
+        status,
+        type: 'homework',
+      }).then(res => {
+        res.paging.pageSize = res.paging.limit
+        this.$set(this.homeworkResultList, status, res);
+      })
+    },
+    getTestpaperResults(currentTestpaperTab = 0) {
+      const status = this.status[currentTestpaperTab]
+
+      MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
+        status,
+        type: 'testpaper',
+      }).then(res => {
+        res.paging.pageSize = res.paging.limit
+        this.$set(this.testpaperResultList, status, res);
+      })
+    },
     addStudent() {
       this.addStudentVisible = true;
     },
@@ -308,6 +501,16 @@ export default {
       this.onRemoveStudent(userId);
       this.$message.success('移除学员成功！', 2);
     },
+    getSelectedRowKeysQueryStr() {
+      let str = '';
+      if (this.selectedRowKeys) {
+        this.selectedRowKeys.forEach((item, index) => {
+          str =  `${str}&ids[]=${item}`;
+        });
+      }
+      console.log(str);
+      this.selectedRowKeysStr = str;
+    }
   }
 }
 </script>
