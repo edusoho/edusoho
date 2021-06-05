@@ -505,7 +505,11 @@ export default {
       let str = '';
       if (this.selectedRowKeys) {
         this.selectedRowKeys.forEach((item, index) => {
-          str =  `${str}&ids[]=${item}`;
+          this.students.forEach((item1, index1) => {
+            if (item1.id == item) {
+              str =  `${str}&ids[]=${item1.user.id}`;
+            }
+          })
         });
       }
       console.log(str);
