@@ -291,7 +291,8 @@ export default {
       this.handleCancel();
     },
 
-    batchCreation(params) {
+    async batchCreation(params) {
+      const data = [];
       const { taskNum } = params;
       let loopNum = _.floor(taskNum / 5);
 
@@ -300,11 +301,20 @@ export default {
       }
 
       for (let index = 0; index < loopNum; index++) {
-        this.createTask(_.assign({}, _.assign(params, {
-          start: index * 5,
-          limit: 5
-        })));
+        let result = await Course.addLiveTask(this.courseId, {
+          ...params,
+          ...{
+            start: index * 5,
+            limit: 5
+          }
+        });
+        _.forEach(result.data, item => {
+          data.push(item);
+        })
       }
+
+      this.$emit('change-lesson-directory', { addData: data });
+      this.handleCancel();
     },
 
     handleOk() {
