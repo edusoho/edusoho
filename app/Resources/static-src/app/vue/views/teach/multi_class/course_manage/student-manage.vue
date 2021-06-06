@@ -134,8 +134,8 @@
         :data-source="homeworkResults.data"
         :pagination="homeworkResults.paging"
       >
-        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
+        <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--' }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}
@@ -175,8 +175,8 @@
         :data-source="testpaperResults.data"
         :pagination="testpaperResults.paging"
       >
-        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
+        <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--'  }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}
@@ -260,14 +260,18 @@ const columns = [
 ];
 const resultColumns = [
   {
-    title: '姓名',
-    dataIndex: 'nickname',
-    scopedSlots: { customRender: "nickname" },
+    title: '课时',
+    dataIndex: 'activity',
+    scopedSlots: { customRender: "lesson" },
+    width: '15%',
+    ellipsis: true,
   },
   {
-    title: '成绩',
-    dataIndex: 'grade',
-    scopedSlots: { customRender: "grade" },
+    title: '作业/考试',
+    dataIndex: 'answerScene',
+    scopedSlots: { customRender: "exam" },
+    width: '15%',
+    ellipsis: true,
   },
   {
     title: '提交时间',
