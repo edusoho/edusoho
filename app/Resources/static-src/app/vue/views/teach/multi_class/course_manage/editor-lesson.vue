@@ -40,8 +40,8 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_editor_lesson' }),
       courseId: this.$route.params.id,
-      courseSetId: this.$route.params.courseSetId,
-      multiClassId: this.$route.params.multiClassId,
+      courseSetId: this.$route.query.courseSetId,
+      multiClassId: this.$route.query.multiClassId,
     }
   },
 

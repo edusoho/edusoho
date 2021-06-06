@@ -311,7 +311,9 @@ export default {
       this.$router.push({
         name: 'MultiClassEditorLesson',
         params: {
-          id: this.courseId,
+          id: this.courseId
+        },
+        query: {
           courseSetId: this.courseSetId,
           multiClassId: this.multiClassId
         }
