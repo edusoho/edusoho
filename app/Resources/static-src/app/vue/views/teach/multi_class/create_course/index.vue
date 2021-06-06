@@ -69,7 +69,14 @@
         </a-select>
       </a-form-item>
       <a-form-item label="价格">
-        <a-input suffix="元" v-decorator="['originPrice', { initialValue: 0 }]" />
+        <a-input
+          suffix="元"
+          v-decorator="['originPrice',{
+            initialValue: 0,
+            rules: [
+              { validator: validatorPrice }
+            ]
+          }]" />
       </a-form-item>
       <a-form-item label="学习模式">
         <a-radio-group
@@ -367,6 +374,13 @@
       goToLastPage() {
         // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
         this.$router.go(-1)
+      },
+      validatorPrice(rule, value, callback) {
+        if (value >= 0) {
+          callback();
+          return;
+        }
+        callback('请输入大于等于0的数字');
       }
     }
   }
