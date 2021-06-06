@@ -2,7 +2,7 @@
   <div class="class-info">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-input-search class="pull-left" placeholder="请输入课时关键字搜索" style="width: 260px" @search="onSearch" />
-      <a-button class="pull-right" type="primary" @click="$router.push({ name: 'MultiClassEditorLesson', params: { id: multiClassId } })">
+      <a-button class="pull-right" type="primary" @click="goToEditorLesson">
         重排课时/新增课时
       </a-button>
     </div>
@@ -185,12 +185,15 @@ export default {
         emptyText: '暂无数据'
       },
       multiClassId: this.$route.params.id,
-      keywords: ''
+      keywords: '',
+      courseId: 0,
+      courseSetId: 0,
     }
   },
 
   mounted() {
     this.fetchLessons();
+    this.fetchMultiClass();
 
     $('#modal').on('hide.bs.modal', () => {
       this.fetchLessons();
@@ -219,6 +222,14 @@ export default {
       }
 
       this.fetchLessons(params);
+    },
+
+    fetchMultiClass() {
+      MultiClass.get(this.multiClassId).then(res => {
+        const { course: { id, courseSetId } } = res;
+        this.courseId = id;
+        this.courseSetId = courseSetId;
+      });
     },
 
     fetchLessons(params = {}) {
@@ -296,6 +307,16 @@ export default {
       return url;
     },
 
+    goToEditorLesson() {
+      this.$router.push({
+        name: 'MultiClassEditorLesson',
+        params: {
+          id: this.courseId,
+          courseSetId: this.courseSetId,
+          multiClassId: this.multiClassId
+        }
+      });
+    }
   }
 }
 </script>
