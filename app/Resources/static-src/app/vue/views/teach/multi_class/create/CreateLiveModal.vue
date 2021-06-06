@@ -58,7 +58,6 @@
           :show-time="{ format: 'HH:mm' }"
           format="YYYY-MM-DD HH:mm"
           :disabled-date="disabledDate"
-          :disabled-time="disabledDateTime"
           v-decorator="['startDate', {
             initialValue: moment().add(5, 'minutes'),
             rules: [
@@ -285,12 +284,6 @@ export default {
       return current && current < moment().startOf('day');
     },
 
-    disabledDateTime() {
-      return {
-        disabledHours: () => this.range(0, moment().hour())
-      };
-    },
-
     async createTask(params) {
       let result = await Course.addLiveTask(this.courseId, params);
       const { data } = result;
@@ -298,7 +291,8 @@ export default {
       this.handleCancel();
     },
 
-    batchCreation(params) {
+    async batchCreation(params) {
+      const data = [];
       const { taskNum } = params;
       let loopNum = _.floor(taskNum / 5);
 
@@ -307,11 +301,20 @@ export default {
       }
 
       for (let index = 0; index < loopNum; index++) {
-        this.createTask(_.assign({}, _.assign(params, {
-          start: index * 5,
-          limit: 5
-        })));
+        let result = await Course.addLiveTask(this.courseId, {
+          ...params,
+          ...{
+            start: index * 5,
+            limit: 5
+          }
+        });
+        _.forEach(result.data, item => {
+          data.push(item);
+        })
       }
+
+      this.$emit('change-lesson-directory', { addData: data });
+      this.handleCancel();
     },
 
     handleOk() {
