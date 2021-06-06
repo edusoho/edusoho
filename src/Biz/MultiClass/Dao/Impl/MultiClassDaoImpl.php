@@ -13,6 +13,13 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
 
     const MULTI_CLASS_ORDER_BY = ['createdTime'];
 
+    public function findAll()
+    {
+        $sql = "SELECT * FROM {$this->table};";
+
+        return $this->db()->fetchAll($sql, []) ?: [];
+    }
+
     public function findByProductIds(array $productIds)
     {
         return $this->findInField('productId', array_values($productIds));

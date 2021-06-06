@@ -4,6 +4,8 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassService
 {
+    public function findAllMultiClass();
+
     public function findByProductIds(array $productIds);
 
     public function findMultiClassesByCourseIds($courseIds);

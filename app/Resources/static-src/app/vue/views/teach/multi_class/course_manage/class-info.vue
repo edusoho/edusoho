@@ -1,7 +1,7 @@
 <template>
   <div class="class-info">
     <div class="clearfix" style="margin-bottom: 24px;">
-      <a-input-search class="pull-left" placeholder="请输入课时或老师关键字搜索" style="width: 260px" @search="onSearch" />
+      <a-input-search class="pull-left" placeholder="请输入课时关键字搜索" style="width: 260px" @search="onSearch" />
       <a-button class="pull-right" type="primary" @click="$router.push({ name: 'MultiClassEditorLesson', params: { id: multiClassId } })">
         重排课时/新增课时
       </a-button>
@@ -37,6 +37,8 @@
       <template slot="teacher" slot-scope="teacher">{{ teacher.nickname }}</template>
 
       <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
+
+      <a slot="questionNum" slot-scope="questionNum, record" :href="`/my/course/${record.tasks.courseId}/question?type=question`">{{ questionNum }}</a>
 
       <template slot="studyStudentNum" slot-scope="studyStudentNum, record">
         {{ studyStudentNum }}/{{ record.totalStudentNum }}
@@ -106,7 +108,6 @@ const columns = [
       { text: '音频', value: 'audio' },
       { text: '直播', value: 'live' },
       { text: '讨论', value: 'discuss' },
-      { text: 'flash', value: 'Flash' },
       { text: '文档', value: 'doc' },
       { text: 'PPT', value: 'ppt' },
       { text: '考试', value: 'testpaper' },
@@ -148,7 +149,8 @@ const columns = [
   {
     title: '问题讨论',
     width: '10%',
-    dataIndex: 'questionNum'
+    dataIndex: 'questionNum',
+    scopedSlots: { customRender: 'questionNum' }
   },
   {
     title: '学习人数',
@@ -289,11 +291,7 @@ export default {
     },
 
     copyTaskUrl(record) {
-      let url = `${window.location.origin}/course/${record.courseId}/task/${record.tasks.id}/show`
-
-      if (record.status === 'unpublished') {
-        url += `?preview=1`
-      }
+      let url = `${window.location.origin}/course/${record.courseId}`
 
       return url;
     },

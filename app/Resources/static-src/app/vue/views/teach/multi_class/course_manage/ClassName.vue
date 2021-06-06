@@ -22,15 +22,26 @@ export default {
 
   computed: {
     className() {
-      const { chapterTitle, unitTitle, number, title } = this.record;
-      let className = `${number}.${title}`;
+      const { chapterTitle, unitTitle, number, title, tasks } = this.record;
+      let className = '';
+
+      if (tasks.isLesson == 1) {
+        className = `${number}. ${title}`;
+      } else {
+        let taskNum = tasks.number.split('-');
+        className = `${number}.${taskNum[1]-1} [任务]${tasks.title}`;
+      }
 
       if (unitTitle) {
         className = `${unitTitle} ${className}`;
       }
 
       if (chapterTitle) {
-        className = `${chapterTitle} - ${className}`;
+        if (unitTitle) {
+          className = `${chapterTitle} - ${className}`;
+        } else {
+          className = `${chapterTitle} ${className}`;
+        }
       }
 
       return className;

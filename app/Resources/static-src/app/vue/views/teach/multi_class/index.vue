@@ -25,9 +25,7 @@
           :href="`/course/${course.id}`" target="_blank">
           {{ course.title || course.courseSetTitle }}
         </a>
-        <template slot="assistant" slot-scope="assistant">
-          {{ assistant ? assistant.join('、') : '' }}
-        </template>
+        <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
           href="javascript:;"
           @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
@@ -39,19 +37,15 @@
         <template slot="action" slot-scope="text, record">
           <a href="javascript:;" class="mr2"
             @click="goToMultiClassManage(record.id)">查看</a>
+          <a href="javascript:;"
+            @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
           <a href="javascript:;" class="mr2"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
           <a-dropdown>
             <a href="javascript:;" @click="e => e.preventDefault()">
-              更多 <a-icon type="down" />
+              <a-icon type="ellipsis" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;"
-                  @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">
-                  编辑
-                </a>
-              </a-menu-item>
               <a-menu-item>
                 <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
@@ -69,6 +63,7 @@
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { MultiClass } from 'common/vue/service/index.js';
+import Assistant from './course_manage/Assistant.vue';
 
 const columns = [
   {
@@ -144,7 +139,8 @@ export default {
   name: 'MultiClassList',
 
   components: {
-    AsideLayout
+    AsideLayout,
+    Assistant
   },
 
   data () {

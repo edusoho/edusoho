@@ -67,6 +67,7 @@
           okType: 'danger',
           okText: '确认',
           cancelText: '取消',
+          icon:  'close-circle',
           onOk: () => {
             this.$emit('delete', this.product)
           }

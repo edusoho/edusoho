@@ -6,9 +6,17 @@
         style="width: 224px"
         @search="onSearch"
       />
+      <a-button class="pull-right" type="primary" @click="showPermissionModal">助教权限设置</a-button>
     </div>
 
-    <a-table :columns="columns" :data-source="pageData" rowKey="id" :pagination="false">
+    <a-table
+      :columns="columns"
+      :data-source="pageData"
+      rowKey="id"
+      :pagination="pagination"
+      :loading="loading"
+      @change="handleTableChange"
+    >
       <div slot="loginInfo" slot-scope="item">
         <div>{{ item.loginIp }}</div>
         <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
@@ -17,15 +25,6 @@
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
     </a-table>
 
-    <div class="text-center">
-      <a-pagination class="mt6"
-        v-if="paging"
-        v-model="paging.page"
-        :total="paging.total"
-        show-less-items
-      />
-    </div>
-
     <a-modal title="助教详细信息" :visible="visible" @cancel="close">
       <userInfoTable :user="user" />
 
@@ -33,14 +32,20 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
+
+    <permission-modal
+      :visible="permissionModalVisible"
+      @cancel-permission-modal="hidePermissionModal"
+    />
   </aside-layout>
 </template>
 
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Assistant, User } from "common/vue/service/index.js";
+import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
+import PermissionModal from './permissionModal.vue';
 
 const columns = [
   {
@@ -61,7 +66,8 @@ export default {
   name: "assistants",
   components: {
     userInfoTable,
-    AsideLayout
+    AsideLayout,
+    PermissionModal
   },
   data() {
     return {
@@ -69,58 +75,62 @@ export default {
       user: {},
       columns,
       pageData: [],
-      paging: {
-        offset: 0,
-        limit: 10,
-        total: 0,
-      },
+      loading: false,
+      pagination: {},
+      keyWord: '',
+      permissionModalVisible: false
     };
   },
   created() {
-    this.onSearch();
+    this.fetchAssistant();
   },
   methods: {
-    async onSearch(nickname) {
-      const { data, paging } = await Assistant.search({
-        nickname: nickname,
-        offset: this.paging.offset || 0,
-        limit: this.paging.limit || 10,
-      });
-      paging.page = (paging.offset / paging.limit) + 1;
+    handleTableChange(pagination) {
+      const pager = { ...this.pagination };
+      pager.current = pagination.current;
+      this.pagination = pager;
 
-      this.pageData = data;
-      this.paging = paging;
-    },
-    edit(id) {
-      this.visible = true;
-      // this.user = User.get(id);
-      this.user = {
-        id: 1,
-        nickname: "nickname",
-        email: "email@edusoho.com",
-        roleNames: ['学员', '教师'],
-        createdTime: "1621328200",
-        createdIp: "127.0.0.1",
-        loginTime: "1621328400",
-        loginIp: "136.7.5.14",
-        truename: "张三",
-        gender: "secret",
-        idcard: "",
-        mobile: "13765442211",
-        company: "杭州阔知网络科技有限公司",
-        job: "高级工程师",
-        title: "架构师",
-        signature: "我的签名",
-        site: "http://kd.edusoho.cn",
-        weibo: "http://kd.edusoho.cn",
-        weixin: "13765442211",
-        qq: "11001",
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
       };
+
+      this.fetchAssistant(params);
+    },
+    async fetchAssistant(params) {
+      this.loading = true;
+      const { data, paging } = await Assistant.search({
+        limit: 10,
+        nickname: this.keyWord,
+        ...params
+      });
+      const pagination = { ...this.pagination };
+      pagination.total = paging.total;
+
+      this.loading = false;
+      this.pageData = data;
+      this.pagination = pagination;
+    },
+    async onSearch(nickname) {
+      this.keyWord = nickname;
+      this.pagination.current = 1;
+      this.fetchAssistant();
+    },
+    async edit(id) {
+      this.user = await UserProfiles.get(id);
+      this.visible = true;
     },
     close() {
-      console.log("Clicked cancel button");
       this.visible = false;
     },
+
+    showPermissionModal() {
+      this.permissionModalVisible = true;
+    },
+
+    hidePermissionModal() {
+      this.permissionModalVisible = false;
+    }
   },
 };
 </script>
