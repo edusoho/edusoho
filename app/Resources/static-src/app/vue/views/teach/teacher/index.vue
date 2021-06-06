@@ -21,13 +21,13 @@
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
-        <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
+        <span v-if="item.isPromoted" class="color-gray text-sm">{{ item.promotedSeq }}</span>
         <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
       <div slot="loginInfo" slot-scope="item">
-        <div>{{ item.loginIp }}</div>
-        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
@@ -189,6 +189,7 @@ export default {
               }
             });
             this.handleCancel();
+            this.form.resetFields();
           }
         }
       });

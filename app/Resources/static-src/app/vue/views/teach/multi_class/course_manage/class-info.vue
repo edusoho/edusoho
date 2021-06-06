@@ -29,7 +29,7 @@
 
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
-          {{ record.tasks.length }}min
+          {{ (record.tasks.length / 60).toFixed(2) }}min
         </template>
         <template v-else>--</template>
       </template>
