@@ -201,15 +201,35 @@ export default {
     },
 
     async changePromoted(checked, id) {
-      let { success } = checked ? await Teacher.promotion(id) : await Teacher.cancelPromotion(id);
-      if (success) {
-        _.forEach(this.pageData, item => {
-          if (item.id == id) {
-            item.isPromoted = checked;
-            return false;
-          }
-        });
+      let result = {};
+
+      if (checked) {
+        result = await Teacher.promotion(id);
+        this.changePromotedCallBack(result, id, checked)
+
+        return;
       }
+
+      this.$confirm({
+        content: '真的要取消该教师推荐吗？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: async () => {
+          result = await Teacher.cancelPromotion(id)
+          this.changePromotedCallBack(result, id, checked)
+        }
+      })
+    },
+
+    changePromotedCallBack(result = {}, id, checked) {
+      if (!result.success) return;
+    
+      _.forEach(this.pageData, item => {
+        if (item.id == id) {
+          item.isPromoted = checked;
+          return false;
+        }
+      });
     }
   },
 };
