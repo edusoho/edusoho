@@ -189,7 +189,6 @@ export default {
               }
             });
             this.handleCancel();
-            this.form.resetFields();
           }
         }
       });
@@ -197,6 +196,7 @@ export default {
 
     handleCancel() {
       this.modalVisible = false;
+      this.form.resetFields();
     },
 
     async changePromoted(checked, id) {
@@ -219,7 +219,7 @@ export default {
     display: none;
     margin-left: 8px;
   }
-  
+
 .teacher-manage-row:hover .set-number {
   display: inline-block;
 }
