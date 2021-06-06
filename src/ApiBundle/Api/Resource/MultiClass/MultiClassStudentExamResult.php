@@ -32,7 +32,7 @@ class MultiClassStudentExamResult extends AbstractResource
 
         $courseId = $multiClass['courseId'];
 
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
         $answerSceneIds = [];
         foreach ($activities as $activity) {
             $answerSceneIds[] = $activity['ext']['answerSceneId'];
