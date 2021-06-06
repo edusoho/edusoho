@@ -21,7 +21,7 @@
               :courseId="courseId"
               :lesson="firstLesson"
               class-name="first"
-              @update-lesson="updateLesson"
+              @event-communication="eventCommunication"
             />
           </template>
 
@@ -33,7 +33,7 @@
                     :courseId="courseId"
                     :lesson="secondLesson"
                     class-name="second"
-                    @update-lesson="updateLesson"
+                    @event-communication="eventCommunication"
                   />
                 </template>
 
@@ -45,7 +45,7 @@
                           :courseId="courseId"
                           :lesson="thirdLesson"
                           class-name="third"
-                          @update-lesson="updateLesson"
+                          @event-communication="eventCommunication"
                         />
                       </template>
 
@@ -57,7 +57,7 @@
                                 :courseId="courseId"
                                 :lesson="fourLesson"
                                 class-name="four"
-                                @update-lesson="updateLesson"
+                                @event-communication="eventCommunication"
                               />
                             </template>
                           </a-tree-node>
@@ -75,7 +75,7 @@
                           :courseId="courseId"
                           :lesson="thirdLesson"
                           class-name="third"
-                          @update-lesson="updateLesson"
+                          @event-communication="eventCommunication"
                         />
                       </template>
                     </a-tree-node>
@@ -93,7 +93,7 @@
                     :courseId="courseId"
                     :lesson="secondLesson"
                     class-name="second"
-                    @update-lesson="updateLesson"
+                    @event-communication="eventCommunication"
                   />
                 </template>
               </a-tree-node>
@@ -211,20 +211,38 @@ export default {
       this.$emit('change-lesson-directory', { data });
     },
 
-    updateLesson(type, id) {
-      if (['chapter', 'unit'].includes(type)) {
+    /**
+     * params = { eventType, id }
+     */
+    eventCommunication(params = {}) {
+      const { eventType, id } = params;
+
+      // 章节重命名
+      if (eventType === 'renameChapterUnit') {
+        this.renameChapterUnit(params);
+        return;
+      }
+
+      // 删除章节
+      if (eventType === 'deleteChapterUnit') {
         this.deleteChapter(id);
         return;
       }
 
-      this.deleteTask(id);
+      // 删除任务
+      if (eventType === 'deleteTask') {
+        this.deleteTask(id);
+      }
     },
 
+    renameChapterUnit(params) {
+      this.$emit('change-lesson-directory', params);
+    },
 
     async deleteChapter(id) {
       const { success } = await Course.deleteChapter(this.courseId, id);
       if (success) {
-        this.$emit('change-lesson-directory', { type: 'update' });
+        this.$emit('change-lesson-directory', { eventType: 'update' });
         this.$message.success('删除成功');
       }
     },
@@ -232,7 +250,7 @@ export default {
     async deleteTask(id) {
       const success = await Course.deleteTask(this.courseId, id);
       if (success) {
-        this.$emit('change-lesson-directory', { type: 'update' });
+        this.$emit('change-lesson-directory', { eventType: 'update' });
         this.$message.success('删除成功');
       }
     }

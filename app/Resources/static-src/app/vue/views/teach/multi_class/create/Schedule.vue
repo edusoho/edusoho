@@ -38,6 +38,7 @@
       :type="addType"
       :courseId="courseId"
       :visible="addChapterOrUnitVisible"
+      :chapter-unit-info="chapterUnitInfo"
       @handle-cancel="hideAddChapterOrUnitModal"
       @change-lesson-directory="changeLessonDirectory"
     />
@@ -76,7 +77,8 @@ export default {
       lessonDirectory: [],
       createLiveVisible: false,
       addChapterOrUnitVisible: false,
-      addType: ''
+      addType: '',
+      chapterUnitInfo: {}
     }
   },
 
@@ -113,9 +115,15 @@ export default {
     },
 
     changeLessonDirectory(params) {
-      const { data = this.lessonDirectory, addData, type } = params;
+      const { data = this.lessonDirectory, addData, eventType, type } = params;
 
-      if (type === 'update') {
+      if (eventType === 'renameChapterUnit') {
+        this.chapterUnitInfo = params;
+        this.showAddChapterOrUnitModal({ key: type });
+        return;
+      }
+
+      if (eventType === 'update') {
         this.fetchCourseLesson();
         return;
       }
@@ -150,6 +158,7 @@ export default {
 
     hideAddChapterOrUnitModal() {
       this.addChapterOrUnitVisible = false;
+      this.chapterUnitInfo = {};
     }
   }
 }

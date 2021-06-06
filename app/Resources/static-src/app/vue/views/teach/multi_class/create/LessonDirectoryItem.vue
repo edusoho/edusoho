@@ -18,6 +18,12 @@
           style="color: #46c37b;"
         />
         <a-icon
+          v-if="['chapter', 'unit'].includes(lesson.type)"
+          type="edit"
+          style="color: #46c37b;"
+          @click="handleEditorClick"
+        />
+        <a-icon
           v-if="lesson.type !== 'lesson' && lesson.status !== 'published'"
           type="delete"
           style="color: #fe4040;"
@@ -82,8 +88,21 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk() {
-          that.$emit('update-lesson', type, id)
+          that.$emit('event-communication', {
+            eventType: ['chapter', 'unit'].includes(type) ? 'deleteChapterUnit' : 'deleteTask',
+            id
+          });
         }
+      });
+    },
+
+    handleEditorClick() {
+      const { type, id, title } = this.lesson;
+      this.$emit('event-communication', {
+        eventType: 'renameChapterUnit',
+        id,
+        type,
+        title
       });
     }
   }
