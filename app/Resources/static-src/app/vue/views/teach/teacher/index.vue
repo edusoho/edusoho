@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '教师管理' }]">
+  <aside-layout class="teacher-manage-container" :breadcrumbs="[{ name: '教师管理' }]">
     <div class="clearfix cd-mb24">
       <a-input-search
         placeholder="请输入用户名搜索"
@@ -154,7 +154,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = pagination;
+      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
     },
 
     async onSearch(nickname) {
@@ -214,15 +214,18 @@ export default {
 };
 </script>
 
-<style lang="less">
-.teacher-manage-row {
-  .set-number {
+<style scoped>
+.teacher-manage-row .set-number {
     display: none;
     margin-left: 8px;
   }
+  
+.teacher-manage-row:hover .set-number {
+  display: inline-block;
+}
 
-  &:hover .set-number {
-    display: inline-block;
-  }
+.teacher-manage-container >>> .ant-pagination {
+  float: none;
+  text-align: center;
 }
 </style>
