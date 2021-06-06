@@ -81,19 +81,27 @@ class CourseSet extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $courseSet = $this->getCourseSetService()->createCourseSet(['type' => $data['type'], 'title' => $data['title']]);
-        $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
-        if (!empty($data['images'])) {
-            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+        try {
+            $this->biz['db']->beginTransaction();
+            $courseSet = $this->getCourseSetService()->createCourseSet(['type' => $data['type'], 'title' => $data['title']]);
+            $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
+            if (!empty($data['images'])) {
+                $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+            }
+
+            $data = $this->prepareExpiryMode($data);
+            $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
+
+            $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
+            $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
+
+            $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
         }
-
-        $data = $this->prepareExpiryMode($data);
-        $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
-
-        $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
-        $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
-
-        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
 
         return $this->getCourseSetService()->getCourseSet($courseSet['id']);
     }
@@ -108,16 +116,23 @@ class CourseSet extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
-        if (!empty($data['images'])) {
-            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+        try {
+            $this->biz['db']->beginTransaction();
+            $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], $this->filterCourseSetData($data));
+            if (!empty($data['images'])) {
+                $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], $data['images']);
+            }
+
+            $data = $this->prepareExpiryMode($data);
+            $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
+
+            $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
+            $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
         }
-
-        $data = $this->prepareExpiryMode($data);
-        $course = $this->getCourseService()->updateBaseInfo($courseSet['defaultCourseId'], $this->filterCourseData($data));
-
-        $this->getMemberService()->setCourseTeachers($course['id'], $this->filterCourseMember($data['teachers']));
-        $this->getMemberService()->setCourseAssistants($course['id'], $data['assistants']);
 
         return $this->getCourseSetService()->getCourseSet($courseSet['id']);
     }
