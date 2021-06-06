@@ -331,7 +331,7 @@ export default {
         offset: 0,
         pageSize: 10,
       },
-      status: ['all', 'doing', 'reviewing', 'finished'],
+      status: ['all', 'reviewing', 'doing',  'finished'],
       statusMap: {
         doing: '进行中',
         paused: '暂停',
