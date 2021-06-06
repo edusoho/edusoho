@@ -147,11 +147,13 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-             :href="`/homework/result/${record.id}/show?action=check`"
+             :href="`/testpaper/result/${record.id}/show?action=check`"
              target="_blank">查看结果</a>
+          <span v-else-if="['doing', 'paused'].includes(record.status)"
+          >--</span>
         </template>
       </a-table>
     </a-modal>
@@ -188,11 +190,13 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-             :href="`/homework/result/${record.id}/show?action=check`"
+             :href="`/testpaper/result/${record.id}/show?action=check`"
              target="_blank">查看结果</a>
+          <span v-else-if="['doing', 'paused'].includes(record.status)"
+             >--</span>
         </template>
       </a-table>
     </a-modal>
