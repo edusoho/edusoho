@@ -72,7 +72,7 @@
         <a-input-number
           :precision="2"
           style="width: 100%"
-          :default-value="0"
+          v-decorator="['originPrice', { initialValue: 0 }]"
           :min="0"
         />
         <span class="price-number-input">元</span>
@@ -252,7 +252,7 @@
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
-          
+
           this.ajaxLoading = true
           values.summary = this.editor.getData()
           values.teachers = [values.teachers]
