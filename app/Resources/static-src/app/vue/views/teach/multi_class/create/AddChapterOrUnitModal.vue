@@ -2,7 +2,7 @@
   <a-modal
     :title="modalInfo.title"
     :visible="visible"
-    okText="新增一栏"
+    :okText="isEditor ? '保存' : '新增一栏'"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -13,7 +13,10 @@
         :wrapper-col="{ span: 16 }"
       >
         <a-input
-          v-decorator="['title', { rules: [{ required: true, message: '标题不能为空' }] }]"
+          v-decorator="['title', {
+            initialValue: chapterUnitInfo.title,
+            rules: [{ required: true, message: '标题不能为空' }]
+          }]"
         />
       </a-form-item>
     </a-form>
@@ -21,6 +24,7 @@
 </template>
 
 <script>
+import _ from '@codeages/utils';
 import { Course } from 'common/vue/service';
 
 export default {
@@ -29,16 +33,19 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      required: true,
-      default: false
+      required: true
+    },
+
+    chapterUnitInfo: {
+      type: Object,
+      required: true
     },
 
     type: String,
 
     courseId: {
       type: [Number, String],
-      required: true,
-      default: 0
+      required: true
     }
   },
 
@@ -58,9 +65,13 @@ export default {
       const text = types[this.type];
 
       return {
-        title: `创建 ${text}`,
+        title: `${this.isEditor ? '编辑' : '创建' } ${text}`,
         label: `${text} 标题`
       }
+    },
+
+    isEditor() {
+      return !!_.size(this.chapterUnitInfo);
     }
   },
 
@@ -72,10 +83,18 @@ export default {
             type: this.type,
             title: values.title
           }
-          Course.addChapter(this.courseId, params).then(res => {
-            this.$emit('change-lesson-directory', { addData: [res] });
-            this.handleCancel();
-          });
+
+          if (this.isEditor) {
+            Course.editorChapter(this.courseId, this.chapterUnitInfo.id, params).then(res => {
+              this.$emit('change-lesson-directory', { eventType: 'update' });
+              this.handleCancel();
+            });
+          } else {
+            Course.addChapter(this.courseId, params).then(res => {
+              this.$emit('change-lesson-directory', { addData: [res] });
+              this.handleCancel();
+            });
+          }
         }
       });
     },
