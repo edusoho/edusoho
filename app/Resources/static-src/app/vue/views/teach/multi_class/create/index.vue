@@ -235,6 +235,7 @@ export default {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
         this.form.setFieldsValue({ 'title': title });
         this.selectedCourseId = courseId;
+        this.selectedCourseSetId = course.courseSetId;
         this.course.list = [course];
         this.course.initialValue = courseId;
         this.product.list = [product];
