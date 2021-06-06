@@ -2,25 +2,25 @@
   <aside-layout :breadcrumbs="[{ name: '课时设置' }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
-      :label-col="{ span: 3 }"
-      :wrapper-col="{ span: 21 }"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 20 }"
       style="max-width: 900px;"
     >
       <a-form-item label="排课">
-        <Schedule :course-id="selectedCourseId" />
-      </a-form-item>
-
-      <a-form-item :wrapper-col="{ span: 20, offset: 4 }" class="create-multi-class-btn-group">
-        <a-space size="large">
-          <a-button type="primary" @click="onClickGoToCourseManage">
-            确定
-          </a-button>
-          <a-button @click="onClickGoToCourseManage">
-            取消
-          </a-button>
-        </a-space>
+        <Schedule :course-id="courseId" :courseSetId="courseSetId" />
       </a-form-item>
     </a-form>
+
+     <div class="create-multi-class-btn-group">
+      <a-space size="large">
+        <a-button type="primary" @click="onClickGoToCourseManage">
+          确定
+        </a-button>
+        <a-button @click="onClickGoToCourseManage">
+          取消
+        </a-button>
+      </a-space>
+    </div>
   </aside-layout>
 </template>
 
@@ -39,7 +39,9 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_editor_lesson' }),
-      selectedCourseId: this.$route.params.id
+      courseId: this.$route.params.id,
+      courseSetId: this.$route.query.courseSetId,
+      multiClassId: this.$route.query.multiClassId,
     }
   },
 
@@ -48,7 +50,7 @@ export default {
       this.$router.push({
         name: 'MultiClassCourseManage',
         params: {
-          id: this.selectedCourseId
+          id: this.multiClassId
         }
       });
     }
@@ -62,7 +64,7 @@ export default {
   bottom: 0;
   right: 64px;
   left: 200px;
-  padding: 24px 0;
+  padding: 24px 0 24px 164px;
   margin: 0;
   border-top: solid 1px #ebebeb;
   background-color: #ffffff;

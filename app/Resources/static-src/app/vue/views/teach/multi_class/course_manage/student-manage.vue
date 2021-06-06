@@ -134,8 +134,8 @@
         :data-source="homeworkResults.data"
         :pagination="homeworkResults.paging"
       >
-        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
+        <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--' }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}
@@ -147,11 +147,13 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-             :href="`/homework/result/${record.id}/show?action=check`"
+             :href="`/testpaper/result/${record.id}/show?action=check`"
              target="_blank">查看结果</a>
+          <span v-else-if="['doing', 'paused'].includes(record.status)"
+          >--</span>
         </template>
       </a-table>
     </a-modal>
@@ -175,8 +177,8 @@
         :data-source="testpaperResults.data"
         :pagination="testpaperResults.paging"
       >
-        <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
+        <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--'  }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}
@@ -188,11 +190,13 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-             :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`"
+             :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-             :href="`/homework/result/${record.id}/show?action=check`"
+             :href="`/testpaper/result/${record.id}/show?action=check`"
              target="_blank">查看结果</a>
+          <span v-else-if="['doing', 'paused'].includes(record.status)"
+             >--</span>
         </template>
       </a-table>
     </a-modal>
@@ -260,14 +264,18 @@ const columns = [
 ];
 const resultColumns = [
   {
-    title: '姓名',
-    dataIndex: 'nickname',
-    scopedSlots: { customRender: "nickname" },
+    title: '课时',
+    dataIndex: 'activity',
+    scopedSlots: { customRender: "lesson" },
+    width: '15%',
+    ellipsis: true,
   },
   {
-    title: '成绩',
-    dataIndex: 'grade',
-    scopedSlots: { customRender: "grade" },
+    title: '作业/考试',
+    dataIndex: 'answerScene',
+    scopedSlots: { customRender: "exam" },
+    width: '15%',
+    ellipsis: true,
   },
   {
     title: '提交时间',
@@ -323,7 +331,7 @@ export default {
         offset: 0,
         pageSize: 10,
       },
-      status: ['all', 'doing', 'reviewing', 'finished'],
+      status: ['all', 'reviewing', 'doing',  'finished'],
       statusMap: {
         doing: '进行中',
         paused: '暂停',
@@ -420,6 +428,7 @@ export default {
       this.getMultiClassStudents({ keyword })
     },
     onClickHomeworkModal(user) {
+      console.log(user)
       this.selectedUser = user;
       this.getHomeworkResults();
       this.homeworkModalVisible = true;

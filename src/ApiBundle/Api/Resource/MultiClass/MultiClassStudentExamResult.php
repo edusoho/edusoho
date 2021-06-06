@@ -32,11 +32,15 @@ class MultiClassStudentExamResult extends AbstractResource
 
         $courseId = $multiClass['courseId'];
 
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, $type, true);
         $answerSceneIds = [];
+        $sceneIndexActivities = [];
         foreach ($activities as $activity) {
             $answerSceneIds[] = $activity['ext']['answerSceneId'];
+            $sceneIndexActivities[$activity['ext']['answerSceneId']] = $activity;
         }
+
+
 
         $status = $request->query->get('status', 'all');
         if (!in_array($status, ['all', 'finished', 'reviewing', 'doing'])) {
@@ -58,12 +62,12 @@ class MultiClassStudentExamResult extends AbstractResource
             $offset,
             $limit
         );
-        $answerRecords = $this->filterRecords($answerRecords);
+        $answerRecords = $this->filterRecords($answerRecords, $sceneIndexActivities);
 
         return $this->makePagingObject($answerRecords, $total, $offset, $limit);
     }
 
-    protected function filterRecords($answerRecords)
+    protected function filterRecords($answerRecords, $sceneIndexActivities)
     {
         $answerReports = ArrayToolkit::index($this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')), 'id');
         $studentIds = ArrayToolkit::column($answerRecords, 'user_id');
@@ -75,6 +79,8 @@ class MultiClassStudentExamResult extends AbstractResource
         $userFilter->filters($users);
 
         foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['answerScene'] = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+            $answerRecord['activity'] = $sceneIndexActivities[$answerRecord['answer_scene_id']];
             $answerRecord['answerReportInfo'] = isset($answerReports[$answerRecord['answer_report_id']]) ? $answerReports[$answerRecord['answer_report_id']] : [];
             $answerRecord['userInfo'] = isset($users[$answerRecord['user_id']]) ? $users[$answerRecord['user_id']] : [];
             $answerRecord['teacherInfo'] = isset($users[$answerRecord['answerReportInfo']['review_user_id']]) ? $users[$answerRecord['answerReportInfo']['review_user_id']] : [];

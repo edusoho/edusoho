@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue.esm.js';
 import _ from 'lodash';
 import 'moment';
+import { AssistantPermission } from 'common/vue/service';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
@@ -74,6 +75,20 @@ if (!window.Vue) {
     }
     return moment(value * 1000).format(format)
   }
+
+  AssistantPermission.get('portal').then(res => {
+    const { isAssistant, permissions } = res;
+    Vue.mixin({
+      methods: {
+        isPermission(code) {
+          if (!isAssistant || _.includes(permissions, code)) {
+            return true;
+          }
+          return false;
+        }
+      }
+    });
+  });
 }
 
 window.Vue = window.Vue || Vue;

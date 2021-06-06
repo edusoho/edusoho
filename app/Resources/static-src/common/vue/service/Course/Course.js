@@ -42,6 +42,11 @@ export const Course = {
     return apiClient.delete(`${baseUrl}/${courseId}/chapter/${chapterId}`)
   },
 
+  // 修改章节
+  async editorChapter(courseId, chapterId, params) {
+    return apiClient.patch(`${baseUrl}/${courseId}/chapter/${chapterId}`, params)
+  },
+
   // 新增直播课时（包括批量）
   async addLiveTask(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/live_task`, params)
