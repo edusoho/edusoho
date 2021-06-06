@@ -67,6 +67,7 @@
             ]
           }]"
           placeholder="请选择日期时间"
+          @change="onChangeStartDate"
         />
       </a-form-item>
 
@@ -115,6 +116,7 @@
           <a-select
             v-decorator="['repeatData', { initialValue: 1 }]"
             placeholder="选择上课时长"
+            @change="onChangeRepeatData"
           >
             <a-select-option v-for="i in 6" :value="i" :key="i">
               每 {{ i }} 天一次课
@@ -132,6 +134,12 @@
             @change="onChangeCheckedList"
           />
         </template>
+        <div
+          v-if="repeatType === 'day' || (repeatType === 'week' && repeatData.length)"
+        >
+          <a-icon type="exclamation-circle" style="color: #fe4040;"/>
+          {{ getRepeatDataTip }}
+        </div>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -178,8 +186,37 @@ export default {
       checkedList: [],
       indeterminate: false,
       checkAll: false,
-      repeatDataOptions
+      repeatDataOptions,
+      startDate: '',
+      repeatData: 1
     }
+  },
+
+  computed: {
+    getRepeatDataTip() {
+      const time = moment(this.startDate).format('YYYY-MM-DD');
+      const weeks = {
+        Monday: '周一',
+        Tuesday: '周二',
+        Wednesday: '周三',
+        Thursday: '周四',
+        Friday: '周五',
+        Saturday: '周六',
+        Sunday: '周日',
+      };
+
+      if (this.repeatType === 'day') {
+        return `从 ${time} 所开始，每 ${this.repeatData} 天有课`;
+      } else {
+        return `从 ${time} 所处周开始，每 ${_.join(_.map(this.repeatData, item => {
+          return weeks[item]
+        }), '、')} 有课`;
+      }
+    },
+  },
+
+  mounted() {
+    this.startDate = this.form.getFieldValue('startDate');
   },
 
   methods: {
@@ -191,13 +228,22 @@ export default {
 
     onChangeRepeatType(e) {
       this.form.resetFields(['repeatData']);
-      this.repeatType = e.target.value;
+      const repeatType = e.target.value;
+      this.repeatType = repeatType;
+      if (repeatType == 'day') {
+        this.repeatData = 1;
+      } else {
+        this.repeatData = this.checkedList;
+      }
     },
 
     onChangeCheckedList(checkedList) {
-      this.checkedList = checkedList;
-      this.indeterminate = !!checkedList.length && checkedList.length < repeatDataOptions.length;
-      this.checkAll = checkedList.length === repeatDataOptions.length;
+      _.assign(this, {
+        checkedList,
+        indeterminate: !!checkedList.length && checkedList.length < repeatDataOptions.length,
+        checkAll: checkedList.length === repeatDataOptions.length,
+        repeatData: checkedList
+      });
     },
 
     onCheckAllChange(e) {
@@ -206,13 +252,22 @@ export default {
       _.assign(this, {
         checkedList,
         indeterminate: false,
-        checkAll: e.target.checked
+        checkAll: e.target.checked,
+        repeatData: checkedList
       });
     },
 
     validatorTaskNum: _.debounce((rule, value, callback) => {
       value > 50 ? callback('一次批量生成最大为50个课时') : callback();
     }, 300),
+
+    onChangeStartDate(date, dateString) {
+      this.startDate = date;
+    },
+
+    onChangeRepeatData(value) {
+      this.repeatData = value;
+    },
 
     validatorStartDate: _.debounce((rule, value, callback) => {
       value._d <= moment() ? callback('开始时间不能小于当前时间') : callback();
