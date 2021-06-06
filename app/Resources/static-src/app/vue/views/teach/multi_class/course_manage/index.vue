@@ -16,15 +16,15 @@
         </a-menu-item>
       </a-menu>
 
-      <a-menu v-if="course" class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
+      <a-menu v-if="multiClass.course" class="manage-menu manage-menu-blank pull-right" :selectable="false" mode="horizontal">
         <a-menu-item class="manage-menu-item">
-          <a :href="`/announcement/course/${course.id}/list`" target="_blank">公告管理</a>
+          <a :href="`/announcement/course/${multiClass.course.id}/list`" target="_blank">公告管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item">
-          <a :href="`/course_set/${course.courseSet.id}/manage/course/${course.id}/live_statistics`" target="_blank">录播管理</a>
+          <a :href="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/live_statistics`" target="_blank">录播管理</a>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space">
-          <a :href="`/course_set/${course.courseSet.id}/manage/course/${course.id}/orders`" target="_blank">订单管理</a>
+          <a :href="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/orders`" target="_blank">订单管理</a>
         </a-menu-item>
       </a-menu>
     </div>
@@ -48,28 +48,21 @@ export default {
     return {
       current: ['class-info'],
       id: this.$route.params.id,
-      course: null,
       multiClass: {}
     }
   },
 
   befeoreRouteUpdate(to, from, next) {
     this.id = to.params.id
-    this.getSingleCourse()
     next()
   },
 
   created() {
     this.current = [this.$route.meta.current];
-    this.getSingleCourse();
     this.getMultiClass();
   },
 
   methods: {
-    async getSingleCourse() {
-      this.course = await Course.getSingleCourse(this.id);
-    },
-
     async getMultiClass() {
       this.multiClass = await MultiClass.get(this.id);
     }
