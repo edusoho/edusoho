@@ -253,7 +253,7 @@
           values = _.assignIn(values, this.formInfo)
 
           if (this.imgs) {
-            values.imgs = this.imgs;
+            values.images = this.imgs;
           }
 
           try {
