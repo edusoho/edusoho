@@ -420,6 +420,7 @@ export default {
       this.getMultiClassStudents({ keyword })
     },
     onClickHomeworkModal(user) {
+      console.log(user)
       this.selectedUser = user;
       this.getHomeworkResults();
       this.homeworkModalVisible = true;
