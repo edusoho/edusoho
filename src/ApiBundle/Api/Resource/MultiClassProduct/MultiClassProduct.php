@@ -131,8 +131,8 @@ class MultiClassProduct extends AbstractResource
             $classes = isset($multiClasses[$product['id']]) ? $multiClasses[$product['id']] : [];
             $product['multiClassNum'] = count($classes);
             $courseIds = ArrayToolkit::column($classes, 'courseId') ? ArrayToolkit::column($classes, 'courseId') : [-1];
-            $income = $this->getCourseService()->sumTotalIncomeByIds($courseIds)['income'];
-            $product['income'] = $income ? $income : 0;
+            $income = $this->getCourseService()->sumTotalIncomeByIds($courseIds);
+            $product['income'] = $income ? $income : '0.00';
             $product['studentNum'] = $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds, 'role' => 'student']);
             $product['taskNum'] = $this->getTaskService()->countTasks(['courseIds' => $courseIds, 'isLesson' => 1]);
         }

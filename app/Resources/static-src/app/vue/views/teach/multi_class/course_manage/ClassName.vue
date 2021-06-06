@@ -25,7 +25,7 @@ export default {
       const { chapterTitle, unitTitle, number, title, tasks } = this.record;
       let className = '';
 
-      if (tasks.isLesson == 1) {
+      if (tasks.mode === 'lesson') {
         className = `${number}. ${title}`;
       } else {
         let taskNum = tasks.number.split('-');
