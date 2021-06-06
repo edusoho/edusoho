@@ -21,7 +21,7 @@
           {{ record.tasks.assessmentStatusNum.doing || 0 }}
         </a>
         <template slot="startTime" slot-scope="startTime, record">
-          {{ $dateFormat(record.tasks.startTime, 'YYYY-MM-DD HH:mm') }}
+          {{ $dateFormat(record.tasks.createdTime, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
           <a :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
