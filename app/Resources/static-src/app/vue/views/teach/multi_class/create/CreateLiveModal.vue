@@ -58,7 +58,6 @@
           :show-time="{ format: 'HH:mm' }"
           format="YYYY-MM-DD HH:mm"
           :disabled-date="disabledDate"
-          :disabled-time="disabledDateTime"
           v-decorator="['startDate', {
             initialValue: moment().add(5, 'minutes'),
             rules: [
@@ -283,12 +282,6 @@ export default {
 
     disabledDate(current) {
       return current && current < moment().startOf('day');
-    },
-
-    disabledDateTime() {
-      return {
-        disabledHours: () => this.range(0, moment().hour())
-      };
     },
 
     async createTask(params) {
