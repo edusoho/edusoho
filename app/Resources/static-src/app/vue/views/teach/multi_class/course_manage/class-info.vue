@@ -57,6 +57,7 @@
         </a-dropdown>
 
         <a class="ant-dropdown-link"
+           v-if="isPermission('course_lesson_edit')"
           href="javascript:;"
           data-toggle="modal"
           data-target="#modal"
@@ -74,7 +75,7 @@
               <a-menu-item key="publish">
                 立即发布
               </a-menu-item>
-              <a-menu-item key="delete">
+              <a-menu-item key="delete" v-if="isPermission('course_lesson_delete')">
                 删除
               </a-menu-item>
             </template>

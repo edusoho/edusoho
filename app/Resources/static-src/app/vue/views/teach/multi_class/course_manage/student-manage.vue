@@ -4,6 +4,7 @@
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
         <a-button
+          v-if="isPermission('course_member_export')"
           type="primary"
           class="js-export-btn"
           icon="upload"
@@ -20,10 +21,10 @@
       </a-space>
 
       <a-space class="pull-right" size="middle">
-        <a-button type="primary" @click="addStudent()">
+        <a-button v-if="isPermission('course_member_create')" type="primary" @click="addStudent()">
           添加学员
         </a-button>
-        <a-button type="primary"
+        <a-button v-if="isPermission('course_member_import')" type="primary"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
@@ -32,21 +33,21 @@
         >
           批量导入
         </a-button>
-        <a-button type="primary"
+        <a-button v-if="isPermission('course_member_delete')" type="primary"
                   icon="upload"
                   @click="onBatchRemoveStudent"
         >
           批量移除
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length === 0"
+        <a-button v-if="this.selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
                   type="primary"
                   @click="onSelectEmpty"
         >
           批量修改有效期
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length > 0"
+        <a-button v-if="this.selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
                   type="primary"
                   data-toggle="modal"
                   data-target="#modal"
@@ -100,7 +101,7 @@
             cancel-text="取消"
             @confirm="confirm(record.user.id)"
           >
-            <a href="#" >移除</a>
+            <a v-if="isPermission('course_member_delete')" href="#" >移除</a>
           </a-popconfirm>
         </a-space>
       </template>
