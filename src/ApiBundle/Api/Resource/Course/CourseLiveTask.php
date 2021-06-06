@@ -105,7 +105,7 @@ class CourseLiveTask extends AbstractResource
         $repeatCount = count($data['repeatData']);
         $todayWeek = ucfirst(date('l'));
         $dateTime = strtotime($data['startDate']);
-        list($date, $clock) = explode(' ', $data['startDate']);
+        $clock = date('H:i', strtotime($data['startDate']));
 
         $lessons = [];
         $limitTaskNum = ($start + $limit) > $data['taskNum'] ? $data['taskNum'] : ($start + $limit);
