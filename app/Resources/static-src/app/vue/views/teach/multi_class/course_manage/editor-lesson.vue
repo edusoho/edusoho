@@ -7,7 +7,7 @@
       style="max-width: 900px;"
     >
       <a-form-item label="排课">
-        <Schedule :course-id="selectedCourseId" />
+        <Schedule :course-id="courseId" :courseSetId="courseSetId" />
       </a-form-item>
     </a-form>
 
@@ -39,7 +39,9 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this, { name: 'multi_class_editor_lesson' }),
-      selectedCourseId: this.$route.params.id
+      courseId: this.$route.params.id,
+      courseSetId: this.$route.query.courseSetId,
+      multiClassId: this.$route.query.multiClassId,
     }
   },
 
@@ -48,7 +50,7 @@ export default {
       this.$router.push({
         name: 'MultiClassCourseManage',
         params: {
-          id: this.selectedCourseId
+          id: this.multiClassId
         }
       });
     }
