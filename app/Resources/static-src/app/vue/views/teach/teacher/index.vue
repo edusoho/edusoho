@@ -141,12 +141,13 @@ export default {
     async fetchTeacher(params) {
       this.loading = true;
       const { data, paging } = await Teacher.search({
-        limit: 10,
+        limit: 20,
         nickname: this.keyWord,
         ...params
       });
       const pagination = { ...this.pagination };
       pagination.total = paging.total;
+      pagination.pageSize = Number(paging.limit);
 
       _.forEach(data, item => {
         item.isPromoted = item.promoted == 1;
