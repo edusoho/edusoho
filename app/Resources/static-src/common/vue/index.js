@@ -78,16 +78,19 @@ if (!window.Vue) {
 
   AssistantPermission.get('portal').then(res => {
     const { isAssistant, permissions } = res;
-    Vue.mixin({
-      methods: {
-        isPermission(code) {
-          if (!isAssistant || _.includes(permissions, code)) {
-            return true;
-          }
-          return false;
+    Vue.prototype.$isAssistant = isAssistant;
+    Vue.prototype.$permissions = permissions;
+  });
+
+  Vue.mixin({
+    methods: {
+      isPermission(code) {
+        if (!this.$isAssistant || _.includes(this.$permissions, code)) {
+          return true;
         }
+        return false;
       }
-    });
+    }
   });
 }
 
