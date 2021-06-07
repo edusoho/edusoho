@@ -57,6 +57,12 @@
         </template>
       </a-table>
     </a-spin>
+
+    <copy-multi-class-modal
+      :id="copyMultiClassId"
+      :visible="copyModalVisible"
+      @event-communication="eventCommunication"
+    />
    </aside-layout>
 </template>
 
@@ -64,6 +70,7 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { MultiClass } from 'common/vue/service/index.js';
 import Assistant from './course_manage/Assistant.vue';
+import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
 const columns = [
   {
@@ -140,7 +147,8 @@ export default {
 
   components: {
     AsideLayout,
-    Assistant
+    Assistant,
+    CopyMultiClassModal
   },
 
   data () {
@@ -153,6 +161,8 @@ export default {
         offset: 0,
         pageSize: 10,
       },
+      copyModalVisible: false,
+      copyMultiClassId: 0
     }
   },
   created() {
@@ -200,14 +210,6 @@ export default {
       });
     },
 
-    async copyMultiClass(multiClass) {
-      const { success } = await MultiClass.copyMultiClass(multiClass.id);
-      if ('success') {
-        this.$message.success('复制成功');
-        this.getMultiClassList();
-      }
-    },
-
     goToMultiClassManage(id) {
       this.$router.push({
         name: 'MultiClassCourseManage',
@@ -225,6 +227,20 @@ export default {
 
       if (Object.keys(params).length > 0) {
         this.getMultiClassList(params)
+      }
+    },
+
+    copyMultiClass(multiClass) {
+      this.copyModalVisible = true;
+      this.copyMultiClassId = multiClass.id;
+    },
+
+    eventCommunication(params) {
+      const { event } = params;
+
+      if (event === 'handle-cancel') {
+        this.copyModalVisible = false;
+        this.getMultiClassList();
       }
     }
   }
