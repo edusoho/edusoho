@@ -69,6 +69,7 @@ export default {
 
         this.treeData = menu;
         this.permissions = permissions;
+        this.checkedKeys = permissions;
       });
     },
 
