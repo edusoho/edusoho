@@ -100,7 +100,10 @@ export default {
     },
 
     validatorName: _.debounce(async function(rule, value, callback) {
-      const { result, message } = await ValidationTitle.search('courseStudent', {title: value, exceptId: this.multiClass ? this.multiClass.courseId : 0})
+      const { result, message } = await ValidationTitle.search('courseStudent', {
+        title: value,
+        exceptId: this.multiClass ? this.multiClass.courseId : 0
+      })
 
       if (!result) {
         this.form.setFields({
