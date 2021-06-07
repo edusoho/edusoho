@@ -433,12 +433,8 @@ export default {
       result ? callback() : callback('产品名称不能与已创建的相同');
     }, 300),
 
-    validatorNum: async function(rule, value, callback) {
-    　　if (value.length > 20){
-    　　　　callback('最多选择20个助教')
-    　　} else {
-    　　　　callback()
-    　　}
+    validatorNum: (rule, value, callback)=>{
+        value.length > 20 ? callback('最多选择20个助教'):callback()
     },
 
     handleSubmit(e) {
