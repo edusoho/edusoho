@@ -41,7 +41,7 @@
             @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
           <a v-if="isPermission('course_statistics_view')" href="javascript:;" class="mr2"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
-          <a-dropdown>
+          <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a href="javascript:;" @click="e => e.preventDefault()">
               <a-icon type="ellipsis" />
             </a>
