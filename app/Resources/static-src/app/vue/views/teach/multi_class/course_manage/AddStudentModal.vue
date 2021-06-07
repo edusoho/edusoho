@@ -36,7 +36,7 @@
 
       <a-form-item label="备注" extra="选填">
         <a-input
-          v-decorator="['price1']"
+          v-decorator="['remark']"
         />
       </a-form-item>
     </a-form>
@@ -87,6 +87,7 @@ export default {
             id: this.multiClass.id,
             userInfo: values.name,
             price: values.price,
+            remark: values.remark,
           }).then((res) => {
             this.$message.success('学员创建成功！', 2);
             this.visible = false;
