@@ -227,7 +227,8 @@ export default {
 
     async copyMultiClass(multiClass) {
       const { success } = await MultiClass.copyMultiClass(multiClass.id);
-      if ('success') {
+      
+      if (success) {
         this.$message.success('复制成功');
         this.getMultiClassList();
       }

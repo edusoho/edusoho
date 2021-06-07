@@ -458,6 +458,8 @@
         if (!value) {
           callback(rule.message)
         }
+
+        callback()
       },
       goToLastPage() {
         // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
