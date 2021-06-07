@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '教师管理' }]">
+  <aside-layout class="teacher-manage-container" :breadcrumbs="[{ name: '教师管理' }]">
     <div class="clearfix cd-mb24">
       <a-input-search
         placeholder="请输入用户名搜索"
@@ -21,13 +21,13 @@
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
-        <span class="color-gray text-sm">{{ item.promotedSeq }}</span>
+        <span v-if="item.isPromoted" class="color-gray text-sm">{{ item.promotedSeq }}</span>
         <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
       <div slot="loginInfo" slot-scope="item">
-        <div>{{ item.loginIp }}</div>
-        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
@@ -54,10 +54,10 @@
           <a-input-number
             style="width: 100%;"
             v-decorator="['number', { rules: [
-              { required: true, message: '请输入序号' }
+              { required: true, message: '请输入序号' },
+              { type: 'integer', message: '请输入整数' },
+              { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
-            :min="0"
-            :max="10000"
           />
         </a-form-item>
       </a-form>
@@ -141,12 +141,13 @@ export default {
     async fetchTeacher(params) {
       this.loading = true;
       const { data, paging } = await Teacher.search({
-        limit: 10,
+        limit: 20,
         nickname: this.keyWord,
         ...params
       });
       const pagination = { ...this.pagination };
       pagination.total = paging.total;
+      pagination.pageSize = Number(paging.limit);
 
       _.forEach(data, item => {
         item.isPromoted = item.promoted == 1;
@@ -154,7 +155,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = pagination;
+      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
     },
 
     async onSearch(nickname) {
@@ -196,32 +197,64 @@ export default {
 
     handleCancel() {
       this.modalVisible = false;
+      this.form.resetFields();
     },
 
     async changePromoted(checked, id) {
-      let { success } = checked ? await Teacher.promotion(id) : await Teacher.cancelPromotion(id);
-      if (success) {
-        _.forEach(this.pageData, item => {
-          if (item.id == id) {
-            item.isPromoted = checked;
-            return false;
-          }
-        });
+      let result = {};
+
+      if (checked) {
+        result = await Teacher.promotion(id);
+        this.changePromotedCallBack(result, id, checked)
+
+        return;
       }
+
+      this.$confirm({
+        content: '真的要取消该教师推荐吗？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: async () => {
+          result = await Teacher.cancelPromotion(id)
+          this.changePromotedCallBack(result, id, checked)
+        }
+      })
+    },
+
+    changePromotedCallBack(result = {}, id, checked) {
+      if (!result.success) return;
+    
+      _.forEach(this.pageData, item => {
+        if (item.id == id) {
+          item.isPromoted = checked;
+          return false;
+        }
+      });
+    },
+
+    validateRange(rule, value, callback) {
+      if (_.inRange(value, 0, 10000) === false) {
+        callback('请输入0-10000的整数')
+      }
+
+      callback()
     }
   },
 };
 </script>
 
-<style lang="less">
-.teacher-manage-row {
-  .set-number {
+<style scoped>
+.teacher-manage-row .set-number {
     display: none;
     margin-left: 8px;
   }
 
-  &:hover .set-number {
-    display: inline-block;
-  }
+.teacher-manage-row:hover .set-number {
+  display: inline-block;
+}
+
+.teacher-manage-container >>> .ant-pagination {
+  float: none;
+  text-align: center;
 }
 </style>
