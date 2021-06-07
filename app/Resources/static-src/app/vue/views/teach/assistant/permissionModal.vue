@@ -10,6 +10,7 @@
   >
     <a-tree
       checkable
+      :default-expand-all="true"
       :checkStrictly="true"
       :tree-data="treeData"
       :default-checked-keys="permissions"
