@@ -87,7 +87,7 @@
           }]"
         />
         <div class="color-gray cd-mt8">
-          <template>自由式：学习过程自由安排</template>
+          <template>自由式：学习过程自由安排;</template>
           <template>解锁式：根据既定顺序逐个解锁学习</template>
         </div>
       </a-form-item>
@@ -104,16 +104,20 @@
       </a-form-item>
       <a-form-item label="是否可加入">
         <a-switch v-model="formInfo.buyable"  />
+        <div class="color-gray cd-mt8">
+          <template>关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。</template>
+        </div>
       </a-form-item>
       <a-form-item label="加入截止日期">
         <div style="overflow: hidden">
-          <a-radio-group class="pull-left mt3"
+          <a-radio-group class="pull-left mt3" style="width: 100%;"
             :options="[{ label: '不限制', value: '1' }, { label: '自定义', value: '0' }]"
             v-decorator="['enableBuyExpiryTime', {
-              initialValue: '1'
+              initialValue: '1',
+              rules: [{ required: true, message: '请输入加入截止日期' }]
             }]"
           />
-          <a-form-item class="pull-left" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
+          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
             <a-date-picker placeholder=""
               v-decorator="['buyExpiryTime', {
                 rules: [{ required: true, message: '请输入加入截止日期' }]
@@ -131,6 +135,16 @@
           ]"
           v-decorator="['expiryMode', { initialValue: 'forever' }]"
         />
+        <a-tooltip overlayClassName='expand-tooltip'>
+          <template slot="title">
+            随到随学：有效期从学员加入的当天开始算起，截至到期当天晚上的23:59<br>
+            固定周期：有固定的学习开始日期和结束日期<br>
+            过期后无法继续学习，系统会在到期前10天提醒学员。
+          </template>
+          <a>
+            <a-icon type="question-circle" style="margin-left: -6px;"/>
+          </a>
+        </a-tooltip>
       </a-form-item>
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'days'"
         style="position: relative;left: 12.5%;"
@@ -502,6 +516,10 @@
     background-color: @bg;
   }
 
+  .expand-tooltip .ant-tooltip-content{
+    width: 500px !important;
+  }
+  
   .price-number-input {
     position: absolute;
     top: -12px;

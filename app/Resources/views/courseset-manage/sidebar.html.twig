@@ -34,7 +34,7 @@
             </a>
           {% endif %}
         </li>
-        {% if not assistant.isAssistant %}
+        {% if not assistant.isAssistant or 'course_lesson_create' in assistant.permissions %}
           <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">

@@ -129,7 +129,7 @@ class MultiClass extends AbstractResource
         }
 
         $user = $this->getCurrentUser();
-        if (empty(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles())) && in_array('ROLE_TEACHER', $user->getRoles())) {
+        if (empty(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles())) && !empty(array_intersect(['ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT'], $user->getRoles()))) {
             $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher', 'assistant']);
             $prepareConditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'multiClassId');
         }
