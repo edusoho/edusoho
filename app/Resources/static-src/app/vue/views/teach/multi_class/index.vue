@@ -238,9 +238,8 @@ export default {
     eventCommunication(params) {
       const { event } = params;
 
-      if (event === 'handle-cancel') {
+      if (event === 'cancel-modal') {
         this.copyModalVisible = false;
-        this.getMultiClassList();
       }
     }
   }
