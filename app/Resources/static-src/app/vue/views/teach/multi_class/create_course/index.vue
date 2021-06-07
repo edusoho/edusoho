@@ -163,7 +163,7 @@
             }]" />
           <span class="ml2">在此日期前，学员可进行学习。</span>
         </a-form-item>
-        <a-form-item v-if="form.getFieldValue('deadlineType') === 'days'">
+        <a-form-item v-else>
           <a-input
             style="width: 200px;"
             v-decorator="['expiryDays', {
