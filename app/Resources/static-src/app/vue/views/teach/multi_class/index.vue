@@ -2,7 +2,7 @@
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb24">
-        <a-input-search placeholder="请输入班课名称" style="width: 224px" @search="searchMultiClass" />
+        <a-input-search placeholder="请输入课程或老师关键字搜索" style="width: 224px" @search="searchMultiClass" />
         <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
 
@@ -188,6 +188,7 @@ export default {
         content: '确认要删除该班课？',
         okType: 'danger',
         maskClosable: true,
+        icon:  'close-circle',
         onOk: async () => {
           const { success } = await MultiClass.delete({ id: multiClass.id })
 

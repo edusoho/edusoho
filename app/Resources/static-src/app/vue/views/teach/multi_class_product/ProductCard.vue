@@ -68,6 +68,7 @@
           okText: '确认',
           cancelText: '取消',
           icon:  'close-circle',
+          maskClosable: true,
           onOk: () => {
             this.$emit('delete', this.product)
           }
