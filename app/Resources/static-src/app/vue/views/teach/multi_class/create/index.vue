@@ -434,7 +434,7 @@ export default {
     }, 300),
 
     validatorAssistant: (rule, value, callback) => {
-      value.length > 20 ? callback('最多选择20个助教'):callback()
+      value.length > 20 ? callback('最多选择20个助教') : callback();
     },
 
     handleSubmit(e) {
