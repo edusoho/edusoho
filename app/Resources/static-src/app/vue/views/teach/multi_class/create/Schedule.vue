@@ -1,6 +1,6 @@
 <template>
   <div>
-    排课只涉及直播课时，其他类型课时设置，请点击-<a v-if="isPermission('course_lesson_create')" :href="courseSetId ? `/course_set/${courseSetId}/manage/course/${courseId}/tasks` : 'javascript:;'" :target="courseSetId ? '_blank' : ''">更多课时设置</a>
+    <div v-if="isPermission('course_lesson_create')">排课只涉及直播课时，其他类型课时设置，请点击-<a :href="courseSetId ? `/course_set/${courseSetId}/manage/course/${courseId}/tasks` : 'javascript:;'" :target="courseSetId ? '_blank' : ''">更多课时设置</a></div>
     <div class="clearfix">
       <a-space size="large">
         <a-button v-if="isPermission('course_lesson_create')" type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
