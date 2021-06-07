@@ -17,7 +17,7 @@ export const MultiClass = _.assignIn(baseService, {
   },
 
   // 复制班课
-  async copyMultiClass(multiClassId) {
-    return apiClient.post(`${this.baseUrl}/${multiClassId}/clone`)
+  async copyMultiClass(multiClassId, params) {
+    return apiClient.post(`${this.baseUrl}/${multiClassId}/clone`, params)
   }
 })

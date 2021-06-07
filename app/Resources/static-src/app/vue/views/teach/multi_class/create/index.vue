@@ -78,9 +78,10 @@
           }]"
           placeholder="请选择授课教师"
           @popupScroll="teacherScroll"
+          @change="(value) => handleChange(value, 'teacher')"
           @search="handleSearchTeacher"
         >
-          <a-select-option v-for="item in teacher.list" :key="item.id">
+          <a-select-option v-for="item in teacher.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -101,8 +102,9 @@
           placeholder="请选择助教"
           @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
+          @change="(value) => handleChange(value, 'assistant')"
         >
-          <a-select-option v-for="item in assistant.list" :key="item.id">
+          <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -231,6 +233,33 @@ export default {
       });
     },
 
+    disabledTeacher(value) {
+      const assistantIds = value || this.form.getFieldValue('assistantIds') || this.assistant.initialValue;
+      _.forEach(assistantIds, id => {
+        _.forEach(this.teacher.list, item => {
+          if (item.id == id) {
+            item.disabled = true;
+            return;
+          }
+
+          if (!_.includes(assistantIds, item.id)) {
+            item.disabled = false;
+          }
+        });
+      });
+    },
+
+    disabledAssistant(value) {
+      const teacherId = value || this.form.getFieldValue('teacherId') || this.teacher.initialValue;
+      _.forEach(this.assistant.list, item => {
+        if (item.id == teacherId) {
+          item.disabled = true;
+        } else {
+          item.disabled = false;
+        }
+      });
+    },
+
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
@@ -345,6 +374,7 @@ export default {
         if (_.size(this.teacher.list) >= res.paging.total) {
           this.teacher.flag = false;
         }
+        this.disabledTeacher();
       });
     },
 
@@ -389,6 +419,7 @@ export default {
         if (_.size(this.assistant.list) >= res.paging.total) {
           this.assistant.flag = false;
         }
+        this.disabledAssistant();
       });
     },
 
@@ -421,6 +452,16 @@ export default {
           return false;
         }
       });
+    },
+
+    handleChange(value, type) {
+      if (type === 'teacher') {
+        this.disabledAssistant(value);
+        return;
+      }
+      if (type === 'assistant') {
+        this.disabledTeacher(value);
+      }
     },
 
     validatorＴitle: _.debounce(async function(rule, value, callback) {
