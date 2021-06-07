@@ -1,6 +1,6 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '班课' }, { name: multiClass.title }]" class="course-manage">
-    <div class="clearfix" style="margin-bottom: 24px;">
+  <aside-layout :breadcrumbs="[{ name: '班课', href: '/admin/v2/multi_class/index' }, { name: multiClass.title }]" class="course-manage">
+    <div class="clearfix" style="margin-bottom: 20px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
         <a-menu-item class="manage-menu-item" key="class-info">
           <router-link :to="{ name: 'MultiClassCourseManage' }">课时管理</router-link>

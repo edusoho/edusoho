@@ -1,7 +1,14 @@
 <template>
   <div class="aside-layout">
-    <a-breadcrumb class="aside-layout-header" separator=">">
-      <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">{{ breadcrumb.name }}</a-breadcrumb-item>
+    <a-breadcrumb class="aside-layout-header" separator="/">
+      <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+        <template v-if="breadcrumb.href">
+          <a :href="breadcrumb.href">{{ breadcrumb.name }}</a>
+        </template>
+        <template v-else>
+          {{ breadcrumb.name }}
+        </template>
+      </a-breadcrumb-item>
     </a-breadcrumb>
     <div class="aside-layout-main">
       <slot />
@@ -25,7 +32,7 @@ export default {
 <style lang="less">
 .aside-layout {
   .aside-layout-header {
-    padding: 24px 16px 16px;
+    padding: 16px 16px 12px;
     border-bottom: 1px solid #e8e8e8;
     font-size: 18px;
     color: #333;
