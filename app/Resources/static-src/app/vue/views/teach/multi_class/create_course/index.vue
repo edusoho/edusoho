@@ -318,11 +318,11 @@
           }
 
           try {
-            const { error, id } = await CourseSet.add(values);
+            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
 
             if (!error) {
               this.$message.success('创建成功')
-              this.goToMultiClassCreatePage(id)
+              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle })
             }
           } finally {
             this.ajaxLoading = false;
@@ -497,20 +497,20 @@
 
         callback()
       },
-      goToMultiClassCreatePage(id = '') {
-        // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
-        if (!id) {
+      goToMultiClassCreatePage(course) {
+        if (!course) {
           this.$router.go(-1)
-
           return
         }
         
-        this.$router.replace({
-          name: 'MultiClassCreate',
-          query: {
-            courseId: id
-          }
-        })
+        if (_.isObject(course)) {
+          this.$router.replace({
+            name: 'MultiClassCreate',
+            query: {
+              course: JSON.stringify(course)
+            }
+          })
+        }
       },
       validatePrice(rule, value, callback) {
         if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {
@@ -523,7 +523,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "~common/variable.less";
 
   .ant-upload-select-picture-card {

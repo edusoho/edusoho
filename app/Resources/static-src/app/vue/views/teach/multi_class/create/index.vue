@@ -211,6 +211,14 @@ export default {
     } else {
       this.initFetch();
     }
+
+    let course = this.$route.query.course
+    if (course) {
+      course = JSON.parse(course)
+
+      this.course.list.push(course)
+      this.$set(this.course, 'initialValue', course.id)
+    }
   },
 
   methods: {
