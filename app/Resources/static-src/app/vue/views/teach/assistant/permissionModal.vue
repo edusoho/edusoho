@@ -10,6 +10,8 @@
   >
     <a-tree
       checkable
+      :default-expand-all="true"
+      :checkStrictly="true"
       :tree-data="treeData"
       :default-checked-keys="permissions"
       :replace-fields="replaceFields"
@@ -51,17 +53,22 @@ export default {
   methods: {
     getAssistantPermission() {
       AssistantPermission.search().then(res => {
+        const { menu, permissions } = res;
+
         const loop = (treeData) => {
           _.forEach(treeData, item => {
             item.disabled = !!item.disabled;
+
             if (item.children) {
               loop(item.children);
             }
           });
         };
-        loop(res.menu);
-        this.treeData = res.menu;
-        this.permissions = res.permissions;
+
+        loop(menu);
+
+        this.treeData = menu;
+        this.permissions = permissions;
       });
     },
 
@@ -80,7 +87,7 @@ export default {
     },
 
     onCheck(checkedKeys) {
-      this.checkedKeys = checkedKeys;
+      this.checkedKeys = checkedKeys.checked;
     },
   }
 }
