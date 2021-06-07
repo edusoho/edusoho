@@ -127,7 +127,7 @@
           ]"
           v-decorator="['expiryMode', { initialValue: 'forever' }]"
         />
-        <a-tooltip overlayClassName='expandTooltip'>
+        <a-tooltip overlayClassName='expand-tooltip'>
           <template slot="title">
             随到随学：有效期从学员加入的当天开始算起，截至到期当天晚上的23:59<br>
             固定周期：有固定的学习开始日期和结束日期<br>
@@ -419,7 +419,7 @@
     background-color: @bg;
   }
 
-  .expandTooltip .ant-tooltip-content{
+  .expand-tooltip .ant-tooltip-content{
     width: 500px !important;
   }
 </style>
