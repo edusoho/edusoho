@@ -105,7 +105,7 @@
         <a-input
           v-decorator="['maxStudentNum', {
             rules: [{ required: true, message: '请输入课程人数' }]
-          }]"> 
+          }]">
             <span slot="suffix">人</span>
           </a-input>
       </a-form-item>
@@ -525,7 +525,7 @@
     bottom: 0;
     right: 64px;
     left: 200px;
-    padding: @spacing-6x 0;
+    padding: @spacing-3x 0;
     border-top: solid 1px @border;
     background-color: @bg;
   }
