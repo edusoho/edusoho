@@ -57,9 +57,11 @@ class AssistantPermission extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $this->getSettingService()->set('assistant_permission', $permissions);
+        $this->getSettingService()->set('assistant_permission', ['permissions' => $permissions]);
 
-        return $this->getSettingService()->get('assistant_permission');
+        $assistantPermissions = $this->getSettingService()->get('assistant_permission');
+
+        return $assistantPermissions['permissions'];
     }
 
     /**

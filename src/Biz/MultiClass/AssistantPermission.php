@@ -95,9 +95,9 @@ class AssistantPermission
 
     public function getPermissions()
     {
-        $permission = $this->getSettingService()->get('assistant_permission', []);
+        $assistantPermissions = $this->getSettingService()->get('assistant_permission', []);
 
-        if (empty($permission)) {
+        if (empty($assistantPermissions['permissions'])) {
             return [
                 'multi_class_manage',
                 'course_manage',
@@ -117,7 +117,7 @@ class AssistantPermission
             ];
         }
 
-        return $permission;
+        return $assistantPermissions['permissions'];
     }
 
     public function hasActionPermission($action)
