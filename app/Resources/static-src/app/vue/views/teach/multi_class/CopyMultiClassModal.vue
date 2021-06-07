@@ -25,24 +25,14 @@
         />
       </a-form-item>
 
-      <a-form-item label="选择课程">
-        <a-select
-          show-search
-          v-decorator="['courseId', {
-            initialValue: course.initialValue,
-            rules: [
-              { required: true, message: '请选择课程' }
-            ]
-          }]"
-          :filter-option="false"
-          placeholder="请选择课程"
-          @search="(value) => handleSearch(value, 'course')"
-          @popupScroll="(e) => handlePopupScroll(e, 'course')"
-        >
-          <a-select-option v-for="item in course.list" :key="item.id">
-            {{ item.courseSetTitle }}
-          </a-select-option>
-        </a-select>
+      <a-form-item label="课程名称">
+        <a-input
+          v-decorator="['courseSetTitle', { rules: [
+            { required: true, message: '请填写课程名称' },
+            { max: 40, message: '课程名称不能超过40个字' },
+          ]}]"
+          placeholder="请输入课程名称"
+        />
       </a-form-item>
 
       <a-form-item label="所属产品">
@@ -76,9 +66,10 @@
           }]"
           placeholder="请选择授课教师"
           @search="(value) => handleSearch(value, 'teacher')"
+          @change="(value) => handleChange(value, 'teacher')"
           @popupScroll="(e) => handlePopupScroll(e, 'teacher')"
         >
-          <a-select-option v-for="item in teacher.list" :key="item.id">
+          <a-select-option v-for="item in teacher.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -97,9 +88,10 @@
           mode="multiple"
           placeholder="请选择助教"
           @search="(value) => handleSearch(value, 'assistant')"
+          @change="(value) => handleChange(value, 'assistant')"
           @popupScroll="(e) => handlePopupScroll(e, 'assistant')"
         >
-          <a-select-option v-for="item in assistant.list" :key="item.id">
+          <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -110,7 +102,7 @@
 
 <script>
 import _ from '@codeages/utils';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher } from 'common/vue/service';
 
 export default {
   name: 'CopyMultiClassModal',
@@ -131,16 +123,6 @@ export default {
     return {
       confirmLoading: false,
       form: this.$form.createForm(this, { name: 'copy_multi_class' }),
-      course: {
-        list: [],
-        title: '',
-        flag: true,
-        initialValue: undefined,
-        paging: {
-          pageSize: 10,
-          current: 0
-        }
-      },
       product: {
         list: [],
         flag: true,
@@ -173,14 +155,19 @@ export default {
     };
   },
 
-  created() {
-    this.fetchCourse();
-    this.fetchProduct();
-    this.fetchTeacher();
-    this.fetchAssistant();
+  watch: {
+    id(newValue, oldValue) {
+      if (newValue) this.fetchMultiClass();
+    }
   },
 
   methods: {
+    initFetch() {
+      this.fetchProduct();
+      this.fetchTeacher();
+      this.fetchAssistant();
+    },
+
     duplicateRemoval(data, id) {
       _.forEach(data, (item, index) => {
         if (item.id == id) {
@@ -190,30 +177,48 @@ export default {
       });
     },
 
-    fetchCourse() {
-      const { title, paging: { pageSize, current } } = this.course;
+    disabledTeacher(value) {
+      const assistantIds = value || this.form.getFieldValue('assistantIds') || this.assistant.initialValue;
+      _.forEach(assistantIds, id => {
+        _.forEach(this.teacher.list, item => {
+          if (item.id == id) {
+            item.disabled = true;
+            return;
+          }
 
-      const params = {
-        isDefault: 1,
-        limit: pageSize,
-        offset: pageSize * current
-      };
+          if (!_.includes(assistantIds, item.id)) {
+            item.disabled = false;
+          }
+        });
+      });
+    },
 
-      if (title) {
-        params.titleLike = title;
-      }
-
-      Me.get('teach_courses', { params }).then(res => {
-        this.course.paging.current++;
-
-        if (this.course.initialValue) {
-          this.duplicateRemoval(res.data, this.course.initialValue);
+    disabledAssistant(value) {
+      const teacherId = value || this.form.getFieldValue('teacherId') || this.teacher.initialValue;
+      _.forEach(this.assistant.list, item => {
+        if (item.id == teacherId) {
+          item.disabled = true;
+          return false;
+        } else {
+          item.disabled = false;
         }
+      });
+    },
 
-        this.course.list = _.concat(this.course.list, res.data);
-        if (_.size(this.course.list) >= res.paging.total) {
-          this.course.flag = false;
-        }
+    fetchMultiClass() {
+      MultiClass.get(this.id).then(res => {
+        const { title, course: { courseSetTitle }, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
+        this.form.setFieldsValue({
+          'title': `${title}(复制)`,
+          'courseSetTitle': courseSetTitle
+        });
+        this.product.list = [product];
+        this.product.initialValue = productId;
+        this.teacher.list = teachers;
+        this.teacher.initialValue = teacherIds[0];
+        this.assistant.list = assistants;
+        this.assistant.initialValue = assistantIds;
+        this.initFetch();
       });
     },
 
@@ -257,6 +262,7 @@ export default {
         if (_.size(this.teacher.list) >= res.paging.total) {
           this.teacher.flag = false;
         }
+        this.disabledTeacher();
       });
     },
 
@@ -280,6 +286,7 @@ export default {
         if (_.size(this.assistant.list) >= res.paging.total) {
           this.assistant.flag = false;
         }
+        this.disabledAssistant();
       });
     },
 
@@ -305,6 +312,16 @@ export default {
       this[`fetch${_.capitalize(type)}`]();
     }, 300),
 
+    handleChange(value, type) {
+      if (type === 'teacher') {
+        this.disabledAssistant(value);
+        return;
+      }
+      if (type === 'assistant') {
+        this.disabledTeacher(value);
+      }
+    },
+
     handlePopupScroll: _.debounce(function (e, type) {
       const { scrollHeight, offsetHeight, scrollTop } = e.target;
       const maxScrollTop = scrollHeight - offsetHeight - 20;
@@ -314,16 +331,22 @@ export default {
     }, 300),
 
     handleOk(e) {
-      this.confirmLoading = true;
-      // const { success } = await MultiClass.copyMultiClass(multiClass.id);
-      if ('success') {
-        this.$message.success('正在复制中...');
-        this.confirmLoading = false;
-        this.handleCancel();
-      }
+      e.preventDefault();
+      this.form.validateFields(async (err, values) => {
+        if (!err) {
+          this.confirmLoading = true;
+          const { success } = await MultiClass.copyMultiClass(this.id, values);
+          if (success) {
+            this.$message.success('正在复制中...');
+            this.confirmLoading = false;
+            this.handleCancel();
+          }
+        }
+      });
     },
 
     handleCancel() {
+      this.form.resetFields();
       this.$emit('event-communication', { event: 'cancel-modal' });
     }
   }
