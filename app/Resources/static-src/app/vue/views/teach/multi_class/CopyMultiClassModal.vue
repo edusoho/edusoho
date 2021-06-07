@@ -198,7 +198,6 @@ export default {
       _.forEach(this.assistant.list, item => {
         if (item.id == teacherId) {
           item.disabled = true;
-          return false;
         } else {
           item.disabled = false;
         }
