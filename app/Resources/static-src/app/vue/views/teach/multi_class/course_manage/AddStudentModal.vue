@@ -19,19 +19,24 @@
         />
       </a-form-item>
 
-      <a-form-item label="购买价格" extra="本课程的价格为 0.00 元">
+      <a-form-item v-if="multiClass.course.price" label="购买价格" :extra="`本课程的价格为 ${multiClass.course.price} 元`">
         <a-input
-          type="number"
-          v-decorator="['price', { rules: [
-            { validator: validatorPrice }
-          ]}]"
+          type="text"
+          v-decorator="['price',
+          {
+            initialValue: multiClass.course.price,
+            rules: [
+              { validator: validatorPrice },
+              { validator: maxPrice }
+            ]
+          }]"
           addon-after="元"
         />
       </a-form-item>
 
       <a-form-item label="备注" extra="选填">
         <a-input
-          v-decorator="['price1']"
+          v-decorator="['remark']"
         />
       </a-form-item>
     </a-form>
@@ -82,6 +87,7 @@ export default {
             id: this.multiClass.id,
             userInfo: values.name,
             price: values.price,
+            remark: values.remark,
           }).then((res) => {
             this.$message.success('学员创建成功！', 2);
             this.visible = false;
@@ -110,11 +116,11 @@ export default {
     }, 300),
 
     validatorPrice(rule, value, callback) {
-      if (value >= 0) {
-        callback();
-        return;
-      }
-      callback('请输入正整数');
+      /^[0-9]{0,8}(\.\d{0,2})?$/.test(value) ? callback() : callback(new Error(Translator.trans('validate.positive_currency.message')));
+    },
+
+    maxPrice(rule, value, callback) {
+      (value > this.multiClass.course.price) ? callback(new Error(Translator.trans('course_manage.student_create.price_max_error_hint'))) : callback();
     }
   }
 }

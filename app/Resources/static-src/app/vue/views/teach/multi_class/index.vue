@@ -41,7 +41,7 @@
             @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
           <a v-if="isPermission('course_statistics_view')" href="javascript:;" class="mr2"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
-          <a-dropdown>
+          <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a href="javascript:;" @click="e => e.preventDefault()">
               <a-icon type="ellipsis" />
             </a>
@@ -68,7 +68,7 @@
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { MultiClass } from 'common/vue/service/index.js';
+import { MultiClass, MultiClassProduct } from 'common/vue/service/index.js';
 import Assistant from './course_manage/Assistant.vue';
 import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
@@ -90,6 +90,7 @@ const columns = [
   {
     title: '所属产品',
     dataIndex: 'product',
+    key: 'productId',
     width: '10%',
     ellipsis: true,
     filters: [],
@@ -155,6 +156,7 @@ export default {
     return {
       columns,
       multiClassList: [],
+      productList: [],
       getListLoading: false,
       paging: {
         total: 0,
@@ -167,6 +169,7 @@ export default {
   },
   created() {
     this.getMultiClassList()
+    this.getMultiClassProductList()
   },
   methods: {
     goToCreateMultiClassPage() {
@@ -174,16 +177,38 @@ export default {
         name: 'MultiClassCreate'
       })
     },
+    async getMultiClassProductList() {
+      const { data } = await MultiClassProduct.search({
+        keywords: '',
+        offset: 0,
+        limit: 100000,
+      })
+
+      const index = _.findIndex(this.columns, item => item.dataIndex === 'product');
+      const productItem = this.columns[index];
+
+      productItem.filters = []
+      _.forEach(data, item => {
+        productItem.filters.push({
+          text: item.title,
+          value: item.id
+        })
+      })
+
+      this.$set(this.columns, index, productItem)
+    },
     async getMultiClassList (params = {}) {
+      params.limit = params.pageSize || 10
+      params.offset = params.offset || 0
+      params.keywords = params.keywords || ''
+
       this.getListLoading = true;
       try {
-        const { data, paging } = await MultiClass.search({
-          keywords: params.keywords || '',
-          offset: params.offset || 0,
-          limit: params.pageSize || 10,
-        })
+        const { data, paging } = await MultiClass.search(params)
+
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
+
         this.multiClassList = data;
         this.paging = paging;
       } finally {
@@ -223,6 +248,16 @@ export default {
       if (pagination) {
         params.offset = pagination.pageSize * (pagination.current - 1)
         params.pageSize = pagination.pageSize
+      }
+
+      if (filters && Object.keys(filters).length > 0) {
+        _.forEach(Object.keys(filters), key => {
+          params[key] = filters[key]
+        })
+      }
+
+      if (sorter && sorter.order) {
+        params[`${sorter.field}Sort`] = sorter.order === 'ascend' ? 'ASC' : 'DESC'
       }
 
       if (Object.keys(params).length > 0) {

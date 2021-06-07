@@ -58,7 +58,7 @@
         :pagination="examResults.paging"
       >
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}

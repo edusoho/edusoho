@@ -47,7 +47,6 @@
               placeholder="请输入产品名称"
               v-decorator="['title', { rules: [
                 { required: true, message: '产品名称不能为空' },
-                { max: 20, message: '产品名称不能超过20个字' },
                 { validator: validatorTitle }
               ] }]"
             />
@@ -144,6 +143,15 @@
         this.modalTitle = '新建产品'
       },
       validatorTitle: _.debounce(async function(rule, value, callback) {
+        if (this.calculateByteLength(value) > 40) {
+          this.form.setFields({
+            title: { value, errors: [new Error('产品名称不能超过40个字符，一个中文字算2个字符')] }
+          })
+
+          return
+        }
+
+
         const { result } = await ValidationTitle.search({
           type: 'multiClassProduct',
           title: value
@@ -158,6 +166,16 @@
 
         callback()
       }, 300),
+      calculateByteLength(string = '') {
+        let length = string.length;
+
+        for (let i = 0; i < string.length; i++) {
+          if (string.charCodeAt(i) > 127)
+            length++;
+        }
+
+        return length;
+      },
       ajaxMultiClassProduct () {
         if (this.editingProduct) {
           this.editMultiClassProduct()
