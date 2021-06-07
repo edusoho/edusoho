@@ -2,9 +2,9 @@
 
 namespace AppBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class AddMultiClassProductCommand extends BaseCommand
 {
@@ -18,7 +18,7 @@ class AddMultiClassProductCommand extends BaseCommand
     {
         $num = $input->getArgument('num');
 
-        for ($i = 1; $i <= $num; $i++) {
+        for ($i = 1; $i <= $num; ++$i) {
             $this->getMultiClassProductDao()->create(['title' => '测试产品'.$i, 'type' => 'normal']);
             $output->writeln("<info>生成第{$i}个成功</info>");
         }
