@@ -188,6 +188,7 @@ export default {
         content: '确认要删除该班课？',
         okType: 'danger',
         maskClosable: true,
+        icon:  'close-circle',
         onOk: async () => {
           const { success } = await MultiClass.delete({ id: multiClass.id })
 
