@@ -6,13 +6,14 @@
       <template slot="title">
         <span>{{ assistants }}</span>
       </template>
-      <a-icon type="ellipsis" />
+      <a-icon type="more" />
     </a-tooltip>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
+
 export default {
   name: 'Assistant',
 

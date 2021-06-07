@@ -32,15 +32,20 @@ export default {
 <style lang="less">
 .aside-layout {
   .aside-layout-header {
+<<<<<<< Updated upstream
     padding: 16px 16px 12px;
+=======
+    padding: 16px;
+>>>>>>> Stashed changes
     border-bottom: 1px solid #e8e8e8;
     font-size: 18px;
     color: #333;
     font-weight: 500;
+    overflow: hidden;
   }
 
   .aside-layout-main {
-    padding: 24px 16px 16px;
+    padding: 16px;
   }
 }
 </style>

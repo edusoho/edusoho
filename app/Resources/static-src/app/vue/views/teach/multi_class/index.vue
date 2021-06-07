@@ -1,7 +1,7 @@
 <template>
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
     <a-spin :spinning="getListLoading">
-      <div class="clearfix cd-mb24">
+      <div class="clearfix cd-mb16">
         <a-input-search placeholder="请输入班课名称" style="width: 224px" @search="searchMultiClass" />
         <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
@@ -35,16 +35,16 @@
           {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <a href="javascript:;" class="mr2"
-            @click="goToMultiClassManage(record.id)">查看</a>
-          <a v-if="isPermission('multi_class_edit')" href="javascript:;"
-            @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
-          <a v-if="isPermission('course_statistics_view')" href="javascript:;" class="mr2"
-            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
+          <a-button type="link"
+            @click="goToMultiClassManage(record.id)">查看</a-button>
+          <a-button v-if="isPermission('multi_class_edit')"
+            type="link" 
+            @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a-button>
+          <a-button v-if="isPermission('course_statistics_view')"
+            type="link" 
+            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
-            <a href="javascript:;" @click="e => e.preventDefault()">
-              <a-icon type="ellipsis" />
-            </a>
+            <a-icon type="ellipsis" @click="e => e.preventDefault()" />
             <a-menu slot="overlay">
               <a-menu-item>
                 <a v-if="isPermission('multi_class_copy')" href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
@@ -76,14 +76,14 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
-    width: '10%',
+    width: '15%',
     ellipsis: true,
     scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
     dataIndex: 'course',
-    width: '10%',
+    width: '15%',
     ellipsis: true,
     scopedSlots: { customRender: 'course' },
   },
@@ -98,7 +98,7 @@ const columns = [
   {
     title: '价格',
     dataIndex: 'price',
-    width: '10%',
+    width: '100px',
     sorter: true,
   },
   {
@@ -116,14 +116,14 @@ const columns = [
   {
     title: '助教老师',
     dataIndex: 'assistant',
-    width: '10%',
+    width: '160px',
     ellipsis: true,
     scopedSlots: { customRender: 'assistant' },
   },
   {
     title: '已报班人数',
     dataIndex: 'studentNum',
-    width: '8%',
+    width: '108px',
     ellipsis: true,
     sorter: true,
     scopedSlots: { customRender: 'studentNum' },
@@ -131,14 +131,14 @@ const columns = [
   {
     title: '创建时间',
     dataIndex: 'createdTime',
-    width: '10%',
+    width: '160px',
     sorter: true,
     scopedSlots: { customRender: 'createdTime' },
   },
   {
     title: '操作',
     dataIndex: 'action',
-    width: '14%',
+    width: '200px',
     scopedSlots: { customRender: 'action' },
   },
 ];

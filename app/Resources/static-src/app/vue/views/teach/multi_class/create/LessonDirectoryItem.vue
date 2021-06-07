@@ -1,6 +1,6 @@
 <template>
   <div :class="`lesson-directory-${className} clearfix`">
-    <div class="title pull-left">
+    <div class="title pull-left text-overflow">
       <a-tag v-if="lesson.mode && lesson.type !== 'live'">非直播</a-tag>
       <a-tag v-if="lesson.mode && lesson.status !== 'published'">未发布</a-tag>
       {{ getTitle }}

@@ -63,7 +63,7 @@
         const title = this.product.title
 
         this.$confirm({
-          content: `确认要删除${title}`,
+          content: `确认要删除-${title}`,
           okType: 'danger',
           okText: '确认',
           cancelText: '取消',
@@ -86,15 +86,18 @@
 
   .product-card {
     height: 234px;
+    margin-top: @spacing-4x;
     padding: @spacing-6x @spacing-6x 0;
-    box-shadow: 0 0 16px 0 rgba(0,0,0,0.10);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.08);
+    border: 1px solid #fff;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3 ease;
 
     &:hover {
-      box-shadow: 0 0 16px 0 rgba(70,195,123,0.30);
+      box-shadow: 0 0 16px 0 rgba(70, 195, 123, 0.1);
+      border:1px solid rgba(70, 195, 123, 0.8);
       .product-card__lookover-multiclass {
         color: @brand-primary;
       }

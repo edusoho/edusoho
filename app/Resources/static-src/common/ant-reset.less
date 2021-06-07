@@ -1,3 +1,5 @@
+/************* Table *************/
+
 .ant-table-thead > tr > th .ant-table-filter-icon, 
 .ant-table-thead > tr > th .anticon-filter {
   position: static;
@@ -14,4 +16,41 @@
 
 .ant-table-filter-dropdown .ant-dropdown-menu {
   max-height: 300px !important;
+}
+
+.ant-table-row {
+  td a:not(.ant-dropdown-link) {
+    color: @gray-darker;
+  }
+  &:hover td a {
+    color: #59baff;
+  }
+
+  &:active td a {
+    color: #1e7fd9;
+  }
+}
+
+.ant-table-tbody > tr > td {
+  transition: none;
+  .ant-btn {
+    padding: 0 4px;
+  }
+}
+
+.ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  background:rgb(249, 249, 249,0.5);
+}
+
+.ant-table-thead > tr > th {
+  border: none;
+}
+
+/************* Table *************/
+
+.ant-form-item {
+  margin-bottom: 12px;
 }

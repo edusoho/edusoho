@@ -199,7 +199,7 @@
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="goToMultiClassCreatePage()">取消</a-button>
+      <a-button class="ml2" @click="goToMultiClassCreatePage()">返回</a-button>
     </div>
 
     <a-modal

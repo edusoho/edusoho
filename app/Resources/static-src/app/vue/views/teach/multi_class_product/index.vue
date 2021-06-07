@@ -14,7 +14,6 @@
       <a-row :gutter="24">
         <a-col :sm="24" :lg="12" :xl="8" v-for="product in productList" :key="product.id">
           <product-card
-            class="cd-mt24"
             :product="product"
             @edit="startEditMultiClassProduct"
             @delete="deleteMultiClassProduct"
