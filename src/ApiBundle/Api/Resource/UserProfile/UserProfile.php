@@ -18,7 +18,7 @@ class UserProfile extends AbstractResource
     public function get(ApiRequest $request, $userId)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$currentUser->hasPermission('admin_v2_teacher_manage')) {
+        if (!$currentUser->hasPermission('admin_v2')) {
             throw new AccessDeniedException();
         }
 
