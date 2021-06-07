@@ -109,7 +109,7 @@
               rules: [{ required: true, message: '请输入加入截止日期' }]
             }]"
           />
-          <a-form-item class="pull-left text-show-around" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
+          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
             <a-date-picker placeholder=""
               v-decorator="['buyExpiryTime', {
                 rules: [{ required: true, message: '请输入加入截止日期' }]
@@ -133,7 +133,9 @@
             固定周期：有固定的学习开始日期和结束日期<br>
             过期后无法继续学习，系统会在到期前10天提醒学员。
           </template>
-          <a><a-icon type="question-circle" style="margin-left: -6px;cursor: pointer;"/></a>
+          <a>
+            <a-icon type="question-circle" style="margin-left: -6px;"/>
+          </a>
         </a-tooltip>
       </a-form-item>
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'days'"
@@ -416,13 +418,7 @@
     border-top: solid 1px @border;
     background-color: @bg;
   }
-  .text-show-around{
-    margin: 0;
-    margin-top: 4px;
-  }
-  .ant-calendar-picker-icon{
-    color: #4c4c4c;
-  }
+
   .expandTooltip .ant-tooltip-content{
     width: 500px !important;
   }
