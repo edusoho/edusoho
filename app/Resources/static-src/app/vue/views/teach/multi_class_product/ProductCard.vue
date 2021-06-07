@@ -120,7 +120,7 @@
       display: none;
       position: absolute;
       right: 0px;
-      top: 8px;
+      top: 4px;
     }
     &__lookover-multiclass {
       margin: @spacing-6x -24px 0;

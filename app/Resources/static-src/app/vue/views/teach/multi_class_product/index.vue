@@ -64,7 +64,6 @@
           </a-button>
           <a-button key="submit" type="primary"
             :loading="ajaxProductLoading"
-            :disabled="!form.getFieldValue('title')"
             @click="ajaxMultiClassProduct">
             确认
           </a-button>
@@ -176,7 +175,8 @@
 
         return length;
       },
-      ajaxMultiClassProduct () {
+      ajaxMultiClassProduct (e) {
+        e.preventDefault();
         if (this.editingProduct) {
           this.editMultiClassProduct()
         } else {

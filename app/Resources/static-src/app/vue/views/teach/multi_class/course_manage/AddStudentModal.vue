@@ -93,7 +93,7 @@ export default {
             this.visible = false;
             window.location.reload();
           }).catch(err => {
-            this.$message.success('学员创建失败', 2);
+            this.$message.warning('学员创建失败', 2);
           });
         }
       });
@@ -120,7 +120,7 @@ export default {
     },
 
     maxPrice(rule, value, callback) {
-      (value > this.multiClass.course.price) ? callback(new Error(Translator.trans('course_manage.student_create.price_max_error_hint'))) : callback();
+      (parseFloat(value) > this.multiClass.course.price) ? callback(new Error(Translator.trans('course_manage.student_create.price_max_error_hint'))) : callback();
     }
   }
 }
