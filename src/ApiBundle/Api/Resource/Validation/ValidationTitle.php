@@ -33,7 +33,7 @@ class ValidationTitle extends AbstractResource
             return ['result' => true];
         }
 
-        if (!empty($result) && !empty($exceptId) && $result['id'] != $exceptId) {
+        if (!empty($result) && !empty($exceptId) && $result['id'] == $exceptId) {
             return ['result' => true];
         }
 

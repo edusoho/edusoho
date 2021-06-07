@@ -430,7 +430,7 @@ export default {
         exceptId: this.multiClassId
       });
 
-      result ? callback() : callback('产品名称不能与已创建的相同');
+      result ? callback() : callback('班课名称不能与已创建的相同');
     }, 300),
 
     validatorAssistant: (rule, value, callback) => {

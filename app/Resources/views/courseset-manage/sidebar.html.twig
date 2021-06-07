@@ -59,7 +59,7 @@
           </li>
         {% endif %}
         {# 录播管理 #}
-        {% if hasLiveTasks or courseSet.type == 'live' %}
+        {% if (hasLiveTasks or courseSet.type == 'live') and (not assistant.isAssistant or 'course_replay_manage' in assistant.permissions) %}
           <li class="cd-sidebar__item {% if course_side_nav == 'replay' %}active{% endif %}">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'replay'}) }}">
@@ -97,26 +97,31 @@
               {{ 'course.student_manage'|trans }}
             </a>
           </li>
+        {% endif %}
 
-          <li class="cd-sidebar__heading">
-            <hr class="mt0 mb0 mh10 bg-border-color"/>
-          </li>
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color"/>
+        </li>
 
+        {% if not assistant.isAssistant or 'course_exam_review' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'testpaper-check' %}active{% endif %}">
             <a
               href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ 'course.testpaper_check'|trans }}
             </a>
           </li>
+        {% endif %}
+
+        {% if not assistant.isAssistant or 'course_homework_review' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'homework-check' %}active{% endif %}">
             <a
               href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
             </a>
           </li>
-
-          <li class="cd-sidebar__heading">
-            <hr class="mt0 mb0 mh10 bg-border-color"/>
-          </li>
         {% endif %}
+
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color"/>
+        </li>
 
         {% if not assistant.isAssistant or 'course_statistics_view' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'overview' %}active{% endif %}" id="step-0">
