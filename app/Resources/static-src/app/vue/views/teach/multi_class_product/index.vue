@@ -151,10 +151,9 @@
           return
         }
 
-
-        const { result } = await ValidationTitle.search({
-          type: 'multiClassProduct',
-          title: value
+        const { result } = await ValidationTitle.search('multiClassProduct', {
+          title: value,
+          exceptId: this.editingProduct ? this.editingProduct.id : 0
         })
 
         if (!result) {

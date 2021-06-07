@@ -100,14 +100,11 @@ export default {
     },
 
     validatorName: _.debounce(async function(rule, value, callback) {
-      const { result } = await ValidationTitle.search({
-        type: 'multiClassProduct',
-        title: value
-      })
+      const { result, message } = await ValidationTitle.search('courseStudent', {title: value, exceptId: this.multiClass ? this.multiClass.courseId : 0})
 
       if (!result) {
         this.form.setFields({
-          title: { value, errors: [new Error('产品名称不能与已创建的相同')] }
+          name: { value, errors: [new Error(message)] }
         })
         return
       }

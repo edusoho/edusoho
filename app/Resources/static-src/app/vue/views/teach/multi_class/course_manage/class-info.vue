@@ -28,9 +28,10 @@
       </template>
 
       <template slot="time" slot-scope="time, record">
-        <template v-if="['video', 'live'].includes(record.tasks.type)">
+        <template v-if="'video' === record.tasks.type">
           {{ (record.tasks.length / 60).toFixed(2) }}min
         </template>
+        <template v-else-if="'live' === record.tasks.type">{{ record.tasks.length }}min</template>
         <template v-else>--</template>
       </template>
 
@@ -38,9 +39,9 @@
 
       <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
 
-      <a slot="questionNum" 
-        slot-scope="questionNum, record" 
-        :href="`/my/course/${record.tasks.courseId}/question?type=question`" 
+      <a slot="questionNum"
+        slot-scope="questionNum, record"
+        :href="`/my/course/${record.tasks.courseId}/question?type=question`"
         target="_blank">{{ questionNum }}</a>
 
       <template slot="studyStudentNum" slot-scope="studyStudentNum, record">

@@ -11,7 +11,7 @@
           v-decorator="['title', { rules: [
             { required: true, message: '请填写班课名称' },
             { max: 40, message: '班课名称不能超过40个字' },
-            { validator: validatorＴitle }
+            { validator: validatorTitle }
           ]}]"
           placeholder="请输入班课名称"
         />
@@ -464,9 +464,8 @@ export default {
       }
     },
 
-    validatorＴitle: _.debounce(async function(rule, value, callback) {
-      const { result } = await ValidationTitle.search({
-        type: 'multiClass',
+    validatorTitle: _.debounce(async function(rule, value, callback) {
+      const { result } = await ValidationTitle.search('multiClass',{
         title: value,
         exceptId: this.multiClassId
       });
