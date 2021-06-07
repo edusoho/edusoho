@@ -72,15 +72,15 @@
       :pagination="paging"
       :data-source="students"
     >
-      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}</a>
+      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
-      <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile }}</template>
+      <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
 
 <!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
-      <template slot="assistants" slot-scope="assistants">{{ assistants[0].nickname }}</template>
+      <assistant slot="assistants" slot-scope="assistants" :assistant="assistants" />
 
       <a slot="threadCount" slot-scope="threadCount">{{ threadCount }}</a>
 
@@ -88,9 +88,9 @@
 
       <a slot="finishedTestpaperCount" @click="onClickTestpaperModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
 
-      <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') }}</template>
+      <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') || '--' }}</template>
 
-      <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}</template>
+      <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm')|| '--' }}</template>
 
       <template slot="actions" slot-scope="actions, record">
         <a-space size="middle">
@@ -210,6 +210,7 @@ import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
 import userInfoTable from "../../../components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
+import Assistant from "./Assistant";
 
 const columns = [
   {
@@ -230,6 +231,8 @@ const columns = [
   {
     title: '助教老师',
     dataIndex: 'assistants',
+    width: '10%',
+    ellipsis: true,
     scopedSlots: { customRender: 'assistants' }
   },
   {
@@ -305,6 +308,7 @@ export default {
     AddStudentModal,
     StudentInfoModal,
     userInfoTable,
+    Assistant,
   },
   data() {
     return {
@@ -519,7 +523,6 @@ export default {
     },
     confirm(userId) {
       this.onRemoveStudent(userId);
-      this.$message.success('移除学员成功！', 2);
     },
     getSelectedRowKeysQueryStr() {
       let str = '';
