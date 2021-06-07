@@ -71,10 +71,3 @@ let smsEvent = () => {
   });
 };
 smsEvent();
-
-$('.js-btn-login').click((event) => {
-  if (validator.form()) {
-    $(event.currentTarget).button('loadding');
-    $form.submit();
-  }
-});
