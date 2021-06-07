@@ -523,7 +523,6 @@ export default {
     },
     confirm(userId) {
       this.onRemoveStudent(userId);
-      this.$message.success('移除学员成功！', 2);
     },
     getSelectedRowKeysQueryStr() {
       let str = '';
