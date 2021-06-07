@@ -58,10 +58,6 @@ export default {
           _.forEach(treeData, item => {
             item.disabled = !!item.disabled;
 
-            // if (item.disabled && !_.includes(permissions, item.code)) {
-            //   permissions.push(item.code);
-            // }
-
             if (item.children) {
               loop(item.children);
             }
@@ -90,7 +86,6 @@ export default {
     },
 
     onCheck(checkedKeys) {
-      console.log(checkedKeys.checked);
       this.checkedKeys = checkedKeys.checked;
     },
   }
