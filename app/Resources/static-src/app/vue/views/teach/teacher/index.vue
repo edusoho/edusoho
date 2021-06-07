@@ -54,10 +54,10 @@
           <a-input-number
             style="width: 100%;"
             v-decorator="['number', { rules: [
-              { required: true, message: '请输入序号' }
+              { required: true, message: '请输入序号' },
+              { type: 'integer', message: '请输入整数' },
+              { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
-            :min="0"
-            :max="10000"
           />
         </a-form-item>
       </a-form>
@@ -230,6 +230,14 @@ export default {
           return false;
         }
       });
+    },
+
+    validateRange(rule, value, callback) {
+      if (_.inRange(value, 0, 10000) === false) {
+        callback('请输入0-10000的整数')
+      }
+
+      callback()
     }
   },
 };
