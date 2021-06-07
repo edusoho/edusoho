@@ -209,7 +209,7 @@ export default {
         const { title, course: { courseSetTitle }, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
         this.form.setFieldsValue({
           'title': `${title}(复制)`,
-          'courseSetTitle': courseSetTitle
+          'courseSetTitle': `${courseSetTitle}(复制)`,
         });
         this.product.list = [product];
         this.product.initialValue = productId;
