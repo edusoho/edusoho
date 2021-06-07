@@ -37,7 +37,7 @@ class MultiClassTaskExamResult extends AbstractResource
             $status = 'all';
         }
 
-        $conditions = ['answer_scene_id' => $answerScene['id']];
+        $conditions = ['answer_scene_id' => empty($answerScene) ? -1 : $answerScene['id']];
         if ('all' !== $status) {
             $conditions['status'] = $status;
         }

@@ -9,28 +9,28 @@
         @change="change"
       >
         <class-name slot="lesson" slot-scope="lesson, record" :record="record" />
-        <template slot="name" slot-scope="name, record">{{ record.assessment.name }}</template>
-        <template slot="item_count" slot-scope="item_count, record">{{ record.assessment.item_count }}</template>
-        <a slot="finished" slot-scope="finished, record" @click="showResultListModal('finished', record)">
-          {{ record.assessmentStatusNum.finished || 0 }}
+        <template slot="name" slot-scope="name, record">{{ record.tasks.assessment.name }}</template>
+        <template slot="item_count" slot-scope="item_count, record">{{ record.tasks.assessment.item_count }}</template>
+        <a slot="finished" slot-scope="finished, record" @click="showResultListModal('finished', record.tasks)">
+          {{ record.tasks.assessmentStatusNum.finished || 0 }}
         </a>
-        <a slot="reviewing" slot-scope="reviewing, record" @click="showResultListModal('reviewing', record)">
-          {{ record.assessmentStatusNum.reviewing || 0 }}
+        <a slot="reviewing" slot-scope="reviewing, record" @click="showResultListModal('reviewing', record.tasks)">
+          {{ record.tasks.assessmentStatusNum.reviewing || 0 }}
         </a>
-        <a slot="doing" slot-scope="doing, record" @click="showResultListModal('doing', record)">
-          {{ record.assessmentStatusNum.doing || 0 }}
+        <a slot="doing" slot-scope="doing, record" @click="showResultListModal('doing', record.tasks)">
+          {{ record.tasks.assessmentStatusNum.doing || 0 }}
         </a>
-        <template slot="startTime" slot-scope="startTime">
-          {{ $dateFormat(startTime, 'YYYY-MM-DD HH:mm') }}
+        <template slot="startTime" slot-scope="startTime, record">
+          {{ $dateFormat(record.tasks.createdTime, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <a :href="`/course/${record.courseId}/manage/exam/activity/${record.activityId}/analysis`"
+          <a :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
             target="_blank">
             答题分布
           </a>
           <a href="#modal"
             data-toggle="modal"
-            :data-url="`/course/${record.courseId}/activity/${record.activityId}/testpaper/graph`">
+            :data-url="`/course/${record.tasks.courseId}/activity/${record.tasks.activityId}/testpaper/graph`">
             成绩分布
           </a>
         </template>
@@ -58,7 +58,7 @@
         :pagination="examResults.paging"
       >
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
-        <template slot="grade" slot-scope="grade, record">{{ gradeMap[record.answerReportInfo.grade] }}</template>
+        <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
         <template slot="status" slot-scope="status">
           {{ statusMap[status] }}
@@ -70,10 +70,10 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-            :href="`/course/${currentTask.courseId}/manage/testpaper/${record.assessment_id}/check?action=check`" 
+            :href="`/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check`"
             target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
-            :href="`/homework/result/${record.id}/show?action=check`" 
+            :href="`/homework/result/${record.id}/show?action=check`"
             target="_blank">查看结果</a>
         </template>
       </a-table>
@@ -168,7 +168,7 @@ const resultColumns = [
 
 export default {
   name: "HomeWorkReview",
-  components: { 
+  components: {
     ClassName
   },
   data() {
@@ -186,7 +186,7 @@ export default {
       modalVisible: false,
       currentTab: 0,
       currentTask: {},
-      status: ['all', 'doing', 'reviewing', 'finished'],
+      status: ['all', 'reviewing', 'doing', 'finished'],
       statusMap: {
         doing: '进行中',
         paused: '暂停',
@@ -243,7 +243,7 @@ export default {
     getExamResults(currentTab = 0) {
       const status = this.status[currentTab]
 
-      MultiClassExam.getExamResults({ 
+      MultiClassExam.getExamResults({
         status,
         multiClassId: this.$route.params.id,
         taskId: this.currentTask.id,

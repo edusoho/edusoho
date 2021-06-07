@@ -29,7 +29,7 @@
 
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
-          {{ record.tasks.length }}min
+          {{ (record.tasks.length / 60).toFixed(2) }}min
         </template>
         <template v-else>--</template>
       </template>
@@ -38,7 +38,10 @@
 
       <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
 
-      <a slot="questionNum" slot-scope="questionNum, record" :href="`/my/course/${record.tasks.courseId}/question?type=question`">{{ questionNum }}</a>
+      <a slot="questionNum" 
+        slot-scope="questionNum, record" 
+        :href="`/my/course/${record.tasks.courseId}/question?type=question`" 
+        target="_blank">{{ questionNum }}</a>
 
       <template slot="studyStudentNum" slot-scope="studyStudentNum, record">
         {{ studyStudentNum }}/{{ record.totalStudentNum }}
@@ -57,6 +60,7 @@
         </a-dropdown>
 
         <a class="ant-dropdown-link"
+           v-if="isPermission('course_lesson_edit')"
           href="javascript:;"
           data-toggle="modal"
           data-target="#modal"
@@ -74,7 +78,7 @@
               <a-menu-item key="publish">
                 立即发布
               </a-menu-item>
-              <a-menu-item key="delete">
+              <a-menu-item key="delete" v-if="isPermission('course_lesson_delete')">
                 删除
               </a-menu-item>
             </template>

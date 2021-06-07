@@ -41,10 +41,10 @@ class MultiClassExam extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $tasks = $this->getCourseService()->searchMultiClassCourseItems($conditions, [], $offset, $limit);
         $total = $this->getTaskService()->countTasks($conditions);
-        $tasks = $this->getCourseTaskTree($tasks, $course, $request->getHttpRequest()->isSecure());
-        $tasks = $this->findTestpapersAndStatusNum($tasks);
+        $lessons = $this->getCourseTaskTree($tasks, $course, $request->getHttpRequest()->isSecure());
+        $lessons = $this->findTestpapersAndStatusNum($lessons);
 
-        return $this->makePagingObject($tasks, $total, $offset, $limit);
+        return $this->makePagingObject($lessons, $total, $offset, $limit);
     }
 
     protected function getCourseTaskTree($tasks, $course, $isSsl)
@@ -52,16 +52,16 @@ class MultiClassExam extends AbstractResource
         $items = $this->convertToLeadingItems($tasks, $course, $isSsl, 0);
         $items = $this->convertToTree($items);
 
-        $necessaryTasks = [];
+        $necessaryLessons = [];
         foreach ($items as $item){
             $units = $item['children'];
             foreach ($units as $unit){
                 $lessons = $unit['children'];
                 foreach ($lessons as &$lesson){
+                    $lesson['chapterTitle'] = $item['title'];
+                    $lesson['unitTitle'] = $unit['title'];
                     if ($lesson['isExist']){
-                        foreach ($lesson['tasks'] as $key => &$task){
-                            $task['chapterTitle'] = $item['title'];
-                            $task['unitTitle'] = $unit['title'];
+                        foreach ($lesson['tasks'] as $key => $task){
                             $task['answerSceneId'] = $task['activity']['ext']['answerSceneId'];
                             if ($task['type'] === 'homework'){
                                 $task['assessmentId'] = $task['activity']['ext']['assessmentId'];
@@ -69,32 +69,34 @@ class MultiClassExam extends AbstractResource
                                 $task['assessmentId'] = $task['activity']['ext']['mediaId'];
                             }
                             unset($task['activity']['ext']);
-                            $necessaryTasks[] = $task;
+                            $lesson['tasks'] = $task;
+                            $necessaryLessons[] = $lesson;
                         }
                     }
                 }
             }
         }
 
-        return $necessaryTasks;
+        return $necessaryLessons;
     }
 
-    protected function findTestpapersAndStatusNum($tasks)
+    protected function findTestpapersAndStatusNum($lessons)
     {
-        if (empty($tasks)) {
+        if (empty($lessons)) {
             return [];
         }
 
+        $tasks = ArrayToolkit::column($lessons, 'tasks');
         $ids = ArrayToolkit::column($tasks, 'assessmentId');
         $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
         $testpapersStatusNum = $this->findTestpapersStatusNum($tasks);
 
-        array_walk($tasks, function (&$task, $key) use ($testpapers, $testpapersStatusNum) {
-            $task['assessment'] = isset($testpapers[$task['assessmentId']]) ? $testpapers[$task['assessmentId']] : [];
-            $task['assessmentStatusNum'] = isset($testpapersStatusNum[$task['activityId']]) ? $testpapersStatusNum[$task['activityId']] : [];
+        array_walk($lessons, function (&$lesson, $key) use ($testpapers, $testpapersStatusNum) {
+            $lesson['tasks']['assessment'] = isset($testpapers[$lesson['tasks']['assessmentId']]) ? $testpapers[$lesson['tasks']['assessmentId']] : [];
+            $lesson['tasks']['assessmentStatusNum'] = isset($testpapersStatusNum[$lesson['tasks']['activityId']]) ? $testpapersStatusNum[$lesson['tasks']['activityId']] : [];
         });
 
-        return $tasks;
+        return $lessons;
     }
 
     protected function findTestpapersStatusNum($tasks)

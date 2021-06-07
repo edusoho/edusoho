@@ -45,11 +45,12 @@
           :show-arrow="false"
           :filter-option="false"
           :not-found-content="null"
-          @search="searchTeachers"
+          @popupScroll="teacherScroll"
+          @search="handleSearchTeacher"
           v-decorator="['teachers', { rules: [{ required: true, message: '请选择授课老师' }] }]"
         >
-          <a-select-option v-for="teacher in teachersList" :key="teacher.id">
-            {{ teacher.nickname }}
+          <a-select-option v-for="item in teacher.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -60,16 +61,23 @@
           :show-arrow="false"
           :filter-option="false"
           :not-found-content="null"
-          @search="searchAssistants"
+          @popupScroll="assistantScroll"
+          @search="handleSearchAssistant"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
         >
-          <a-select-option v-for="assistant in assistantsList" :key="assistant.id">
-            {{ assistant.nickname }}
+          <a-select-option v-for="item in assistant.list" :key="item.id">
+            {{ item.nickname }}
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="价格">
-        <a-input suffix="元" v-decorator="['originPrice', { initialValue: 0 }]" />
+      <a-form-item label="价格" style="position: relative;">
+        <a-input-number
+          :precision="2"
+          style="width: 100%"
+          v-decorator="['originPrice', { initialValue: 0 }]"
+          :min="0"
+        />
+        <span class="price-number-input">元</span>
       </a-form-item>
       <a-form-item label="学习模式">
         <a-radio-group
@@ -155,7 +163,7 @@
             }]" />
           <span class="ml2">在此日期前，学员可进行学习。</span>
         </a-form-item>
-        <a-form-item v-if="form.getFieldValue('deadlineType') === 'dayjs'">
+        <a-form-item v-if="form.getFieldValue('deadlineType') === 'days'">
           <a-input
             style="width: 200px;"
             v-decorator="['expiryDays', {
@@ -226,8 +234,26 @@
         formInfo: {
           buyable: true,
         },
-        teachersList: [],
-        assistantsList: [],
+        teacher: {
+          list: [],
+          title: '',
+          flag: true,
+          initialValue: undefined,
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        },
+        assistant: {
+          list: [],
+          title: '',
+          flag: true,
+          initialValue: [],
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        },
         courseCoverUrl: '',
         cropModalVisible: false,
         loading: false,
@@ -240,8 +266,8 @@
       };
     },
     created() {
-      this.searchTeachers();
-      this.searchAssistants();
+      this.fetchAssistants();
+      this.fetchTeacher();
     },
     mounted() {
       this.editor = CKEDITOR.replace('summary', {
@@ -282,15 +308,84 @@
           }
         })
       },
-      searchTeachers: _.debounce(async function(nickname = '') {
-        const { data } = await Teacher.search({ nickname })
+      fetchTeacher() {
+        const { title, paging: { pageSize, current } } = this.teacher;
+        const params = {
+          limit: pageSize,
+          offset: pageSize * current
+        };
+        if (title) {
+          params.nickname = title;
+        }
+        Teacher.search(params).then(res => {
+          this.teacher.paging.current++;
+          this.teacher.list = _.concat(this.teacher.list, res.data);
+          if (_.size(this.teacher.list) >= res.paging.total) {
+            this.teacher.flag = false;
+          }
+        });
+      },
 
-        this.teachersList = data
+      handleSearchTeacher: _.debounce(function(input) {
+        this.teacher = {
+          list: [],
+          title: input,
+          flag: true,
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        };
+        this.fetchTeacher();
       }, 300),
-      searchAssistants: _.debounce(async function(nickname = '') {
-        const { data } = await Assistant.search({ nickname })
 
-        this.assistantsList = data
+      teacherScroll: _.debounce(function (e) {
+        const { scrollHeight, offsetHeight, scrollTop } = e.target;
+        const maxScrollTop = scrollHeight - offsetHeight - 20;
+        if (maxScrollTop < scrollTop && this.teacher.flag) {
+          this.fetchTeacher();
+        }
+      }, 300),
+
+      fetchAssistants() {
+        const { title, paging: { pageSize, current } } = this.assistant;
+        const params = {
+          limit: pageSize,
+          offset: pageSize * current
+        };
+
+        if (title) {
+          params.nickname = title;
+        }
+
+        Assistant.search(params).then(res => {
+          this.assistant.paging.current++;
+          this.assistant.list = _.concat(this.assistant.list, res.data);
+          if (_.size(this.assistant.list) >= res.paging.total) {
+            this.assistant.flag = false;
+          }
+        });
+      },
+
+      handleSearchAssistant: _.debounce(function(input) {
+        this.assistant = {
+          list: [],
+          title: input,
+          flag: true,
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        };
+        this.fetchAssistants();
+      }, 300),
+
+      assistantScroll: _.debounce(function (e) {
+        const { scrollHeight, offsetHeight, scrollTop } = e.target;
+        const maxScrollTop = scrollHeight - offsetHeight - 20;
+        if (maxScrollTop < scrollTop && this.assistant.flag) {
+          this.fetchAssistants();
+        }
       }, 300),
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
@@ -421,5 +516,11 @@
 
   .expand-tooltip .ant-tooltip-content{
     width: 500px !important;
+  }
+  
+  .price-number-input {
+    position: absolute;
+    top: -12px;
+    right: 28px;
   }
 </style>

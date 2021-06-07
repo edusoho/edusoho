@@ -3,7 +3,7 @@
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb24">
         <a-input-search placeholder="请输入班课名称" style="width: 224px" @search="searchMultiClass" />
-        <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
+        <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
 
       <a-table :columns="columns"
@@ -37,9 +37,9 @@
         <template slot="action" slot-scope="text, record">
           <a href="javascript:;" class="mr2"
             @click="goToMultiClassManage(record.id)">查看</a>
-          <a href="javascript:;"
+          <a v-if="isPermission('multi_class_edit')" href="javascript:;"
             @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a>
-          <a href="javascript:;" class="mr2"
+          <a v-if="isPermission('course_statistics_view')" href="javascript:;" class="mr2"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a>
           <a-dropdown>
             <a href="javascript:;" @click="e => e.preventDefault()">
@@ -47,10 +47,10 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
+                <a v-if="isPermission('multi_class_copy')" href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
+                <a v-if="isPermission('multi_class_delete')" href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -188,6 +188,7 @@ export default {
         content: '确认要删除该班课？',
         okType: 'danger',
         maskClosable: true,
+        icon:  'close-circle',
         onOk: async () => {
           const { success } = await MultiClass.delete({ id: multiClass.id })
 
