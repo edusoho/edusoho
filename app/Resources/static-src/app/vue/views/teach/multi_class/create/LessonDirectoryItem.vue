@@ -82,11 +82,10 @@ export default {
       const { type, id } = this.lesson;
       const that = this;
       this.$confirm({
-        title: '删除',
         content: `确认删除?`,
-        okText: '确认',
         okType: 'danger',
-        cancelText: '取消',
+        icon: 'close-circle',
+        maskClosable: true,
         onOk() {
           that.$emit('event-communication', {
             eventType: ['chapter', 'unit'].includes(type) ? 'deleteChapterUnit' : 'deleteTask',

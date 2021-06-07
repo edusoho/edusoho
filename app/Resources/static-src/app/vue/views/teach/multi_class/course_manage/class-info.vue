@@ -38,7 +38,10 @@
 
       <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
 
-      <a slot="questionNum" slot-scope="questionNum, record" :href="`/my/course/${record.tasks.courseId}/question?type=question`">{{ questionNum }}</a>
+      <a slot="questionNum" 
+        slot-scope="questionNum, record" 
+        :href="`/my/course/${record.tasks.courseId}/question?type=question`" 
+        target="_blank">{{ questionNum }}</a>
 
       <template slot="studyStudentNum" slot-scope="studyStudentNum, record">
         {{ studyStudentNum }}/{{ record.totalStudentNum }}

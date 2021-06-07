@@ -54,10 +54,10 @@
           <a-input-number
             style="width: 100%;"
             v-decorator="['number', { rules: [
-              { required: true, message: '请输入序号' }
+              { required: true, message: '请输入序号' },
+              { type: 'integer', message: '请输入整数' },
+              { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
-            :min="0"
-            :max="10000"
           />
         </a-form-item>
       </a-form>
@@ -141,12 +141,13 @@ export default {
     async fetchTeacher(params) {
       this.loading = true;
       const { data, paging } = await Teacher.search({
-        limit: 10,
+        limit: 20,
         nickname: this.keyWord,
         ...params
       });
       const pagination = { ...this.pagination };
       pagination.total = paging.total;
+      pagination.pageSize = Number(paging.limit);
 
       _.forEach(data, item => {
         item.isPromoted = item.promoted == 1;
@@ -200,15 +201,43 @@ export default {
     },
 
     async changePromoted(checked, id) {
-      let { success } = checked ? await Teacher.promotion(id) : await Teacher.cancelPromotion(id);
-      if (success) {
-        _.forEach(this.pageData, item => {
-          if (item.id == id) {
-            item.isPromoted = checked;
-            return false;
-          }
-        });
+      let result = {};
+
+      if (checked) {
+        result = await Teacher.promotion(id);
+        this.changePromotedCallBack(result, id, checked)
+
+        return;
       }
+
+      this.$confirm({
+        content: '真的要取消该教师推荐吗？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: async () => {
+          result = await Teacher.cancelPromotion(id)
+          this.changePromotedCallBack(result, id, checked)
+        }
+      })
+    },
+
+    changePromotedCallBack(result = {}, id, checked) {
+      if (!result.success) return;
+    
+      _.forEach(this.pageData, item => {
+        if (item.id == id) {
+          item.isPromoted = checked;
+          return false;
+        }
+      });
+    },
+
+    validateRange(rule, value, callback) {
+      if (_.inRange(value, 0, 10000) === false) {
+        callback('请输入0-10000的整数')
+      }
+
+      callback()
     }
   },
 };
