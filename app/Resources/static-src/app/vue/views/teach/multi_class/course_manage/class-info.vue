@@ -200,7 +200,11 @@ export default {
     this.fetchMultiClass();
 
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchLessons();
+      const params = {
+        limit: 10,
+        offset: (this.pagination.current - 1) * 10
+      };
+      this.fetchLessons(params);
     })
   },
 
@@ -298,7 +302,11 @@ export default {
           Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
-              this.fetchLessons();
+              _.forEach(this.data, (item, index) => {
+                if (item.tasks.id == id) {
+                  this.data.splice(index, 1);
+                }
+              });
             }
           });
         }
