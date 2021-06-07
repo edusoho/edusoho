@@ -93,7 +93,7 @@
       </a-form-item>
       <a-form-item label="任务完成规则">
         <a-radio-group
-          :options="[{ label: '无限制', value: '1' }, { label: '由任务完成条件决定', value: '2' }]"
+          :options="[{ label: '无限制', value: '1' }, { label: '由任务完成条件决定', value: '0' }]"
           v-decorator="['enableFinish', {
             initialValue: '1'
           }]"
