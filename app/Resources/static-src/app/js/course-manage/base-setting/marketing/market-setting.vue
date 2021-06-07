@@ -6,7 +6,7 @@
                  label-width="150px">
             <div v-if="course.platform === 'supplier'">
                 <el-form-item :label="'s2b2c.product.cooperation_price'|trans">
-                    <el-col span="18">
+                    <el-col :span="18">
                         {{ courseProduct.cooperationPrice }}
                         <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
                         <el-popover
@@ -20,7 +20,7 @@
                     </el-col>
                 </el-form-item>
                 <el-form-item :label="'s2b2c.product.suggestion_price'|trans">
-                    <el-col span="18">
+                    <el-col :span="18">
                         {{ courseProduct.suggestionPrice }}
                         <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
                         <el-popover
@@ -41,11 +41,11 @@
             </div>
 
             <el-form-item :label="'site.price'|trans" prop="originPrice">
-                <el-col span="4">
+                <el-col :span="4">
                     <el-input v-model="marketingForm.originPrice" ref="originPrice"
                               :disabled="course.platform === 'supplier' && !canModifyCoursePrice"></el-input>
                 </el-col>
-                <el-col span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
+                <el-col :span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
             <el-form-item>
@@ -59,7 +59,7 @@
                            slot="reference"></a>
                     </el-popover>
                 </label>
-                <el-col span="18">
+                <el-col :span="18">
                     <el-radio v-for="buyableRadio in buyableRadios"
                               v-model="marketingForm.buyable"
                               :key="buyableRadio.value"
@@ -73,7 +73,7 @@
 
             <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
                           :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
-                <el-col span="8">
+                <el-col :span="8">
                     <el-radio v-for="buyExpiryTimeEnabledRadio in buyExpiryTimeEnabledRadios"
                               v-model="marketingForm.enableBuyExpiryTime"
                               :key="buyExpiryTimeEnabledRadio.value"
@@ -106,7 +106,7 @@
                         <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
                     </el-popover>
                 </label>
-                <el-col span="18">
+                <el-col :span="18">
                     <el-radio v-for="(label, value) in expiryMode"
                               v-model="marketingForm.expiryMode"
                               :label="value"
@@ -145,7 +145,7 @@
                         </div>
                         <div class="cd-mt16"
                              v-if="marketingForm.expiryMode === 'days' && marketingForm.deadlineType === 'days'">
-                            <el-col span="8">
+                            <el-col :span="8">
                                 <el-form-item prop="expiryDays">
                                     <el-input ref="expiryDays" v-model="marketingForm.expiryDays"
                                               :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
@@ -204,7 +204,7 @@
             <!--                           slot="reference"></a>-->
             <!--                    </el-popover>-->
             <!--                </label>-->
-            <!--                <el-col span="18">-->
+            <!--                <el-col :span="18">-->
             <!--                    <el-radio v-for="(label, value) in approvalRadio"-->
             <!--                              v-model="marketingForm.approval"-->
             <!--                              :key="value"-->
@@ -337,12 +337,6 @@
             }
 
             return {
-                course: {},
-                courseProduct: {},
-                notifies: {},
-                canModifyCoursePrice: true,
-                buyBeforeApproval: false,
-                serviceTags: {},
                 buyableRadios: [
                     {
                         value: '1',
@@ -488,9 +482,6 @@
                 courseSetClosed: courseSetClosed,
                 courseSetPublished: courseSetPublished,
                 coursePublished: coursePublished,
-                vipInstalled: false,
-                vipEnabled: false,
-                vipLevels: {}
             }
     }
 }
