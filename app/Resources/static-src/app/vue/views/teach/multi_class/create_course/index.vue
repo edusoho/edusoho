@@ -199,7 +199,7 @@
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="goToLastPage">取消</a-button>
+      <a-button class="ml2" @click="goToMultiClassCreatePage()">取消</a-button>
     </div>
 
     <a-modal
@@ -270,18 +270,22 @@
         courseCoverName: '',
         uploading: false,
         imgs: null,
+        imageUploadUrl: '/editor/upload?token=',
+        flashUploadUrl: '/editor/upload?token=',
       };
     },
     created() {
       this.fetchAssistants();
       this.fetchTeacher();
     },
-    mounted() {
+    async mounted() {
+      await this.getEditorUploadToken()
       this.editor = CKEDITOR.replace('summary', {
         allowedContent: true,
         toolbar: 'Detail',
         fileSingleSizeLimit: app.fileSingleSizeLimit,
-        filebrowserImageUploadUrl: this.uploadUrl // TODO {{ path('editor_upload', {token:upload_token('course')}) }}
+        filebrowserImageUploadUrl: this.imageUploadUrl,
+        filebrowserFlashUploadUrl: this.flashUploadUrl
       });
     },
     methods: {
@@ -290,6 +294,16 @@
 
         return Promise.resolve(1);
       },
+
+      async getEditorUploadToken() {
+        const { token } = await UploadToken.get('course')
+
+        this.imageUploadUrl += token
+        this.flashUploadUrl += token
+
+        return Promise.resolve(1);
+      },
+      
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
@@ -304,17 +318,18 @@
           }
 
           try {
-            const { error } = await CourseSet.add(values);
+            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
 
             if (!error) {
               this.$message.success('创建成功')
-              this.$router.go(-1);
+              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle })
             }
           } finally {
             this.ajaxLoading = false;
           }
         })
       },
+
       fetchTeacher() {
         const { title, paging: { pageSize, current } } = this.teacher;
         const params = {
@@ -482,9 +497,20 @@
 
         callback()
       },
-      goToLastPage() {
-        // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
-        this.$router.go(-1)
+      goToMultiClassCreatePage(course) {
+        if (!course) {
+          this.$router.go(-1)
+          return
+        }
+        
+        if (_.isObject(course)) {
+          this.$router.replace({
+            name: 'MultiClassCreate',
+            query: {
+              course: JSON.stringify(course)
+            }
+          })
+        }
       },
       validatePrice(rule, value, callback) {
         if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {
@@ -497,7 +523,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "~common/variable.less";
 
   .ant-upload-select-picture-card {
