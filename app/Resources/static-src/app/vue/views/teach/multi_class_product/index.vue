@@ -74,9 +74,11 @@
         :product="currentProduct"
         :visible="multiClassModalVisible"
         @close="event => multiClassModalVisible = event" />
+
+      <empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
+
     </a-spin>
 
-    <a-empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
   </aside-layout>
 </template>
 
@@ -86,13 +88,15 @@
   import { MultiClassProduct, ValidationTitle } from 'common/vue/service';
   import ProductCard from './ProductCard.vue';
   import MultiClassModal from './MultiClassModal.vue';
+  import Empty from 'app/vue/views/components/Empty.vue';
 
   export default {
     name: 'MultiClassProduct',
     components: {
       ProductCard,
       MultiClassModal,
-      AsideLayout
+      AsideLayout,
+      Empty
     },
     props: {},
     data () {

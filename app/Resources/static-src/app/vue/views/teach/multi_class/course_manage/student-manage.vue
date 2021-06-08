@@ -76,8 +76,6 @@
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
 
-<!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
-
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
       <assistant slot="assistants" slot-scope="assistants" :assistant="assistants" />
@@ -145,8 +143,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
@@ -188,8 +184,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>

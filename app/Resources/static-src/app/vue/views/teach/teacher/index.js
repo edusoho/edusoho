@@ -1,6 +1,7 @@
 import Vue from 'common/vue';
 import Router from 'vue-router';
 import routes from 'app/vue/router/teach/teacher/index.js';
+import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 
 const router = new Router({
   mode: 'hash',
@@ -10,6 +11,9 @@ const router = new Router({
 new Vue({
   el: '#app',
   router,
-  template: '<router-view></router-view>'
+  components: {
+    AntConfigProvider
+  },
+  template: `<ant-config-provider />`
 });
 
