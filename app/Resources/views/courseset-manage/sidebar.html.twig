@@ -97,11 +97,10 @@
               {{ 'course.student_manage'|trans }}
             </a>
           </li>
+          <li class="cd-sidebar__heading">
+            <hr class="mt0 mb0 mh10 bg-border-color"/>
+          </li>
         {% endif %}
-
-        <li class="cd-sidebar__heading">
-          <hr class="mt0 mb0 mh10 bg-border-color"/>
-        </li>
 
         {% if not assistant.isAssistant or 'course_exam_review' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'testpaper-check' %}active{% endif %}">
@@ -117,11 +116,10 @@
               href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
             </a>
           </li>
+          <li class="cd-sidebar__heading">
+            <hr class="mt0 mb0 mh10 bg-border-color"/>
+          </li>
         {% endif %}
-
-        <li class="cd-sidebar__heading">
-          <hr class="mt0 mb0 mh10 bg-border-color"/>
-        </li>
 
         {% if not assistant.isAssistant or 'course_statistics_view' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'overview' %}active{% endif %}" id="step-0">
@@ -132,7 +130,7 @@
           </li>
         {% endif %}
         {% if courseSet.platform == 'self'  %}
-          {% if not assistant.isAssistant or 'course_replay_manage' in assistant.permissions  %}
+          {% if not assistant.isAssistant or 'course_live_manage' in assistant.permissions  %}
             <li class="cd-sidebar__item {% if course_side_nav == 'live-statistics' %}active{% endif %}">
               {% if courseSet.locked %}
                 <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'live-statistics'}) }}">
