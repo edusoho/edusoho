@@ -208,11 +208,7 @@ export default {
       }
     };
   },
-  watch: {
-    currentTab(currentTab) {
-      this.getExamResults(currentTab)
-    },
-  },
+
   computed: {
     examResults() {
       const key = this.status[this.currentTab];
@@ -245,6 +241,7 @@ export default {
     showResultListModal(type, record) {
       this.currentTask = record;
       this.currentTab = this.status.indexOf(type);
+      this.getExamResults(this.currentTab);
       this.modalVisible = true;
     },
     getExamResults(currentTab = 0) {
