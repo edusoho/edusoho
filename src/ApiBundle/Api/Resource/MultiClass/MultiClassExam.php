@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
@@ -20,7 +21,6 @@ class MultiClassExam extends AbstractResource
      * @param ApiRequest $request
      * @param $multiClassId
      * @return array
-     * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request, $multiClassId)
     {
@@ -34,10 +34,15 @@ class MultiClassExam extends AbstractResource
             throw CourseException::NOTFOUND_COURSE();
         }
 
+        if (!$this->getCourseService()->hasCourseManagerRole($course['id'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $conditions = [
             'courseId' => $course['id'],
             'types' => $request->query->get('types', ['testpaper', 'homework'])
         ];
+        $conditions = $this->filterRoleConditions($conditions, $course['id']);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $tasks = $this->getCourseService()->searchMultiClassCourseItems($conditions, [], $offset, $limit);
         $total = $this->getTaskService()->countTasks($conditions);
@@ -122,6 +127,27 @@ class MultiClassExam extends AbstractResource
         return $resultStatusNum;
     }
 
+    protected function filterRoleConditions($conditions, $courseId)
+    {
+        $user = $this->getCurrentUser();
+        $member = $this->getMemberService()->getCourseMember($courseId, $user['id']);
+        if (!empty($member) && 'assistant' == $member['role']) {
+            $types = [];
+            $permission = $this->biz['assistant_permission'];
+            if ($permission->hasActionPermission('course_homework_review')) {
+                $types[] = 'homework';
+            }
+
+            if ($permission->hasActionPermission('course_exam_review')) {
+                $types[] = 'testpaper';
+            }
+
+            $conditions['types'] = empty($types) ? ['none'] : $types;
+        }
+
+        return $conditions;
+    }
+
     protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
     {
         return $this->container->get('api.util.item_helper')->convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask, $showOptionalNum);
@@ -170,5 +196,13 @@ class MultiClassExam extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }
