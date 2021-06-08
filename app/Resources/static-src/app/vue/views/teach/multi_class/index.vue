@@ -25,7 +25,7 @@
         </a>
         <a slot="course" slot-scope="course"
           :href="`/course/${course.id}`" target="_blank">
-          {{ course.title || course.courseSetTitle }}
+          {{ course.courseSetTitle }}
         </a>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"

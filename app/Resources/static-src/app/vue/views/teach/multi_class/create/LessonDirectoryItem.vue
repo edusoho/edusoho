@@ -1,8 +1,8 @@
 <template>
   <div :class="`lesson-directory-${className} clearfix`">
     <div class="title pull-left text-overflow">
-      <a-tag v-if="lesson.mode && lesson.type !== 'live'">非直播</a-tag>
-      <a-tag v-if="lesson.mode && lesson.status !== 'published'">未发布</a-tag>
+      <a-tag v-if="lessonData.mode && lessonData.type !== 'live'">非直播</a-tag>
+      <a-tag v-if="lessonData.mode && lessonData.status !== 'published'">未发布</a-tag>
       {{ getTitle }}
     </div>
     <div class="start-time pull-left">{{ getStartTime }}</div>
@@ -10,21 +10,21 @@
     <div class="actions pull-left">
       <a-space size="large">
         <a-icon
-          v-if="lesson.mode && isPermission('course_lesson_manage')"
+          v-if="lessonData.mode && isPermission('course_lesson_manage')"
           type="edit"
           data-toggle="modal"
           data-target="#modal"
-          :data-url="`/course/${courseId}/task/${lesson.id}/update`"
+          :data-url="`/course/${courseId}/task/${lessonData.id}/update`"
           style="color: #46c37b;"
         />
         <a-icon
-          v-if="['chapter', 'unit'].includes(lesson.type)"
+          v-if="['chapter', 'unit'].includes(lessonData.type)"
           type="edit"
           style="color: #46c37b;"
           @click="handleEditorClick"
         />
         <a-icon
-          v-if="lesson.type !== 'lesson' && lesson.status !== 'published' && isPermission('course_lesson_manage')"
+          v-if="lessonData.type !== 'lesson' && lessonData.status !== 'published' && isPermission('course_lesson_manage')"
           type="delete"
           style="color: #fe4040;"
           @click="handleDeleteClick"
@@ -65,21 +65,32 @@ export default {
     },
 
     getStartTime() {
-      const { type, startTime } = this.lesson;
+      const { type, startTime } = this.lessonData;
       if (type === 'live') return this.$dateFormat(startTime, 'YYYY/MM/DD HH:mm:ss');
       return '- -';
     },
 
     getLength() {
-      const { type, length } = this.lesson;
+      const { type, length } = this.lessonData;
       if (type === 'live') return `${length} 分钟`;
       return '- -';
+    },
+
+    isOnlyOneTask() {
+      return this.lesson.tasks && this.lesson.tasks.length == 1;
+    },
+
+    lessonData() {
+      if (this.isOnlyOneTask) {
+        return this.lesson.tasks[0];
+      }
+      return this.lesson;
     }
   },
 
   methods: {
     handleDeleteClick() {
-      const { type, id } = this.lesson;
+      const { type, id } = this.lessonData;
       const that = this;
       this.$confirm({
         content: `确认删除?`,
@@ -96,7 +107,7 @@ export default {
     },
 
     handleEditorClick() {
-      const { type, id, title } = this.lesson;
+      const { type, id, title } = this.lessonData;
       this.$emit('event-communication', {
         eventType: 'renameChapterUnit',
         id,

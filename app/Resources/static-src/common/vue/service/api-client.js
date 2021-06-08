@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Vue from 'common/vue'
 
 const apiStore = {
   token: '',
@@ -50,10 +51,14 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   response => {
-    console.log('response： ', response)
     return response.data;
   },
   error => {
+    try {
+      Vue.prototype.$message.error(error.response.data.error.message)
+    } catch (e) {
+
+    }
     return Promise.reject(error);
 });
 

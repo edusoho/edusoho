@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ApiBundle\Api\Resource\Course;
+namespace ApiBundle\Api\Resource\LiveCapacity;
 
 
 use ApiBundle\Api\ApiRequest;
@@ -9,12 +9,10 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Util\EdusohoLiveClient;
 
-class CourseLiveCapacity extends AbstractResource
+class LiveCapacity extends AbstractResource
 {
-    public function search(ApiRequest $request, $courseId)
+    public function search(ApiRequest $request)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-
         $client = new EdusohoLiveClient();
         return $client->getCapacity();
     }

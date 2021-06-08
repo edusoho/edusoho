@@ -32,6 +32,8 @@ use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
@@ -744,6 +746,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->tryManageCourse($id);
         if ('published' === $course['status']) {
             $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
+        }
+
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        if (!empty($multiClass)) {
+            $this->createNewException(MultiClassException::FORBIDDEN_DELETE_MULTI_CLASS_COURSE());
         }
 
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
@@ -2964,6 +2971,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCertificateService()
     {
         return $this->createService('Certificate:CertificateService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 
     /**
