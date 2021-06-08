@@ -14,9 +14,9 @@
           </template>
         </a-breadcrumb-item>
       </a-breadcrumb>
-      <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a>
+      <!-- <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a> -->
     </div>
-    
+
     <div class="aside-layout-main">
       <slot />
     </div>
@@ -39,12 +39,17 @@ export default {
 <style lang="less">
 .aside-layout {
   .aside-layout-header {
-    padding: 16px;
+    padding: 12px 24px;
     border-bottom: 1px solid #e8e8e8;
     font-size: 18px;
     color: #333;
     font-weight: 500;
     overflow: hidden;
+
+    .ant-breadcrumb {
+      font-size: 18px;
+      line-height: 28px;
+    }
   }
 
   .aside-layout-main {

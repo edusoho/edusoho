@@ -6,7 +6,7 @@
       <template slot="title">
         <span>{{ assistants }}</span>
       </template>
-      <a-icon type="more" />
+      <svg-icon style="color: #979797;" icon="icon-more" />
     </a-tooltip>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
       if (!_.size(this.assistant)) return '- -';
       let temp = [];
       _.forEach(this.assistant, (assistant, index) => {
-        if(assistant.nickname){
+        if(assistant.nickname) {
           temp.push(assistant.nickname);
         }else {
           temp.push(assistant);

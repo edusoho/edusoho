@@ -30,7 +30,7 @@
               { validator: maxPrice }
             ]
           }]"
-          addon-after="元"
+          suffix="元"
         />
       </a-form-item>
 
