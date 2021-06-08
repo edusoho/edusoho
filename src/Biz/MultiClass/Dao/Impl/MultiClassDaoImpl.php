@@ -76,6 +76,7 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
                 'id = :id',
                 'multi_class.id IN ( :ids)',
                 'productId = :productId',
+                'productId IN ( :productIds)',
                 'courseId IN ( :courseIds)',
                 'copyId = :copyId',
                 'multi_class.title LIKE :titleLike',
