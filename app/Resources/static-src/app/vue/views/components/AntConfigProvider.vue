@@ -1,9 +1,11 @@
 <template>
   <config-provider :locale="locale">
     <template #renderEmpty>
-      <div style="position: relative; text-align: center">
-        <img style="height: 120px;" src="/static-dist/app/img/vue/search_empty.png" alt="暂无数据">
-        <p style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: #333;">暂无数据</p>
+      <div style="position: relative; margin-top: 24px; text-align: center;">
+        <img style="height: 200px;" src="/static-dist/app/img/vue/empty.png" alt="暂无数据">
+        <p style="position: absolute; bottom: 60px; left: 50%; margin: 0; transform: translateX(-50%); color: #bebebe;">
+          暂无数据
+        </p>
       </div>
     </template>
 

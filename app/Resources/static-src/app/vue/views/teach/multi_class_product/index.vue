@@ -74,9 +74,11 @@
         :product="currentProduct"
         :visible="multiClassModalVisible"
         @close="event => multiClassModalVisible = event" />
+
+      <empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
+
     </a-spin>
 
-    <empty description="暂无产品" v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
   </aside-layout>
 </template>
 

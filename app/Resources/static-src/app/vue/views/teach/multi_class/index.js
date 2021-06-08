@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import routes from 'app/vue/router/teach/multi_class/index.js';
 import zhCN from '@codeages/design-vue/lib/locale-provider/zh_CN';
 import { ConfigProvider } from '@codeages/design-vue';
+import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 
 const router = new Router({
   mode: 'hash',
@@ -15,18 +16,12 @@ new Vue({
   el: '#app',
   router,
   components: {
-    ConfigProvider
+    ConfigProvider,
+    AntConfigProvider
   },
   data: {
     locale: zhCN
   },
-  template: `
-    <config-provider :locale="locale">
-      <keep-alive v-if="$route.meta.keepAlive">
-        <router-view></router-view>
-      </keep-alive>
-      <router-view v-else></router-view>
-    </config-provider>
-  `
+  template: `<ant-config-provider />`
 });
 

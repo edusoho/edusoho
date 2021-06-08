@@ -1,5 +1,11 @@
 <template>
-  <a-empty :description="description" :image="image" :image-style="imageStyle" />
+  <a-empty
+    class="custom-empty"
+    :image="image"
+    :image-style="imageStyle"
+  >
+    <span class="custom-empty__description" slot="description">{{ description }}</span>
+  </a-empty>
 </template>
 
 <script>
@@ -28,3 +34,19 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.custom-empty {
+  position: relative;
+  margin-top: 60px;
+
+  .custom-empty__description {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+    color: #bebebe;
+  }
+}
+</style>
