@@ -126,8 +126,6 @@
       </template>
     </a-table>
 
-
-
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
@@ -523,12 +521,17 @@ export default {
       this.getMultiClassStudents({ keyword })
     },
     onClickHomeworkModal(user) {
-      console.log(user)
+      if (!this.isPermission('course_homework_review')) {
+        return;
+      }
       this.selectedUser = user;
       this.getHomeworkResults();
       this.homeworkModalVisible = true;
     },
     onClickTestpaperModal(user) {
+      if (!this.isPermission('course_exam_review')) {
+        return;
+      }
       this.selectedUser = user;
       this.getTestpaperResults();
       this.testpaperModalVisible = true;
