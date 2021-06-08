@@ -1,5 +1,4 @@
-{% set assistant = data('AssistantPermission', {courseId: course.id}) %}
-{% if (app.user.isAdmin() or setting('course.teacher_search_order') == 1) and (not assistant.isAssistant or 'course_live_data_export' in assistant.permissions)  %}
+{% if (app.user.isAdmin() or setting('course.teacher_search_order') == 1)  %}
   {% include 'export/export-btn.html.twig' with
     {
       'exportFileName' : 'order',
