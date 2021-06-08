@@ -17,7 +17,7 @@
         />
       </a-form-item>
       <a-form-item label="课程副标题" >
-        <a-textarea auto-size v-decorator="['subTitle']" placeholder="请输入课程副标题" />
+        <a-textarea auto-size v-decorator="['subtitle']" placeholder="请输入课程副标题" />
       </a-form-item>
       <a-form-item label="封面图片">
         <a-upload
@@ -48,10 +48,11 @@
           :not-found-content="null"
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
+          @change="(value) => handleChange(value, 'teacher')"
           v-decorator="['teachers', { rules: [{ required: true, message: '请选择授课老师' }] }]"
           placeholder="请选择授课教师"
         >
-          <a-select-option v-for="item in teacher.list" :key="item.id">
+          <a-select-option v-for="item in teacher.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -65,10 +66,11 @@
           :not-found-content="null"
           @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
+          @change="(value) => handleChange(value, 'assistant')"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
           placeholder="请选择一个或多个助教"
         >
-          <a-select-option v-for="item in assistant.list" :key="item.id">
+          <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
             {{ item.nickname }}
           </a-select-option>
         </a-select>
@@ -341,6 +343,31 @@
         })
       },
 
+      disabledTeacher(value) {
+        const assistantIds = value || this.form.getFieldValue('assistants') || this.assistant.initialValue;
+        _.forEach(this.teacher.list, item => {
+          if (!_.includes(assistantIds, item.id)) {
+            item.disabled = false;
+          }
+          _.forEach(assistantIds, id => {
+            if (item.id == id) {
+              item.disabled = true;
+            }
+          });
+        });
+      },
+
+      disabledAssistant(value) {
+        const teacherId = value || this.form.getFieldValue('teachers') || this.teacher.initialValue;
+        _.forEach(this.assistant.list, item => {
+          if (item.id == teacherId) {
+            item.disabled = true;
+          } else {
+            item.disabled = false;
+          }
+        });
+      },
+
       formatValues(values = {}) {
         values.summary = this.editor.getData()
         values.teachers = [values.teachers]
@@ -377,6 +404,7 @@
           if (_.size(this.teacher.list) >= res.paging.total) {
             this.teacher.flag = false;
           }
+          this.disabledTeacher();
         });
       },
 
@@ -418,6 +446,7 @@
           if (_.size(this.assistant.list) >= res.paging.total) {
             this.assistant.flag = false;
           }
+          this.disabledAssistant();
         });
       },
 
@@ -441,6 +470,17 @@
           this.fetchAssistants();
         }
       }, 300),
+
+      handleChange(value, type) {
+        console.log(value);
+        if (type === 'teacher') {
+          this.disabledAssistant(value);
+          return;
+        }
+        if (type === 'assistant') {
+          this.disabledTeacher(value);
+        }
+      },
 
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)

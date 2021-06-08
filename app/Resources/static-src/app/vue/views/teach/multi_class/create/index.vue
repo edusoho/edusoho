@@ -244,15 +244,13 @@ export default {
 
     disabledTeacher(value) {
       const assistantIds = value || this.form.getFieldValue('assistantIds') || this.assistant.initialValue;
-      _.forEach(assistantIds, id => {
-        _.forEach(this.teacher.list, item => {
+      _.forEach(this.teacher.list, item => {
+        if (!_.includes(assistantIds, item.id)) {
+          item.disabled = false;
+        }
+        _.forEach(assistantIds, id => {
           if (item.id == id) {
             item.disabled = true;
-            return;
-          }
-
-          if (!_.includes(assistantIds, item.id)) {
-            item.disabled = false;
           }
         });
       });
@@ -491,7 +489,7 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (err) return
-      
+
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;

@@ -5,6 +5,18 @@ object-assign
 */
 
 /*!
+  * vue-router v3.5.1
+  * (c) 2021 Evan You
+  * @license MIT
+  */
+
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+
+/*!
  *  * postal.federation - A base plugin for federating instances of postal.js across various boundaries.
  *  * Author: Jim Cowart (http://ifandelse.com)
  *  * Version: v0.5.3
