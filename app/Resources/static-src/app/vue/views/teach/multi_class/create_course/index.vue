@@ -199,7 +199,7 @@
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="goToMultiClassCreatePage()">返回</a-button>
+      <a-button @click="goToMultiClassCreatePage()">取消</a-button>
     </div>
 
     <a-modal
@@ -311,7 +311,9 @@
           this.ajaxLoading = true
           values.summary = this.editor.getData()
           values.teachers = [values.teachers]
-          values = _.assignIn(values, this.formInfo)
+          values = _.assignIn(values, {
+            buyable: Number(this.formInfo.buyable)
+          })
 
           if (this.imgs) {
             values.images = this.imgs;
@@ -388,7 +390,7 @@
           }
         });
       },
-
+      
       handleSearchAssistant: _.debounce(function(input) {
         this.assistant = {
           list: [],
@@ -401,7 +403,7 @@
         };
         this.fetchAssistants();
       }, 300),
-
+      
       assistantScroll: _.debounce(function (e) {
         const { scrollHeight, offsetHeight, scrollTop } = e.target;
         const maxScrollTop = scrollHeight - offsetHeight - 20;
@@ -409,6 +411,7 @@
           this.fetchAssistants();
         }
       }, 300),
+      
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },

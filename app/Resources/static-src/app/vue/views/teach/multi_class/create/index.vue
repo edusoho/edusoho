@@ -124,7 +124,7 @@
           {{ mode === 'editor' ? '确定' : '立即创建' }}
         </a-button>
         <a-button @click="clickCancelCreate">
-          返回
+          取消
         </a-button>
       </a-space>
     </div>
