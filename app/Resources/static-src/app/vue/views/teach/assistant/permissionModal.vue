@@ -5,6 +5,7 @@
     okText="保存"
     cancelText="取消"
     @ok="handleOk"
+    class="permission-modal"
     @cancel="handleCancel"
     :destroyOnClose="true"
   >
@@ -93,3 +94,11 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+.permission-modal >>> .ant-modal-body {
+  max-height: 410px;
+  overflow: auto;
+}
+</style>

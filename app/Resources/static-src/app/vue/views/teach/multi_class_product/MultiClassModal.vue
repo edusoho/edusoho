@@ -14,7 +14,8 @@
           {{ text }}
         </a>
         <a slot="course" slot-scope="text, record"
-          :href="`/course/${record.courseId}`">
+          :href="`/course/${record.courseId}`"
+          target="_blank">
           {{ record.course ? record.course.courseSetTitle : '' }}
         </a>
         <a slot="taskNum" slot-scope="text, record"

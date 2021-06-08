@@ -4,6 +4,7 @@
       <a-input-search
         placeholder="请输入用户名搜索"
         style="width: 224px"
+        :allowClear="true"
         @search="onSearch"
       />
     </div>

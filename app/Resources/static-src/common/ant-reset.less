@@ -32,6 +32,7 @@
 }
 
 .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f0f0f0;
   transition: none;
   .ant-btn {
     padding: 0 4px;
@@ -42,10 +43,14 @@
 .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
 .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-  background:rgb(249, 249, 249,0.5);
+  background:rgb(249, 249, 249, 0.5);
 }
 
 .ant-table-thead > tr > th {
+  border: none;
+}
+
+.ant-table-placeholder {
   border: none;
 }
 
@@ -53,4 +58,24 @@
 
 .ant-form-item {
   margin-bottom: 12px;
+}
+
+/************* Button *************/
+
+.ant-btn-link {
+  &:hover,
+  &:focus {
+    color: #59baff;
+  }
+
+  &:active,
+  &.active {
+    color: #1e7fd9;
+  }
+}
+
+/************* Menu *************/
+
+.ant-menu-horizontal {
+  line-height: 38px;
 }

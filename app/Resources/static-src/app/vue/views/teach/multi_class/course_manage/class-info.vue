@@ -29,7 +29,7 @@
 
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
-          {{ (record.tasks.length / 60).toFixed(2) }}min
+          {{ record.tasks.length | timeTransfer }}
         </template>
         <template v-else>--</template>
       </template>
@@ -205,6 +205,20 @@ export default {
       };
       this.fetchLessons(params);
     })
+  },
+
+  filters: {
+    timeTransfer(totalSecond) {
+      const minute = _.floor(totalSecond / 60)
+      const second = totalSecond % 60
+      let time = `${minute}min `
+
+      if (second) {
+        time += `${second}s`
+      }
+
+      return time
+    }
   },
 
   methods: {

@@ -2,7 +2,9 @@
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
-        <a-input-search placeholder="请输入班课名称" style="width: 224px" @search="searchMultiClass" />
+        <a-input-search placeholder="请输入班课名称" style="width: 224px"
+          :allowClear="true" 
+          @search="searchMultiClass" />
         <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
 
