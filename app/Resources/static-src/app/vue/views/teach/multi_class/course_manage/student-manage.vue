@@ -71,6 +71,7 @@
       :row-key="record => record.id"
       :pagination="paging"
       :data-source="students"
+      @change="handleStudentTableChange"
     >
       <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
@@ -131,7 +132,8 @@
         v-if="homeworkResults"
         :columns="resultColumns"
         :data-source="homeworkResults.data"
-        :pagination="homeworkResults.paging"
+        :pagination="homeworkPaging[status[currentHomeworkTab]]"
+        @change="handleHomeworkTableChange"
       >
         <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
         <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--' }}</template>
@@ -172,7 +174,8 @@
         v-if="testpaperResults"
         :columns="resultColumns"
         :data-source="testpaperResults.data"
-        :pagination="testpaperResults.paging"
+        :pagination="testpaperPaging[status[currentTestpaperTab]]"
+        @change="handleTestpaperTableChange"
       >
         <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
         <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--'  }}</template>
@@ -297,6 +300,29 @@ const resultColumns = [
   }
 ];
 
+const defaultExamPaging = {
+  all: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  reviewing: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  doing: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  finished: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  }
+};
+
 export default {
   components: {
     AddStudentModal,
@@ -330,6 +356,8 @@ export default {
         offset: 0,
         pageSize: 10,
       },
+      testpaperPaging: defaultExamPaging,
+      homeworkPaging: defaultExamPaging,
       status: ['all', 'reviewing', 'doing',  'finished'],
       statusMap: {
         doing: '进行中',
@@ -400,12 +428,60 @@ export default {
         id: this.id,
         keyword: params.keyword ||this.keyword || '',
         offset: params.offset || this.paging.offset || 0,
-        limit: params.limit || this.paging.limit || 10,
+        limit: params.limit || this.paging.pageSize || 10,
       });
       this.students = data;
       paging.page = (paging.offset / paging.limit) + 1;
-      this.paging = paging;
+      this.paging = Object.assign(this.paging, paging);
     },
+
+    handleTestpaperTableChange(pagination) {
+      const status = this.status[this.currentTestpaperTab];
+      const pager = { ...this.testpaperPaging[status] };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize;
+      this.testpaperPaging[status] = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.getTestpaperResults(this.currentTestpaperTab, params);
+    },
+
+    handleHomeworkTableChange(pagination) {
+      const status = this.status[this.currentHomeworkTab];
+      const pager = { ...this.homeworkPaging[status] };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize;
+      this.homeworkPaging[status] = pager;
+
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+      console.log(this.homeworkPaging);
+      console.log(params)
+
+      this.getHomeworkResults(this.currentHomeworkTab, params);
+    },
+
+    handleStudentTableChange(pagination) {
+      const pager = { ...this.paging };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize
+      this.paging = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.getMultiClassStudents(params);
+    },
+
 
     async getMultiClass() {
       await MultiClass.get(this.id).then(res => {
@@ -450,25 +526,33 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
       this.getSelectedRowKeysQueryStr();
     },
-    getHomeworkResults(currentHomeworkTab = 0) {
+    getHomeworkResults(currentHomeworkTab = 0, params = {}) {
       const status = this.status[currentHomeworkTab]
 
       MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
         status,
         type: 'homework',
+        offset: params.offset || this.homeworkPaging[status].offset || defaultExamPaging[status].offset,
+        limit: params.limit || this.homeworkPaging[status].pageSize || defaultExamPaging[status].pageSize,
       }).then(res => {
-        res.paging.pageSize = res.paging.limit
+        res.paging.page = (res.paging.offset / res.paging.limit) + 1;
+        this.homeworkPaging[status] = Object.assign(this.homeworkPaging[status], res.paging);
+        console.log(this.homeworkPaging[status]);
         this.$set(this.homeworkResultList, status, res);
-      })
+      });
+
     },
-    getTestpaperResults(currentTestpaperTab = 0) {
+    getTestpaperResults(currentTestpaperTab = 0, params = {}) {
       const status = this.status[currentTestpaperTab]
 
       MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
         status,
         type: 'testpaper',
+        offset: params.offset || this.testpaperPaging[status].offset || defaultExamPaging[status].offset,
+        limit: params.limit || this.testpaperPaging[status].pageSize || defaultExamPaging[status].pageSize,
       }).then(res => {
-        res.paging.pageSize = res.paging.limit
+        res.paging.page = (res.paging.offset / res.paging.limit) + 1;
+        this.testpaperPaging[status] = Object.assign(this.testpaperPaging[status], res.paging);
         this.$set(this.testpaperResultList, status, res);
       })
     },
