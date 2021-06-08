@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.esm.js';
 import _ from 'lodash';
 import 'moment';
 import { AssistantPermission } from 'common/vue/service';
-import './iconfont.js';
+import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
