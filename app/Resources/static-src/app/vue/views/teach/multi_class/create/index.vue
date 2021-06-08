@@ -2,9 +2,9 @@
   <aside-layout :breadcrumbs="[{ name: breadcrumbName }]" style="padding-bottom: 88px;">
     <a-form
       :form="form"
-      :label-col="{ span: 4 }"
-      :wrapper-col="{ span: 20 }"
-      style="max-width: 900px;"
+      :label-col="{ span: 3 }"
+      :wrapper-col="{ span: 21 }"
+      style="max-width: 1000px;"
     >
       <a-form-item label="班课名称">
         <a-input
@@ -19,7 +19,7 @@
 
       <a-form-item label="选择课程">
         <a-row :gutter="16">
-          <a-col :span="mode === 'editor' ? 24 : 19">
+          <a-col :span="mode === 'editor' ? 24 : 20">
             <a-select
               show-search
               v-decorator="['courseId', {
@@ -40,7 +40,7 @@
               </a-select-option>
             </a-select>
           </a-col>
-          <a-col :span="5" v-if="mode !== 'editor'">
+          <a-col :span="4" v-if="mode !== 'editor'">
             <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
               <a-icon type="plus" />
               创建新课程
@@ -124,7 +124,7 @@
           {{ mode === 'editor' ? '确定' : '立即创建' }}
         </a-button>
         <a-button @click="clickCancelCreate">
-          取消
+          返回
         </a-button>
       </a-space>
     </div>
@@ -489,14 +489,15 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
-        if (!err) {
-          if (this.mode === 'create') {
-            this.createMultiClass(values);
-            return;
-          }
-          if (this.mode === 'editor') {
-            this.editorMultiClass(values);
-          }
+        if (err) return
+      
+        if (this.mode === 'create') {
+          this.createMultiClass(values);
+          return;
+        }
+
+        if (this.mode === 'editor') {
+          this.editorMultiClass(values);
         }
       });
     },
