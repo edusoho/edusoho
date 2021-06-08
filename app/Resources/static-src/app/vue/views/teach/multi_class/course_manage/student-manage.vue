@@ -101,7 +101,7 @@
             cancel-text="取消"
             @confirm="confirm(record.user.id)"
           >
-            <a v-if="isPermission('course_member_delete')" href="javascript:;">移除</a>
+            <a-button v-if="isPermission('course_member_delete')" type="link">移除</a-button>
           </a-popconfirm>
         </a-space>
       </template>
@@ -453,7 +453,6 @@ export default {
     },
 
     onSelectChange(selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
       this.getSelectedRowKeysQueryStr();
     },
@@ -537,7 +536,6 @@ export default {
           })
         });
       }
-      console.log(str);
       this.selectedRowKeysStr = str;
       this.selectedUserIds = userIds;
     },
