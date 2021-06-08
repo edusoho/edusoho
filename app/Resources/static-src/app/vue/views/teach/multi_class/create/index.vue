@@ -120,11 +120,11 @@
 
     <div class="create-multi-class-btn-group">
       <a-space size="large">
-        <a-button type="primary" @click="handleSubmit">
+        <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
           {{ mode === 'editor' ? '确定' : '立即创建' }}
         </a-button>
         <a-button @click="clickCancelCreate">
-          返回
+          取消
         </a-button>
       </a-space>
     </div>
@@ -147,6 +147,7 @@ export default {
 
   data() {
     return {
+      ajaxLoading: false,
       form: this.$form.createForm(this, { name: 'multi_class_create' }),
       selectedCourseId: 0,
       selectedCourseSetId: 0,
@@ -503,15 +504,21 @@ export default {
     },
 
     createMultiClass(values) {
-      MultiClass.add(values).then(res => {
+      this.ajaxLoading = true
+      MultiClass.add(values).then(() => {
         this.clickCancelCreate();
-      });
+      }).finally(() => {
+        this.ajaxLoading = false
+      })
     },
 
     editorMultiClass(values) {
-      MultiClass.editorMultiClass(this.multiClassId, values).then(res => {
+      this.ajaxLoading = true
+      MultiClass.editorMultiClass(this.multiClassId, values).then(() => {
         this.clickCancelCreate();
-      });
+      }).finally(() => {
+        this.ajaxLoading = false
+      })
     },
 
     clickCancelCreate() {

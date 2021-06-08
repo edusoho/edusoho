@@ -3,7 +3,7 @@
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
         <a-input-search placeholder="请输入班课名称" style="width: 224px"
-          :allowClear="true" 
+          :allowClear="true"
           @search="searchMultiClass" />
         <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
@@ -13,9 +13,13 @@
         :data-source="multiClassList"
         @change="change"
         :rowKey="record => record.id">
-        <a slot="class_title" slot-scope="text, record"
+        <a
+          slot="class_title"
+          slot-scope="text, record"
           href="javascript:;"
-          @click="goToMultiClassManage(record.id)">
+          :title="text"
+          @click="goToMultiClassManage(record.id)"
+        >
           {{ text }}
         </a>
         <a slot="taskNum" slot-scope="text, record"
@@ -24,8 +28,8 @@
           {{ record.endTaskNum }}/{{ record.taskNum }}
         </a>
         <a slot="course" slot-scope="course"
-          :href="`/course/${course.id}`" target="_blank">
-          {{ course.title || course.courseSetTitle }}
+          :href="`/course/${course.id}`" target="_blank" :title="course.courseSetTitle">
+          {{ course.courseSetTitle }}
         </a>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
@@ -40,10 +44,10 @@
           <a-button type="link"
             @click="goToMultiClassManage(record.id)">查看</a-button>
           <a-button v-if="isPermission('multi_class_edit')"
-            type="link" 
+            type="link"
             @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a-button>
           <a-button v-if="isPermission('course_statistics_view')"
-            type="link" 
+            type="link"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a-icon type="ellipsis" @click="e => e.preventDefault()" />

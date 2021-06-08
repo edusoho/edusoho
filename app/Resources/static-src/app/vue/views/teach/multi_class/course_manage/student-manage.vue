@@ -3,41 +3,61 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-        <a-button v-if="isPermission('course_member_create')" type="primary" @click="addStudent()">
+        <a-button
+          v-if="isPermission('course_member_create')"
+          icon="plus"
+          type="primary"
+          @click="addStudent()"
+        >
           添加学员
         </a-button>
-        <a-button v-if="isPermission('course_member_import')" type="primary"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
+        <a-button
+          v-if="isPermission('course_member_import')"
+          type="primary"
+          icon="download"
+          data-toggle="modal"
+          data-target="#modal"
+          data-backdrop="static"
+          data-keyboard="false"
+          :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
         >
           批量导入
         </a-button>
-        <a-button v-if="isPermission('course_member_delete')" type="primary"
-                  icon="upload"
-                  @click="onBatchRemoveStudent"
+        <a-button
+          v-if="isPermission('course_member_delete')"
+          type="primary"
+          @click="onBatchRemoveStudent"
         >
-          批量移除
+          <a-space>
+            <svg-icon icon="icon-remove" />
+            批量移除
+          </a-space>
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
-                  type="primary"
-                  @click="onSelectEmpty"
+        <a-button
+          v-if="selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
+          type="primary"
+          @click="onSelectEmpty"
         >
-          批量修改有效期
+          <a-space>
+            <svg-icon icon="icon-edit" />
+            批量修改有效期
+          </a-space>
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
-                  type="primary"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline?${selectedRowKeysStr}`"
+        <a-button
+          v-if="selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
+          type="primary"
+          data-toggle="modal"
+          data-target="#modal"
+          data-backdrop="static"
+          data-keyboard="false"
+          :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline?${selectedRowKeysStr}`"
         >
-          批量修改有效期
+          <a-space>
+            <svg-icon icon="icon-edit" />
+            批量修改有效期
+          </a-space>
         </a-button>
       </a-space>
 
@@ -71,12 +91,11 @@
       :row-key="record => record.id"
       :pagination="paging"
       :data-source="students"
+      @change="handleStudentTableChange"
     >
       <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
-
-<!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
@@ -133,7 +152,8 @@
         v-if="homeworkResults"
         :columns="resultColumns"
         :data-source="homeworkResults.data"
-        :pagination="homeworkResults.paging"
+        :pagination="homeworkPaging[status[currentHomeworkTab]]"
+        @change="handleHomeworkTableChange"
       >
         <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
         <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--' }}</template>
@@ -145,8 +165,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
@@ -176,7 +194,8 @@
         v-if="testpaperResults"
         :columns="resultColumns"
         :data-source="testpaperResults.data"
-        :pagination="testpaperResults.paging"
+        :pagination="testpaperPaging[status[currentTestpaperTab]]"
+        @change="handleTestpaperTableChange"
       >
         <template slot="lesson" slot-scope="activity, record">{{ activity.title || '--' }}</template>
         <template slot="exam" slot-scope="answerScene, record">{{ answerScene.name || '--'  }}</template>
@@ -188,8 +207,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
@@ -303,6 +320,29 @@ const resultColumns = [
   }
 ];
 
+const defaultExamPaging = {
+  all: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  reviewing: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  doing: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  },
+  finished: {
+    total: 0,
+    offset: 0,
+    pageSize: 10,
+  }
+};
+
 export default {
   components: {
     AddStudentModal,
@@ -336,6 +376,8 @@ export default {
         offset: 0,
         pageSize: 10,
       },
+      testpaperPaging: defaultExamPaging,
+      homeworkPaging: defaultExamPaging,
       status: ['all', 'reviewing', 'doing',  'finished'],
       statusMap: {
         doing: '进行中',
@@ -406,12 +448,60 @@ export default {
         id: this.id,
         keyword: params.keyword ||this.keyword || '',
         offset: params.offset || this.paging.offset || 0,
-        limit: params.limit || this.paging.limit || 10,
+        limit: params.limit || this.paging.pageSize || 10,
       });
       this.students = data;
       paging.page = (paging.offset / paging.limit) + 1;
-      this.paging = paging;
+      this.paging = Object.assign(this.paging, paging);
     },
+
+    handleTestpaperTableChange(pagination) {
+      const status = this.status[this.currentTestpaperTab];
+      const pager = { ...this.testpaperPaging[status] };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize;
+      this.testpaperPaging[status] = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.getTestpaperResults(this.currentTestpaperTab, params);
+    },
+
+    handleHomeworkTableChange(pagination) {
+      const status = this.status[this.currentHomeworkTab];
+      const pager = { ...this.homeworkPaging[status] };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize;
+      this.homeworkPaging[status] = pager;
+
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+      console.log(this.homeworkPaging);
+      console.log(params)
+
+      this.getHomeworkResults(this.currentHomeworkTab, params);
+    },
+
+    handleStudentTableChange(pagination) {
+      const pager = { ...this.paging };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize
+      this.paging = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.getMultiClassStudents(params);
+    },
+
 
     async getMultiClass() {
       await MultiClass.get(this.id).then(res => {
@@ -456,25 +546,33 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
       this.getSelectedRowKeysQueryStr();
     },
-    getHomeworkResults(currentHomeworkTab = 0) {
+    getHomeworkResults(currentHomeworkTab = 0, params = {}) {
       const status = this.status[currentHomeworkTab]
 
       MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
         status,
         type: 'homework',
+        offset: params.offset || this.homeworkPaging[status].offset || defaultExamPaging[status].offset,
+        limit: params.limit || this.homeworkPaging[status].pageSize || defaultExamPaging[status].pageSize,
       }).then(res => {
-        res.paging.pageSize = res.paging.limit
+        res.paging.page = (res.paging.offset / res.paging.limit) + 1;
+        this.homeworkPaging[status] = Object.assign(this.homeworkPaging[status], res.paging);
+        console.log(this.homeworkPaging[status]);
         this.$set(this.homeworkResultList, status, res);
-      })
+      });
+
     },
-    getTestpaperResults(currentTestpaperTab = 0) {
+    getTestpaperResults(currentTestpaperTab = 0, params = {}) {
       const status = this.status[currentTestpaperTab]
 
       MultiClassStudentExam.searchStudentExamResults(this.$route.params.id, this.selectedUser.id, {
         status,
         type: 'testpaper',
+        offset: params.offset || this.testpaperPaging[status].offset || defaultExamPaging[status].offset,
+        limit: params.limit || this.testpaperPaging[status].pageSize || defaultExamPaging[status].pageSize,
       }).then(res => {
-        res.paging.pageSize = res.paging.limit
+        res.paging.page = (res.paging.offset / res.paging.limit) + 1;
+        this.testpaperPaging[status] = Object.assign(this.testpaperPaging[status], res.paging);
         this.$set(this.testpaperResultList, status, res);
       })
     },

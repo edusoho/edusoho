@@ -6,18 +6,14 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudent extends AbstractResource
 {
-    /**
-     * @param $multiClassId
-     *
-     * @return bool[]
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function add(ApiRequest $request, $multiClassId)
     {
         $studentData = $request->request->all();
@@ -28,6 +24,10 @@ class MultiClassStudent extends AbstractResource
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        if (!$this->getCourseService()->hasCourseManagerRole($multiClass['courseId'], 'course_member_create')) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
         }
 
         $courseId = $multiClass['courseId'];
@@ -41,12 +41,14 @@ class MultiClassStudent extends AbstractResource
         return ['success' => true];
     }
 
-    /**
-     * get api/multi_class/{id}/students
-     */
     public function search(ApiRequest $request, $id)
     {
         $multiClass = $this->getMultiClassService()->getMultiClass($id);
+
+        if (!$this->getCourseService()->hasCourseManagerRole($multiClass['courseId'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $conditions = $request->query->all();
         $conditions['courseId'] = $multiClass['courseId'];
         $conditions['role'] = 'student';
@@ -114,6 +116,10 @@ class MultiClassStudent extends AbstractResource
         $multiClass = $this->getMultiClassService()->getMultiClass($id);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
+        }
+
+        if (!$this->getCourseService()->hasCourseManagerRole($multiClass['courseId'], 'course_member_delete')) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
         }
 
         $courseId = $multiClass['courseId'];
@@ -194,11 +200,6 @@ class MultiClassStudent extends AbstractResource
         return $this->service('Course:MemberService');
     }
 
-    private function getTaskService()
-    {
-        return $this->service('Task:TaskService');
-    }
-
     private function getActivityService()
     {
         return $this->service('Activity:ActivityService');
@@ -230,5 +231,13 @@ class MultiClassStudent extends AbstractResource
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

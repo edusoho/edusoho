@@ -49,7 +49,7 @@
                         />
                       </template>
 
-                      <template v-if="thirdLesson.tasks">
+                      <template v-if="thirdLesson.tasks && thirdLesson.tasks.length > 1">
                         <template v-for="fourLesson in thirdLesson.tasks">
                           <a-tree-node class="tree-node-task" :key="fourLesson.id">
                             <template slot="title">
@@ -67,7 +67,7 @@
                   </template>
                 </template>
 
-                <template v-if="secondLesson.tasks">
+                <template v-if="secondLesson.tasks && secondLesson.tasks.length > 1">
                   <template v-for="thirdLesson in secondLesson.tasks">
                     <a-tree-node class="tree-node-task" :key="thirdLesson.id">
                       <template slot="title">
@@ -85,7 +85,7 @@
             </template>
           </template>
 
-          <template v-if="firstLesson.tasks">
+          <template v-if="firstLesson.tasks && firstLesson.tasks.length > 1">
             <template v-for="secondLesson in firstLesson.tasks">
               <a-tree-node class="tree-node-task" :key="secondLesson.id">
                 <template slot="title">
@@ -104,7 +104,7 @@
       </template>
 
     </a-tree>
-     <a-empty style="margin-top: 200px;" v-if="!lessonDirectory.length" />
+     <empty v-if="!lessonDirectory.length" />
   </div>
 </template>
 
@@ -112,12 +112,14 @@
 import { Course } from 'common/vue/service';
 import _ from '@codeages/utils';
 import LessonDirectoryItem from './LessonDirectoryItem.vue';
+import Empty from 'app/vue/views/components/Empty.vue';
 
 export default {
   name: 'LessonDirectory',
 
   components: {
-    LessonDirectoryItem
+    LessonDirectoryItem,
+    Empty
   },
 
   props: {

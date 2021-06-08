@@ -184,8 +184,7 @@ export default {
       columns,
       locale: {
         filterConfirm: '确定',
-        filterReset: '重置',
-        emptyText: '暂无数据'
+        filterReset: '重置'
       },
       multiClassId: this.$route.params.id,
       keywords: '',

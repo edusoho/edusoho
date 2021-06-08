@@ -10687,9 +10687,13 @@ exception.multi_class.can_not_manage_multi_class: No right to manage the multi c
 exception.multi_class.multi_class_course_exist: The Multi class course already exists
 admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
 exception.multi_class.multi_teacher_cannot_be_assistant: The Multi class teacher cannot be assistant
+exception.multi_class.forbidden_delete_course: The course can not delete
+exception.multi_class.forbidden_close_course: The course can not close
 
 site.login.change_to_pwd: Change to account login
 site.login.change_to_sms: Change to sms login
 
 admin.multi_class_copy.success.notify: Your new multi-class《%newTitle%》is copied success from origin multi-class《%originTitle%》！
 admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is copied failed from origin multi-class《%originTitle%》！
+
+course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'

@@ -13,10 +13,11 @@
         <a-input v-decorator="['title', { rules: [
             { required: true, message: '请填写课程名称' },
           ]} ]"
+          placeholder="请输入课程标题"
         />
       </a-form-item>
       <a-form-item label="课程副标题" >
-        <a-textarea auto-size v-decorator="['subTitle']" />
+        <a-textarea auto-size v-decorator="['subTitle']" placeholder="请输入课程副标题" />
       </a-form-item>
       <a-form-item label="封面图片">
         <a-upload
@@ -48,6 +49,7 @@
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
           v-decorator="['teachers', { rules: [{ required: true, message: '请选择授课老师' }] }]"
+          placeholder="请选择授课教师"
         >
           <a-select-option v-for="item in teacher.list" :key="item.id">
             {{ item.nickname }}
@@ -64,6 +66,7 @@
           @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
+          placeholder="请选择一个或多个助教"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id">
             {{ item.nickname }}
@@ -74,7 +77,9 @@
         <a-input
           v-decorator="['originPrice', { initialValue: 0, rules: [
             { validator: validatePrice, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' }
-          ] }]">
+          ] }]"
+          placeholder="请输入产品价格"
+        >
             <span slot="suffix">元</span>
           </a-input>
       </a-form-item>
@@ -103,9 +108,13 @@
       </a-form-item>
       <a-form-item label="课程人数" v-if="form.getFieldValue('type') === 'live'">
         <a-input
-          v-decorator="['maxStudentNum', {
-            rules: [{ required: true, message: '请输入课程人数' }]
-          }]">
+          style="width: 100%;"
+          v-decorator="['maxStudentNum', { rules: [
+            { required: true, message: '请输入课程人数' },
+            { validator: validateRange },
+          ]}]"
+          placeholder="请输入课程人数"
+        >
             <span slot="suffix">人</span>
           </a-input>
       </a-form-item>
@@ -117,14 +126,14 @@
       </a-form-item>
       <a-form-item label="加入截止日期">
         <div style="overflow: hidden">
-          <a-radio-group class="pull-left mt3" style="width: 100%;"
-            :options="[{ label: '不限制', value: '1' }, { label: '自定义', value: '0' }]"
+          <a-radio-group class="pull-left mt3"
+            :options="[{ label: '不限制', value: '0' }, { label: '自定义', value: '1' }]"
             v-decorator="['enableBuyExpiryTime', {
-              initialValue: '1',
+              initialValue: '0',
               rules: [{ required: true, message: '请输入加入截止日期' }]
             }]"
           />
-          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
+          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '1'">
             <a-date-picker placeholder=""
               v-decorator="['buyExpiryTime', {
                 rules: [{ required: true, message: '请输入加入截止日期' }]
@@ -199,7 +208,7 @@
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="goToMultiClassCreatePage()">返回</a-button>
+      <a-button @click="goToMultiClassCreatePage()">取消</a-button>
     </div>
 
     <a-modal
@@ -224,7 +233,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teacher, Assistant, Course, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
+  import { Teacher, Assistant, CourseSet, UploadToken, File, LiveCapacity } from 'common/vue/service/index.js';
 
   export default {
     name: 'CreateCourse',
@@ -272,11 +281,13 @@
         imgs: null,
         imageUploadUrl: '/editor/upload?token=',
         flashUploadUrl: '/editor/upload?token=',
+        liveCapacity: 0,
       };
     },
     created() {
       this.fetchAssistants();
       this.fetchTeacher();
+      this.getLiveCapacity();
     },
     async mounted() {
       await this.getEditorUploadToken()
@@ -303,19 +314,19 @@
 
         return Promise.resolve(1);
       },
-      
+
+      async getLiveCapacity() {
+        const { capacity } = await LiveCapacity.search()
+
+        this.liveCapacity = Number(capacity)
+      },
+
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
 
           this.ajaxLoading = true
-          values.summary = this.editor.getData()
-          values.teachers = [values.teachers]
-          values = _.assignIn(values, this.formInfo)
-
-          if (this.imgs) {
-            values.images = this.imgs;
-          }
+          values = this.formatValues(values)
 
           try {
             const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
@@ -328,6 +339,27 @@
             this.ajaxLoading = false;
           }
         })
+      },
+
+      formatValues(values = {}) {
+        values.summary = this.editor.getData()
+        values.teachers = [values.teachers]
+        values = _.assignIn(values, {
+          buyable: Number(this.formInfo.buyable)
+        })
+
+        if (this.imgs) {
+          values.images = this.imgs;
+        }
+
+        for (const key in values) {
+          if (['buyExpiryTime', 'expiryStartDate', 'expiryEndDate', 'deadline'].includes(key)) {
+            values[key] = (new Date(values[key])).getTime()
+            values[key] = _.floor(values[key] / 1000)
+          }
+        }
+
+        return values
       },
 
       fetchTeacher() {
@@ -409,6 +441,7 @@
           this.fetchAssistants();
         }
       }, 300),
+
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },
@@ -502,7 +535,7 @@
           this.$router.go(-1)
           return
         }
-        
+
         if (_.isObject(course)) {
           this.$router.replace({
             name: 'MultiClassCreate',
@@ -515,6 +548,17 @@
       validatePrice(rule, value, callback) {
         if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {
           callback(rule.message)
+        }
+
+        callback()
+      },
+      validateRange(rule, value, callback) {
+        value = Number(value)
+
+        if (!_.isInteger(value) || value < 0) {
+          callback(`请输入正整数`)
+        } else if (value > this.liveCapacity) {
+          callback(`网校可支持最多${this.liveCapacity}人同时参加直播。`)
         }
 
         callback()

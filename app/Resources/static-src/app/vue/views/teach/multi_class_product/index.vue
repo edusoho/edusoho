@@ -3,9 +3,9 @@
     <a-spin class="multi-class-product" :spinning="getListLoading || ajaxProductLoading">
       <div class="clearfix">
         <a-input-search placeholder="请输入产品名称"
-          v-model="title"
-          :allowClear="true"
-          style="width: 262px" @search="searchProductList" />
+                        v-model="title"
+                        :allowClear="true"
+                        style="width: 262px" @search="searchProductList" />
 
         <a-button class="pull-right" type="primary" @click="createMultiClassProduct">
           新建产品
@@ -25,11 +25,11 @@
 
       <div class="text-center">
         <a-pagination class="mt6"
-          v-if="paging && productList.length > 0"
-          v-model="paging.page"
-          :total="paging.total"
-          show-less-items
-          @change="onChangePagination"
+                      v-if="paging && productList.length > 0"
+                      v-model="paging.page"
+                      :total="paging.total"
+                      show-less-items
+                      @change="onChangePagination"
         />
       </div>
 
@@ -47,7 +47,8 @@
               placeholder="请输入产品名称"
               v-decorator="['title', { rules: [
                 { required: true, message: '产品名称不能为空' },
-                { validator: validatorTitle, message: '' }
+                { validator: validatorTitle },
+                { validator: validatorLen },
               ] }]"
             />
           </a-form-item>
@@ -63,8 +64,8 @@
             取消
           </a-button>
           <a-button key="submit" type="primary"
-            :loading="ajaxProductLoading"
-            @click="ajaxMultiClassProduct">
+                    :loading="ajaxProductLoading"
+                    @click="ajaxMultiClassProduct">
             确认
           </a-button>
         </template>
@@ -74,157 +75,123 @@
         :product="currentProduct"
         :visible="multiClassModalVisible"
         @close="event => multiClassModalVisible = event" />
+
+      <empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
+
     </a-spin>
 
-    <a-empty v-if="!(getListLoading || ajaxProductLoading) && !productList.length" />
   </aside-layout>
 </template>
 
 <script>
-  import AsideLayout from 'app/vue/views/layouts/aside.vue';
-  import _ from 'lodash';
-  import { MultiClassProduct, ValidationTitle } from 'common/vue/service';
-  import ProductCard from './ProductCard.vue';
-  import MultiClassModal from './MultiClassModal.vue';
+import AsideLayout from 'app/vue/views/layouts/aside.vue';
+import _ from 'lodash';
+import { MultiClassProduct, ValidationTitle } from 'common/vue/service';
+import ProductCard from './ProductCard.vue';
+import MultiClassModal from './MultiClassModal.vue';
+import Empty from 'app/vue/views/components/Empty.vue';
 
-  export default {
-    name: 'MultiClassProduct',
-    components: {
-      ProductCard,
-      MultiClassModal,
-      AsideLayout
-    },
-    props: {},
-    data () {
-      return {
-        modalVisible: false,
-        multiClassModalVisible: false,
-        form: this.$form.createForm(this),
-        productList: [],
-        paging: {
-          offset: 0,
-          limit: 9,
-          total: 0,
-        },
-        title: '',
-        getListLoading: false,
-        ajaxProductLoading: false,
-        editingProduct: null,
-        currentProduct: {},
-        modalTitle: ''
-      };
-    },
-    created() {
-      this.getProductList()
-    },
-    methods: {
-      async getProductList (params = {}) {
-        this.getListLoading = true;
-        try {
-          const { data, paging } = await MultiClassProduct.search({
-            keywords: params.title || this.title,
-            offset: params.offset || this.paging.offset || 0,
-            limit: params.limit || this.paging.limit || 9,
-          })
-          paging.page = (paging.offset / paging.limit) + 1;
-
-          this.productList = data;
-          this.paging = paging
-        } finally {
-          this.getListLoading = false;
-        }
+export default {
+  name: 'MultiClassProduct',
+  components: {
+    ProductCard,
+    MultiClassModal,
+    AsideLayout,
+    Empty
+  },
+  props: {},
+  data () {
+    return {
+      modalVisible: false,
+      multiClassModalVisible: false,
+      form: this.$form.createForm(this),
+      productList: [],
+      paging: {
+        offset: 0,
+        limit: 9,
+        total: 0,
       },
-      searchProductList (title = '') {
-        this.getProductList({ title })
-      },
-      createMultiClassProduct(){
-        this.modalVisible = true;
-        this.modalTitle = '新建产品'
-      },
-      validatorTitle: _.debounce(async function(rule, value, callback) {
-        if (this.calculateByteLength(value) > 40) {
-          this.form.setFields({
-            title: { value, errors: [new Error('产品名称不能超过40个字符，一个中文字算2个字符')] }
-          })
-          callback('产品名称不能超过40个字符，一个中文字算2个字符')
-
-          return
-        }
-
-        const result = await this.checkTitle()
-
-        if (!result) {
-          this.form.setFields({
-            title: { value, errors: [new Error('产品名称不能与已创建的相同')] }
-          })
-          callback('产品名称不能与已创建的相同')
-
-          return;
-        }
-
-        callback()
-      }, 300),
-      calculateByteLength(string = '') {
-        let length = string.length;
-
-        for (let i = 0; i < string.length; i++) {
-          if (string.charCodeAt(i) > 127)
-            length++;
-        }
-
-        return length;
-      },
-      ajaxMultiClassProduct (e) {
-        e.preventDefault();
-        if (this.editingProduct) {
-          this.editMultiClassProduct()
-        } else {
-          this.addMultiClassProduct()
-        }
-      },
-
-      async checkTitle() {
-        const title = this.form.getFieldValue('title')
-        const { result } = await ValidationTitle.search({
-          type: 'multiClassProduct',
-          title: title,
-          exceptId: this.editingProduct ? this.editingProduct.id : 0
+      title: '',
+      getListLoading: false,
+      ajaxProductLoading: false,
+      editingProduct: null,
+      currentProduct: {},
+      modalTitle: ''
+    };
+  },
+  created() {
+    this.getProductList()
+  },
+  methods: {
+    async getProductList (params = {}) {
+      this.getListLoading = true;
+      try {
+        const { data, paging } = await MultiClassProduct.search({
+          keywords: params.title || this.title,
+          offset: params.offset || this.paging.offset || 0,
+          limit: params.limit || this.paging.limit || 9,
         })
+        paging.page = (paging.offset / paging.limit) + 1;
 
-        if (!result) {
-          this.form.setFields({
-            title: { value: title, errors: [new Error('产品名称不能与已创建的相同')] }
-          })
-          return Promise.resolve(0)
-        }
+        this.productList = data;
+        this.paging = paging
+      } finally {
+        this.getListLoading = false;
+      }
+    },
+    searchProductList (title = '') {
+      this.getProductList({ title })
+    },
+    createMultiClassProduct(){
+      this.modalVisible = true;
+      this.modalTitle = '新建产品'
+    },
+    validatorTitle: _.debounce(async function(rule, value, callback) {
+      const { result } = await ValidationTitle.search({
+        type: 'multiClassProduct',
+        title: value,
+        exceptId: this.editingProduct ? this.editingProduct.id : 0
+      })
 
-        return Promise.resolve(1)
-      },
-      async addMultiClassProduct () {
-        const title = this.form.getFieldValue('title')
+      if (!result) {
+        callback('产品名称不能与已创建的相同')
+      }
 
-        this.ajaxProductLoading = true;
+      callback()
+    }, 300),
+    validatorLen(rule, value, callback) {
+      if (this.calculateByteLength(value) > 40) {
+        callback('产品名称不能超过40个字符，一个中文字算2个字符')
+      }
 
-        if (this.calculateByteLength(title) > 40) {
-          this.form.setFields({
-            title: { value: title, errors: [new Error('产品名称不能超过40个字符，一个中文字算2个字符')] }
-          })
-          this.ajaxProductLoading = false
-          return
-        }
+      callback()
+    },
+    calculateByteLength(string = '') {
+      let length = string.length;
 
-        const result = await this.checkTitle();
+      for (let i = 0; i < string.length; i++) {
+        if (string.charCodeAt(i) > 127) length++;
+      }
 
-        if (!result) {
-          this.ajaxProductLoading = false;
-          return
-        }
+      return length;
+    },
+    ajaxMultiClassProduct (e) {
+      e.preventDefault();
+      if (this.editingProduct) {
+        this.editMultiClassProduct()
+      } else {
+        this.addMultiClassProduct()
+      }
+    },
+    async addMultiClassProduct () {
+      this.form.validateFields(async (err, values) => {
+        if (err) return
 
         try {
-          const values = this.form.getFieldsValue()
+          this.ajaxProductLoading = true;
+
           const { error } = await MultiClassProduct.add(values)
 
-          this.ajaxProductLoading = false;
           this.modalVisible = false;
           this.form.resetFields();
 
@@ -234,62 +201,63 @@
         } finally {
           this.ajaxProductLoading = false;
         }
-      },
-      startEditMultiClassProduct (product) {
-        this.editingProduct = product;
-        this.modalVisible = true;
-        this.modalTitle = '编辑产品';
-        this.$nextTick(() => {
-          this.form.setFieldsValue({
-            title: product.title || '',
-            remark: product.remark || '',
-          });
-        })
-      },
-      editMultiClassProduct () {
-        this.form.validateFields(async (err, values) => {
-          if (err) return
-
-          this.ajaxProductLoading = true;
-
-          try {
-            const { error } = await MultiClassProduct.update({...values, id: this.editingProduct.id })
-
-            this.editingProduct = null;
-            this.modalVisible = false;
-            this.form.resetFields();
-
-            if (!error) {
-              this.getProductList({ title: this.title })
-            }
-          } finally {
-            this.ajaxProductLoading = false;
-          }
+      })
+    },
+    startEditMultiClassProduct (product) {
+      this.editingProduct = product;
+      this.modalVisible = true;
+      this.modalTitle = '编辑产品';
+      this.$nextTick(() => {
+        this.form.setFieldsValue({
+          title: product.title || '',
+          remark: product.remark || '',
         });
-      },
-      async deleteMultiClassProduct ({ id, title }) {
-        const { success } = await MultiClassProduct.delete({ id })
+      })
+    },
+    editMultiClassProduct () {
+      this.form.validateFields(async (err, values) => {
+        if (err) return
 
-        if (success) {
-          this.getProductList()
+        this.ajaxProductLoading = true;
+
+        try {
+          const { error } = await MultiClassProduct.update({...values, id: this.editingProduct.id })
+
+          this.editingProduct = null;
+          this.modalVisible = false;
+          this.form.resetFields();
+
+          if (!error) {
+            this.getProductList({ title: this.title })
+          }
+        } finally {
+          this.ajaxProductLoading = false;
         }
-      },
-      async lookoverMultiClass (product) {
-        this.currentProduct = product;
-        this.multiClassModalVisible = true;
-      },
-      closeModal() {
-        this.form.resetFields();
-        this.modalVisible = false;
-        this.editingProduct = null;
-      },
+      });
+    },
+    async deleteMultiClassProduct ({ id, title }) {
+      const { success } = await MultiClassProduct.delete({ id })
 
-      onChangePagination(current) {
-        this.paging.offset = (current - 1) * this.paging.limit;
-        this.getProductList();
+      if (success) {
+        this.getProductList()
       }
+    },
+    async lookoverMultiClass (product) {
+      this.currentProduct = product;
+      this.multiClassModalVisible = true;
+    },
+    closeModal() {
+      this.form.resetFields();
+      this.modalVisible = false;
+      this.editingProduct = null;
+    },
+
+    onChangePagination(current) {
+      this.paging.offset = (current - 1) * this.paging.limit;
+      this.getProductList();
     }
   }
+}
 </script>
 
 <style>
