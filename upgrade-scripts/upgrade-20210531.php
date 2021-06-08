@@ -179,7 +179,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $permissions = [
             'multi_class_manage',
             'course_manage',
-            'course_lesson_manage',
             'course_member_manage',
             'course_member_create',
             'course_member_deadline_edit',
@@ -193,7 +192,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'course_question_marker_manage',
             'course_order_manage',
         ];
-        $this->getSettingService()->set('assistant_permission', $permissions);
+        $this->getSettingService()->set('assistant_permission', ['permissions' => $permissions]);
 
         return 1;
     }
