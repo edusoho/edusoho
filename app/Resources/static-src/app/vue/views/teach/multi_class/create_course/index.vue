@@ -103,9 +103,11 @@
       </a-form-item>
       <a-form-item label="课程人数" v-if="form.getFieldValue('type') === 'live'">
         <a-input
-          v-decorator="['maxStudentNum', {
-            rules: [{ required: true, message: '请输入课程人数' }]
-          }]">
+          style="width: 100%;"
+          v-decorator="['maxStudentNum', { rules: [
+            { required: true, message: '请输入课程人数' },
+            { validator: validateRange },
+          ]}]">
             <span slot="suffix">人</span>
           </a-input>
       </a-form-item>
@@ -224,7 +226,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teacher, Assistant, Course, CourseSet, UploadToken, File } from 'common/vue/service/index.js';
+  import { Teacher, Assistant, CourseSet, UploadToken, File, CourseLiveCapacity } from 'common/vue/service/index.js';
 
   export default {
     name: 'CreateCourse',
@@ -272,11 +274,13 @@
         imgs: null,
         imageUploadUrl: '/editor/upload?token=',
         flashUploadUrl: '/editor/upload?token=',
+        liveCapacity: 0,
       };
     },
     created() {
       this.fetchAssistants();
       this.fetchTeacher();
+      this.getLiveCapacity();
     },
     async mounted() {
       await this.getEditorUploadToken()
@@ -302,6 +306,12 @@
         this.flashUploadUrl += token
 
         return Promise.resolve(1);
+      },
+
+      async getLiveCapacity() {
+        const { capacity } = await CourseLiveCapacity.search({ id: 0 })
+
+        this.liveCapacity = capacity
       },
       
       saveCourseSet() {
@@ -531,6 +541,15 @@
       validatePrice(rule, value, callback) {
         if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {
           callback(rule.message)
+        }
+
+        callback()
+      },
+      validateRange(rule, value, callback) {
+        if (!_.isInteger(Number(value)) || value < 0) {
+          callback(`请输入正整数`)
+        } else if (value > this.liveCapacity) {
+          callback(`网校可支持最多${this.liveCapacity}人同时参加直播。`)
         }
 
         callback()
