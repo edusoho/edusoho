@@ -17,7 +17,7 @@
         />
       </a-form-item>
       <a-form-item label="课程副标题" >
-        <a-textarea auto-size v-decorator="['subTitle']" placeholder="请输入课程副标题" />
+        <a-textarea auto-size v-decorator="['subtitle']" placeholder="请输入课程副标题" />
       </a-form-item>
       <a-form-item label="封面图片">
         <a-upload

@@ -157,7 +157,7 @@ class CourseSet extends AbstractResource
         return ArrayToolkit::parts($data, [
             'serializeMode',
             'categoryId',
-            'subTitle',
+            'subtitle',
             'summary',
             'title',
         ]);
