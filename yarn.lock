@@ -979,10 +979,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@codeages/design-vue@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/@codeages/design-vue/-/design-vue-1.0.2.tgz#edc8bffc696edeef241343933b3b2a925d205e1e"
-  integrity sha512-VGY1U67J3jCzePV1Wz16gkO0CGfdQQRue0pwO6kn5I3Akv5/AnivxHSqYugK5xFWp45+FoW9aLzKDKDhrheHlg==
+"@codeages/design-vue@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/@codeages/design-vue/-/design-vue-1.0.3.tgz#2cacf050353b06bf2bf36770d72ecee780d320e4"
+  integrity sha512-g1m7G7v/uDHFKjiT7v2+TQVdN2hV697hypdbYQZg+/xZ3dLxI30XHiuOOMDWQM86wf7ulMCBuTUo3rJshPpVCw==
   dependencies:
     "@ant-design/icons" "^2.1.1"
     "@ant-design/icons-vue" "^2.0.0"

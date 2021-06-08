@@ -14,7 +14,7 @@
           </template>
         </a-breadcrumb-item>
       </a-breadcrumb>
-      <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a>
+      <!-- <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a> -->
     </div>
 
     <div class="aside-layout-main">
