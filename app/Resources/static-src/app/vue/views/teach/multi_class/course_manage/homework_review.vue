@@ -208,7 +208,11 @@ export default {
       }
     };
   },
-
+  watch: {
+    currentTab(currentTab) {
+      this.getExamResults(currentTab)
+    },
+  },
   computed: {
     examResults() {
       const key = this.status[this.currentTab];
@@ -239,9 +243,12 @@ export default {
       }
     },
     showResultListModal(type, record) {
+      const currentTab = this.status.indexOf(type);
       this.currentTask = record;
-      this.currentTab = this.status.indexOf(type);
-      this.getExamResults(this.currentTab);
+      this.currentTab = currentTab;
+      if (this.currentTab == currentTab) {
+        this.getExamResults(currentTab);
+      }
       this.modalVisible = true;
     },
     getExamResults(currentTab = 0) {
