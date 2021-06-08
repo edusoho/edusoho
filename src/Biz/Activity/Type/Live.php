@@ -13,14 +13,14 @@ class Live extends Activity
 {
     protected function registerListeners()
     {
-        return array(
+        return [
             'watching' => 'Biz\Activity\Listener\LiveActivityWatchListener',
-        );
+        ];
     }
 
     public function preCreateCheck($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
+        if (!ArrayToolkit::requireds($fields, ['fromCourseId', 'startTime', 'length'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -41,7 +41,7 @@ class Live extends Activity
             return;
         }
 
-        if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
+        if (!ArrayToolkit::requireds($newFields, ['fromCourseId', 'startTime', 'length'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -65,7 +65,7 @@ class Live extends Activity
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $user = $this->getCurrentUser();
         $live = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
@@ -119,7 +119,7 @@ class Live extends Activity
             $this->getUploadFileService()->updateUsedCount($fileId);
         }
 
-        $conditions = array('type' => 'live', 'mediaId' => $targetId);
+        $conditions = ['type' => 'live', 'mediaId' => $targetId];
         $count = $this->getActivityService()->count($conditions);
         if (1 == $count) {
             return $this->getLiveActivityService()->deleteLiveActivity($targetId);

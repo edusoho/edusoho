@@ -19,6 +19,6 @@ class ActivityLiveAddFileids extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `activity_live` DROP COLUMN `fileIds`;");
+        $biz['db']->exec('ALTER TABLE `activity_live` DROP COLUMN `fileIds`;');
     }
 }

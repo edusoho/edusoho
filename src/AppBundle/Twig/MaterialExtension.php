@@ -22,22 +22,22 @@ class MaterialExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('convert_materials', array($this, 'convertMaterials')),
-        );
+        return [
+            new \Twig_SimpleFilter('convert_materials', [$this, 'convertMaterials']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('find_materials_by_activity_id_and_source', array($this, 'findMaterialsByActivityIdAndSource')),
-        );
+        return [
+            new \Twig_SimpleFunction('find_materials_by_activity_id_and_source', [$this, 'findMaterialsByActivityIdAndSource']),
+        ];
     }
 
     public function findMaterialsByActivityIdAndSource($activityId, $source)
     {
         if (empty($activityId)) {
-            return array();
+            return [];
         }
 
         $conditions = [
@@ -61,10 +61,10 @@ class MaterialExtension extends \Twig_Extension
 
     public function convertMaterials($materials)
     {
-        $newMaterials = array();
+        $newMaterials = [];
         foreach ($materials as $material) {
             $id = empty($material['fileId']) ? $material['link'] : $material['fileId'];
-            $newMaterials[$id] = array('id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']);
+            $newMaterials[$id] = ['id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']];
         }
 
         return $newMaterials;

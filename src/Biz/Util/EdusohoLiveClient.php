@@ -2,8 +2,8 @@
 
 namespace Biz\Util;
 
-use Biz\CloudPlatform\CloudAPIFactory;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class EdusohoLiveClient
 {
@@ -43,9 +43,9 @@ class EdusohoLiveClient
 
     public function getCapacity()
     {
-        $args = array(
+        $args = [
             'timestamp' => time().'',
-        );
+        ];
 
         return $this->createCloudApi('leaf')->get('/lives/capacity', $args);
     }
@@ -57,18 +57,18 @@ class EdusohoLiveClient
 
     public function deleteLive($liveId)
     {
-        $args = array(
+        $args = [
             'liveId' => $liveId,
-        );
+        ];
 
         return $this->createCloudApi('root')->delete('/lives/'.$liveId, $args);
     }
 
     public function getMaxOnline($liveId)
     {
-        $args = array(
+        $args = [
             'liveId' => $liveId,
-        );
+        ];
 
         return $this->createCloudApi('leaf')->get('/lives/'.$liveId.'/max_online', $args);
     }
@@ -85,20 +85,20 @@ class EdusohoLiveClient
 
     public function createReplayList($liveId, $title, $provider)
     {
-        $args = array(
+        $args = [
             'liveId' => $liveId,
             'title' => $title,
             'provider' => $provider,
-        );
+        ];
 
         return $this->createCloudApi('root')->post('/lives/'.$liveId.'/records', $args);
     }
 
     public function isAvailableRecord($liveId, $server = 'root')
     {
-        $args = array(
+        $args = [
             'liveId' => $liveId,
-        );
+        ];
 
         $response = $this->createCloudApi($server)->get('/lives/'.$liveId.'/available_record', $args);
 
@@ -107,11 +107,11 @@ class EdusohoLiveClient
 
     public function setLiveLogo($logoData)
     {
-        $filter = array(
+        $filter = [
             'logoPcUrl',
             'logoClientUrl',
             'logoGotoUrl',
-        );
+        ];
 
         $logoData = ArrayToolkit::parts($logoData, $filter);
 
@@ -127,7 +127,7 @@ class EdusohoLiveClient
      */
     public function checkLiveStatus($lives)
     {
-        $args = array('liveIds' => $lives);
+        $args = ['liveIds' => $lives];
 
         return $this->createCloudApi('leaf')->get('/lives/rooms_status', $args);
     }
@@ -144,7 +144,7 @@ class EdusohoLiveClient
 
     public static function isEsLive($liveProvider)
     {
-        return in_array($liveProvider, array(self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER));
+        return in_array($liveProvider, [self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER]);
     }
 
     public function getLiveRoomCheckinList($liveId)

@@ -138,7 +138,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
-            if ($liveActivity['liveProvider'] == EdusohoLiveClient::SELF_ES_LIVE_PROVIDER) {
+            if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
                 $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
                 $this->createLiveroomCourseware($liveActivity['liveId'], $fileIds);
             }
@@ -309,13 +309,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         ]);
 
         // 给直播间（自研）添加课件
-        if (isset($live['provider']) && $live['provider'] == EdusohoLiveClient::SELF_ES_LIVE_PROVIDER && $activity['fileIds']) {
+        if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider'] && $activity['fileIds']) {
             $this->createLiveroomCourseware($live['id'], $activity['fileIds']);
         }
 
         return $live;
     }
-
 
     /**
      * @param  $liveId
