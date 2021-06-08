@@ -34,22 +34,20 @@
             </a>
           {% endif %}
         </li>
-        {% if not assistant.isAssistant or 'course_lesson_manage' in assistant.permissions %}
-          <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}">
-            {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}
-              </a>
-            {% else %}
-              <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-                {{ 'course.plan_task'|trans }}
-                {% if hasLessonChanged|default(0) %}
-                  <i class="es-icon es-icon-tip color-danger"></i>
-                {% endif %}
-              </a>
-            {% endif %}
-          </li>
-        {% endif %}
+        <li class="cd-sidebar__item {% if course_side_nav == 'tasks' %}active{% endif %}">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}
+            </a>
+          {% else %}
+            <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.plan_task'|trans }}
+              {% if hasLessonChanged|default(0) %}
+                <i class="es-icon es-icon-tip color-danger"></i>
+              {% endif %}
+            </a>
+          {% endif %}
+        </li>
 
         {% if not assistant.isAssistant or 'course_announcement_manage' in assistant.permissions %}
           <li class="cd-sidebar__item {% if course_side_nav == 'announcements' %}active{% endif %}">

@@ -20,6 +20,8 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Product\Service\ProductService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
@@ -140,7 +142,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return $user->isTeacher();
+            return $user->hasPermission('admin_v2_course_content_manage');
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
@@ -526,6 +528,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $subCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($id, 1);
         if (!empty($subCourseSets)) {
             $this->createNewException(CourseSetException::SUB_COURSESET_EXIST());
+        }
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $multiClasses = $this->getMultiClassService()->findMultiClassesByCourseIds(ArrayToolkit::column($courses, 'id'));
+        if (!empty($multiClasses)) {
+            $this->createNewException(MultiClassException::FORBIDDEN_DELETE_MULTI_CLASS_COURSE());
         }
 
         $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
@@ -1269,5 +1277,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 }

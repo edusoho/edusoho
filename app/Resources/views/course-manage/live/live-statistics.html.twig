@@ -2,6 +2,7 @@
 
 {% block title %}{{ 'course.live_statistics'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'live-statistics' %}
+{% set assistant = data('AssistantPermission', {courseId: course.id}) %}
 
 {% block page_title %}{{ 'course.live_statistics'|trans }}{% endblock %}
 {% block main_body %}
@@ -15,14 +16,16 @@
         <i class="cd-icon cd-icon-search"></i>
       </button>
     </div>
-    {% include 'export/export-btn.html.twig' with
-      {
-        'exportFileName' : 'course-live-statistics-list',
-        'targetFormId': 'live-statistics',
-        'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
-        'exportWebpack': 'ture'
-      }
-    %}
+    {% if not assistant.isAssistant or 'course_live_data_export' in assistant.permissions %}
+      {% include 'export/export-btn.html.twig' with
+        {
+          'exportFileName' : 'course-live-statistics-list',
+          'targetFormId': 'live-statistics',
+          'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
+          'exportWebpack': 'ture'
+        }
+      %}
+    {% endif %}
 
     <div id="export-modal" class="hide">
       <div class="modal-dialog">
