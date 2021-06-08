@@ -1,8 +1,8 @@
 <template>
   <div class="class-info">
-    <div class="clearfix" style="margin-bottom: 24px;">
+    <div class="clearfix" style="margin-bottom: 16px;">
       <a-input-search class="pull-left" placeholder="请输入课时关键字搜索" style="width: 260px" @search="onSearch" />
-      <a-button class="pull-right" type="primary" @click="goToEditorLesson">
+      <a-button class="pull-right" type="primary" @click="goToEditorLesson" v-if="isPermission('course_lesson_manage')">
         重排课时/新增课时
       </a-button>
     </div>
@@ -61,25 +61,25 @@
         </a-dropdown>
 
         <a class="ant-dropdown-link"
-           v-if="isPermission('course_lesson_edit')"
+           v-if="isPermission('course_lesson_manage')"
           href="javascript:;"
           data-toggle="modal"
           data-target="#modal"
           :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a>
 
-        <a-dropdown :trigger="['hover']" placement="bottomRight">
+        <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_manage')">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
-            <a-menu-item v-if="record.tasks.status == 'published'" key="unpublish" >
+            <a-menu-item v-if="record.tasks.status == 'published' && isPermission('course_lesson_manage')" key="unpublish" >
               取消发布
             </a-menu-item>
             <template v-else>
-              <a-menu-item key="publish">
+              <a-menu-item key="publish" v-if="isPermission('course_lesson_manage')">
                 立即发布
               </a-menu-item>
-              <a-menu-item key="delete" v-if="isPermission('course_lesson_delete')">
+              <a-menu-item key="delete" v-if="isPermission('course_lesson_manage')">
                 删除
               </a-menu-item>
             </template>
@@ -128,7 +128,6 @@ const columns = [
     title: '开课时间',
     dataIndex: 'startTime',
     width: '13%',
-    sorter: true,
     scopedSlots: { customRender: 'startTime' }
   },
   {
@@ -201,7 +200,11 @@ export default {
     this.fetchMultiClass();
 
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchLessons();
+      const params = {
+        limit: 10,
+        offset: (this.pagination.current - 1) * 10
+      };
+      this.fetchLessons(params);
     })
   },
 
@@ -299,7 +302,11 @@ export default {
           Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
-              this.fetchLessons();
+              _.forEach(this.data, (item, index) => {
+                if (item.tasks.id == id) {
+                  this.data.splice(index, 1);
+                }
+              });
             }
           });
         }

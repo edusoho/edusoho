@@ -82,7 +82,7 @@
 
       <assistant slot="assistants" slot-scope="assistants" :assistant="assistants" />
 
-      <a slot="threadCount" slot-scope="threadCount">{{ threadCount }}</a>
+      <template slot="threadCount" slot-scope="threadCount">{{ threadCount }}</template>
 
       <a slot="finishedHomeworkCount" @click="onClickHomeworkModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.homeworkCount }}</a>
 

@@ -36,7 +36,7 @@ class MultiClassClone extends AbstractResource
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => intval(time() + 10),
                 'class' => 'Biz\MultiClass\Job\CloneMultiClassJob',
-                'args' => ['multiClassId' => $id, 'cloneMultiClass' => $cloneMultiClass],
+                'args' => ['multiClassId' => $id, 'cloneMultiClass' => $cloneMultiClass, 'userId' => $this->getCurrentUser()->getId()],
                 'misfire_threshold' => 60 * 60,
             ]);
         }

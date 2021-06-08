@@ -1,6 +1,9 @@
 <template>
   <div class="text-overflow">
-    {{ className }}
+    <a-tooltip>
+      <template slot="title">{{ className }}</template>
+      {{ className }}
+    </a-tooltip>
     <br>
     <a-tag v-if="record.tasks.status != 'published'" style="margin-top: 4px;">未发布</a-tag>
   </div>

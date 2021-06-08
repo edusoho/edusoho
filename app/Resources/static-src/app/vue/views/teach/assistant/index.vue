@@ -18,8 +18,8 @@
       @change="handleTableChange"
     >
       <div slot="loginInfo" slot-scope="item">
-        <div>{{ item.loginIp }}</div>
-        <div class="color-gray text-sm">{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
+        <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
       <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>

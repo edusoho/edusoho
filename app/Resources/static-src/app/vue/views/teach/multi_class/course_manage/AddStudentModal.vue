@@ -54,7 +54,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, MultiClassStudent } from 'common/vue/service';
+import { ValidationTitle, CourseMemberCheck } from 'common/vue/service';
 
 export default {
   props: {
@@ -93,17 +93,17 @@ export default {
             this.visible = false;
             window.location.reload();
           }).catch(err => {
-            this.$message.success('学员创建失败', 2);
+            this.$message.warning('学员创建失败', 2);
           });
         }
       });
     },
 
     validatorName: _.debounce(async function(rule, value, callback) {
-      const { result, message } = await ValidationTitle.search('courseStudent', {
-        title: value,
-        exceptId: this.multiClass ? this.multiClass.courseId : 0
-      })
+      const { result, message } = await CourseMemberCheck.checkStudentName(
+        this.multiClass ? this.multiClass.courseId : 0,
+        {title: value}
+        )
 
       if (!result) {
         this.form.setFields({
@@ -120,7 +120,7 @@ export default {
     },
 
     maxPrice(rule, value, callback) {
-      (value > this.multiClass.course.price) ? callback(new Error(Translator.trans('course_manage.student_create.price_max_error_hint'))) : callback();
+      (parseFloat(value) > this.multiClass.course.price) ? callback(new Error(Translator.trans('course_manage.student_create.price_max_error_hint'))) : callback();
     }
   }
 }

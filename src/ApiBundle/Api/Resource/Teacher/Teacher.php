@@ -6,6 +6,7 @@ namespace ApiBundle\Api\Resource\Teacher;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\User\Service\UserService;
 use ApiBundle\Api\Annotation\Access;
 
@@ -14,10 +15,14 @@ class Teacher extends AbstractResource
     /**
      * @param ApiRequest $request
      * @return array
-     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2')) {
+            throw new AccessDeniedException();
+        }
+
         $conditions = [
             'nickname' => $request->query->get('nickname', ''),
             'roles' => '|ROLE_TEACHER|',
