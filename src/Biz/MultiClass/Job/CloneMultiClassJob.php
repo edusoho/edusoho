@@ -7,34 +7,45 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
+use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class CloneMultiClassJob extends AbstractJob
 {
     public function execute()
     {
+        $user = $this->biz['user'];
+        $multiClassId = $this->args['multiClassId'];
+        $cloneMultiClass = $this->args['cloneMultiClass'];
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        $message = [
+            'newTitle' => $cloneMultiClass['title'],
+            'originTitle' => $multiClass['title'],
+        ];
+
         try {
             $this->biz['db']->beginTransaction();
-
-            $multiClassId = $this->args['multiClassId'];
-            $cloneMultiClass = $this->args['cloneMultiClass'];
             $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClassId, $cloneMultiClass);
             $course = $this->getCourseService()->getCourse($newMultiClass['courseId']);
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
             $this->getCourseSetService()->cloneCourseSet($course['courseSetId'], [
-                'title' => empty($cloneMultiClass['courseSetTitle']) ? $courseSet['title']."(复制{$newMultiClass['number']})" : $cloneMultiClass['courseSetTitle'],
+                'title' => $cloneMultiClass['courseSetTitle'],
                 'newMultiClass' => $newMultiClass,
             ]);
-            $multiClass = $this->getMultiClassService()->getMultiClass($newMultiClass['id']);
-            $this->getCourseMemberService()->setCourseTeachers($multiClass['courseId'], [[
+            $newMultiClass = $this->getMultiClassService()->getMultiClass($newMultiClass['id']);
+            $this->getCourseMemberService()->setCourseTeachers($newMultiClass['courseId'], [[
                 'id' => $cloneMultiClass['teacherId'],
-                'isVisable' => 1, ]], $multiClass['id']);
-            $this->getCourseMemberService()->setCourseAssistants($multiClass['courseId'], $cloneMultiClass['assistantIds'], $multiClass['id']);
+                'isVisable' => 1, ]], $newMultiClass['id']);
+            $this->getCourseMemberService()->setCourseAssistants($newMultiClass['courseId'], $cloneMultiClass['assistantIds'], $newMultiClass['id']);
+
+            $message['status'] = 'success';
+            $this->getNotificationService()->notify($user['id'], 'multi-class-copy', $message);
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
             $this->getLogService()->error('multi_class', 'multi_class_clone', "复制班课{$multiClassId}失败", $e->getMessage());
+            $message['status'] = 'failure';
+            $this->getNotificationService()->notify($user['id'], 'multi-class-copy', $message);
         }
     }
 
@@ -76,5 +87,13 @@ class CloneMultiClassJob extends AbstractJob
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    private function getNotificationService()
+    {
+        return $this->biz->service('User:NotificationService');
     }
 }

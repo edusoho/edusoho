@@ -2,7 +2,7 @@
   <div class="class-info">
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-input-search class="pull-left" placeholder="请输入课时关键字搜索" style="width: 260px" @search="onSearch" />
-      <a-button class="pull-right" type="primary" @click="goToEditorLesson" v-if="isPermission('course_lesson_edit') || isPermission('course_lesson_create')">
+      <a-button class="pull-right" type="primary" @click="goToEditorLesson" v-if="isPermission('course_lesson_manage') || isPermission('course_lesson_manage')">
         重排课时/新增课时
       </a-button>
     </div>
@@ -60,25 +60,25 @@
         </a-dropdown>
 
         <a class="ant-dropdown-link"
-           v-if="isPermission('course_lesson_edit')"
+           v-if="isPermission('course_lesson_manage')"
           href="javascript:;"
           data-toggle="modal"
           data-target="#modal"
           :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a>
 
-        <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_edit') || isPermission('course_lesson_delete')">
+        <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_manage')">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
-            <a-menu-item v-if="record.tasks.status == 'published' && isPermission('course_lesson_edit')" key="unpublish" >
+            <a-menu-item v-if="record.tasks.status == 'published' && isPermission('course_lesson_manage')" key="unpublish" >
               取消发布
             </a-menu-item>
             <template v-else>
-              <a-menu-item key="publish" v-if="isPermission('course_lesson_edit')">
+              <a-menu-item key="publish" v-if="isPermission('course_lesson_manage')">
                 立即发布
               </a-menu-item>
-              <a-menu-item key="delete" v-if="isPermission('course_lesson_delete')">
+              <a-menu-item key="delete" v-if="isPermission('course_lesson_manage')">
                 删除
               </a-menu-item>
             </template>
