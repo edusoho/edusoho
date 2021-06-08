@@ -122,9 +122,7 @@ export default class Live {
 
   initEvent() {
     this.$form.on('click', '.js-btn-delete', (event) => this.deleteItem(event));
-    this.$form.on('click', '.js-video-import', () => this.importLink());
     this.$form.on('click', '.js-add-file-list', () => this.addFile());
-    this.$form.on('blur', '#title', (event) => this.changeTitle(event));
     
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
@@ -150,37 +148,6 @@ export default class Live {
     $parent.remove();
   }
 
-  changeTitle(event) {
-    let $this = $(event.currentTarget);
-    this.firstName = $this.val();
-  }
-
-  importLink() {
-    const $link = $('#link');
-    const $verifyLink = $('#verifyLink');
-    if (this.$form.data('validator').valid() && $link.val()) {
-      $verifyLink.val($link.val());
-    } else {
-      $link.val('');
-      $verifyLink.val('');
-    }
-    $('.js-current-file').text($verifyLink.val());
-  }
-
-  addLink() {
-    let verifyLinkVal = $('#verifyLink').val();
-    const data = {
-      source: 'link',
-      id: verifyLinkVal,
-      name: verifyLinkVal,
-      link: verifyLinkVal,
-      summary: $('#file-summary').val(),
-      size: 0
-    };
-
-    $('#media').val(JSON.stringify(data));
-  }
-
   addFile() {
     const $media = $('#media');
     const $materials = $('#materials');
@@ -191,9 +158,6 @@ export default class Live {
     const successTip = 'activity.download_manage.materials_add_success_hint';
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
-    if ($('#verifyLink').val()) {
-      this.addLink();
-    }
     let media = {};  
     if (!isEmpty($media.val())) {
       media = JSON.parse($media.val());
@@ -219,11 +183,6 @@ export default class Live {
     this.materials[this.media.id] = this.media;
     $materials.val(JSON.stringify(this.materials));
 
-    if (!this.firstName) {
-      this.firstName = this.media.name;
-      $('#title').val(this.firstName);
-    }
-
     this.showFile();
 
     this.showTip($errorTipDom, $successTipDom, successTip);
@@ -237,9 +196,8 @@ export default class Live {
     for (let item in this.materials) {
       const materialsItem = this.materials[item];
       const checkFile = materialsItem.title === this.media.title;
-      const checkLink = materialsItem.link && (materialsItem.link === this.media.id);
 
-      if (checkFile || checkLink) {
+      if (checkFile) {
         return true;
       }
     }
@@ -262,8 +220,6 @@ export default class Live {
   showTip($hideDom, $showDom, trans) {
     $hideDom.hide();
     $('.js-current-file').text('');
-    $('#link').val('');
-    $('#verifyLink').val('');
     $('#file-summary').val('');
     $('#media').val('');
     $showDom.text(Translator.trans(trans)).show();
@@ -276,7 +232,6 @@ export default class Live {
     const fileSelect = (file) => {
       $('#media').val(JSON.stringify(file));
       chooserUiOpen();
-      $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
     };
 

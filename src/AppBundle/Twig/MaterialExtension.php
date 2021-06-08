@@ -40,7 +40,23 @@ class MaterialExtension extends \Twig_Extension
             return array();
         }
 
-        return $this->getMaterialService()->findMaterialsByLessonIdAndSource($activityId, $source);
+        $conditions = [
+            'lessonId' => $activityId,
+            'source' => $source,
+        ];
+
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        if (isset($activity['ext']['fileIds'])) {
+            $conditions['fileIds'] = $activity['ext']['fileIds'] ?: [-1];
+        }
+
+        return $this->getMaterialService()->searchMaterials(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
     }
 
     public function convertMaterials($materials)
@@ -52,6 +68,14 @@ class MaterialExtension extends \Twig_Extension
         }
 
         return $newMaterials;
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 
     protected function getCourseSetService()

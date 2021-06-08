@@ -13,6 +13,7 @@ class EdusohoLiveClient
     const LIVE_STATUS_CLOSED = 'closed';
     const OLD_ES_LIVE_PROVIDER = 8;
     const NEW_ES_LIVE_PROVIDER = 9;
+    const SELF_ES_LIVE_PROVIDER = 13;
     const LIVE_ROOM_LARGE = 'large';
     const LIVE_ROOM_SMALL = 'small';
 
@@ -28,6 +29,11 @@ class EdusohoLiveClient
     public function createLive(array $args)
     {
         return $this->createCloudApi('root')->post('/lives', $args);
+    }
+
+    public function createLiveCourseware(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/courseware', $args['resources']);
     }
 
     public function updateLive(array $args)

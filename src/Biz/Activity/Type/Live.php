@@ -59,6 +59,9 @@ class Live extends Activity
 
     public function create($fields)
     {
+        $files = json_decode($fields['materials'], true);
+        $fields['fileIds'] = empty($files) ? [] : array_keys($files);
+
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
@@ -91,6 +94,9 @@ class Live extends Activity
 
     public function update($id, &$fields, $activity)
     {
+        $files = json_decode($fields['materials'], true);
+        $fields['fileIds'] = empty($files) ? [] : array_keys($files);
+
         list($liveActivity, $fields) = $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);
 
         return $liveActivity;
@@ -108,6 +114,11 @@ class Live extends Activity
 
     public function delete($targetId)
     {
+        $live = $this->getLiveActivityService()->getLiveActivity($targetId);
+        foreach ($live['fileIds'] as $fileId) {
+            $this->getUploadFileService()->updateUsedCount($fileId);
+        }
+
         $conditions = array('type' => 'live', 'mediaId' => $targetId);
         $count = $this->getActivityService()->count($conditions);
         if (1 == $count) {
@@ -142,5 +153,13 @@ class Live extends Activity
     private function getActivityDao()
     {
         return $this->getBiz()->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

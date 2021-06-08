@@ -9,6 +9,7 @@
 
 {% set timeDisabled = (activity.startTime|default(0) > 0 and activity.startTime|default(0) <= timestamp() and activity.ext.roomCreated|default() ) ? 1 : 0 %}
 {% set mediaType = activity.mediaType|default('live') %}
+{% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'courseactivity') %}
 
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
@@ -58,24 +59,26 @@
           </div>
       </div>
 
-      <div class="form-group">
-        <div class="col-sm-2 control-label">
-          <label for="materials" class="style control-label-required">{{ 'course.plan_task.activity_manage.live_resource.choose_file'|trans }}</label>
+      {% if setting('live-course.live_provider_code')|default() == 13 %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label for="materials" class="style">{{ 'course.plan_task.activity_manage.live_resource.choose_file'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+            <ul class="live-resource-list" id="material-list">
+              {% for media in medias|default() %}
+                <li class="live-resource-item" data-id="{{ media.fileId }}">
+                  <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
+                  <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.live_resource.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+                </li>
+              {% endfor %}
+            </ul>
+            {% include 'file-chooser/file-choose.html.twig' with {courseId: activity.fromCourseId, mediaType: mediaType, fileType:'document',file: null } %}
+            <input id="materials" class="form-control" type="hidden" name="materials"
+              {% if medias|default() %} value="{{ medias|default()|json_encode }}" {% endif %} >
+          </div>
         </div>
-        <div class="col-sm-10">
-          <ul class="live-resource-list" id="material-list">
-            {% for media in medias|default() %}
-              <li class="live-resource--item" data-id="{{ media.link|default(media.fileId) }}">
-                <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
-                <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.live_resource.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
-              </li>
-            {% endfor %}
-          </ul>
-          {% include 'file-chooser/file-choose.html.twig' with {courseId: activity.fromCourseId, mediaType: mediaType, fileType:'all',file: null } %}
-          <input id="materials" class="form-control" type="hidden" name="materials"
-            {% if medias|default() %} value="{{ medias|default()|json_encode }}" {% endif %} >
-        </div>
-      </div>
+      {% endif %}
 
       <div class="form-group">
           <div class="col-sm-2 control-label">
