@@ -2,6 +2,8 @@ import Vue from 'vue/dist/vue.esm.js';
 import _ from 'lodash';
 import 'moment';
 import { AssistantPermission } from 'common/vue/service';
+import './iconfont.js';
+import SvgIcon from './icons/SvgIcon.vue';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
@@ -58,6 +60,8 @@ if (!window.Vue) {
   Message.config({
     top: `100px`
   });
+
+  Vue.component('svg-icon', SvgIcon);
 }
 
 if (!window.Vue) {
