@@ -57,13 +57,20 @@
         </template>
       </a-table>
     </a-spin>
+
+    <copy-multi-class-modal
+      :id="copyMultiClassId"
+      :visible="copyModalVisible"
+      @event-communication="eventCommunication"
+    />
    </aside-layout>
 </template>
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { MultiClass } from 'common/vue/service/index.js';
+import { MultiClass, MultiClassProduct } from 'common/vue/service/index.js';
 import Assistant from './course_manage/Assistant.vue';
+import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
 const columns = [
   {
@@ -83,6 +90,7 @@ const columns = [
   {
     title: '所属产品',
     dataIndex: 'product',
+    key: 'productId',
     width: '10%',
     ellipsis: true,
     filters: [],
@@ -140,23 +148,28 @@ export default {
 
   components: {
     AsideLayout,
-    Assistant
+    Assistant,
+    CopyMultiClassModal
   },
 
   data () {
     return {
       columns,
       multiClassList: [],
+      productList: [],
       getListLoading: false,
       paging: {
         total: 0,
         offset: 0,
         pageSize: 10,
       },
+      copyModalVisible: false,
+      copyMultiClassId: 0
     }
   },
   created() {
     this.getMultiClassList()
+    this.getMultiClassProductList()
   },
   methods: {
     goToCreateMultiClassPage() {
@@ -164,16 +177,38 @@ export default {
         name: 'MultiClassCreate'
       })
     },
+    async getMultiClassProductList() {
+      const { data } = await MultiClassProduct.search({
+        keywords: '',
+        offset: 0,
+        limit: 100000,
+      })
+
+      const index = _.findIndex(this.columns, item => item.dataIndex === 'product');
+      const productItem = this.columns[index];
+
+      productItem.filters = []
+      _.forEach(data, item => {
+        productItem.filters.push({
+          text: item.title,
+          value: item.id
+        })
+      })
+
+      this.$set(this.columns, index, productItem)
+    },
     async getMultiClassList (params = {}) {
+      params.limit = params.pageSize || 10
+      params.offset = params.offset || 0
+      params.keywords = params.keywords || ''
+
       this.getListLoading = true;
       try {
-        const { data, paging } = await MultiClass.search({
-          keywords: params.keywords || '',
-          offset: params.offset || 0,
-          limit: params.pageSize || 10,
-        })
+        const { data, paging } = await MultiClass.search(params)
+
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
+
         this.multiClassList = data;
         this.paging = paging;
       } finally {
@@ -200,14 +235,6 @@ export default {
       });
     },
 
-    async copyMultiClass(multiClass) {
-      const { success } = await MultiClass.copyMultiClass(multiClass.id);
-      if ('success') {
-        this.$message.success('复制成功');
-        this.getMultiClassList();
-      }
-    },
-
     goToMultiClassManage(id) {
       this.$router.push({
         name: 'MultiClassCourseManage',
@@ -223,8 +250,31 @@ export default {
         params.pageSize = pagination.pageSize
       }
 
+      if (filters && Object.keys(filters).length > 0) {
+        _.forEach(Object.keys(filters), key => {
+          params[key] = filters[key]
+        })
+      }
+
+      if (sorter && sorter.order) {
+        params[`${sorter.field}Sort`] = sorter.order === 'ascend' ? 'ASC' : 'DESC'
+      }
+
       if (Object.keys(params).length > 0) {
         this.getMultiClassList(params)
+      }
+    },
+
+    copyMultiClass(multiClass) {
+      this.copyModalVisible = true;
+      this.copyMultiClassId = multiClass.id;
+    },
+
+    eventCommunication(params) {
+      const { event } = params;
+
+      if (event === 'cancel-modal') {
+        this.copyModalVisible = false;
       }
     }
   }

@@ -6,7 +6,7 @@
       <template slot="title">
         <span>{{ assistants }}</span>
       </template>
-      <a-icon type="appstore" />
+      <a-icon type="ellipsis" />
     </a-tooltip>
   </div>
 </template>

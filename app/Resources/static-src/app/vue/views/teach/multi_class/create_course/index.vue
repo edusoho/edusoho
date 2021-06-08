@@ -71,13 +71,12 @@
         </a-select>
       </a-form-item>
       <a-form-item label="价格" style="position: relative;">
-        <a-input-number
-          :precision="2"
-          style="width: 100%"
-          v-decorator="['originPrice', { initialValue: 0 }]"
-          :min="0"
-        />
-        <span class="price-number-input">元</span>
+        <a-input
+          v-decorator="['originPrice', { initialValue: 0, rules: [
+            { validator: validatePrice, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' }
+          ] }]">
+            <span slot="suffix">元</span>
+          </a-input>
       </a-form-item>
       <a-form-item label="学习模式">
         <a-radio-group
@@ -93,7 +92,7 @@
       </a-form-item>
       <a-form-item label="任务完成规则">
         <a-radio-group
-          :options="[{ label: '无限制', value: '1' }, { label: '由任务完成条件决定', value: '2' }]"
+          :options="[{ label: '无限制', value: '1' }, { label: '由任务完成条件决定', value: '0' }]"
           v-decorator="['enableFinish', {
             initialValue: '1'
           }]"
@@ -101,6 +100,14 @@
         <div class="color-gray cd-mt8">
           <template>必须达到完成条件，任务才算完成</template>
         </div>
+      </a-form-item>
+      <a-form-item label="课程人数" v-if="form.getFieldValue('type') === 'live'">
+        <a-input
+          v-decorator="['maxStudentNum', {
+            rules: [{ required: true, message: '请输入课程人数' }]
+          }]">
+            <span slot="suffix">人</span>
+          </a-input>
       </a-form-item>
       <a-form-item label="是否可加入">
         <a-switch v-model="formInfo.buyable"  />
@@ -163,7 +170,7 @@
             }]" />
           <span class="ml2">在此日期前，学员可进行学习。</span>
         </a-form-item>
-        <a-form-item v-if="form.getFieldValue('deadlineType') === 'days'">
+        <a-form-item v-else>
           <a-input
             style="width: 200px;"
             v-decorator="['expiryDays', {
@@ -192,7 +199,7 @@
 
     <div class="create-course-btn-group">
       <a-button class="save-course-btn" type="primary" @click="saveCourseSet" :loading="ajaxLoading">创建课程</a-button>
-      <a-button class="ml2" @click="goToLastPage">取消</a-button>
+      <a-button class="ml2" @click="goToMultiClassCreatePage()">取消</a-button>
     </div>
 
     <a-modal
@@ -263,18 +270,22 @@
         courseCoverName: '',
         uploading: false,
         imgs: null,
+        imageUploadUrl: '/editor/upload?token=',
+        flashUploadUrl: '/editor/upload?token=',
       };
     },
     created() {
       this.fetchAssistants();
       this.fetchTeacher();
     },
-    mounted() {
+    async mounted() {
+      await this.getEditorUploadToken()
       this.editor = CKEDITOR.replace('summary', {
         allowedContent: true,
         toolbar: 'Detail',
         fileSingleSizeLimit: app.fileSingleSizeLimit,
-        filebrowserImageUploadUrl: this.uploadUrl // TODO {{ path('editor_upload', {token:upload_token('course')}) }}
+        filebrowserImageUploadUrl: this.imageUploadUrl,
+        filebrowserFlashUploadUrl: this.flashUploadUrl
       });
     },
     methods: {
@@ -283,6 +294,16 @@
 
         return Promise.resolve(1);
       },
+
+      async getEditorUploadToken() {
+        const { token } = await UploadToken.get('course')
+
+        this.imageUploadUrl += token
+        this.flashUploadUrl += token
+
+        return Promise.resolve(1);
+      },
+      
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
@@ -297,17 +318,18 @@
           }
 
           try {
-            const { error } = await CourseSet.add(values);
+            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
 
             if (!error) {
               this.$message.success('创建成功')
-              this.$router.go(-1);
+              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle })
             }
           } finally {
             this.ajaxLoading = false;
           }
         })
       },
+
       fetchTeacher() {
         const { title, paging: { pageSize, current } } = this.teacher;
         const params = {
@@ -472,16 +494,36 @@
         if (!value) {
           callback(rule.message)
         }
+
+        callback()
       },
-      goToLastPage() {
-        // TODO 需要根据有没有上一个页面来判断，可以封装成一个mixins
-        this.$router.go(-1)
+      goToMultiClassCreatePage(course) {
+        if (!course) {
+          this.$router.go(-1)
+          return
+        }
+        
+        if (_.isObject(course)) {
+          this.$router.replace({
+            name: 'MultiClassCreate',
+            query: {
+              course: JSON.stringify(course)
+            }
+          })
+        }
+      },
+      validatePrice(rule, value, callback) {
+        if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {
+          callback(rule.message)
+        }
+
+        callback()
       }
     }
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "~common/variable.less";
 
   .ant-upload-select-picture-card {
@@ -509,18 +551,12 @@
     bottom: 0;
     right: 64px;
     left: 200px;
-    padding: @spacing-6x 0;
+    padding: @spacing-3x 0;
     border-top: solid 1px @border;
     background-color: @bg;
   }
 
   .expand-tooltip .ant-tooltip-content{
     width: 500px !important;
-  }
-  
-  .price-number-input {
-    position: absolute;
-    top: -12px;
-    right: 28px;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div v-show="categoryChoices">
-        <el-select v-model="category" v-on:change="updateCategory">
+        <el-select v-model="categoryData" v-on:change="updateCategory">
             <el-option value="0" :label="'category'|trans"></el-option>
             <el-option
                 v-for="choice in categoryChoices"
@@ -18,8 +18,12 @@
     export default {
         name: "category",
         props: {
-            type: 'course',
-            category: '0',
+            type: {
+                default: 'course'
+            },
+            category: {
+                default: '0',
+            },
         },
         filters: {
             trim: function (value = '') {
@@ -59,10 +63,15 @@
                 }
             }
         },
+        watch: {
+            category(value) {
+                this.categoryData = value
+            }
+        },
         data() {
             return {
                 categoryChoices: null,
-                category: '0',
+                categoryData: this.category
             };
         },
         created() {

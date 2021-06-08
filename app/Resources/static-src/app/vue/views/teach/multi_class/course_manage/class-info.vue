@@ -1,6 +1,6 @@
 <template>
   <div class="class-info">
-    <div class="clearfix" style="margin-bottom: 24px;">
+    <div class="clearfix" style="margin-bottom: 16px;">
       <a-input-search class="pull-left" placeholder="请输入课时关键字搜索" style="width: 260px" @search="onSearch" />
       <a-button class="pull-right" type="primary" @click="goToEditorLesson" v-if="isPermission('course_lesson_manage') || isPermission('course_lesson_manage')">
         重排课时/新增课时
@@ -200,7 +200,11 @@ export default {
     this.fetchMultiClass();
 
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchLessons();
+      const params = {
+        limit: 10,
+        offset: (this.pagination.current - 1) * 10
+      };
+      this.fetchLessons(params);
     })
   },
 
@@ -298,7 +302,11 @@ export default {
           Course.deleteTask(courseId, id).then(res => {
             if (res.success) {
               this.$message.success('删除成功');
-              this.fetchLessons();
+              _.forEach(this.data, (item, index) => {
+                if (item.tasks.id == id) {
+                  this.data.splice(index, 1);
+                }
+              });
             }
           });
         }

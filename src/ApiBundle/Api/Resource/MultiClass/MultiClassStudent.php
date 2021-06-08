@@ -175,6 +175,7 @@ class MultiClassStudent extends AbstractResource
                 'nickname' => $member['user']['nickname'],
                 'verifiedMobile' => $member['user']['verifiedMobile'],
                 'weixin' => $member['profile']['weixin'],
+                'truename' => $member['profile']['truename'],
             ];
 
             $filteredFields['assistants'] = ArrayToolkit::thin($member['assistants'], ['id', 'nickname']);

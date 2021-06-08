@@ -14,7 +14,7 @@ class CloneMultiClassJob extends AbstractJob
 {
     public function execute()
     {
-        $user = $this->biz['user'];
+        $userId = $this->args['userId'];
         $multiClassId = $this->args['multiClassId'];
         $cloneMultiClass = $this->args['cloneMultiClass'];
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
@@ -38,14 +38,14 @@ class CloneMultiClassJob extends AbstractJob
             $this->getCourseMemberService()->setCourseAssistants($newMultiClass['courseId'], $cloneMultiClass['assistantIds'], $newMultiClass['id']);
 
             $message['status'] = 'success';
-            $this->getNotificationService()->notify($user['id'], 'multi-class-copy', $message);
+            $this->getNotificationService()->notify($userId, 'multi-class-copy', $message);
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
             $this->getLogService()->error('multi_class', 'multi_class_clone', "复制班课{$multiClassId}失败", $e->getMessage());
             $message['status'] = 'failure';
-            $this->getNotificationService()->notify($user['id'], 'multi-class-copy', $message);
+            $this->getNotificationService()->notify($userId, 'multi-class-copy', $message);
         }
     }
 

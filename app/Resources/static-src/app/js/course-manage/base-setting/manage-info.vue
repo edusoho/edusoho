@@ -48,7 +48,7 @@
         ></market-setting>
 
         <el-row>
-            <el-col span="18" offset="6">
+            <el-col :span="18" :offset="6">
                 <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
             </el-col>
         </el-row>
@@ -149,42 +149,6 @@
         },
         data() {
             return {
-                courseManageUrl: '',
-                course: this.course,
-                courseSet: {},
-                lessonWatchLimit: false,
-                hasRoleAdmin: false,
-                wechatSetting: {},
-                hasWechatNotificationManageRole: false,
-                hasMulCourses: false,
-                wechatManageUrl: '',
-                liveCapacityUrl: '',
-                contentCourseRuleUrl: '',
-                canFreeTasks: {},
-                freeTasks: {},
-                taskName: '',
-                activityMetas: {},
-                courseRemindSendDays: '',
-                uploadMode: '',
-                serviceTags: [],
-                audioServiceStatus: '',
-                videoConvertCompletion: '',
-                courseSetManageFilesUrl: '',
-                courseProduct: {},
-                notifies: {},
-                canModifyCoursePrice: true,
-                buyBeforeApproval: false,
-                canFreeActivityTypes: '',
-                freeTaskChangelog: '',
-                isUnMultiCourseSet: false,
-                tags: '',
-                imageSaveUrl: '',
-                imageSrc: '',
-                imageUploadUrl: '',
-                vipInstalled: false,
-                vipEnabled: false,
-                vipLevels: {},
-                enableOrg: 0
             }
         }
     }
