@@ -14,7 +14,8 @@
           {{ text }}
         </a>
         <a slot="course" slot-scope="text, record"
-          :href="`/course/${record.courseId}`">
+          :href="`/course/${record.courseId}`"
+          target="_blank">
           {{ record.course ? record.course.courseSetTitle : '' }}
         </a>
         <a slot="taskNum" slot-scope="text, record"
@@ -33,10 +34,9 @@
           {{ text }}
         </a>
         <template :size="8" slot="action" slot-scope="text, record">
-          <a href="javascript:;" class="mr2" @click="goToMultiClassManage(record.id)">查看</a>
-          <a href="javascript:;" class="mr2" @click="goToEditMultiClass(record.id)">编辑</a>
-          <a href="javascript:;"
-            @click="goToMultiClassDataPreview(record.id)">数据概览</a>
+          <a-button type="link" @click="goToMultiClassManage(record.id)">查看</a-button>
+          <a-button type="link" @click="goToEditMultiClass(record.id)">编辑</a-button>
+          <a-button type="link" @click="goToMultiClassDataPreview(record.id)">数据概览</a-button>
         </template>
       </a-table>
     </a-spin>

@@ -4,6 +4,7 @@
       <div class="clearfix">
         <a-input-search placeholder="请输入产品名称"
           v-model="title"
+          :allowClear="true"
           style="width: 262px" @search="searchProductList" />
 
         <a-button class="pull-right" type="primary" @click="createMultiClassProduct">
@@ -14,7 +15,6 @@
       <a-row :gutter="24">
         <a-col :sm="24" :lg="12" :xl="8" v-for="product in productList" :key="product.id">
           <product-card
-            class="cd-mt24"
             :product="product"
             @edit="startEditMultiClassProduct"
             @delete="deleteMultiClassProduct"
@@ -47,7 +47,7 @@
               placeholder="请输入产品名称"
               v-decorator="['title', { rules: [
                 { required: true, message: '产品名称不能为空' },
-                { validator: validatorTitle }
+                { validator: validatorTitle, message: '' }
               ] }]"
             />
           </a-form-item>
@@ -150,21 +150,20 @@
           this.form.setFields({
             title: { value, errors: [new Error('产品名称不能超过40个字符，一个中文字算2个字符')] }
           })
+          callback('产品名称不能超过40个字符，一个中文字算2个字符')
 
           return
         }
-
-
-        const { result } = await ValidationTitle.search({
-          type: 'multiClassProduct',
-          title: value
-        })
+      
+        const result = await this.checkTitle()
 
         if (!result) {
           this.form.setFields({
             title: { value, errors: [new Error('产品名称不能与已创建的相同')] }
           })
-          return
+          callback('产品名称不能与已创建的相同')
+
+          return;
         }
 
         callback()
@@ -187,26 +186,56 @@
           this.addMultiClassProduct()
         }
       },
-      addMultiClassProduct () {
-        this.form.validateFields(async (err, values) => {
-          if (err) return;
+      async checkTitle() {
+        const title = this.form.getFieldValue('title')
+        const { result } = await ValidationTitle.search({
+          type: 'multiClassProduct',
+          title
+        })
 
-          this.ajaxProductLoading = true;
+        if (!result) {
+          this.form.setFields({
+            title: { value: title, errors: [new Error('产品名称不能与已创建的相同')] }
+          })
+          return Promise.resolve(0)
+        }
 
-          try {
-            const { error } = await MultiClassProduct.add(values)
+        return Promise.resolve(1)
+      },
+      async addMultiClassProduct () {
+        const title = this.form.getFieldValue('title')
+        
+        this.ajaxProductLoading = true;
+        
+        if (this.calculateByteLength(title) > 40) {
+          this.form.setFields({
+            title: { value: title, errors: [new Error('产品名称不能超过40个字符，一个中文字算2个字符')] }
+          })
+          this.ajaxProductLoading = false
+          return
+        }
+        
+        const result = await this.checkTitle();
 
-            this.ajaxProductLoading = false;
-            this.modalVisible = false;
-            this.form.resetFields();
+        if (!result) {
+          this.ajaxProductLoading = false;
+          return
+        }
 
-            if (!error) {
-              this.getProductList({ title: this.title })
-            }
-          } finally {
-            this.ajaxProductLoading = false;
+        try {
+          const values = this.form.getFieldsValue()
+          const { error } = await MultiClassProduct.add(values)
+
+          this.ajaxProductLoading = false;
+          this.modalVisible = false;
+          this.form.resetFields();
+
+          if (!error) {
+            this.getProductList({ title: this.title })
           }
-        });
+        } finally {
+          this.ajaxProductLoading = false;
+        }
       },
       startEditMultiClassProduct (product) {
         this.editingProduct = product;

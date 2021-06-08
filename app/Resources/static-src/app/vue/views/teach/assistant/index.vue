@@ -4,6 +4,7 @@
       <a-input-search
         placeholder="请输入用户名搜索"
         style="width: 224px"
+        :allowClear="true"
         @search="onSearch"
       />
       <a-button class="pull-right" type="primary" @click="showPermissionModal">助教权限设置</a-button>
@@ -22,7 +23,11 @@
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
+      <a-button 
+        slot="action" 
+        slot-scope="item" 
+        type="link"
+        @click="edit(item.id)">查看</a-button>
     </a-table>
 
     <a-modal title="助教详细信息" :visible="visible" @cancel="close">

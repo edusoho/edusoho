@@ -3,24 +3,6 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-        <a-button
-          v-if="isPermission('course_member_export')"
-          type="primary"
-          class="js-export-btn"
-          icon="upload"
-          href="javascript:;"
-          data-try-url="/try/export/course-students"
-          data-url="/export/course-students"
-          data-pre-url="/pre/export/course-students"
-          data-loading-text="正在导出..."
-          data-target-form="#course-students-export"
-          data-file-names='["course-students"]'
-        >
-          批量导出
-        </a-button>
-      </a-space>
-
-      <a-space class="pull-right" size="middle">
         <a-button v-if="isPermission('course_member_create')" type="primary" @click="addStudent()">
           添加学员
         </a-button>
@@ -58,6 +40,24 @@
           批量修改有效期
         </a-button>
       </a-space>
+
+      <a-space class="pull-right" size="middle">
+        <a-button
+          v-if="isPermission('course_member_export')"
+          type="primary"
+          class="js-export-btn"
+          icon="upload"
+          href="javascript:;"
+          data-try-url="/try/export/course-students"
+          data-url="/export/course-students"
+          data-pre-url="/pre/export/course-students"
+          data-loading-text="正在导出..."
+          data-target-form="#course-students-export"
+          data-file-names='["course-students"]'
+        >
+          批量导出
+        </a-button>
+      </a-space>
     </div>
     <a-modal title="学员详细信息" :visible="viewStudentInfoVisible" @cancel="close">
       <userInfoTable :user="modalShowUser" />
@@ -75,8 +75,6 @@
       <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
       <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
-
-<!--      <--<template slot="wechat" slot-scope="wechat, record">{{ record.user.weixin }}</template>-->
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
@@ -101,7 +99,7 @@
             cancel-text="取消"
             @confirm="confirm(record.user.id)"
           >
-            <a v-if="isPermission('course_member_delete')" href="#" >移除</a>
+            <a-button v-if="isPermission('course_member_delete')" type="link">移除</a-button>
           </a-popconfirm>
         </a-space>
       </template>
@@ -145,8 +143,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
@@ -188,8 +184,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
              :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
@@ -453,7 +447,6 @@ export default {
     },
 
     onSelectChange(selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
       this.getSelectedRowKeysQueryStr();
     },
@@ -537,7 +530,6 @@ export default {
           })
         });
       }
-      console.log(str);
       this.selectedRowKeysStr = str;
       this.selectedUserIds = userIds;
     },

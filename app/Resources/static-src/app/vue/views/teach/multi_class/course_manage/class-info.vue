@@ -29,7 +29,7 @@
 
       <template slot="time" slot-scope="time, record">
         <template v-if="['video', 'live'].includes(record.tasks.type)">
-          {{ (record.tasks.length / 60).toFixed(2) }}min
+          {{ record.tasks.length | timeTransfer }}
         </template>
         <template v-else>--</template>
       </template>
@@ -49,9 +49,9 @@
 
       <template slot="actions" slot-scope="actions, record">
         <a-dropdown :trigger="['hover']" placement="bottomRight" style="margin-right: 12px;">
-          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+          <a-button type="link" @click="e => e.preventDefault()">
             <a-icon type="copy" />
-          </a>
+          </a-button>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">
             <a-menu-item key="copy" >
               复制课程链接
@@ -59,12 +59,11 @@
           </a-menu>
         </a-dropdown>
 
-        <a class="ant-dropdown-link"
-           v-if="isPermission('course_lesson_manage')"
-          href="javascript:;"
+        <a-button v-if="isPermission('course_lesson_edit')"
+          type="link"
           data-toggle="modal"
           data-target="#modal"
-          :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a>
+          :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a-button>
 
         <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_manage')">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
@@ -205,6 +204,20 @@ export default {
       };
       this.fetchLessons(params);
     })
+  },
+
+  filters: {
+    timeTransfer(totalSecond) {
+      const minute = _.floor(totalSecond / 60)
+      const second = totalSecond % 60
+      let time = `${minute}min `
+
+      if (second) {
+        time += `${second}s`
+      }
+
+      return time
+    }
   },
 
   methods: {

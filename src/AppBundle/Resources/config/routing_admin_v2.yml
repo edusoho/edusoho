@@ -2742,6 +2742,11 @@ admin_v2_setting_developer_magic:
     path:  /setting/developer/magic
     defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:magic }
 
+#给magic别名，可以访问，这个没有危险
+admin_v2_setting_alias_developer_magic:
+  path:  /setting_alias/developer/magic
+  defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:magic }
+
 admin_v2_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }
