@@ -1,15 +1,22 @@
 <template>
   <div class="aside-layout">
-    <a-breadcrumb class="aside-layout-header" separator="/">
-      <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
-        <template v-if="breadcrumb.href">
-          <a :href="breadcrumb.href">{{ breadcrumb.name }}</a>
+    <div class="aside-layout-header">
+      <a-breadcrumb class="pull-left" separator="/">
+        <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+          <template v-if="breadcrumb.href">
+            <a :href="breadcrumb.href" target="_blank">{{ breadcrumb.name }}</a>
         </template>
-        <template v-else>
-          {{ breadcrumb.name }}
-        </template>
-      </a-breadcrumb-item>
-    </a-breadcrumb>
+          <template v-else-if="breadcrumb.pathName">
+            <a href="javascript:;" @click="$router.push({ name: breadcrumb.pathName })">{{ breadcrumb.name }}</a>
+          </template>
+          <template v-else>
+            {{ breadcrumb.name }}
+          </template>
+        </a-breadcrumb-item>
+      </a-breadcrumb>
+      <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a>
+    </div>
+    
     <div class="aside-layout-main">
       <slot />
     </div>
@@ -32,15 +39,16 @@ export default {
 <style lang="less">
 .aside-layout {
   .aside-layout-header {
-    padding: 16px 16px 12px;
+    padding: 16px;
     border-bottom: 1px solid #e8e8e8;
     font-size: 18px;
     color: #333;
     font-weight: 500;
+    overflow: hidden;
   }
 
   .aside-layout-main {
-    padding: 24px 16px 16px;
+    padding: 16px;
   }
 }
 </style>
