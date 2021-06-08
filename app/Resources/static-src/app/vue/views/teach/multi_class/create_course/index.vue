@@ -117,14 +117,14 @@
       </a-form-item>
       <a-form-item label="加入截止日期">
         <div style="overflow: hidden">
-          <a-radio-group class="pull-left mt3" style="width: 100%;"
-            :options="[{ label: '不限制', value: '1' }, { label: '自定义', value: '0' }]"
+          <a-radio-group class="pull-left mt3"
+            :options="[{ label: '不限制', value: '0' }, { label: '自定义', value: '1' }]"
             v-decorator="['enableBuyExpiryTime', {
-              initialValue: '1',
+              initialValue: '0',
               rules: [{ required: true, message: '请输入加入截止日期' }]
             }]"
           />
-          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '0'">
+          <a-form-item class="pull-left" style="margin: 4px 0 0;" v-if="form.getFieldValue('enableBuyExpiryTime') === '1'">
             <a-date-picker placeholder=""
               v-decorator="['buyExpiryTime', {
                 rules: [{ required: true, message: '请输入加入截止日期' }]
@@ -309,15 +309,7 @@
           if (err) return;
 
           this.ajaxLoading = true
-          values.summary = this.editor.getData()
-          values.teachers = [values.teachers]
-          values = _.assignIn(values, {
-            buyable: Number(this.formInfo.buyable)
-          })
-
-          if (this.imgs) {
-            values.images = this.imgs;
-          }
+          values = this.formatValues(values)
 
           try {
             const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
@@ -330,6 +322,27 @@
             this.ajaxLoading = false;
           }
         })
+      },
+
+      formatValues(values = {}) {
+        values.summary = this.editor.getData()
+        values.teachers = [values.teachers]
+        values = _.assignIn(values, {
+          buyable: Number(this.formInfo.buyable)
+        })
+
+        if (this.imgs) {
+          values.images = this.imgs;
+        }
+
+        for (const key in values) {
+          if (['buyExpiryTime', 'expiryStartDate', 'expiryEndDate', 'deadline'].includes(key)) {
+            values[key] = (new Date(values[key])).getTime()
+            values[key] = _.floor(values[key] / 1000)
+          }
+        }
+
+        return values
       },
 
       fetchTeacher() {
