@@ -187,7 +187,7 @@ export default {
       checkAll: false,
       repeatDataOptions,
       startDate: '',
-      repeatData: 1
+      repeatData: 1,
     }
   },
 
@@ -285,10 +285,16 @@ export default {
     },
 
     async createTask(params) {
-      let result = await Course.addLiveTask(this.courseId, params);
-      const { data } = result;
-      this.$emit('change-lesson-directory', { addData: data });
-      this.handleCancel();
+      try {
+        this.confirmLoading = true;
+        
+        const { data } = await Course.addLiveTask(this.courseId, params);
+        
+        this.$emit('change-lesson-directory', { addData: data });
+        this.handleCancel();
+      } finally {
+        this.confirmLoading = false;
+      }
     },
 
     async batchCreation(params) {
@@ -299,22 +305,27 @@ export default {
       if (taskNum % 5 != 0) {
         loopNum++;
       }
+      
+      try {
+        this.confirmLoading = true;
+        for (let index = 0; index < loopNum; index++) {
+          let result = await Course.addLiveTask(this.courseId, {
+            ...params,
+            ...{
+              start: index * 5,
+              limit: 5
+            }
+          });
 
-      for (let index = 0; index < loopNum; index++) {
-        let result = await Course.addLiveTask(this.courseId, {
-          ...params,
-          ...{
-            start: index * 5,
-            limit: 5
-          }
-        });
-        _.forEach(result.data, item => {
-          data.push(item);
-        })
+          _.forEach(result.data, item => {
+            data.push(item);
+          })
+        }
+        this.$emit('change-lesson-directory', { addData: data });
+        this.handleCancel();
+      } finally {
+        this.confirmLoading = false;
       }
-
-      this.$emit('change-lesson-directory', { addData: data });
-      this.handleCancel();
     },
 
     handleOk() {
