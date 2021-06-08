@@ -11935,3 +11935,6 @@ exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设�
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
 site.login.change_to_sms: 切换手机快捷登录
+
+admin.multi_class_copy.success.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制完成！
+admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制失败！

@@ -1441,7 +1441,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, ['createdTime' => 'DESC'], 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0)
+    public function hasCourseManagerRole($courseId = 0, $action = '')
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -1474,8 +1474,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        if ($this->getMemberService()->isCourseAssistant($courseId, $user->getId())) {
-            return true;
+        $isAssistant = $this->getMemberService()->isCourseAssistant($courseId, $user->getId());
+        if ($isAssistant) {
+            $permission = $this->biz['assistant_permission'];
+            if (!empty($action) && $permission->hasActionPermission($action)) {
+                return true;
+            }
+
+            if (empty($action)) {
+                return true;
+            }
+
+            return false;
         }
 
         if ($course['parentId'] > 0) {

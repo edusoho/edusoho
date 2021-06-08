@@ -21,12 +21,9 @@ class CourseLiveTask extends AbstractResource
 
     const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function add(ApiRequest $request, $courseId)
     {
-        if (!$this->getCourseService()->hasCourseManagerRole($courseId)) {
+        if (!$this->getCourseService()->hasCourseManagerRole($courseId, 'course_lesson_manage')) {
             throw CourseException::FORBIDDEN_MANAGE_COURSE();
         }
 
@@ -121,7 +118,7 @@ class CourseLiveTask extends AbstractResource
                 $startTime = $weekDiff * self::WEEK_TIME + $weekTime;
             }
 
-            $lesson = [
+            $lessonFields = [
                 'fromUserId' => $user['id'],
                 'mediaType' => 'live',
                 'fromCourseId' => $courseId,
@@ -133,14 +130,19 @@ class CourseLiveTask extends AbstractResource
                 'finishData' => '',
             ];
             try {
-                list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+                $this->biz['db']->beginTransaction();
+                list($lesson, $task) = $this->getLessonService()->createLesson($lessonFields);
+                $lesson = $this->getLessonService()->publishLesson($courseId, $lesson['id']);
+                $lesson['task'] = $task;
+                $this->biz['db']->commit();
             } catch (\Exception $e) {
-
+                $this->biz['db']->rollback();
+                $lesson = [];
             }
 
-            $lesson['task'] = $task;
-
-            $lessons[] = $lesson;
+            if (!empty($lesson)) {
+                $lessons[] = $lesson;
+            }
         }
 
         return $this->makePagingObject($lessons, $data['taskNum'], $start, $limit);
@@ -181,14 +183,19 @@ class CourseLiveTask extends AbstractResource
             ];
 
             try {
+                $this->biz['db']->beginTransaction();
                 list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+                $lesson = $this->getLessonService()->publishLesson($courseId, $lesson['id']);
+                $lesson['task'] = $task;
+                $this->biz['db']->commit();
             } catch (\Exception $e) {
-
+                $this->biz['db']->rollback();
+                $lesson = [];
             }
 
-            $lesson['task'] = $task;
-
-            $lessons[] = $lesson;
+            if (!empty($lesson)) {
+                $lessons[] = $lesson;
+            }
         }
 
         return $this->makePagingObject($lessons, $data['taskNum'], $start, $limit);

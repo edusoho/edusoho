@@ -40,7 +40,6 @@ class AssistantPermission
                 'code' => 'multi_class_manage',
                 'disabled' => 1,
                 'children' => [
-                    ['title' => '创建班课', 'code' => 'multi_class_create', 'disabled' => 0],
                     ['title' => '编辑班课', 'code' => 'multi_class_edit', 'disabled' => 0],
                     ['title' => '复制班课', 'code' => 'multi_class_copy', 'disabled' => 0],
                     ['title' => '删除班课', 'code' => 'multi_class_delete', 'disabled' => 0],
@@ -54,12 +53,7 @@ class AssistantPermission
                     [
                         'title' => '课时管理',
                         'code' => 'course_lesson_manage',
-                        'disabled' => 1,
-                        'children' => [
-                            ['title' => '创建课时', 'code' => 'course_lesson_create', 'disabled' => 0],
-                            ['title' => '编辑课时', 'code' => 'course_lesson_edit', 'disabled' => 0],
-                            ['title' => '删除课时', 'code' => 'course_lesson_delete', 'disabled' => 0],
-                        ],
+                        'disabled' => 0,
                     ],
                     [
                         'title' => '学员管理',
@@ -101,7 +95,6 @@ class AssistantPermission
             return [
                 'multi_class_manage',
                 'course_manage',
-                'course_lesson_manage',
                 'course_member_manage',
                 'course_member_create',
                 'course_member_deadline_edit',
