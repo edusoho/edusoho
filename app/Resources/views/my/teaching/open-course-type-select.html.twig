@@ -1,13 +1,13 @@
 <div class="visible-xs cd-mb24 clearfix">
   <div class="pull-right">
-    {% if s2b2c_has_behaviour_permission('canAddCourse') %}{#S2B2C#}
+    {% if s2b2c_has_behaviour_permission('canAddCourse') and has_permission('admin_v2_course_content_manage') %}{#S2B2C#}
       <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
     {% endif %}
   </div>
 </div>
 <div class="cd-mb24">
   <div class="pull-right hidden-xs">
-    {% if s2b2c_has_behaviour_permission('canAddCourse') and isAddCourseShow|default(1) == 1 %}{#S2B2C#}
+    {% if s2b2c_has_behaviour_permission('canAddCourse') and isAddCourseShow|default(1) == 1 and has_permission('admin_v2_course_content_manage') %}{#S2B2C#}
       <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
     {% endif %}
   </div>
