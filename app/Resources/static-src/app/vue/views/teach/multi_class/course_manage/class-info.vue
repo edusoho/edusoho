@@ -127,7 +127,6 @@ const columns = [
     title: '开课时间',
     dataIndex: 'startTime',
     width: '13%',
-    sorter: true,
     scopedSlots: { customRender: 'startTime' }
   },
   {
