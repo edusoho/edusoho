@@ -73,6 +73,9 @@ define(function (require, exports, module) {
         } else {
           $('#modal').modal('show').html(data);
         }
+      }).error(function(e) {
+        var res = e.responseJSON.error.message;
+        Notify.danger(res);
       });
     });
 
