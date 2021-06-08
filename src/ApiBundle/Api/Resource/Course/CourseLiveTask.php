@@ -76,6 +76,7 @@ class CourseLiveTask extends AbstractResource
         ];
 
         list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
+        $lesson = $this->getLessonService()->publishLesson($courseId, $lesson['id']);
 
         $lesson['task'] = $task;
 
