@@ -104,7 +104,7 @@
       </template>
 
     </a-tree>
-     <a-empty style="margin-top: 200px;" v-if="!lessonDirectory.length" />
+     <empty v-if="!lessonDirectory.length" />
   </div>
 </template>
 
@@ -112,12 +112,14 @@
 import { Course } from 'common/vue/service';
 import _ from '@codeages/utils';
 import LessonDirectoryItem from './LessonDirectoryItem.vue';
+import Empty from 'app/vue/views/components/Empty.vue';
 
 export default {
   name: 'LessonDirectory',
 
   components: {
-    LessonDirectoryItem
+    LessonDirectoryItem,
+    Empty
   },
 
   props: {
