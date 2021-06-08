@@ -164,7 +164,7 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a v-if="record.status === 'reviewing'"
-             :href="`/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check`"
+             :href="record.activity.mediaType === 'testpaper' ? `/course/${multiClass.course.id}/manage/testpaper/${record.id}/check?action=check` : `/course/${multiClass.course.id}/manage/homework/${record.id}/check?action=check`"
              target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
              :href="`/testpaper/result/${record.id}/show?action=check`"
