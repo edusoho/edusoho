@@ -13,10 +13,11 @@
         <a-input v-decorator="['title', { rules: [
             { required: true, message: '请填写课程名称' },
           ]} ]"
+          placeholder="请输入课程标题"
         />
       </a-form-item>
       <a-form-item label="课程副标题" >
-        <a-textarea auto-size v-decorator="['subTitle']" />
+        <a-textarea auto-size v-decorator="['subTitle']" placeholder="请输入课程副标题" />
       </a-form-item>
       <a-form-item label="封面图片">
         <a-upload
@@ -48,6 +49,7 @@
           @popupScroll="teacherScroll"
           @search="handleSearchTeacher"
           v-decorator="['teachers', { rules: [{ required: true, message: '请选择授课老师' }] }]"
+          placeholder="请选择授课教师"
         >
           <a-select-option v-for="item in teacher.list" :key="item.id">
             {{ item.nickname }}
@@ -64,6 +66,7 @@
           @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
           v-decorator="['assistants', { rules: [{ required: true, message: '至少选择一位助教'}]}]"
+          placeholder="请选择一个或多个助教"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id">
             {{ item.nickname }}
@@ -74,7 +77,9 @@
         <a-input
           v-decorator="['originPrice', { initialValue: 0, rules: [
             { validator: validatePrice, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' }
-          ] }]">
+          ] }]"
+          placeholder="请输入产品价格"
+        >
             <span slot="suffix">元</span>
           </a-input>
       </a-form-item>
@@ -107,7 +112,9 @@
           v-decorator="['maxStudentNum', { rules: [
             { required: true, message: '请输入课程人数' },
             { validator: validateRange },
-          ]}]">
+          ]}]"
+          placeholder="请输入课程人数"
+        >
             <span slot="suffix">人</span>
           </a-input>
       </a-form-item>
@@ -313,7 +320,7 @@
 
         this.liveCapacity = Number(capacity)
       },
-      
+
       saveCourseSet() {
         this.form.validateFields(async (err, values) => {
           if (err) return;
@@ -413,7 +420,7 @@
           }
         });
       },
-      
+
       handleSearchAssistant: _.debounce(function(input) {
         this.assistant = {
           list: [],
@@ -426,7 +433,7 @@
         };
         this.fetchAssistants();
       }, 300),
-      
+
       assistantScroll: _.debounce(function (e) {
         const { scrollHeight, offsetHeight, scrollTop } = e.target;
         const maxScrollTop = scrollHeight - offsetHeight - 20;
@@ -434,7 +441,7 @@
           this.fetchAssistants();
         }
       }, 300),
-      
+
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },
@@ -528,7 +535,7 @@
           this.$router.go(-1)
           return
         }
-        
+
         if (_.isObject(course)) {
           this.$router.replace({
             name: 'MultiClassCreate',
