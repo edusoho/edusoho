@@ -13,8 +13,6 @@ class CourseLiveCapacity extends AbstractResource
 {
     public function search(ApiRequest $request, $courseId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-
         $client = new EdusohoLiveClient();
         return $client->getCapacity();
     }
