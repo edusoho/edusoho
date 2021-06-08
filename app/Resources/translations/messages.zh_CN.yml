@@ -2110,6 +2110,10 @@ course.plan_task.activity_manage.live.live_time: 直播时长
 course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
+course.plan_task.activity_manage.live_resource.file_name: 资料名称：
+course.plan_task.activity_manage.live_resource.upload_btn:  (请上传或选择资料)
+course.plan_task.activity_manage.live_resource.add_btn: 添加资料
+course.plan_task.activity_manage.live_resource.file_tips:
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
 course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
