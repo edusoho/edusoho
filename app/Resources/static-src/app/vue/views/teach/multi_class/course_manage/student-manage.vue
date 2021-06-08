@@ -3,41 +3,61 @@
     <div class="clearfix" style="margin-bottom: 24px;">
       <a-space class="pull-left" size="large">
         <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-        <a-button v-if="isPermission('course_member_create')" type="primary" @click="addStudent()">
+        <a-button
+          v-if="isPermission('course_member_create')"
+          icon="plus"
+          type="primary"
+          @click="addStudent()"
+        >
           添加学员
         </a-button>
-        <a-button v-if="isPermission('course_member_import')" type="primary"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
+        <a-button
+          v-if="isPermission('course_member_import')"
+          type="primary"
+          icon="download"
+          data-toggle="modal"
+          data-target="#modal"
+          data-backdrop="static"
+          data-keyboard="false"
+          :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
         >
           批量导入
         </a-button>
-        <a-button v-if="isPermission('course_member_delete')" type="primary"
-                  icon="upload"
-                  @click="onBatchRemoveStudent"
+        <a-button
+          v-if="isPermission('course_member_delete')"
+          type="primary"
+          @click="onBatchRemoveStudent"
         >
-          批量移除
+          <a-space>
+            <svg-icon icon="icon-remove" />
+            批量移除
+          </a-space>
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
-                  type="primary"
-                  @click="onSelectEmpty"
+        <a-button
+          v-if="selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
+          type="primary"
+          @click="onSelectEmpty"
         >
-          批量修改有效期
+          <a-space>
+            <svg-icon icon="icon-edit" />
+            批量修改有效期
+          </a-space>
         </a-button>
 
-        <a-button v-if="this.selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
-                  type="primary"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline?${selectedRowKeysStr}`"
+        <a-button
+          v-if="selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
+          type="primary"
+          data-toggle="modal"
+          data-target="#modal"
+          data-backdrop="static"
+          data-keyboard="false"
+          :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/student/deadline?${selectedRowKeysStr}`"
         >
-          批量修改有效期
+          <a-space>
+            <svg-icon icon="icon-edit" />
+            批量修改有效期
+          </a-space>
         </a-button>
       </a-space>
 
