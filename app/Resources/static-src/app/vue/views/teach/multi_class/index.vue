@@ -90,7 +90,7 @@ const columns = [
   {
     title: '所属产品',
     dataIndex: 'product',
-    key: 'productId',
+    key: 'productIds',
     width: '10%',
     ellipsis: true,
     filters: [],

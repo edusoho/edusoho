@@ -112,8 +112,12 @@ class MultiClass extends AbstractResource
             $prepareConditions['titleLike'] = $conditions['keywords'];
         }
 
+        if (!empty($conditions['productIds'])) {
+            $prepareConditions['productIds'] = $conditions['productIds'];
+        }
+
         if (!empty($conditions['productId'])) {
-            $prepareConditions['productIds'] = $conditions['productId'];
+            $prepareConditions['productId'] = $conditions['productId'];
         }
 
         $user = $this->getCurrentUser();
