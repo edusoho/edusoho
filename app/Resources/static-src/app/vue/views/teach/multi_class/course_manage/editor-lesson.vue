@@ -64,7 +64,7 @@ export default {
   bottom: 0;
   right: 64px;
   left: 200px;
-  padding: 24px 0 24px 164px;
+  padding: 12px 0 12px 164px;
   margin: 0;
   border-top: solid 1px #ebebeb;
   background-color: #ffffff;

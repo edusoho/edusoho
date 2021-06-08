@@ -24,15 +24,18 @@
           {{ $dateFormat(record.tasks.createdTime, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <a :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
-            target="_blank">
-            答题分布
-          </a>
-          <a href="#modal"
-            data-toggle="modal"
-            :data-url="`/course/${record.tasks.courseId}/activity/${record.tasks.activityId}/testpaper/graph`">
-            成绩分布
-          </a>
+          <a-space size="large">
+            <a :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
+              target="_blank">
+              答题分布
+            </a>
+            <a href="#modal"
+              data-toggle="modal"
+              :data-url="`/course/${record.tasks.courseId}/activity/${record.tasks.activityId}/testpaper/graph`">
+              成绩分布
+            </a>
+          </a-space>
+
         </template>
       </a-table>
     </a-spin>

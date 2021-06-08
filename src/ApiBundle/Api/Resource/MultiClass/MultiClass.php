@@ -47,10 +47,6 @@ class MultiClass extends AbstractResource
         return $multiClass;
     }
 
-    /**
-     * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function add(ApiRequest $request)
     {
         $multiClass = $this->checkDataFields($request->request->all());
@@ -68,10 +64,6 @@ class MultiClass extends AbstractResource
         return $this->getMultiClassService()->createMultiClass($multiClass);
     }
 
-    /**
-     * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function update(ApiRequest $request, $id)
     {
         $multiClass = $this->checkDataFields($request->request->all());
@@ -89,10 +81,6 @@ class MultiClass extends AbstractResource
         return $this->getMultiClassService()->updateMultiClass($id, $multiClass);
     }
 
-    /**
-     * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function remove(ApiRequest $request, $id)
     {
         $this->getMultiClassService()->deleteMultiClass($id);
