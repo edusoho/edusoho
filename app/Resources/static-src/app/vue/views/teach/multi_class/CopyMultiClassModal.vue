@@ -336,7 +336,7 @@ export default {
           this.confirmLoading = true;
           const { success } = await MultiClass.copyMultiClass(this.id, values);
           if (success) {
-            this.$message.success('正在复制中...');
+            this.$message.success('开始复制班课，复制成功后请在前台的通知页面中查看通知消息');
             this.confirmLoading = false;
             this.handleCancel();
           }
