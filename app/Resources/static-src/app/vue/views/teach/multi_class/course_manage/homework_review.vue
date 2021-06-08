@@ -77,7 +77,8 @@
           <!-- TODO 这里要判断是不是老师 -->
           <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
-            :href="`/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check`"
+            :href="record.activity.mediaType == 'testpaper' ?
+            `/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check` : `/course/${currentTask.courseId}/manage/homework/${record.id}/check?action=check`"
             target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
             :href="`/homework/result/${record.id}/show?action=check`"

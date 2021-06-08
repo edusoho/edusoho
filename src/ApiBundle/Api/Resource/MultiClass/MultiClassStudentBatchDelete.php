@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\MultiClass;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
@@ -27,6 +29,11 @@ class MultiClassStudentBatchDelete extends AbstractResource
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
+
+        if (!$this->getCourseService()->hasCourseManagerRole($multiClass['courseId'], 'course_member_delete')) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $this->getCourseMemberService()->removeCourseStudents($multiClass['courseId'], $userIds);
 
         return [
@@ -49,5 +56,13 @@ class MultiClassStudentBatchDelete extends AbstractResource
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
