@@ -226,7 +226,7 @@
   import _ from 'lodash';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
-  import { Teacher, Assistant, CourseSet, UploadToken, File, CourseLiveCapacity } from 'common/vue/service/index.js';
+  import { Teacher, Assistant, CourseSet, UploadToken, File, LiveCapacity } from 'common/vue/service/index.js';
 
   export default {
     name: 'CreateCourse',
@@ -309,9 +309,9 @@
       },
 
       async getLiveCapacity() {
-        const { capacity } = await CourseLiveCapacity.search({ id: 0 })
+        const { capacity } = await LiveCapacity.search()
 
-        this.liveCapacity = capacity
+        this.liveCapacity = Number(capacity)
       },
       
       saveCourseSet() {
@@ -546,7 +546,9 @@
         callback()
       },
       validateRange(rule, value, callback) {
-        if (!_.isInteger(Number(value)) || value < 0) {
+        value = Number(value)
+
+        if (!_.isInteger(value) || value < 0) {
           callback(`请输入正整数`)
         } else if (value > this.liveCapacity) {
           callback(`网校可支持最多${this.liveCapacity}人同时参加直播。`)
