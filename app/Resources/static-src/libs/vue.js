@@ -1,3 +1,4 @@
-import Vue from 'common/vue/index.js';
+import Vue from 'vue/dist/vue.esm.js';
+window.Vue = Vue;
 
-export default Vue;
+export default window.Vue;
