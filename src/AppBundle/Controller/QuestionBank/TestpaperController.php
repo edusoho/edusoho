@@ -550,7 +550,7 @@ class TestpaperController extends BaseController
             // $section['type'] = $section['items'][0]['type'];
             // todo:$section['items'][0]的type不一定存在,可能item刚好被删除了;
             foreach ($section['items'] as $item) {
-                if (isset($item['type']) ) {
+                if (isset($item['type'])) {
                     $section['type'] = $item['type'];
                     break;
                 }
