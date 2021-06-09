@@ -105,6 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='班课产品';"
             );
+            $this->logger('info', '新增multi_class_product');
         }
 
         if (!$this->isTableExist('multi_class')) {
@@ -120,10 +121,12 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='班课';"
             );
+            $this->logger('info', 'multi_class');
         }
 
         if (!$this->isFieldExist('course_task', 'multiClassId')) {
             $this->getConnection()->exec("ALTER TABLE `course_task` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
+            $this->logger('info', 'course_task增加multiClassId');
         }
 
         return 1;
