@@ -159,7 +159,7 @@ export default {
   },
 
   watch: {
-    id(newValue, oldValue) {
+    visible(newValue, oldValue) {
       if (newValue) this.fetchMultiClass();
     }
   },
