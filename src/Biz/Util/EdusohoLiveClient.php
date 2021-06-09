@@ -36,6 +36,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/courseware', $args['resources']);
     }
 
+    public function deleteLiveCourseware(array $args)
+    {
+        return $this->createCloudApi('root')->delete('/lives/'.$args['liveId'].'/courseware/'.$args['coursewareId']);
+    }
+
     public function updateLive(array $args)
     {
         return $this->createCloudApi('root')->patch('/lives/'.$args['liveId'], $args);
