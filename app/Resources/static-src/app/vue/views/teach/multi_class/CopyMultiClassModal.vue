@@ -16,11 +16,14 @@
     >
       <a-form-item label="班课名称">
         <a-input
-          v-decorator="['title', { rules: [
-            { required: true, message: '请填写班课名称' },
-            { max: 40, message: '班课名称不能超过40个字' },
-            { validator: validatorＴitle }
-          ]}]"
+          v-decorator="['title', {
+            trigger: 'blur',
+            rules: [
+              { required: true, message: '请填写班课名称' },
+              { validator: validatorTitle },
+              { validator: validatorTitleLength }
+            ]
+          }]"
           placeholder="请输入班课名称"
         />
       </a-form-item>
@@ -289,14 +292,19 @@ export default {
       });
     },
 
-    validatorＴitle: _.debounce(async function(rule, value, callback) {
+    async validatorTitle(rule, value, callback) {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
         title: value
       });
 
       result ? callback() : callback('产品名称不能与已创建的相同');
-    }, 300),
+    },
+
+    validatorTitleLength(rule, value, callback) {
+      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
+      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+    },
 
     handleSearch: _.debounce(function(value, type) {
       this[type] = {
