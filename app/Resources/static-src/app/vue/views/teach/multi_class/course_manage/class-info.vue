@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import { MultiClass, Course } from 'common/vue/service';
 
 import ClassName from './ClassName.vue';

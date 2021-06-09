@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher } from 'common/vue/service';
 
 export default {

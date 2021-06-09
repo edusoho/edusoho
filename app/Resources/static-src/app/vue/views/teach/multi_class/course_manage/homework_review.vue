@@ -89,7 +89,7 @@
 <script>
 import { MultiClassExam } from 'common/vue/service';
 import ClassName from './ClassName.vue';
-import _ from '@codeages/utils';
+import _ from 'lodash';
 
 const columns = [
   {

@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import { Course } from 'common/vue/service';
 
 const repeatDataOptions = [
