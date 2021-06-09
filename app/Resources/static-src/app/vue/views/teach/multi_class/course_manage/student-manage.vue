@@ -137,7 +137,7 @@
       :footer="null"
       :title="`${selectedUser.nickname} - 作业`"
       :width="920"
-      @cancel="homeworkModalVisible = false"
+      @cancel="onHomeworkModalCancel"
     >
       <a-tabs v-model="currentHomeworkTab">
         <a-tab-pane :key="0" tab="全部"></a-tab-pane>
@@ -145,7 +145,6 @@
         <a-tab-pane :key="2" tab="进行中"></a-tab-pane>
         <a-tab-pane :key="3" tab="已批阅"></a-tab-pane>
       </a-tabs>
-      <!-- TODO 翻页未做 -->
       <a-table
         v-if="homeworkResults"
         :columns="resultColumns"
@@ -179,7 +178,7 @@
       :footer="null"
       :title="`${selectedUser.nickname} - 试卷`"
       :width="920"
-      @cancel="testpaperModalVisible = false"
+      @cancel="onTestpaperModalCancel"
     >
       <a-tabs v-model="currentTestpaperTab">
         <a-tab-pane :key="0" tab="全部"></a-tab-pane>
@@ -322,22 +321,22 @@ const defaultExamPaging = {
   all: {
     total: 0,
     offset: 0,
-    pageSize: 10,
+    pageSize: 5,
   },
   reviewing: {
     total: 0,
     offset: 0,
-    pageSize: 10,
+    pageSize: 5,
   },
   doing: {
     total: 0,
     offset: 0,
-    pageSize: 10,
+    pageSize: 5,
   },
   finished: {
     total: 0,
     offset: 0,
-    pageSize: 10,
+    pageSize: 5,
   }
 };
 
@@ -441,6 +440,19 @@ export default {
   },
 
   methods: {
+    onHomeworkModalCancel() {
+      this.homeworkModalVisible = false;
+      this.currentHomeworkTab = 0;
+      this.homeworkPaging = defaultExamPaging;
+      this.homeworkResultList = {};
+    },
+
+    onTestpaperModalCancel() {
+      this.testpaperModalVisible = false;
+      this.currentTestpaperTab = 0;
+      this.testpaperPaging = defaultExamPaging;
+      this.testpaperResultList = {};
+    },
     async getMultiClassStudents(params = {}) {
       const { data, paging } = await MultiClassStudent.search({
         id: this.id,
