@@ -140,7 +140,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->getEdusohoLiveClient()->updateLive($liveParams);
             if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
                 $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
-                $this->createLiveroomCourseware($liveActivity['liveId'], $fileIds);
+                $this->createLiveroomCoursewares($liveActivity['liveId'], $fileIds);
             }
         }
         $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds']);
@@ -310,7 +310,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         // 给直播间（自研）添加课件
         if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider'] && $activity['fileIds']) {
-            $this->createLiveroomCourseware($live['id'], $activity['fileIds']);
+            $this->createLiveroomCoursewares($live['id'], $activity['fileIds']);
         }
 
         return $live;
@@ -324,24 +324,24 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
      *
      * @return array
      */
-    public function createLiveroomCourseware($liveId, $fileIds)
+    public function createLiveroomCoursewares($liveId, $fileIds)
     {
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $storageSetting = $this->getSettingService()->get('storage', []);
 
-        $resources = [];
+        $liveCoursewares = [];
         foreach ($files as $file) {
-            $resources[] = [
-                'name' => $file['filename'],
-                'fromResNo' => $file['globalId'],
-            ];
+            $liveCoursewares = $this->getEdusohoLiveClient()->createLiveCourseware([
+                'liveId' => $liveId,
+                'resources' => [
+                    'name' => $file['filename'],
+                    'fromResNo' => $file['globalId'],
+                    'copyToken' => $storageSetting['cloud_access_key'] . ':' . md5($file['globalId'] . "\n" . $storageSetting['cloud_secret_key']),
+                ],
+            ]);
         }
 
-        $liveCourseware = $this->getEdusohoLiveClient()->createLiveCourseware([
-            'liveId' => $liveId,
-            'resources' => $resources,
-        ]);
-
-        return $liveCourseware;
+        return $liveCoursewares;
     }
 
     /**
