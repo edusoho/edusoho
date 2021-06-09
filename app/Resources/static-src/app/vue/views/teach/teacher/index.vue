@@ -224,7 +224,7 @@ export default {
 
     changePromotedCallBack(result = {}, id, checked) {
       if (!result.success) return;
-    
+
       _.forEach(this.pageData, item => {
         if (item.id == id) {
           item.isPromoted = checked;
@@ -234,7 +234,7 @@ export default {
     },
 
     validateRange(rule, value, callback) {
-      if (_.inRange(value, 0, 10000) === false) {
+      if (_.inRange(value, 0, 10001) === false) {
         callback('请输入0-10000的整数')
       }
 
