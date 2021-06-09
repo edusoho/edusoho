@@ -336,7 +336,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 'resources' => [
                     'name' => $file['filename'],
                     'fromResNo' => $file['globalId'],
-                    'copyToken' => $storageSetting['cloud_access_key'] . ':' . md5($file['globalId'] . "\n" . $storageSetting['cloud_secret_key']),
+                    'copyToken' => $storageSetting['cloud_access_key'].':'.md5($file['globalId']."\n".$storageSetting['cloud_secret_key']),
                 ],
             ]);
         }
