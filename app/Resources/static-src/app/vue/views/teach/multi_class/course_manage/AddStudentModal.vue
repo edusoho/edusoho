@@ -54,7 +54,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, MultiClassStudent } from 'common/vue/service';
+import { ValidationTitle, CourseMemberCheck } from 'common/vue/service';
 
 export default {
   props: {
@@ -100,14 +100,14 @@ export default {
     },
 
     validatorName: _.debounce(async function(rule, value, callback) {
-      const { result } = await ValidationTitle.search({
-        type: 'multiClassProduct',
-        title: value
-      })
+      const { result, message } = await CourseMemberCheck.checkStudentName(
+        this.multiClass ? this.multiClass.courseId : 0,
+        {title: value}
+        )
 
       if (!result) {
         this.form.setFields({
-          title: { value, errors: [new Error('产品名称不能与已创建的相同')] }
+          name: { value, errors: [new Error(message)] }
         })
         return
       }
