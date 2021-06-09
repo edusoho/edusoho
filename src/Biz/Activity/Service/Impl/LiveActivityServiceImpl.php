@@ -326,12 +326,24 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
      */
     public function createLiveroomCoursewares($liveId, $fileIds)
     {
+        $liveActivity = $this->getByLiveId($liveId);
+        $liveActivity['coursewareIds'] = empty($liveActivity['coursewareIds']) ? [] : $liveActivity['coursewareIds'];
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
         $storageSetting = $this->getSettingService()->get('storage', []);
 
+        // 直播课件上传文件信息保存
         $liveCoursewares = [];
+        // 直播课件已上传文件信息
+        $coursewareIds = [];
+
         foreach ($files as $file) {
-            $liveCoursewares = $this->getEdusohoLiveClient()->createLiveCourseware([
+            $fileId = $file['id'];
+            if (!empty($liveActivity['coursewareIds'][$fileId])) {
+                $coursewareIds[$fileId] = $liveActivity['coursewareIds'][$fileId];
+                continue;
+            }
+
+            $liveCoursewares[$fileId] = $result = $this->getEdusohoLiveClient()->createLiveCourseware([
                 'liveId' => $liveId,
                 'resources' => [
                     'name' => $file['filename'],
@@ -341,7 +353,28 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             ]);
         }
 
-        return $liveCoursewares;
+        foreach ($liveCoursewares as $key => $liveCourseware) {
+            if (isset($liveCourseware['id'])) {
+                $coursewareIds[$key] = $liveCourseware['id'];
+            }
+        }
+
+        // 对比新增/删除直播课件信息
+        $newCoursewareIds = array_diff($coursewareIds, $liveActivity['coursewareIds']);
+        $deleteCoursewareIds = array_diff($liveActivity['coursewareIds'], $coursewareIds);
+
+        $this->getLiveActivityDao()->update($liveActivity['id'], ['coursewareIds' => $newCoursewareIds]);
+        $this->deleteLiveroomCoursewares($liveId, $deleteCoursewareIds);
+    }
+
+    private function deleteLiveroomCoursewares($liveId, $coursewareIds)
+    {
+        foreach ($coursewareIds as $coursewareId) {
+            $result = $this->getEdusohoLiveClient()->deleteLiveCourseware([
+                'liveId' => $liveId,
+                'coursewareId' => $coursewareId,
+            ]);
+        }
     }
 
     /**

@@ -1821,7 +1821,7 @@ course.plan_task.activity_manage.live.info: 'Description'
 course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live %taskName% may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
 course.plan_task.activity_manage.live_resource.choose_file: 'Choose file'
-course.plan_task.activity_manage.live_resource.file_name: 'File name': 
+course.plan_task.activity_manage.live_resource.file_name: 'File name: '
 course.plan_task.activity_manage.live_resource.upload_btn: '(Please upload or choose files)'
 course.plan_task.activity_manage.live_resource.add_btn: 'Add'
 course.plan_task.activity_manage.live_resource.delete_btn: 'Delete'
