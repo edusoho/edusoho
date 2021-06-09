@@ -52,6 +52,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'addMultiClassTables',
+            'alterCourseMemberAddMultiClassId',
+            'alterCourseMemberChangeRole',
             'addDefaultProduct',
             'updateRolePermission',
             'initAssistantPermission',
@@ -120,16 +122,26 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
 
+        if (!$this->isFieldExist('course_task', 'multiClassId')) {
+            $this->getConnection()->exec("ALTER TABLE `course_task` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
+        }
+
+        return 1;
+    }
+
+    public function alterCourseMemberAddMultiClassId()
+    {
         if (!$this->isFieldExist('course_member', 'multiClassId')) {
             $this->getConnection()->exec("ALTER TABLE `course_member` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
         }
 
+        return 1;
+    }
+
+    public function alterCourseMemberChangeRole()
+    {
         if ($this->isFieldExist('course_member', 'role')) {
             $this->getConnection()->exec("ALTER TABLE `course_member` CHANGE `role` `role` enum('student','teacher', 'assistant') NOT NULL DEFAULT 'student' COMMENT '成员角色';");
-        }
-
-        if (!$this->isFieldExist('course_task', 'multiClassId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_task` ADD `multiClassId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '班课ID' AFTER `courseId`;");
         }
 
         return 1;
