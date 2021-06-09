@@ -10,8 +10,8 @@
         <a-input
           v-decorator="['title', { rules: [
             { required: true, message: '请填写班课名称' },
-            { max: 40, message: '班课名称不能超过40个字' },
-            { validator: validatorTitle }
+            { validator: validatorTitle },
+            { validator: validatorTitleLength }
           ]}]"
           placeholder="请输入班课名称"
         />
@@ -480,6 +480,11 @@ export default {
 
       result ? callback() : callback('班课名称不能与已创建的相同');
     }, 300),
+
+    validatorTitleLength(rule, value, callback) {
+      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
+      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+    },
 
     validatorAssistant: (rule, value, callback) => {
       value.length > 20 ? callback('最多选择20个助教') : callback();
