@@ -23,7 +23,7 @@
 
 <script>
 import { AssistantPermission } from 'common/vue/service';
-import _ from '@codeages/utils';
+import _ from 'lodash';
 
 export default {
   name: 'PermissionModal',

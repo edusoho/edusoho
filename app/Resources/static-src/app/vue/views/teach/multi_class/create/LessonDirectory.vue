@@ -110,7 +110,7 @@
 
 <script>
 import { Course } from 'common/vue/service';
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import LessonDirectoryItem from './LessonDirectoryItem.vue';
 import Empty from 'app/vue/views/components/Empty.vue';
 
