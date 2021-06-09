@@ -79,7 +79,7 @@
                 立即发布
               </a-menu-item>
               <a-menu-item key="delete" v-if="isPermission('course_lesson_manage')">
-                删除
+                <span style="color: #fe4040; cursor: pointer;">删除</span>
               </a-menu-item>
             </template>
           </a-menu>
