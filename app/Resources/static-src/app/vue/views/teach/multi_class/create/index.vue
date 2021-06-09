@@ -8,11 +8,14 @@
     >
       <a-form-item label="班课名称">
         <a-input
-          v-decorator="['title', { rules: [
-            { required: true, message: '请填写班课名称' },
-            { max: 40, message: '班课名称不能超过40个字' },
-            { validator: validatorTitle }
-          ]}]"
+          v-decorator="['title', {
+            trigger: 'blur',
+            rules: [
+              { required: true, message: '请填写班课名称' },
+              { validator: validatorTitle },
+              { validator: validatorTitleLength }
+            ]
+          }]"
           placeholder="请输入班课名称"
         />
       </a-form-item>
@@ -222,6 +225,8 @@ export default {
     if (course) {
       course = JSON.parse(course)
 
+      this.selectedCourseId = course.id;
+      this.selectedCourseSetId = course.courseSetId;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
     }
@@ -491,7 +496,7 @@ export default {
       }
     },
 
-    validatorTitle: _.debounce(async function(rule, value, callback) {
+    async validatorTitle(rule, value, callback) {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
         title: value,
@@ -499,7 +504,12 @@ export default {
       });
 
       result ? callback() : callback('班课名称不能与已创建的相同');
-    }, 300),
+    },
+
+    validatorTitleLength(rule, value, callback) {
+      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
+      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+    },
 
     validatorAssistant: (rule, value, callback) => {
       value.length > 20 ? callback('最多选择20个助教') : callback();
@@ -540,8 +550,14 @@ export default {
     },
 
     clickCancelCreate() {
+      const params = {};
+      const paging = this.$route.params.paging;
+      if (paging) {
+        params.paging = paging;
+      }
       this.$router.push({
-        path: '/'
+        name: 'MultiClass',
+        params
       });
     }
   }

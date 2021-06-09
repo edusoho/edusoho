@@ -45,11 +45,14 @@
           <a-form-item label="产品名称">
             <a-input
               placeholder="请输入产品名称"
-              v-decorator="['title', { rules: [
-                { required: true, message: '产品名称不能为空' },
-                { validator: validatorTitle },
-                { validator: validatorLen },
-              ] }]"
+              v-decorator="['title', {
+                trigger: 'blur',
+                rules: [
+                  { required: true, message: '产品名称不能为空' },
+                  { validator: validatorTitle },
+                  { validator: validatorLen },
+                ]
+              }]"
             />
           </a-form-item>
           <a-form-item label="备注">
@@ -146,7 +149,7 @@ export default {
       this.modalVisible = true;
       this.modalTitle = '新建产品'
     },
-    validatorTitle: _.debounce(async function(rule, value, callback) {
+    async validatorTitle(rule, value, callback) {
       const { result } = await ValidationTitle.search({
         type: 'multiClassProduct',
         title: value,
@@ -158,7 +161,7 @@ export default {
       }
 
       callback()
-    }, 300),
+    },
     validatorLen(rule, value, callback) {
       if (this.calculateByteLength(value) > 40) {
         callback('产品名称不能超过40个字符，一个中文字算2个字符')
