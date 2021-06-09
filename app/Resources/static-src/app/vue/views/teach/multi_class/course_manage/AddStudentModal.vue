@@ -79,6 +79,7 @@ export default {
   methods: {
     handleCancel() {
       this.$emit('handle-cancel');
+      this.form.resetFields();
     },
     async handleSubmit() {
       this.form.validateFields((err, values) => {

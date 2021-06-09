@@ -37,6 +37,9 @@ class CloneMultiClassJob extends AbstractJob
                 'isVisable' => 1, ]], $newMultiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($newMultiClass['courseId'], $cloneMultiClass['assistantIds'], $newMultiClass['id']);
 
+            $course = $this->getCourseService()->getCourse($newMultiClass['courseId']);
+            $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
+
             $message['status'] = 'success';
             $this->getNotificationService()->notify($userId, 'multi-class-copy', $message);
 
