@@ -29,8 +29,7 @@ class MultiClassLesson extends AbstractResource
             'titleLike' => $request->query->get('titleLike', ''),
             'types' => $request->query->get('types', []),
         ];
-        $sort = $request->query->get('sort') ? ['startTime' => $request->query->get('sort')] : [];
-        $items = $this->getCourseService()->searchMultiClassCourseItems($conditions, $sort, $offset, $limit);
+        $items = $this->getCourseService()->searchMultiClassCourseItems($conditions, ['seq' => 'ASC'], $offset, $limit);
         $total = $this->getTaskService()->countTasks($conditions);
 
         $items = $this->getNecessaryItems($items, $multiClass['id'], $course, $request);
