@@ -69,7 +69,7 @@
 
 
 <script>
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";

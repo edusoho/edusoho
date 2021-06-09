@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import _ from '@codeages/utils';
+import _ from 'lodash';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
