@@ -608,6 +608,7 @@ export default {
           }).then(res => {
             self.getMultiClassStudents();
             self.$message.success('移除学员成功！');
+            self.selectedRowKeys = [];
           }).catch(err => {
             self.$message.warning('移除学员失败！');
           })
