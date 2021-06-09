@@ -96,6 +96,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'liveProvider' => $live['provider'],
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
+            'fileIds' => $activity['fileIds'],
         ];
 
         return $this->getLiveActivityDao()->create($liveActivity);
@@ -137,8 +138,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
+            if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
+                $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
+                $this->createLiveroomCourseware($liveActivity['liveId'], $fileIds);
+            }
         }
-        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType']);
+        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds']);
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -303,7 +308,48 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ]);
 
+        // 给直播间（自研）添加课件
+        if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider'] && $activity['fileIds']) {
+            $this->createLiveroomCourseware($live['id'], $activity['fileIds']);
+        }
+
         return $live;
+    }
+
+    /**
+     * @param  $liveId
+     * @param  $fileIds
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    public function createLiveroomCourseware($liveId, $fileIds)
+    {
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+
+        $resources = [];
+        foreach ($files as $file) {
+            $resources[] = [
+                'name' => $file['filename'],
+                'fromResNo' => $file['globalId'],
+            ];
+        }
+
+        $liveCourseware = $this->getEdusohoLiveClient()->createLiveCourseware([
+            'liveId' => $liveId,
+            'resources' => $resources,
+        ]);
+
+        return $liveCourseware;
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getTokenService()
