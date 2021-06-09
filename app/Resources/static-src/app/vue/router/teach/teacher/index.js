@@ -2,6 +2,6 @@ export default [
   {
     path: '/',
     name: 'Teacher',
-    component: () => import('app/vue/views/teach/teacher/index.vue')
+    component: () => import(/* webpackChunkName: "app/vue/dist/Teacher" */ 'app/vue/views/teach/teacher/index.vue')
   }
 ];
