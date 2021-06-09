@@ -66,7 +66,7 @@
           :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a-button>
 
         <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_manage')">
-          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">

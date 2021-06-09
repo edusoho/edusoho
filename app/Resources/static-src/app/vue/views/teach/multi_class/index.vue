@@ -46,11 +46,10 @@
           <a-button v-if="isPermission('multi_class_edit')"
             type="link"
             @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a-button>
-          <a-button v-if="isPermission('course_statistics_view')"
-            type="link"
-            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
-            <a-icon type="ellipsis" @click="e => e.preventDefault()" />
+            <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
+              <a-icon type="caret-down" />
+            </a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a v-if="isPermission('multi_class_copy')" href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
@@ -60,6 +59,9 @@
               </a-menu-item>
             </a-menu>
           </a-dropdown>
+          <a-button v-if="isPermission('course_statistics_view')"
+            type="link"
+            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
         </template>
       </a-table>
     </a-spin>
