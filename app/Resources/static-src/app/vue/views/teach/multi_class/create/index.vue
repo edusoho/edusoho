@@ -51,6 +51,8 @@
 
       <a-form-item label="所属产品">
         <a-select
+          show-search
+          :filter-option="false"
           v-decorator="['productId', {
             initialValue: product.initialValue,
             rules: [
@@ -59,6 +61,7 @@
           }]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
+          @search="handleSearchProduct"
         >
           <a-select-option v-for="item in product.list" :key="item.id">
             {{ item.title }}
@@ -334,12 +337,16 @@ export default {
     }, 300),
 
     fetchProducts() {
-      const { paging: { pageSize, current } } = this.product;
+      const { title, paging: { pageSize, current } } = this.product;
 
       const params = {
         limit: pageSize,
         offset: pageSize * current
       };
+
+      if (title) {
+        params.keywords = title;
+      }
 
       MultiClassProduct.search(params).then(res => {
         this.product.paging.current++;
@@ -361,6 +368,19 @@ export default {
       if (maxScrollTop < scrollTop && this.product.flag) {
         this.fetchProducts();
       }
+    }, 300),
+
+    handleSearchProduct: _.debounce(function(input) {
+      this.product = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchProducts();
     }, 300),
 
     fetchTeacher() {
