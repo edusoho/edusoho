@@ -39,7 +39,7 @@ export default {
 <style lang="less">
 .aside-layout {
   .aside-layout-header {
-    padding: 12px 24px;
+    padding: 16px;
     border-bottom: 1px solid #e8e8e8;
     font-size: 18px;
     color: #333;
@@ -47,7 +47,7 @@ export default {
     overflow: hidden;
 
     .ant-breadcrumb {
-      font-size: 18px;
+      font-size: 16px;
       line-height: 28px;
     }
   }
