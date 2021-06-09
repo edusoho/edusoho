@@ -222,6 +222,8 @@ export default {
     if (course) {
       course = JSON.parse(course)
 
+      this.selectedCourseId = course.id;
+      this.selectedCourseSetId = course.courseSetId;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
     }
