@@ -120,7 +120,7 @@
             cancel-text="取消"
             @confirm="confirm(record.user.id)"
           >
-            <a-button v-if="isPermission('course_member_delete')" type="link">移除</a-button>
+            <span v-if="isPermission('course_member_delete')" style="color: #fe4040; cursor: pointer;">移除</span>
           </a-popconfirm>
         </a-space>
       </template>
