@@ -28,9 +28,10 @@
       </template>
 
       <template slot="time" slot-scope="time, record">
-        <template v-if="['video', 'live'].includes(record.tasks.type)">
-          {{ record.tasks.length | timeTransfer }}
+        <template v-if="'video' === record.tasks.type">
+          {{ (record.tasks.length / 60).toFixed(2) }}min
         </template>
+        <template v-else-if="'live' === record.tasks.type">{{ record.tasks.length }}min</template>
         <template v-else>--</template>
       </template>
 
@@ -66,7 +67,7 @@
           :data-url="`/course/${record.courseId}/task/${record.tasks.id}/update`">编辑</a-button>
 
         <a-dropdown :trigger="['hover']" placement="bottomRight" v-if="isPermission('course_lesson_manage')">
-          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay" @click="({ key }) => handleMenuClick(key, record)">

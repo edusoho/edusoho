@@ -11,6 +11,8 @@ use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -24,6 +26,10 @@ class MultiClassTaskExamResult extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         if (!$task) {
             throw TaskException::NOTFOUND_TASK();
+        }
+
+        if (!$this->getCourseService()->hasCourseManagerRole($task['courseId'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -122,5 +128,13 @@ class MultiClassTaskExamResult extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

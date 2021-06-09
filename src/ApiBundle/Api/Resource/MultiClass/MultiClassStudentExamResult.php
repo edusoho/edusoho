@@ -9,6 +9,8 @@ use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
@@ -24,6 +26,11 @@ class MultiClassStudentExamResult extends AbstractResource
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
+
+        if (!$this->getCourseService()->hasCourseManagerRole($multiClass['courseId'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $type = $request->query->get('type', '');
 
         if (!in_array($type, ['homework', 'testpaper'])) {
@@ -39,8 +46,6 @@ class MultiClassStudentExamResult extends AbstractResource
             $answerSceneIds[] = $activity['ext']['answerSceneId'];
             $sceneIndexActivities[$activity['ext']['answerSceneId']] = $activity;
         }
-
-
 
         $status = $request->query->get('status', 'all');
         if (!in_array($status, ['all', 'finished', 'reviewing', 'doing'])) {
@@ -143,5 +148,13 @@ class MultiClassStudentExamResult extends AbstractResource
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
