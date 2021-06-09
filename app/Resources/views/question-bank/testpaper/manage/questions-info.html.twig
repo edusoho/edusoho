@@ -38,7 +38,7 @@
           </tr>
           </thead>
           <tbody data-type="{{ type }}" class="testpaper-table-tbody" data-role="question-body">
-          {% for item in sections[type].items|default([]) if sections %}
+          {% for item in sections[type].items|default([]) if not item.isDelete|default(1) %}
             {% if item.type == 'material' %}
               {% include 'question-bank/widgets/picked-item/material-question-item.html.twig' %}
             {% else %}
