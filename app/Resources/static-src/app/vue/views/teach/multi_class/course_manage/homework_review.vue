@@ -57,12 +57,12 @@
         <a-tab-pane :key="2" tab="进行中"></a-tab-pane>
         <a-tab-pane :key="3" tab="已批阅"></a-tab-pane>
       </a-tabs>
-      <!-- TODO 翻页未做 -->
       <a-table
         v-if="examResults"
         :columns="resultColumns"
         :data-source="examResults.data"
-        :pagination="examResults.paging"
+        :pagination="examPaging[status[currentTab]]"
+        @change="handleExamTableChange"
       >
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
         <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
@@ -74,8 +74,6 @@
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
-          <!-- TODO 这里要判断是不是老师 -->
-          <!-- TODO 这里要判断来源是classroom还是course -->
           <a v-if="record.status === 'reviewing'"
             :href="currentTask.type === 'testpaper' ? `/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check` : `/course/${currentTask.courseId}/manage/homework/${record.id}/check?action=check`"
             target="_blank">去批阅</a>
@@ -173,6 +171,29 @@ const resultColumns = [
   }
 ]
 
+const defaultExamPaging = {
+  all: {
+    total: 0,
+    offset: 0,
+    pageSize: 5,
+  },
+  reviewing: {
+    total: 0,
+    offset: 0,
+    pageSize: 5,
+  },
+  doing: {
+    total: 0,
+    offset: 0,
+    pageSize: 5,
+  },
+  finished: {
+    total: 0,
+    offset: 0,
+    pageSize: 5,
+  }
+};
+
 export default {
   name: "HomeWorkReview",
   components: {
@@ -190,6 +211,7 @@ export default {
         offset: 0,
         pageSize: 10,
       },
+      examPaging: defaultExamPaging,
       modalVisible: false,
       currentTab: 0,
       currentTask: {},
@@ -224,6 +246,20 @@ export default {
     this.getHomeworkList()
   },
   methods: {
+    handleExamTableChange(pagination) {
+      const status = this.status[this.currentTab];
+      const pager = { ...this.examPaging[status] };
+      pager.current = pagination.current;
+      pager.offset = (pagination.current - 1) * pagination.pageSize;
+      this.examPaging[status] = pager;
+
+      const params = {
+        limit: pagination.pageSize,
+        offset: (pagination.current - 1) * pagination.pageSize
+      };
+
+      this.getExamResults(this.currentTab, params);
+    },
     async getHomeworkList(params = {}) {
       this.getListLoading = true;
       try {
@@ -251,15 +287,20 @@ export default {
       }
       this.modalVisible = true;
     },
-    getExamResults(currentTab = 0) {
-      const status = this.status[currentTab]
+    getExamResults(currentTab = 0, params = {}) {
+      const status = this.status[currentTab];
+      console.log(status)
+      console.log(this.examPaging[status]);
 
       MultiClassExam.getExamResults({
         status,
         multiClassId: this.$route.params.id,
         taskId: this.currentTask.id,
+        offset: params.offset || this.examPaging[status].offset || defaultExamPaging[status].offset,
+        limit: params.limit || this.examPaging[status].pageSize || defaultExamPaging[status].pageSize,
       }).then(res => {
-        res.paging.pageSize = res.paging.limit
+        res.paging.page = (res.paging.offset / res.paging.limit) + 1;
+        this.examPaging[status] = Object.assign(this.examPaging[status], res.paging);
         this.$set(this.examResultList, status, res);
       })
     },
