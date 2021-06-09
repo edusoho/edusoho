@@ -530,8 +530,14 @@ export default {
     },
 
     clickCancelCreate() {
+      const params = {};
+      const paging = this.$route.params.paging;
+      if (paging) {
+        params.paging = paging;
+      }
       this.$router.push({
-        path: '/'
+        name: 'MultiClass',
+        params
       });
     }
   }
