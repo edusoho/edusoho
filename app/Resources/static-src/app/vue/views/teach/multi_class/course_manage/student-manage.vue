@@ -1,8 +1,8 @@
 <template>
   <div class="student-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
-      <a-space class="pull-left" size="large">
-        <a-input-search placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
+      <a-input-search class="pull-left" placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
+      <a-space class="pull-left cd-ml24" size="middle">
         <a-button
           v-if="isPermission('course_member_create')"
           icon="plus"

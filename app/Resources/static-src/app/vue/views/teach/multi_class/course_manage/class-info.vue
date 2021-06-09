@@ -162,7 +162,7 @@ const columns = [
   },
   {
     title: '操作',
-    width: '10%',
+    width: '128px',
     dataIndex: 'actions',
     scopedSlots: { customRender: 'actions' }
   }
