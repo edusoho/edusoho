@@ -13,14 +13,14 @@ class Live extends Activity
 {
     protected function registerListeners()
     {
-        return array(
+        return [
             'watching' => 'Biz\Activity\Listener\LiveActivityWatchListener',
-        );
+        ];
     }
 
     public function preCreateCheck($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
+        if (!ArrayToolkit::requireds($fields, ['fromCourseId', 'startTime', 'length'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -41,7 +41,7 @@ class Live extends Activity
             return;
         }
 
-        if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
+        if (!ArrayToolkit::requireds($newFields, ['fromCourseId', 'startTime', 'length'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -59,10 +59,13 @@ class Live extends Activity
 
     public function create($fields)
     {
+        $files = json_decode($fields['materials'], true);
+        $fields['fileIds'] = empty($files) ? [] : array_keys($files);
+
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $user = $this->getCurrentUser();
         $live = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
@@ -91,6 +94,9 @@ class Live extends Activity
 
     public function update($id, &$fields, $activity)
     {
+        $files = json_decode($fields['materials'], true);
+        $fields['fileIds'] = empty($files) ? [] : array_keys($files);
+
         list($liveActivity, $fields) = $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);
 
         return $liveActivity;
@@ -108,7 +114,12 @@ class Live extends Activity
 
     public function delete($targetId)
     {
-        $conditions = array('type' => 'live', 'mediaId' => $targetId);
+        $live = $this->getLiveActivityService()->getLiveActivity($targetId);
+        foreach ($live['fileIds'] as $fileId) {
+            $this->getUploadFileService()->updateUsedCount($fileId);
+        }
+
+        $conditions = ['type' => 'live', 'mediaId' => $targetId];
         $count = $this->getActivityService()->count($conditions);
         if (1 == $count) {
             return $this->getLiveActivityService()->deleteLiveActivity($targetId);
@@ -142,5 +153,13 @@ class Live extends Activity
     private function getActivityDao()
     {
         return $this->getBiz()->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

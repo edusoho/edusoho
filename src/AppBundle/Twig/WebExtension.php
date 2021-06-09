@@ -2165,10 +2165,6 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
-        $logger = new JsonLogger('CloudAPI', $stream);
-        $logger->addInfo($type.'--getCloudSdkUrl');
-
         return $this->getResourceFacadeService()->getFrontPlaySDKPathByType($type);
     }
 

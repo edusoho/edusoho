@@ -70,3 +70,12 @@
   <span class="color-success js-success-redmine"></span>
   <span class="color-danger js-danger-redmine"></span>
 {% endif %}
+
+{% if mediaType == 'live' %}
+  <div class="row mt5">
+    <div class="col-sm-10"><p class="mbl mtl"><label>{{'course.plan_task.activity_manage.live_resource.file_name'|trans}}</label><span class="js-current-file">{{'course.plan_task.activity_manage.live_resource.upload_btn'|trans}}</span></p></div>
+    <div class="col-sm-2"><a class="btn btn-primary btn-block mbl mtl js-add-file-list">{{'course.plan_task.activity_manage.download.add_btn'|trans}}</a></div>
+  </div>
+  <span class="color-success js-success-redmine"></span>
+  <span class="color-danger js-danger-redmine"></span>
+{% endif %}
