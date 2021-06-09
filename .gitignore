@@ -49,6 +49,7 @@ chunk-manifest.json
 /web/static-dist/*
 !/web/static-dist/*.js
 !/web/static-dist/*.css
+!/web/static-dist/vendors~app
 !/web/static-dist/libs
 !/web/static-dist/app
 !/web/static-dist/jianmotheme

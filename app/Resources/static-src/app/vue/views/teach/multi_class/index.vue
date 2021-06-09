@@ -45,7 +45,7 @@
             @click="goToMultiClassManage(record.id)">查看</a-button>
           <a-button v-if="isPermission('multi_class_edit')"
             type="link"
-            @click="$router.push({ name: 'MultiClassCreate', query: { id: record.id } })">编辑</a-button>
+            @click="goToEditorMultiClass(record.id)">编辑</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
               <a-icon type="caret-down" />
@@ -176,7 +176,11 @@ export default {
     }
   },
   created() {
-    this.getMultiClassList()
+    let paging = this.$route.params.paging;
+    if (paging) {
+      this.paging = paging;
+    }
+    this.getMultiClassList(this.paging)
     this.getMultiClassProductList()
   },
   methods: {
@@ -216,6 +220,7 @@ export default {
 
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
+        paging.current = params.current;
 
         this.multiClassList = data;
         this.paging = paging;
@@ -255,7 +260,8 @@ export default {
 
       if (pagination) {
         params.offset = pagination.pageSize * (pagination.current - 1)
-        params.pageSize = pagination.pageSize
+        params.pageSize = pagination.pageSize,
+        params.current = pagination.current
       }
 
       if (filters && Object.keys(filters).length > 0) {
@@ -284,6 +290,18 @@ export default {
       if (event === 'cancel-modal') {
         this.copyModalVisible = false;
       }
+    },
+
+    goToEditorMultiClass(id) {
+      this.$router.push({
+        name: 'MultiClassCreate',
+        query: {
+          id
+        },
+        params: {
+          paging: this.paging
+        }
+      });
     }
   }
 }

@@ -54,7 +54,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, CourseMemberCheck } from 'common/vue/service';
+import { CourseMemberCheck, MultiClassStudent } from 'common/vue/service';
 
 export default {
   props: {
@@ -79,9 +79,11 @@ export default {
   methods: {
     handleCancel() {
       this.$emit('handle-cancel');
+      this.form.resetFields();
     },
     async handleSubmit() {
       this.form.validateFields((err, values) => {
+        console.log(err);
         if (!err) {
           MultiClassStudent.add({
             id: this.multiClass.id,

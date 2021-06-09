@@ -8,11 +8,14 @@
     >
       <a-form-item label="班课名称">
         <a-input
-          v-decorator="['title', { rules: [
-            { required: true, message: '请填写班课名称' },
-            { max: 40, message: '班课名称不能超过40个字' },
-            { validator: validatorTitle }
-          ]}]"
+          v-decorator="['title', {
+            trigger: 'blur',
+            rules: [
+              { required: true, message: '请填写班课名称' },
+              { validator: validatorTitle },
+              { validator: validatorTitleLength }
+            ]
+          }]"
           placeholder="请输入班课名称"
         />
       </a-form-item>
@@ -51,6 +54,8 @@
 
       <a-form-item label="所属产品">
         <a-select
+          show-search
+          :filter-option="false"
           v-decorator="['productId', {
             initialValue: product.initialValue,
             rules: [
@@ -59,6 +64,7 @@
           }]"
           placeholder="请选择归属产品"
           @popupScroll="productScroll"
+          @search="handleSearchProduct"
         >
           <a-select-option v-for="item in product.list" :key="item.id">
             {{ item.title }}
@@ -219,6 +225,8 @@ export default {
     if (course) {
       course = JSON.parse(course)
 
+      this.selectedCourseId = course.id;
+      this.selectedCourseSetId = course.courseSetId;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
     }
@@ -334,12 +342,16 @@ export default {
     }, 300),
 
     fetchProducts() {
-      const { paging: { pageSize, current } } = this.product;
+      const { title, paging: { pageSize, current } } = this.product;
 
       const params = {
         limit: pageSize,
         offset: pageSize * current
       };
+
+      if (title) {
+        params.keywords = title;
+      }
 
       MultiClassProduct.search(params).then(res => {
         this.product.paging.current++;
@@ -361,6 +373,19 @@ export default {
       if (maxScrollTop < scrollTop && this.product.flag) {
         this.fetchProducts();
       }
+    }, 300),
+
+    handleSearchProduct: _.debounce(function(input) {
+      this.product = {
+        list: [],
+        title: input,
+        flag: true,
+        paging: {
+          pageSize: 10,
+          current: 0
+        }
+      };
+      this.fetchProducts();
     }, 300),
 
     fetchTeacher() {
@@ -471,7 +496,7 @@ export default {
       }
     },
 
-    validatorTitle: _.debounce(async function(rule, value, callback) {
+    async validatorTitle(rule, value, callback) {
       const { result } = await ValidationTitle.search({
         type: 'multiClass',
         title: value,
@@ -479,7 +504,12 @@ export default {
       });
 
       result ? callback() : callback('班课名称不能与已创建的相同');
-    }, 300),
+    },
+
+    validatorTitleLength(rule, value, callback) {
+      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
+      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+    },
 
     validatorAssistant: (rule, value, callback) => {
       value.length > 20 ? callback('最多选择20个助教') : callback();
@@ -520,8 +550,14 @@ export default {
     },
 
     clickCancelCreate() {
+      const params = {};
+      const paging = this.$route.params.paging;
+      if (paging) {
+        params.paging = paging;
+      }
       this.$router.push({
-        path: '/'
+        name: 'MultiClass',
+        params
       });
     }
   }

@@ -76,6 +76,10 @@ class CourseSet extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
+        if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
+            throw CourseSetException::FORBIDDEN_CREATE();
+        }
+
         $data = $request->request->all();
         if (!ArrayToolkit::requireds($data, ['type', 'title', 'teachers', 'assistants'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();

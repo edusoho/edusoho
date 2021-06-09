@@ -134,15 +134,15 @@ class MultiClass extends AbstractResource
         $prepareOrderBys = ['createdTime' => 'DESC'];
 
         if (!empty($orderBys['priceSort'])) {
-            $prepareOrderBys['price'] = 'ASC' == $orderBys['priceSort'] ? 'ASC' : 'DESC';
+            $prepareOrderBys = 'ASC' == $orderBys['priceSort'] ? ['price' => 'ASC'] : ['price' => 'DESC'];
         }
 
         if (!empty($orderBys['studentNumSort'])) {
-            $prepareOrderBys['studentNum'] = 'ASC' == $orderBys['studentNumSort'] ? 'ASC' : 'DESC';
+            $prepareOrderBys = 'ASC' == $orderBys['studentNumSort'] ? ['studentNum' => 'ASC'] : ['studentNum' => 'DESC'];
         }
 
         if (!empty($orderBys['createdTimeSort'])) {
-            $prepareOrderBys['createdTime'] = 'DESC' == $orderBys['createdTimeSort'] ? 'DESC' : 'ASC';
+            $prepareOrderBys = 'DESC' == $orderBys['createdTimeSort'] ? ['createdTime' => 'DESC'] : ['createdTime' => 'ASC'];
         }
 
         return $prepareOrderBys;
