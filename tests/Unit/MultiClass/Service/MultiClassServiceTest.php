@@ -124,8 +124,12 @@ class MultiClassServiceTest extends BaseTestCase
         $this->createMultiClassDefaultProduct();
         $multiClass = $this->createMultiClass();
         $this->getMultiClassProductDao()->create(['title' => '系统默认', 'type' => 'default']);
-        $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id']);
-        $this->assertEquals($multiClass['title'].'(复制)', $newMultiClass['title']);
+        $cloneMultiClass = [
+            'title' => '复制课程',
+            'productId' => 1,
+        ];
+        $newMultiClass = $this->getMultiClassService()->cloneMultiClass($multiClass['id'], $cloneMultiClass);
+        $this->assertEquals('复制课程', $newMultiClass['title']);
     }
 
     public function testGetMultiClassByCourseId()
@@ -279,13 +283,5 @@ class MultiClassServiceTest extends BaseTestCase
     protected function getUserDao()
     {
         return $this->createService('User:UserDao');
-    }
-
-    /**
-     * @return MultiClassProductDao
-     */
-    protected function getMultiClassProductDao()
-    {
-        return $this->createDao('MultiClass:MultiClassProductDao');
     }
 }
