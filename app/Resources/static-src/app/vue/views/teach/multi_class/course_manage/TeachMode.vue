@@ -3,10 +3,10 @@
     {{ record.tasks.type | teachType }}
 
     <template v-if="progressStatus">
-      <a-divider type="vertical" />
-      <a-checkable-tag v-if="progressStatus == 'created'" style="color: #fb8d4d;">未开始</a-checkable-tag>
-      <a-checkable-tag v-else-if="progressStatus == 'start'" style="color: #43bc60;">直播中</a-checkable-tag>
-      <a-checkable-tag v-else-if="progressStatus == 'closed'">已结束</a-checkable-tag>
+      <a-divider type="vertical" style="margin: 0 4px;" />
+      <span v-if="progressStatus == 'created'" style="font-size: 14px; color: #fb8d4d;">未开始</span>
+      <span v-else-if="progressStatus == 'start'" style="font-size: 14px; color: #43bc60;">直播中</span>
+      <span v-else-if="progressStatus == 'closed'" style="font-size: 14px; color: #999;">已结束</span>
     </template>
 
     <template v-if="replayStatus">

@@ -37,18 +37,40 @@ export default {
 </script>
 
 <style lang="less">
+body {
+  background-color: #f5f5f5;
+}
+
 .aside-layout {
   .aside-layout-header {
     padding: 16px;
     border-bottom: 1px solid #e8e8e8;
-    font-size: 18px;
     color: #333;
-    font-weight: 500;
     overflow: hidden;
 
-    .ant-breadcrumb {
-      font-size: 16px;
+    .ant-breadcrumb-separator,
+    .ant-breadcrumb-link,
+    .ant-breadcrumb-link a {
       line-height: 28px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .ant-breadcrumb-separator,
+    .ant-breadcrumb-link a {
+      color: #999;
+    }
+
+    .ant-breadcrumb-link a {
+      &:hover,
+      &:focus {
+        color: #59baff !important;
+      }
+
+      &:active,
+      &.active {
+        color: #1e7fd9 !important;
+      }
     }
   }
 

@@ -25,13 +25,11 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a-space size="large">
-            <a-button type="link">
-              <a class="ant-dropdown-link"
-                :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
-                target="_blank">
-                答题分布
-              </a>
-            </a-button>
+            <a class="ant-dropdown-link"
+              :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
+              target="_blank">
+              答题分布
+            </a>
             <a-button type="link"
               data-target="#modal"
               data-toggle="modal"
@@ -62,22 +60,25 @@
         :columns="resultColumns"
         :data-source="examResults.data"
         :pagination="examPaging[status[currentTab]]"
+        :rowKey="record => record.id"
         @change="handleExamTableChange"
       >
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
         <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
-        <template slot="status" slot-scope="status">
+        <span slot="status" slot-scope="status" :style="{ color: status === 'reviewing' ? '#fb8d4d' : '' }">
           {{ statusMap[status] }}
-        </template>
+        </span>
         <template slot="end_time" slot-scope="end_time">
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
         <template slot="action" slot-scope="text, record">
           <a v-if="record.status === 'reviewing'"
+            class="ant-dropdown-link"
             :href="currentTask.type === 'testpaper' ? `/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check` : `/course/${currentTask.courseId}/manage/homework/${record.id}/check?action=check`"
             target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
+            class="ant-dropdown-link"
             :href="`/homework/result/${record.id}/show?action=check`"
             target="_blank">查看结果</a>
         </template>
