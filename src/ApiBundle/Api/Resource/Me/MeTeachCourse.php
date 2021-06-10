@@ -26,6 +26,7 @@ class MeTeachCourse extends AbstractResource
         $conditions = [
             'parentId' => 0,
             'status' => 'published',
+            'excludeTypes' => ['reservation'],
         ];
 
         if (!in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
