@@ -25,13 +25,11 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a-space size="large">
-            <a-button type="link">
-              <a class="ant-dropdown-link"
-                :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
-                target="_blank">
-                答题分布
-              </a>
-            </a-button>
+            <a class="ant-dropdown-link"
+              :href="`/course/${record.tasks.courseId}/manage/exam/activity/${record.tasks.activityId}/analysis`"
+              target="_blank">
+              答题分布
+            </a>
             <a-button type="link"
               data-target="#modal"
               data-toggle="modal"
