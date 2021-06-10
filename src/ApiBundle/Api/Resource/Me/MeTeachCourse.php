@@ -34,7 +34,7 @@ class MeTeachCourse extends AbstractResource
             $conditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId');
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, [], 0, PHP_INT_MAX);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, ['createdTime' => 'desc'], 0, PHP_INT_MAX);
 
         $conditions = [
             'courseSetIds' => empty($courseSets) ? [-1] : array_column($courseSets, 'id'),
@@ -52,7 +52,7 @@ class MeTeachCourse extends AbstractResource
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getCourseService()->searchCourses($conditions, [], $offset, $limit, ['id', 'title', 'courseSetTitle', 'courseSetId']);
+        $courses = $this->getCourseService()->searchCourses($conditions, ['createdTime' => 'desc'], $offset, $limit, ['id', 'title', 'courseSetTitle', 'courseSetId']);
         $total = $this->getCourseService()->countCourses($conditions);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
