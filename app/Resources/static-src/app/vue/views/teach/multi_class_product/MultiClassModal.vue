@@ -7,7 +7,12 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="ajaxLoading">
-      <a-table :columns="columns" :data-source="multiClassList" :pagination="paging">
+      <a-table
+        :columns="columns"
+        :data-source="multiClassList"
+        :pagination="paging"
+        @change="handleTableChange"
+      >
         <a slot="class_title" slot-scope="text, record"
           href="javascript:;"
           @click="goToMultiClassManage(record.id)">
@@ -124,12 +129,19 @@
       handleCancel() {
         this.$emit('close', false)
       },
-      async searchMultiClassList() {
+      async searchMultiClassList (data = {}) {
         if (!this.product) return
+        const params = {};
+        params.limit = data.pageSize || 10
+        params.offset = data.offset || 0
+        params.productId = this.product.id;
 
+        this.ajaxLoading = true;
         try {
-          this.ajaxLoading = true;
-          const { data, paging } = await MultiClass.search({ productId: this.product.id })
+          const { data, paging } = await MultiClass.search(params)
+
+          paging.page = (paging.offset / paging.limit) + 1;
+          paging.pageSize = Number(paging.limit);
 
           this.multiClassList = data;
           this.paging = paging;
@@ -137,6 +149,7 @@
           this.ajaxLoading = false;
         }
       },
+
       goToMultiClassManage(id) {
         window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}`
       },
@@ -145,6 +158,18 @@
       },
       goToMultiClassDataPreview(id) {
         window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}/data_preview`
+      },
+
+      handleTableChange(pagination) {
+        const params = {}
+
+        if (pagination) {
+          params.offset = pagination.pageSize * (pagination.current - 1)
+          params.pageSize = pagination.pageSize,
+          params.current = pagination.current
+        }
+
+        this.searchMultiClassList(params)
       }
     }
   };
