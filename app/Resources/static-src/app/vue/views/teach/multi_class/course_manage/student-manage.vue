@@ -14,14 +14,16 @@
         <a-button
           v-if="isPermission('course_member_import')"
           type="primary"
-          icon="download"
           data-toggle="modal"
           data-target="#modal"
           data-backdrop="static"
           data-keyboard="false"
           :data-url="`/importer/course-member/index?courseId=${multiClass.course.id}`"
         >
-          批量导入
+          <a-space>
+            <svg-icon icon="icon-import" />
+            批量导入
+          </a-space>
         </a-button>
         <a-button
           v-if="isPermission('course_member_delete')"
@@ -66,7 +68,6 @@
           v-if="isPermission('course_member_export')"
           type="primary"
           class="js-export-btn"
-          icon="upload"
           href="javascript:;"
           data-try-url="/try/export/course-students"
           data-url="/export/course-students"
@@ -75,7 +76,11 @@
           data-target-form="#course-students-export"
           data-file-names='["course-students"]'
         >
-          批量导出
+
+          <a-space>
+            <svg-icon icon="icon-export" />
+            批量导出
+          </a-space>
         </a-button>
       </a-space>
     </div>
