@@ -108,6 +108,7 @@
           placeholder="请选择助教"
           @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
+          @blur="() => handleSearchAssistant('')"
           @change="(value) => handleChange(value, 'assistant')"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">

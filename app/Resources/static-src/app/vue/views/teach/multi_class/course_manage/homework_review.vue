@@ -66,9 +66,11 @@
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
         <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
-        <span slot="status" slot-scope="status" :style="{ color: status === 'reviewing' ? '#fb8d4d' : '' }">
-          {{ statusMap[status] }}
-        </span>
+        <template slot="status" slot-scope="status">
+          <span v-if="status == 'reviewing'" style="color: #fb8d4d;">{{ statusMap[status] }}</span>
+          <span v-else-if="status == 'doing'" style="color: #43bc60;">{{ statusMap[status] }}</span>
+          <span v-else-if="status == 'finished'" style="color: #999;">{{ statusMap[status] }}</span>
+        </template>
         <template slot="end_time" slot-scope="end_time">
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>

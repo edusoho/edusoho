@@ -54,7 +54,7 @@ export default {
   computed: {
     replayStatus() {
       const { tasks: { type, activity: { ext } }} = this.record;
-      if (type == 'live' && ext.replayStatus == 'videoGenerate') {
+      if (type == 'live' && ['generate', 'videoGenerate'].includes(ext.replayStatus)) {
         return true;
       }
       return false;
