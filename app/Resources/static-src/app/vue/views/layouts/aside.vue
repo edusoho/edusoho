@@ -37,6 +37,10 @@ export default {
 </script>
 
 <style lang="less">
+body {
+  background-color: #f5f5f5;
+}
+
 .aside-layout {
   .aside-layout-header {
     padding: 16px;
