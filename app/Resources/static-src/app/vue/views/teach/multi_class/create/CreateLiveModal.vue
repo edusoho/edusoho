@@ -58,6 +58,7 @@
           :show-time="{ format: 'HH:mm' }"
           format="YYYY-MM-DD HH:mm"
           :disabled-date="disabledDate"
+          :show-today="false"
           v-decorator="['startDate', {
             initialValue: moment().add(5, 'minutes'),
             rules: [
