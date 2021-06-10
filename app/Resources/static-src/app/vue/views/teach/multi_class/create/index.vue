@@ -140,7 +140,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -213,15 +213,16 @@ export default {
   },
 
   created() {
+    // 编辑班课
     const id = this.$route.query.id;
     if (id) {
       this.multiClassId = id;
       this.mode = 'editor';
       this.fetchEditorMultiClass();
-    } else {
-      this.initFetch();
+      return;
     }
 
+    // 创建新课程后
     let course = this.$route.query.course
     if (course) {
       course = JSON.parse(course)
@@ -230,7 +231,13 @@ export default {
       this.selectedCourseSetId = course.courseSetId;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
+      this.fetchCourse();
+      this.fetchProducts();
+      this.fetchCourseTeacher(course.id);
+      return;
     }
+
+    this.initFetch();
   },
 
   methods: {
@@ -273,6 +280,25 @@ export default {
         } else {
           item.disabled = false;
         }
+      });
+    },
+
+    fetchCourseTeacher(courseId) {
+      Course.getTeacher(courseId, { role: 'teacher' }).then(res => {
+        const defaultTeacher = res.data[0].user;
+        this.teacher = {
+          list: [defaultTeacher],
+          title: '',
+          flag: true,
+          initialValue: defaultTeacher.id,
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        };
+        this.form.setFieldsValue({ 'teacherId': defaultTeacher.id });
+        this.fetchAssistants();
+        this.fetchTeacher();
       });
     },
 
@@ -485,6 +511,7 @@ export default {
           return false;
         }
       });
+      this.fetchCourseTeacher(value);
     },
 
     handleChange(value, type) {
