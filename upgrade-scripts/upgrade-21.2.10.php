@@ -57,6 +57,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addDefaultProduct',
             'updateRolePermission',
             'initAssistantPermission',
+            'addActivityLiveColumn',
         );
 
         $funcNames = array();
@@ -213,6 +214,19 @@ class EduSohoUpgrade extends AbstractUpdater
             'course_order_manage',
         ];
         $this->getSettingService()->set('assistant_permission', ['permissions' => $permissions]);
+
+        return 1;
+    }
+
+    public function addActivityLiveColumn()
+    {
+        if (!$this->isFieldExist('activity_live', 'fileIds')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `fileIds` varchar(255) NOT NULL DEFAULT '' COMMENT '课件资料ids' AFTER roomCreated;");
+        }
+
+        if (!$this->isFieldExist('activity_live', 'coursewareIds')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `coursewareIds` varchar(255) NOT NULL DEFAULT '' COMMENT '直播间课件ids' AFTER fileIds;");
+        }
 
         return 1;
     }
