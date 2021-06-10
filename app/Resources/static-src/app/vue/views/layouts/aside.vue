@@ -60,6 +60,18 @@ body {
     .ant-breadcrumb-link a {
       color: #999;
     }
+
+    .ant-breadcrumb-link a {
+      &:hover,
+      &:focus {
+        color: #59baff !important;
+      }
+
+      &:active,
+      &.active {
+        color: #1e7fd9 !important;
+      }
+    }
   }
 
   .aside-layout-main {
