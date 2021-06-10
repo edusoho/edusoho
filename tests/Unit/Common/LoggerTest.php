@@ -38,6 +38,8 @@ class LoggerTest extends BaseTestCase
             'announcement' => '公告',
             'open_course' => '公开课',
             'live' => '直播',
+            'multi_class_product' => '大班课产品',
+            'multi_class' => '大班课',
         ], $result);
     }
 
@@ -295,6 +297,17 @@ class LoggerTest extends BaseTestCase
             'live' => [
                 'update_live_activity' => '更新直播活动',
                 'generate_live_replay' => '生成录播回放',
+            ],
+            'multi_class_product' => [
+                'create_product' => '创建大班课产品',
+                'update_product' => '更新大班课产品',
+                'delete_product' => '删除大班课产品',
+            ],
+            'multi_class' => [
+                'create_multi_class' => '创建班课',
+                'update_multi_class' => '更新班课',
+                'delete_multi_class' => '删除班课',
+                'clone_multi_class' => '复制班课',
             ],
         ], $result);
     }

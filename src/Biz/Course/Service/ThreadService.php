@@ -9,6 +9,8 @@ interface ThreadService
 {
     public function searchThreads($conditions, $sort, $start, $limit);
 
+    public function fillThreadCounts($conditions, $courseMembers);
+
     public function countThreads($conditions);
 
     public function getThreadByThreadId($threadId);

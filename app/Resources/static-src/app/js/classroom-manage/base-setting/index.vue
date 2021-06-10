@@ -22,7 +22,7 @@
                            v-bind:course-price="coursePrice"
         ></marketing-setting>
         <el-row class="pbl">
-            <el-col span="18" offset="6" class="pbl">
+            <el-col span="18" :offset="6" class="pbl">
                 <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
             </el-col>
         </el-row>

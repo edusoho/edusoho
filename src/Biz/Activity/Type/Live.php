@@ -69,11 +69,15 @@ class Live extends Activity
     {
         $user = $this->getCurrentUser();
         $live = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
+        $activity['startTime'] = $config['newActivity']['startTime'];
+        $activity['endTime'] = $config['newActivity']['endTime'];
         if (empty($config['refLiveroom'])) {
             $activity['fromUserId'] = $user['id'];
             unset($activity['id']);
-            unset($activity['startTime']);
-            unset($activity['endTime']);
+            if (!$config['newMultiClass']) {
+                unset($activity['startTime']);
+                unset($activity['endTime']);
+            }
 
             return $this->getLiveActivityService()->createLiveActivity($activity, true);
         }

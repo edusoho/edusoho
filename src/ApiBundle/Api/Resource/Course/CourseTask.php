@@ -60,6 +60,19 @@ class CourseTask extends AbstractResource
         return $activity;
     }
 
+    public function remove(ApiRequest $request, $courseId, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if (!$task) {
+            throw TaskException::NOTFOUND_TASK();
+        }
+
+        $this->getTaskService()->deleteTask($taskId);
+
+        return ['success' => true];
+    }
+
     /**
      * @return TaskService
      */

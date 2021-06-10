@@ -18,6 +18,7 @@ class Importer {
       rules: {},
       importData: [],
       formData: {},
+      messages: {},
     }, props);
 
     this.$container = $(this.container);
@@ -50,6 +51,7 @@ class Importer {
     let self = this;
     let validatior = this.$form.validate({
       rules: self.rules,
+      messages: self.messages,
       submitHandler(form) {
         let $form = $(form);
         let $btn = $(self.verifyBtn);

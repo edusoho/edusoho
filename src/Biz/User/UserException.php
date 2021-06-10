@@ -100,6 +100,8 @@ class UserException extends AbstractException
 
     const MOBILE_NOT_FOUND = 4040119;
 
+    const USER_IS_DESTROYED = 4040120;
+
     public $messages = [
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
@@ -147,5 +149,6 @@ class UserException extends AbstractException
         5000144 => 'exception.user.weixin_invalid',
         4030145 => 'exception.user.file_permission_denied',
         4040119 => 'exception.user.mobile_not_found',
+        4040120 => 'exception.user.user_is_destroyed',
     ];
 }

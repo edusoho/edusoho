@@ -5,14 +5,14 @@
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
             <el-form-item :label="'course.plan_setup.name'|trans" prop="title">
-                <el-col span="18">
+                <el-col :span="18">
                     <el-input ref="title" v-model="baseInfoForm.title" auto-complete="off"
                               :placeholder="'course.plan_setup.placeholder'|trans">
                     </el-input>
                 </el-col>
             </el-form-item>
             <el-form-item :label="'course.plan_setup.subtitle'|trans" prop="subtitle">
-                <el-col span="18">
+                <el-col :span="18">
                     <el-input ref="subtitle" v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
                 </el-col>
             </el-form-item>
@@ -23,33 +23,34 @@
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
 
             <el-form-item :label="'course.base.title'|trans" prop="title">
-                <el-col span="18">
+                <el-col :span="18">
                     <el-input ref="title" v-model="baseInfoForm.title" auto-complete="off"
                               :placeholder="'course.base.title.placeholder'|trans">
                     </el-input>
                 </el-col>
             </el-form-item>
             <el-form-item :label="'course.base.sub_title'|trans" prop="subtitle">
-                <el-col span="18">
+                <el-col :span="18">
                     <el-input ref="subtitle" v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
                 </el-col>
             </el-form-item>
+            
             <el-form-item :label="'course.base.tag'|trans">
-                <el-col span="18">
-                    <tags v-bind:tag-data="baseInfoForm.tags" v-on:update:tags="baseInfoForm.tags = $event"></tags>
+                <el-col :span="18">
+                    <tags v-bind:tag-data="baseInfoForm.tags || []" v-on:update:tags="baseInfoForm.tags = $event"></tags>
                     <div class="help-block courseset-manage-body__tip">{{ 'course.base.tag_tips'|trans }}</div>
                 </el-col>
             </el-form-item>
 
             <el-form-item :label="'course.base.category'|trans">
-                <el-col span="8">
+                <el-col :span="8">
                     <category v-bind:category="baseInfoForm.categoryId"
                               v-on:update:category="baseInfoForm.categoryId = $event"></category>
                 </el-col>
             </el-form-item>
 
             <el-form-item v-if="enableOrg" :label="'site.org'|trans">
-                <el-col span="8">
+                <el-col :span="8">
                     <org v-bind:params="{}" v-bind:org-code="baseInfoForm.orgCode"></org>
                 </el-col>
             </el-form-item>
@@ -65,14 +66,14 @@
             </el-form-item>
 
             <el-form-item :label="'course.cover_image.content_title'|trans">
-                <el-col span="18">
+                <el-col :span="18">
                     <div v-html="uploadImageTemplate"></div>
                     <div class="help-block">{{ 'course.cover_image.upload_tips'|trans }}</div>
                 </el-col>
             </el-form-item>
 
             <el-form-item :label="'course.detail.summary'|trans">
-                <el-col span="18">
+                <el-col :span="18">
                     <textarea name="summary" rows="10" data-form="base-info-form"
                               data-button="button"
                               id="courseset-summary-field" class="form-control"
@@ -197,10 +198,6 @@
 
 
             return {
-                course: {},
-                isUnMultiCourseSet: false,
-                hasMulCourses: false,
-                tags: '',
                 uploadImageTemplate: '',
                 summaryTemplate: '',
                 baseInfoForm: baseForm,
@@ -254,7 +251,6 @@
                     serialized: Translator.trans('course.base.serialize_mode.serialized'),
                     finished: Translator.trans('course.base.serialize_mode.finished')
                 },
-                enableOrg: 0
             };
         },
         mounted() {

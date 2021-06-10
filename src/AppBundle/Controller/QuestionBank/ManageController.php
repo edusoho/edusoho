@@ -101,7 +101,7 @@ class ManageController extends BaseController
         $queryField = $request->query->get('q');
 
         $users = $this->getUserService()->searchUsers(
-            ['nickname' => $queryField, 'roles' => 'ROLE_TEACHER'],
+            ['nickname' => $queryField, 'roles' => '|ROLE_TEACHER|'],
             ['createdTime' => 'DESC'],
             0,
             10,

@@ -13,12 +13,12 @@ class CourseTaskCopyTest extends BaseTestCase
         $newCourseId = 11223;
         $taskDao = $this->mockBiz(
             'Task:TaskDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByCourseId',
-                    'withParams' => array($oldCourseId),
-                    'returnValue' => array(
-                        array(
+                    'withParams' => [$oldCourseId],
+                    'returnValue' => [
+                        [
                             'id' => 11221,
                             'seq' => 1,
                             'activityId' => 2222,
@@ -34,14 +34,14 @@ class CourseTaskCopyTest extends BaseTestCase
                             'mediaSource' => 'dses',
                             'status' => 'ok',
                             'length' => 12312,
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'functionName' => 'batchCreate',
-                    'withParams' => array(
-                        array(
-                            array(
+                    'withParams' => [
+                        [
+                            [
                                 'seq' => 1,
                                 'activityId' => 2222,
                                 'categoryId' => 54,
@@ -58,59 +58,60 @@ class CourseTaskCopyTest extends BaseTestCase
                                 'length' => 12312,
                                 'courseId' => $newCourseId,
                                 'fromCourseSetId' => 123,
+                                'multiClassId' => 0,
                                 'createdUserId' => 1,
                                 'copyId' => 11221,
-                            ),
-                        ),
-                    ),
-                ),
-            )
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $courseChaperDao = $this->mockBiz(
             'Course:CourseChapterDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findChaptersByCourseId',
-                    'withParams' => array($newCourseId),
-                    'returnValue' => array(
-                        array(
+                    'withParams' => [$newCourseId],
+                    'returnValue' => [
+                        [
                             'copyId' => 101,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $activityDao = $this->mockBiz(
             'Activity:ActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByCourseId',
-                    'withParams' => array($newCourseId),
-                    'returnValue' => array(
-                        array(
+                    'withParams' => [$newCourseId],
+                    'returnValue' => [
+                        [
                             'copyId' => 201,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $copy = new CourseTaskCopy($this->biz, null);
 
         $result = $copy->doCopy(
-            array(),
-            array(
-                'originCourse' => array(
+            [],
+            [
+                'originCourse' => [
                     'id' => $oldCourseId,
-                ),
-                'newCourse' => array(
+                ],
+                'newCourse' => [
                     'id' => $newCourseId,
-                ),
-                'newCourseSet' => array(
+                ],
+                'newCourseSet' => [
                     'id' => 123,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertNull($result);

@@ -49,7 +49,11 @@ interface MemberService
 
     public function findCourseTeachers($courseId);
 
+    public function findMultiClassMemberByMultiClassIdAndRole($multiClassId, $role);
+
     public function findCourseSetTeachers($courseSetId);
+
+    public function findCourseSetTeachersAndAssistant($courseSetId);
 
     public function findCourseStudentsByCourseIds($courseIds);
 
@@ -57,7 +61,11 @@ interface MemberService
 
     public function getCourseStudentCount($courseId);
 
+    public function getMultiClassMembers($courseId, $multiClassId, $role);
+
     public function isCourseTeacher($courseId, $userId);
+
+    public function isCourseAssistant($courseId, $userId);
 
     public function isCourseStudent($courseId, $userId);
 
@@ -70,11 +78,14 @@ interface MemberService
     /**
      * @param $courseId
      * @param $teachers
+     * @param $multiClassId
      *
      * @return mixed
      * @Log(module="course",action="update_teacher",serviceName="Course:CourseService",funcName="getCourse",param="courseId")
      */
-    public function setCourseTeachers($courseId, $teachers);
+    public function setCourseTeachers($courseId, $teachers, $multiClassId = 0);
+
+    public function setCourseAssistants($courseId, $assistantIds, $multiClassId = 0);
 
     public function cancelTeacherInAllCourses($userId);
 
@@ -183,4 +194,16 @@ interface MemberService
     public function refreshCourseMembersFinishData($courseId);
 
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
+
+    public function releaseMultiClassMember($courseId, $multiClassId);
+
+    public function findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, $role);
+
+    public function searchMultiClassIds($conditions, $sort, $start, $limit);
+
+    public function deleteMemberByMultiClassIdAndRole($multiClassId, $role);
+
+    public function findMembersByUserIdAndRoles($userId, $roles);
+
+    public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
 }

@@ -1,9 +1,9 @@
 //此处为通用变量，用于各个bundle的引用，只具有方法，不生成样式；
 
 @gray-base:             #000;
-@gray-darker:           #313131;
-@gray-dark:             #616161;
-@gray:                  #919191;
+@gray-darker:           #333;
+@gray-dark:             #666;
+@gray:                  #999;
 @gray-medium:           #c1c1c1;
 @gray-light:            #e1e1e1;
 @gray-lighter:          #f5f5f5;
@@ -12,11 +12,28 @@
 @border-color:          #e4ecf3;
 @tip-color:             #adadad;
 
-@brand-primary:         #43bc60;
+@brand-primary:         #46c37B;
+@brand-primary-link:    #31a1ff;
 @brand-success:         #43bc60;
 @brand-info:            #278bf5;
 @brand-warning:         #ffa51f;
-@brand-danger:          #ed3e3e;
+@brand-danger:          #fe4040;
+
+// 背景色
+@bg:                     #ffffff;
+@bg-primary:             #F0F9FF;
+@bg-dark:                #f0f0f0;
+@bg-light:               #f9f9f9;
+@bg-normal:              #f5f5f5;
+@bg-disabeld:            #e1e1e1;
+
+// 边框色
+@border: 								 #ebebeb;
+@border-light:           #f0f0f0;
+
+// 图标色
+@icon: 									 #bebebe;
+@icon-light: 						 #cdcdcd;
 
 /* =========================== main-color =========================== */
 
@@ -41,3 +58,57 @@
 @screen-xs-max:              (@screen-sm-min - 1);
 @screen-sm-max:              (@screen-md-min - 1);
 @screen-md-max:              (@screen-lg-min - 1);
+
+/******************************* spacing ****************************************/
+
+@base-spacing: 4px;
+
+@spacing-1x: @base-spacing;
+@spacing-2x: @base-spacing * 2;
+@spacing-3x: @base-spacing * 3;
+@spacing-4x: @base-spacing * 4;
+@spacing-5x: @base-spacing * 5;
+@spacing-6x: @base-spacing * 6;
+@spacing-8x: @base-spacing * 8;
+@spacing-10x: @base-spacing * 10;
+@spacing-12x: @base-spacing * 12;
+@spacing-15x: @base-spacing * 15;
+
+@border-radius: @base-spacing;
+
+
+/******************************* text ****************************************/
+
+.text-12 { font-size: 12px; line-height: 16px; }
+.text-14 { font-size: 14px; line-height: 20px; }
+.text-16 { font-size: 16px; line-height: 24px; }
+.text-18 { font-size: 18px; line-height: 28px; }
+.text-24 { font-size: 24px; line-height: 32px; }
+.text-32 { font-size: 32px; line-height: 40px; }
+.text-40 { font-size: 40px; line-height: 48px; }
+
+.text-regular   { font-weight: 400; }
+.text-bold      { font-weight: 500; }
+.text-bolder    { font-weight: 600; }
+
+/******************************* margin ****************************************/
+
+.ml1 { margin-left: @spacing-1x; }
+.mr1 { margin-right: @spacing-1x; }
+.mt1 { margin-top: @spacing-1x; }
+.mb1 { margin-bottom: @spacing-1x; }
+
+.ml2 { margin-left: @spacing-2x; }
+.mr2 { margin-right: @spacing-2x; }
+.mt2 { margin-top: @spacing-2x; }
+.mb2 { margin-bottom: @spacing-2x; }
+
+.ml3 { margin-left: @spacing-3x; }
+.mr3 { margin-right: @spacing-3x; }
+.mt3 { margin-top: @spacing-3x; }
+.mb3 { margin-bottom: @spacing-3x; }
+
+.ml6 { margin-left: @spacing-6x; }
+.mr6 { margin-right: @spacing-6x; }
+.mt6 { margin-top: @spacing-6x; }
+.mb6 { margin-bottom: @spacing-6x; }

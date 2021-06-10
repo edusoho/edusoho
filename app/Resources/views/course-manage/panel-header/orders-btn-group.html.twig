@@ -1,4 +1,4 @@
-{% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
+{% if (app.user.isAdmin() or setting('course.teacher_search_order') == 1)  %}
   {% include 'export/export-btn.html.twig' with
     {
       'exportFileName' : 'order',

@@ -6,6 +6,8 @@ interface LearningDataAnalysisService
 {
     public function getUserLearningProgress($courseId, $userId);
 
+    public function fillCourseProgress($members);
+
     public function makeProgress($learnedNum, $total);
 
     /**

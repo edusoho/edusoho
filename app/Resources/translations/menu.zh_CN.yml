@@ -461,7 +461,19 @@ admin_v2.nav.statistics: 数据
 admin_v2.nav.system: 系统
 
 # 教学-课程管理
-admin_v2.course.basic_group: 课程管理
+admin_v2.course.basic_group: 教学管理
+
+# 教学-课程管理-产品库
+admin_v2.multi_class_product.basic_menu: 产品库
+
+# 教学-课程管理-班课
+admin_v2.multi_class.basic_menu: 班课
+
+# 教学-课程管理-助教管理
+admin_v2.teacher.basic_menu: 教师管理
+
+# 教学-课程管理-助教管理
+admin_v2.assistant.basic_menu: 助教管理
 
 # 教学-课程管理-课程管理
 admin_v2.course.basic_menu: 课程管理

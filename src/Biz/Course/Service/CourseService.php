@@ -17,7 +17,7 @@ interface CourseService
 
     public function getCourse($id);
 
-    public function hasCourseManagerRole($courseId = 0);
+    public function hasCourseManagerRole($courseId = 0, $action = '');
 
     public function findCoursesByIds($ids);
 
@@ -139,6 +139,8 @@ interface CourseService
      * @return mixed
      */
     public function findCourseItems($courseId, $limitNum = 0);
+
+    public function searchMultiClassCourseItems($conditions, $sort, $start, $limit);
 
     /**
      * @param $courseId
@@ -361,6 +363,10 @@ interface CourseService
     public function appendHasCertificate(array $courses);
 
     public function hasCertificate($courseId);
+
+    public function sumTotalIncomeByIds($ids);
+
+    public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
 }
