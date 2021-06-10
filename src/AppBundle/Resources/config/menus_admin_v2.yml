@@ -148,25 +148,6 @@ admin_v2:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
                                     name: admin_v2.course.basic.analysis_tab
-                        
-                        # 教师管理
-                        admin_v2_teacher:
-                            quick_entrance_icon: 'teacher'
-                            name: admin_v2.teacher.basic_menu
-                            router_name: admin_v2_teacher
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin_v2.teacher.basic_menu
-                                    router_name: admin_v2_teacher
-                        
-                        # 助教管理
-                        admin_v2_assistant:
-                            name: admin_v2.assistant.basic_menu
-                            router_name: admin_v2_assistant
-                            children:
-                                admin_v2_assistant_manage:
-                                    name: admin_v2.assistant.basic_menu
-                                    router_name: admin_v2_assistant
                         # 班级管理
                         admin_v2_classroom:
                             name: admin_v2.course.classroom_menu
@@ -354,6 +335,24 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
+                        # 教师管理
+                        admin_v2_teacher:
+                            quick_entrance_icon: 'teacher'
+                            name: admin_v2.teacher.basic_menu
+                            router_name: admin_v2_teacher
+                            children:
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.teacher.basic_menu
+                                    router_name: admin_v2_teacher
+
+                        # 助教管理
+                        admin_v2_assistant:
+                            name: admin_v2.assistant.basic_menu
+                            router_name: admin_v2_assistant
+                            children:
+                                admin_v2_assistant_manage:
+                                    name: admin_v2.assistant.basic_menu
+                                    router_name: admin_v2_assistant
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
