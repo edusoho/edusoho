@@ -4,7 +4,7 @@
       :form="form"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
-      style="max-width: 900px;"
+      style="max-width: 1000px;"
     >
       <a-form-item label="排课">
         <Schedule :course-id="courseId" :courseSetId="courseSetId" />
