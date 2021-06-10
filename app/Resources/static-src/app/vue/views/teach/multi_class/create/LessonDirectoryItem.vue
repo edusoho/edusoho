@@ -151,6 +151,9 @@ export default {
 .lesson-directory-first {
   .title {
     width: 364px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
