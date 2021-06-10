@@ -233,7 +233,7 @@ export default {
       this.$set(this.course, 'initialValue', course.id)
       this.fetchCourse();
       this.fetchProducts();
-      this.fetchCourseTeacher(course.id);
+      this.fetchCourseInfo(course.id);
       return;
     }
 
@@ -283,9 +283,13 @@ export default {
       });
     },
 
-    fetchCourseTeacher(courseId) {
-      Course.getTeacher(courseId, { role: 'teacher' }).then(res => {
-        const defaultTeacher = res.data[0].user;
+    fetchCourseInfo(courseId) {
+      this.form.resetFields(['teacherId', 'assistantIds']);
+      Course.getSingleCourse(courseId).then(res => {
+        const { teachers, assistants } = res;
+        const defaultTeacher = teachers[0];
+        const defaultAssistant = assistants;
+
         this.teacher = {
           list: [defaultTeacher],
           title: '',
@@ -296,7 +300,25 @@ export default {
             current: 0
           }
         };
-        this.form.setFieldsValue({ 'teacherId': defaultTeacher.id });
+
+        const assistantIds = [];
+        _.forEach(defaultAssistant, item => {
+          assistantIds.push(item.id);
+        });
+        this.assistant = {
+          list: defaultAssistant,
+          title: '',
+          flag: true,
+          initialValue: assistantIds,
+          paging: {
+            pageSize: 10,
+            current: 0
+          }
+        };
+        this.form.setFieldsValue({
+          'teacherId': defaultTeacher.id,
+          'assistantIds': assistantIds
+        });
         this.fetchAssistants();
         this.fetchTeacher();
       });
@@ -511,7 +533,7 @@ export default {
           return false;
         }
       });
-      this.fetchCourseTeacher(value);
+      this.fetchCourseInfo(value);
     },
 
     handleChange(value, type) {
