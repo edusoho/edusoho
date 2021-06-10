@@ -60,7 +60,7 @@
           </a-menu>
         </a-dropdown>
 
-        <a-button v-if="isPermission('course_lesson_edit')"
+        <a-button v-if="isPermission('course_lesson_manage')"
           type="link"
           data-toggle="modal"
           data-target="#modal"
