@@ -74,9 +74,11 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a v-if="record.status === 'reviewing'"
+            class="ant-dropdown-link"
             :href="currentTask.type === 'testpaper' ? `/course/${currentTask.courseId}/manage/testpaper/${record.id}/check?action=check` : `/course/${currentTask.courseId}/manage/homework/${record.id}/check?action=check`"
             target="_blank">去批阅</a>
           <a v-else-if="record.status === 'finished'"
+            class="ant-dropdown-link"
             :href="`/homework/result/${record.id}/show?action=check`"
             target="_blank">查看结果</a>
         </template>
