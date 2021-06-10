@@ -135,8 +135,9 @@
         </template>
         <div
           v-if="repeatType === 'day' || (repeatType === 'week' && repeatData.length)"
+          style="color: #fb8d4d;"
         >
-          <a-icon type="exclamation-circle" style="color: #fe4040;"/>
+          <a-icon type="exclamation-circle" style="color: #fb8d4d;"/>
           {{ getRepeatDataTip }}
         </div>
       </a-form-item>
@@ -287,9 +288,9 @@ export default {
     async createTask(params) {
       try {
         this.confirmLoading = true;
-        
+
         const { data } = await Course.addLiveTask(this.courseId, params);
-        
+
         this.$emit('change-lesson-directory', { addData: data });
         this.handleCancel();
       } finally {
@@ -305,7 +306,7 @@ export default {
       if (taskNum % 5 != 0) {
         loopNum++;
       }
-      
+
       try {
         this.confirmLoading = true;
         for (let index = 0; index < loopNum; index++) {
