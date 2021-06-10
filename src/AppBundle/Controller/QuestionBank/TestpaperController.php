@@ -225,7 +225,7 @@ class TestpaperController extends BaseController
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
             'questionBank' => $questionBank,
             'testpaper' => $assessment,
-            'sections' => $this->setSectionsType($assessmentDetail['sections']),
+            'sections' => $this->setSectionsTypeAndQuestionCount($assessmentDetail['sections']),
             'itemCategories' => $itemCategories,
             'showBaseInfo' => $request->query->get('showBaseInfo', '1'),
         ]);
@@ -544,10 +544,20 @@ class TestpaperController extends BaseController
         return $itemCount;
     }
 
-    protected function setSectionsType($sections)
+    protected function setSectionsTypeAndQuestionCount($sections)
     {
         foreach ($sections as &$section) {
-            $section['type'] = $section['items'][0]['type'];
+            // $section['type'] = $section['items'][0]['type'];
+            // todo:$section['items'][0]的type不一定存在,可能item刚好被删除了;
+            foreach ($section['items'] as $item) {
+                if (isset($item['type'])) {
+                    $section['type'] = $item['type'];
+                    break;
+                }
+            }
+
+            $itemsCount = $section['question_count'] - count(array_filter(ArrayToolkit::column($section['items'], 'isDelete')));
+            $section['question_count'] = $itemsCount < 0 ? 0 : $itemsCount;
         }
 
         return ArrayToolkit::index($sections, 'type');
