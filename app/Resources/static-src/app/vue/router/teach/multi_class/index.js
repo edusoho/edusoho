@@ -18,7 +18,7 @@ export default [
     component: () => import(/* webpackChunkName: "app/vue/dist/CreateCourse" */ 'app/vue/views/teach/multi_class/create_course/index.vue'),
   },
   {
-    path: '/course_manage/:id',
+    path: '/manage/:id',
     component: () => import(/* webpackChunkName: "app/vue/dist/CourseManage" */ 'app/vue/views/teach/multi_class/course_manage/index.vue'),
     children: [
       {
@@ -48,7 +48,7 @@ export default [
     ]
   },
   {
-    path: '/course_manage/editor_lesson/:id',
+    path: '/manage/editor_lesson/:id',
     name: 'MultiClassEditorLesson',
     component: () => import(/* webpackChunkName: "app/vue/dist/MultiClassEditorLesson" */ 'app/vue/views/teach/multi_class/course_manage/editor-lesson.vue')
   },

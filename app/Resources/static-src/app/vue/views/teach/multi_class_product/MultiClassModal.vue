@@ -35,7 +35,7 @@
           {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
         </template>
         <a slot="studentNum" slot-scope="text, record"
-          :href="`/admin/v2/multi_class/index#/course_manage/${record.id}/student_manage`">
+          :href="`/admin/v2/multi_class/index#/manage/${record.id}/student_manage`">
           {{ text }}
         </a>
         <template :size="8" slot="action" slot-scope="text, record">
@@ -151,13 +151,13 @@
       },
 
       goToMultiClassManage(id) {
-        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}`
+        window.location.href = `/admin/v2/multi_class/index#/manage/${id}`
       },
       goToEditMultiClass(id) {
         window.location.href = `/admin/v2/multi_class/index#/create?id=${id}`
       },
       goToMultiClassDataPreview(id) {
-        window.location.href = `/admin/v2/multi_class/index#/course_manage/${id}/data_preview`
+        window.location.href = `/admin/v2/multi_class/index#/manage/${id}/data_preview`
       },
 
       handleTableChange(pagination) {
