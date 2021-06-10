@@ -60,14 +60,15 @@
         :columns="resultColumns"
         :data-source="examResults.data"
         :pagination="examPaging[status[currentTab]]"
+        :rowKey="record => record.id"
         @change="handleExamTableChange"
       >
         <template slot="nickname" slot-scope="nickname, record">{{ record.userInfo.nickname }}</template>
         <template slot="grade" slot-scope="grade, record">{{ record.status === 'reviewing' ? '--' : gradeMap[record.answerReportInfo.grade] }}</template>
         <template slot="teacherInfo" slot-scope="teacherInfo, record">{{ record.teacherInfo.nickname || '--' }}</template>
-        <template slot="status" slot-scope="status">
+        <span slot="status" slot-scope="status" :style="{ color: status === 'reviewing' ? '#fb8d4d' : '' }">
           {{ statusMap[status] }}
-        </template>
+        </span>
         <template slot="end_time" slot-scope="end_time">
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
