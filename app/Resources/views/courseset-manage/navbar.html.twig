@@ -7,7 +7,9 @@
           <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.base'|trans }}
         </a>
       {% else %}
-        <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.base'|trans }}</a>
+        {% if has_permission('admin_v2_course_content_manage') %}
+          <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.base'|trans }}</a>
+        {% endif %}
       {% endif %}
     </li>
     {% if not has_mul_courses(courseSet.id) %}
@@ -58,43 +60,45 @@
     </li>
   {% endif %}
 
-  <div class="clearfix nav-header-section-step">
-    <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
-      {% if courseSet.locked %}
-        <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
-          <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
-        </a>
-      {% else %}
-        <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
-          {{ 'course.question_manage'|trans }}
-        </a>
-      {% endif %}
-    </li>
+  {% if has_permission('admin_v2_course_content_manage') %}
+    <div class="clearfix nav-header-section-step">
+      <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
+        {% if courseSet.locked %}
+          <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
+            <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
+          </a>
+        {% else %}
+          <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
+            {{ 'course.question_manage'|trans }}
+          </a>
+        {% endif %}
+      </li>
 
-    <li class="nav-header-section__item pull-right {% if side_nav == 'testpaper' %}active{% endif %}"
-        data-intro-group="odd">
-      {% if courseSet.locked %}
-        <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'testpaper'}) }}">
-          <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.testpaper_manage'|trans }}
-        </a>
-      {% else %}
-        <a href="{{ path('course_set_manage_testpaper', {id: courseSet.id}) }}">
-          {{ 'course.testpaper_manage'|trans }}
-        </a>
-      {% endif %}
-    </li>
+      <li class="nav-header-section__item pull-right {% if side_nav == 'testpaper' %}active{% endif %}"
+          data-intro-group="odd">
+        {% if courseSet.locked %}
+          <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'testpaper'}) }}">
+            <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.testpaper_manage'|trans }}
+          </a>
+        {% else %}
+          <a href="{{ path('course_set_manage_testpaper', {id: courseSet.id}) }}">
+            {{ 'course.testpaper_manage'|trans }}
+          </a>
+        {% endif %}
+      </li>
 
-    <li id="step-1" class="nav-header-section__item pull-right cd-ml24 {% if side_nav == 'files' %}active{% endif %}"
-        data-intro-group="odd">
-      {% if courseSet.locked %}
-        <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
-          <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
-        </a>
-      {% else %}
-        <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">{{ 'course.course_files'|trans }}</a>
-      {% endif %}
-    </li>
-  </div>
+      <li id="step-1" class="nav-header-section__item pull-right cd-ml24 {% if side_nav == 'files' %}active{% endif %}"
+          data-intro-group="odd">
+        {% if courseSet.locked %}
+          <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
+            <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
+          </a>
+        {% else %}
+          <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">{{ 'course.course_files'|trans }}</a>
+        {% endif %}
+      </li>
+    </div>
+  {% endif %}
 
   {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
 </ul>
