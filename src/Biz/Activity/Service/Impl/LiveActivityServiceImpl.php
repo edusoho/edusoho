@@ -97,6 +97,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
+            'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
 
         return $this->getLiveActivityDao()->create($liveActivity);
@@ -117,6 +118,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $liveActivity['liveProvider'] = $live['provider'];
                 $liveActivity['roomCreated'] = 1;
                 $liveActivity['roomType'] = empty($fields['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $fields['roomType'];
+                $liveActivity['coursewareIds'] = empty($live['coursewareIds']) ? [] : $live['coursewareIds'];
 
                 $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
             }
@@ -140,9 +142,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->getEdusohoLiveClient()->updateLive($liveParams);
             if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
                 $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
-                $this->createLiveroomCoursewares($liveActivity['liveId'], $fileIds);
+                $coursewareIds = $this->createLiveroomCoursewares($liveActivity['liveId'], $fileIds);
+                $this->getLiveActivityDao()->update($id, ['coursewareIds' => $coursewareIds]);
             }
         }
+
         $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds']);
 
         if (!empty($live['fileId'])) {
@@ -310,7 +314,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         // 给直播间（自研）添加课件
         if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider'] && $activity['fileIds']) {
-            $this->createLiveroomCoursewares($live['id'], $activity['fileIds']);
+            $live['coursewareIds'] = $this->createLiveroomCoursewares($live['id'], $activity['fileIds']);
         }
 
         return $live;
@@ -340,10 +344,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $fileId = $file['id'];
             if (!empty($liveActivity['coursewareIds'][$fileId])) {
                 $coursewareIds[$fileId] = $liveActivity['coursewareIds'][$fileId];
+                unset($liveActivity['coursewareIds'][$fileId]);
                 continue;
             }
 
-            $liveCoursewares[$fileId] = $result = $this->getEdusohoLiveClient()->createLiveCourseware([
+            $liveCoursewares[$fileId] = $this->getEdusohoLiveClient()->createLiveCourseware([
                 'liveId' => $liveId,
                 'resources' => [
                     'name' => $file['filename'],
@@ -363,14 +368,15 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $newCoursewareIds = array_diff($coursewareIds, $liveActivity['coursewareIds']);
         $deleteCoursewareIds = array_diff($liveActivity['coursewareIds'], $coursewareIds);
 
-        $this->getLiveActivityDao()->update($liveActivity['id'], ['coursewareIds' => $newCoursewareIds]);
         $this->deleteLiveroomCoursewares($liveId, $deleteCoursewareIds);
+
+        return $newCoursewareIds;
     }
 
     private function deleteLiveroomCoursewares($liveId, $coursewareIds)
     {
         foreach ($coursewareIds as $coursewareId) {
-            $result = $this->getEdusohoLiveClient()->deleteLiveCourseware([
+            $this->getEdusohoLiveClient()->deleteLiveCourseware([
                 'liveId' => $liveId,
                 'coursewareId' => $coursewareId,
             ]);
