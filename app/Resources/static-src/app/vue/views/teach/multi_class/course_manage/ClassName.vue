@@ -22,13 +22,13 @@ export default {
 
   computed: {
     className() {
-      const { chapterTitle, unitTitle, number, title, tasks } = this.record;
+      const { chapterTitle, unitTitle, title, tasks, tasks: { number } } = this.record;
       let className = '';
 
       if (tasks.mode === 'lesson') {
         className = `${number}. ${title}`;
       } else {
-        let taskNum = tasks.number.split('-');
+        let taskNum = number.split('-');
         className = `${number}.${taskNum[1]-1} [任务]${tasks.title}`;
       }
 
