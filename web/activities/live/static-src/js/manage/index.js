@@ -1,22 +1,22 @@
 import { initEditor } from 'app/js/activity-manage/editor.js';
+import { isEmpty , arrayIndex } from 'common/utils';
+import FileChooser from 'app/js/file-chooser/file-choose';
+import { chooserUiOpen } from 'app/js/activity-manage/widget/chooser-ui';
 
 export default class Live {
   constructor() {
+    this.$form = $('#step2-form');
     this.$startTime = $('#startTime');
+    this.media = {};
+    this.materials = {};
     this._init();
   }
 
   _init() {
     this.initStep2Form();
     this._timePickerHide();
-
-    window.ltc.on('getActivity', (msg) => {
-      window.ltc.emit('returnActivity', {valid:this.validator2.form() ,data: window.ltc.getFormSerializeObject($('#step2-form'))});
-    });
-
-    window.ltc.on('getValidate', (msg) => {
-      window.ltc.emit('returnValidate', { valid: this.validator2.form() });
-    });
+    this.initEvent();
+    this.initFileChooser();
   }
 
   initStep2Form() {
@@ -118,6 +118,125 @@ export default class Live {
     parent.$('#modal', window.parent.document).on('afterNext',function(){
       $starttime.datetimepicker('hide');
     });
+  }
+
+  initEvent() {
+    this.$form.on('click', '.js-btn-delete', (event) => this.deleteItem(event));
+    this.$form.on('click', '.js-add-file-list', () => this.addFile());
+    
+    window.ltc.on('getActivity', (msg) => {
+      window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
+    });
+      
+    window.ltc.on('getValidate', (msg) => {
+      window.ltc.emit('returnValidate', { valid: this.validator2.form() });
+    });
+  }
+
+  deleteItem(event) {
+    let $parent = $(event.currentTarget).closest('li');
+    let mediaId = $parent.data('id');
+    const $materials = $('#materials');
+    this.materials = isEmpty($materials.val()) ? {} :  arrayIndex(JSON.parse($materials.val()), 'fileId');
+    if (this.materials && this.materials[mediaId]) {
+      delete this.materials[mediaId];
+      $materials.val(JSON.stringify(this.materials));
+    }
+    if (!$parent.siblings('li').length) {
+      $materials.val('');
+    }
+    $parent.remove();
+  }
+
+  addFile() {
+    const $media = $('#media');
+    const $materials = $('#materials');
+    const $successTipDom = $('.js-success-redmine');
+    const $errorTipDom = $('.js-danger-redmine');
+
+    const errorTip = 'activity.download_manage.materials_error_hint';
+    const successTip = 'activity.download_manage.materials_add_success_hint';
+    const existTip = 'activity.download_manage.materials_exist_error_hint';
+
+    let media = {};  
+    if (!isEmpty($media.val())) {
+      media = JSON.parse($media.val());
+      media.fileId = media.id;
+      media.title = media.name;
+    }
+
+    this.media = media;
+    console.log(this.media);
+    this.materials = isEmpty($materials.val()) ? {} : arrayIndex(JSON.parse($materials.val()), 'fileId');
+
+    if (isEmpty(this.media)) {
+      this.showTip($successTipDom, $errorTipDom, errorTip);
+      return;
+    }
+
+    if (!isEmpty(this.materials) && this.checkExisted()) {
+      this.showTip($successTipDom, $errorTipDom, existTip);
+      return;
+    }
+
+    this.media.summary = $('#file-summary').val();
+    this.materials[this.media.id] = this.media;
+    $materials.val(JSON.stringify(this.materials));
+
+    this.showFile();
+
+    this.showTip($errorTipDom, $successTipDom, successTip);
+
+    if ($('.jq-validate-error:visible').length) {
+      this.$form.data('validator').form();
+    }
+  }
+
+  checkExisted() {
+    for (let item in this.materials) {
+      const materialsItem = this.materials[item];
+      const checkFile = materialsItem.title === this.media.title;
+
+      if (checkFile) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  showFile() {
+    let item_tpl = '';
+    item_tpl = `
+      <li class="live-resource-item" data-id="${ this.media.id }">
+        <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
+        <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.live_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+      </li>
+    `;
+
+    $('#material-list').append(item_tpl);
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
+  showTip($hideDom, $showDom, trans) {
+    $hideDom.hide();
+    $('.js-current-file').text('');
+    $('#file-summary').val('');
+    $('#media').val('');
+    $showDom.text(Translator.trans(trans)).show();
+    setTimeout(function() {
+      $showDom.slideUp();
+    }, 3000);
+  }
+
+  initFileChooser() {
+    const fileSelect = (file) => {
+      $('#media').val(JSON.stringify(file));
+      chooserUiOpen();
+      $('.js-current-file').text(file.name);
+    };
+
+    const fileChooser = new FileChooser();
+    fileChooser.on('select', fileSelect);
   }
 }
 

@@ -32,6 +32,8 @@ use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
@@ -60,6 +62,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courses = $this->getCourseDao()->findCoursesByIds($ids);
 
         return ArrayToolkit::index($courses, 'id');
+    }
+
+    public function findCourseByCourseSetTitleLike($courseSetTitle)
+    {
+        return $this->getCourseDao()->findCourseByCourseSetTitleLike($courseSetTitle);
     }
 
     public function findCourseByIdsWithMarketingInfo($ids)
@@ -741,6 +748,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
         }
 
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        if (!empty($multiClass)) {
+            $this->createNewException(MultiClassException::FORBIDDEN_DELETE_MULTI_CLASS_COURSE());
+        }
+
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             $this->createNewException(CourseException::SUB_COURSE_EXIST());
@@ -925,6 +937,34 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
+    public function searchMultiClassCourseItems($conditions, $sort, $start, $limit)
+    {
+        $course = $this->getCourse($conditions['courseId']);
+        if (empty($course)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+        $tasks = $this->searchCourseTasks($conditions, $sort, $start, $limit);
+
+        return $this->createCourseStrategy($course)->prepareCourseItems($conditions['courseId'], $tasks, $limit);
+    }
+
+    protected function searchCourseTasks($conditions, $sort, $start, $limit)
+    {
+        $tasks = $this->getTaskService()->searchTasks($conditions, $sort, $start, $limit);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true, 0);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        array_walk(
+            $tasks,
+            function (&$task) use ($activities) {
+                $task['activity'] = $activities[$task['activityId']];
+            }
+        );
+
+        return $tasks;
+    }
+
     protected function findTasksByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
@@ -1085,7 +1125,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
-        if ($member && in_array($member['role'], ['teacher', 'student'])) {
+        if ($member && in_array($member['role'], ['teacher', 'student', 'assistant'])) {
             return true;
         }
 
@@ -1408,7 +1448,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, ['createdTime' => 'DESC'], 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0)
+    public function hasCourseManagerRole($courseId = 0, $action = '')
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -1436,10 +1476,23 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
         //不是课程教师，无权限管理
-        if ($teacher) {
+        if ($this->getMemberService()->isCourseTeacher($courseId, $user->getId())) {
             return true;
+        }
+
+        $isAssistant = $this->getMemberService()->isCourseAssistant($courseId, $user->getId());
+        if ($isAssistant) {
+            $permission = $this->biz['assistant_permission'];
+            if (!empty($action) && $permission->hasActionPermission($action)) {
+                return true;
+            }
+
+            if (empty($action)) {
+                return true;
+            }
+
+            return false;
         }
 
         if ($course['parentId'] > 0) {
@@ -2907,12 +2960,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
+    public function sumTotalIncomeByIds($ids)
+    {
+        return $this->getCourseDao()->sumTotalIncomeByIds($ids);
+    }
+
     /**
      * @return CertificateService
      */
     protected function getCertificateService()
     {
         return $this->createService('Certificate:CertificateService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 
     /**

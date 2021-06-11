@@ -14,7 +14,7 @@
                            slot="reference"></a>
                     </el-popover>
                 </label>
-                <el-col span="18">
+                <el-col :span="18">
                     <el-radio v-model="baseRuleForm.learnMode"
                               v-for="(label, value) in learnModeRadio"
                               ref="learnMode"
@@ -27,10 +27,10 @@
             </el-form-item>
 
             <el-form-item prop="watchLimit" v-if="lessonWatchLimit" :label="'course.marketing_setup.rule.watch_time_limit'|trans">
-                <el-col span="2">
+                <el-col :span="2">
                     <el-input v-model="baseRuleForm.watchLimit" ref="watchLimit"></el-input>
                 </el-col>
-                <el-col span="8" class="mlm">{{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
+                <el-col :span="8" class="mlm">{{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
                     <el-popover width="300"
                         placement="top"
                         trigger="hover">
@@ -41,7 +41,7 @@
             </el-form-item>
 
             <el-form-item :label="'course.plan_setup.finish_rule'|trans({'taskName': taskName })">
-                <el-col span="18">
+                <el-col :span="18">
                     <el-radio v-model="baseRuleForm.enableFinish" label="1" :disabled="course.platform === 'supplier'"
                               class="cd-radio">
                         {{ 'course.plan_setup.finish_rule.nothing'|trans }}
@@ -62,10 +62,10 @@
             <el-form-item v-if="courseSet.type === 'live'"
                           :label="'course.plan_setup.member_numbers'|trans"
                           prop="maxStudentNum">
-                <el-col span="8">
+                <el-col :span="8">
                     <el-input v-model="baseRuleForm.maxStudentNum" ref="maxStudentNum"></el-input>
                 </el-col>
-                <el-col span="6" class="mlm">
+                <el-col :span="6" class="mlm">
                     {{'site.data.people'|trans}}
                     <a class="cd-text-sm cd-link-primary" :href="contentCourseRuleUrl" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
                 </el-col>
@@ -75,7 +75,7 @@
             </el-form-item>
             <div v-else>
                 <el-form-item :label="'course.marketing_setup.preview.set_task'|trans({'taskName': taskName})">
-                    <el-col span="16">
+                    <el-col :span="16">
                         <ul v-if="canFreeTasks.length" class="list-group mb0 pb0 js-task-price-setting-scroll"
                             :class="freeTaskJsClass">
                             <el-scrollbar :style="scrollLength(canFreeTasks.length)">
@@ -143,7 +143,7 @@
                           :label="'course.info.video.convert.audio.enable'|trans"
                           v-model="baseRuleForm.enableAudio"
                           v-if="audioServiceStatus !== 'needOpen' && course.type === 'normal'">
-                <el-col span="16">
+                <el-col :span="16">
                     <el-radio v-model="baseRuleForm.enableAudio"
                               v-for="audioServiceStatusRadio in audioServiceStatusRadios"
                               class="cd-radio"
@@ -256,26 +256,12 @@
 
             return {
                 liveCapacity: liveCapacity,
-                course: {},
-                courseSet: {},
-                lessonWatchLimit: false,
-                hasRoleAdmin: false,
-                wechatSetting: {},
-                hasWechatNotificationManageRole: false,
-                wechatManageUrl: '',
-                contentCourseRuleUrl: '',
-                canFreeTasks: {},
-                freeTasks: {},
-                courseRemindSendDays: '',
                 learnModeRadio: {
                     freeMode: Translator.trans('course.plan_setup.mode.free'),
                     lockMode: Translator.trans('course.plan_setup.mode.locked'),
                 },
                 learnModeTips: Translator.trans('course.plan_setup.mode.tips'),
                 freeTaskJsClass: freeTaskJsClass,
-                taskName: '',
-                activityMetas: {},
-                audioServiceStatus: '',
                 audioServiceStatusRadios: [
                     {
                         value: '1',
@@ -286,8 +272,6 @@
                         label:  Translator.trans('course.info.video.convert.audio.close'),
                     }
                 ],
-                videoConvertCompletion: '',
-                courseSetManageFilesUrl: '',
                 baseRuleForm: {
                     learnMode: this.course.learnMode,
                     watchLimit: this.course.watchLimit,
@@ -322,8 +306,6 @@
                         // }
                     ],
                 },
-                canFreeActivityTypes: '',
-                freeTaskChangelog: '',
                 tryLookLengthOptions: tryLookLengthOptions,
                 watchLimitTip: Translator.trans('course.marketing_setup.rule.watch_time_limit.watch_limit_tips'),
                 today: Date.now(),

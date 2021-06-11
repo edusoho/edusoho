@@ -16,10 +16,10 @@ class CourseMemberImporter extends Importer
         $price = $request->request->get('price');
         $remark = $request->request->get('remark', '通过批量导入添加');
         $course = $this->getCourseService()->getCourse($courseId);
-        $orderData = array(
+        $orderData = [
             'amount' => $price,
             'remark' => $remark,
-        );
+        ];
 
         return $this->excelDataImporting($course, $importData, $orderData);
     }
@@ -29,14 +29,14 @@ class CourseMemberImporter extends Importer
         $existsUserCount = 0;
         $successCount = 0;
 
-        foreach ($userData as $key => $user) {
-            if (!empty($user['nickname'])) {
-                $user = $this->getUserService()->getUserByNickname($user['nickname']);
+        foreach ($userData as $key => $data) {
+            if (!empty($data['nickname'])) {
+                $user = $this->getUserService()->getUserByNickname($data['nickname']);
             } else {
-                if (!empty($user['email'])) {
-                    $user = $this->getUserService()->getUserByEmail($user['email']);
+                if (!empty($data['email'])) {
+                    $user = $this->getUserService()->getUserByEmail($data['email']);
                 } else {
-                    $user = $this->getUserService()->getUserByVerifiedMobile($user['verifiedMobile']);
+                    $user = $this->getUserService()->getUserByVerifiedMobile($data['verifiedMobile']);
                 }
             }
 
@@ -46,18 +46,18 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                $data = array(
+                $data = [
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
-                );
+                ];
                 $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
 
                 ++$successCount;
             }
         }
 
-        return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
+        return ['existsUserCount' => $existsUserCount, 'successCount' => $successCount];
     }
 
     public function getTemplate(Request $request)
@@ -67,10 +67,10 @@ class CourseMemberImporter extends Importer
 
         return $this->render(
             'course-manage/student/import.html.twig',
-            array(
+            [
                 'course' => $course,
                 'importerType' => $this->type,
-            )
+            ]
         );
     }
 

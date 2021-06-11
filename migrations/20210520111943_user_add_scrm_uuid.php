@@ -19,6 +19,6 @@ class UserAddScrmUuid extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `user` DROP COLUMN `scrmUuid`;");
+        $biz['db']->exec('ALTER TABLE `user` DROP COLUMN `scrmUuid`;');
     }
 }

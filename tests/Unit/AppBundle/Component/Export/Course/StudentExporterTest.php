@@ -79,6 +79,9 @@ class StudentExporterTest extends BaseTestCase
             'user.fields.email_label',
             'task.learn_data_detail.createdTime',
             'course.plan_task.study_rate',
+            'course.plan_task.put_question',
+            'student.report_card.homework',
+            'course.testpaper_manage.testpaper',
             'user.fields.truename_label',
             'user.fields.gender_label',
             'user.fileds.qq',
@@ -88,7 +91,6 @@ class StudentExporterTest extends BaseTestCase
             'user.fields.career_label',
             'user.fields.title_label',
             'student.profile.weibo',
-            'title2',
         ];
 
         $this->assertArrayEquals($title, $expoter->getTitles());
@@ -196,6 +198,9 @@ class StudentExporterTest extends BaseTestCase
                 'email',
                 '1970-1-01 08:00:01',
                 '20%',
+                '0',
+                '0/0'."\t",
+                '0/0'."\t",
                 'truename',
                 '女',
                 'qq',
@@ -212,6 +217,9 @@ class StudentExporterTest extends BaseTestCase
                 'email2',
                 '1970-1-01 08:00:33',
                 '30%',
+                '0',
+                '0/0'."\t",
+                '0/0'."\t",
                 'truename2',
                 '男',
                 'qq2',

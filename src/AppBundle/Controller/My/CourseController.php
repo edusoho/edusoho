@@ -218,7 +218,7 @@ class CourseController extends CourseBaseController
                 'tab' => $tab,
                 'tags' => $tags,
                 'member' => $member,
-                'isCourseTeacher' => 'teacher' == $member['role'],
+                'isCourseTeacher' => in_array($member['role'], ['teacher', 'assistant']),
                 'course' => $course,
                 'classroom' => $classroom,
             ]

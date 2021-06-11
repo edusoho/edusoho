@@ -10,7 +10,7 @@ class TeacherAppController extends MobileBaseController
     public function indexAction()
     {
         $conditions = array(
-            'roles' => 'ROLE_TEACHER',
+            'roles' => '|ROLE_TEACHER|',
             'locked' => 0,
         );
 

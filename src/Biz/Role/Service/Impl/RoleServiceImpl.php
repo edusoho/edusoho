@@ -348,9 +348,16 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         return [
             'ROLE_USER' => [],
-            'ROLE_TEACHER' => $webRoles,
+            'ROLE_TEACHER' => array_merge($this->getDefaultTeacherAdminRole(), $webRoles),
             'ROLE_ADMIN' => array_diff($superAdminV2Roles, $adminV2ForbidRoles),
             'ROLE_SUPER_ADMIN' => $superAdminV2Roles,
+        ];
+    }
+
+    private function getDefaultTeacherAdminRole()
+    {
+        return [
+            'admin_v2', 'admin_v2_teach', 'admin_v2_course_group', 'admin_v2_multi_class', 'admin_v2_multi_class_manage', 'admin_v2_course_show', 'admin_v2_course_manage', 'admin_v2_course_content_manage', 'admin_v2_course_add', 'admin_v2_course_guest_member_preview', 'admin_v2_course_set_close', 'admin_v2_course_set_clone', 'admin_v2_course_set_publish', 'admin_v2_course_set_delete', 'admin_v2_course_set_remove', 'admin_v2_course_set_data',
         ];
     }
 

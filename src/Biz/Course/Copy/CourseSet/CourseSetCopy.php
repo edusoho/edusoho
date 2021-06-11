@@ -61,7 +61,7 @@ class CourseSetCopy extends AbstractCopy
             $this->getCourseSetGoodsMediator()->onPublish($newCourseSet);
         }
 
-        return ['newCourseSet' => $newCourseSet];
+        return array_merge(['newCourseSet' => $newCourseSet], $options['params']);
     }
 
     /**

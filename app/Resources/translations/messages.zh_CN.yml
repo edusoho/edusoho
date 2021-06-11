@@ -2110,6 +2110,11 @@ course.plan_task.activity_manage.live.live_time: 直播时长
 course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
+course.plan_task.activity_manage.live_resource.choose_file: 选择课件
+course.plan_task.activity_manage.live_resource.file_name: 资料名称：
+course.plan_task.activity_manage.live_resource.upload_btn:  (请上传或选择资料)
+course.plan_task.activity_manage.live_resource.add_btn: 添加资料
+course.plan_task.activity_manage.live_resource.delete_btn: 删除
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
 course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
@@ -10338,6 +10343,7 @@ exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
+exception.user.user_is_destroyed: 用户已注销
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -11914,6 +11920,30 @@ admin_v2.syetem.user_content_control.sensitive.import.tips: 请按照提供的EX
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: 浏览
 
 site.content.illegal_status: 该条内容已违规处理
+
+exception.multi_class.multi_class_product_exist: 产品名称已存在
+exception.multi_class.multi_class_exist: 班课名称已存在
+exception.multi_class.multi_class_not_exist: 班课不存在
+exception.multi_class.multi_class_teacher_require: 班课需要设置教师
+exception.multi_class.multi_class_assistant_require: 班课需要设置助教
+exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
+exception.multi_class.multi_class_data_fields_missing : 班课参数缺失
+exception.multi_class.multi_class_course_not_match: 班课与课程不匹配
+exception.multi_class.product_not_found: 产品未找到
+exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除
+exception.multi_class.multi_class_clone_already: 班课复制中
+exception.multi_class.can_not_delete_product: 该产品含有班课，不能删除
+exception.multi_class.can_not_manage_multi_class: 无权管理班课
+exception.multi_class.multi_class_course_exist: 班课中已存在此课程
+exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设置为助教
+exception.multi_class.forbidden_delete_course: 无法删除班课课程
+exception.multi_class.forbidden_close_course: 无法关闭班课课程
+
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
 site.login.change_to_sms: 切换手机快捷登录
+
+admin.multi_class_copy.success.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制完成！
+admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制失败！
+
+course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！

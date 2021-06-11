@@ -8,6 +8,8 @@ interface ThreadDao extends GeneralDaoInterface
 {
     public function deleteByCourseId($courseId);
 
+    public function countThreadsGroupedByUserId($conditions);
+
     public function findLatestThreadsByType($type, $start, $limit);
 
     public function findEliteThreadsByType($type, $status, $start, $limit);

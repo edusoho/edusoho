@@ -214,6 +214,8 @@ class EduCloudController extends BaseController
             $live = $request->request->all();
             $liveCourseSetting = array_merge($liveCourseSetting, $live);
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $liveCourseSetting['live_provider'] = empty($capacity['provider']) ? 0 : $capacity['provider'];
+            $liveCourseSetting['live_provider_code'] = empty($capacity['code']) ? 0 : $capacity['code'];
 
             $courseSetting = $this->getSettingService()->get('course', []);
             $setting = array_merge($courseSetting, $liveCourseSetting);
