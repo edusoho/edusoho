@@ -72,6 +72,17 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->findInField('nickname', $nicknames);
     }
 
+    public function findUserLikeNickname($nickname)
+    {
+        if (empty($nickname)) {
+            $nickname = '';
+        }
+        $nickname = '%'.$nickname.'%';
+        $sql = "SELECT * FROM {$this->table} WHERE nickname LIKE ?";
+
+        return $this->db()->fetchAll($sql, [$nickname]);
+    }
+
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);

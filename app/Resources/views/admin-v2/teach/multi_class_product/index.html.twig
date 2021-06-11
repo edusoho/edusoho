@@ -1,0 +1,9 @@
+{% extends 'admin-v2/content-layout.html.twig' %}
+
+{% set menu = 'admin_v2_multi_class_product_manage' %}
+
+{% do script(['app/vue/views/teach/multi_class_product/index.js']) %}
+
+{% block main %}
+  <div id="app"></div>
+{% endblock %}

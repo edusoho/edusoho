@@ -22,36 +22,60 @@ class MaterialExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('convert_materials', array($this, 'convertMaterials')),
-        );
+        return [
+            new \Twig_SimpleFilter('convert_materials', [$this, 'convertMaterials']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('find_materials_by_activity_id_and_source', array($this, 'findMaterialsByActivityIdAndSource')),
-        );
+        return [
+            new \Twig_SimpleFunction('find_materials_by_activity_id_and_source', [$this, 'findMaterialsByActivityIdAndSource']),
+        ];
     }
 
     public function findMaterialsByActivityIdAndSource($activityId, $source)
     {
         if (empty($activityId)) {
-            return array();
+            return [];
         }
 
-        return $this->getMaterialService()->findMaterialsByLessonIdAndSource($activityId, $source);
+        $conditions = [
+            'lessonId' => $activityId,
+            'source' => $source,
+        ];
+
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        if (isset($activity['ext']['fileIds'])) {
+            $conditions['fileIds'] = $activity['ext']['fileIds'] ?: [-1];
+        }
+
+        return $this->getMaterialService()->searchMaterials(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
     }
 
     public function convertMaterials($materials)
     {
-        $newMaterials = array();
+        $newMaterials = [];
         foreach ($materials as $material) {
             $id = empty($material['fileId']) ? $material['link'] : $material['fileId'];
-            $newMaterials[$id] = array('id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']);
+            $newMaterials[$id] = ['id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']];
         }
 
         return $newMaterials;
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 
     protected function getCourseSetService()

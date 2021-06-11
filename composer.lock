@@ -515,12 +515,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f"
+                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/c2328cf3f6c317c368e85983825da6ac97fc105f",
-                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/245b0ecf14b8788b325ee0a33e830748f3ff88dc",
+                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -538,6 +538,7 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "4.8.36"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -551,7 +552,11 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2021-03-12T08:57:55+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-order-pay/issues",
+                "source": "https://github.com/codeages/biz-order-pay/tree/master"
+            },
+            "time": "2021-06-05T08:23:07+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -9210,5 +9215,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

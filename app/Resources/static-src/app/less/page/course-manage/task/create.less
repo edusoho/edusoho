@@ -71,7 +71,7 @@
   }
 }
 
-.download-list {
+.live-resource-list {
   list-style: none;
   padding-left: 0;
   .border-radius(4px);
@@ -89,6 +89,36 @@
       visibility: hidden;
       font-size: 16px;
       color:@gray; 
+    }
+    &:hover {
+      >.btn-delete {
+        visibility: visible;
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+.download-list {
+  list-style: none;
+  padding-left: 0;
+  .border-radius(4px);
+  background-color: #f8fbfd;
+  li {
+    padding: 10px 15px 0 ;
+    &:last-child {
+      padding-bottom: 10px;
+    }
+    >a {
+      color: @gray-darker;
+      font-weight: bold;
+    }
+    .btn-delete {
+      visibility: hidden;
+      font-size: 16px;
+      color:@gray;
     }
     &:hover {
       >.btn-delete {

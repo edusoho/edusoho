@@ -419,4 +419,6 @@ interface UserService
     public function findUnLockedUsersByUserIds($userIds = []);
 
     public function updatePasswordChanged($id, $passwordChanged);
+
+    public function findUserLikeNickname($nickname);
 }

@@ -148,6 +148,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserTokenDao()->count($conditions);
     }
 
+    public function findUserLikeNickname($nickname)
+    {
+        return $this->getUserDao()->findUserLikeNickname($nickname);
+    }
+
     public function findUserFollowing($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
@@ -1541,7 +1546,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findLatestPromotedTeacher($start, $limit)
     {
-        return $this->searchUsers(['roles' => 'ROLE_TEACHER', 'promoted' => 1], ['promotedTime' => 'DESC'], $start, $limit);
+        return $this->searchUsers(['roles' => '|ROLE_TEACHER|', 'promoted' => 1], ['promotedTime' => 'DESC'], $start, $limit);
     }
 
     public function waveUserCounter($userId, $name, $number)

@@ -1,0 +1,19 @@
+/*!    SWFObject v2.3.20130521 <http://github.com/swfobject/swfobject>
+ is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
+ */
+
+/*! Video.js v4.10.2 Copyright 2014 Brightcove, Inc. https://github.com/videojs/video.js/blob/master/LICENSE */
+
+/**
+ *     __  ___
+ *    /  |/  /___   _____ _____ ___   ____   ____ _ ___   _____
+ *   / /|_/ // _ \ / ___// ___// _ \ / __ \ / __ `// _ \ / ___/
+ *  / /  / //  __/(__  )(__  )/  __// / / // /_/ //  __// /
+ * /_/  /_/ \___//____//____/ \___//_/ /_/ \__, / \___//_/
+ *                                        /____/
+ *
+ * @description MessengerJS, a common cross-document communicate solution.
+ * @author biqing kwok
+ * @version 2.2.4
+ * @license release under MIT license
+ */

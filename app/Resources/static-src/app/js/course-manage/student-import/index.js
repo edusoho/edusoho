@@ -5,11 +5,16 @@ let rules = {
     maxlength: 50,
   },
   'price': {
-    currency: true
+    currency: true,
+    max: parseFloat($('#buy-price').data('price')),
   }
 };
 
-let messages = {};
+let messages = {
+  price: {
+    max: Translator.trans('course_manage.student_create.price_max_error_hint'),
+  }
+};
 
 new Importer({
   rules: rules,

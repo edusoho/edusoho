@@ -74,4 +74,6 @@ interface TaskResultService
     public function batchUpdate($ids, $taskResults);
 
     public function countFinishedCompulsoryTaskNumGroupByUserId($courseId);
+
+    public function countUserNumByCourseTaskId($conditions);
 }

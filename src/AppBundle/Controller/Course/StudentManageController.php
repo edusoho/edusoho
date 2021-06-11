@@ -54,7 +54,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $this->appendLearningProgress($members);
+        $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
         return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
@@ -335,14 +335,6 @@ class StudentManageController extends BaseController
         $reportCard = $this->createReportCard($course, $user);
 
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
-    }
-
-    private function appendLearningProgress(&$members)
-    {
-        foreach ($members as &$member) {
-            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['courseId'], $member['userId']);
-            $member['learningProgressPercent'] = $progress['percent'];
-        }
     }
 
     protected function hasAdminRole()

@@ -224,7 +224,7 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
-            ['roles' => 'ROLE_TEACHER', 'locked' => 0],
+            ['roles' => '|ROLE_TEACHER|', 'locked' => 0],
             ['nickname' => 'ASC'],
             0,
             1000
@@ -283,7 +283,7 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
-            ['roles' => 'ROLE_TEACHER', 'locked' => 0],
+            ['roles' => '|ROLE_TEACHER|', 'locked' => 0],
             ['nickname' => 'ASC'],
             0,
             1000
