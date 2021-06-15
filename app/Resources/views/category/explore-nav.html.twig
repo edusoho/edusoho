@@ -5,15 +5,16 @@
 
 {% if group == 'classroom' %}
   {% set path = 'classroom_explore' %}
-  {% set orderByDefault = 'createdTime' %}
+  {% set orderByDefault = setting('classroom.explore_default_orderBy') %}
 {% elseif group == 'open_course' %}
   {% set path = 'open_course_explore' %}
   {% set group = 'course' %}
+  {% set orderByDefault = setting('course.explore_default_orderBy') %}
 {% else %}
   {% set path = 'course_set_explore' %}
-  {% set orderByDefault = 'latest' %}
+  {% set orderByDefault = setting('course.explore_default_orderBy')%}
 {% endif %}
-{% set orderBy = request.query.get('orderBy', orderByDefault|default(setting('course.explore_default_orderBy'))) %}
+{% set orderBy = request.query.get('orderBy', orderByDefault) %}
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm clearfix">
