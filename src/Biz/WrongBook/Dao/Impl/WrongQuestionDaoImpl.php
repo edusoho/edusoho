@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 {
+    protected $table = 'biz_item_wrong_question';
+
     public function declares()
     {
         return [
