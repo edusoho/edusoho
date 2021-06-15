@@ -41,6 +41,11 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(['uuid' => $uuid]);
     }
 
+    public function getByScrmUuid($scrmUuid)
+    {
+        return $this->getByFields(['scrmUuid' => $scrmUuid]);
+    }
+
     public function countByMobileNotEmpty()
     {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";
@@ -65,6 +70,17 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
     public function findByNicknames(array $nicknames)
     {
         return $this->findInField('nickname', $nicknames);
+    }
+
+    public function findUserLikeNickname($nickname)
+    {
+        if (empty($nickname)) {
+            $nickname = '';
+        }
+        $nickname = '%'.$nickname.'%';
+        $sql = "SELECT * FROM {$this->table} WHERE nickname LIKE ?";
+
+        return $this->db()->fetchAll($sql, [$nickname]);
     }
 
     public function findByIds(array $ids)

@@ -42,6 +42,8 @@ interface UserService
 
     public function getUserByEmail($email);
 
+    public function getUserByScrmUuid($scrmUuid);
+
     public function findUsersByIds(array $id);
 
     public function findUnDestroyedUsersByIds($ids);
@@ -90,6 +92,8 @@ interface UserService
      * @Log(module="user",action="avatar-changed",funcName="getUser",param="userId")
      */
     public function changeAvatar($userId, $data);
+
+    public function setUserScrmUuid($userId, $scrmUuid);
 
     public function isNicknameAvaliable($nickname);
 
@@ -415,4 +419,6 @@ interface UserService
     public function findUnLockedUsersByUserIds($userIds = []);
 
     public function updatePasswordChanged($id, $passwordChanged);
+
+    public function findUserLikeNickname($nickname);
 }

@@ -946,7 +946,7 @@ class ClassroomManageController extends BaseController
 
         if ('' != $nickName) {
             $user = $this->getUserService()->searchUsers(
-                ['nickname' => $nickName, 'roles' => 'ROLE_TEACHER'],
+                ['nickname' => $nickName, 'roles' => '|ROLE_TEACHER|'],
                 ['createdTime' => 'DESC'],
                 0,
                 1

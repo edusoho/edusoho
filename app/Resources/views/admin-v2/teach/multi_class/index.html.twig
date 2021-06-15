@@ -1,0 +1,25 @@
+{% extends 'admin-v2/content-layout.html.twig' %}
+
+{% do script(['app/vue/views/teach/multi_class/index.js', 'libs/es-ckeditor/ckeditor.js', 'app/vue/views/teach/multi_class/exporter/index.js']) %}
+
+{% set menu = 'admin_v2_multi_class_manage' %}
+
+{% block main %}
+  <div id="app"></div>
+  <div id="export-modal" class="hide">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress progress-striped active">
+            <div  id="progress-bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

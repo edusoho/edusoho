@@ -31,7 +31,7 @@
     </div>
     <div class="col-sm-8 controls">
       <div class="input-group" style="width: 160px">
-        <input type="text" id="buy-price" name="price" value="{{ course.price }}" class="form-control">
+        <input type="text" id="buy-price" name="price" data-price="{{ course.price|currency }}" value="{{ course.price }}" class="form-control">
         <div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
       </div>
       <div class="help-block">{{'import.user_import.price_tips'|trans}}{{course.price}}{{'site.currency.CNY'|trans}}</div>

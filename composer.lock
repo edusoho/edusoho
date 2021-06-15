@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f9697c10db22b0c15157f763cf9041b",
+    "content-hash": "8e82aa999b542c4ddeb843b552bebeb0",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -515,12 +515,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f"
+                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/c2328cf3f6c317c368e85983825da6ac97fc105f",
-                "reference": "c2328cf3f6c317c368e85983825da6ac97fc105f",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/245b0ecf14b8788b325ee0a33e830748f3ff88dc",
+                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -538,6 +538,7 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "4.8.36"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -551,7 +552,11 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2021-03-12T08:57:55+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-order-pay/issues",
+                "source": "https://github.com/codeages/biz-order-pay/tree/master"
+            },
+            "time": "2021-06-05T08:23:07+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -592,16 +597,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "dev-master",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f"
+                "reference": "bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/6536acd34a0266c7fcd80ff72793e005c05d5f3f",
-                "reference": "6536acd34a0266c7fcd80ff72793e005c05d5f3f",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7",
+                "reference": "bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -615,7 +620,7 @@
                 "ext-json": "*",
                 "firebase/php-jwt": "^5.0",
                 "paragonie/random_compat": ">=2",
-                "php": ">=5.3.3",
+                "php": ">=5.5.0",
                 "psr/log": "^1.0"
             },
             "require-dev": {
@@ -640,7 +645,11 @@
                 }
             ],
             "description": "ESCloud PHP SDK",
-            "time": "2021-04-30T03:47:30+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/escloud-php-sdk/issues",
+                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.0"
+            },
+            "time": "2021-06-01T06:41:59+00:00"
         },
         {
             "name": "codeages/exam-parser",
@@ -9196,7 +9205,6 @@
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
         "codeages/biz-order-pay": 20,
-        "codeages/escloud-php-sdk": 20,
         "codeages/plumber2": 20,
         "codeages/biz-item-bank": 20
     },
@@ -9206,5 +9214,6 @@
         "php": ">=5.6.0",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
 }

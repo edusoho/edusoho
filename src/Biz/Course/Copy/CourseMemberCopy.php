@@ -18,19 +18,21 @@ class CourseMemberCopy extends AbstractCopy
         $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
 
-        $courseMembers = $this->getMemberDao()->findByCourseIdAndRole($course['id'], 'teacher');
+        $courseMembers = array_merge($this->getMemberDao()->findByCourseIdAndRole($course['id'], 'teacher'),
+            $this->getMemberDao()->findByCourseIdAndRole($course['id'], 'assistant')
+        );
 
         if (!empty($courseMembers)) {
-            $newMembers = array();
-            $teacherIds = array();
+            $newMembers = [];
+            $teacherIds = [];
 
             foreach ($courseMembers as $member) {
                 $member = $this->partsFields($member);
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
-                $member['role'] = 'teacher';
+                $member['multiClassId'] = !empty($member['multiClassId']) && !empty($options['newMultiClass']) ? $options['newMultiClass']['id'] : 0;
 
-                if ($member['isVisible']) {
+                if ($member['isVisible'] && 'teacher' == $member['role']) {
                     $teacherIds[] = $member['userId'];
                 }
 
@@ -42,7 +44,7 @@ class CourseMemberCopy extends AbstractCopy
             }
 
             if (!empty($teacherIds)) {
-                $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
+                $this->getCourseDao()->update($newCourse['id'], ['teacherIds' => $teacherIds]);
             }
         }
     }
@@ -54,14 +56,16 @@ class CourseMemberCopy extends AbstractCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'userId',
             'seq',
             'isVisible',
             'remark',
             'deadline',
             'deadlineNotified',
-        );
+            'role',
+            'multiClassId',
+        ];
     }
 
     /**

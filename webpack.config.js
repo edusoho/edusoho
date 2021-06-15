@@ -34,9 +34,9 @@ module.exports = {
     'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
-    'vue': ['vue'],
     'province-city-area': ['libs/province-city-area.js'],
     'element-ui': ['element-ui'],
+    'vue': ['libs/vue.js'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -56,7 +56,6 @@ module.exports = {
     'echo-js': 'echo-js/dist/echo.js',
     'jquery-waypoints': 'jquery-waypoints/waypoints.js',
     'echarts': 'echarts/dist/echarts.js',
-    'vue': 'vue/dist/vue.min.js',
     'handlebars': 'handlebars/dist/handlebars.min.js',
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',

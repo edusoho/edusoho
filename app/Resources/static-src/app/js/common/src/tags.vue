@@ -26,7 +26,9 @@
     export default {
         name: "tags",
         props: {
-            tagData: [],
+            tagData: {
+                type: Array
+            },
             tagSearchUrl: '',
         },
         methods: {
@@ -37,11 +39,14 @@
                 return value;
             },
             searchTags(query) {
+                this.loading = true
                 this.$axios.get(this.tagSearchUrl ? this.tagSearchUrl : '/tag/match_jsonp', {
                     params: {q: query},
                 }).then((response) => {
                     this.tags = response.data;
-                });
+                }).finnaly(() => {
+                    this.loading = false
+                })
 
             },
             updateTags(value) {
@@ -51,8 +56,8 @@
         },
         data() {
             return {
-                tagData: [],
                 tags: [],
+                loading: false,
             }
         }
     }

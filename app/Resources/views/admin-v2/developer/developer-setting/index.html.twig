@@ -110,6 +110,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{'admin_v2.developer_setting.scrm_url'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="scrm_server" value="{{ developerSetting.scrm_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.mp_service_url_label'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">

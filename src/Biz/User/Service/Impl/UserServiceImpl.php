@@ -148,6 +148,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserTokenDao()->count($conditions);
     }
 
+    public function findUserLikeNickname($nickname)
+    {
+        return $this->getUserDao()->findUserLikeNickname($nickname);
+    }
+
     public function findUserFollowing($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
@@ -324,6 +329,16 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->getByEmail($email);
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserByScrmUuid($scrmUuid)
+    {
+        if (empty($scrmUuid)) {
+            return null;
+        }
+        $user = $this->getUserDao()->getByScrmUuid($scrmUuid);
 
         return !$user ? null : UserSerialize::unserialize($user);
     }
@@ -558,6 +573,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function updateUserUpdatedTime($id)
     {
         return $this->getUserDao()->update($id, []);
+    }
+
+    public function setUserScrmUuid($userId, $scrmUuid)
+    {
+        return $this->getUserDao()->update($userId, ['scrmUuid' => $scrmUuid]);
     }
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = [])
@@ -1526,7 +1546,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findLatestPromotedTeacher($start, $limit)
     {
-        return $this->searchUsers(['roles' => 'ROLE_TEACHER', 'promoted' => 1], ['promotedTime' => 'DESC'], $start, $limit);
+        return $this->searchUsers(['roles' => '|ROLE_TEACHER|', 'promoted' => 1], ['promotedTime' => 'DESC'], $start, $limit);
     }
 
     public function waveUserCounter($userId, $name, $number)

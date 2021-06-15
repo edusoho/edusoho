@@ -8,6 +8,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Mediator\CourseSpecsMediator;
+use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -61,6 +62,11 @@ class CourseSetCoursesCopy extends AbstractCopy
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
 
         $this->resetCopyId($newCourseSet['id']);
+
+        if (!empty($options['newMultiClass'])) {
+            $newMultiClass = $options['newMultiClass'];
+            $this->getMultiClassDao()->update($newMultiClass['id'], ['courseId' => $defaultCourseId]);
+        }
     }
 
     /**
@@ -202,5 +208,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getCourseSpecsMediator()
     {
         return $this->biz['specs.mediator.course'];
+    }
+
+    /**
+     * @return MultiClassDao
+     */
+    private function getMultiClassDao()
+    {
+        return $this->biz->dao('MultiClass:MultiClassDao');
     }
 }

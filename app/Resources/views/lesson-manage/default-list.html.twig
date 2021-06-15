@@ -8,21 +8,26 @@
   {% endif %}
 {% endblock %}
 {% block main_body %}
-  <div class="js-lesson-manage">
-    {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
-    <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
-      {% for key, item in items %}
-        {% if item.type == 'lesson' %}
-          {% include 'lesson-manage/default/lesson.html.twig' with {course: course, lesson: item} %}
-        {% else %}
-          {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
-        {% endif %}
-      {% endfor %}
-    </ul>
-    <div class="empty task-empty js-task-empty {% if items %} hidden {% endif %}">
-      <i class="es-icon es-icon-book task-empty-icon"></i>
-      {{'course.plan_task.empty'|trans}}
+  {% set assistant = data('AssistantPermission', {courseId: course.id}) %}
+  {% if not assistant.isAssistant or 'course_lesson_manage' in assistant.permissions %}
+    <div class="js-lesson-manage">
+      {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
+      <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+        {% for key, item in items %}
+          {% if item.type == 'lesson' %}
+            {% include 'lesson-manage/default/lesson.html.twig' with {course: course, lesson: item} %}
+          {% else %}
+            {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="empty task-empty js-task-empty {% if items %} hidden {% endif %}">
+        <i class="es-icon es-icon-book task-empty-icon"></i>
+        {{'course.plan_task.empty'|trans}}
+      </div>
+      {% include 'lesson-manage/batch-operate.html.twig' with { courseId: course.id } %}
     </div>
-    {% include 'lesson-manage/batch-operate.html.twig' with { courseId: course.id } %}
-  </div>
+  {% else %}
+    <div class="cd-alert cd-alert-danger">{{ 'course.task_manage.no_permission_tips'|trans }}</div>
+  {% endif %}
 {% endblock %}

@@ -10,6 +10,7 @@ class ObjectCombinationUtil
 
     private $serviceMap = [
         'user' => 'User:UserService',
+        'profile' => 'User:UserService',
         'course' => 'Course:CourseService',
         'courseSet' => 'Course:CourseSetService',
         'classroom' => 'Classroom:ClassroomService',
@@ -19,6 +20,7 @@ class ObjectCombinationUtil
 
     private $methodMap = [
         'user' => 'findUsersByIds',
+        'profile' => 'findUserProfilesByIds',
         'course' => 'findCoursesByIds',
         'courseSet' => 'findCourseSetsByIdsWithMarketingInfo',
         'classroom' => 'findClassroomsByIds',
@@ -52,8 +54,9 @@ class ObjectCombinationUtil
      * 如 multiple($orderLogs, array('user_id'), 'user')，会将 orderLogs 中的 user_id 替换为 user对象
      *
      * @param $targetObjectType 分为 user, course, courseset, 见全局变量 $serviceMap
+     * @param $keepFields 是否保留原有属性
      */
-    public function multiple(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user')
+    public function multiple(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user', $newFieldName = '', $keepFields = false)
     {
         if (!$sourceObjects) {
             return;
@@ -67,7 +70,7 @@ class ObjectCombinationUtil
 
         $targetObjects = $this->findTargetObjects($targetObjectType, $targetIds);
         foreach ($sourceObjects as &$sourceObject) {
-            $this->replaceSourceObject($targetObjects, $sourceObject, $targetIdFields);
+            $this->replaceSourceObject($targetObjects, $sourceObject, $targetIdFields, $newFieldName, $keepFields);
         }
     }
 
@@ -147,10 +150,13 @@ class ObjectCombinationUtil
         return ArrayToolkit::index($targetObjects, 'id');
     }
 
-    private function replaceSourceObject($targetObjects, &$sourceObj, $targetIdFields)
+    private function replaceSourceObject($targetObjects, &$sourceObj, $targetIdFields, $newFieldName = '', $keepFields = true)
     {
         foreach ($targetIdFields as $targetIdField) {
-            $newField = str_replace('Id', '', $targetIdField);
+            $newField = $newFieldName;
+            if (empty($newField)) {
+                $newField = str_replace('Id', '', $targetIdField);
+            }
             $targetIdValue = $sourceObj[$targetIdField];
             $sourceObj[$newField] = [];
 
@@ -168,7 +174,7 @@ class ObjectCombinationUtil
                 }
             }
 
-            if ($targetIdField !== $newField) {
+            if ($targetIdField !== $newField && !$keepFields) {
                 unset($sourceObj[$targetIdField]);
             }
         }

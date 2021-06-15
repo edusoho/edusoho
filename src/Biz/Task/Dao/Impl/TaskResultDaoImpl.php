@@ -189,6 +189,14 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         return $builder->execute()->fetchAll();
     }
 
+    public function countUserNumByCourseTaskId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(userId) as count');
+
+        return $builder->execute()->fetchColumn();
+    }
+
     public function declares()
     {
         return [

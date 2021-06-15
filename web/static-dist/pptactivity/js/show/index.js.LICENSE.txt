@@ -1,0 +1,34 @@
+/*!
+ *  * postal.federation - A base plugin for federating instances of postal.js across various boundaries.
+ *  * Author: Jim Cowart (http://ifandelse.com)
+ *  * Version: v0.5.3
+ *  * Url: http://github.com/postaljs/postal.federation
+ *  * License(s): (MIT OR GPL-2.0)
+ */
+
+/*!
+ *  * postal.xframe - postal.js/postal.federation plugin for federating instances of postal.js across iframe/window boundaries.
+ *  * Author: Jim Cowart (http://ifandelse.com)
+ *  * Version: v0.5.0
+ *  * Url: http://github.com/postaljs/postal.xframe
+ *  * License(s): (MIT OR GPL-2.0)
+ */
+
+/**
+ * @license
+ * Lodash <https://lodash.com/>
+ * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/**
+ * @license
+ * lodash 3.10.1 (Custom Build) <https://lodash.com/>
+ * Build: `lodash modern -d -o ./index.js`
+ * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
+ */

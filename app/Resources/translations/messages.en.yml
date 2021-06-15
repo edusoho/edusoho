@@ -1820,6 +1820,11 @@ course.plan_task.activity_manage.live.live_time: 'Duration'
 course.plan_task.activity_manage.live.info: 'Description'
 course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live %taskName% may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
+course.plan_task.activity_manage.live_resource.choose_file: 'Choose file'
+course.plan_task.activity_manage.live_resource.file_name: 'File name: '
+course.plan_task.activity_manage.live_resource.upload_btn: '(Please upload or choose files)'
+course.plan_task.activity_manage.live_resource.add_btn: 'Add'
+course.plan_task.activity_manage.live_resource.delete_btn: 'Delete'
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
 course.plan_task.activity_manage.ppt.time: 'Learn duration'
 course.plan_task.activity_manage.ppt.lear_at_least_time: 'Learn at least'
@@ -6309,7 +6314,7 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 'A IP  e
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 'Will be temporarily blocked'
 admin.login_connect.User_login_protection.after: After
 admin.login_connect.User_login_captcha: 'User login captcha'
-admin.login_connect.User_login_captcha.help_block: 'When enabled, users are required to validate verification code when logging in.'
+admin.login_connect.User_login_captcha.help_block: 'After opening, users need to drag the verification code to check when they log in; If you switch to "mobile quick login", you always need to drag the verification code'
 admin.login_connect.User_login_protection.after.unblock: 'Minutes, unblock user /IP'
 admin.login_connect.weixinmob.frist.help_block: 'If turned on, users can register or login the site with wechat id in wechat app.'
 admin.login_connect.weixinmob.help_block: 'How to access:1. You need a certified <a target= "_blank" HREF = "https://MP.weixin.QQ.com" > wechat service account, </a>;2. A certified <a target= "_blank" HREF = "https://open.weixin.QQ.com" > wechat open platform </a> account;3. Bind the wechat service account with <a target=, "_blank" HREF = "https://open.weixin.QQ.com" > the open platform </a>.'
@@ -6553,6 +6558,7 @@ admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN 
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
+admin_v2.developer_setting.scrm_url: 'SCRM(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.default_locale: language
 admin.developer_setting.default_locale.zh_CN: Chinese(简体中文)
@@ -9064,6 +9070,7 @@ exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: The number of registrations has reached the maximum limit!
 exception.user.not_match_auth: 'User is not match auth'
 exception.user.mobile_not_found: 'User mobile is not found'
+exception.user.user_is_destroyed: User is destroyed
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -10669,4 +10676,29 @@ admin_v2.syetem.user_content_control.sensitive.import.choose_file: Select the fi
 admin_v2.syetem.user_content_control.sensitive.import.tips: Please follow the provided EXCEL file template to import sensitive words
 admin_v2.syetem.user_content_control.sensitive.import.browser_btn: Browse
 
+exception.multi_class.multi_class_product_exist: The product name already exists
+exception.multi_class.multi_class_exist: The Multi class name already exists
+exception.multi_class.multi_class_not_exist: The Multi class name not exists
+exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
+exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
+exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
+exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing
+exception.multi_class.multi_class_course_not_match: The Multi class course not match
+exception.multi_class.product_not_found: The product not found
+exception.multi_class.cannot_delete_default_product: The default product can not delete
+exception.multi_class.multi_class_clone_already: The Multi class clone already
+exception.multi_class.can_not_delete_product: This product contains classes and cannot be deleted
+exception.multi_class.can_not_manage_multi_class: No right to manage the multi class
+exception.multi_class.multi_class_course_exist: The Multi class course already exists
 admin_v2.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
+exception.multi_class.multi_teacher_cannot_be_assistant: The Multi class teacher cannot be assistant
+exception.multi_class.forbidden_delete_course: The course can not delete
+exception.multi_class.forbidden_close_course: The course can not close
+
+site.login.change_to_pwd: Change to account login
+site.login.change_to_sms: Change to sms login
+
+admin.multi_class_copy.success.notify: Your new multi-class《%newTitle%》is copied success from origin multi-class《%originTitle%》！
+admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is copied failed from origin multi-class《%originTitle%》！
+
+course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
