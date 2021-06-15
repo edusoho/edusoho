@@ -4429,6 +4429,7 @@ my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 user.certificate_menu: 我的证书
+my.wrong_question_book: 我的错题本
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！

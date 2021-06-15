@@ -3796,6 +3796,7 @@ my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
 my.learning.group_menu: 'Groups'
 user.certificate_menu: 'My Certificate'
+my.wrong_question_book: 'My wrong question book'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
