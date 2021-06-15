@@ -311,6 +311,7 @@ class LoggerTest extends BaseTestCase
             ],
             'wrong_question' => [
                 'create_wrong_question' => '创建错题',
+                'delete_wrong_question' => '删除错题',
             ],
         ], $result);
     }

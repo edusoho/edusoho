@@ -41,6 +41,31 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit);
     }
 
+    public function deleteWrongQuestion($id)
+    {
+        $wrongExisted = $this->getWrongQuestionDao()->get($id);
+        if (empty($wrongExisted)) {
+            throw WrongBookException::WRONG_QUESTION_NOT_EXIST();
+        }
+
+        $this->beginTransaction();
+
+        try {
+            $this->getWrongQuestionDao()->delete($id);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'delete_wrong_question',
+                "删除错题#{$id},错题id{$wrongExisted['item_id']}"
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     private function filterWrongQuestionFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, [

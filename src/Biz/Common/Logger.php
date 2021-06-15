@@ -411,6 +411,7 @@ class Logger
 
             self::WRONG_QUESTION => [
                 'create_wrong_question' => '创建错题',
+                'delete_wrong_question' => '删除错题',
             ],
         ];
     }

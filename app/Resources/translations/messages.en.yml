@@ -10704,3 +10704,5 @@ admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is co
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
 
 exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.not_exist: Wrong question not exist
+
