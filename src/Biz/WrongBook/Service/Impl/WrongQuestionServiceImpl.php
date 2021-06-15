@@ -5,20 +5,25 @@ namespace Biz\WrongBook\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\LogService;
+use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 
 class WrongQuestionServiceImpl extends BaseService implements WrongQuestionService
 {
-    public function createWrongQuestion($wrongQuestion)
+    public function createWrongQuestion($fields)
     {
-        $this->filterWrongQuestionFields($wrongQuestion);
+        $fields['user_id'] = $this->getCurrentUser()->getId();
 
         $this->beginTransaction();
-
         try {
-            $wrongQuestion = $this->getWrongQuestionDao()->create($wrongQuestion);
+            $pool = $this->getQuestionPool($fields);
+            $collect = $this->getQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
+
+            $wrongQuestionFields = $this->filterWrongQuestionFields(array_merge($fields, ['collect_id' => $collect['id']]));
+            $wrongQuestion = $this->getWrongQuestionDao()->create($wrongQuestionFields);
 
             $this->getLogService()->info(
                 'wrong_question',
@@ -26,12 +31,13 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 "创建错题#{$wrongQuestion['id']},错题id{$wrongQuestion['item_id']}",
                 $wrongQuestion
             );
-
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
+
+        $this->dispatchEvent('wrong.question.create', $wrongQuestion);
 
         return $wrongQuestion;
     }
@@ -49,7 +55,6 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         }
 
         $this->beginTransaction();
-
         try {
             $this->getWrongQuestionDao()->delete($id);
 
@@ -64,23 +69,70 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             $this->rollback();
             throw $e;
         }
+
+        $this->dispatchEvent('wrong.question.delete', $wrongExisted);
+    }
+
+    protected function getQuestionCollect($wrongQuestion)
+    {
+        $collectRequireFields = [
+            'pool_id',
+            'item_id',
+        ];
+        if (!ArrayToolkit::requireds($wrongQuestion, $collectRequireFields)) {
+            throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
+        }
+
+        $collect = $this->getWrongQuestionCollectDao()->getCollect($wrongQuestion['pool_id'], $wrongQuestion['item_id']);
+
+        if (!$collect) {
+            $collectFields = ArrayToolkit::parts($wrongQuestion, $collectRequireFields);
+            $collectFields['last_submit_time'] = intval(time());
+            $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
+        }
+
+        return $collect;
+    }
+
+    protected function getQuestionPool($fields)
+    {
+        $poolRequireFields = [
+            'target_type',
+            'target_id',
+            'user_id',
+            ];
+        if (!ArrayToolkit::requireds($fields, $poolRequireFields)) {
+            throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
+        }
+
+        $pool = $this->getWrongQuestionBookPoolDao()->getPool($fields['user_id'], $fields['target_type'], $fields['target_id']);
+
+        if (!$pool) {
+            $poolFields = ArrayToolkit::parts($fields, $poolRequireFields);
+            $poolFields['item_num'] = 0;
+            $pool = $this->getWrongQuestionBookPoolDao()->create($poolFields);
+        }
+
+        return $pool;
     }
 
     private function filterWrongQuestionFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, [
-            'item_id',
+        $wrongQuestionRequireFields = [
+            'collect_id',
             'user_id',
+            'question_id',
+            'item_id',
+            'answer_scene_id',
             'answer_question_report_id',
-            'target_type',
-            'target_id',
-            'sub_target_id',
-            'source',
-            'event_id',
-            'error_time',
-        ])) {
+        ];
+        if (!ArrayToolkit::requireds($fields, $wrongQuestionRequireFields)) {
             throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
         }
+
+        $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
+
+        return array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]);
     }
 
     /**
@@ -88,7 +140,23 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
      */
     protected function getWrongQuestionDao()
     {
-        return $this->createDao(' WrongBook:WrongQuestionDao');
+        return $this->createDao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return WrongQuestionBookPoolDao
+     */
+    protected function getWrongQuestionBookPoolDao()
+    {
+        return $this->createDao('WrongBook:WrongQuestionBookPoolDao');
+    }
+
+    /**
+     * @return WrongQuestionCollectDao
+     */
+    protected function getWrongQuestionCollectDao()
+    {
+        return $this->createDao('WrongBook:WrongQuestionCollectDao');
     }
 
     /**
