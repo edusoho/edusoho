@@ -13,7 +13,7 @@
   {% set path = 'course_set_explore' %}
   {% set orderByDefault = 'latest' %}
 {% endif %}
-{% set orderBy = request.query.get('orderBy', orderByDefault|default(null)) %}
+{% set orderBy = request.query.get('orderBy', orderByDefault|default(setting('course.explore_default_orderBy'))) %}
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm clearfix">
