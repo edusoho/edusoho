@@ -2,12 +2,12 @@
 
 namespace Biz\WrongBook\Dao\Impl;
 
-use Biz\WrongBook\Dao\WrongQuestionDao;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
+class WrongQuestionCollectImpl extends AdvancedDaoImpl implements WrongQuestionCollectDao
 {
-    protected $table = 'biz_item_wrong_question';
+    protected $table = 'biz_wrong_question_collect';
 
     public function declares()
     {
