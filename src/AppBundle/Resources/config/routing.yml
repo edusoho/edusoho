@@ -637,6 +637,10 @@ my_certificates:
     defaults: { _controller: AppBundle:My/Certificate:index }
     h5: true
 
+my_wrong_question_book:
+    path: /my/wrong_question_book
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:index }
+
 my_unclaimed_certificates:
     path: /my/certificates/unclaimed
     defaults: { _controller: AppBundle:My/Certificate:unclaimed }
