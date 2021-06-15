@@ -45,25 +45,21 @@ class MultiClassProductDaoTest extends BaseTestCase
     {
         return $this->getMulticlassProductDao()->batchCreate([
             [
-                'id' => 1,
                 'title' => '系统默认',
                 'type' => 'default',
                 'remark' => 'default product 1',
             ],
             [
-                'id' => 2,
                 'title' => 'product 1',
                 'type' => 'normal',
                 'remark' => 'product 1',
             ],
             [
-                'id' => 3,
                 'title' => 'product 2',
                 'type' => 'normal',
                 'remark' => 'product 2',
             ],
             [
-                'id' => 4,
                 'title' => '班课产品',
                 'type' => 'normal',
                 'remark' => 'product 3',
