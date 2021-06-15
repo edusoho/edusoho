@@ -309,6 +309,9 @@ class LoggerTest extends BaseTestCase
                 'delete_multi_class' => '删除班课',
                 'clone_multi_class' => '复制班课',
             ],
+            'wrong_question' => [
+                'create_wrong_question' => '创建错题',
+            ],
         ], $result);
     }
 
