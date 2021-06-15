@@ -1,11 +1,13 @@
 <?php
 
+
 namespace Biz\WrongBook\Dao\Impl;
+
 
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class WrongQuestionCollectImpl extends AdvancedDaoImpl implements WrongQuestionCollectDao
+class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuestionCollectDao
 {
     protected $table = 'biz_wrong_question_collect';
 
