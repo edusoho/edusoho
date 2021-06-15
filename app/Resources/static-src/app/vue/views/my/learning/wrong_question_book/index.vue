@@ -1,32 +1,27 @@
 <template>
   <div>
-    <a-tabs default-active-key="1" @change="callback">
-      <a-tab-pane key="1" tab="Tab 1">
-        Content of Tab Pane 1
-      </a-tab-pane>
-      <a-tab-pane key="2" tab="Tab 2" force-render>
-        Content of Tab Pane 2
-      </a-tab-pane>
-      <a-tab-pane key="3" tab="Tab 3">
-        Content of Tab Pane 3
-      </a-tab-pane>
-    </a-tabs>
+    <a-menu v-model="current" mode="horizontal">
+      <a-menu-item key="course">课程错题</a-menu-item>
+      <a-menu-item key="classroom">班级错题</a-menu-item>
+      <a-menu-item key="question-bank">题库错题</a-menu-item>
+    </a-menu>
+
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
   name: 'WrongQuestionBook',
+
   data() {
     return {
-
+      current: ['course'],
     };
-  },
-
-  methods: {
-    callback(key) {
-      console.log(key);
-    }
   }
 };
 </script>
+
+<style lang="less">
+
+</style>
