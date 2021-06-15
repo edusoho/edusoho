@@ -11,20 +11,20 @@ use Biz\WrongBook\WrongBookException;
 
 class WrongQuestionServiceImpl extends BaseService implements WrongQuestionService
 {
-    public function createWrongQuestion($fields)
+    public function createWrongQuestion($wrongQuestion)
     {
-        $this->filterWrongQuestionFields($fields);
+        $this->filterWrongQuestionFields($wrongQuestion);
 
         $this->beginTransaction();
 
         try {
-            $wrongQuestion = $this->getWrongQuestionDao()->create($fields);
+            $wrongQuestion = $this->getWrongQuestionDao()->create($wrongQuestion);
 
             $this->getLogService()->info(
                 'wrong_question',
                 'create_wrong_question',
                 "创建错题#{$wrongQuestion['id']},错题id{$wrongQuestion['item_id']}",
-                $fields
+                $wrongQuestion
             );
 
             $this->commit();
@@ -54,7 +54,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             'event_id',
             'error_time',
         ])) {
-            throw WrongBookException::WRONG_BOOK_DATA_FIELDS_MISSING();
+            throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
         }
     }
 
