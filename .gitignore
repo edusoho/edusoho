@@ -10,6 +10,7 @@
 /app/config/uc_client_config.php
 /app/config/routing_plugins.yml
 /app/config/sentry.yml
+/app/config/session_redis.yml
 /web/themes/*
 /web/assets/libs/js-sdk/
 !/web/themes/autumn

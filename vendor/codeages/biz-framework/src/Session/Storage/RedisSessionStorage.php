@@ -57,6 +57,6 @@ class RedisSessionStorage implements SessionStorage
 
     protected function getRedis()
     {
-        return $this->biz['session.redis'] ?: $this->biz['redis'];
+        return $this->biz['session.redis'];
     }
 }

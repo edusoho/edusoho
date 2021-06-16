@@ -7,7 +7,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: service_listener.yml }
-    - { resource: session_redis.yml, ignore_errors: true }
+    - { resource: session_redis.yml }
     - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
     - { resource: "@CustomBundle/Resources/config/services.yml" }
@@ -94,7 +94,8 @@ services:
         arguments: ["", "", "@biz"]
 
     session.handler.pdo:
-        class:     Codeages\Biz\Framework\Session\Handler\BizSessionHandler
+        # class:     Codeages\Biz\Framework\Session\Handler\BizSessionHandler
+        class: AppBundle\Handler\SessionHandler
         arguments:
              - '@biz'
 

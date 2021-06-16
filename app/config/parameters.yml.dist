@@ -21,14 +21,6 @@ parameters:
     # redis_retry_interval: 100
     # redis_password: ~
 
-    # session redis options
-    # session_redis_host: 127.0.0.1
-    # session_redis_port: 6380
-    # session_redis_timeout: 1
-    # session_redis_reserved: null
-    # session_redis_retry_interval: 100
-    # session_redis_password: ~
-
     #扩展参数
     #oauth2_clients: #oauth2客户端配置
     #    third_party_oauth:
