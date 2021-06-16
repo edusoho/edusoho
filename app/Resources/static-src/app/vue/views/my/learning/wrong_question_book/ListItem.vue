@@ -7,11 +7,25 @@
       <h3 class="text-overflow">标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
       <p class="number">20 题</p>
     </div>
-    <a-button type="primary" class="check-wrong-question pull-right">
+    <a-button
+      type="primary"
+      class="check-wrong-question pull-right"
+      @click="goToWrongQuestionDetail"
+    >
       查看错题
     </a-button>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    goToWrongQuestionDetail() {
+      window.location.href = `/my/wrong_question_book/target_type/course/target_id/1`
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .list-item {
