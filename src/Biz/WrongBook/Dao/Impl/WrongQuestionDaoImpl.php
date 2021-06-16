@@ -7,16 +7,16 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 {
-    protected $table = 'biz_item_wrong_question';
+    protected $table = 'biz_wrong_question';
 
     public function declares()
     {
         return [
             'conditions' => [
                 'id = :id',
-                'createdTime = :createdTime',
+                'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'created_time'],
         ];
     }
 }
