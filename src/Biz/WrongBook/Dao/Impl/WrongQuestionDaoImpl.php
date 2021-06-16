@@ -14,9 +14,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return [
             'conditions' => [
                 'id = :id',
-                'created_time = :created_time',
+                'answer_scene_id = :answer_scene_id',
+                'createdTime = :createdTime',
             ],
-            'orderbys' => ['id', 'created_time'],
+            'orderbys' => ['id', 'createdTime'],
         ];
     }
 }
