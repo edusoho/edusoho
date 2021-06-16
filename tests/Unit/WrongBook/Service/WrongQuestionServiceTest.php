@@ -19,7 +19,7 @@ class WrongQuestionServiceTest extends BaseTestCase
             'answer_scene_id' => 1,
             'answer_question_report_id' => 1,
         ];
-        $wrongQuestion = $this->getWrongQuestionService()->createWrongQuestion($wrongQuestion);
+        $wrongQuestion = $this->getWrongQuestionService()->buildWrongQuestion($wrongQuestion);
 
         $questionCollect = $this->getWrongQuestionCollectDao()->get($wrongQuestion['collect_id']);
 

@@ -13,17 +13,15 @@ use Biz\WrongBook\WrongBookException;
 
 class WrongQuestionServiceImpl extends BaseService implements WrongQuestionService
 {
-    public function createWrongQuestion($fields)
+    public function buildWrongQuestion($fields)
     {
         $fields['user_id'] = $this->getCurrentUser()->getId();
 
         $this->beginTransaction();
         try {
-            $pool = $this->getQuestionPool($fields);
-            $collect = $this->getQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
-
-            $wrongQuestionFields = $this->filterWrongQuestionFields(array_merge($fields, ['collect_id' => $collect['id']]));
-            $wrongQuestion = $this->getWrongQuestionDao()->create($wrongQuestionFields);
+            $pool = $this->handleQuestionPool($fields);
+            $collect = $this->handleQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
+            $wrongQuestion = $this->createWrongQuestion(array_merge($fields, ['collect_id' => $collect['id']]));
 
             $this->getLogService()->info(
                 'wrong_question',
@@ -40,6 +38,25 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         $this->dispatchEvent('wrong.question.create', $wrongQuestion);
 
         return $wrongQuestion;
+    }
+
+    public function createWrongQuestion($fields)
+    {
+        $wrongQuestionRequireFields = [
+            'collect_id',
+            'user_id',
+            'question_id',
+            'item_id',
+            'answer_scene_id',
+            'answer_question_report_id',
+        ];
+        if (!ArrayToolkit::requireds($fields, $wrongQuestionRequireFields)) {
+            throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
+        }
+
+        $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
+
+        return   $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]));
     }
 
     public function searchWrongQuestion($conditions, $orderBys, $start, $limit)
@@ -73,20 +90,20 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         $this->dispatchEvent('wrong.question.delete', $wrongExisted);
     }
 
-    protected function getQuestionCollect($wrongQuestion)
+    protected function handleQuestionCollect($fields)
     {
         $collectRequireFields = [
             'pool_id',
             'item_id',
         ];
-        if (!ArrayToolkit::requireds($wrongQuestion, $collectRequireFields)) {
+        if (!ArrayToolkit::requireds($fields, $collectRequireFields)) {
             throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
         }
 
-        $collect = $this->getWrongQuestionCollectDao()->getCollect($wrongQuestion['pool_id'], $wrongQuestion['item_id']);
+        $collect = $this->getWrongQuestionCollectDao()->getCollect($fields['pool_id'], $fields['item_id']);
 
         if (!$collect) {
-            $collectFields = ArrayToolkit::parts($wrongQuestion, $collectRequireFields);
+            $collectFields = ArrayToolkit::parts($fields, $collectRequireFields);
             $collectFields['last_submit_time'] = intval(time());
             $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
         }
@@ -94,7 +111,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $collect;
     }
 
-    protected function getQuestionPool($fields)
+    protected function handleQuestionPool($fields)
     {
         $poolRequireFields = [
             'target_type',
@@ -114,25 +131,6 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         }
 
         return $pool;
-    }
-
-    private function filterWrongQuestionFields($fields)
-    {
-        $wrongQuestionRequireFields = [
-            'collect_id',
-            'user_id',
-            'question_id',
-            'item_id',
-            'answer_scene_id',
-            'answer_question_report_id',
-        ];
-        if (!ArrayToolkit::requireds($fields, $wrongQuestionRequireFields)) {
-            throw WrongBookException::WRONG_QUESTION_DATA_FIELDS_MISSING();
-        }
-
-        $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
-
-        return array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]);
     }
 
     /**
