@@ -36,7 +36,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrongQuestion.create', $wrongQuestion);
+        $this->dispatchEvent('wrong_question.create', $wrongQuestion);
 
         return $wrongQuestion;
     }
@@ -56,7 +56,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'question_id' => $wrongAnswerQuestionReport['question_id'],
                     'answer_scene_id' => $source['answer_scene_id'],
                     'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
-                    'submit_time' => intval(time()),
+                    'submit_time' => time(),
                 ];
             }
             $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
@@ -74,7 +74,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrongQuestion.batchCreate', $wrongQuestions, ['pool_id' => $pool['id']]);
+        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function createWrongQuestion($fields)
@@ -93,12 +93,12 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
 
-        return  $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]));
+        return  $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => time()]));
     }
 
-    public function searchWrongQuestion($conditions, $orderBys, $start, $limit)
+    public function searchWrongQuestion($conditions, $orderBys, $start, $limit, $columns = [])
     {
-        return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit);
+        return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countWrongQuestion($conditions)
@@ -129,7 +129,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrongQuestion.delete', $wrongExisted);
+        $this->dispatchEvent('wrong_question.delete', $wrongExisted);
     }
 
     protected function handleQuestionCollect($fields)
@@ -146,7 +146,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         if (!$collect) {
             $collectFields = ArrayToolkit::parts($fields, $collectRequireFields);
-            $collectFields['last_submit_time'] = intval(time());
+            $collectFields['last_submit_time'] = time();
             $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
         }
 

@@ -8,9 +8,11 @@ interface WrongQuestionService
 
     public function createWrongQuestion($fields);
 
-    public function searchWrongQuestion($conditions, $orderBys, $start, $limit);
+    public function searchWrongQuestion($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function deleteWrongQuestion($id);
 
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
+
+    public function countWrongQuestion($conditions);
 }

@@ -20,7 +20,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     {
         return [
             'answer.submitted' => 'onAnswerSubmitted',
-            'wrongQuestion.batchCreate' => 'onWrongQuestionBatchChanged',
+            'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
         ];
     }
 
