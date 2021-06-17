@@ -1724,6 +1724,7 @@ course.question_manage.import.reupload_document: 重新上传文档
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
+course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
 course.question_manage.import.rule: 导入规则说明
