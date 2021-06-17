@@ -15,4 +15,11 @@ interface WrongQuestionService
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
 
     public function countWrongQuestion($conditions);
+
+    /**
+     * BookPool
+     */
+    public function searchWrongBookPool($conditions, $orderBys, $start, $limit);
+
+    public function getWrongBookPoolByFieldsGroupByTargetType($fields);
 }

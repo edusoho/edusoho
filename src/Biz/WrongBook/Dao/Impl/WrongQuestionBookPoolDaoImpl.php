@@ -12,6 +12,15 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         return $this->getByFields(['user_id' => $user_id, 'target_type' => $target_type, 'target_id' => $target_id]);
     }
 
+    public function getPoolByFieldsGroupByTargetType($fields)
+    {
+        $builder = $this->createQueryBuilder($fields)
+            ->select('sum(`item_num`) as sum_wrong_num,user_id,target_type')
+            ->groupBy('target_type');
+
+        return $builder->execute()->fetchAll();
+    }
+
     protected $table = 'biz_wrong_question_book_pool';
 
     public function declares()
@@ -20,10 +29,10 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
             'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
-                'user_id = : user_id',
-                'target_type = : target_type',
-                'target_id = : target_id',
-                'created_time = :created_time',
+                'user_id = :user_id',
+                'target_type = :target_type',
+                'target_id = :target_id',
+                'createdTime = :createdTime',
             ],
             'orderbys' => ['id', 'created_time'],
         ];
