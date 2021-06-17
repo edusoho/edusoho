@@ -27,17 +27,17 @@
         <div class="pull-left result">正确<span class="error">答案是C</span></div>
       </div>
 
-      <div class="analysis clearfix">
+      <div class="clearfix analysis">
         <div class="pull-left keyword" style="text-indent: 2em;">解析：</div>
         <div class="pull-left result">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
       </div>
 
-      <div class="clearfix wrong-situation">
-        <div class="pull-left right mt-space">来源：计划1-考试任务、作业任务</div>
+      <div class="clearfix situation">
+        <div class="pull-left right mt-space situation__item">来源：计划1-考试任务、作业任务</div>
 
-        <div class="pull-right clearfix">
-          <div class="mt-space pull-left frequency">做错频次：<span class="error">3</span>次</div>
-          <div class="mt-space pull-left">错题时间：2021-04-15 20:20:00</div>
+        <div class="pull-right clearfix situation__item">
+          <div class="pull-left mt-space frequency">做错频次：<span class="error">3</span>次</div>
+          <div class="pull-left mt-space time">错题时间：2021-04-15 20:20:00</div>
         </div>
       </div>
     </a-col>
@@ -76,7 +76,7 @@
   border-radius: 4px;
 }
 
-.wrong-situation {
+.situation {
 
   .frequency {
     margin-right: 40px;
@@ -96,8 +96,10 @@
     padding: 8px 16px 6px 0;
   }
 
-  .wrong-situation {
-    & > div {
+  .situation {
+    .situation__item,
+    .frequency,
+    .time {
       float: none !important;
     }
 
