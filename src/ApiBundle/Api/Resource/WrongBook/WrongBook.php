@@ -17,7 +17,6 @@ class WrongBook extends AbstractResource
     {
         $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $userId]);
         $wrongPools = empty($wrongPools) ? 0 : ArrayToolkit::index($wrongPools, 'target_type');
-
         return $wrongPools;
     }
 
