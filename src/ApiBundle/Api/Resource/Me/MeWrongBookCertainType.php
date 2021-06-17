@@ -1,21 +1,18 @@
 <?php
 
-namespace ApiBundle\Api\Resource\WrongBook;
+namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Service\WrongQuestionService;
 
-class WrongBookCertainType extends AbstractResource
+class MeWrongBookCertainType extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
-    public function search(ApiRequest $request, $userId)
+    public function search(ApiRequest $request, $type)
     {
         $conditions = $request->query->all();
-        print_r($conditions);die;
+        print_r($type);die;
         $conditions['user_id'] = $userId;
         $conditions['locked'] = 0;
 
