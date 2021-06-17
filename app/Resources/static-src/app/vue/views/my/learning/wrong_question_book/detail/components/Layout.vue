@@ -12,6 +12,8 @@
         <slot name="answer" />
       </div>
 
+      <a-divider style="margin: 16px 0;" />
+
       <div class="clearfix mb-space">
         <div class="pull-left keyword">参考答案：</div>
         <div class="pull-left result">正确答案是C</div>
