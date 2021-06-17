@@ -17,13 +17,14 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
     public function declares()
     {
         return [
+            'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
                 'pool_id = :pool_id',
                 'item_id = :item_id',
-                'createdTime = :createdTime',
+                'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'created_time'],
         ];
     }
 }
