@@ -12,7 +12,7 @@ use Biz\WrongBook\Service\WrongQuestionService;
 class MeWrongBook extends AbstractResource
 {
     /**
-     * @ResponseFilter(class="ApiBundle\Api\Resource\WrongBook\WrongBookFilter", mode="authenticated")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\WrongBook\WrongBookFilter", mode="public")
      */
     public function search(ApiRequest $request)
     {

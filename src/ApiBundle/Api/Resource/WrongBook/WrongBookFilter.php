@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\TagUtil;
 
 class WrongBookFilter extends Filter
 {
-    protected $authenticatedFields = array(
+    protected $publicFields = array(
         'user_id',
         'sum_wrong_num',
         'target_type',
