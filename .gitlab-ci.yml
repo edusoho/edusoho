@@ -10,18 +10,19 @@ variables:
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
-  - cp app/config/session_redis.yml.dist app/config/session_redis_test.yml
+  - cp app/config/session_redis.yml.dist app/config/session_redis.yml
+  # - cp app/config/session_redis.yml.dist app/config/session_redis_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
   - "echo '    redis_host: redis:6379' >> app/config/parameters_test.yml"
   - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
   - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
   - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
-  - "echo '    session_redis:' >> app/config/session_redis_test.yml"
-  - "echo '        host: redis:6380' >> app/config/session_redis_test.yml"
-  - "echo '        timeout: 1' >> app/config/session_redis_test.yml"
-  - "echo '        reserved: null' >> app/config/session_redis_test.yml"
-  - "echo '        retry_interval: 100' >> app/config/session_redis_test.yml"
+  # - "echo '    session_redis:' >> app/config/session_redis_test.yml"
+  # - "echo '        host: redis:6380' >> app/config/session_redis_test.yml"
+  # - "echo '        timeout: 1' >> app/config/session_redis_test.yml"
+  # - "echo '        reserved: null' >> app/config/session_redis_test.yml"
+  # - "echo '        retry_interval: 100' >> app/config/session_redis_test.yml"
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
