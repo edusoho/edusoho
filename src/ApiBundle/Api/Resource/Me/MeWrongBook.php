@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -16,8 +15,15 @@ class MeWrongBook extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
+        $defaultWrongPools = [
+            'course' => 0,
+            'classroom' => 0,
+            'exercise' => 0,
+        ];
         $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $this->getCurrentUser()->getId()]);
-        $wrongPools = empty($wrongPools) ? [] : ArrayToolkit::index($wrongPools, 'target_type');
+        $wrongPools = empty($wrongPools) ? $defaultWrongPools : ArrayToolkit::index($wrongPools, 'target_type');
+        $wrongPools = array_merge($defaultWrongPools, $wrongPools);
+
         return $wrongPools;
     }
 
