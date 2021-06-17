@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template #answer>
-      <a-radio-group class="prevent-click" :default-value="value">
+      <a-radio-group :default-value="value">
         <a-radio :style="radioStyle" :value="1">
           Option A
         </a-radio>
@@ -37,9 +37,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.prevent-click {
-  pointer-events: none;
-}
-</style>

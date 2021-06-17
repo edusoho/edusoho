@@ -8,7 +8,7 @@
     <a-col :xs="20" :sm="22">
       <div class="keyword mb-space">科目汇总表的总范围是?</div>
 
-      <div class="mb-space">
+      <div class="mb-space prevent-click">
         <slot name="answer" />
       </div>
 
@@ -34,7 +34,7 @@
         <div class="pull-left result">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
       </div>
 
-      <div class="clearfix situation">
+      <div v-if="showSituation" class="clearfix situation">
         <div class="pull-left right mt-space situation__item">来源：计划1-考试任务、作业任务</div>
 
         <div class="pull-right clearfix situation__item">
@@ -46,7 +46,22 @@
   </a-row>
 </template>
 
+<script>
+export default {
+  props: {
+    showSituation: {
+      type: Boolean,
+      default: true
+    }
+  }
+}
+</script>
+
 <style lang="less" scoped>
+.prevent-click {
+  pointer-events: none;
+}
+
 .mb-space {
   margin-bottom: 16px;
 }
