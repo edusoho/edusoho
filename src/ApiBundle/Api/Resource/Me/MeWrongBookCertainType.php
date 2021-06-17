@@ -12,23 +12,24 @@ class MeWrongBookCertainType extends AbstractResource
     public function search(ApiRequest $request, $type)
     {
         $conditions = $request->query->all();
-        print_r($type);die;
-        $conditions['user_id'] = $userId;
-        $conditions['locked'] = 0;
+        $conditions['user_id'] = $this->getCurrentUser()->getId();
+        $conditions['target_type'] = $type;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $members = $this->service('Course:MemberService')->searchMembers(
+        $members = $this->service('WrongBook:WrongQuestionService')->searchWrongQuestion(
             $conditions,
-            ['createdTime' => 'DESC'],
+            ['created_time' => 'DESC'],
             $offset,
             $limit
         );
-
+        print_r($members);die;
         $total = $this->service('Course:MemberService')->countMembers($conditions);
 
         $this->getOCUtil()->multiple($members, ['userId']);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
+
+
         $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $userId]);
         $wrongPools = empty($wrongPools) ? 0 : ArrayToolkit::index($wrongPools, 'target_type');
         return $wrongPools;
