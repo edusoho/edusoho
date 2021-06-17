@@ -17,14 +17,15 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
     public function declares()
     {
         return [
+            'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
                 'user_id = : user_id',
                 'target_type = : target_type',
                 'target_id = : target_id',
-                'createdTime = :createdTime',
+                'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'created_time'],
         ];
     }
 }

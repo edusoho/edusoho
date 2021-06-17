@@ -19,8 +19,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         try {
             $pool = $this->handleQuestionPool($source);
             $collect = $this->handleQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
-            $wrongQuestion = $this->createWrongQuestion(array_merge($fields, ['collect_id' => $collect['id'], 'user_id' => $source['user_id']]));
-
+            $wrongQuestion = $this->createWrongQuestion(array_merge($fields, [
+                'collect_id' => $collect['id'],
+                'user_id' => $source['user_id'],
+                'answer_scene_id' => $source['answer_scene_id'],
+            ]));
             $this->getLogService()->info(
                 'wrong_question',
                 'create_wrong_question',
@@ -51,17 +54,27 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'user_id' => $source['user_id'],
                     'item_id' => $wrongAnswerQuestionReport['item_id'],
                     'question_id' => $wrongAnswerQuestionReport['question_id'],
-                    'answer_scene_id' => $wrongAnswerQuestionReport['answer_scene_id'],
+                    'answer_scene_id' => $source['answer_scene_id'],
                     'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
                     'submit_time' => intval(time()),
                 ];
             }
-
             $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'create_wrong_question',
+                '批量创建错题',
+                $wrongQuestions
+            );
+
+            $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
+
+        $this->dispatchEvent('wrongQuestion.batchCreate', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function createWrongQuestion($fields)
@@ -80,12 +93,17 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
 
-        return   $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]));
+        return  $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]));
     }
 
     public function searchWrongQuestion($conditions, $orderBys, $start, $limit)
     {
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countWrongQuestion($conditions)
+    {
+        return $this->getWrongQuestionDao()->count($conditions);
     }
 
     public function deleteWrongQuestion($id)

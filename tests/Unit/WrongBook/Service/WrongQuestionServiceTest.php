@@ -15,11 +15,11 @@ class WrongQuestionServiceTest extends BaseTestCase
         $wrongQuestion = [
             'item_id' => 1,
             'question_id' => 1,
-            'answer_scene_id' => 1,
             'answer_question_report_id' => 1,
         ];
         $source = [
             'user_id' => 1,
+            'answer_scene_id' => 1,
             'target_type' => 'course',
             'target_id' => 1,
         ];
@@ -41,17 +41,16 @@ class WrongQuestionServiceTest extends BaseTestCase
                 'id' => 1,
                 'item_id' => 1,
                 'question_id' => 1,
-                'answer_scene_id' => 1,
             ],
             [
                 'id' => 2,
                 'item_id' => 2,
                 'question_id' => 2,
-                'answer_scene_id' => 1,
             ],
         ];
         $source = [
             'user_id' => 1,
+            'answer_scene_id' => 1,
             'target_type' => 'course',
             'target_id' => 1,
         ];

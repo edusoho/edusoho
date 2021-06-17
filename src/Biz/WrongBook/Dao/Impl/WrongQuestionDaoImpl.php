@@ -12,8 +12,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function declares()
     {
         return [
+            'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
+                'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
                 'created_time = :created_time',
             ],
