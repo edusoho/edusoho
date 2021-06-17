@@ -5,11 +5,11 @@
       {% if records|default(null) %}{% set record = records[assessment.id]|default(null)  %}{% endif %}
       <div class="row">
         <li class="assessment-list-li">
-          <div class="col-xs-6 title-overflow">
+          <div class="col-xs-4 col-md-7 title-overflow">
             <span>{{ assessment.name }}</span>
           </div>
           {% if member|default(null) and previewAs|default(null) == 'member' %}
-            <div class="col-xs-2 content-right">
+            <div class="col-xs-4 col-md-3 content-right">
               <span style="color:#999">
                 {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
               </span>
