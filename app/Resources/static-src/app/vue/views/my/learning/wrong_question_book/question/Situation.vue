@@ -14,7 +14,6 @@
 
 <style lang="less" scoped>
 .situation {
-  margin-top: 16px;
   color: #666;
 
   .situation-left {
@@ -32,7 +31,6 @@
 
 @media (max-width: 767px) {
   .situation {
-    margin-top: 8px;
 
     .frequency {
       margin-right: 0;
