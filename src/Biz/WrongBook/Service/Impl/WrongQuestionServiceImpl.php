@@ -101,9 +101,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
-    public function searchWrongQuestionWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
     {
-        return $this->getWrongQuestionDao()->searchWrongQuestionWithCollect($conditions, $orderBys, $start, $limit, $columns);
+        return $this->getWrongQuestionDao()->searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function searchWrongQuestionCollect($conditions, $orderBys, $start, $limit, $columns = [])
@@ -114,11 +114,6 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function getPool($poolId)
     {
         return $this->getWrongQuestionBookPoolDao()->get($poolId);
-    }
-
-    public function findCollectByPoolId($poolId)
-    {
-        return $this->getWrongQuestionCollectDao()->findCollectByPoolId($poolId);
     }
 
     public function countWrongQuestion($conditions)

@@ -11,12 +11,25 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     protected $collectTable = 'biz_wrong_question_collect';
 
-    public function searchWrongQuestionWithCollect($conditions, $orderBys, $start, $limit, $columns)
+    const WRONG_QUESTION_ORDER_BY = ['submit_time'];
+
+    const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times'];
+
+    public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$this->table}.*, c.wrong_times as wrong_times")
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        foreach ($orderBys ?: [] as $order => $sort) {
+            if (in_array($order, self::WRONG_QUESTION_ORDER_BY)) {
+                $builder->addOrderBy($this->table.'.'.$order, $sort);
+            }
+            if (in_array($order, self::WRONG_QUESTION_COLLECT_ORDER_BY)) {
+                $builder->addOrderBy('c.'.$order, $sort);
+            }
+        }
 
         return $builder->execute()->fetchAll() ?: [];
     }

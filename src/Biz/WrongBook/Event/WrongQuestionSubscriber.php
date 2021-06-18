@@ -74,7 +74,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             } else {
                 $targetType = 'course';
             }
-            $targetId = $activity['fromCourseId'];
+            $targetId = $activity['fromCourseSetId'];
         } else {
             $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
             $targetType = 'exercise';

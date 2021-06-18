@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\WrongBook;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -11,6 +9,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
@@ -28,26 +27,28 @@ class WrongBookQuestionShow extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = $this->prepareConditions($poolId, $request->query->all());
-        $OrderBys = $this->prepareOrderBys($request->query->all());
+        $orderBys = $this->prepareOrderBys($request->query->all());
 
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionWithCollect($conditions, $OrderBys, $offset, $limit);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($conditions, $orderBys, $offset, $limit);
         $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestion($conditions);
+
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
     }
 
     protected function makeWrongQuestionInfo($wrongQuestions)
     {
-        $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions,'item_id'),true);
-        $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions,'answer_question_report_id'));
+        $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
+        $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
         foreach ($wrongQuestions as &$wrongQuestion) {
             $questions = $itemsWithQuestion[$wrongQuestion['item_id']]['questions'];
-            $questions = ArrayToolkit::index($questions,'id');
+            $questions = ArrayToolkit::index($questions, 'id');
             $wrongQuestion['material'] = $itemsWithQuestion[$wrongQuestion['item_id']]['material'];
             $wrongQuestion['question'] = $questions[$wrongQuestion['question_id']];
             $wrongQuestion['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
             $wrongQuestion['source'] = $this->getWrongQuestionSource($wrongQuestion['answer_scene_id']);
         }
+
         return $wrongQuestions;
     }
 
@@ -58,20 +59,21 @@ class WrongBookQuestionShow extends AbstractResource
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
             if ($courseSet['isClassroomRef']) {
                 $source = [
-                    'courseSet' => $courseSet['title'],
-                    'type' => $activity['mediaType']
+                    'mainSource' => $courseSet['title'],
+                    'secondarySource' => $activity['mediaType'],
                 ];
-            }else{
+            } else {
                 $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
                 $source = [
-                    'course' => $course['title'],
-                    'type' => $activity['mediaType']
+                    'mainSource' => $course['title'],
+                    'secondarySource' => $activity['mediaType'],
                 ];
             }
-        }else {
+        } else {
             $exerciseModule = $this->getExerciseModuleService()->get($answerSceneId);
             $source['type'] = $exerciseModule['type'];
         }
+
         return $source;
     }
 
@@ -81,6 +83,12 @@ class WrongBookQuestionShow extends AbstractResource
 
         $prepareConditions['pool_id'] = $poolId;
 
+        if (empty($conditions['targetType'])) {
+            throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
+        }
+
+        //todo:待确认查询
+
         return $prepareConditions;
     }
 
@@ -88,7 +96,7 @@ class WrongBookQuestionShow extends AbstractResource
     {
         $prepareOrderBys = ['submit_time' => 'DESC'];
 
-        if(!empty($orderBys['wrongTimesSort'])) {
+        if (!empty($orderBys['wrongTimesSort'])) {
             $prepareOrderBys = 'ASC' == $orderBys['wrongTimesSort'] ? ['wrong_times' => 'ASC'] : ['wrong_times' => 'DESC'];
         }
 
@@ -149,5 +157,13 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getExerciseModuleService()
     {
         return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getCourseTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }

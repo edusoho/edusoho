@@ -14,9 +14,12 @@ class WrongBookException extends AbstractException
 
     const WRONG_QUESTION_BOOK_POOL_NOT_EXIST = 5008203;
 
+    const WRONG_QUESTION_TARGET_TYPE_REQUIRE = 5008204;
+
     public $message = [
         '5008201' => 'exception.wrong_book.wrong_question.data_fields_missing',
         '5008202' => 'exception.wrong_book.wrong_question.not_exist',
         '5008203' => 'exception.wrong_book.wrong_question_book_pool.not_exist',
+        '5008204' => 'exception.wrong_book.wrong_question.target_type_require',
     ];
 }

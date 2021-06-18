@@ -18,12 +18,12 @@ interface WrongQuestionService
 
     public function getPool($poolId);
 
-    public function findCollectByPoolId($poolId);
-
     /**
      * BookPool
      */
     public function searchWrongBookPool($conditions, $orderBys, $start, $limit);
 
     public function getWrongBookPoolByFieldsGroupByTargetType($fields);
+
+    public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = []);
 }
