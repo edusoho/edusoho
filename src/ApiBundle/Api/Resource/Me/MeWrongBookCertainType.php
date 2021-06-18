@@ -2,13 +2,16 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Service\WrongQuestionService;
 
 class MeWrongBookCertainType extends AbstractResource
 {
+    /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\WrongBook\WrongBookCertainTypeFilter", mode="public")
+     */
     public function search(ApiRequest $request, $type)
     {
         $conditions = $request->query->all();
@@ -16,27 +19,23 @@ class MeWrongBookCertainType extends AbstractResource
         $conditions['target_type'] = $type;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $members = $this->service('WrongBook:WrongQuestionService')->searchWrongQuestion(
+        $wrongBookPools = $this->service('WrongBook:WrongQuestionService')->searchWrongBookPool(
             $conditions,
             ['created_time' => 'DESC'],
             $offset,
             $limit
         );
-        print_r($members);die;
-        $total = $this->service('Course:MemberService')->countMembers($conditions);
+        $total = $this->service('WrongBook:WrongQuestionService')->countWrongBookPool($conditions);
+        if ('exercise' == $type) {
+            $type = 'item_bank_exercise';
+        }
 
-        $this->getOCUtil()->multiple($members, ['userId']);
+        $this->getOCUtil()->multiple($wrongBookPools, ['target_id'], $type, 'target_data');
 
-        return $this->makePagingObject($members, $total, $offset, $limit);
-
-
-        $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $userId]);
-        $wrongPools = empty($wrongPools) ? 0 : ArrayToolkit::index($wrongPools, 'target_type');
-        return $wrongPools;
+        return $this->makePagingObject($wrongBookPools, $total, $offset, $limit);
     }
 
     /**
-
      * @return WrongQuestionService
      */
     private function getWrongQuestionService()

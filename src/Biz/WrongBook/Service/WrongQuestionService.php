@@ -21,5 +21,7 @@ interface WrongQuestionService
      */
     public function searchWrongBookPool($conditions, $orderBys, $start, $limit);
 
+    public function countWrongBookPool($conditions);
+
     public function getWrongBookPoolByFieldsGroupByTargetType($fields);
 }
