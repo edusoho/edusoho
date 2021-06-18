@@ -4,6 +4,7 @@ namespace Biz\WrongBook\Event;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
@@ -70,11 +71,13 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseId']);
             if ($courseSet['isClassroomRef']) {
+                $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
                 $targetType = 'classroom';
+                $targetId = $classCourse['classroomId'];
             } else {
                 $targetType = 'course';
+                $targetId = $activity['fromCourseSetId'];
             }
-            $targetId = $activity['fromCourseSetId'];
         } else {
             $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
             $targetType = 'exercise';
@@ -106,6 +109,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     /**
