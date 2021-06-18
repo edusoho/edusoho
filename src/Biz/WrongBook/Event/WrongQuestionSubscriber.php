@@ -4,8 +4,8 @@ namespace Biz\WrongBook\Event;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
@@ -27,29 +27,25 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     public function onAnswerSubmitted(Event $event)
     {
         $answerRecord = $event->getSubject();
-        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
-        if (empty($activity) || !in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
-            return;
-        }
+        list($targetType, $targetId) = $this->getWrongQuestionSource($answerRecord);
 
-        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
             'status' => 'wrong',
         ], [], 0, PHP_INT_MAX);
+
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, [
             'user_id' => $answerRecord['user_id'],
             'answer_scene_id' => $answerRecord['answer_scene_id'],
-            'target_type' => $this->getTargetType($activity),
-            'target_id' => $course['id'],
+            'target_type' => $targetType,
+            'target_id' => $targetId,
         ]);
     }
 
     public function onWrongQuestionBatchChanged(Event $event)
     {
         $wrongQuestions = $event->getSubject();
-
         $collectQuestions = ArrayToolkit::group($wrongQuestions, 'collect_id');
 
         foreach ($collectQuestions as $collectId => $collectQuestion) {
@@ -67,20 +63,25 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => $poolCounts]);
     }
 
-    protected function getTargetType($activity)
+    protected function getWrongQuestionSource($answerRecord)
     {
-        $targetType = $activity['mediaType'];
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
-        if (in_array($activity['mediaType'], ['testpaper', 'homework'])) {
+        if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseId']);
             if ($courseSet['isClassroomRef']) {
-                $targetType = 'class';
+                $targetType = 'classroom';
             } else {
                 $targetType = 'course';
             }
+            $targetId = $activity['fromCourseId'];
+        } else {
+            $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+            $targetType = 'exercise';
+            $targetId = $assessmentExerciseRecord['exerciseId'];
         }
 
-        return $targetType;
+        return [$targetType, $targetId];
     }
 
     /**
@@ -100,14 +101,6 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
-    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
@@ -121,6 +114,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getAnswerQuestionReportService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AssessmentExerciseRecordService
+     */
+    protected function getItemBankAssessmentExerciseRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
     /**

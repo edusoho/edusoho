@@ -15,4 +15,8 @@ interface WrongQuestionService
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
 
     public function countWrongQuestion($conditions);
+
+    public function getPool($poolId);
+
+    public function findCollectByPoolId($poolId);
 }
