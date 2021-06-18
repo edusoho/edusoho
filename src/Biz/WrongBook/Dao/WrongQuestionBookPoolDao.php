@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 interface WrongQuestionBookPoolDao extends AdvancedDaoInterface
 {
     public function getPoolByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
+
+    public function getPoolByFieldsGroupByTargetType($fields);
 }
