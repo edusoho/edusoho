@@ -818,6 +818,17 @@ const routes = [
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
       ),
   },
+  {
+    path: '/my/wrong-quesition-book',
+    name: 'myWrongQuestionBook',
+    meta: {
+      title: '我的错题本',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/index.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

@@ -23,6 +23,16 @@
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </router-link>
+
+    <template v-for="(entry, index) in entryData">
+      <router-link :to="{ name: entry.link }" :key="index">
+        <div class="coupon-code-entrance">
+          {{ entry.name }}
+          <i class="van-icon van-icon-arrow pull-right" />
+        </div>
+      </router-link>
+    </template>
+
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
       <van-tab v-for="(item, index) in tabs" :title="item" :key="index" />
     </van-tabs>
@@ -38,6 +48,13 @@ import { mapState } from 'vuex';
 import preloginMixin from '@/mixins/preLogin';
 import Api from '@/api';
 
+const entryData = [
+  {
+    name: '我的错题本',
+    link: 'myWrongQuestionBook',
+  },
+];
+
 export default {
   components: {
     Orders,
@@ -52,6 +69,7 @@ export default {
       hasBusinessDrainage: false,
       isShowDistributorEntrance: false, // 是否展示分销中心入口
       drpSetting: {},
+      entryData,
     };
   },
   computed: {
