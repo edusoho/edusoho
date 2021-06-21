@@ -2434,8 +2434,9 @@ circular-json@^0.3.1:
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
 
 ckeditor4@^4.14.0:
-  version "4.14.1"
-  resolved "https://registry.yarnpkg.com/ckeditor4/-/ckeditor4-4.14.1.tgz#662bd605f33eaa6bb5644d5fd81c15dbe9d9a18c"
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/ckeditor4/-/ckeditor4-4.16.1.tgz#c1d34d032085d33e2efe3c12b30431b5f9230c16"
+  integrity sha512-dfclP3QDQfXMOrPex3s/l6b5E+MBSxhMpW3+nUM6lFX3ax1u/1tl2ETpe7iYJRtoN4TdvddL5XFweQT17woN5A==
 
 class-utils@^0.3.5:
   version "0.3.6"
