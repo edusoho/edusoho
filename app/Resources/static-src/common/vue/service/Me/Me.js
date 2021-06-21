@@ -13,6 +13,6 @@ export const Me = _.assignIn(baseService, {
 
   // 我的错题题目分类
   async getWrongBooksCertainTypes(params) {
-    return apiClient.get(`${this.baseUrl}/wrong_books/${params.targetType}/certain_types`, { keyWord: params.keyWord })
+    return apiClient.get(`${this.baseUrl}/wrong_books/${params.targetType}/certain_types`, { params })
   }
 });

@@ -7,7 +7,19 @@
       @search="onSearch"
     />
 
-    <list-item v-for="question in questionList" :key="question.id" :question="question" />
+    <div class="text-center mt20" v-if="loading">
+      <a-spin />
+    </div>
+
+    <template v-else>
+      <list-item
+        v-for="question in questionList"
+        :key="question.id"
+        :question="question"
+      />
+    </template>
+
+    <empty v-if="!loading && !questionList.length" />
 
     <a-pagination
       class="text-center"
@@ -23,15 +35,20 @@
 <script>
 import { Me } from 'common/vue/service/index.js';
 import ListItem from './ListItem.vue';
+import Empty from 'app/vue/views/components/Empty.vue';
 
 export default {
   components: {
-    ListItem
+    ListItem,
+    Empty
   },
 
   data() {
     return {
-      pagination: {},
+      loading: false,
+      pagination: {
+        current: 1
+      },
       keyWord: '',
       questionList: []
     }
@@ -43,23 +60,27 @@ export default {
 
   methods: {
     onSearch(value) {
-      console.log(value);
+      this.keyWord = value;
+      this.pagination.current = 1;
+      this.fetchWrongBooksCertainTypes();
     },
 
     onChange(current) {
-      console.log(current);
+      this.fetchWrongBooksCertainTypes();
     },
 
     async fetchWrongBooksCertainTypes() {
+      this.loading = true;
+
       const { data, paging } = await Me.getWrongBooksCertainTypes({
         targetType: 'course',
-        keyWord: this.keyWord
+        keyWord: this.keyWord,
+        offset: (this.pagination.current - 1) * 10
       });
 
+      this.pagination.total = Number(paging.total);
+      this.loading = false;
       this.questionList = data;
-      // this.pagination = {
-      //   total: paging.total
-      // };
     }
   }
 }
