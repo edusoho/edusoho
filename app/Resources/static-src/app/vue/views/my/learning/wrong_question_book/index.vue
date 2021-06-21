@@ -27,7 +27,9 @@
       </a-menu-item>
     </a-menu>
 
-    <router-view />
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
