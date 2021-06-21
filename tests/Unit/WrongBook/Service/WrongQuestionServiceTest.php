@@ -38,24 +38,24 @@ class WrongQuestionServiceTest extends BaseTestCase
     {
         $wrongAnswerQuestionReports = [
             [
-                'id' => 1,
-                'item_id' => 1,
-                'question_id' => 1,
-            ],
-            [
                 'id' => 2,
                 'item_id' => 2,
                 'question_id' => 2,
             ],
+            [
+                'id' => 3,
+                'item_id' => 3,
+                'question_id' => 3,
+            ],
         ];
         $source = [
-            'user_id' => 1,
-            'answer_scene_id' => 1,
-            'target_type' => 'course',
-            'target_id' => 1,
+            'user_id' => 4,
+            'answer_scene_id' => 4,
+            'target_type' => 'classroom',
+            'target_id' => 4,
         ];
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
-        $wrongQuestions = $this->getWrongQuestionDao()->search(['answer_scene_id' => 1], [], 0, PHP_INT_MAX);
+        $wrongQuestions = $this->getWrongQuestionDao()->search(['answer_scene_id' => 4], [], 0, PHP_INT_MAX);
 
         $this->assertCount(2, $wrongQuestions);
     }
