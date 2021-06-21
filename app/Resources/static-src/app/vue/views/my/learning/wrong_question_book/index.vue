@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { Me } from 'common/vue/service/index.js';
+
 export default {
   name: 'WrongQuestionBook',
 
@@ -28,6 +30,15 @@ export default {
 
   created() {
     this.current = [this.$route.meta.current];
+
+    this.initWrongBooks();
+  },
+
+  methods: {
+    async initWrongBooks() {
+      const result = await Me.getWrongBooks();
+      console.log(result);
+    }
   }
 };
 </script>

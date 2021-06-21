@@ -1,5 +1,5 @@
 <template>
-  <div class="list-item clearfix">
+  <div class="item clearfix">
     <div class="item-cover-image float-left">
       <img src="/files/course/2020/08-12/093700c063c8447618.jpg" alt="">
     </div>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.list-item {
+.item {
   position: relative;
   padding: 8px 24px 8px 8px;
   margin-top: 16px;
