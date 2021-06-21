@@ -13,16 +13,17 @@ use Biz\WrongBook\WrongBookException;
 
 class WrongQuestionServiceImpl extends BaseService implements WrongQuestionService
 {
-    public function buildWrongQuestion($fields)
+    public function buildWrongQuestion($fields, $source)
     {
-        $fields['user_id'] = $this->getCurrentUser()->getId();
-
         $this->beginTransaction();
         try {
-            $pool = $this->handleQuestionPool($fields);
+            $pool = $this->handleQuestionPool($source);
             $collect = $this->handleQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
-            $wrongQuestion = $this->createWrongQuestion(array_merge($fields, ['collect_id' => $collect['id']]));
-
+            $wrongQuestion = $this->createWrongQuestion(array_merge($fields, [
+                'collect_id' => $collect['id'],
+                'user_id' => $source['user_id'],
+                'answer_scene_id' => $source['answer_scene_id'],
+            ]));
             $this->getLogService()->info(
                 'wrong_question',
                 'create_wrong_question',
@@ -35,9 +36,45 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrong.question.create', $wrongQuestion);
+        $this->dispatchEvent('wrong_question.create', $wrongQuestion);
 
         return $wrongQuestion;
+    }
+
+    public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source)
+    {
+        $this->beginTransaction();
+        try {
+            $pool = $this->handleQuestionPool($source);
+            $wrongQuestions = [];
+            foreach ($wrongAnswerQuestionReports as $wrongAnswerQuestionReport) {
+                $collect = $this->handleQuestionCollect(['item_id' => $wrongAnswerQuestionReport['item_id'], 'pool_id' => $pool['id']]);
+                $wrongQuestions[] = [
+                    'collect_id' => $collect['id'],
+                    'user_id' => $source['user_id'],
+                    'item_id' => $wrongAnswerQuestionReport['item_id'],
+                    'question_id' => $wrongAnswerQuestionReport['question_id'],
+                    'answer_scene_id' => $source['answer_scene_id'],
+                    'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
+                    'submit_time' => time(),
+                ];
+            }
+            $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'create_wrong_question',
+                '批量创建错题',
+                $wrongQuestions
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function createWrongQuestion($fields)
@@ -56,12 +93,32 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
 
-        return   $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => intval(time())]));
+        return  $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => time()]));
     }
 
-    public function searchWrongQuestion($conditions, $orderBys, $start, $limit)
+    public function searchWrongQuestion($conditions, $orderBys, $start, $limit, $columns = [])
     {
-        return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit);
+        return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countWrongQuestion($conditions)
+    {
+        return $this->getWrongQuestionDao()->count($conditions);
+    }
+
+    public function searchWrongBookPool($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getWrongQuestionBookPoolDao()->searchPoolByConditions($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countWrongBookPool($conditions)
+    {
+        return $this->getWrongQuestionBookPoolDao()->countPoolByConditions($conditions);
+    }
+
+    public function getWrongBookPoolByFieldsGroupByTargetType($fields)
+    {
+        return $this->getWrongQuestionBookPoolDao()->getPoolByFieldsGroupByTargetType($fields);
     }
 
     public function deleteWrongQuestion($id)
@@ -87,7 +144,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrong.question.delete', $wrongExisted);
+        $this->dispatchEvent('wrong_question.delete', $wrongExisted);
     }
 
     protected function handleQuestionCollect($fields)
@@ -104,7 +161,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         if (!$collect) {
             $collectFields = ArrayToolkit::parts($fields, $collectRequireFields);
-            $collectFields['last_submit_time'] = intval(time());
+            $collectFields['last_submit_time'] = time();
             $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
         }
 
