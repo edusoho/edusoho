@@ -28,7 +28,8 @@ export default {
 
   methods: {
     goToWrongQuestionDetail() {
-      window.location.href = `/my/wrong_question_book/target_type/course/target_id/1`
+      const { target_type, id } = this.question;
+      window.location.href = `/my/wrong_question_book/target_type/${target_type}/target_id/${id}`
     }
   }
 }
