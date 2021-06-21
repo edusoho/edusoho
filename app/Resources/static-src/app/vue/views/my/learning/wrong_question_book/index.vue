@@ -49,11 +49,11 @@ export default {
   created() {
     this.current = [this.$route.meta.current];
 
-    this.initWrongBooks();
+    this.fetchWrongBooks();
   },
 
   methods: {
-    async initWrongBooks() {
+    async fetchWrongBooks() {
       const result = await Me.getWrongBooks();
       this.wrongBooks = result;
     }

@@ -7,9 +7,7 @@
       @search="onSearch"
     />
 
-    <template>
-      <list-item />
-    </template>
+    <list-item v-for="question in questionList" :key="question.id" :question="question" />
 
     <a-pagination
       class="text-center"
@@ -23,6 +21,7 @@
 </template>
 
 <script>
+import { Me } from 'common/vue/service/index.js';
 import ListItem from './ListItem.vue';
 
 export default {
@@ -32,8 +31,14 @@ export default {
 
   data() {
     return {
-      pagination: {}
+      pagination: {},
+      keyWord: '',
+      questionList: []
     }
+  },
+
+  created() {
+    this.fetchWrongBooksCertainTypes();
   },
 
   methods: {
@@ -43,6 +48,18 @@ export default {
 
     onChange(current) {
       console.log(current);
+    },
+
+    async fetchWrongBooksCertainTypes() {
+      const { data, paging } = await Me.getWrongBooksCertainTypes({
+        targetType: 'course',
+        keyWord: this.keyWord
+      });
+
+      this.questionList = data;
+      // this.pagination = {
+      //   total: paging.total
+      // };
     }
   }
 }

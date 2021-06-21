@@ -4,8 +4,8 @@
       <img src="/files/course/2020/08-12/093700c063c8447618.jpg" alt="">
     </div>
     <div class="item-info pull-left">
-      <h3 class="text-overflow">标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
-      <p class="number">20 题</p>
+      <h3 class="text-overflow">{{ question.target_data.title }}</h3>
+      <p class="number">{{ question.item_num }} 题</p>
     </div>
     <a-button
       type="primary"
@@ -19,6 +19,13 @@
 
 <script>
 export default {
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  },
+
   methods: {
     goToWrongQuestionDetail() {
       window.location.href = `/my/wrong_question_book/target_type/course/target_id/1`

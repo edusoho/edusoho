@@ -9,5 +9,10 @@ export const Me = _.assignIn(baseService, {
   // 错题列表
   async getWrongBooks() {
     return apiClient.get(`${this.baseUrl}/wrong_books`)
+  },
+
+  // 我的错题题目分类
+  async getWrongBooksCertainTypes(params) {
+    return apiClient.get(`${this.baseUrl}/wrong_books/${params.targetType}/certain_types`, { keyWord: params.keyWord })
   }
 });
