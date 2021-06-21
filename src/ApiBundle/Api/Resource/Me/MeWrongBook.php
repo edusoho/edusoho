@@ -15,12 +15,25 @@ class MeWrongBook extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
+        $userId = $this->getCurrentUser()->getId();
         $defaultWrongPools = [
-            'course' => 0,
-            'classroom' => 0,
-            'exercise' => 0,
+            'course' => [
+                'sum_wrong_num' => 0,
+                'user_id' => $userId,
+                'target_type' => 'course',
+            ],
+            'classroom' => [
+                'sum_wrong_num' => 0,
+                'user_id' => $userId,
+                'target_type' => 'classroom',
+            ],
+            'exercise' => [
+                'sum_wrong_num' => 0,
+                'user_id' => $userId,
+                'target_type' => 'exercise',
+            ],
         ];
-        $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $this->getCurrentUser()->getId()]);
+        $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => $userId]);
         $wrongPools = empty($wrongPools) ? $defaultWrongPools : ArrayToolkit::index($wrongPools, 'target_type');
         $wrongPools = array_merge($defaultWrongPools, $wrongPools);
 
