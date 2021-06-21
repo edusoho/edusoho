@@ -103,7 +103,8 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertCount(2, $wrongPools);
     }
 
-    public function testCountWrongBookPool(){
+    public function testCountWrongBookPool()
+    {
         $pools = [
             [
                 'user_id' => 2,
@@ -142,7 +143,7 @@ class WrongQuestionServiceTest extends BaseTestCase
             $this->getWrongQuestionBookPoolDao()->create($pool);
         }
         $wrongPoolsNum = $this->getWrongQuestionService()->countWrongBookPool(['user_id' => 2]);
-        $this->assertEquals('3',$wrongPoolsNum);
+        $this->assertEquals('3', $wrongPoolsNum);
     }
 
     /**
