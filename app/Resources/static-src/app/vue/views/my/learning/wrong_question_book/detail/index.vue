@@ -7,14 +7,25 @@
     </template>
 
     <template slot="extra">
-      <a-button type="primary">
+      <a-button type="primary" @click="handleClickWrongExercises">
         错题练习
       </a-button>
     </template>
 
-    <course-screen @on-search="onSearch" />
-    <classroom-screen @on-search="onSearch" />
-    <question-bank-screen @on-search="onSearch" />
+    <course-screen
+      v-if="targetType == 'course'"
+      @on-search="onSearch"
+    />
+
+    <classroom-screen
+      v-else-if="targetType == 'classroom'"
+      @on-search="onSearch"
+    />
+
+    <question-bank-screen
+      v-else-if="targetType == 'exercise'"
+      @on-search="onSearch"
+    />
 
     <question-item />
 
@@ -39,11 +50,18 @@ export default {
 
   data() {
     return {
-      form: this.$form.createForm(this, { name: 'wrong_question_search' })
+      form: this.$form.createForm(this, { name: 'wrong_question_search' }),
+      targetType: 'course',
     }
   },
 
   methods: {
+    // 错题练习
+    handleClickWrongExercises() {
+
+    },
+
+    // 错题搜索
     onSearch(values) {
       console.log(values);
     }
