@@ -12227,6 +12227,7 @@ t.add("exception.question_bank.forbidden_access_bank", "Forbidden access this ba
 t.add("exception.educloud.user_disabled_hint", "The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href=\"http:\/\/www.qiqiuyu.com\/faq\/438\/detail\" target=\"_blank\">See here<\/a>", "js", "en");
 t.add("exception.coupon.target_type_error", "The batch does not support viewing details", "js", "en");
 t.add("exception.coupon.setting_close", "Coupon global switch is closed", "js", "en");
+t.add("exception.coupon.receive_late", "You are one step too late, the coupon has been claimed!", "js", "en");
 t.add("exception.item_bank_exercise.forbidden_learn", "Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.", "js", "en");
 t.add("exception.item_bank_exercise.exercise.not_found", "Item bank exercise does not exist", "js", "en");
 t.add("exception.item_bank_exercise.exercise.forbidden_manage_exercise", "Forbidden manage this item bank exercise", "js", "en");
