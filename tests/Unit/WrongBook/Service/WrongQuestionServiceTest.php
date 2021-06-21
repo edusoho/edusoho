@@ -60,6 +60,91 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertCount(2, $wrongQuestions);
     }
 
+    public function testGetWrongBookPoolByFieldsGroupByTargetType()
+    {
+        $pools = [
+            [
+                'user_id' => 2,
+                'item_num' => 1,
+                'target_type' => 'course',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 2,
+                'item_num' => 2,
+                'target_type' => 'course',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 2,
+                'item_num' => 1,
+                'target_type' => 'classroom',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 1,
+                'item_num' => 1,
+                'target_type' => 'classroom',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+        ];
+        foreach ($pools as $key => $pool) {
+            $this->getWrongQuestionBookPoolDao()->create($pool);
+        }
+        $wrongPools = $this->getWrongQuestionService()->getWrongBookPoolByFieldsGroupByTargetType(['user_id' => 2]);
+        $this->assertCount(2, $wrongPools);
+    }
+
+    public function testCountWrongBookPool(){
+        $pools = [
+            [
+                'user_id' => 2,
+                'item_num' => 1,
+                'target_type' => 'course',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 2,
+                'item_num' => 2,
+                'target_type' => 'course',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 2,
+                'item_num' => 1,
+                'target_type' => 'classroom',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+            [
+                'user_id' => 1,
+                'item_num' => 1,
+                'target_type' => 'classroom',
+                'target_id' => 1,
+                'created_time' => 0,
+                'updated_time' => 0,
+            ],
+        ];
+        foreach ($pools as $key => $pool) {
+            $this->getWrongQuestionBookPoolDao()->create($pool);
+        }
+        $wrongPoolsNum = $this->getWrongQuestionService()->countWrongBookPool(['user_id' => 2]);
+        $this->assertEquals('3',$wrongPoolsNum);
+    }
+
     /**
      * @return WrongQuestionService
      */
