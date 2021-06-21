@@ -1,13 +1,13 @@
 <template>
   <div class="clearfix situation">
-    <div class="pull-left situation-left">来源：计划1-考试任务、作业任务</div>
+    <div class="float-left situation-left">来源：计划1-考试任务、作业任务</div>
 
-    <div class="pull-right clearfix situation-right">
-      <div class="pull-left frequency">
+    <div class="float-right clearfix situation-right">
+      <div class="float-left frequency">
         做错频次：
         <span class="frequency-error">3 </span>次
       </div>
-      <div class="pull-left time">错题时间：2021-04-15 20:20:00</div>
+      <div class="float-left time">错题时间：2021-04-15 20:20:00</div>
     </div>
   </div>
 </template>

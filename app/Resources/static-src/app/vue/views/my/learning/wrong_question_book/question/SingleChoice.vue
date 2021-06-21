@@ -21,8 +21,8 @@
      <a-divider style="margin: 16px 0;" />
 
     <div class="clearfix result">
-      <div class="pull-left result-label">正确答案：</div>
-      <div class="pull-left result-content">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
+      <div class="float-left result-label">正确答案：</div>
+      <div class="float-left result-content">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
     </div>
 
     <analysis />
@@ -61,10 +61,6 @@ export default {
 .question-layout {
   position: relative;
   padding-left: 54px;
-}
-
-.prevent-click {
-  pointer-events: none;
 }
 
 .title {

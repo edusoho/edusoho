@@ -1015,6 +1015,11 @@
     vue-ref "^2.0.0"
     warning "^4.0.0"
 
+"@codeages/styles@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/@codeages/styles/-/styles-1.0.3.tgz#395ac86c7a72f17e5c2aaa4afe3588b631d6d4c9"
+  integrity sha512-zcYu1BggowQduFgvT6U2lf/CNhOc1Cfw3tHA6Beegx8w/fJEGF6CrBvInIwLg1do64hG5xMJra7rV3VCL7uCUQ==
+
 "@codeages/utils@^1.0.2":
   version "1.0.2"
   resolved "https://registry.npmjs.org/@codeages/utils/-/utils-1.0.2.tgz#0073689529f666f4730df1570a7b040392ceb860"
