@@ -1,22 +1,24 @@
 <template>
-  <Layout>
+  <div class="question-layout">
     <order />
 
     <div class="title">这是题目?</div>
 
-    <a-radio-group :default-value="value">
-      <a-radio :style="radioStyle" :value="1">
-        Option A
-      </a-radio>
-      <a-radio :style="radioStyle" :value="2">
-        Option B
-      </a-radio>
-      <a-radio :style="radioStyle" :value="3">
-        Option C
-      </a-radio>
-    </a-radio-group>
+    <div class="prevent-click">
+      <a-radio-group :default-value="value">
+        <a-radio :style="radioStyle" :value="1">
+          Option A
+        </a-radio>
+        <a-radio :style="radioStyle" :value="2">
+          Option B
+        </a-radio>
+        <a-radio :style="radioStyle" :value="3">
+          Option C
+        </a-radio>
+      </a-radio-group>
+    </div>
 
-    <a-divider style="margin: 16px 0;" />
+     <a-divider style="margin: 16px 0;" />
 
     <div class="clearfix result">
       <div class="pull-left result-label">正确答案：</div>
@@ -25,22 +27,18 @@
 
     <analysis />
 
-    <template #situation>
-      <slot name="situation" />
-    </template>
-  </Layout>
+    <slot name="situation" />
+  </div>
 </template>
 
 <script>
-import Layout from './Layout.vue';
-import Order from './Order.vue';
-import Analysis from './Analysis.vue';
+import Order from './components/Order.vue';
+import Analysis from './components/Analysis.vue';
 
 export default {
   name: 'SingleChoice',
 
   components: {
-    Layout,
     Order,
     Analysis
   },
@@ -60,6 +58,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.question-layout {
+  position: relative;
+  padding-left: 54px;
+}
+
+.prevent-click {
+  pointer-events: none;
+}
+
 .title {
   margin-bottom: 16px;
 }

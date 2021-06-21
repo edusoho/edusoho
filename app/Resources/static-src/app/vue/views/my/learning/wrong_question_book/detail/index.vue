@@ -16,27 +16,25 @@
     <classroom-screen @on-search="onSearch" />
     <question-bank-screen @on-search="onSearch" />
 
-    <student-view />
+    <question-item />
 
   </a-page-header>
 </template>
 
 <script>
-import Item from './Item.vue';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
-import StudentView from '../question/StudentView.vue';
+import QuestionItem from './QuestionItem.vue';
 
 export default {
   name: 'WrongQuestionDetail',
 
   components: {
-    Item,
     CourseScreen,
     ClassroomScreen,
     QuestionBankScreen,
-    StudentView
+    QuestionItem
   },
 
   data() {

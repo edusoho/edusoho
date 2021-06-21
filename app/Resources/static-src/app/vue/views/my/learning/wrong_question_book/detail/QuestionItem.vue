@@ -1,6 +1,7 @@
 <template>
   <div class="student-view-question">
     <!-- 单选 -->
+    fsaf
     <single-choice>
       <template #situation>
         <situation />
@@ -10,8 +11,8 @@
 </template>
 
 <script>
-import SingleChoice from './SingleChoice.vue';
-import Situation from './Situation.vue';
+import SingleChoice from '../question/SingleChoice.vue';
+import Situation from '../question/components/Situation.vue';
 
 export default {
   name: 'StudentView',
