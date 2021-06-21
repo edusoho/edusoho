@@ -9,7 +9,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
-use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
@@ -70,8 +69,8 @@ class WrongBookQuestionShow extends AbstractResource
                 ];
             }
         } else {
-            $exerciseModule = $this->getExerciseModuleService()->get($answerSceneId);
-            $source['type'] = $exerciseModule['type'];
+            $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+            $source['mainSource'] = $exerciseModule['type'];
         }
 
         return $source;
@@ -80,14 +79,63 @@ class WrongBookQuestionShow extends AbstractResource
     protected function prepareConditions($poolId, $conditions)
     {
         $prepareConditions = [];
-
         $prepareConditions['pool_id'] = $poolId;
+        $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
 
         if (empty($conditions['targetType'])) {
             throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
         }
 
-        //todo:待确认查询
+        if ('course' == $conditions['targetType']) {
+            $coursePool = $this->biz['wrong_question.course_pool'];
+
+            if (!empty($conditions['courseId'])) {
+                $prepareConditions['answer_scene_ids'] = $coursePool->findSceneIdsByCourseId($conditions['courseId']);
+            }
+
+            if (!empty($conditions['courseMediaType'])) {
+                $sceneIdsByCourseMediaType = $coursePool->findSceneIdsByCourseMediaType($poolId, $conditions['courseMediaType']);
+                $prepareConditions['answer_scene_ids'] = empty($prepareConditions['answer_scene_ids']) ? $sceneIdsByCourseMediaType : array_intersect($prepareConditions['answer_scene_ids'], $sceneIdsByCourseMediaType);
+            }
+
+            if (!empty($conditions['courseTaskId'])) {
+                $sceneIdsByCourseTaskId = $coursePool->findSceneIdsByCourseTaskId($conditions['courseTaskId']);
+                $prepareConditions['answer_scene_ids'] = empty($prepareConditions['answer_scene_ids']) ? $sceneIdsByCourseTaskId : array_intersect($prepareConditions['answer_scene_ids'], $sceneIdsByCourseTaskId);
+            }
+        }
+
+        if ('classroom' == $conditions['targetType']) {
+            $classroomPool = $this->biz['wrong_question.classroom_pool'];
+            if (!empty($conditions['classroomCourseSetId'])) {
+                $prepareConditions['answer_scene_ids'] = $classroomPool->findSceneIdsByCourseSetId($conditions['classroomCourseSetId']);
+            }
+
+            if (!empty($conditions['classroomMediaType'])) {
+                $sceneIdsByClassroomMediaType = $classroomPool->findSceneIdsByClassroomMediaType($poolId, $conditions['classroomMediaType']);
+                $prepareConditions['answer_scene_ids'] = empty($prepareConditions['answer_scene_ids']) ? $sceneIdsByClassroomMediaType : array_intersect($prepareConditions['answer_scene_ids'], $sceneIdsByClassroomMediaType);
+            }
+
+            if (!empty($conditions['classroomTaskId'])) {
+                $sceneIdsByClassroomTaskId = $classroomPool->findSceneIdsByCourseTaskId($conditions['classroomTaskId']);
+                $prepareConditions['answer_scene_ids'] = empty($prepareConditions['answer_scene_ids']) ? $sceneIdsByClassroomTaskId : array_intersect($prepareConditions['answer_scene_ids'], $sceneIdsByClassroomTaskId);
+            }
+
+            if (!empty($conditions['classroomCourseSetName'])) {
+                $sceneIdsByClassroomCourseSetName = $classroomPool->findSceneIdsByCourseSetName($conditions['classroomCourseSetName']);
+                $prepareConditions['answer_scene_ids'] = empty($prepareConditions['answer_scene_ids']) ? $sceneIdsByClassroomCourseSetName : array_intersect($prepareConditions['answer_scene_ids'], $sceneIdsByClassroomCourseSetName);
+            }
+        }
+
+        if ('exercise' == $conditions['targetType']) {
+            $exercisePool = $this->biz['wrong_question.exercise_pool'];
+            if (!empty($conditions['exerciseMediaType'])) {
+                $prepareConditions['answer_scene_ids'] = $exercisePool->findSceneIdsByExerciseMediaType($poolId, $conditions['exerciseMediaType']);
+            }
+        }
+
+        if (empty($prepareConditions['answer_scene_ids'])) {
+            $prepareConditions['answer_scene_ids'] = [];
+        }
 
         return $prepareConditions;
     }
@@ -157,13 +205,5 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getExerciseModuleService()
     {
         return $this->service('ItemBankExercise:ExerciseModuleService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getCourseTaskService()
-    {
-        return $this->service('Task:TaskService');
     }
 }

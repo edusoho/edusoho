@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
-use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
@@ -69,7 +69,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
-            $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseId']);
+            $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
             if ($courseSet['isClassroomRef']) {
                 $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
                 $targetType = 'classroom';
@@ -79,7 +79,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
                 $targetId = $activity['fromCourseSetId'];
             }
         } else {
-            $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+            $assessmentExerciseRecord = $this->getExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
             $targetType = 'exercise';
             $targetId = $assessmentExerciseRecord['exerciseId'];
         }
@@ -128,11 +128,11 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     }
 
     /**
-     * @return AssessmentExerciseRecordService
+     * @return ExerciseModuleService
      */
-    protected function getItemBankAssessmentExerciseRecordService()
+    protected function getExerciseModuleService()
     {
-        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
+        return $this->getBiz()->service('ItemBankExercise:ExerciseModuleService');
     }
 
     /**

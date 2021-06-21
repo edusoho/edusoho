@@ -52,6 +52,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
+                'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
                 'created_time = :created_time',

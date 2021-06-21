@@ -63,6 +63,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'mediaType IN (:mediaTypes)',
             'mediaId = :mediaId',
             'fromCourseSetId = :fromCourseSetId',
+            'fromCourseSetId IN (:courseSetIds)',
             'startTime >= :startTime_GT',
             'endTime <= :endTime_LT',
         ];

@@ -93,10 +93,32 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->prepareActivities($fetchMedia, $activities);
     }
 
+    public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false)
+    {
+        $conditions = [
+            'courseIds' => $courseIds,
+            'mediaType' => $type,
+        ];
+        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+
+        return $this->prepareActivities($fetchMedia, $activities);
+    }
+
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
     {
         $conditions = [
             'fromCourseSetId' => $courseSetId,
+            'mediaType' => $type,
+        ];
+        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+
+        return $this->prepareActivities($fetchMedia, $activities);
+    }
+
+    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $type, $fetchMedia = false)
+    {
+        $conditions = [
+            'courseSetIds' => $courseSetIds,
             'mediaType' => $type,
         ];
         $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);

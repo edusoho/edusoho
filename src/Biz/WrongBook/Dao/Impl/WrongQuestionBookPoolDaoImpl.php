@@ -23,6 +23,45 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         return $builder->execute()->fetchAll();
     }
 
+    public function searchPoolByConditions($conditions, $orderBys, $start, $limit)
+    {
+        $table = $this->getTableName($conditions);
+        $conditions['keyWord'] = isset($conditions['keyWord']) ? $conditions['keyWord'] : '';
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin('biz_wrong_question_book_pool', $table, 't', 't.id = biz_wrong_question_book_pool.target_id')
+            ->select('biz_wrong_question_book_pool.*')
+            ->andWhere('title like :keyWord')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function countPoolByConditions($conditions)
+    {
+        $table = $this->getTableName($conditions);
+        $conditions['keyWord'] = isset($conditions['keyWord']) ? $conditions['keyWord'] : '';
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin('biz_wrong_question_book_pool', $table, 't', 't.id = biz_wrong_question_book_pool.target_id')
+            ->select('COUNT(*)')
+            ->andWhere('title like :keyWord');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function getTableName($conditions)
+    {
+        if ('classroom' == $conditions['target_type']) {
+            $table = 'classroom';
+        } elseif ('exercise' == $conditions['target_type']) {
+            $table = 'item_bank_exercise';
+        } else {
+            $table = 'course_set_v8';
+        }
+
+        return  $table;
+    }
+
     public function declares()
     {
         return [
