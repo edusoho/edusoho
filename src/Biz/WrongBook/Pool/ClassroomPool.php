@@ -16,17 +16,33 @@ class ClassroomPool extends AbstractPool
         // TODO: Implement getPoolTarget() method.
     }
 
-    public function prepareClassroomSceneIds($poolId, $conditions)
-    {
-        return parent::prepareSceneIds($this, $poolId, $conditions);
-    }
-
-    public function findSceneIdsByClassroomCourseSetId($poolId, $courseSetId)
+    public function prepareSceneIds($poolId, $conditions)
     {
         $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
         if (empty($pool)) {
             return [];
         }
+
+        $sceneIds = [];
+        if (!empty($conditions['classroomCourseSetId'])) {
+            $sceneIds = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
+        }
+
+        if (!empty($conditions['classroomMediaType'])) {
+            $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($pool['target_id'], $conditions['classroomMediaType']);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds, $sceneIdsByClassroomMediaType);
+        }
+
+        if (!empty($conditions['classroomTaskId'])) {
+            $sceneIdsByClassroomTaskId = $this->findSceneIdsByClassroomTaskId($conditions['classroomTaskId']);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomTaskId : array_intersect($sceneIds, $sceneIdsByClassroomTaskId);
+        }
+
+        return  $sceneIds;
+    }
+
+    public function findSceneIdsByClassroomCourseSetId($courseSetId)
+    {
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'homework', true);
         $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'exercise', true);
@@ -35,34 +51,30 @@ class ClassroomPool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByClassroomMediaType($poolId, $mediaType)
+    public function findSceneIdsByClassroomMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['testpaper', 'homework', 'exercise'])) {
             return [];
         }
 
-        $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
-        $classroomCourses = $this->getClassroomService()->findByClassroomId($pool['target_id']);
-
-        if (empty($pool) || 'classroom' != $pool['target_type'] || empty($classroomCourses)) {
+        $classroomCourses = $this->getClassroomService()->findByClassroomId($targetId);
+        if (empty($classroomCourses)) {
             return [];
         }
 
-        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
-
-        $activates = $this->getActivityService()->findActivitiesByCourseIdsAndType($courseIds, $mediaType, true);
+        $activates = $this->getActivityService()->findActivitiesByCourseIdsAndType(ArrayToolkit::column($classroomCourses, 'courseId'), $mediaType, true);
 
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByClassroomTaskId($poolId, $courseTaskId)
+    public function findSceneIdsByClassroomTaskId($courseTaskId)
     {
         $courseTask = $this->getCourseTaskService()->getTask($courseTaskId);
         if (empty($courseTask)) {
             return [];
         }
 
-        return $this->findSceneIdsByClassroomCourseSetId($poolId, $courseTask['fromCourseSetId']);
+        return $this->findSceneIdsByClassroomCourseSetId($courseTask['fromCourseSetId']);
     }
 
     protected function generateSceneIds($activates)

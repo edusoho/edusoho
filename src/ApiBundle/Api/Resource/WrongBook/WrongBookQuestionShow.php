@@ -87,24 +87,12 @@ class WrongBookQuestionShow extends AbstractResource
         $prepareConditions['pool_id'] = $poolId;
         $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
 
-        if (empty($conditions['targetType'])) {
+        if (!in_array($conditions['targetType'], ['course', 'classroom', 'exercise'])) {
             throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
         }
 
-        if ('course' === $conditions['targetType']) {
-            $coursePool = $this->biz['wrong_question.course_pool'];
-            $prepareConditions['answer_scene_ids'] = $coursePool->prepareCourseSceneIds($poolId, $conditions);
-        }
-
-        if ('classroom' === $conditions['targetType']) {
-            $classroomPool = $this->biz['wrong_question.classroom_pool'];
-            $prepareConditions['answer_scene_ids'] = $classroomPool->prepareClassroomSceneIds($poolId, $conditions);
-        }
-
-        if ('exercise' === $conditions['targetType']) {
-            $exercisePool = $this->biz['wrong_question.exercise_pool'];
-            $prepareConditions['answer_scene_ids'] = $exercisePool->prepareExerciseSceneIds($poolId, $conditions);
-        }
+        $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
+        $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
 
         if (!isset($prepareConditions['answer_scene_ids'])) {
             $prepareConditions['answer_scene_ids'] = [];

@@ -13,23 +13,28 @@ class ItemBankExercisePool extends AbstractPool
         // TODO: Implement getPoolTarget() method.
     }
 
-    public function prepareExerciseSceneIds($poolId, $conditions)
+    public function prepareSceneIds($poolId, $conditions)
     {
-        return parent::prepareSceneIds($this, $poolId, $conditions);
-    }
-
-    public function findSceneIdsByExerciseMediaType($poolId, $mediaType)
-    {
-        if (!in_array($mediaType, ['chapter', 'assessment'])) {
-            return [];
-        }
-
         $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
         if (empty($pool) || 'exercise' != $pool['target_type']) {
             return [];
         }
 
-        $exercise = $this->getExerciseModuleService()->findByExerciseIdAndType($pool['target_id'], $mediaType);
+        $sceneIds = [];
+        if (!empty($conditions['exerciseMediaType'])) {
+            $sceneIds = $this->findSceneIdsByExerciseMediaType($pool['target_id'], $conditions['exerciseMediaType']);
+        }
+
+        return $sceneIds;
+    }
+
+    public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
+    {
+        if (!in_array($mediaType, ['chapter', 'assessment'])) {
+            return [];
+        }
+
+        $exercise = $this->getExerciseModuleService()->findByExerciseIdAndType($targetId, $mediaType);
 
         return ArrayToolkit::column($exercise, 'answerSceneId');
     }
