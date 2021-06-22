@@ -1,5 +1,5 @@
 <template>
-  <van-tabs>
+  <van-tabs :border="true" color="#43c793">
     <template v-for="(listItem, index) in list">
       <van-tab :title="listItem.title" :key="index">
         <van-search
@@ -9,21 +9,31 @@
           @search="value => onSearch(index, value)"
         />
         <van-list
+          class="wrong-list"
           v-model="listItem.loading"
           :finished="listItem.finished"
           finished-text="没有更多了"
           @load="onLoad(index)"
         >
-          <van-cell v-for="item in listItem.items" :key="item" :title="item" />
+          <item v-for="item in listItem.items" :key="item" :title="item" />
         </van-list>
+        <div class="wrong-question-number">
+          {{ listItem.totalTitle }}：{{ listItem.total }}
+        </div>
       </van-tab>
     </template>
   </van-tabs>
 </template>
 
 <script>
+import Item from './Item.vue';
+
 export default {
   name: 'MyWrongQuestionBook',
+
+  components: {
+    Item,
+  },
 
   data() {
     return {
@@ -35,6 +45,8 @@ export default {
           loading: false,
           error: false,
           finished: false,
+          totalTitle: '课程错题数量',
+          total: 0,
         },
         {
           title: '班级错题',
@@ -43,6 +55,8 @@ export default {
           loading: false,
           error: false,
           finished: false,
+          totalTitle: '班级错题数量',
+          total: 0,
         },
         {
           title: '题库错题',
@@ -51,6 +65,8 @@ export default {
           loading: false,
           error: false,
           finished: false,
+          totalTitle: '题库错题数量',
+          total: 0,
         },
       ],
     };
@@ -91,3 +107,26 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../assets/styles/mixins.scss';
+
+.wrong-list {
+  padding: 0 vw(16) vw(20);
+  margin-top: 0;
+}
+
+.wrong-question-number {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: vw(4) 0;
+  text-align: center;
+  font-size: vw(10);
+  color: #999;
+  line-height: vw(20);
+  background-color: #fff;
+  box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.05);
+}
+</style>
