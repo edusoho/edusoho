@@ -2,6 +2,8 @@
 
 namespace Biz\WrongBook\Service;
 
-interface WrongBookAssessmentService
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+
+interface WrongBookAssessmentService extends AssessmentService
 {
 }
