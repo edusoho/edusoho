@@ -16,8 +16,17 @@ class ClassroomPool extends AbstractPool
         // TODO: Implement getPoolTarget() method.
     }
 
-    public function findSceneIdsByCourseSetId($courseSetId)
+    public function prepareClassroomSceneIds($poolId, $conditions)
     {
+        return parent::prepareSceneIds($this, $poolId, $conditions);
+    }
+
+    public function findSceneIdsByClassroomCourseSetId($poolId, $courseSetId)
+    {
+        $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
+        if (empty($pool)) {
+            return [];
+        }
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'homework', true);
         $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'exercise', true);
@@ -46,32 +55,14 @@ class ClassroomPool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseTaskId($courseTaskId)
+    public function findSceneIdsByClassroomTaskId($poolId, $courseTaskId)
     {
         $courseTask = $this->getCourseTaskService()->getTask($courseTaskId);
         if (empty($courseTask)) {
             return [];
         }
 
-        return $this->findSceneIdsByCourseSetId($courseTask['fromCourseSetId']);
-    }
-
-    public function findSceneIdsByCourseSetName($courseSetName)
-    {
-        $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($courseSetName);
-
-        if (empty($courseSets)) {
-            return [];
-        }
-
-        $courseSetIds = ArrayToolkit::column($courseSets, 'courseId');
-
-        $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'testpaper', true);
-        $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'homework', true);
-        $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'exercise', true);
-        $activates = array_merge($activityTestPapers, $activityHomeWorks, $activityExercises);
-
-        return $this->generateSceneIds($activates);
+        return $this->findSceneIdsByClassroomCourseSetId($poolId, $courseTask['fromCourseSetId']);
     }
 
     protected function generateSceneIds($activates)

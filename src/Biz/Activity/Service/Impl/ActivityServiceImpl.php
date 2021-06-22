@@ -84,44 +84,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false)
     {
-        $conditions = [
-            'fromCourseId' => $courseId,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities = $this->getActivityDao()->findActivitiesByCourseIdAndType($courseId, $type);
 
         return $this->prepareActivities($fetchMedia, $activities);
     }
 
     public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false)
     {
-        $conditions = [
-            'courseIds' => $courseIds,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities = $this->getActivityDao()->findActivitiesByCourseIdsAndType($courseIds, $type);
 
         return $this->prepareActivities($fetchMedia, $activities);
     }
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
     {
-        $conditions = [
-            'fromCourseSetId' => $courseSetId,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
-
-        return $this->prepareActivities($fetchMedia, $activities);
-    }
-
-    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $type, $fetchMedia = false)
-    {
-        $conditions = [
-            'courseSetIds' => $courseSetIds,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities = $this->getActivityDao()->findActivitiesByCourseSetIdAndType($courseSetId, $type);
 
         return $this->prepareActivities($fetchMedia, $activities);
     }

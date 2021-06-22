@@ -123,6 +123,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->count($conditions);
     }
 
+    public function countWrongQuestionWithCollect($conditions)
+    {
+        return $this->getWrongQuestionDao()->countWrongQuestionWithCollect($conditions);
+    }
+
     public function searchWrongBookPool($conditions, $orderBys, $start, $limit)
     {
         return $this->getWrongQuestionBookPoolDao()->searchPoolByConditions($conditions, $orderBys, $start, $limit);

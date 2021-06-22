@@ -13,6 +13,11 @@ class ItemBankExercisePool extends AbstractPool
         // TODO: Implement getPoolTarget() method.
     }
 
+    public function prepareExerciseSceneIds($poolId, $conditions)
+    {
+        return parent::prepareSceneIds($this, $poolId, $conditions);
+    }
+
     public function findSceneIdsByExerciseMediaType($poolId, $mediaType)
     {
         if (!in_array($mediaType, ['chapter', 'assessment'])) {

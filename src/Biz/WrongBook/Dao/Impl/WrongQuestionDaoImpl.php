@@ -18,9 +18,14 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
             ->select("{$this->table}.*, c.wrong_times as wrong_times")
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        if (!empty($conditions['pool_id'])) {
+            $builder->andWhere('c.pool_id = :pool_id');
+        }
 
         foreach ($orderBys ?: [] as $order => $sort) {
             if (in_array($order, self::WRONG_QUESTION_ORDER_BY)) {
@@ -34,16 +39,16 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
-    protected function createQueryBuilder($conditions)
+    public function countWrongQuestionWithCollect($conditions)
     {
-        $builder = parent::createQueryBuilder($conditions);
-        $builder->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id");
-
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
+            ->select('COUNT(*)');
         if (!empty($conditions['pool_id'])) {
             $builder->andWhere('c.pool_id = :pool_id');
         }
 
-        return $builder;
+        return (int) $builder->execute()->fetchColumn(0);
     }
 
     public function declares()
