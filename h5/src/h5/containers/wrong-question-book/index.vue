@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Api from '@/api';
 import Item from './Item.vue';
 
 export default {
@@ -72,7 +73,19 @@ export default {
     };
   },
 
+  created() {
+    this.fetchWrongQuestionBooks();
+  },
+
   methods: {
+    fetchWrongQuestionBooks() {
+      Api.getWrongBooks().then(res => {
+        this.list[0].total = res.course.sum_wrong_num;
+        this.list[1].total = res.classroom.sum_wrong_num;
+        this.list[2].total = res.exercise.sum_wrong_num;
+      });
+    },
+
     onLoad(index) {
       const list = this.list[index];
       list.loading = true;
