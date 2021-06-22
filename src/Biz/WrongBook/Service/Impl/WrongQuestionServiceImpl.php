@@ -15,8 +15,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 {
     public function buildWrongQuestion($fields, $source)
     {
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
+
             $pool = $this->handleQuestionPool($source);
             $collect = $this->handleQuestionCollect(array_merge($fields, ['pool_id' => $pool['id']]));
             $wrongQuestion = $this->createWrongQuestion(array_merge($fields, [
@@ -43,8 +44,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source)
     {
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
+
             $pool = $this->handleQuestionPool($source);
             $wrongQuestions = [];
             foreach ($wrongAnswerQuestionReports as $wrongAnswerQuestionReport) {
@@ -143,8 +145,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw WrongBookException::WRONG_QUESTION_NOT_EXIST();
         }
 
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
+
             $this->getWrongQuestionDao()->delete($id);
 
             $this->getLogService()->info(

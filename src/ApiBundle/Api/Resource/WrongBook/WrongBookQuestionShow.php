@@ -39,41 +39,46 @@ class WrongBookQuestionShow extends AbstractResource
     {
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
+        $sources = $this->getWrongQuestionSources(array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id')));
         foreach ($wrongQuestions as &$wrongQuestion) {
             $questions = $itemsWithQuestion[$wrongQuestion['item_id']]['questions'];
             $questions = ArrayToolkit::index($questions, 'id');
             $wrongQuestion['material'] = $itemsWithQuestion[$wrongQuestion['item_id']]['material'];
             $wrongQuestion['question'] = $questions[$wrongQuestion['question_id']];
             $wrongQuestion['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
-            $wrongQuestion['source'] = $this->getWrongQuestionSource($wrongQuestion['answer_scene_id']);
+            $wrongQuestion['source'] = $sources[$wrongQuestion['answer_scene_id']];
         }
 
         return $wrongQuestions;
     }
 
-    protected function getWrongQuestionSource($answerSceneId)
+    protected function getWrongQuestionSources($answerSceneIds)
     {
-        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
-        if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
-            $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-            if ($courseSet['isClassroomRef']) {
-                $source = [
-                    'mainSource' => $courseSet['title'],
-                    'secondarySource' => $activity['mediaType'],
-                ];
+        $sources = [];
+        array_walk($answerSceneIds, function ($answerSceneId) use (&$sources) {
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+            if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
+                $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                if ($courseSet['isClassroomRef']) {
+                    $source = [
+                        'mainSource' => $courseSet['title'],
+                        'secondarySource' => $activity['mediaType'],
+                    ];
+                } else {
+                    $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+                    $source = [
+                        'mainSource' => $course['title'],
+                        'secondarySource' => $activity['mediaType'],
+                    ];
+                }
             } else {
-                $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-                $source = [
-                    'mainSource' => $course['title'],
-                    'secondarySource' => $activity['mediaType'],
-                ];
+                $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+                $source['mainSource'] = $exerciseModule['type'];
             }
-        } else {
-            $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
-            $source['mainSource'] = $exerciseModule['type'];
-        }
+            $sources[$answerSceneId] = $source;
+        });
 
-        return $source;
+        return $sources;
     }
 
     protected function prepareConditions($poolId, $conditions)
@@ -133,8 +138,10 @@ class WrongBookQuestionShow extends AbstractResource
             }
         }
 
-        if (empty($prepareConditions['answer_scene_ids'])) {
+        if (!isset($prepareConditions['answer_scene_ids'])) {
             $prepareConditions['answer_scene_ids'] = [];
+        } elseif ($prepareConditions['answer_scene_ids'] == []) {
+            $prepareConditions['answer_scene_ids'] = [-1];
         }
 
         return $prepareConditions;
