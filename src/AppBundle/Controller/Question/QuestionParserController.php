@@ -21,8 +21,8 @@ class QuestionParserController extends BaseController
         if ($request->isMethod('POST')) {
             $file = $request->files->get('importFile');
 
-            $filename = pathinfo($file->getClientOriginalName());
-            $filename = $filename['filename'];
+            $filename = $file->getClientOriginalName();
+            $filename = substr($filename, 0, strripos($filename, '.'));
             if (mb_strlen($filename) > 50) {
                 return $this->render($templateInfo['readErrorModalTemplate'], ['type' => 'length']);
             }
