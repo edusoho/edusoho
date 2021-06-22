@@ -5,7 +5,7 @@
         <van-search
           v-model="listItem.keyword"
           shape="round"
-          placeholder="请输入搜索关键词"
+          :placeholder="listItem.placeholder"
           @search="value => onSearch(index, value)"
         />
         <van-list
@@ -15,7 +15,11 @@
           finished-text="没有更多了"
           @load="onLoad(index)"
         >
-          <item v-for="item in listItem.items" :key="item" :title="item" />
+          <item
+            v-for="item in listItem.items"
+            :key="item.id"
+            :question="item"
+          />
         </van-list>
         <div class="wrong-question-number">
           {{ listItem.totalTitle }}：{{ listItem.total }}
@@ -41,33 +45,48 @@ export default {
       list: [
         {
           title: '课程错题',
+          type: 'course',
+          placeholder: '搜索相应课程',
           items: [],
           keyword: '',
           loading: false,
-          error: false,
           finished: false,
           totalTitle: '课程错题数量',
           total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
         },
         {
           title: '班级错题',
+          type: 'classroom',
+          placeholder: '搜索相应班级',
           items: [],
           keyword: '',
           loading: false,
-          error: false,
           finished: false,
           totalTitle: '班级错题数量',
           total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
         },
         {
           title: '题库错题',
+          type: 'exercise',
+          placeholder: '搜索相应练习名称',
           items: [],
           keyword: '',
           loading: false,
-          error: false,
           finished: false,
           totalTitle: '题库错题数量',
           total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
         },
       ],
     };
@@ -89,32 +108,39 @@ export default {
     onLoad(index) {
       const list = this.list[index];
       list.loading = true;
-      setTimeout(() => {
+
+      Api.getWrongBooksCertainTypes({
+        query: {
+          targetType: list.type,
+        },
+        params: {
+          keyWord: list.keyword,
+          offset: list.paging.current * 10,
+        },
+      }).then(res => {
         if (list.refreshing) {
           list.items = [];
           list.refreshing = false;
         }
-        for (let i = 0; i < 10; i++) {
-          const text = list.items.length + 1;
-          list.items.push(text < 10 ? '0' + text : String(text));
-        }
+        list.items = list.items.concat(res.data);
         list.loading = false;
         list.refreshing = false;
-        // show error info in second demo
-        if (index === 1 && list.items.length === 10 && !list.error) {
-          list.error = true;
-        } else {
-          list.error = false;
-        }
-        if (list.items.length >= 40) {
+
+        const { total } = res.paging;
+        list.paging.total = total;
+        list.paging.current++;
+
+        if (list.items.length >= total) {
           list.finished = true;
         }
-      }, 1000);
+      });
     },
 
-    onSearch(value, index) {
-      this.list[index].keyword = value;
-      this.list[index].finished = false;
+    onSearch(index, value) {
+      const list = this.list[index];
+      list.keyword = value;
+      list.refreshing = true;
+      list.paging.current = 0;
       this.onLoad(index);
     },
   },
@@ -122,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/styles/mixins.scss';
+@import '../../../assets/styles/mixins.scss';
 
 .wrong-list {
   padding: 0 vw(16) vw(20);

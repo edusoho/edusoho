@@ -826,7 +826,15 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/index.vue'
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/my/index.vue'
+      ),
+  },
+  {
+    path: '/my/wrong-quesition-book/detail/:targetType/:id',
+    name: 'myWrongQuestionBookDetail',
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/detail/index.vue'
       ),
   },
 ];
