@@ -344,8 +344,9 @@ class TestpaperController extends BaseController
 
         $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
         $fileName = rawurlencode("{$assessment['name']}.docx");
+        $wordFileName = rawurlencode(substr($assessment['name'], 0,20).".docx");
         $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
+        $path = $baseDir.DIRECTORY_SEPARATOR.$wordFileName;
 
         $result = $this->getAssessmentService()->exportAssessment($assessmentId, $path, $imgRootDir);
 
