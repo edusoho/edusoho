@@ -13,6 +13,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -150,6 +151,11 @@ class BaseController extends Controller
         }
 
         return false;
+    }
+
+    protected function redirect($url, $status = 302)
+    {
+        return new RedirectResponse($this->purifyHtml($url), $status);
     }
 
     protected function purifyHtml($html, $trusted = false)

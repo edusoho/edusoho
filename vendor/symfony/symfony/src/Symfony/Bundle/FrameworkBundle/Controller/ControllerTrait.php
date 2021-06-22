@@ -120,14 +120,7 @@ trait ControllerTrait
      */
     protected function redirect($url, $status = 302)
     {
-        return new RedirectResponse($this->purifyHtml($url), $status);
-    }
-
-    private function purifyHtml($html)
-    {
-        $biz = $this->get('biz');
-
-        return $biz['item_bank_html_helper']->purify($html);
+        return new RedirectResponse($url, $status);
     }
 
     /**
