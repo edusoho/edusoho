@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e82aa999b542c4ddeb843b552bebeb0",
+    "content-hash": "4db22ad8776a29da816fbcc6457bcd25",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -468,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "92b5cb28f6c90304254c20c8c5c5a938425e3e29"
+                "reference": "8692f8fe68e8254f3de92ab4c4bfc5081edbaad5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/92b5cb28f6c90304254c20c8c5c5a938425e3e29",
-                "reference": "92b5cb28f6c90304254c20c8c5c5a938425e3e29",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/8692f8fe68e8254f3de92ab4c4bfc5081edbaad5",
+                "reference": "8692f8fe68e8254f3de92ab4c4bfc5081edbaad5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -496,6 +496,7 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^5|^6"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -507,7 +508,11 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2021-05-13T08:47:37+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-item-bank/issues",
+                "source": "https://github.com/codeages/biz-item-bank/tree/master"
+            },
+            "time": "2021-06-22T10:16:02+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -9205,8 +9210,7 @@
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
         "codeages/biz-order-pay": 20,
-        "codeages/plumber2": 20,
-        "codeages/biz-item-bank": 20
+        "codeages/plumber2": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
