@@ -19,9 +19,6 @@ class WrongBookCertainTypeFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if (empty($data['target_data'])) {
-            return;
-        }
         if ('course' == $data['target_type']) {
             $this->transformImages($data['target_data']['cover'], 'course.png');
         } elseif ('classroom' == $data['target_type']) {

@@ -19,7 +19,7 @@
       </a-menu-item>
       <a-menu-item key="question-bank">
         <router-link :to="{ name: 'QuestionBankWrongQuestion' }">
-          题库错题
+          题库练习错题
           <template v-if="wrongBooks.exercise">
             ({{ wrongBooks.exercise.sum_wrong_num }})
           </template>

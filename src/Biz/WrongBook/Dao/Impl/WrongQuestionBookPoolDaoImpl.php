@@ -31,6 +31,7 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
             ->leftJoin('biz_wrong_question_book_pool', $table, 't', 't.id = biz_wrong_question_book_pool.target_id')
             ->select('biz_wrong_question_book_pool.*')
             ->andWhere('title like :keyWord')
+            ->orderBy('biz_wrong_question_book_pool.updated_time','DESC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
