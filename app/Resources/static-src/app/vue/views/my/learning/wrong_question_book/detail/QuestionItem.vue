@@ -1,6 +1,10 @@
 <template>
   <div class="student-view-question">
-    <component :is="currentQuestionComponent">
+    <component
+      :is="currentQuestionComponent"
+      :question="question.question"
+      :report="question.report"
+    >
       <template #situation>
         <situation />
       </template>

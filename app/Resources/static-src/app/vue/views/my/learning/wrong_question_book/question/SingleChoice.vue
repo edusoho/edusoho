@@ -2,25 +2,27 @@
   <div class="question-layout">
     <order />
 
-    <div class="title">这是题目?</div>
+    <div class="mb16" v-html="question.stem" />
 
     <div class="prevent-click">
-      <a-radio-group :default-value="value">
-        <a-radio :style="radioStyle" :value="1">
-          Option A
-        </a-radio>
-        <a-radio :style="radioStyle" :value="2">
-          Option B
-        </a-radio>
-        <a-radio :style="radioStyle" :value="3">
-          Option C
+      <a-radio-group :default-value="question.answer[0]">
+        <a-radio
+          class="choose-item"
+          v-for="(item, index) in question.response_points"
+          :key="index"
+          :value="item.radio.val"
+        >
+          <div :class="['choose-answer', { 'choose-answer--right': question.answer[0] == item.radio.val }]">
+            <span>{{ item.radio.val }}.</span>
+            <span class="choose-answer-text" v-html="item.radio.text" />
+          </div>
         </a-radio>
       </a-radio-group>
     </div>
 
      <a-divider style="margin: 16px 0;" />
 
-    <div class="clearfix result">
+    <div class="clearfix result mb16">
       <div class="pull-left result-label">正确答案：</div>
       <div class="pull-left result-content">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
     </div>
@@ -38,6 +40,18 @@ import Analysis from './components/Analysis.vue';
 export default {
   name: 'SingleChoice',
 
+  props: {
+    question: {
+      type: Object,
+      required: true
+    },
+
+    report: {
+      type: Object,
+      required: true
+    }
+  },
+
   components: {
     Order,
     Analysis
@@ -45,13 +59,7 @@ export default {
 
   data() {
     return {
-      value: 1,
-      radioStyle: {
-        display: 'block',
-        height: '30px',
-        lineHeight: '30px',
-        fontWeight: '400'
-      }
+      value: 1
     }
   }
 }
@@ -61,10 +69,40 @@ export default {
 .question-layout {
   position: relative;
   padding-left: 54px;
-}
 
-.title {
-  margin-bottom: 16px;
+  /deep/ .choose-item {
+    display: block;
+    position: relative;
+    font-weight: 400;
+
+    .ant-radio {
+      position: absolute;
+      top: 2px;
+      vertical-align: super;
+
+      & + span {
+        display: inline-block;
+        margin-left: 16px;
+      }
+    }
+
+    .choose-answer {
+      display: table;
+      white-space: normal;
+
+      &-text {
+        display: table-cell;
+
+        p {
+          margin: 0;
+        }
+      }
+
+      &--right {
+        color: #46c37b;
+      }
+    }
+  }
 }
 
 .result {
@@ -76,14 +114,6 @@ export default {
 
   .result-content {
     width: calc(100% - 72px);
-  }
-}
-
-@media (max-width: 767px) {
-
-  .title,
-  .result {
-    margin-bottom: 8px;
   }
 }
 </style>
