@@ -37,7 +37,7 @@ class GoodsMediatorFactory
     {
         $types = self::types();
         if (empty($types[$type])) {
-            throw new CommonException::ERROR_PARAMETER();
+            throw CommonException::ERROR_PARAMETER();
         }
         return new $types[$type]($this->biz);
     }
