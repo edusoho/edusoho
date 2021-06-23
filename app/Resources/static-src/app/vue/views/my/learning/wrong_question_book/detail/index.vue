@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import WrongBookQuestionShow from 'common/vue/service/index.js';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
@@ -56,6 +57,10 @@ export default {
   },
 
   methods: {
+    async fetchWrongBookQuestion() {
+      const { data } = await WrongBookQuestionShow.search();
+    },
+
     // 错题练习
     handleClickWrongExercises() {
 
