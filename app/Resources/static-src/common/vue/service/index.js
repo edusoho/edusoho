@@ -12,3 +12,5 @@ export * from './File/index.js';
 export * from './AssistantPermission/index.js';
 export * from './LiveCapacity/index.js';
 
+// 接口规范
+export * from './WrongBook';
