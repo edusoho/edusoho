@@ -5,7 +5,12 @@
         <router-link :to="{ name: 'CourseWrongQuestion' }">
           课程错题
           <template v-if="wrongBooks.course">
-            ({{ wrongBooks.course.sum_wrong_num }})
+            <span v-if="wrongBooks.course.sum_wrong_num<=999">
+              ({{ wrongBooks.course.sum_wrong_num }})
+            </span>
+            <span v-else>
+              (999+)
+            </span>
           </template>
         </router-link>
       </a-menu-item>
@@ -13,7 +18,12 @@
         <router-link :to="{ name: 'ClassroomWrongQuestion' }">
           班级错题
           <template v-if="wrongBooks.classroom">
-            ({{ wrongBooks.classroom.sum_wrong_num }})
+            <span v-if="wrongBooks.classroom.sum_wrong_num<=999">
+              ({{ wrongBooks.classroom.sum_wrong_num }})
+            </span>
+            <span v-else>
+              (999+)
+            </span>
           </template>
         </router-link>
       </a-menu-item>
@@ -21,7 +31,12 @@
         <router-link :to="{ name: 'QuestionBankWrongQuestion' }">
           题库练习错题
           <template v-if="wrongBooks.exercise">
-            ({{ wrongBooks.exercise.sum_wrong_num }})
+            <span v-if="wrongBooks.exercise.sum_wrong_num<=999">
+              ({{ wrongBooks.exercise.sum_wrong_num }})
+            </span>
+            <span v-else>
+              (999+)
+            </span>
           </template>
         </router-link>
       </a-menu-item>
