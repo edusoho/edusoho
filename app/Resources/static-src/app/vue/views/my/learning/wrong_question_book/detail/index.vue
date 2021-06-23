@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       targetType: this.$route.params.target_type,
-      targetId: this.$route.params.id
+      targetId: this.$route.params.target_id
     }
   },
 
@@ -63,7 +63,7 @@ export default {
   methods: {
     async fetchWrongBookQuestion() {
       const params = {
-        id: this.id,
+        id: this.targetId,
       };
       const res = await WrongBookQuestionShow.search(params);
       console.log(res);

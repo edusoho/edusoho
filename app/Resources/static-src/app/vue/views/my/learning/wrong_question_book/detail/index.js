@@ -4,7 +4,7 @@ import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 
 const routes = [
   {
-    path: '/target_type/:target_type/target_id/:id',
+    path: '/target_type/:target_type/target_id/:target_id',
     name: 'WrongQuestionBookDetail',
     component: () => import(/* webpackChunkName: "app/vue/dist/WrongQuestionBookDetail" */ 'app/vue/views/my/learning/wrong_question_book/detail/index.vue')
   }
