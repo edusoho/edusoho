@@ -21,7 +21,7 @@ class MultiClassAssistant extends AbstractResource
      * @param ApiRequest $request
      * @param $multiClassId
      * @return mixed
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request, $multiClassId)
     {
