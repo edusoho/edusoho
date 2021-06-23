@@ -124,6 +124,23 @@
           :course-set-id="selectedCourseSetId"
         />
       </a-form-item>
+
+      <a-form-item label="限购人数">
+        <a-input v-decorator="['', {
+
+        }]"></a-input>
+      </a-form-item>
+
+      <a-form-item label="直播回放观看">
+        <a-radio-group 
+          :options="[
+            { label: '开启', value: '1' },
+            { label: '关闭', value: '0' },
+          ]"
+          v-decorator="['sss', { initialValue: '1'}]"
+        >
+        </a-radio-group>
+      </a-form-item>
     </a-form>
 
     <div class="create-multi-class-btn-group">

@@ -220,7 +220,7 @@ export default {
 
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
-        paging.current = params.current;
+        paging.current = params.current || 1;
 
         this.multiClassList = data;
         this.paging = paging;

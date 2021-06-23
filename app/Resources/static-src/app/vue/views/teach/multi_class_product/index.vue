@@ -41,6 +41,7 @@
         :visible="modalVisible"
         @cancel="closeModal"
       >
+      <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
         <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
           <a-form-item label="产品名称">
             <a-input
