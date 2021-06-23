@@ -11,7 +11,7 @@
   <li {% if adminV2Homepage|default(null) %}class="active"{% endif %} id="nav_admin_v2">
     <a title="{{ 'admin_v2.homepage.overview'|trans }}" href="{{ path('admin_v2') }}">{{ 'admin_v2.homepage.overview'|trans }}</a>
   </li>
-  {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
+  {% for key,m in permissions if not m.visible is defined or eval_expression(m.visible) %}
     {% set tabMenu = first_child_permission(first_child_permission(first_child_permission(m, true, false), true, false), true, false) %}
     {% if tabMenu %}
       <li class="{% if menu and m.code == rootMenu.code|default(null) %}active{% endif %} {% if m.code == 'admin_v2_cloud_center' %} application-icon {% if app.request.locale == 'en' %}{{ 'en-application-icon' }}{% endif %}{% endif %} {{ m.class|default('') }}" id="nav_{{ m.code }}">
