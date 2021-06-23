@@ -153,11 +153,6 @@ class BaseController extends Controller
         return false;
     }
 
-    protected function redirect($url, $status = 302)
-    {
-        return new RedirectResponse($this->purifyHtml($url), $status);
-    }
-
     protected function purifyHtml($html, $trusted = false)
     {
         $biz = $this->getBiz();
