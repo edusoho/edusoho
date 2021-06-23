@@ -27,12 +27,13 @@
       @on-search="onSearch"
     />
 
-    <question-item />
+    <question-item v-for="question in questionList" :key="question.id" :question="question" />
 
   </a-page-header>
 </template>
 
 <script>
+import _ from 'lodash';
 import { WrongBookQuestionShow } from 'common/vue/service';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
@@ -52,7 +53,8 @@ export default {
   data() {
     return {
       targetType: this.$route.params.target_type,
-      targetId: this.$route.params.target_id
+      targetId: this.$route.params.target_id,
+      questionList: []
     }
   },
 
@@ -64,9 +66,11 @@ export default {
     async fetchWrongBookQuestion() {
       const params = {
         id: this.targetId,
+        targetType: this.targetType,
+        courseId: 72
       };
       const res = await WrongBookQuestionShow.search(params);
-      console.log(res);
+      this.questionList = _.concat(this.questionList, res.data);
     },
 
     // 错题练习
