@@ -6,4 +6,5 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 interface WrongBookAssessmentService extends AssessmentService
 {
+    public function createAssessment($assessment);
 }
