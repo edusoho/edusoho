@@ -20,13 +20,25 @@ class WrongBookPractiseServiceImpl extends BaseService implements WrongBookPract
 
         $exercise = $this->getWrongQuestionBookExerciseDao()->create($exercise);
 
-        $this->dispatchEvent('wrong_question.create', new Event($exercise, []));
+        $this->dispatchEvent('wrong_question_exercise.create', new Event($exercise, []));
 
         return $exercise;
     }
 
-    public function updateExercise()
+    public function updateExercise($id, $fields)
     {
+        $exercise = $this->getValidator()->validate($fields, [
+            'answer_scene_id' => ['integer', ['min', 0]],
+            'assessment_id' => ['integer', ['min', 0]],
+            'regulation' => [],
+            'user_id' => ['integer', ['min', 0]],
+        ]);
+
+        $exercise = $this->getWrongQuestionBookExerciseDao()->update($id, $exercise);
+
+        $this->dispatchEvent('wrong_question_exercise.update', new Event($exercise, []));
+
+        return $exercise;
     }
 
     /**

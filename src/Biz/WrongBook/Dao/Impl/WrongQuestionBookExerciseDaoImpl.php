@@ -13,7 +13,9 @@ class WrongQuestionBookExerciseDaoImpl extends AdvancedDaoImpl implements WrongQ
     {
         return [
             'timestamps' => ['created_time', 'updated_time'],
-            'serializes' => [],
+            'serializes' => [
+                'regulation' => 'json',
+            ],
             'orderbys' => ['id'],
             'conditions' => [
                 'id = :id',
