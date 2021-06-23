@@ -12,6 +12,8 @@ interface ExerciseModuleService
 
     const ASSESSMENT_MODULE_LEAST_COUNT = 1;
 
+    public function getByAnswerSceneId($answerSceneId);
+
     public function findByExerciseId($exerciseId);
 
     public function findByExerciseIdAndType($exerciseId, $type);
