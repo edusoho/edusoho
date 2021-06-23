@@ -61,7 +61,15 @@ class CallbackController extends BaseController
             $param['loginToken'] = $token;
         }
 
-        return $this->redirect($this->generateUrl('my_course_show', $param));
+        if ('course' === $goods['type']) {
+            $route = 'my_course_show';
+        } elseif ('classroom' === $goods['type']) {
+            $route = 'classroom_show';
+        } else {
+            $route = 'homepage';
+        }
+
+        return $this->redirect($this->generateUrl($route, $param));
     }
 
     protected function registerUser($userInfo)
