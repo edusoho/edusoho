@@ -2,10 +2,56 @@
 
 namespace Biz\WrongBook\Pool;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+
 class ItemBankExercisePool extends AbstractPool
 {
     public function getPoolTarget($report)
     {
         // TODO: Implement getPoolTarget() method.
+    }
+
+    public function prepareSceneIds($poolId, $conditions)
+    {
+        $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
+        if (empty($pool) || 'exercise' != $pool['target_type']) {
+            return [];
+        }
+
+        $sceneIds = [];
+        if (!empty($conditions['exerciseMediaType'])) {
+            $sceneIds = $this->findSceneIdsByExerciseMediaType($pool['target_id'], $conditions['exerciseMediaType']);
+        }
+
+        return $sceneIds;
+    }
+
+    public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
+    {
+        if (!in_array($mediaType, ['chapter', 'assessment'])) {
+            return [];
+        }
+
+        $exercise = $this->getExerciseModuleService()->findByExerciseIdAndType($targetId, $mediaType);
+
+        return ArrayToolkit::column($exercise, 'answerSceneId');
+    }
+
+    /**
+     * @return WrongQuestionBookPoolDao
+     */
+    protected function getWrongQuestionBookPoolDao()
+    {
+        return $this->biz->dao('WrongBook:WrongQuestionBookPoolDao');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    protected function getExerciseModuleService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseModuleService');
     }
 }

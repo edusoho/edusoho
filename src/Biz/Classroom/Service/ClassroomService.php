@@ -207,6 +207,8 @@ interface ClassroomService
 
     public function findClassroomIdsByCourseId($courseId);
 
+    public function findByClassroomId($classroomId);
+
     public function findClassroomsByCourseId($courseId);
 
     /**
