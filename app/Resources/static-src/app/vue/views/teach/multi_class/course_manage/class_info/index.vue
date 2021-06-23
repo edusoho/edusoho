@@ -93,9 +93,9 @@
 import _ from 'lodash';
 import { MultiClass, Course } from 'common/vue/service';
 
-import ClassName from './ClassName.vue';
-import TeachMode from './TeachMode.vue';
-import Assistant from './Assistant.vue';
+import ClassName from '../components/ClassName.vue';
+import TeachMode from '../components/TeachMode.vue';
+import Assistant from '../components/Assistant.vue';
 
 const columns = [
   {

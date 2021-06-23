@@ -227,9 +227,9 @@
 <script>
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
-import userInfoTable from "../../../components/userInfoTable";
+import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
-import Assistant from "./Assistant";
+import Assistant from "../components/Assistant.vue";
 
 const columns = [
   {
@@ -285,6 +285,7 @@ const columns = [
     scopedSlots: { customRender: 'actions' }
   }
 ];
+
 const resultColumns = [
   {
     title: '课时',

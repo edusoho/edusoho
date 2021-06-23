@@ -91,7 +91,7 @@
 
 <script>
 import { MultiClassExam } from 'common/vue/service';
-import ClassName from './ClassName.vue';
+import ClassName from '../components/ClassName.vue';
 import _ from 'lodash';
 
 const columns = [
