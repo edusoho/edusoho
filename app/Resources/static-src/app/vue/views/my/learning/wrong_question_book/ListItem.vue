@@ -2,7 +2,6 @@
   <div class="item clearfix">
     <div class="item-cover-image pull-left">
       <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
-      <img v-else src="/files/system/2021/06-22/152738ad67d6945666.jpeg" alt="">
     </div>
     <div class="item-info pull-left">
       <h3 class="text-overflow">{{ question.target_data.title }}</h3>
