@@ -16,6 +16,8 @@ interface WrongQuestionService
 
     public function countWrongQuestion($conditions);
 
+    public function getPool($poolId);
+
     /**
      * BookPool
      */
@@ -24,4 +26,8 @@ interface WrongQuestionService
     public function countWrongBookPool($conditions);
 
     public function getWrongBookPoolByFieldsGroupByTargetType($fields);
+
+    public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function countWrongQuestionWithCollect($conditions);
 }

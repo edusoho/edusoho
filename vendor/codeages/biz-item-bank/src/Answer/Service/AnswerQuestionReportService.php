@@ -13,13 +13,15 @@ interface AnswerQuestionReportService
     const STATUS_NOANSWER = 'no_answer';
 
     const STATUS_PART_RIGHT = 'part_right';
-    
+
+    public function findByIds($ids);
+
     public function batchCreate(array $answerQuestionReports);
 
-    public function search($conditions, $orderBys, $start, $limit, $columns = array());
+    public function search($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function count($conditions);
-  
+
     public function batchUpdate(array $answerQuestionReports);
 
     public function findByAnswerRecordId($answerRecordId);

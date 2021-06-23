@@ -36,6 +36,11 @@ const apiClient = axios.create({
   timeout: 15000
 });
 
+let csrfToken = document.getElementsByTagName('meta')['csrf-token'];
+if (csrfToken) {
+  localStorage.setItem('csrf-token', csrfToken.content);
+}
+
 apiClient.interceptors.request.use(
   config => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
