@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import WrongBookQuestionShow from 'common/vue/service/index.js';
+import { WrongBookQuestionShow } from 'common/vue/service';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
@@ -51,14 +51,22 @@ export default {
 
   data() {
     return {
-      form: this.$form.createForm(this, { name: 'wrong_question_search' }),
-      targetType: 'course',
+      targetType: this.$route.params.target_type,
+      targetId: this.$route.params.id
     }
+  },
+
+  created() {
+    this.fetchWrongBookQuestion();
   },
 
   methods: {
     async fetchWrongBookQuestion() {
-      const { data } = await WrongBookQuestionShow.search();
+      const params = {
+        id: this.id,
+      };
+      const res = await WrongBookQuestionShow.search(params);
+      console.log(res);
     },
 
     // 错题练习
