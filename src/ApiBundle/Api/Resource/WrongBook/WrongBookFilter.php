@@ -13,4 +13,11 @@ class WrongBookFilter extends Filter
         'sum_wrong_num',
         'target_type',
     );
+
+    protected function publicFields(&$data)
+    {
+        if($data['sum_wrong_num']>=1000){
+            $data['sum_wrong_num']='999+';
+        }
+    }
 }
