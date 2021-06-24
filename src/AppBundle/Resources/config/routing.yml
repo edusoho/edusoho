@@ -645,6 +645,14 @@ my_wrong_question_book_target_detail:
     path: /my/wrong_question_book/target_type/{targetType}/target_id/{targetId}
     defaults: { _controller: AppBundle:My/WrongQuestionBook:detail }
 
+wrong_question_book_practise:
+    path: /wrong_question_book/pool/{poolId}/practise
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:practise }
+
+wrong_question_book_practise_start_do:
+  path: /wrong_question_book/pool/{poolId}/practise/{recordId}/start_do
+  defaults: { _controller: AppBundle:My/WrongQuestionBook:startDo }
+
 my_unclaimed_certificates:
     path: /my/certificates/unclaimed
     defaults: { _controller: AppBundle:My/Certificate:unclaimed }

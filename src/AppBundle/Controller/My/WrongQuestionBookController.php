@@ -16,4 +16,22 @@ class WrongQuestionBookController extends BaseController
     {
         return $this->render('my/learning/wrong-question-book/detail.html.twig');
     }
+
+    public function practiseAction(Request $request, $poolId)
+    {
+        return $this->render('my/learning/wrong-question-book/practise.html.twig');
+    }
+
+    public function startDoAction(Request $request, $poolId, $recordId)
+    {
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
+            'answerRecordId' => $recordId,
+            'submitGotoUrl' => '',
+            'saveGotoUrl' => '',
+        ]);
+    }
+
+    public function showResultAction(Request $request, $poolId, $recordId)
+    {
+    }
 }
