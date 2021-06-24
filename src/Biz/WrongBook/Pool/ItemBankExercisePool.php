@@ -22,10 +22,20 @@ class ItemBankExercisePool extends AbstractPool
 
         $sceneIds = [];
         if (!empty($conditions['exerciseMediaType'])) {
-            $sceneIds = $this->findSceneIdsByExerciseMediaType($pool['target_id'], $conditions['exerciseMediaType']);
+            $sceneIds['sceneIds'] = $this->findSceneIdsByExerciseMediaType($pool['target_id'], $conditions['exerciseMediaType']);
+        }
+
+        if (!isset($sceneIds['sceneIds'])) {
+            $sceneIds = [];
+        } elseif ($sceneIds['sceneIds'] == []) {
+            $sceneIds = [-1];
         }
 
         return $sceneIds;
+    }
+
+    public function prepareConditions($poolId, $conditions)
+    {
     }
 
     public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
