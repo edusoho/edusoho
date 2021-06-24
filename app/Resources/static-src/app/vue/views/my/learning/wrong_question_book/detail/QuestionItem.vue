@@ -44,7 +44,7 @@ export default {
       questionComponents: {
         single_choice: 'SingleChoice',
         choice: 'Choice',
-        uncertain_choice: 'UncertainChoice',
+        uncertain_choice: 'Choice',
         true_false: 'Judge',
         text: 'Fill'
       }
