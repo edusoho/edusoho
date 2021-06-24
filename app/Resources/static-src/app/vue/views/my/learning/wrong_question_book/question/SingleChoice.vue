@@ -20,12 +20,9 @@
       </a-radio-group>
     </div>
 
-     <a-divider style="margin: 16px 0;" />
+    <a-divider style="margin: 16px 0;" />
 
-    <div class="clearfix result mb16">
-      <div class="pull-left result-label">正确答案：</div>
-      <div class="pull-left result-content">{{ rightAnswer }}</div>
-    </div>
+    <result :question="question" :report="report" />
 
     <analysis :analysis="question.analysis" />
 
@@ -37,6 +34,7 @@
 import _ from 'lodash';
 import Order from './components/Order.vue';
 import Analysis from './components/Analysis.vue';
+import Result from './components/Result.vue';
 
 export default {
   name: 'SingleChoice',
@@ -55,14 +53,8 @@ export default {
 
   components: {
     Order,
-    Analysis
-  },
-
-  computed: {
-    rightAnswer() {
-      const { answer } = this.question;
-      return `${_.join(answer, '、')}`;
-    }
+    Analysis,
+    Result
   },
 
   methods: {
