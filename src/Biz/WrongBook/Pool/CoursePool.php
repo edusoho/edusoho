@@ -22,20 +22,30 @@ class CoursePool extends AbstractPool
 
         $sceneIds = [];
         if (!empty($conditions['courseId'])) {
-            $sceneIds = $this->findSceneIdsByCourseId($conditions['courseId']);
+            $sceneIds['sceneIds'] = $this->findSceneIdsByCourseId($conditions['courseId']);
         }
 
         if (!empty($conditions['courseMediaType'])) {
             $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($pool['target_id'], $conditions['courseMediaType']);
-            $sceneIds = empty($sceneIds) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds, $sceneIdsByCourseMediaType);
+            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseMediaType);
         }
 
         if (!empty($conditions['courseTaskId'])) {
             $sceneIdsByCourseTaskId = $this->findSceneIdsByCourseTaskId($conditions['courseTaskId']);
-            $sceneIds = empty($sceneIds) ? $sceneIdsByCourseTaskId : array_intersect($sceneIds, $sceneIdsByCourseTaskId);
+            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseTaskId : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseTaskId);
+        }
+
+        if (!isset($sceneIds['sceneIds'])) {
+            $sceneIds = [];
+        } elseif ($sceneIds['sceneIds'] == []) {
+            $sceneIds = [-1];
         }
 
         return $sceneIds;
+    }
+
+    public function prepareConditions($poolId, $conditions)
+    {
     }
 
     public function findSceneIdsByCourseId($courseId)

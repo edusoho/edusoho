@@ -94,12 +94,6 @@ class WrongBookQuestionShow extends AbstractResource
         $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
         $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
 
-        if (!isset($prepareConditions['answer_scene_ids'])) {
-            $prepareConditions['answer_scene_ids'] = [];
-        } elseif ($prepareConditions['answer_scene_ids'] == []) {
-            $prepareConditions['answer_scene_ids'] = [-1];
-        }
-
         return $prepareConditions;
     }
 
