@@ -1,5 +1,6 @@
 <template>
   <aside-layout :breadcrumbs="[{ name: breadcrumbName }]" style="padding-bottom: 88px;">
+    <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form
       :form="form"
       :label-col="{ span: 3 }"
@@ -122,6 +123,23 @@
           :course-id="selectedCourseId"
           :course-set-id="selectedCourseSetId"
         />
+      </a-form-item>
+
+      <a-form-item label="限购人数">
+        <a-input v-decorator="['', {
+
+        }]"></a-input>
+      </a-form-item>
+
+      <a-form-item label="直播回放观看">
+        <a-radio-group 
+          :options="[
+            { label: '开启', value: '1' },
+            { label: '关闭', value: '0' },
+          ]"
+          v-decorator="['sss', { initialValue: '1'}]"
+        >
+        </a-radio-group>
       </a-form-item>
     </a-form>
 

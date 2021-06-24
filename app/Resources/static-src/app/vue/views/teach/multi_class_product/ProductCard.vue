@@ -20,8 +20,8 @@
         <div class="color-gray text-14 mt1">学习人数</div>
       </a-col>
       <a-col :span="5">
-        <div class="gray-darker text-24">{{ product.taskNum }}</div>
-        <div class="color-gray text-14 mt1">总课时</div>
+        <div class="gray-darker text-24">{{ product.finishedCourseRate }}</div>
+        <div class="color-gray text-14 mt1">完课率</div>
       </a-col>
       <a-col :span="5">
         <div class="gray-darker text-24">{{ product.multiClassNum }}</div>
