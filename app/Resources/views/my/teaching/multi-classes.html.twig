@@ -11,25 +11,19 @@
     {% for multiClass in multiClasses %}
       {% set course = courses[multiClass.courseId] %}
       {% set courseSet = courseSets[course.courseSetId] %}
+      {% set manageUrl = 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') ?
+        path('course_set_manage_course_info',{courseSetId:courseSet.id, courseId: course.id}) : path('course_set_manage_course_students',{courseSetId:courseSet.id, courseId: course.id})
+      %}
       <div class="cd-mb32">
         <div class="courseset-manage-header clearfix">
           <div class="clearfix">
-            <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"/>
-
-{#            {% if classroom.status=='closed' %}#}
-{#              <span#}
-{#                class="course-publish-status course-publish-status--closed">{{ 'classroom.status.closed'|trans }}</span>#}
-{#            {% elseif classroom.status=='draft' %}#}
-{#              <span#}
-{#                class="course-publish-status course-publish-status--unpublished">{{ 'classroom.status.unpublish'|trans }}</span>#}
-{#            {% elseif classroom.status=='published' %}#}
-{#              <span#}
-{#                class="course-publish-status course-publish-status--published">{{ 'classroom.status.published'|trans }}</span>#}
-{#            {% endif %}#}
+            <a target="_blank" href="{{ manageUrl }}">
+              <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"/>
+            </a>
 
             <div class="courseset-manage-header-info">
               <div class="courseset-manage-header-info__title text-overflow">
-                <span class="cd-dark-major">{{ courseSet.title|raw }}</span>
+                <span class="cd-dark-major">{{ multiClass.title|raw }}</span>
               </div>
 
               <div class="courseset-manage-header-info__price color-danger">
@@ -38,14 +32,7 @@
             </div>
 
             <div class="courseset-manage-header-btn">
-              {% if 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') %}}
-                <a class="cd-btn cd-btn-primary" target="_blank"
-                   href="{{ path('course_set_manage_course_info',{courseSetId:courseSet.id, courseId: course.id}) }}">{{ 'course.manage_btn'|trans }}</a>
-              {% else %}
-                <a class="cd-btn cd-btn-primary" target="_blank"
-                   href="{{ path('course_set_manage_course_students',{courseSetId:courseSet.id, courseId: course.id}) }}">{{ 'my.teaching.multi_class.my_students'|trans }}</a>
-              {% endif %}
-
+              <a class="cd-btn cd-btn-primary" target="_blank" href="{{ manageUrl }}">{{ 'course.manage_btn'|trans }}</a>
               {% if courseSet.status != 'published' %}
                 <a class="cd-btn cd-btn-ghost-default cd-ml16" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
               {% else %}
