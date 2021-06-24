@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -484,6 +485,49 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             ];
             $this->getSchedulerService()->register($job);
         }
+
+        $this->registerMultiClassNotificationJob($task);
+    }
+
+    private function registerMultiClassNotificationJob($task)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($task['courseId']);
+        if (empty($multiClass) || empty($multiClass['liveRemindTime'])) {
+            return;
+        }
+
+        $hourTemplateId = $this->getWeChatService()->getSubscribeTemplateId(MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneHour');
+        $dayTemplateId = $this->getWeChatService()->getSubscribeTemplateId(MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneDay');
+        if (empty($hourTemplateId) && empty($dayTemplateId)) {
+            return;
+        }
+
+        if ($task['startTime'] < (time() + $multiClass['liveRemindTime'] * 60)) {
+            return;
+        }
+
+        $smsType = '';
+        if (!empty($hourTemplateId)) {
+            $smsType = 'sms_live_play_one_hour';
+        }
+
+        if (!empty($dayTemplateId)) {
+            $smsType = 'sms_live_play_one_day';
+        }
+
+        $job = [
+            'name' => 'WeChatSubscribeNotification_LiveOpen_'.$task['id'],
+            'expression' => intval($task['startTime'] - $multiClass['liveRemindTime'] * 60),
+            'class' => 'Biz\WeChatSubscribeNotification\Job\LiveNotificationJob',
+            'misfire_threshold' => 60 * 10,
+            'args' => [
+                'templateCode' => MessageSubscribeTemplateUtil::TEMPLATE_LIVE_OPEN,
+                'taskId' => $task['id'],
+                'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
+                'cloudSmsType' => $smsType,
+            ],
+        ];
+        $this->getSchedulerService()->register($job);
     }
 
     private function getCopiedTasks($task)
@@ -529,6 +573,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
     {
         $this->deleteByJobName('WeChatSubscribeNotification_LiveOneHour_'.$task['id']);
         $this->deleteByJobName('WeChatSubscribeNotification_LiveOneDay_'.$task['id']);
+        $this->deleteByJobName('WeChatSubscribeNotification_LiveOpen_'.$task['id']);
     }
 
     private function deleteByJobName($jobName)
@@ -744,5 +789,13 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
     public function getAssessmentService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    public function getMultiClassService()
+    {
+        return $this->getBiz()->service('MultiClass:MultiClassService');
     }
 }
