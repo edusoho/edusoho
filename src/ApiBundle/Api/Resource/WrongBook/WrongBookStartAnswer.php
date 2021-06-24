@@ -13,7 +13,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class WrongBookStartAnswer extends AbstractResource
 {
@@ -23,7 +22,7 @@ class WrongBookStartAnswer extends AbstractResource
     public function add(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
-        $wrongQuestions = $this->getCollectDao()->search([], [], 0, 20);
+        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId], [], 0, 20);
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
         $answerScene = $this->initScene();
