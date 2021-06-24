@@ -64,14 +64,9 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $this->beginTransaction();
         try {
             $multiClass = $this->getMultiClassDao()->create($fields);
-<<<<<<< src/Biz/MultiClass/Service/Impl/MultiClassServiceImpl.php
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
             $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
-=======
-            $this->getCourseMemberService()->setCourseTeachers($multiClass['courseId'], $teacherId, $multiClass['id']);
-            $this->getCourseMemberService()->setCourseAssistants($multiClass['courseId'], $assistantIds, $multiClass['id']);
->>>>>>> src/Biz/MultiClass/Service/Impl/MultiClassServiceImpl.php
 
             $this->getLogService()->info(
                 'multi_class',
