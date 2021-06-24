@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   props: {
     question: {
@@ -16,7 +18,14 @@ export default {
 
   computed: {
     rightAnswer() {
-      const { answer } = this.question.question;
+      let { answer, answer_mode } = this.question.question;
+
+      if (answer_mode === 'true_false') {
+        answer = _.map(answer, function(item) {
+          return item === 'T' ? '正确' : '错误';
+        });
+      }
+
       return `<span class="success">${_.join(answer, '、')}<span>`;
     }
   }
