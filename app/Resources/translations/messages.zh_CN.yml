@@ -4158,6 +4158,11 @@ my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
+#班课
+my.teaching.multi_class.my_students: 我的学员
+my.teaching.multi_class.status: 班课状态
+my.teaching.multi_class.student_num: 班课学员
+
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
 my.teaching.open_course.Basic_Info.message: 基础信息

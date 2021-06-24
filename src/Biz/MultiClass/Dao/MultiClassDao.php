@@ -14,6 +14,8 @@ interface MultiClassDao extends AdvancedDaoInterface
 
     public function findByProductId($productId);
 
+    public function findByCreator($creator);
+
     public function getByTitle($title);
 
     public function getByCourseId($courseId);

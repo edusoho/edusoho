@@ -3578,6 +3578,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.multi_class.my_students: My Students
+my.teaching.multi_class.status: Status
+my.teaching.multi_class.student_num: Student Number
 my.teaching.open_course.Basic_Info: Course settings
 my.teaching.open_course.Basic_Info.message: Basic infomation
 my.teaching.open_course.Basic_Info.title: Course title

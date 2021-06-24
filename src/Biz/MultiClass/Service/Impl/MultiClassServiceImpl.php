@@ -36,6 +36,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->findByProductId($productId);
     }
 
+    public function findMultiClassesByCreator($creator)
+    {
+        return $this->getMultiClassDao()->findByCreator($creator);
+    }
+
     public function getMultiClass($id)
     {
         return $this->getMultiClassDao()->get($id);
@@ -62,6 +67,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
         $this->beginTransaction();
         try {
+            $fields['creator'] = $this->getCurrentUser()->getId();
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($multiClass['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($multiClass['courseId'], $assistantIds, $multiClass['id']);
@@ -153,6 +159,36 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $conditions = $this->filterConditions($conditions);
 
         return $this->getMultiClassDao()->searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
+    }
+
+    public function searchUserTeachMultiClass($userId, $conditions, $start, $limit)
+    {
+        $multiClasses = $this->findMultiClassesByCreator($userId);
+        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
+        $multiClassIds = array_unique($multiClassIds);
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        $conditions['ids'] = $multiClassIds;
+
+        return $this->searchMultiClass($conditions, ['createdTime' => 'desc'], $start, $limit);
+    }
+
+    public function countUserTeachMultiClass($userId, $conditions)
+    {
+        $multiClasses = $this->findMultiClassesByCreator($userId);
+        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
+        $multiClassIds = array_unique($multiClassIds);
+        if (empty($multiClassIds)) {
+            return 0;
+        }
+
+        $conditions['ids'] = $multiClassIds;
+
+        return $this->countMultiClass($conditions);
     }
 
     public function searchMultiClass($conditions, $orderBys, $start, $limit, $columns = [])
