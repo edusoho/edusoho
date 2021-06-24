@@ -1,6 +1,6 @@
 <template>
   <div class="student-view-question">
-    <component
+    <!-- <component
       :is="currentQuestionComponent"
       :question="question.question"
       :report="question.report"
@@ -8,12 +8,14 @@
       <template #situation>
         <situation />
       </template>
-    </component>
+    </component> -->
+
+    <single-choice :question="question" />
   </div>
 </template>
 
 <script>
-import SingleChoice from '../question/SingleChoice.vue';
+import SingleChoice from './components/SingleChoice.vue';
 import Choice from '../question/Choice.vue';
 import UncertainChoice from '../question/UncertainChoice.vue';
 import Judge from '../question/Judge.vue';
