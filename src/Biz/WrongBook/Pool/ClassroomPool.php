@@ -47,8 +47,69 @@ class ClassroomPool extends AbstractPool
         return  $sceneIds;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function prepareConditions($targetId, $conditions)
     {
+        $searchConditions = [];
+        $searchConditions['courseSets'] = $this->classroomCourseSetIdSearch($targetId);
+        $searchConditions['mediaTypes'] = $this->classroomMediaTypeSearch($conditions);
+        $searchConditions['tasks'] = $this->classroomTaskIdSearch($conditions);
+
+        return $searchConditions;
+    }
+
+    protected function classroomCourseSetIdSearch($classroomId)
+    {
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSetInfo = [];
+        foreach ($courseSets as $courseSet) {
+            $courseSetInfo[] = [
+                'id' => $courseSet['id'],
+                'title' => $courseSet['title'],
+            ];
+        }
+
+        return $courseSetInfo;
+    }
+
+    protected function classroomMediaTypeSearch($conditions)
+    {
+        $defaultMediaType = ['homework', 'testpaper', 'exercise'];
+        if (!empty($conditions['classroomCourseSetId'])) {
+            $activates = $this->getActivityService()->findActivitiesByCourseSetId($conditions['classroomCourseSetId']);
+            $mediaType = ArrayToolkit::column($activates, 'mediaType');
+
+            return array_values(array_intersect(array_unique($mediaType), $defaultMediaType));
+        }
+
+        return $defaultMediaType;
+    }
+
+    protected function classroomTaskIdSearch($conditions)
+    {
+        $searchConditions = [];
+        $defaultMediaType = ['homework', 'testpaper', 'exercise'];
+        if (!empty($conditions['classroomCourseSetId'])) {
+            $searchConditions['fromCourseSetId'] = $conditions['classroomCourseSetId'];
+        }
+        if (!empty($conditions['classroomMediaType'])) {
+            $searchConditions['mediaType'] = $conditions['classroomMediaType'];
+        } else {
+            $searchConditions['mediaTypes'] = $defaultMediaType;
+        }
+        $activates = $this->getActivityService()->search($searchConditions, [], 0, PHP_INT_MAX);
+        $activityIds = ArrayToolkit::column($activates, 'id');
+        $courseTasks = $this->getCourseTaskService()->findTasksByActivityIds($activityIds);
+        $courseTasksInfo = [];
+        foreach ($courseTasks as $courseTask) {
+            $courseTasksInfo[] = [
+                'id' => $courseTask['id'],
+                'title' => $courseTask['title'],
+            ];
+        }
+
+        return $courseTasksInfo;
     }
 
     public function findSceneIdsByClassroomCourseSetId($courseSetId)

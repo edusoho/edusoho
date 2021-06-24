@@ -29,4 +29,6 @@ interface ActivityDao extends GeneralDaoInterface
     public function findActivitiesByCourseIdsAndType($courseIds, $mediaType);
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $mediaType);
+
+    public function findActivitiesByCourseSetId($courseSetId);
 }
