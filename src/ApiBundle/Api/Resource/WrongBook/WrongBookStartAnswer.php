@@ -5,10 +5,15 @@ namespace ApiBundle\Api\Resource\WrongBook;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use AppBundle\Common\ArrayToolkit;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
+use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class WrongBookStartAnswer extends AbstractResource
 {
@@ -17,19 +22,29 @@ class WrongBookStartAnswer extends AbstractResource
      */
     public function add(ApiRequest $request, $poolId)
     {
+        $pool = $this->getWrongQuestionService()->getPool($poolId);
+        $wrongQuestions = $this->getCollectDao()->search([], [], 0, 20);
+        $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
+        $items = $this->getItemService()->findItemsByIds($itemIds, true);
+        $answerScene = $this->initScene();
         $assessment = [
-            'name' => '',
+            'name' => '错题练习',
             'displayable' => 0,
             'description' => '',
             'bank_id' => 0,
-            'sections' => [],
+            'sections' => [
+                [
+                    'name' => '作业题目',
+                    'items' => $items,
+                ],
+            ],
         ];
 
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 
         $this->getAssessmentService()->openAssessment($assessment['id']);
 
-        $answerRecord = $this->getAnswerService()->startAnswer($sceneId, $assessment['id'], $this->getCurrentUser()['id']);
+        $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $this->getCurrentUser()['id']);
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
 
@@ -51,12 +66,27 @@ class WrongBookStartAnswer extends AbstractResource
         ];
     }
 
+    protected function initScene()
+    {
+        $answerScene = $this->getAnswerSceneService()->create([
+            'name' => '错题练习',
+            'limited_time' => 0,
+            'do_times' => 0,
+            'redo_interval' => 0,
+            'need_score' => 0,
+            'manual_marking' => 0,
+            'start_time' => 0,
+        ]);
+
+        return $answerScene;
+    }
+
     /**
      * @return AssessmentService
      */
     protected function getAssessmentService()
     {
-        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+        return $this->getBiz()->service('WrongBook:WrongBookAssessmentService');
     }
 
     /**
@@ -73,5 +103,29 @@ class WrongBookStartAnswer extends AbstractResource
     protected function getAnswerSceneService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->getBiz()->service('WrongBook:WrongQuestionService');
+    }
+
+    /**
+     * @return WrongQuestionCollectDao
+     */
+    protected function getCollectDao()
+    {
+        return $this->getBiz()->dao('WrongBook:WrongQuestionCollectDao');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:ItemService');
     }
 }

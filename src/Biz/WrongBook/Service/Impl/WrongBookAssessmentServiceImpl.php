@@ -3,6 +3,7 @@
 namespace Biz\WrongBook\Service\Impl;
 
 use Biz\WrongBook\Service\WrongBookAssessmentService;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Assessment\Service\Impl\AssessmentServiceImpl;
 
 class WrongBookAssessmentServiceImpl extends AssessmentServiceImpl implements WrongBookAssessmentService
@@ -62,6 +63,40 @@ class WrongBookAssessmentServiceImpl extends AssessmentServiceImpl implements Wr
 
     protected function createAssessmentSectionsAndItems($assessmentId, $sections)
     {
-        return [];
+        $assessmentSections = [];
+        $sections = $this->setSeq($sections);
+        foreach ($sections as $section) {
+            if (empty($section['items'])) {
+                continue;
+            }
+            $assessmentSections[] = $this->getSectionService()->createAssessmentSection($assessmentId, $section);
+        }
+
+        $assessment = $this->updateBasicAssessment($assessmentId, [
+            'total_score' => array_sum(ArrayToolkit::column($assessmentSections, 'total_score')),
+            'item_count' => array_sum(ArrayToolkit::column($assessmentSections, 'item_count')),
+            'question_count' => array_sum(ArrayToolkit::column($assessmentSections, 'question_count')),
+        ]);
+        $assessment['sections'] = $assessmentSections;
+
+        return $assessment;
+    }
+
+    protected function setSeq($sections)
+    {
+        $sectionSeq = 1;
+        $itemSeq = 1;
+        $questionSeq = 1;
+        foreach ($sections as &$section) {
+            $section['seq'] = $sectionSeq++;
+            foreach ($section['items'] as &$item) {
+                $item['seq'] = $itemSeq++;
+                foreach ($item['questions'] as &$question) {
+                    $question['seq'] = $questionSeq++;
+                }
+            }
+        }
+
+        return $sections;
     }
 }
