@@ -19,12 +19,21 @@ export default {
   computed: {
     answerResult() {
       let { response } = this.question.report;
+      const { answer } = this.question.question;
       const { answer_mode } = this.question.question;
 
       if (answer_mode === 'true_false') {
         response = _.map(response, function(item) {
           return item === 'T' ? '正确' : '错误';
         });
+      }
+
+      if (answer_mode === 'text') {
+        let result = '';
+        _.forEach(answer, function(item, index) {
+          result += `<div>填空(${index + 1})：正确答案：<span class="success">${item}</span>， 你的答案：<span class="danger">${response[index]}</span></div>`;
+        });
+        return result;
       }
 
       return `你的答案是<span class="danger"> ${_.join(response, '、')} </span>, 你答错了。`;

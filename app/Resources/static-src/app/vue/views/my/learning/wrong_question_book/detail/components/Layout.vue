@@ -8,7 +8,7 @@
 
     <a-divider style="margin: 16px 0;" />
 
-    <right-answer :question="question" />
+    <right-answer v-if="question.question.answer_mode !== 'text'" :question="question" />
 
     <answer-result :question="question" />
 
