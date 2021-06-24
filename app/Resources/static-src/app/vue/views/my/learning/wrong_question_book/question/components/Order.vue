@@ -5,15 +5,26 @@
     align="center"
     :size="2"
   >
-    1
-    <a-tag style="margin-right: 0;">2 分</a-tag>
+    {{ question.seq }}
+    <a-tag style="margin-right: 0;">{{ question.score }}分</a-tag>
   </a-space>
 </template>
+
+<script>
+export default {
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .question-order {
   position: absolute;
-  top: 0;
+  top: 16;
   left: 0;
 }
 </style>

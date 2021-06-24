@@ -32,6 +32,10 @@ export default {
     width: calc(100% - 72px);
     color: #666;
   }
+
+  /deep/ p {
+    margin: 0;
+  }
 }
 
 @media (max-width: 767px) {
