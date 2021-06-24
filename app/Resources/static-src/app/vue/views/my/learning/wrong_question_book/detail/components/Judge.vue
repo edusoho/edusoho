@@ -9,7 +9,6 @@
           :value="item.radio.val"
         >
           <div class="choose-answer-content">
-            <span>{{ item.radio.val }}.</span>
             <span class="choose-answer-text" v-html="item.radio.text" />
           </div>
         </a-radio>
@@ -23,7 +22,7 @@ import _ from 'lodash';
 import Layout from './Layout.vue';
 
 export default {
-  name: 'SingleChoice',
+  name: 'Judge',
 
   props: {
     question: {

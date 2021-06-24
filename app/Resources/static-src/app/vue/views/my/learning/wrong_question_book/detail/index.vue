@@ -27,7 +27,9 @@
       @on-search="onSearch"
     />
 
-    <question-item v-for="question in questionList" :key="question.id" :question="question" />
+    <template v-for="question in questionList">
+      <component :is="currentQuestionComponent(question.question.answer_mode)" :key="question.id" :question="question" />
+    </template>
 
   </a-page-header>
 </template>
@@ -38,7 +40,10 @@ import { WrongBookQuestionShow } from 'common/vue/service';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
-import QuestionItem from './QuestionItem.vue';
+import SingleChoice from './components/SingleChoice.vue';
+import Choice from './components/Choice.vue';
+import Judge from './components/Judge.vue';
+import Fill from './components/Fill.vue';
 
 export default {
   name: 'WrongQuestionDetail',
@@ -47,14 +52,24 @@ export default {
     CourseScreen,
     ClassroomScreen,
     QuestionBankScreen,
-    QuestionItem
+    SingleChoice,
+    Choice,
+    Judge,
+    Fill
   },
 
   data() {
     return {
       targetType: this.$route.params.target_type,
       targetId: this.$route.params.target_id,
-      questionList: []
+      questionList: [],
+      questionComponents: {
+        single_choice: 'SingleChoice',
+        choice: 'Choice',
+        uncertain_choice: 'Choice',
+        true_false: 'Judge',
+        text: 'Fill'
+      }
     }
   },
 
@@ -71,6 +86,10 @@ export default {
       };
       const res = await WrongBookQuestionShow.search(params);
       this.questionList = _.concat(this.questionList, res.data);
+    },
+
+    currentQuestionComponent(answerMode) {
+      return this.questionComponents[answerMode];
     },
 
     // 错题练习

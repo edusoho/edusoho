@@ -53,6 +53,81 @@ export default {
   .answer-content {
     margin-top: 16px;
   }
+
+  .choose-answer {
+    display: block;
+    position: relative;
+    font-weight: 400;
+
+    .ant-radio,
+    .ant-checkbox {
+      position: absolute;
+      top: 2px;
+      vertical-align: super;
+
+      & + span {
+        display: inline-block;
+        margin-left: 16px;
+      }
+    }
+
+    &.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+      margin-left: 0;
+    }
+
+    .choose-answer-content {
+      display: table;
+      white-space: normal;
+
+      .choose-answer-text {
+        display: table-cell;
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+
+    &--right {
+      color: #46c37b;
+    }
+
+    &--right {
+      .ant-radio-checked .ant-radio-inner,
+      .ant-checkbox-checked .ant-checkbox-inner {
+        border-color: #46c37b;
+
+        &::after {
+          background-color: #46c37b;
+        }
+      }
+
+      .ant-checkbox-checked .ant-checkbox-inner {
+        background-color: #46c37b;
+      }
+    }
+
+    &--wrong {
+      color: #ff5c3b;
+
+      .ant-radio-checked .ant-radio-inner,
+      .ant-checkbox-checked .ant-checkbox-inner {
+        border-color: #ff5c3b;
+
+        &::after {
+          background-color: #ff5c3b;
+        }
+      }
+
+      .ant-checkbox-checked .ant-checkbox-inner {
+        background-color: #ff5c3b;
+      }
+    }
+  }
+
+  .right-answer {
+    color: #46c37b;
+  }
 }
 
 @media (max-width: 767px) {

@@ -1,19 +1,19 @@
 <template>
   <layout :question="question">
     <template #answer>
-      <a-radio-group :default-value="question.report.response[0]">
-        <a-radio
-          :class="['choose-answer', getAnswerClass(item.radio.val)]"
+      <a-checkbox-group :default-value="question.report.response">
+        <a-checkbox
+          :class="['choose-answer', getAnswerClass(item.checkbox.val)]"
           v-for="(item, index) in question.question.response_points"
           :key="index"
-          :value="item.radio.val"
+          :value="item.checkbox.val"
         >
           <div class="choose-answer-content">
-            <span>{{ item.radio.val }}.</span>
-            <span class="choose-answer-text" v-html="item.radio.text" />
+            <span>{{ item.checkbox.val }}.</span>
+            <span class="choose-answer-text" v-html="item.checkbox.text" />
           </div>
-        </a-radio>
-      </a-radio-group>
+        </a-checkbox >
+      </a-checkbox-group>
     </template>
   </layout>
 </template>
@@ -23,7 +23,7 @@ import _ from 'lodash';
 import Layout from './Layout.vue';
 
 export default {
-  name: 'SingleChoice',
+  name: 'Choice',
 
   props: {
     question: {
