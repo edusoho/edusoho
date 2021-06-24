@@ -152,11 +152,18 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
-    public function searchMultiClass($conditions, $orderBys, $start, $limit)
+    public function searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit)
     {
         $conditions = $this->filterConditions($conditions);
 
         return $this->getMultiClassDao()->searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
+    }
+
+    public function searchMultiClass($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countMultiClass($conditions)

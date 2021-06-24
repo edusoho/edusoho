@@ -2387,6 +2387,7 @@ open_course.lesson.create_error: 课时创建失败
 
 # 班级
 classroom: 班级
+column: 专栏
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -4040,6 +4041,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.multi_class_menu: 在教班课
 my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题

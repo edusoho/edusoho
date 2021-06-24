@@ -2092,6 +2092,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+column: Column
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
@@ -3476,6 +3477,7 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.multi_class_menu: Multi Class
 my.teaching.open_course_menu: Open Course
 my.teaching.classroom.studen_count: Students
 my.teaching.classroom.course_count: Courses
