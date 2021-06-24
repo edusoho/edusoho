@@ -25,20 +25,30 @@ class ClassroomPool extends AbstractPool
 
         $sceneIds = [];
         if (!empty($conditions['classroomCourseSetId'])) {
-            $sceneIds = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
+            $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
         }
 
         if (!empty($conditions['classroomMediaType'])) {
             $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($pool['target_id'], $conditions['classroomMediaType']);
-            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds, $sceneIdsByClassroomMediaType);
+            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomMediaType);
         }
 
         if (!empty($conditions['classroomTaskId'])) {
             $sceneIdsByClassroomTaskId = $this->findSceneIdsByClassroomTaskId($conditions['classroomTaskId']);
-            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomTaskId : array_intersect($sceneIds, $sceneIdsByClassroomTaskId);
+            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomTaskId : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomTaskId);
+        }
+
+        if (!isset($sceneIds['sceneIds'])) {
+            $sceneIds = [];
+        } elseif ($sceneIds['sceneIds'] == []) {
+            $sceneIds = [-1];
         }
 
         return  $sceneIds;
+    }
+
+    public function prepareConditions($poolId, $conditions)
+    {
     }
 
     public function findSceneIdsByClassroomCourseSetId($courseSetId)
