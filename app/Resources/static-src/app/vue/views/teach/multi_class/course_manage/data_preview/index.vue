@@ -1,6 +1,8 @@
 <template>
   <div class="student-manage">
-    <iframe id="iframe" :src="`/admin/v2/multi_class/overview/${this.$route.params.id}`" frameborder="0" style="position:inherit; left:0; top:0; min-height: 600px; height:100%; width:100%; border:0px;" allowfullscreen="true" scrolling="yes" allow="screen-wake-lock"></iframe>
+    <iframe id="iframe" :src="`/admin/v2/multi_class/overview/${this.$route.params.id}`" 
+      frameborder="0" 
+      style="position:inherit; left:0; top:0; min-height: 600px; height:100%; width:100%; border:0px;" allowfullscreen="true" scrolling="yes" allow="screen-wake-lock"></iframe>
   </div>
 </template>
 

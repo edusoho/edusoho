@@ -77,7 +77,7 @@
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { MultiClass, MultiClassProduct } from 'common/vue/service/index.js';
-import Assistant from './course_manage/Assistant.vue';
+import Assistant from './course_manage/components/Assistant.vue';
 import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
 const columns = [
@@ -220,7 +220,7 @@ export default {
 
         paging.page = (paging.offset / paging.limit) + 1;
         paging.pageSize = Number(paging.limit);
-        paging.current = params.current;
+        paging.current = params.current || 1;
 
         this.multiClassList = data;
         this.paging = paging;

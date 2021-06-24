@@ -38,9 +38,9 @@ export default {
       if (!_.size(this.assistant)) return '- -';
       let temp = [];
       _.forEach(this.assistant, (assistant, index) => {
-        if(assistant.nickname) {
+        if (assistant.nickname) {
           temp.push(assistant.nickname);
-        }else {
+        } else {
           temp.push(assistant);
         }
       });
@@ -66,6 +66,8 @@ export default {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
     cursor: pointer;
   }
 }
