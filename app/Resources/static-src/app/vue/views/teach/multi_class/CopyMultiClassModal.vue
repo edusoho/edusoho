@@ -9,6 +9,7 @@
     @ok="handleOk"
     @cancel="handleCancel"
   >
+  <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form
       :form="form"
       :label-col="{ span: 4 }"
