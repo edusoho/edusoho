@@ -7,7 +7,6 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MultiClassController extends CourseBaseController
