@@ -27,7 +27,7 @@
       <div class="pull-left result-content">正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C正确答案是C</div>
     </div>
 
-    <analysis />
+    <analysis :analysis="question.analysis" />
 
     <slot name="situation" />
   </div>
