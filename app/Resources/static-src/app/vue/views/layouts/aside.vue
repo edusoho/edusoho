@@ -15,6 +15,12 @@
         </a-breadcrumb-item>
       </a-breadcrumb>
       <!-- <a class="pull-right" href="javascript:;" @click="$router.go(-1)">返回</a> -->
+      <a-popover v-if="headerTip" placement="bottomLeft">
+        <template slot="content">
+          <div class="aside-header-tip" v-html="headerTip" />
+        </template>
+        <span class="aside-header-title-icon"><a-icon theme="filled" type="question-circle" />{{headerTitle}}</span>
+      </a-popover>
     </div>
 
     <div class="aside-layout-main">
@@ -31,6 +37,16 @@ export default {
     breadcrumbs: {
       type: Array,
       required: true
+    },
+
+    headerTitle: {
+      type: String,
+      default: ''
+    },
+
+    headerTip: {
+      type: String,
+      default: ''
     }
   }
 }
@@ -72,11 +88,23 @@ body {
         color: #1e7fd9 !important;
       }
     }
+
+    .aside-header-title-icon {
+      color: #999;
+      margin-left: 2px;
+      vertical-align: sub;
+    }
   }
 
   .aside-layout-main {
     padding: 16px;
   }
+}
+
+.aside-header-tip {
+  width: 265px;
+  font-size: 14px;
+  font-weight: 400;
 }
 </style>
 
