@@ -1,7 +1,7 @@
 <template>
   <div class="clearfix analysis">
     <div class="pull-left analysis-label">解析：</div>
-    <div class="pull-left analysis-content" v-html="analysis"></div>
+    <div class="pull-left analysis-content" v-html="analysis || '无解析'"></div>
   </div>
 </template>
 

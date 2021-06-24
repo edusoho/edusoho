@@ -5,12 +5,23 @@
     <div class="pull-right clearfix situation-right">
       <div class="pull-left frequency">
         做错频次：
-        <span class="frequency-error">3 </span>次
+        <span class="frequency-error">{{ question.wrong_times }}</span>次
       </div>
-      <div class="pull-left time">错题时间：2021-04-15 20:20:00</div>
+      <div class="pull-left time">错题时间：{{ $dateFormat(question.updated_time) }}</div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .situation {
