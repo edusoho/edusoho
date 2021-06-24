@@ -7970,6 +7970,8 @@ log.module.wap: 'Wap'
 log.module.push: 'Push'
 log.module.question_bank: 'Question Bank'
 log.module.item_bank_exercise: 'Item Bank Exercise'
+log.module.multi_class_assistant: Multi class assistant
+log.module.multi_class: Multi class
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -10680,6 +10682,7 @@ exception.multi_class.multi_class_product_exist: The product name already exists
 exception.multi_class.multi_class_exist: The Multi class name already exists
 exception.multi_class.multi_class_not_exist: The Multi class name not exists
 exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
+exception.multi_class.assistant_require: The Multi class assistant need to be set up
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
 exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing

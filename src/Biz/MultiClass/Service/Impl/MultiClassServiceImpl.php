@@ -2,6 +2,7 @@
 
 namespace Biz\MultiClass\Service\Impl;
 
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -64,6 +65,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
 
             $this->getLogService()->info(
                 'multi_class',
@@ -107,6 +109,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+
             $this->getLogService()->info(
                 'multi_class',
                 'update_multi_class',
@@ -296,6 +300,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**
