@@ -58,12 +58,6 @@ export default {
     Analysis
   },
 
-  data() {
-    return {
-      value: 1
-    }
-  },
-
   computed: {
     rightAnswer() {
       const { answer } = this.question;
@@ -88,16 +82,4 @@ export default {
 
 <style lang="less" scoped>
 @import './common.less';
-
-.result {
-  margin-bottom: 16px;
-
-  .result-label {
-    color: #333;
-  }
-
-  .result-content {
-    width: calc(100% - 72px);
-  }
-}
 </style>
