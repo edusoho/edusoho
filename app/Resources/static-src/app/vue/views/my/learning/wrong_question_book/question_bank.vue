@@ -2,7 +2,7 @@
   <div>
     <a-input-search
       allowClear
-      placeholder="请输入题库名称"
+      placeholder="请输入题库练习名称"
       style="width: 224px; margin-top: 16px;"
       @search="onSearch"
     />
