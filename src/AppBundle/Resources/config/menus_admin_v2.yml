@@ -2,14 +2,13 @@ admin_v2:
     name: admin_v2.basic_menu
     parent: null
     children:
-        # 教学模块
-        admin_v2_teach:
+        # 教务模块
+        admin_v2_education:
             quick_entrance_icon_class: 'icon-color-green'
-            name: admin_v2.nav.teach
+            name: admin_v2.nav.education
             children:
-                # 课程管理（group）
-                admin_v2_course_group:
-                    name: admin_v2.course.basic_group
+                admin_v2_education_manage:
+                    name: admin_v2.education.basic_group
                     is_group: true
                     children:
                         # 产品库
@@ -28,6 +27,33 @@ admin_v2:
                                 admin_v2_multi_class_manage:
                                     name: admin_v2.multi_class.basic_menu
                                     router_name: admin_v2_multi_class
+                        # 教师管理
+                        admin_v2_teacher:
+                            quick_entrance_icon: 'teacher'
+                            name: admin_v2.teacher.basic_menu
+                            router_name: admin_v2_teacher
+                            children:
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.teacher.basic_menu
+                                    router_name: admin_v2_teacher
+                        # 助教管理
+                        admin_v2_assistant:
+                            name: admin_v2.assistant.basic_menu
+                            router_name: admin_v2_assistant
+                            children:
+                                admin_v2_assistant_manage:
+                                    name: admin_v2.assistant.basic_menu
+                                    router_name: admin_v2_assistant
+        # 教学模块
+        admin_v2_teach:
+            quick_entrance_icon_class: 'icon-color-green'
+            name: admin_v2.nav.teach
+            children:
+                # 课程管理（group）
+                admin_v2_course_group:
+                    name: admin_v2.course.basic_group
+                    is_group: true
+                    children:
                         # 课程管理
                         admin_v2_course_show:
                             quick_entrance_icon: 'course'
@@ -335,24 +361,6 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
-                        # 教师管理
-                        admin_v2_teacher:
-                            quick_entrance_icon: 'teacher'
-                            name: admin_v2.teacher.basic_menu
-                            router_name: admin_v2_teacher
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin_v2.teacher.basic_menu
-                                    router_name: admin_v2_teacher
-
-                        # 助教管理
-                        admin_v2_assistant:
-                            name: admin_v2.assistant.basic_menu
-                            router_name: admin_v2_assistant
-                            children:
-                                admin_v2_assistant_manage:
-                                    name: admin_v2.assistant.basic_menu
-                                    router_name: admin_v2_assistant
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
