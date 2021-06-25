@@ -66,12 +66,8 @@ if (!window.Vue) {
 }
 
 if (!window.Vue) {
-  Vue.filter('trans', (value) => {
-    if (_.isObject(value)) {
-      Translator.trans(value.text, value.options || {})
-    } else if (_.isString(value)) {
-      Translator.trans(value)
-    }
+  Vue.filter('trans', (value = '', options = {}) => {
+    return Translator.trans(value, options)
   })
 
   Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
