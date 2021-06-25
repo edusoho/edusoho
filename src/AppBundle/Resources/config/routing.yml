@@ -2457,6 +2457,10 @@ course_manage_homework_check:
   path: /course/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
 
+course_manage_wrong_questions:
+  path: /course/{id}/manage/wrong-questions/list
+  defaults: { _controller: AppBundle:Course/WrongQuestion:index }
+
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
   defaults: { _controller: AppBundle:Homework:startDo }
