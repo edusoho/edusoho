@@ -24,7 +24,7 @@
       </a-row>
 
       <div class="text-center">
-        <a-pagination class="mt6"
+        <a-pagination class="mt24"
                       v-if="paging && productList.length > 0"
                       v-model="paging.page"
                       :total="paging.total"

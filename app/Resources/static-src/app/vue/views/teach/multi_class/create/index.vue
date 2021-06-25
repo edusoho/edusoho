@@ -126,8 +126,11 @@
       </a-form-item>
 
       <a-form-item label="限购人数">
-        <a-input v-decorator="['', {
-
+        <a-input v-decorator="['maxStudentNum', {
+          rules: [
+            { required: true, message: '请输入限购人数' },
+            { min: 0, max: 5000, message: '人数范围在0-5000人' }
+          ]
         }]"></a-input>
       </a-form-item>
 
@@ -137,9 +140,21 @@
             { label: '开启', value: '1' },
             { label: '关闭', value: '0' },
           ]"
-          v-decorator="['sss', { initialValue: '1'}]"
+          v-decorator="['maxStudentNum', { initialValue: '1'}]"
         >
         </a-radio-group>
+      </a-form-item>
+      <div class="form-split-item">通知设置</div>
+      <a-form-item label="开课提醒">
+        <div class="pull-left">开课</div>
+        <a-select class="pull-left" v-decorator="['liveRemindTime', ]">
+          <a-select-option v-for="time in [0, 5, 15, 30, 60, 1440]" :value="time" :key="time">
+            <template v-if="time === 0">不通知</template>
+            <template v-else-if="time === 1440">1天前</template>
+            <template v-esle>{{ time }}分钟</template>
+          </a-select-option>
+        </a-select>
+        <div class="pull-left">自动发送提醒</div>
       </a-form-item>
     </a-form>
 
@@ -657,6 +672,16 @@ export default {
 
 .border-radius(@radius) {
   border-radius: @radius;
+}
+
+.form-split-item {
+  margin-bottom: 12px;
+  padding: 4px 0 4px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-align: right;
+  background-color: #f5f5f5;
 }
 
 @import "~app/less/admin-v2/variables.less";

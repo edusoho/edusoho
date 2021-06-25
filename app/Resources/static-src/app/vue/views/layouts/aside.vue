@@ -1,7 +1,7 @@
 <template>
   <div class="aside-layout">
     <div class="aside-layout-header">
-      <a-breadcrumb class="pull-left" separator="/">
+      <a-breadcrumb class="pull-left aside-layout-header__breadcrumb" separator="/">
         <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
           <template v-if="breadcrumb.href">
             <a :href="breadcrumb.href" target="_blank">{{ breadcrumb.name }}</a>
@@ -63,6 +63,10 @@ body {
     border-bottom: 1px solid #e8e8e8;
     color: #333;
     overflow: hidden;
+
+    &__breadcrumb {
+      margin-right: 8px;
+    }
 
     .ant-breadcrumb-separator,
     .ant-breadcrumb-link,
