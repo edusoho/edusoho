@@ -72,6 +72,8 @@
         <a-button type="link" @click="handleClickViewDetails(record)">查看详情</a-button>
       </template>
     </a-table>
+
+    <view-details-modal :visible="visible" @handle-cancel="handleCancel" />
   </div>
 </template>
 
@@ -109,8 +111,14 @@ const columns = [
   },
 ];
 
+import ViewDetailsModal from './ViewDetailsModal.vue';
+
 export default {
   name: 'CourseManageWrongQuestion',
+
+  components: {
+    ViewDetailsModal
+  },
 
   data() {
     return {
@@ -131,7 +139,8 @@ export default {
       pagination: {
         hideOnSinglePage: true
       },
-      loading: false
+      loading: false,
+      visible: false
     }
   },
 
@@ -174,7 +183,11 @@ export default {
     },
 
     handleClickViewDetails() {
+      this.visible = true;
+    },
 
+    handleCancel() {
+      this.visible = false;
     }
   }
 }
