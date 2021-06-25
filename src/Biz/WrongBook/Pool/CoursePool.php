@@ -2,12 +2,11 @@
 
 namespace Biz\WrongBook\Pool;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
-use Biz\User\CurrentUser;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
-use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Context\Biz;
+use Biz\WrongBook\Service\WrongQuestionService;
 
 class CoursePool extends AbstractPool
 {
@@ -47,17 +46,47 @@ class CoursePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($courseId, $conditions)
+    public function prepareConditions($courseSetId, $conditions)
     {
-        $courses=$this->getCourseService()->findPublishedCoursesByCourseSetId($courseId);
-        $conditions['courseIds']=ArrayToolkit::column($courses,'id');
-        $conditions=$this->handleConditions($conditions);
-        $tasks=$this->getCourseTaskService()->searchTasks($conditions,[],0,PHP_INT_MAX);
-        $coursesTitles=ArrayToolkit::columns($courses,['id','title']);
-        $result['plans']=array_combine($coursesTitles[0],$coursesTitles[1]);
-        $result['source']=array_unique(ArrayToolkit::column($tasks,'type'));
-        $taskTitles=ArrayToolkit::columns($tasks,['id','title']);
-        $result['tasks']=array_combine($taskTitles[0],$taskTitles[1]);
+        if (empty($conditions['courseId'])) {
+            $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
+        } else {
+            $courses[] = $this->getCourseService()->getCourse($conditions['courseId']);
+        }
+        $courses = ArrayToolkit::index($courses, 'id');
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $types = [];
+        $taskTitles = [];
+        $coursesTitles = [];
+        foreach ($courseIds as $key => $courseId) {
+            $activates = $this->findActivityByCourseId($courseId, true);
+
+            $sceneIds = $this->generateSceneIds($activates);
+            $questions = $this->getWrongQuestionService()->searchWrongQuestion(['answer_scene_ids' => $sceneIds], [], 0, PHP_INT_MAX);
+            $answerSceneIds = ArrayToolkit::column($questions, 'answer_scene_id');
+            if (empty($questions)) {
+                unset($courseIds[$key]);
+                unset($courses[$courseId]);
+                continue;
+            }
+            $coursesTitles[$key]['id'] = $courseId;
+            $coursesTitles[$key]['title'] = $courses[$courseId]['title'];
+            foreach ($activates as $k => $activate) {
+                if (in_array($activate['ext']['answerSceneId'], $answerSceneIds)) {
+                    if (!empty($conditions['courseMediaType']) && $conditions['courseMediaType'] != $activate['mediaType']) {
+                        continue;
+                    }
+                    $task = current($this->getCourseTaskService()->findTasksByActivityIds([$activate['id']]));
+                    $types[] = $activate['mediaType'];
+                    $taskTitles[$k]['id'] = $task['id'];
+                    $taskTitles[$k]['title'] = $task['title'];
+                }
+            }
+        }
+        $result['course'] = $coursesTitles;
+        $result['mediaTypes'] = array_unique($types);
+        $result['tasks'] = $taskTitles;
+
         return $result;
     }
 
@@ -69,6 +98,16 @@ class CoursePool extends AbstractPool
         $activates = array_merge($activityTestPapers, $activityHomeWorks, $activityExercises);
 
         return $this->generateSceneIds($activates);
+    }
+
+    public function findActivityByCourseId($courseId)
+    {
+        $activityTestPapers = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'testpaper', true);
+        $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'homework', true);
+        $activityExercises = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'exercise', true);
+        $activates = array_merge($activityTestPapers, $activityHomeWorks, $activityExercises);
+
+        return $activates;
     }
 
     public function findSceneIdsByCourseMediaType($targetId, $mediaType)
@@ -92,26 +131,6 @@ class CoursePool extends AbstractPool
         return $this->findSceneIdsByCourseId($courseTask['courseId']);
     }
 
-    protected function handleConditions($conditions)
-    {
-        if(empty($conditions['courseId'])){
-            unset($conditions['courseId']);
-        }else{
-            unset($conditions['courseIds']);
-        }
-        if(!empty($conditions['courseMediaType'])){
-            $conditions['type']=$conditions['courseMediaType'];
-            unset($conditions['courseMediaType']);
-        }else{
-            $conditions['types']=['testpaper','exercise','homework'];
-        }
-        if(!empty($conditions['courseTaskId'])){
-            $conditions['id']=$conditions['courseTaskId'];
-            unset($conditions['courseTaskId']);
-        }
-        return $conditions;
-    }
-
     protected function generateSceneIds($activates)
     {
         $sceneIds = [];
@@ -133,6 +152,14 @@ class CoursePool extends AbstractPool
     }
 
     /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->biz->service('WrongBook:WrongQuestionService');
+    }
+
+    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -147,6 +174,7 @@ class CoursePool extends AbstractPool
     {
         return $this->biz->service('Task:TaskService');
     }
+
     /**
      * @return CourseService
      */
