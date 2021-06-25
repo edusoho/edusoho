@@ -457,6 +457,7 @@ admin.operation.query_menu.basic_tab: Use Query
 admin_v2.basic_menu: Admin
 
 # 新版后台顶部导航
+admin_v2.nav.education: Education
 admin_v2.nav.teach: Teach
 admin_v2.nav.marketing: Marketing
 admin_v2.nav.operating: Operating
@@ -464,6 +465,9 @@ admin_v2.nav.user: User
 admin_v2.nav.trade: Trade
 admin_v2.nav.statistics: Statistics
 admin_v2.nav.system: System
+
+# 教务-教务管理
+admin_v2.education.basic_group: Education Manage
 
 # 教学模块-课程管理
 

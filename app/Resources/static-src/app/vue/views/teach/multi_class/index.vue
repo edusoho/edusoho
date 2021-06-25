@@ -1,5 +1,5 @@
 <template>
-   <aside-layout :breadcrumbs="[{ name: '班课管理' }]">
+   <aside-layout :breadcrumbs="[{ name: '班课管理' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
         <a-input-search placeholder="请输入班课名称" style="width: 224px"
@@ -172,7 +172,9 @@ export default {
         pageSize: 10,
       },
       copyModalVisible: false,
-      copyMultiClassId: 0
+      copyMultiClassId: 0,
+      headerTitle: '什么是班课？',
+      headerTip: '班课是以班级形式按照特定的时间安排所进行的课程'
     }
   },
   created() {
