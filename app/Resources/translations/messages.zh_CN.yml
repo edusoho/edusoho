@@ -9183,6 +9183,8 @@ log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
 log.module.item_bank_exercise: 题库练习
+log.module.multi_class_assistant: 班课助教
+log.module.multi_class: 班课
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -11938,6 +11940,7 @@ exception.multi_class.multi_class_course_exist: 班课中已存在此课程
 exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设置为助教
 exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
+exception.multi_class.assistant_require: 班课需要设置助教
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
