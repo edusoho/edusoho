@@ -25,7 +25,7 @@ class MultiClassAssistant extends AbstractResource
     public function search(ApiRequest $request, $multiClassId)
     {
         $user = $this->getCurrentUser();
-        if ($user->hasPermission('admin_v2_education')){
+        if (!$user->hasPermission('admin_v2_education')){
             throw new AccessDeniedException();
         }
 
