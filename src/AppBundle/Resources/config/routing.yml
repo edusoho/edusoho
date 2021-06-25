@@ -2682,6 +2682,10 @@ classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
+classroom_manage_wrong_questions:
+  path: /classroom/{id}/manage/wrong_book/list
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:wrongQuestion }
+
 classroom_data_statistics:
   path:  /classroom/{id}/manage/data/statistics
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:statistics }

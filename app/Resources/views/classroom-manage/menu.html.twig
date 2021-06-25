@@ -58,6 +58,12 @@
             {{ 'classroom.homework_check'|trans }}
           </a>
         </li>
+
+        <li class="cd-sidebar__item {% if side_nav == 'wrong-questions' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_wrong_questions', {id: classroom.id}) }}">
+            {{ '学员错题'|trans }}
+          </a>
+        </li>
       {% endif %}
 
       {% if canManage %}
