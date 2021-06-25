@@ -21,6 +21,11 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->getByFields(['studentId' => $studentId, 'multiClassId' => $multiClassId]);
     }
 
+    public function findByAssistantIdAndCourseId($assistantId, $courseId)
+    {
+        return $this->findByFields(['assistantId' => $assistantId, 'courseId' => $courseId]);
+    }
+
     public function declares()
     {
         return [
