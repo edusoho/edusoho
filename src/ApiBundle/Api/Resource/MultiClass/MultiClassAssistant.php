@@ -9,11 +9,11 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class MultiClassAssistant extends AbstractResource
 {
@@ -21,10 +21,14 @@ class MultiClassAssistant extends AbstractResource
      * @param ApiRequest $request
      * @param $multiClassId
      * @return mixed
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request, $multiClassId)
     {
+        $user = $this->getCurrentUser();
+        if ($user->hasPermission('admin_v2_education')){
+            throw new AccessDeniedException();
+        }
+
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
