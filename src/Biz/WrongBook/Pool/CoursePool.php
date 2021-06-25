@@ -54,6 +54,8 @@ class CoursePool extends AbstractPool
             $courses[] = $this->getCourseService()->getCourse($conditions['courseId']);
         }
         $courses = ArrayToolkit::index($courses, 'id');
+        $tasks = $this->getCourseTaskService()->findTasksByCourseSetId($courseSetId);
+        $tasks = ArrayToolkit::index($tasks, 'activityId');
         $courseIds = ArrayToolkit::column($courses, 'id');
         $types = [];
         $taskTitles = [];
@@ -71,15 +73,15 @@ class CoursePool extends AbstractPool
             }
             $coursesTitles[$key]['id'] = $courseId;
             $coursesTitles[$key]['title'] = $courses[$courseId]['title'];
+
             foreach ($activates as $k => $activate) {
                 if (in_array($activate['ext']['answerSceneId'], $answerSceneIds)) {
                     if (!empty($conditions['courseMediaType']) && $conditions['courseMediaType'] != $activate['mediaType']) {
                         continue;
                     }
-                    $task = current($this->getCourseTaskService()->findTasksByActivityIds([$activate['id']]));
                     $types[] = $activate['mediaType'];
-                    $taskTitles[$k]['id'] = $task['id'];
-                    $taskTitles[$k]['title'] = $task['title'];
+                    $taskTitles[$k]['id'] = $tasks[$activate['id']]['id'];
+                    $taskTitles[$k]['title'] = $tasks[$activate['id']]['title'];
                 }
             }
         }
