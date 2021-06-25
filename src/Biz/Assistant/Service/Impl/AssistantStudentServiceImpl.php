@@ -3,6 +3,7 @@
 namespace Biz\Assistant\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\AssistantException;
 use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
@@ -31,6 +32,21 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->update($id, $fields);
     }
 
+    public function get($id)
+    {
+        return $this->getAssistantStudentDao()->get($id);
+    }
+
+    public function delete($id)
+    {
+        $assistantStudent = $this->get($id);
+        if (empty($assistantStudent)) {
+            $this->createNewException(AssistantException::ASSISTANT_STUDENT_NOT_FOUND());
+        }
+
+        return $this->getAssistantStudentDao()->delete($id);
+    }
+
     protected function filterAssistantStudentFields($fields)
     {
         return ArrayToolkit::parts(
@@ -47,6 +63,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId)
     {
         return $this->getAssistantStudentDao()->getByStudentIdAndMultiClassId($studentId, $multiClassId);
+    }
+
+    public function getByStudentIdAndCourseId($studentId, $courseId)
+    {
+        return $this->getAssistantStudentDao()->getByStudentIdAndCourseId($studentId, $courseId);
     }
 
     public function setAssistantStudents($courseId, $multiClassId)

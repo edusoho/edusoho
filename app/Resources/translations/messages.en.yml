@@ -10683,6 +10683,7 @@ exception.multi_class.multi_class_exist: The Multi class name already exists
 exception.multi_class.multi_class_not_exist: The Multi class name not exists
 exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
 exception.multi_class.assistant_require: The Multi class assistant need to be set up
+exception.multi_class.assistant_student_not_found: Assistant student relationship not found
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
 exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing

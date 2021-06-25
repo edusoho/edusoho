@@ -11941,6 +11941,7 @@ exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设�
 exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
 exception.multi_class.assistant_require: 班课需要设置助教
+exception.multi_class.assistant_student_not_found: 助教学员关系未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
