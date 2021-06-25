@@ -19,7 +19,9 @@
         <template slot="content">
           <div class="aside-header-tip" v-html="headerTip" />
         </template>
-        <span class="aside-header-title-icon"><a-icon theme="filled" type="question-circle" />{{headerTitle}}</span>
+        <span class="aside-header-title-icon">
+          <a-icon theme="filled" type="question-circle" /><span class="icon-circle">{{headerTitle}}</span>
+        </span>
       </a-popover>
     </div>
 
@@ -95,8 +97,11 @@ body {
 
     .aside-header-title-icon {
       color: #999;
-      margin-left: 2px;
+      margin-left: 4px;
       vertical-align: sub;
+      .icon-circle {
+        margin-left: 4px;
+      }
     }
   }
 
