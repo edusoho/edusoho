@@ -28,7 +28,11 @@
     />
 
     <template v-for="question in questionList">
-      <component :is="currentQuestionComponent(question.question.answer_mode)" :key="question.id" :question="question" />
+      <component
+        :is="currentQuestionComponent(question.question.answer_mode)"
+        :key="question.id"
+        :question="question"
+      />
     </template>
 
   </a-page-header>
@@ -104,10 +108,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.wrong-question-detail {
-  padding: 24px 16px;
-  background-color: #fff;
-}
-</style>
