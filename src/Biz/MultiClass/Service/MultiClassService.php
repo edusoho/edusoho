@@ -12,6 +12,8 @@ interface MultiClassService
 
     public function findByProductId($productId);
 
+    public function findMultiClassesByCreator($creator);
+
     public function getMultiClass($id);
 
     public function createMultiClass($fields);
@@ -21,6 +23,16 @@ interface MultiClassService
     public function updateMultiClass($id, $fields);
 
     public function deleteMultiClass($id);
+
+    public function searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
+
+    public function searchUserTeachMultiClass($userId, $conditions, $start, $limit);
+
+    public function countUserTeachMultiClass($userId, $conditions);
+
+    public function searchMultiClass($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function countMultiClass($conditions);
 
     public function cloneMultiClass($id, $cloneMultiClass);
 

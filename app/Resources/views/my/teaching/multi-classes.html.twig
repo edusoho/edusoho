@@ -1,0 +1,70 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.multi_class_menu'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-multi-class' %}
+
+{% block main %}
+  <div role="my-teaching-course-sets">
+
+    {% for multiClass in multiClasses %}
+      {% set course = courses[multiClass.courseId] %}
+      {% set courseSet = courseSets[course.courseSetId] %}
+      {% set manageUrl = 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') ?
+        path('course_set_manage_course_info',{courseSetId:courseSet.id, courseId: course.id}) : path('course_set_manage_course_students',{courseSetId:courseSet.id, courseId: course.id})
+      %}
+      <div class="cd-mb32">
+        <div class="courseset-manage-header clearfix">
+          <div class="clearfix">
+            <a target="_blank" href="{{ manageUrl }}">
+              <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"/>
+            </a>
+
+            <div class="courseset-manage-header-info">
+              <div class="courseset-manage-header-info__title text-overflow">
+                <span class="cd-dark-major">{{ multiClass.title|raw }}</span>
+              </div>
+
+              <div class="courseset-manage-header-info__price color-danger">
+                {% include 'common/price.html.twig' with {'productPrice': course.price} %}
+              </div>
+            </div>
+
+            <div class="courseset-manage-header-btn">
+              <a class="cd-btn cd-btn-primary" target="_blank" href="{{ manageUrl }}">{{ 'course.manage_btn'|trans }}</a>
+              {% if courseSet.status != 'published' %}
+                <a class="cd-btn cd-btn-ghost-default cd-ml16" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
+              {% else %}
+                <a class="cd-btn cd-btn-ghost-default cd-ml16" target="_blank" href="{{ path('course_show', {id: course.id }) }}">{{'my.learning.course.watch'|trans}}</a>
+              {% endif %}
+            </div>
+
+            <div class="courseset-manage-header-data hidden-xs">
+              <span class="cd-text-medium">{{ 'my.teaching.multi_class.student_num'|trans }}</span>
+              <div class="cd-mt16 cd-dark-major">
+                <span class="courseset-manage-header-data__num">{{ course.studentNum }}</span>
+              </div>
+            </div>
+
+            <div class="courseset-manage-header-data hidden-xs">
+              <span class="cd-text-medium">{{ 'my.teaching.multi_class.status'|trans }}</span>
+              <div class="cd-mt16 cd-dark-major">
+                <span class="courseset-manage-header-data__num">{{ dict_text('multiClassStatus', course.liveStatus) }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">
+        {{ 'site.datagrid.empty'|trans }}
+      </div>
+    {% endfor %}
+
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  </div>
+{% endblock %}

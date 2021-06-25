@@ -15,15 +15,13 @@
       </div>
     {% else %}
       <div class="empty">
-        {% if has_permission('admin_v2_course_content_manage') %}
-          <a class="cd-link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
-            {% if filter|default('normal') == 'live' %}
-              {{ 'my.teaching.course_set.live_empty_hint'|trans }}
-            {% else %}
-              {{ 'my.teaching.course_set.empty_hint'|trans }}
-            {% endif %}
-          </a>
-        {% endif %}
+        <a class="cd-link-primary" href="{{ path('course_set_manage_create') }}" target="_blank">
+          {% if filter|default('normal') == 'live' %}
+            {{ 'my.teaching.course_set.live_empty_hint'|trans }}
+          {% else %}
+            {{ 'my.teaching.course_set.empty_hint'|trans }}
+          {% endif %}
+        </a>
       </div>
     {% endfor %}
 

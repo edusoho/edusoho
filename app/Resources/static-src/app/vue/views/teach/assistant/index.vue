@@ -7,7 +7,6 @@
         :allowClear="true"
         @search="onSearch"
       />
-      <a-button class="pull-right" type="primary" @click="showPermissionModal">助教权限设置</a-button>
     </div>
 
     <a-table
@@ -23,9 +22,9 @@
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a-button 
-        slot="action" 
-        slot-scope="item" 
+      <a-button
+        slot="action"
+        slot-scope="item"
         type="link"
         @click="edit(item.id)">查看</a-button>
     </a-table>
@@ -37,11 +36,6 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-
-    <permission-modal
-      :visible="permissionModalVisible"
-      @cancel-permission-modal="hidePermissionModal"
-    />
   </aside-layout>
 </template>
 
@@ -50,7 +44,6 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import PermissionModal from './permissionModal.vue';
 
 const columns = [
   {
@@ -72,7 +65,6 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    PermissionModal
   },
   data() {
     return {
@@ -83,7 +75,6 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
-      permissionModalVisible: false
     };
   },
   created() {
@@ -128,14 +119,6 @@ export default {
     close() {
       this.visible = false;
     },
-
-    showPermissionModal() {
-      this.permissionModalVisible = true;
-    },
-
-    hidePermissionModal() {
-      this.permissionModalVisible = false;
-    }
   },
 };
 </script>
