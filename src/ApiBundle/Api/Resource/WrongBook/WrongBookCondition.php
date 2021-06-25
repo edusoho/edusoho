@@ -9,7 +9,7 @@ use Biz\WrongBook\WrongBookException;
 
 class WrongBookCondition extends AbstractResource
 {
-    public function get(ApiRequest $request, $poolId)
+    public function search(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
         if (empty($pool)) {

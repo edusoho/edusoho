@@ -4,7 +4,10 @@ namespace Biz\WrongBook\Pool;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
+use Biz\User\CurrentUser;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Context\Biz;
 
 class CoursePool extends AbstractPool
 {
@@ -44,8 +47,18 @@ class CoursePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function prepareConditions($courseId, $conditions)
     {
+        $courses=$this->getCourseService()->findPublishedCoursesByCourseSetId($courseId);
+        $conditions['courseIds']=ArrayToolkit::column($courses,'id');
+        $conditions=$this->handleConditions($conditions);
+        $tasks=$this->getCourseTaskService()->searchTasks($conditions,[],0,PHP_INT_MAX);
+        $coursesTitles=ArrayToolkit::columns($courses,['id','title']);
+        $result['plans']=array_combine($coursesTitles[0],$coursesTitles[1]);
+        $result['source']=array_unique(ArrayToolkit::column($tasks,'type'));
+        $taskTitles=ArrayToolkit::columns($tasks,['id','title']);
+        $result['tasks']=array_combine($taskTitles[0],$taskTitles[1]);
+        return $result;
     }
 
     public function findSceneIdsByCourseId($courseId)
@@ -77,6 +90,26 @@ class CoursePool extends AbstractPool
         }
 
         return $this->findSceneIdsByCourseId($courseTask['courseId']);
+    }
+
+    protected function handleConditions($conditions)
+    {
+        if(empty($conditions['courseId'])){
+            unset($conditions['courseId']);
+        }else{
+            unset($conditions['courseIds']);
+        }
+        if(!empty($conditions['courseMediaType'])){
+            $conditions['type']=$conditions['courseMediaType'];
+            unset($conditions['courseMediaType']);
+        }else{
+            $conditions['types']=['testpaper','exercise','homework'];
+        }
+        if(!empty($conditions['courseTaskId'])){
+            $conditions['id']=$conditions['courseTaskId'];
+            unset($conditions['courseTaskId']);
+        }
+        return $conditions;
     }
 
     protected function generateSceneIds($activates)
@@ -113,5 +146,12 @@ class CoursePool extends AbstractPool
     protected function getCourseTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
