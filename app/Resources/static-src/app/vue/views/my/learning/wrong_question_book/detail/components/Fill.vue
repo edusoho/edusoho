@@ -3,21 +3,11 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import Layout from './Layout.vue';
+import answerMixin from './answerMixin.js';
 
 export default {
   name: 'Fill',
 
-  props: {
-    question: {
-      type: Object,
-      required: true
-    }
-  },
-
-  components: {
-    Layout
-  }
+  mixins: [answerMixin]
 }
 </script>
