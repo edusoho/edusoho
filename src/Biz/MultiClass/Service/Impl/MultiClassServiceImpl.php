@@ -167,32 +167,36 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
     public function searchUserTeachMultiClass($userId, $conditions, $start, $limit)
     {
-        $multiClasses = $this->findMultiClassesByCreator($userId);
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
-        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
-        $multiClassIds = array_unique($multiClassIds);
+        $multiClassIds = $this->findUserTeachMultiClassIds($userId);
         if (empty($multiClassIds)) {
             return [];
         }
 
-        $conditions['ids'] = $multiClassIds;
+        $conditions['ids'] = array_values($multiClassIds);
 
         return $this->searchMultiClass($conditions, ['createdTime' => 'desc'], $start, $limit);
     }
 
     public function countUserTeachMultiClass($userId, $conditions)
     {
-        $multiClasses = $this->findMultiClassesByCreator($userId);
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
-        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
-        $multiClassIds = array_unique($multiClassIds);
+        $multiClassIds = $this->findUserTeachMultiClassIds($userId);
         if (empty($multiClassIds)) {
             return 0;
         }
 
-        $conditions['ids'] = $multiClassIds;
+        $conditions['ids'] = array_values($multiClassIds);
 
         return $this->countMultiClass($conditions);
+    }
+
+    protected function findUserTeachMultiClassIds($userId)
+    {
+        $multiClasses = $this->findMultiClassesByCreator($userId);
+        $members = $this->getCourseMemberService()->findMembersByUserIdAndRoles($userId, ['assistant', 'teacher']);
+        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
+        $multiClassIds = array_unique($multiClassIds);
+
+        return array_values($multiClassIds);
     }
 
     public function searchMultiClass($conditions, $orderBys, $start, $limit, $columns = [])

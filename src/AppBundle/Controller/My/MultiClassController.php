@@ -40,11 +40,11 @@ class MultiClassController extends CourseBaseController
             }
 
             $course['liveStatus'] = 'live';
-            if ($firstLive['startTime'] > $currentTime) {
+            if (current($firstLive)['startTime'] > $currentTime) {
                 $course['liveStatus'] = 'notStart';
             }
 
-            if ($lastLive['endTime'] < $currentTime) {
+            if (current($lastLive)['endTime'] < $currentTime) {
                 $course['liveStatus'] = 'end';
             }
         }
