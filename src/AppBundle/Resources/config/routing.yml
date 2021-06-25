@@ -642,7 +642,7 @@ my_wrong_question_book:
     defaults: { _controller: AppBundle:My/WrongQuestionBook:index }
 
 my_wrong_question_book_target_detail:
-    path: /my/wrong_question_book/target_type/{targetType}/target_id/{targetId}
+    path: /my/wrong_question_book/wrong_questions
     defaults: { _controller: AppBundle:My/WrongQuestionBook:detail }
 
 my_unclaimed_certificates:

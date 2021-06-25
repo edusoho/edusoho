@@ -1,7 +1,14 @@
 import Vue from 'common/vue';
 import Router from 'vue-router';
-import routes from 'app/vue/router/my/learning/wrong_question_book/detail/index.js';
 import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
+
+const routes = [
+  {
+    path: '/target_type/:target_type/target_id/:target_id',
+    name: 'WrongQuestionBookDetail',
+    component: () => import(/* webpackChunkName: "app/vue/dist/WrongQuestionBookDetail" */ 'app/vue/views/my/learning/wrong_question_book/detail/index.vue')
+  }
+];
 
 const router = new Router({
   mode: 'hash',
