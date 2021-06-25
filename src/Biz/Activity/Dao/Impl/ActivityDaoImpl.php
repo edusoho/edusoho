@@ -59,6 +59,14 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->findByFields(['fromCourseSetId' => $courseSetId, 'mediaType' => $mediaType]);
     }
 
+    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $mediaType)
+    {
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseSetId IN({$marks}) AND mediaType = ?;";
+
+        return $this->db()->fetchAll($sql, array_merge($courseSetIds, [$mediaType]));
+    }
+
     public function findActivitiesByCourseIdsAndType($courseIds, $mediaType)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
