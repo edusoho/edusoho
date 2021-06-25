@@ -41,16 +41,19 @@ class WrongBookQuestionShow extends AbstractResource
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
         $sources = $this->getWrongQuestionSources(array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id')));
-        foreach ($wrongQuestions as &$wrongQuestion) {
+        $wrongQuestionInfo = [];
+        foreach ($wrongQuestions as $wrongQuestion) {
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
             foreach ($item['questions'] as &$question) {
                 $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
                 $question['source'] = $sources[$wrongQuestion['answer_scene_id']];
+                $question['source']['submit_time'] = $wrongQuestion['submit_time'];
+                $question['source']['wrong_times'] = $wrongQuestion['wrong_times'];
             }
-            $wrongQuestion['section']['item'] = [$item];
+            $wrongQuestionInfo[] = $item;
         }
 
-        return $wrongQuestions;
+        return $wrongQuestionInfo;
     }
 
     protected function getWrongQuestionSources($answerSceneIds)
@@ -75,7 +78,7 @@ class WrongBookQuestionShow extends AbstractResource
                 }
             } else {
                 $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
-                $source['mainSource'] = $exerciseModule['type'];
+                $source['mainSource'] = $exerciseModule['title'];
             }
             $sources[$answerSceneId] = $source;
         });
