@@ -35,6 +35,17 @@
       />
     </template>
 
+    <div class="text-center mt20" v-if="loading">
+      <a-spin />
+    </div>
+
+    <a-pagination
+      class="text-center mt48"
+      :hide-on-single-page="true"
+      v-model="pagination.current"
+      :total="pagination.total"
+      @change="onChange"
+    />
   </a-page-header>
 </template>
 
@@ -67,6 +78,10 @@ export default {
       targetType: this.$route.params.target_type,
       targetId: this.$route.params.target_id,
       questionList: [],
+      loading: false,
+      pagination: {
+        current: 1
+      },
       questionComponents: {
         single_choice: 'SingleChoice',
         choice: 'Choice',
@@ -83,13 +98,18 @@ export default {
 
   methods: {
     async fetchWrongBookQuestion() {
+      this.loading = true;
       const params = {
         id: this.targetId,
         targetType: this.targetType,
-        courseId: 72
+        courseId: 72,
+        offset: (this.pagination.current - 1) * 10,
+        limit: 10
       };
-      const res = await WrongBookQuestionShow.search(params);
-      this.questionList = _.concat(this.questionList, res.data);
+      const { paging, data } = await WrongBookQuestionShow.search(params);
+      this.pagination.total = Number(paging.total);
+      this.loading = false;
+      this.questionList = data;
     },
 
     currentQuestionComponent(answerMode) {
@@ -104,6 +124,11 @@ export default {
     // 错题搜索
     onSearch(values) {
       console.log(values);
+    },
+
+    // 翻页
+    onChange() {
+      this.fetchWrongBookQuestion();
     }
   }
 }
