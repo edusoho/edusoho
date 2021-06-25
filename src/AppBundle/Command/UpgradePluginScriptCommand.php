@@ -17,7 +17,7 @@ class UpgradePluginScriptCommand extends BaseCommand
             ->addArgument('code', InputArgument::REQUIRED, '插件code')
             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
             ->addArgument('index', InputArgument::REQUIRED, '执行的序号')
-            ->setDescription('用于命令行中执行插件指定版本的升级脚本');
+            ->setDescription('用于命令行中执行插件指定版本的升级脚本，插件升级脚本中执行数据的方法必须为installData');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
