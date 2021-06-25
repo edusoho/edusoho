@@ -2,8 +2,8 @@
 
 namespace Biz\MultiClass\Service\Impl;
 
-use Biz\Assistant\Service\AssistantStudentService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
@@ -172,7 +172,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             return [];
         }
 
-        $conditions['ids'] = array_values($multiClassIds);
+        $conditions['ids'] = $multiClassIds;
 
         return $this->searchMultiClass($conditions, ['createdTime' => 'desc'], $start, $limit);
     }
@@ -184,7 +184,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             return 0;
         }
 
-        $conditions['ids'] = array_values($multiClassIds);
+        $conditions['ids'] = $multiClassIds;
 
         return $this->countMultiClass($conditions);
     }
