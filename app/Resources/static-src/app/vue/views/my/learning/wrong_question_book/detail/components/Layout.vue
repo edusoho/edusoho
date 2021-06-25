@@ -6,7 +6,7 @@
       <slot name="answer" />
     </div>
 
-    <a-divider style="margin: 16px 0;" />
+    <a-divider v-if="question.question.answer_mode !== 'text'" style="margin: 16px 0;" />
 
     <right-answer v-if="question.question.answer_mode !== 'text'" :question="question" />
 
@@ -78,6 +78,7 @@ export default {
     .choose-answer-content {
       display: table;
       white-space: normal;
+      color: #666;
 
       .choose-answer-text {
         display: table-cell;
@@ -90,9 +91,11 @@ export default {
 
     &--right {
       color: #46c37b;
-    }
 
-    &--right {
+      .choose-answer-content {
+        color: #46c37b;
+      }
+
       .ant-radio-checked .ant-radio-inner,
       .ant-checkbox-checked .ant-checkbox-inner {
         border-color: #46c37b;
@@ -109,6 +112,10 @@ export default {
 
     &--wrong {
       color: #ff5c3b;
+
+      .choose-answer-content {
+        color: #ff5c3b;
+      }
 
       .ant-radio-checked .ant-radio-inner,
       .ant-checkbox-checked .ant-checkbox-inner {

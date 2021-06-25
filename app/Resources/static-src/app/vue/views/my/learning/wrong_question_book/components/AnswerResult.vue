@@ -52,6 +52,7 @@ export default {
 
   .answer-result-content {
     width: calc(100% - 72px);
+    color: #666;
 
     /deep/ .danger {
       color: #ff5c3b;
