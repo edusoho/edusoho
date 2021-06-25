@@ -13,6 +13,42 @@ use Biz\System\Service\LogService;
 
 class AssistantStudentServiceImpl extends BaseService implements AssistantStudentService
 {
+    public function create($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, ['multiClassId', 'studentId', 'assistantId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $fields = $this->filterAssistantStudentFields($fields);
+
+        return $this->getAssistantStudentDao()->create($fields);
+    }
+
+    public function update($id, $fields)
+    {
+        $fields = $this->filterAssistantStudentFields($fields);
+
+        return $this->getAssistantStudentDao()->update($id, $fields);
+    }
+
+    protected function filterAssistantStudentFields($fields)
+    {
+        return ArrayToolkit::parts(
+            $fields,
+            [
+                'courseId',
+                'studentId',
+                'assistantId',
+                'multiClassId',
+            ]
+        );
+    }
+
+    public function getByStudentIdAndMultiClassId($studentId, $multiClassId)
+    {
+        return $this->getAssistantStudentDao()->getByStudentIdAndMultiClassId($studentId, $multiClassId);
+    }
+
     public function setAssistantStudents($courseId, $multiClassId)
     {
         if (empty($multiClassId) || empty($courseId)) {
