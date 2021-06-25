@@ -4,9 +4,9 @@
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="max-width: 860px;">
       <a-form-item label="课程类型">
         <a-radio-group
-          :options="[{ label: '普通课程', value: 'normal' }, { label: '直播课程', value: 'live' }]"
+          :options="[{ label: '直播大班课', value: 'live' }]"
           v-decorator="['type', {
-            initialValue: 'normal'
+            initialValue: 'live'
           }]"
         />
       </a-form-item>
