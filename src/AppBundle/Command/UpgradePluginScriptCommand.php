@@ -16,6 +16,7 @@ class UpgradePluginScriptCommand extends BaseCommand
         $this->setName('util:upgrade-plugin-script')
             ->addArgument('code', InputArgument::REQUIRED, '插件code')
             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
+            ->addArgument('index', InputArgument::REQUIRED, '执行的序号')
             ->setDescription('用于命令行中执行插件指定版本的升级脚本');
     }
 
@@ -25,8 +26,9 @@ class UpgradePluginScriptCommand extends BaseCommand
 
         $code = $input->getArgument('code');
         $version = $input->getArgument('version');
+        $index = $input->getArgument('index');
 
-        $this->executeScript($code, $version);
+        $this->executeScript($code, $version, $index);
         $output->writeln('<info>执行脚本</info>');
 
         PluginUtil::refresh();
@@ -35,16 +37,15 @@ class UpgradePluginScriptCommand extends BaseCommand
         $output->writeln('<info>元数据更新</info>');
     }
 
-    protected function executeScript($code, $version)
+    protected function executeScript($code, $version, $index)
     {
-        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../plugins/{$code}Plugin/Scripts/UpgradeScript{$version}.php";
-
+        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../plugins/{$code}Plugin/Scripts/UpgradeScript{$index}.php";
         if (!file_exists($scriptFile)) {
             return;
         }
 
         include_once $scriptFile;
-        $upgradeClass = "UpgradeScript{$code}";
+        $upgradeClass = "UpgradeScript{$index}";
         $upgrade = new $upgradeClass($this->getServiceKernel()->getBiz(), $version);
 
         if (method_exists($upgrade, 'execute')) {
