@@ -48,8 +48,8 @@ class UpgradePluginScriptCommand extends BaseCommand
         $upgradeClass = "UpgradeScript{$index}";
         $upgrade = new $upgradeClass($this->getServiceKernel()->getBiz(), $version);
 
-        if (method_exists($upgrade, 'execute')) {
-            $upgrade->execute();
+        if (method_exists($upgrade, 'installData')) {
+            $upgrade->installData();
         }
     }
 
