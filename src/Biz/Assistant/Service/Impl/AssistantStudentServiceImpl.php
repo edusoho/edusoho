@@ -144,6 +144,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $assistantStudentRef = $this->findRelationsByAssistantIdAndCourseId($user['id'], $courseId);
         if (empty($assistantStudentRef)) {
             $conditions['userIds'] = [-1];
+
             return $conditions;
         }
 
