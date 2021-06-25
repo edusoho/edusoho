@@ -12,7 +12,6 @@
       :data-source="data"
       :pagination="pagination"
       :loading="loading"
-      bordered
       @change="handleTableChange"
     >
       <template slot="actions" slot-scope="actions, record">
