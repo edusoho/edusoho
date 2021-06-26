@@ -48,12 +48,13 @@ class ClassroomPool extends AbstractPool
         return  $sceneIds;
     }
 
-    public function prepareConditions($targetId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
         $searchConditions = [];
-        $searchConditions['courseSets'] = $this->classroomCourseSetIdSearch($targetId);
-        $searchConditions['mediaTypes'] = $this->classroomMediaTypeSearch($conditions);
-        $searchConditions['tasks'] = $this->classroomTaskIdSearch($conditions);
+        $courSets = $this->classroomCourseSetIdSearch($pool['target_id']);
+        $searchConditions['courseSets'] = $courSets;
+        $searchConditions['mediaTypes'] = $this->classroomMediaTypeSearch($courSets, $conditions);
+        $searchConditions['tasks'] = $this->classroomTaskIdSearch($courSets, $conditions);
 
         return $searchConditions;
     }
@@ -75,52 +76,82 @@ class ClassroomPool extends AbstractPool
 
         $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestion, 'answer_scene_id');
         $courseSetInfo = [];
+        $tempCourseSet = [];
         foreach ($activates as $activity) {
-            if (!empty($activity['ext']) && isset($wrongQuestionGroupSceneIds[$activity['ext']['answerSceneId']])) {
+            $courseSetId = $courseSetsGroupId[$activity['fromCourseSetId']]['id'];
+            if (!empty($activity['ext']) && isset($wrongQuestionGroupSceneIds[$activity['ext']['answerSceneId']]) && $tempCourseSet !== $courseSetIds && !in_array($courseSetId, $tempCourseSet)) {
                 $courseSetInfo[] = [
                     'id' => $courseSetsGroupId[$activity['fromCourseSetId']]['id'],
                     'title' => $courseSetsGroupId[$activity['fromCourseSetId']]['title'],
                 ];
+                $tempCourseSet[] = $courseSetId;
             }
         }
 
         return $courseSetInfo;
     }
 
-    protected function classroomMediaTypeSearch($conditions)
+    protected function classroomMediaTypeSearch($courSets, $conditions)
     {
         $defaultMediaType = ['homework', 'testpaper', 'exercise'];
+        $courseSetIds = ArrayToolkit::column($courSets, 'id');
         if (!empty($conditions['classroomCourseSetId'])) {
-            $activates = $this->getActivityService()->findActivitiesByCourseSetId($conditions['classroomCourseSetId']);
-            $mediaType = ArrayToolkit::column($activates, 'mediaType');
+            $courseSetIds = [$conditions['classroomCourseSetId']];
+        }
+        $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'testpaper', true);
+        $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'homework', true);
+        $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'exercise', true);
+        $activates = array_merge($activityTestPapers, $activityHomeWorks, $activityExercises);
+        $wrongQuestion = $this->getWrongQuestionService()->searchWrongQuestion([
+            'user_id' => $this->getCurrentUser()->getId(),
+            'answer_scene_ids' => $this->generateSceneIds($activates),
+        ], [], 0, PHP_INT_MAX);
 
-            return array_values(array_intersect(array_unique($mediaType), $defaultMediaType));
+        $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestion, 'answer_scene_id');
+        $mediaType = [];
+        foreach ($activates as $activity) {
+            if (!empty($activity['ext']) && isset($wrongQuestionGroupSceneIds[$activity['ext']['answerSceneId']]) && !in_array($activity['mediaType'], $mediaType)) {
+                $mediaType[] = $activity['mediaType'];
+                if ($mediaType === $defaultMediaType) {
+                    break;
+                }
+            }
         }
 
-        return $defaultMediaType;
+        return $mediaType;
     }
 
-    protected function classroomTaskIdSearch($conditions)
+    protected function classroomTaskIdSearch($courSets, $conditions)
     {
-        $searchConditions = [];
         $defaultMediaType = ['homework', 'testpaper', 'exercise'];
+        $courseSetIds = ArrayToolkit::column($courSets, 'id');
         if (!empty($conditions['classroomCourseSetId'])) {
-            $searchConditions['fromCourseSetId'] = $conditions['classroomCourseSetId'];
+            $courseSetIds = [$conditions['classroomCourseSetId']];
         }
         if (!empty($conditions['classroomMediaType'])) {
-            $searchConditions['mediaType'] = $conditions['classroomMediaType'];
+            $mediaTypes = $conditions['classroomMediaType'];
         } else {
-            $searchConditions['mediaTypes'] = $defaultMediaType;
+            $mediaTypes = $defaultMediaType;
         }
-        $activates = $this->getActivityService()->search($searchConditions, [], 0, PHP_INT_MAX);
+        $activates = $this->getActivityService()->findActivitiesByCourseSetIdsAndTypes($courseSetIds, $mediaTypes, true);
+        $activatesGroupById = ArrayToolkit::index($activates, 'id');
+        $wrongQuestion = $this->getWrongQuestionService()->searchWrongQuestion([
+            'user_id' => $this->getCurrentUser()->getId(),
+            'answer_scene_ids' => $this->generateSceneIds($activates),
+        ], [], 0, PHP_INT_MAX);
+
+        $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestion, 'answer_scene_id');
         $activityIds = ArrayToolkit::column($activates, 'id');
         $courseTasks = $this->getCourseTaskService()->findTasksByActivityIds($activityIds);
         $courseTasksInfo = [];
         foreach ($courseTasks as $courseTask) {
-            $courseTasksInfo[] = [
-                'id' => $courseTask['id'],
-                'title' => $courseTask['title'],
-            ];
+            $taskActivity = $activatesGroupById[$courseTask['activityId']];
+            if (!empty($taskActivity['ext']) && isset($wrongQuestionGroupSceneIds[$taskActivity['ext']['answerSceneId']])) {
+                $courseTasksInfo[] = [
+                    'id' => $courseTask['id'],
+                    'title' => $courseTask['title'],
+                ];
+            }
         }
 
         return $courseTasksInfo;

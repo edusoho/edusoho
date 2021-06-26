@@ -44,7 +44,7 @@ class CoursePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
     }
 

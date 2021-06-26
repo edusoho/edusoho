@@ -34,10 +34,10 @@ class ItemBankExercisePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($targetId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
         $searchConditions = [];
-        $searchConditions['types'] = $this->exerciseMediaTypeSearch($targetId);
+        $searchConditions['types'] = $this->exerciseMediaTypeSearch($pool['target_id']);
 
         return $searchConditions;
     }
