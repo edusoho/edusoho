@@ -72,7 +72,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             return;
         }
 
-        $multiClassAssistants = $this->getAssistantStudentDao()->search(['multiClassId' => $multiClassId], [], 0, PHP_INT_MAX, ['assistantId']);
+        $multiClassAssistants = $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
         $existAssistantIds = ArrayToolkit::column($multiClassAssistants, 'assistantId');
 
         $deleteAssistantIds = array_diff($existAssistantIds, $assistantIds);
@@ -80,7 +80,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             $this->getAssistantStudentDao()->batchDelete(['assistantIds' => $deleteAssistantIds]);
         }
 
-        $students = $this->getAssistantStudentDao()->search(['multiClassId' => $multiClassId], [], 0, PHP_INT_MAX, ['studentId']);
+        $students = $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
         $courseMembers = $this->getMemberService()->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['userId']);
         $noAssistantStudentIds = array_diff(ArrayToolkit::column($courseMembers, 'userId'), ArrayToolkit::column($students, 'studentId'));
 
