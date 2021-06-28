@@ -4,7 +4,7 @@
       <a-select
         show-search
         style="width: 120px;"
-        v-model="form.plan"
+        v-model="form.courseId"
         @change="(value) => handleChange(value, 'plan')"
       >
         <a-select-option
@@ -20,7 +20,7 @@
     <a-form-model-item>
       <a-select
         style="width: 120px;"
-        v-model="form.source"
+        v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
       >
         <a-select-option
@@ -36,7 +36,7 @@
     <a-form-model-item>
       <a-select
         style="width: 120px;"
-        v-model="form.taskName"
+        v-model="form.courseTaskId"
       >
         <a-select-option
           v-for="task in conditions.tasks"
@@ -51,16 +51,16 @@
     <a-form-model-item>
       <a-select
         style="width: 120px;"
-        v-model="form.frequency"
+        v-model="form.wrongTimesSort"
       >
-        <a-select-option value="0">
+        <a-select-option value="default">
           做错频次
         </a-select-option>
-        <a-select-option value="1">
-          做错频次1
+        <a-select-option value="DESC">
+          由高至低
         </a-select-option>
-        <a-select-option value="2">
-          做错频次2
+        <a-select-option value="ASC">
+          由低至高
         </a-select-option>
       </a-select>
     </a-form-model-item>
@@ -99,10 +99,10 @@ export default {
   data() {
     return {
       form: {
-        plan: 'all',
-        source: 'all',
-        taskName: 'all',
-        frequency: 'all'
+        courseId: 'all',
+        courseMediaType: 'all',
+        courseTaskId: 'all',
+        wrongTimesSort: 'default'
       },
       conditions: {}
     }
@@ -113,21 +113,35 @@ export default {
   },
 
   methods: {
-    async fetchWrongBookCondition(type) {
+    getParams(type) {
       const { plan, source } = this.form;
       const params = {
-        id: this.id
+        poolId: this.id
       };
 
-      if (type === 'plan' && plan !== 'all') {
-        params.courseId = plan;
-      }
-
-      if (type === 'source' && source !== 'all') {
-        params.courseMediaType = source;
+      if (type === 'plan') {
+        _.assign(this.form, {
+          courseMediaType: 'all',
+          courseTaskId: 'all'
+        });
 
         plan !== 'all' && (params.courseId = plan);
       }
+
+      if (type === 'source') {
+        _.assign(this.form, {
+          courseTaskId: 'all'
+        });
+
+        source !== 'all' && (params.courseMediaType = source);
+        plan !== 'all' && (params.courseId = plan);
+      }
+
+      return params;
+    },
+
+    async fetchWrongBookCondition(type) {
+      const params = this.getParams(type);
 
       const result = await WrongBookCondition.get(params);
 
