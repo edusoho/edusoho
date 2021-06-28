@@ -2,8 +2,10 @@
   <a-form-model :model="form" layout="inline">
     <a-form-model-item>
       <a-select
+        show-search
         style="width: 120px;"
         v-model="form.plan"
+        @change="(value) => handleChange(value, 'plan')"
       >
         <a-select-option
           v-for="plan in conditions.plans"
@@ -19,6 +21,7 @@
       <a-select
         style="width: 120px;"
         v-model="form.source"
+        @change="(value) => handleChange(value, 'source')"
       >
         <a-select-option
           v-for="item in conditions.source"
@@ -110,10 +113,21 @@ export default {
   },
 
   methods: {
-    async fetchWrongBookCondition() {
+    async fetchWrongBookCondition(type) {
+      const { plan, source } = this.form;
       const params = {
         id: this.id
       };
+
+      if (type === 'plan' && plan !== 'all') {
+        params.courseId = plan;
+      }
+
+      if (type === 'source' && source !== 'all') {
+        params.courseMediaType = source;
+
+        plan !== 'all' && (params.courseId = plan);
+      }
 
       const result = await WrongBookCondition.get(params);
 
@@ -138,6 +152,10 @@ export default {
       this.conditions = result;
 
       console.log(result);
+    },
+
+    handleChange(value, type) {
+      this.fetchWrongBookCondition(type);
     },
 
     handleSubmit() {
