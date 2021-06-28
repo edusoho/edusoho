@@ -1336,7 +1336,9 @@ admin.user.valid_remark_length_hint: 不好意思，备注太长，请限制在1
 admin.user.approve_submiting_hint: 提交中...
 admin.user.cancel_approval_hint: 确定要撤销这条认证成功的实名认证吗？
 admin.user.update_avatar_success_hint: 头像更新成功！
+admin.user.update_assistant_qrcode_success_hint: 二维码更新成功！
 admin.user.upload_avatar_success_hint: 上传成功！
+admin.user.upload_assistant_qrcode_success_hint: 上传成功！
 admin.user.password_modify_success_hint: 密码修改成功
 admin.user.password_modify_error_hint: 操作失败
 admin.user.create_new_user_success_hint: 新用户添加成功

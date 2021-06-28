@@ -6643,9 +6643,12 @@ admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
 admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.assistant_qrcode.upload_btn: 上传新二维码
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
@@ -6654,7 +6657,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 再输入
 admin.user.manage.create.heading_title: 添加新用户
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
 admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
