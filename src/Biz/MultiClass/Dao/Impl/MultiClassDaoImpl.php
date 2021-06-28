@@ -79,7 +79,7 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
             'orderbys' => ['id', 'createdTime', 'updatedTime', 'startTime', 'endTime'],
             'conditions' => [
                 'id = :id',
-                'multi_class.id IN ( :ids)',
+                'multi_class.id IN (:ids)',
                 'productId = :productId',
                 'productId IN ( :productIds)',
                 'courseId IN ( :courseIds)',

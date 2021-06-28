@@ -91,6 +91,19 @@ class CourseEntity extends BaseGoodsEntity
         return $this->getCourseSetService()->hasCourseSetManageRole($courseSet['id']);
     }
 
+    public function getManageUrl($goods)
+    {
+        $courseSet = $this->getTarget($goods);
+        $user = $this->biz['user'];
+
+        $member = $this->getCourseMemberService()->getCourseMember($courseSet['defaultCourseId'], $user['id']);
+        if ('assistant' == $member['role']) {
+            return $this->generateUrl('course_set_manage_course_students', ['courseSetId' => $courseSet['id'], 'courseId' => $courseSet['defaultCourseId']]);
+        }
+
+        return $this->generateUrl('course_set_manage_base', ['id' => $courseSet['id']]);
+    }
+
     public function buySpecsAccess($goods, $specs)
     {
         return $this->getCourseService()->canJoinCourse($specs['targetId']);
