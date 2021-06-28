@@ -250,6 +250,17 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             $couponsId = ArrayToolkit::column($coupons, 'id');
             $coupon = $this->getCouponService()->getCoupon($couponsId[0]);
 
+            if (!empty($coupon['userId']) && $coupon['userId'] != $userId) {
+                return [
+                    'code' => 'failed',
+                    'message' => '您来晚了一步，优惠券已被领完！',
+                    'exception' => [
+                        'class' => 'Biz\Coupon\CouponException',
+                        'method' => 'RECEIVE_LATE',
+                    ],
+                ];
+            }
+
             if (!empty($userId) && !empty($coupon)) {
                 $fields = [
                     'userId' => $userId,

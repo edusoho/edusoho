@@ -30,6 +30,8 @@ class CouponException extends AbstractException
 
     const SETTING_CLOSE = 5004511;
 
+    const RECEIVE_LATE = 5004512;
+
     public $messages = [
         4044501 => 'exception.coupon.not_found',
         5004502 => 'exception.coupon.status_invalid',
@@ -42,5 +44,6 @@ class CouponException extends AbstractException
         5004509 => 'exception.coupon.over_batch_limit',
         4044510 => 'exception.coupon.target_type_error',
         5004511 => 'exception.coupon.setting_close',
+        5004512 => 'exception.coupon.receive_late',
     ];
 }

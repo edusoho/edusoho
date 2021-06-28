@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\CouponException;
@@ -10,7 +11,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\AccessDeniedException;
 
 class CouponBatchController extends BaseController
 {
@@ -19,15 +19,15 @@ class CouponBatchController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $goto = $this->generateUrl('coupon_receive', array('token' => $token), true);
+            $goto = $this->generateUrl('coupon_receive', ['token' => $token], true);
 
-            return $this->redirect($this->generateUrl('login', array('goto' => $goto)));
+            return $this->redirect($this->generateUrl('login', ['goto' => $goto]));
         }
         $couponBatch = $this->getCouponBatchService()->getBatchByToken($token);
         if (!$couponBatch['linkEnable']) {
             throw new AccessDeniedException('Coupon receipt by link is not allowed');
         }
-        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $couponSetting = $this->getSettingService()->get('coupon', []);
         if (empty($couponSetting['enabled'])) {
             return $this->createMessageResponse('info', '优惠券已失效');
         }
@@ -36,58 +36,58 @@ class CouponBatchController extends BaseController
 
         if ($result['code']) {
             if (isset($result['id'])) {
-                $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $result['id'])));
+                $response = $this->redirect($this->generateUrl('my_cards', ['cardType' => 'coupon', 'cardId' => $result['id']]));
 
                 $response->headers->setCookie(new Cookie('modalOpened', '1'));
 
                 return $response;
             }
 
-            return $this->createMessageResponse('info', $result['message'], '', 3, $this->generateUrl('my_cards', array('cardType' => 'coupon')));
+            return $this->createMessageResponse('info', $result['message'], '', 2000, $this->generateUrl('my_cards', ['cardType' => 'coupon']));
         }
 
-        return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
+        return $this->createMessageResponse('info', '无效的链接', '', 2000, $this->generateUrl('homepage'));
     }
 
     public function couponResourceListAction(Request $request, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
-        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
+        if (!in_array($batch['targetType'], ['course', 'classroom']) || $batch['targetId'] < 0) {
             $this->createNewException(CouponException::TARGET_TYPE_ERROR());
         }
-        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
+        $resourceIds = empty($batch['targetIds']) ? [-1] : $batch['targetIds'];
 
         if ('course' == $batch['targetType']) {
             $paginator = new Paginator(
                 $request,
-                $this->getCourseSetService()->countCourseSets(array('ids' => $resourceIds)),
+                $this->getCourseSetService()->countCourseSets(['ids' => $resourceIds]),
                 10
             );
             $resources = $this->getCourseSetService()->searchCourseSets(
-                array('ids' => $resourceIds),
-                array(),
+                ['ids' => $resourceIds],
+                [],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         } else {
             $paginator = new Paginator(
                 $request,
-                $this->getClassroomService()->countClassrooms(array('classroomIds' => $resourceIds)),
+                $this->getClassroomService()->countClassrooms(['classroomIds' => $resourceIds]),
                 10
             );
             $resources = $this->getClassroomService()->searchClassrooms(
-                array('classroomIds' => $resourceIds),
-                array(),
+                ['classroomIds' => $resourceIds],
+                [],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         }
 
-        return $this->render('card/coupon-resource-list-modal.html.twig', array(
+        return $this->render('card/coupon-resource-list-modal.html.twig', [
             'paginator' => $paginator,
             'batch' => $batch,
             'resources' => $resources,
-        ));
+        ]);
     }
 
     protected function getUserService()
