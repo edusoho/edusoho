@@ -185,6 +185,24 @@ class SettingsController extends BaseController
         return $this->render('settings/profile-avatar-crop-modal.html.twig');
     }
 
+    public function assistantQrCodeCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ('POST' === $request->getMethod()) {
+            $options = $request->request->all();
+            file_put_contents('/tmp/tmp.log', var_export($options, true), FILE_APPEND);
+            $result = $this->getUserService()->changeAssistantQrCode($currentUser['id'], $options['images']);
+            $image = $this->getWebExtension()->getFpath($result['weChatQrCode']);
+
+            return $this->createJsonResponse([
+                'image' => $image,
+            ], 200);
+        }
+
+        return $this->render('settings/assistant-qrcode-crop-modal.html.twig');
+    }
+
     public function avatarFetchPartnerAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
