@@ -9,6 +9,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
@@ -40,16 +41,19 @@ class WrongBookQuestionShow extends AbstractResource
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
         $sources = $this->getWrongQuestionSources(array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id')));
-        foreach ($wrongQuestions as &$wrongQuestion) {
-            $questions = $itemsWithQuestion[$wrongQuestion['item_id']]['questions'];
-            $questions = ArrayToolkit::index($questions, 'id');
-            $wrongQuestion['material'] = $itemsWithQuestion[$wrongQuestion['item_id']]['material'];
-            $wrongQuestion['question'] = $questions[$wrongQuestion['question_id']];
-            $wrongQuestion['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
-            $wrongQuestion['source'] = $sources[$wrongQuestion['answer_scene_id']];
+        $wrongQuestionInfo = [];
+        foreach ($wrongQuestions as $wrongQuestion) {
+            $item = $itemsWithQuestion[$wrongQuestion['item_id']];
+            foreach ($item['questions'] as &$question) {
+                $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
+                $question['source'] = $sources[$wrongQuestion['answer_scene_id']];
+                $question['source']['submit_time'] = $wrongQuestion['submit_time'];
+                $question['source']['wrong_times'] = $wrongQuestion['wrong_times'];
+            }
+            $wrongQuestionInfo[] = $item;
         }
 
-        return $wrongQuestions;
+        return $wrongQuestionInfo;
     }
 
     protected function getWrongQuestionSources($answerSceneIds)
@@ -59,21 +63,22 @@ class WrongBookQuestionShow extends AbstractResource
             $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
             if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
                 $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
                 if ($courseSet['isClassroomRef']) {
                     $source = [
                         'mainSource' => $courseSet['title'],
-                        'secondarySource' => $activity['mediaType'],
+                        'secondarySource' => $courseTask['title'],
                     ];
                 } else {
                     $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
                     $source = [
                         'mainSource' => $course['title'],
-                        'secondarySource' => $activity['mediaType'],
+                        'secondarySource' => $courseTask['title'],
                     ];
                 }
             } else {
                 $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
-                $source['mainSource'] = $exerciseModule['type'];
+                $source['mainSource'] = $exerciseModule['title'];
             }
             $sources[$answerSceneId] = $source;
         });
@@ -93,12 +98,6 @@ class WrongBookQuestionShow extends AbstractResource
 
         $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
         $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
-
-        if (!isset($prepareConditions['answer_scene_ids'])) {
-            $prepareConditions['answer_scene_ids'] = [];
-        } elseif ($prepareConditions['answer_scene_ids'] == []) {
-            $prepareConditions['answer_scene_ids'] = [-1];
-        }
 
         return $prepareConditions;
     }
@@ -168,5 +167,13 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getExerciseModuleService()
     {
         return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getCourseTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

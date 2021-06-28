@@ -12,7 +12,7 @@ class WrongQuestionBookController extends BaseController
         return $this->render('my/learning/wrong-question-book/index.html.twig');
     }
 
-    public function detailAction(Request $request, $targetType, $targetId)
+    public function detailAction(Request $request)
     {
         return $this->render('my/learning/wrong-question-book/detail.html.twig');
     }

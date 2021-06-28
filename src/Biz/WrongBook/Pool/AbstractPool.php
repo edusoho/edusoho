@@ -16,4 +16,6 @@ abstract class AbstractPool
     abstract public function getPoolTarget($report);
 
     abstract public function prepareSceneIds($poolId, $conditions);
+
+    abstract public function prepareConditions($poolId, $conditions);
 }
