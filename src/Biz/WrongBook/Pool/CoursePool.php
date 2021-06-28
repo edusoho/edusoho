@@ -23,6 +23,20 @@ class CoursePool extends AbstractPool
             return [];
         }
 
+        return $this->prepareCommonSceneIds($conditions, $pool);
+    }
+
+    public function prepareCourseSceneIds($courseId, $conditions)
+    {
+        $conditions = array_merge($conditions, [
+            'courseId' => $courseId,
+        ]);
+
+        return $this->prepareCommonSceneIds($conditions);
+    }
+
+    public function prepareCommonSceneIds($conditions, $pool = [])
+    {
         $sceneIds = [];
         if (!empty($conditions['courseId'])) {
             $sceneIds['sceneIds'] = $this->findSceneIdsByCourseId($conditions['courseId']);
@@ -42,6 +56,8 @@ class CoursePool extends AbstractPool
             $sceneIds = [];
         } elseif ($sceneIds['sceneIds'] == []) {
             $sceneIds = [-1];
+        } else {
+            $sceneIds = $sceneIds['sceneIds'];
         }
 
         return $sceneIds;
