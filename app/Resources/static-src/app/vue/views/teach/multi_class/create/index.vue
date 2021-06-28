@@ -116,6 +116,15 @@
             {{ item.nickname }}
           </a-select-option>
         </a-select>
+        <div class="pull-left color-gray" >
+          <a-icon type="exclamation-circle" style="color: #bebebe;" />
+          用户中心设置助教
+          <a href="/admin/v2/user" target="_blank">去设置</a>
+        </div>
+        <div class="pull-right color-gray">
+          <a-icon type="exclamation-circle" style="color: #bebebe;" />
+          默认学员自动平均分配至课程助教（手动设置前往学员管理）
+        </div>
       </a-form-item>
 
       <a-form-item label="排课">
@@ -126,20 +135,46 @@
       </a-form-item>
 
       <a-form-item label="限购人数">
-        <a-input v-decorator="['', {
-
-        }]"></a-input>
+        <a-input v-decorator="['maxStudentNum', {
+          rules: [
+            { required: true, message: '请输入限购人数' },
+            { validator: validateStudentNum, message: '人数范围在0-100000人' }
+            ]
+          }]">
+          <span slot="suffix">人</span>
+        </a-input>
       </a-form-item>
 
       <a-form-item label="直播回放观看">
-        <a-radio-group 
+        <a-radio-group
           :options="[
             { label: '开启', value: '1' },
             { label: '关闭', value: '0' },
           ]"
-          v-decorator="['sss', { initialValue: '1'}]"
+          v-decorator="['isReplayShow', { initialValue: '1'}]"
         >
         </a-radio-group>
+      </a-form-item>
+      <a-form-item label="通知设置" v-if="notificationShow !== ''">
+        <a-form-item style="position: relative;left: -7.5%;margin-top: 50px;">
+          <div class="pull-left mr12">开课提醒</div>
+          <div v-if="notificationShow">
+            <div class="pull-left">开课</div>
+            <a-select class="pull-left ml8" style="width: 200px; " v-decorator="['liveRemindTime', { initialValue: 5 }]">
+              <a-select-option v-for="time in [0, 5, 15, 30, 60, 1440]" :value="time" :key="time">
+                <template v-if="time === 0">不通知</template>
+                <template v-else-if="time === 1440">1天前</template>
+                <template v-else>{{ time }}分钟</template>
+              </a-select-option>
+            </a-select>
+            <div class="pull-left ml8">自动发送提醒</div>
+          </div>
+          <div v-if="!notificationShow">
+            <a-icon type="info-circle" style="color: #bebebe;" />
+            尚未在系统后台配置微信通知，开启配置，才可使用该功能
+            <a href="/admin/v2/wechat/notification/manage" target="_blank">去设置</a>
+          </div>
+        </a-form-item>
       </a-form-item>
     </a-form>
 
@@ -158,7 +193,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -178,6 +213,7 @@ export default {
       selectedCourseSetId: 0,
       multiClassId: 0,
       mode: 'create', // create, editor, copy
+      notificationShow: '',
       course: {
         list: [],
         title: '',
@@ -232,6 +268,7 @@ export default {
 
   created() {
     // 编辑班课
+    this.fetchNotificationSetting();
     const id = this.$route.query.id;
     if (id) {
       this.multiClassId = id;
@@ -301,6 +338,12 @@ export default {
       });
     },
 
+    fetchNotificationSetting() {
+      Setting.get('wechat_message_subscribe').then(res => {
+        this.notificationShow = res.enable;
+      });
+    },
+
     fetchCourseInfo(courseId) {
       this.form.resetFields(['teacherId', 'assistantIds']);
       Course.getSingleCourse(courseId).then(res => {
@@ -344,8 +387,8 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
-        this.form.setFieldsValue({ 'title': title });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.course.list = [course];
@@ -366,14 +409,16 @@ export default {
       const params = {
         isDefault: 1,
         limit: pageSize,
-        offset: pageSize * current
+        offset: pageSize * current,
+        type: 'live',
+        excludeMultiClassCourses: true,
       };
 
       if (title) {
-        params.titleLike = title;
+        params.courseSetTitleLike = title;
       }
 
-      Me.get('teach_courses', { params }).then(res => {
+      Course.searchCourses(params).then(res => {
         this.course.paging.current++;
 
         if (this.course.initialValue) {
@@ -547,7 +592,7 @@ export default {
       this.selectedCourseId = value;
       _.forEach(this.course.list, item => {
         if (item.id == value) {
-          this.selectedCourseSetId = item.courseSetId;
+          this.selectedCourseSetId = item.courseSet.id;
           return false;
         }
       });
@@ -583,6 +628,12 @@ export default {
       value.length > 20 ? callback('最多选择20个助教') : callback();
     },
 
+    validateStudentNum(rule, value, callback) {
+        if (/^\+?(\d|[1-9]\d{1,2}|[1-4]\d{3}|100000)$/.test(value) === false) {
+          callback(rule.message)
+        }
+        callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
@@ -659,7 +710,19 @@ export default {
   border-radius: @radius;
 }
 
+.form-split-item {
+  margin-bottom: 12px;
+  padding: 4px 0 4px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-align: right;
+  background-color: #f5f5f5;
+}
+
+
 @import "~app/less/admin-v2/variables.less";
 @import "~app/less/page/course-manage/task/create.less";
 @import "~app/less/component/es-step.less";
+@import "~common/variable.less";
 </style>

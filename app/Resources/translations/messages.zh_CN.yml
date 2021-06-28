@@ -2387,6 +2387,7 @@ open_course.lesson.create_error: 课时创建失败
 
 # 班级
 classroom: 班级
+column: 专栏
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -4040,6 +4041,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.multi_class_menu: 在教班课
 my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
@@ -4155,6 +4157,11 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+
+#班课
+my.teaching.multi_class.my_students: 我的学员
+my.teaching.multi_class.status: 班课状态
+my.teaching.multi_class.student_num: 班课学员
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
@@ -6636,9 +6643,12 @@ admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
 admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.assistant_qrcode.upload_btn: 上传新二维码
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
@@ -6647,7 +6657,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 再输入
 admin.user.manage.create.heading_title: 添加新用户
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
 admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码

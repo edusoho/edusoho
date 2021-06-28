@@ -10,6 +10,10 @@ interface AssistantStudentService
 
     public function getByStudentIdAndCourseId($studentId, $courseId);
 
+    public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId);
+
+    public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+
     public function create($fields);
 
     public function update($id, $fields);
@@ -17,4 +21,6 @@ interface AssistantStudentService
     public function delete($id);
 
     public function get($id);
+
+    public function filterAssistantConditions($conditions, $courseId);
 }

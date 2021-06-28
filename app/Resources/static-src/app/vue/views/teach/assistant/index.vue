@@ -7,7 +7,6 @@
         :allowClear="true"
         @search="onSearch"
       />
-      <a-button class="pull-right" type="primary" @click="showPermissionModal">助教权限设置</a-button>
     </div>
 
     <a-table
@@ -18,16 +17,53 @@
       :loading="loading"
       @change="handleTableChange"
     >
+      <img slot="mediumAvatar" slot-scope="mediumAvatar" :src="mediumAvatar" />
+
+      <img slot="weChatQrCode" slot-scope="weChatQrCode" :src="weChatQrCode" />
+
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a-button 
-        slot="action" 
-        slot-scope="item" 
+      <template slot="action" slot-scope="item">
+        <a-button
         type="link"
-        @click="edit(item.id)">查看</a-button>
+        @click="check(item.id)"
+        >
+          查看
+        </a-button>
+        <a-dropdown>
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
+            <a-icon type="caret-down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/edit`"
+              >
+                编辑用户信息
+              </a>
+            </a-menu-item>
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/avatar`"
+              >
+                修改用户头像
+              </a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </template>
+
     </a-table>
 
     <a-modal title="助教详细信息" :visible="visible" @cancel="close">
@@ -37,11 +73,6 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-
-    <permission-modal
-      :visible="permissionModalVisible"
-      @cancel-permission-modal="hidePermissionModal"
-    />
   </aside-layout>
 </template>
 
@@ -50,12 +81,21 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import PermissionModal from './permissionModal.vue';
 
 const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
+  },
+  {
+    title: "头像",
+    dataIndex: 'mediumAvatar',
+    scopedSlots: { customRender: "mediumAvatar" },
+  },
+  {
+    title: "微信二维码",
+    dataIndex: 'weChatQrCode',
+    scopedSlots: {customRender: "weChatQrCode"},
   },
   {
     title: "最近登录",
@@ -72,7 +112,6 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    PermissionModal
   },
   data() {
     return {
@@ -83,7 +122,6 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
-      permissionModalVisible: false
     };
   },
   created() {
@@ -121,21 +159,13 @@ export default {
       this.pagination.current = 1;
       this.fetchAssistant();
     },
-    async edit(id) {
+    async check(id) {
       this.user = await UserProfiles.get(id);
       this.visible = true;
     },
     close() {
       this.visible = false;
     },
-
-    showPermissionModal() {
-      this.permissionModalVisible = true;
-    },
-
-    hidePermissionModal() {
-      this.permissionModalVisible = false;
-    }
   },
 };
 </script>

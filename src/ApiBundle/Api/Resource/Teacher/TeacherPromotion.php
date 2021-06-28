@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Teacher;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 
@@ -14,10 +15,13 @@ class TeacherPromotion extends AbstractResource
      * @param $id
      *
      * @return bool[]
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function add(ApiRequest $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2_teacher')) {
+            throw new AccessDeniedException();
+        }
         $teacher = $this->getUserService()->getUser($id);
 
         if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {
@@ -34,10 +38,14 @@ class TeacherPromotion extends AbstractResource
      * @param $id
      *
      * @return bool[]
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function remove(ApiRequest $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2_teacher')) {
+            throw new AccessDeniedException();
+        }
+
         $teacher = $this->getUserService()->getUser($id);
 
         if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {

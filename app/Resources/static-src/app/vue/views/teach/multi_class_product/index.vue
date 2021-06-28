@@ -24,7 +24,7 @@
       </a-row>
 
       <div class="text-center">
-        <a-pagination class="mt6"
+        <a-pagination class="mt24"
                       v-if="paging && productList.length > 0"
                       v-model="paging.page"
                       :total="paging.total"
@@ -122,7 +122,7 @@ export default {
       currentProduct: {},
       modalTitle: '',
       headerTitle: '什么是产品库？',
-      headerTip: '<p>产品是相同课程内容不同班课的集合，方便教务人员,实时了解产品的经营状况。机构可以根据自身课程情况进行差异设置。 产品可开设多个班课，班课可关联直播大班课课程</p> <p>范例1：K12英语大班产品（产品）- K12英语大班三月班（班课）- k12英语大班直播课程（课程）</p> <p>范例2：K12英语大班三月班（产品）-K12英语3月班1班/ k12英语三月班2班-k12英语大班直播课程（课程）</p>'
+      headerTip: '<p>产品是相同课程内容不同班课的集合，方便教务人员,实时了解产品的经营状况。机构可以根据自身课程情况进行差异设置。 产品可开设多个班课，班课可关联直播大班课课程</p> <p>范例1：<br>K12英语大班产品（产品）- K12英语大班三月班（班课）- k12英语大班直播课程（课程）</p> <p>范例2：<br>K12英语大班三月班（产品）-K12英语3月班1班/ k12英语三月班2班-k12英语大班直播课程（课程）</p>'
     };
   },
   created() {

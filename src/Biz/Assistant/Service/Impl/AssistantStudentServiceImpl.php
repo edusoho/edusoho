@@ -70,6 +70,16 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->getByStudentIdAndCourseId($studentId, $courseId);
     }
 
+    public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId)
+    {
+        return $this->getAssistantStudentDao()->findByAssistantIdAndCourseId($assistantId, $courseId);
+    }
+
+    public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds)
+    {
+        return $this->getAssistantStudentDao()->findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+    }
+
     public function setAssistantStudents($courseId, $multiClassId)
     {
         if (empty($multiClassId) || empty($courseId)) {
@@ -147,6 +157,27 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         if (!empty($studentIds)) {
             $this->assign($data, $studentIds, $assistantIds, $studentNumGroup, 1, true);
         }
+    }
+
+    public function filterAssistantConditions($conditions, $courseId)
+    {
+        $user = $this->getCurrentUser();
+        $member = $this->getMemberService()->getCourseMember($courseId, $user['id']);
+        if ('assistant' != $member['role']) {
+            return $conditions;
+        }
+
+        $assistantStudentRef = $this->findRelationsByAssistantIdAndCourseId($user['id'], $courseId);
+        if (empty($assistantStudentRef)) {
+            $conditions['userIds'] = [-1];
+
+            return $conditions;
+        }
+
+        $studentIds = ArrayToolkit::column($assistantStudentRef, 'studentId');
+        $conditions['userIds'] = !empty($conditions['userIds']) ? array_intersect($studentIds, $conditions['userIds']) : $studentIds;
+
+        return $conditions;
     }
 
     /**

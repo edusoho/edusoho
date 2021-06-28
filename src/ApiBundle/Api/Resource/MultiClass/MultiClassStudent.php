@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -14,6 +15,8 @@ use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudent extends AbstractResource
 {
+    const MAX_ASSISTANT_NUM = 20;
+
     public function add(ApiRequest $request, $multiClassId)
     {
         $studentData = $request->request->all();
@@ -73,8 +76,7 @@ class MultiClassStudent extends AbstractResource
 
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
-        $maxAssistantsCount = 20;
-        $assistantMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $multiClass['courseId'], 'role' => 'assistant'], [], 0, $maxAssistantsCount);
+        $assistantMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $multiClass['courseId'], 'role' => 'assistant'], [], 0, self::MAX_ASSISTANT_NUM);
         $assistantIds = ArrayToolkit::column($assistantMembers, 'userId');
 
         $assistants = $this->getUserService()->findUsersByIds($assistantIds);
@@ -92,7 +94,6 @@ class MultiClassStudent extends AbstractResource
         $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
         $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
-            $member['assistants'] = $assistantInfos;
             $member['finishedHomeworkCount'] = 0;
             $member['homeworkCount'] = $homeworkCount;
             if (!empty($userHomeworkCount[$member['userId']])) {
@@ -107,8 +108,32 @@ class MultiClassStudent extends AbstractResource
         }
 
         $members = $this->filterFields($members);
+        $member = $this->appendStudentAssistant($multiClass, $members, $assistantInfos);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
+    }
+
+    protected function appendStudentAssistant($multiClass, $members, $assistantInfos)
+    {
+        $assistantInfos = ArrayToolkit::index($assistantInfos, 'id');
+        $assistantStudentRefs = $this->getAssistantStudentService()->findRelationsByMultiClassIdAndStudentIds($multiClass['id'], ArrayToolkit::column($members, 'userId'));
+        $assistantStudentRefs = ArrayToolkit::index($assistantStudentRefs, 'studentId');
+        foreach ($members as &$member) {
+            if (empty($assistantStudentRefs[$member['userId']])) {
+                $member['assistant'] = [];
+                continue;
+            }
+
+            $assistantStudentRef = $assistantStudentRefs[$member['userId']];
+            if (empty($assistantInfos[$assistantStudentRef['assistantId']])) {
+                $member['assistant'] = [];
+                continue;
+            }
+
+            $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']];
+        }
+
+        return $members;
     }
 
     public function remove(ApiRequest $request, $id, $userId)
@@ -184,8 +209,6 @@ class MultiClassStudent extends AbstractResource
                 'truename' => $member['profile']['truename'],
             ];
 
-            $filteredFields['assistants'] = ArrayToolkit::thin($member['assistants'], ['id', 'nickname']);
-
             $results[] = $filteredFields;
         }
 
@@ -239,5 +262,13 @@ class MultiClassStudent extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    private function getAssistantStudentService()
+    {
+        return $this->service('Assistant:AssistantStudentService');
     }
 }

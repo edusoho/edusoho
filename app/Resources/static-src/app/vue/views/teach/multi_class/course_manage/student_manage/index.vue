@@ -249,7 +249,7 @@ const columns = [
   },
   {
     title: '助教老师',
-    dataIndex: 'assistants',
+    dataIndex: 'assistant',
     width: '10%',
     ellipsis: true,
     scopedSlots: { customRender: 'assistants' }

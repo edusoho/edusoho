@@ -2092,6 +2092,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+column: Column
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
@@ -3476,6 +3477,7 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.multi_class_menu: Multi Class
 my.teaching.open_course_menu: Open Course
 my.teaching.classroom.studen_count: Students
 my.teaching.classroom.course_count: Courses
@@ -3576,6 +3578,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.multi_class.my_students: My Students
+my.teaching.multi_class.status: Status
+my.teaching.multi_class.student_num: Student Number
 my.teaching.open_course.Basic_Info: Course settings
 my.teaching.open_course.Basic_Info.message: Basic infomation
 my.teaching.open_course.Basic_Info.title: Course title
@@ -5621,9 +5626,12 @@ admin.user.manage.user_show.fields.personal_website_label: 'Personal Websites'
 admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
+admin.user.manage.assistant_qrcode.fields.heading_title: 'Set assistant qrCode'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 'Current qrCode'
 admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the fit picture？</a>'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
+admin.user.manage.assistant_qrcode.upload_btn: 'Upload New qrCode'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
 admin.user.manage.change_password.heading_title: 'Reset password of user %nickname%'
@@ -5632,7 +5640,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 'Input pa
 admin.user.manage.create.heading_title: 'Add New User'
 admin.user.manage.create.email_label: 'Email Address'
 admin.user.manage.avatar_crop.heading_title: 'Set Avatar'
+admin.user.manage.assistant_qrcode_crop.heading_title: 'Set assistant qrcode'
 admin.user.manage.avatar_crop.crop_hint: 'Tip:Please select an image crop area'
+admin.user.manage.assistant_qrcode_crop.crop_hint: 'Tip:Please select an image crop area'
 admin.user.manage.avatar_crop.select_again_btn: 'Reselect an image'
 admin.user.manage.create_by_mobile.heading_title: 'Add New User'
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 'Phone Number'

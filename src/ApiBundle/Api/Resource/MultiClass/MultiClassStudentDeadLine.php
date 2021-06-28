@@ -19,7 +19,7 @@ class MultiClassStudentDeadLine extends AbstractResource
      * @param $updateType
      *
      * @return bool[]
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_EDUCATIONAL_ADMIN")
      */
     public function update(ApiRequest $request, $multiClassId, $updateType)
     {
