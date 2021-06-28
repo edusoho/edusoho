@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\Course;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -21,19 +19,20 @@ class CourseWrongQuestion extends AbstractResource
 
         $sceneIds = $this->biz['wrong_question.course_pool']->prepareCourseSceneIds($course['id'], $request->query->all());
         $conditions = [
-            'answer_scene_ids' => $sceneIds
+            'answer_scene_ids' => $sceneIds,
         ];
-        $wrongTimesSort = $request->query->get('wrongTimesSort','');
-        $orderBys['wrongTimes'] = $wrongTimesSort == 'ASC' ? 'ASC' : 'DESC';
+        $wrongTimesSort = $request->query->get('wrongTimesSort', '');
+        $orderBys['wrongTimes'] = 'ASC' == $wrongTimesSort ? 'ASC' : 'DESC';
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions,$orderBys, $offset, $limit);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
         $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
+
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions ,$sceneIds)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
@@ -49,10 +48,12 @@ class CourseWrongQuestion extends AbstractResource
                 'wrong_times' => $wrongQuestion['wrongTimes'],
             ];
         }
+
         return $wrongQuestionInfo;
     }
 
-    protected function getCourseWrongQuestionSources($wrongQuestionScenes){
+    protected function getCourseWrongQuestionSources($wrongQuestionScenes)
+    {
         $sources = [];
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = [];
@@ -67,16 +68,16 @@ class CourseWrongQuestion extends AbstractResource
             $activity = $activityScenes[$sceneId];
             $inItemScene = empty($tempSceneIds[$itemId]) ? [] : $tempSceneIds[$itemId];
             if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise']) && !in_array($sceneId, $inItemScene)) {
-                $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'],$activity['id']);
+                $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
                 $sources[$itemId]['taskName'][] = $courseTask['title'];
                 $source = empty($sources[$itemId]['source']) ? [] : $sources[$itemId]['source'];
                 if (!in_array($activity['mediaType'], $source)) {
                     $sources[$itemId]['source'][] = $activity['mediaType'];
                 }
                 $tempSceneIds[$itemId][] = $sceneId;
-
             }
         }
+
         return $sources;
     }
 
