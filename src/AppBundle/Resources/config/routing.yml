@@ -642,7 +642,7 @@ my_wrong_question_book:
     defaults: { _controller: AppBundle:My/WrongQuestionBook:index }
 
 my_wrong_question_book_target_detail:
-    path: /my/wrong_question_book/target_type/{targetType}/target_id/{targetId}
+    path: /my/wrong_question_book/wrong_questions
     defaults: { _controller: AppBundle:My/WrongQuestionBook:detail }
 
 my_unclaimed_certificates:
@@ -2457,6 +2457,10 @@ course_manage_homework_check:
   path: /course/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
 
+course_manage_wrong_questions:
+  path: /course/{id}/manage/wrong-questions/list
+  defaults: { _controller: AppBundle:Course/WrongQuestion:index }
+
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
   defaults: { _controller: AppBundle:Homework:startDo }
@@ -2677,6 +2681,10 @@ classroom_manage_homework:
 classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
+
+classroom_manage_wrong_questions:
+  path: /classroom/{id}/manage/wrong_book/list
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:wrongQuestion }
 
 classroom_data_statistics:
   path:  /classroom/{id}/manage/data/statistics

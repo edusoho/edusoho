@@ -100,6 +100,7 @@
           </li>
         {% endif %}
 
+
         {% if not assistant.isAssistant or 'course_exam_review' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'testpaper-check' %}active{% endif %}">
             <a
@@ -118,6 +119,12 @@
             <hr class="mt0 mb0 mh10 bg-border-color"/>
           </li>
         {% endif %}
+
+        <li class="cd-sidebar__item {% if course_side_nav == 'wrong-questions' %}active{% endif %}">
+          <a
+            href="{{ path('course_manage_wrong_questions', {id: curCourse.id}) }}">{{ '学员错题'|trans }}
+          </a>
+        </li>
 
         {% if not assistant.isAssistant or 'course_statistics_view' in assistant.permissions  %}
           <li class="cd-sidebar__item {% if course_side_nav == 'overview' %}active{% endif %}" id="step-0">

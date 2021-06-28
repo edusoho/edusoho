@@ -1131,6 +1131,16 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function wrongQuestionAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->render('classroom-manage/wrong-question/index.html.twig', [
+            'classroom' => $classroom,
+            'isTeacher' => true,
+        ]);
+    }
+
     public function resultGraphAction(Request $request, $id, $activityId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
