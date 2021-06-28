@@ -37,24 +37,27 @@ class Assistant extends AbstractResource
     public function add(ApiRequest $request)
     {
         $assistantStudentData = $request->request->all();
-        if (!ArrayToolkit::requireds($assistantStudentData, ['assistantId', 'studentId', 'multiClassId'])) {
+        if (!ArrayToolkit::requireds($assistantStudentData, ['assistantId', 'studentIds', 'multiClassId'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
-        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($assistantStudentData['studentId'], $assistantStudentData['multiClassId']);
+        $assistantStudents = $this->getAssistantStudentService()->findByStudentIdsAndMultiClassId($assistantStudentData['studentIds'], $assistantStudentData['multiClassId']);
+        $assistantStudents = ArrayToolkit::index($assistantStudents, 'studentId');
+
         $multiClass = $this->getMultiClassService()->getMultiClass($assistantStudentData['multiClassId']);
+        foreach ($assistantStudentData['studentIds'] as $studentId) {
+            if (empty($assistantStudents[$studentId])) {
+                $fields = [
+                    'studentId' => $studentId,
+                    'multiClassId' => $assistantStudentData['multiClassId'],
+                    'assistantId' => $assistantStudentData['assistantId'],
+                    'courseId' => $multiClass['courseId'],
+                ];
 
-        if (empty($assistantStudent)) {
-            $fields = [
-                'studentId' => $assistantStudentData['studentId'],
-                'multiClassId' => $assistantStudentData['multiClassId'],
-                'assistantId' => $assistantStudentData['assistantId'],
-                'courseId' => $multiClass['courseId'],
-            ];
-
-            $this->getAssistantStudentService()->create($fields);
-        } else {
-            $this->getAssistantStudentService()->update($assistantStudent['id'], ['assistantId' => $assistantStudentData['assistantId']]);
+                $this->getAssistantStudentService()->create($fields);
+            } else {
+                $this->getAssistantStudentService()->update($assistantStudents[$studentId]['id'], ['assistantId' => $assistantStudentData['assistantId']]);
+            }
         }
 
         return ['success' => true];

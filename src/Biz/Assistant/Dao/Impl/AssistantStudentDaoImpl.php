@@ -26,6 +26,11 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->getByFields(['studentId' => $studentId, 'courseId' => $courseId]);
     }
 
+    public function findByStudentIdsAndMultiClassId($studentIds, $multiClassId)
+    {
+        return $this->getByFields(['studentIds' => $studentIds, 'multiClassId' => $multiClassId]);
+    }
+
     public function declares()
     {
         return [
@@ -36,6 +41,7 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
                 'assistantId = :assistantId',
                 'multiClassId = :multiClassId',
                 'assistantId IN (:assistantIds)',
+                'studentId IN (:studentIds)',
             ],
         ];
     }

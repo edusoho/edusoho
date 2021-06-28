@@ -10,6 +10,8 @@ interface AssistantStudentService
 
     public function getByStudentIdAndCourseId($studentId, $courseId);
 
+    public function findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
+
     public function create($fields);
 
     public function update($id, $fields);
