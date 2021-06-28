@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -45,8 +46,12 @@ class Course extends AbstractResource
         $assistants = $this->getMemberService()->findMembersByCourseIdAndRole($courseId, 'assistant');
         $course['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId(19, $courseId);
+        $course['assistantId'] = $assistantStudent['assistantId'];
+
         $this->getOCUtil()->single($course, ['creator', 'teacherIds', 'assistantIds']);
         $this->getOCUtil()->single($course, ['courseSetId'], 'courseSet');
+        $this->getOCUtil()->single($course, ['assistantId']);
 
         if (!empty($member)) {
             $course['access'] = $this->getCourseService()->canLearnCourse($courseId);
@@ -180,6 +185,14 @@ class Course extends AbstractResource
     protected function getLevelService()
     {
         return $this->service('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->service('Assistant:AssistantStudentService');
     }
 
     protected function getVipRightService()
