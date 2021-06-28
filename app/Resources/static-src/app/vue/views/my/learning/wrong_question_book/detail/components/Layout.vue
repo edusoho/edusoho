@@ -1,18 +1,18 @@
 <template>
   <div class="question-layout">
-    <stem :order="1" :stem="question.question.stem" />
+    <stem :order="1" :stem="questions.stem" />
 
     <div class="prevent-click answer-content">
       <slot name="answer" />
     </div>
 
-    <a-divider v-if="question.question.answer_mode !== 'text'" style="margin: 16px 0;" />
+    <a-divider v-if="questions.answer_mode !== 'text'" style="margin: 16px 0;" />
 
-    <right-answer v-if="question.question.answer_mode !== 'text'" :question="question" />
+    <right-answer v-if="questions.answer_mode !== 'text'" :question="question" />
 
     <answer-result :question="question" />
 
-    <analysis :analysis="question.question.analysis" />
+    <analysis :analysis="questions.analysis" />
 
     <situation :question="question" />
   </div>
@@ -40,6 +40,12 @@ export default {
     question: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    questions() {
+      return this.question.questions[0];
     }
   }
 }

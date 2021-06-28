@@ -18,9 +18,7 @@ export default {
 
   computed: {
     answerResult() {
-      let { response } = this.question.report;
-      const { answer } = this.question.question;
-      const { answer_mode } = this.question.question;
+      let { answer, answer_mode, report: { response } } = this.question.questions[0];
 
       if (answer_mode === 'true_false') {
         response = _.map(response, function(item) {

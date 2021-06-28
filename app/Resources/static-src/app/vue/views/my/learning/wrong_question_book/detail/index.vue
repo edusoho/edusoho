@@ -27,10 +27,10 @@
       @on-search="onSearch"
     />
 
-    <template v-for="question in questionList">
+    <template v-for="(question, index) in questionList">
       <component
-        :is="currentQuestionComponent(question.question.answer_mode)"
-        :key="question.id"
+        :is="currentQuestionComponent(question.questions[0].answer_mode)"
+        :key="question.id + index"
         :question="question"
       />
     </template>
@@ -102,7 +102,6 @@ export default {
       const params = {
         id: this.targetId,
         targetType: this.targetType,
-        courseId: 72,
         offset: (this.pagination.current - 1) * 10,
         limit: 10
       };
