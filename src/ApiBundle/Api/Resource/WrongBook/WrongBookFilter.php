@@ -13,4 +13,9 @@ class WrongBookFilter extends Filter
         'sum_wrong_num',
         'target_type',
     );
+
+    protected function publicFields(&$data)
+    {
+        $data['sum_wrong_num']=(int)$data['sum_wrong_num'];
+    }
 }

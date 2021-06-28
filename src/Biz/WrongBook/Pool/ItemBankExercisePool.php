@@ -34,8 +34,20 @@ class ItemBankExercisePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
+        $searchConditions = [];
+        $searchConditions['types'] = $this->exerciseMediaTypeSearch($pool['target_id']);
+
+        return $searchConditions;
+    }
+
+    public function exerciseMediaTypeSearch($targetId)
+    {
+        $exerciseModules = $this->getExerciseModuleService()->findByExerciseId($targetId);
+        $mediaType = ArrayToolkit::column($exerciseModules, 'type');
+
+        return array_values((array_unique($mediaType)));
     }
 
     public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
