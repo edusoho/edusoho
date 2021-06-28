@@ -2,8 +2,10 @@
 
 namespace Biz\Course\Accessor;
 
+use ApiBundle\Api\Resource\MultiClass\MultiClass;
 use Biz\Accessor\AccessorAdapter;
 use Biz\Course\Service\CourseSetService;
+use Biz\MultiClass\Service\MultiClassService;
 
 class JoinCourseAccessor extends AccessorAdapter
 {
@@ -37,6 +39,11 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.reach_max_student_num', ['courseId' => $course['id']]);
         }
 
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        if (!empty($multiClass['maxStudentNum']) && $multiClass['maxStudentNum'] <= $course['studentNum']) {
+            return $this->buildResult('course.reach_max_student_num', ['courseId' => $course['id']]);
+        }
+
         return null;
     }
 
@@ -59,5 +66,13 @@ class JoinCourseAccessor extends AccessorAdapter
     private function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    private function getMultiClassService()
+    {
+        return $this->biz->service('MultiClass:MultiClassService');
     }
 }
