@@ -26,6 +26,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->getByFields(['copyId' => $copyId, 'fromCourseSetId' => $courseSetId]);
     }
 
+    public function findActivitiesByCourseSetId($courseSetId)
+    {
+        return $this->findByFields(['fromCourseSetId' => $courseSetId]);
+    }
+
     public function findSelfVideoActivityByCourseIds($courseIds)
     {
         if (empty($courseIds)) {
@@ -52,6 +57,23 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     public function findActivitiesByCourseSetIdAndType($courseSetId, $mediaType)
     {
         return $this->findByFields(['fromCourseSetId' => $courseSetId, 'mediaType' => $mediaType]);
+    }
+
+    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $mediaType)
+    {
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseSetId IN({$marks}) AND mediaType = ?;";
+
+        return $this->db()->fetchAll($sql, array_merge($courseSetIds, [$mediaType]));
+    }
+
+    public function findActivitiesByCourseSetIdsAndTypes($courseSetIds, $mediaTypes)
+    {
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $marks1 = str_repeat('?,', count($mediaTypes) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseSetId IN({$marks}) AND mediaType IN ({$marks1});";
+
+        return $this->db()->fetchAll($sql, array_merge($courseSetIds, $mediaTypes));
     }
 
     public function findActivitiesByCourseIdsAndType($courseIds, $mediaType)
