@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -13,6 +14,9 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class CourseWrongQuestion extends AbstractResource
 {
+    /**
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     */
     public function search(ApiRequest $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
