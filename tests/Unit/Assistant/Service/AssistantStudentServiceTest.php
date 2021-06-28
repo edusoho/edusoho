@@ -38,6 +38,10 @@ class AssistantStudentServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'productId' => $product['id'],
             'copyId' => 0,
+            'creator' => '1',
+            'maxStudentNum' => 0,
+            'isReplayShow' => 1,
+            'liveRemindTime' => 1,
             'teacherId' => $teacher['id'],
             'assistantIds' => [$assistant1['id'], $assistant2['id']],
         ];
