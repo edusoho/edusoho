@@ -415,7 +415,7 @@ export default {
       };
 
       if (title) {
-        params.titleLike = title;
+        params.courseSetTitleLike = title;
       }
 
       Course.searchCourses(params).then(res => {
