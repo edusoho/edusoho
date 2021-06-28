@@ -12,21 +12,10 @@
       </a-button>
     </template>
 
-    <course-screen
-      v-if="targetType == 'course'"
-      @on-search="onSearch"
-    />
+    <!-- 筛选 -->
+    <component :is="currentScreenComponent" @on-search="onSearch" />
 
-    <classroom-screen
-      v-else-if="targetType == 'classroom'"
-      @on-search="onSearch"
-    />
-
-    <question-bank-screen
-      v-else-if="targetType == 'exercise'"
-      @on-search="onSearch"
-    />
-
+    <!-- 题目 -->
     <template v-for="(question, index) in questionList">
       <component
         :is="currentQuestionComponent(question.questions[0].answer_mode)"
@@ -88,7 +77,18 @@ export default {
         uncertain_choice: 'Choice',
         true_false: 'Judge',
         text: 'Fill'
+      },
+      screenComponents: {
+        course: 'CourseScreen',
+        classroom: 'ClassroomScreen',
+        exercise: 'QuestionBankScreen'
       }
+    }
+  },
+
+  computed: {
+    currentScreenComponent() {
+      return this.screenComponents[this.targetType];
     }
   },
 
