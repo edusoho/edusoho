@@ -13,7 +13,7 @@
     </template>
 
     <!-- 筛选 -->
-    <component :is="currentScreenComponent" @on-search="onSearch" />
+    <component :is="currentScreenComponent" :id="targetId" @on-search="onSearch" />
 
     <!-- 题目 -->
     <template v-for="(question, index) in questionList">
@@ -40,7 +40,7 @@
 
 <script>
 import _ from 'lodash';
-import { WrongBookQuestionShow, WrongBookCondition } from 'common/vue/service';
+import { WrongBookQuestionShow } from 'common/vue/service';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
@@ -94,7 +94,6 @@ export default {
 
   created() {
     this.fetchWrongBookQuestion();
-    this.fetchWrongBookCondition();
   },
 
   methods: {
@@ -110,16 +109,6 @@ export default {
       this.pagination.total = Number(paging.total);
       this.loading = false;
       this.questionList = data;
-    },
-
-    async fetchWrongBookCondition() {
-      const params = {
-        id: this.targetId
-      };
-
-      const result = await WrongBookCondition.get(params);
-
-      console.log(result);
     },
 
     currentQuestionComponent(answerMode) {
