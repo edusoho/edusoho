@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
@@ -1653,6 +1654,11 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->beginTransaction();
             $member = $this->getMemberDao()->create(array_merge($member, $this->getMemberHistoryData($member['userId'], $member['courseId'])));
 
+            $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($member['courseId']);
+            if (!empty($multiClass)) {
+                $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
+            }
+
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'join', $reason);
             }
@@ -1843,6 +1849,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**
