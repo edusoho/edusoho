@@ -137,7 +137,8 @@
       <a-form-item label="限购人数">
         <a-input v-decorator="['maxStudentNum', {
           rules: [
-            { validator: validateStudentNum, message: '请输入限购人数，人数范围在0-5000人' }
+            { required: true, message: '请输入限购人数' },
+            { validator: validateStudentNum, message: '人数范围在0-5000人' }
             ]
           }]">
           <span slot="suffix">人</span>
@@ -162,7 +163,7 @@
             <a-select-option v-for="time in [0, 5, 15, 30, 60, 1440]" :value="time" :key="time">
               <template v-if="time === 0">不通知</template>
               <template v-else-if="time === 1440">1天前</template>
-              <template v-esle>{{ time }}分钟</template>
+              <template v-else>{{ time }}分钟</template>
             </a-select-option>
           </a-select>
           <div class="pull-left ml8">自动发送提醒</div>
