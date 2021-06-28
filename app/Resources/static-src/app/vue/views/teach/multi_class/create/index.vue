@@ -137,7 +137,7 @@
       <a-form-item label="限购人数">
         <a-input v-decorator="['maxStudentNum', {
           rules: [
-            { validator: validateStudentNum, message: '请输入限购人数，人数范围在0-5000人' }
+            { validator: validateStudentNum, message: '请输入限购人数，人数范围在0-100000人' }
             ]
           }]">
           <span slot="suffix">人</span>
@@ -154,24 +154,26 @@
         >
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="通知设置">
+      <a-form-item label="通知设置" v-if="notificationShow !== ''">
         <a-form-item style="position: relative;left: -7.5%;margin-top: 50px;">
           <div class="pull-left mr12">开课提醒</div>
-          <div class="pull-left">开课</div>
-          <a-select class="pull-left ml8" style="width: 200px; " v-decorator="['liveRemindTime', { initialValue: 5}]">
-            <a-select-option v-for="time in [0, 5, 15, 30, 60, 1440]" :value="time" :key="time">
-              <template v-if="time === 0">不通知</template>
-              <template v-else-if="time === 1440">1天前</template>
-              <template v-esle>{{ time }}分钟</template>
-            </a-select-option>
-          </a-select>
-          <div class="pull-left ml8">自动发送提醒</div>
+          <div v-if="notificationShow">
+            <div class="pull-left">开课</div>
+            <a-select class="pull-left ml8" style="width: 200px; " v-decorator="['liveRemindTime', { initialValue: 5 }]">
+              <a-select-option v-for="time in [0, 5, 15, 30, 60, 1440]" :value="time" :key="time">
+                <template v-if="time === 0">不通知</template>
+                <template v-else-if="time === 1440">1天前</template>
+                <template v-esle>{{ time }}分钟</template>
+              </a-select-option>
+            </a-select>
+            <div class="pull-left ml8">自动发送提醒</div>
+          </div>
+          <div v-if="!notificationShow">
+            <a-icon type="info-circle" style="color: #bebebe;" />
+            尚未在系统后台配置微信通知，开启配置，才可使用该功能
+            <a href="/admin/v2/wechat/notification/manage" target="_blank">去设置</a>
+          </div>
         </a-form-item>
-        <!-- <div>
-          <a-icon type="info-circle" style="color: #bebebe;" />
-          尚未在系统后台配置微信通知，开启配置，才可使用该功能
-          <a href="/admin/v2/wechat/notification/manage" target="_blank">去设置</a>
-        </div> -->
       </a-form-item>
     </a-form>
 
@@ -190,7 +192,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -210,6 +212,7 @@ export default {
       selectedCourseSetId: 0,
       multiClassId: 0,
       mode: 'create', // create, editor, copy
+      notificationShow: '',
       course: {
         list: [],
         title: '',
@@ -264,6 +267,7 @@ export default {
 
   created() {
     // 编辑班课
+    this.fetchNotificationSetting();
     const id = this.$route.query.id;
     if (id) {
       this.multiClassId = id;
@@ -333,6 +337,12 @@ export default {
       });
     },
 
+    fetchNotificationSetting() {
+      Setting.get('wechat_message_subscribe').then(res => {
+        this.notificationShow = res.enable;
+      });
+    },
+
     fetchCourseInfo(courseId) {
       this.form.resetFields(['teacherId', 'assistantIds']);
       Course.getSingleCourse(courseId).then(res => {
@@ -376,8 +386,9 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds } = res;
-        this.form.setFieldsValue({ 'title': title });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
+        console.log(liveRemindTime);
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.course.list = [course];
@@ -398,14 +409,15 @@ export default {
       const params = {
         isDefault: 1,
         limit: pageSize,
-        offset: pageSize * current
+        offset: pageSize * current,
+        type: 'live'
       };
 
       if (title) {
         params.titleLike = title;
       }
 
-      Me.get('teach_courses', { params }).then(res => {
+      Course.searchCourses(params).then(res => {
         this.course.paging.current++;
 
         if (this.course.initialValue) {
@@ -616,7 +628,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-        if (/^\+?(\d|[1-9]\d{1,2}|[1-4]\d{3}|5000)$/.test(value) === false) {
+        if (/^\+?(\d|[1-9]\d{1,2}|[1-4]\d{3}|100000)$/.test(value) === false) {
           callback(rule.message)
         }
         callback()
