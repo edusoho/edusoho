@@ -2,9 +2,12 @@
 
 namespace Biz\WrongBook\Pool;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
+use Biz\WrongBook\Service\WrongQuestionService;
 
 class CoursePool extends AbstractPool
 {
@@ -44,8 +47,76 @@ class CoursePool extends AbstractPool
         return $sceneIds;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($pool['target_id']);
+        $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        $conditions = $this->handleConditions($conditions);
+        $tasks = $this->getCourseTaskService()->searchTasks($conditions, [], 0, PHP_INT_MAX);
+
+        $collects = $this->getWrongQuestionCollectDao()->getCollectBYPoolId($pool['id']);
+        $collectIds = array_unique(ArrayToolkit::column($collects, 'id'));
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => $collectIds], [], 0, PHP_INT_MAX);
+        $answerSceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
+
+        $activitys = [];
+        foreach ($answerSceneIds as $answerSceneId) {
+            $activitys[] = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        }
+        $coursesIds = array_unique(ArrayToolkit::column($activitys, 'fromCourseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+        $tasks = ArrayToolkit::index($tasks, 'activityId');
+        $activityIds = ArrayToolkit::column($activitys, 'id');
+        $newCourses = [];
+        foreach ($coursesIds as $coursesId) {
+            if (!empty($courses[$coursesId])) {
+                $newCourses[] = $courses[$coursesId];
+            }
+        }
+        $newTasks = [];
+        foreach ($activityIds as $activityId) {
+            if (!empty($tasks[$activityId])) {
+                $newTasks[] = $tasks[$activityId];
+            }
+        }
+        $result['plans'] = $this->handleArray($newCourses, ['id', 'title']);
+        $result['source'] = array_unique(ArrayToolkit::column($newTasks, 'type'));
+        $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
+
+        return $result;
+    }
+
+    protected function handleArray($data, $fields)
+    {
+        $newData = [];
+        foreach ($data as $key => $value) {
+            foreach ($fields as $k => $field) {
+                $newData[$key][$field] = $value[$field];
+            }
+        }
+
+        return $newData;
+    }
+
+    protected function handleConditions($conditions)
+    {
+        if (empty($conditions['courseId'])) {
+            unset($conditions['courseId']);
+        } else {
+            unset($conditions['courseIds']);
+        }
+        if (!empty($conditions['courseMediaType'])) {
+            $conditions['type'] = $conditions['courseMediaType'];
+            unset($conditions['courseMediaType']);
+        } else {
+            $conditions['types'] = ['testpaper', 'exercise', 'homework'];
+        }
+        if (!empty($conditions['courseTaskId'])) {
+            $conditions['id'] = $conditions['courseTaskId'];
+            unset($conditions['courseTaskId']);
+        }
+
+        return $conditions;
     }
 
     public function findSceneIdsByCourseId($courseId)
@@ -100,6 +171,22 @@ class CoursePool extends AbstractPool
     }
 
     /**
+     * @return WrongQuestionCollectDao
+     */
+    protected function getWrongQuestionCollectDao()
+    {
+        return $this->biz->dao('WrongBook:WrongQuestionCollectDao');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->biz->service('WrongBook:WrongQuestionService');
+    }
+
+    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -113,5 +200,13 @@ class CoursePool extends AbstractPool
     protected function getCourseTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
