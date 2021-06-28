@@ -1,18 +1,19 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\Assistant;
 
-
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
+use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class Assistant extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @return array
      * @Access(roles="ROLE_TEACHER_ASSISTANT,ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
@@ -33,11 +34,53 @@ class Assistant extends AbstractResource
         return $this->makePagingObject($users, $total, $offset, $limit);
     }
 
+    public function add(ApiRequest $request)
+    {
+        $assistantStudentData = $request->request->all();
+        if (!ArrayToolkit::requireds($assistantStudentData, ['assistantId', 'studentId', 'multiClassId'])) {
+            throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
+        }
+
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($assistantStudentData['studentId'], $assistantStudentData['multiClassId']);
+        $multiClass = $this->getMultiClassService()->getMultiClass($assistantStudentData['multiClassId']);
+
+        if (empty($assistantStudent)) {
+            $fields = [
+                'studentId' => $assistantStudentData['studentId'],
+                'multiClassId' => $assistantStudentData['multiClassId'],
+                'assistantId' => $assistantStudentData['assistantId'],
+                'courseId' => $multiClass['courseId'],
+            ];
+
+            $this->getAssistantStudentService()->create($fields);
+        } else {
+            $this->getAssistantStudentService()->update($assistantStudent['id'], ['assistantId' => $assistantStudentData['assistantId']]);
+        }
+
+        return ['success' => true];
+    }
+
     /**
      * @return UserService
      */
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->service('Assistant:AssistantStudentService');
     }
 }
