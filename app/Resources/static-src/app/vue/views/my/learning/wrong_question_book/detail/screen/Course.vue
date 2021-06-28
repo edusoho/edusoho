@@ -7,6 +7,8 @@
         v-model="form.courseId"
         @change="(value) => handleChange(value, 'plan')"
       >
+        <a-select-option value="all">全部计划</a-select-option>
+
         <a-select-option
           v-for="plan in conditions.plans"
           :value="plan.id"
@@ -23,6 +25,8 @@
         v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
       >
+        <a-select-option value="all">题目来源</a-select-option>
+
         <a-select-option
           v-for="item in conditions.source"
           :value="item"
@@ -38,6 +42,8 @@
         style="width: 120px;"
         v-model="form.courseTaskId"
       >
+        <a-select-option value="all">任务名称</a-select-option>
+
         <a-select-option
           v-for="task in conditions.tasks"
           :value="task.id"
@@ -76,9 +82,8 @@ import _ from 'lodash';
 import { WrongBookCondition } from 'common/vue/service';
 
 const sources = {
-  all: '题目来源',
   testpaper: '考试任务',
-  homeword: '作业任务',
+  homework: '作业任务',
   exercise: '练习任务'
 }
 
@@ -114,7 +119,7 @@ export default {
 
   methods: {
     getParams(type) {
-      const { plan, source } = this.form;
+      const { courseId, courseMediaType } = this.form;
       const params = {
         poolId: this.id
       };
@@ -125,7 +130,7 @@ export default {
           courseTaskId: 'all'
         });
 
-        plan !== 'all' && (params.courseId = plan);
+        courseId !== 'all' && (params.courseId = courseId);
       }
 
       if (type === 'source') {
@@ -133,8 +138,8 @@ export default {
           courseTaskId: 'all'
         });
 
-        source !== 'all' && (params.courseMediaType = source);
-        plan !== 'all' && (params.courseId = plan);
+        courseMediaType !== 'all' && (params.courseMediaType = courseMediaType);
+        courseId !== 'all' && (params.courseId = courseId);
       }
 
       return params;
@@ -149,18 +154,6 @@ export default {
         if (!plan.title) {
           result.plans.splice(index, 1);
         }
-      });
-
-      result.plans.unshift({
-        id: 'all',
-        title: '全部计划'
-      });
-
-      result.source.unshift('all');
-
-      result.tasks.unshift({
-        id: 'all',
-        title: '任务名称'
       });
 
       this.conditions = result;
