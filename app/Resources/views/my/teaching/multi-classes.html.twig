@@ -14,6 +14,7 @@
       {% set manageUrl = 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') ?
         path('course_set_manage_course_info',{courseSetId:courseSet.id, courseId: course.id}) : path('course_set_manage_course_students',{courseSetId:courseSet.id, courseId: course.id})
       %}
+      {% set manageBtn = 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') ? 'course.manage_btn' : 'my.teaching.multi_class.my_students' %}
       <div class="cd-mb32">
         <div class="courseset-manage-header clearfix">
           <div class="clearfix">
@@ -32,7 +33,7 @@
             </div>
 
             <div class="courseset-manage-header-btn">
-              <a class="cd-btn cd-btn-primary" target="_blank" href="{{ manageUrl }}">{{ 'course.manage_btn'|trans }}</a>
+              <a class="cd-btn cd-btn-primary" target="_blank" href="{{ manageUrl }}">{{ manageBtn|trans }}</a>
               {% if courseSet.status != 'published' %}
                 <a class="cd-btn cd-btn-ghost-default cd-ml16" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
               {% else %}

@@ -388,7 +388,6 @@ export default {
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
-        console.log(liveRemindTime);
         this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
@@ -411,7 +410,8 @@ export default {
         isDefault: 1,
         limit: pageSize,
         offset: pageSize * current,
-        type: 'live'
+        type: 'live',
+        excludeMultiClassCourses: true,
       };
 
       if (title) {
@@ -592,7 +592,7 @@ export default {
       this.selectedCourseId = value;
       _.forEach(this.course.list, item => {
         if (item.id == value) {
-          this.selectedCourseSetId = item.courseSetId;
+          this.selectedCourseSetId = item.courseSet.id;
           return false;
         }
       });

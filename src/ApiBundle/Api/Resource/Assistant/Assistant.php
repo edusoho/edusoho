@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\Assistant;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\MultiClass\MultiClassException;
@@ -30,6 +32,10 @@ class Assistant extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $users = $this->getUserService()->searchUsers($conditions, ['createdTime' => 'DESC'], $offset, $limit);
         $total = $this->getUserService()->countUsers($conditions);
+
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::AUTHENTICATED_MODE);
+        $userFilter->filters($users);
 
         return $this->makePagingObject($users, $total, $offset, $limit);
     }
