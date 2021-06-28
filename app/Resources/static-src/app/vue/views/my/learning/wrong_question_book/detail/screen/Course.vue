@@ -3,6 +3,9 @@
     <a-form-model-item>
       <a-select
         show-search
+        option-filter-prop="children"
+        :filter-option="filterOption"
+        notFoundContent="暂无数据"
         style="width: 120px;"
         v-model="form.courseId"
         @change="(value) => handleChange(value, 'plan')"
@@ -21,6 +24,10 @@
 
     <a-form-model-item>
       <a-select
+        show-search
+        option-filter-prop="children"
+        :filter-option="filterOption"
+        notFoundContent="暂无数据"
         style="width: 120px;"
         v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
@@ -39,6 +46,10 @@
 
     <a-form-model-item>
       <a-select
+        show-search
+        option-filter-prop="children"
+        :filter-option="filterOption"
+        notFoundContent="暂无数据"
         style="width: 120px;"
         v-model="form.courseTaskId"
       >
@@ -163,6 +174,12 @@ export default {
 
     handleChange(value, type) {
       this.fetchWrongBookCondition(type);
+    },
+
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
     },
 
     handleSubmit() {
