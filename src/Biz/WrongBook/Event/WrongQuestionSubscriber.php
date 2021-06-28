@@ -78,10 +78,12 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
                 $targetType = 'course';
                 $targetId = $activity['fromCourseSetId'];
             }
-        } else {
-            $assessmentExerciseRecord = $this->getExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
+        } elseif ($assessmentExerciseRecord = $this->getExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id'])) {
             $targetType = 'exercise';
             $targetId = $assessmentExerciseRecord['exerciseId'];
+        } else {
+            $targetType = 'wrong_book_exercise';
+            $targetId = 0;
         }
 
         return [$targetType, $targetId];
