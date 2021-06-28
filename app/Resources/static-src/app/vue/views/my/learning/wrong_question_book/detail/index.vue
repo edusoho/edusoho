@@ -121,8 +121,12 @@ export default {
     },
 
     // 错题搜索
-    onSearch(values) {
-      console.log(values);
+    onSearch(params) {
+      const { data, type } = params;
+
+      if (type === 'course') {
+
+      }
     },
 
     // 翻页

@@ -168,8 +168,6 @@ export default {
       });
 
       this.conditions = result;
-
-      console.log(result);
     },
 
     handleChange(value, type) {
@@ -183,7 +181,7 @@ export default {
     },
 
     handleSubmit() {
-      console.log('submit!', this.form);
+      this.$emit('on-search', { data: this.form, type: 'course' });
     }
   }
 }
