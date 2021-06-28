@@ -993,6 +993,20 @@ admin_v2:
                                             visible: (user.type != 'system')
                                             router_params:
                                                 id: (user.id)
+                                        admin_v2_user_avatar:
+                                            name: admin_v2.user.basic.basic_tab.update_avatar_btn
+                                            mode: modal
+                                            group: groupButton
+                                            visible: (user.type != 'system')
+                                            router_params:
+                                                id: (user.id)
+                                        admin_v2_assistant_qrcode:
+                                            name: admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn
+                                            mode: modal
+                                            group: groupButton
+                                            visible: (is_assistant(0))
+                                            router_params:
+                                                id: (user.id)
                                         admin_v2_user_roles:
                                             name: admin_v2.user.basic.basic_tab.setting_roles_btn
                                             mode: modal
@@ -1007,13 +1021,6 @@ admin_v2:
                                             visible: (user.type != 'system')
                                             router_params:
                                                 userId: (user.id)
-                                        admin_v2_user_avatar:
-                                            name: admin_v2.user.basic.basic_tab.update_avatar_btn
-                                            mode: modal
-                                            group: groupButton
-                                            visible: (user.type != 'system')
-                                            router_params:
-                                                id: (user.id)
                                         admin_v2_user_change_password:
                                             name: admin_v2.user.basic.basic_tab.change_password_btn
                                             mode: modal

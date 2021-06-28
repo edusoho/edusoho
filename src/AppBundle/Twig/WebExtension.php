@@ -228,6 +228,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_vip_right', [$this, 'isVipRight']),
             new \Twig_SimpleFunction('is_group_member', [$this, 'isGroupMember']),
             new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
+            new \Twig_SimpleFunction('is_assistant', [$this, 'isAssistant']),
         ];
     }
 
@@ -507,6 +508,13 @@ class WebExtension extends \Twig_Extension
         }
 
         return rtrim($result, '、');
+    }
+
+    public function isAssistant($userId)
+    {
+        $user = empty($userId) ? $this->biz['user'] : $this->getUserService()->getUser($userId);
+
+        return in_array('ROLE_TEACHER_ASSISTANT', $user['roles']);
     }
 
     public function convertAbsoluteUrl($html)

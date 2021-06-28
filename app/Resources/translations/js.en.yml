@@ -1391,7 +1391,9 @@ admin.user.valid_remark_length_hint: Sorry, the remarks is too long, please limi
 admin.user.approve_submiting_hint: submitting...
 admin.user.cancel_approval_hint: Are you sure you want to cancel this successful approval?
 admin.user.update_avatar_success_hint: The avatar update is successful!
+admin.user.update_assistant_qrcode_success_hint: The qrcode update is successful!
 admin.user.upload_avatar_success_hint: Uploaded successfully!
+admin.user.upload_assistant_qrcode_success_hint: Uploaded successfully!
 admin.user.password_modify_success_hint: Password modified successfully
 admin.user.password_modify_error_hint: operation failed
 admin.user.create_new_user_success_hint: New user added successfully

@@ -508,6 +508,46 @@ class UserServiceImpl extends BaseService implements UserService
         return UserSerialize::unserialize($user);
     }
 
+    public function changeAssistantQrCode($userId, $data)
+    {
+        $user = $this->getUser($userId);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        $fileIds = ArrayToolkit::column($data, 'id');
+        $files = $this->getFileService()->getFilesByIds($fileIds);
+
+        if (empty($files)) {
+            $this->createNewException(FileException::FILE_NOT_FOUND());
+        }
+
+        $files = ArrayToolkit::index($files, 'id');
+        $fileIds = ArrayToolkit::index($data, 'type');
+
+        $fields = [
+            'weChatQrCode' => $files[$fileIds['large']['id']]['uri'],
+        ];
+
+        $oldQrCodes = [
+            'weChatQrCode' => $user['weChatQrCode'] ? $user['weChatQrCode'] : null,
+        ];
+
+        $oldQrCodeFiles = $this->getFileService()->findFilesByUris(array_values($oldQrCodes));
+
+        foreach ($oldQrCodeFiles as $oldQrCodeFile) {
+            if ($this->canManageAvatarFile($userId, $oldQrCodeFile)) {
+                $this->getFileService()->deleteFileByUri($oldQrCodeFile['uri']);
+            }
+        }
+
+        $user = $this->getUserDao()->update($userId, $fields);
+//        $this->dispatchEvent('user.change_avatar', new Event($user));
+
+        return UserSerialize::unserialize($user);
+    }
+
     public function changeAvatarByFileId($userId, $fileId)
     {
         if (empty($fileId)) {
