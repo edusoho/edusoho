@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Assistant\Service;
 
+use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
@@ -23,6 +24,88 @@ class AssistantStudentServiceTest extends BaseTestCase
 
         $result = $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
         $this->assertEquals(true, $result);
+    }
+
+    public function testGetByStudentIdAndMultiClassId()
+    {
+        $multiClass = $this->createMultiClass();
+        $assistantStudent = $this->createAssistantStudent();
+
+        $result = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($assistantStudent['studentId'], $multiClass['id']);
+
+        $this->assertEquals(1, $result['id']);
+    }
+
+    public function testFindRelationsByAssistantIdAndCourseId()
+    {
+        $course = $this->createCourse();
+        $assistantStudent = $this->createAssistantStudent();
+
+        $result = $this->getAssistantStudentService()->findRelationsByAssistantIdAndCourseId($assistantStudent['studentId'], $course['id']);
+
+        $this->assertEquals($course['id'], $result[0]['courseId']);
+    }
+
+    public function testFindRelationsByMultiClassIdAndStudentIds()
+    {
+        $multiClass = $this->createMultiClass();
+        $this->batchCreateAssistantStudents();
+
+        $result = $this->getAssistantStudentService()->findRelationsByMultiClassIdAndStudentIds($multiClass['id'], [1, 2]);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testFilterAssistantConditions()
+    {
+        $params = [
+            'userIds' => time() + 3000,
+        ];
+        $course = $this->createCourse();
+
+        $result = $this->getAssistantStudentService()->filterAssistantConditions($params, $course['id']);
+
+        $this->assertArrayHasKey('userIds', $result);
+    }
+
+    public function batchCreateAssistantStudents()
+    {
+        $field1 = [
+            'id' => '1',
+            'courseId' => 2,
+            'studentId' => 1,
+            'assistantId' => 1,
+            'multiClassId' => 2,
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ];
+
+        $field2 = [
+            'id' => '2',
+            'courseId' => 3,
+            'studentId' => 2,
+            'assistantId' => 2,
+            'multiClassId' => 2,
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ];
+
+        return $this->getAssistantStudentDao()->batchCreate([$field1, $field2]);
+    }
+
+    public function createAssistantStudent()
+    {
+        $fields = [
+            'id' => '1',
+            'courseId' => 2,
+            'studentId' => 1,
+            'assistantId' => 1,
+            'multiClassId' => 1,
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ];
+
+        return $this->getAssistantStudentService()->create($fields);
     }
 
     protected function createMultiClass()
@@ -186,5 +269,13 @@ class AssistantStudentServiceTest extends BaseTestCase
     protected function getUserDao()
     {
         return $this->createService('User:UserDao');
+    }
+
+    /**
+     * @return AssistantStudentDao
+     */
+    protected function getAssistantStudentDao()
+    {
+        return $this->createDao('Assistant:AssistantStudentDao');
     }
 }
