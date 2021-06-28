@@ -7,7 +7,7 @@
           <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.base'|trans }}
         </a>
       {% else %}
-        {% if has_permission('admin_v2_course_content_manage') %}
+        {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
           <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{ 'course.base'|trans }}</a>
         {% endif %}
       {% endif %}
@@ -60,7 +60,7 @@
     </li>
   {% endif %}
 
-  {% if has_permission('admin_v2_course_content_manage') %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
     <div class="clearfix nav-header-section-step">
       <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
         {% if courseSet.locked %}

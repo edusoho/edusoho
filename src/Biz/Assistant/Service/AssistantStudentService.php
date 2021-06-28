@@ -12,7 +12,13 @@ interface AssistantStudentService
 
     public function findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
 
+    public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId);
+
+    public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+
     public function create($fields);
 
     public function update($id, $fields);
+
+    public function filterAssistantConditions($conditions, $courseId);
 }

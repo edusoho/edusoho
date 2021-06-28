@@ -12,6 +12,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Service\MultiClassService;
 
 class Course extends AbstractResource
 {
@@ -71,6 +72,8 @@ class Course extends AbstractResource
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         unset($course['enableAudio']);
         $course = $this->getCourseService()->appendSpecInfo($course);
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        $course['isReplayShow'] = empty($multiClass) || !empty($multiClass['isReplayShow']) ? 1 : 0;
 
         return $course;
     }
@@ -113,6 +116,14 @@ class Course extends AbstractResource
             $timeRange = TimeMachine::getTimeRangeByDays($conditions['lastDays']);
             $conditions['outerStartTime'] = $timeRange['startTime'];
             $conditions['outerEndTime'] = $timeRange['endTime'];
+        }
+
+        if (!empty($conditions['excludeMultiClassCourses'])) {
+            $multiClasses = $this->getMultiClassService()->findAllMultiClass();
+            if (!empty($multiClasses)) {
+                $conditions['excludeIds'] = ArrayToolkit::column($multiClasses, 'courseId');
+            }
+            unset($conditions['excludeMultiClassCourses']);
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -180,6 +191,14 @@ class Course extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
     }
 
     protected function getLevelService()

@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\Service\MultiClassService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -53,8 +54,11 @@ class PageCourse extends AbstractResource
         $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
-        $course = $this->getCourseService()->appendSpecInfo($course);
 
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        $course['isReplayShow'] = empty($multiClass) || !empty($multiClass['isReplayShow']) ? 1 : 0;
+
+        $course = $this->getCourseService()->appendSpecInfo($course);
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
@@ -189,5 +193,13 @@ class PageCourse extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    private function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
     }
 }
