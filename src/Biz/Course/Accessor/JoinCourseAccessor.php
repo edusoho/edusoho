@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Accessor;
 
-use ApiBundle\Api\Resource\MultiClass\MultiClass;
 use Biz\Accessor\AccessorAdapter;
 use Biz\Course\Service\CourseSetService;
 use Biz\MultiClass\Service\MultiClassService;

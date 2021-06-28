@@ -10,6 +10,8 @@ interface AssistantStudentService
 
     public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId);
 
+    public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+
     public function create($fields);
 
     public function update($id, $fields);

@@ -113,6 +113,14 @@ class Course extends AbstractResource
             $conditions['outerEndTime'] = $timeRange['endTime'];
         }
 
+        if (!empty($conditions['excludeMultiClassCourses'])) {
+            $multiClasses = $this->getMultiClassService()->findAllMultiClass();
+            if (!empty($multiClasses)) {
+                $conditions['excludeIds'] = ArrayToolkit::column($multiClasses, 'courseId');
+            }
+            unset($conditions['excludeMultiClassCourses']);
+        }
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
