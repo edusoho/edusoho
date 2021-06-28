@@ -18,7 +18,7 @@ class WrongBookCondition extends AbstractResource
 
         $poolName = 'wrong_question.'.$pool['target_type'].'_pool';
 
-        return $this->biz[$poolName]->prepareConditions($pool, $request->query->all());
+        return $this->biz[$poolName]->buildConditions($pool, $request->query->all());
     }
 
     /**
