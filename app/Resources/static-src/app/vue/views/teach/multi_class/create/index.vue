@@ -137,10 +137,9 @@
       <a-form-item label="限购人数">
         <a-input v-decorator="['maxStudentNum', {
           rules: [
-            { required: true, message: '请输入限购人数' },
-            { min: 0, max: 5000, message: '人数范围在0-5000人' }
-          ]
-        }]">
+            { validator: validateStudentNum, message: '请输入限购人数，人数范围在0-5000人' }
+            ]
+          }]">
           <span slot="suffix">人</span>
         </a-input>
       </a-form-item>
@@ -151,7 +150,7 @@
             { label: '开启', value: '1' },
             { label: '关闭', value: '0' },
           ]"
-          v-decorator="['livePlayback', { initialValue: '1'}]"
+          v-decorator="['isReplayShow', { initialValue: '1'}]"
         >
         </a-radio-group>
       </a-form-item>
@@ -616,6 +615,12 @@ export default {
       value.length > 20 ? callback('最多选择20个助教') : callback();
     },
 
+    validateStudentNum(rule, value, callback) {
+        if (/^\+?(\d|[1-9]\d{1,2}|[1-4]\d{3}|5000)$/.test(value) === false) {
+          callback(rule.message)
+        }
+        callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
