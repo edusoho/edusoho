@@ -7,6 +7,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -78,6 +79,10 @@ class PageCourse extends AbstractResource
 
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
+
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
+        $course['assistantId'] = $assistantStudent['assistantId'];
+        $this->getOCUtil()->single($course, ['assistantId']);
 
         return $course;
     }
@@ -201,5 +206,13 @@ class PageCourse extends AbstractResource
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->service('Assistant:AssistantStudentService');
     }
 }
