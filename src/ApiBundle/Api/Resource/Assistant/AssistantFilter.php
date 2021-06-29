@@ -1,24 +1,18 @@
 <?php
 
-namespace ApiBundle\Api\Resource\User;
+namespace ApiBundle\Api\Resource\Assistant;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\AssetHelper;
 
-class UserFilter extends Filter
+class AssistantFilter extends Filter
 {
     protected $simpleFields = [
         'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed',
-    ];
-
-    protected $publicFields = [
-        'about', 'faceRegistered',
-    ];
-
-    protected $authenticatedFields = [
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile',
         'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting', 'weChatQrCode',
+        'loginIp',
     ];
 
     protected $mode = self::SIMPLE_MODE;
@@ -27,23 +21,12 @@ class UserFilter extends Filter
     {
         $this->transformAvatar($data);
         $this->destroyedNicknameFilter($data);
-    }
 
-    protected function publicFields(&$data)
-    {
-        if (!isset($data['about'])) {
-            return;
-        }
-        $data['about'] = $this->convertAbsoluteUrl($data['about']);
-    }
-
-    protected function authenticatedFields(&$data)
-    {
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
-        $data['loginTime'] = date('c', $data['loginTime']);
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['email'] = '*****';
+
         if (!empty($data['verifiedMobile'])) {
             $data['verifiedMobile'] = substr_replace($data['verifiedMobile'], '****', 3, 4);
         } else {

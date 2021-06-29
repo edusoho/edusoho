@@ -17,9 +17,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <img slot="mediumAvatar" slot-scope="mediumAvatar" :src="mediumAvatar" />
+      <img slot="mediumAvatar" slot-scope="mediumAvatar" :src="mediumAvatar" width="50px" height="50px" />
 
-      <img slot="weChatQrCode" slot-scope="weChatQrCode" :src="weChatQrCode" />
+      <template slot="weChatQrCode" slot-scope="weChatQrCode">
+        <img v-if="weChatQrCode" :src="weChatQrCode" width="50px" height="50px" />
+      </template>
 
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
@@ -60,6 +62,17 @@
                 修改用户头像
               </a>
             </a-menu-item>
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/assistant/qrcode`"
+              >
+                修改助教二维码
+              </a>
+            </a-menu-item>
           </a-menu>
         </a-dropdown>
       </template>
@@ -89,7 +102,7 @@ const columns = [
   },
   {
     title: "头像",
-    dataIndex: 'mediumAvatar',
+    dataIndex: 'avatar.middle',
     scopedSlots: { customRender: "mediumAvatar" },
   },
   {
