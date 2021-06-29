@@ -2633,12 +2633,14 @@ user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
+user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
 user.settings.profile.change_avatar: Modify picture
 user.settings.profile.choose_again: Choose again
 user.settings.profile.save_avatar: Save picture
+user.settings.profile.save_qrcode: Save qrcode
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set password'
@@ -2772,6 +2774,7 @@ user.settings.basic_info.alter_description: 'You can create a course after setti
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.shange_avatar: 'Change avatar'
+user.settings.basic_info.shange_qrcode: 'Change qrcode'
 
 user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
@@ -2797,6 +2800,7 @@ user.settings.verification.notice_content: "<p>1, please make sure that the phot
 
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
+user.settings.qrcode.crop: QrCode
 user.settings.avatar.reselect: 'Reselect an image'
 user.settings.avatar.content_title: 'Avatar Setting'
 user.settings.avatar.current_avatar: 'Current Avatar'

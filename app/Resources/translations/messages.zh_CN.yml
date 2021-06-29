@@ -3027,6 +3027,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.qrcode.tip: 助教请务必上传二维码
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -3035,6 +3036,7 @@ user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机�
 user.settings.profile.change_avatar: 修改头像
 user.settings.profile.choose_again: 重新选择
 user.settings.profile.save_avatar: 保存头像
+user.settings.profile.save_qrcode: 保存二维码
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -3192,6 +3194,7 @@ user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.shange_avatar: 修改头像
+user.settings.basic_info.shange_qrcode: 修改二维码
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -3227,6 +3230,8 @@ user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
+
+user.settings.qrcode.crop: 二维码图片
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
