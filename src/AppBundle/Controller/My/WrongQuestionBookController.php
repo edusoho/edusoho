@@ -20,7 +20,10 @@ class WrongQuestionBookController extends BaseController
 
     public function practiseAction(Request $request, $poolId, $recordId)
     {
-        return $this->render('my/learning/wrong-question-book/practise.html.twig');
+        return $this->render('my/learning/wrong-question-book/practise.html.twig', [
+            'poolId' => $poolId,
+            'recordId' => $recordId,
+        ]);
     }
 
     public function practiseRedirectAction(Request $request, $poolId)
@@ -38,6 +41,7 @@ class WrongQuestionBookController extends BaseController
             'answerRecordId' => $recordId,
             'submitGotoUrl' => '',
             'saveGotoUrl' => '',
+            'showHeader' => 1,
         ]);
     }
 

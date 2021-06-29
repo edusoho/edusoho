@@ -1,6 +1,15 @@
-{% extends 'layout.html.twig' %}
-
-{% do script([]) %}
-
-{% block content %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Picture and text task display page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script>
+  var url = "{{ path('wrong_question_book_practise_start_do', {poolId: poolId, recordId:recordId}) }}";
+  window.location.href = url;
+</script>
+</body>
+</html>
