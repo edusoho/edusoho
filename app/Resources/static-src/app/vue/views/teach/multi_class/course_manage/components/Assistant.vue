@@ -19,7 +19,6 @@ export default {
 
   props: {
     assistant: {
-      type: Array,
       required: true,
       default() {
         return []
@@ -37,13 +36,17 @@ export default {
     assistants() {
       if (!_.size(this.assistant)) return '- -';
       let temp = [];
-      _.forEach(this.assistant, (assistant, index) => {
-        if (assistant.nickname) {
-          temp.push(assistant.nickname);
-        } else {
-          temp.push(assistant);
-        }
-      });
+      if (this.assistant.nickname) {
+        temp.push(this.assistant.nickname);
+      } else {
+        _.forEach(this.assistant, (assistant, index) => {
+          if (assistant.nickname) {
+            temp.push(assistant.nickname);
+          } else {
+            temp.push(assistant);
+          }
+        });
+      }
       return _.join(temp, '、');
     },
   },

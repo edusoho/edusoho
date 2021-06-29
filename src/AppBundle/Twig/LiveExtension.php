@@ -60,11 +60,6 @@ class LiveExtension extends \Twig_Extension
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($activity['fromCourseId']);
-        if (!empty($multiClass) && 0 == $multiClass['isReplayShow']) {
-            return [];
-        }
-
         if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             return [$this->_getLiveVideoReplay($activity)];
         } else {

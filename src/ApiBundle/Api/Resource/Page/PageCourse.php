@@ -56,9 +56,6 @@ class PageCourse extends AbstractResource
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
 
-        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
-        $course['isReplayShow'] = empty($multiClass) || !empty($multiClass['isReplayShow']) ? 1 : 0;
-
         $course = $this->getCourseService()->appendSpecInfo($course);
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
