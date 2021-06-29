@@ -1711,6 +1711,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             $result = $this->getMemberDao()->delete($member['id']);
+            $this->getAssistantStudentService()->deleteByStudentIdAndCourseId($member['userId'], $member['courseId']);
+
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'exit', $reason);
             }

@@ -16,6 +16,11 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function getByStudentIdAndCourseId($studentId, $courseId)
+    {
+        return $this->getByFields(['studentId' => $studentId, 'courseId' => $courseId]);
+    }
+
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId)
     {
         return $this->getByFields(['studentId' => $studentId, 'multiClassId' => $multiClassId]);
@@ -34,6 +39,11 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
     public function findByAssistantIdAndCourseId($assistantId, $courseId)
     {
         return $this->findByFields(['assistantId' => $assistantId, 'courseId' => $courseId]);
+    }
+
+    public function deleteByStudentIdAndCourseId($studentId, $courseId)
+    {
+        return $this->db()->delete($this->table(), ['studentId' => $studentId, 'courseId' => $courseId]);
     }
 
     public function findByMultiClassId($multiClassId)
