@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\MultiClass;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -91,6 +90,9 @@ class MultiClassStudent extends AbstractResource
             ['mediaType' => 'testpaper', 'fromCourseId' => $multiClass['courseId']]
         );
 
+        $assistantStudents = $this->getAssistantStudentService()->findByMultiClassId($id);
+        $assistantStudents = ArrayToolkit::index($assistantStudents, 'studentId');
+
         $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
         $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
@@ -98,6 +100,12 @@ class MultiClassStudent extends AbstractResource
             $member['homeworkCount'] = $homeworkCount;
             if (!empty($userHomeworkCount[$member['userId']])) {
                 $member['finishedHomeworkCount'] = $userHomeworkCount[$member['userId']];
+            }
+
+            $member['assistant'] = [];
+            if (!empty($assistantStudents[$member['userId']])) {
+                $member['assistantId'] = $assistantStudents[$member['userId']]['assistantId'];
+                $this->getOCUtil()->single($member, ['assistantId']);
             }
 
             $member['finishedTestpaperCount'] = 0;
@@ -199,6 +207,7 @@ class MultiClassStudent extends AbstractResource
                 'finishedTestpaperCount',
                 'deadline',
                 'createdTime',
+                'assistant',
             ]);
 
             $filteredFields['user'] = [
@@ -208,6 +217,13 @@ class MultiClassStudent extends AbstractResource
                 'weixin' => $member['profile']['weixin'],
                 'truename' => $member['profile']['truename'],
             ];
+
+            if (!empty($member['assistant'])) {
+                $filteredFields['assistant'] = [
+                    'id' => $member['assistant']['id'],
+                    'nickname' => $member['assistant']['nickname'],
+                ];
+            }
 
             $results[] = $filteredFields;
         }
