@@ -27,4 +27,6 @@ interface AssistantStudentService
     public function filterAssistantConditions($conditions, $courseId);
 
     public function deleteByStudentIdAndCourseId($studentId, $courseId);
+
+    public function findByMultiClassId($multiClassId);
 }

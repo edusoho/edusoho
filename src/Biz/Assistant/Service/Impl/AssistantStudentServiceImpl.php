@@ -169,6 +169,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->deleteByStudentIdAndCourseId($studentId, $courseId);
     }
 
+    public function findByMultiClassId($multiClassId)
+    {
+        return $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
+    }
+
     public function filterAssistantConditions($conditions, $courseId)
     {
         $user = $this->getCurrentUser();

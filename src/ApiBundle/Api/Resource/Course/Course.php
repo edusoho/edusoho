@@ -47,12 +47,17 @@ class Course extends AbstractResource
         $assistants = $this->getMemberService()->findMembersByCourseIdAndRole($courseId, 'assistant');
         $course['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
-        $course['assistantId'] = $assistantStudent['assistantId'];
+        $course['assistant'] = [];
+        if (!empty($user['id'])) {
+            $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
+            if (!empty($assistantStudent)) {
+                $course['assistantId'] = $assistantStudent['assistantId'];
+                $this->getOCUtil()->single($course, ['assistantId']);
+            }
+        }
 
         $this->getOCUtil()->single($course, ['creator', 'teacherIds', 'assistantIds']);
         $this->getOCUtil()->single($course, ['courseSetId'], 'courseSet');
-        $this->getOCUtil()->single($course, ['assistantId']);
 
         if (!empty($member)) {
             $course['access'] = $this->getCourseService()->canLearnCourse($courseId);
