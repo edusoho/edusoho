@@ -45,14 +45,12 @@ class CourseFilter extends Filter
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['creator']);
         $userFilter->filters($data['teachers']);
+        $userFilter->filter($data['assistant']);
+        $userFilter->filters($data['assistants']);
 
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
-
-        $assistantFilter = new AssistantFilter();
-        $assistantFilter->filter($data['assistant']);
-        $assistantFilter->filters($data['assistants']);
 
         if (!empty($data['spec'])) {
             $specsFilter = new GoodSpecsFilter();

@@ -56,6 +56,7 @@ class UserFilter extends Filter
         $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
         $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
         $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
+        $data['weChatQrCode'] = AssetHelper::getFurl($data['weChatQrCode'], 'avatar.png');
         $data['avatar'] = [
             'small' => $data['smallAvatar'],
             'middle' => $data['mediumAvatar'],
