@@ -4,6 +4,7 @@ namespace Biz\WrongBook\Pool;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
@@ -26,10 +27,12 @@ class CoursePool extends AbstractPool
         return $this->prepareCommonSceneIds($conditions, $pool);
     }
 
-    public function prepareCourseSceneIds($courseId, $conditions)
+    public function prepareSceneIdsByTargetId($targetId, $conditions)
     {
+        $this->getCourseService()->tryManageCourse($targetId);
+
         $conditions = array_merge($conditions, [
-            'courseId' => $courseId,
+            'courseId' => $targetId,
         ]);
 
         return $this->prepareCommonSceneIds($conditions);

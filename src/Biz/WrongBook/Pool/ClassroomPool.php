@@ -24,7 +24,17 @@ class ClassroomPool extends AbstractPool
             return [];
         }
 
+       return $this->prepareCommonSceneIds($conditions, $pool);
+    }
+
+    protected function prepareCommonSceneIds($conditions ,$pool = [])
+    {
         $sceneIds = [];
+
+        if (!empty($conditions['classroomId'])) {
+            $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomId($conditions['classroomId']);
+        }
+
         if (!empty($conditions['classroomCourseSetId'])) {
             $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
         }
@@ -48,6 +58,17 @@ class ClassroomPool extends AbstractPool
         }
 
         return  $sceneIds;
+    }
+
+    public function prepareSceneIdsByTargetId($targetId, $conditions)
+    {
+        $this->getClassroomService()->tryManageClassroom($targetId);
+
+        $conditions = array_merge($conditions, [
+            'classroomId' => $targetId,
+        ]);
+
+        return $this->prepareCommonSceneIds($conditions);
     }
 
     public function buildConditions($pool, $conditions)
@@ -155,6 +176,15 @@ class ClassroomPool extends AbstractPool
         }
 
         return $courseTasksInfo;
+    }
+
+    protected function findSceneIdsByClassroomId($classroomId)
+    {
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $courseSetIds = ArrayToolkit::column($classroomCourses,'courseSetId');
+
+        $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
+        return $this->generateSceneIds($activates);
     }
 
     public function findSceneIdsByClassroomCourseSetId($courseSetId)

@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Course;
+namespace ApiBundle\Api\Resource\WrongBook;
 
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
@@ -10,18 +10,23 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
+use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
-class CourseWrongQuestion extends AbstractResource
+class WrongBookStudentWrongQuestion extends AbstractResource
 {
     /**
      * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
      */
-    public function search(ApiRequest $request, $courseId)
+    public function search(ApiRequest $request, $targetId, $targetType)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $conditions = $request->query->all();
+        if (!in_array($targetType, ['course', 'classroom', 'exercise'])) {
+            throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
+        }
 
-        $sceneIds = $this->biz['wrong_question.course_pool']->prepareCourseSceneIds($course['id'], $request->query->all());
+        $pool = 'wrong_question.'.$targetType.'_pool';
+        $sceneIds = $this->biz[$pool]->prepareSceneIdsByTargetId($targetId, $conditions);
         $conditions = [
             'answer_scene_ids' => $sceneIds,
         ];
