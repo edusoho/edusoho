@@ -80,7 +80,7 @@ class PageCourse extends AbstractResource
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
 
-        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId(19, $courseId);
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
         $course['assistantId'] = $assistantStudent['assistantId'];
         $this->getOCUtil()->single($course, ['assistantId']);
 

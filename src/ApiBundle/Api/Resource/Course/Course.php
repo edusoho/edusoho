@@ -47,7 +47,7 @@ class Course extends AbstractResource
         $assistants = $this->getMemberService()->findMembersByCourseIdAndRole($courseId, 'assistant');
         $course['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId(19, $courseId);
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
         $course['assistantId'] = $assistantStudent['assistantId'];
 
         $this->getOCUtil()->single($course, ['creator', 'teacherIds', 'assistantIds']);
