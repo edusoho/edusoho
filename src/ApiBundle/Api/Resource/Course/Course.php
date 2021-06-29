@@ -77,8 +77,6 @@ class Course extends AbstractResource
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         unset($course['enableAudio']);
         $course = $this->getCourseService()->appendSpecInfo($course);
-        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
-        $course['isReplayShow'] = empty($multiClass) || !empty($multiClass['isReplayShow']) ? 1 : 0;
 
         return $course;
     }
