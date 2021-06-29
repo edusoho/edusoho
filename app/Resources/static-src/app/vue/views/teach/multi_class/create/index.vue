@@ -138,9 +138,11 @@
         <a-input v-decorator="['maxStudentNum', {
           rules: [
             { required: true, message: '请输入限购人数' },
-            { validator: validateStudentNum, message: '人数范围在0-100000人' }
+            { validator: validateStudentNum }
             ]
-          }]">
+          }]"
+          :disabled="!form.getFieldValue('courseId')"
+        >
           <span slot="suffix">人</span>
         </a-input>
       </a-form-item>
@@ -214,6 +216,7 @@ export default {
       multiClassId: 0,
       mode: 'create', // create, editor, copy
       notificationShow: '',
+      maxStudentNum: 0,
       course: {
         list: [],
         title: '',
@@ -284,6 +287,7 @@ export default {
 
       this.selectedCourseId = course.id;
       this.selectedCourseSetId = course.courseSetId;
+      this.maxStudentNum = course.maxStudentNum;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
       this.fetchCourse();
@@ -391,6 +395,7 @@ export default {
         this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum;
         this.course.list = [course];
         this.course.initialValue = courseId;
         this.product.list = [product];
@@ -593,6 +598,7 @@ export default {
       _.forEach(this.course.list, item => {
         if (item.id == value) {
           this.selectedCourseSetId = item.courseSet.id;
+          this.maxStudentNum = item.maxStudentNum;
           return false;
         }
       });
@@ -629,9 +635,10 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-        if (/^\+?(\d|[1-9]\d{1,2}|[1-4]\d{3}|100000)$/.test(value) === false) {
-          callback(rule.message)
+        if (/^\+?[1-9][0-9]*$/.test(value) === false || value > Number(this.maxStudentNum)) {
+          callback(`人数范围在0-${this.maxStudentNum}人`)
         }
+
         callback()
     },
     handleSubmit(e) {
