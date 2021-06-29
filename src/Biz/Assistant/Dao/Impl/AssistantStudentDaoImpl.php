@@ -34,7 +34,7 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         $marks = str_repeat('?,', count($studentIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE studentId IN ({$marks}) AND multiClassId = ?;";
 
-        return $this->db()->fetchAll($sql, array_merge($studentIds, $multiClassId));
+        return $this->db()->fetchAll($sql, array_merge($studentIds, [$multiClassId]));
     }
 
     public function findByAssistantIdAndCourseId($assistantId, $courseId)
