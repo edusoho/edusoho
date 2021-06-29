@@ -17,4 +17,6 @@ interface AssistantStudentDao extends AdvancedDaoInterface
     public function findByAssistantIdAndCourseId($assistantId, $courseId);
 
     public function findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+
+    public function findByMultiClassId($multiClassId);
 }
