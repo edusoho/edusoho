@@ -12,25 +12,14 @@
       </a-button>
     </template>
 
-    <course-screen
-      v-if="targetType == 'course'"
-      @on-search="onSearch"
-    />
+    <!-- 筛选 -->
+    <component :is="currentScreenComponent" :id="targetId" @on-search="onSearch" />
 
-    <classroom-screen
-      v-else-if="targetType == 'classroom'"
-      @on-search="onSearch"
-    />
-
-    <question-bank-screen
-      v-else-if="targetType == 'exercise'"
-      @on-search="onSearch"
-    />
-
-    <template v-for="question in questionList">
+    <!-- 题目 -->
+    <template v-for="(question, index) in questionList">
       <component
-        :is="currentQuestionComponent(question.question.answer_mode)"
-        :key="question.id"
+        :is="currentQuestionComponent(question.questions[0].answer_mode)"
+        :key="question.id + index"
         :question="question"
       />
     </template>
@@ -88,7 +77,18 @@ export default {
         uncertain_choice: 'Choice',
         true_false: 'Judge',
         text: 'Fill'
+      },
+      screenComponents: {
+        course: 'CourseScreen',
+        classroom: 'ClassroomScreen',
+        exercise: 'QuestionBankScreen'
       }
+    }
+  },
+
+  computed: {
+    currentScreenComponent() {
+      return this.screenComponents[this.targetType];
     }
   },
 
@@ -102,7 +102,6 @@ export default {
       const params = {
         id: this.targetId,
         targetType: this.targetType,
-        courseId: 72,
         offset: (this.pagination.current - 1) * 10,
         limit: 10
       };
@@ -122,8 +121,12 @@ export default {
     },
 
     // 错题搜索
-    onSearch(values) {
-      console.log(values);
+    onSearch(params) {
+      const { data, type } = params;
+
+      if (type === 'course') {
+
+      }
     },
 
     // 翻页
