@@ -206,6 +206,11 @@ file_upload:
     defaults: { _controller: AppBundle:File:upload }
     methods: [POST]
 
+qr_code_upload:
+    path:  /qr/code/upload
+    defaults: { _controller: AppBundle:File:qrCodeUpload }
+    methods: [POST]
+
 file_img_crop:
     path:  /file/img/crop
     defaults: { _controller: AppBundle:File:cropImg }
@@ -417,6 +422,10 @@ settings_avatar_crop_modal:
 settings_profile_avatar_crop_modal:
     path:  /settings/profile/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:profileAvatarCropModal }
+
+settings_assistant_qrcode_crop_modal:
+    path:  /settings/assistant/qrcode/crop/modal
+    defaults: { _controller: AppBundle:Settings:assistantQrCodeCropModal }
 
 settings_avatar_fetch_partner:
     path:  /settings/avatar/fetch_partner

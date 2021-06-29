@@ -1,90 +1,91 @@
 <?php
 
-namespace Tests\Unit\MultiClass\Dao;
+namespace Tests\Unit\Assistant\Dao;
 
-use Biz\BaseTestCase;
-use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\Assistant\Dao\AssistantStudentDao;
+use Tests\Unit\Base\BaseDaoTestCase;
 
-class AssistantStudentDaoTest extends BaseTestCase
+class AssistantStudentDaoTest extends BaseDaoTestCase
 {
-    public function testFindByProductIds()
+    public function testSearch()
     {
-        $this->batchCreateMultiClass();
+        $expected = [];
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(['assistantId' => 1]);
+        $expected[] = $this->mockDataObject(['assistantId' => 1, 'multiClassId' => 2]);
 
-        $result = $this->getMultiClassDao()->findByProductIds([1, 2]);
-
-        $this->assertEquals(3, count($result));
-    }
-
-    public function testFindByProductId()
-    {
-        $this->batchCreateMultiClass();
-
-        $result = $this->getMultiClassDao()->findByProductId(1);
-
-        $this->assertEquals(2, count($result));
-    }
-
-    public function testGetByTitle()
-    {
-        $this->batchCreateMultiClass();
-
-        $result = $this->getMultiClassDao()->getByTitle('班课1');
-
-        $this->assertEquals('班课1', $result['title']);
-        $this->assertEquals(1, $result['courseId']);
-        $this->assertEquals(1, $result['productId']);
-    }
-
-    public function testGetByCourseId()
-    {
-        $this->batchCreateMultiClass();
-
-        $result = $this->getMultiClassDao()->getByCourseId(1);
-
-        $this->assertEquals('班课1', $result['title']);
-        $this->assertEquals(1, $result['courseId']);
-        $this->assertEquals(1, $result['productId']);
-    }
-
-    public function testSearchMultiClassJoinCourse()
-    {
-        $this->batchCreateMultiClass();
-
-        $result = $this->getMultiClassDao()->searchMultiClassJoinCourse(['productId' => 1], [], 0, PHP_INT_MAX);
-
-        $this->assertEquals(2, count($result));
-    }
-
-    protected function batchCreateMultiClass()
-    {
-        return $this->getMultiClassDao()->batchCreate([
+        $testCondition = [
             [
-                'title' => '班课1',
-                'courseId' => 1,
-                'productId' => 1,
-                'copyId' => 0,
+                'condition' => ['assistantId' => 1],
+                'expectedResults' => $expected,
+                'expectedCount' => 3,
             ],
-            [
-                'title' => '班课2',
-                'courseId' => 2,
-                'productId' => 1,
-                'copyId' => 0,
-            ],
-            [
-                'title' => '班课3',
-                'courseId' => 3,
-                'productId' => 2,
-                'copyId' => 0,
-            ],
-        ]);
+        ];
+
+        $this->searchTestUtil($this->getAssistantStudentDao(), $testCondition, $this->getCompareKeys());
+    }
+
+    public function testCountMultiClassGroupStudent()
+    {
+        $this->mockDataObject(['multiClassId' => 1]);
+
+        $res = $this->getAssistantStudentDao()->countMultiClassGroupStudent(1);
+
+        $this->assertEquals(1, $res[0]['assistantId']);
+        $this->assertEquals(1, $res[0]['studentNum']);
+    }
+
+    public function testGetByStudentIdAndMultiClassId()
+    {
+        $this->mockDataObject(['multiClassId' => 1]);
+
+        $res = $this->getAssistantStudentDao()->getByStudentIdAndMultiClassId(1, 1);
+
+        $this->assertEquals(1, $res['assistantId']);
+    }
+
+    public function testFindByAssistantIdAndCourseId()
+    {
+        $this->mockDataObject(['courseId' => 1]);
+
+        $res = $this->getAssistantStudentDao()->findByAssistantIdAndCourseId(1, 1);
+
+        $this->assertEquals(1, $res[0]['assistantId']);
+    }
+
+    public function testFindByMultiClassIdAndStudentIds()
+    {
+        $this->mockDataObject(['courseId' => 1]);
+
+        $res = $this->getAssistantStudentDao()->findByAssistantIdAndCourseId(1, 1);
+
+        $this->assertEquals(1, $res[0]['assistantId']);
+    }
+
+    public function testFindByMultiClassId()
+    {
+        $this->mockDataObject(['multiClassId' => 1]);
+
+        $res = $this->getAssistantStudentDao()->findByMultiClassId(1);
+
+        $this->assertEquals(1, $res[0]['assistantId']);
+    }
+
+    protected function getDefaultMockFields()
+    {
+        return [
+            'assistantId' => 1,    // 助教ID
+            'studentId' => 1,    // 学员ID
+            'courseId' => 1, // 课程ID
+            'multiClassId' => 1,  // 班课ID
+        ];
     }
 
     /**
-     * @return MultiClassDao
+     * @return AssistantStudentDao
      */
-    protected function getMultiClassDao()
+    protected function getAssistantStudentDao()
     {
-        return $this->createDao('MultiClass:MultiClassDao');
+        return $this->createDao('Assistant:AssistantStudentDao');
     }
 }
