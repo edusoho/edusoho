@@ -151,7 +151,7 @@ class TestpaperController extends BaseController
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        if ('teacher' === $member['role']) {
+        if (in_array($member['role'], ['teacher', 'assistant'])) {
             return true;
         }
 
