@@ -118,6 +118,11 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'uri' => 'AppBundle:Course/Course:teachers',
                 'renderType' => 'render',
             ],
+            'assistantInfo' => [
+                'uri' => 'AppBundle:Course/Course:assistantInfo',
+                'renderType' => 'render',
+                'showMode' => 'course',
+            ],
             //最新学员
             'newestStudents' => [
                 'uri' => 'AppBundle:Course/Course:newestStudents',
@@ -141,6 +146,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
             'otherCourses' => $widgets['otherCourses'],
             'belongClassroom' => $widgets['belongClassroom'],
             'teachers' => $widgets['teachers'],
+            'assistantInfo' => $widgets['assistantInfo'],
             'newestStudents' => $widgets['newestStudents'],
             'studentActivity' => $widgets['studentActivity'],
         ];
