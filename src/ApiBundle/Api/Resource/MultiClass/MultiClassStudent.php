@@ -93,6 +93,8 @@ class MultiClassStudent extends AbstractResource
         $assistantStudents = $this->getAssistantStudentService()->findByMultiClassId($id);
         $assistantStudents = ArrayToolkit::index($assistantStudents, 'studentId');
 
+        $this->getOCUtil()->multiple($assistantStudents, ['assistantId']);
+
         $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
         $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
@@ -104,8 +106,7 @@ class MultiClassStudent extends AbstractResource
 
             $member['assistant'] = [];
             if (!empty($assistantStudents[$member['userId']])) {
-                $member['assistantId'] = $assistantStudents[$member['userId']]['assistantId'];
-                $this->getOCUtil()->single($member, ['assistantId']);
+                $member['assistant'] = $assistantStudents[$member['userId']]['assistant'];
             }
 
             $member['finishedTestpaperCount'] = 0;

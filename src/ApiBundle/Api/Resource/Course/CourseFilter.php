@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Resource\Assistant\AssistantFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
@@ -30,7 +31,7 @@ class CourseFilter extends Filter
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
         'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom', 'assistants', 'assistant',
-        'isReplayShow'
+        'isReplayShow',
     ];
 
     protected function publicFields(&$data)
@@ -48,6 +49,10 @@ class CourseFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
+
+        $assistantFilter = new AssistantFilter();
+        $assistantFilter->filter($data['assistant']);
+        $assistantFilter->filters($data['assistants']);
 
         if (!empty($data['spec'])) {
             $specsFilter = new GoodSpecsFilter();
