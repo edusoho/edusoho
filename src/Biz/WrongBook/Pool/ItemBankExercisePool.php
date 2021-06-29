@@ -74,7 +74,7 @@ class ItemBankExercisePool extends AbstractPool
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
             'user_id' => $this->getCurrentUser()->getId(),
             'answer_scene_id' => $sceneId,
-            'testpaper_id' => ArrayToolkit::column($assessmentExercises, 'assessmentId'),
+            'testpaper_ids' => ArrayToolkit::column($assessmentExercises, 'assessmentId'),
         ], [], 0, PHP_INT_MAX);
         $wrongQuestionGroupAssessmentId = ArrayToolkit::group($wrongQuestions, 'testpaper_id');
 
