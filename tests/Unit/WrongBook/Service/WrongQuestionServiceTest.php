@@ -34,6 +34,20 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertNotEmpty($questionPool);
     }
 
+    public function testGetPool()
+    {
+        $created = $this->getWrongQuestionBookPoolDao()->create($this->mockPool());
+        $get = $this->getWrongQuestionBookPoolDao()->get($created['id']);
+        self::assertEquals($created, $get);
+    }
+
+    public function testGetPoolBySceneId()
+    {
+        $created = $this->getWrongQuestionBookPoolDao()->create($this->mockPool(['scene_id' => 3]));
+        $get = $this->getWrongQuestionBookPoolDao()->get($created['id']);
+        self::assertEquals(3, $get['scene_id']);
+    }
+
     public function testBatchBuildWrongQuestion()
     {
         $wrongAnswerQuestionReports = [
@@ -144,6 +158,16 @@ class WrongQuestionServiceTest extends BaseTestCase
         }
         $wrongPoolsNum = $this->getWrongQuestionService()->countWrongBookPool(['user_id' => 2]);
         $this->assertEquals('3', $wrongPoolsNum);
+    }
+
+    protected function mockPool($customFields = [])
+    {
+        return array_merge([
+            'user_id' => 1,
+            'item_num' => 1,
+            'target_type' => 'course',
+            'target_id' => 1,
+        ], $customFields);
     }
 
     /**

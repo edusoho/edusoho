@@ -123,6 +123,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionBookPoolDao()->get($poolId);
     }
 
+    public function getPoolBySceneId($sceneId)
+    {
+        return $this->getWrongQuestionBookPoolDao()->getPoolBySceneId($sceneId);
+    }
+
     public function countWrongQuestion($conditions)
     {
         return $this->getWrongQuestionDao()->count($conditions);
