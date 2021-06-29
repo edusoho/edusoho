@@ -51,7 +51,7 @@
             <div class="courseset-manage-header-data hidden-xs">
               <span class="cd-text-medium">{{ 'my.teaching.multi_class.status'|trans }}</span>
               <div class="cd-mt16 cd-dark-major">
-                {% if course.liveStatus == 'notStart' %}
+                {% if course.liveStatus == 'not_start' %}
                   <span class="courseset-manage-header-data__num color-warning">{{ dict_text('multiClassStatus', course.liveStatus) }}</span>
                 {% elseif course.liveStatus == 'live' %}
                   <span class="courseset-manage-header-data__num color-success">{{ dict_text('multiClassStatus', course.liveStatus) }}</span>
