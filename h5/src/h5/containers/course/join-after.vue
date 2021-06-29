@@ -23,6 +23,41 @@
           </div>
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
+        <!-- 助教 -->
+        <div v-if="details.assistant" class="assistant-show clearfix">
+          <div class="assistant-show__icon">
+            <i class="iconfont icon-weixin1"></i>
+          </div>
+          <div class="assistant-show__text" @click="showAssistant">
+            为保证更好地学习效果，请点击此处添加助教老师微信
+          </div>
+        </div>
+        <!-- 助教弹出框 -->
+        <van-popup
+          class="assistant-show__content"
+          v-model="assistantShow"
+          closeable
+          round
+        >
+          <img
+            class="avatar"
+            :src="details.assistant.smallAvatar"
+            alt="助教图片"
+          />
+          <p class="name">
+            {{ details.assistant.title }}课程助教——
+            {{ details.assistant.nickname }}
+          </p>
+          <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
+          <img
+            class="wechat"
+            :src="details.assistant.weChatQrCode"
+            alt="二维码图片"
+          />
+          <van-button type="primary" block @click="downloadCodeImg()"
+            >保存图片，前往微信添加</van-button
+          >
+        </van-popup>
 
         <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
       </div>
@@ -117,6 +152,7 @@ export default {
       },
       show: false,
       show_course_review: this.$store.state.goods.show_course_review,
+      assistantShow: false,
     };
   },
   mixins: [collectUserInfo],
@@ -439,6 +475,17 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
+    },
+
+    showAssistant() {
+      this.assistantShow = true;
+    },
+
+    downloadCodeImg() {
+      const a = document.createElement('a');
+      a.download = name || '微信二维码';
+      a.href = this.details.assistant.weChatQrCode;
+      a.click();
     },
   },
 };
