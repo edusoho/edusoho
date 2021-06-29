@@ -11,8 +11,9 @@ class WrongQuestionPool extends AbstractPool
 {
     public function getPoolTarget($report)
     {
-        $poolId = $this->getWrongQuestionService()->getPool($report['poolId']);
-        $result = $this->getWrongQuestionService()->getPool(1);
+        $pool = $this->getWrongQuestionService()->getPoolBySceneId($report['answer_scene_id']);
+
+        return $pool;
     }
 
     public function prepareSceneIds($poolId, $conditions)
@@ -20,9 +21,9 @@ class WrongQuestionPool extends AbstractPool
         return $conditions;
     }
 
-    public function prepareConditions($poolId, $conditions)
+    public function buildConditions($pool, $conditions)
     {
-        return $conditions;
+        // TODO: Implement buildConditions() method.
     }
 
     /**

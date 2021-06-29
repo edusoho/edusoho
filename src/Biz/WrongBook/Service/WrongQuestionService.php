@@ -18,6 +18,8 @@ interface WrongQuestionService
 
     public function getPool($poolId);
 
+    public function getPoolBySceneId($sceneId);
+
     /**
      * BookPool
      */
