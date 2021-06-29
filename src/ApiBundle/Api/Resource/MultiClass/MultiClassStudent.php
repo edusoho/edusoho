@@ -90,11 +90,6 @@ class MultiClassStudent extends AbstractResource
             ['mediaType' => 'testpaper', 'fromCourseId' => $multiClass['courseId']]
         );
 
-        $assistantStudents = $this->getAssistantStudentService()->findByMultiClassId($id);
-        $assistantStudents = ArrayToolkit::index($assistantStudents, 'studentId');
-
-        $this->getOCUtil()->multiple($assistantStudents, ['assistantId']);
-
         $userHomeworkCount = $this->findUserTaskCount($multiClass['courseId'], 'homework');
         $userTestpaperCount = $this->findUserTaskCount($multiClass['courseId'], 'testpaper');
         foreach ($members as &$member) {
@@ -102,11 +97,6 @@ class MultiClassStudent extends AbstractResource
             $member['homeworkCount'] = $homeworkCount;
             if (!empty($userHomeworkCount[$member['userId']])) {
                 $member['finishedHomeworkCount'] = $userHomeworkCount[$member['userId']];
-            }
-
-            $member['assistant'] = [];
-            if (!empty($assistantStudents[$member['userId']])) {
-                $member['assistant'] = $assistantStudents[$member['userId']]['assistant'];
             }
 
             $member['finishedTestpaperCount'] = 0;
@@ -117,7 +107,7 @@ class MultiClassStudent extends AbstractResource
         }
 
         $members = $this->filterFields($members);
-        $member = $this->appendStudentAssistant($multiClass, $members, $assistantInfos);
+        $members = $this->appendStudentAssistant($multiClass, $members, $assistantInfos);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
@@ -202,6 +192,7 @@ class MultiClassStudent extends AbstractResource
                 'id',
                 'learningProgressPercent',
                 'threadCount',
+                'userId',
                 'homeworkCount',
                 'finishedHomeworkCount',
                 'testpaperCount',
@@ -218,13 +209,6 @@ class MultiClassStudent extends AbstractResource
                 'weixin' => $member['profile']['weixin'],
                 'truename' => $member['profile']['truename'],
             ];
-
-            if (!empty($member['assistant'])) {
-                $filteredFields['assistant'] = [
-                    'id' => $member['assistant']['id'],
-                    'nickname' => $member['assistant']['nickname'],
-                ];
-            }
 
             $results[] = $filteredFields;
         }
