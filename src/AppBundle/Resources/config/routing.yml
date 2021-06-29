@@ -645,8 +645,12 @@ my_wrong_question_book_target_detail:
     path: /my/wrong_question_book/wrong_questions
     defaults: { _controller: AppBundle:My/WrongQuestionBook:detail }
 
-wrong_question_book_practise:
+wrong_question_book_practise_redirect:
     path: /wrong_question_book/pool/{poolId}/practise
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:practiseRedirect }
+
+wrong_question_book_practise:
+    path: /wrong_question_book/pool/{poolId}/practise/{recordId}
     defaults: { _controller: AppBundle:My/WrongQuestionBook:practise }
 
 wrong_question_book_practise_start_do:

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use ApiBundle\Api\ApiRequest;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,6 +25,11 @@ class WrongQuestionBookController extends BaseController
 
     public function practiseRedirectAction(Request $request, $poolId)
     {
+        $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST');
+        $result = $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
+        $record = $result['answer_record'];
+
+        return $this->redirect($this->generateUrl('wrong_question_book_practise', ['poolId' => $poolId, 'recordId' => $record['id']]));
     }
 
     public function startDoAction(Request $request, $poolId, $recordId)
