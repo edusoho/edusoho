@@ -31,6 +31,11 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->findByFields(['assistantId' => $assistantId, 'courseId' => $courseId]);
     }
 
+    public function deleteByStudentIdAndCourseId($studentId, $courseId)
+    {
+        return $this->db()->delete($this->table(), ['studentId' => $studentId, 'courseId' => $courseId]);
+    }
+
     public function findByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         if (empty($studentIds)) {

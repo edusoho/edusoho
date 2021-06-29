@@ -23,4 +23,6 @@ interface AssistantStudentService
     public function get($id);
 
     public function filterAssistantConditions($conditions, $courseId);
+
+    public function deleteByStudentIdAndCourseId($studentId, $courseId);
 }
