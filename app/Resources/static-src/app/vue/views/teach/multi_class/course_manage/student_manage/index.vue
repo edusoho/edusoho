@@ -27,6 +27,7 @@
         </a-button>
 
         <a-button
+          v-if="isPermission('student_assistant_update')"
           @click="clickBatchUpdateAssistantModal()"
           type="primary"
         >
@@ -35,7 +36,6 @@
             批量修改助教
           </a-space>
         </a-button>
-        <assistant-list-modal :visible="assistantListModalVisible" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
 
         <a-button
           v-if="isPermission('course_member_delete')"
@@ -143,6 +143,7 @@
       </template>
     </a-table>
 
+    <assistant-list-modal :visible="assistantListModalVisible" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
