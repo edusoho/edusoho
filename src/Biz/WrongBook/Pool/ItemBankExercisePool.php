@@ -29,6 +29,8 @@ class ItemBankExercisePool extends AbstractPool
             $sceneIds = [];
         } elseif ($sceneIds['sceneIds'] == []) {
             $sceneIds = [-1];
+        } else {
+            $sceneIds = $sceneIds['sceneIds'];
         }
 
         return $sceneIds;
