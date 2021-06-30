@@ -34,7 +34,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'status' => 'wrong',
+            'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
 
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, [
