@@ -1,10 +1,10 @@
 <template>
-  <layout :question="question">
+  <layout :question="question" :order="order">
     <template #answer>
-      <a-checkbox-group :default-value="question.report.response">
+      <a-checkbox-group :default-value="questions.report.response">
         <a-checkbox
+          v-for="(item, index) in questions.response_points"
           :class="['choose-answer', getAnswerClass(item.checkbox.val)]"
-          v-for="(item, index) in question.question.response_points"
           :key="index"
           :value="item.checkbox.val"
         >

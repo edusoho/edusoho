@@ -18,7 +18,7 @@ export default {
 
   computed: {
     rightAnswer() {
-      let { answer, answer_mode } = this.question.question;
+      let { answer, answer_mode } = this.question.questions[0];
 
       if (answer_mode === 'true_false') {
         answer = _.map(answer, function(item) {

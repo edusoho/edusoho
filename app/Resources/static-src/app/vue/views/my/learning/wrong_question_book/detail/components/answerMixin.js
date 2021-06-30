@@ -11,13 +11,23 @@ export default {
     question: {
       type: Object,
       required: true
+    },
+
+    order: {
+      type: Number,
+      required: true
+    }
+  },
+
+  computed: {
+    questions() {
+      return this.question.questions[0];
     }
   },
 
   methods: {
     getAnswerClass(value) {
-      const { answer } = this.question.question; // 正确答案
-      const { response } = this.question.report; // 用户选择的答案
+      const { answer, report: { response } } = this.questions;
 
       if (_.includes(_.difference(answer, response), value)) return 'right-answer'; // 用户未选的正确答案
 
