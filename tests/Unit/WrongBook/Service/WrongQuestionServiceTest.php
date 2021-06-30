@@ -21,6 +21,7 @@ class WrongQuestionServiceTest extends BaseTestCase
             'user_id' => 1,
             'answer_scene_id' => 1,
             'target_type' => 'course',
+            'testpaper_id' => 1,
             'target_id' => 1,
         ];
         $wrongQuestion = $this->getWrongQuestionService()->buildWrongQuestion($wrongQuestion, $source);
@@ -66,6 +67,7 @@ class WrongQuestionServiceTest extends BaseTestCase
             'user_id' => 4,
             'answer_scene_id' => 4,
             'target_type' => 'classroom',
+            'testpaper_id' => 1,
             'target_id' => 4,
         ];
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);

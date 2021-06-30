@@ -92,6 +92,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
+                'testpaper_id = :testpaper_id',
+                'testpaper_id IN (:testpaper_ids)',
                 'created_time = :created_time',
             ],
             'orderbys' => ['id', 'created_time', 'submit_time'],
