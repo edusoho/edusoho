@@ -140,7 +140,7 @@ export default {
           courseTaskId: 'all'
         });
 
-        courseSetId !== 'all' && (params.courseSetId = courseSertId);
+        courseSetId !== 'all' && (params.courseSetId = courseSetId);
       }
 
       if (type === 'source') {

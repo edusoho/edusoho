@@ -100,12 +100,17 @@ export default {
   methods: {
     async fetchWrongBookQuestion() {
       this.loading = true;
-      const params = Object.assign({
-        targetType: this.targetType,
-        offset: (this.pagination.current - 1) * 10,
-        limit: 10
-      }, this.searchParams);
-      const { paging, data } = await WrongBookQuestionShow.search(this.targetId, params);
+      const apiParams = {
+        params: Object.assign({
+          targetType: this.targetType,
+          offset: (this.pagination.current - 1) * 10,
+          limit: 10
+        }, this.searchParams),
+        query: {
+          poolId: this.targetId,
+        }
+      };
+      const { paging, data } = await WrongBookQuestionShow.search(apiParams);
       this.pagination.total = Number(paging.total);
       this.loading = false;
       this.questionList = data;
