@@ -213,7 +213,11 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $assistant = [];
         $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($member['userId'], $id);
+        if (!empty($assistantStudent)) {
+            $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
+        }
 
         return $this->render(
             'course/course-show.html.twig',
@@ -224,7 +228,7 @@ class CourseController extends CourseBaseController
                 'isCourseTeacher' => in_array($member['role'], ['teacher', 'assistant']),
                 'course' => $course,
                 'classroom' => $classroom,
-                'hasAssistant' => !empty($assistantStudent),
+                'hasAssistant' => !empty($assistant['weChatQrCode']),
             ]
         );
     }
