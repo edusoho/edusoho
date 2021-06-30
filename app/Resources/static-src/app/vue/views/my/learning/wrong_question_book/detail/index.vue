@@ -68,6 +68,7 @@ export default {
       targetId: this.$route.params.target_id,
       questionList: [],
       loading: false,
+      searchParams: {},
       pagination: {
         current: 1
       },
@@ -99,13 +100,12 @@ export default {
   methods: {
     async fetchWrongBookQuestion() {
       this.loading = true;
-      const params = {
-        id: this.targetId,
+      const params = Object.assign({
         targetType: this.targetType,
         offset: (this.pagination.current - 1) * 10,
         limit: 10
-      };
-      const { paging, data } = await WrongBookQuestionShow.search(params);
+      }, this.searchParams);
+      const { paging, data } = await WrongBookQuestionShow.search(this.targetId, params);
       this.pagination.total = Number(paging.total);
       this.loading = false;
       this.questionList = data;
@@ -123,10 +123,8 @@ export default {
     // 错题搜索
     onSearch(params) {
       const { data, type } = params;
-
-      if (type === 'course') {
-
-      }
+      this.searchParams = data;
+      this.fetchWrongBookQuestion();
     },
 
     // 翻页
