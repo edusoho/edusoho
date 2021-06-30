@@ -4990,6 +4990,8 @@ courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,�
 role.student: 学员
 # 教师
 role.teacher: 教师
+role.assistant: 助教
+role.academic_staf: 教务
 
 # 后台
 admin.process_bar: 优化课程文件

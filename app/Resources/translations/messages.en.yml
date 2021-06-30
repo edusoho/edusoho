@@ -4229,6 +4229,8 @@ courseset_manage.unlock_confrim: Unlock
 courseset_manage.unlock_confrim.tips: 'Unlock operation is irreversible and it will end the update'
 role.student: Student
 role.teacher: Teacher
+role.assistant: Assistant
+role.academic_staf: Academic Staf
 admin.process_bar: 'Optimize course file'
 admin.process_bar.finish_btn: 'Optimize completely'
 admin.process_bar.keep_window_tips: 'Please don''t close current window because of the optimization is in progress'
