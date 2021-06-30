@@ -25,6 +25,18 @@
             批量导入
           </a-space>
         </a-button>
+
+        <a-button
+          v-if="isPermission('student_assistant_update')"
+          @click="clickBatchUpdateAssistantModal()"
+          type="primary"
+        >
+          <a-space>
+            <svg-icon icon="icon-edit" />
+            批量修改助教
+          </a-space>
+        </a-button>
+
         <a-button
           v-if="isPermission('course_member_delete')"
           type="primary"
@@ -131,6 +143,7 @@
       </template>
     </a-table>
 
+    <assistant-list-modal :visible="assistantListModalVisible" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
@@ -227,6 +240,7 @@
 <script>
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
+import AssistantListModal from 'app/vue/views/teach/assistant/components/AssistantListModal';
 import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
 import Assistant from "../components/Assistant.vue";
@@ -350,6 +364,7 @@ export default {
   components: {
     AddStudentModal,
     StudentInfoModal,
+    AssistantListModal,
     userInfoTable,
     Assistant,
   },
@@ -371,6 +386,8 @@ export default {
       loading: false,
       addStudentVisible: false,
       viewStudentInfoVisible: false,
+      assistantListModalVisible: false,
+      selectedStudentIds: [],
       id: this.$route.params.id,
       getListLoading: false,
       keyword: '',
@@ -607,6 +624,16 @@ export default {
     async viewStudentInfo(user) {
       this.modalShowUser = await UserProfiles.get(user.id);;
       this.viewStudentInfoVisible = true;
+    },
+
+    clickBatchUpdateAssistantModal()
+    {
+      if (this.selectedRowKeys.length === 0) {
+        this.$message.error('请至少选中一项后修改', 1);
+        return;
+      }
+      this.assistantListModalVisible = true;
+      this.selectedStudentIds = this.selectedUserIds
     },
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
