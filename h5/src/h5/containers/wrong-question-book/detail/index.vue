@@ -3,6 +3,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
+
 export default {
   name: 'WrongQuestionBookDetail',
 
@@ -13,6 +16,14 @@ export default {
     };
   },
 
-  created() {},
+  created() {
+    this.setNavbarTitle(this.$route.query.title);
+  },
+
+  methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
+    }),
+  },
 };
 </script>
