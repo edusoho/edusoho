@@ -14,7 +14,6 @@
         <a-select
           show-search
           :filter-option="false"
-          @popupScroll="assistantScroll"
           @search="handleSearchAssistant"
           v-decorator="['assistantId', {
             initialValue: assistant.initialValue,
@@ -46,7 +45,7 @@
 
 <script>
 import _ from 'lodash';
-import { Assistant } from 'common/vue/service';
+import { MultiClassAssistant, Assistant } from 'common/vue/service';
 
 export default {
   props: {
@@ -64,6 +63,10 @@ export default {
       type: Array,
       required: true,
       default: {}
+    },
+    multiClassId: {
+      required: true,
+      default: 0
     }
   },
 
@@ -73,12 +76,7 @@ export default {
       assistant: {
         list: [],
         title: '',
-        flag: true,
         initialValue: [],
-        paging: {
-          pageSize: 10,
-          current: 0
-        }
       },
     };
   },
@@ -87,41 +85,24 @@ export default {
   },
 
   methods: {
-    assistantScroll: _.debounce(function (e) {
-      const { scrollHeight, offsetHeight, scrollTop } = e.target;
-      const maxScrollTop = scrollHeight - offsetHeight - 20;
-      if (maxScrollTop < scrollTop && this.assistant.flag) {
-        this.fetchAssistants();
-      }
-    }, 300),
     fetchAssistants() {
-      const { title, paging: { pageSize, current } } = this.assistant;
+      const { title } = this.assistant;
       const params = {
-        limit: pageSize,
-        offset: pageSize * current
+        id: this.multiClassId
       };
 
       if (title) {
         params.nickname = title;
       }
 
-      Assistant.search(params).then(res => {
-        this.assistant.paging.current++;
-        this.assistant.list = _.concat(this.assistant.list, res.data);
-        if (_.size(this.assistant.list) >= res.paging.total) {
-          this.assistant.flag = false;
-        }
+      MultiClassAssistant.search(params).then(res => {
+        this.assistant.list = _.concat(this.assistant.list, res);
       });
     },
     handleSearchAssistant: _.debounce(function(input) {
       this.assistant = {
         list: [],
         title: input,
-        flag: true,
-        paging: {
-          pageSize: 10,
-          current: 0
-        }
       };
       this.fetchAssistants();
     }, 200),
