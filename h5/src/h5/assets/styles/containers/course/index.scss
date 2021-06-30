@@ -462,25 +462,29 @@
 
 	.assistant-show {
 		margin-bottom: 15px;
-		padding: 15px;
+		padding: 15px 20px;
+		vertical-align: middle;
 		border-bottom: 1px solid #f5f5f5;
 
-		&__icon {
-			float: left;
-			width: 8%;
-			height: 26px;
-			color: $primary-color;
-			line-height: 26px;
-		}
-
 		&__text {
-			float: left;
-			width: 88%;
 			height: 24px;
-			font-size: 12px;
 			line-height: 24px;
-			text-align: center;
-			border: 1px solid #bbb;
+
+			i {
+				color: $primary-color;
+			}
+
+			.arrow-icon {
+				float: right;
+				height: 24px;
+				color: #bebebe;
+				line-height: 24px;
+			}
+
+			.text {
+				padding-left: 4px;
+				font-size: 14px;
+			}
 		}
 
 		.assistant-show__content {
@@ -509,7 +513,6 @@
 
 			.tips {
 				margin-bottom: 10px;
-				color: #bbb;
 				font-size: 14px;
 			}
 		}
