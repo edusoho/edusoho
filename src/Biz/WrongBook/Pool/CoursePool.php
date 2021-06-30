@@ -4,6 +4,7 @@ namespace Biz\WrongBook\Pool;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
@@ -23,19 +24,21 @@ class CoursePool extends AbstractPool
             return [];
         }
 
-        return $this->prepareCommonSceneIds($conditions, $pool);
+        return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
-    public function prepareCourseSceneIds($courseId, $conditions)
+    public function prepareSceneIdsByTargetId($targetId, $conditions)
     {
+        $this->getCourseService()->tryManageCourse($targetId);
+
         $conditions = array_merge($conditions, [
-            'courseId' => $courseId,
+            'courseId' => $targetId,
         ]);
 
-        return $this->prepareCommonSceneIds($conditions);
+        return $this->prepareCommonSceneIds($conditions, $targetId);
     }
 
-    public function prepareCommonSceneIds($conditions, $pool = [])
+    public function prepareCommonSceneIds($conditions, $targetId)
     {
         $sceneIds = [];
         if (!empty($conditions['courseId'])) {
@@ -43,7 +46,7 @@ class CoursePool extends AbstractPool
         }
 
         if (!empty($conditions['courseMediaType'])) {
-            $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($pool['target_id'], $conditions['courseMediaType']);
+            $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($targetId, $conditions['courseMediaType']);
             $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseMediaType);
         }
 
