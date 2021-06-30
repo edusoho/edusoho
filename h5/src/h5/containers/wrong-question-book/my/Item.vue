@@ -24,8 +24,11 @@ export default {
       this.$router.push({
         name: 'myWrongQuestionBookDetail',
         params: {
-          targetType: this.question.target_type,
+          type: this.question.target_type,
           id: this.question.id,
+        },
+        query: {
+          title: this.question.target_data.title,
         },
       });
     },

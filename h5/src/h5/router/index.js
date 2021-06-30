@@ -830,7 +830,7 @@ const routes = [
       ),
   },
   {
-    path: '/my/wrong-quesition-book/detail/:targetType/:id',
+    path: '/my/wrong-quesition-book/detail/:type/:id',
     name: 'myWrongQuestionBookDetail',
     component: () =>
       import(
