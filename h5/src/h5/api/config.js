@@ -17,6 +17,7 @@ import reviews from './reviews/index';
 import certificate from './certificate/index';
 import itemBank from './itemBank/index';
 import infoCollection from './infoCollection/index';
+import wrongQuestionBook from './wrong-question-book/index';
 
 const config = [
   ...openCourse,
@@ -38,6 +39,7 @@ const config = [
   ...certificate,
   ...itemBank,
   ...infoCollection,
+  ...wrongQuestionBook,
 ];
 
 export default config;
