@@ -40,30 +40,24 @@ class CoursePool extends AbstractPool
 
     public function prepareCommonSceneIds($conditions, $targetId)
     {
-        $sceneIds = [];
+        $sceneIds = $this->findSceneIdsByCourseSetId($targetId);
+
         if (!empty($conditions['courseId'])) {
-            $sceneIds['sceneIds'] = $this->findSceneIdsByCourseId($conditions['courseId']);
+            $sceneIdsByCourseId = $this->findSceneIdsByCourseId($conditions['courseId']);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByCourseId : array_intersect($sceneIds, $sceneIdsByCourseId);
         }
 
         if (!empty($conditions['courseMediaType'])) {
             $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($targetId, $conditions['courseMediaType']);
-            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseMediaType);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds, $sceneIdsByCourseMediaType);
         }
 
         if (!empty($conditions['courseTaskId'])) {
             $sceneIdsByCourseTaskId = $this->findSceneIdsByCourseTaskId($conditions['courseTaskId']);
-            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseTaskId : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseTaskId);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByCourseTaskId : array_intersect($sceneIds, $sceneIdsByCourseTaskId);
         }
 
-        if (!isset($sceneIds['sceneIds'])) {
-            $sceneIds = [];
-        } elseif ($sceneIds['sceneIds'] == []) {
-            $sceneIds = [-1];
-        } else {
-            $sceneIds = $sceneIds['sceneIds'];
-        }
-
-        return $sceneIds;
+        return empty($sceneIds) ? [-1] : $sceneIds;
     }
 
     public function buildConditions($pool, $conditions)
@@ -136,6 +130,16 @@ class CoursePool extends AbstractPool
         }
 
         return $conditions;
+    }
+
+    protected function findSceneIdsByCourseSetId($courseSetId)
+    {
+        $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'testpaper', true);
+        $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'homework', true);
+        $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'exercise', true);
+        $activates = array_merge($activityTestPapers, $activityHomeWorks, $activityExercises);
+
+        return $this->generateSceneIds($activates);
     }
 
     public function findSceneIdsByCourseId($courseId)

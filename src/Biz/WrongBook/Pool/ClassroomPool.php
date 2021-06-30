@@ -20,7 +20,7 @@ class ClassroomPool extends AbstractPool
     public function prepareSceneIds($poolId, $conditions)
     {
         $pool = $this->getWrongQuestionBookPoolDao()->get($poolId);
-        if (empty($pool)) {
+        if (empty($pool) || 'classroom' != $pool['target_type']) {
             return [];
         }
 
@@ -29,35 +29,24 @@ class ClassroomPool extends AbstractPool
 
     protected function prepareCommonSceneIds($conditions, $targetId)
     {
-        $sceneIds = [];
-
-        if (!empty($conditions['classroomId'])) {
-            $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomId($conditions['classroomId']);
-        }
+        $sceneIds = $this->findSceneIdsByClassroomId($targetId);
 
         if (!empty($conditions['classroomCourseSetId'])) {
-            $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
+            $sceneIdsByClassroomCourseSetId = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomCourseSetId : array_intersect($sceneIds, $sceneIdsByClassroomCourseSetId);
         }
 
         if (!empty($conditions['classroomMediaType'])) {
             $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($targetId, $conditions['classroomMediaType']);
-            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomMediaType);
+            $sceneIds = empty($sceneIds) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds, $sceneIdsByClassroomMediaType);
         }
 
         if (!empty($conditions['classroomTaskId'])) {
             $sceneIdsByClassroomTaskId = $this->findSceneIdsByClassroomTaskId($conditions['classroomTaskId']);
-            $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomTaskId : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomTaskId);
+            $sceneIds = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomTaskId : array_intersect($sceneIds, $sceneIdsByClassroomTaskId);
         }
 
-        if (!isset($sceneIds['sceneIds'])) {
-            $sceneIds = [];
-        } elseif ($sceneIds['sceneIds'] == []) {
-            $sceneIds = [-1];
-        } else {
-            $sceneIds = $sceneIds['sceneIds'];
-        }
-
-        return  $sceneIds;
+        return empty($sceneIds) ? [-1] : $sceneIds;
     }
 
     public function prepareSceneIdsByTargetId($targetId, $conditions)
