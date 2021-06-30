@@ -1,5 +1,5 @@
 <template>
-  <layout :question="question">
+  <layout :question="question" :order="order">
     <template #answer>
       <a-radio-group :default-value="questions.report.response[0]">
         <a-radio

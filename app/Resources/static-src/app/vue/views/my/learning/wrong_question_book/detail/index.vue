@@ -21,6 +21,7 @@
         :is="currentQuestionComponent(question.questions[0].answer_mode)"
         :key="question.id + index"
         :question="question"
+        :order="(pagination.current - 1) * 10 + index + 1"
       />
     </template>
 

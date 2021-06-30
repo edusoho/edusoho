@@ -1,6 +1,6 @@
 <template>
-  <div class="question-layout">
-    <stem :order="1" :stem="questions.stem" />
+  <div class="question-layout" :order="order">
+    <stem :order="order" :stem="questions.stem" />
 
     <div class="prevent-click answer-content">
       <slot name="answer" />
@@ -39,6 +39,11 @@ export default {
   props: {
     question: {
       type: Object,
+      required: true
+    },
+
+    order: {
+      type: Number,
       required: true
     }
   },

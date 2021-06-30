@@ -11,6 +11,11 @@ export default {
     question: {
       type: Object,
       required: true
+    },
+
+    order: {
+      type: Number,
+      required: true
     }
   },
 
