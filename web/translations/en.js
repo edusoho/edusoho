@@ -1239,7 +1239,9 @@ t.add("admin.user.valid_remark_length_hint", "Sorry, the remarks is too long, pl
 t.add("admin.user.approve_submiting_hint", "submitting...", "js", "en");
 t.add("admin.user.cancel_approval_hint", "Are you sure you want to cancel this successful approval?", "js", "en");
 t.add("admin.user.update_avatar_success_hint", "The avatar update is successful!", "js", "en");
+t.add("admin.user.update_assistant_qrcode_success_hint", "The qrcode update is successful!", "js", "en");
 t.add("admin.user.upload_avatar_success_hint", "Uploaded successfully!", "js", "en");
+t.add("admin.user.upload_assistant_qrcode_success_hint", "Uploaded successfully!", "js", "en");
 t.add("admin.user.password_modify_success_hint", "Password modified successfully", "js", "en");
 t.add("admin.user.password_modify_error_hint", "operation failed", "js", "en");
 t.add("admin.user.create_new_user_success_hint", "New user added successfully", "js", "en");
