@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\Service\ClassroomService;
@@ -691,6 +692,15 @@ class CourseController extends CourseBaseController
         );
     }
 
+    public function assistantInfoAction($course)
+    {
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($this->getCurrentUser()->getId(), $course['id']);
+
+        return $this->render('course/widgets/course-assistant-info.html.twig', [
+            'assistant' => empty($assistantStudent) ? [] : $this->getUserService()->getUser($assistantStudent['assistantId']),
+        ]);
+    }
+
     public function newestStudentsAction($course, $member = [])
     {
         $conditions = [
@@ -1050,6 +1060,14 @@ class CourseController extends CourseBaseController
     protected function getProductService()
     {
         return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**

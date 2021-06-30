@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\Course\CourseBaseController;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -212,6 +213,8 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($member['userId'], $id);
+
         return $this->render(
             'course/course-show.html.twig',
             [
@@ -221,6 +224,7 @@ class CourseController extends CourseBaseController
                 'isCourseTeacher' => in_array($member['role'], ['teacher', 'assistant']),
                 'course' => $course,
                 'classroom' => $classroom,
+                'hasAssistant' => !empty($assistantStudent),
             ]
         );
     }
@@ -430,6 +434,14 @@ class CourseController extends CourseBaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**

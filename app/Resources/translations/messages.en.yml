@@ -1722,6 +1722,7 @@ course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
+course.student.add.assistant.tip: 'Please go to the right side of the class schedule to add a teaching assistant, otherwise you will not be able to listen to the class properly.'
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
 course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
 course.plan_task.activity_ppt_animation_link: Animation support
