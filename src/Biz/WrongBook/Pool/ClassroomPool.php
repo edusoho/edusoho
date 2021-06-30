@@ -24,13 +24,23 @@ class ClassroomPool extends AbstractPool
             return [];
         }
 
+        return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
+    }
+
+    protected function prepareCommonSceneIds($conditions, $targetId)
+    {
         $sceneIds = [];
+
+        if (!empty($conditions['classroomId'])) {
+            $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomId($conditions['classroomId']);
+        }
+
         if (!empty($conditions['classroomCourseSetId'])) {
             $sceneIds['sceneIds'] = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
         }
 
         if (!empty($conditions['classroomMediaType'])) {
-            $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($pool['target_id'], $conditions['classroomMediaType']);
+            $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($targetId, $conditions['classroomMediaType']);
             $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomMediaType);
         }
 
@@ -48,6 +58,17 @@ class ClassroomPool extends AbstractPool
         }
 
         return  $sceneIds;
+    }
+
+    public function prepareSceneIdsByTargetId($targetId, $conditions)
+    {
+        $this->getClassroomService()->tryManageClassroom($targetId);
+
+        $conditions = array_merge($conditions, [
+            'classroomId' => $targetId,
+        ]);
+
+        return $this->prepareCommonSceneIds($conditions, $targetId);
     }
 
     public function buildConditions($pool, $conditions)
@@ -155,6 +176,16 @@ class ClassroomPool extends AbstractPool
         }
 
         return $courseTasksInfo;
+    }
+
+    protected function findSceneIdsByClassroomId($classroomId)
+    {
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+
+        $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
+
+        return $this->generateSceneIds($activates);
     }
 
     public function findSceneIdsByClassroomCourseSetId($courseSetId)
