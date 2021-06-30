@@ -11,4 +11,5 @@ export * from './Me/index.js';
 export * from './File/index.js';
 export * from './AssistantPermission/index.js';
 export * from './LiveCapacity/index.js';
+export * from './Setting/index.js';
 

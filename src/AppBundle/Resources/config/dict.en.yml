@@ -595,3 +595,8 @@ reportAuditStatus:
     none: None
     pass: Pass
     illegal: Illegal
+
+multiClassStatus:
+  not_start: Not Start
+  live: live
+  end: End

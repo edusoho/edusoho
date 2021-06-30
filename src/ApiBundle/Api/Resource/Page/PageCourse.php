@@ -7,8 +7,10 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\Service\MultiClassService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -53,8 +55,8 @@ class PageCourse extends AbstractResource
         $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
-        $course = $this->getCourseService()->appendSpecInfo($course);
 
+        $course = $this->getCourseService()->appendSpecInfo($course);
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
@@ -74,6 +76,15 @@ class PageCourse extends AbstractResource
 
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
+
+        $course['assistant'] = [];
+        if (!empty($user['id'])) {
+            $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
+            if (!empty($assistantStudent)) {
+                $course['assistantId'] = $assistantStudent['assistantId'];
+                $this->getOCUtil()->single($course, ['assistantId']);
+            }
+        }
 
         return $course;
     }
@@ -189,5 +200,21 @@ class PageCourse extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    private function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->service('Assistant:AssistantStudentService');
     }
 }

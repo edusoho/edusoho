@@ -10,7 +10,7 @@ use Biz\Common\CommonException;
 class TeacherLiveCourse extends AbstractResource
 {
     /**
-     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER_ASSISTANT")
      */
     public function search(ApiRequest $request)
     {

@@ -154,11 +154,7 @@
                 this.$emit('changeSku', sku.targetId);
             },
             manageUrl(goods) {
-                if (goods.type === 'course') {
-                    window.open(`/course_set/${goods.product.target.id}/manage/base`, '_blank');
-                } else if (goods.type === 'classroom') {
-                    window.open(`/classroom/${goods.product.target.id}/manage`, '_blank')
-                }
+                window.open(goods.manageUrl, '_blank');
             },
             remainTime() {
                 if (this.goods.discountId == 0) {

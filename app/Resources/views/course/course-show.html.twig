@@ -35,7 +35,7 @@
         {{ slot('course.show.content.section', {'course':course}) }}
 
         <section class="es-section">
-          <div class="nav-btn-tab">
+          <div class="nav-btn-tab mbs">
             {% set showReviewTab = course.parentId > 0 %}
 	          {% if member|default(null) %}
 		          {% include 'course/header/nav-tab-for-member.html.twig' %}
@@ -55,6 +55,13 @@
 {#            {% endif %}#}
 
           </div>
+
+          {% if hasAssistant|default(false) %}
+            <div class="alert alert-warning mbs" style="padding: 5px 5px 5px 10px; border-radius: 5px;">
+              <i class="es-icon es-icon-weixin"></i>{{ 'course.student.add.assistant.tip'|trans }}
+            </div>
+          {% endif %}
+
           {% block detail_content %}
             {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null), type: tab|default(null)})) }}
           {% endblock %}

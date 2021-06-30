@@ -206,6 +206,11 @@ file_upload:
     defaults: { _controller: AppBundle:File:upload }
     methods: [POST]
 
+qr_code_upload:
+    path:  /qr/code/upload
+    defaults: { _controller: AppBundle:File:qrCodeUpload }
+    methods: [POST]
+
 file_img_crop:
     path:  /file/img/crop
     defaults: { _controller: AppBundle:File:cropImg }
@@ -418,6 +423,10 @@ settings_profile_avatar_crop_modal:
     path:  /settings/profile/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:profileAvatarCropModal }
 
+settings_assistant_qrcode_crop_modal:
+    path:  /settings/assistant/qrcode/crop/modal
+    defaults: { _controller: AppBundle:Settings:assistantQrCodeCropModal }
+
 settings_avatar_fetch_partner:
     path:  /settings/avatar/fetch_partner
     defaults: { _controller: AppBundle:Settings:avatarFetchPartner }
@@ -586,6 +595,10 @@ my_teaching_threads:
 my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
+
+my_teaching_multi_class:
+    path: /my/teaching/multi_class
+    defaults: { _controller: AppBundle:My/MultiClass:teaching }
 
 my_teaching_live_calendar:
     path: /my/teaching/live/calendar

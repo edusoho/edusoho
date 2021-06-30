@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed',
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed', 'weChatQrCode'
     ];
 
     protected $publicFields = [
@@ -18,7 +18,7 @@ class UserFilter extends Filter
     protected $authenticatedFields = [
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile',
-        'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting',
+        'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting', 'weChatQrCode',
     ];
 
     protected $mode = self::SIMPLE_MODE;
@@ -56,6 +56,7 @@ class UserFilter extends Filter
         $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
         $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
         $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
+        $data['weChatQrCode'] = !empty($data['weChatQrCode']) ? AssetHelper::getFurl($data['weChatQrCode'], 'avatar.png') : '';
         $data['avatar'] = [
             'small' => $data['smallAvatar'],
             'middle' => $data['mediumAvatar'],

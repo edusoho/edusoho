@@ -1989,6 +1989,7 @@ course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
+course.student.add.assistant.tip: 扫一扫右侧二维码，添加助教微信，加入班级群，保证更好的学习效果哦～
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
@@ -2388,6 +2389,7 @@ open_course.lesson.create_error: 课时创建失败
 
 # 班级
 classroom: 班级
+column: 专栏
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -3027,6 +3029,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.qrcode.tip: 助教请务必上传二维码
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -3035,6 +3038,7 @@ user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机�
 user.settings.profile.change_avatar: 修改头像
 user.settings.profile.choose_again: 重新选择
 user.settings.profile.save_avatar: 保存头像
+user.settings.profile.save_qrcode: 保存二维码
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -3192,6 +3196,7 @@ user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.shange_avatar: 修改头像
+user.settings.basic_info.shange_qrcode: 修改二维码
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -3227,6 +3232,8 @@ user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
+
+user.settings.qrcode.crop: 二维码图片
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
@@ -4041,6 +4048,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.multi_class_menu: 在教班课
 my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
@@ -4156,6 +4164,11 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+
+#班课
+my.teaching.multi_class.my_students: 我的学员
+my.teaching.multi_class.status: 班课状态
+my.teaching.multi_class.student_num: 班课学员
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
@@ -4978,6 +4991,8 @@ courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,�
 role.student: 学员
 # 教师
 role.teacher: 教师
+role.assistant: 助教
+role.academic_staf: 教务
 
 # 后台
 admin.process_bar: 优化课程文件
@@ -6637,9 +6652,12 @@ admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
 admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.assistant_qrcode.upload_btn: 上传新二维码
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
@@ -6648,7 +6666,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 再输入
 admin.user.manage.create.heading_title: 添加新用户
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
 admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
@@ -9184,6 +9204,8 @@ log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
 log.module.item_bank_exercise: 题库练习
+log.module.multi_class_assistant: 班课助教
+log.module.multi_class: 班课
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -11940,6 +11962,8 @@ exception.multi_class.multi_class_course_exist: 班课中已存在此课程
 exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设置为助教
 exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
+exception.multi_class.assistant_require: 班课需要设置助教
+exception.multi_class.assistant_student_not_found: 助教学员关系未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
@@ -11949,3 +11973,6 @@ admin.multi_class_copy.success.notify: 您的新班课《%newTitle%》从原班�
 admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制失败！
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
+
+course.assistant.student_add_qrcode: 为了保证学习质量
+course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
