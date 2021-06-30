@@ -1,13 +1,13 @@
 <template>
   <div class="clearfix situation">
-    <div class="pull-left source">来源：计划1-考试任务、作业任务</div>
+    <div class="pull-left source">来源：{{ source }}</div>
 
     <div class="pull-right clearfix situation-right">
       <div class="pull-left frequency">
         做错频次：
         <span class="frequency-error">{{ question.question_num }}</span>次
       </div>
-      <div class="pull-left time">错题时间：{{ $dateFormat(question.updated_time) }}</div>
+      <div class="pull-left time">错题时间：{{ $dateFormat(question.updated_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
     </div>
   </div>
 </template>
@@ -18,6 +18,13 @@ export default {
     question: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    source() {
+      const { mainSource, secondarySource } = this.question.questions[0].source;
+      return `${mainSource} - ${secondarySource}`;
     }
   }
 }
