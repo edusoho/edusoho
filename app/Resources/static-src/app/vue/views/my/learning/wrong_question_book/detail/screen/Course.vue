@@ -131,9 +131,14 @@ export default {
   methods: {
     getParams(type) {
       const { courseId, courseMediaType } = this.form;
-      const params = {
-        poolId: this.id
+      const apiParams = {
+        query: {
+          poolId: this.id
+        },
+        params: {}
       };
+
+      const params = apiParams.params;
 
       if (type === 'plan') {
         _.assign(this.form, {
@@ -153,7 +158,7 @@ export default {
         courseId !== 'default' && (params.courseId = courseId);
       }
 
-      return params;
+      return apiParams;
     },
 
     async fetchWrongBookCondition(type) {

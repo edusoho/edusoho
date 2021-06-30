@@ -10,7 +10,7 @@
         v-model="form.courseSetId"
         @change="(value) => handleChange(value, 'plan')"
       >
-        <a-select-option value="all">全部课程</a-select-option>
+        <a-select-option value="default">全部课程</a-select-option>
 
         <a-select-option
           v-for="courseSet in conditions.courseSets"
@@ -32,7 +32,7 @@
         v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
       >
-        <a-select-option value="all">题目来源</a-select-option>
+        <a-select-option value="default">题目来源</a-select-option>
 
         <a-select-option
           v-for="item in conditions.source"
@@ -53,7 +53,7 @@
         style="width: 120px;"
         v-model="form.courseTaskId"
       >
-        <a-select-option value="all">任务名称</a-select-option>
+        <a-select-option value="default">任务名称</a-select-option>
 
         <a-select-option
           v-for="task in conditions.tasks"
@@ -105,6 +105,7 @@ export default {
       return sources[value];
     }
   },
+
   props: {
     id: {
       type: String,
@@ -115,9 +116,9 @@ export default {
   data() {
     return {
       form: {
-        courseSetId: 'all',
-        courseMediaType: 'all',
-        courseTaskId: 'all',
+        courseSetId: 'default',
+        courseMediaType: 'default',
+        courseTaskId: 'default',
         wrongTimesSort: 'default'
       },
       conditions: {}
@@ -127,32 +128,39 @@ export default {
   created() {
     this.fetchWrongBookCondition();
   },
+
   methods: {
     getParams(type) {
       const { courseSetId, courseMediaType } = this.form;
-      const params = {
-        poolId: this.id
+
+      const apiParams = {
+        query: {
+          poolId: this.id
+        },
+        params: {}
       };
+
+      const params = apiParams.params;
 
       if (type === 'plan') {
         _.assign(this.form, {
-          courseMediaType: 'all',
-          courseTaskId: 'all'
+          courseMediaType: 'default',
+          courseTaskId: 'default'
         });
 
-        courseSetId !== 'all' && (params.courseSetId = courseSetId);
+        courseSetId !== 'default' && (params.courseSetId = courseSetId);
       }
 
       if (type === 'source') {
         _.assign(this.form, {
-          courseTaskId: 'all'
+          courseTaskId: 'default'
         });
 
-        courseMediaType !== 'all' && (params.courseMediaType = courseMediaType);
-        courseSetId !== 'all' && (params.courseSetId = courseSetId);
+        courseMediaType !== 'default' && (params.courseMediaType = courseMediaType);
+        courseSetId !== 'default' && (params.courseSetId = courseSetId);
       }
 
-      return params;
+      return apiParams;
     },
 
     async fetchWrongBookCondition(type) {
