@@ -190,7 +190,9 @@ class ClassroomPool extends AbstractPool
             return [];
         }
 
-        return $this->findSceneIdsByClassroomCourseSetId($courseTask['fromCourseSetId']);
+        $activity = $this->getActivityService()->getActivity($courseTask['activityId'], true);
+
+        return $this->generateSceneIds([$activity]);
     }
 
     protected function findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds)

@@ -162,8 +162,9 @@ class CoursePool extends AbstractPool
         if (empty($courseTask)) {
             return [];
         }
+        $activity = $this->getActivityService()->getActivity($courseTask['activityId'], true);
 
-        return $this->findSceneIdsByCourseId($courseTask['courseId']);
+        return $this->generateSceneIds([$activity]);
     }
 
     protected function generateSceneIds($activates)
