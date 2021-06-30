@@ -10,7 +10,7 @@
         v-model="form.courseId"
         @change="(value) => handleChange(value, 'plan')"
       >
-        <a-select-option value="all">全部计划</a-select-option>
+        <a-select-option value="default">全部计划</a-select-option>
 
         <a-select-option
           v-for="plan in conditions.plans"
@@ -32,7 +32,7 @@
         v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
       >
-        <a-select-option value="all">题目来源</a-select-option>
+        <a-select-option value="default">题目来源</a-select-option>
 
         <a-select-option
           v-for="item in conditions.source"
@@ -53,7 +53,7 @@
         style="width: 120px;"
         v-model="form.courseTaskId"
       >
-        <a-select-option value="all">任务名称</a-select-option>
+        <a-select-option value="default">任务名称</a-select-option>
 
         <a-select-option
           v-for="task in conditions.tasks"
@@ -115,9 +115,9 @@ export default {
   data() {
     return {
       form: {
-        courseId: 'all',
-        courseMediaType: 'all',
-        courseTaskId: 'all',
+        courseId: 'default',
+        courseMediaType: 'default',
+        courseTaskId: 'default',
         wrongTimesSort: 'default'
       },
       conditions: {}
@@ -137,20 +137,20 @@ export default {
 
       if (type === 'plan') {
         _.assign(this.form, {
-          courseMediaType: 'all',
-          courseTaskId: 'all'
+          courseMediaType: 'default',
+          courseTaskId: 'default'
         });
 
-        courseId !== 'all' && (params.courseId = courseId);
+        courseId !== 'default' && (params.courseId = courseId);
       }
 
       if (type === 'source') {
         _.assign(this.form, {
-          courseTaskId: 'all'
+          courseTaskId: 'default'
         });
 
-        courseMediaType !== 'all' && (params.courseMediaType = courseMediaType);
-        courseId !== 'all' && (params.courseId = courseId);
+        courseMediaType !== 'default' && (params.courseMediaType = courseMediaType);
+        courseId !== 'default' && (params.courseId = courseId);
       }
 
       return params;
@@ -181,7 +181,14 @@ export default {
     },
 
     handleSubmit() {
-      this.$emit('on-search', { data: this.form, type: 'course' });
+      const params = {};
+      _.forEach(_.keys(this.form), item => {
+        const value = this.form[item];
+        if (value != 'default') {
+          params[item] = value;
+        }
+      });
+      this.$emit('on-search', params);
     }
   }
 }
