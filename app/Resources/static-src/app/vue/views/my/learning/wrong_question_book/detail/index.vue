@@ -29,6 +29,8 @@
       <a-spin />
     </div>
 
+    <empty v-if="!loading && !questionList.length" />
+
     <a-pagination
       class="text-center mt48"
       :hide-on-single-page="true"
@@ -49,6 +51,7 @@ import SingleChoice from './components/SingleChoice.vue';
 import Choice from './components/Choice.vue';
 import Judge from './components/Judge.vue';
 import Fill from './components/Fill.vue';
+import Empty from 'app/vue/views/components/Empty.vue';
 
 export default {
   name: 'WrongQuestionDetail',
@@ -60,7 +63,8 @@ export default {
     SingleChoice,
     Choice,
     Judge,
-    Fill
+    Fill,
+    Empty
   },
 
   data() {
