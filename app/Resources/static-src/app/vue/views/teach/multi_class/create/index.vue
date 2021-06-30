@@ -639,11 +639,15 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-        if (/^\+?[1-9][0-9]*$/.test(value) === false || value > Number(this.maxStudentNum)) {
-          callback(`人数范围在0-${this.maxStudentNum}人`)
-        }
+      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback('请输入正整数')
+      }
 
-        callback()
+      if (value > Number(this.maxStudentNum)) {
+        callback(`人数范围在0-${this.maxStudentNum}人`)
+      }
+
+      callback()
     },
     handleSubmit(e) {
       e.preventDefault();
