@@ -125,6 +125,10 @@
           <a-icon type="exclamation-circle" style="color: #bebebe;" />
           默认学员自动平均分配至课程助教（手动设置前往学员管理）
         </div>
+        <div class="pull-left color-warning" v-if="multiClassId">
+          <a-icon type="exclamation-circle" style="color: #ff8a0c;" />
+          删除助教，将导致该助教下已分配的学员平均分配给其他助教！
+        </div>
       </a-form-item>
 
       <a-form-item label="排课">
