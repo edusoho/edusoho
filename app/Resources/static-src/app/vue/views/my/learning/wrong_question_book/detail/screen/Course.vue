@@ -125,10 +125,19 @@ export default {
   },
 
   created() {
+    this.initSearchParams();
     this.fetchWrongBookCondition();
   },
 
   methods: {
+    initSearchParams() {
+      const params = this.$route.query;
+
+      _.forEach(params, (value, key) => {
+        this.form[key] = value;
+      });
+    },
+
     getParams(type) {
       const { courseId, courseMediaType } = this.form;
       const apiParams = {

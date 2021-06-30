@@ -88,7 +88,7 @@ export default {
       targetType: this.$route.params.target_type,
       targetId: this.$route.params.target_id,
       questionList: [],
-      searchParams: {},
+      searchParams: this.$route.query,
       loading: false,
       pagination: {
         current: 1
@@ -162,9 +162,34 @@ export default {
 
     // 错题搜索
     onSearch(params) {
-      this.searchParams = params;
-      this.pagination.current = 1;
-      this.fetchWrongBookQuestion();
+      if (this.judgeSearchParamsChange(params)) {
+        this.resetQuery(params);
+        this.searchParams = params;
+        this.pagination.current = 1;
+        this.fetchWrongBookQuestion();
+      }
+    },
+
+    judgeSearchParamsChange(params) {
+      if (_.size(params) != _.size(this.searchParams)) {
+        return true;
+      }
+
+      let isChange = false;
+
+      _.forEach(params, (value, key) => {
+        if (value != this.searchParams[key]) {
+          isChange = true;
+        }
+      });
+
+      return isChange;
+    },
+
+    resetQuery(params) {
+      this.$router.push({
+        query: params
+      });
     },
 
     // 翻页
