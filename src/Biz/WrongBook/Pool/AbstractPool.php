@@ -2,6 +2,7 @@
 
 namespace Biz\WrongBook\Pool;
 
+use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class AbstractPool
@@ -17,5 +18,26 @@ abstract class AbstractPool
 
     abstract public function prepareSceneIds($poolId, $conditions);
 
-    abstract public function prepareConditions($poolId, $conditions);
+    abstract public function buildConditions($pool, $conditions);
+
+    abstract public function prepareSceneIdsByTargetId($targetId, $conditions);
+
+
+    /**
+     * @return Biz
+     */
+    final public function getBiz()
+    {
+        return $this->biz;
+    }
+
+    /**
+     * @return CurrentUser
+     */
+    protected function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user'];
+    }
 }

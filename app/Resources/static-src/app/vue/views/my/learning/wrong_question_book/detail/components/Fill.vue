@@ -1,5 +1,5 @@
 <template>
-  <layout :question="question" />
+  <layout :question="question" :order="order" />
 </template>
 
 <script>
