@@ -24,7 +24,7 @@ class CoursePool extends AbstractPool
             return [];
         }
 
-        return $this->prepareCommonSceneIds($conditions, $pool);
+        return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
     public function prepareSceneIdsByTargetId($targetId, $conditions)
@@ -35,10 +35,10 @@ class CoursePool extends AbstractPool
             'courseId' => $targetId,
         ]);
 
-        return $this->prepareCommonSceneIds($conditions);
+        return $this->prepareCommonSceneIds($conditions, $targetId);
     }
 
-    public function prepareCommonSceneIds($conditions, $pool = [])
+    public function prepareCommonSceneIds($conditions, $targetId)
     {
         $sceneIds = [];
         if (!empty($conditions['courseId'])) {
@@ -46,7 +46,7 @@ class CoursePool extends AbstractPool
         }
 
         if (!empty($conditions['courseMediaType'])) {
-            $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($pool['target_id'], $conditions['courseMediaType']);
+            $sceneIdsByCourseMediaType = $this->findSceneIdsByCourseMediaType($targetId, $conditions['courseMediaType']);
             $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByCourseMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByCourseMediaType);
         }
 

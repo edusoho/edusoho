@@ -24,10 +24,10 @@ class ClassroomPool extends AbstractPool
             return [];
         }
 
-       return $this->prepareCommonSceneIds($conditions, $pool);
+        return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
-    protected function prepareCommonSceneIds($conditions ,$pool = [])
+    protected function prepareCommonSceneIds($conditions, $targetId)
     {
         $sceneIds = [];
 
@@ -40,7 +40,7 @@ class ClassroomPool extends AbstractPool
         }
 
         if (!empty($conditions['classroomMediaType'])) {
-            $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($pool['target_id'], $conditions['classroomMediaType']);
+            $sceneIdsByClassroomMediaType = $this->findSceneIdsByClassroomMediaType($targetId, $conditions['classroomMediaType']);
             $sceneIds['sceneIds'] = empty($sceneIds['sceneIds']) ? $sceneIdsByClassroomMediaType : array_intersect($sceneIds['sceneIds'], $sceneIdsByClassroomMediaType);
         }
 
@@ -68,7 +68,7 @@ class ClassroomPool extends AbstractPool
             'classroomId' => $targetId,
         ]);
 
-        return $this->prepareCommonSceneIds($conditions);
+        return $this->prepareCommonSceneIds($conditions, $targetId);
     }
 
     public function buildConditions($pool, $conditions)
@@ -181,9 +181,10 @@ class ClassroomPool extends AbstractPool
     protected function findSceneIdsByClassroomId($classroomId)
     {
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
-        $courseSetIds = ArrayToolkit::column($classroomCourses,'courseSetId');
+        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
 
         $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
+
         return $this->generateSceneIds($activates);
     }
 
