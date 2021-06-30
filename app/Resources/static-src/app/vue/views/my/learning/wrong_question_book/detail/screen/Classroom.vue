@@ -168,12 +168,6 @@ export default {
 
       const result = await WrongBookCondition.get(params);
 
-      _.forEach(result.plans, (plan, index) => {
-        if (!plan.title) {
-          result.plans.splice(index, 1);
-        }
-      });
-
       this.conditions = result;
     },
 
@@ -188,7 +182,14 @@ export default {
     },
 
     handleSubmit() {
-      this.$emit('on-search', { data: this.form, type: 'classroom' });
+      const params = {};
+      _.forEach(_.keys(this.form), item => {
+        const value = this.form[item];
+        if (value != 'default') {
+          params[item] = value;
+        }
+      });
+      this.$emit('on-search', params);
     }
   }
 }
