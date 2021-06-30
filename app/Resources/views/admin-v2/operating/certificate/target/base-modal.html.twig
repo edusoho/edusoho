@@ -1,5 +1,11 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{ 'classroom.select_course'|trans }}{% endblock %}
+{% block title %}
+  {% if targetType == 'course' %}
+    {{ 'classroom.select_course'|trans }}
+  {% else %}
+    {{ 'admin_v2.information_collect.selecte_classroom'|trans }}
+  {% endif %}
+{% endblock %}
 {% set modal_class= "modal-lg" %}
 
 {% do script(['app/js/admin-v2/operating/certificate/target/index.js']) %}

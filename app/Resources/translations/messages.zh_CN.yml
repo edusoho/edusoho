@@ -1724,6 +1724,7 @@ course.question_manage.import.reupload_document: 重新上传文档
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
+course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
 course.question_manage.import.rule: 导入规则说明
@@ -10847,6 +10848,7 @@ exception.coupon.over_batch_limit: 超过批次总额限制
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 exception.coupon.target_type_error: 该批次不支持查看详情
 exception.coupon.setting_close: 优惠券全局开关未开启
+exception.coupon.receive_late: 您来晚了一步，优惠券已被领完！
 
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景

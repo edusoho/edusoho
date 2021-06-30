@@ -61,7 +61,7 @@ class TextAnswerMode extends AnswerMode
             unset($pointAnswer);
         }
 
-        if (empty($response[$key])) {
+        if (empty($response[$key]) && $response[$key] != '0') {
             return self::POINT_NOANSWER;
         }
 
