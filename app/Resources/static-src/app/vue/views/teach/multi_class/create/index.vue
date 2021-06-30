@@ -216,7 +216,7 @@ export default {
       multiClassId: 0,
       mode: 'create', // create, editor, copy
       notificationShow: '',
-      maxStudentNum: 0,
+      maxStudentNum: 100000,
       course: {
         list: [],
         title: '',
@@ -287,7 +287,7 @@ export default {
 
       this.selectedCourseId = course.id;
       this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum;
+      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
       this.course.list.push(course)
       this.$set(this.course, 'initialValue', course.id)
       this.fetchCourse();
@@ -395,7 +395,7 @@ export default {
         this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
-        this.maxStudentNum = course.maxStudentNum;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
         this.course.list = [course];
         this.course.initialValue = courseId;
         this.product.list = [product];
@@ -598,7 +598,7 @@ export default {
       _.forEach(this.course.list, item => {
         if (item.id == value) {
           this.selectedCourseSetId = item.courseSet.id;
-          this.maxStudentNum = item.maxStudentNum;
+          this.maxStudentNum = item.maxStudentNum > 0 ? item.maxStudentNum : 100000;
           return false;
         }
       });
