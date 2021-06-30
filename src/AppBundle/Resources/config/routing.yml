@@ -657,6 +657,10 @@ wrong_question_book_practise_start_do:
   path: /wrong_question_book/pool/{poolId}/practise/{recordId}/start_do
   defaults: { _controller: AppBundle:My/WrongQuestionBook:startDo }
 
+wrong_question_book_practise_show_result:
+  path: /wrong_question_book/pool/{poolId}/practise/{recordId}/show_result
+  defaults: { _controller: AppBundle:My/WrongQuestionBook:showResult }
+
 my_unclaimed_certificates:
     path: /my/certificates/unclaimed
     defaults: { _controller: AppBundle:My/Certificate:unclaimed }
