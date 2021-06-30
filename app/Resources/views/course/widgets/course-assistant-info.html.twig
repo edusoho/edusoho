@@ -11,8 +11,8 @@
           <span>{{ assistant.nickname }}</span>
         </div>
         <div class="mtl text-bolder">
-          <span>为了保证学习质量</span><br>
-          <span>请扫码添加班课专属助教微信</span>
+          <span>{{ 'course.assistant.student_add_qrcode'|trans }}</span><br>
+          <span>{{ 'course.assistant.student_add_qrcode_info'|trans }}</span>
         </div>
         <img class="mts img-responsive center-block" height="65%" width="65%" src="{{ filepath(assistant.weChatQrCode, 'avatar.png') }}"><br>
       </div>
