@@ -116,7 +116,24 @@
 
       <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
-      <assistant slot="assistants" slot-scope="assistants" :assistant="assistants" />
+      <template slot="assistant" slot-scope="assistant, record">
+        {{assistant.nickname}}
+        <a-popover title="助教变更" trigger="click">
+          <template slot="content">
+            <a-select
+              show-search
+              style="width: 200px"
+              placeholder="请选择助教"
+              @blur="handleChange(record, $event)"
+            >
+              <a-select-option v-for="item in multiClass.assistants" :key="item.id" >
+                {{ item.nickname }}
+              </a-select-option>
+            </a-select>
+          </template>
+          <svg-icon class="assistants-icon" style="color: #979797;" icon="icon-more" />
+        </a-popover>
+      </template>
 
       <template slot="threadCount" slot-scope="threadCount">{{ threadCount }}</template>
 
@@ -238,12 +255,12 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import AddStudentModal from './AddStudentModal.vue';
 import StudentInfoModal from './StudentInfoModal.vue';
 import AssistantListModal from 'app/vue/views/teach/assistant/components/AssistantListModal';
 import userInfoTable from "app/vue/views/components/userInfoTable";
-import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
-import Assistant from "../components/Assistant.vue";
+import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam, Assistant } from 'common/vue/service';
 
 const columns = [
   {
@@ -266,7 +283,7 @@ const columns = [
     dataIndex: 'assistant',
     width: '10%',
     ellipsis: true,
-    scopedSlots: { customRender: 'assistants' }
+    scopedSlots: { customRender: 'assistant' }
   },
   {
     title: '提问',
@@ -366,7 +383,6 @@ export default {
     StudentInfoModal,
     AssistantListModal,
     userInfoTable,
-    Assistant,
   },
   data() {
     return {
@@ -686,6 +702,31 @@ export default {
       this.selectedRowKeysStr = str;
       this.selectedUserIds = userIds;
     },
+
+    async getAssistant(params) {
+      const result = await Assistant.edit(params)
+    },
+
+    handleChange(record, assistantId) {
+      if(assistantId === undefined || assistantId === record.assistant.id ){
+        return;
+      }
+
+      const studentIds = [];
+      if(this.selectedRowKeys.length == this.students.length){
+        _.forEach(this.students, item => {
+          studentIds.push(item.user.id)
+        })
+      }else {
+        studentIds.push(record.user.id)
+      }
+
+      this.getAssistant({
+        studentIds,
+        assistantId,
+        multiClassId: this.multiClass.id
+      });
+    },
   }
 }
 </script>
@@ -745,6 +786,13 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+}
+.assistants-icon {
+  float: right;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 @screen-xs-min:              480px;
 @screen-sm-min:              768px;
