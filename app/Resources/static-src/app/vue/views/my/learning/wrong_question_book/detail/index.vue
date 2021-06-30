@@ -67,8 +67,8 @@ export default {
       targetType: this.$route.params.target_type,
       targetId: this.$route.params.target_id,
       questionList: [],
-      loading: false,
       searchParams: {},
+      loading: false,
       pagination: {
         current: 1
       },
@@ -101,15 +101,17 @@ export default {
     async fetchWrongBookQuestion() {
       this.loading = true;
       const apiParams = {
-        params: Object.assign({
+        params: {
           targetType: this.targetType,
           offset: (this.pagination.current - 1) * 10,
-          limit: 10
-        }, this.searchParams),
+          limit: 10,
+          ...this.searchParams
+        },
         query: {
-          poolId: this.targetId,
+          poolId: this.targetId
         }
       };
+
       const { paging, data } = await WrongBookQuestionShow.search(apiParams);
       this.pagination.total = Number(paging.total);
       this.loading = false;
@@ -127,8 +129,8 @@ export default {
 
     // 错题搜索
     onSearch(params) {
-      const { data, type } = params;
-      this.searchParams = data;
+      this.searchParams = params;
+      this.pagination.current = 1;
       this.fetchWrongBookQuestion();
     },
 
