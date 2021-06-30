@@ -38,6 +38,21 @@
       :total="pagination.total"
       @change="onChange"
     />
+
+    <a-modal
+      title="错题练习小提示"
+      width="400px"
+      :visible="visible"
+    >
+      <p>系统为你随机筛选最多20题重做看你是否掌握</p>
+
+      <template slot="footer">
+        <a-button type="primary" @click="goToWrongExercises">
+          随机练习
+        </a-button>
+      </template>
+    </a-modal>
+
   </a-page-header>
 </template>
 
@@ -88,7 +103,8 @@ export default {
         course: 'CourseScreen',
         classroom: 'ClassroomScreen',
         exercise: 'QuestionBankScreen'
-      }
+      },
+      visible: false
     }
   },
 
@@ -129,7 +145,18 @@ export default {
 
     // 错题练习
     handleClickWrongExercises() {
+      if (localStorage.getItem('first_wrong_exercises')) {
+        this.goToWrongExercises();
+        return;
+      }
 
+      this.visible = true;
+      localStorage.setItem('first_wrong_exercises', true);
+    },
+
+    goToWrongExercises() {
+      this.visible = false;
+      // 错题练习
     },
 
     // 错题搜索
