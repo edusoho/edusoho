@@ -43,6 +43,7 @@
       title="错题练习小提示"
       width="400px"
       :visible="visible"
+      @cancel="visible = false"
     >
       <p>系统为你随机筛选最多20题重做看你是否掌握</p>
 
