@@ -44,27 +44,30 @@ class ItemBankExercisePool extends AbstractPool
     {
         $searchConditions = [];
 
-        if (!in_array($conditions['exerciseMediaType'], ['chapter', 'assessment'])) {
+        if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
             return [];
         }
-        if ('chapter' === $conditions['exerciseMediaType']) {
-            $searchConditions = $this->exerciseChapterSearch($pool['target_id']);
-        }
 
-        if ('assessment' === $conditions['exerciseMediaType']) {
-            $searchConditions = $this->exerciseAssessmentSearch($pool['target_id']);
-        }
+        $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
+        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions);
 
         return $searchConditions;
     }
 
-    public function exerciseChapterSearch($targetId)
+    public function exerciseChapterSearch($targetId, $conditions)
     {
+        if ('chapter' !== $conditions['exerciseMediaType']) {
+            return [];
+        }
+
         return $this->getItemCategoryService()->getItemCategoryTree($targetId);
     }
 
-    public function exerciseAssessmentSearch($targetId)
+    public function exerciseAssessmentSearch($targetId, $conditions)
     {
+        if ('testpaper' !== $conditions['exerciseMediaType']) {
+            return [];
+        }
         $exerciseModule = $this->getExerciseModuleService()->findByExerciseIdAndType($targetId, 'assessment');
         $moduleId = $exerciseModule[0]['id'];
         $sceneId = $exerciseModule[0]['answerSceneId'];
