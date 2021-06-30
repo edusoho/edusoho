@@ -10722,3 +10722,6 @@ admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is co
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
 
+course.assistant.student_add_qrcode: To ensure the quality of learning
+course.assistant.student_add_qrcode_info: Please scan the code to add the class exclusive assistant teacher WeChat
+

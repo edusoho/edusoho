@@ -11970,3 +11970,5 @@ admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班�
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
 
+course.assistant.student_add_qrcode: 为了保证学习质量
+course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
