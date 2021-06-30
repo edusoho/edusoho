@@ -1,6 +1,8 @@
 <template>
   <div class="list-item" @click="goToWrongQuestionDetail">
-    <div class="list-item__image"></div>
+    <div class="list-item__image">
+      <img :src="question.target_data.cover.middle" />
+    </div>
     <div class="list-item__detail">
       <h3 class="title text-overflow">{{ question.target_data.title }}</h3>
       <p class="number text-overflow">{{ question.item_num }}道题</p>
@@ -42,7 +44,11 @@ export default {
     width: vw(128);
     height: vw(72);
     margin-right: vw(12);
-    background-color: red;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__detail {
