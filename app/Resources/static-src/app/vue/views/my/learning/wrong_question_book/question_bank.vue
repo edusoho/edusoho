@@ -75,7 +75,7 @@
         const { data, paging } = await Me.getWrongBooksCertainTypes({
           targetType: 'exercise',
           keyWord: this.keyWord,
-          offset: (this.pagination.current - 1) * 2
+          offset: (this.pagination.current - 1) * 10
         });
 
         this.pagination.total = Number(paging.total);

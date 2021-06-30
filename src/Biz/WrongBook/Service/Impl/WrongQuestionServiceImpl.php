@@ -108,6 +108,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getWrongQuestionDao()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns);
+    }
+
     public function searchWrongQuestionCollect($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getWrongQuestionCollectDao()->search($conditions, $orderBys, $start, $limit, $columns);
@@ -118,6 +123,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionBookPoolDao()->get($poolId);
     }
 
+    public function getPoolBySceneId($sceneId)
+    {
+        return $this->getWrongQuestionBookPoolDao()->getPoolBySceneId($sceneId);
+    }
+
     public function countWrongQuestion($conditions)
     {
         return $this->getWrongQuestionDao()->count($conditions);
@@ -126,6 +136,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function countWrongQuestionWithCollect($conditions)
     {
         return $this->getWrongQuestionDao()->countWrongQuestionWithCollect($conditions);
+    }
+
+    public function countWrongQuestionsWithDistinctItem($conditions)
+    {
+        return $this->getWrongQuestionDao()->countWrongQuestionsWithDistinctItem($conditions);
     }
 
     public function searchWrongBookPool($conditions, $orderBys, $start, $limit)
@@ -168,6 +183,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         }
 
         $this->dispatchEvent('wrong_question.delete', $wrongExisted);
+    }
+
+    public function findWrongQuestionBySceneIds($sceneIds)
+    {
+        return $this->getWrongQuestionDao()->findWrongQuestionBySceneIds($sceneIds);
     }
 
     protected function handleQuestionCollect($fields)

@@ -39,6 +39,9 @@ class BizItemWrongQuestionBookTable extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='错题统计集合表';
         ");
 
+        /*
+         * scene_id 6月28号添加： ALTER TABLE `biz_wrong_question_book_pool` ADD COLUMN `scene_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '错题练习sceneId' AFTER `target_id`;
+         */
         $biz['db']->exec("
             CREATE TABLE `biz_wrong_question_book_pool` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -46,6 +49,7 @@ class BizItemWrongQuestionBookTable extends Migration
               `item_num` int(11) unsigned NOT NULL COMMENT '错题数量',
               `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '所属类型',
               `target_id` int(11) unsigned NOT NULL COMMENT '所属ID',
+              `scene_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '错题练习sceneId',
               `created_time` int(11) NOT NULL DEFAULT '0',
               `updated_time` int(11) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
