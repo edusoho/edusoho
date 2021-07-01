@@ -103,9 +103,23 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getWrongQuestionDao()->searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit);
+    }
+    public function countWrongBookQuestionsByConditions($conditions)
+    {
+        return $this->getWrongQuestionDao()->countWrongBookQuestionsByConditions($conditions);
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getWrongQuestionDao()->searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function searchCollect($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getWrongQuestionCollectDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns = [])
@@ -151,6 +165,15 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function getWrongBookPoolByFieldsGroupByTargetType($fields)
     {
         return $this->getWrongQuestionBookPoolDao()->getPoolByFieldsGroupByTargetType($fields);
+    }
+    public function getWrongBookPoolByFields($fields)
+    {
+        return $this->getWrongQuestionBookPoolDao()->getWrongBookPoolByFields($fields);
+    }
+
+    public function getWrongBookQuestionByFields($fields)
+    {
+        return $this->getWrongQuestionDao()->getWrongBookQuestionByFields($fields);
     }
 
     public function deleteWrongQuestion($id)

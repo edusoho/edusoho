@@ -18,6 +18,12 @@ interface WrongQuestionService
 
     public function getPool($poolId);
 
+    public function getWrongBookQuestionByFields($fields);
+
+    public function searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit);
+
+    public function countWrongBookQuestionsByConditions($conditions);
+
     /**
      * BookPool
      */
@@ -26,6 +32,8 @@ interface WrongQuestionService
     public function countWrongBookPool($conditions);
 
     public function getWrongBookPoolByFieldsGroupByTargetType($fields);
+
+    public function getWrongBookPoolByFields($fields);
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = []);
 
@@ -36,4 +44,9 @@ interface WrongQuestionService
     public function countWrongQuestionsWithDistinctItem($conditions);
 
     public function findWrongQuestionBySceneIds($sceneIds);
+
+    /**
+     * collect
+     */
+    public function searchCollect($conditions, $orderBys, $start, $limit, $columns = []);
 }

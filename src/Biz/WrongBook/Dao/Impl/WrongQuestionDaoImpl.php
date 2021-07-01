@@ -23,6 +23,34 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return $this->db()->fetchAll($sql, $items);
     }
 
+    public function getWrongBookQuestionByFields($fields)
+    {
+        $builder = $this->createQueryBuilder($fields)
+            ->select('*')
+            ->orderBy('updated_time','DESC');
+        return $builder->execute()->fetchAll();
+    }
+
+    public function searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('*')
+            ->addOrderBy('updated_time','DESC')
+            ->addGroupBy('user_id')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+    public function countWrongBookQuestionsByConditions($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(*)')
+            ->groupBy('biz_wrong_question.user_id');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
@@ -89,12 +117,13 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             'conditions' => [
                 'id = :id',
                 'user_id = :user_id',
+                'item_id = :item_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
                 'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'created_time', 'submit_time'],
+            'orderbys' => ['id', 'created_time', 'submit_time','updated_time'],
         ];
     }
 }
