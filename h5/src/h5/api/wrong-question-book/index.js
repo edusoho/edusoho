@@ -11,4 +11,10 @@ export default [
     url: '/me/wrong_books/{targetType}/certain_types',
     method: 'GET',
   },
+  {
+    // 课程、班级、题库练习错题展示
+    name: 'getWrongBooksQuestionShow',
+    url: '/wrong_books/{poolId}/question_show',
+    method: 'GET',
+  },
 ];
