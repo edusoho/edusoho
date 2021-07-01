@@ -107,7 +107,10 @@ class CourseSet extends AbstractResource
             throw $e;
         }
 
-        return $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $courseSet['course'] = $course;
+
+        return $courseSet;
     }
 
     public function update(ApiRequest $request, $courseSetId)
