@@ -29,7 +29,17 @@
 		padding: 0 vw(32);
 	}
 
+	.answer-result {
+		margin-top: vw(24);
+	}
+
+	.right-answer {
+		margin-top: vw(8);
+	}
+
 	.question-analysis {
+		margin-top: vw(24);
+
 		.question-analysis__label {
 			color: #333;
 		}
@@ -41,6 +51,8 @@
 	}
 
 	.question-situation {
+		margin-top: vw(24);
+
 		.situation-top {
 			color: #03c777;
 		}

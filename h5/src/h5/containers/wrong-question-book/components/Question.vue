@@ -9,12 +9,12 @@
     </div>
 
     <div class="question-making">
-      <div class="right-answer">
-        <div>你的回答</div>
+      <div class="answer-result">
+        你的回答：未作答
       </div>
 
       <div class="right-answer">
-        <div>正确答案</div>
+        正确答案：这里是答案
       </div>
 
       <div class="question-analysis">
