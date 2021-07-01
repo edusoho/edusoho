@@ -66,21 +66,25 @@
       @event-communication="eventCommunication"
     />
 
-    <view-details-modal :visible="visible" @handle-cancel="handleCancel" />
+    <wrong-question-detail-modal
+      :visible="visible"
+      :wrong-question-id="wrongQuestionId"
+      @event-communication="eventCommunication"
+    />
   </div>
 </template>
 
 <script>
 import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
 import WrongQuestionTable from 'app/vue/views/components/WrongQuestionTable.vue';
-import ViewDetailsModal from './ViewDetailsModal.vue';
+import WrongQuestionDetailModal from 'app/vue/views/components/WrongQuestionDetailModal.vue';
 
 export default {
   name: 'CourseManageWrongQuestion',
 
   components: {
     WrongQuestionTable,
-    ViewDetailsModal
+    WrongQuestionDetailModal
   },
 
   data() {
@@ -96,7 +100,8 @@ export default {
         current: 1
       },
       loading: false,
-      visible: false
+      visible: false,
+      wrongQuestionId: '0'
     }
   },
 
@@ -139,11 +144,8 @@ export default {
     },
 
     handleClickViewDetails(data) {
+      this.wrongQuestionId = data.itemId;
       this.visible = true;
-    },
-
-    handleCancel() {
-      this.visible = false;
     },
 
     eventCommunication(params) {
@@ -156,6 +158,11 @@ export default {
 
       if (type === 'table-click') {
         this.handleClickViewDetails(data);
+        return;
+      }
+
+      if (type === 'modal-cancel') {
+        this.visible = false;
       }
     }
   }

@@ -14,9 +14,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="actions" slot-scope="actions, record">
-        <a-button type="link" @click="handleClickViewDetails(record)">查看详情</a-button>
-      </template>
     </a-table>
 
   </a-modal>
@@ -48,6 +45,11 @@ export default {
     visible: {
       type: Boolean,
       required: true
+    },
+
+    wrongQuestionId: {
+      type: String,
+      required: true
     }
   },
 
@@ -55,6 +57,7 @@ export default {
     return {
       columns,
       data: [{
+        order: 0,
         usernick: '用户名',
         time: '答题时间',
         result: '答题结果'
@@ -67,13 +70,13 @@ export default {
   },
 
   methods: {
-    handleCancel() {
-      this.$emit('handle-cancel');
-    },
-
     handleTableChange() {
 
+    },
+
+    handleCancel() {
+      this.$emit('event-communication', { type: 'modal-cancel' });
     }
-  },
+  }
 };
 </script>
