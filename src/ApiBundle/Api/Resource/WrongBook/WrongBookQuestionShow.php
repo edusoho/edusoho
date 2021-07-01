@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookQuestionShow extends AbstractResource
@@ -100,7 +101,8 @@ class WrongBookQuestionShow extends AbstractResource
         $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
 
         if ('exercise' === $conditions['targetType'] && 'chapter' === $conditions['exerciseMediaType'] && !empty($conditions['chapterId'])) {
-            $prepareConditions['testpaper_id'] = $conditions['chapterId'];
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['chapterId']);
+            $prepareConditions['testpaper_ids'] = array_merge([$conditions['chapterId']], $childrenIds);
         }
         if ('exercise' === $conditions['targetType'] && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
             $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
@@ -182,5 +184,13 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getCourseTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemCategoryService');
     }
 }

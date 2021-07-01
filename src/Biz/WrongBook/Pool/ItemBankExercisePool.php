@@ -5,6 +5,7 @@ namespace Biz\WrongBook\Pool;
 use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -93,9 +94,10 @@ class ItemBankExercisePool extends AbstractPool
             return [];
         }
 
-        $exercise = $this->getExerciseModuleService()->findByExerciseIdAndType($targetId, $mediaType);
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($targetId);
+        $exerciseModules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], $mediaType);
 
-        return ArrayToolkit::column($exercise, 'answerSceneId');
+        return ArrayToolkit::column($exerciseModules, 'answerSceneId');
     }
 
     protected function prepareCommonSceneIds($conditions, $targetId)
@@ -157,5 +159,13 @@ class ItemBankExercisePool extends AbstractPool
     protected function getAssessmentService()
     {
         return $this->biz->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseService');
     }
 }
