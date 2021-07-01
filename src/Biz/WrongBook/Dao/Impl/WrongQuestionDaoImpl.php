@@ -33,6 +33,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
+        foreach ($orderBys ?: [] as $field => $direction) {
+            $builder->addOrderBy($field, $direction);
+        }
+
         return $builder->execute()->fetchAll() ?: [];
     }
 
@@ -51,7 +55,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     {
         $userMarks = str_repeat('?,', count($userIds) - 1).'?';
         $sceneIdsMarks = str_repeat('?,', count($sceneIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE item_id = ? AND user_id IN({$userMarks}) AND answer_scene_id IN({$sceneIdsMarks});";
+        $sql = "SELECT * FROM {$this->table} WHERE item_id = ? AND user_id IN({$userMarks}) AND answer_scene_id IN({$sceneIdsMarks}) ORDER BY submit_time DESC;";
 
         return $this->db()->fetchAll($sql, array_merge([$itemId], $userIds, $sceneIds));
     }

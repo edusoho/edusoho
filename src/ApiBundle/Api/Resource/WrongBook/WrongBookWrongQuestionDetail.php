@@ -18,11 +18,11 @@ class WrongBookWrongQuestionDetail extends AbstractResource
         if (!in_array($targetType, ['course', 'classroom', 'exercise'])) {
             throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
         }
-
+        $orderBy = ['submit_time' => 'DESC'];
         $conditions = $this->prepareConditions($request->query->all(), $targetType, $itemId);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $wrongQuestionsByUser = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctUserId($conditions, [], $offset, $limit);
+        $wrongQuestionsByUser = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctUserId($conditions, $orderBy, $offset, $limit);
         $wrongQuestionsUserDetail = $this->getWrongQuestionService()->findWrongQuestionsByUserIdsAndItemIdAndSceneIds(ArrayToolkit::column($wrongQuestionsByUser, 'user_id'), $itemId, $conditions['answer_scene_ids']);
         $wrongQuestionsByUser = $this->makeWrongQuestionDetailInfo($wrongQuestionsByUser, $wrongQuestionsUserDetail);
         $questionsCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctUserId($conditions);
