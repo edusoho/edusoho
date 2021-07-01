@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block course_member_exit %}
-	{% if member and not member.locked and not member.role in ['teacher', 'assistnat'] and course.parentId == 0 %}
+	{% if member and not member.locked and member.role not in ['teacher', 'assistant'] and course.parentId == 0 %}
 		<li>
 		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('course_exit_modal', {action:path('course_exit', {id:course.id})}) }}" ><i class="es-icon es-icon-exit"></i>
 		  </a>

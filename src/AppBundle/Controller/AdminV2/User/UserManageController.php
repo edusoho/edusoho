@@ -390,6 +390,15 @@ class UserManageController extends BaseController
         ]);
     }
 
+    public function qrCodeAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        return $this->render('admin-v2/user/user-manage/assistant-qrcode-modal.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     protected function getFields()
     {
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -434,6 +443,28 @@ class UserManageController extends BaseController
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('admin-v2/user/user-manage/user-avatar-crop-modal.html.twig', [
+            'user' => $user,
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ]);
+    }
+
+    public function assistantQrCodeCropAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        if ('POST' === $request->getMethod()) {
+            $options = $request->request->all();
+            $this->getUserService()->changeAssistantQrCode($id, $options['images']);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $fileId = $request->getSession()->get('fileId');
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        return $this->render('admin-v2/user/user-manage/assistant-qrcode-crop-modal.html.twig', [
             'user' => $user,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,

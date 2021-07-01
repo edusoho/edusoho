@@ -85,6 +85,13 @@ class ClassroomEntity extends BaseGoodsEntity
         return $this->getClassroomService()->canManageClassroom($classroom['id']);
     }
 
+    public function getManageUrl($goods)
+    {
+        $classroom = $this->getTarget($goods);
+
+        return $this->generateUrl('classroom_manage', ['id' => $classroom['id']]);
+    }
+
     public function buySpecsAccess($goods, $specs)
     {
         return $this->getClassroomService()->canJoinClassroom($specs['targetId']);

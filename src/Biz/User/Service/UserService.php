@@ -93,6 +93,8 @@ interface UserService
      */
     public function changeAvatar($userId, $data);
 
+    public function changeAssistantQrCode($userId, $data);
+
     public function setUserScrmUuid($userId, $scrmUuid);
 
     public function isNicknameAvaliable($nickname);

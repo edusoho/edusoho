@@ -29,6 +29,10 @@ class MeTeachCourse extends AbstractResource
             'excludeTypes' => ['reservation'],
         ];
 
+        if ($request->query->get('types')) {
+            $conditions['types'] = $request->query->get('types');
+        }
+
         if (!in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
             $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher']);
             $conditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseSetId');
