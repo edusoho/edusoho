@@ -1,19 +1,34 @@
 <template>
-  <div>
-    <head-top />
+  <div class="question">
+    <div class="question-head">
+      <div class="head-left">单选题</div>
+      <div class="head-right">
+        <span class="right-color">1</span>
+        /6
+      </div>
+    </div>
 
-    <situation />
+    <div class="question-making">
+      <div class="right-answer">
+        <div>你的回答</div>
+      </div>
+
+      <div class="right-answer">
+        <div>正确答案</div>
+      </div>
+
+      <div class="question-analysis">
+        <div class="question-analysis__label">题目解析：</div>
+        <div class="question-analysis__result">这里是材料题的解析</div>
+      </div>
+
+      <div class="question-situation">
+        <div class="situation-top">来源：课程名称-作业课时任务</div>
+        <div class="situation-bottom">
+          <span>2021-04-15 20:20:00</span>
+          <span>做错频次：<span class="frequency">3</span>次</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-<script>
-import HeadTop from './QuestionElement/HeadTop.vue';
-import Situation from './QuestionElement/Situation.vue';
-
-export default {
-  components: {
-    HeadTop,
-    Situation,
-  },
-};
-</script>
