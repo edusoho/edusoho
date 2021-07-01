@@ -1,10 +1,10 @@
 <template>
-  <layout :question="question">
+  <layout :question="question" :order="order">
     <template #answer>
-      <a-radio-group :default-value="question.report.response[0]">
+      <a-radio-group :default-value="questions.report.response[0]">
         <a-radio
+          v-for="(item, index) in questions.response_points"
           :class="['choose-answer', getAnswerClass(item.radio.val)]"
-          v-for="(item, index) in question.question.response_points"
           :key="index"
           :value="item.radio.val"
         >

@@ -6,7 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
@@ -33,12 +35,13 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'status' => 'wrong',
+            'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
 
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, [
             'user_id' => $answerRecord['user_id'],
             'answer_scene_id' => $answerRecord['answer_scene_id'],
+            'testpaper_id' => $this->getTestPaperId($answerRecord),
             'target_type' => $targetType,
             'target_id' => $targetId,
         ]);
@@ -64,6 +67,18 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => $poolCounts]);
     }
 
+    protected function getTestPaperId($answerRecord)
+    {
+        $testPaperId = $answerRecord['assessment_id'];
+
+        $isChapterRecord = $this->getItemBankChapterExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($isChapterRecord) {
+            $testPaperId = $isChapterRecord['itemCategoryId'];
+        }
+
+        return $testPaperId;
+    }
+
     protected function getWrongQuestionSource($answerRecord)
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
@@ -79,8 +94,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
                 $targetId = $activity['fromCourseSetId'];
             }
         } elseif ($assessmentExerciseRecord = $this->getExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id'])) {
+            $bankExercise = $this->getItemBankExerciseService()->get($assessmentExerciseRecord['exerciseId']);
             $targetType = 'exercise';
-            $targetId = $assessmentExerciseRecord['exerciseId'];
+            $targetId = empty($bankExercise) ? 0 : $bankExercise['questionBankId'];
         } else {
             $targetType = 'wrong_book_exercise';
             $targetId = 0;
@@ -138,6 +154,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     }
 
     /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
      * @return WrongQuestionBookPoolDao
      */
     protected function getWrongQuestionBookPoolDao()
@@ -151,5 +175,13 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getWrongQuestionCollectDao()
     {
         return $this->getBiz()->dao('WrongBook:WrongQuestionCollectDao');
+    }
+
+    /**
+     * @return ChapterExerciseRecordService
+     */
+    protected function getItemBankChapterExerciseRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
     }
 }

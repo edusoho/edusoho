@@ -24,6 +24,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'collect_id' => $collect['id'],
                 'user_id' => $source['user_id'],
                 'answer_scene_id' => $source['answer_scene_id'],
+                'testpaper_id' => $source['testpaper_id'],
             ]));
             $this->getLogService()->info(
                 'wrong_question',
@@ -57,6 +58,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'item_id' => $wrongAnswerQuestionReport['item_id'],
                     'question_id' => $wrongAnswerQuestionReport['question_id'],
                     'answer_scene_id' => $source['answer_scene_id'],
+                    'testpaper_id' => $source['testpaper_id'],
                     'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
                     'submit_time' => time(),
                 ];
@@ -87,6 +89,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             'question_id',
             'item_id',
             'answer_scene_id',
+            'testpaper_id',
             'answer_question_report_id',
         ];
         if (!ArrayToolkit::requireds($fields, $wrongQuestionRequireFields)) {
@@ -135,6 +138,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function getPool($poolId)
     {
         return $this->getWrongQuestionBookPoolDao()->get($poolId);
+    }
+
+    public function getPoolBySceneId($sceneId)
+    {
+        return $this->getWrongQuestionBookPoolDao()->getPoolBySceneId($sceneId);
     }
 
     public function countWrongQuestion($conditions)
