@@ -250,8 +250,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
             $couponsIds = ArrayToolkit::column($coupons, 'id');
 
-            foreach ($couponsIds as $key => $couponsId) {
-                $coupon = $this->getCouponService()->getCoupon($couponsId[$key]);
+            foreach ($couponsIds as $couponsId) {
+                $coupon = $this->getCouponService()->getCoupon($couponsId);
                 if (!empty($coupon) && empty($coupon['userId'])) {
                     break;
                 }
