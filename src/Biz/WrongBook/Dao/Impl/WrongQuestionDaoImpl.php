@@ -25,15 +25,25 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
-        $builder = $this->createQueryBuilder($conditions)
-            ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
-            ->select("{$this->table}.*, c.wrong_times as wrong_times")
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+        $preBuilder = $this->createQueryBuilder($conditions)
+            ->select("max({$this->table}.id) as id")
+            ->innerJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
+            ->addGroupBy("{$this->table}.item_id");
 
         if (!empty($conditions['pool_id'])) {
-            $builder->andWhere('c.pool_id = :pool_id');
+            $preBuilder->andWhere('c.pool_id = :pool_id');
         }
+
+        $ids = array_column($preBuilder->execute()->fetchAll(), 'id');
+        if (empty($ids)) {
+            return [];
+        }
+        $builder = $this->createQueryBuilder(['wrong_question_ids' => $ids])
+            ->select("{$this->table}.*, c.wrong_times as wrong_times")
+            ->andWhere("{$this->table}.id IN (:wrong_question_ids)")
+            ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         foreach ($orderBys ?: [] as $order => $sort) {
             if (in_array($order, self::WRONG_QUESTION_ORDER_BY)) {
@@ -66,7 +76,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     {
         $builder = $this->createQueryBuilder($conditions)
             ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
-            ->select('COUNT(*)');
+            ->select("COUNT(DISTINCT {$this->table}.item_id)");
         if (!empty($conditions['pool_id'])) {
             $builder->andWhere('c.pool_id = :pool_id');
         }
@@ -88,6 +98,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             'timestamps' => ['created_time', 'updated_time'],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'user_id = :user_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',

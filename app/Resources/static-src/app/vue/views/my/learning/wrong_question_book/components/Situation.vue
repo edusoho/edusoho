@@ -5,7 +5,7 @@
     <div class="pull-right clearfix situation-right">
       <div class="pull-left frequency">
         做错频次：
-        <span class="frequency-error">{{ question.question_num }}</span>次
+        <span class="frequency-error">{{ question.wrong_times }}</span>次
       </div>
       <div class="pull-left time">错题时间：{{ $dateFormat(question.updated_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
     </div>
