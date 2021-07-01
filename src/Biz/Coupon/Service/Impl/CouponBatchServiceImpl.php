@@ -247,10 +247,19 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             }
 
             $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
-            $couponsId = ArrayToolkit::column($coupons, 'id');
-            $coupon = $this->getCouponService()->getCoupon($couponsId[0]);
+            $couponsIds = ArrayToolkit::column($coupons, 'id');
+
+            foreach ($couponsIds as $key => $couponsId) {
+                $coupon = $this->getCouponService()->getCoupon($couponsId[$key]);
+                if (!empty($coupon) && empty($coupon['userId'])) {
+                    break;
+                }
+            }
 
             if (!empty($coupon['userId']) && $coupon['userId'] != $userId) {
+                $this->getCouponBatchDao()->db()->commit();
+                $this->getLock()->release("receive_coupon_{$batch['id']}");
+
                 return [
                     'code' => 'failed',
                     'message' => '您来晚了一步，优惠券已被领完！',
