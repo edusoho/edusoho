@@ -44,12 +44,16 @@
 
     <a-form-model-item v-if="form.exerciseMediaType === 'chapter'">
       <a-tree-select
+        show-search
+        option-filter-prop="children"
+        :filter-option="filterOption"
+        notFoundContent="暂无数据"
         v-model="form.chapterId"
         style="width: 100%"
         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
         :tree-data="conditions.chapter"
         placeholder="全部章节"
-        :replace-fields="{children:'children', title:'name', key:'id', value: 'id' }"
+        :replace-fields="{title:'name', key:'id', value: 'id' }"
         tree-default-expand-all
         @change="(value) => handleChange(value, 'chapterId')"
       >
@@ -167,7 +171,7 @@ export default {
 
       if (type === 'chapterId') {
         _.assign(this.form, {
-          chapterId: 'default'
+          chapterId: chapterId,
         });
 
         chapterId !== 'default' && (params.chapterId = chapterId);
