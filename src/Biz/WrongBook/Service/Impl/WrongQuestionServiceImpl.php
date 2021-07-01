@@ -118,6 +118,10 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
     public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds)
     {
+        if (empty($userIds) || empty($itemId) || empty($sceneIds)) {
+            return [];
+        }
+
         return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds);
     }
 
