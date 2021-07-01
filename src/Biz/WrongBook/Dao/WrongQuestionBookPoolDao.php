@@ -10,8 +10,6 @@ interface WrongQuestionBookPoolDao extends AdvancedDaoInterface
 
     public function getPoolByFieldsGroupByTargetType($fields);
 
-    public function getWrongBookPoolByFields($fields);
-
     public function getPoolBySceneId($sceneId);
 
     public function searchPoolByConditions($conditions, $orderBys, $start, $limit);

@@ -23,32 +23,37 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return $this->db()->fetchAll($sql, $items);
     }
 
-    public function getWrongBookQuestionByFields($fields)
+    public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->createQueryBuilder($fields)
+        $itemId = $conditions['item_id'];
+        $sceneIds = implode(',', $conditions['answer_scene_ids']);
+        $builder = $this->createQueryBuilder([])
             ->select('*')
-            ->orderBy('updated_time','DESC');
-        return $builder->execute()->fetchAll();
-    }
-
-    public function searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
-            ->addOrderBy('updated_time','DESC')
-            ->addGroupBy('user_id')
+            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId")
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
         return $builder->execute()->fetchAll() ?: [];
     }
-    public function countWrongBookQuestionsByConditions($conditions)
+
+    public function countWrongQuestionsWithDistinctUserId($conditions)
     {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('count(*)')
-            ->groupBy('biz_wrong_question.user_id');
+        $itemId = $conditions['item_id'];
+        $sceneIds = implode(',', $conditions['answer_scene_ids']);
+        $builder = $this->createQueryBuilder([])
+            ->select('COUNT(*)')
+            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId");
 
         return $builder->execute()->fetchColumn(0);
+    }
+
+    public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds)
+    {
+        $userMarks = str_repeat('?,', count($userIds) - 1).'?';
+        $sceneIdsMarks = str_repeat('?,', count($sceneIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE item_id = ? AND user_id IN({$userMarks}) AND answer_scene_id IN({$sceneIdsMarks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$itemId], $userIds, $sceneIds));
     }
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
@@ -117,6 +122,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             'conditions' => [
                 'id = :id',
                 'user_id = :user_id',
+                'user_id IN (:user_ids)',
                 'item_id = :item_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
@@ -125,7 +131,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'testpaper_id IN (:testpaper_ids)',
                 'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'created_time', 'submit_time','updated_time'],
+            'orderbys' => ['id', 'created_time', 'submit_time'],
         ];
     }
 }

@@ -14,10 +14,7 @@ interface WrongQuestionDao extends AdvancedDaoInterface
 
     public function findWrongQuestionBySceneIds($items);
 
-    public function getWrongBookQuestionByFields($fields);
+    public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit);
 
-    public function searchWrongBookQuestionsByConditions($conditions, $orderBys, $start, $limit);
-
-    public function countWrongBookQuestionsByConditions($conditions);
-
+    public function countWrongQuestionsWithDistinctUserId($conditions);
 }

@@ -26,11 +26,10 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
             'conditions' => [
                 'id = :id',
                 'pool_id = :pool_id',
-                'pool_id IN (:pool_ids)',
                 'item_id = :item_id',
                 'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'created_time', 'wrong_times','updated_time'],
+            'orderbys' => ['id', 'created_time', 'wrong_times'],
         ];
     }
 }

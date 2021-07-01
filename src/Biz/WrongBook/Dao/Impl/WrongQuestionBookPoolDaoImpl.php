@@ -28,14 +28,6 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         return $this->getByFields(['scene_id' => $sceneId]);
     }
 
-    public function getWrongBookPoolByFields($fields)
-    {
-        $builder = $this->createQueryBuilder($fields)
-            ->select('*');
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function searchPoolByConditions($conditions, $orderBys, $start, $limit)
     {
         $table = $this->getTableName($conditions);
