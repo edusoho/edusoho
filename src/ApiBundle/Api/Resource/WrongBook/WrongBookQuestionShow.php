@@ -45,11 +45,13 @@ class WrongBookQuestionShow extends AbstractResource
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
+            $source = $sources[$wrongQuestion['answer_scene_id']];
+            $item['submit_time'] = $wrongQuestion['submit_time'];
+            $item['wrong_times'] = $wrongQuestion['wrong_times'];
+            $item['source'] = $source;
             foreach ($item['questions'] as &$question) {
                 $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
-                $question['source'] = $sources[$wrongQuestion['answer_scene_id']];
-                $question['source']['submit_time'] = $wrongQuestion['submit_time'];
-                $question['source']['wrong_times'] = $wrongQuestion['wrong_times'];
+                $question['source'] = $source;
             }
             $wrongQuestionInfo[] = $item;
         }
