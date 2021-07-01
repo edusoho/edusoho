@@ -146,26 +146,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../../../assets/styles/mixins.scss';
-
-.wrong-list {
-  padding: 0 vw(16) vw(20);
-  margin-top: 0;
-}
-
-.wrong-question-number {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: vw(4) 0;
-  text-align: center;
-  font-size: vw(10);
-  color: #999;
-  line-height: vw(20);
-  background-color: #fff;
-  box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.05);
-}
-</style>
