@@ -25,6 +25,7 @@
           ref="upload"
           accept="image/*"
           :file-list="[]"
+          :customRequest="() => {}"
           list-type="picture-card"
           @change="uploadCourseCover"
         >
