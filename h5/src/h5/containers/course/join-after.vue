@@ -24,10 +24,7 @@
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
         <!-- 助教 -->
-        <div
-          v-if="details.assistant && details.assistant !== null"
-          class="assistant-show clearfix"
-        >
+        <div v-if="details.assistant" class="assistant-show clearfix">
           <div class="assistant-show__icon">
             <i class="iconfont icon-weixin1"></i>
           </div>
@@ -48,9 +45,8 @@
             alt="助教图片"
           />
           <p class="name">
-            {{ details.assistant.title }}课程助教——{{
-              details.assistant.nickname
-            }}
+            {{ details.assistant.title }}课程助教——
+            {{ details.assistant.nickname }}
           </p>
           <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
           <img
