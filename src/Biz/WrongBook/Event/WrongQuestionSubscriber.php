@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
@@ -93,8 +94,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
                 $targetId = $activity['fromCourseSetId'];
             }
         } elseif ($assessmentExerciseRecord = $this->getExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id'])) {
+            $bankExercise = $this->getItemBankExerciseService()->get($assessmentExerciseRecord['exerciseId']);
             $targetType = 'exercise';
-            $targetId = $assessmentExerciseRecord['exerciseId'];
+            $targetId = empty($bankExercise) ? 0 : $bankExercise['questionBankId'];
         } else {
             $targetType = 'wrong_book_exercise';
             $targetId = 0;
@@ -149,6 +151,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getExerciseModuleService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
     }
 
     /**
