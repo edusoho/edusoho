@@ -229,6 +229,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 ];
             }
 
+            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
+
             $conditions = [
                 'userId' => 0,
                 'batchId' => $batch['id'],
@@ -238,7 +240,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             if (empty($coupons)) {
                 return [
                     'code' => 'failed',
-                    'message' => '该批优惠码已经被领完',
+                    'message' => '您来晚了一步，优惠券已被领完！',
                     'exception' => [
                         'class' => 'Biz\Coupon\CouponException',
                         'method' => 'FINISHED',
@@ -246,28 +248,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 ];
             }
 
-            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
-
-            $coupons = $this->getCouponService()->searchCoupons($conditions, ['id' => 'ASC'], 0, PHP_INT_MAX);
             $couponsIds = ArrayToolkit::column($coupons, 'id');
 
-            foreach ($couponsIds as $couponsId) {
-                $coupon = $this->getCouponService()->getCoupon($couponsId);
-                if (!empty($coupon) && empty($coupon['userId'])) {
-                    break;
-                }
-            }
-
-            if (!empty($coupon['userId']) && $coupon['userId'] != $userId) {
-                return [
-                    'code' => 'failed',
-                    'message' => '您来晚了一步，优惠券已被领完！',
-                    'exception' => [
-                        'class' => 'Biz\Coupon\CouponException',
-                        'method' => 'RECEIVE_LATE',
-                    ],
-                ];
-            }
+            $coupon = $this->getCouponService()->getCoupon($couponsIds[0]);
 
             if (!empty($userId) && !empty($coupon)) {
                 $fields = [
