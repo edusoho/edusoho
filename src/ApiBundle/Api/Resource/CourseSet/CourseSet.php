@@ -72,7 +72,7 @@ class CourseSet extends AbstractResource
     }
 
     /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function add(ApiRequest $request)
     {
