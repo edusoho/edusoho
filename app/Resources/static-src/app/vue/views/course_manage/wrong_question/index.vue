@@ -92,7 +92,8 @@ export default {
       },
       wrongQuestionList: [],
       pagination: {
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
+        current: 1
       },
       loading: false,
       visible: false
@@ -116,13 +117,6 @@ export default {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
-      // this.fetch({
-      //   results: pagination.pageSize,
-      //   page: pagination.current,
-      //   sortField: sorter.field,
-      //   sortOrder: sorter.order,
-      //   ...filters,
-      // });
     },
 
     async fetchWrongQuestion() {
