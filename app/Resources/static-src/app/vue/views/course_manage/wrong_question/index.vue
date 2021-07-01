@@ -76,8 +76,8 @@
 
 <script>
 import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
-import WrongQuestionTable from 'app/vue/views/components/wrong_question/Table.vue';
-import WrongQuestionDetailModal from 'app/vue/views/components/wrong_question/ViewDetailModal.vue';
+import WrongQuestionTable from 'app/vue/views/components/WrongQuestion/Table.vue';
+import WrongQuestionDetailModal from 'app/vue/views/components/WrongQuestion/ViewDetailModal.vue';
 
 export default {
   name: 'CourseManageWrongQuestion',
