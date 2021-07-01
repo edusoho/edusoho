@@ -117,14 +117,14 @@ export default {
 
     handleTableChange(pagination) {
       this.$emit('event-communication', {
-        type: 'pagination',
+        type: 'table-pagination',
         data: pagination
       });
     },
 
     handleClickViewDetails(params) {
       this.$emit('event-communication', {
-        type: 'click',
+        type: 'table-click',
         data: params
       });
     }

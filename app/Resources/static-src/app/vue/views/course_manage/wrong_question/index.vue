@@ -114,9 +114,7 @@ export default {
     },
 
     handleTableChange(pagination) {
-      const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      this.pagination.current = pagination.current;
     },
 
     async fetchWrongQuestion() {
@@ -126,18 +124,21 @@ export default {
         query: {
           targetId: 72,
           targetType: 'course'
+        },
+        params: {
+          offset: (this.pagination.current - 1) * 10,
+          limit: 10
         }
       };
+
       const { data, paging } = await WrongBookStudentWrongQuestion.get(apiParams);
 
-      const pagination = { ...this.pagination };
-      pagination.total = paging.total;
       this.loading = false;
       this.wrongQuestionList = data;
-      this.pagination = pagination;
+      this.pagination.total = paging.total;
     },
 
-    handleClickViewDetails() {
+    handleClickViewDetails(data) {
       this.visible = true;
     },
 
@@ -148,12 +149,12 @@ export default {
     eventCommunication(params) {
       const { type, data } = params;
 
-      if (type === 'pagination') {
+      if (type === 'table-pagination') {
         this.handleTableChange(data);
         return;
       }
 
-      if (type === 'click') {
+      if (type === 'table-click') {
         this.handleClickViewDetails(data);
       }
     }
