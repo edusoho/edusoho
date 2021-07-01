@@ -58,64 +58,28 @@
       </a-form-model-item>
     </a-form-model>
 
-    <a-table
+    <wrong-question-table
       class="mt24"
-      :columns="columns"
-      :row-key="record => record.order"
-      :data-source="data"
+      :data="wrongQuestionList"
       :pagination="pagination"
       :loading="loading"
-      @change="handleTableChange"
-    >
-      <template slot="actions" slot-scope="actions, record">
-        <a-button type="link" @click="handleClickViewDetails(record)">查看详情</a-button>
-      </template>
-    </a-table>
+      @event-communication="eventCommunication"
+    />
 
     <view-details-modal :visible="visible" @handle-cancel="handleCancel" />
   </div>
 </template>
 
 <script>
-const columns = [
-  {
-    title: '',
-    dataIndex: 'order',
-    width: '5%'
-  },
-  {
-    title: '题目',
-    dataIndex: 'stem',
-    width: '40%'
-  },
-  {
-    title: '任务名称',
-    dataIndex: 'taskName',
-    width: '15%'
-  },
-  {
-    title: '来源',
-    dataIndex: 'source',
-    width: '15%'
-  },
-  {
-    title: '答错人次',
-    dataIndex: 'email',
-    width: '15%'
-  },
-  {
-    title: 'actions',
-    width: '10%',
-    scopedSlots: { customRender: 'actions' }
-  },
-];
-
+import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
+import WrongQuestionTable from 'app/vue/views/components/WrongQuestionTable.vue';
 import ViewDetailsModal from './ViewDetailsModal.vue';
 
 export default {
   name: 'CourseManageWrongQuestion',
 
   components: {
+    WrongQuestionTable,
     ViewDetailsModal
   },
 
@@ -126,21 +90,17 @@ export default {
         taskName: undefined,
         sort: undefined
       },
-      columns,
-      data: [{
-        order: 1,
-        stem: '这是一个题目',
-        taskName: '这是任务名称',
-        source: '这是来源',
-        email: '这是答错人次',
-        actions: '查看详情'
-      }],
+      wrongQuestionList: [],
       pagination: {
         hideOnSinglePage: true
       },
       loading: false,
       visible: false
     }
+  },
+
+  created() {
+    this.fetchWrongQuestion();
   },
 
   methods: {
@@ -165,20 +125,22 @@ export default {
       // });
     },
 
-    fetch(params = {}) {
+    async fetchWrongQuestion() {
       this.loading = true;
-      // queryData({
-      //   results: 10,
-      //   ...params,
-      // }).then(({ data }) => {
-      //   const pagination = { ...this.pagination };
-      //   // Read total count from server
-      //   // pagination.total = data.totalCount;
-      //   pagination.total = 200;
-      //   this.loading = false;
-      //   this.data = data.results;
-      //   this.pagination = pagination;
-      // });
+
+      const apiParams = {
+        query: {
+          targetId: 72,
+          targetType: 'course'
+        }
+      };
+      const { data, paging } = await WrongBookStudentWrongQuestion.get(apiParams);
+
+      const pagination = { ...this.pagination };
+      pagination.total = paging.total;
+      this.loading = false;
+      this.wrongQuestionList = data;
+      this.pagination = pagination;
     },
 
     handleClickViewDetails() {
@@ -187,6 +149,19 @@ export default {
 
     handleCancel() {
       this.visible = false;
+    },
+
+    eventCommunication(params) {
+      const { type, data } = params;
+
+      if (type === 'pagination') {
+        this.handleTableChange(data);
+        return;
+      }
+
+      if (type === 'click') {
+        this.handleClickViewDetails(data);
+      }
     }
   }
 }

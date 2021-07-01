@@ -1,6 +1,5 @@
 <template>
   <a-table
-    class="mt24"
     :columns="columns"
     :row-key="record => record.order"
     :data-source="data"
@@ -23,26 +22,26 @@ const columns = [
   },
   {
     title: '题目',
-    dataIndex: 'stem',
+    dataIndex: 'itemTitle',
     width: '40%'
   },
   {
     title: '任务名称',
-    dataIndex: 'taskName',
+    dataIndex: 'courseName',
     width: '15%'
   },
   {
     title: '来源',
-    dataIndex: 'source',
+    dataIndex: 'sourceType',
     width: '15%'
   },
   {
     title: '答错人次',
-    dataIndex: 'email',
+    dataIndex: 'wrong_times',
     width: '15%'
   },
   {
-    title: 'actions',
+    title: '操作',
     width: '10%',
     scopedSlots: { customRender: 'actions' }
   },
@@ -51,37 +50,42 @@ const columns = [
 export default {
   name: 'WrongQuestionTable',
 
+  props: {
+    data: {
+      type: Array,
+      required: true
+    },
+
+    pagination: {
+      type: Object,
+      required: true
+    },
+
+    loading: {
+      type: Boolean,
+      required: true
+    }
+  },
+
   data() {
     return {
-      columns,
-      data: [{
-        order: 1,
-        stem: '这是一个题目',
-        taskName: '这是任务名称',
-        source: '这是来源',
-        email: '这是答错人次',
-        actions: '查看详情'
-      }],
-      pagination: {
-        hideOnSinglePage: true
-      },
-      loading: false,
-      visible: false
+      columns
     }
   },
 
   methods: {
     handleTableChange(pagination) {
-      const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
-      // this.fetch({
-      //   results: pagination.pageSize,
-      //   page: pagination.current,
-      //   sortField: sorter.field,
-      //   sortOrder: sorter.order,
-      //   ...filters,
-      // });
+      this.$emit('event-communication', {
+        type: 'pagination',
+        data: pagination
+      });
+    },
+
+    handleClickViewDetails(params) {
+      this.$emit('event-communication', {
+        type: 'click',
+        data: params
+      });
     }
   }
 }
