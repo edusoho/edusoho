@@ -421,6 +421,7 @@ export default {
         offset: pageSize * current,
         type: 'live',
         excludeMultiClassCourses: true,
+        sort: '-createdTime'
       };
 
       if (title) {

@@ -7,22 +7,26 @@
 {% block page_title %}{{ 'course.teacher_setup'|trans }}{% endblock %}
 
 {% block main_body %}
-  <div>
-    <form id="teachers-form" class="form-horizontal" method="post" >
-      {{ web_macro.flash_messages() }}
-      <div class="form-group" id="teachers-form-group">
-        <div class="col-md-2 control-label"><label>{{'course.teacher_setup.exist_teacher'|trans}}</label></div>
-        <div class="col-md-8 controls">
-          <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('course_set_manage_course_teachers_match', {courseSetId: courseSet.id, courseId: course.id})}}"></div>
-          <div class="help-block">{{'course.teacher_setup.exist_teacher.add_tips'|trans}}</div>
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
+    <div>
+      <form id="teachers-form" class="form-horizontal" method="post" >
+        {{ web_macro.flash_messages() }}
+        <div class="form-group" id="teachers-form-group">
+          <div class="col-md-2 control-label"><label>{{'course.teacher_setup.exist_teacher'|trans}}</label></div>
+          <div class="col-md-8 controls">
+            <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('course_set_manage_course_teachers_match', {courseSetId: courseSet.id, courseId: course.id})}}"></div>
+            <div class="help-block">{{'course.teacher_setup.exist_teacher.add_tips'|trans}}</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-offset-2 col-md-8 controls">
-          <button type="button" class="cd-btn cd-btn-primary js-btn-save">{{'form.btn.save'|trans}}</button>
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <button type="button" class="cd-btn cd-btn-primary js-btn-save">{{'form.btn.save'|trans}}</button>
+          </div>
         </div>
-      </div>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
-  </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  {% else %}
+    <div class="cd-alert cd-alert-danger">{{ 'course.teacher_manage.no_permission_tips'|trans }}</div>
+  {% endif %}
 {% endblock %}

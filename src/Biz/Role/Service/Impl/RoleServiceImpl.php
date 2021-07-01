@@ -348,7 +348,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         return [
             'ROLE_USER' => [],
-            'ROLE_TEACHER' => array_merge($this->getDefaultTeacherAdminRole(), $webRoles),
+            'ROLE_TEACHER' => $webRoles,
             'ROLE_ADMIN' => array_diff($superAdminV2Roles, $adminV2ForbidRoles),
             'ROLE_SUPER_ADMIN' => $superAdminV2Roles,
         ];

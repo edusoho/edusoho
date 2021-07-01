@@ -146,6 +146,7 @@ export default {
       }
     },
     searchProductList (title = '') {
+      this.paging.offset = 0;
       this.getProductList({ title })
     },
     createMultiClassProduct(){

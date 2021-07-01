@@ -47,7 +47,7 @@ class Course extends AbstractResource
         $assistants = $this->getMemberService()->findMembersByCourseIdAndRole($courseId, 'assistant');
         $course['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $course['assistant'] = [];
+        $course['assistant'] = null;
         if (!empty($user['id'])) {
             $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($user['id'], $courseId);
             if (!empty($assistantStudent)) {
