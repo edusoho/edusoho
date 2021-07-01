@@ -1,6 +1,30 @@
 <template>
-  <div>
-    <question />
+  <div class="wrong-question-detail">
+    <van-swipe
+      ref="swipe"
+      :height="height"
+      :duration="100"
+      :loop="false"
+      :show-indicators="false"
+      @change="onChange"
+    >
+      <van-swipe-item>
+        <question />
+      </van-swipe-item>
+      <van-swipe-item>
+        <question />
+      </van-swipe-item>
+      <van-swipe-item>
+        <question />
+      </van-swipe-item>
+      <van-swipe-item>
+        <question />
+      </van-swipe-item>
+    </van-swipe>
+
+    <div class="question-foot">
+      错题练习
+    </div>
   </div>
 </template>
 
@@ -9,6 +33,11 @@ import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import Question from '../components/Question.vue';
+
+const NavBarHeight = 46;
+const FootHeight = 48;
+const DocHeight = document.documentElement.clientHeight;
+const MaxHeight = DocHeight - NavBarHeight - FootHeight;
 
 export default {
   name: 'WrongQuestionBookDetail',
@@ -22,6 +51,7 @@ export default {
       targetType: this.$route.params.type,
       targetId: this.$route.params.id,
       questionList: [],
+      height: MaxHeight,
     };
   },
 
@@ -46,6 +76,10 @@ export default {
       }).then(res => {
         this.questionList = res.data;
       });
+    },
+
+    onChange(index) {
+      console.log(index);
     },
   },
 };
