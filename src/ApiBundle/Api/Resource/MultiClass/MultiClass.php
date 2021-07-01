@@ -90,7 +90,7 @@ class MultiClass extends AbstractResource
 
     /**
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request)
     {
