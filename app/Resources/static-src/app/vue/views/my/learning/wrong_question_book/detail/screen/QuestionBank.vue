@@ -44,18 +44,14 @@
 
     <a-form-model-item v-if="form.exerciseMediaType === 'chapter'">
       <a-tree-select
-        show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
         notFoundContent="暂无数据"
         v-model="form.chapterId"
-        style="width: 100%"
-        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+        style="min-width: 120px"
+        :dropdown-style="{ maxHeight: '400px',  overflow: 'auto' }"
         :tree-data="conditions.chapter"
         placeholder="全部章节"
-        :replace-fields="{title:'name', key:'id', value: 'id' }"
+        :replace-fields="{title:'name', key:'id', value: 'id', children: 'children' }"
         tree-default-expand-all
-        @change="(value) => handleChange(value, 'chapterId')"
       >
       </a-tree-select>
     </a-form-model-item>
@@ -143,7 +139,6 @@ export default {
 
 
       if (type == undefined) {
-        console.log(type);
         _.assign(params, this.form);
       }
 
@@ -161,21 +156,22 @@ export default {
         exerciseMediaType !== 'default' && (params.exerciseMediaType = exerciseMediaType)
       }
 
-      if (type === 'testpaperId') {
-        _.assign(this.form, {
-          testpaperId: 'default'
-        });
-
-        testpaperId !== 'default' && (params.testpaperId = testpaperId);
-      }
-
-      if (type === 'chapterId') {
-        _.assign(this.form, {
-          chapterId: chapterId,
-        });
-
-        chapterId !== 'default' && (params.chapterId = chapterId);
-      }
+      // if (type === 'testpaperId') {
+      //   _.assign(this.form, {
+      //     testpaperId: 'default'
+      //   });
+      //
+      //   testpaperId !== 'default' && (params.testpaperId = testpaperId);
+      // }
+      //
+      // if (type === 'chapterId') {
+      //   console.log(chapterId)
+      //   _.assign(this.form, {
+      //     chapterId: chapterId,
+      //   });
+      //
+      //   chapterId !== 'default' && (params.chapterId = chapterId);
+      // }
 
       return apiParams;
     },
