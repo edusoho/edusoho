@@ -248,6 +248,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
             $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
 
+            $coupons = $this->getCouponService()->searchCoupons($conditions, ['id' => 'ASC'], 0, PHP_INT_MAX);
             $couponsIds = ArrayToolkit::column($coupons, 'id');
 
             foreach ($couponsIds as $couponsId) {
