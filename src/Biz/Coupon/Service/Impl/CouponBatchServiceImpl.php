@@ -246,6 +246,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 ];
             }
 
+            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
+
             $couponsIds = ArrayToolkit::column($coupons, 'id');
 
             foreach ($couponsIds as $key => $couponsId) {
@@ -266,7 +268,6 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 ];
             }
 
-            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
             if (!empty($userId) && !empty($coupon)) {
                 $fields = [
                     'userId' => $userId,
