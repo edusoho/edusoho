@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import Stem from '../../components/Stem.vue';
-import RightAnswer from '../../components/RightAnswer.vue';
-import AnswerResult from '../../components/AnswerResult.vue';
-import Analysis from '../../components/Analysis.vue';
-import Situation from '../../components/Situation.vue';
+import Stem from 'app/vue/views/components/wrong_question/question_element/Stem.vue';
+import RightAnswer from 'app/vue/views/components/wrong_question/question_element/RightAnswer.vue';
+import AnswerResult from 'app/vue/views/components/wrong_question/question_element/AnswerResult.vue';
+import Analysis from 'app/vue/views/components/wrong_question/question_element/Analysis.vue';
+import Situation from 'app/vue/views/components/wrong_question/question_element/Situation.vue';
 
 export default {
   name: 'question-layout',
