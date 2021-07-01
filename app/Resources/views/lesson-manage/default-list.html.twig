@@ -8,8 +8,7 @@
   {% endif %}
 {% endblock %}
 {% block main_body %}
-  {% set assistant = data('AssistantPermission', {courseId: course.id}) %}
-  {% if not assistant.isAssistant or 'course_lesson_manage' in assistant.permissions %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
     <div class="js-lesson-manage">
       {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
       <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
