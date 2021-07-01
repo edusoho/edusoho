@@ -155,9 +155,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function addWeChatQrCode()
     {
-        $this->getConnection()->exec("
-            ALTER TABLE `user` ADD COLUMN `weChatQrCode` varchar(255) NOT NULL DEFAULT '' COMMENT '助教微信二维码' AFTER `largeAvatar`;
-        ");
+        if (!$this->isFieldExist('user', 'weChatQrCode')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `user` ADD COLUMN `weChatQrCode` varchar(255) NOT NULL DEFAULT '' COMMENT '助教微信二维码' AFTER `largeAvatar`;
+            ");
+        }
 
         return 1;
     }
