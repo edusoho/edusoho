@@ -1,10 +1,6 @@
 <template>
   <div>
-    <question
-      v-for="(question, index) in questionList"
-      :key="question.id + index"
-      :question="question"
-    />
+    <question />
   </div>
 </template>
 
