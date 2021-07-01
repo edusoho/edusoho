@@ -153,11 +153,13 @@ export default {
 
       this.visible = true;
       localStorage.setItem('first_wrong_exercises', true);
+      this.goToWrongExercises();
     },
 
     goToWrongExercises() {
       this.visible = false;
       // 错题练习
+      window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`;
     },
 
     // 错题搜索
