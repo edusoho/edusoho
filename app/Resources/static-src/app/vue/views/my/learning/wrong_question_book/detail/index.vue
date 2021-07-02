@@ -45,7 +45,7 @@
       :visible="visible"
       @cancel="visible = false"
     >
-      <p>系统为你随机筛选最多20题重做看你是否掌握</p>
+      <p>已为你随机筛选最多20题</p>
 
       <template slot="footer">
         <a-button type="primary" @click="goToWrongExercises">
