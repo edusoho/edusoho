@@ -58,7 +58,7 @@
       </a-form-model-item>
     </a-form-model>
 
-    <wrong-question-table
+    <student-wrong-question-table
       class="mt24"
       :data="wrongQuestionList"
       :pagination="pagination"
@@ -66,25 +66,21 @@
       @event-communication="eventCommunication"
     />
 
-    <wrong-question-detail-modal
-      :visible="visible"
-      :wrong-question-id="wrongQuestionId"
-      @event-communication="eventCommunication"
-    />
+    <view-detail-modal :visible="visible" />
   </div>
 </template>
 
 <script>
 import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
-import WrongQuestionTable from 'app/vue/views/components/WrongQuestion/Table.vue';
-import WrongQuestionDetailModal from 'app/vue/views/components/WrongQuestion/ViewDetailModal.vue';
+import StudentWrongQuestionTable from 'app/vue/views/components/WrongQuestion/StudentWrongQuestionTable.vue';
+import ViewDetailModal from './ViewDetailModal.vue';
 
 export default {
   name: 'CourseManageWrongQuestion',
 
   components: {
-    WrongQuestionTable,
-    WrongQuestionDetailModal
+    StudentWrongQuestionTable,
+    ViewDetailModal
   },
 
   data() {

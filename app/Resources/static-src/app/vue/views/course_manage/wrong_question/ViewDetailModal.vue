@@ -7,58 +7,34 @@
     :destroyOnClose="true"
     @cancel="handleCancel"
   >
-    <a-table
-      :columns="columns"
-      :row-key="record => record.order"
-      :data-source="data"
-      :pagination="pagination"
+    <detail-table
+      :data="data"
       :loading="loading"
-      @change="handleTableChange"
-    >
-    </a-table>
-
+      :pagination="pagination"
+    />
   </a-modal>
 </template>
 
 <script>
 import { WrongBookWrongQuestionDetail } from 'common/vue/service';
-
-const columns = [
-  {
-    title: '用户名',
-    dataIndex: 'usernick',
-    width: '20%'
-  },
-  {
-    title: '答题时间',
-    dataIndex: 'time',
-    width: '40%'
-  },
-  {
-    title: '答题结果',
-    dataIndex: 'result',
-    width: '40%'
-  }
-];
+import DetailTable from 'app/vue/views/components/WrongQuestion/DetailTable.vue';
 
 export default {
   name: 'ViewDetailsModal',
 
+  components: {
+    DetailTable
+  },
+
   props: {
     visible: {
       type: Boolean,
-      required: true
-    },
-
-    wrongQuestionId: {
-      type: String,
       required: true
     }
   },
 
   data() {
     return {
-      columns,
       data: [{
         order: 0,
         usernick: '用户名',
@@ -68,7 +44,7 @@ export default {
       pagination: {
         hideOnSinglePage: true
       },
-      loading: false,
+      loading: false
     };
   },
 
