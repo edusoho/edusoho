@@ -73,7 +73,7 @@ export default {
 
     handleTableChange(pagination) {
       this.$emit('event-communication', {
-        type: 'table-pagination',
+        type: 'pagination',
         data: pagination
       });
     }

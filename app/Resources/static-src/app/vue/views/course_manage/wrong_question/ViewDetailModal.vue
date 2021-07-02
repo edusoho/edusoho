@@ -109,7 +109,7 @@ export default {
     eventCommunication(params) {
       const { type, data } = params;
 
-      if (type === 'table-pagination') {
+      if (type === 'pagination') {
         this.handleTableChange(data);
       }
     }

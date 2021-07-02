@@ -102,12 +102,12 @@ export default {
     eventCommunication(params) {
       const { type, data } = params;
 
-      if (type === 'table-pagination') {
+      if (type === 'pagination') {
         this.handleTableChange(data);
         return;
       }
 
-      if (type === 'click-view-detail') {
+      if (type === 'view-detail') {
         this.handleClickViewDetails(data);
         return;
       }
