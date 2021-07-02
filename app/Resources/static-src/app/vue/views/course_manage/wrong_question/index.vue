@@ -31,17 +31,13 @@ export default {
 
   data() {
     return {
-      form: {
-        source: undefined,
-        taskName: undefined,
-        sort: undefined
-      },
-      wrongQuestionList: [],
       pagination: {
         hideOnSinglePage: true,
-        current: 1
+        current: 1,
+        total: 0
       },
       loading: false,
+      wrongQuestionList: [],
       visible: false,
       wrongQuestionId: '0'
     }
@@ -62,6 +58,7 @@ export default {
 
     handleTableChange(pagination) {
       this.pagination.current = pagination.current;
+      this.fetchWrongQuestion();
     },
 
     async fetchWrongQuestion() {
@@ -98,7 +95,7 @@ export default {
         return;
       }
 
-      if (type === 'table-click') {
+      if (type === 'click-view-detail') {
         this.handleClickViewDetails(data);
         return;
       }

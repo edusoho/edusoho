@@ -32,7 +32,7 @@ const columns = [
   {
     title: '',
     dataIndex: 'order',
-    width: '5%',
+    width: '10%',
     scopedSlots: { customRender: 'order' }
   },
   {
@@ -49,7 +49,7 @@ const columns = [
   {
     title: '来源',
     dataIndex: 'sourceType',
-    width: '25%',
+    width: '20%',
     scopedSlots: { customRender: 'sourceType' }
   },
   {
@@ -124,7 +124,7 @@ export default {
 
     handleClickViewDetails(params) {
       this.$emit('event-communication', {
-        type: 'table-click',
+        type: 'click-view-detail',
         data: params
       });
     }

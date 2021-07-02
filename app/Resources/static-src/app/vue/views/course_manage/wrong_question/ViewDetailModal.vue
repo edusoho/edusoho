@@ -49,7 +49,7 @@ export default {
   },
 
   created() {
-    this.fetchWrongQuestionDetail();
+    // this.fetchWrongQuestionDetail();
   },
 
   methods: {
