@@ -4,11 +4,10 @@
     width="900px"
     :visible="visible"
     :footer="null"
-    :destroyOnClose="true"
     @cancel="handleCancel"
   >
     <detail-table
-      :data="data"
+      :data="answerDetails"
       :loading="loading"
       :pagination="pagination"
     />
@@ -50,14 +49,12 @@ export default {
 
   data() {
     return {
-      data: [{
-        order: 0,
-        usernick: '用户名',
-        time: '答题时间',
-        result: '答题结果'
-      }],
+      answerDetails: [],
+      question: {},
       pagination: {
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
+        current: 1,
+        total: 0
       },
       loading: false
     };
@@ -69,6 +66,8 @@ export default {
 
   methods: {
     async fetchWrongQuestionDetail() {
+      this.loading = true;
+
       const apiParams = {
         query: {
           itemId: this.currentId,
@@ -78,8 +77,12 @@ export default {
           targetId: this.targetId
         }
       };
-      const result = await WrongBookWrongQuestionDetail.get(apiParams);
-      console.log(result);
+      const { data, item, paging } = await WrongBookWrongQuestionDetail.get(apiParams);
+
+      this.loading = false;
+      this.answerDetails = data;
+      this.question = item;
+      this.pagination.total = Number(paging.total);
     },
 
     handleTableChange() {
