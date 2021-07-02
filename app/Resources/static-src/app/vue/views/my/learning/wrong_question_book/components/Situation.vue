@@ -24,7 +24,10 @@ export default {
   computed: {
     source() {
       const { mainSource, secondarySource } = this.question.questions[0].source;
-      return `${mainSource} - ${secondarySource}`;
+      if (secondarySource) {
+        return `${mainSource} - ${secondarySource}`;
+      }
+      return `${mainSource}`;
     }
   }
 }

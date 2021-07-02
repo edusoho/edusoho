@@ -35,7 +35,7 @@
         <a-select-option value="default">题目来源</a-select-option>
 
         <a-select-option
-          v-for="item in conditions.source"
+          v-for="item in conditions.mediaTypes"
           :value="item"
           :key="item"
         >
