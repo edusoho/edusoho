@@ -23,11 +23,7 @@ export default {
 
   computed: {
     source() {
-      const { mainSource, secondarySource } = this.question.questions[0].source;
-      if (secondarySource) {
-        return `${mainSource} - ${secondarySource}`;
-      }
-      return `${mainSource}`;
+      return this.question.sources.join('、');
     }
   }
 }
