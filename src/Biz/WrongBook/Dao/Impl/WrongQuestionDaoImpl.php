@@ -23,6 +23,43 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return $this->db()->fetchAll($sql, $items);
     }
 
+    public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
+    {
+        $itemId = $conditions['item_id'];
+        $sceneIds = implode(',', $conditions['answer_scene_ids']);
+        $builder = $this->createQueryBuilder([])
+            ->select('*')
+            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId")
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        foreach ($orderBys ?: [] as $field => $direction) {
+            $builder->addOrderBy($field, $direction);
+        }
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function countWrongQuestionsWithDistinctUserId($conditions)
+    {
+        $itemId = $conditions['item_id'];
+        $sceneIds = implode(',', $conditions['answer_scene_ids']);
+        $builder = $this->createQueryBuilder([])
+            ->select('COUNT(*)')
+            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId");
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds)
+    {
+        $userMarks = str_repeat('?,', count($userIds) - 1).'?';
+        $sceneIdsMarks = str_repeat('?,', count($sceneIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE item_id = ? AND user_id IN({$userMarks}) AND answer_scene_id IN({$sceneIdsMarks}) ORDER BY submit_time DESC;";
+
+        return $this->db()->fetchAll($sql, array_merge([$itemId], $userIds, $sceneIds));
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
         $preBuilder = $this->createQueryBuilder($conditions)
@@ -100,6 +137,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'id = :id',
                 'id IN (:ids)',
                 'user_id = :user_id',
+                'user_id IN (:user_ids)',
+                'item_id = :item_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
