@@ -98,7 +98,6 @@ class WrongBookQuestionShow extends AbstractResource
                 }
             } else {
                 $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($sceneId);
-                $sources[$itemId]['sourceType'][] = $exerciseModule['type'];
                 if ('chapter' === $exerciseModule['type']) {
                     $itemCategory = $this->getItemCategoryService()->getItemCategory($wrongQuestion['testpaper_id']);
                     $sources[$itemId]['mainSource'] = $itemCategory['name'];
