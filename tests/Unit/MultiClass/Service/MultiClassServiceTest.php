@@ -154,6 +154,8 @@ class MultiClassServiceTest extends BaseTestCase
             'copyId' => 0,
             'teacherId' => $teacher['id'],
             'assistantIds' => [$assistant1['id'], $assistant2['id']],
+            'maxStudentNum' => 10,
+            'isReplayShow' => 1,
         ];
 
         return $this->getMultiClassService()->createMultiClass($fields);
