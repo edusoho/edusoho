@@ -13,7 +13,6 @@ use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
@@ -32,13 +31,13 @@ class WrongBookQuestionShow extends AbstractResource
         $orderBys = $this->prepareOrderBys($request->query->all());
 
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions,$conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
     }
 
-    protected function makeWrongQuestionInfo($wrongQuestions,$sceneIds)
+    protected function makeWrongQuestionInfo($wrongQuestions, $sceneIds)
     {
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
@@ -62,7 +61,6 @@ class WrongBookQuestionShow extends AbstractResource
 
         return $wrongQuestionInfo;
     }
-
 
     protected function getActivityScenes($sceneIds)
     {
@@ -94,7 +92,7 @@ class WrongBookQuestionShow extends AbstractResource
                         $mainSource = $course['title'];
                     }
                     $secondarySource = $courseTask['title'];
-                    $sources[$itemId][] = empty($mainSource) ? $secondarySource : $mainSource . '-' . $secondarySource;
+                    $sources[$itemId][] = empty($mainSource) ? $secondarySource : $mainSource.'-'.$secondarySource;
                     $tempSceneIds[$itemId][] = $sceneId;
                 }
             } else {
@@ -103,6 +101,7 @@ class WrongBookQuestionShow extends AbstractResource
                 $sources[$itemId][] = $exerciseSource[$exerciseModule['type']];
             }
         }
+
         return $sources;
     }
 
@@ -145,7 +144,7 @@ class WrongBookQuestionShow extends AbstractResource
     {
         return [
             'chapter' => '章节练习',
-            'assessment' => '考试练习'
+            'assessment' => '考试练习',
         ];
     }
 
