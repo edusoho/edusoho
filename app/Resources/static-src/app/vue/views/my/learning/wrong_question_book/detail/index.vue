@@ -21,7 +21,7 @@
         :is="currentQuestionComponent(question.questions[0].answer_mode)"
         :key="question.id + index"
         :question="question"
-        :order="(pagination.current - 1) * 10 + index + 1"
+        :order="(pagination.current - 1) * 20 + index + 1"
       />
     </template>
 
@@ -125,8 +125,8 @@ export default {
       const apiParams = {
         params: {
           targetType: this.targetType,
-          offset: (this.pagination.current - 1) * 10,
-          limit: 10,
+          offset: (this.pagination.current - 1) * 20,
+          limit: 20,
           ...this.searchParams
         },
         query: {
