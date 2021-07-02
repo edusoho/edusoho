@@ -1,14 +1,10 @@
 <template>
   <div class="item clearfix">
-    <div class="item-cover-image pull-left">
-      <a @click="goToWrongQuestionDetail">
-        <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
-      </a>
+    <div class="item-cover-image pull-left" @click="goToWrongQuestionDetail">
+      <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
     </div>
     <div class="item-info pull-left">
-      <a @click="goToWrongQuestionDetail">
-        <h3 class="text-overflow">{{ question.target_data.title }}</h3>
-      </a>
+      <h3 class="text-overflow title" @click="goToWrongQuestionDetail">{{ question.target_data.title }}</h3>
       <p class="number">{{ question.item_num }} 题</p>
     </div>
     <a-button
@@ -49,6 +45,7 @@ export default {
   .item-cover-image {
     margin-right: 24px;
     width: 227px;
+    cursor: pointer;
 
     img {
       width: 100%;
@@ -58,8 +55,13 @@ export default {
   .item-info {
     width: 45%;
 
+    .title {
+      display: inline-block;
+      max-width: 100%;
+      cursor: pointer;
+    }
     .number {
-      margin: 86px 0 0;
+      margin: 72px 0 0;
       color: #ff4040;
     }
   }
