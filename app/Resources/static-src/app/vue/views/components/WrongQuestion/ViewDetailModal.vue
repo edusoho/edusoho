@@ -4,6 +4,7 @@
     width="900px"
     :visible="visible"
     :footer="null"
+    :destroyOnClose="true"
     @cancel="handleCancel"
   >
     <a-table
@@ -20,6 +21,8 @@
 </template>
 
 <script>
+import { WrongBookWrongQuestionDetail } from 'common/vue/service';
+
 const columns = [
   {
     title: '用户名',
@@ -69,7 +72,25 @@ export default {
     };
   },
 
+  created() {
+    this.fetchWrongQuestionDetail();
+  },
+
   methods: {
+    async fetchWrongQuestionDetail() {
+      const apiParams = {
+        query: {
+          itemId: this.wrongQuestionId,
+          targetType: 'course'
+        },
+        params: {
+          targetId: 72
+        }
+      };
+      const result = await WrongBookWrongQuestionDetail.get(apiParams);
+      console.log(result);
+    },
+
     handleTableChange() {
 
     },
