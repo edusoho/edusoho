@@ -1,10 +1,14 @@
 <template>
   <div class="item clearfix">
     <div class="item-cover-image pull-left">
-      <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
+      <a @click="goToWrongQuestionDetail">
+        <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
+      </a>
     </div>
     <div class="item-info pull-left">
-      <h3 class="text-overflow">{{ question.target_data.title }}</h3>
+      <a @click="goToWrongQuestionDetail">
+        <h3 class="text-overflow">{{ question.target_data.title }}</h3>
+      </a>
       <p class="number">{{ question.item_num }} 题</p>
     </div>
     <a-button
