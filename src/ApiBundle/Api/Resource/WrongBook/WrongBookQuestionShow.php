@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
@@ -41,11 +42,15 @@ class WrongBookQuestionShow extends AbstractResource
     {
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
-        $sources = $this->getWrongQuestionSources(array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id')));
+        $sceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
+        $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
+        $activityScenes = $this->getActivityScenes($sceneIds);
+        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdAndSceneIds($this->getCurrentUser()->getId(), $itemIds, $sceneIds);
+        $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
-            $source = $sources[$wrongQuestion['answer_scene_id']];
+            $source = $sources[$wrongQuestion['item_id']];
             $item['submit_time'] = $wrongQuestion['submit_time'];
             $item['wrong_times'] = $wrongQuestion['wrong_times'];
             $item['source'] = $source;
@@ -59,32 +64,50 @@ class WrongBookQuestionShow extends AbstractResource
         return $wrongQuestionInfo;
     }
 
-    protected function getWrongQuestionSources($answerSceneIds)
+    protected function getActivityScenes($sceneIds)
+    {
+        $activityScenes = [];
+        array_walk($sceneIds, function ($sceneId) use (&$activityScenes) {
+            $activityScenes[$sceneId] = $this->getActivityService()->getActivityByAnswerSceneId($sceneId);
+        });
+
+        return $activityScenes;
+    }
+
+    protected function getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes)
     {
         $sources = [];
-        array_walk($answerSceneIds, function ($answerSceneId) use (&$sources) {
-            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        $tempSceneIds = [];
+        foreach ($wrongQuestionScenes as $wrongQuestion) {
+            $itemId = $wrongQuestion['item_id'];
+            $sceneId = $wrongQuestion['answer_scene_id'];
+            $activity = $activityScenes[$sceneId];
+            $inItemScene = empty($tempSceneIds[$itemId]) ? [] : $tempSceneIds[$itemId];
             if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
-                $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-                $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-                if ($courseSet['isClassroomRef']) {
-                    $source = [
-                        'mainSource' => $courseSet['title'],
-                        'secondarySource' => $courseTask['title'],
-                    ];
-                } else {
-                    $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-                    $source = [
-                        'mainSource' => $course['title'],
-                        'secondarySource' => $courseTask['title'],
-                    ];
+                if (!in_array($sceneId, $inItemScene)) {
+                    $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                    $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+                    if ($courseSet['isClassroomRef']) {
+                        $sources[$itemId]['mainSource'] = $courseSet['title'];
+                    } else {
+                        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+                        $sources[$itemId]['mainSource'] = $course['title'];
+                    }
+                    $sources[$itemId]['secondarySource'][] = $courseTask['title'];
+                    $tempSceneIds[$itemId][] = $sceneId;
                 }
             } else {
-                $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($answerSceneId);
-                $source['mainSource'] = $exerciseModule['title'];
+                $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($sceneId);
+                $sources[$itemId]['sourceType'][] = $exerciseModule['type'];
+                if ('chapter' === $exerciseModule['type']) {
+                    $itemCategory = $this->getItemCategoryService()->getItemCategory($wrongQuestion['testpaper_id']);
+                    $sources[$itemId]['mainSource'] = $itemCategory['name'];
+                } else {
+                    $assessment = $this->getAssessmentService()->getAssessment($wrongQuestion['testpaper_id']);
+                    $sources[$itemId]['mainSource'] = $assessment['name'];
+                }
             }
-            $sources[$answerSceneId] = $source;
-        });
+        }
 
         return $sources;
     }
@@ -185,7 +208,7 @@ class WrongBookQuestionShow extends AbstractResource
      */
     protected function getCourseTaskService()
     {
-        return $this->biz->service('Task:TaskService');
+        return  $this->service('Task:TaskService');
     }
 
     /**
@@ -193,6 +216,14 @@ class WrongBookQuestionShow extends AbstractResource
      */
     protected function getItemCategoryService()
     {
-        return $this->biz->service('ItemBank:Item:ItemCategoryService');
+        return  $this->service('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 }

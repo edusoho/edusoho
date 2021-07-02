@@ -49,8 +49,9 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         $sceneIds = $this->biz[$pool]->prepareSceneIdsByTargetId($targetId, $conditions);
 
         $prepareConditions['answer_scene_ids'] = $sceneIds;
-        if ('exercise' === $targetType && 'chapter' === $conditions['exerciseMediaType'] && !empty($conditions['chapterId'])) {
-            $prepareConditions['testpaper_id'] = $conditions['chapterId'];
+        if ('exercise' === $conditions['targetType'] && 'chapter' === $conditions['exerciseMediaType'] && !empty($conditions['chapterId'])) {
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['chapterId']);
+            $prepareConditions['testpaper_ids'] = array_merge([$conditions['chapterId']], $childrenIds);
         }
         if ('exercise' === $targetType && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
             $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
