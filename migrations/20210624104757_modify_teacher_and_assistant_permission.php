@@ -20,6 +20,5 @@ class ModifyTeacherAndAssistantPermission extends Migration
      */
     public function down()
     {
-
     }
 }
