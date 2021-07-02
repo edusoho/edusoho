@@ -19,7 +19,7 @@ class WrongBookSubmitAnswer extends AbstractResource
     public function update(ApiRequest $request, $poolId, $exerciseRecordId)
     {
         $user = $this->getCurrentUser();
-        $data = $request->request->all();
+        $assessmentResponse = $request->request->all();
         $exerciseRecord = $this->getAnswerRecordService()->get($exerciseRecordId);
 
         if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], ['doing', 'paused'])) {
@@ -30,9 +30,9 @@ class WrongBookSubmitAnswer extends AbstractResource
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-        $wrapper = new AssessmentResponseWrapper();
+//        $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
-        $assessmentResponse = $wrapper->wrap($data, $assessment, $exerciseRecord);
+//        $assessmentResponse = $wrapper->wrap($data, $assessment, $exerciseRecord);
         $answerRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);

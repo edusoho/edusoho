@@ -21,7 +21,7 @@
         :is="currentQuestionComponent(question.questions[0].answer_mode)"
         :key="question.id + index"
         :question="question"
-        :order="(pagination.current - 1) * 10 + index + 1"
+        :order="(pagination.current - 1) * 20 + index + 1"
       />
     </template>
 
@@ -36,6 +36,7 @@
       :hide-on-single-page="true"
       v-model="pagination.current"
       :total="pagination.total"
+      :page-size="pagination.pageSize"
       @change="onChange"
     />
 
@@ -45,7 +46,7 @@
       :visible="visible"
       @cancel="visible = false"
     >
-      <p>系统为你随机筛选最多20题重做看你是否掌握</p>
+      <p>已为你随机筛选最多20题</p>
 
       <template slot="footer">
         <a-button type="primary" @click="goToWrongExercises">
@@ -91,7 +92,8 @@ export default {
       searchParams: this.$route.query,
       loading: false,
       pagination: {
-        current: 1
+        current: 1,
+        pageSize: 20,
       },
       questionComponents: {
         single_choice: 'SingleChoice',
@@ -125,8 +127,8 @@ export default {
       const apiParams = {
         params: {
           targetType: this.targetType,
-          offset: (this.pagination.current - 1) * 10,
-          limit: 10,
+          offset: (this.pagination.current - 1) * 20,
+          limit: 20,
           ...this.searchParams
         },
         query: {
