@@ -1,5 +1,5 @@
 <template>
   <div>
-    single-choice
+    choice
   </div>
 </template>

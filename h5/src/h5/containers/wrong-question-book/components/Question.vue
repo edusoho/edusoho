@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-head">
-      <div class="head-left">{{ getQuestionType }}</div>
+      <div class="head-left">{{ currentQuestionComponent.name }}</div>
       <div class="head-right">
         <span class="right-color">{{ order }}</span>
         /{{ total }}
@@ -9,6 +9,8 @@
     </div>
 
     <div class="question-stem"></div>
+
+    <component :is="currentQuestionComponent.component" />
 
     <div class="question-making">
       <div class="answer-result">
@@ -36,7 +38,23 @@
 </template>
 
 <script>
+import Choice from './Choice.vue';
+import SingleChoice from './SingleChoice.vue';
+import Judge from './Judge.vue';
+import Fill from './Fill.vue';
+
 export default {
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    Choice,
+    // eslint-disable-next-line vue/no-unused-components
+    SingleChoice,
+    // eslint-disable-next-line vue/no-unused-components
+    Judge,
+    // eslint-disable-next-line vue/no-unused-components
+    Fill,
+  },
+
   props: {
     total: {
       type: Number,
@@ -56,19 +74,34 @@ export default {
 
   data() {
     return {
-      types: {
-        single_choice: '单选题',
-        fill: '填空题',
-        choice: '多选题',
-        uncertain_choice: '不定项选择题',
-        determine: '判断题',
+      questionComponents: {
+        single_choice: {
+          name: '单选题',
+          component: 'SingleChoice',
+        },
+        fill: {
+          name: '填空题',
+          component: 'Fill',
+        },
+        choice: {
+          name: '多选题',
+          component: 'Choice',
+        },
+        uncertain_choice: {
+          name: '不定项选择题',
+          component: 'Choice',
+        },
+        determine: {
+          name: '判断题',
+          component: 'Judge',
+        },
       },
     };
   },
 
   computed: {
-    getQuestionType() {
-      return this.types[this.question.type];
+    currentQuestionComponent() {
+      return this.questionComponents[this.question.type];
     },
   },
 };
