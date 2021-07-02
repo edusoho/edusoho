@@ -7,8 +7,8 @@
         :filter-option="filterOption"
         notFoundContent="暂无数据"
         style="width: 120px;"
-        v-model="form.courseSetId"
-        @change="(value) => handleChange(value, 'plan')"
+        v-model="form.classroomCourseSetId"
+        @change="(value) => handleChange(value, 'classroomCourseSetId')"
       >
         <a-select-option value="default">全部课程</a-select-option>
 
@@ -29,13 +29,13 @@
         :filter-option="filterOption"
         notFoundContent="暂无数据"
         style="width: 120px;"
-        v-model="form.courseMediaType"
-        @change="(value) => handleChange(value, 'source')"
+        v-model="form.classroomMediaType"
+        @change="(value) => handleChange(value, 'classroomMediaType')"
       >
         <a-select-option value="default">题目来源</a-select-option>
 
         <a-select-option
-          v-for="item in conditions.source"
+          v-for="item in conditions.mediaTypes"
           :value="item"
           :key="item"
         >
@@ -51,7 +51,7 @@
         :filter-option="filterOption"
         notFoundContent="暂无数据"
         style="width: 120px;"
-        v-model="form.courseTaskId"
+        v-model="form.classroomTaskId"
       >
         <a-select-option value="default">任务名称</a-select-option>
 
@@ -116,9 +116,9 @@ export default {
   data() {
     return {
       form: {
-        courseSetId: 'default',
-        courseMediaType: 'default',
-        courseTaskId: 'default',
+        classroomCourseSetId: 'default',
+        classroomMediaType: 'default',
+        classroomTaskId: 'default',
         wrongTimesSort: 'default'
       },
       conditions: {}
@@ -140,7 +140,7 @@ export default {
     },
 
     getParams(type) {
-      const { courseSetId, courseMediaType } = this.form;
+      const { classroomCourseSetId, classroomMediaType } = this.form;
 
       const apiParams = {
         query: {
@@ -151,22 +151,22 @@ export default {
 
       const params = apiParams.params;
 
-      if (type === 'plan') {
+      if (type === 'classroomCourseSetId') {
         _.assign(this.form, {
-          courseMediaType: 'default',
-          courseTaskId: 'default'
+          classroomMediaType: 'default',
+          classroomTaskId: 'default'
         });
 
-        courseSetId !== 'default' && (params.courseSetId = courseSetId);
+        classroomCourseSetId !== 'default' && (params.classroomCourseSetId = classroomCourseSetId);
       }
 
-      if (type === 'source') {
+      if (type === 'classroomMediaType') {
         _.assign(this.form, {
-          courseTaskId: 'default'
+          classroomTaskId: 'default'
         });
 
-        courseMediaType !== 'default' && (params.courseMediaType = courseMediaType);
-        courseSetId !== 'default' && (params.courseSetId = courseSetId);
+        classroomMediaType !== 'default' && (params.classroomMediaType = classroomMediaType);
+        classroomCourseSetId !== 'default' && (params.classroomCourseSetId = classroomCourseSetId);
       }
 
       return apiParams;

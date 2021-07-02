@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookQuestionShow extends AbstractResource
@@ -44,11 +45,13 @@ class WrongBookQuestionShow extends AbstractResource
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
+            $source = $sources[$wrongQuestion['answer_scene_id']];
+            $item['submit_time'] = $wrongQuestion['submit_time'];
+            $item['wrong_times'] = $wrongQuestion['wrong_times'];
+            $item['source'] = $source;
             foreach ($item['questions'] as &$question) {
                 $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
-                $question['source'] = $sources[$wrongQuestion['answer_scene_id']];
-                $question['source']['submit_time'] = $wrongQuestion['submit_time'];
-                $question['source']['wrong_times'] = $wrongQuestion['wrong_times'];
+                $question['source'] = $source;
             }
             $wrongQuestionInfo[] = $item;
         }
@@ -98,6 +101,14 @@ class WrongBookQuestionShow extends AbstractResource
 
         $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
         $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
+
+        if ('exercise' === $conditions['targetType'] && 'chapter' === $conditions['exerciseMediaType'] && !empty($conditions['chapterId'])) {
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['chapterId']);
+            $prepareConditions['testpaper_ids'] = array_merge([$conditions['chapterId']], $childrenIds);
+        }
+        if ('exercise' === $conditions['targetType'] && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
+            $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
+        }
 
         return $prepareConditions;
     }
@@ -175,5 +186,13 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getCourseTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemCategoryService');
     }
 }

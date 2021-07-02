@@ -24,6 +24,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'collect_id' => $collect['id'],
                 'user_id' => $source['user_id'],
                 'answer_scene_id' => $source['answer_scene_id'],
+                'testpaper_id' => $source['testpaper_id'],
             ]));
             $this->getLogService()->info(
                 'wrong_question',
@@ -57,6 +58,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'item_id' => $wrongAnswerQuestionReport['item_id'],
                     'question_id' => $wrongAnswerQuestionReport['question_id'],
                     'answer_scene_id' => $source['answer_scene_id'],
+                    'testpaper_id' => $source['testpaper_id'],
                     'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
                     'submit_time' => time(),
                 ];
@@ -87,6 +89,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             'question_id',
             'item_id',
             'answer_scene_id',
+            'testpaper_id',
             'answer_question_report_id',
         ];
         if (!ArrayToolkit::requireds($fields, $wrongQuestionRequireFields)) {
@@ -101,6 +104,25 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function searchWrongQuestion($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getWrongQuestionDao()->searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countWrongQuestionsWithDistinctUserId($conditions)
+    {
+        return $this->getWrongQuestionDao()->countWrongQuestionsWithDistinctUserId($conditions);
+    }
+
+    public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds)
+    {
+        if (empty($userIds) || empty($itemId) || empty($sceneIds)) {
+            return [];
+        }
+
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds);
     }
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
