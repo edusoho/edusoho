@@ -106,6 +106,25 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getWrongQuestionDao()->searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countWrongQuestionsWithDistinctUserId($conditions)
+    {
+        return $this->getWrongQuestionDao()->countWrongQuestionsWithDistinctUserId($conditions);
+    }
+
+    public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds)
+    {
+        if (empty($userIds) || empty($itemId) || empty($sceneIds)) {
+            return [];
+        }
+
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds);
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getWrongQuestionDao()->searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns);

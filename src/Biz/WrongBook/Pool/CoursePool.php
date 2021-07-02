@@ -99,12 +99,12 @@ class CoursePool extends AbstractPool
         return $result;
     }
 
-    protected function handleArray($data, $fields)
+    protected function handleArray($data, $fields,$type='')
     {
         $newData = [];
         foreach ($data as $key => $value) {
             foreach ($fields as $k => $field) {
-                $newData[$key][$field] = $value[$field];
+                $newData[$key][$field] = (empty($value[$field]) && isset($value['courseSetTitle']))?$value['courseSetTitle']:$value[$field];
             }
         }
 
