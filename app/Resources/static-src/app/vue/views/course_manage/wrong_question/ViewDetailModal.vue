@@ -12,6 +12,7 @@
       :data="answerDetails"
       :loading="loading"
       :pagination="pagination"
+      @event-communication="eventCommunication"
     />
   </a-modal>
 </template>
@@ -83,7 +84,9 @@ export default {
           targetType: this.targetType
         },
         params: {
-          targetId: this.targetId
+          targetId: this.targetId,
+          offset: (this.pagination.current - 1) * 10,
+          limit: 10
         }
       };
       const { data, item, paging } = await WrongBookWrongQuestionDetail.get(apiParams);
@@ -94,12 +97,21 @@ export default {
       this.pagination.total = Number(paging.total);
     },
 
-    handleTableChange() {
-
+    handleTableChange(pagination) {
+      this.pagination.current = pagination.current;
+      this.fetchWrongQuestionDetail();
     },
 
     handleCancel() {
       this.$emit('event-communication', { type: 'modal-cancel' });
+    },
+
+    eventCommunication(params) {
+      const { type, data } = params;
+
+      if (type === 'table-pagination') {
+        this.handleTableChange(data);
+      }
     }
   }
 };

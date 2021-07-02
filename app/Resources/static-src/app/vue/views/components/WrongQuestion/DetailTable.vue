@@ -72,7 +72,10 @@ export default {
     },
 
     handleTableChange(pagination) {
-      console.log(pagination);
+      this.$emit('event-communication', {
+        type: 'table-pagination',
+        data: pagination
+      });
     }
   }
 };
