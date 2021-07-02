@@ -8,17 +8,15 @@
       :show-indicators="false"
       @change="onChange"
     >
-      <van-swipe-item>
-        <question />
-      </van-swipe-item>
-      <van-swipe-item>
-        <question />
-      </van-swipe-item>
-      <van-swipe-item>
-        <question />
-      </van-swipe-item>
-      <van-swipe-item>
-        <question />
+      <van-swipe-item
+        v-for="(question, index) in questionList"
+        :key="question.id"
+      >
+        <question
+          :total="pagination.total"
+          :order="(pagination.current - 1) * 20 + index + 1"
+          :question="question"
+        />
       </van-swipe-item>
     </van-swipe>
 
@@ -51,6 +49,10 @@ export default {
       targetType: this.$route.params.type,
       targetId: this.$route.params.id,
       questionList: [],
+      pagination: {
+        current: 1,
+        total: 0,
+      },
       height: MaxHeight,
     };
   },
@@ -74,7 +76,9 @@ export default {
           targetType: this.targetType,
         },
       }).then(res => {
-        this.questionList = res.data;
+        const { data, paging } = res;
+        this.questionList = data;
+        this.pagination.total = paging.total;
       });
     },
 

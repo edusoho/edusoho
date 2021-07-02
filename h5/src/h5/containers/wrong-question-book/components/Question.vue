@@ -1,12 +1,14 @@
 <template>
   <div class="question">
     <div class="question-head">
-      <div class="head-left">单选题</div>
+      <div class="head-left">{{ getQuestionType }}</div>
       <div class="head-right">
-        <span class="right-color">1</span>
-        /6
+        <span class="right-color">{{ order }}</span>
+        /{{ total }}
       </div>
     </div>
+
+    <div class="question-stem"></div>
 
     <div class="question-making">
       <div class="answer-result">
@@ -32,3 +34,42 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    total: {
+      type: Number,
+      required: true,
+    },
+
+    order: {
+      type: Number,
+      required: true,
+    },
+
+    question: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      types: {
+        single_choice: '单选题',
+        fill: '填空题',
+        choice: '多选题',
+        uncertain_choice: '不定项选择题',
+        determine: '判断题',
+      },
+    };
+  },
+
+  computed: {
+    getQuestionType() {
+      return this.types[this.question.type];
+    },
+  },
+};
+</script>
