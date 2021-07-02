@@ -55,7 +55,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
     public function declares()
     {
-        $declares['orderbys'] = ['endTime'];
+        $declares['orderbys'] = ['endTime', 'startTime'];
         $declares['conditions'] = [
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',

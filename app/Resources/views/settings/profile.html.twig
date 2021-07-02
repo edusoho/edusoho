@@ -36,8 +36,29 @@
           imageText: 'user.settings.basic_info.shange_avatar'|trans,
           imageSrc: filepath(user.largeAvatar, 'avatar.png'),
         } %}
+            {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
+              <div class="cd-md-11 pull-right">
+                {% include 'settings/upload-qrcode.html.twig' with {
+                  saveUrl: path('settings_assistant_qrcode_crop_modal'),
+                  targetImg: 'assistant-qrcode',
+                  cropWidth: '270',
+                  cropHeight: '270',
+                  imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
+                  imageText: 'user.settings.basic_info.shange_qrcode'|trans,
+                  imageSrc: filepath(user.weChatQrCode, 'avatar.png'),
+                } %}
+              </div>
+            {% endif %}
 					</div>
-					<p class="image-upload-tip">{{ 'user.settings.upload.img.tip'|trans }}</p>
+          <p class="image-upload-tip">
+            {{ 'user.settings.upload.img.tip'|trans }}
+            {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
+              <span class="pull-right cd-md-11 color-warning" style="padding-left: 0px;">
+              <i class="es-icon es-icon-warning"></i>
+              {{ 'user.settings.upload.qrcode.tip'|trans }}
+            </span>
+            {% endif %}
+          </p>
 					<div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="nickname-form-group">
 
 						<label for="nickname">{{'user.fields.username_label'|trans}}</label>

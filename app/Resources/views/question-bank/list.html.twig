@@ -12,7 +12,7 @@
         <i class="es-icon es-icon-tip"></i>
         {{ 'my.teaching.question_bank.instructions'|trans }}
       </a>
-      {% if not is_s2b2c_enabled() %}
+      {% if not is_s2b2c_enabled() and ('ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_question_bank')) %}
         <a class="cd-btn cd-btn-primary" data-url="{{ path('question_bank_create') }}" data-toggle="modal" data-target="#modal">
           {{ 'my.teaching.question_bank.create'|trans }}
         </a>

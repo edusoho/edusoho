@@ -27,7 +27,7 @@ class HomeworkController extends BaseController
         $keywordType = $request->query->get('keywordType', 'nickname');
         $keyword = $request->query->get('keyword', '');
 
-        $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
+        $teacherCourses = $this->getCourseMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher', 'assistant']);
         $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
         if (!empty($courseIds) && 'courseTitle' == $keywordType) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);

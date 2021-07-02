@@ -1186,7 +1186,9 @@ t.add("admin.user.valid_remark_length_hint", "\u4e0d\u597d\u610f\u601d\uff0c\u59
 t.add("admin.user.approve_submiting_hint", "\u63d0\u4ea4\u4e2d...", "js", "zh_CN");
 t.add("admin.user.cancel_approval_hint", "\u786e\u5b9a\u8981\u64a4\u9500\u8fd9\u6761\u8ba4\u8bc1\u6210\u529f\u7684\u5b9e\u540d\u8ba4\u8bc1\u5417\uff1f", "js", "zh_CN");
 t.add("admin.user.update_avatar_success_hint", "\u5934\u50cf\u66f4\u65b0\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.user.update_assistant_qrcode_success_hint", "\u4e8c\u7ef4\u7801\u66f4\u65b0\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.upload_avatar_success_hint", "\u4e0a\u4f20\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.user.upload_assistant_qrcode_success_hint", "\u4e0a\u4f20\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.password_modify_success_hint", "\u5bc6\u7801\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("admin.user.password_modify_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 t.add("admin.user.create_new_user_success_hint", "\u65b0\u7528\u6237\u6dfb\u52a0\u6210\u529f", "js", "zh_CN");

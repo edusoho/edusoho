@@ -388,13 +388,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             $result = $this->getSDKNotificationService()->sendNotifications($list);
         } catch (\Exception $e) {
-            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_subscribe_notification', "{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
 
             return false;
         }
 
         if (empty($result['sn'])) {
-            $this->getLogger()->error("{$logName}:发送微信订阅通知失败:template:{$templateCode}", $result);
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_subscribe_notification', "{$logName}:发送微信订阅通知失败:template:{$templateCode}", $result);
 
             return false;
         }

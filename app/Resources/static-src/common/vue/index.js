@@ -8,7 +8,7 @@ import SvgIcon from './icons/SvgIcon.vue';
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
-  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty
+  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty, Popover
 } from '@codeages/design-vue';
 import Clipboard from 'v-clipboard';
 
@@ -45,6 +45,7 @@ if (!window.Vue) {
   Vue.use(InputNumber)
   Vue.use(Breadcrumb)
   Vue.use(Empty)
+  Vue.use(Popover)
 
   Vue.use(Clipboard)
 
@@ -65,12 +66,8 @@ if (!window.Vue) {
 }
 
 if (!window.Vue) {
-  Vue.filter('trans', (value) => {
-    if (_.isObject(value)) {
-      Translator.trans(value.text, value.options || {})
-    } else if (_.isString(value)) {
-      Translator.trans(value)
-    }
+  Vue.filter('trans', (value = '', options = {}) => {
+    return Translator.trans(value, options)
   })
 
   Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {

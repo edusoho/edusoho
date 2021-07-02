@@ -61,6 +61,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
         $expected = [
+            'admin_v2_education',
             'admin_v2_teach',
             'admin_v2_marketing',
             'admin_v2_operating',
@@ -69,9 +70,9 @@ class QuickEntranceServiceTest extends BaseTestCase
             'admin_v2_system',
         ];
 
-        $this->assertCount(6, $result);
+        $this->assertCount(7, $result);
         $this->assertEquals($expected, array_keys($result));
-        $this->assertCount(10, $result['admin_v2_teach']['data']);
+        $this->assertCount(9, $result['admin_v2_teach']['data']);
         $this->assertCount(5, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
         $this->assertCount(2, $result['admin_v2_user']['data']);
@@ -85,6 +86,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
         $expected = [
+            'admin_v2_education',
             'admin_v2_teach',
             'admin_v2_marketing',
             'admin_v2_operating',
@@ -93,9 +95,9 @@ class QuickEntranceServiceTest extends BaseTestCase
             'admin_v2_system',
         ];
 
-        $this->assertCount(6, $result);
+        $this->assertCount(7, $result);
         $this->assertEquals($expected, array_keys($result));
-        $this->assertCount(10, $result['admin_v2_teach']['data']);
+        $this->assertCount(9, $result['admin_v2_teach']['data']);
         $this->assertCount(5, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
         $this->assertCount(2, $result['admin_v2_user']['data']);

@@ -90,14 +90,14 @@ class MultiClass extends AbstractResource
 
     /**
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
         $orderBys = $this->prepareOrderBys($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, $orderBys, $offset, $limit);
+        $multiClasses = $this->getMultiClassService()->searchMultiClassJoinCourse($conditions, $orderBys, $offset, $limit);
         $multiClassesCount = $this->getMultiClassService()->countMultiClass($conditions);
         $multiClasses = $this->makeMultiClassesInfo($multiClasses);
 

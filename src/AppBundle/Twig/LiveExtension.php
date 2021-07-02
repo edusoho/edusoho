@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
@@ -235,5 +236,13 @@ class LiveExtension extends \Twig_Extension
     protected function getS2B2CFacadeService()
     {
         return $this->biz->service('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->biz->service('MultiClass:MultiClassService');
     }
 }

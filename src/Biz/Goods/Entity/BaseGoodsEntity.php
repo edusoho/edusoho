@@ -7,6 +7,7 @@ use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
@@ -31,6 +32,8 @@ abstract class BaseGoodsEntity
     abstract public function getSpecsByTargetId($targetId);
 
     abstract public function canManageTarget($goods);
+
+    abstract public function getManageUrl($goods);
 
     abstract public function fetchTargets($goodses);
 
@@ -90,18 +93,10 @@ abstract class BaseGoodsEntity
         return $pluginManager->isPluginInstalled($code);
     }
 
-    protected function getPluginVersion($pluginName)
+    protected function generateUrl($name, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         global $kernel;
 
-        $plugins = $kernel->getPluginConfigurationManager()->getInstalledPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (strtolower($plugin['code']) == strtolower($pluginName)) {
-                return $plugin['version'];
-            }
-        }
-
-        return null;
+        return $kernel->getContainer()->get('router')->generate($name, $parameters, $referenceType);
     }
 }

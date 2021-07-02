@@ -65,6 +65,7 @@ class AssistantPermission
                             ['title' => '修改学员有效期', 'code' => 'course_member_deadline_edit', 'disabled' => 0],
                             ['title' => '导入学员', 'code' => 'course_member_import', 'disabled' => 0],
                             ['title' => '导出学员', 'code' => 'course_member_export', 'disabled' => 0],
+                            ['title' => '批量修改助教', 'code' => 'student_assistant_update', 'disabled' => 0],
                         ],
                     ],
                     [
@@ -107,6 +108,7 @@ class AssistantPermission
                 'course_replay_manage',
                 'course_question_marker_manage',
                 'course_order_manage',
+                'student_assistant_update',
             ];
         }
 
