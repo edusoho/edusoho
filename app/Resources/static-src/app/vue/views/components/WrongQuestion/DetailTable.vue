@@ -12,7 +12,7 @@
     </template>
 
     <template slot="answer" slot-scope="answer">
-      {{ formatAnswer(answer) }}
+      <span :title="formatAnswer(answer)">{{ formatAnswer(answer) }}</span>
     </template>
   </a-table>
 </template>
@@ -35,6 +35,7 @@ const columns = [
   {
     title: '答题结果',
     dataIndex: 'answer',
+    ellipsis: true,
     width: '40%',
     scopedSlots: { customRender: 'answer' }
   }
