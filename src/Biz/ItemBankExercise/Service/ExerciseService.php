@@ -34,7 +34,7 @@ interface ExerciseService
 
     public function getByQuestionBankId($questionBankId);
 
-    public function changeExerciseIdAsBankId($questionBankIds);
+    public function findByQuestionBankIds($questionBankIds);
 
     public function updateModuleEnable($exercised, $enable);
 
