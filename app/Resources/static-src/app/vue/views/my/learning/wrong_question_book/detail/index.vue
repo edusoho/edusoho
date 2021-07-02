@@ -153,7 +153,6 @@ export default {
 
       this.visible = true;
       localStorage.setItem('first_wrong_exercises', true);
-      this.goToWrongExercises();
     },
 
     goToWrongExercises() {
