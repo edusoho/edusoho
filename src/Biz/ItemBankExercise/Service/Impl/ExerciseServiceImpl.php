@@ -237,6 +237,17 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
     }
 
+    public function changeExerciseIdAsBankId($questionBankIds)
+    {
+        $itemBankExercises = $this->getExerciseDao()->findByQuestionBankIds($questionBankIds);
+
+        foreach ($itemBankExercises as &$exercise) {
+            $exercise['id'] = $exercise['questionBankId'];
+        }
+
+        return ArrayToolkit::index($itemBankExercises, 'id');
+    }
+
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);

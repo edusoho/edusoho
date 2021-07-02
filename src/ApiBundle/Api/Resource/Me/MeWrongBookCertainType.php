@@ -28,7 +28,7 @@ class MeWrongBookCertainType extends AbstractResource
         );
         $total = $this->service('WrongBook:WrongQuestionService')->countWrongBookPool($conditions);
         if ('exercise' == $type) {
-            $type = 'item_bank_exercise';
+            $type = 'bank_exchange_exercise';
         } elseif ('course' == $type) {
             $type = 'courseSet';
         }
