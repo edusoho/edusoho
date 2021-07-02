@@ -27,13 +27,8 @@ export default {
 
   methods: {
     getAnswerClass(value) {
-      const { answer, report: { response } } = this.questions;
-
-      if (_.includes(_.difference(answer, response), value)) return 'right-answer'; // 用户未选的正确答案
-
-      if (_.includes(_.difference(response, answer), value)) return 'choose-answer--wrong'; // 用户选择的错误答案
-
-      if (_.includes(_.intersection(answer, response), value)) return 'choose-answer--right'; // 用户选中的正确答案
+      const { answer } = this.questions;
+      if (_.includes(answer, value)) return 'choose-answer--right';
     }
   }
 }

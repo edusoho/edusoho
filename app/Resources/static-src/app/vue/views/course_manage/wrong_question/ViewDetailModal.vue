@@ -6,6 +6,8 @@
     :footer="null"
     @cancel="handleCancel"
   >
+    <question :question="question" />
+
     <detail-table
       :data="answerDetails"
       :loading="loading"
@@ -17,12 +19,14 @@
 <script>
 import { WrongBookWrongQuestionDetail } from 'common/vue/service';
 import DetailTable from 'app/vue/views/components/WrongQuestion/DetailTable.vue';
+import Question from 'app/vue/views/components/WrongQuestion/Question/index.vue';
 
 export default {
   name: 'ViewDetailsModal',
 
   components: {
-    DetailTable
+    DetailTable,
+    Question
   },
 
   props: {

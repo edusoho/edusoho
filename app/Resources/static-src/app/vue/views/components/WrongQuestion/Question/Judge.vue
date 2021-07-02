@@ -1,7 +1,7 @@
 <template>
   <layout :question="question" :order="order">
     <template #answer>
-      <a-radio-group :default-value="questions.report.response[0]">
+      <a-radio-group :default-value="questions.answer">
         <a-radio
           v-for="(item, index) in questions.response_points"
           :class="['choose-answer', getAnswerClass(item.radio.val)]"
