@@ -36,6 +36,7 @@
       :hide-on-single-page="true"
       v-model="pagination.current"
       :total="pagination.total"
+      :page-size="pagination.pageSize"
       @change="onChange"
     />
 
@@ -91,7 +92,8 @@ export default {
       searchParams: this.$route.query,
       loading: false,
       pagination: {
-        current: 1
+        current: 1,
+        pageSize: 20,
       },
       questionComponents: {
         single_choice: 'SingleChoice',
