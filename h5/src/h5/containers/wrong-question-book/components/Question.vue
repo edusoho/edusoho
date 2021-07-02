@@ -8,9 +8,12 @@
       </div>
     </div>
 
-    <div class="question-stem"></div>
+    <div class="question-stem clearfix">
+      <span class="pull-left">{{ order }}、</span>
+      <div>{{ questions.stem }}</div>
+    </div>
 
-    <component :is="currentQuestionComponent.component" />
+    <component :is="currentQuestionComponent.component" :question="question" />
 
     <div class="question-making">
       <div class="answer-result">
@@ -100,6 +103,10 @@ export default {
   },
 
   computed: {
+    questions() {
+      return this.question.questions[0];
+    },
+
     currentQuestionComponent() {
       return this.questionComponents[this.question.type];
     },
