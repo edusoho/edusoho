@@ -25,8 +25,8 @@
       />
     </template>
 
-    <div class="text-center mt20" v-if="loading">
-      <a-spin />
+    <div class="text-center mt20" style="height: 200px;" v-if="loading">
+      <a-spin style="padding-top: 100px;" />
     </div>
 
     <empty v-if="!loading && !questionList.length" />
@@ -123,6 +123,7 @@ export default {
 
   methods: {
     async fetchWrongBookQuestion() {
+      this.questionList = [];
       this.loading = true;
       const apiParams = {
         params: {
