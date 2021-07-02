@@ -30,6 +30,21 @@ export default {
     visible: {
       type: Boolean,
       required: true
+    },
+
+    targetType: {
+      type: String,
+      required: true
+    },
+
+    targetId: {
+      type: String,
+      required: true
+    },
+
+    currentId: {
+      type: String,
+      required: true
     }
   },
 
@@ -49,18 +64,18 @@ export default {
   },
 
   created() {
-    // this.fetchWrongQuestionDetail();
+    this.fetchWrongQuestionDetail();
   },
 
   methods: {
     async fetchWrongQuestionDetail() {
       const apiParams = {
         query: {
-          itemId: this.wrongQuestionId,
-          targetType: 'course'
+          itemId: this.currentId,
+          targetType: this.targetType
         },
         params: {
-          targetId: 72
+          targetId: this.targetId
         }
       };
       const result = await WrongBookWrongQuestionDetail.get(apiParams);

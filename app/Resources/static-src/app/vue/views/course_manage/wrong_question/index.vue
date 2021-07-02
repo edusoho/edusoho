@@ -10,7 +10,14 @@
       @event-communication="eventCommunication"
     />
 
-    <view-detail-modal :visible="visible" />
+    <view-detail-modal
+      v-if="visible"
+      :visible="visible"
+      :current-id="currentId"
+      :target-type="targetType"
+      :target-id="targetId"
+      @event-communication="eventCommunication"
+    />
   </div>
 </template>
 
@@ -31,6 +38,8 @@ export default {
 
   data() {
     return {
+      targetType: 'course',
+      targetId: '72',
       pagination: {
         hideOnSinglePage: true,
         current: 1,
@@ -39,7 +48,7 @@ export default {
       loading: false,
       wrongQuestionList: [],
       visible: false,
-      wrongQuestionId: '0'
+      currentId: '0'
     }
   },
 
@@ -66,8 +75,8 @@ export default {
 
       const apiParams = {
         query: {
-          targetId: 72,
-          targetType: 'course'
+          targetId: this.targetId,
+          targetType: this.targetType
         },
         params: {
           offset: (this.pagination.current - 1) * 10,
@@ -83,7 +92,7 @@ export default {
     },
 
     handleClickViewDetails(data) {
-      this.wrongQuestionId = data.itemId;
+      this.currentId = data.itemId;
       this.visible = true;
     },
 
