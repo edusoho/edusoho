@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       targetType: 'course',
-      targetId: '72',
+      targetId: $('.js-course-id').val(),
       pagination: {
         hideOnSinglePage: true,
         current: 1,
