@@ -107,7 +107,8 @@ class ItemBankExercisePool extends AbstractPool
             $assessmentSceneIds = $this->findSceneIdsByExerciseMediaType($targetId, 'assessment');
             $sceneIds = array_merge($chapterSceneIds, $assessmentSceneIds);
         } else {
-            $sceneIds = $this->findSceneIdsByExerciseMediaType($targetId, $conditions['exerciseMediaType']);
+            $mediaType = 'testpaper' === $conditions['exerciseMediaType'] ? 'assessment' : 'chapter';
+            $sceneIds = $this->findSceneIdsByExerciseMediaType($targetId, $mediaType);
         }
 
         return empty($sceneIds) ? [-1] : $sceneIds;
