@@ -14,6 +14,7 @@
       v-if="visible"
       :visible="visible"
       :current-id="currentId"
+      :current-order="currentOrder"
       :target-type="targetType"
       :target-id="targetId"
       @event-communication="eventCommunication"
@@ -48,7 +49,8 @@ export default {
       loading: false,
       wrongQuestionList: [],
       visible: false,
-      currentId: '0'
+      currentId: '0',
+      currentOrder: 0
     }
   },
 
@@ -92,7 +94,8 @@ export default {
     },
 
     handleClickViewDetails(data) {
-      this.currentId = data.itemId;
+      this.currentId = data.id;
+      this.currentOrder = data.order;
       this.visible = true;
     },
 

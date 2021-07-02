@@ -6,7 +6,7 @@
       <slot name="answer" />
     </div>
 
-    <right-answer v-if="questions.answer_mode !== 'text'" :question="question" />
+    <right-answer :question="question" />
 
     <analysis :analysis="questions.analysis" />
   </div>

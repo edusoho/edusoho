@@ -19,8 +19,8 @@
       {{ formateQuestionSource(sourceType) }}
     </template>
 
-    <template slot="actions" slot-scope="actions, record">
-      <a-button type="link" @click="handleClickViewDetails(record)">查看详情</a-button>
+    <template slot="actions" slot-scope="actions, record, index">
+      <a-button type="link" @click="handleClickViewDetails(record.itemId, (pagination.current - 1) * 10 + index + 1)">查看详情</a-button>
     </template>
   </a-table>
 </template>
@@ -122,10 +122,13 @@ export default {
       });
     },
 
-    handleClickViewDetails(params) {
+    handleClickViewDetails(id, order) {
       this.$emit('event-communication', {
         type: 'click-view-detail',
-        data: params
+        data: {
+          id,
+          order
+        }
       });
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <component
-    :is="currentQuestionComponent(question.type)"
+    :is="currentQuestionComponent(question.questions)"
     :question="question"
-    :order="1"
+    :order="order"
   />
 </template>
 
@@ -17,6 +17,11 @@ export default {
   props: {
     question: {
       type: Object,
+      required: true
+    },
+
+    order: {
+      type: Number,
       required: true
     }
   },
@@ -41,7 +46,8 @@ export default {
   },
 
   methods: {
-    currentQuestionComponent(answerMode) {
+    currentQuestionComponent(question) {
+      const answerMode = question && question[0].answer_mode;
       return this.questionComponents[answerMode];
     }
   }

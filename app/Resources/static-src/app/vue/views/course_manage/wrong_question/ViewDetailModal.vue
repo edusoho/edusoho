@@ -6,7 +6,7 @@
     :footer="null"
     @cancel="handleCancel"
   >
-    <question :question="question" />
+    <question :question="question" :order="currentOrder" />
 
     <detail-table
       :data="answerDetails"
@@ -47,6 +47,11 @@ export default {
 
     currentId: {
       type: String,
+      required: true
+    },
+
+    currentOrder: {
+      type: Number,
       required: true
     }
   },
