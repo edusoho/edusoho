@@ -68,6 +68,9 @@ export default {
 
   methods: {
     formatAnswer(answer) {
+      if (!_.size(answer)) {
+        return '未作答';
+      }
       return _.join(answer, ',');
     },
 
