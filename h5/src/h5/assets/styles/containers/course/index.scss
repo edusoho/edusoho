@@ -431,9 +431,9 @@
 		// margin-top: 44px;
 		// height: vw(44);
 		// padding: vw(15) vw(20) vw(15) vw(20) ;
+		// box-shadow: 0 2px 6px 0 rgba(49, 49, 49, 0.1);
 		padding: 15px 20px;
 		background: #fff;
-		box-shadow: 0 2px 6px 0 rgba(49, 49, 49, 0.1);
 
 		&__content {
 			flex: 1;
@@ -482,31 +482,36 @@
 			text-align: center;
 			border: 1px solid #bbb;
 		}
-	}
 
-	.assistant-show__content {
-		width: 90%;
-		text-align: center;
+		.assistant-show__content {
+			text-align: center;
 
-		.avatar {
-			margin: 20px;
-			margin-top: 24px;
-			border-radius: 50%;
-		}
+			.avatar {
+				width: 20%;
+				height: 20%;
+				margin-top: 40px;
+				margin-top: 24px;
+				border-radius: 50%;
+			}
 
-		.name {
-			color: #bbb;
-			font-size: 14px;
-		}
+			.name {
+				padding-top: 10px;
+				color: #bbb;
+			}
 
-		.text {
-			padding-top: 10px;
-		}
+			.text {
+				padding-top: 10px;
+			}
 
-		.wechat {
-			width: 130px;
-			height: 130px;
-			margin: 20px;
+			.wechat {
+				margin: 20px 0 10px;
+			}
+
+			.tips {
+				margin-bottom: 10px;
+				color: #bbb;
+				font-size: 14px;
+			}
 		}
 	}
 

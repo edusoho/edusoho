@@ -24,40 +24,46 @@
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
         <!-- 助教 -->
-        <div v-if="details.assistant" class="assistant-show clearfix">
+        <div
+          v-if="details.assistant.weChatQrCode"
+          class="assistant-show clearfix"
+        >
           <div class="assistant-show__icon">
             <i class="iconfont icon-weixin1"></i>
           </div>
           <div class="assistant-show__text" @click="showAssistant">
             为保证更好地学习效果，请点击此处添加助教老师微信
           </div>
-        </div>
-        <!-- 助教弹出框 -->
-        <van-popup
-          class="assistant-show__content"
-          v-model="assistantShow"
-          closeable
-          round
-        >
-          <img
-            class="avatar"
-            :src="details.assistant.smallAvatar"
-            alt="助教图片"
-          />
-          <p class="name">
-            {{ details.assistant.title }}课程助教——
-            {{ details.assistant.nickname }}
-          </p>
-          <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
-          <img
-            class="wechat"
-            :src="details.assistant.weChatQrCode"
-            alt="二维码图片"
-          />
-          <van-button type="primary" block @click="downloadCodeImg()"
-            >保存图片，前往微信添加</van-button
+          <!-- 助教弹出框 -->
+          <van-popup
+            class="assistant-show__content"
+            v-model="assistantShow"
+            position="bottom"
+            closeable
+            round
           >
-        </van-popup>
+            <img
+              class="avatar"
+              :src="details.assistant.avatar.middle"
+              alt="助教图片"
+            />
+            <p class="name">
+              {{ details.assistant.nickname }}
+            </p>
+            <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
+            <img
+              class="wechat"
+              :src="details.assistant.weChatQrCode"
+              alt="二维码图片"
+            />
+            <div class="tips" v-if="isWeixin">
+              长按图片识别二维码
+            </div>
+            <div class="tips" v-else>
+              长按图片保存二维码，前往微信添加
+            </div>
+          </van-popup>
+        </div>
 
         <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
       </div>
@@ -175,6 +181,11 @@ export default {
     },
     currentTypeText() {
       return this.details.classroom ? '班级' : '课程';
+    },
+
+    isWeixin() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
   },
   watch: {
@@ -479,13 +490,6 @@ export default {
 
     showAssistant() {
       this.assistantShow = true;
-    },
-
-    downloadCodeImg() {
-      const a = document.createElement('a');
-      a.download = name || '微信二维码';
-      a.href = this.details.assistant.weChatQrCode;
-      a.click();
     },
   },
 };
