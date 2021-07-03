@@ -703,7 +703,7 @@ export default {
       this.selectedUserIds = userIds;
     },
 
-    async getAssistant(params) {
+    async editAssistant(params) {
       const result = await Assistant.edit(params)
     },
 
@@ -721,7 +721,7 @@ export default {
         studentIds.push(record.user.id)
       }
 
-      this.getAssistant({
+      this.editAssistant({
         studentIds,
         assistantId,
         multiClassId: this.multiClass.id
