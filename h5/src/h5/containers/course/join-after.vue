@@ -28,12 +28,14 @@
           v-if="details.assistant.weChatQrCode"
           class="assistant-show clearfix"
         >
-          <div class="assistant-show__icon">
-            <i class="iconfont icon-weixin1"></i>
-          </div>
           <div class="assistant-show__text" @click="showAssistant">
-            为保证更好地学习效果，请点击此处添加助教老师微信
+            <i class="iconfont icon-weixin1"></i>
+            <span class="text">
+              为了更好的学习，点击此处添加助教微信
+            </span>
+            <van-icon class="arrow-icon" name="arrow" />
           </div>
+
           <!-- 助教弹出框 -->
           <van-popup
             class="assistant-show__content"
