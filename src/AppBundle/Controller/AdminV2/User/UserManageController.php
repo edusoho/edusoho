@@ -183,7 +183,7 @@ class UserManageController extends BaseController
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
-                $roles[] = 'ROLE_TEACHER';
+                $roles = $formData['roles'];
                 array_push($roles, 'ROLE_USER');
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }

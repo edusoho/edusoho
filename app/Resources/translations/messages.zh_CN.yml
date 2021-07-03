@@ -1988,6 +1988,7 @@ course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
+course.student.add.assistant.tip: 请到课表右方"助教"添加助教老师，否则无法正常听课哦～
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
@@ -4989,6 +4990,8 @@ courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,�
 role.student: 学员
 # 教师
 role.teacher: 教师
+role.assistant: 助教
+role.academic_staf: 教务
 
 # 后台
 admin.process_bar: 优化课程文件
@@ -11969,3 +11972,5 @@ admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班�
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
 
+course.assistant.student_add_qrcode: 为了保证学习质量
+course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信

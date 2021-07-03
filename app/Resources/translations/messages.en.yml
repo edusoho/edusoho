@@ -1722,6 +1722,7 @@ course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
+course.student.add.assistant.tip: 'Please go to the right side of the class schedule to add a teaching assistant, otherwise you will not be able to listen to the class properly.'
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
 course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
 course.plan_task.activity_ppt_animation_link: Animation support
@@ -4228,6 +4229,8 @@ courseset_manage.unlock_confrim: Unlock
 courseset_manage.unlock_confrim.tips: 'Unlock operation is irreversible and it will end the update'
 role.student: Student
 role.teacher: Teacher
+role.assistant: Assistant
+role.academic_staf: Academic Staf
 admin.process_bar: 'Optimize course file'
 admin.process_bar.finish_btn: 'Optimize completely'
 admin.process_bar.keep_window_tips: 'Please don''t close current window because of the optimization is in progress'
@@ -10720,4 +10723,7 @@ admin.multi_class_copy.success.notify: Your new multi-class《%newTitle%》is co
 admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is copied failed from origin multi-class《%originTitle%》！
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
+
+course.assistant.student_add_qrcode: To ensure the quality of learning
+course.assistant.student_add_qrcode_info: Please scan the code to add the class exclusive assistant teacher WeChat
 

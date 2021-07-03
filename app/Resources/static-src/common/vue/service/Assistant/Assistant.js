@@ -8,5 +8,8 @@ const baseService = new BaseService({ baseUrl })
 export const Assistant = _.assignIn(baseService, {
   async edit(params) {
     return apiClient.post(this.baseUrl, params)
-  }
+  },
+  async add(params) {
+    return apiClient.post(baseUrl, params);
+  },
 })
