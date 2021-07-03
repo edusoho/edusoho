@@ -678,26 +678,27 @@ export default {
 
     async getAssistant(params) {
       const result = await Assistant.edit(params)
-      console.log(result);
     },
 
     handleChange(record, assistantId) {
-      if(assistantId !== undefined && assistantId !== record.assistant.id ){
-        let studentIds = [];
-        if(this.selectedRowKeys.length == this.students.length){
-          _.forEach(this.students, item => {
-            studentIds.push(item.user.id)
-          })
-        }else {
-          studentIds.push(record.user.id)
-        }
-        const params = {
-          studentIds,
-          assistantId,
-          multiClassId: this.multiClass.id
-        }
-        this.getAssistant(params);
+      if(assistantId === undefined || assistantId === record.assistant.id ){
+        return;
       }
+
+      const studentIds = [];
+      if(this.selectedRowKeys.length == this.students.length){
+        _.forEach(this.students, item => {
+          studentIds.push(item.user.id)
+        })
+      }else {
+        studentIds.push(record.user.id)
+      }
+
+      this.getAssistant({
+        studentIds,
+        assistantId,
+        multiClassId: this.multiClass.id
+      });
     },
   }
 }
@@ -760,9 +761,9 @@ export default {
   word-wrap: normal;
 }
 .assistants-icon {
+  float: right;
   width: 18px;
   height: 18px;
-  float: right;
   vertical-align: middle;
   cursor: pointer;
 }
