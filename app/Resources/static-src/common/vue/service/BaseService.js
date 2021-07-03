@@ -25,6 +25,10 @@ export default class BaseService {
     return apiClient.delete(`${this.baseUrl}/${id}`)
   }
 
+  async edit(params) {
+    return apiClient.post(this.baseUrl, params)
+  }
+
   changeBaseUrl(url) {
     this.baseUrl = url
   }
