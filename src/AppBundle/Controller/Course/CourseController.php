@@ -695,9 +695,13 @@ class CourseController extends CourseBaseController
     public function assistantInfoAction($course)
     {
         $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($this->getCurrentUser()->getId(), $course['id']);
+        $assistant = [];
+        if (!empty($assistantStudent)) {
+            $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
+        }
 
         return $this->render('course/widgets/course-assistant-info.html.twig', [
-            'assistant' => empty($assistantStudent) ? [] : $this->getUserService()->getUser($assistantStudent['assistantId']),
+            'assistant' => $assistant,
         ]);
     }
 

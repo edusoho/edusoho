@@ -92,11 +92,11 @@ export default {
             price: values.price,
             remark: values.remark,
           }).then((res) => {
-            this.$message.success('学员创建成功！', 2);
+            this.$message.success('学员添加成功！', 2);
             this.visible = false;
             window.location.reload();
           }).catch(err => {
-            this.$message.warning('学员创建失败', 2);
+            this.$message.warning('学员添加失败！', 2);
           });
         }
       });
