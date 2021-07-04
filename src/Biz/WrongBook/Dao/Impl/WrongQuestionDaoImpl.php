@@ -60,6 +60,15 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         return $this->db()->fetchAll($sql, array_merge([$itemId], $userIds, $sceneIds));
     }
 
+    public function findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds, $sceneIds)
+    {
+        $itemMarks = str_repeat('?,', count($itemIds) - 1).'?';
+        $sceneIdsMarks = str_repeat('?,', count($sceneIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = ? AND item_id IN({$itemMarks}) AND answer_scene_id IN({$sceneIdsMarks}) ORDER BY submit_time DESC;";
+
+        return $this->db()->fetchAll($sql, array_merge([$userId], $itemIds, $sceneIds));
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns)
     {
         $preBuilder = $this->createQueryBuilder($conditions)

@@ -14,6 +14,7 @@ use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -38,7 +39,17 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
 
-        $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, [
+        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
+
+        $wrongQuestion = [];
+        foreach ($items as $item) {
+            if ('material' !== $item['type']) {
+                $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
+            }
+        }
+
+        $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongQuestion, [
             'user_id' => $answerRecord['user_id'],
             'answer_scene_id' => $answerRecord['answer_scene_id'],
             'testpaper_id' => $this->getTestPaperId($answerRecord),
@@ -60,11 +71,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId], [], 0, PHP_INT_MAX);
 
-        $poolCounts = $this->getWrongQuestionService()->countWrongQuestion([
-            'collect_ids' => ArrayToolkit::column($poolCollects, 'id'),
-        ]);
-
-        $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => $poolCounts]);
+        $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
     }
 
     protected function getTestPaperId($answerRecord)
@@ -183,5 +190,13 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getItemBankChapterExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:ItemService');
     }
 }

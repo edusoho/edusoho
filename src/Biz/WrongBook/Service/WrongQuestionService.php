@@ -26,6 +26,8 @@ interface WrongQuestionService
 
     public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds);
 
+    public function findWrongQuestionsByUserIdAndItemIdAndSceneIds($userId, $itemIds, $sceneIds);
+
     /**
      * BookPool
      */
