@@ -25,6 +25,7 @@
           ref="upload"
           accept="image/*"
           :file-list="[]"
+          :customRequest="() => {}"
           list-type="picture-card"
           @change="uploadCourseCover"
         >
@@ -335,11 +336,12 @@
           values = this.formatValues(values)
 
           try {
-            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
+            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title, course } = await CourseSet.add(values);
 
             if (!error) {
-              this.$message.success('创建成功')
-              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle })
+              this.$message.success('创建成功');
+              let maxStudentNum = course.maxStudentNum;
+              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle, maxStudentNum })
             }
           } finally {
             this.ajaxLoading = false;

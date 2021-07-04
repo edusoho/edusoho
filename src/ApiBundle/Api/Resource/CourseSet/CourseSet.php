@@ -72,7 +72,7 @@ class CourseSet extends AbstractResource
     }
 
     /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function add(ApiRequest $request)
     {
@@ -107,7 +107,10 @@ class CourseSet extends AbstractResource
             throw $e;
         }
 
-        return $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $courseSet['course'] = $course;
+
+        return $courseSet;
     }
 
     public function update(ApiRequest $request, $courseSetId)
