@@ -215,12 +215,13 @@
     </div>
 
     <a-modal
+      :key='cropModal'
       :visible="cropModalVisible"
       @cancel="cropModalVisible = false;courseCoverUrl = ''">
       <vue-cropper
         ref="cropper"
         :aspect-ratio="16 / 9"
-        :src="courseCoverUrl"
+        :src="imgUrl"
       >
       </vue-cropper>
       <template slot="footer">
@@ -249,6 +250,7 @@
 
     data () {
       return {
+        cropModal: 0,
         form: this.$form.createForm(this),
         formInfo: {
           buyable: true,
@@ -274,6 +276,7 @@
           }
         },
         courseCoverUrl: '',
+        imgUrl: '',
         cropModalVisible: false,
         loading: false,
         editor: {},
@@ -486,14 +489,14 @@
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },
+
       uploadCourseCover(info) {
+        this.cropModal += 1;
         const reader = new FileReader();
 
-        this.loading = true;
         reader.onload = (event) => {
-          this.courseCoverUrl = event.target.result;
+          this.imgUrl = event.target.result;
           this.cropModalVisible = true;
-          this.loading = false;
         };
 
         this.courseCoverName = info.file.originFileObj.name
@@ -509,6 +512,8 @@
         }
       },
       async saveCourseCover() {
+        this.loading = true;
+
         if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
           await this.getUploadToken()
         }
@@ -550,6 +555,7 @@
           try {
             const { url } = await File.uploadFile(formData)
 
+            this.imgUrl = url;
             this.courseCoverUrl = url;
 
             const formData1 = new FormData();
@@ -561,6 +567,7 @@
           } finally {
             this.uploading = false;
             this.cropModalVisible = false;
+            this.loading = false;
           }
         })
       },
