@@ -22,7 +22,9 @@ class WrongBookStartAnswer extends AbstractResource
     public function add(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
-        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId], [], 0, 20);
+        $wrongQuestionsCount = $this->getCollectDao()->count(['pool_id' => $poolId]);
+        list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount);
+        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId], $orderBy, $start, 20);
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
         $answerScene = $this->initScene();
@@ -62,6 +64,36 @@ class WrongBookStartAnswer extends AbstractResource
             'assessment_response' => $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']),
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
+        ];
+    }
+
+    protected function getSearchFields($count)
+    {
+        $regularWrongTimes = [
+            ['wrong_times' => 'DESC'],
+            ['wrong_times' => 'ASC'],
+        ];
+        $regularUpdatedTime = [
+            ['updated_time' => 'DESC'],
+            ['updated_time' => 'ASC'],
+        ];
+        $regularEmpty = [
+            [],
+            [],
+        ];
+
+        $orderBys = [$regularWrongTimes, $regularUpdatedTime, $regularEmpty];
+        $orderBy = $orderBys[mt_rand(0, 2)][mt_rand(0, 1)];
+
+        if ($count > 20) {
+            $start = mt_rand(0, $count - 20);
+        } else {
+            $start = 0;
+        }
+
+        return [
+            'orderBy' => $orderBy,
+            'start' => $start,
         ];
     }
 
