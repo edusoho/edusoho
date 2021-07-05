@@ -7,6 +7,7 @@
       :loop="false"
       :show-indicators="false"
       @change="onChange"
+      style="overflow-y: auto;"
     >
       <van-swipe-item
         v-for="(question, index) in questionList"
