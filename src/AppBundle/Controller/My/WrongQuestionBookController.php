@@ -9,6 +9,7 @@ use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WrongQuestionBookController extends BaseController
 {
@@ -46,6 +47,7 @@ class WrongQuestionBookController extends BaseController
             'submitGotoUrl' => $this->generateUrl('wrong_question_book_practise_show_result', ['poolId' => $poolId, 'recordId' => $recordId]),
             'saveGotoUrl' => false,
             'showHeader' => 1,
+            'showSaveProgressBtn' => 0,
         ]);
     }
 
@@ -63,6 +65,8 @@ class WrongQuestionBookController extends BaseController
             'assessment' => $assessment,
             'showHeader' => 1,
             'restartUrl' => '',
+            'showDoAgainBtn' => 0,
+            'submitReturnUrl' => $this->generateUrl('my_wrong_question_book_target_detail', [], UrlGeneratorInterface::ABSOLUTE_URL)."#/target_type/exercise/target_id/{$poolId}",
         ]);
     }
 

@@ -9,6 +9,7 @@
       :questionFavorites="questionFavorites"
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
+      :showDoAgainBtn="showDoAgainBtn"
       :cdnHost="cdnHost"
       :collect="collect"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -18,7 +19,16 @@
       @doAgainEvent="doAgainEvent"
       @cancelFavoriteEvent="cancelFavoriteEvent"
       @favoriteEvent="favoriteEvent"
-    ></item-report>
+      @submitReturn="returnUrlGoto"
+    >
+      <template slot="returnBtn">
+        <div class="ibs-text-center ibs-mt16">
+          <a-button type="primary" shape="round" @click="gotoReturnUrl">{{
+              "返回错题本"
+            }}</a-button>
+        </div>
+      </template>
+    </item-report>
   </div>
 </template>
 
@@ -38,6 +48,7 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
+        showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
       };
     },
     created() {
@@ -92,8 +103,14 @@
           },
           data: JSON.stringify(favorite),
         }).done(function (res) {
-          
+
         })
+      },
+      gotoReturnUrl() {
+        parent.location.href = $('[name=submit_return_url]').val();
+      },
+      returnUrlGoto() {
+        parent.location.href = $('[name=submit_return_url]').val();
       },
       favoriteEvent(favorite) {
         $.ajax({
@@ -108,7 +125,7 @@
           },
           data: JSON.stringify(favorite),
         }).done(function (res) {
-          
+
         })
       },
       deleteAttachment(fileId, flag) {
