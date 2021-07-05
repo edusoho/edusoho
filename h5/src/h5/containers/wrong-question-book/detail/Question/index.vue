@@ -28,15 +28,15 @@
         <div class="analysis-content">
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">做题结果</div>
-            <div class="analysis-item_right">回答正确</div>
+            <div :class="[status.color]">{{ status.text }}</div>
           </div>
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">正确答案</div>
-            <div class="analysis-item_right">回答正确</div>
+            <div class="analysis-item_right">{{ rightAnswer }}</div>
           </div>
           <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">做题解析</div>
-            <div class="analysis-item_right">回答正确</div>
+            <div class="analysis-item__title">你的答案</div>
+            <div :class="[status.color]">{{ yourAnswer }}</div>
           </div>
         </div>
       </div>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import Choice from './Choice.vue';
 import SingleChoice from './SingleChoice.vue';
 import Judge from './Judge.vue';
@@ -144,6 +145,76 @@ export default {
     currentQuestionComponent() {
       return this.questionComponents[this.question.type];
     },
+
+    status() {
+      const statusResult = {
+        right: {
+          color: 'analysis-item_right',
+          text: '回答正确',
+        },
+        wrong: {
+          color: 'analysis-item_worng',
+          text: '回答错误',
+        },
+        partRight: {
+          color: 'analysis-item_worng',
+          text: '回答错误',
+        },
+        noAnswer: {
+          color: 'analysis-item_noAnswer',
+          text: '未回答',
+        },
+      };
+      const { response, status } = this.questions.report;
+
+      if (!_.size(response)) {
+        return statusResult.noAnswer;
+      }
+
+      return statusResult[status];
+    },
+
+    rightAnswer() {
+      let { answer, answer_mode } = this.questions;
+
+      if (answer_mode === 'true_false') {
+        answer = _.map(answer, function(item) {
+          return item === 'T' ? '正确' : '错误';
+        });
+      }
+
+      return _.join(answer, '、');
+    },
+
+    yourAnswer() {
+      let {
+        answer,
+        answer_mode,
+        report: { response },
+      } = this.questions;
+
+      if (!_.size(response)) {
+        return '未作答';
+      }
+
+      if (answer_mode === 'true_false') {
+        response = _.map(response, function(item) {
+          return item === 'T' ? '正确' : '错误';
+        });
+      }
+
+      if (answer_mode === 'text') {
+        let result = '';
+        _.forEach(answer, function(item, index) {
+          result += `(${index + 1})：${item}`;
+        });
+        return result;
+      }
+
+      return _.join(response, '、');
+    },
   },
+
+  methods: {},
 };
 </script>

@@ -28,5 +28,6 @@ module.exports = {
     'no-var': 2,
     'prettier/prettier': 'error',
     eqeqeq: 0,
+    camelcase: 0,
   },
 };
