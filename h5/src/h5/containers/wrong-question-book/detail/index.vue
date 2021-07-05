@@ -6,6 +6,8 @@
       :duration="100"
       :loop="false"
       :show-indicators="false"
+      :lazy-render="true"
+      :initial-swipe="currentIndex"
       @change="onChange"
       style="overflow-y: auto;"
     >
@@ -15,7 +17,7 @@
       >
         <question
           :total="pagination.total"
-          :order="(pagination.current - 1) * 20 + index + 1"
+          :order="index + 1"
           :question="question"
         />
       </van-swipe-item>
@@ -57,6 +59,7 @@ export default {
       },
       finished: false,
       height: MaxHeight,
+      currentIndex: 0,
     };
   },
 
@@ -92,6 +95,7 @@ export default {
     },
 
     onChange(index) {
+      this.currentIndex = index;
       const maxLength = _.size(this.questionList) - 3;
       if (!this.finished && index >= maxLength) {
         this.pagination.current++;
