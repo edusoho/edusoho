@@ -51,34 +51,8 @@
 	}
 }
 
-.question-answer-result {
-	margin-top: vw(24);
-	background-color: #f6f6f6;
-}
-
-.question-right-answer {
-	margin-top: vw(8);
-	background-color: #f6f6f6;
-}
-
-.question-analysis {
-	margin-top: vw(24);
-	background-color: #f6f6f6;
-
-	.question-analysis__label {
-		color: #333;
-	}
-
-	.question-analysis__result {
-		margin-top: 8px;
-		color: #666;
-	}
-}
-
 .question-situation {
-	padding-top: vw(24);
-	padding-bottom: vw(24);
-	background-color: #f6f6f6;
+	padding: 0 vw(24);
 
 	.situation-top {
 		color: #03c777;

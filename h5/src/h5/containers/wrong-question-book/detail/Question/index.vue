@@ -22,26 +22,40 @@
       </div>
     </div>
 
-    <!-- <div class="question-answer-result">
-      你的回答：未作答
-    </div>
-
-    <div class="question-right-answer">
-      正确答案：这里是答案
-    </div>
-
-    <div class="question-analysis">
-      <div class="question-analysis__label">题目解析：</div>
-      <div class="question-analysis__result">这里是材料题的解析</div>
-    </div>
-
-    <div class="question-situation">
-      <div class="situation-top">来源：课程名称-作业课时任务</div>
-      <div class="situation-bottom">
-        <span>2021-04-15 20:20:00</span>
-        <span>做错频次：<span class="frequency">3</span>次</span>
+    <div class="analysis">
+      <div class="mt10 analysis-result">
+        <div class="analysis-title">做题结果</div>
+        <div class="analysis-content">
+          <div class="analysis-content__item mt10">
+            <div class="analysis-item__title">做题结果</div>
+            <div class="analysis-item_right">回答正确</div>
+          </div>
+          <div class="analysis-content__item mt10">
+            <div class="analysis-item__title">正确答案</div>
+            <div class="analysis-item_right">回答正确</div>
+          </div>
+          <div class="analysis-content__item mt10">
+            <div class="analysis-item__title">做题解析</div>
+            <div class="analysis-item_right">回答正确</div>
+          </div>
+        </div>
       </div>
-    </div> -->
+
+      <div class="mt10 analysis-result">
+        <div class="analysis-title">做题解析</div>
+        <div class="analysis-content mt10">这是判断题的解析</div>
+      </div>
+
+      <div class="mt10 analysis-result">
+        <div class="question-situation">
+          <div class="situation-top">来源：课程名称-作业课时任务</div>
+          <div class="situation-bottom">
+            <span>2021-04-15 20:20:00</span>
+            <span>做错频次：<span class="frequency">3</span>次</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
