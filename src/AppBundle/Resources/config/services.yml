@@ -138,6 +138,14 @@ services:
         tags:
             - { name: extension }
 
+    scrm_service_provider:
+        class: Biz\SCRM\SCRMProvider
+        public: true
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
         arguments:    ['@service_container', '@biz']

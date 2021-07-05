@@ -21,7 +21,9 @@
 {% endblock %}
 
 {% block btn %}
-  <a class="cd-btn cd-btn-ghost-primary cd-mr16" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
+  {% if 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') %}
+    <a class="cd-btn cd-btn-ghost-primary cd-mr16" target="_blank" href="{{ courseSet.redirect_path }}">{{ 'course.manage_btn'|trans }}</a>
+  {% endif %}
   {% if courseSet.status != 'published' %}
     <a class="cd-btn cd-btn-ghost-default" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{ 'course.preview.course'|trans }}</a>
   {% else %}

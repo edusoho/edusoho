@@ -1484,6 +1484,7 @@ course.question_manage.import.reupload_document: Re-Upload
 course.question_manage.import.uploading: Uploading...
 course.question_manage.import.use_old_template: Use Old Template
 course.question_manage.impport.cancle: Cancel
+course.question_manage.import.filename_length_limit: File names cannot exceed 50 characters
 course.question_manage.import.docx_support_hint2: Please upload .docx Word file
 course.question_manage.import.doc_to_docx_hint2: <a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">Click here</a>to see how doc convert to docx
 course.question_manage.import.rule: Import rule description
@@ -1722,6 +1723,7 @@ course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
+course.student.add.assistant.tip: 'Please go to the right side of the class schedule to add a teaching assistant, otherwise you will not be able to listen to the class properly.'
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
 course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
 course.plan_task.activity_ppt_animation_link: Animation support
@@ -2092,6 +2094,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+column: Column
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
@@ -2632,12 +2635,14 @@ user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
+user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
 user.settings.profile.change_avatar: Modify picture
 user.settings.profile.choose_again: Choose again
 user.settings.profile.save_avatar: Save picture
+user.settings.profile.save_qrcode: Save qrcode
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set password'
@@ -2771,6 +2776,7 @@ user.settings.basic_info.alter_description: 'You can create a course after setti
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.shange_avatar: 'Change avatar'
+user.settings.basic_info.shange_qrcode: 'Change qrcode'
 
 user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
@@ -2796,6 +2802,7 @@ user.settings.verification.notice_content: "<p>1, please make sure that the phot
 
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
+user.settings.qrcode.crop: QrCode
 user.settings.avatar.reselect: 'Reselect an image'
 user.settings.avatar.content_title: 'Avatar Setting'
 user.settings.avatar.current_avatar: 'Current Avatar'
@@ -3476,6 +3483,7 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.multi_class_menu: Multi Class
 my.teaching.open_course_menu: Open Course
 my.teaching.classroom.studen_count: Students
 my.teaching.classroom.course_count: Courses
@@ -3576,6 +3584,9 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.multi_class.my_students: My Students
+my.teaching.multi_class.status: Status
+my.teaching.multi_class.student_num: Student Number
 my.teaching.open_course.Basic_Info: Course settings
 my.teaching.open_course.Basic_Info.message: Basic infomation
 my.teaching.open_course.Basic_Info.title: Course title
@@ -4220,6 +4231,8 @@ courseset_manage.unlock_confrim: Unlock
 courseset_manage.unlock_confrim.tips: 'Unlock operation is irreversible and it will end the update'
 role.student: Student
 role.teacher: Teacher
+role.assistant: Assistant
+role.academic_staf: Academic Staf
 admin.process_bar: 'Optimize course file'
 admin.process_bar.finish_btn: 'Optimize completely'
 admin.process_bar.keep_window_tips: 'Please don''t close current window because of the optimization is in progress'
@@ -5622,9 +5635,12 @@ admin.user.manage.user_show.fields.personal_website_label: 'Personal Websites'
 admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
+admin.user.manage.assistant_qrcode.fields.heading_title: 'Set assistant qrCode'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 'Current qrCode'
 admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the fit picture？</a>'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
+admin.user.manage.assistant_qrcode.upload_btn: 'Upload New qrCode'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
 admin.user.manage.change_password.heading_title: 'Reset password of user %nickname%'
@@ -5633,7 +5649,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 'Input pa
 admin.user.manage.create.heading_title: 'Add New User'
 admin.user.manage.create.email_label: 'Email Address'
 admin.user.manage.avatar_crop.heading_title: 'Set Avatar'
+admin.user.manage.assistant_qrcode_crop.heading_title: 'Set assistant qrcode'
 admin.user.manage.avatar_crop.crop_hint: 'Tip:Please select an image crop area'
+admin.user.manage.assistant_qrcode_crop.crop_hint: 'Tip:Please select an image crop area'
 admin.user.manage.avatar_crop.select_again_btn: 'Reselect an image'
 admin.user.manage.create_by_mobile.heading_title: 'Add New User'
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 'Phone Number'
@@ -7971,6 +7989,8 @@ log.module.wap: 'Wap'
 log.module.push: 'Push'
 log.module.question_bank: 'Question Bank'
 log.module.item_bank_exercise: 'Item Bank Exercise'
+log.module.multi_class_assistant: Multi class assistant
+log.module.multi_class: Multi class
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -9478,6 +9498,7 @@ exception.question_bank.forbidden_access_bank: Forbidden access this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
+exception.coupon.receive_late: You are one step too late, the coupon has been claimed!
 
 exception.item_bank_exercise.forbidden_learn: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.'
 exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
@@ -10681,6 +10702,8 @@ exception.multi_class.multi_class_product_exist: The product name already exists
 exception.multi_class.multi_class_exist: The Multi class name already exists
 exception.multi_class.multi_class_not_exist: The Multi class name not exists
 exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
+exception.multi_class.assistant_require: The Multi class assistant need to be set up
+exception.multi_class.assistant_student_not_found: Assistant student relationship not found
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
 exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing
@@ -10706,4 +10729,9 @@ course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact s
 
 exception.wrong_question.data_fields_missing: Wrong question data fields missing
 exception.wrong_book.wrong_question.not_exist: Wrong question not exist
+course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
+course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
+
+course.assistant.student_add_qrcode: To ensure the quality of learning
+course.assistant.student_add_qrcode_info: Please scan the code to add the class exclusive assistant teacher WeChat
 

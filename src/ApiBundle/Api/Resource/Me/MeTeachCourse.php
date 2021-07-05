@@ -1,22 +1,18 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\Me;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use ApiBundle\Api\Annotation\Access;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 
 class MeTeachCourse extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @return array
      */
     public function search(ApiRequest $request)
@@ -28,6 +24,10 @@ class MeTeachCourse extends AbstractResource
             'status' => 'published',
             'excludeTypes' => ['reservation'],
         ];
+
+        if ($request->query->get('types')) {
+            $conditions['types'] = $request->query->get('types');
+        }
 
         if (!in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
             $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher']);

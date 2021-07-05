@@ -1,5 +1,6 @@
 <template>
   <aside-layout :breadcrumbs="[{ name: '课时设置' }]" style="padding-bottom: 88px;">
+    <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form
       :form="form"
       :label-col="{ span: 4 }"

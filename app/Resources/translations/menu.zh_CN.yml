@@ -452,6 +452,7 @@ admin.operation.query_menu.basic_tab: 使用查询
 admin_v2.basic_menu: 后台管理员
 
 # 新版后台顶部导航
+admin_v2.nav.education: 教务
 admin_v2.nav.teach: 教学
 admin_v2.nav.marketing: 营销
 admin_v2.nav.operating: 运营
@@ -459,6 +460,9 @@ admin_v2.nav.user: 用户
 admin_v2.nav.trade: 交易
 admin_v2.nav.statistics: 数据
 admin_v2.nav.system: 系统
+
+# 教务-教务管理
+admin_v2.education.basic_group: 教务管理
 
 # 教学-课程管理
 admin_v2.course.basic_group: 教学管理
@@ -746,6 +750,7 @@ admin_v2.user.basic.basic_tab.create_btn: '添加新用户'
 admin_v2.user.basic.basic_tab.edit_btn: '编辑用户信息'
 admin_v2.user.basic.basic_tab.setting_roles_btn: '设置用户组'
 admin_v2.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
+admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
 admin_v2.user.basic.basic_tab.change_nickname_btn: '修改用户名'
 admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'

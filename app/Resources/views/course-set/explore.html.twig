@@ -48,7 +48,7 @@
 {% block content %}
   {% set type = filter.type|default('all') %}
   {% set price = filter.price|default('all') %}
-  {% set orderBy = app.request.query.get('orderBy')|default('latest')%}
+  {% set orderBy = app.request.query.get('orderBy')|default(setting('course.explore_default_orderBy'))%}
   {% set currentLevelId = filter.currentLevelId|default('all') %}
   {% set path = app.request.get('_route') %}
   {% set subCategory = app.request.query.get('subCategory', '') %}

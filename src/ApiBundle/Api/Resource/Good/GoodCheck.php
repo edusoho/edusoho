@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\InformationCollect\Service\EventService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
@@ -57,6 +58,10 @@ class GoodCheck extends AbstractResource
             return ['success' => false, 'code' => self::NO_REMAIN];
         }
 
+        if ($this->isMultiClassStudentNumLimit($goodsSpecs['targetId'])) {
+            return ['success' => false, 'code' => self::NO_REMAIN];
+        }
+
         if ($this->needUploadAvatar()) {
             return ['success' => false, 'code' => self::AVATAR_ALERT];
         }
@@ -98,6 +103,17 @@ class GoodCheck extends AbstractResource
         $course = $this->getCourseService()->getCourse($id);
 
         return $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
+    }
+
+    protected function isMultiClassStudentNumLimit($id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        if (!empty($multiClass['maxStudentNum'])) {
+            return $multiClass['maxStudentNum'] - $course['studentNum'] <= 0;
+        }
+
+        return false;
     }
 
     protected function needUploadAvatar()
@@ -285,5 +301,13 @@ class GoodCheck extends AbstractResource
     protected function getInformationCollectEventService()
     {
         return $this->service('InformationCollect:EventService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->service('MultiClass:MultiClassService');
     }
 }

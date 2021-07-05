@@ -659,3 +659,8 @@ reportAuditStatus:
     pass: 正常
     illegal: 违规
 
+multiClassStatus:
+  not_start: 未开始
+  live: 开课中
+  end: 已结束
+

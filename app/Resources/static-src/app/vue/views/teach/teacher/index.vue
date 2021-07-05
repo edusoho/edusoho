@@ -50,6 +50,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
+    <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
       <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
         <a-form-item label="序号" extra="请输入0-10000的整数">
           <a-input-number

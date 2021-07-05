@@ -1,11 +1,16 @@
 import Vue from 'common/vue';
 import Router from 'vue-router'
-import routes from 'app/vue/router/teach/multi_class_product/index.js'
 import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 
 const router = new Router({
   mode: 'hash',
-  routes
+  routes: [
+    {
+      path: '/',
+      name: 'MultiClassProduct',
+      component: () => import(/* webpackChunkName: "app/vue/dist/MultiClassProduct" */ 'app/vue/views/teach/multi_class_product/index.vue')
+    }
+  ]
 })
 
 new Vue({
