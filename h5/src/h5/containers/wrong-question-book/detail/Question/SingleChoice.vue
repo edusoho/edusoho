@@ -6,8 +6,8 @@
       class="question-option"
       :name="answer.radio.val"
     >
-      <div class="question-option__content">{{ answer.radio.text }}</div>
-      <template #icon="props">
+      <div class="question-option__content" v-html="answer.radio.text" />
+      <template slot="icon">
         <span
           :class="['question-option__order', checkAnswer(answer.radio.val)]"
         >
