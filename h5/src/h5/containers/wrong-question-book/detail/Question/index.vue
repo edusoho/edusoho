@@ -75,7 +75,6 @@ import _ from 'lodash';
 import Choice from './Choice.vue';
 import SingleChoice from './SingleChoice.vue';
 import Judge from './Judge.vue';
-import Fill from './Fill.vue';
 
 export default {
   components: {
@@ -85,8 +84,6 @@ export default {
     SingleChoice,
     // eslint-disable-next-line vue/no-unused-components
     Judge,
-    // eslint-disable-next-line vue/no-unused-components
-    Fill,
   },
 
   props: {
@@ -115,7 +112,7 @@ export default {
         },
         text: {
           name: '填空题',
-          component: 'Fill',
+          component: '',
         },
         choice: {
           name: '多选题',
@@ -187,7 +184,7 @@ export default {
 
       if (answer_mode === 'true_false') {
         answer = _.map(answer, function(item) {
-          return item === 'T' ? '正确' : '错误';
+          return item === 'T' ? '对' : '错';
         });
       }
 

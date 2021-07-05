@@ -1,3 +1,60 @@
 <template>
-  <div>Judge</div>
+  <van-radio-group v-model="questions.answer[0]">
+    <van-radio
+      v-for="(answer, index) in questions.response_points"
+      :key="index"
+      class="question-option"
+      :name="answer.radio.val"
+    >
+      <div class="question-option__content">
+        {{ answer.radio.val === 'T' ? '对' : '错' }}
+      </div>
+      <template slot="icon">
+        <span
+          :class="['question-option__order', checkAnswer(answer.radio.val)]"
+        >
+          <i class="iconfont icon-yes" v-if="answer.radio.val === 'T'"></i>
+          <i class="iconfont icon-no" v-else></i>
+        </span>
+      </template>
+    </van-radio>
+  </van-radio-group>
 </template>
+
+<script>
+import _ from 'lodash';
+
+export default {
+  props: {
+    question: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  computed: {
+    questions() {
+      return this.question.questions[0];
+    },
+  },
+
+  methods: {
+    checkAnswer(value) {
+      const {
+        answer,
+        report: { response },
+      } = this.questions;
+
+      // 正确答案
+      if (_.includes(answer, value)) {
+        return 'question-option__order_right';
+      }
+
+      // 用户选择的错误答案
+      if (_.includes(_.difference(response, answer), value)) {
+        return 'question-option__order_wrong';
+      }
+    },
+  },
+};
+</script>
