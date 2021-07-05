@@ -48,47 +48,51 @@
 			margin-top: vw(40);
 			pointer-events: none;
 		}
+	}
+}
 
-		.answer-result {
-			margin-top: vw(24);
-		}
+.question-answer-result {
+	margin-top: vw(24);
+	background-color: #f6f6f6;
+}
 
-		.right-answer {
-			margin-top: vw(8);
-		}
+.question-right-answer {
+	margin-top: vw(8);
+	background-color: #f6f6f6;
+}
 
-		.question-analysis {
-			margin-top: vw(24);
+.question-analysis {
+	margin-top: vw(24);
+	background-color: #f6f6f6;
 
-			.question-analysis__label {
-				color: #333;
-			}
+	.question-analysis__label {
+		color: #333;
+	}
 
-			.question-analysis__result {
-				margin-top: 8px;
-				color: #666;
-			}
-		}
+	.question-analysis__result {
+		margin-top: 8px;
+		color: #666;
+	}
+}
 
-		.question-situation {
-			margin-top: vw(24);
-			padding-bottom: vw(24);
+.question-situation {
+	padding-top: vw(24);
+	padding-bottom: vw(24);
+	background-color: #f6f6f6;
 
-			.situation-top {
-				color: #03c777;
-			}
+	.situation-top {
+		color: #03c777;
+	}
 
-			.situation-bottom {
-				display: flex;
-				justify-content: space-between;
-				margin-top: vw(8);
-				color: #999;
-				font-size: vw(12);
+	.situation-bottom {
+		display: flex;
+		justify-content: space-between;
+		margin-top: vw(8);
+		color: #999;
+		font-size: vw(12);
 
-				.frequency {
-					color: #ff4040;
-				}
-			}
+		.frequency {
+			color: #ff4040;
 		}
 	}
 }
