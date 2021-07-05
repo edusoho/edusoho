@@ -8,14 +8,19 @@
       </div>
     </div>
 
-    <div class="question-stem clearfix">
-      <span class="pull-left">{{ order }}、</span>
-      <div>{{ questions.stem }}</div>
-    </div>
+    <div class="question-body">
+      <div class="question-stem clearfix">
+        <span>{{ order }}、</span>
+        <div v-html="formateQuestionStem" />
+      </div>
 
-    <component :is="currentQuestionComponent.component" :question="question" />
+      <div class="question-answer">
+        <component
+          :is="currentQuestionComponent.component"
+          :question="question"
+        />
+      </div>
 
-    <div class="question-making">
       <div class="answer-result">
         你的回答：未作答
       </div>
@@ -105,6 +110,18 @@ export default {
   computed: {
     questions() {
       return this.question.questions[0];
+    },
+
+    formateQuestionStem() {
+      const text = this.questions.stem;
+      const reg = /\[\[\]\]/g;
+      if (!text.match(reg)) {
+        return text;
+      }
+      let index = 1;
+      return text.replace(reg, function() {
+        return `<span class="stem-fill-blank">(${index++})</span>`;
+      });
     },
 
     currentQuestionComponent() {
