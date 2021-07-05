@@ -11,23 +11,26 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AnswerEngineController extends BaseController
 {
-    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0)
+    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1)
     {
         return $this->render('answer-engine/answer.html.twig', [
             'answerRecord' => $this->getAnswerRecordService()->get($answerRecordId),
             'submitGotoUrl' => $submitGotoUrl,
             'saveGotoUrl' => $saveGotoUrl,
             'showHeader' => $showHeader,
+            'showSaveProgressBtn' => $showSaveProgressBtn,
         ]);
     }
 
-    public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show', $collect = true)
+    public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show', $collect = true, $options = [])
     {
         return $this->render('answer-engine/report.html.twig', [
             'answerRecordId' => $answerRecordId,
             'restartUrl' => $restartUrl,
             'answerShow' => $answerShow,
             'collect' => true === $collect ? 1 : 0,
+            'showDoAgainBtn' => isset($options['showDoAgainBtn']) ? $options['showDoAgainBtn'] : 1,
+            'submitReturnUrl' => isset($options['submitReturnUrl']) ? $options['submitReturnUrl'] : '',
         ]);
     }
 
