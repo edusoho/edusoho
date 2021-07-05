@@ -23,6 +23,24 @@
       </van-swipe-item>
     </van-swipe>
 
+    <div class="paper-swiper">
+      <div
+        :class="['left-slide__btn', currentIndex == 0 ? 'slide-disabled' : '']"
+        @click="prev()"
+      >
+        <i class="iconfont icon-arrow-left" />
+      </div>
+      <div
+        :class="[
+          'right-slide__btn',
+          currentIndex == questionList.length - 1 ? 'slide-disabled' : '',
+        ]"
+        @click="next()"
+      >
+        <i class="iconfont icon-arrow-right" />
+      </div>
+    </div>
+
     <div class="question-foot">
       错题练习
     </div>
@@ -102,6 +120,20 @@ export default {
         this.finished = true;
         this.fetchWrongQuestion();
       }
+    },
+
+    prev() {
+      if (this.currentIndex == 0) {
+        return;
+      }
+      this.$refs.swipe.swipeTo(this.currentIndex - 1);
+    },
+
+    next() {
+      if (this.currentIndex == this.questionList.length - 1) {
+        return;
+      }
+      this.$refs.swipe.swipeTo(this.currentIndex + 1);
     },
   },
 };
