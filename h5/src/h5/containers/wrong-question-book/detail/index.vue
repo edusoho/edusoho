@@ -30,7 +30,7 @@
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
-import Question from '../components/Question.vue';
+import Question from './Question/index.vue';
 
 const NavBarHeight = 46;
 const FootHeight = 48;
