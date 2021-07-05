@@ -23,6 +23,49 @@
           </div>
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
+        <!-- 助教 -->
+        <div
+          v-if="details.assistant.weChatQrCode"
+          class="assistant-show clearfix"
+        >
+          <div class="assistant-show__text" @click="showAssistant">
+            <i class="iconfont icon-weixin1"></i>
+            <span class="text">
+              为了更好的学习，点击此处添加助教微信
+            </span>
+            <van-icon class="arrow-icon" name="arrow" />
+          </div>
+
+          <!-- 助教弹出框 -->
+          <van-popup
+            class="assistant-show__content"
+            v-model="assistantShow"
+            position="bottom"
+            closeable
+            round
+          >
+            <img
+              class="avatar"
+              :src="details.assistant.avatar.middle"
+              alt="助教图片"
+            />
+            <p class="name">
+              {{ details.assistant.nickname }}
+            </p>
+            <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
+            <img
+              class="wechat"
+              :src="details.assistant.weChatQrCode"
+              alt="二维码图片"
+            />
+            <div class="tips" v-if="isWeixin">
+              长按图片识别二维码
+            </div>
+            <div class="tips" v-else>
+              长按图片保存二维码，前往微信添加
+            </div>
+          </van-popup>
+        </div>
 
         <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
       </div>
@@ -117,6 +160,7 @@ export default {
       },
       show: false,
       show_course_review: this.$store.state.goods.show_course_review,
+      assistantShow: false,
     };
   },
   mixins: [collectUserInfo],
@@ -139,6 +183,11 @@ export default {
     },
     currentTypeText() {
       return this.details.classroom ? '班级' : '课程';
+    },
+
+    isWeixin() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
   },
   watch: {
@@ -439,6 +488,10 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
+    },
+
+    showAssistant() {
+      this.assistantShow = true;
     },
   },
 };
