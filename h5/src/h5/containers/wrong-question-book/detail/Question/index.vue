@@ -51,10 +51,18 @@
 
       <div class="mt10 analysis-result">
         <div class="question-situation">
-          <div class="situation-top">来源：课程名称-作业课时任务</div>
+          <div class="situation-top">来源：{{ question.sources[0] }}</div>
           <div class="situation-bottom">
-            <span>2021-04-15 20:20:00</span>
-            <span>做错频次：<span class="frequency">3</span>次</span>
+            <span>{{
+              $moment(question.updated_time * 1000).format(
+                'YYYY-MM-DD HH:mm:ss',
+              )
+            }}</span>
+            <span>
+              做错频次：
+              <span class="frequency">{{ question.wrong_times }}</span>
+              次
+            </span>
           </div>
         </div>
       </div>
@@ -105,7 +113,7 @@ export default {
           name: '单选题',
           component: 'SingleChoice',
         },
-        fill: {
+        text: {
           name: '填空题',
           component: 'Fill',
         },
@@ -117,7 +125,7 @@ export default {
           name: '不定项选择题',
           component: 'Choice',
         },
-        determine: {
+        true_false: {
           name: '判断题',
           component: 'Judge',
         },
@@ -143,7 +151,7 @@ export default {
     },
 
     currentQuestionComponent() {
-      return this.questionComponents[this.question.type];
+      return this.questionComponents[this.question.questions[0].answer_mode];
     },
 
     status() {
