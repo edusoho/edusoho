@@ -43,7 +43,10 @@
 
       <div class="mt10 analysis-result">
         <div class="analysis-title">做题解析</div>
-        <div class="analysis-content mt10">这是判断题的解析</div>
+        <div
+          class="analysis-content mt10"
+          v-html="questions.analysis || '无解析'"
+        />
       </div>
 
       <div class="mt10 analysis-result">
