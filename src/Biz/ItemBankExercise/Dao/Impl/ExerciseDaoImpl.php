@@ -15,6 +15,11 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
         return $this->getByFields(['questionBankId' => $questionBankId]);
     }
 
+    public function findByQuestionBankIds($questionBankIds)
+    {
+        return $this->findInField('questionBankId', $questionBankIds);
+    }
+
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);

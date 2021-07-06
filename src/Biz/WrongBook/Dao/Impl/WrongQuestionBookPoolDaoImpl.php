@@ -31,9 +31,10 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
     public function searchPoolByConditions($conditions, $orderBys, $start, $limit)
     {
         $table = $this->getTableName($conditions);
+        $field = $this->getTableJoinCondition($conditions);
         $conditions['keyWord'] = isset($conditions['keyWord']) ? $conditions['keyWord'] : '';
         $builder = $this->createQueryBuilder($conditions)
-            ->leftJoin('biz_wrong_question_book_pool', $table, 't', 't.id = biz_wrong_question_book_pool.target_id')
+            ->leftJoin('biz_wrong_question_book_pool', $table, 't', "t.{$field} = biz_wrong_question_book_pool.target_id")
             ->select('biz_wrong_question_book_pool.*')
             ->andWhere('title like :keyWord')
             ->orderBy('biz_wrong_question_book_pool.updated_time', 'DESC')
@@ -46,9 +47,10 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
     public function countPoolByConditions($conditions)
     {
         $table = $this->getTableName($conditions);
+        $field = $this->getTableJoinCondition($conditions);
         $conditions['keyWord'] = isset($conditions['keyWord']) ? $conditions['keyWord'] : '';
         $builder = $this->createQueryBuilder($conditions)
-            ->leftJoin('biz_wrong_question_book_pool', $table, 't', 't.id = biz_wrong_question_book_pool.target_id')
+            ->leftJoin('biz_wrong_question_book_pool', $table, 't', "t.{$field} = biz_wrong_question_book_pool.target_id")
             ->select('COUNT(*)')
             ->andWhere('title like :keyWord');
 
@@ -66,6 +68,19 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         }
 
         return  $table;
+    }
+
+    protected function getTableJoinCondition($conditions)
+    {
+        if ('classroom' == $conditions['target_type']) {
+            $field = 'id';
+        } elseif ('exercise' == $conditions['target_type']) {
+            $field = 'questionBankId';
+        } else {
+            $field = 'id';
+        }
+
+        return  $field;
     }
 
     public function declares()
