@@ -69,7 +69,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'wrong_question',
                 'create_wrong_question',
                 '批量创建错题',
-                $wrongQuestions
+                ArrayToolkit::column($wrongQuestions, 'id')
             );
 
             $this->commit();
