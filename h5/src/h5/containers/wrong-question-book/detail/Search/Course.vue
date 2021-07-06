@@ -98,23 +98,21 @@ export default {
       sortType: 'default',
       currentIndex: 0,
       selectdIndex: 0,
+      searchParams: {},
       conditions: [
         {
           title: '选择计划',
           columns: [],
-          courseId: 'default',
           selectdText: '选择计划',
         },
         {
           title: '选择题目来源',
           columns: [],
-          courseMediaType: 'default',
           selectdText: '选择题目来源',
         },
         {
           title: '选择任务名称',
           columns: [],
-          courseTaskId: 'default',
           selectdText: '选择任务名称',
         },
       ],
@@ -180,7 +178,7 @@ export default {
 
     onClickSearch() {
       this.visible = false;
-      console.log('onClickSearch');
+      this.$emit('on-search', this.searchParams);
     },
 
     onClickSort(value) {
@@ -201,17 +199,17 @@ export default {
       this.currentCondition.selectdText = value.text;
 
       if (this.currentIndex === 0) {
-        this.currentCondition.courseId = value.id;
+        this.searchParams.courseId = value.id;
         return;
       }
 
       if (this.currentIndex === 1) {
-        this.currentCondition.courseMediaType = value.type;
+        this.searchParams.courseMediaType = value.type;
         return;
       }
 
       if (this.currentIndex === 2) {
-        this.currentCondition.courseTaskId = value.id;
+        this.searchParams.courseTaskId = value.id;
       }
     },
   },

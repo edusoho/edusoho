@@ -52,6 +52,7 @@
       :show="show"
       :pool-id="targetId"
       @hidden-search="hiddenSearch"
+      @on-search="onSearch"
     />
 
     <div class="question-foot">
@@ -176,6 +177,10 @@ export default {
 
     hiddenSearch() {
       this.show = false;
+    },
+
+    onSearch(params) {
+      console.log(params);
     },
   },
 };
