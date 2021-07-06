@@ -72,7 +72,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds)
     {
         $sceneIdsMarks = str_repeat('?,', count($sceneIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE user_id = ? AND answer_scene_id IN({$sceneIdsMarks}) ORDER BY submit_time DESC;";
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = ? AND answer_scene_id IN({$sceneIdsMarks});";
 
         return $this->db()->fetchAll($sql, array_merge([$userId], $sceneIds));
     }
