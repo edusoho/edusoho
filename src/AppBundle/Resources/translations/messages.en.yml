@@ -1806,6 +1806,7 @@ Email地址: 'Email Address'
 '--按从属--': '-- By category --'
 请选择试卷: 'please select the test paper'
 课程分类: 'Course categories'
+公开课分类: 'Open course categories'
 收件人: Recipent
 '新密码': 'New Password'
 '确认密码': 'Password Confirmed'

@@ -90,14 +90,14 @@ class MultiClass extends AbstractResource
 
     /**
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request)
     {
         $conditions = $this->prepareConditions($request->query->all());
         $orderBys = $this->prepareOrderBys($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, $orderBys, $offset, $limit);
+        $multiClasses = $this->getMultiClassService()->searchMultiClassJoinCourse($conditions, $orderBys, $offset, $limit);
         $multiClassesCount = $this->getMultiClassService()->countMultiClass($conditions);
         $multiClasses = $this->makeMultiClassesInfo($multiClasses);
 
@@ -118,12 +118,6 @@ class MultiClass extends AbstractResource
 
         if (!empty($conditions['productId'])) {
             $prepareConditions['productId'] = $conditions['productId'];
-        }
-
-        $user = $this->getCurrentUser();
-        if (empty(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles())) && !empty(array_intersect(['ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT'], $user->getRoles()))) {
-            $members = $this->getMemberService()->findMembersByUserIdAndRoles($user['id'], ['teacher', 'assistant']);
-            $prepareConditions['ids'] = empty($members) ? [-1] : ArrayToolkit::column($members, 'multiClassId');
         }
 
         return $prepareConditions;

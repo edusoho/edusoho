@@ -2,7 +2,7 @@
   <div>
     <div v-if="isPermission('course_lesson_manage')">
       <a-icon type="exclamation-circle" style="color: #bebebe;" />
-      排课只涉及直播课时，其他类型课时设置，请点击-<a :href="courseSetId ? `/course_set/${courseSetId}/manage/course/${courseId}/tasks` : 'javascript:;'" :target="courseSetId ? '_blank' : ''">更多课时设置</a>
+      排课只涉及直播课时
     </div>
     <div class="clearfix">
       <a-space size="large">

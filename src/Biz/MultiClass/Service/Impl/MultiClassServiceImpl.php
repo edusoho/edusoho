@@ -2,7 +2,10 @@
 
 namespace Biz\MultiClass\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -34,6 +37,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->findByProductId($productId);
     }
 
+    public function findMultiClassesByCreator($creator)
+    {
+        return $this->getMultiClassDao()->findByCreator($creator);
+    }
+
     public function getMultiClass($id)
     {
         return $this->getMultiClassDao()->get($id);
@@ -50,26 +58,27 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
-        $teacherId = [
-            [
-                'id' => $fields['teacherId'],
-                'isVisable' => 1,
-            ],
-        ];
+        $teacherId = [['id' => $fields['teacherId'], 'isVisable' => 1]];
         $assistantIds = $fields['assistantIds'];
+
         $fields = $this->filterMultiClassFields($fields);
+        if (!ArrayToolkit::requireds($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
 
         $this->beginTransaction();
         try {
+            $fields['creator'] = $this->getCurrentUser()->getId();
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
 
             $this->getLogService()->info(
                 'multi_class',
                 'create_multi_class',
-                "创建班课#{$multiClass['id']}《{$fields['title']}》",
-                $fields
+                "创建班课#{$multiClass['id']}《{$multiClass['title']}》",
+                $multiClass
             );
 
             $this->commit();
@@ -92,12 +101,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
-        $teacherId = [
-            [
-                'id' => $fields['teacherId'],
-                'isVisable' => 1,
-            ],
-        ];
+        $teacherId = [['id' => $fields['teacherId'], 'isVisable' => 1]];
         $assistantIds = $fields['assistantIds'];
 
         $fields = $this->filterMultiClassFields($fields, $id);
@@ -107,6 +111,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+
             $this->getLogService()->info(
                 'multi_class',
                 'update_multi_class',
@@ -152,11 +158,52 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
-    public function searchMultiClass($conditions, $orderBys, $start, $limit)
+    public function searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit)
     {
         $conditions = $this->filterConditions($conditions);
 
         return $this->getMultiClassDao()->searchMultiClassJoinCourse($conditions, $orderBys, $start, $limit);
+    }
+
+    public function searchUserTeachMultiClass($userId, $conditions, $start, $limit)
+    {
+        $multiClassIds = $this->findUserTeachMultiClassIds($userId);
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        $conditions['ids'] = $multiClassIds;
+
+        return $this->searchMultiClass($conditions, ['createdTime' => 'desc'], $start, $limit);
+    }
+
+    public function countUserTeachMultiClass($userId, $conditions)
+    {
+        $multiClassIds = $this->findUserTeachMultiClassIds($userId);
+        if (empty($multiClassIds)) {
+            return 0;
+        }
+
+        $conditions['ids'] = $multiClassIds;
+
+        return $this->countMultiClass($conditions);
+    }
+
+    protected function findUserTeachMultiClassIds($userId)
+    {
+        $multiClasses = $this->findMultiClassesByCreator($userId);
+        $members = $this->getCourseMemberService()->findMembersByUserIdAndRoles($userId, ['assistant', 'teacher']);
+        $multiClassIds = array_merge(ArrayToolkit::column($multiClasses, 'id'), ArrayToolkit::column($members, 'multiClassId'));
+        $multiClassIds = array_unique($multiClassIds);
+
+        return array_values($multiClassIds);
+    }
+
+    public function searchMultiClass($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getMultiClassDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countMultiClass($conditions)
@@ -249,21 +296,20 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $conditions;
     }
 
-    private function filterMultiClassFields($fields)
+    private function filterMultiClassFields($fields, $multiClassId = 0)
     {
-        if (isset($fields['teacherId'])) {
-            unset($fields['teacherId']);
-        }
-        if (isset($fields['assistantIds'])) {
-            unset($fields['assistantIds']);
-        }
-
         if (isset($fields['courseId'])) {
             $course = $this->getCourseService()->getCourse($fields['courseId']);
             if (empty($course)) {
                 throw CourseException::NOTFOUND_COURSE();
             }
+
+            $multiClass = $this->getMultiClassByCourseId($course['id']);
+            if (!empty($multiClass) && $multiClass['id'] != $multiClassId) {
+                throw MultiClassException::MULTI_CLASS_COURSE_EXIST();
+            }
         }
+
         if (isset($fields['productId'])) {
             $course = $this->getMultiClassProductService()->getProduct($fields['productId']);
             if (empty($course)) {
@@ -271,7 +317,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             }
         }
 
-        return $fields;
+        return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
     }
 
     /**
@@ -296,6 +342,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**

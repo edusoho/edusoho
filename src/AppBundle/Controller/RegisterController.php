@@ -227,7 +227,7 @@ class RegisterController extends BaseController
         $auth = $this->getSettingService()->get('auth');
 
         if (!empty($user['verifiedMobile'])) {
-            return $this->redirect($this->getTargetPath($request));
+            return $this->redirect(htmlspecialchars($this->getTargetPath($request)));
         }
 
         if ($auth && 'mobile' !== $auth['register_mode']
@@ -238,12 +238,12 @@ class RegisterController extends BaseController
                 'user' => $user,
                 'hash' => $hash,
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-                '_target_path' => $this->getTargetPath($request),
+                '_target_path' => htmlspecialchars($this->getTargetPath($request)),
             ]);
         }
         $this->authenticateUser($user);
 
-        return $this->redirect($this->getTargetPath($request));
+        return $this->redirect(htmlspecialchars($this->getTargetPath($request)));
     }
 
     public function emailVerifyAction(Request $request, $token)

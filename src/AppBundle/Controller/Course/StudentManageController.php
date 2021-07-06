@@ -8,6 +8,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -41,6 +42,8 @@ class StudentManageController extends BaseController
         if (!empty($keyword)) {
             $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($keyword);
         }
+
+        $conditions = $this->getAssistantStudentService()->filterAssistantConditions($conditions, $courseId);
 
         $paginator = new Paginator(
             $request,
@@ -609,6 +612,14 @@ class StudentManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     protected function getServiceKernel()

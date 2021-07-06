@@ -89,13 +89,13 @@ class MultiClassServiceTest extends BaseTestCase
         $this->assertCount(0, $assistants);
     }
 
-    public function testSearchMultiClass()
+    public function testSearchMultiClassJoinCourse()
     {
         $this->createMultiClass();
         $conditions = [
             'productId' => 1,
         ];
-        $searchMultiClass = $this->getMultiClassService()->searchMultiClass($conditions, [], 0, PHP_INT_MAX);
+        $searchMultiClass = $this->getMultiClassService()->searchMultiClassJoinCourse($conditions, [], 0, PHP_INT_MAX);
 
         $this->assertNotEmpty($searchMultiClass);
     }
@@ -154,6 +154,8 @@ class MultiClassServiceTest extends BaseTestCase
             'copyId' => 0,
             'teacherId' => $teacher['id'],
             'assistantIds' => [$assistant1['id'], $assistant2['id']],
+            'maxStudentNum' => 10,
+            'isReplayShow' => 1,
         ];
 
         return $this->getMultiClassService()->createMultiClass($fields);

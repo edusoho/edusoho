@@ -9,7 +9,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
-use Biz\ItemBankExercise\OperateReason;
+use Biz\SCRM\GoodsMediatorFactory;
 use Biz\User\Dao\UserDao;
 use ESCloud\SDK\Service\ScrmService;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,17 +36,11 @@ class CallbackController extends BaseController
             $this->authenticateUser($adminUser);
             $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
             $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
-            $courseMember = $this->getCourseMemberService()->getCourseMember($specs['targetId'], $existUser['id']);
-            if (empty($courseMember)) {
-                $data = [
-                    'price' => $orderInfo['payAmount'],
-                    'remark' => '通过SCRM添加',
-                    'source' => 'outside',
-                    'reason' => OperateReason::JOIN_BY_IMPORT,
-                    'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
-                ];
-                $this->getCourseMemberService()->becomeStudent($specs['targetId'], $existUser['id'], $data);
-            }
+            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+
+            $goodsMediatorFactory = $this->getGoodsMediatorFactory();
+            $mediator = $goodsMediatorFactory->create($goods['type']);
+            $mediator->join($existUser, $specs, ['userInfo' => $userInfo]);
         } catch (\Exception $e) {
             $this->authenticateUser([
                 'id' => 0,
@@ -67,7 +61,15 @@ class CallbackController extends BaseController
             $param['loginToken'] = $token;
         }
 
-        return $this->redirect($this->generateUrl('my_course_show', $param));
+        if ('course' === $goods['type']) {
+            $route = 'my_course_show';
+        } elseif ('classroom' === $goods['type']) {
+            $route = 'classroom_show';
+        } else {
+            $route = 'homepage';
+        }
+
+        return $this->redirect($this->generateUrl($route, $param));
     }
 
     protected function registerUser($userInfo)
@@ -153,5 +155,15 @@ class CallbackController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return GoodsMediatorFactory
+     */
+    protected function getGoodsMediatorFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['scrm_goods_mediator_factory'];
     }
 }

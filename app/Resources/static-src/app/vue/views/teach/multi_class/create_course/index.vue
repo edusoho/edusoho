@@ -1,11 +1,12 @@
 <template>
   <aside-layout :breadcrumbs="[{ name: '新建课程' }]" class="create-course">
+    <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="max-width: 860px;">
       <a-form-item label="课程类型">
         <a-radio-group
-          :options="[{ label: '普通课程', value: 'normal' }, { label: '直播课程', value: 'live' }]"
+          :options="[{ label: '直播大班课', value: 'live' }]"
           v-decorator="['type', {
-            initialValue: 'normal'
+            initialValue: 'live'
           }]"
         />
       </a-form-item>
@@ -24,6 +25,7 @@
           ref="upload"
           accept="image/*"
           :file-list="[]"
+          :customRequest="() => {}"
           list-type="picture-card"
           @change="uploadCourseCover"
         >
@@ -128,7 +130,7 @@
       </a-form-item>
       <a-form-item label="加入截止日期">
         <div style="overflow: hidden">
-          <a-radio-group class="pull-left mt3"
+          <a-radio-group class="pull-left mt12"
             :options="[{ label: '不限制', value: '0' }, { label: '自定义', value: '1' }]"
             v-decorator="['enableBuyExpiryTime', {
               initialValue: '0',
@@ -179,7 +181,7 @@
             v-decorator="['deadline', {
               rules: [{ validator: requiredValidator, message: '请输入截止日期' }]
             }]" />
-          <span class="ml2">在此日期前，学员可进行学习。</span>
+          <span class="ml8">在此日期前，学员可进行学习。</span>
         </a-form-item>
         <a-form-item v-else>
           <a-input
@@ -187,20 +189,20 @@
             v-decorator="['expiryDays', {
               rules: [{ required: true, message: '请输入有效期天数' }]
             }]" />
-          <span class="ml2">从加入当天起，在几天内可进行学习。</span>
+          <span class="ml8">从加入当天起，在几天内可进行学习。</span>
         </a-form-item>
       </a-form-item>
       <a-form-item v-if="form.getFieldValue('expiryMode') === 'date'"
         style="position: relative;left: 12.5%;overflow: hidden"
       >
         <a-form-item class="pull-left">
-          <span class="mr2">开始日期</span>
+          <span class="mr8">开始日期</span>
           <a-date-picker v-decorator="['expiryStartDate', {
             rules: [{ required: true, message: '请输入开始日期' }]
           }]" />
         </a-form-item>
-        <a-form-item class="pull-left ml3">
-          <span class="mr2">结束日期</span>
+        <a-form-item class="pull-left ml12">
+          <span class="mr8">结束日期</span>
           <a-date-picker v-decorator="['expiryEndDate', {
             rules: [{ required: true, message: '请输入结束日期' }]
           }]" />
@@ -214,12 +216,13 @@
     </div>
 
     <a-modal
+      :key='cropModal'
       :visible="cropModalVisible"
       @cancel="cropModalVisible = false;courseCoverUrl = ''">
       <vue-cropper
         ref="cropper"
         :aspect-ratio="16 / 9"
-        :src="courseCoverUrl"
+        :src="imgUrl"
       >
       </vue-cropper>
       <template slot="footer">
@@ -248,6 +251,7 @@
 
     data () {
       return {
+        cropModal: 0,
         form: this.$form.createForm(this),
         formInfo: {
           buyable: true,
@@ -273,6 +277,7 @@
           }
         },
         courseCoverUrl: '',
+        imgUrl: '',
         cropModalVisible: false,
         loading: false,
         editor: {},
@@ -331,11 +336,12 @@
           values = this.formatValues(values)
 
           try {
-            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title } = await CourseSet.add(values);
+            const { error, defaultCourseId: id, title: courseSetTitle, id: courseSetId, title, course } = await CourseSet.add(values);
 
             if (!error) {
-              this.$message.success('创建成功')
-              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle })
+              this.$message.success('创建成功');
+              let maxStudentNum = course.maxStudentNum;
+              this.goToMultiClassCreatePage({ id, title, courseSetId, courseSetTitle, maxStudentNum })
             }
           } finally {
             this.ajaxLoading = false;
@@ -485,14 +491,14 @@
       switchBuyAble(checked) {
         this.$set(this.formInfo, 'buyable', checked)
       },
+
       uploadCourseCover(info) {
+        this.cropModal += 1;
         const reader = new FileReader();
 
-        this.loading = true;
         reader.onload = (event) => {
-          this.courseCoverUrl = event.target.result;
+          this.imgUrl = event.target.result;
           this.cropModalVisible = true;
-          this.loading = false;
         };
 
         this.courseCoverName = info.file.originFileObj.name
@@ -508,6 +514,8 @@
         }
       },
       async saveCourseCover() {
+        this.loading = true;
+
         if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
           await this.getUploadToken()
         }
@@ -549,6 +557,7 @@
           try {
             const { url } = await File.uploadFile(formData)
 
+            this.imgUrl = url;
             this.courseCoverUrl = url;
 
             const formData1 = new FormData();
@@ -560,6 +569,7 @@
           } finally {
             this.uploading = false;
             this.cropModalVisible = false;
+            this.loading = false;
           }
         })
       },

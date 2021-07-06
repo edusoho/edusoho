@@ -55,7 +55,7 @@
 			<a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list" data-toggle="tooltip" title="{{'course.replay_manage.edit_btn'|trans}}"></span></a>
 		{% endif %}
 
-		{% if task.status == 'published' and task.isEnd  %}
+		{% if task.status == 'published' and task.isEnd and (not multiClass or multiClass.isReplayShow == 1)  %}
 			{% if live_can_record(activity.ext.liveId, activity.syncId) and activity.ext.replayStatus != 'videoGenerated' %}
 				<a class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}

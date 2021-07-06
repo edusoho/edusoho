@@ -37,7 +37,7 @@
 {% endblock %}
 {% block content %}
   {% set price = filter.price|default('all')%}
-  {% set orderBy = app.request.query.get('orderBy')|default('createdTime')%}
+  {% set orderBy = app.request.query.get('orderBy')|default(setting('classroom.explore_default_orderBy'))%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
   {% set subCategory = app.request.query.get('subCategory', '') %}
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}

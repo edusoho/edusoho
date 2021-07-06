@@ -1481,18 +1481,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $isAssistant = $this->getMemberService()->isCourseAssistant($courseId, $user->getId());
-        if ($isAssistant) {
-            $permission = $this->biz['assistant_permission'];
-            if (!empty($action) && $permission->hasActionPermission($action)) {
-                return true;
-            }
-
-            if (empty($action)) {
-                return true;
-            }
-
-            return false;
+        if ($this->getMemberService()->isCourseAssistant($courseId, $user->getId())) {
+            return true;
         }
 
         if ($course['parentId'] > 0) {

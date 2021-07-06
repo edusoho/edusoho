@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Controller\BaseController;
 use AppBundle\Util\AvatarAlert;
 use Biz\Course\Service\CourseSetService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -64,6 +65,19 @@ class CourseOrderController extends BaseController
                     'course' => $course,
                 ]
             );
+        }
+
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+        if (!empty($multiClass['maxStudentNum'])) {
+            $remainingStudentNum = $this->getMultiClassRemainStudentNum($multiClass, $course);
+            if ($remainingStudentNum <= 0) {
+                return $this->render(
+                    'course/order/remainless-modal.html.twig',
+                    [
+                        'course' => $course,
+                    ]
+                );
+            }
         }
 
         if (AvatarAlert::alertJoinCourse($user)) {
@@ -131,6 +145,25 @@ class CourseOrderController extends BaseController
         return $remainingStudentNum;
     }
 
+    protected function getMultiClassRemainStudentNum($multiClass, $course)
+    {
+        if ($course['price'] <= 0) {
+            $remainingStudentNum = $multiClass['maxStudentNum'] - $course['studentNum'];
+        } else {
+            $createdOrdersCount = $this->getOrderService()->countOrders(
+                [
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime('-30 minutes'),
+                ]
+            );
+            $remainingStudentNum = $multiClass['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
+        }
+
+        return $remainingStudentNum;
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -175,5 +208,13 @@ class CourseOrderController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 }
