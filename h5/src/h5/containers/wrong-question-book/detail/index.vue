@@ -6,19 +6,40 @@
       :duration="100"
       :loop="false"
       :show-indicators="false"
+      :lazy-render="true"
+      :initial-swipe="currentIndex"
       @change="onChange"
+      style="overflow-y: auto;"
     >
       <van-swipe-item
         v-for="(question, index) in questionList"
-        :key="question.id"
+        :key="question.id + index"
       >
         <question
           :total="pagination.total"
-          :order="(pagination.current - 1) * 20 + index + 1"
+          :order="index + 1"
           :question="question"
         />
       </van-swipe-item>
     </van-swipe>
+
+    <div class="paper-swiper">
+      <div
+        :class="['left-slide__btn', currentIndex == 0 ? 'slide-disabled' : '']"
+        @click="prev()"
+      >
+        <i class="iconfont icon-arrow-left" />
+      </div>
+      <div
+        :class="[
+          'right-slide__btn',
+          currentIndex == questionList.length - 1 ? 'slide-disabled' : '',
+        ]"
+        @click="next()"
+      >
+        <i class="iconfont icon-arrow-right" />
+      </div>
+    </div>
 
     <div class="question-foot">
       错题练习
@@ -27,6 +48,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
@@ -53,7 +75,9 @@ export default {
         current: 1,
         total: 0,
       },
+      finished: false,
       height: MaxHeight,
+      currentIndex: 0,
     };
   },
 
@@ -74,16 +98,42 @@ export default {
         },
         params: {
           targetType: this.targetType,
+          limit: 20,
+          offset: (this.pagination.current - 1) * 20,
         },
       }).then(res => {
         const { data, paging } = res;
-        this.questionList = data;
+        this.questionList = _.concat(this.questionList, data);
         this.pagination.total = paging.total;
+        this.finished = false;
+        if (_.size(this.questionList) >= paging.total) {
+          this.finished = true;
+        }
       });
     },
 
     onChange(index) {
-      console.log(index);
+      this.currentIndex = index;
+      const maxLength = _.size(this.questionList) - 3;
+      if (!this.finished && index >= maxLength) {
+        this.pagination.current++;
+        this.finished = true;
+        this.fetchWrongQuestion();
+      }
+    },
+
+    prev() {
+      if (this.currentIndex == 0) {
+        return;
+      }
+      this.$refs.swipe.swipeTo(this.currentIndex - 1);
+    },
+
+    next() {
+      if (this.currentIndex == this.questionList.length - 1) {
+        return;
+      }
+      this.$refs.swipe.swipeTo(this.currentIndex + 1);
     },
   },
 };
