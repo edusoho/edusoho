@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\WrongBook;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -20,27 +21,36 @@ class WrongBookBankExercise extends AbstractResource
             throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
         }
         $bankExercise = $this->getItemBankExerciseService()->getByQuestionBankId($pool['target_id']);
-        $exerciseModule = $this->getExerciseModuleService()->findByExerciseId($bankExercise['id']);
-        $exerciseTypes = ArrayToolkit::column($exerciseModule, 'type');
-
+        $exerciseModules = $this->getExerciseModuleService()->findByExerciseId($bankExercise['id']);
         $bankExerciseModule = [];
         $bankPool = $this->biz['wrong_question.exercise_pool'];
         $exerciseSource = $this->bankExerciseSourceConstant();
 
-        foreach ($exerciseTypes as $type) {
-            $condition['exerciseMediaType'] = $type = 'assessment' === $type ? 'testpaper' : 'chapter';
+        foreach ($exerciseModules as $module) {
+            $condition['exerciseMediaType'] = $type = 'assessment' === $module['type'] ? 'testpaper' : 'chapter';
             $condition['user_id'] = $pool['user_id'];
             $sceneId = $bankPool->prepareSceneIds($poolId, $condition);
             $wrongQuestionByScene = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndSceneIds($pool['user_id'], $sceneId);
             $typeCount = count(array_unique(ArrayToolkit::column($wrongQuestionByScene, 'collect_id')));
-            $bankExerciseModule[$type] = [
+            $bankExerciseModule[] = [
                 'type' => $type,
                 'module' => $exerciseSource[$type],
                 'wrong_number' => $typeCount,
+                'cover' => $this->transformImages($bankExercise['cover']),
             ];
         }
 
         return $bankExerciseModule;
+    }
+
+    protected function transformImages(&$images)
+    {
+        $defaultImg = 'item_bank_exercise.png';
+        $images['small'] = AssetHelper::getFurl(empty($images['small']) ? '' : $images['small'], $defaultImg);
+        $images['middle'] = AssetHelper::getFurl(empty($images['middle']) ? '' : $images['middle'], $defaultImg);
+        $images['large'] = AssetHelper::getFurl(empty($images['large']) ? '' : $images['large'], $defaultImg);
+
+        return $images;
     }
 
     protected function bankExerciseSourceConstant()
