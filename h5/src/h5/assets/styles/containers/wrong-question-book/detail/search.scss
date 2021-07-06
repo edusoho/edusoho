@@ -55,9 +55,10 @@
 		display: flex;
 		justify-content: space-around;
 		margin-top: vw(16);
-		padding-bottom: vw(16);
+		padding-bottom: vw(26);
 
 		&__item {
+			position: relative;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -76,12 +77,15 @@
 				font-size: vw(12);
 			}
 
-			.checked-active {
+			&.active::after {
+				position: absolute;
+				bottom: -10px;
 				width: vw(68);
 				height: vw(2);
 				margin-top: vw(8);
 				background: #03c777;
 				border-radius: vw(1);
+				content: "";
 			}
 		}
 	}

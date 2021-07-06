@@ -45,36 +45,37 @@
     </div>
 
     <div class="search-checked">
-      <div class="search-checked__item">
-        <div class="checked-title">全部计划</div>
-        <div class="checked-result">选择计划</div>
-        <div class="checked-active"></div>
-      </div>
-      <div class="search-checked__item">
-        <div class="checked-title">题目来源</div>
-        <div class="checked-result">选择题目来源</div>
-        <div class="checked-active"></div>
-      </div>
-      <div class="search-checked__item">
-        <div class="checked-title">任务名称</div>
-        <div class="checked-result">选择任务名称</div>
-        <div class="checked-active"></div>
+      <div
+        v-for="(condition, index) in conditions"
+        :key="index"
+        :class="['search-checked__item', { active: currentIndex == index }]"
+        @click="currentIndex = index"
+      >
+        <div class="checked-title">{{ condition.title }}</div>
+        <div class="checked-result">{{ condition.selectdText }}</div>
       </div>
     </div>
 
     <div class="search-select">
       <div class="search-select__toolbar">
-        {{ pickerTitle }}
-        <div class="search-select__confirm">确定</div>
+        {{ currentCondition.title }}
+        <div class="search-select__confirm" @click="onClickConfirm">确定</div>
       </div>
 
-      <van-picker :columns="columns" @change="onChange" />
+      <van-picker :columns="currentCondition.columns" @change="onChange" />
     </div>
   </van-popup>
 </template>
 
 <script>
+import _ from 'lodash';
 import Api from '@/api';
+
+const sources = {
+  testpaper: '考试任务',
+  homework: '作业任务',
+  exercise: '练习任务',
+};
 
 export default {
   name: 'CourseSearch',
@@ -95,9 +96,35 @@ export default {
     return {
       visible: this.show,
       sortType: 'default',
-      pickerTitle: '选择题目来源',
-      columns: ['杭州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州'],
+      currentIndex: 0,
+      selectdIndex: 0,
+      conditions: [
+        {
+          title: '选择计划',
+          columns: [],
+          courseId: 'default',
+          selectdText: '选择计划',
+        },
+        {
+          title: '选择题目来源',
+          columns: [],
+          courseMediaType: 'default',
+          selectdText: '选择题目来源',
+        },
+        {
+          title: '选择任务名称',
+          columns: [],
+          courseTaskId: 'default',
+          selectdText: '选择任务名称',
+        },
+      ],
     };
+  },
+
+  computed: {
+    currentCondition() {
+      return this.conditions[this.currentIndex];
+    },
   },
 
   watch: {
@@ -121,12 +148,34 @@ export default {
           poolId: this.poolId,
         },
       }).then(res => {
-        console.log(res);
+        const { plans, source, tasks } = res;
+
+        const newSource = [];
+
+        _.forEach(plans, item => {
+          item.text = item.title;
+        });
+
+        _.forEach(source, item => {
+          newSource.push({
+            type: item,
+            text: sources[item],
+          });
+        });
+
+        _.forEach(tasks, item => {
+          item.text = item.title;
+        });
+
+        this.conditions[0].columns = plans;
+        this.conditions[1].columns = newSource;
+        this.conditions[2].columns = tasks;
       });
     },
 
     onClickReset() {
-      console.log('onClickReset');
+      this.sortType = 'default';
+      this.currentType = 'plans';
     },
 
     onClickSearch() {
@@ -139,7 +188,31 @@ export default {
     },
 
     onChange(picker, value, index) {
-      console.log(value, index);
+      this.selectdIndex = index;
+    },
+
+    onClickConfirm() {
+      const value = this.currentCondition.columns[this.selectdIndex];
+
+      if (!_.size(value)) {
+        return;
+      }
+
+      this.currentCondition.selectdText = value.text;
+
+      if (this.currentIndex === 0) {
+        this.currentCondition.courseId = value.id;
+        return;
+      }
+
+      if (this.currentIndex === 1) {
+        this.currentCondition.courseMediaType = value.type;
+        return;
+      }
+
+      if (this.currentIndex === 2) {
+        this.currentCondition.courseTaskId = value.id;
+      }
     },
   },
 };
