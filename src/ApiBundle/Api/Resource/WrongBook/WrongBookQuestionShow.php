@@ -76,11 +76,13 @@ class WrongBookQuestionShow extends AbstractResource
     {
         $sources = [];
         $tempSceneIds = [];
+        $tempExercise = [];
         foreach ($wrongQuestionScenes as $wrongQuestion) {
             $itemId = $wrongQuestion['item_id'];
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
             $inItemScene = empty($tempSceneIds[$itemId]) ? [] : $tempSceneIds[$itemId];
+            $inSourceItem = empty($tempExercise[$itemId]) ? [] : $tempExercise[$itemId];
             if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
                 if (!in_array($sceneId, $inItemScene)) {
                     $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
@@ -98,7 +100,9 @@ class WrongBookQuestionShow extends AbstractResource
             } else {
                 $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($sceneId);
                 $exerciseSource = $this->bankExerciseSourceConstant();
-                $sources[$itemId][] = $exerciseSource[$exerciseModule['type']];
+                if (!in_array($exerciseSource[$exerciseModule['type']], $inSourceItem)) {
+                    $sources[$itemId][] = $tempExercise[$itemId][] = $exerciseSource[$exerciseModule['type']];
+                }
             }
         }
 
