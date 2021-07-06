@@ -41,6 +41,31 @@
       </div>
     </div>
 
+    <div class="question-search" @click="showSearch">筛选</div>
+
+    <van-popup
+      v-model="show"
+      round
+      position="bottom"
+      :style="{ height: '540px', padding: '6px 0' }"
+    >
+      <van-nav-bar
+        title="筛选"
+        @click-left="onClickReset"
+        @click-right="onClickSearch"
+      >
+        <template #left>
+          <span style="color: #333; font-size: 16px;">重置</span>
+        </template>
+        <template #right>
+          <span style="color: #03c777; font-size: 16px;">查看错题</span>
+        </template>
+      </van-nav-bar>
+      <van-divider style="margin-top: 4px;" />
+
+      <component :is="currentSearchComponent" />
+    </van-popup>
+
     <div class="question-foot">
       错题练习
     </div>
@@ -53,6 +78,9 @@ import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import Question from './Question/index.vue';
+import CourseSearch from './Search/Course.vue';
+import ClassroomSearch from './Search/Classroom.vue';
+import QuestionBankSearch from './Search/QuestionBank.vue';
 
 const NavBarHeight = 46;
 const FootHeight = 48;
@@ -64,6 +92,12 @@ export default {
 
   components: {
     Question,
+    // eslint-disable-next-line vue/no-unused-components
+    CourseSearch,
+    // eslint-disable-next-line vue/no-unused-components
+    ClassroomSearch,
+    // eslint-disable-next-line vue/no-unused-components
+    QuestionBankSearch,
   },
 
   data() {
@@ -78,7 +112,19 @@ export default {
       finished: false,
       height: MaxHeight,
       currentIndex: 0,
+      show: false,
+      searchComponents: {
+        course: 'CourseSearch',
+        classroom: 'ClassroomSearch',
+        exercise: 'QuestionBankSearch',
+      },
     };
+  },
+
+  computed: {
+    currentSearchComponent() {
+      return this.searchComponents[this.targetType];
+    },
   },
 
   created() {
@@ -134,6 +180,19 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex + 1);
+    },
+
+    showSearch() {
+      this.show = true;
+    },
+
+    onClickReset() {
+      console.log('onClickReset');
+    },
+
+    onClickSearch() {
+      this.show = false;
+      console.log('onClickSearch');
     },
   },
 };
