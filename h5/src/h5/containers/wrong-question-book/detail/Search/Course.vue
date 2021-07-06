@@ -43,6 +43,28 @@
         </div>
       </div>
     </div>
+
+    <div class="search-checked">
+      <div class="search-checked__item">
+        <div class="checked-title">题目来源</div>
+        <div class="checked-result">选择题目来源</div>
+        <div class="checked-active"></div>
+      </div>
+      <div class="search-checked__item">
+        <div class="checked-title">任务名称</div>
+        <div class="checked-result">选择任务名称</div>
+        <div class="checked-active"></div>
+      </div>
+    </div>
+
+    <div class="search-select">
+      <div class="search-select__toolbar">
+        {{ pickerTitle }}
+        <div class="search-select__confirm">确定</div>
+      </div>
+
+      <van-picker :columns="columns" @change="onChange" />
+    </div>
   </van-popup>
 </template>
 
@@ -61,6 +83,8 @@ export default {
     return {
       visible: this.show,
       sortType: 'default',
+      pickerTitle: '选择题目来源',
+      columns: ['杭州', '宁波', '温州', '绍兴', '湖州', '嘉兴', '金华', '衢州'],
     };
   },
 
@@ -86,6 +110,10 @@ export default {
 
     onClickSort(value) {
       this.sortType = value;
+    },
+
+    onChange(picker, value, index) {
+      console.log(value, index);
     },
   },
 };

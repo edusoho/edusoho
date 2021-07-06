@@ -50,4 +50,63 @@
 			}
 		}
 	}
+
+	.search-checked {
+		display: flex;
+		justify-content: space-around;
+		margin-top: vw(16);
+		padding-bottom: vw(16);
+
+		&__item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.checked-title {
+				color: #333;
+				font-weight: 500;
+				font-size: vw(16);
+			}
+
+			.checked-result {
+				margin-top: vw(8);
+				color: #666;
+				font-weight: 400;
+				font-size: vw(12);
+			}
+
+			.checked-active {
+				width: vw(68);
+				height: vw(2);
+				margin-top: vw(8);
+				background: #03c777;
+				border-radius: vw(1);
+			}
+		}
+	}
+
+	.search-select {
+		border-top: 8px solid #f5f5f5;
+
+		.search-select__toolbar {
+			position: relative;
+			height: vw(44);
+			color: #666;
+			font-weight: 400;
+			font-size: vw(16);
+			line-height: vw(44);
+			text-align: center;
+
+			.search-select__confirm {
+				position: absolute;
+				top: vw(10);
+				right: vw(16);
+				height: vw(24);
+				color: #03c777;
+				font-size: vw(16);
+				line-height: vw(24);
+			}
+		}
+	}
 }
