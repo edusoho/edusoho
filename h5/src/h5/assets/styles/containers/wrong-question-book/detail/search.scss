@@ -5,12 +5,49 @@
 	.search-reset {
 		color: #333;
 		font-weight: 500;
-		font-size: 16px;
+		font-size: vw(16);
 	}
 
 	.search-btn {
 		color: #03c777;
 		font-weight: 500;
-		font-size: 16px;
+		font-size: vw(16);
+	}
+
+	.search-sort {
+		padding: 0 vw(16);
+
+		&__title {
+			color: #333;
+			font-weight: 500;
+			font-size: vw(16);
+		}
+
+		&__btns {
+			display: flex;
+			justify-content: space-between;
+			margin-top: vw(12);
+
+			.sort-btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-sizing: border-box;
+				width: vw(104);
+				height: vw(32);
+				color: #666;
+				font-size: vw(14);
+				background: #f5f5f5;
+				border: 1px solid #f5f5f5;
+				border-radius: vw(16);
+				transition: all 0.3s ease;
+
+				&.active {
+					color: #03c777;
+					background: #ecfef4;
+					border: 1px solid #03c777;
+				}
+			}
+		}
 	}
 }

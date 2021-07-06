@@ -99,7 +99,7 @@ export default {
       finished: false,
       height: MaxHeight,
       currentIndex: 0,
-      show: false,
+      show: true,
       searchComponents: {
         course: 'CourseSearch',
         classroom: 'ClassroomSearch',
