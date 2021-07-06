@@ -29,14 +29,17 @@ class MeWrongBookCertainType extends AbstractResource
             $limit
         );
         $total = $this->service('WrongBook:WrongQuestionService')->countWrongBookPool($conditions);
+
+        $relationField = 'target_id';
         if ('exercise' == $type) {
             $type = 'item_bank_exercise';
             $wrongBookPools = $this->bankExchangeExercise($wrongBookPools);
+            $relationField = 'exercise_id';
         } elseif ('course' == $type) {
             $type = 'courseSet';
         }
 
-        $this->getOCUtil()->multiple($wrongBookPools, ['exercise_id'], $type, 'target_data');
+        $this->getOCUtil()->multiple($wrongBookPools, [$relationField], $type, 'target_data');
 
         return $this->makePagingObject($wrongBookPools, $total, $offset, $limit);
     }
