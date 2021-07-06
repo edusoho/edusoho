@@ -16,21 +16,23 @@ class WrongBookBankExercise extends AbstractResource
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
 
-        if (empty($pool)) {
+        if (empty($pool) || 'exercise' !== $pool['target_type']) {
             throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
         }
         $bankExercise = $this->getItemBankExerciseService()->getByQuestionBankId($pool['target_id']);
         $exerciseModule = $this->getExerciseModuleService()->findByExerciseId($bankExercise['id']);
-        $types = ArrayToolkit::column($exerciseModule, 'type');
+        $exerciseTypes = ArrayToolkit::column($exerciseModule, 'type');
 
-        $bankPool = $this->biz['wrong_question.exercise_pool'];
         $bankExerciseModule = [];
+        $bankPool = $this->biz['wrong_question.exercise_pool'];
         $exerciseSource = $this->bankExerciseSourceConstant();
 
-        foreach ($types as $type) {
+        foreach ($exerciseTypes as $type) {
             $condition['exerciseMediaType'] = $type = 'assessment' === $type ? 'testpaper' : 'chapter';
+            $condition['user_id'] = $pool['user_id'];
             $sceneId = $bankPool->prepareSceneIds($poolId, $condition);
-            $typeCount = $this->getWrongQuestionService()->countWrongQuestion(['answer_scene_id' => $sceneId]);
+            $wrongQuestionByScene = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndSceneIds($pool['user_id'], $sceneId);
+            $typeCount = count(array_unique(ArrayToolkit::column($wrongQuestionByScene, 'collect_id')));
             $bankExerciseModule[$type] = [
                 'type' => $type,
                 'module' => $exerciseSource[$type],
