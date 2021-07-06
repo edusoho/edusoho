@@ -4,13 +4,14 @@
 {% set course_side_nav = 'wrong-questions' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 
-{% do script([]) %}
+{% do script(['app/vue/views/course_manage/wrong_question/index.js']) %}
 
 {% block main_heading %}
   {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav,btnGroup:0} %}
 {% endblock %}
 
 {% block main_body %}
+  <input type="hidden" class="js-course-id" value="{{ course.id }}" />
   <div id="app">
   </div>
 {% endblock %}

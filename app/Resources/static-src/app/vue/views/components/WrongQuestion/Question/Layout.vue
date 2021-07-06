@@ -6,24 +6,16 @@
       <slot name="answer" />
     </div>
 
-    <a-divider v-if="questions.answer_mode !== 'text'" style="margin: 16px 0;" />
-
-    <right-answer v-if="questions.answer_mode !== 'text'" :question="question" />
-
-    <answer-result :question="question" />
+    <right-answer :question="question" />
 
     <analysis :analysis="questions.analysis" />
-
-    <situation :question="question" />
   </div>
 </template>
 
 <script>
 import Stem from 'app/vue/views/components/WrongQuestion/QuestionElement/Stem.vue';
 import RightAnswer from 'app/vue/views/components/WrongQuestion/QuestionElement/RightAnswer.vue';
-import AnswerResult from 'app/vue/views/components/WrongQuestion/QuestionElement/AnswerResult.vue';
 import Analysis from 'app/vue/views/components/WrongQuestion/QuestionElement/Analysis.vue';
-import Situation from 'app/vue/views/components/WrongQuestion/QuestionElement/Situation.vue';
 
 export default {
   name: 'question-layout',
@@ -31,9 +23,7 @@ export default {
   components: {
     Stem,
     RightAnswer,
-    AnswerResult,
-    Analysis,
-    Situation
+    Analysis
   },
 
   props: {
