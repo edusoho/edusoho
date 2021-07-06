@@ -69,12 +69,19 @@
 </template>
 
 <script>
+import Api from '@/api';
+
 export default {
   name: 'CourseSearch',
 
   props: {
     show: {
       type: Boolean,
+      required: true,
+    },
+
+    poolId: {
+      type: String,
       required: true,
     },
   },
@@ -98,7 +105,21 @@ export default {
     },
   },
 
+  created() {
+    this.fetchCondition();
+  },
+
   methods: {
+    fetchCondition() {
+      Api.getWrongQuestionCondition({
+        query: {
+          poolId: this.poolId,
+        },
+      }).then(res => {
+        console.log(res);
+      });
+    },
+
     onClickReset() {
       console.log('onClickReset');
     },

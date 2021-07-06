@@ -17,4 +17,10 @@ export default [
     url: '/wrong_books/{poolId}/question_show',
     method: 'GET',
   },
+  {
+    // 错题课程分类级联查询条件
+    name: 'getWrongQuestionCondition',
+    url: '/wrong_books/{poolId}/condition',
+    method: 'GET',
+  },
 ];

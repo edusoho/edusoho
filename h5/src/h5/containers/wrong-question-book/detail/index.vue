@@ -50,6 +50,7 @@
     <component
       :is="currentSearchComponent"
       :show="show"
+      :pool-id="targetId"
       @hidden-search="hiddenSearch"
     />
 
