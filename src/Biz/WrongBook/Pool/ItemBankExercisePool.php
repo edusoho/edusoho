@@ -61,10 +61,11 @@ class ItemBankExercisePool extends AbstractPool
         if ('testpaper' !== $conditions['exerciseMediaType']) {
             return [];
         }
-        $exerciseModule = $this->getExerciseModuleService()->findByExerciseIdAndType($targetId, 'assessment');
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($targetId);
+        $exerciseModule = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
         $moduleId = $exerciseModule[0]['id'];
         $sceneId = $exerciseModule[0]['answerSceneId'];
-        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByExerciseIdAndModuleId($targetId, $moduleId);
+        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByExerciseIdAndModuleId($exercise['id'], $moduleId);
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
 
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([

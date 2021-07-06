@@ -28,16 +28,15 @@
         notFoundContent="暂无数据"
         style="width: 120px;"
         v-model="form.testpaperId"
-        @change="(value) => handleChange(value, 'testpaperId')"
       >
         <a-select-option value="default">全部试卷</a-select-option>
 
         <a-select-option
           v-for="testpaper in conditions.testpapers"
-          :value="testpaper.id"
-          :key="testpaper.id"
+          :value="testpaper.assessmentId"
+          :key="testpaper.assessmentId"
         >
-          {{ testpaper.title }}
+          {{ testpaper.assessmentName }}
         </a-select-option>
       </a-select>
     </a-form-model-item>
@@ -147,7 +146,7 @@ export default {
           _.assign(this.form, {
             chapterId: 'default',
           });
-        }else if (exerciseMediaType === 'chapter') {
+        }else if (exerciseMediaType === 'testpaper') {
           _.assign(this.form, {
             testpaperId: 'default',
           });
@@ -182,6 +181,7 @@ export default {
       const result = await WrongBookCondition.get(params);
 
       result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
+      result.testpapers = result.testpaper;
 
       this.conditions = result;
     },
