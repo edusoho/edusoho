@@ -25,6 +25,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         return [
             'answer.submitted' => 'onAnswerSubmitted',
             'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
+            'wrong_question.batch_delete' => 'onWrongQuestionBatchDelete',
+            'item.delete' => 'onItemDelete',
+            'item.batchDelete' => 'onItemBatchDelete',
         ];
     }
 
@@ -39,12 +42,12 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
 
-        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
-        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
+        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports,'item_id');
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports,'item_id'));
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if ($item['type'] !== 'material') {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -69,9 +72,50 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $poolId = $event->getArgument('pool_id');
 
+        $this->updatePoolItemNum($poolId);
+    }
+
+    public function onWrongQuestionBatchDelete(Event $event)
+    {
+        $wrongQuestionCollects = $event->getSubject();
+
+        $poolIds = array_unique(ArrayToolkit::index($wrongQuestionCollects,'pool_id'));
+
+        foreach ($poolIds as $poolId) {
+            $this->updatePoolItemNum($poolId);
+        }
+
+    }
+
+    public function onItemDelete(Event $event)
+    {
+        $item = $event->getSubject();
+
+        if (!empty($item)) {
+            $this->getWrongQuestionService()->batchDeleteWrongQuestionByItemIds([$item['id']]);
+        }
+    }
+
+    public function onItemBatchDelete(Event $event)
+    {
+        $items = $event->getSubject();
+
+        if (!empty($items)) {
+            $this->getWrongQuestionService()->batchDeleteWrongQuestionByItemIds(ArrayToolkit::column($items, 'id'));
+        }
+    }
+
+    protected function updatePoolItemNum($poolId)
+    {
         $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId], [], 0, PHP_INT_MAX);
 
-        $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
+        $itemNum = count($poolCollects);
+
+        if ($itemNum === 0) {
+            $this->getWrongQuestionBookPoolDao()->delete($poolId);
+        }else {
+            $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
+        }
     }
 
     protected function getTestPaperId($answerRecord)

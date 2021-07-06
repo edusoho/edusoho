@@ -69,7 +69,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'wrong_question',
                 'create_wrong_question',
                 '批量创建错题',
-                ArrayToolkit::column($wrongQuestions, 'id')
+                $wrongQuestions
             );
 
             $this->commit();
@@ -130,8 +130,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         if (empty($userId) || empty($itemIds) || empty($sceneIds)) {
             return [];
         }
-
-        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds, $sceneIds);
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds,$sceneIds);
     }
 
     public function findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds)
@@ -139,8 +138,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         if (empty($userId) || empty($sceneIds)) {
             return [];
         }
-
-        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds);
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndSceneIds($userId,$sceneIds);
     }
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
@@ -223,6 +221,34 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         }
 
         $this->dispatchEvent('wrong_question.delete', $wrongExisted);
+    }
+
+    public function batchDeleteWrongQuestionByItemIds($itemIds)
+    {
+        try {
+            $this->beginTransaction();
+
+
+            $this->getWrongQuestionDao()->batchDelete(['item_ids' => $itemIds]);
+
+            $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemId($itemIds);
+
+            $this->getWrongQuestionCollectDao()->batchDelete(['item_ids' => $itemIds]);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'delete_wrong_question',
+                "原题目删除,错题本题目删除",
+                ['item_ids' => $itemIds]
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatchEvent('wrong_question.batch_delete',$wrongQuestionCollects);
     }
 
     public function findWrongQuestionBySceneIds($sceneIds)

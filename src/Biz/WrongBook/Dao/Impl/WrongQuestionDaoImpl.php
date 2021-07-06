@@ -156,6 +156,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'user_id = :user_id',
                 'user_id IN (:user_ids)',
                 'item_id = :item_id',
+                'item_id IN (:item_ids)',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',
