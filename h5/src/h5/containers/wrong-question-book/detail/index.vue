@@ -41,30 +41,17 @@
       </div>
     </div>
 
-    <div class="question-search" @click="showSearch">筛选</div>
+    <div class="question-search" @click="showSearch">
+      <van-icon name="filter-o" />
+      筛选
+    </div>
 
-    <van-popup
-      v-model="show"
-      round
-      position="bottom"
-      :style="{ height: '540px', padding: '6px 0' }"
-    >
-      <van-nav-bar
-        title="筛选"
-        @click-left="onClickReset"
-        @click-right="onClickSearch"
-      >
-        <template #left>
-          <span style="color: #333; font-size: 16px;">重置</span>
-        </template>
-        <template #right>
-          <span style="color: #03c777; font-size: 16px;">查看错题</span>
-        </template>
-      </van-nav-bar>
-      <van-divider style="margin-top: 4px;" />
-
-      <component :is="currentSearchComponent" />
-    </van-popup>
+    <!-- 筛选组件 -->
+    <component
+      :is="currentSearchComponent"
+      :show="show"
+      @hidden-search="hiddenSearch"
+    />
 
     <div class="question-foot">
       错题练习
@@ -186,13 +173,8 @@ export default {
       this.show = true;
     },
 
-    onClickReset() {
-      console.log('onClickReset');
-    },
-
-    onClickSearch() {
+    hiddenSearch() {
       this.show = false;
-      console.log('onClickSearch');
     },
   },
 };
