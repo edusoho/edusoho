@@ -21,7 +21,7 @@
       @favoriteEvent="favoriteEvent"
       @submitReturn="returnUrlGoto"
     >
-      <template slot="returnBtn">
+      <template slot="returnBtn" v-if="showReturnBtn">
         <div class="ibs-text-center ibs-mt16">
           <a-button type="primary" shape="round" @click="gotoReturnUrl">{{
               "返回错题本"
@@ -49,6 +49,7 @@
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
         showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
+        showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length
       };
     },
     created() {

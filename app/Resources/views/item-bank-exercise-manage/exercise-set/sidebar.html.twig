@@ -38,6 +38,13 @@
             {{ 'course.student_manage'|trans }}
           </a>
         </li>
+        {# 错题管理 #}
+        <li class="cd-sidebar__item {% if course_side_nav == 'wrong_questions' %}active{% endif %}">
+          <a
+            href="{{ path('item_bank_exercise_manage_wrong_questions', {exerciseId:exercise.id}) }}">
+            {{ '错题管理'|trans }}
+          </a>
+        </li>
       </div>
     </ul>
   </div>
