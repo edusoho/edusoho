@@ -115,3 +115,36 @@
 		}
 	}
 }
+
+.exercise-search {
+	box-sizing: border-box;
+	padding: 0 vw(16);
+	background: #fff;
+	border-radius: 10px 0 0 10px;
+
+	&__title {
+		padding: vw(16) 0;
+		color: #333;
+		font-weight: 500;
+		font-size: vw(16);
+	}
+
+	&__item {
+		display: flex;
+		justify-content: space-between;
+		padding-bottom: vw(24);
+	}
+
+	&__name {
+		max-width: vw(200);
+		color: #333;
+		font-weight: 400;
+		font-size: vw(14);
+	}
+
+	&__btn {
+		color: #03c777;
+		font-weight: 400;
+		font-size: vw(14);
+	}
+}

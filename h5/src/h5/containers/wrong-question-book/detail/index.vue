@@ -51,6 +51,7 @@
       :is="currentSearchComponent"
       :show="show"
       :pool-id="targetId"
+      :exercise-media-type="exerciseMediaType"
       @hidden-search="hiddenSearch"
       @on-search="onSearch"
     />
