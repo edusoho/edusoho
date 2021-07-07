@@ -555,6 +555,117 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertArrayHasKey('ext', $activities[0]);
     }
 
+    public function testFindActivitiesByCourseSetIdsAndType()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            [
+                [
+                    'functionName' => 'findActivitiesByCourseSetIdsAndType',
+                    'returnValue' => [
+                        [
+                        'id' => 1,
+                        'title' => 'title1',
+                        'mediaType' => 'homework',
+                        'fromCourseId' => 1,
+                        'fromCourseSetId' => 1,
+                        'mediaId' => 1,
+                        ],
+                        [
+                            'id' => 2,
+                            'title' => 'title2',
+                            'mediaType' => 'homework',
+                            'fromCourseId' => 2,
+                            'fromCourseSetId' => 2,
+                            'mediaId' => 1,
+                        ],
+                            ],
+                    'withParams' => [
+                        [1, 2],
+                        'homework',
+                    ],
+                ],
+            ]
+        );
+
+        $activities = $this->getActivityService()->findActivitiesByCourseSetIdsAndType([1, 2], 'homework', true);
+        $this->assertCount(2, $activities);
+    }
+
+    public function testFindActivitiesByCourseIdsAndType()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            [
+                [
+                    'functionName' => 'findActivitiesByCourseIdsAndType',
+                    'returnValue' => [
+                        [
+                            'id' => 1,
+                            'title' => 'title1',
+                            'mediaType' => 'homework',
+                            'fromCourseId' => 1,
+                            'fromCourseSetId' => 1,
+                            'mediaId' => 1,
+                        ],
+                        [
+                            'id' => 2,
+                            'title' => 'title2',
+                            'mediaType' => 'homework',
+                            'fromCourseId' => 2,
+                            'fromCourseSetId' => 2,
+                            'mediaId' => 1,
+                        ],
+                    ],
+                    'withParams' => [
+                        [1, 2],
+                        'homework',
+                    ],
+                ],
+            ]
+        );
+
+        $activities = $this->getActivityService()->findActivitiesByCourseIdsAndType([1, 2], 'homework', true);
+        $this->assertCount(2, $activities);
+    }
+
+    public function findActivitiesByCourseSetIdsAndTypes()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            [
+                [
+                    'functionName' => 'findActivitiesByCourseSetIdsAndTypes',
+                    'returnValue' => [
+                        [
+                            'id' => 1,
+                            'title' => 'title1',
+                            'mediaType' => 'homework',
+                            'fromCourseId' => 1,
+                            'fromCourseSetId' => 1,
+                            'mediaId' => 1,
+                        ],
+                        [
+                            'id' => 2,
+                            'title' => 'title2',
+                            'mediaType' => 'exercise',
+                            'fromCourseId' => 2,
+                            'fromCourseSetId' => 2,
+                            'mediaId' => 1,
+                        ],
+                    ],
+                    'withParams' => [
+                        [1, 2],
+                        ['homework', 'exercise'],
+                    ],
+                ],
+            ]
+        );
+
+        $activities = $this->getActivityService()->findActivitiesByCourseSetIdsAndTypes([1, 2], ['homework', 'exercise'], true);
+        $this->assertCount(2, $activities);
+    }
+
     public function testIsFinishedWithEndType()
     {
         $activity1 = [
