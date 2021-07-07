@@ -139,7 +139,7 @@ class ClassroomPool extends AbstractPool
             $courseSetIds = [$conditions['classroomCourseSetId']];
         }
         if (!empty($conditions['classroomMediaType'])) {
-            $mediaTypes = $conditions['classroomMediaType'];
+            $mediaTypes = [$conditions['classroomMediaType']];
         } else {
             $mediaTypes = $defaultMediaType;
         }

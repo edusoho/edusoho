@@ -62,27 +62,31 @@ class ItemBankExercisePool extends AbstractPool
             return [];
         }
         $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($targetId);
-        $exerciseModule = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
-        $moduleId = $exerciseModule[0]['id'];
-        $sceneId = $exerciseModule[0]['answerSceneId'];
-        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByExerciseIdAndModuleId($exercise['id'], $moduleId);
+        $exerciseModules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
+
+        $moduleIds = ArrayToolkit::column($exerciseModules, 'id');
+        $sceneIds = ArrayToolkit::column($exerciseModules, 'answerSceneId');
+        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByModuleIds($moduleIds);
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
 
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
             'user_id' => $this->getCurrentUser()->getId(),
-            'answer_scene_id' => $sceneId,
+            'answer_scene_ids' => $sceneIds,
             'testpaper_ids' => ArrayToolkit::column($assessmentExercises, 'assessmentId'),
         ], [], 0, PHP_INT_MAX);
         $wrongQuestionGroupAssessmentId = ArrayToolkit::group($wrongQuestions, 'testpaper_id');
 
         $assessmentSearch = [];
+        $tempAssessment = [];
         foreach ($assessmentExercises as $exercises) {
-            if (isset($wrongQuestionGroupAssessmentId[$exercises['assessmentId']])) {
+            $assessmentId = $exercises['assessmentId'];
+            if (isset($wrongQuestionGroupAssessmentId[$exercises['assessmentId']]) && !in_array($assessmentId, $tempAssessment)) {
                 $assessmentSearch[] = [
-                    'assessmentId' => $exercises['assessmentId'],
-                    'answerSceneId' => $sceneId,
+                    'assessmentId' => $assessmentId,
+                    'module' => $exercises['moduleId'],
                     'assessmentName' => $assessments[$exercises['assessmentId']]['name'],
                 ];
+                $tempAssessment[] = $assessmentId;
             }
         }
 
