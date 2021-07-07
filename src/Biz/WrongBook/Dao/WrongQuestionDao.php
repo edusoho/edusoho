@@ -12,7 +12,7 @@ interface WrongQuestionDao extends AdvancedDaoInterface
 
     public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns);
 
-    public function findWrongQuestionBySceneIds($items);
+    public function findWrongQuestionBySceneIds($sceneIds);
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit);
 
