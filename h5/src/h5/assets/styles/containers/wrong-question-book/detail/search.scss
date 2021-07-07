@@ -136,10 +136,13 @@
 	}
 
 	&__name {
+		display: flex;
+		align-items: center;
 		max-width: vw(200);
 		color: #333;
 		font-weight: 400;
 		font-size: vw(14);
+		line-height: vw(20);
 	}
 
 	&__btn {
@@ -147,4 +150,48 @@
 		font-weight: 400;
 		font-size: vw(14);
 	}
+}
+
+.first-chapter__bar,
+.second-chapter__bar,
+.third-chapter__bar {
+	position: relative;
+	top: vw(1);
+	display: inline-block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: vw(19);
+	height: vw(19);
+	padding-right: 5px;
+
+	span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.first-chapter__bar span {
+	width: 16px;
+	height: 16px;
+	color: #fff;
+	background-color: #03c777;
+	border-radius: 50%;
+}
+
+.second-chapter__bar span {
+	width: 15px;
+	height: 15px;
+	color: #fff;
+	background-color: #03c777;
+	border-radius: 50%;
+}
+
+.third-chapter__bar span {
+	width: 10px;
+	height: 10px;
+	color: #fff;
+	background-color: #03c777;
+	border-radius: 50%;
 }

@@ -11,6 +11,8 @@
   >
     <div class="exercise-search">
       <div class="exercise-search__title">题目来源</div>
+
+      <!-- 考试筛选 -->
       <template v-if="exerciseMediaType === 'testpaper'">
         <div
           class="exercise-search__item"
@@ -28,14 +30,82 @@
           </div>
         </div>
       </template>
+
+      <!-- 章节筛选 -->
       <template v-else>
-        fsd
+        <div
+          class="first-chapter"
+          v-for="firstChapter in chapterData"
+          :key="firstChapter.id"
+        >
+          <div class="exercise-search__item">
+            <div class="exercise-search__name text-overflow">
+              <span class="first-chapter__bar">
+                <span>{{ firstChapter.status ? '-' : '+' }}</span>
+              </span>
+              {{ firstChapter.name }}
+            </div>
+            <div
+              class="exercise-search__btn"
+              @click="onClickSearch({ chapterId: firstChapter.id })"
+            >
+              查看错题
+            </div>
+          </div>
+
+          <template v-if="firstChapter.children.length">
+            <div
+              class="second-chapter"
+              v-for="secondChapter in firstChapter.children"
+              :key="secondChapter.id"
+            >
+              <div class="exercise-search__item">
+                <div class="exercise-search__name text-overflow">
+                  <span class="second-chapter__bar">
+                    <span>{{ secondChapter.status ? '-' : '+' }}</span>
+                  </span>
+                  {{ secondChapter.name }}
+                </div>
+                <div
+                  class="exercise-search__btn"
+                  @click="onClickSearch({ chapterId: secondChapter.id })"
+                >
+                  查看错题
+                </div>
+              </div>
+
+              <template v-if="secondChapter.children.length">
+                <div
+                  class="third-chapter"
+                  v-for="thirdChapter in secondChapter.children"
+                  :key="thirdChapter.id"
+                >
+                  <div class="exercise-search__item">
+                    <div class="exercise-search__name text-overflow">
+                      <span class="third-chapter__bar">
+                        <span></span>
+                      </span>
+                      {{ thirdChapter.name }}
+                    </div>
+                    <div
+                      class="exercise-search__btn"
+                      @click="onClickSearch({ chapterId: thirdChapter.id })"
+                    >
+                      查看错题
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
       </template>
     </div>
   </van-popup>
 </template>
 
 <script>
+import _ from 'lodash';
 import Api from '@/api';
 
 export default {
@@ -90,8 +160,21 @@ export default {
           exerciseMediaType: this.exerciseMediaType,
         },
       }).then(res => {
-        this.chapterData = res.chapter;
-        this.testpaperData = res.testpaper;
+        const { chapter, testpaper } = res;
+
+        const loop = data => {
+          _.forEach(data, item => {
+            item.status = true;
+            if (item.children) {
+              loop(item.children);
+            }
+          });
+        };
+
+        loop(chapter);
+
+        this.chapterData = chapter;
+        this.testpaperData = testpaper;
       });
     },
 
