@@ -75,6 +75,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->findByFields(['courseId' => $courseId, 'categoryId' => $categoryId]);
     }
 
+    public function findByCourseIdAndType($courseId, $type)
+    {
+        return $this->findByFields(['courseId' => $courseId, 'type' => $type]);
+    }
+
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";

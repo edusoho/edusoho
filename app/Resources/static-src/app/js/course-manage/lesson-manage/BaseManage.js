@@ -273,6 +273,7 @@ export default class Manage {
     });
     $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {});
     this.sortablelist();
+    window.location.reload();
   }
 
   setShowNum($parentLi) {

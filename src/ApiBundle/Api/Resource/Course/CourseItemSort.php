@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -20,11 +21,17 @@ class CourseItemSort extends AbstractResource
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $sortInfos = $request->request->get('sortInfos');
+        $sortInfos = $this->getCourseService()->courseItemIdsHandle($courseId, $sortInfos);
         $this->getCourseService()->sortCourseItems($courseId, $sortInfos);
+
+        $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $sortInfos);
 
         return ['success' => true];
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
