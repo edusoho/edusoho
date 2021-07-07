@@ -44,7 +44,7 @@
               @click="onClickChange(firstChapter.id)"
             >
               <span class="first-chapter__bar">
-                <span>
+                <span class="round-ball">
                   <span>{{ firstChapter.status ? '-' : '+' }}</span>
                 </span>
               </span>
@@ -73,7 +73,7 @@
                   @click="onClickChange(secondChapter.id)"
                 >
                   <span class="second-chapter__bar">
-                    <span>
+                    <span class="round-ball">
                       <span>{{ secondChapter.status ? '-' : '+' }}</span>
                     </span>
                   </span>
@@ -102,7 +102,7 @@
                       @click="onClickChange(thirdChapter.id)"
                     >
                       <span class="third-chapter__bar">
-                        <span></span>
+                        <span class="round-ball"></span>
                       </span>
                       {{ thirdChapter.name }}
                     </div>

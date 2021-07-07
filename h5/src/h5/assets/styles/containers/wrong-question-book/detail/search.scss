@@ -165,7 +165,7 @@
 	height: vw(19);
 	padding-right: 5px;
 
-	> span {
+	.round-ball {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -177,7 +177,7 @@
 	}
 }
 
-.first-chapter__bar > span {
+.first-chapter__bar .round-ball {
 	width: 16px;
 	height: 16px;
 	color: #fff;
@@ -185,7 +185,7 @@
 	border-radius: 50%;
 }
 
-.second-chapter__bar > span {
+.second-chapter__bar .round-ball {
 	width: 15px;
 	height: 15px;
 	color: #fff;
@@ -193,7 +193,7 @@
 	border-radius: 50%;
 }
 
-.third-chapter__bar > span {
+.third-chapter__bar .round-ball {
 	width: 10px;
 	height: 10px;
 	color: #fff;
