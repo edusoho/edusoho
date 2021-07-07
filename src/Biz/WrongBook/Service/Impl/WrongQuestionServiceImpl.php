@@ -130,7 +130,8 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         if (empty($userId) || empty($itemIds) || empty($sceneIds)) {
             return [];
         }
-        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds,$sceneIds);
+
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds, $sceneIds);
     }
 
     public function findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds)
@@ -138,7 +139,8 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         if (empty($userId) || empty($sceneIds)) {
             return [];
         }
-        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndSceneIds($userId,$sceneIds);
+
+        return $this->getWrongQuestionDao()->findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds);
     }
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
@@ -227,18 +229,19 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     {
         try {
             $this->beginTransaction();
+            $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemIds($itemIds);
 
+            if (empty($wrongQuestionCollects)) {
+                return;
+            }
 
             $this->getWrongQuestionDao()->batchDelete(['item_ids' => $itemIds]);
-
-            $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemId($itemIds);
-
             $this->getWrongQuestionCollectDao()->batchDelete(['item_ids' => $itemIds]);
 
             $this->getLogService()->info(
                 'wrong_question',
                 'delete_wrong_question',
-                "原题目删除,错题本题目删除",
+                '错题本题目清除',
                 ['item_ids' => $itemIds]
             );
 
@@ -248,7 +251,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrong_question.batch_delete',$wrongQuestionCollects);
+        $this->dispatchEvent('wrong_question.batch_delete', $wrongQuestionCollects);
     }
 
     public function findWrongQuestionBySceneIds($sceneIds)

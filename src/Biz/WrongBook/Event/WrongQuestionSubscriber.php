@@ -42,12 +42,12 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
 
-        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports,'item_id');
-        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports,'item_id'));
+        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ($item['type'] !== 'material') {
+            if ('material' !== $item['type']) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -79,12 +79,11 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     {
         $wrongQuestionCollects = $event->getSubject();
 
-        $poolIds = array_unique(ArrayToolkit::index($wrongQuestionCollects,'pool_id'));
+        $poolIds = array_unique(ArrayToolkit::column($wrongQuestionCollects, 'pool_id'));
 
         foreach ($poolIds as $poolId) {
             $this->updatePoolItemNum($poolId);
         }
-
     }
 
     public function onItemDelete(Event $event)
@@ -111,9 +110,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $itemNum = count($poolCollects);
 
-        if ($itemNum === 0) {
+        if (0 === $itemNum) {
             $this->getWrongQuestionBookPoolDao()->delete($poolId);
-        }else {
+        } else {
             $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
         }
     }
