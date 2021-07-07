@@ -199,6 +199,11 @@ export default {
 
     onClickSort(value) {
       this.sortType = value;
+      if (value === 'default') {
+        delete this.searchParams.wrongTimesSort;
+        return;
+      }
+      this.searchParams.wrongTimesSort = value;
     },
 
     onChange(picker, value, index) {
