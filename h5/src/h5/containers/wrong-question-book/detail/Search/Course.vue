@@ -58,7 +58,7 @@
 
     <div class="search-select">
       <div class="search-select__toolbar">
-        {{ currentCondition.title }}
+        {{ currentCondition.placeholder }}
         <div class="search-select__confirm" @click="onClickConfirm">确定</div>
       </div>
 
@@ -82,6 +82,30 @@ const sources = {
   exercise: '练习任务',
 };
 
+const defaultConditions = [
+  {
+    title: '全部计划',
+    placeholder: '选择计划',
+    columns: [],
+    selectdText: '选择计划',
+    selectdIndex: 0,
+  },
+  {
+    title: '题目来源',
+    placeholder: '选择题目来源',
+    columns: [],
+    selectdText: '选择题目来源',
+    selectdIndex: 0,
+  },
+  {
+    title: '任务名称',
+    placeholder: '选择任务名称',
+    columns: [],
+    selectdText: '选择任务名称',
+    selectdIndex: 0,
+  },
+];
+
 export default {
   name: 'CourseSearch',
 
@@ -103,26 +127,7 @@ export default {
       sortType: 'default',
       currentIndex: 0,
       searchParams: {},
-      conditions: [
-        {
-          title: '选择计划',
-          columns: [],
-          selectdText: '选择计划',
-          selectdIndex: 0,
-        },
-        {
-          title: '选择题目来源',
-          columns: [],
-          selectdText: '选择题目来源',
-          selectdIndex: 0,
-        },
-        {
-          title: '选择任务名称',
-          columns: [],
-          selectdText: '选择任务名称',
-          selectdIndex: 0,
-        },
-      ],
+      conditions: _.assign({}, defaultConditions),
     };
   },
 
@@ -183,12 +188,7 @@ export default {
       this.sortType = 'default';
       this.currentIndex = 0;
       this.searchParams = {};
-      this.conditions[0].selectdIndex = 0;
-      this.conditions[0].selectdText = '选择计划';
-      this.conditions[1].selectdIndex = 0;
-      this.conditions[1].selectdText = '选择题目来源';
-      this.conditions[2].selectdIndex = 0;
-      this.conditions[2].selectdText = '选择任务名称';
+      this.conditions = _.assign({}, defaultConditions);
       this.fetchCondition();
     },
 
