@@ -75,12 +75,12 @@ class CoursePool extends AbstractPool
         $activitys = [];
         $allActivitys = [];
         foreach ($answerSceneIds as $answerSceneId) {
-            $activity= $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
-            $allActivitys[] =$activity;
-            if(isset($conditions['courseId']) && $conditions['courseId']!=$activity['fromCourseId']){
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+            $allActivitys[] = $activity;
+            if (isset($conditions['courseId']) && $conditions['courseId'] != $activity['fromCourseId']) {
                 continue;
             }
-            $activitys[] =$activity;
+            $activitys[] = $activity;
         }
         $coursesIds = array_unique(ArrayToolkit::column($allActivitys, 'fromCourseId'));
 
@@ -98,7 +98,7 @@ class CoursePool extends AbstractPool
         $newTasks = [];
         foreach ($activityIds as $activityId) {
             if (!empty($tasks[$activityId])) {
-                $newTasks[]  = $tasks[$activityId];
+                $newTasks[] = $tasks[$activityId];
             }
         }
 
@@ -109,12 +109,12 @@ class CoursePool extends AbstractPool
         return $result;
     }
 
-    protected function handleArray($data, $fields,$type='')
+    protected function handleArray($data, $fields, $type = '')
     {
         $newData = [];
         foreach ($data as $key => $value) {
             foreach ($fields as $k => $field) {
-                $newData[$key][$field] = (empty($value[$field]) && isset($value['courseSetTitle']))?$value['courseSetTitle']:$value[$field];
+                $newData[$key][$field] = (empty($value[$field]) && isset($value['courseSetTitle'])) ? $value['courseSetTitle'] : $value[$field];
             }
         }
 
@@ -134,6 +134,7 @@ class CoursePool extends AbstractPool
         } else {
             $conditions['types'] = ['testpaper', 'exercise', 'homework'];
         }
+
         return $conditions;
     }
 
