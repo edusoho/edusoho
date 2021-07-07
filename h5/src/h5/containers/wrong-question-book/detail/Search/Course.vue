@@ -82,30 +82,6 @@ const sources = {
   exercise: '练习任务',
 };
 
-const defaultConditions = [
-  {
-    title: '全部计划',
-    placeholder: '选择计划',
-    columns: [],
-    selectdText: '选择计划',
-    selectdIndex: 0,
-  },
-  {
-    title: '题目来源',
-    placeholder: '选择题目来源',
-    columns: [],
-    selectdText: '选择题目来源',
-    selectdIndex: 0,
-  },
-  {
-    title: '任务名称',
-    placeholder: '选择任务名称',
-    columns: [],
-    selectdText: '选择任务名称',
-    selectdIndex: 0,
-  },
-];
-
 export default {
   name: 'CourseSearch',
 
@@ -127,7 +103,29 @@ export default {
       sortType: 'default',
       currentIndex: 0,
       searchParams: {},
-      conditions: _.assign({}, defaultConditions),
+      conditions: [
+        {
+          title: '全部计划',
+          placeholder: '选择计划',
+          columns: [],
+          selectdText: '选择计划',
+          selectdIndex: 0,
+        },
+        {
+          title: '题目来源',
+          placeholder: '选择题目来源',
+          columns: [],
+          selectdText: '选择题目来源',
+          selectdIndex: 0,
+        },
+        {
+          title: '任务名称',
+          placeholder: '选择任务名称',
+          columns: [],
+          selectdText: '选择任务名称',
+          selectdIndex: 0,
+        },
+      ],
     };
   },
 
@@ -161,12 +159,11 @@ export default {
       }).then(res => {
         const { plans, source, tasks } = res;
 
-        const newSource = [];
-
         _.forEach(plans, item => {
           item.text = item.title;
         });
 
+        const newSource = [];
         _.forEach(source, item => {
           newSource.push({
             type: item,
@@ -188,7 +185,13 @@ export default {
       this.sortType = 'default';
       this.currentIndex = 0;
       this.searchParams = {};
-      this.conditions = _.assign({}, defaultConditions);
+
+      this.conditions[0].selectdIndex = 0;
+      this.conditions[1].selectdIndex = 0;
+      this.conditions[2].selectdIndex = 0;
+      this.conditions[0].selectdText = '选择计划';
+      this.conditions[1].selectdText = '选择题目来源';
+      this.conditions[2].selectdText = '选择任务名称';
       this.fetchCondition();
     },
 
