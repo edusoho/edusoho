@@ -3,7 +3,7 @@
 {% do script(['libs/perfect-scrollbar.js','downloadactivity/js/show/index.js']) %}
 
 {% block body %}
-    {% set materials = find_materials_by_lessonId_id_and_source(activity.id, 'coursematerial') %}
+    {% set materials = find_materials_by_activity_id_and_source(activity.id, 'coursematerial') %}
     {% set download = activity.ext %}
     <div class="iframe-parent-content iframe-parent-full" id="download-activity">
         <ul class="download-activity-list">

@@ -31,17 +31,7 @@ class MaterialExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('find_materials_by_activity_id_and_source', [$this, 'findMaterialsByActivityIdAndSource']),
-            new \Twig_SimpleFunction('find_materials_by_lessonId_id_and_source', [$this, 'findMaterialsByLessonIdAndSource']),
         ];
-    }
-
-    public function findMaterialsByLessonIdAndSource($activityId, $source)
-    {
-        if (empty($activityId)) {
-            return [];
-        }
-
-        return $this->getMaterialService()->findMaterialsByLessonIdAndSource($activityId, $source);
     }
 
     public function findMaterialsByActivityIdAndSource($activityId, $source)
@@ -57,7 +47,7 @@ class MaterialExtension extends \Twig_Extension
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        if (isset($activity['ext']['fileIds']) && $activity['ext']['fileIds'][0] != 0) {
+        if (isset($activity['ext']['fileIds']) && $activity['mediaType'] === 'live') {
             $conditions['fileIds'] = $activity['ext']['fileIds'] ?: [-1];
         }
 
