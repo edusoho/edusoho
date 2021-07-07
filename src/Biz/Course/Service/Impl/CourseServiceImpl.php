@@ -47,7 +47,6 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
-use function Clue\StreamFilter\fun;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
