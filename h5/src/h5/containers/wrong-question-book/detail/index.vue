@@ -97,10 +97,12 @@ export default {
       pagination: {
         current: 1,
         total: 0,
+        pageSize: 20,
       },
       finished: false,
       height: MaxHeight,
       currentIndex: 0,
+      searchParams: {},
       show: true,
       searchComponents: {
         course: 'CourseSearch',
@@ -127,14 +129,16 @@ export default {
     }),
 
     fetchWrongQuestion() {
+      const { current, pageSize } = this.pagination;
       Api.getWrongBooksQuestionShow({
         query: {
           poolId: this.targetId,
         },
         params: {
           targetType: this.targetType,
-          limit: 20,
-          offset: (this.pagination.current - 1) * 20,
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+          ...this.searchParams,
         },
       }).then(res => {
         const { data, paging } = res;
@@ -180,7 +184,10 @@ export default {
     },
 
     onSearch(params) {
-      console.log(params);
+      this.searchParams = params;
+      this.questionList = [];
+      this.pagination.current = 1;
+      this.fetchWrongQuestion();
     },
   },
 };

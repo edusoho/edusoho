@@ -62,7 +62,12 @@
         <div class="search-select__confirm" @click="onClickConfirm">确定</div>
       </div>
 
-      <van-picker :columns="currentCondition.columns" @change="onChange" />
+      <van-picker
+        :swipe-duration="500"
+        :columns="currentCondition.columns"
+        :default-index="currentCondition.selectdIndex"
+        @change="onChange"
+      />
     </div>
   </van-popup>
 </template>
@@ -97,23 +102,25 @@ export default {
       visible: this.show,
       sortType: 'default',
       currentIndex: 0,
-      selectdIndex: 0,
       searchParams: {},
       conditions: [
         {
           title: '选择计划',
           columns: [],
           selectdText: '选择计划',
+          selectdIndex: 0,
         },
         {
           title: '选择题目来源',
           columns: [],
           selectdText: '选择题目来源',
+          selectdIndex: 0,
         },
         {
           title: '选择任务名称',
           columns: [],
           selectdText: '选择任务名称',
+          selectdIndex: 0,
         },
       ],
     };
@@ -145,6 +152,7 @@ export default {
         query: {
           poolId: this.poolId,
         },
+        params: this.searchParams,
       }).then(res => {
         const { plans, source, tasks } = res;
 
@@ -173,7 +181,15 @@ export default {
 
     onClickReset() {
       this.sortType = 'default';
-      this.currentType = 'plans';
+      this.currentIndex = 0;
+      this.searchParams = {};
+      this.conditions[0].selectdIndex = 0;
+      this.conditions[0].selectdText = '选择计划';
+      this.conditions[1].selectdIndex = 0;
+      this.conditions[1].selectdText = '选择题目来源';
+      this.conditions[2].selectdIndex = 0;
+      this.conditions[2].selectdText = '选择任务名称';
+      this.fetchCondition();
     },
 
     onClickSearch() {
@@ -186,11 +202,12 @@ export default {
     },
 
     onChange(picker, value, index) {
-      this.selectdIndex = index;
+      this.currentCondition.selectdIndex = index;
     },
 
     onClickConfirm() {
-      const value = this.currentCondition.columns[this.selectdIndex];
+      const { selectdIndex, columns } = this.currentCondition;
+      const value = columns[selectdIndex];
 
       if (!_.size(value)) {
         return;
@@ -200,17 +217,22 @@ export default {
 
       if (this.currentIndex === 0) {
         this.searchParams.courseId = value.id;
-        return;
-      }
-
-      if (this.currentIndex === 1) {
+        this.conditions[1].selectdIndex = 0;
+        this.conditions[1].selectdText = '选择题目来源';
+        this.conditions[2].selectdIndex = 0;
+        this.conditions[2].selectdText = '选择任务名称';
+        delete this.searchParams.courseMediaType;
+        delete this.searchParams.courseTaskId;
+      } else if (this.currentIndex === 1) {
         this.searchParams.courseMediaType = value.type;
-        return;
-      }
-
-      if (this.currentIndex === 2) {
+        this.conditions[2].selectdIndex = 0;
+        this.conditions[2].selectdText = '选择任务名称';
+        delete this.searchParams.courseTaskId;
+      } else if (this.currentIndex === 2) {
         this.searchParams.courseTaskId = value.id;
       }
+
+      this.fetchCondition();
     },
   },
 };
