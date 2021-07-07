@@ -1,7 +1,7 @@
 {% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'错题管理'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/item-bank-exercise/students/manage/index.js']) %}
+{% do script(['app/vue/views/item_bank_exercise_manage/wrong_question/index.js']) %}
 {% set course_side_nav = 'wrong_questions' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}
@@ -9,4 +9,7 @@
 {% endblock %}
 
 {% block main_body %}
+  <input type="hidden" class="js-item-bank-id" value="{{ questionBank.id }}" />
+  <div id="app">
+  </div>
 {% endblock %}
