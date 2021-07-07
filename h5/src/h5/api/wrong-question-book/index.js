@@ -23,4 +23,10 @@ export default [
     url: '/wrong_books/{poolId}/condition',
     method: 'GET',
   },
+  {
+    // 题库练习-章节、试卷练习数量详情
+    name: 'getWrongQuestionExercise',
+    url: '/wrong_books/{poolId}/bank_exercise',
+    method: 'GET',
+  },
 ];

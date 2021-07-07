@@ -93,6 +93,7 @@ export default {
     return {
       targetType: this.$route.params.type,
       targetId: this.$route.params.id,
+      exerciseMediaType: this.$route.query.type,
       questionList: [],
       pagination: {
         current: 1,
@@ -138,6 +139,7 @@ export default {
           targetType: this.targetType,
           limit: pageSize,
           offset: (current - 1) * pageSize,
+          exerciseMediaType: this.exerciseMediaType,
           ...this.searchParams,
         },
       }).then(res => {
