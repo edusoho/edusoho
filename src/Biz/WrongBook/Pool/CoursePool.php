@@ -66,7 +66,14 @@ class CoursePool extends AbstractPool
         $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         $conditions = $this->handleConditions($conditions);
         $tasks = $this->getCourseTaskService()->searchTasks($conditions, [], 0, PHP_INT_MAX);
-
+        $taskTypes = array_values(array_unique(ArrayToolkit::column($tasks, 'type')));
+        if(isset($conditions['courseMediaType'])){
+            foreach ($tasks as $key=>$task){
+                if($task['type']!=$conditions['courseMediaType']){
+                    unset($tasks[$key]);
+                }
+            }
+        }
         $collects = $this->getWrongQuestionCollectDao()->getCollectBYPoolId($pool['id']);
         $collectIds = array_unique(ArrayToolkit::column($collects, 'id'));
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => $collectIds], [], 0, PHP_INT_MAX);
@@ -77,6 +84,7 @@ class CoursePool extends AbstractPool
             $activitys[] = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
         }
         $coursesIds = array_unique(ArrayToolkit::column($activitys, 'fromCourseId'));
+
         $courses = ArrayToolkit::index($courses, 'id');
         $tasks = ArrayToolkit::index($tasks, 'activityId');
         $activityIds = ArrayToolkit::column($activitys, 'id');
@@ -92,8 +100,9 @@ class CoursePool extends AbstractPool
                 $newTasks[] = $tasks[$activityId];
             }
         }
+
         $result['plans'] = $this->handleArray($newCourses, ['id', 'title']);
-        $result['source'] = array_unique(ArrayToolkit::column($newTasks, 'type'));
+        $result['source'] = $taskTypes;
         $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
 
         return $result;
@@ -118,17 +127,7 @@ class CoursePool extends AbstractPool
         } else {
             unset($conditions['courseIds']);
         }
-        if (!empty($conditions['courseMediaType'])) {
-            $conditions['type'] = $conditions['courseMediaType'];
-            unset($conditions['courseMediaType']);
-        } else {
-            $conditions['types'] = ['testpaper', 'exercise', 'homework'];
-        }
-        if (!empty($conditions['courseTaskId'])) {
-            $conditions['id'] = $conditions['courseTaskId'];
-            unset($conditions['courseTaskId']);
-        }
-
+        $conditions['types'] = ['testpaper', 'exercise', 'homework'];
         return $conditions;
     }
 
