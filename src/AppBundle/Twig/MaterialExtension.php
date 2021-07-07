@@ -47,7 +47,7 @@ class MaterialExtension extends \Twig_Extension
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        if (isset($activity['ext']['fileIds'])) {
+        if (isset($activity['ext']['fileIds']) && $activity['ext']['fileIds'][0] != 0) {
             $conditions['fileIds'] = $activity['ext']['fileIds'] ?: [-1];
         }
 
