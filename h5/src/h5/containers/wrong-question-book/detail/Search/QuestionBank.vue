@@ -39,9 +39,14 @@
           :key="firstChapter.id"
         >
           <div class="exercise-search__item">
-            <div class="exercise-search__name text-overflow">
+            <div
+              class="exercise-search__name text-overflow"
+              @click="onClickChange(firstChapter.id)"
+            >
               <span class="first-chapter__bar">
-                <span>{{ firstChapter.status ? '-' : '+' }}</span>
+                <span>
+                  <span>{{ firstChapter.status ? '-' : '+' }}</span>
+                </span>
               </span>
               {{ firstChapter.name }}
             </div>
@@ -53,16 +58,24 @@
             </div>
           </div>
 
-          <template v-if="firstChapter.children.length">
+          <div
+            v-if="firstChapter.children.length"
+            :class="firstChapter.status ? '' : 'hidden-chapter-children'"
+          >
             <div
               class="second-chapter"
               v-for="secondChapter in firstChapter.children"
               :key="secondChapter.id"
             >
               <div class="exercise-search__item">
-                <div class="exercise-search__name text-overflow">
+                <div
+                  class="exercise-search__name text-overflow"
+                  @click="onClickChange(secondChapter.id)"
+                >
                   <span class="second-chapter__bar">
-                    <span>{{ secondChapter.status ? '-' : '+' }}</span>
+                    <span>
+                      <span>{{ secondChapter.status ? '-' : '+' }}</span>
+                    </span>
                   </span>
                   {{ secondChapter.name }}
                 </div>
@@ -74,14 +87,20 @@
                 </div>
               </div>
 
-              <template v-if="secondChapter.children.length">
+              <div
+                v-if="secondChapter.children.length"
+                :class="secondChapter.status ? '' : 'hidden-chapter-children'"
+              >
                 <div
                   class="third-chapter"
                   v-for="thirdChapter in secondChapter.children"
                   :key="thirdChapter.id"
                 >
                   <div class="exercise-search__item">
-                    <div class="exercise-search__name text-overflow">
+                    <div
+                      class="exercise-search__name text-overflow"
+                      @click="onClickChange(thirdChapter.id)"
+                    >
                       <span class="third-chapter__bar">
                         <span></span>
                       </span>
@@ -95,9 +114,9 @@
                     </div>
                   </div>
                 </div>
-              </template>
+              </div>
             </div>
-          </template>
+          </div>
         </div>
       </template>
     </div>
@@ -181,6 +200,21 @@ export default {
     onClickSearch(params) {
       this.visible = false;
       this.$emit('on-search', params);
+    },
+
+    onClickChange(id) {
+      const loop = (data, id) => {
+        _.forEach(data, item => {
+          if (item.id == id) {
+            item.status = !item.status;
+            return false;
+          }
+          if (item.children) {
+            loop(item.children, id);
+          }
+        });
+      };
+      loop(this.chapterData, id);
     },
   },
 };
