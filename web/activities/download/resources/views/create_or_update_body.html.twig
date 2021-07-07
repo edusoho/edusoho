@@ -3,7 +3,7 @@
 {% block activity_step %}
   {% set optionalDefault = 1 %}
   {% set mediaType = activity.mediaType|default('download') %}
-  {% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'coursematerial') %}
+  {% set medias = find_materials_by_lessonId_id_and_source(activity.id|default(0), 'coursematerial') %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" >
       <div class="form-group">
