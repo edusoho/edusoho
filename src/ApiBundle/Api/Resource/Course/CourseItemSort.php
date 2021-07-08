@@ -24,7 +24,7 @@ class CourseItemSort extends AbstractResource
         $sortInfos = $this->getCourseService()->courseItemIdsHandle($courseId, $sortInfos);
         $this->getCourseService()->sortCourseItems($courseId, $sortInfos);
 
-        $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $sortInfos);
+        $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $sortInfos, true);
 
         return ['success' => true];
     }

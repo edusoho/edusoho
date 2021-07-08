@@ -2955,10 +2955,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->sumTotalIncomeByIds($ids);
     }
 
-    public function sortLiveTasksWithLiveCourse($courseId, $chapterIds)
+    public function sortLiveTasksWithLiveCourse($courseId, $chapterIds, $isCreate = false)
     {
         $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($courseId);
-        if (empty($multiClass) || $this->isLiveTaskSortByTime($courseId)) {
+        if ((empty($multiClass) && !$isCreate) || $this->isLiveTaskSortByTime($courseId)) {
             return $chapterIds;
         }
 
