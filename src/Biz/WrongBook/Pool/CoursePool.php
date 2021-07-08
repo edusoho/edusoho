@@ -73,13 +73,22 @@ class CoursePool extends AbstractPool
         $answerSceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
 
         $activitys = [];
+        $allActivitys = [];
         foreach ($answerSceneIds as $answerSceneId) {
-            $activitys[] = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+            $allActivitys[] = $activity;
+            if (isset($conditions['courseId']) && $conditions['courseId'] != $activity['fromCourseId']) {
+                continue;
+            }
+            $activitys[] = $activity;
         }
-        $coursesIds = array_unique(ArrayToolkit::column($activitys, 'fromCourseId'));
+        $coursesIds = array_unique(ArrayToolkit::column($allActivitys, 'fromCourseId'));
+
         $courses = ArrayToolkit::index($courses, 'id');
         $tasks = ArrayToolkit::index($tasks, 'activityId');
         $activityIds = ArrayToolkit::column($activitys, 'id');
+        $taskTypes = array_values(array_unique(ArrayToolkit::column($activitys, 'mediaType')));
+
         $newCourses = [];
         foreach ($coursesIds as $coursesId) {
             if (!empty($courses[$coursesId])) {
@@ -92,19 +101,20 @@ class CoursePool extends AbstractPool
                 $newTasks[] = $tasks[$activityId];
             }
         }
+
         $result['plans'] = $this->handleArray($newCourses, ['id', 'title']);
-        $result['source'] = array_unique(ArrayToolkit::column($newTasks, 'type'));
+        $result['source'] = $taskTypes;
         $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
 
         return $result;
     }
 
-    protected function handleArray($data, $fields,$type='')
+    protected function handleArray($data, $fields, $type = '')
     {
         $newData = [];
         foreach ($data as $key => $value) {
             foreach ($fields as $k => $field) {
-                $newData[$key][$field] = (empty($value[$field]) && isset($value['courseSetTitle']))?$value['courseSetTitle']:$value[$field];
+                $newData[$key][$field] = (empty($value[$field]) && isset($value['courseSetTitle'])) ? $value['courseSetTitle'] : $value[$field];
             }
         }
 
@@ -123,10 +133,6 @@ class CoursePool extends AbstractPool
             unset($conditions['courseMediaType']);
         } else {
             $conditions['types'] = ['testpaper', 'exercise', 'homework'];
-        }
-        if (!empty($conditions['courseTaskId'])) {
-            $conditions['id'] = $conditions['courseTaskId'];
-            unset($conditions['courseTaskId']);
         }
 
         return $conditions;
