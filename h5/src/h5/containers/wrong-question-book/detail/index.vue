@@ -105,7 +105,7 @@ export default {
       height: MaxHeight,
       currentIndex: 0,
       searchParams: {},
-      show: true,
+      show: false,
       searchComponents: {
         course: 'CourseSearch',
         classroom: 'ClassroomSearch',
