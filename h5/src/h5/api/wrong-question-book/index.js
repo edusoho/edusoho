@@ -35,4 +35,10 @@ export default [
     url: '/wrong_books/{poolId}/start_answer',
     method: 'POST',
   },
+  {
+    // 做题提交
+    name: 'submitWrongQuestionAnswer',
+    url: '/wrong_books/{poolId}/submit_answer/{recordId}',
+    method: 'PUT',
+  },
 ];
