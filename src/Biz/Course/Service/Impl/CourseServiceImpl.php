@@ -2957,8 +2957,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function sortLiveTasksWithLiveCourse($courseId, $chapterIds)
     {
-        $course = $this->getCourse($courseId);
-        if ('live' != $course['type'] || $this->isLiveTaskSortByTime($courseId)) {
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($courseId);
+        if (empty($multiClass) || $this->isLiveTaskSortByTime($courseId)) {
             return $chapterIds;
         }
 

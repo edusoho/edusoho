@@ -163,12 +163,13 @@ export default class Manage {
   _sort() {
     // 拖动，及拖动规则
     let self = this;
-    let $childrens = null
+    let $childrens = null;
     let adjustment;
     sortList({
       element: self.$element,
       ajax: false,
       group: 'nested',
+      exclude: '.drag_cancel',
       placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function($item, container) {
         return self._sortRules($item, container);
@@ -176,12 +177,12 @@ export default class Manage {
       onDragStart: function(item, container, _super) {
         let offset = item.offset();
         let pointer = container.rootGroup.pointer;
-        
+
         adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
         };
-        
+
         $childrens = self.getChildrens(item)
         _super(item, container);
       },
@@ -273,7 +274,9 @@ export default class Manage {
     });
     $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {});
     this.sortablelist();
-    window.location.reload();
+    if (this.$element.data('multiClass')) {
+      window.location.reload();
+    }
   }
 
   setShowNum($parentLi) {
