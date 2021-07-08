@@ -176,7 +176,7 @@ check env:
   only:
     refs:
       - develop
-      - feature/20210319-unit-test
+      - project/wrong-qiestion-book
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
