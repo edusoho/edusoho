@@ -856,6 +856,17 @@ const routes = [
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/result/index.vue'
       ),
   },
+  {
+    path: '/wrong-question/do',
+    name: 'WrongQuestionDo',
+    meta: {
+      title: '错题练习',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/do/index.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

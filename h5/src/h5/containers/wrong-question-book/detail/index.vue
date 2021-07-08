@@ -56,7 +56,7 @@
       @on-search="onSearch"
     />
 
-    <div class="question-foot">
+    <div class="question-foot" @click="onClickWrongExercise">
       错题练习
     </div>
   </div>
@@ -67,6 +67,7 @@ import _ from 'lodash';
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
+import { Dialog } from 'vant';
 import Question from './Question/index.vue';
 import CourseSearch from './Search/Course.vue';
 import ClassroomSearch from './Search/Classroom.vue';
@@ -191,6 +192,31 @@ export default {
       this.questionList = [];
       this.pagination.current = 1;
       this.fetchWrongQuestion();
+    },
+
+    onClickWrongExercise() {
+      if (!localStorage.getItem('first_wrong_exercises')) {
+        Dialog.alert({
+          message: '已为你随机筛选最多 20 题',
+          confirmButtonText: '我知道了',
+          confirmButtonColor: '#03c777 !important',
+        }).then(() => {
+          this.goToStartAnswer();
+        });
+        localStorage.setItem('first_wrong_exercises', true);
+        return;
+      }
+      this.goToStartAnswer();
+    },
+
+    goToStartAnswer() {
+      this.$router.push({
+        name: 'WrongQuestionDo',
+        query: {
+          id: this.targetId,
+          ...this.searchParams,
+        },
+      });
     },
   },
 };
