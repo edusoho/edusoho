@@ -269,14 +269,16 @@ export default class Manage {
   sortList() {
     // 后台排序seq值
     let ids = [];
+    let self = this;
     this.$element.find('.task-manage-item').each(function() {
       ids.push($(this).attr('id'));
     });
-    $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {});
+    $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {
+      if (self.$element.data('multiClass')) {
+        window.location.reload();
+      }
+    });
     this.sortablelist();
-    if (this.$element.data('multiClass')) {
-      window.location.reload();
-    }
   }
 
   setShowNum($parentLi) {
