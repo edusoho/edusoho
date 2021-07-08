@@ -22,12 +22,12 @@ class WrongBookStartAnswer extends AbstractResource
     public function add(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
-        $wrongQuestionsCount = $this->getCollectDao()->count(['pool_id' => $poolId]);
+        $wrongQuestionsCount = $this->getCollectDao()->count(['pool_id' => $poolId, 'status' => 'wrong']);
         list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount);
-        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId], $orderBy, $start, 20);
+        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], $orderBy, $start, 20);
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
-        $answerScene = $this->initScene();
+        $answerScene = $this->initScene($pool);
         $assessment = [
             'name' => '错题练习',
             'displayable' => 0,
@@ -74,8 +74,8 @@ class WrongBookStartAnswer extends AbstractResource
             ['wrong_times' => 'ASC'],
         ];
         $regularUpdatedTime = [
-            ['updated_time' => 'DESC'],
-            ['updated_time' => 'ASC'],
+            ['last_submit_time' => 'DESC'],
+            ['last_submit_time' => 'ASC'],
         ];
         $regularEmpty = [
             [],
@@ -92,22 +92,27 @@ class WrongBookStartAnswer extends AbstractResource
         }
 
         return [
-            'orderBy' => $orderBy,
-            'start' => $start,
+            $orderBy,
+            $start,
         ];
     }
 
-    protected function initScene()
+    protected function initScene($pool)
     {
-        $answerScene = $this->getAnswerSceneService()->create([
-            'name' => '错题练习',
-            'limited_time' => 0,
-            'do_times' => 0,
-            'redo_interval' => 0,
-            'need_score' => 0,
-            'manual_marking' => 0,
-            'start_time' => 0,
-        ]);
+        if (empty($pool['scene_id'])) {
+            $answerScene = $this->getAnswerSceneService()->create([
+                'name' => '错题练习',
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 0,
+                'manual_marking' => 0,
+                'start_time' => 0,
+            ]);
+            $this->getWrongQuestionService()->updatePool($pool['id'], ['scene_id' => $answerScene['id']]);
+        } else {
+            $answerScene = $this->getAnswerSceneService()->get($pool['scene_id']);
+        }
 
         return $answerScene;
     }

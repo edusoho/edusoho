@@ -16,7 +16,7 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
 
     public function getCollectBYPoolId($poolId)
     {
-        return $this->findByFields(['pool_id' => $poolId]);
+        return $this->findByFields(['pool_id' => $poolId, 'status' => 'wrong']);
     }
 
     public function declares()
@@ -28,8 +28,9 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
                 'pool_id = :pool_id',
                 'item_id = :item_id',
                 'created_time = :created_time',
+                'status = :status',
             ],
-            'orderbys' => ['id', 'created_time', 'wrong_times'],
+            'orderbys' => ['id', 'created_time', 'wrong_times', 'last_submit_time'],
         ];
     }
 }

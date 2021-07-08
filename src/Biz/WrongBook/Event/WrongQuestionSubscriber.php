@@ -38,6 +38,30 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'answer_record_id' => $answerRecord['id'],
             'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
+        if ('wrong_book_exercise' === $targetType) {
+            $correctAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
+                'answer_record_id' => $answerRecord['id'],
+                'statues' => ['right'],
+            ], [], 0, PHP_INT_MAX);
+            $correctAnswerQuestionReports = ArrayToolkit::index($correctAnswerQuestionReports, 'item_id');
+            $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
+            $correctQuestions = [];
+            foreach ($correctItems as $item) {
+                if ('material' !== $item['type']) {
+                    $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
+                }
+            }
+            $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerRecord['answer_scene_id']);
+            if ($pool) {
+                $this->getWrongQuestionService()->batchBuildCorrectQuestion($correctQuestions, [
+                    'user_id' => $answerRecord['user_id'],
+                    'answer_scene_id' => $answerRecord['answer_scene_id'],
+                    'testpaper_id' => $this->getTestPaperId($answerRecord),
+                    'target_type' => $pool['target_type'],
+                    'target_id' => $pool['target_id'],
+                ]);
+            }
+        }
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
@@ -69,7 +93,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $poolId = $event->getArgument('pool_id');
 
-        $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId], [], 0, PHP_INT_MAX);
+        $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], [], 0, PHP_INT_MAX);
 
         $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
     }

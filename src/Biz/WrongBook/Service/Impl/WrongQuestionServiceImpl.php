@@ -81,6 +81,39 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
+    public function batchBuildCorrectQuestion($correctAnswerQuestionReports, $source)
+    {
+        try {
+            $this->beginTransaction();
+
+            $pool = $this->handleQuestionPool($source);
+            $wrongQuestions = [];
+            foreach ($correctAnswerQuestionReports as $correctAnswerQuestionReport) {
+                $collect = $this->handleQuestionCollect(['item_id' => $correctAnswerQuestionReport['item_id'], 'pool_id' => $pool['id']]);
+
+                $this->getWrongQuestionCollectDao()->update($collect['id'], ['status' => 'correct']);
+            }
+
+            $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $pool['id'], 'status' => 'wrong'], [], 0, PHP_INT_MAX);
+
+            $this->getWrongQuestionBookPoolDao()->update($pool['id'], ['item_num' => count($poolCollects)]);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'correct_wrong_question',
+                '修正错题',
+                ArrayToolkit::column($wrongQuestions, 'id')
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
+    }
+
     public function createWrongQuestion($fields)
     {
         $wrongQuestionRequireFields = [
@@ -166,6 +199,11 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function getPoolBySceneId($sceneId)
     {
         return $this->getWrongQuestionBookPoolDao()->getPoolBySceneId($sceneId);
+    }
+
+    public function updatePool($id, $pool)
+    {
+        return $this->getWrongQuestionBookPoolDao()->update($id, $pool);
     }
 
     public function countWrongQuestion($conditions)

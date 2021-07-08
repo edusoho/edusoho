@@ -113,6 +113,7 @@ class WrongBookQuestionShow extends AbstractResource
     {
         $prepareConditions = [];
         $prepareConditions['pool_id'] = $poolId;
+        $prepareConditions['status'] = 'wrong';
         $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
 
         if (!in_array($conditions['targetType'], ['course', 'classroom', 'exercise'])) {
