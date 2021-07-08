@@ -55,7 +55,6 @@ export default {
           answer_scene,
           answer_record,
         } = res;
-        this.assessment = assessment;
         _.assign(this, {
           assessment,
           answerScene: answer_scene,
