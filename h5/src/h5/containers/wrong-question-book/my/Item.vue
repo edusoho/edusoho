@@ -21,14 +21,20 @@ export default {
 
   methods: {
     goToWrongQuestionDetail() {
+      const { target_type } = this.question;
+      let routerName = 'myWrongQuestionBookDetail';
+      if (target_type === 'exercise') {
+        routerName = 'myWrongQuestionBookExercise';
+      }
       this.$router.push({
-        name: 'myWrongQuestionBookDetail',
+        name: routerName,
         params: {
-          type: this.question.target_type,
+          type: target_type,
           id: this.question.id,
         },
         query: {
           title: this.question.target_data.title,
+          id: this.question.id,
         },
       });
     },

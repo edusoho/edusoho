@@ -41,6 +41,21 @@
       </div>
     </div>
 
+    <div class="question-search" @click="showSearch">
+      <van-icon name="filter-o" />
+      筛选
+    </div>
+
+    <!-- 筛选组件 -->
+    <component
+      :is="currentSearchComponent"
+      :show="show"
+      :pool-id="targetId"
+      :exercise-media-type="exerciseMediaType"
+      @hidden-search="hiddenSearch"
+      @on-search="onSearch"
+    />
+
     <div class="question-foot">
       错题练习
     </div>
@@ -53,6 +68,9 @@ import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import Question from './Question/index.vue';
+import CourseSearch from './Search/Course.vue';
+import ClassroomSearch from './Search/Classroom.vue';
+import QuestionBankSearch from './Search/QuestionBank.vue';
 
 const NavBarHeight = 46;
 const FootHeight = 48;
@@ -64,21 +82,42 @@ export default {
 
   components: {
     Question,
+    // eslint-disable-next-line vue/no-unused-components
+    CourseSearch,
+    // eslint-disable-next-line vue/no-unused-components
+    ClassroomSearch,
+    // eslint-disable-next-line vue/no-unused-components
+    QuestionBankSearch,
   },
 
   data() {
     return {
       targetType: this.$route.params.type,
       targetId: this.$route.params.id,
+      exerciseMediaType: this.$route.query.type,
       questionList: [],
       pagination: {
         current: 1,
         total: 0,
+        pageSize: 20,
       },
       finished: false,
       height: MaxHeight,
       currentIndex: 0,
+      searchParams: {},
+      show: false,
+      searchComponents: {
+        course: 'CourseSearch',
+        classroom: 'ClassroomSearch',
+        exercise: 'QuestionBankSearch',
+      },
     };
+  },
+
+  computed: {
+    currentSearchComponent() {
+      return this.searchComponents[this.targetType];
+    },
   },
 
   created() {
@@ -92,14 +131,17 @@ export default {
     }),
 
     fetchWrongQuestion() {
+      const { current, pageSize } = this.pagination;
       Api.getWrongBooksQuestionShow({
         query: {
           poolId: this.targetId,
         },
         params: {
           targetType: this.targetType,
-          limit: 20,
-          offset: (this.pagination.current - 1) * 20,
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+          exerciseMediaType: this.exerciseMediaType,
+          ...this.searchParams,
         },
       }).then(res => {
         const { data, paging } = res;
@@ -134,6 +176,21 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex + 1);
+    },
+
+    showSearch() {
+      this.show = true;
+    },
+
+    hiddenSearch() {
+      this.show = false;
+    },
+
+    onSearch(params) {
+      this.searchParams = params;
+      this.questionList = [];
+      this.pagination.current = 1;
+      this.fetchWrongQuestion();
     },
   },
 };
