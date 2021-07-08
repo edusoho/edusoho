@@ -340,6 +340,7 @@ form.placeholder.max_int: 'Maximum 9 digits integer'
 form.placeholer.two_decimal_places: 'Keep the second decimal place'
 form.placeholder.start_date: 'Start time'
 form.placeholder.end_date: 'Finish time'
+form.placeholder.deadline_range: Please enter the deadline range
 form.placeholder.nickname: Username
 form.placeholder.keyword: Keyword
 form.radio_btn.pass: Agree

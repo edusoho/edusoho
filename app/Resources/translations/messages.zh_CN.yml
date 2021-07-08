@@ -413,6 +413,7 @@ form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
 form.placeholder.start_date: 起始时间
+form.placeholder.deadline_range: 学习有效期时间
 form.placeholder.end_date: 结束时间
 form.placeholder.nickname: 用户名
 form.placeholder.keyword: 关键词

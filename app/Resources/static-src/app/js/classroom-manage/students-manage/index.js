@@ -103,3 +103,10 @@ function exportStudents(start, fileName) {
     }
   });
 }
+
+$('#deadLineStartDate, #deadLineEndDate').datetimepicker({
+  format: 'yyyy-mm-dd',
+  language: document.documentElement.lang,
+  minView: 2,
+  autoclose: true,
+});
