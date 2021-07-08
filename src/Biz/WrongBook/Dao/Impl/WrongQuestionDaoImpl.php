@@ -15,12 +15,12 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times'];
 
-    public function findWrongQuestionBySceneIds($items)
+    public function findWrongQuestionBySceneIds($sceneIds)
     {
-        $marks = str_repeat('?,', count($items) - 1).'?';
+        $marks = str_repeat('?,', count($sceneIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE answer_scene_id IN({$marks});";
 
-        return $this->db()->fetchAll($sql, $items);
+        return $this->db()->fetchAll($sql, $sceneIds);
     }
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
