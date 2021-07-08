@@ -58,10 +58,10 @@
 
 			&__item {
 				display: inline-block;
-				margin-right: vw(12);
-				margin-bottom: vw(10);
+				margin-right: 2.93333vw;
+				margin-bottom: 2.66667vw;
 
-				&:nth-child(9n) {
+				&:nth-child(8n) {
 					margin-right: 0;
 				}
 			}
@@ -119,11 +119,11 @@
 }
 
 .testpaper-number {
-	width: vw(28);
-	height: vw(28);
+	width: vw(34);
+	height: vw(34);
 	color: #fff;
 	font-size: vw(14);
-	line-height: vw(28);
+	line-height: vw(34);
 	text-align: center;
 	border-radius: 100%;
 }
