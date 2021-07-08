@@ -47,7 +47,7 @@ class MaterialExtension extends \Twig_Extension
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        if (isset($activity['ext']['fileIds']) && $activity['mediaType'] === 'live') {
+        if (isset($activity['ext']['fileIds']) && 'live' === $activity['mediaType']) {
             $conditions['fileIds'] = $activity['ext']['fileIds'] ?: [-1];
         }
 
