@@ -848,6 +848,9 @@ const routes = [
   {
     path: '/wrong-quesition-book/result',
     name: 'WrongQuestionResult',
+    meta: {
+      title: '错题练习',
+    },
     component: () =>
       import(
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/result/index.vue'
