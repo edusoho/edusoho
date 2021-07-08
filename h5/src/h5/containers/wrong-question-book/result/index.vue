@@ -61,5 +61,13 @@ export default {
     document.getElementById('app').style.background = '';
     next();
   },
+
+  methods: {
+    viewAnalysis() {
+      this.$router.push({
+        name: 'WrongExercisesAnalysis',
+      });
+    },
+  },
 };
 </script>
