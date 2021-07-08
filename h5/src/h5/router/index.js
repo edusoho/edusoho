@@ -830,6 +830,14 @@ const routes = [
       ),
   },
   {
+    path: '/my/wrong-quesition-book/exercise',
+    name: 'myWrongQuestionBookExercise',
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/my/exercise.vue'
+      ),
+  },
+  {
     path: '/my/wrong-quesition-book/detail/:type/:id',
     name: 'myWrongQuestionBookDetail',
     component: () =>

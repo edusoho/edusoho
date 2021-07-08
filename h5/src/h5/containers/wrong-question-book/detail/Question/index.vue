@@ -165,7 +165,7 @@ export default {
           color: 'analysis-item_worng',
           text: '回答错误',
         },
-        noAnswer: {
+        no_answer: {
           color: 'analysis-item_noAnswer',
           text: '未回答',
         },
@@ -173,7 +173,7 @@ export default {
       const { response, status } = this.questions.report;
 
       if (!_.size(response)) {
-        return statusResult.noAnswer;
+        return statusResult.no_answer;
       }
 
       return statusResult[status];

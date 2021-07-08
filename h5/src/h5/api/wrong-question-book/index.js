@@ -17,4 +17,16 @@ export default [
     url: '/wrong_books/{poolId}/question_show',
     method: 'GET',
   },
+  {
+    // 错题课程分类级联查询条件
+    name: 'getWrongQuestionCondition',
+    url: '/wrong_books/{poolId}/condition',
+    method: 'GET',
+  },
+  {
+    // 题库练习-章节、试卷练习数量详情
+    name: 'getWrongQuestionExercise',
+    url: '/wrong_books/{poolId}/bank_exercise',
+    method: 'GET',
+  },
 ];
