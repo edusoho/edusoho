@@ -135,8 +135,10 @@ export default {
   },
 
   methods: {
-    allowDrag(dragType, dragEnterType, dropPosition) {
+    allowDrag(dragType, dragTasks, dragEnterType, dropPosition) {
       if (!['chapter', 'unit', 'lesson'].includes(dragType)) return false;
+
+      if (dragTasks && dragTasks[0]['type'] === 'live') return false;
 
       if (dragType === 'chapter' && dragEnterType === 'chapter' && dropPosition != 0) return true;
 
@@ -189,7 +191,7 @@ export default {
         dragEnterArr = arr;
       });
 
-      if (!this.allowDrag(dragObj.type, dragEnterObj.type, dropPosition)) return;
+      if (!this.allowDrag(dragObj.type, dragObj.tasks, dragEnterObj.type, dropPosition)) return;
 
       dragArr.splice(dragIndex, 1);
 

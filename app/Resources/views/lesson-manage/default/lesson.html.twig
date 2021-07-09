@@ -7,8 +7,9 @@
 {% set isHideUnpublish = course['isHideUnpublish']|default(false) %}
 
 {% set isShowText = lesson.isOptional or (isHideUnpublish and lesson.status != 'published') %}
+{% set multiClass = data('MultiClass',{'courseId':course.id}) %}
 
-<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix "
+<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag {% if multiClass|default(null) and task.activity.mediaType == 'live' %}drag_cancel{% endif %} clearfix "
     show-num="{% if isShowText %}0{% else %}1{% endif %}">
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
