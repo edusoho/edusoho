@@ -231,9 +231,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return $this->getWrongQuestionBookPoolDao()->countPoolByConditions($conditions);
     }
 
-    public function getWrongBookPoolByFields($fields)
+    public function getWrongBookPoolByFieldsGroupByTargetType($fields)
     {
-        return $this->getWrongQuestionBookPoolDao()->getPoolByFields($fields);
+        return $this->getWrongQuestionBookPoolDao()->getPoolByFieldsGroupByTargetType($fields);
     }
 
     public function deleteWrongQuestion($id)
