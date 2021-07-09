@@ -58,8 +58,8 @@
 
 			&__item {
 				display: inline-block;
-				margin-right: 2.93333vw;
-				margin-bottom: 2.66667vw;
+				margin-right: vw(11);
+				margin-bottom: vw(10);
 
 				&:nth-child(8n) {
 					margin-right: 0;
