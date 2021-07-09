@@ -1,4 +1,6 @@
 .wrong-question-detail {
+	position: relative;
+
 	.question-foot {
 		position: fixed;
 		bottom: 0;
@@ -13,8 +15,8 @@
 	}
 
 	.question-search {
-		position: fixed;
-		top: 12px;
+		position: absolute;
+		top: -34px;
 		right: 16px;
 		z-index: 1002;
 		display: flex;
