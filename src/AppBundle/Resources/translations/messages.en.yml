@@ -1536,7 +1536,6 @@ Email地址: 'Email Address'
 可搜索课程、教师、话题、资讯: 'Search by courses\teachers\topics\info'
 教师: teacher
 小组话题: 'group topic'
-资讯: information
 '共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程': 'Found <span>%count%</span> courses matching keyword <span>“%keywords%”</span>.'
 '共找到<span>%count%</span>门课程': 'Found <span>%count%</span> courses.'
 '没有搜到相关课程，请换个关键词试试！': 'cannot find related courses, please change your keyword'
@@ -3300,3 +3299,26 @@ Flash: Flash
 最近置顶: Recent top
 班级分类: Class category
 请选择所属栏目: Please select column
+资讯: News
+近期直播: Recent live courses
+热门班课1: Popular class 1
+热门班课2: Popular class 2
+热门班课3: Popular class 3
+分类课程1: Classification of course 1
+分类课程2: Classification of course 2
+分类课程3: Classification of course 3
+分类课程4: Classification of course 4
+分类课程5: Classification of course 5
+分类课程6: Classification of course 6
+分类课程7: Classification of course 7
+分类课程8: Classification of course 8
+公开课: Open course
+名师天团: Excellent teacher
+荣誉: Honor
+网站数据: Web site
+广告栏: Ad column
+友情链接: Blogroll
+内容状态: Status
+正常: Normal
+违规: Irregularities
+未审核: Unreviewed

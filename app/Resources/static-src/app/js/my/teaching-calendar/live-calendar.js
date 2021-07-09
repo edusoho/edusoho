@@ -11,11 +11,12 @@ new CustomFullCalendar({
     'start': 'startTime',
     'end': 'endTime'
   },
-  'dateParams': {'start': 'startTime_GE', 'end': 'endTime_LT'},
+  'dateParams': {'start': 'startTime_/noteGE', 'end': 'endTime_LT'},
   'currentTime': $('#todayDateStr').html(),
   'components': [
     new LiveTooltipComp(),
     new ClickComp('{url}') //routing course_show
   ],
-  'defaultView': 'agendaWeek' // 'agendaWeek'
+  'defaultView': 'agendaWeek', // 'agendaWeek'
+  'locale': app.lang === 'en' ? 'en' : 'zh-cn'
 });

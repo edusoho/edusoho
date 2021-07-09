@@ -8,7 +8,7 @@
       <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ permission_path(tabMenu) }}"
          target="{{ entrance.target|default('_self') }}">
         <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
-        <div class="admin-function__name">{{ entrance.text }}</div>
+        <div class="admin-function__name" {% if app.request.getLocale() == 'en' and entrance.code == 'admin_v2_user_show'  %}style="line-height: 16px;margin-top: 8px" {% endif %}>{{ entrance.text|trans }}</div>
       </a>
     </div>
   {% endfor %}
