@@ -71,3 +71,12 @@ let smsEvent = () => {
   });
 };
 smsEvent();
+
+const $loginModal = $('#login-modal');
+$('#pwd-login').click((event) => {
+  $loginModal.modal('show');
+  $('#modal').modal('hide');
+  $.get($loginModal.data('url'), function (html) {
+    $loginModal.html(html);
+  });
+});
