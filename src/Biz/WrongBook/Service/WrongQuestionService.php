@@ -41,7 +41,7 @@ interface WrongQuestionService
 
     public function countWrongBookPool($conditions);
 
-    public function getWrongBookPoolByFieldsGroupByTargetType($fields);
+    public function getWrongBookPoolByFields($fields);
 
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = []);
 
