@@ -48,7 +48,7 @@ class ItemBankExercisePool extends AbstractPool
         return $searchConditions;
     }
 
-    public function exerciseChapterSearch($targetId, $conditions)
+    protected function exerciseChapterSearch($targetId, $conditions)
     {
         if ('chapter' !== $conditions['exerciseMediaType']) {
             return [];
@@ -57,7 +57,7 @@ class ItemBankExercisePool extends AbstractPool
         return $this->getItemCategoryService()->getItemCategoryTree($targetId);
     }
 
-    public function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
+    protected function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
     {
         if ('testpaper' !== $conditions['exerciseMediaType']) {
             return [];
@@ -87,7 +87,7 @@ class ItemBankExercisePool extends AbstractPool
         return $assessmentSearch;
     }
 
-    public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
+    protected function findSceneIdsByExerciseMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['chapter', 'assessment'])) {
             return [];

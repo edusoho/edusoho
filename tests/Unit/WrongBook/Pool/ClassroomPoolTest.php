@@ -20,8 +20,8 @@ class ClassroomPoolTest extends BaseTestCase
         $this->createClassroomAndCourse();
         $this->createActivityWithMedia(1, ['mediaType' => 'homework', 'fromCourseSetId' => 1, 'fromCourseId' => 1]);
         $this->createActivityWithMedia(2, ['mediaType' => 'testpaper', 'fromCourseSetId' => 1, 'fromCourseId' => 2]);
-        $coursePool = $this->biz['wrong_question.classroom_pool'];
-        $sceneIds = $coursePool->prepareSceneIds($pool['id'], ['classroomCourseSetId' => 1, 'classroomMediaType' => 'homework']);
+        $classroomPool = $this->biz['wrong_question.classroom_pool'];
+        $sceneIds = $classroomPool->prepareSceneIds($pool['id'], ['classroomCourseSetId' => 1, 'classroomMediaType' => 'homework']);
 
         $this->assertEquals([1], array_values($sceneIds));
     }
@@ -32,8 +32,8 @@ class ClassroomPoolTest extends BaseTestCase
         $this->createActivityWithMedia(1, ['mediaType' => 'homework', 'fromCourseSetId' => 1, 'fromCourseId' => 1]);
         $this->createActivityWithMedia(2, ['mediaType' => 'testpaper', 'fromCourseSetId' => 1, 'fromCourseId' => 2]);
         $this->createActivityWithMedia(3, ['mediaType' => 'testpaper', 'fromCourseSetId' => 1, 'fromCourseId' => 2, 'mediaId' => 2]);
-        $coursePool = $this->biz['wrong_question.classroom_pool'];
-        $sceneIds = array_values($coursePool->prepareSceneIdsByTargetId(1, ['classroomMediaType' => 'testpaper']));
+        $classroomPool = $this->biz['wrong_question.classroom_pool'];
+        $sceneIds = array_values($classroomPool->prepareSceneIdsByTargetId(1, ['classroomMediaType' => 'testpaper']));
         sort($sceneIds);
         $this->assertEquals([2, 3], $sceneIds);
     }

@@ -148,7 +148,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseId($courseId)
+    protected function findSceneIdsByCourseId($courseId)
     {
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'homework', true);
@@ -158,7 +158,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseMediaType($targetId, $mediaType)
+    protected function findSceneIdsByCourseMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['testpaper', 'homework', 'exercise'])) {
             return [];
@@ -169,7 +169,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseTaskId($courseTaskId)
+    protected function findSceneIdsByCourseTaskId($courseTaskId)
     {
         $courseTask = $this->getCourseTaskService()->getTask($courseTaskId);
         if (empty($courseTask)) {
