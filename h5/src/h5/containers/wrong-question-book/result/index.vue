@@ -38,10 +38,7 @@
         <li
           v-for="(item, index) in reports.item_reports"
           :key="index"
-          :class="[
-            'result-list__item testpaper-number',
-            `circle-${status(item).color}`,
-          ]"
+          :class="['result-list__item testpaper-number', getStatusClass(item)]"
         >
           {{ index + 1 }}
         </li>
@@ -77,6 +74,7 @@ export default {
       const timeInterval = parseInt(this.answerRecord.used_time) || 0;
       return timeInterval <= 60 ? 1 : Math.round(timeInterval / 60);
     },
+
     rightRate() {
       return parseInt(
         (this.reports.right_question_num / this.reports.question_count) * 100,
@@ -117,20 +115,12 @@ export default {
         });
     },
 
-    status(reports) {
+    getStatusClass(reports) {
       const statusResult = {
-        right: {
-          color: 'green',
-        },
-        wrong: {
-          color: 'orange',
-        },
-        partRight: {
-          color: 'orange',
-        },
-        no_answer: {
-          color: 'gray',
-        },
+        right: 'circle-green',
+        wrong: 'circle-orange',
+        partRight: 'circle-orange',
+        no_answer: 'circle-gray',
       };
       const { response, status } = reports.question_reports[0];
 

@@ -14556,7 +14556,7 @@ walker@~1.0.5:
 
 wap-sdk@^0.1.2:
   version "0.1.2"
-  resolved "https://registry.npm.taobao.org/wap-sdk/download/wap-sdk-0.1.2.tgz#8d2c4bcd73d5484d83917a0f40305eaaeed5c4c6"
+  resolved "https://registry.nlark.com/wap-sdk/download/wap-sdk-0.1.2.tgz#8d2c4bcd73d5484d83917a0f40305eaaeed5c4c6"
   integrity sha1-jSxLzXPVSE2DkXoPQDBequ7VxMY=
   dependencies:
     babel-plugin-import "^1.13.0"
