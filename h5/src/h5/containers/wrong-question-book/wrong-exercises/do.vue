@@ -89,7 +89,7 @@ export default {
 
     goResult() {
       this.$router.push({
-        name: 'WrongQuestionResult',
+        name: 'WrongExercisesResult',
         query: {
           recordId: this.answerRecord.id,
         },

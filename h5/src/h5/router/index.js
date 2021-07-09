@@ -846,25 +846,25 @@ const routes = [
       ),
   },
   {
-    path: '/wrong-quesition-book/result',
-    name: 'WrongQuestionResult',
+    path: '/wrong-exercises/do',
+    name: 'WrongExercisesDo',
     meta: {
       title: '错题练习',
     },
     component: () =>
       import(
-        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/result/index.vue'
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/do.vue'
       ),
   },
   {
-    path: '/wrong-question/do',
-    name: 'WrongQuestionDo',
+    path: '/wrong-exercises/result',
+    name: 'WrongExercisesResult',
     meta: {
       title: '错题练习',
     },
     component: () =>
       import(
-        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/do/index.vue'
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/result.vue'
       ),
   },
   {

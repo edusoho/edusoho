@@ -211,7 +211,7 @@ export default {
 
     goToStartAnswer() {
       this.$router.push({
-        name: 'WrongQuestionDo',
+        name: 'WrongExercisesDo',
         query: {
           id: this.targetId,
           ...this.searchParams,
