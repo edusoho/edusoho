@@ -1,5 +1,7 @@
 <template>
   <div class="wrong-question-detail">
+    <e-loading v-if="isLoading" />
+
     <van-swipe
       ref="swipe"
       :height="height"
@@ -93,6 +95,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       targetType: this.$route.params.type,
       targetId: this.$route.params.id,
       exerciseMediaType: this.$route.query.type,
@@ -132,6 +135,7 @@ export default {
     }),
 
     fetchWrongQuestion() {
+      this.isLoading = true;
       const { current, pageSize } = this.pagination;
       Api.getWrongBooksQuestionShow({
         query: {
@@ -149,6 +153,7 @@ export default {
         this.questionList = _.concat(this.questionList, data);
         this.pagination.total = paging.total;
         this.finished = false;
+        this.isLoading = false;
         if (_.size(this.questionList) >= paging.total) {
           this.finished = true;
         }
@@ -191,6 +196,7 @@ export default {
       this.searchParams = params;
       this.questionList = [];
       this.pagination.current = 1;
+      this.currentIndex = 0;
       this.fetchWrongQuestion();
     },
 

@@ -134,6 +134,9 @@ export default {
     viewAnalysis() {
       this.$router.push({
         name: 'WrongExercisesAnalysis',
+        query: {
+          recordId: this.$route.query.recordId,
+        },
       });
     },
   },

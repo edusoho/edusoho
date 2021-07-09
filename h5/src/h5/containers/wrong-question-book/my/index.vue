@@ -1,32 +1,35 @@
 <template>
-  <van-tabs :border="true" color="#43c793">
-    <template v-for="(listItem, index) in list">
-      <van-tab :title="listItem.title" :key="index">
-        <van-search
-          v-model="listItem.keyword"
-          shape="round"
-          :placeholder="listItem.placeholder"
-          @search="value => onSearch(index, value)"
-        />
-        <van-list
-          class="wrong-list"
-          v-model="listItem.loading"
-          :finished="listItem.finished"
-          finished-text="没有更多了"
-          @load="onLoad(index)"
-        >
-          <item
-            v-for="item in listItem.items"
-            :key="item.id"
-            :question="item"
+  <div>
+    <e-loading v-if="isLoading" />
+    <van-tabs :border="true" color="#43c793">
+      <template v-for="(listItem, index) in list">
+        <van-tab :title="listItem.title" :key="index">
+          <van-search
+            v-model="listItem.keyword"
+            shape="round"
+            :placeholder="listItem.placeholder"
+            @search="value => onSearch(index, value)"
           />
-        </van-list>
-        <div class="wrong-question-number">
-          {{ listItem.totalTitle }}：{{ listItem.total }}
-        </div>
-      </van-tab>
-    </template>
-  </van-tabs>
+          <van-list
+            class="wrong-list"
+            v-model="listItem.loading"
+            :finished="listItem.finished"
+            finished-text="没有更多了"
+            @load="onLoad(index)"
+          >
+            <item
+              v-for="item in listItem.items"
+              :key="item.id"
+              :question="item"
+            />
+          </van-list>
+          <div class="wrong-question-number">
+            {{ listItem.totalTitle }}：{{ listItem.total }}
+          </div>
+        </van-tab>
+      </template>
+    </van-tabs>
+  </div>
 </template>
 
 <script>
@@ -42,6 +45,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       list: [
         {
           title: '课程错题',
@@ -98,10 +102,12 @@ export default {
 
   methods: {
     fetchWrongQuestionBooks() {
+      this.isLoading = true;
       Api.getWrongBooks().then(res => {
         this.list[0].total = res.course.sum_wrong_num;
         this.list[1].total = res.classroom.sum_wrong_num;
         this.list[2].total = res.exercise.sum_wrong_num;
+        this.isLoading = false;
       });
     },
 
