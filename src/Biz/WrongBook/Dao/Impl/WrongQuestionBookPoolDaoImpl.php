@@ -14,12 +14,10 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         return $this->getByFields(['user_id' => $userId, 'target_type' => $targetType, 'target_id' => $targetId]);
     }
 
-    public function getPoolByFieldsGroupByTargetType($fields)
+    public function getPoolByFields($fields)
     {
         $builder = $this->createQueryBuilder($fields)
-            ->select('sum(`item_num`) as sum_wrong_num,user_id,target_type')
-            ->groupBy('target_type');
-
+            ->select('user_id,target_type,target_id,item_num');
         return $builder->execute()->fetchAll();
     }
 

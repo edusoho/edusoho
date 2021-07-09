@@ -8,7 +8,7 @@ interface WrongQuestionBookPoolDao extends AdvancedDaoInterface
 {
     public function getPoolByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 
-    public function getPoolByFieldsGroupByTargetType($fields);
+    public function getPoolByFields($fields);
 
     public function getPoolBySceneId($sceneId);
 

@@ -23,6 +23,7 @@ class ItemBankDaoImpl extends GeneralDaoImpl implements ItemBankDao
             ],
             'conditions' => [
                 'id = :id',
+                'id in (:ids)',
                 'name like :nameLike',
             ],
         ];
