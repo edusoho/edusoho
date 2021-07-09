@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DownloadActivityDao;
 use Biz\File\Service\UploadFileService;
@@ -55,7 +56,7 @@ class Download extends Activity
     {
         $files = json_decode($fields['materials'], true);
 
-        $fileIds = array_keys($files);
+        $fileIds = array_keys(ArrayToolkit::index($files, 'fileId'));
 
         $downloadActivity = ['mediaCount' => count($files), 'fileIds' => $fileIds];
         $downloadActivity = $this->getDownloadActivityDao()->update($id, $downloadActivity);
