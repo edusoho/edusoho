@@ -1,14 +1,9 @@
 <template>
   <div>
     <e-loading v-if="isLoading" />
-    <van-tabs
-      :border="true"
-      v-model="active"
-      color="#43c793"
-      @click="onClickTabs"
-    >
+    <van-tabs :border="true" color="#43c793">
       <template v-for="(listItem, index) in list">
-        <van-tab :title="listItem.title" :key="index" :name="listItem.type">
+        <van-tab :title="listItem.title" :key="index">
           <van-search
             v-model="listItem.keyword"
             shape="round"
@@ -51,8 +46,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      active: 'course',
-      currentActive: 'course',
       list: [
         {
           title: '课程错题',
@@ -105,7 +98,6 @@ export default {
 
   created() {
     this.fetchWrongQuestionBooks();
-    this.active = this.$route.query.active;
   },
 
   methods: {
@@ -116,17 +108,6 @@ export default {
         this.list[1].total = res.classroom.sum_wrong_num;
         this.list[2].total = res.exercise.sum_wrong_num;
         this.isLoading = false;
-      });
-    },
-
-    onClickTabs(key, title) {
-      if (key === this.currentActive) return;
-      this.currentActive = key;
-
-      this.$router.push({
-        query: {
-          active: key,
-        },
       });
     },
 
