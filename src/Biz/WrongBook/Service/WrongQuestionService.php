@@ -30,7 +30,7 @@ interface WrongQuestionService
 
     public function findWrongQuestionsByUserIdsAndItemIdAndSceneIds($userIds, $itemId, $sceneIds);
 
-    public function findWrongQuestionsByUserIdAndItemIdAndSceneIds($userId, $itemIds, $sceneIds);
+    public function findWrongQuestionsByUserIdAndItemIdsAndSceneIds($userId, $itemIds, $sceneIds);
 
     public function findWrongQuestionsByUserIdAndSceneIds($userId, $sceneIds);
 
