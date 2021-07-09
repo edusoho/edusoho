@@ -41,7 +41,7 @@ export default {
 
       Api.answerRecord({
         query: {
-          answerRecordId: Number(179),
+          answerRecordId: this.$route.query.recordId,
         },
       }).then(res => {
         const { assessment, answer_scene, answer_report, answer_record } = res;
