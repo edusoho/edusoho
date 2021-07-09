@@ -40,7 +40,7 @@
           :key="index"
           :class="[
             'result-list__item testpaper-number',
-            `circle-${color[item.question_reports[0].status]}`,
+            `circle-${status(item).color}`,
           ]"
         >
           {{ index + 1 }}
@@ -61,21 +61,15 @@
 
 <script>
 import Api from '@/api';
+import _ from 'lodash';
+
 export default {
   name: 'WrongQuestionResult',
   data() {
     return {
       isLoading: true,
-      assessment: {},
-      answerScene: {},
-      answerReport: {},
       answerRecord: {},
       reports: {},
-      color: {
-        right: 'green',
-        wrong: 'orange',
-        no_answer: 'gray',
-      },
     };
   },
   computed: {
@@ -113,9 +107,6 @@ export default {
         query,
       })
         .then(res => {
-          this.assessment = res.assessment;
-          this.answerScene = res.answer_scene;
-          this.answerReport = res.answer_report;
           this.answerRecord = res.answer_record;
           this.reports = res.answer_report.section_reports[0];
           this.isLoading = false;
@@ -124,6 +115,30 @@ export default {
           this.isLoading = false;
           this.$toast(err.message);
         });
+    },
+
+    status(reports) {
+      const statusResult = {
+        right: {
+          color: 'green',
+        },
+        wrong: {
+          color: 'orange',
+        },
+        partRight: {
+          color: 'orange',
+        },
+        no_answer: {
+          color: 'gray',
+        },
+      };
+      const { response, status } = reports.question_reports[0];
+
+      if (!_.size(response)) {
+        return statusResult.no_answer;
+      }
+
+      return statusResult[status];
     },
 
     viewAnalysis() {
