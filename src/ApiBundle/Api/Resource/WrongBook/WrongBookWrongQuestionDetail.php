@@ -61,7 +61,7 @@ class WrongBookWrongQuestionDetail extends AbstractResource
             'user_id' => $question['user_id'],
             'user_name' => $users[$question['user_id']]['nickname'],
             'answer_time' => $question['submit_time'],
-            'answer' => $reports[$question['answer_question_report_id']]['response'],
+            'answer' => 'no_answer' === $reports[$question['answer_question_report_id']]['status'] ? [] : $reports[$question['answer_question_report_id']]['response'],
         ];
     }
 
