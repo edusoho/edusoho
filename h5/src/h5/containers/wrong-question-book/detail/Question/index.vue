@@ -10,7 +10,7 @@
 
     <div class="question-body">
       <div class="question-stem clearfix">
-        <span>{{ order }}、</span>
+        <div class="pull-left">{{ order }}、</div>
         <div v-html="formateQuestionStem" />
       </div>
 
