@@ -88,6 +88,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             $preBuilder->andWhere('c.pool_id = :pool_id');
         }
 
+        if (!empty($conditions['pool_ids'])) {
+            $preBuilder->andWhere('c.pool_id IN (:pool_ids)');
+        }
+
         if (!empty($conditions['status'])) {
             $preBuilder->andWhere('c.status = :status');
         }
@@ -111,6 +115,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 $builder->addOrderBy('c.'.$order, $sort);
             }
         }
+
+        $builder->addOrderBy($this->table.'.id', 'DESC');
 
         return $builder->execute()->fetchAll() ?: [];
     }
