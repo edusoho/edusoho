@@ -7,7 +7,7 @@
         做错频次：
         <span class="frequency-error">{{ question.wrong_times }}</span>次
       </div>
-      <div class="pull-left time">错题时间：{{ $dateFormat(question.last_submit_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
+      <div class="pull-left time">错题时间：{{ $dateFormat(question.submit_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
     </div>
   </div>
 </template>
