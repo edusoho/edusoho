@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search />
+    <search :target-id="targetId" :course-id="courseId" @on-search="onSearch"/>
 
     <student-wrong-question-table
       class="mt24"
@@ -17,6 +17,7 @@
       :current-order="currentOrder"
       :target-type="targetType"
       :target-id="targetId"
+      :course-id="courseId"
       @event-communication="eventCommunication"
     />
   </div>
@@ -40,7 +41,8 @@ export default {
   data() {
     return {
       targetType: 'course',
-      targetId: $('.js-course-id').val(),
+      targetId: $('.js-course-set-id').val(),
+      courseId: $('.js-course-id').val(),
       pagination: {
         hideOnSinglePage: true,
         current: 1,
@@ -59,12 +61,13 @@ export default {
   },
 
   methods: {
-    onSearch() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          // do
-        }
-      })
+    onSearch(params) {
+      // this.$refs.form.validate(valid => {
+      //   if (valid) {
+      //
+      //   }
+      // })
+      this.fetchWrongQuestion(params);
     },
 
     handleTableChange(pagination) {
@@ -72,7 +75,7 @@ export default {
       this.fetchWrongQuestion();
     },
 
-    async fetchWrongQuestion() {
+    async fetchWrongQuestion(params = {}) {
       this.loading = true;
 
       const apiParams = {
@@ -80,10 +83,11 @@ export default {
           targetId: this.targetId,
           targetType: this.targetType
         },
-        params: {
+        params: Object.assign({
+          courseId: this.courseId,
           offset: (this.pagination.current - 1) * 10,
           limit: 10
-        }
+        }, params),
       };
 
       const { data, paging } = await WrongBookStudentWrongQuestion.get(apiParams);

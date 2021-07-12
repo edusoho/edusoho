@@ -48,6 +48,23 @@ class ItemBankExercisePool extends AbstractPool
         return $searchConditions;
     }
 
+    public function buildTargetConditions($targetId, $conditions)
+    {
+        $searchConditions = [];
+
+        if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
+            return [];
+        }
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'exercise', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+
+        $searchConditions['chapter'] = $this->exerciseChapterSearch($targetId, $conditions);
+        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions);
+
+        return $searchConditions;
+    }
+
     public function exerciseChapterSearch($targetId, $conditions)
     {
         if ('chapter' !== $conditions['exerciseMediaType']) {

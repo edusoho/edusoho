@@ -155,23 +155,6 @@ export default {
         exerciseMediaType !== 'default' && (params.exerciseMediaType = exerciseMediaType)
       }
 
-      // if (type === 'testpaperId') {
-      //   _.assign(this.form, {
-      //     testpaperId: 'default'
-      //   });
-      //
-      //   testpaperId !== 'default' && (params.testpaperId = testpaperId);
-      // }
-      //
-      // if (type === 'chapterId') {
-      //   console.log(chapterId)
-      //   _.assign(this.form, {
-      //     chapterId: chapterId,
-      //   });
-      //
-      //   chapterId !== 'default' && (params.chapterId = chapterId);
-      // }
-
       return apiParams;
     },
 
