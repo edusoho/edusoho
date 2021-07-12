@@ -263,6 +263,35 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         $this->dispatchEvent('wrong_question.delete', $wrongExisted);
     }
 
+    public function batchDeleteWrongQuestionByItemIds($itemIds)
+    {
+        try {
+            $this->beginTransaction();
+            $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemIds($itemIds);
+
+            if (empty($wrongQuestionCollects)) {
+                return;
+            }
+
+            $this->getWrongQuestionDao()->batchDelete(['item_ids' => $itemIds]);
+            $this->getWrongQuestionCollectDao()->batchDelete(['item_ids' => $itemIds]);
+
+            $this->getLogService()->info(
+                'wrong_question',
+                'delete_wrong_question',
+                '错题本题目清除',
+                ['item_ids' => $itemIds]
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatchEvent('wrong_question.batch_delete', $wrongQuestionCollects);
+    }
+
     public function findWrongQuestionBySceneIds($sceneIds)
     {
         return $this->getWrongQuestionDao()->findWrongQuestionBySceneIds($sceneIds);

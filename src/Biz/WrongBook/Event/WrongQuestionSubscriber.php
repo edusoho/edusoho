@@ -29,6 +29,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'answer.submitted' => 'onAnswerSubmitted',
             'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
             'wrong_question_pool.delete' => 'onWrongQuestionPoolDelete',
+            'wrong_question.batch_delete' => 'onWrongQuestionBatchDelete',
+            'item.delete' => 'onItemDelete',
+            'item.batchDelete' => 'onItemBatchDelete',
         ];
     }
     public function onWrongQuestionPoolDelete(Event $event){
@@ -128,9 +131,49 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $poolId = $event->getArgument('pool_id');
 
+        $this->updatePoolItemNum($poolId);
+    }
+
+    public function onWrongQuestionBatchDelete(Event $event)
+    {
+        $wrongQuestionCollects = $event->getSubject();
+
+        $poolIds = array_unique(ArrayToolkit::column($wrongQuestionCollects, 'pool_id'));
+
+        foreach ($poolIds as $poolId) {
+            $this->updatePoolItemNum($poolId);
+        }
+    }
+
+    public function onItemDelete(Event $event)
+    {
+        $item = $event->getSubject();
+
+        if (!empty($item)) {
+            $this->getWrongQuestionService()->batchDeleteWrongQuestionByItemIds([$item['id']]);
+        }
+    }
+
+    public function onItemBatchDelete(Event $event)
+    {
+        $items = $event->getSubject();
+
+        if (!empty($items)) {
+            $this->getWrongQuestionService()->batchDeleteWrongQuestionByItemIds(ArrayToolkit::column($items, 'id'));
+        }
+    }
+
+    protected function updatePoolItemNum($poolId)
+    {
         $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], [], 0, PHP_INT_MAX);
 
-        $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
+        $itemNum = count($poolCollects);
+
+        if (0 === $itemNum) {
+            $this->getWrongQuestionBookPoolDao()->delete($poolId);
+        } else {
+            $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
+        }
     }
 
     protected function getTestPaperId($answerRecord)
@@ -151,7 +194,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-            if ($courseSet['locked']) {
+            if ($courseSet['parentId'] > 0) {
                 $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
                 $targetType = 'classroom';
                 $targetId = $classCourse['classroomId'];
