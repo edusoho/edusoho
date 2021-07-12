@@ -31,6 +31,7 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\WrongBook\Service\WrongQuestionService;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -540,7 +541,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
         $this->getCourseSetGoodsMediator()->onDelete($courseSet);
-
+        $this->getWrongQuestionService()->deleteWrongPoolByTargetIdAndTargetType($courseSet['id'],'course');
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
 
@@ -1285,5 +1286,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->createService('WrongBook:WrongQuestionService');
     }
 }

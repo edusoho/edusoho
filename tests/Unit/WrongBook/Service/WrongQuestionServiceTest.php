@@ -3,6 +3,7 @@
 namespace Tests\Unit\WrongBook\Service;
 
 use Biz\BaseTestCase;
+use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Dao\WrongQuestionDao;
@@ -221,6 +222,23 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->getWrongQuestionService()->deleteWrongQuestion($wrongQuestionsOld[0]['id']);
         $wrongQuestionsNew = $this->getWrongQuestionDao()->search(['item_id' => 1], [], 0, PHP_INT_MAX);
         $this->assertCount(count($wrongQuestionsOld) - 1, $wrongQuestionsNew);
+    }
+
+    public function testDeleteWrongPoolByTargetIdAndTargetType()
+    {
+        $created = $this->getWrongQuestionBookPoolDao()->create($this->mockPool());
+        $this->createWrongQuestionCollect();
+        $this->batchCreateWrongQuestion();
+        $wrongPools=$this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType(1,'course');
+        $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
+        $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType(1, 'course');
+        $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
+        $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
+        $collecIds = ArrayToolkit::column($collecIds, 'id');
+        $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
+        $wrongPools=$this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType(1,'course');
+
+        $this->assertEquals(0,count($wrongPools));
     }
 
     public function testFindWrongQuestionBySceneIds()
