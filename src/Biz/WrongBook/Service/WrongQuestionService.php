@@ -54,6 +54,4 @@ interface WrongQuestionService
     public function countWrongQuestionsWithDistinctItem($conditions);
 
     public function findWrongQuestionBySceneIds($sceneIds);
-
-    public function deleteWrongPoolByTargetIdAndTargetType($targetId,$targetType);
 }

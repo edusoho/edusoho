@@ -263,34 +263,6 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         $this->dispatchEvent('wrong_question.delete', $wrongExisted);
     }
 
-    public function deleteWrongPoolByTargetIdAndTargetType($targetId, $targetType)
-    {
-        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($targetId, $targetType);
-        if (empty($wrongPools)) {
-            throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
-        }
-        $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
-        try {
-            $this->beginTransaction();
-
-            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($targetId, $targetType);
-            $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
-            $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
-            $collecIds = ArrayToolkit::column($collecIds, 'id');
-            $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
-            $this->getLogService()->info(
-                'wrong_question',
-                'delete_wrong_question',
-                "删除课程#{$targetId}错题池"
-            );
-
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
-    }
-
     public function findWrongQuestionBySceneIds($sceneIds)
     {
         return $this->getWrongQuestionDao()->findWrongQuestionBySceneIds($sceneIds);

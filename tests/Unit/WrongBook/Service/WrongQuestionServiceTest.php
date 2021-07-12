@@ -224,23 +224,6 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertCount(count($wrongQuestionsOld) - 1, $wrongQuestionsNew);
     }
 
-    public function testDeleteWrongPoolByTargetIdAndTargetType()
-    {
-        $created = $this->getWrongQuestionBookPoolDao()->create($this->mockPool());
-        $this->createWrongQuestionCollect();
-        $this->batchCreateWrongQuestion();
-        $wrongPools=$this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType(1,'course');
-        $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
-        $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType(1, 'course');
-        $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
-        $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
-        $collecIds = ArrayToolkit::column($collecIds, 'id');
-        $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
-        $wrongPools=$this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType(1,'course');
-
-        $this->assertEquals(0,count($wrongPools));
-    }
-
     public function testFindWrongQuestionBySceneIds()
     {
         $this->batchCreateWrongQuestion();

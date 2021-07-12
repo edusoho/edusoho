@@ -9,9 +9,12 @@ use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\System\Service\LogService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
+use Biz\WrongBook\Dao\WrongQuestionDao;
 use Biz\WrongBook\Service\WrongQuestionService;
+use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -25,7 +28,39 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         return [
             'answer.submitted' => 'onAnswerSubmitted',
             'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
+            'wrong_question_pool.delete' => 'onWrongQuestionPoolDelete',
         ];
+    }
+    public function onWrongQuestionPoolDelete(Event $event){
+        $contions = $event->getSubject();
+        if (empty($contions['target_id'])) {
+            throw WrongBookException::WRONG_QUESTION_BOOK_POOL_TARGET_ID_REQUIRE();
+        }
+        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+        if (empty($wrongPools)) {
+            throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
+        }
+        $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
+        $db = $this->getBiz()->offsetGet('db');
+        try {
+            $db->beginTransaction();
+
+            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+            $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
+            $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
+            $collecIds = ArrayToolkit::column($collecIds, 'id');
+            $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
+            $this->getLogService()->info(
+                'wrong_question',
+                'delete_wrong_question',
+                "删除课程#{$contions['target_id']}错题池"
+            );
+
+            $db->commit();
+        } catch (\Exception $e) {
+            $db->rollback();
+            throw $e;
+        }
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -134,6 +169,22 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         }
 
         return [$targetType, $targetId];
+    }
+
+    /**
+     * @return WrongQuestionDao
+     */
+    protected function getWrongQuestionDao()
+    {
+        return $this->getBiz()->dao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 
     /**

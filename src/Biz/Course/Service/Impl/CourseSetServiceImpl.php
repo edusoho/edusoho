@@ -541,8 +541,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
         $this->getCourseSetGoodsMediator()->onDelete($courseSet);
-        $this->getWrongQuestionService()->deleteWrongPoolByTargetIdAndTargetType($courseSet['id'],'course');
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
+        $this->dispatchEvent('wrong_question_pool.delete', ['target_id'=>$courseSet['id'],'target_type'=>'course']);
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
