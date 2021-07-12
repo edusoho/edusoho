@@ -11,7 +11,9 @@ class WrongBookSourceManageCondition extends AbstractResource
     public function search(ApiRequest $request, $type, $targetId)
     {
         $conditions = $request->query->all();
-        $this->getWrongQuestionService()->
+        $poolName = 'wrong_question.'.$type.'_pool';
+
+        return $this->biz[$poolName]->buildTargetConditions($targetId, $conditions);
     }
 
     /**

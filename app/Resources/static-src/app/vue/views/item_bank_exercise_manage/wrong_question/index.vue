@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search />
+    <search :target-id="targetId" @on-search="onSearch"/>
 
     <student-wrong-question-table
       class="mt24"
@@ -59,12 +59,8 @@ export default {
   },
 
   methods: {
-    onSearch() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          // do
-        }
-      })
+    onSearch(params = {}) {
+      this.fetchWrongQuestion(params);
     },
 
     handleTableChange(pagination) {
@@ -72,7 +68,7 @@ export default {
       this.fetchWrongQuestion();
     },
 
-    async fetchWrongQuestion() {
+    async fetchWrongQuestion(params = {}) {
       this.loading = true;
 
       const apiParams = {
@@ -80,10 +76,10 @@ export default {
           targetId: this.targetId,
           targetType: this.targetType
         },
-        params: {
+        params: Object.assign({
           offset: (this.pagination.current - 1) * 10,
           limit: 10
-        }
+        }, params),
       };
 
       const { data, paging } = await WrongBookStudentWrongQuestion.get(apiParams);
