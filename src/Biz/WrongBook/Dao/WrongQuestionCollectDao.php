@@ -8,5 +8,5 @@ interface WrongQuestionCollectDao extends AdvancedDaoInterface
 {
     public function getCollectBYPoolIdAndItemId($poolId, $itemId);
 
-    public function getCollectBYPoolId($poolId);
+    public function findCollectBYPoolId($poolId);
 }
