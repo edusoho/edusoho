@@ -15,12 +15,12 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times'];
 
-    public function findWrongQuestionBySceneIds($items)
+    public function findWrongQuestionBySceneIds($sceneIds)
     {
-        $marks = str_repeat('?,', count($items) - 1).'?';
+        $marks = str_repeat('?,', count($sceneIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE answer_scene_id IN({$marks});";
 
-        return $this->db()->fetchAll($sql, $items);
+        return $this->db()->fetchAll($sql, $sceneIds);
     }
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
@@ -88,6 +88,14 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             $preBuilder->andWhere('c.pool_id = :pool_id');
         }
 
+        if (!empty($conditions['pool_ids'])) {
+            $preBuilder->andWhere('c.pool_id IN (:pool_ids)');
+        }
+
+        if (!empty($conditions['status'])) {
+            $preBuilder->andWhere('c.status = :status');
+        }
+
         $ids = array_column($preBuilder->execute()->fetchAll(), 'id');
         if (empty($ids)) {
             return [];
@@ -107,6 +115,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 $builder->addOrderBy('c.'.$order, $sort);
             }
         }
+
+        $builder->addOrderBy($this->table.'.id', 'DESC');
 
         return $builder->execute()->fetchAll() ?: [];
     }
@@ -133,6 +143,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             ->select("COUNT(DISTINCT {$this->table}.item_id)");
         if (!empty($conditions['pool_id'])) {
             $builder->andWhere('c.pool_id = :pool_id');
+        }
+
+        if (!empty($conditions['status'])) {
+            $builder->andWhere('c.status = :status');
         }
 
         return (int) $builder->execute()->fetchColumn(0);

@@ -16,11 +16,15 @@ interface WrongQuestionService
 
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
 
+    public function batchBuildCorrectQuestion($correctAnswerQuestionReports, $source);
+
     public function countWrongQuestion($conditions);
 
     public function getPool($poolId);
 
     public function getPoolBySceneId($sceneId);
+
+    public function updatePool($id, $pool);
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit);
 

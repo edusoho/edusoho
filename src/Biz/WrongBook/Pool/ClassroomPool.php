@@ -63,35 +63,48 @@ class ClassroomPool extends AbstractPool
     public function buildConditions($pool, $conditions)
     {
         $searchConditions = [];
-        $courSets = $this->classroomCourseSetIdSearch($pool['target_id']);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_id' => $pool['id']], [], 0, PHP_INT_MAX);
+        $wrongQuestions = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
+        $courSets = $this->classroomCourseSetIdSearch($pool['target_id'], $wrongQuestions);
         $searchConditions['courseSets'] = $courSets;
-        $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions);
-        $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions);
+        $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions);
+        $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions, $wrongQuestions);
 
         return $searchConditions;
     }
 
-    protected function classroomCourseSetIdSearch($classroomId)
+    public function buildTargetConditions($targetId, $conditions)
     {
+        $searchConditions = [];
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'classroom', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+        $wrongQuestions = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
+        $courSets = $this->classroomCourseSetIdSearch($targetId, $wrongQuestions);
+        $searchConditions['courseSets'] = $courSets;
+        $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions);
+        $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions, $wrongQuestions);
+
+        return $searchConditions;
+    }
+
+    protected function classroomCourseSetIdSearch($classroomId, $wrongQuestions)
+    {
+        if (empty($wrongQuestions)) {
+            return [];
+        }
+
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSetsGroupId = ArrayToolkit::index($courseSets, 'id');
         $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
-            'user_id' => $this->getCurrentUser()->getId(),
-            'answer_scene_ids' => $this->generateSceneIds($activates),
-        ], [], 0, PHP_INT_MAX);
 
-        if (empty($wrongQuestions)) {
-            return [];
-        }
-        $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
         $courseSetInfo = [];
         $tempCourseSet = [];
         foreach ($activates as $activity) {
             $courseSetId = $courseSetsGroupId[$activity['fromCourseSetId']]['id'];
-            if (!empty($activity['ext']) && isset($wrongQuestionGroupSceneIds[$activity['ext']['answerSceneId']]) && $tempCourseSet !== $courseSetIds && !in_array($courseSetId, $tempCourseSet)) {
+            if (!empty($activity['ext']) && isset($wrongQuestions[$activity['ext']['answerSceneId']]) && $tempCourseSet !== $courseSetIds && !in_array($courseSetId, $tempCourseSet)) {
                 $courseSetInfo[] = [
                     'id' => $courseSetsGroupId[$activity['fromCourseSetId']]['id'],
                     'title' => $courseSetsGroupId[$activity['fromCourseSetId']]['title'],
@@ -103,7 +116,7 @@ class ClassroomPool extends AbstractPool
         return $courseSetInfo;
     }
 
-    protected function classroomMediaTypeSearch($courSets, $conditions)
+    protected function classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions)
     {
         $defaultMediaType = ['homework', 'testpaper', 'exercise'];
         $courseSetIds = ArrayToolkit::column($courSets, 'id');
@@ -112,15 +125,9 @@ class ClassroomPool extends AbstractPool
         }
 
         $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
-            'user_id' => $this->getCurrentUser()->getId(),
-            'answer_scene_ids' => $this->generateSceneIds($activates),
-        ], [], 0, PHP_INT_MAX);
-
-        $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
         $mediaType = [];
         foreach ($activates as $activity) {
-            if (!empty($activity['ext']) && isset($wrongQuestionGroupSceneIds[$activity['ext']['answerSceneId']]) && !in_array($activity['mediaType'], $mediaType)) {
+            if (!empty($activity['ext']) && isset($wrongQuestions[$activity['ext']['answerSceneId']]) && !in_array($activity['mediaType'], $mediaType)) {
                 $mediaType[] = $activity['mediaType'];
                 if ($mediaType === $defaultMediaType) {
                     break;
@@ -131,7 +138,7 @@ class ClassroomPool extends AbstractPool
         return $mediaType;
     }
 
-    protected function classroomTaskIdSearch($courSets, $conditions)
+    protected function classroomTaskIdSearch($courSets, $conditions, $wrongQuestions)
     {
         $defaultMediaType = ['homework', 'testpaper', 'exercise'];
         $courseSetIds = ArrayToolkit::column($courSets, 'id');
@@ -143,20 +150,16 @@ class ClassroomPool extends AbstractPool
         } else {
             $mediaTypes = $defaultMediaType;
         }
+
         $activates = $this->getActivityService()->findActivitiesByCourseSetIdsAndTypes($courseSetIds, $mediaTypes, true);
         $activatesGroupById = ArrayToolkit::index($activates, 'id');
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
-            'user_id' => $this->getCurrentUser()->getId(),
-            'answer_scene_ids' => $this->generateSceneIds($activates),
-        ], [], 0, PHP_INT_MAX);
-
-        $wrongQuestionGroupSceneIds = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
         $activityIds = ArrayToolkit::column($activates, 'id');
         $courseTasks = $this->getCourseTaskService()->findTasksByActivityIds($activityIds);
+
         $courseTasksInfo = [];
         foreach ($courseTasks as $courseTask) {
             $taskActivity = $activatesGroupById[$courseTask['activityId']];
-            if (!empty($taskActivity['ext']) && isset($wrongQuestionGroupSceneIds[$taskActivity['ext']['answerSceneId']])) {
+            if (!empty($taskActivity['ext']) && isset($wrongQuestions[$taskActivity['ext']['answerSceneId']])) {
                 $courseTasksInfo[] = [
                     'id' => $courseTask['id'],
                     'title' => $courseTask['title'],

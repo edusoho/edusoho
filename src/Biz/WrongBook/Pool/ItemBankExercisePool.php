@@ -40,9 +40,27 @@ class ItemBankExercisePool extends AbstractPool
         if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
             return [];
         }
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_id' => $pool['id']], [], 0, PHP_INT_MAX);
 
         $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
-        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions);
+        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions, $wrongQuestions);
+
+        return $searchConditions;
+    }
+
+    public function buildTargetConditions($targetId, $conditions)
+    {
+        $searchConditions = [];
+
+        if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
+            return [];
+        }
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'exercise', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+
+        $searchConditions['chapter'] = $this->exerciseChapterSearch($targetId, $conditions);
+        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions);
 
         return $searchConditions;
     }
@@ -56,7 +74,7 @@ class ItemBankExercisePool extends AbstractPool
         return $this->getItemCategoryService()->getItemCategoryTree($targetId);
     }
 
-    public function exerciseAssessmentSearch($targetId, $conditions)
+    public function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
     {
         if ('testpaper' !== $conditions['exerciseMediaType']) {
             return [];
@@ -65,15 +83,8 @@ class ItemBankExercisePool extends AbstractPool
         $exerciseModules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
 
         $moduleIds = ArrayToolkit::column($exerciseModules, 'id');
-        $sceneIds = ArrayToolkit::column($exerciseModules, 'answerSceneId');
         $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByModuleIds($moduleIds);
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
-
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion([
-            'user_id' => $this->getCurrentUser()->getId(),
-            'answer_scene_ids' => $sceneIds,
-            'testpaper_ids' => ArrayToolkit::column($assessmentExercises, 'assessmentId'),
-        ], [], 0, PHP_INT_MAX);
         $wrongQuestionGroupAssessmentId = ArrayToolkit::group($wrongQuestions, 'testpaper_id');
 
         $assessmentSearch = [];
