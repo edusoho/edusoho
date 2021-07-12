@@ -124,7 +124,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('item_id,COUNT(*) as wrongTimes')
+            ->select('max(id) as id,item_id,COUNT(*) as wrongTimes')
             ->groupBy('item_id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -132,6 +132,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         if (!empty($orderBys['wrongTimes'])) {
             $builder->addOrderBy('wrongTimes', $orderBys['wrongTimes']);
         }
+
+        $builder->addOrderBy('id', 'DESC');
 
         return $builder->execute()->fetchAll() ?: [];
     }

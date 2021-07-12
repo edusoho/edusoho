@@ -119,9 +119,7 @@ class ItemBankExercisePool extends AbstractPool
     protected function prepareCommonSceneIds($conditions, $targetId)
     {
         if (empty($conditions['exerciseMediaType'])) {
-            $chapterSceneIds = $this->findSceneIdsByExerciseMediaType($targetId, 'chapter');
-            $assessmentSceneIds = $this->findSceneIdsByExerciseMediaType($targetId, 'assessment');
-            $sceneIds = array_merge($chapterSceneIds, $assessmentSceneIds);
+            return $this->findSceneIdsByExerciseMediaType($targetId, 'chapter');
         } else {
             $mediaType = 'testpaper' === $conditions['exerciseMediaType'] ? 'assessment' : 'chapter';
             $sceneIds = $this->findSceneIdsByExerciseMediaType($targetId, $mediaType);
