@@ -3,7 +3,6 @@
 namespace Tests\Unit\WrongBook\Service;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Dao\WrongQuestionDao;
