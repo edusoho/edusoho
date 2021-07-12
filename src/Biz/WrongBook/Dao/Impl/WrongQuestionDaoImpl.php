@@ -112,6 +112,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             }
         }
 
+        $builder->addOrderBy($this->table.'.id', 'DESC');
+
         return $builder->execute()->fetchAll() ?: [];
     }
 
