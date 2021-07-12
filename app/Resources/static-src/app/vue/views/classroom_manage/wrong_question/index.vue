@@ -50,7 +50,8 @@ export default {
       wrongQuestionList: [],
       visible: false,
       currentId: '0',
-      currentOrder: 0
+      currentOrder: 0,
+      searchParams: {},
     }
   },
 
@@ -60,12 +61,13 @@ export default {
 
   methods: {
     onSearch(params) {
+      this.searchParams = params;
       this.fetchWrongQuestion(params);
     },
 
     handleTableChange(pagination) {
       this.pagination.current = pagination.current;
-      this.fetchWrongQuestion();
+      this.fetchWrongQuestion(this.searchParams);
     },
 
     async fetchWrongQuestion(params = {}) {
