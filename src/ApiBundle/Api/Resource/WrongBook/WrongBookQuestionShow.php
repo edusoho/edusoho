@@ -149,7 +149,7 @@ class WrongBookQuestionShow extends AbstractResource
     {
         return [
             'chapter' => '章节练习',
-            'assessment' => '考试练习',
+            'assessment' => '试卷练习',
         ];
     }
 
