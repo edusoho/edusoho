@@ -23,8 +23,7 @@ class WrongBookWrongQuestionDetail extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $wrongQuestionsByUser = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctUserId($conditions, $orderBy, $offset, $limit);
-        $wrongQuestionsUserDetail = $this->getWrongQuestionService()->findWrongQuestionsByUserIdsAndItemIdAndSceneIds(ArrayToolkit::column($wrongQuestionsByUser, 'user_id'), $itemId, $conditions['answer_scene_ids']);
-        $wrongQuestionsByUser = $this->makeWrongQuestionDetailInfo($wrongQuestionsByUser, $wrongQuestionsUserDetail);
+        $wrongQuestionsByUser = $this->makeWrongQuestionDetailInfo($wrongQuestionsByUser);
         $questionsCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctUserId($conditions);
 
         $itemInfo = $this->getItemService()->getItemWithQuestions($itemId, true);
@@ -32,23 +31,18 @@ class WrongBookWrongQuestionDetail extends AbstractResource
         return array_merge(['item' => $itemInfo], $this->makePagingObject($wrongQuestionsByUser, $questionsCount, $offset, $limit));
     }
 
-    protected function makeWrongQuestionDetailInfo($wrongQuestionsByUser, $wrongQuestionsUserDetail)
+    protected function makeWrongQuestionDetailInfo($wrongQuestionsByUser)
     {
-        $answerQuestionReportIds = array_merge(ArrayToolkit::column($wrongQuestionsByUser, 'answer_question_report_id'),
-            ArrayToolkit::column($wrongQuestionsUserDetail, 'answer_question_report_id'));
+        $answerQuestionReportIds = ArrayToolkit::column($wrongQuestionsByUser, 'answer_question_report_id');
+        $collectIds = array_unique(ArrayToolkit::column($wrongQuestionsByUser, 'collect_id'));
+        $collect = $this->getWrongQuestionService()->findWrongQuestionCollectByCollectIds($collectIds);
         $userIds = ArrayToolkit::column($wrongQuestionsByUser, 'user_id');
         $reports = $this->getAnswerQuestionReportService()->findByIds($answerQuestionReportIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
         $detailInfo = [];
         foreach ($wrongQuestionsByUser as $key => $question) {
             $detailInfo[] = $this->generateDetailData($question, $users, $reports);
-            $userDetail = [];
-            foreach ($wrongQuestionsUserDetail as $detail) {
-                if ($question['user_id'] === $detail['user_id']) {
-                    $userDetail[] = $this->generateDetailData($detail, $users, $reports);
-                }
-            }
-            $detailInfo[$key]['wrong_record'] = $userDetail;
+            $detailInfo[$key]['wrong_times'] = $collect[$question['collect_id']]['wrong_times'];
         }
 
         return $detailInfo;
