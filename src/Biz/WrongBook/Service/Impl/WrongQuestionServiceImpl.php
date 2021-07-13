@@ -312,6 +312,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         if (!$collect) {
             $collectFields = ArrayToolkit::parts($fields, $collectRequireFields);
             $collectFields['last_submit_time'] = time();
+            $collectFields['status'] = 'wrong';
             $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
         }
 
