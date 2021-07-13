@@ -43,7 +43,7 @@ class WrongBookQuestionShow extends AbstractResource
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $activityScenes = $this->getActivityScenes($sceneIds);
-        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdAndSceneIds($this->getCurrentUser()->getId(), $itemIds, $sceneIds);
+        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($this->getCurrentUser()->getId(), $itemIds, $sceneIds);
         $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {

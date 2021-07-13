@@ -68,7 +68,7 @@ class ItemBankExercisePool extends AbstractPool
         return $searchConditions;
     }
 
-    public function exerciseChapterSearch($targetId, $conditions)
+    protected function exerciseChapterSearch($targetId, $conditions)
     {
         if ('chapter' !== $conditions['exerciseMediaType']) {
             return [];
