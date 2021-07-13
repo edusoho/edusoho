@@ -10,7 +10,7 @@
 
     <div class="question-body">
       <div class="question-stem clearfix">
-        <span>{{ order }}、</span>
+        <div class="pull-left">{{ order }}、</div>
         <div v-html="formateQuestionStem" />
       </div>
 
@@ -32,11 +32,19 @@
           </div>
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">正确答案</div>
-            <div class="analysis-item_right">{{ rightAnswer }}</div>
+            <div
+              class="analysis-item_right analysis-content__item--column"
+              v-html="rightAnswer"
+            ></div>
           </div>
+
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">你的答案</div>
-            <div :class="[status.color]">{{ yourAnswer }}</div>
+            <div
+              class="analysis-item_right analysis-content__item--column"
+              :class="[status.color]"
+              v-html="yourAnswer"
+            ></div>
           </div>
         </div>
       </div>
@@ -188,17 +196,28 @@ export default {
         });
       }
 
+      if (answer_mode === 'text') {
+        let result = '';
+        _.forEach(answer, (item, index) => {
+          result += `<div style="margin-bottom: 2vw"> (${index +
+            1}) ${item} </div>`;
+        });
+        return result;
+      }
+
       return _.join(answer, '、');
     },
 
     yourAnswer() {
       let {
-        answer,
         answer_mode,
         report: { response },
       } = this.questions;
 
       if (!_.size(response)) {
+        if (answer_mode === 'text') {
+          return '<div class="fill-answer">（1）未作答</div>';
+        }
         return '未作答';
       }
 
@@ -210,8 +229,9 @@ export default {
 
       if (answer_mode === 'text') {
         let result = '';
-        _.forEach(answer, function(item, index) {
-          result += `(${index + 1})：${item}`;
+        _.forEach(response, (item, index) => {
+          result += `<div style="margin-bottom: 2vw"> (${index + 1}) ${item ||
+            '未作答'}</div>`;
         });
         return result;
       }
