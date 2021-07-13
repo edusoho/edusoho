@@ -55,6 +55,8 @@ interface WrongQuestionService
 
     public function searchWrongQuestionCollect($conditions, $orderBys, $start, $limit, $columns = []);
 
+    public function countWrongQuestionCollect($conditions);
+
     public function countWrongQuestionsWithDistinctItem($conditions);
 
     public function findWrongQuestionBySceneIds($sceneIds);
