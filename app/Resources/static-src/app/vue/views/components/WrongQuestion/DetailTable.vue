@@ -24,12 +24,17 @@ const columns = [
   {
     title: '用户名',
     dataIndex: 'user_name',
-    width: '20%'
+    width: '15%'
+  },
+  {
+    title: '做错频次',
+    dataIndex: 'wrong_times',
+    width: '15%'
   },
   {
     title: '答题时间',
     dataIndex: 'answer_time',
-    width: '40%',
+    width: '30%',
     scopedSlots: { customRender: 'answer_time' }
   },
   {
