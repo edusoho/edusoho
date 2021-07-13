@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\User\UserException;
+use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +58,8 @@ class WrongQuestionBookController extends BaseController
             $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
         }
 
+        $pool = $this->getWrongQuestionService()->getPool($poolId);
+
         $answerRecord = $this->getAnswerRecordService()->get($recordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
@@ -66,7 +69,7 @@ class WrongQuestionBookController extends BaseController
             'showHeader' => 1,
             'restartUrl' => '',
             'showDoAgainBtn' => 0,
-            'submitReturnUrl' => $this->generateUrl('my_wrong_question_book_target_detail', [], UrlGeneratorInterface::ABSOLUTE_URL)."#/target_type/exercise/target_id/{$poolId}",
+            'submitReturnUrl' => $this->generateUrl('my_wrong_question_book_target_detail', [], UrlGeneratorInterface::ABSOLUTE_URL)."#/target_type/{$pool['target_type']}/target_id/{$poolId}",
         ]);
     }
 
@@ -105,5 +108,13 @@ class WrongQuestionBookController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->createService('WrongBook:WrongQuestionService');
     }
 }
