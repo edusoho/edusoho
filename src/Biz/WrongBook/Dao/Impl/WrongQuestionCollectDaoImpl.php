@@ -24,6 +24,11 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
         return $this->findInField('item_id', $itemIds);
     }
 
+    public function findWrongQuestionCollectByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [
