@@ -22,6 +22,7 @@ abstract class AbstractPool
 
     abstract public function prepareSceneIdsByTargetId($targetId, $conditions);
 
+    abstract public function buildTargetConditions($targetId, $conditions);
 
     /**
      * @return Biz

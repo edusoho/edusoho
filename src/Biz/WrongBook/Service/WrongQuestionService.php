@@ -12,6 +12,8 @@ interface WrongQuestionService
 
     public function deleteWrongQuestion($id);
 
+    public function batchDeleteWrongQuestionByItemIds($itemIds);
+
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
 
     public function batchBuildCorrectQuestion($correctAnswerQuestionReports, $source);

@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\WrongBook;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Testpaper\ExerciseException;
-use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -30,9 +29,7 @@ class WrongBookSubmitAnswer extends AbstractResource
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-//        $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
-//        $assessmentResponse = $wrapper->wrap($data, $assessment, $exerciseRecord);
         $answerRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
