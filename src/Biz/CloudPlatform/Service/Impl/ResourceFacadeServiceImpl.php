@@ -46,7 +46,13 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         if (!DeviceToolkit::isMobileClient()) {
             $payload['hlsClefEncryptVersion'] = 3;
         }
-        $payload['encrypt'] = 3;
+
+        $client = DeviceToolkit::getClient($userAgent);
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (in_array($client, ['ios', 'android']) || !empty($storageSetting['enable_hls_encryption_plus'])) {
+            $payload['encrypt'] = 3;
+        }
+
         $context['token'] = $this->makePlayToken($file, 600, $payload);
         $context['resNo'] = $file['globalId'];
 

@@ -321,7 +321,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $options['playAudio'] = $request->query->get('playAudio', 0);
 
-            return $this->getAudioWithEsCloud($file, $audio, $activity, $options);
+            return $this->getAudioWithEsCloud($file, $audio, $activity, $options, $request);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -341,9 +341,9 @@ class CourseTaskMedia extends AbstractResource
         ];
     }
 
-    protected function getAudioWithEsCloud($file, $audio, $activity, $options)
+    protected function getAudioWithEsCloud($file, $audio, $activity, $options, $request)
     {
-        $context = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
+        $context = $this->getResourceFacadeService()->getPlayerContext($file, $request->headers->get('user-agent'), $options);
         $context['hasText'] = $audio['hasText'] ? true : false;
         $context['text'] = $audio['hasText'] ? $activity['content'] : '';
 
