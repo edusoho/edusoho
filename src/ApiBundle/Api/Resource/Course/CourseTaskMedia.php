@@ -321,7 +321,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $options['playAudio'] = $request->query->get('playAudio', 0);
 
-            return $this->getAudioWithEsCloud($file, $audio, $activity, $options, $request);
+            return $this->getAudioWithEsCloud($file, $audio, $activity, $options);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
