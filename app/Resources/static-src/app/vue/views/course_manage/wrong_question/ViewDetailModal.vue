@@ -46,6 +46,11 @@ export default {
       required: true
     },
 
+    courseId: {
+      type: String,
+      required: true
+    },
+
     currentId: {
       type: String,
       required: true
@@ -85,6 +90,7 @@ export default {
         },
         params: {
           targetId: this.targetId,
+          courseId: this.courseId,
           offset: (this.pagination.current - 1) * 10,
           limit: 10
         }

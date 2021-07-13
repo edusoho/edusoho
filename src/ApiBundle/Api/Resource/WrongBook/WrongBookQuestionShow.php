@@ -87,7 +87,7 @@ class WrongBookQuestionShow extends AbstractResource
                 if (!in_array($sceneId, $inItemScene)) {
                     $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
                     $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-                    if ($courseSet['isClassroomRef']) {
+                    if ($courseSet['parentId'] > 0) {
                         $mainSource = $courseSet['title'];
                     } else {
                         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
@@ -149,7 +149,7 @@ class WrongBookQuestionShow extends AbstractResource
     {
         return [
             'chapter' => '章节练习',
-            'assessment' => '考试练习',
+            'assessment' => '试卷练习',
         ];
     }
 

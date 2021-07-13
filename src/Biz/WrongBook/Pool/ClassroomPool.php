@@ -75,6 +75,21 @@ class ClassroomPool extends AbstractPool
         return $searchConditions;
     }
 
+    public function buildTargetConditions($targetId, $conditions)
+    {
+        $searchConditions = [];
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'classroom', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+        $wrongQuestions = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
+        $courSets = $this->classroomCourseSetIdSearch($targetId, $wrongQuestions);
+        $searchConditions['courseSets'] = $courSets;
+        $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions);
+        $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions, $wrongQuestions);
+
+        return $searchConditions;
+    }
+
     protected function classroomCourseSetIdSearch($classroomId, $wrongQuestions)
     {
         if (empty($wrongQuestions)) {

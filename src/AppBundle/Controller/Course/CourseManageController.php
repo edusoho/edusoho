@@ -922,6 +922,7 @@ class CourseManageController extends BaseController
         $ids = $request->request->get('ids', []);
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
         $this->getCourseService()->sortCourseItems($courseId, $ids);
+        $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $ids);
 
         return $this->createJsonResponse(['result' => true]);
     }

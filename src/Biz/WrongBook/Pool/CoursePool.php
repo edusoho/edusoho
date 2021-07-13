@@ -29,10 +29,10 @@ class CoursePool extends AbstractPool
 
     public function prepareSceneIdsByTargetId($targetId, $conditions)
     {
-        $this->getCourseService()->tryManageCourse($targetId);
+        $this->getCourseService()->tryManageCourse($conditions['courseId']);
 
         $conditions = array_merge($conditions, [
-            'courseId' => $targetId,
+            'courseId' => $conditions['courseId'],
         ]);
 
         return $this->prepareCommonSceneIds($conditions, $targetId);
@@ -103,6 +103,43 @@ class CoursePool extends AbstractPool
         }
 
         $result['plans'] = $this->handleArray($newCourses, ['id', 'title']);
+        $result['source'] = $taskTypes;
+        $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
+
+        return $result;
+    }
+
+    public function buildTargetConditions($targetId, $conditions)
+    {
+        $conditions = $this->handleConditions($conditions);
+        $tasks = $this->getCourseTaskService()->searchTasks($conditions, [], 0, PHP_INT_MAX);
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'course', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+
+        $collects = $this->getWrongQuestionCollectDao()->search(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+        $collectIds = array_unique(ArrayToolkit::column($collects, 'id'));
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => $collectIds], [], 0, PHP_INT_MAX);
+        $answerSceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
+
+        $activitys = [];
+        foreach ($answerSceneIds as $answerSceneId) {
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+            if (isset($conditions['courseId']) && $conditions['courseId'] != $activity['fromCourseId']) {
+                continue;
+            }
+            $activitys[] = $activity;
+        }
+        $tasks = ArrayToolkit::index($tasks, 'activityId');
+        $activityIds = ArrayToolkit::column($activitys, 'id');
+        $taskTypes = array_values(array_unique(ArrayToolkit::column($activitys, 'mediaType')));
+
+        $newTasks = [];
+        foreach ($activityIds as $activityId) {
+            if (!empty($tasks[$activityId])) {
+                $newTasks[] = $tasks[$activityId];
+            }
+        }
+
         $result['source'] = $taskTypes;
         $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
 

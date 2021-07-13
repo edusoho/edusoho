@@ -51,7 +51,24 @@ class ItemBankExercisePool extends AbstractPool
         return $searchConditions;
     }
 
-    protected function exerciseChapterSearch($targetId, $conditions)
+    public function buildTargetConditions($targetId, $conditions)
+    {
+        $searchConditions = [];
+
+        if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
+            return [];
+        }
+        $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'exercise', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+
+        $searchConditions['chapter'] = $this->exerciseChapterSearch($targetId, $conditions);
+        $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions);
+
+        return $searchConditions;
+    }
+
+    public function exerciseChapterSearch($targetId, $conditions)
     {
         if ('chapter' !== $conditions['exerciseMediaType']) {
             return [];
@@ -105,9 +122,7 @@ class ItemBankExercisePool extends AbstractPool
     protected function prepareCommonSceneIds($conditions, $targetId)
     {
         if (empty($conditions['exerciseMediaType'])) {
-            $chapterSceneIds = $this->findSceneIdsByExerciseMediaType($targetId, 'chapter');
-            $assessmentSceneIds = $this->findSceneIdsByExerciseMediaType($targetId, 'assessment');
-            $sceneIds = array_merge($chapterSceneIds, $assessmentSceneIds);
+            return $this->findSceneIdsByExerciseMediaType($targetId, 'chapter');
         } else {
             $mediaType = 'testpaper' === $conditions['exerciseMediaType'] ? 'assessment' : 'chapter';
             $sceneIds = $this->findSceneIdsByExerciseMediaType($targetId, $mediaType);

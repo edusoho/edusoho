@@ -88,6 +88,10 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             $preBuilder->andWhere('c.pool_id = :pool_id');
         }
 
+        if (!empty($conditions['pool_ids'])) {
+            $preBuilder->andWhere('c.pool_id IN (:pool_ids)');
+        }
+
         if (!empty($conditions['status'])) {
             $preBuilder->andWhere('c.status = :status');
         }
@@ -112,13 +116,15 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             }
         }
 
+        $builder->addOrderBy($this->table.'.id', 'DESC');
+
         return $builder->execute()->fetchAll() ?: [];
     }
 
     public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('item_id,COUNT(*) as wrongTimes')
+            ->select('max(id) as id,item_id,COUNT(*) as wrongTimes')
             ->groupBy('item_id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -126,6 +132,8 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         if (!empty($orderBys['wrongTimes'])) {
             $builder->addOrderBy('wrongTimes', $orderBys['wrongTimes']);
         }
+
+        $builder->addOrderBy('id', 'DESC');
 
         return $builder->execute()->fetchAll() ?: [];
     }
@@ -164,6 +172,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'user_id = :user_id',
                 'user_id IN (:user_ids)',
                 'item_id = :item_id',
+                'item_id IN (:item_ids)',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'collect_id IN (:collect_ids)',
                 'answer_scene_id = :answer_scene_id',

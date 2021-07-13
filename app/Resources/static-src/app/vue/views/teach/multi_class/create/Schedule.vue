@@ -97,7 +97,7 @@ export default {
 
   mounted() {
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchCourseLesson();
+      this.sortItems();
     });
   },
 
@@ -149,6 +149,26 @@ export default {
         loop(sortInfos, addData);
       }
 
+      Course.courseSort(this.courseId, { sortInfos }).then(res => {
+        this.fetchCourseLesson();
+      });
+    },
+
+    sortItems() {
+      const data = this.lessonDirectory;
+      const sortInfos = [];
+
+      const loop = (sortInfos, data) => {
+        _.forEach(data, lesson => {
+          const { type, id } = lesson;
+          sortInfos.push(`${type}-${id}`);
+          if (lesson.children) {
+            loop(sortInfos, lesson.children)
+          }
+        });
+      };
+
+      loop(sortInfos, data);
       Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });

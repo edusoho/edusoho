@@ -21,23 +21,24 @@ class WrongBookBankExercise extends AbstractResource
             throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
         }
         $bankExercise = $this->getItemBankExerciseService()->getByQuestionBankId($pool['target_id']);
-        $exerciseModules = $this->getExerciseModuleService()->findByExerciseId($bankExercise['id']);
         $bankExerciseModule = [];
         $bankPool = $this->biz['wrong_question.exercise_pool'];
-        $exerciseSource = $this->bankExerciseSourceConstant();
+        $exerciseSources = $this->bankExerciseSourceConstant();
 
-        foreach ($exerciseModules as $module) {
-            $condition['exerciseMediaType'] = $type = 'assessment' === $module['type'] ? 'testpaper' : 'chapter';
+        foreach ($exerciseSources as $source => $sourceName) {
+            $condition['exerciseMediaType'] = $source;
             $condition['user_id'] = $pool['user_id'];
             $sceneId = $bankPool->prepareSceneIds($poolId, $condition);
             $wrongQuestionByScene = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndSceneIds($pool['user_id'], $sceneId);
             $typeCount = count(array_unique(ArrayToolkit::column($wrongQuestionByScene, 'collect_id')));
-            $bankExerciseModule[] = [
-                'type' => $type,
-                'module' => $exerciseSource[$type],
-                'wrong_number' => $typeCount,
-                'cover' => $this->transformImages($bankExercise['cover']),
-            ];
+            if ($typeCount > 0) {
+                $bankExerciseModule[] = [
+                    'type' => $source,
+                    'module' => $sourceName,
+                    'wrong_number' => $typeCount,
+                    'cover' => $this->transformImages($bankExercise['cover']),
+                ];
+            }
         }
 
         return $bankExerciseModule;
@@ -57,7 +58,7 @@ class WrongBookBankExercise extends AbstractResource
     {
         return [
             'chapter' => '章节练习',
-            'testpaper' => '考试练习',
+            'testpaper' => '试卷练习',
         ];
     }
 
