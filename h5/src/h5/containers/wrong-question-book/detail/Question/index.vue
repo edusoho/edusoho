@@ -33,46 +33,18 @@
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">正确答案</div>
             <div
-              v-if="currentQuestionComponent.name === '填空题'"
               class="analysis-item_right analysis-content__item--column"
-            >
-              <div
-                v-for="(item, index) in rightAnswer"
-                :key="index"
-                class="fill-answer"
-              >
-                （{{ index + 1 }}）{{ item }}
-              </div>
-            </div>
-            <div v-else class="analysis-item_right">{{ rightAnswer }}</div>
+              v-html="rightAnswer"
+            ></div>
           </div>
 
-          <div
-            v-if="currentQuestionComponent.name === '填空题'"
-            class="analysis-content__item"
-          >
+          <div class="analysis-content__item mt10">
             <div class="analysis-item__title">你的答案</div>
             <div
               class="analysis-item_right analysis-content__item--column"
               :class="[status.color]"
-            >
-              <div v-if="yourAnswer === '未作答'" class="fill-answer">
-                （1）未回答
-              </div>
-              <div
-                v-else
-                v-for="(item, index) in yourAnswer"
-                :key="index"
-                class="fill-answer"
-              >
-                <div v-if="item">（{{ index + 1 }}）{{ item }}</div>
-                <div v-else>（{{ index + 1 }}）未回答</div>
-              </div>
-            </div>
-          </div>
-          <div v-else class="analysis-content__item mt10">
-            <div class="analysis-item__title">你的答案</div>
-            <div :class="[status.color]">{{ yourAnswer }}</div>
+              v-html="yourAnswer"
+            ></div>
           </div>
         </div>
       </div>
@@ -225,7 +197,12 @@ export default {
       }
 
       if (answer_mode === 'text') {
-        return answer;
+        let result = '';
+        _.forEach(answer, (item, index) => {
+          result += `<div style="margin-bottom: 2vw"> (${index +
+            1}) ${item} </div>`;
+        });
+        return result;
       }
 
       return _.join(answer, '、');
@@ -238,6 +215,9 @@ export default {
       } = this.questions;
 
       if (!_.size(response)) {
+        if (answer_mode === 'text') {
+          return '<div class="fill-answer">（1）未作答</div>';
+        }
         return '未作答';
       }
 
@@ -248,7 +228,12 @@ export default {
       }
 
       if (answer_mode === 'text') {
-        return response;
+        let result = '';
+        _.forEach(response, (item, index) => {
+          result += `<div style="margin-bottom: 2vw"> (${index + 1}) ${item ||
+            '未作答'}</div>`;
+        });
+        return result;
       }
 
       return _.join(response, '、');
