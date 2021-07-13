@@ -4,7 +4,7 @@
       {% if canManage %}
         <li class="cd-sidebar__item {% if side_nav == 'main' %}active{% endif %}">
           <a href="{{ path('classroom_manage', {id: classroom.id}) }}">
-            {{ '基础设置'|trans }}
+            {{ 'classroom.basic_setting'|trans }}
           </a>
         </li>
         <li class="cd-sidebar__item {% if side_nav == 'courses' %}active{% endif %}">

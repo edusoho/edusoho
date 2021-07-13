@@ -4,7 +4,7 @@
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 {% set title = config.title ? config.title : config.defaultTitle %}
 {% set subTitle = config.subTitle|default() ? config.subTitle|default() : config.defaultSubTitle|default() %}
-{% block title %}{{ title }}{{'admin.setting.theme.manage.modal.edit'|trans}}{% endblock %}
+{% block title %}{{ title|trans }} {{'admin.setting.theme.manage.modal.edit'|trans}}{% endblock %}
 {% block body %}
   <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
     {% block content %}
@@ -14,7 +14,7 @@
             <label for="name">{{'admin.setting.theme.manage.custom_name'|trans}}</label>
           </div>
           <div class="col-md-7 controls">
-            <input type="text"  class="form-control" name="title" value="{{ title }}">
+            <input type="text"  class="form-control" name="title" value="{{ title|trans }}">
             <div class="titleTip hidden" style="color: red;margin-top: 10px">{{ 'admin_v2.byte_maxlength.message'|trans({'%max%':100}) }}</div>
           </div>
         </div>
