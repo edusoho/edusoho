@@ -4,7 +4,6 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ChangelogToolkit;
-use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\System;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -100,7 +99,7 @@ class DefaultController extends BaseController
         $user = $this->getUserService()->getUserProfile($this->getUser()->getId());
         $site = $this->getSettingService()->get('site', []);
         $payload = [
-            'userId' => (int)$user['id'],
+            'userId' => (int) $user['id'],
             'userName' => $user['truename'],
             'schoolName' => $site['name'],
             'isAdmin' => $this->getUser()->isSuperAdmin() ? 1 : 0,
