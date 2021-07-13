@@ -92,6 +92,8 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         foreach ($collectQuestions as $collectId => $collectQuestion) {
             $this->getWrongQuestionCollectDao()->wave([$collectId], ['wrong_times' => count($collectQuestion)]);
+            //不用wave
+            $this->getWrongQuestionCollectDao()->update($collectId, ['status' => 'wrong']);
         }
 
         $poolId = $event->getArgument('pool_id');
