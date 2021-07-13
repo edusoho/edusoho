@@ -183,7 +183,7 @@ class CourseTaskMedia extends AbstractResource
             $options['playAudio'] = $request->query->get('playAudio', 0);
             $options['watchLimitTime'] = $this->getVideoFreeWatchTime($course, $task);
 
-            return $this->getVideoWithEsCloud($file, $course, $task, $options);
+            return $this->getVideoWithEsCloud($file, $course, $task, $options, $request);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -230,9 +230,9 @@ class CourseTaskMedia extends AbstractResource
         return 0;
     }
 
-    protected function getVideoWithEsCloud($file, $course, $task, $options = [])
+    protected function getVideoWithEsCloud($file, $course, $task, $options = [], $request)
     {
-        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, $request->headers->get('user-agent'), $options);
         $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
         $playerContext['securityVideoPlayer'] = (int) $this->getSettingService()->node('magic.security_video_player', 0);
 
@@ -321,7 +321,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $options['playAudio'] = $request->query->get('playAudio', 0);
 
-            return $this->getAudioWithEsCloud($file, $audio, $activity, $options, $request);
+            return $this->getAudioWithEsCloud($file, $audio, $activity, $options);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -341,9 +341,9 @@ class CourseTaskMedia extends AbstractResource
         ];
     }
 
-    protected function getAudioWithEsCloud($file, $audio, $activity, $options, $request)
+    protected function getAudioWithEsCloud($file, $audio, $activity, $options)
     {
-        $context = $this->getResourceFacadeService()->getPlayerContext($file, $request->headers->get('user-agent'), $options);
+        $context = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         $context['hasText'] = $audio['hasText'] ? true : false;
         $context['text'] = $audio['hasText'] ? $activity['content'] : '';
 
