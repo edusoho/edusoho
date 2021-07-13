@@ -52,6 +52,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             $wrongQuestions = [];
             foreach ($wrongAnswerQuestionReports as $wrongAnswerQuestionReport) {
                 $collect = $this->handleQuestionCollect(['item_id' => $wrongAnswerQuestionReport['item_id'], 'pool_id' => $pool['id']]);
+
                 $wrongQuestions[] = [
                     'collect_id' => $collect['id'],
                     'user_id' => $source['user_id'],
@@ -314,6 +315,8 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             $collectFields['last_submit_time'] = time();
             $collectFields['status'] = 'wrong';
             $collect = $this->getWrongQuestionCollectDao()->create($collectFields);
+        } else {
+            $this->getWrongQuestionCollectDao()->update($collect['id'], ['status' => 'wrong', 'last_submit_time' => time()]);
         }
 
         return $collect;
