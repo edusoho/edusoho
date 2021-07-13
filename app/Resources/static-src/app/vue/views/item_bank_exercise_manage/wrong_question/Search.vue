@@ -49,7 +49,7 @@
       <a-tree-select
         notFoundContent="暂无数据"
         v-model="form.chapterId"
-        style="min-width: 120px"
+        style="min-width: 120px; max-width: 120px;"
         :dropdown-style="{ maxHeight: '400px',  overflow: 'auto' }"
         :tree-data="conditions.chapter"
         :replace-fields="{title:'name', key:'id', value: 'id', children: 'children' }"
