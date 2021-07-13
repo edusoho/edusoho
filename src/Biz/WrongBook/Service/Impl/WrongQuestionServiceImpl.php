@@ -61,6 +61,8 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'testpaper_id' => $source['testpaper_id'],
                     'answer_question_report_id' => $wrongAnswerQuestionReport['id'],
                     'submit_time' => time(),
+                    'source_type' => $source['source_type'],
+                    'source_id' => $source['source_id'],
                 ];
             }
             $this->getWrongQuestionDao()->batchCreate($wrongQuestions);

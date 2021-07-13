@@ -75,33 +75,38 @@ class WrongBookQuestionShow extends AbstractResource
     protected function getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes)
     {
         $sources = [];
-        $tempSceneIds = [];
-        $tempExercise = [];
         foreach ($wrongQuestionScenes as $wrongQuestion) {
             $itemId = $wrongQuestion['item_id'];
+            if (empty($sources[$itemId])) {
+                $sources[$itemId] = [];
+            }
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
-            $inItemScene = empty($tempSceneIds[$itemId]) ? [] : $tempSceneIds[$itemId];
-            $inSourceItem = empty($tempExercise[$itemId]) ? [] : $tempExercise[$itemId];
-            if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
-                if (!in_array($sceneId, $inItemScene)) {
-                    $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-                    $courseTask = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-                    if ($courseSet['parentId'] > 0) {
-                        $mainSource = $courseSet['title'];
-                    } else {
-                        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-                        $mainSource = $course['title'];
-                    }
-                    $secondarySource = $courseTask['title'];
-                    $sources[$itemId][] = empty($mainSource) ? $secondarySource : $mainSource.'-'.$secondarySource;
-                    $tempSceneIds[$itemId][] = $sceneId;
+            if ($wrongQuestion['source_type'] === 'course_task') {
+                $courseTask = $this->getCourseTaskService()->getTask($wrongQuestion['source_id']);
+                $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                if ($courseSet['parentId'] > 0) {
+                    $mainSource = $courseSet['title'];
+                } else {
+                    $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+                    $mainSource = $course['title'];
                 }
-            } else {
-                $exerciseModule = $this->getExerciseModuleService()->getByAnswerSceneId($sceneId);
-                $exerciseSource = $this->bankExerciseSourceConstant();
-                if (!in_array($exerciseSource[$exerciseModule['type']], $inSourceItem)) {
-                    $sources[$itemId][] = $tempExercise[$itemId][] = $exerciseSource[$exerciseModule['type']];
+                $secondarySource = $courseTask['title'];
+                $sourceTitle = empty($mainSource) ? $secondarySource : $mainSource.'-'.$secondarySource;
+                if (!in_array($sourceTitle, $sources[$itemId], true)) {
+                    $sources[$itemId][] = $sourceTitle;
+                }
+            } elseif ($wrongQuestion['source_type'] === 'item_bank_chapter') {
+                if (!in_array('章节练习', $sources[$itemId], true)) {
+                    $sources[$itemId][] = '章节练习';
+                }
+            }elseif ($wrongQuestion['source_type'] === 'item_bank_assessment') {
+                if (!in_array('试卷练习', $sources[$itemId], true)){
+                    $sources[$itemId][] = '试卷练习';
+                }
+            }elseif ($wrongQuestion['source_type'] === 'wrong_question_exercise') {
+                if (!in_array('错题练习', $sources[$itemId], true)) {
+                    $sources[$itemId][] = '错题练习';
                 }
             }
         }
