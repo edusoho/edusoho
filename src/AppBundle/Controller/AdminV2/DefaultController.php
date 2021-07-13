@@ -88,6 +88,10 @@ class DefaultController extends BaseController
 
     public function feedbackAction(Request $request)
     {
+        if (!$this->getWebExtension()->isSaas()) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('admin-v2/default/feedback.html.twig', ['token' => $this->makeToken()]);
     }
 

@@ -24,6 +24,7 @@ use Biz\AuditCenter\Service\ReportAuditService;
 use Biz\AuditCenter\Service\ReportRecordService;
 use Biz\AuditCenter\Service\ReportService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
@@ -229,7 +230,27 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_group_member', [$this, 'isGroupMember']),
             new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
             new \Twig_SimpleFunction('is_assistant', [$this, 'isAssistant']),
+            new \Twig_SimpleFunction('is_saas', [$this, 'isSaas']),
         ];
+    }
+
+    public function isSaas()
+    {
+        $site = $this->getSetting('site');
+        if (empty($site['level']) || ($site['levelExpired'] ?? 0) < time()) {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+            $site['level'] = $info['level'] ?? '';
+            $site['levelExpired'] = time() + 7200;
+            $this->getSettingService()->set('site', $site);
+        }
+
+        return in_array($this->getSetting('site.level'), $this->getSaasLevels());
+    }
+
+    public function getSaasLevels()
+    {
+        return ['license', 'basic', 'medium', 'advanced', 'gold', 'custom', 'es-basic', 'es-standard', 'es-professional', 'es-flagship'];
     }
 
     public function isGroupMember($groupId)
