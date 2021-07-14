@@ -25,15 +25,15 @@ class ClassroomPool extends AbstractPool
             return [];
         }
 
+        if (empty($conditions['classroomCourseSetId']) && empty($conditions['classroomMediaType']) && empty($conditions['classroomTaskId'])) {
+            return [];
+        }
+
         return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
     protected function prepareCommonSceneIds($conditions, $targetId)
     {
-        if (empty($conditions['classroomCourseSetId']) && empty($conditions['classroomMediaType']) && empty($conditions['classroomTaskId'])) {
-            return [];
-        }
-
         $sceneIds = $this->findSceneIdsByClassroomId($targetId);
 
         if (!empty($conditions['classroomCourseSetId'])) {

@@ -35,7 +35,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -60,13 +60,11 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         return $prepareConditions;
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
-        $wrongQuestionScenes = $this->getWrongQuestionService()->searchWrongQuestion([
-            'answer_scene_ids' => $sceneIds,
-        ], [], 0, PHP_INT_MAX);
+        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionByCollectIds(ArrayToolkit::column($wrongQuestions, 'collect_id'));
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);
         $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);
@@ -75,9 +73,9 @@ class WrongBookStudentWrongQuestion extends AbstractResource
             $wrongQuestionInfo[] = [
                 'itemId' => $wrongQuestion['item_id'],
                 'itemTitle' => empty($items[$wrongQuestion['item_id']]['material']) ? '' : $items[$wrongQuestion['item_id']]['material'],
-                'sourceName' => $sources[$wrongQuestion['item_id']]['sourceName'] ? : [],
-                'courseName' => $sources[$wrongQuestion['item_id']]['courseName'] ? : [],
-                'sourceType' => $sources[$wrongQuestion['item_id']]['sourceType'] ? : [],
+                'sourceName' => $sources[$wrongQuestion['item_id']]['sourceName'] ?: [],
+                'courseName' => $sources[$wrongQuestion['item_id']]['courseName'] ?: [],
+                'sourceType' => $sources[$wrongQuestion['item_id']]['sourceType'] ?: [],
                 'wrong_times' => $wrongQuestion['wrongTimes'],
             ];
         }

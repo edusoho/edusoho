@@ -31,19 +31,19 @@ class WrongBookQuestionShow extends AbstractResource
         $orderBys = $this->prepareOrderBys($request->query->all());
 
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions, array_merge($conditions['answer_scene_ids'], [$pool['scene_id']]));
+        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
     }
 
-    protected function makeWrongQuestionInfo($wrongQuestions, $sceneIds)
+    protected function makeWrongQuestionInfo($wrongQuestions)
     {
         $itemsWithQuestion = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongQuestions, 'item_id'), true);
         $questionReports = $this->getAnswerQuestionReportService()->findByIds(ArrayToolkit::column($wrongQuestions, 'answer_question_report_id'));
-        $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
+        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionByCollectIds(ArrayToolkit::column($wrongQuestions, 'collect_id'));
+        $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);
-        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds($this->getCurrentUser()->getId(), $itemIds, $sceneIds);
         $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {
@@ -51,7 +51,7 @@ class WrongBookQuestionShow extends AbstractResource
                 continue;
             }
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
-            $source = $sources[$wrongQuestion['item_id']];
+            $source = empty($sources[$wrongQuestion['item_id']]) ? [] : $sources[$wrongQuestion['item_id']];
             $item['submit_time'] = $wrongQuestion['last_submit_time'];
             $item['wrong_times'] = $wrongQuestion['wrong_times'];
             $item['sources'] = $source;
@@ -145,7 +145,7 @@ class WrongBookQuestionShow extends AbstractResource
 
     protected function prepareOrderBys($orderBys)
     {
-        $prepareOrderBys = ['submit_time' => 'DESC'];
+        $prepareOrderBys = ['last_submit_time' => 'DESC'];
 
         if (!empty($orderBys['wrongTimesSort'])) {
             $prepareOrderBys = 'ASC' == $orderBys['wrongTimesSort'] ? ['wrong_times' => 'ASC'] : ['wrong_times' => 'DESC'];

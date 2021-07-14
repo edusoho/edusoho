@@ -13,7 +13,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     const WRONG_QUESTION_ORDER_BY = ['submit_time'];
 
-    const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times'];
+    const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times', 'last_submit_time'];
 
     public function findWrongQuestionBySceneIds($sceneIds)
     {
@@ -21,6 +21,11 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
         $sql = "SELECT * FROM {$this->table} WHERE answer_scene_id IN({$marks});";
 
         return $this->db()->fetchAll($sql, $sceneIds);
+    }
+
+    public function findWrongQuestionByCollectIds($collectIds)
+    {
+        return $this->findInField('collect_id', $collectIds);
     }
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
@@ -117,7 +122,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $start, $limit, $columns)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('max(id) as id,item_id,COUNT(*) as wrongTimes')
+            ->select('max(id) as id,item_id, max(collect_id) as collect_id,COUNT(*) as wrongTimes')
             ->groupBy('item_id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
