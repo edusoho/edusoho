@@ -178,6 +178,7 @@ export default {
       const result = await WrongBookCondition.get(params);
 
       this.conditions = result;
+      this.$emit('set-title', result.title);
     },
 
     handleChange(value, type) {

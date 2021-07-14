@@ -47,6 +47,7 @@ class ItemBankExercisePool extends AbstractPool
 
         $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
         $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions, $wrongQuestions);
+        $searchConditions['title'] = 'chapter' === $conditions['exerciseMediaType'] ? '章节练习' : '试卷练习';
 
         return $searchConditions;
     }

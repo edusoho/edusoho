@@ -165,7 +165,7 @@ export default {
 
       result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
       result.testpapers = result.testpaper;
-
+      this.$emit('set-title', result.title);
       this.conditions = result;
     },
 
