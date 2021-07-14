@@ -71,6 +71,18 @@ if (!window.Vue) {
     return Translator.trans(value, options)
   })
 
+  Vue.filter('formatHtml', (value = '') => {
+    return value && value.replace(/<(?:.|\n)*?>/gm, '')
+    .replace(/(&rdquo;)/g, '\"')
+    .replace(/&ldquo;/g, '\"')
+    .replace(/&mdash;/g, '-')
+    .replace(/&nbsp;/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, '<')
+    .replace(/<[\w\s"':=\/]*/, '');
+  });
+
   Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
     if (value == 0) {
       return '';
