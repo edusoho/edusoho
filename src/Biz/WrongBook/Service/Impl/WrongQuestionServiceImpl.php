@@ -338,13 +338,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     {
         $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], [], 0, PHP_INT_MAX);
 
-        $itemNum = count($poolCollects);
-
-        if (0 === $itemNum) {
-            $this->getWrongQuestionBookPoolDao()->delete($poolId);
-        } else {
-            $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
-        }
+        $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
     }
 
     protected function handleQuestionCollect($fields)
