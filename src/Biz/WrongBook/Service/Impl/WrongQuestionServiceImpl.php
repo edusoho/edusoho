@@ -195,6 +195,13 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
         return ArrayToolkit::index($collects, 'id');
     }
 
+    public function findWrongQuestionByCollectIds($collectIds)
+    {
+        $collects = $this->getWrongQuestionDao()->findWrongQuestionByCollectIds($collectIds);
+
+        return ArrayToolkit::index($collects, 'id');
+    }
+
     public function searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getWrongQuestionDao()->searchWrongQuestionsWithCollect($conditions, $orderBys, $start, $limit, $columns);
