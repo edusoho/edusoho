@@ -23,6 +23,11 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         return $builder->execute()->fetchAll();
     }
 
+    public function findPoolsByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->findByFields(['target_type' => $targetType, 'target_id' => $targetId]);
+    }
+
     public function getPoolBySceneId($sceneId)
     {
         return $this->getByFields(['scene_id' => $sceneId]);
@@ -55,6 +60,11 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
             ->andWhere('title like :keyWord');
 
         return $builder->execute()->fetchColumn(0);
+    }
+
+    public function deleteWrongPoolByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->db()->delete($this->table(), ['target_type' => $targetType, 'target_id' => $targetId]);
     }
 
     protected function getTableName($conditions)

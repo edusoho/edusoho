@@ -19,6 +19,19 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
         return $this->findByFields(['pool_id' => $poolId, 'status' => 'wrong']);
     }
 
+    public function getCollectIdsBYPoolIds($poolIds)
+    {
+        $builder = $this->createQueryBuilder(['pool_ids' => $poolIds])
+            ->select('id');
+
+        return $builder->execute()->fetchAll();
+    }
+
+    public function deleteCollectByPoolIds($poolIds)
+    {
+        return $this->batchDelete(['pool_ids' => $poolIds]);
+    }
+
     public function findCollectByItemIds($itemIds)
     {
         return $this->findInField('item_id', $itemIds);
@@ -37,6 +50,7 @@ class WrongQuestionCollectDaoImpl extends AdvancedDaoImpl implements WrongQuesti
                 'id = :id',
                 'id IN (:ids)',
                 'pool_id = :pool_id',
+                'pool_id IN (:pool_ids)',
                 'item_id = :item_id',
                 'item_id IN (:item_ids)',
                 'created_time = :created_time',
