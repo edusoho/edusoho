@@ -53,6 +53,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Divider,
+  Empty,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -111,6 +112,7 @@ Vue.use(Icon);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(wapSdk);
+Vue.use(Empty);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;

@@ -1,8 +1,8 @@
 <template>
   <div class="wrong-question-detail">
     <e-loading v-if="isLoading" />
-
     <van-swipe
+      v-if="questionList.length"
       ref="swipe"
       :height="height"
       :duration="100"
@@ -25,7 +25,13 @@
       </van-swipe-item>
     </van-swipe>
 
-    <div class="paper-swiper">
+    <van-empty
+      v-else
+      style="transform: translateY(50%);"
+      description="暂无错题"
+    />
+
+    <div v-if="questionList.length" class="paper-swiper">
       <div
         :class="['left-slide__btn', currentIndex == 0 ? 'slide-disabled' : '']"
         @click="prev()"
@@ -58,7 +64,11 @@
       @on-search="onSearch"
     />
 
-    <div class="question-foot" @click="onClickWrongExercise">
+    <div
+      v-if="questionList.length"
+      class="question-foot"
+      @click="onClickWrongExercise"
+    >
       错题练习
     </div>
   </div>
