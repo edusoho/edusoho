@@ -18,6 +18,7 @@
       :target-type="targetType"
       :target-id="targetId"
       :course-id="courseId"
+      :search-params="searchParams"
       @event-communication="eventCommunication"
     />
   </div>

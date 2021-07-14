@@ -17,6 +17,7 @@
       :current-order="currentOrder"
       :target-type="targetType"
       :target-id="targetId"
+      :search-params="searchParams"
       @event-communication="eventCommunication"
     />
   </div>

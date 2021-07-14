@@ -59,7 +59,9 @@ export default {
     currentOrder: {
       type: Number,
       required: true
-    }
+    },
+
+    searchParams: {}
   },
 
   data() {
@@ -88,12 +90,12 @@ export default {
           itemId: this.currentId,
           targetType: this.targetType
         },
-        params: {
+        params: Object.assign({
           targetId: this.targetId,
           courseId: this.courseId,
           offset: (this.pagination.current - 1) * 10,
           limit: 10
-        }
+        }, this.searchParams)
       };
       const { data, item, paging } = await WrongBookWrongQuestionDetail.get(apiParams);
 
