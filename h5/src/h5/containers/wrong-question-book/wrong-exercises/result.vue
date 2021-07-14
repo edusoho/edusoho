@@ -152,6 +152,9 @@ export default {
     goToMyWrongQuestionBook() {
       this.$router.push({
         name: 'myWrongQuestionBook',
+        query: {
+          backUrl: '/my/orders',
+        },
       });
     },
   },
