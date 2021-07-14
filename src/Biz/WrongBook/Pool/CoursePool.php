@@ -67,7 +67,7 @@ class CoursePool extends AbstractPool
         $conditions = $this->handleConditions($conditions);
         $tasks = $this->getCourseTaskService()->searchTasks($conditions, [], 0, PHP_INT_MAX);
 
-        $collects = $this->getWrongQuestionCollectDao()->getCollectBYPoolId($pool['id']);
+        $collects = $this->getWrongQuestionCollectDao()->findCollectBYPoolId($pool['id']);
         $collectIds = array_unique(ArrayToolkit::column($collects, 'id'));
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => $collectIds], [], 0, PHP_INT_MAX);
         $answerSceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
@@ -185,7 +185,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseId($courseId)
+    protected function findSceneIdsByCourseId($courseId)
     {
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'homework', true);
@@ -195,7 +195,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseMediaType($targetId, $mediaType)
+    protected function findSceneIdsByCourseMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['testpaper', 'homework', 'exercise'])) {
             return [];
@@ -206,7 +206,7 @@ class CoursePool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByCourseTaskId($courseTaskId)
+    protected function findSceneIdsByCourseTaskId($courseTaskId)
     {
         $courseTask = $this->getCourseTaskService()->getTask($courseTaskId);
         if (empty($courseTask)) {

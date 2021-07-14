@@ -7,6 +7,7 @@ use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -40,7 +41,9 @@ class ItemBankExercisePool extends AbstractPool
         if (!in_array($conditions['exerciseMediaType'], ['chapter', 'testpaper'])) {
             return [];
         }
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_id' => $pool['id']], [], 0, PHP_INT_MAX);
+
+        $collects = $this->getWrongQuestionCollectDao()->findCollectBYPoolId($pool['id']);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
 
         $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
         $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions, $wrongQuestions);
@@ -65,7 +68,7 @@ class ItemBankExercisePool extends AbstractPool
         return $searchConditions;
     }
 
-    public function exerciseChapterSearch($targetId, $conditions)
+    protected function exerciseChapterSearch($targetId, $conditions)
     {
         if ('chapter' !== $conditions['exerciseMediaType']) {
             return [];
@@ -74,7 +77,7 @@ class ItemBankExercisePool extends AbstractPool
         return $this->getItemCategoryService()->getItemCategoryTree($targetId);
     }
 
-    public function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
+    protected function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
     {
         if ('testpaper' !== $conditions['exerciseMediaType']) {
             return [];
@@ -104,7 +107,7 @@ class ItemBankExercisePool extends AbstractPool
         return $assessmentSearch;
     }
 
-    public function findSceneIdsByExerciseMediaType($targetId, $mediaType)
+    protected function findSceneIdsByExerciseMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['chapter', 'assessment'])) {
             return [];
@@ -134,6 +137,14 @@ class ItemBankExercisePool extends AbstractPool
     protected function getWrongQuestionBookPoolDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionBookPoolDao');
+    }
+
+    /**
+     * @return WrongQuestionCollectDao
+     */
+    protected function getWrongQuestionCollectDao()
+    {
+        return $this->biz->dao('WrongBook:WrongQuestionCollectDao');
     }
 
     /**

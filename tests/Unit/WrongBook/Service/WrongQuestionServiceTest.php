@@ -145,14 +145,14 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertCount(2, $wrongQuestion);
     }
 
-    public function findWrongQuestionsByUserIdAndItemIdAndSceneIds()
+    public function testFindWrongQuestionsByUserIdAndItemIdsAndSceneIds()
     {
         $this->batchCreateWrongQuestion();
-        $wrongQuestion = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdAndSceneIds(1, 1, [1, 2]);
+        $wrongQuestion = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndItemIdsAndSceneIds(1, [1], [1, 2]);
         $this->assertCount(1, $wrongQuestion);
     }
 
-    public function findWrongQuestionsByUserIdAndSceneIds()
+    public function testFindWrongQuestionsByUserIdAndSceneIds()
     {
         $this->batchCreateWrongQuestion();
         $wrongQuestion = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndSceneIds(2, [1, 2]);

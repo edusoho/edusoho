@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
+use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 
 class ClassroomPool extends AbstractPool
@@ -63,7 +64,8 @@ class ClassroomPool extends AbstractPool
     public function buildConditions($pool, $conditions)
     {
         $searchConditions = [];
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_id' => $pool['id']], [], 0, PHP_INT_MAX);
+        $collects = $this->getWrongQuestionCollectDao()->findCollectBYPoolId($pool['id']);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
         $wrongQuestions = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
         $courSets = $this->classroomCourseSetIdSearch($pool['target_id'], $wrongQuestions);
         $searchConditions['courseSets'] = $courSets;
@@ -180,7 +182,7 @@ class ClassroomPool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByClassroomCourseSetId($courseSetId)
+    protected function findSceneIdsByClassroomCourseSetId($courseSetId)
     {
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdAndType($courseSetId, 'homework', true);
@@ -190,7 +192,7 @@ class ClassroomPool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByClassroomMediaType($targetId, $mediaType)
+    protected function findSceneIdsByClassroomMediaType($targetId, $mediaType)
     {
         if (!in_array($mediaType, ['testpaper', 'homework', 'exercise'])) {
             return [];
@@ -206,7 +208,7 @@ class ClassroomPool extends AbstractPool
         return $this->generateSceneIds($activates);
     }
 
-    public function findSceneIdsByClassroomTaskId($courseTaskId)
+    protected function findSceneIdsByClassroomTaskId($courseTaskId)
     {
         $courseTask = $this->getCourseTaskService()->getTask($courseTaskId);
         if (empty($courseTask)) {
@@ -245,6 +247,14 @@ class ClassroomPool extends AbstractPool
     protected function getWrongQuestionBookPoolDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionBookPoolDao');
+    }
+
+    /**
+     * @return WrongQuestionCollectDao
+     */
+    protected function getWrongQuestionCollectDao()
+    {
+        return $this->biz->dao('WrongBook:WrongQuestionCollectDao');
     }
 
     /**

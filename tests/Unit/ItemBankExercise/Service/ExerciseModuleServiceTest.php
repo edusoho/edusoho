@@ -15,6 +15,14 @@ class ExerciseModuleServiceTest extends BaseTestCase
         $this->assertEquals($module['id'], 1);
     }
 
+    public function testGetByAnswerSceneId()
+    {
+        $this->mockExerciseModule();
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId(1);
+
+        $this->assertEquals(1, $module['answerSceneId']);
+    }
+
     public function testSearch()
     {
         $this->mockExerciseModule();
