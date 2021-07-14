@@ -28,7 +28,7 @@
 import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
 import Search from './Search.vue';
 import ViewDetailModal from './ViewDetailModal.vue';
-import StudentWrongQuestionTable from 'app/vue/views/components/WrongQuestion/StudentWrongQuestionTable.vue';
+import StudentWrongQuestionTable from './StudentWrongQuestionTable.vue';
 
 export default {
   name: 'CourseManageWrongQuestion',
@@ -64,11 +64,7 @@ export default {
 
   methods: {
     onSearch(params) {
-      // this.$refs.form.validate(valid => {
-      //   if (valid) {
-      //
-      //   }
-      // })
+      this.pagination.current = 1;
       this.searchParams = params;
       this.fetchWrongQuestion(params);
     },

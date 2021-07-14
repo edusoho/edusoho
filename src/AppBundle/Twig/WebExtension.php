@@ -237,10 +237,10 @@ class WebExtension extends \Twig_Extension
     public function isSaas()
     {
         $site = $this->getSetting('site');
-        if (empty($site['level']) || ($site['levelExpired'] ?? 0) < time()) {
+        if (empty($site['level']) || ($site['levelExpired'] ? $site['levelExpired'] : 0) < time()) {
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
-            $site['level'] = $info['level'] ?? '';
+            $site['level'] = $info['level'] ? $info['level'] : '';
             $site['levelExpired'] = time() + 7200;
             $this->getSettingService()->set('site', $site);
         }

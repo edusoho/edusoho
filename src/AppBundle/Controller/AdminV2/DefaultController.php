@@ -20,7 +20,6 @@ use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
 use Codeages\Biz\Order\Service\OrderService;
-use Firebase\JWT\JWT;
 use QiQiuYun\SDK\Service\PlatformNewsService;
 use QiQiuYun\SDK\Service\WeChatService;
 use Symfony\Component\HttpFoundation\File\File;
@@ -83,31 +82,6 @@ class DefaultController extends BaseController
             'newOrderCount' => $newOrderCount,
             'newPaidOrderCount' => $newPaidOrderCount,
         ]);
-    }
-
-    public function feedbackAction(Request $request)
-    {
-        if (!$this->getWebExtension()->isSaas()) {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->render('admin-v2/default/feedback.html.twig', ['token' => $this->makeToken()]);
-    }
-
-    protected function makeToken()
-    {
-        $user = $this->getUserService()->getUserProfile($this->getUser()->getId());
-        $site = $this->getSettingService()->get('site', []);
-        $payload = [
-            'userId' => (int) $user['id'],
-            'userName' => $user['truename'],
-            'schoolName' => $site['name'],
-            'isAdmin' => $this->getUser()->isSuperAdmin() ? 1 : 0,
-            'version' => System::VERSION,
-        ];
-        $storage = $this->getSettingService()->get('storage', []);
-
-        return JWT::encode($payload, $storage['cloud_secret_key'], 'HS256', $storage['cloud_access_key']);
     }
 
     public function infoAction(Request $request)

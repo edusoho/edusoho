@@ -62,6 +62,7 @@ export default {
 
   methods: {
     onSearch(params = {}) {
+      this.pagination.current = 1;
       this.searchParams = params;
       this.fetchWrongQuestion(params);
     },

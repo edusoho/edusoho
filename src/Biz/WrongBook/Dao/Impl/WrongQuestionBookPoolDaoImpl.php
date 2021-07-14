@@ -101,6 +101,7 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
                 'id = :id',
                 'user_id = :user_id',
                 'target_type = :target_type',
+                'item_num > :item_num_GT',
                 'target_id = :target_id',
                 'createdTime = :createdTime',
             ],
