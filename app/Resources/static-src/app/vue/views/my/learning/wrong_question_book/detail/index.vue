@@ -1,16 +1,14 @@
 <template>
-  <a-page-header
-    :ghost="false"
-  >
-    <template slot="title">
-      {{ title | formatHtml }}
-    </template>
+  <div class="wrong-question-detail">
+    <div class="clearfix mb12">
+      <h3 class="wrong-question-detail-title pull-left text-overflow mb0">
+        {{ title | formatHtml }}
+      </h3>
 
-    <template slot="extra">
-      <a-button type="primary" @click="handleClickWrongExercises">
+      <a-button class="pull-right" type="primary" @click="handleClickWrongExercises">
         错题练习
       </a-button>
-    </template>
+    </div>
 
     <!-- 筛选 -->
     <component :is="currentScreenComponent" :id="targetId" @on-search="onSearch" @set-title="setTitle" />
@@ -55,7 +53,7 @@
       </template>
     </a-modal>
 
-  </a-page-header>
+  </div>
 </template>
 
 <script>
@@ -208,3 +206,22 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.wrong-question-detail {
+  position: relative;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  margin: 0;
+  color: #333;
+  background-color: #fff;
+
+  .wrong-question-detail-title {
+    max-width: 50%;
+    color: rgba(0, 0, 0, .85);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 32px;
+  }
+}
+</style>
