@@ -1,6 +1,6 @@
 {% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
-{% block title %}{{'错题管理'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{'学员错题'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/vue/views/item_bank_exercise_manage/wrong_question/index.js']) %}
 {% set course_side_nav = 'wrong_questions' %}
 {% block main_heading_class %}course-main-header{% endblock %}
