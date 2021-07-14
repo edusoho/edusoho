@@ -25,28 +25,21 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
     {
-        $itemId = $conditions['item_id'];
-        $sceneIds = implode(',', $conditions['answer_scene_ids']);
-        $builder = $this->createQueryBuilder([])
-            ->select('*')
-            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId")
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('max(id) as id,user_id,max(submit_time) as submit_time,COUNT(*) as wrongTimes')
+            ->groupBy('user_id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        foreach ($orderBys ?: [] as $field => $direction) {
-            $builder->addOrderBy($field, $direction);
-        }
+        $builder->addOrderBy('id', 'DESC');
 
         return $builder->execute()->fetchAll() ?: [];
     }
 
     public function countWrongQuestionsWithDistinctUserId($conditions)
     {
-        $itemId = $conditions['item_id'];
-        $sceneIds = implode(',', $conditions['answer_scene_ids']);
-        $builder = $this->createQueryBuilder([])
-            ->select('COUNT(*)')
-            ->rightJoin($this->table, "(SELECT MAX(id) as maxId FROM biz_wrong_question WHERE item_id = {$itemId} AND answer_scene_id IN ({$sceneIds}) GROUP BY user_id)", 'w', "{$this->table}.id = w.maxId");
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('COUNT(DISTINCT user_id)');
 
         return $builder->execute()->fetchColumn(0);
     }
