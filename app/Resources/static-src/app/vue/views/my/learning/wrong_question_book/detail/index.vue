@@ -5,7 +5,8 @@
         {{ title | formatHtml }}
       </h3>
 
-      <a-button class="pull-right" type="primary" @click="handleClickWrongExercises">
+    <template slot="extra">
+      <a-button class="pull-right" type="primary" :disabled="pagination.total <= 0" @click="handleClickWrongExercises">
         错题练习
       </a-button>
     </div>
@@ -160,7 +161,15 @@ export default {
     goToWrongExercises() {
       this.visible = false;
       // 错题练习
-      window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`;
+      window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`+ this.makeQuery({targetType:this.targetType, ...this.searchParams});
+    },
+    makeQuery(queryObject) {
+      const query = Object.entries(queryObject)
+        .reduce((result, entry) => {
+          result.push(entry.join('='))
+          return result
+        }, []).join('&')
+      return `?${query}`
     },
 
     // 错题搜索

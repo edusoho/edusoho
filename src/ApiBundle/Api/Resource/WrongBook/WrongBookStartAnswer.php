@@ -8,10 +8,12 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
+use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookStartAnswer extends AbstractResource
@@ -22,9 +24,11 @@ class WrongBookStartAnswer extends AbstractResource
     public function add(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
-        $wrongQuestionsCount = $this->getCollectDao()->count(['pool_id' => $poolId, 'status' => 'wrong']);
+        $filterConditions = $this->prepareConditions($poolId, $request->query->all());
+        $wrongQuestionsCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($filterConditions);
         list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount);
-        $wrongQuestions = $this->getCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], $orderBy, $start, 20);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($filterConditions, $orderBy, $start, 20);
+
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
         $answerScene = $this->initScene($pool);
@@ -65,6 +69,31 @@ class WrongBookStartAnswer extends AbstractResource
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
         ];
+    }
+
+    protected function prepareConditions($poolId, $conditions)
+    {
+        $prepareConditions = [];
+        $prepareConditions['pool_id'] = $poolId;
+        $prepareConditions['status'] = 'wrong';
+        $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
+
+        if (!in_array($conditions['targetType'], ['course', 'classroom', 'exercise'])) {
+            throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
+        }
+
+        $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
+        $prepareConditions['answer_scene_ids'] = $this->biz[$pool]->prepareSceneIds($poolId, $conditions);
+
+        if ('exercise' === $conditions['targetType'] && 'chapter' === $conditions['exerciseMediaType'] && !empty($conditions['chapterId'])) {
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['chapterId']);
+            $prepareConditions['testpaper_ids'] = array_merge([$conditions['chapterId']], $childrenIds);
+        }
+        if ('exercise' === $conditions['targetType'] && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
+            $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
+        }
+
+        return $prepareConditions;
     }
 
     protected function getSearchFields($count)
@@ -163,5 +192,13 @@ class WrongBookStartAnswer extends AbstractResource
     protected function getItemService()
     {
         return $this->getBiz()->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return  $this->service('ItemBank:Item:ItemCategoryService');
     }
 }
