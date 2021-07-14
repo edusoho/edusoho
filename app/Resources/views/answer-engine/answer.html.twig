@@ -25,13 +25,14 @@
   <style>
     html, body {
       -webkit-overflow-scrolling: touch;
-    }  
+    }
   </style>
   {% include 'answer-engine/common.html.twig' %}
   {% include 'attachment-upload/upload-data.html.twig' %}
   <input type="hidden" name="answer_record_id" value='{{ answerRecord.id }}'>
   <input type="hidden" name="submit_goto_url" value='{{ submitGotoUrl }}'>
   <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
+  <input type="hidden" name="show_save_progress_btn" value="{{ showSaveProgressBtn|default(1) }}">
   {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerRecord.answer_scene_id, answerRecordId: answerRecord.id})) }}
   {% block footer %}
       {% if showHeader|default(0) %}{{ parent() }}{% endif %}

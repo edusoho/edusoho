@@ -181,6 +181,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
     }
 
+    public function findByClassroomId($classroomId)
+    {
+        return $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+    }
+
     /**
      * @deprecated
      *

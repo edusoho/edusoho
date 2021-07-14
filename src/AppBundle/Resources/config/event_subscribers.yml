@@ -435,3 +435,10 @@ services:
       public: true
       tags:
         - { name: codeages_plugin.event.subscriber }
+
+    wrong_question_event_subscriber:
+      class: Biz\WrongBook\Event\WrongQuestionSubscriber
+      arguments: [ '@biz' ]
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }

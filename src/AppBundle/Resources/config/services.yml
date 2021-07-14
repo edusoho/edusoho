@@ -110,6 +110,14 @@ services:
         tags:
             - { name: extension, priority: 10 }
 
+    wrong_question_pool.extension:
+      class: AppBundle\Extension\WrongQuestionPoolExtension
+      public: true
+      calls:
+        - [ setBiz, [ '@biz' ] ]
+      tags:
+        - { name: extension, priority: 10 }
+
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
         public: true

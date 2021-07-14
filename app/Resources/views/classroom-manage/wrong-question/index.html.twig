@@ -1,0 +1,16 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{'学员错题'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'wrong-questions' %}
+{% do script(['app/vue/views/classroom_manage/wrong_question/index.js']) %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'学员错题'|trans}}</div>
+    <div class="panel-body">
+      <input type="hidden" class="js-classroom-id" value="{{ classroom.id }}" />
+      <div id="app">
+      </div>
+    </div>
+  </div>
+{% endblock %}

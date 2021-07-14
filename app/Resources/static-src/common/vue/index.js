@@ -8,7 +8,7 @@ import SvgIcon from './icons/SvgIcon.vue';
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
-  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty, Popover
+  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty, PageHeader, TreeSelect, Popover
 } from '@codeages/design-vue';
 import Clipboard from 'v-clipboard';
 
@@ -45,8 +45,9 @@ if (!window.Vue) {
   Vue.use(InputNumber)
   Vue.use(Breadcrumb)
   Vue.use(Empty)
+  Vue.use(PageHeader)
+  Vue.use(TreeSelect)
   Vue.use(Popover)
-
   Vue.use(Clipboard)
 
   Vue.prototype.$message = Message;

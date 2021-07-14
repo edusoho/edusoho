@@ -3808,6 +3808,7 @@ my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
 my.learning.group_menu: 'Groups'
 user.certificate_menu: 'My Certificate'
+my.wrong_question_book: 'My wrong question book'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
@@ -10727,6 +10728,9 @@ admin.multi_class_copy.success.notify: Your new multi-class《%newTitle%》is co
 admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is copied failed from origin multi-class《%originTitle%》！
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
+
+exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.not_exist: Wrong question not exist
 course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
 course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
 

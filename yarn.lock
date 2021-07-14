@@ -1015,6 +1015,11 @@
     vue-ref "^2.0.0"
     warning "^4.0.0"
 
+"@codeages/styles@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/@codeages/styles/-/styles-1.0.7.tgz#d4870a11584897ddb3a0d76a7d2dbd9eb9f71a06"
+  integrity sha512-4dLToVIj0Bx6YRCA2fcbEErcvvn1VDHVEhoyz3NxeyvyVtMLYipcj/lF4qJg5N5IFgWlz+WYnNMLL3rFvqnpIg==
+
 "@codeages/utils@^1.0.2":
   version "1.0.2"
   resolved "https://registry.npmjs.org/@codeages/utils/-/utils-1.0.2.tgz#0073689529f666f4730df1570a7b040392ceb860"
@@ -5476,10 +5481,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.27:
-  version "1.0.27"
-  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.27.tgz#2af01c487bda5d2378a8da787c74c685de2c5d0a"
-  integrity sha512-8hn5HvN+0NlfZ964FqzgradLeOn9s5CzQi1tS1JsTCanvJJPExPAQrnRnyERiNJVzvt00cmzHHMHDO4IjdYwwQ==
+item-bank@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.nlark.com/item-bank/download/item-bank-1.0.28.tgz#a6aacac915bdde2e08a2dd1eebfe184aefed0e9a"
+  integrity sha1-pqrKyRW93i4Iot0e6/4YSu/tDpo=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"

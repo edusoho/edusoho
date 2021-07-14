@@ -108,6 +108,11 @@
             href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
           </a>
         </li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'wrong-questions' %}active{% endif %}">
+          <a
+            href="{{ path('course_manage_wrong_questions', {id: curCourse.id}) }}">{{ '学员错题'|trans }}
+          </a>
+        </li>
         <li class="cd-sidebar__heading">
           <hr class="mt0 mb0 mh10 bg-border-color"/>
         </li>
@@ -131,12 +136,14 @@
             {% endif %}
           </li>
         {% endif %}
+
         {% if setting('storage.upload_mode', 'local') == 'cloud' %}
           <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
             <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
               {{ 'course.question_marker_statistics'|trans }}</a>
           </li>
         {% endif %}
+
         {% if app.user.isAdmin() or (setting('course.teacher_search_order') == 1 and 'ROLE_TEACHER' in app.user.roles) %}
           <li class="cd-sidebar__item {% if course_side_nav == 'orders' %}active{% endif %}">
             <a

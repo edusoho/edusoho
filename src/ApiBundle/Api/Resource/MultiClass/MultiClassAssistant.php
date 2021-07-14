@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\MultiClass;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -18,14 +16,14 @@ use Biz\User\Service\UserService;
 class MultiClassAssistant extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @param $multiClassId
+     *
      * @return mixed
      */
     public function search(ApiRequest $request, $multiClassId)
     {
         $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_v2_education')){
+        if (!$user->hasPermission('admin_v2_education')) {
             throw new AccessDeniedException();
         }
 
@@ -38,7 +36,7 @@ class MultiClassAssistant extends AbstractResource
         $userIds = ArrayToolkit::column($assistants, 'userId');
         $conditions = [
             'userIds' => $userIds,
-            'nickname' => $request->query->get('nickname', '')
+            'nickname' => $request->query->get('nickname', ''),
         ];
 
         $users = $this->getUserService()->searchUsers($conditions, ['createdTime' => 'DESC'], 0, count($userIds));

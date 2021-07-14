@@ -29,6 +29,11 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         return $this->getItemBankExerciseModuleDao()->get($id);
     }
 
+    public function getByAnswerSceneId($answerSceneId)
+    {
+        return $this->getItemBankExerciseModuleDao()->getByAnswerSceneId($answerSceneId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankExerciseModuleDao()->search($conditions, $sort, $start, $limit, $columns);

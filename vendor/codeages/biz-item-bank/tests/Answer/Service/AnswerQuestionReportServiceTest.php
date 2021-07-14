@@ -6,6 +6,35 @@ use Tests\IntegrationTestCase;
 
 class AnswerQuestionReportServiceTest extends IntegrationTestCase
 {
+    public function testFindByIds()
+    {
+        $this->getAnswerQuestionReportDao()->batchCreate([
+            [
+                'id' => '1',
+                'identify' => '1_1',
+                'answer_record_id' => '1',
+                'total_score' => 2,
+                'section_id' => '1',
+                'item_id' => '2',
+                'question_id' => '2',
+                'response' => ['A'],
+            ],
+            [
+                'id' => '2',
+                'identify' => '1_2',
+                'answer_record_id' => '1',
+                'total_score' => 2,
+                'section_id' => '1',
+                'item_id' => '2',
+                'question_id' => '2',
+                'response' => ['A'],
+            ],
+        ]);
+
+        $report = $this->getAnswerQuestionReportService()->findByIds([1, 2]);
+        $this->assertCount(2, $report);
+    }
+
     public function testBatchCreate()
     {
         $answerQuestionReports = [
@@ -77,14 +106,14 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ]
+            ],
         ]);
 
         $this->getAnswerQuestionReportService()->batchUpdate([
             ['identify' => '1_1', 'answer_record_id' => 1],
             ['identify' => '1_2', 'answer_record_id' => 1],
         ]);
-        
+
         $result = $this->getAnswerQuestionReportDao()->findByAnswerRecordId(1);
 
         $this->assertEquals(count($result), 2);
@@ -112,7 +141,7 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ]
+            ],
         ]);
 
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId(1);
@@ -142,7 +171,7 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ]
+            ],
         ]);
 
         $questionReports = $this->getAnswerQuestionReportService()->search([], [], 0, 2);
