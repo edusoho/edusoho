@@ -3772,3 +3772,7 @@ common_report_tags_modal:
 scrm_buy_goods_callback:
   path: /scrm/buy/goods/callback
   defaults: { _controller: AppBundle:SCRM/Callback:goods }
+
+feedback:
+  path: /feedback
+  defaults: { _controller: AppBundle:Default:feedback }
