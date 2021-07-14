@@ -4,7 +4,7 @@
       <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
     </div>
     <div class="item-info pull-left">
-      <h3 class="text-overflow title" @click="goToWrongQuestionDetail">{{ question.target_data.title }}</h3>
+      <h3 class="text-overflow title" @click="goToWrongQuestionDetail">{{ question.target_data.title | formatHtml }}</h3>
       <p class="number">{{ question.item_num }} 题</p>
     </div>
     <a-button

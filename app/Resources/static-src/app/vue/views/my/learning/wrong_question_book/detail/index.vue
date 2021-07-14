@@ -3,7 +3,7 @@
     :ghost="false"
   >
     <template slot="title">
-      {{ title }}
+      {{ title | formatHtml }}
     </template>
 
     <template slot="extra">
