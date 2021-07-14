@@ -1,13 +1,8 @@
 <template>
   <div class="wrong-question-detail">
     <e-loading v-if="isLoading" />
-    <van-empty
-      v-if="!questionList.length"
-      style="transform: translateY(50%);"
-      description="暂无错题"
-    />
     <van-swipe
-      v-else
+      v-if="questionList.length"
       ref="swipe"
       :height="height"
       :duration="100"
@@ -29,6 +24,12 @@
         />
       </van-swipe-item>
     </van-swipe>
+
+    <van-empty
+      v-else
+      style="transform: translateY(50%);"
+      description="暂无错题"
+    />
 
     <div v-if="questionList.length" class="paper-swiper">
       <div
