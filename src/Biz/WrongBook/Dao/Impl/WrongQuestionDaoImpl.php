@@ -101,7 +101,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
             return [];
         }
         $builder = $this->createQueryBuilder(['wrong_question_ids' => $ids])
-            ->select("{$this->table}.*, c.wrong_times as wrong_times")
+            ->select("{$this->table}.*, c.wrong_times as wrong_times, c.last_submit_time as last_submit_time")
             ->andWhere("{$this->table}.id IN (:wrong_question_ids)")
             ->leftJoin($this->table, $this->collectTable, 'c', "c.id = {$this->table}.collect_id")
             ->setFirstResult($start)

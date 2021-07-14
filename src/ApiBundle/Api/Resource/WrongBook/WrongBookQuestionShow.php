@@ -52,7 +52,7 @@ class WrongBookQuestionShow extends AbstractResource
             }
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
             $source = $sources[$wrongQuestion['item_id']];
-            $item['submit_time'] = $wrongQuestion['submit_time'];
+            $item['submit_time'] = $wrongQuestion['last_submit_time'];
             $item['wrong_times'] = $wrongQuestion['wrong_times'];
             $item['sources'] = $source;
             foreach ($item['questions'] as &$question) {
