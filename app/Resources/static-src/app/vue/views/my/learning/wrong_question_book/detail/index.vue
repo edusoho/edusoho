@@ -5,7 +5,6 @@
         {{ title | formatHtml }}
       </h3>
 
-    <template slot="extra">
       <a-button class="pull-right" type="primary" :disabled="pagination.total <= 0" @click="handleClickWrongExercises">
         错题练习
       </a-button>
