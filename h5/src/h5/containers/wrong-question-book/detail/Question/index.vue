@@ -62,9 +62,7 @@
           <div class="situation-top">来源：{{ question.sources[0] }}</div>
           <div class="situation-bottom">
             <span>{{
-              $moment(question.updated_time * 1000).format(
-                'YYYY-MM-DD HH:mm:ss',
-              )
+              $moment(question.submit_time * 1000).format('YYYY-MM-DD HH:mm:ss')
             }}</span>
             <span>
               做错频次：
