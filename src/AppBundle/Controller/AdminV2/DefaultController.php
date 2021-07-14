@@ -4,7 +4,6 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ChangelogToolkit;
-use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\System;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -21,6 +20,7 @@ use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
 use Codeages\Biz\Order\Service\OrderService;
+use Firebase\JWT\JWT;
 use QiQiuYun\SDK\Service\PlatformNewsService;
 use QiQiuYun\SDK\Service\WeChatService;
 use Symfony\Component\HttpFoundation\File\File;
@@ -87,13 +87,27 @@ class DefaultController extends BaseController
 
     public function feedbackAction(Request $request)
     {
-        $site = $this->getSettingService()->get('site');
-        $user = $this->getUser();
-        $token = CurlToolkit::request('POST', 'https://www.edusoho.com/question/get/token', []);
-        $site = ['name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname];
-        $site = urlencode(http_build_query($site));
+        if (!$this->getWebExtension()->isSaas()) {
+            throw $this->createNotFoundException();
+        }
 
-        return $this->redirect('https://www.edusoho.com/question?site='.$site.'');
+        return $this->render('admin-v2/default/feedback.html.twig', ['token' => $this->makeToken()]);
+    }
+
+    protected function makeToken()
+    {
+        $user = $this->getUserService()->getUserProfile($this->getUser()->getId());
+        $site = $this->getSettingService()->get('site', []);
+        $payload = [
+            'userId' => (int) $user['id'],
+            'userName' => $user['truename'],
+            'schoolName' => $site['name'],
+            'isAdmin' => $this->getUser()->isSuperAdmin() ? 1 : 0,
+            'version' => System::VERSION,
+        ];
+        $storage = $this->getSettingService()->get('storage', []);
+
+        return JWT::encode($payload, $storage['cloud_secret_key'], 'HS256', $storage['cloud_access_key']);
     }
 
     public function infoAction(Request $request)

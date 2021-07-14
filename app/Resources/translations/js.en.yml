@@ -375,6 +375,7 @@ activity.manage.finished_tips: >
 
 announcement.create_datetime.error.hint: The announcement start time cannot be later than the end time
 announcement.delete_hint: Really want to delete the announcement?
+start.end.datetime_picker.error.hint: Start time cannot be later than the end time
 
 auth.login_bind_choose.service_agreement_hint: Check to agree to this service agreement before continue to register!
 auth.login_bind_choose.login_success_hint: Log in successfully, redirecting to the homepage!

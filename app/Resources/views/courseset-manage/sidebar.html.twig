@@ -19,7 +19,7 @@
   <div class="cd-sidebar locked js-sidenav" data-course-length="{{ get_course_count(courseSet.id) }}">
     <ul class="cd-sidebar__list">
       <div class="js-sidenav-course-menu">
-        {% if 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') %}
+        {% if 'ROLE_TEACHER' in app.user.roles or has_permission('admin_v2_course_content_manage') or (courseSet.parentId > 0 and has_permission('admin_v2_classroom')) %}
           <li class="cd-sidebar__item {% if course_side_nav == 'info' %}active{% endif %}">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'info'}) }}">

@@ -8,7 +8,7 @@
   {% endif %}
 {% endblock %}
 {% block main_body %}
-  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles or (courseSet.parentId > 0 and has_permission('admin_v2_classroom')) %}
     <div class="js-lesson-manage">
       {% set locales = app.request.session.get('_locale',app.request.locale)|default('zh_CN') %}
       <span class="js-data-local hidden" data-local="{{ locales }}"></span>

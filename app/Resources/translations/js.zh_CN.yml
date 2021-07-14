@@ -322,6 +322,7 @@ activity.manage.finished_tips: >
 
 announcement.create_datetime.error.hint: 公告发布时间不能晚于结束时间
 announcement.delete_hint: 真的要删除该公告吗?
+start.end.datetime_picker.error.hint: 开始时间不能晚于结束时间
 
 auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
 auth.login_bind_choose.login_success_hint: 登录成功，正在跳转至首页！
