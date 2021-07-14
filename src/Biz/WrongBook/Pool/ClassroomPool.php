@@ -30,6 +30,10 @@ class ClassroomPool extends AbstractPool
 
     protected function prepareCommonSceneIds($conditions, $targetId)
     {
+        if (empty($conditions['classroomCourseSetId']) && empty($conditions['classroomMediaType']) && empty($conditions['classroomTaskId'])) {
+            return [];
+        }
+
         $sceneIds = $this->findSceneIdsByClassroomId($targetId);
 
         if (!empty($conditions['classroomCourseSetId'])) {
