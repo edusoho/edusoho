@@ -46,7 +46,7 @@ const columns = [
     scopedSlots: { customRender: 'itemTitle' }
   },
   {
-    title: '任务名称',
+    title: '名称',
     dataIndex: 'sourceName',
     width: '15%',
     scopedSlots: { customRender: 'sourceName' }
@@ -93,9 +93,10 @@ export default {
     return {
       columns,
       sources: {
-        testpaper: '考试任务',
+        testpaper: '试卷练习',
         homework: '作业任务',
         exercise: '练习任务',
+        chapter: '章节练习',
         wrong_question_exercise: '错题练习',
       }
     }

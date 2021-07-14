@@ -26,7 +26,7 @@
 import { WrongBookStudentWrongQuestion } from 'common/vue/service/index.js';
 import Search from './Search.vue';
 import ViewDetailModal from './ViewDetailModal.vue';
-import StudentWrongQuestionTable from 'app/vue/views/components/WrongQuestion/StudentWrongQuestionTable.vue';
+import StudentWrongQuestionTable from './StudentWrongQuestionTable.vue';
 
 export default {
   name: 'ClassroomManageWrongQuestion',

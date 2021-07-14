@@ -19,6 +19,10 @@
       {{ formateQuestionSource(sourceType) }}
     </template>
 
+    <template slot="courseName" slot-scope="courseName">
+      {{ courseName.join('、') }}
+    </template>
+
     <template slot="sourceName" slot-scope="sourceName">
       {{ sourceName.join('、') }}
     </template>
@@ -46,6 +50,12 @@ const columns = [
     scopedSlots: { customRender: 'itemTitle' }
   },
   {
+    title: '课程',
+    dataIndex: 'courseName',
+    width: '15%',
+    scopedSlots: { customRender: 'courseName' }
+  },
+  {
     title: '任务名称',
     dataIndex: 'sourceName',
     width: '15%',
@@ -54,13 +64,13 @@ const columns = [
   {
     title: '来源',
     dataIndex: 'sourceType',
-    width: '20%',
+    width: '10%',
     scopedSlots: { customRender: 'sourceType' }
   },
   {
     title: '答错人次',
     dataIndex: 'wrong_times',
-    width: '15%'
+    width: '10%'
   },
   {
     title: '操作',

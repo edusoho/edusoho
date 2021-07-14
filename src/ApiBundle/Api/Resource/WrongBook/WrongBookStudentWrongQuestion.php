@@ -117,7 +117,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
                 $sources[$itemId]['sourceName'][] = $assessment['name'];
                 $sources[$itemId]['sourceType'][] = 'testpaper';
             } elseif ('wrong_question_exercise' === $wrongQuestion['source_type']) {
-                $sources[$itemId]['sourceType'][] = 'exercise';
+                $sources[$itemId]['sourceType'][] = 'wrong_question_exercise';
             }
         }
 
