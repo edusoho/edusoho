@@ -34,15 +34,12 @@ class WrongBookWrongQuestionDetail extends AbstractResource
     protected function makeWrongQuestionDetailInfo($wrongQuestionsByUser)
     {
         $answerQuestionReportIds = ArrayToolkit::column($wrongQuestionsByUser, 'answer_question_report_id');
-        $collectIds = array_unique(ArrayToolkit::column($wrongQuestionsByUser, 'collect_id'));
-        $collect = $this->getWrongQuestionService()->findWrongQuestionCollectByCollectIds($collectIds);
         $userIds = ArrayToolkit::column($wrongQuestionsByUser, 'user_id');
         $reports = $this->getAnswerQuestionReportService()->findByIds($answerQuestionReportIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
         $detailInfo = [];
-        foreach ($wrongQuestionsByUser as $key => $question) {
+        foreach ($wrongQuestionsByUser as $question) {
             $detailInfo[] = $this->generateDetailData($question, $users, $reports);
-            $detailInfo[$key]['wrong_times'] = $collect[$question['collect_id']]['wrong_times'];
         }
 
         return $detailInfo;
@@ -55,6 +52,7 @@ class WrongBookWrongQuestionDetail extends AbstractResource
             'user_id' => $question['user_id'],
             'user_name' => $users[$question['user_id']]['nickname'],
             'answer_time' => $question['submit_time'],
+            'wrong_times' => $question['wrongTimes'],
             'answer' => 'no_answer' === $reports[$question['answer_question_report_id']]['status'] ? [] : $reports[$question['answer_question_report_id']]['response'],
         ];
     }
