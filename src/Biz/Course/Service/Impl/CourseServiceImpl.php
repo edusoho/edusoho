@@ -1496,7 +1496,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $classroomRef['classroomId'],
                     $user['id']
                 );
-                if ($isTeacher || $isHeadTeacher) {
+                if ($isTeacher || $isHeadTeacher || $user->hasPermission('admin_v2_classroom')) {
                     return true;
                 }
             }

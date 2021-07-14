@@ -122,6 +122,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
+
         if (!$this->hasCourseSetManageRole($id)) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
@@ -152,6 +153,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         if ($courseSet['creator'] == $user->getId()) {
             return true;
+        }
+
+        if ($courseSet['parentId'] > 0) {
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSetId);
+            if (!empty($classroomCourse)) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+                if (!empty($classroom) && $classroom['headTeacherId'] == $user['id'] || $user->hasPermission('admin_v2_classroom')) {
+                    return true;
+                }
+            }
         }
 
         $teachers = $this->getCourseMemberService()->findCourseSetTeachersAndAssistant($courseSetId);

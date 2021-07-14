@@ -60,7 +60,7 @@
     </li>
   {% endif %}
 
-  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles or (courseSet.parentId > 0 and has_permission('admin_v2_classroom')) %}
     <div class="clearfix nav-header-section-step">
       <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
         {% if courseSet.locked %}
