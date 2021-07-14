@@ -28,9 +28,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     {
         return [
             'answer.submitted' => 'onAnswerSubmitted',
-            'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
             'wrong_question_pool.delete' => 'onWrongQuestionPoolDelete',
-            'wrong_question.batch_delete' => 'onWrongQuestionBatchDelete',
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
         ];
@@ -159,31 +157,6 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         ]);
     }
 
-    public function onWrongQuestionBatchChanged(Event $event)
-    {
-        $wrongQuestions = $event->getSubject();
-        $collectQuestions = ArrayToolkit::group($wrongQuestions, 'collect_id');
-
-        foreach ($collectQuestions as $collectId => $collectQuestion) {
-            $this->getWrongQuestionCollectDao()->wave([$collectId], ['wrong_times' => count($collectQuestion)]);
-        }
-
-        $poolId = $event->getArgument('pool_id');
-
-        $this->updatePoolItemNum($poolId);
-    }
-
-    public function onWrongQuestionBatchDelete(Event $event)
-    {
-        $wrongQuestionCollects = $event->getSubject();
-
-        $poolIds = array_unique(ArrayToolkit::column($wrongQuestionCollects, 'pool_id'));
-
-        foreach ($poolIds as $poolId) {
-            $this->updatePoolItemNum($poolId);
-        }
-    }
-
     public function onItemDelete(Event $event)
     {
         $item = $event->getSubject();
@@ -199,19 +172,6 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         if (!empty($items)) {
             $this->getWrongQuestionService()->batchDeleteWrongQuestionByItemIds(ArrayToolkit::column($items, 'id'));
-        }
-    }
-
-    protected function updatePoolItemNum($poolId)
-    {
-        $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], [], 0, PHP_INT_MAX);
-
-        $itemNum = count($poolCollects);
-
-        if (0 === $itemNum) {
-            $this->getWrongQuestionBookPoolDao()->delete($poolId);
-        } else {
-            $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
         }
     }
 

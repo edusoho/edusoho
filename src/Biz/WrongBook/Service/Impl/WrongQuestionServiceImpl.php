@@ -50,9 +50,9 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
             $pool = $this->handleQuestionPool($source);
             $wrongQuestions = [];
+            $collects = [];
             foreach ($wrongAnswerQuestionReports as $wrongAnswerQuestionReport) {
                 $collect = $this->handleQuestionCollect(['item_id' => $wrongAnswerQuestionReport['item_id'], 'pool_id' => $pool['id']]);
-
                 $wrongQuestions[] = [
                     'collect_id' => $collect['id'],
                     'user_id' => $source['user_id'],
@@ -65,8 +65,17 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                     'source_type' => $source['source_type'],
                     'source_id' => $source['source_id'],
                 ];
+                $collects[] = $collect['id'];
             }
             $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
+
+            $collects = array_unique($collects);
+            foreach ($collects as $collectId) {
+                $collectCount = $this->getWrongQuestionDao()->count(['collect_id' => $collectId]);
+                $this->getWrongQuestionCollectDao()->update($collectId, ['wrong_times' => $collectCount]);
+            }
+
+            $this->updatePoolItemNum($pool['id']);
 
             $this->getLogService()->info(
                 'wrong_question',
@@ -279,6 +288,12 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             $this->getWrongQuestionDao()->batchDelete(['item_ids' => $itemIds]);
             $this->getWrongQuestionCollectDao()->batchDelete(['item_ids' => $itemIds]);
 
+            $poolIds = array_unique(ArrayToolkit::column($wrongQuestionCollects, 'pool_id'));
+
+            foreach ($poolIds as $poolId) {
+                $this->updatePoolItemNum($poolId);
+            }
+
             $this->getLogService()->info(
                 'wrong_question',
                 'delete_wrong_question',
@@ -298,6 +313,19 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
     public function findWrongQuestionBySceneIds($sceneIds)
     {
         return $this->getWrongQuestionDao()->findWrongQuestionBySceneIds($sceneIds);
+    }
+
+    protected function updatePoolItemNum($poolId)
+    {
+        $poolCollects = $this->getWrongQuestionCollectDao()->search(['pool_id' => $poolId, 'status' => 'wrong'], [], 0, PHP_INT_MAX);
+
+        $itemNum = count($poolCollects);
+
+        if (0 === $itemNum) {
+            $this->getWrongQuestionBookPoolDao()->delete($poolId);
+        } else {
+            $this->getWrongQuestionBookPoolDao()->update($poolId, ['item_num' => count($poolCollects)]);
+        }
     }
 
     protected function handleQuestionCollect($fields)
