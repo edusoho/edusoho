@@ -182,6 +182,7 @@ export default {
       });
 
       this.conditions = result;
+      this.$emit('set-title', result.title);
     },
 
     handleChange(value, type) {

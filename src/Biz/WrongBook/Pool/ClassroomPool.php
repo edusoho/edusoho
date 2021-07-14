@@ -71,6 +71,8 @@ class ClassroomPool extends AbstractPool
         $searchConditions['courseSets'] = $courSets;
         $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions);
         $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions, $wrongQuestions);
+        $classroom = $this->getClassroomService()->getClassroom($pool['target_id']);
+        $searchConditions['title'] = $classroom['title'];
 
         return $searchConditions;
     }

@@ -3,7 +3,7 @@
     :ghost="false"
   >
     <template slot="title">
-      title
+      {{ title }}
     </template>
 
     <template slot="extra">
@@ -13,7 +13,7 @@
     </template>
 
     <!-- 筛选 -->
-    <component :is="currentScreenComponent" :id="targetId" @on-search="onSearch" />
+    <component :is="currentScreenComponent" :id="targetId" @on-search="onSearch" @set-title="setTitle" />
 
     <!-- 题目 -->
     <template v-for="(question, index) in questionList">
@@ -86,6 +86,7 @@ export default {
 
   data() {
     return {
+      title: '',
       targetType: this.$route.params.target_type,
       targetId: this.$route.params.target_id,
       questionList: [],
@@ -172,6 +173,10 @@ export default {
         this.pagination.current = 1;
         this.fetchWrongBookQuestion();
       }
+    },
+
+    setTitle(title) {
+      this.title = title;
     },
 
     judgeSearchParamsChange(params) {

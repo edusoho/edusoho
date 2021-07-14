@@ -5,6 +5,7 @@ namespace Biz\WrongBook\Pool;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
@@ -62,6 +63,7 @@ class CoursePool extends AbstractPool
 
     public function buildConditions($pool, $conditions)
     {
+        $courseSet = $this->getCourseSetService()->getCourseSet($pool['target_id']);
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($pool['target_id']);
         $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         $conditions = $this->handleConditions($conditions);
@@ -105,6 +107,7 @@ class CoursePool extends AbstractPool
         $result['plans'] = $this->handleArray($newCourses, ['id', 'title']);
         $result['source'] = $taskTypes;
         $result['tasks'] = $this->handleArray($newTasks, ['id', 'title']);
+        $result['title'] = $courseSet['title'];
 
         return $result;
     }
@@ -275,5 +278,13 @@ class CoursePool extends AbstractPool
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 }

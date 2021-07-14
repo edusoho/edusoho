@@ -114,7 +114,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
             throw $e;
         }
 
-        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
+        $this->dispatchEvent('wrong_question_correct.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function createWrongQuestion($fields)
