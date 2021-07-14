@@ -19,6 +19,7 @@ class MeWrongBookCertainType extends AbstractResource
         $conditions = $request->query->all();
         $conditions['user_id'] = $this->getCurrentUser()->getId();
         $conditions['target_type'] = $type;
+        $conditions['item_num_GT'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
