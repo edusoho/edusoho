@@ -34,8 +34,9 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         $orderBys['wrongTimes'] = 'ASC' == $wrongTimesSort ? 'ASC' : 'DESC';
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $wrongQuestionExerciseSceneIds = ArrayToolkit::column($this->getWrongQuestionService()->searchWrongBookPool(['target_type' => $targetType, 'target_id' => $targetId], [], 0, PHP_INT_MAX), 'scene_id');
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, array_merge($conditions['answer_scene_ids'], $wrongQuestionExerciseSceneIds));
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);

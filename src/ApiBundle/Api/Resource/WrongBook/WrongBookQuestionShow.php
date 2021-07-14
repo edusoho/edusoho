@@ -31,7 +31,7 @@ class WrongBookQuestionShow extends AbstractResource
         $orderBys = $this->prepareOrderBys($request->query->all());
 
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeWrongQuestionInfo($wrongQuestions, array_merge($conditions['answer_scene_ids'], [$pool['scene_id']]));
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -47,6 +47,9 @@ class WrongBookQuestionShow extends AbstractResource
         $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);
         $wrongQuestionInfo = [];
         foreach ($wrongQuestions as $wrongQuestion) {
+            if (empty($itemsWithQuestion[$wrongQuestion['item_id']])) {
+                continue;
+            }
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
             $source = $sources[$wrongQuestion['item_id']];
             $item['submit_time'] = $wrongQuestion['submit_time'];
@@ -82,7 +85,8 @@ class WrongBookQuestionShow extends AbstractResource
             }
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
-            if ($wrongQuestion['source_type'] === 'course_task') {
+//            var_dump($wrongQuestion['source_type']);
+            if ('course_task' === $wrongQuestion['source_type']) {
                 $courseTask = $this->getCourseTaskService()->getTask($wrongQuestion['source_id']);
                 $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
                 if ($courseSet['parentId'] > 0) {
@@ -96,15 +100,15 @@ class WrongBookQuestionShow extends AbstractResource
                 if (!in_array($sourceTitle, $sources[$itemId], true)) {
                     $sources[$itemId][] = $sourceTitle;
                 }
-            } elseif ($wrongQuestion['source_type'] === 'item_bank_chapter') {
+            } elseif ('item_bank_chapter' === $wrongQuestion['source_type']) {
                 if (!in_array('章节练习', $sources[$itemId], true)) {
                     $sources[$itemId][] = '章节练习';
                 }
-            }elseif ($wrongQuestion['source_type'] === 'item_bank_assessment') {
-                if (!in_array('试卷练习', $sources[$itemId], true)){
+            } elseif ('item_bank_assessment' === $wrongQuestion['source_type']) {
+                if (!in_array('试卷练习', $sources[$itemId], true)) {
                     $sources[$itemId][] = '试卷练习';
                 }
-            }elseif ($wrongQuestion['source_type'] === 'wrong_question_exercise') {
+            } elseif ('wrong_question_exercise' === $wrongQuestion['source_type']) {
                 if (!in_array('错题练习', $sources[$itemId], true)) {
                     $sources[$itemId][] = '错题练习';
                 }

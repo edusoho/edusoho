@@ -38,34 +38,16 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         list($targetType, $targetId, $sourceType, $sourceId) = $this->getWrongQuestionSource($answerRecord);
 
+        if ('wrong_book_exercise' === $targetType) {
+            $this->dealWrongQuestionExerciseQuestions($answerRecord, $targetType, $targetId, $sourceType, $sourceId);
+
+            return;
+        }
+
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
             'statues' => ['wrong', 'no_answer'],
         ], [], 0, PHP_INT_MAX);
-        if ('wrong_book_exercise' === $targetType) {
-            $correctAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
-                'answer_record_id' => $answerRecord['id'],
-                'statues' => ['right'],
-            ], [], 0, PHP_INT_MAX);
-            $correctAnswerQuestionReports = ArrayToolkit::index($correctAnswerQuestionReports, 'item_id');
-            $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
-            $correctQuestions = [];
-            foreach ($correctItems as $item) {
-                if ('material' !== $item['type']) {
-                    $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
-                }
-            }
-            $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerRecord['answer_scene_id']);
-            if ($pool) {
-                $this->getWrongQuestionService()->batchBuildCorrectQuestion($correctQuestions, [
-                    'user_id' => $answerRecord['user_id'],
-                    'answer_scene_id' => $answerRecord['answer_scene_id'],
-                    'testpaper_id' => $this->getTestPaperId($answerRecord),
-                    'target_type' => $pool['target_type'],
-                    'target_id' => $pool['target_id'],
-                ]);
-            }
-        }
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
@@ -85,6 +67,58 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             'target_id' => $targetId,
             'source_type' => $sourceType,
             'source_id' => $sourceId,
+        ]);
+    }
+
+    protected function dealWrongQuestionExerciseQuestions($answerRecord, $targetType, $targetId, $sourceType, $sourceId)
+    {
+        $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerRecord['answer_scene_id']);
+        $correctAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
+            'answer_record_id' => $answerRecord['id'],
+            'statues' => ['right'],
+        ], [], 0, PHP_INT_MAX);
+        $correctAnswerQuestionReports = ArrayToolkit::index($correctAnswerQuestionReports, 'item_id');
+        $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
+        $correctQuestions = [];
+        foreach ($correctItems as $item) {
+            if ('material' !== $item['type']) {
+                $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
+            }
+        }
+        if ($pool) {
+            $this->getWrongQuestionService()->batchBuildCorrectQuestion($correctQuestions, [
+                'user_id' => $answerRecord['user_id'],
+                'answer_scene_id' => $answerRecord['answer_scene_id'],
+                'testpaper_id' => $this->getTestPaperId($answerRecord),
+                'target_type' => $pool['target_type'],
+                'target_id' => $pool['target_id'],
+            ]);
+        }
+
+        //===== wrong=====
+        $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
+            'answer_record_id' => $answerRecord['id'],
+            'statues' => ['wrong', 'no_answer'],
+        ], [], 0, PHP_INT_MAX);
+
+        $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id'));
+
+        $wrongQuestion = [];
+        foreach ($items as $item) {
+            if ('material' !== $item['type']) {
+                $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
+            }
+        }
+
+        $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongQuestion, [
+            'user_id' => $answerRecord['user_id'],
+            'answer_scene_id' => $answerRecord['answer_scene_id'],
+            'testpaper_id' => $this->getTestPaperId($answerRecord),
+            'target_type' => $pool['target_type'],
+            'target_id' => $pool['target_id'],
+            'source_type' => $sourceType,
+            'source_id' => $pool['id'],
         ]);
     }
 
@@ -182,12 +216,12 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         } else {
             $targetType = 'wrong_book_exercise';
             $targetId = 0;
-            $sourceType = '';
+            $sourceType = 'wrong_question_exercise';
             $sourceId = 0;
         }
 
         return [
-             $targetType, $targetId, $sourceType, $sourceId
+             $targetType, $targetId, $sourceType, $sourceId,
         ];
     }
 
