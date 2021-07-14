@@ -15,4 +15,8 @@ interface WrongQuestionBookPoolDao extends AdvancedDaoInterface
     public function searchPoolByConditions($conditions, $orderBys, $start, $limit);
 
     public function countPoolByConditions($conditions);
+
+    public function deleteWrongPoolByTargetIdAndTargetType($targetId, $targetType);
+
+    public function findPoolsByTargetIdAndTargetType($targetId, $targetType);
 }
