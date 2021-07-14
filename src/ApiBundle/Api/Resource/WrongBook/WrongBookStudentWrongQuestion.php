@@ -75,9 +75,9 @@ class WrongBookStudentWrongQuestion extends AbstractResource
             $wrongQuestionInfo[] = [
                 'itemId' => $wrongQuestion['item_id'],
                 'itemTitle' => empty($items[$wrongQuestion['item_id']]['material']) ? '' : $items[$wrongQuestion['item_id']]['material'],
-                'sourceName' => $sources[$wrongQuestion['item_id']]['sourceName'],
-                'courseName' => $sources[$wrongQuestion['item_id']]['courseName'],
-                'sourceType' => $sources[$wrongQuestion['item_id']]['sourceType'],
+                'sourceName' => $sources[$wrongQuestion['item_id']]['sourceName'] ? : [],
+                'courseName' => $sources[$wrongQuestion['item_id']]['courseName'] ? : [],
+                'sourceType' => $sources[$wrongQuestion['item_id']]['sourceType'] ? : [],
                 'wrong_times' => $wrongQuestion['wrongTimes'],
             ];
         }
