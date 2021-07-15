@@ -90,11 +90,15 @@ class WrongBookQuestionShow extends AbstractResource
                 $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
                 if ($courseSet['parentId'] > 0) {
                     $mainSource = $courseSet['title'];
+                } elseif ($courseSet['isClassroomRef']) {
+                    $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+                    $mainSource = !empty($course['title']) ? $course['title'] : $courseSet['title'];
                 } else {
                     $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
                     $mainSource = $course['title'];
                 }
                 $secondarySource = $courseTask['title'];
+
                 $sourceTitle = empty($mainSource) ? $secondarySource : $mainSource.'-'.$secondarySource;
                 if (!in_array($sourceTitle, $sources[$itemId], true) && !empty($sourceTitle)) {
                     $sources[$itemId][] = $sourceTitle;
