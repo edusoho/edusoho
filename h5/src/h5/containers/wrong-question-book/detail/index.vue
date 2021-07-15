@@ -2,6 +2,7 @@
   <div class="wrong-question-detail">
     <e-loading v-if="isLoading" />
     <van-swipe
+      v-if="questionList.length && !isLoading"
       ref="swipe"
       :height="height"
       :duration="100"
@@ -25,9 +26,10 @@
     </van-swipe>
 
     <empty-course
-      v-if="!questionList.length && !isLoading"
+      v-else
       :has-button="false"
       text="暂无错题"
+      style="margin-top: 0; padding-top: 36.53333vw;"
     />
 
     <div v-if="questionList.length" class="paper-swiper">
