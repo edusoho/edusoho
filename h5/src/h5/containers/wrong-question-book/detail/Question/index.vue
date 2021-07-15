@@ -142,7 +142,7 @@ export default {
     },
 
     sourcesStr() {
-      return _.join(this.questions.sources, '、');
+      return _.join(this.question.sources, '、');
     },
 
     formateQuestionStem() {
