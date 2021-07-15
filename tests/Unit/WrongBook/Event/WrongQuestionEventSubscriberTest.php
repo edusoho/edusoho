@@ -25,8 +25,8 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
     public function testOnWrongQuestionPoolDelete()
     {
         $created = $this->getWrongQuestionBookPoolDao()->create($this->mockPool());
-        $this->createWrongQuestionCollect();
-        $this->batchCreateWrongQuestion();
+        $collect = $this->createWrongQuestionCollect(['pool_id' => $created['id']]);
+        $this->batchCreateWrongQuestion($collect['id']);
         $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType(1, 'course');
         $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
         $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType(1, 'course');
@@ -39,11 +39,11 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
         $this->assertEquals(0, count($wrongPools));
     }
 
-    protected function batchCreateWrongQuestion()
+    protected function batchCreateWrongQuestion($collectId = 1)
     {
         $wrongQuestions = [
             [
-                'collect_id' => 1,
+                'collect_id' => $collectId,
                 'user_id' => 1,
                 'question_id' => 1,
                 'item_id' => 1,
@@ -53,7 +53,7 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
                 'submit_time' => time(),
             ],
             [
-                'collect_id' => 1,
+                'collect_id' => $collectId,
                 'user_id' => 2,
                 'question_id' => 1,
                 'item_id' => 1,
@@ -63,7 +63,7 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
                 'submit_time' => time(),
             ],
             [
-                'collect_id' => 2,
+                'collect_id' => $collectId + 1,
                 'user_id' => 2,
                 'question_id' => 1,
                 'item_id' => 2,
@@ -77,13 +77,13 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
         return $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
     }
 
-    protected function createWrongQuestionCollect()
+    protected function createWrongQuestionCollect($customFields = [])
     {
-        $collectRequireFields = [
+        $collectRequireFields = array_merge([
             'pool_id' => 1,
             'item_id' => 1,
             'last_submit_time' => time(),
-        ];
+        ], $customFields);
 
         return $this->getWrongQuestionCollectDao()->create($collectRequireFields);
     }
