@@ -223,20 +223,20 @@ export default {
       this.currentCondition.selectdText = value.text;
 
       if (this.currentIndex === 0) {
-        this.searchParams.courseId = value.id;
+        this.searchParams.classroomCourseSetId = value.id;
         this.conditions[1].selectdIndex = 0;
         this.conditions[1].selectdText = '选择题目来源';
         this.conditions[2].selectdIndex = 0;
         this.conditions[2].selectdText = '选择任务名称';
-        delete this.searchParams.courseMediaType;
-        delete this.searchParams.courseTaskId;
+        delete this.searchParams.classroomMediaType;
+        delete this.searchParams.classroomTaskId;
       } else if (this.currentIndex === 1) {
-        this.searchParams.courseMediaType = value.type;
+        this.searchParams.classroomMediaType = value.type;
         this.conditions[2].selectdIndex = 0;
         this.conditions[2].selectdText = '选择任务名称';
-        delete this.searchParams.courseTaskId;
+        delete this.searchParams.classroomTaskId;
       } else if (this.currentIndex === 2) {
-        this.searchParams.courseTaskId = value.id;
+        this.searchParams.classroomTaskId = value.id;
       }
 
       this.fetchCondition();
