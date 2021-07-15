@@ -25,10 +25,11 @@
       </van-swipe-item>
     </van-swipe>
 
-    <van-empty
+    <empty-course
       v-else
-      style="transform: translateY(50%);"
-      description="暂无错题"
+      :has-button="false"
+      text="暂无错题"
+      style="margin-top: 0; padding-top: 36.53333vw;"
     />
 
     <div v-if="questionList.length" class="paper-swiper">
@@ -84,6 +85,7 @@ import Question from './Question/index.vue';
 import CourseSearch from './Search/Course.vue';
 import ClassroomSearch from './Search/Classroom.vue';
 import QuestionBankSearch from './Search/QuestionBank.vue';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 
 const NavBarHeight = 46;
 const FootHeight = 48;
@@ -101,6 +103,7 @@ export default {
     ClassroomSearch,
     // eslint-disable-next-line vue/no-unused-components
     QuestionBankSearch,
+    EmptyCourse,
   },
 
   data() {
@@ -226,7 +229,7 @@ export default {
     },
 
     goToStartAnswer() {
-      this.$router.push({
+      this.$router.replace({
         name: 'WrongExercisesDo',
         query: {
           id: this.targetId,

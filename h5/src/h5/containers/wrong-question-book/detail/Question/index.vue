@@ -59,7 +59,7 @@
 
       <div class="mt10 analysis-result">
         <div class="question-situation">
-          <div class="situation-top">来源：{{ question.sources[0] }}</div>
+          <div class="situation-top">来源：{{ sourcesStr }}</div>
           <div class="situation-bottom">
             <span>{{
               $moment(question.submit_time * 1000).format('YYYY-MM-DD HH:mm:ss')
@@ -139,6 +139,10 @@ export default {
   computed: {
     questions() {
       return this.question.questions[0];
+    },
+
+    sourcesStr() {
+      return _.join(this.question.sources, '、');
     },
 
     formateQuestionStem() {

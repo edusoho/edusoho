@@ -1,9 +1,14 @@
 <template>
   <div>
     <e-loading v-if="isLoading" />
-    <van-tabs :border="true" color="#43c793">
+    <van-tabs
+      :border="true"
+      color="#43c793"
+      v-model="active"
+      @click="onClickTabs"
+    >
       <template v-for="(listItem, index) in list">
-        <van-tab :title="listItem.title" :key="index">
+        <van-tab :title="listItem.title" :key="index" :name="listItem.type">
           <van-search
             v-model="listItem.keyword"
             shape="round"
@@ -14,7 +19,6 @@
             class="wrong-list"
             v-model="listItem.loading"
             :finished="listItem.finished"
-            finished-text="没有更多了"
             @load="onLoad(index)"
           >
             <item
@@ -23,6 +27,11 @@
               :question="item"
             />
           </van-list>
+          <empty-course
+            v-if="!listItem.items.length && listItem.finished"
+            :has-button="false"
+            text="暂无错题"
+          />
           <div class="wrong-question-number">
             {{ listItem.totalTitle }}：{{ listItem.total }}
           </div>
@@ -35,17 +44,21 @@
 <script>
 import Api from '@/api';
 import Item from './Item.vue';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 
 export default {
   name: 'MyWrongQuestionBook',
 
   components: {
     Item,
+    EmptyCourse,
   },
 
   data() {
     return {
       isLoading: false,
+      active: 'course',
+      currentActive: 'course',
       list: [
         {
           title: '课程错题',
@@ -98,6 +111,7 @@ export default {
 
   created() {
     this.fetchWrongQuestionBooks();
+    this.active = this.$route.query.active;
   },
 
   methods: {
@@ -148,6 +162,17 @@ export default {
       list.refreshing = true;
       list.paging.current = 0;
       this.onLoad(index);
+    },
+
+    onClickTabs(key, title) {
+      if (key === this.currentActive) return;
+      this.currentActive = key;
+
+      this.$router.replace({
+        query: {
+          active: key,
+        },
+      });
     },
   },
 };
