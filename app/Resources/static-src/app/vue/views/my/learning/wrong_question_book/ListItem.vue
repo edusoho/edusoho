@@ -29,7 +29,7 @@ export default {
   methods: {
     goToWrongQuestionDetail() {
       const { target_type, id } = this.question;
-      window.location.href = `/my/wrong_question_book/wrong_questions#/target_type/${target_type}/target_id/${id}`
+      window.open(`/my/wrong_question_book/wrong_questions#/target_type/${target_type}/target_id/${id}`);
     }
   }
 }
