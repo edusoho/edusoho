@@ -47,7 +47,7 @@ export default {
         query: {
           poolId: this.poolId,
         },
-        data: params,
+        params,
       }).then(res => {
         const {
           assessment,
