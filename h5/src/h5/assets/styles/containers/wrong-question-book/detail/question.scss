@@ -54,6 +54,10 @@
 
 	.situation-top {
 		color: #03c777;
+		word-wrap: break-word;
+		word-break: break-all;
+
+		@include text-overflow-multi(2);
 	}
 
 	.situation-bottom {
