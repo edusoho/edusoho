@@ -69,6 +69,7 @@ class WrongQuestionServiceTest extends BaseTestCase
             'target_type' => 'classroom',
             'testpaper_id' => 1,
             'target_id' => 4,
+            'source_id' => 1,
         ];
         $this->getWrongQuestionService()->batchBuildWrongQuestion($wrongAnswerQuestionReports, $source);
         $wrongQuestions = $this->getWrongQuestionDao()->search(['answer_scene_id' => 4], [], 0, PHP_INT_MAX);
@@ -159,6 +160,20 @@ class WrongQuestionServiceTest extends BaseTestCase
         $this->assertCount(2, $wrongQuestion);
     }
 
+    public function testFindWrongQuestionCollectByCollectIds()
+    {
+        $collect = $this->createWrongQuestionCollect();
+        $wrongQuestion = $this->getWrongQuestionService()->findWrongQuestionCollectByCollectIds([$collect['id']]);
+        $this->assertCount(1, $wrongQuestion);
+    }
+
+    public function testFindWrongQuestionByCollectIds()
+    {
+        $this->batchCreateWrongQuestion();
+        $wrongQuestion = $this->getWrongQuestionService()->findWrongQuestionByCollectIds([1, 2]);
+        $this->assertCount(3, $wrongQuestion);
+    }
+
     public function testSearchWrongQuestionsWithCollect()
     {
         $this->batchCreateWrongQuestion();
@@ -203,6 +218,14 @@ class WrongQuestionServiceTest extends BaseTestCase
             'item_id' => 1,
         ], [], 0, PHP_INT_MAX);
         $this->assertCount(1, $wrongQuestionCollect);
+    }
+
+    public function testCountWrongQuestionCollect()
+    {
+        $this->createWrongQuestionCollect();
+        $wrongQuestionCollectCount = $this->getWrongQuestionService()->countWrongQuestionCollect([
+            'item_id' => 1, ]);
+        $this->assertEquals(1, $wrongQuestionCollectCount);
     }
 
     public function testSearchWrongBookPool()
