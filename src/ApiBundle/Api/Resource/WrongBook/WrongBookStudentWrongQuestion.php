@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\WrongBook;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -32,7 +31,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -57,11 +56,11 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         return $prepareConditions;
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
-        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionByCollectIds(ArrayToolkit::column($wrongQuestions, 'collect_id'));
+        $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionBySceneIds($sceneIds);
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);
         $sources = $this->getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes);

@@ -85,7 +85,6 @@ class WrongBookQuestionShow extends AbstractResource
             }
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
-//            var_dump($wrongQuestion['source_type']);
             if ('course_task' === $wrongQuestion['source_type']) {
                 $courseTask = $this->getCourseTaskService()->getTask($wrongQuestion['source_id']);
                 $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
@@ -97,7 +96,7 @@ class WrongBookQuestionShow extends AbstractResource
                 }
                 $secondarySource = $courseTask['title'];
                 $sourceTitle = empty($mainSource) ? $secondarySource : $mainSource.'-'.$secondarySource;
-                if (!in_array($sourceTitle, $sources[$itemId], true)) {
+                if (!in_array($sourceTitle, $sources[$itemId], true) && !empty($sourceTitle)) {
                     $sources[$itemId][] = $sourceTitle;
                 }
             } elseif ('item_bank_chapter' === $wrongQuestion['source_type']) {
