@@ -14,7 +14,6 @@
             class="wrong-list"
             v-model="listItem.loading"
             :finished="listItem.finished"
-            finished-text="没有更多了"
             @load="onLoad(index)"
           >
             <item
@@ -23,6 +22,11 @@
               :question="item"
             />
           </van-list>
+          <empty-course
+            v-if="!listItem.items.length && listItem.finished"
+            :has-button="false"
+            text="暂无错题"
+          />
           <div class="wrong-question-number">
             {{ listItem.totalTitle }}：{{ listItem.total }}
           </div>
@@ -35,12 +39,14 @@
 <script>
 import Api from '@/api';
 import Item from './Item.vue';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 
 export default {
   name: 'MyWrongQuestionBook',
 
   components: {
     Item,
+    EmptyCourse,
   },
 
   data() {
