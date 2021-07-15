@@ -38,6 +38,8 @@ interface WrongQuestionService
 
     public function findWrongQuestionCollectByCollectIds($collectIds);
 
+    public function findWrongQuestionByCollectIds($collectIds);
+
     /**
      * BookPool
      */

@@ -25,6 +25,10 @@ class CoursePool extends AbstractPool
             return [];
         }
 
+        if (empty($conditions['courseId']) && empty($conditions['courseMediaType']) && empty($conditions['courseTaskId'])) {
+            return [];
+        }
+
         return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
