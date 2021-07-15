@@ -24,7 +24,12 @@
           </div>
           <div
             class="exercise-search__btn"
-            @click="onClickSearch({ testpaperId: testpaper.assessmentId })"
+            @click="
+              onClickSearch({
+                exerciseMediaType: 'testpaper',
+                testpaperId: testpaper.assessmentId,
+              })
+            "
           >
             查看错题
           </div>
@@ -52,7 +57,12 @@
             </div>
             <div
               class="exercise-search__btn"
-              @click="onClickSearch({ chapterId: firstChapter.id })"
+              @click="
+                onClickSearch({
+                  exerciseMediaType: 'chapter',
+                  chapterId: firstChapter.id,
+                })
+              "
             >
               查看错题
             </div>
@@ -81,7 +91,12 @@
                 </div>
                 <div
                   class="exercise-search__btn"
-                  @click="onClickSearch({ chapterId: secondChapter.id })"
+                  @click="
+                    onClickSearch({
+                      exerciseMediaType: 'chapter',
+                      chapterId: secondChapter.id,
+                    })
+                  "
                 >
                   查看错题
                 </div>
@@ -108,7 +123,12 @@
                     </div>
                     <div
                       class="exercise-search__btn"
-                      @click="onClickSearch({ chapterId: thirdChapter.id })"
+                      @click="
+                        onClickSearch({
+                          exerciseMediaType: 'chapter',
+                          chapterId: thirdChapter.id,
+                        })
+                      "
                     >
                       查看错题
                     </div>
