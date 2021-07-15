@@ -55,9 +55,9 @@ if ($('.js-sts-login-link').length) {
 
 const $loginModal = $('#login-modal');
 $('#sms-login').click((event) => {
-  $loginModal.modal('hide');
+  // $loginModal.modal('hide');
   $.get($(event.currentTarget).data('url'), function (html) {
-    $('#modal').html(html);
+    $loginModal.html(html);
   });
 });
 

@@ -3,7 +3,7 @@ import Api from 'common/api';
 import notify from 'common/notify';
 import { countDown } from 'app/common/new-count-down.js';
 
-let $form = $('#login-form');
+let $form = $('#login-sms-form');
 let drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
   limitType: 'user_login'
 }) : null;
@@ -71,3 +71,10 @@ let smsEvent = () => {
   });
 };
 smsEvent();
+
+const $loginModal = $('#login-modal');
+$('#pwd-login').click((event) => {
+  $.get($loginModal.data('url'), function (html) {
+    $loginModal.html(html);
+  });
+});
