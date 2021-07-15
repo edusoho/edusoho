@@ -229,7 +229,7 @@ export default {
     },
 
     goToStartAnswer() {
-      this.$router.push({
+      this.$router.replace({
         name: 'WrongExercisesDo',
         query: {
           id: this.targetId,
