@@ -19,9 +19,6 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookStudentWrongQuestion extends AbstractResource
 {
-    /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER")
-     */
     public function search(ApiRequest $request, $targetId, $targetType)
     {
         if (!in_array($targetType, ['course', 'classroom', 'exercise'])) {
