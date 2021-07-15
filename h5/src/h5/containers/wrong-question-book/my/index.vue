@@ -1,9 +1,14 @@
 <template>
   <div>
     <e-loading v-if="isLoading" />
-    <van-tabs :border="true" color="#43c793">
+    <van-tabs
+      :border="true"
+      color="#43c793"
+      v-model="active"
+      @click="onClickTabs"
+    >
       <template v-for="(listItem, index) in list">
-        <van-tab :title="listItem.title" :key="index">
+        <van-tab :title="listItem.title" :key="index" :name="listItem.type">
           <van-search
             v-model="listItem.keyword"
             shape="round"
@@ -52,6 +57,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      active: 'course',
+      currentActive: 'course',
       list: [
         {
           title: '课程错题',
@@ -104,6 +111,7 @@ export default {
 
   created() {
     this.fetchWrongQuestionBooks();
+    this.active = this.$route.query.active;
   },
 
   methods: {
@@ -154,6 +162,17 @@ export default {
       list.refreshing = true;
       list.paging.current = 0;
       this.onLoad(index);
+    },
+
+    onClickTabs(key, title) {
+      if (key === this.currentActive) return;
+      this.currentActive = key;
+
+      this.$router.replace({
+        query: {
+          active: key,
+        },
+      });
     },
   },
 };
