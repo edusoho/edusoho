@@ -31,7 +31,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('max(id) as id,user_id,max(submit_time) as submit_time,COUNT(*) as wrongTimes')
+            ->select('max(id) as id,user_id,max(submit_time) as submit_time,max(answer_question_report_id) as answer_question_report_id,COUNT(*) as wrongTimes')
             ->groupBy('user_id')
             ->setFirstResult($start)
             ->setMaxResults($limit);
