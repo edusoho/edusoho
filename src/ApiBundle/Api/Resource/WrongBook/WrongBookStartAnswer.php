@@ -41,7 +41,7 @@ class WrongBookStartAnswer extends AbstractResource
             'bank_id' => 0,
             'sections' => [
                 [
-                    'name' => '作业题目',
+                    'name' => '题目列表',
                     'items' => $items,
                 ],
             ],
