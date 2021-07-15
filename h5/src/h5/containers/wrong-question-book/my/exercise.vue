@@ -16,6 +16,12 @@
           <p class="number text-overflow">{{ exercise.wrong_number }}道题</p>
         </div>
       </div>
+
+      <empty-course
+        v-if="!exerciseList.length && !isLoading"
+        :has-button="false"
+        text="暂无错题"
+      />
     </div>
   </div>
 </template>
@@ -24,9 +30,14 @@
 import Api from '@/api';
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 
 export default {
   name: 'myWrongQuestionBookExercise',
+
+  components: {
+    EmptyCourse,
+  },
 
   data() {
     return {
