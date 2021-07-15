@@ -15,9 +15,7 @@ class WrongQuestionEventSubscriberTest extends BaseTestCase
     {
         $expected = [
             'answer.submitted' => 'onAnswerSubmitted',
-            'wrong_question.batch_create' => 'onWrongQuestionBatchChanged',
             'wrong_question_pool.delete' => 'onWrongQuestionPoolDelete',
-            'wrong_question.batch_delete' => 'onWrongQuestionBatchDelete',
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
         ];
