@@ -18,14 +18,14 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
     public function findWrongQuestionBySceneIds($sceneIds)
     {
         $marks = str_repeat('?,', count($sceneIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE answer_scene_id IN({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE answer_scene_id IN ({$marks});";
 
-        return $this->db()->fetchAll($sql, $sceneIds);
+        return $this->db()->fetchAll($sql, array_values($sceneIds));
     }
 
     public function findWrongQuestionByCollectIds($collectIds)
     {
-        return $this->findInField('collect_id', $collectIds);
+        return $this->findInField('collect_id', array_values($collectIds));
     }
 
     public function searchWrongQuestionsWithDistinctUserId($conditions, $orderBys, $start, $limit)
