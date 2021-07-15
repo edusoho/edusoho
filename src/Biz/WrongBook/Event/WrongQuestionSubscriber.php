@@ -42,7 +42,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         }
         $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
         if (empty($wrongPools)) {
-            throw WrongBookException::WRONG_QUESTION_BOOK_POOL_NOT_EXIST();
+            return;
         }
         $wrongPoolIds = ArrayToolkit::column($wrongPools, 'id');
         $db = $this->getBiz()->offsetGet('db');

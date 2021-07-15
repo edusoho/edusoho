@@ -24,7 +24,9 @@ class WrongBookStartAnswer extends AbstractResource
     public function add(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
-        $filterConditions = $this->prepareConditions($poolId, $request->query->all());
+        $conditions = $request->query->all();
+        $conditions['targetType'] = $pool['target_type'];
+        $filterConditions = $this->prepareConditions($poolId, $conditions);
         $wrongQuestionsCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($filterConditions);
         list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($filterConditions, $orderBy, $start, 20);

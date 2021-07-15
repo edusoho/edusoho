@@ -84,13 +84,17 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 ArrayToolkit::column($wrongQuestions, 'id')
             );
 
+            $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            throw $e;
+            $this->getLogService()->error(
+                'wrong_question',
+                'create_wrong_question',
+                '批量创建错题失败',
+                ArrayToolkit::column($wrongAnswerQuestionReports, 'id')
+            );
         }
-
-        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function batchBuildCorrectQuestion($correctAnswerQuestionReports, $source)
@@ -116,14 +120,18 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 '修正错题',
                 ArrayToolkit::column($wrongQuestions, 'id')
             );
+            $this->dispatchEvent('wrong_question_correct.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
 
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            throw $e;
+            $this->getLogService()->info(
+                'wrong_question',
+                'correct_wrong_question',
+                '修正错题失败',
+                ArrayToolkit::column($correctAnswerQuestionReports, 'id')
+            );
         }
-
-        $this->dispatchEvent('wrong_question_correct.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
     }
 
     public function createWrongQuestion($fields)
