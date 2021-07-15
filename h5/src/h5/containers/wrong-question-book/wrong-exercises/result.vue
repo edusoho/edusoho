@@ -47,19 +47,11 @@
 
     <div class="result-footer">
       <van-button
-        style="margin-right: 2vw"
         class="result-footer__btn"
         type="primary"
         @click="viewAnalysis()"
       >
         查看解析
-      </van-button>
-      <van-button
-        class="result-footer__btn"
-        type="primary"
-        @click="goToMyWrongQuestionBook"
-      >
-        我的错题本
       </van-button>
     </div>
   </div>
@@ -145,15 +137,6 @@ export default {
         name: 'WrongExercisesAnalysis',
         query: {
           recordId: this.$route.query.recordId,
-        },
-      });
-    },
-
-    goToMyWrongQuestionBook() {
-      this.$router.push({
-        name: 'myWrongQuestionBook',
-        query: {
-          backUrl: '/my/orders',
         },
       });
     },
