@@ -2,7 +2,7 @@
   <div class="wrong-question-detail">
     <e-loading v-if="isLoading" />
     <van-swipe
-      v-if="questionList.length && !isLoading"
+      v-if="questionList.length"
       ref="swipe"
       :height="height"
       :duration="100"
