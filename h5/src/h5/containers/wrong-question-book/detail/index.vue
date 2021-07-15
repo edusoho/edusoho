@@ -2,7 +2,6 @@
   <div class="wrong-question-detail">
     <e-loading v-if="isLoading" />
     <van-swipe
-      v-if="questionList.length"
       ref="swipe"
       :height="height"
       :duration="100"
@@ -25,10 +24,10 @@
       </van-swipe-item>
     </van-swipe>
 
-    <van-empty
-      v-else
-      style="transform: translateY(50%);"
-      description="暂无错题"
+    <empty-course
+      v-if="!questionList.length && !isLoading"
+      :has-button="false"
+      text="暂无错题"
     />
 
     <div v-if="questionList.length" class="paper-swiper">
@@ -84,6 +83,7 @@ import Question from './Question/index.vue';
 import CourseSearch from './Search/Course.vue';
 import ClassroomSearch from './Search/Classroom.vue';
 import QuestionBankSearch from './Search/QuestionBank.vue';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 
 const NavBarHeight = 46;
 const FootHeight = 48;
@@ -101,6 +101,7 @@ export default {
     ClassroomSearch,
     // eslint-disable-next-line vue/no-unused-components
     QuestionBankSearch,
+    EmptyCourse,
   },
 
   data() {
