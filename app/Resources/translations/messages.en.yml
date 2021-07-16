@@ -340,6 +340,7 @@ form.placeholder.max_int: 'Maximum 9 digits integer'
 form.placeholer.two_decimal_places: 'Keep the second decimal place'
 form.placeholder.start_date: 'Start time'
 form.placeholder.end_date: 'Finish time'
+form.placeholder.deadline_range: Please enter the deadline range
 form.placeholder.nickname: Username
 form.placeholder.keyword: Keyword
 form.radio_btn.pass: Agree
@@ -3807,6 +3808,7 @@ my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
 my.learning.group_menu: 'Groups'
 user.certificate_menu: 'My Certificate'
+my.wrong_question_book: 'My wrong question book'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
@@ -7140,6 +7142,7 @@ admin.cloud_attachment.select_all: 'Select All'
 admin.cloud_file.material_tag_show_match_tips: 'Used to search courses. Managed by site administrator.'
 admin.cloud_file.material_tag_show_match_hint: 'Tags are from courses and managed by admin.'
 admin.cloud_file.keyword_placeholder: 'Input keywords'
+admin.cloud_file.select_placeholeder: 'Choose'
 admin.cloud_file.keyword_type: 'By source'
 admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
@@ -9927,7 +9930,7 @@ admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> 
 
 # 常用入口
 admin_v2.homepage.quick_entrance: Quick Entrance
-admin_v2.edit_quick_entrance.btn: Edit Quick Entrance
+admin_v2.edit_quick_entrance.btn: Edit Entrance
 admin_v2.quick_entrance_setting: Set Quick Entrance
 admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
 
@@ -10244,10 +10247,10 @@ s2b2c.product.suggestion_price: Suggestion Price
 s2b2c.course_product.free_tasks: Free tasks
 s2b2c.course_product.tag: Merchant course
 
-testpaper.result.unpassed: '很遗憾，您未通过本次考试'
-testpaper.result.passed: '恭喜您已通过本次考试!'
-testpaper.result.comment: '教师评语'
-homework.result.tips: '作业结果'
+testpaper.result.unpassed: 'Sorry,you failed the test'
+testpaper.result.passed: 'Congratulations that you have passed the exam!'
+testpaper.result.comment: 'Teacher comments'
+homework.result.tips: 'Assignment result'
 
 #云监考
 course.task.enable_facein: 云监考
@@ -10378,8 +10381,8 @@ user.certificates.placeholde_name: Enter certificate name
 user.certificates.cert_titile: Certificate name
 user.certificates.cert_code: Certificate number
 user.certificates.cert_issue_time: Acquisition time
-user.certificates.look_cert: View Certificate
-user.certificates.download_cert: Download certificate
+user.certificates.look_cert: View
+user.certificates.download_cert: Download
 user.certificates.valid_time_tip: Valid until：
 user.certificates.status_valid: In effect
 user.certificates.status_expired: Expired
@@ -10725,9 +10728,14 @@ admin.multi_class_copy.success.notify: Your new multi-class《%newTitle%》is co
 admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is copied failed from origin multi-class《%originTitle%》！
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
+
+exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.not_exist: Wrong question not exist
 course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
 course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
 
 course.assistant.student_add_qrcode: To ensure the quality of learning
 course.assistant.student_add_qrcode_info: Please scan the code to add the class exclusive assistant teacher WeChat
+
+feedback_title: Diting, directly connected to EduSoho product manager
 

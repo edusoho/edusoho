@@ -10,7 +10,7 @@ $('.js-generate-replay').on('click', (event) => {
     .catch(response => {
       const error = JSON.parse(response.responseText);
       const code = error.code;
-      const message = error.error;
-      cd.message({ type: 'danger', message: Translator.trans('course.manage.live_replay_generate_error')});
+      const message = error.error ? error.error.message : Translator.trans('course.manage.live_replay_generate_error');
+      cd.message({ type: 'danger', message: message});
     });
 });

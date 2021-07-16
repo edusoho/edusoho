@@ -223,6 +223,9 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNum_LT',
                 'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNum_GTE',
                 'learnedCompulsoryTaskNum <= :learnedCompulsoryTaskNum_LTE',
+                'deadline <= :deadline_LE',
+                'deadline >= :deadline_GE',
+                'deadline > :deadline_GT',
             ],
         ];
     }

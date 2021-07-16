@@ -132,7 +132,7 @@ class MultiClassProduct extends AbstractResource
             $classes = isset($multiClasses[$product['id']]) ? $multiClasses[$product['id']] : [];
             $product['multiClassNum'] = count($classes);
             $totalRate = $product['multiClassNum'] ? array_sum(ArrayToolkit::column($multiClasses[$product['id']], 'finishedCourseRate')) : 0;
-            $product['finishedCourseRate'] = $product['multiClassNum'] && $totalRate ? (round($totalRate / $product['multiClassNum'], 2) * 100) . '%' : '0%';
+            $product['finishedCourseRate'] = $product['multiClassNum'] && $totalRate ? (round($totalRate / $product['multiClassNum'], 2) * 100).'%' : '0%';
             $courseIds = ArrayToolkit::column($classes, 'courseId') ? ArrayToolkit::column($classes, 'courseId') : [-1];
             $income = $this->getCourseService()->sumTotalIncomeByIds($courseIds);
             $product['income'] = $income ? $income : '0.00';
@@ -149,7 +149,7 @@ class MultiClassProduct extends AbstractResource
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $students = $this->getCourseMemberService()->findCourseStudentsByCourseIds($courseIds);
         $students = ArrayToolkit::group($students, 'courseId');
-        foreach ($multiClasses as &$multiClass){
+        foreach ($multiClasses as &$multiClass) {
             $studentNum = $courses[$multiClass['courseId']]['studentNum'];
             $compulsoryTaskNum = $courses[$multiClass['courseId']]['compulsoryTaskNum'];
             $learnedCompulsoryTaskNum = array_sum(ArrayToolkit::column($students[$multiClass['courseId']], 'learnedCompulsoryTaskNum'));

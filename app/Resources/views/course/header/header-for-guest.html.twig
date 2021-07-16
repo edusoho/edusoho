@@ -65,7 +65,7 @@
         {#添加admin_v2#}
         {% set canManage =  member.role|default('') in ['teacher', 'assistant'] or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
         {% if canManage %}
-          {% if member.role == 'assistant' %}
+          {% if member.role|default('') == 'assistant' %}
             <a class="btn btn-default btn-xs course-detail-info__manage" href="{{ path('course_set_manage_course_students', {courseSetId: course.courseSetId, courseId: course.id }) }}">
               <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.default.manage'|trans }}
             </a>

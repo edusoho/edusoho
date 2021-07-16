@@ -107,6 +107,8 @@ class ClassroomManageController extends BaseController
 
         $condition = array_merge($condition, ['classroomId' => $id, 'role' => 'student']);
 
+        $this->filterDeadlineConditions($condition, $request);
+
         $paginator = new Paginator(
             $request,
             $this->getClassroomService()->searchMemberCount($condition),
@@ -132,6 +134,22 @@ class ClassroomManageController extends BaseController
                 'role' => $role,
             ]
         );
+    }
+
+    private function filterDeadlineConditions(&$condition, $request)
+    {
+        $deadLineStartDate = $request->query->get('deadLineStartDate');
+        if (!empty($deadLineStartDate)) {
+            $condition['deadline_GE'] = strtotime($deadLineStartDate);
+        }
+
+        $deadLineEndDate = $request->query->get('deadLineEndDate');
+        if (!empty($deadLineEndDate)) {
+            if (empty($deadLineStartDate)) {
+                $condition['deadline_GT'] = 0;
+            }
+            $condition['deadline_LE'] = strtotime($deadLineEndDate.' 23:59:59');
+        }
     }
 
     private function appendLearningProgress(&$classroomMembers)
@@ -1129,6 +1147,16 @@ class ClassroomManageController extends BaseController
                 'targetId' => $classroom['id'],
             ]
         );
+    }
+
+    public function wrongQuestionAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->render('classroom-manage/wrong-question/index.html.twig', [
+            'classroom' => $classroom,
+            'isTeacher' => true,
+        ]);
     }
 
     public function resultGraphAction(Request $request, $id, $activityId)

@@ -49,11 +49,11 @@
         </testsuite>
         <testsuite name="UnitU2Z">
             <directory>../tests/Unit/V*</directory>
-            <directory>../tests/Unit/U*</directory>
             <directory>../tests/Unit/W*</directory>
             <directory>../tests/Unit/X*</directory>
             <directory>../tests/Unit/Y*</directory>
             <directory>../tests/Unit/Z*</directory>
+            <directory>../tests/Unit/U*</directory>
         </testsuite>
         <testsuite name="SpecialTest">
             <file>../tests/Unit/CloudPlatform/Service/AppServiceTest.php</file>

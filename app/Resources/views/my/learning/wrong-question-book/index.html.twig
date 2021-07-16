@@ -1,0 +1,18 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.wrong_question_book'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-wrong-question-book' %}
+
+{% do script(['app/vue/views/my/learning/wrong_question_book/index.js']) %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ 'my.wrong_question_book'|trans }}
+    </div>
+    <div class="panel-body">
+      <div id="app"></div>
+    </div>
+  </div>
+{% endblock %}

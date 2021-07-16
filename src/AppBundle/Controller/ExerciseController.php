@@ -3,12 +3,15 @@
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
-use Biz\Testpaper\Service\TestpaperService;
+use Biz\Task\Service\TaskService;
+use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -25,7 +28,7 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED === $latestAnswerRecord['status']) {
             $assessment = $this->createAssessment(
                 $activity['title'],
                 $activity['ext']['drawCondition']['range'],
@@ -130,14 +133,6 @@ class ExerciseController extends BaseController
         }
 
         return false;
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

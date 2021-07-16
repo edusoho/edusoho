@@ -6,6 +6,14 @@ use Biz\BaseTestCase;
 
 class ExerciseModuleDaoTest extends BaseTestCase
 {
+    public function testGetByAnswerSceneId()
+    {
+        $this->mockExerciseModule();
+        $module = $this->getItemBankExerciseModuleDao()->getByAnswerSceneId(1);
+
+        $this->assertEquals(1, $module['answerSceneId']);
+    }
+
     public function testFindByExerciseId()
     {
         $this->mockExerciseModule();

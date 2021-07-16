@@ -17,5 +17,6 @@ new CustomFullCalendar({
     new LiveTooltipComp(),
     new ClickComp('{url}') //routing course_show
   ],
-  'defaultView': 'agendaWeek' // 'agendaWeek'
+  'defaultView': 'agendaWeek', // 'agendaWeek'
+  'locale': app.lang === 'en' ? 'en' : 'zh-cn'
 });

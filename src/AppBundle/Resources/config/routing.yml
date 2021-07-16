@@ -54,6 +54,10 @@ login_sms:
   path:  /login/sms
   defaults: { _controller: AppBundle:Login:sms }
 
+login_sms_ajax:
+  path:  /login/sms/ajax
+  defaults: { _controller: AppBundle:Login:smsAjax }
+
 login_qrcode:
     path: /login/qrcode
     defaults: { _controller: AppBundle:Login:qrcode }
@@ -649,6 +653,30 @@ my_certificates:
     path: /my/certificates
     defaults: { _controller: AppBundle:My/Certificate:index }
     h5: true
+
+my_wrong_question_book:
+    path: /my/wrong_question_book
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:index }
+
+my_wrong_question_book_target_detail:
+    path: /my/wrong_question_book/wrong_questions
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:detail }
+
+wrong_question_book_practise_redirect:
+    path: /wrong_question_book/pool/{poolId}/practise
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:practiseRedirect }
+
+wrong_question_book_practise:
+    path: /wrong_question_book/pool/{poolId}/practise/{recordId}
+    defaults: { _controller: AppBundle:My/WrongQuestionBook:practise }
+
+wrong_question_book_practise_start_do:
+  path: /wrong_question_book/pool/{poolId}/practise/{recordId}/start_do
+  defaults: { _controller: AppBundle:My/WrongQuestionBook:startDo }
+
+wrong_question_book_practise_show_result:
+  path: /wrong_question_book/pool/{poolId}/practise/{recordId}/show_result
+  defaults: { _controller: AppBundle:My/WrongQuestionBook:showResult }
 
 my_unclaimed_certificates:
     path: /my/certificates/unclaimed
@@ -2462,6 +2490,10 @@ course_manage_homework_check:
   path: /course/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
 
+course_manage_wrong_questions:
+  path: /course/{id}/manage/wrong-questions/list
+  defaults: { _controller: AppBundle:Course/WrongQuestion:index }
+
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
   defaults: { _controller: AppBundle:Homework:startDo }
@@ -2682,6 +2714,10 @@ classroom_manage_homework:
 classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
+
+classroom_manage_wrong_questions:
+  path: /classroom/{id}/manage/wrong_book/list
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:wrongQuestion }
 
 classroom_data_statistics:
   path:  /classroom/{id}/manage/data/statistics
@@ -3535,6 +3571,10 @@ item_bank_exercise_manage_students:
     path: /item_bank_exercise/{exerciseId}/manage/students
     defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
 
+item_bank_exercise_manage_wrong_questions:
+  path: /item_bank_exercise/{exerciseId}/manage/wrong_questions
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:wrongQuestions }
+
 item_bank_exercise_manage_students_add:
     path: /item_bank_exercise/{exerciseId}/manage/students/add
     defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:createExerciseStudent}
@@ -3732,3 +3772,7 @@ common_report_tags_modal:
 scrm_buy_goods_callback:
   path: /scrm/buy/goods/callback
   defaults: { _controller: AppBundle:SCRM/Callback:goods }
+
+feedback:
+  path: /feedback
+  defaults: { _controller: AppBundle:Default:feedback }

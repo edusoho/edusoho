@@ -134,6 +134,21 @@
         background: url("@{img-src}vipfreeEn@1x.png") no-repeat;
         background-image: -webkit-image-set(url("@{img-src}vipfreeEn@1x.png") 1x,url("@{img-src}vipfreeEn@2x.png") 2x);
       }
+      // 折扣 (英文)
+      .tag-discount-en {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 68px;
+        height: 68px;
+        z-index: 10;
+        background: url("@{img-src}tag_discount_en.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_discount_en.png") 1x,url("@{img-src}tag_discount_en@2x.png") 2x);
+        &.free {
+          background: url("@{img-src}tag_disfree_en.png");
+          background-image: -webkit-image-set(url("@{img-src}tag_disfree_en.png") 1x,url("@{img-src}tag_disfree_en@2x.png") 2x);
+        }
+      }
     }
   }
 

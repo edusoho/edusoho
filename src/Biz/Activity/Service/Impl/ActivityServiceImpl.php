@@ -84,22 +84,40 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false)
     {
-        $conditions = [
-            'fromCourseId' => $courseId,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities = $this->getActivityDao()->findActivitiesByCourseIdAndType($courseId, $type);
 
         return $this->prepareActivities($fetchMedia, $activities);
     }
 
+    public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false)
+    {
+        $activities = $this->getActivityDao()->findActivitiesByCourseIdsAndType($courseIds, $type);
+
+        return $this->prepareActivities($fetchMedia, $activities);
+    }
+
+    public function findActivitiesByCourseSetId($courseSetId)
+    {
+        return $this->getActivityDao()->findActivitiesByCourseSetId($courseSetId);
+    }
+
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
     {
-        $conditions = [
-            'fromCourseSetId' => $courseSetId,
-            'mediaType' => $type,
-        ];
-        $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities = $this->getActivityDao()->findActivitiesByCourseSetIdAndType($courseSetId, $type);
+
+        return $this->prepareActivities($fetchMedia, $activities);
+    }
+
+    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $type, $fetchMedia = false)
+    {
+        $activities = $this->getActivityDao()->findActivitiesByCourseSetIdsAndType($courseSetIds, $type);
+
+        return $this->prepareActivities($fetchMedia, $activities);
+    }
+
+    public function findActivitiesByCourseSetIdsAndTypes($courseSetIds, $types, $fetchMedia = false)
+    {
+        $activities = $this->getActivityDao()->findActivitiesByCourseSetIdsAndTypes($courseSetIds, $types);
 
         return $this->prepareActivities($fetchMedia, $activities);
     }

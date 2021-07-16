@@ -3,15 +3,14 @@
 namespace ApiBundle\Api\Resource\Assistant;
 
 use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Filter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\ResponseFilter;
 
 class Assistant extends AbstractResource
 {

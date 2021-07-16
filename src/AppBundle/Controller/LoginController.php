@@ -202,6 +202,13 @@ class LoginController extends BaseController
         ]);
     }
 
+    public function smsAjaxAction(Request $request)
+    {
+        return $this->render('login/sms-ajax.html.twig', [
+            '_target_path' => $request->query->get('_target_path'),
+        ]);
+    }
+
     public function checkEmailAction(Request $request)
     {
         $email = $request->query->get('value');

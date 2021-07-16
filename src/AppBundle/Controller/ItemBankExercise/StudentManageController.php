@@ -53,6 +53,16 @@ class StudentManageController extends BaseController
         ]);
     }
 
+    public function wrongQuestionsAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        return $this->render('item-bank-exercise-manage/wrong-question/index.html.twig', [
+            'exercise' => $exercise,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
+        ]);
+    }
+
     public function studentRecordsAction(Request $request, $exerciseId, $type)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);

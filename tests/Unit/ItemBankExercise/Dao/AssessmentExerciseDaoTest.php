@@ -18,6 +18,13 @@ class AssessmentExerciseDaoTest extends BaseTestCase
         $this->assertEquals($assessmentExercise['assessmentId'], 1);
     }
 
+    public function testFindByModuleIds()
+    {
+        $this->mockAssessmentExercises();
+        $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->findByModuleIds([1]);
+        $this->assertCount(3, $assessmentExercise);
+    }
+
     public function testDeleteByAssessmentId()
     {
         $this->mockAssessmentExercise();
