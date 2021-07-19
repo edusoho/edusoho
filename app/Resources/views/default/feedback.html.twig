@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{%- block title -%}
+  {{ 'feedback_title'|trans }}
+{%- endblock -%}
+
+{% block full_content %}
+  <iframe style="width:100%;min-height:900px;border:0" id="feedback-iframe"></iframe>
+
+  <script type="text/javascript" src="//service-cdn-ali.qiqiuyun.net/js-sdk-v2/feedback-sdk/sdk.js?version={{ timestamp() }}"></script>
+
+  <script type="text/javascript">
+    new FeedbackSdk({
+      iframe: 'feedback-iframe',
+      token: '{{ token }}',
+    });
+  </script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

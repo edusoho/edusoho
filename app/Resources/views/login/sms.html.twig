@@ -13,7 +13,7 @@
   <div class="es-section login-section">
     <div class="logon-tab clearfix">
       <a class="active">{{ 'user.login.login_account'|trans }}</a>
-      <a href="{{ path('register', {goto:'_target_path'}) }}">{{ 'user.register.register_account'|trans }}</a>
+      <a href="{{ path('register', {goto:_target_path}) }}">{{ 'user.register.register_account'|trans }}</a>
     </div>
     <div class="login-main js-login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_sms') }}">

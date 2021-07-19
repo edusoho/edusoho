@@ -8,7 +8,7 @@
 {% block page_title %}{{ 'course.replay_manage.content_title'|trans }}{% endblock %}
 
 {% block main_body %}
-  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles or (courseSet.parentId > 0 and has_permission('admin_v2_classroom')) %}
     <div class="lesson-manage-section">
       {% if tasks is empty %}
         <div class="empty">{{ 'course.replay_manage.empty'|trans }}</div>

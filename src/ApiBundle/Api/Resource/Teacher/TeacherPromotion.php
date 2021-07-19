@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Teacher;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\Exception\AccessDeniedException;

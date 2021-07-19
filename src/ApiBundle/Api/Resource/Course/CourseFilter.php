@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
-use ApiBundle\Api\Resource\Assistant\AssistantFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;

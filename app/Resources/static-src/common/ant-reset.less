@@ -1,6 +1,6 @@
 /************* Table *************/
 
-.ant-table-thead > tr > th .ant-table-filter-icon, 
+.ant-table-thead > tr > th .ant-table-filter-icon,
 .ant-table-thead > tr > th .anticon-filter {
   position: static;
   > svg {
@@ -79,12 +79,22 @@
 
 .ant-menu-horizontal {
   line-height: 38px;
+  border-bottom: none;
+
+  .ant-menu-item {
+    padding: 0;
+    margin-right: 40px;
+  }
 }
 
 .ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover {
   color: #1e7fd9 !important;
 }
 
+/************* Ant 影响 Es 的样式 *************/
+.task-iframe-body {
+  height: auto;
+}
 // icon兼容
 .svg-icon {
   width: 1em;

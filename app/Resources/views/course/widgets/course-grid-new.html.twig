@@ -12,10 +12,10 @@
       {% if courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}
           <!-- 限免 -->
-          <span class="tag-discount free"></span>
+          <span class="{% if app.request.getLocale() == 'en' %}tag-discount-en{% else %}tag-discount{% endif %} free"></span>
         {% else %}
           <!-- 折扣 -->
-          <span class="tag-discount"></span>
+          <span class="{% if app.request.getLocale() == 'en' %}tag-discount-en{% else %}tag-discount{% endif %}"></span>
         {% endif %}
       {% endif %}
       {% if courseSet.course.tryLookVideo|default(false) or courseSet.type|default() == 'reservation' or courseSet.type|default() == 'live' or courseSet.serializeMode != 'none'  %}

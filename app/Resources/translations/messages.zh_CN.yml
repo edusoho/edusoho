@@ -413,6 +413,7 @@ form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
 form.placeholder.start_date: 起始时间
+form.placeholder.deadline_range: 学习有效期时间
 form.placeholder.end_date: 结束时间
 form.placeholder.nickname: 用户名
 form.placeholder.keyword: 关键词
@@ -4443,6 +4444,7 @@ my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 user.certificate_menu: 我的证书
+my.wrong_question_book: 我的错题本
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
@@ -11973,8 +11975,14 @@ admin.multi_class_copy.success.notify: 您的新班课《%newTitle%》从原班�
 admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制失败！
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
+
+exception.wrong_book.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
+exception.wrong_book.wrong_book.wrong_question.not_exist: 错题本题目不存在
+
 course.replay_manage.no_permission_tips: 抱歉，您无权管理课程录播，如有需要请联系网站管理员！
 course.teacher_manage.no_permission_tips: 抱歉，您无权管理课程教师，如有需要请联系网站管理员！
 
 course.assistant.student_add_qrcode: 为了保证学习质量
 course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
+
+feedback_title: 谛听，直连EduSoho产品经理

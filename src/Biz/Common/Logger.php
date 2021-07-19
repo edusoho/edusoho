@@ -189,6 +189,8 @@ class Logger
 
     const ACTION_CLONE_COURSE_SET = 'clone_course_set';
 
+    const WRONG_QUESTION = 'wrong_question';
+
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
@@ -405,6 +407,11 @@ class Logger
                 'update_multi_class' => '更新班课',
                 'delete_multi_class' => '删除班课',
                 'clone_multi_class' => '复制班课',
+            ],
+
+            self::WRONG_QUESTION => [
+                'create_wrong_question' => '创建错题',
+                'delete_wrong_question' => '删除错题',
             ],
         ];
     }

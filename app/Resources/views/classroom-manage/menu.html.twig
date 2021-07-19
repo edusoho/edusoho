@@ -4,7 +4,7 @@
       {% if canManage %}
         <li class="cd-sidebar__item {% if side_nav == 'main' %}active{% endif %}">
           <a href="{{ path('classroom_manage', {id: classroom.id}) }}">
-            {{ '基础设置'|trans }}
+            {{ 'classroom.basic_setting'|trans }}
           </a>
         </li>
         <li class="cd-sidebar__item {% if side_nav == 'courses' %}active{% endif %}">
@@ -56,6 +56,12 @@
         <li class="cd-sidebar__item {% if side_nav == 'homework-check' %}active{% endif %}">
           <a href="{{ path('classroom_manage_homework', {id: classroom.id}) }}">
             {{ 'classroom.homework_check'|trans }}
+          </a>
+        </li>
+
+        <li class="cd-sidebar__item {% if side_nav == 'wrong-questions' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_wrong_questions', {id: classroom.id}) }}">
+            {{ '学员错题'|trans }}
           </a>
         </li>
       {% endif %}

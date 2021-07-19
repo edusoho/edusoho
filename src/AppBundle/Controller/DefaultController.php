@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\System;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
@@ -16,6 +17,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\BatchNotificationService;
+use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -232,6 +234,32 @@ class DefaultController extends BaseController
         $result = $this->getMeCount();
 
         return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
+    }
+
+    public function feedbackAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$this->getWebExtension()->isSaas() || (!$user->isAdmin() && !$user->isTeacher())) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('default/feedback.html.twig', ['token' => $this->makeToken()]);
+    }
+
+    protected function makeToken()
+    {
+        $user = $this->getUserService()->getUserProfile($this->getUser()->getId());
+        $site = $this->getSettingService()->get('site', []);
+        $payload = [
+            'userId' => (int) $user['id'],
+            'userName' => $user['truename'],
+            'schoolName' => $site['name'],
+            'isAdmin' => $this->getUser()->isSuperAdmin() ? 1 : 0,
+            'version' => System::VERSION,
+        ];
+        $storage = $this->getSettingService()->get('storage', []);
+
+        return JWT::encode($payload, $storage['cloud_secret_key'], 'HS256', $storage['cloud_access_key']);
     }
 
     /**
