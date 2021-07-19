@@ -32,7 +32,6 @@
             <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'admin.user_auth.email'|trans}}</button>
             <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'admin.user_auth.phone'|trans}}</button>
             <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">{{'admin.user_auth.email_or_mobile'|trans}}</button>
-            <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">{{'admin.user_auth.closed'|trans}}</button>
           </div>
           <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
           <div class="help-block" >{{'admin.user_auth.User_sign_up_type.help_block'|trans}}</div>
@@ -43,7 +42,7 @@
         </div>
       </div>
 
-      <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
+      <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_enabled == 'closed' %}hidden{% endif %}">
         <div class="form-group">
           <div class="col-md-3 control-label">
             <label >{{'admin.user_auth.Email_verification_sign'|trans}}</label>
@@ -104,7 +103,7 @@
           <label>
             <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
           </label>
-          <div class="help-block js-mobile-tip {% if auth.register_mode == 'email' or auth.register_mode == 'closed' %}hidden{% endif %}">为了避免云短信被盗刷，建议开启注册防护机制</div>
+          <div class="help-block js-mobile-tip {% if auth.register_mode == 'email' or auth.register_enabled == 'closed' %}hidden{% endif %}">为了避免云短信被盗刷，建议开启注册防护机制</div>
         </div>
         <button type="button" class="hiddenJsAction" style="display: none"></button>
 

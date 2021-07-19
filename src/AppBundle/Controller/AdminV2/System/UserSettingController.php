@@ -25,7 +25,7 @@ class UserSettingController extends BaseController
 
         $default = [
             'register_enabled' => 'closed',
-            'register_mode' => 'closed',
+            'register_mode' => 'mobile',
             'email_enabled' => 'closed',
             'setting_time' => -1,
             'email_activation_title' => '',
