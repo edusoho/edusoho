@@ -818,6 +818,66 @@ const routes = [
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
       ),
   },
+  {
+    path: '/my/wrong-quesition-book',
+    name: 'myWrongQuestionBook',
+    meta: {
+      title: '我的错题本',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/my/index.vue'
+      ),
+  },
+  {
+    path: '/my/wrong-quesition-book/exercise',
+    name: 'myWrongQuestionBookExercise',
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/my/exercise.vue'
+      ),
+  },
+  {
+    path: '/my/wrong-quesition-book/detail/:type/:id',
+    name: 'myWrongQuestionBookDetail',
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/detail/index.vue'
+      ),
+  },
+  {
+    path: '/wrong-exercises/do',
+    name: 'WrongExercisesDo',
+    meta: {
+      title: '错题练习',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/do.vue'
+      ),
+  },
+  {
+    path: '/wrong-exercises/result',
+    name: 'WrongExercisesResult',
+    meta: {
+      title: '错题练习',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/result.vue'
+      ),
+  },
+  {
+    path: '/wrong-exercises/analysis',
+    name: 'WrongExercisesAnalysis',
+    meta: {
+      title: '错题解析',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/analysis.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

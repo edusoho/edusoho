@@ -1,0 +1,179 @@
+<template>
+  <div>
+    <e-loading v-if="isLoading" />
+    <van-tabs
+      :border="true"
+      color="#43c793"
+      v-model="active"
+      @click="onClickTabs"
+    >
+      <template v-for="(listItem, index) in list">
+        <van-tab :title="listItem.title" :key="index" :name="listItem.type">
+          <van-search
+            v-model="listItem.keyword"
+            shape="round"
+            :placeholder="listItem.placeholder"
+            @search="value => onSearch(index, value)"
+          />
+          <van-list
+            class="wrong-list"
+            v-model="listItem.loading"
+            :finished="listItem.finished"
+            @load="onLoad(index)"
+          >
+            <item
+              v-for="item in listItem.items"
+              :key="item.id"
+              :question="item"
+            />
+          </van-list>
+          <empty-course
+            v-if="!listItem.items.length && listItem.finished"
+            :has-button="false"
+            text="暂无错题"
+          />
+          <div class="wrong-question-number">
+            {{ listItem.totalTitle }}：{{ listItem.total }}
+          </div>
+        </van-tab>
+      </template>
+    </van-tabs>
+  </div>
+</template>
+
+<script>
+import Api from '@/api';
+import Item from './Item.vue';
+import EmptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
+
+export default {
+  name: 'MyWrongQuestionBook',
+
+  components: {
+    Item,
+    EmptyCourse,
+  },
+
+  data() {
+    return {
+      isLoading: false,
+      active: 'course',
+      currentActive: 'course',
+      list: [
+        {
+          title: '课程错题',
+          type: 'course',
+          placeholder: '搜索相应课程',
+          items: [],
+          keyword: '',
+          loading: false,
+          finished: false,
+          totalTitle: '课程错题数量',
+          total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
+        },
+        {
+          title: '班级错题',
+          type: 'classroom',
+          placeholder: '搜索相应班级',
+          items: [],
+          keyword: '',
+          loading: false,
+          finished: false,
+          totalTitle: '班级错题数量',
+          total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
+        },
+        {
+          title: '题库错题',
+          type: 'exercise',
+          placeholder: '搜索相应练习名称',
+          items: [],
+          keyword: '',
+          loading: false,
+          finished: false,
+          totalTitle: '题库错题数量',
+          total: 0,
+          paging: {
+            current: 0,
+            total: 0,
+          },
+        },
+      ],
+    };
+  },
+
+  created() {
+    this.fetchWrongQuestionBooks();
+    this.active = this.$route.query.active;
+  },
+
+  methods: {
+    fetchWrongQuestionBooks() {
+      this.isLoading = true;
+      Api.getWrongBooks().then(res => {
+        this.list[0].total = res.course.sum_wrong_num;
+        this.list[1].total = res.classroom.sum_wrong_num;
+        this.list[2].total = res.exercise.sum_wrong_num;
+        this.isLoading = false;
+      });
+    },
+
+    onLoad(index) {
+      const list = this.list[index];
+      list.loading = true;
+
+      Api.getWrongBooksCertainTypes({
+        query: {
+          targetType: list.type,
+        },
+        params: {
+          keyWord: list.keyword,
+          offset: list.paging.current * 10,
+        },
+      }).then(res => {
+        if (list.refreshing) {
+          list.items = [];
+          list.refreshing = false;
+        }
+        list.items = list.items.concat(res.data);
+        list.loading = false;
+        list.refreshing = false;
+
+        const { total } = res.paging;
+        list.paging.total = total;
+        list.paging.current++;
+
+        if (list.items.length >= total) {
+          list.finished = true;
+        }
+      });
+    },
+
+    onSearch(index, value) {
+      const list = this.list[index];
+      list.keyword = value;
+      list.refreshing = true;
+      list.paging.current = 0;
+      this.onLoad(index);
+    },
+
+    onClickTabs(key, title) {
+      if (key === this.currentActive) return;
+      this.currentActive = key;
+
+      this.$router.replace({
+        query: {
+          active: key,
+        },
+      });
+    },
+  },
+};
+</script>

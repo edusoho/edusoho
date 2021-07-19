@@ -52,6 +52,8 @@ import {
   Icon,
   DropdownMenu,
   DropdownItem,
+  Divider,
+  Empty,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -77,6 +79,7 @@ Vue.component('van-pull-refresh', PullRefresh);
 Vue.component('van-overlay', Overlay);
 Vue.component('van-search', Search);
 Vue.component('van-count-down', CountDown);
+Vue.component('van-divider', Divider);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -109,6 +112,7 @@ Vue.use(Icon);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(wapSdk);
+Vue.use(Empty);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
