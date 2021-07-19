@@ -352,6 +352,9 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
+        if ($auth && $auth['register_enabled'] === 'closed'){
+            return false;
+        }
         if ($auth && array_key_exists('register_mode', $auth)) {
             return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
         }

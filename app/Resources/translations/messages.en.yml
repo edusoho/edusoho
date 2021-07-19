@@ -6247,6 +6247,8 @@ admin.edu_cloud.key_update.ask_apply_key: 'Have no authorization code yet?'
 admin.edu_cloud.key_update.key_apply_btn: 'Apply for an authorization code'
 admin.edu_cloud.key_update.key_apply.submiting: 'Applying for authorization code now, please wait...'
 admin.user_auth.sign_up_settings: 'Registration settings'
+admin.user_auth.user_sign_up_setting: 'User register setting'
+admin.user_auth.user_sign_up_setting.help_block: According to national laws and regulations, the user's mobile phone number should be collected to meet the requirements of real-name system. The three registration modes can only be used if the cloud SMS is enabled. <a href="%smsUrl%" target="_blank"> set to </a>
 admin.user_auth.User_sign_up_type: 'User register mode'
 admin.user_auth.email: 'Email Registration'
 admin.user_auth.phone: 'Mobile Registration'

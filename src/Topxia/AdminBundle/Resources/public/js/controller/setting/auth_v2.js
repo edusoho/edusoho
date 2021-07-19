@@ -82,7 +82,7 @@ define(function(require, exports, module) {
       return app.arguments.emailVerified == 1;
     }, Translator.trans('admin.setting.auth.email_verified_hint'));
 
-    $('.js-email-send-check').on('click', function() {
+    $('.js-email-send-check').on('click', function() {z
       $('.js-email-status').removeClass().addClass('alert alert-info js-email-status').html(Translator.trans('正在检测.....'));
 
       $.ajax({
@@ -143,6 +143,16 @@ define(function(require, exports, module) {
       }
 
       $('.hiddenJsAction').click();
+    });
+
+    $('input[name=register_enabled]').change(function() {
+      if ($(this).val() === 'closed'){
+        $('#register-enabled-tip').addClass('hidden');
+        $('#sign-up-setting').addClass('hidden');
+      }else{
+        $('#register-enabled-tip').removeClass('hidden');
+        $('#sign-up-setting').removeClass('hidden');
+      }
     });
   };
 });

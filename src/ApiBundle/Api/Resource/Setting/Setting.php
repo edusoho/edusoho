@@ -289,6 +289,7 @@ class Setting extends AbstractResource
 
         $result = [
             'auth' => [
+                'register_enabled' => $authSetting['register_enabled'],
                 'register_mode' => $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,

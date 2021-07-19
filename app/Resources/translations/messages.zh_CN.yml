@@ -7478,6 +7478,8 @@ admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍�
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
+admin.user_auth.user_sign_up_setting: 用户注册设置
+admin.user_auth.user_sign_up_setting.help_block: 根据国家法律规定需收集用户手机号满足实名制要求，需开启云短信才可使用三种注册模式，<a href="%smsUrl%" target="_blank">前往设置</a>
 admin.user_auth.User_sign_up_type: 用户注册模式
 admin.user_auth.email: 邮箱注册
 admin.user_auth.phone: 手机注册
