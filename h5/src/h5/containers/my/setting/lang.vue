@@ -15,7 +15,7 @@
         </van-cell>
       </van-cell-group>
     </van-radio-group>
-    <div style="padding: 0 16px; margin-top: 16px;">
+    <div style="padding: 16px;">
       <van-button type="info" size="small" block @click="onClickSave">{{
         $t('btn.save')
       }}</van-button>
