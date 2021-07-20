@@ -7,4 +7,10 @@ export default {
   navbarTitle: {
     switchLanguage: 'Switch language',
   },
+  btn: {
+    save: 'Save',
+  },
+  toast: {
+    switchSucceeded: 'Switch succeeded',
+  },
 };

@@ -7,4 +7,10 @@ export default {
   navbarTitle: {
     switchLanguage: '切换语言',
   },
+  btn: {
+    save: '保存',
+  },
+  toast: {
+    switchSucceeded: '切换成功',
+  },
 };
