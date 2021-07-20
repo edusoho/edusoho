@@ -26,7 +26,7 @@ module.exports = {
   // 启用额外的规则或覆盖默认的规则
   rules: {
     'no-var': 2,
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'off',
     eqeqeq: 0,
     camelcase: 0,
   },
