@@ -178,6 +178,21 @@ class CourseSettingController extends BaseController
         return $this->render('admin-v2/system/course-setting/questions-setting.html.twig');
     }
 
+    public function coursePurchaseAgreementAction(Request $request)
+    {
+        $purchaseAgreement = $this->getSettingService()->get('course_purchase_agreement');
+        if ($request->isMethod('POST')) {
+            $purchaseAgreement['is_sign'] = 1;
+            $purchaseAgreement['title'] = $request->request->get('purchaseAgreementTitle');
+            $purchaseAgreement['content'] = $request->request->get('purchaseAgreementContent');
+            $this->getSettingService()->set('course_purchase_agreement', $purchaseAgreement);
+        }
+
+        return $this->render('admin-v2/system/course-setting/course-purchase-agreement.html.twig', [
+            'purchaseAgreement' => $purchaseAgreement,
+        ]);
+    }
+
     protected function getCourseDefaultSet()
     {
         $default = [
