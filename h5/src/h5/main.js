@@ -3,6 +3,7 @@ import router from '@/router';
 import filters from '@/filters';
 import utils from '@/utils';
 import store from '@/store';
+import i18n from '@/lang';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
@@ -190,6 +191,7 @@ Api.getSettings({
     new Vue({
       router,
       store,
+      i18n,
       render: h => h(App),
     }).$mount('#app');
   })
