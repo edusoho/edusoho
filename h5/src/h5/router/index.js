@@ -129,8 +129,7 @@ const routes = [
       i18n: true,
       title: 'title.switchLanguage',
     },
-    component: () =>
-      import(/* webpackChunkName: "lang" */ '@/containers/my/setting/lang.vue'),
+    component: () => import(/* webpackChunkName: "lang" */ '@/containers/my/setting/lang.vue')
   },
   {
     path: '/course/explore',
