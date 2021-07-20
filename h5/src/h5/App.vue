@@ -95,9 +95,7 @@ export default {
           return;
         }
 
-        const navbarTitle = to.meta.i18n
-          ? this.$t(to.meta.title)
-          : to.meta.title;
+        const navbarTitle = to.meta.i18n ? this.$t(to.meta.title) : to.meta.title;
 
         this.setNavbarTitle(navbarTitle);
 

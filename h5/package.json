@@ -29,7 +29,6 @@
     ],
     "*.{js,vue}": [
       "eslint  --fix --ext .js --ext .jsx --ext .vue",
-      "prettier --write",
       "git add"
     ]
   },
