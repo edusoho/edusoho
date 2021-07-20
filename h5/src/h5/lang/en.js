@@ -5,9 +5,10 @@ export default {
     en: 'English',
   },
   title: {
-    switchLanguage: 'Switch language',
+    my: 'My',
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
+    switchLanguage: 'Switch language',
   },
   btn: {
     save: 'Save',

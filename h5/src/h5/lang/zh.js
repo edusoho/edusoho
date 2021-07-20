@@ -5,9 +5,10 @@ export default {
     en: '英文',
   },
   title: {
-    switchLanguage: '切换语言',
+    my: '我的',
     setting: '设置',
     nicknameSetting: '昵称设置',
+    switchLanguage: '切换语言',
   },
   btn: {
     save: '保存',
