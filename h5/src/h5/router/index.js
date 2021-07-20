@@ -102,7 +102,8 @@ const routes = [
     path: '/settings',
     name: 'my_setting',
     meta: {
-      title: '设置',
+      i18n: true,
+      title: 'title.setting',
     },
     component: () =>
       import(
@@ -113,7 +114,8 @@ const routes = [
     path: '/setting/nickname',
     name: 'setting_nickname',
     meta: {
-      title: '昵称设置',
+      i18n: true,
+      title: 'title.nicknameSetting',
     },
     component: () =>
       import(
@@ -125,7 +127,7 @@ const routes = [
     name: 'settingLang',
     meta: {
       i18n: true,
-      title: 'navbarTitle.switchLanguage',
+      title: 'title.switchLanguage',
     },
     component: () =>
       import(/* webpackChunkName: "lang" */ '@/containers/my/setting/lang.vue'),

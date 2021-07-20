@@ -4,8 +4,10 @@ export default {
     zh: 'Chinese',
     en: 'English',
   },
-  navbarTitle: {
+  title: {
     switchLanguage: 'Switch language',
+    setting: 'Setting',
+    nicknameSetting: 'Nickname Setting',
   },
   btn: {
     save: 'Save',
