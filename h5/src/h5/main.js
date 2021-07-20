@@ -4,6 +4,7 @@ import filters from '@/filters';
 import utils from '@/utils';
 import store from '@/store';
 import i18n from '@/lang';
+import Cookies from 'js-cookie';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
@@ -240,3 +241,15 @@ Api.getSettings({
   .catch(error => {
     console.error(error);
   });
+
+if (!Cookies.get('language')) {
+  Api.getSettings({
+    query: {
+      type: 'locale',
+    },
+  }).then(res => {
+    const language = res.locale.toLowerCase().replace('_', '-');
+    store.state.language = language;
+    i18n.locale = language;
+  });
+}
