@@ -10,7 +10,7 @@ export default {
     me: 'Me'
   },
   title: {
-    my: 'My',
+    me: 'Me',
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',

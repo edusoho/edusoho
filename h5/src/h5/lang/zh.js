@@ -10,7 +10,7 @@ export default {
     me: '我的'
   },
   title: {
-    my: '我的',
+    me: 'me',
     setting: '设置',
     nicknameSetting: '昵称设置',
     switchLanguage: '切换语言',

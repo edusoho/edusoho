@@ -4,7 +4,7 @@ export default [
     name: 'my',
     meta: {
       i18n: true,
-      title: 'title.my'
+      title: 'title.me'
     },
     component: () => import(/* webpackChunkName: "my" */ '@/containers/my/index.vue')
   }
