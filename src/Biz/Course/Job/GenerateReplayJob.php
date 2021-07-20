@@ -16,6 +16,7 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 class GenerateReplayJob extends AbstractJob
 {
     const DAYTIME = 86400;
+
     public function execute()
     {
         $activities = $this->getActivityService()->search(
@@ -32,7 +33,7 @@ class GenerateReplayJob extends AbstractJob
         $activities = ArrayToolkit::index($activities, 'mediaId');
         $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByIds(ArrayToolkit::column($activities, 'mediaId'));
         foreach ($liveActivities as $liveActivity) {
-            if ($liveActivity['replayStatus'] != 'ungenerated' || empty($liveActivity['roomCreated'])) {
+            if ('ungenerated' != $liveActivity['replayStatus'] || empty($liveActivity['roomCreated'])) {
                 continue;
             }
 

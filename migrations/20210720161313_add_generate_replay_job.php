@@ -52,6 +52,5 @@ class AddGenerateReplayJob extends Migration
      */
     public function down()
     {
-
     }
 }
