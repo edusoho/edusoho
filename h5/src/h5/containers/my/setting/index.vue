@@ -4,6 +4,7 @@
     <div
       v-for="(item, index) in settings"
       class="my_setting-item"
+      :key="index"
       @click="handleSetting(index)"
     >
       <span class="my_setting-title title-18">{{ item.name }}</span>
@@ -49,7 +50,6 @@ import { mapState, mapActions } from 'vuex';
 import { Toast, Dialog } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
-import store from '@/store';
 
 import { VueCropper } from 'vue-cropper';
 
@@ -67,9 +67,9 @@ export default {
         {
           name: '用户名',
           info: '',
-          // }, {
-          //   name: '手机',
-          //   info: ''
+        },
+        {
+          name: '多语言',
         },
       ],
       dialogVisible: false,
@@ -95,7 +95,7 @@ export default {
   created() {
     this.$set(this.settings[0], 'info', this.user.avatar.large);
     this.$set(this.settings[1], 'info', this.user.nickname);
-    // this.$set(this.settings[2], 'info', this.user.school);
+    this.$set(this.settings[2], 'info', this.$t('lang.language'));
   },
   methods: {
     ...mapActions(['setAvatar']),
@@ -112,7 +112,9 @@ export default {
           });
           break;
         case 2:
-          Toast('更改手机号，后续开通');
+          this.$router.push({
+            name: 'settingLang',
+          });
           break;
         default:
           break;

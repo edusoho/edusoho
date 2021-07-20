@@ -14,7 +14,6 @@
   </div>
 </template>
 <script>
-import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapMutations, mapState } from 'vuex';
 
@@ -96,7 +95,12 @@ export default {
           return;
         }
 
-        this.setNavbarTitle(to.meta.title);
+        const navbarTitle = to.meta.i18n
+          ? this.$t(to.meta.title)
+          : to.meta.title;
+
+        this.setNavbarTitle(navbarTitle);
+
         document.title = this.settingsName;
       },
     },

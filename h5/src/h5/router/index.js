@@ -121,6 +121,16 @@ const routes = [
       ),
   },
   {
+    path: '/setting/lang',
+    name: 'settingLang',
+    meta: {
+      i18n: true,
+      title: 'navbarTitle.switchLanguage',
+    },
+    component: () =>
+      import(/* webpackChunkName: "lang" */ '@/containers/my/setting/lang.vue'),
+  },
+  {
     path: '/course/explore',
     name: 'more_course',
     meta: {

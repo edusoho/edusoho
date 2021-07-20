@@ -1,7 +1,10 @@
 export default {
   lang: {
-    Language: 'Language',
+    language: 'English',
     zh: 'Chinese',
     en: 'English',
+  },
+  navbarTitle: {
+    switchLanguage: 'Switch language',
   },
 };
