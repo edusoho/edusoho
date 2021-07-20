@@ -4,6 +4,11 @@ export default {
     zh: 'Chinese',
     en: 'English',
   },
+  footer: {
+    discover: 'Discover',
+    learn: 'Learn',
+    me: 'Me'
+  },
   title: {
     my: 'My',
     setting: 'Setting',

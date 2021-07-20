@@ -4,6 +4,11 @@ export default {
     zh: '中文',
     en: '英文',
   },
+  footer: {
+    discover: '发现',
+    learn: '学习',
+    me: '我的'
+  },
   title: {
     my: '我的',
     setting: '设置',
