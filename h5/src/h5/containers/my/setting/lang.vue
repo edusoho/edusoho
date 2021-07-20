@@ -65,13 +65,14 @@ export default {
     onClickSave() {
       this.$i18n.locale = this.lang;
       this.setLanguage(this.lang);
+      this.$cookie.set('language', this.lang);
       this.$toast.success({
         message: this.$t('toast.switchSucceeded'),
-        duration: 500,
+        duration: 200,
       });
       setTimeout(() => {
         this.$router.go(-1);
-      }, 500);
+      }, 200);
     },
   },
 };

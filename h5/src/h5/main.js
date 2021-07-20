@@ -120,6 +120,7 @@ Vue.use(Empty);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
+Vue.prototype.$cookie = Cookies;
 Vue.prototype.$version = require('../../package.json').version;
 Vue.config.ignoredElements = ['wx-open-subscribe'];
 
