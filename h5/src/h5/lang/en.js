@@ -85,5 +85,23 @@ export default {
     immediatelyRenewals: 'Immediately renewals',
     joinNow: 'Join now',
     youAreNotAVipYet: 'You are not a VIP yet，you can enioy the privileges'
+  },
+  certificate: {
+    title: 'My certificate',
+    getTime: 'Get time',
+    effectiveTime: 'Effective time',
+    details: 'Details',
+    longTermEffective: 'Long-term effective',
+    expired: 'Expired',
+    effective: 'Effective',
+    certifiedObject: 'Certified object',
+    name: 'Name',
+    username: 'Username',
+    information: 'Information',
+    certificateName: 'Certificate name',
+    certificateNumber: 'Certificate number',
+    getTime2: 'Get time',
+    effectiveTime2: 'Effective time',
+    longPressToSaveThePicture: 'Long press to save the picture'
   }
 };

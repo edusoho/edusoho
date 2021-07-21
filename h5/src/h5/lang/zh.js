@@ -85,5 +85,23 @@ export default {
     immediatelyRenewals: '立即续费',
     joinNow: '去开通',
     youAreNotAVipYet: '您还不是会员，开通会员享特权'
+  },
+  certificate: {
+    title: '我的证书',
+    getTime: '获取时间',
+    effectiveTime: '有效时间',
+    details: '查看证书',
+    longTermEffective: '长期有效',
+    expired: '已过期',
+    effective: '有效中',
+    certifiedObject: '认证对象',
+    name: '姓名',
+    username: '用户名',
+    information: '证书信息',
+    certificateName: '证书名称',
+    certificateNumber: '证书编号',
+    getTime2: '发证日期',
+    effectiveTime2: '有效日期',
+    longPressToSaveThePicture: '长按图片保存'
   }
 };

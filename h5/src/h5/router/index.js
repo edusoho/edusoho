@@ -711,12 +711,10 @@ const routes = [
     path: '/my/certificate',
     name: 'my_certificate',
     meta: {
-      title: '我的证书',
+      i18n: true,
+      title: 'certificate.title',
     },
-    component: () =>
-      import(
-        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue'
-      ),
+    component: () => import(/* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue')
   },
   {
     path: '/certificate_records/:id',

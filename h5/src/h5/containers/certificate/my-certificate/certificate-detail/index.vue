@@ -2,46 +2,46 @@
   <div>
     <e-loading v-if="isLoading" />
     <div class="certificate-detail">
-      <h3 class="certificate-detail__title">认证对象</h3>
+      <h3 class="certificate-detail__title">{{ $t('certificate.certifiedObject') }}</h3>
       <div class="certificate-user clearfix">
         <div class="certificate-user__img pull-left">
           <img v-if="userInfo.avatar" :src="userInfo.avatar.small" />
         </div>
         <div class="certificate-user__info pull-left">
-          <p>姓名：{{ certificate.truename }}</p>
-          <p>用户名：{{ userInfo.nickname }}</p>
+          <p>{{ $t('certificate.name') }}：{{ certificate.truename }}</p>
+          <p>{{ $t('certificate.username') }}：{{ userInfo.nickname }}</p>
         </div>
       </div>
     </div>
 
     <div class="certificate-detail">
-      <h3 class="certificate-detail__title">证书信息</h3>
+      <h3 class="certificate-detail__title">{{ $t('certificate.information') }}</h3>
       <div class="certificate-info">
         <p class="certificate-info__item" v-if="certificate.certificate">
-          证书名称：{{ certificate.certificate.name }}
+          {{ $t('certificate.certificateName') }}：{{ certificate.certificate.name }}
         </p>
         <p class="certificate-info__item">
-          证书编号：{{ certificate.certificateCode }}
+          {{ $t('certificate.certificateNumber') }}：{{ certificate.certificateCode }}
         </p>
         <p class="certificate-info__item">
-          发证日期：{{ certificate.issueTime | formatSlashTime }}
+          {{ $t('certificate.getTime2') }}：{{ certificate.issueTime | formatSlashTime }}
         </p>
         <p class="certificate-info__item certificate-info__time">
-          有效日期：<span
+          {{ $t('certificate.effectiveTime2') }}：<span
             v-if="certificate.expiryTime == 0"
             class="item-right__time--green"
-            >长期有效</span
+            >{{ $t('certificate.longTermEffective') }}</span
           ><span
             v-else-if="certificate.status == 'expired'"
             class="item-right__time--red"
             >{{ certificate.expiryTime | formatSlashTime }}
-            <span>已过期</span>
+            <span>{{ $t('certificate.expired') }}</span>
           </span>
           <span
             v-else-if="certificate.status == 'valid'"
             class="item-right__time--green"
             >{{ certificate.expiryTime | formatSlashTime }}
-            <span>有效中</span></span
+            <span>{{ $t('certificate.effective') }}</span></span
           >
         </p>
         <div class="certificate-info__img">
@@ -55,7 +55,7 @@
         <img :src="certificate.imgUrl" />
       </div>
       <a v-if="isUser" class="certificate-detail__download" href="javascript:;">
-        长按图片保存
+        {{ $t('certificate.longPressToSaveThePicture') }}
       </a>
     </div>
   </div>
