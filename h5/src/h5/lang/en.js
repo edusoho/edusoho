@@ -15,7 +15,10 @@ export default {
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',
     coupon: 'Coupon',
-    loginAccount: 'Login account'
+    loginAccount: 'Login account',
+    registerAccount: 'Register account',
+    bindingMobile: 'Binding mobile',
+    findThePassword: 'Find the password'
   },
   btn: {
     save: 'Save',
@@ -25,7 +28,10 @@ export default {
     login: 'Login',
     forgetPassword: 'Forget password',
     registerNow: 'Register now',
-    loginWithMobileNumber: 'Login with mobile number'
+    loginWithMobileNumber: 'Login with mobile number',
+    sendCode: 'Send code',
+    register: 'Register',
+    binding: 'Binding'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
@@ -33,7 +39,12 @@ export default {
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',
     emailMobileNumberUserName: 'Email/Mobile number/User name',
-    password: 'Password'
+    password: 'Password',
+    mobileNumber: 'Mobile number',
+    setPassword: 'Set password(5-20 characters)',
+    verificationCode: 'Verification code',
+    mobileNumberOrEmail: 'Mobile number or email',
+    dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle'
   },
   enter: {
     coupon: 'Coupon',
