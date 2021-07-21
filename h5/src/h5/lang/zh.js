@@ -18,7 +18,10 @@ export default {
     loginAccount: '登录账号',
     registerAccount: '注册账号',
     bindingMobile: '绑定手机',
-    findThePassword: '找回密码'
+    findThePassword: '找回密码',
+    loginWithMobileNumber: '手机快捷登录',
+    automaticallyRegistered: '新用户将为您自动注册',
+    login: '登录'
   },
   btn: {
     save: '保存',
@@ -31,7 +34,10 @@ export default {
     loginWithMobileNumber: '切换手机快捷登录',
     sendCode: '发送验证码',
     register: '注册',
-    binding: '绑定'
+    binding: '绑定',
+    switchAccountPasswordToLogin: '切换账号密码登录',
+    userServiceAgreement: '用户服务',
+    privacyAgreemen: '隐私协议'
   },
   toast: {
     switchSucceeded: '切换成功'
@@ -52,5 +58,9 @@ export default {
     headPortrait: '头像',
     userName: '用户名',
     language: '多语言'
+  },
+  tips: {
+    iHaveReadAndAgreeToThe: '我已阅读并同意',
+    and: '和'
   }
 };

@@ -18,7 +18,10 @@ export default {
     loginAccount: 'Login account',
     registerAccount: 'Register account',
     bindingMobile: 'Binding mobile',
-    findThePassword: 'Find the password'
+    findThePassword: 'Find the password',
+    loginWithMobileNumber: 'Login with mobile number',
+    automaticallyRegistered: 'Automatically registered',
+    login: 'Login'
   },
   btn: {
     save: 'Save',
@@ -31,7 +34,10 @@ export default {
     loginWithMobileNumber: 'Login with mobile number',
     sendCode: 'Send code',
     register: 'Register',
-    binding: 'Binding'
+    binding: 'Binding',
+    switchAccountPasswordToLogin: 'Switch account & password to login',
+    userServiceAgreement: 'User Service Agreement',
+    privacyAgreemen: 'Privacy Agreement'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
@@ -52,5 +58,9 @@ export default {
     headPortrait: 'Head portrait',
     userName: 'User name',
     language: 'Language'
+  },
+  tips: {
+    iHaveReadAndAgreeToThe: 'I have read and agree to the',
+    and: 'and'
   }
 };

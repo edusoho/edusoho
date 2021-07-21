@@ -47,7 +47,8 @@ const routes = [
     path: '/fastlogin',
     name: 'fastlogin',
     meta: {
-      title: '登录',
+      i18n: true,
+      title: 'title.login',
     },
     component: () =>
       import(
