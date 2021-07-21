@@ -38,6 +38,7 @@ use Biz\Player\Service\PlayerService;
 use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Theme\Service\ThemeService;
@@ -236,16 +237,15 @@ class WebExtension extends \Twig_Extension
 
     public function isSaas()
     {
-        $site = $this->getSetting('site');
-        if (empty($site['level']) || ($site['levelExpired'] ? $site['levelExpired'] : 0) < time()) {
+        $level = $this->getCacheService()->get('site_level');
+        if (empty($level)) {
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
-            $site['level'] = $info['level'] ? $info['level'] : '';
-            $site['levelExpired'] = time() + 7200;
-            $this->getSettingService()->set('site', $site);
+            $level = $info['level'] ? $info['level'] : '';
+            $this->getCacheService()->set('site_level', $level, time() + 7200);
         }
 
-        return in_array($this->getSetting('site.level'), $this->getSaasLevels());
+        return in_array($this->getCacheService()->get('site_level'), $this->getSaasLevels());
     }
 
     public function getSaasLevels()
@@ -297,6 +297,14 @@ class WebExtension extends \Twig_Extension
     protected function getGroupService()
     {
         return $this->createService('Group:GroupService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     public function isShowNewMembers()
