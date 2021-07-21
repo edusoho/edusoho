@@ -645,15 +645,7 @@ class SettingsController extends BaseController
         }
 
         if ('POST' === $request->getMethod()) {
-            $password = $request->request->get('password');
-
-            if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
-                SmsToolkit::clearSmsSession($request, $scenario);
-
-                return $this->createJsonResponse(['message' => 'site.incorrect.password'], 403);
-            }
-
-            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
             if ($result) {
                 $verifiedMobile = $sessionField['to'];

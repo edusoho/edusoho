@@ -8,7 +8,7 @@ export default class MobileBind {
     this.$form = $('#mobile-bind-form');
     this.$smsCode = this.$form.find('.js-sms-send');
     this.drag = null;
-    this.initCheckCookie();
+    this.initDrag();
     this.dragEvent();
     this.initValidator();
     this.initMobileCodeSendBtn();
@@ -23,16 +23,10 @@ export default class MobileBind {
     }
   }
 
-  initCheckCookie() {
-    let key = this.$form.data('userId') + '-last-login-in';
-
-    if (!Cookies.get(key) || Cookies.get(key) != new Date().getDate()) {
-      this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
-        limitType: 'web_register'
-      }) : null
-      $('#mobile-bind-modal').modal('show');
-      Cookies.set(key, new Date().getDate());
-    }
+  initDrag() {
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'web_register'
+    }) : null
   }
 
   initValidator() {
@@ -42,12 +36,6 @@ export default class MobileBind {
       currentDom: '#submit-btn',
       ajax: true,
       rules: {
-        password: {
-          required: true,
-          es_remote: {
-            type: 'post'
-          },
-        },
         mobile: {
           required: true,
           phone: true,
@@ -77,7 +65,6 @@ export default class MobileBind {
       },
       submitSuccess(data) {
         notify('success', Translator.trans(data.message));
-        $('.modal').modal('hide');
       },
       submitError(data) {
         notify('danger',  Translator.trans(data.responseJSON.message));

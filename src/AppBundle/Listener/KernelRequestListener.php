@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Topxia\Service\Common\ServiceKernel;
 
 class KernelRequestListener
 {
@@ -137,6 +138,11 @@ class KernelRequestListener
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function trans($id, array $parameters = array())
