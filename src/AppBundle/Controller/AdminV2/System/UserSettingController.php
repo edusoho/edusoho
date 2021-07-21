@@ -24,7 +24,8 @@ class UserSettingController extends BaseController
         $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
         $default = [
-            'register_mode' => 'closed',
+            'register_enabled' => 'closed',
+            'register_mode' => 'mobile',
             'email_enabled' => 'closed',
             'setting_time' => -1,
             'email_activation_title' => '',

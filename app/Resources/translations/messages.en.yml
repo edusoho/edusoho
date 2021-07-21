@@ -6247,6 +6247,8 @@ admin.edu_cloud.key_update.ask_apply_key: 'Have no authorization code yet?'
 admin.edu_cloud.key_update.key_apply_btn: 'Apply for an authorization code'
 admin.edu_cloud.key_update.key_apply.submiting: 'Applying for authorization code now, please wait...'
 admin.user_auth.sign_up_settings: 'Registration settings'
+admin.user_auth.user_sign_up_setting: 'User register setting'
+admin.user_auth.user_sign_up_setting.help_block: According to national laws and regulations, the user's mobile phone number should be collected to meet the requirements of real-name system. The three registration modes can only be used if the cloud SMS is enabled. <a href="%smsUrl%" target="_blank"> set to </a>
 admin.user_auth.User_sign_up_type: 'User register mode'
 admin.user_auth.email: 'Email Registration'
 admin.user_auth.phone: 'Mobile Registration'
@@ -6318,7 +6320,7 @@ admin.user_auth.Name_setting: Name
 admin.user_auth.Name_setting.user_name: 'Username'
 admin.user_auth.Name_setting.help_block: 'Note: After editing the site field, all the relevant field names will be changed accordingly to the edited name'
 admin.user_auth.mobile_bind_tips: >
-  According to the "Internet Regulations Review Service Management Regulations"，<b>It is not allowed to provide follow-up comments to users who do not authenticate true identity information</b>.The post comment service here refers to Internet sites, applications, interactive communication platforms, and other communication platforms with news and public opinion attributes and social mobilization functions. It provides users with posts by <b> posting, replying, leaving messages, and “barrage”<b>. Services for text, symbols, expressions, pictures, audio and video information.Bind mobile phone number meets the requirements of real-name authentication. To avoid legal risks, it is recommended to use <b>“mobile registration”</b>.After switching to "mobile phone registration", for users who have not previously bound the mobile phone number, the user will be prompted to bind the mobile phone number after the first login every day (the user can choose to skip this step).
+  <span style="color:red">Registering with a mobile phone number can meet the requirements of Internet real-name system in relevant national laws and regulations. If you do not use the mobile phone registration method, you may face relevant legal risks.</span>For domestic users, users who have not previously bound their mobile phone number will be forced to bind their mobile phone number by pop-up after successful login.According to China's Regulations on the Administration of Internet Comments and Comments Services, <b>it is prohibited to provide comment services to users who do not have their real identity verified.</b>"Comment and comment services" refers to Internet sites, applications, interactive communication platforms and other communication platforms with news and public opinion attributes and social mobilization functions, which provide users with services to publish <b>text, symbols, facial expressions, pictures, audio and video information </b>by Posting, replying and "bullet screen" messages.
 admin.login_connect.User_login_restrictions: 'User login restrictions'
 admin.login_connect.user_mobile_bind_setting: 'Bind mobile phone number'
 admin.login_connect.mobile_bind.constraint: Mandatory binding
