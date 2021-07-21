@@ -1,8 +1,8 @@
 export default {
   lang: {
-    language: '中文',
-    zh: '中文',
-    en: '英文',
+    language: '简体中文',
+    zh: '简体中文',
+    en: 'English',
   },
   footer: {
     discover: '发现',

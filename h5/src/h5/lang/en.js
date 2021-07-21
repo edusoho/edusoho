@@ -1,7 +1,7 @@
 export default {
   lang: {
     language: 'English',
-    zh: 'Chinese',
+    zh: '简体中文',
     en: 'English',
   },
   footer: {

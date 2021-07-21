@@ -1,24 +1,28 @@
 <template>
   <div>
-    <van-radio-group v-model="lang">
-      <van-cell-group>
-        <van-cell
-          v-for="(item, index) in langOptions"
-          :key="index"
-          clickable
-          :title="$t(item.title)"
-          @click="toggleLang(item.name)"
-        >
-          <template #right-icon>
-            <van-radio :name="item.name" ref="checkboxes" />
-          </template>
-        </van-cell>
-      </van-cell-group>
-    </van-radio-group>
+    <van-cell-group>
+      <van-cell
+        v-for="(item, index) in langOptions"
+        :key="index"
+        clickable
+        :title="$t(item.title)"
+        @click="toggleLang(item.name)"
+      >
+        <template #right-icon>
+          <van-icon
+            v-if="lang === item.name"
+            name="success"
+            color="#408ffb"
+            size="24"
+          />
+        </template>
+      </van-cell>
+    </van-cell-group>
+
     <div style="padding: 16px;">
-      <van-button type="info" size="small" block @click="onClickSave">{{
-        $t('btn.save')
-      }}</van-button>
+      <van-button type="info" size="small" block @click="onClickSave">
+        {{ $t('btn.save') }}
+      </van-button>
     </div>
   </div>
 </template>
