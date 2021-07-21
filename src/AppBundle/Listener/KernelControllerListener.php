@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelControllerListener
 {
@@ -43,7 +44,7 @@ class KernelControllerListener
                 return;
             }
 
-            $url = $this->container->get('router')->generate('settings_bind_mobile');
+            $url = $this->generateUrl('settings_bind_mobile');
             $event->setController(function() use ($url) {
                 return new RedirectResponse($url);
             });
@@ -71,6 +72,11 @@ class KernelControllerListener
             '/register/email_or_mobile/check', '/settings/bind_mobile',
             '/edu_cloud/sms_send_check_captcha',
         ];
+    }
+
+    protected function generateUrl($router, $params = array(), $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($router, $params, $withHost);
     }
 
     protected function getSettingService()

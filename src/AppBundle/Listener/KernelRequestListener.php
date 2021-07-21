@@ -7,7 +7,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Topxia\Service\Common\ServiceKernel;
 
 class KernelRequestListener
 {

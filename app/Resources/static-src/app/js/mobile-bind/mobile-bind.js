@@ -1,5 +1,4 @@
 import SmsSender from 'app/common/widget/sms-sender';
-import Cookies from 'js-cookie';
 import notify from 'common/notify';
 import Drag from 'app/common/drag';
 
@@ -12,6 +11,7 @@ export default class MobileBind {
     this.dragEvent();
     this.initValidator();
     this.initMobileCodeSendBtn();
+    this.bindMobile();
   }
 
   dragEvent() {
@@ -50,17 +50,17 @@ export default class MobileBind {
             }
           },
         },
-        sms_code: {
-          required: true,
-          unsigned_integer: true,
-          es_remote: {
-            type: 'get',
-          },
-        },
+        // sms_code: {
+        //   required: true,
+        //   unsigned_integer: true,
+        //   es_remote: {
+        //     type: 'get',
+        //   },
+        // },
       },
       messages: {
         sms_code: {
-          required: Translator.trans('site.captcha_code.required')
+          required: Translator.trans('auth.mobile_captcha_required_error_hint')
         }
       },
       submitSuccess(data) {
@@ -105,4 +105,17 @@ export default class MobileBind {
     });
   }
 
+  bindMobile() {
+    let self =  this;
+    $('#submit-btn').click(function(){
+      if (self.validator.form()){
+        $.post(self.$form.data('url'), self.$form.serialize(), function(response) {
+          notify('success', Translator.trans(response.message));
+          window.location.href = $('#submit-btn').data('targetUrl');
+        }).error(function(response){
+          notify('danger',  Translator.trans(response.responseJSON.message));
+        });
+      }
+    })
+  }
 }
