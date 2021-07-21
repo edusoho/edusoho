@@ -227,7 +227,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
 
             if (!$avaliable) {
-                return array('error_duplicate', '名称已存在!');
+                return array('error_duplicate', '名称已被占用，请更换其他用户名');
             }
         }
 

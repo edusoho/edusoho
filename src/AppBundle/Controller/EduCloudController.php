@@ -271,7 +271,8 @@ class EduCloudController extends BaseController
         $allowedTime = 120;
 
         if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-            $errorMsg = '请等待120秒再申请';
+//            $errorMsg = '请等待120秒再申请';
+            $errorMsg = '您的操作过于频繁，请在119s后申请发送验证码';
 
             return $errorMsg;
         }

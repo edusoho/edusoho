@@ -10395,7 +10395,7 @@ exception.sms.send_failed: 发送失败！
 exception.sms.bind_mobile_not_found: 用户没有被绑定的手机号
 exception.sms.mobile_username_not_match: 手机与用户名不匹配
 exception.sms.error_mobile: 手机号错误
-exception.sms.need_wait: 请等待120秒再申请!
+exception.sms.need_wait: 您的操作过于频繁，请在119s后申请发送验证码!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
