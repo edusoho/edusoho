@@ -116,6 +116,10 @@ export default {
     numberOfWrongQuestionsInTheCourse: 'Number of wrong questions in the course',
     numberOfWrongQuestionsInTheClass: 'Number of wrong questions in the Class',
     numberOfWrongQuestionsInTheQuestionBank: 'Number of wrong questions in the question bank',
-    empty: 'Empty'
+    empty: 'Empty',
+    filter: 'Filter',
+    exercise: 'Exercise',
+    systemRandomlySelectsQuestions: 'The system randomly selects up to 20 questions for you',
+    iKnow: 'I know'
   }
 };

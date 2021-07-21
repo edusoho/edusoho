@@ -116,6 +116,10 @@ export default {
     numberOfWrongQuestionsInTheCourse: '课程错题数量',
     numberOfWrongQuestionsInTheClass: '班级错题数量',
     numberOfWrongQuestionsInTheQuestionBank: '题库错题数量',
-    empty: '暂无错题'
+    empty: '暂无错题',
+    filter: '筛选',
+    exercise: '错题练习',
+    systemRandomlySelectsQuestions: '已为你随机筛选最多 20 题',
+    iKnow: '我知道了'
   }
 };
