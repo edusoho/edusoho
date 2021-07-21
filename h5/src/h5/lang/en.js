@@ -14,19 +14,26 @@ export default {
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',
-    coupon: 'Coupon'
+    coupon: 'Coupon',
+    loginAccount: 'Login account'
   },
   btn: {
     save: 'Save',
     confirm: 'Confirm',
     cancel: 'Cancel',
-    dropOut: 'Drop out'
+    dropOut: 'Drop out',
+    login: 'Login',
+    forgetPassword: 'Forget password',
+    registerNow: 'Register now',
+    loginWithMobileNumber: 'Login with mobile number'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
   },
   placeholder: {
-    voucherCode: 'Voucher Code (8 Digits)'
+    voucherCode: 'Voucher Code (8 Digits)',
+    emailMobileNumberUserName: 'Email/Mobile number/User name',
+    password: 'Password'
   },
   enter: {
     coupon: 'Coupon',
