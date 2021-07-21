@@ -18,7 +18,7 @@ export default {
     loginAccount: 'Login account',
     registerAccount: 'Register account',
     bindingMobile: 'Binding mobile',
-    findThePassword: 'Find the password',
+    retrievePassword: 'Retrieve password',
     loginWithMobileNumber: 'Login with mobile number',
     automaticallyRegistered: 'Automatically registered',
     login: 'Login'
@@ -49,7 +49,9 @@ export default {
     enterUpTo20Characters: 'Enter up to 20 characters',
     bindingSuccess: 'Binding success',
     registrationSuccess: 'Registration success',
-    pleaseCompleteThePuzzleVerification: 'Please complete the puzzle verification'
+    pleaseCompleteThePuzzleVerification: 'Please complete the puzzle verification',
+    oasswordResetSuccessful: 'Password reset successful',
+    verificationLinkHasBeenSentTo: 'Verification link has been sent to'
   },
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',
@@ -64,8 +66,8 @@ export default {
   enter: {
     coupon: 'Coupon',
     myCertificate: 'My certificate',
-    headPortrait: 'Head portrait',
-    userName: 'User name',
+    heads: 'Heads',
+    nickname: 'Nickname',
     language: 'Language'
   },
   tips: {

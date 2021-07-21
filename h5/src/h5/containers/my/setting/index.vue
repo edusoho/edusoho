@@ -61,11 +61,11 @@ export default {
     return {
       settings: [
         {
-          name: 'enter.headPortrait',
+          name: 'enter.heads',
           info: '',
         },
         {
-          name: 'enter.userName',
+          name: 'enter.nickname',
           info: '',
         },
         {

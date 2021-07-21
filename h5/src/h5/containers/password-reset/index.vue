@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading" />
-    <span class="register-title">{{ $t('title.findThePassword') }}</span>
+    <span class="register-title">{{ $t('title.retrievePassword') }}</span>
 
     <e-drag ref="dragComponent" :key="dragKey" @success="handleSmsSuccess" />
 
@@ -174,7 +174,8 @@ export default {
         })
           .then(res => {
             Dialog.alert({
-              message: '验证链接已发送到 ' + account,
+              message: this.$t('toast.verificationLinkHasBeenSentTo') + account,
+              confirmButtonText: this.$t('btn.confirm')
             }).then(() => {
               this.$router.replace({
                 name: 'login',
@@ -208,7 +209,8 @@ export default {
       })
         .then(res => {
           Dialog.alert({
-            message: '密码重置成功',
+            message: this.$t('toast.oasswordResetSuccessful'),
+            confirmButtonText: this.$t('btn.confirm')
           }).then(() => {
             this.$router.replace({
               name: 'login',

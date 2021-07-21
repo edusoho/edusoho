@@ -18,7 +18,7 @@ export default {
     loginAccount: '登录账号',
     registerAccount: '注册账号',
     bindingMobile: '绑定手机',
-    findThePassword: '找回密码',
+    retrievePassword: '找回密码',
     loginWithMobileNumber: '手机快捷登录',
     automaticallyRegistered: '新用户将为您自动注册',
     login: '登录'
@@ -49,7 +49,9 @@ export default {
     enterUpTo20Characters: '最大输入 20 个字符',
     bindingSuccess: '绑定成功',
     registrationSuccess: '注册成功',
-    pleaseCompleteThePuzzleVerification: '请先完成拼图验证'
+    pleaseCompleteThePuzzleVerification: '请先完成拼图验证',
+    oasswordResetSuccessful: '密码重置成功',
+    verificationLinkHasBeenSentTo: '验证链接已发送到'
   },
   placeholder: {
     voucherCode: '请输入 8 位兑换码',
@@ -64,8 +66,8 @@ export default {
   enter: {
     coupon: '兑换卡券',
     myCertificate: '我的证书',
-    headPortrait: '头像',
-    userName: '用户名',
+    heads: '头像',
+    nickname: '用户名',
     language: '多语言'
   },
   tips: {
