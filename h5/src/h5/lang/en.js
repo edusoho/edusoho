@@ -14,11 +14,20 @@ export default {
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',
+    coupon: 'Coupon'
   },
   btn: {
     save: 'Save',
+    confirm: 'Confirm'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
   },
+  placeholder: {
+    voucherCode: 'Voucher Code (8 Digits)'
+  },
+  enter: {
+    coupon: 'Coupon',
+    myCertificate: 'My certificate'
+  }
 };

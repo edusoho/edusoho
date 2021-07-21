@@ -504,12 +504,10 @@ const routes = [
     path: '/coupon/covert',
     name: 'couponCovert',
     meta: {
-      title: '兑换卡券',
+      i18n: true,
+      title: 'title.coupon'
     },
-    component: () =>
-      import(
-        /* webpackChunkName: "auth_social" */ '@/containers/coupon/covert/index.vue'
-      ),
+    component: () => import(/* webpackChunkName: "auth_social" */ '@/containers/coupon/covert/index.vue')
   },
   {
     path: '/search',
