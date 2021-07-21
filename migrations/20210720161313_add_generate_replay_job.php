@@ -12,8 +12,10 @@ class AddGenerateReplayJob extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $currentTime = time();
-        $connection->exec("
+        $job = $connection->fetchAssoc("select * from biz_scheduler_job where name = 'GenerateReplayJob'");
+        if (empty($job)) {
+            $currentTime = time();
+            $connection->exec("
             INSERT INTO `biz_scheduler_job` (
                 `name`,
                 `pool`,
@@ -45,6 +47,7 @@ class AddGenerateReplayJob extends Migration
                 '{$currentTime}'
             );
         ");
+        }
     }
 
     /**
