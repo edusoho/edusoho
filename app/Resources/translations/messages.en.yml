@@ -6322,6 +6322,13 @@ admin.user_auth.Name_setting.help_block: 'Note: After editing the site field, al
 admin.user_auth.mobile_bind_tips: >
   <span style="color:red">Registering with a mobile phone number can meet the requirements of Internet real-name system in relevant national laws and regulations. If you do not use the mobile phone registration method, you may face relevant legal risks.</span>For domestic users, users who have not previously bound their mobile phone number will be forced to bind their mobile phone number by pop-up after successful login.According to China's Regulations on the Administration of Internet Comments and Comments Services, <b>it is prohibited to provide comment services to users who do not have their real identity verified.</b>"Comment and comment services" refers to Internet sites, applications, interactive communication platforms and other communication platforms with news and public opinion attributes and social mobilization functions, which provide users with services to publish <b>text, symbols, facial expressions, pictures, audio and video information </b>by Posting, replying and "bullet screen" messages.
 admin.login_connect.User_login_restrictions: 'User login restrictions'
+admin.login_connect.user_mobile_bind_setting: 'Bind mobile phone number'
+admin.login_connect.mobile_bind.constraint: Mandatory binding
+admin.login_connect.mobile_bind.option: Unforced binding
+admin.login_connect.mobile_bind.close: Not binding
+admin.login_connect.mobile_bind.constraint_tip: Choose after the mandatory binding, binding mobile phone number of account must be mandatory binding mobile phone number, do not skip <br> <span style="color:red">a phone number binding only one account</span>
+admin.login_connect.mobile_bind.option_tip: After selecting the non-mandatory binding, the unbound mobile phone number of the account guide binding mobile phone number, can be skipped, <span style="color:red">does not comply with the legal provisions, please choose carefully</span>
+admin.login_connect.mobile_bind.close_tip: After selecting unbound mobile phone number, the bound mobile phone number will not pop up if the account is logged in without bound mobile phone number, <span style="color:red">which is not in accordance with the legal provisions, so please choose carefully</span>
 admin.login_connect.client_login_restrictions: 'Client login restrictions'
 admin.login_connect.open: 'Turned on'
 admin.login_connect.closed: Close

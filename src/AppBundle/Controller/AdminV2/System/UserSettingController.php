@@ -459,6 +459,7 @@ class UserSettingController extends BaseController
     private function getDefaultLoginConnect($clients)
     {
         $default = [
+            'mobile_bind_mode' => 'constraint',
             'login_limit' => 0,
             'client_login_limit' => 0,
             'enabled' => 0,
