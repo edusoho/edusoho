@@ -103,5 +103,19 @@ export default {
     getTime2: 'Get time',
     effectiveTime2: 'Effective time',
     longPressToSaveThePicture: 'Long press to save the picture'
+  },
+  wrongQuestion: {
+    title: 'Mistakes collection',
+    fromCourse: 'From course',
+    fromClass: 'From class',
+    fromQuestionBank: 'From question bank',
+    searchCourse: 'Search Course',
+    searchClass: 'Search Class',
+    searchByQuestionBank: 'Search by question bank',
+    question: 'Question',
+    numberOfWrongQuestionsInTheCourse: 'Number of wrong questions in the course',
+    numberOfWrongQuestionsInTheClass: 'Number of wrong questions in the Class',
+    numberOfWrongQuestionsInTheQuestionBank: 'Number of wrong questions in the question bank',
+    empty: 'Empty'
   }
 };

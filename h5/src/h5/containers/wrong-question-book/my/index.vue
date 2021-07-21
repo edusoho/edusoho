@@ -8,11 +8,11 @@
       @click="onClickTabs"
     >
       <template v-for="(listItem, index) in list">
-        <van-tab :title="listItem.title" :key="index" :name="listItem.type">
+        <van-tab :title="$t(listItem.title)" :key="index" :name="listItem.type">
           <van-search
             v-model="listItem.keyword"
             shape="round"
-            :placeholder="listItem.placeholder"
+            :placeholder="$t(listItem.placeholder)"
             @search="value => onSearch(index, value)"
           />
           <van-list
@@ -30,10 +30,10 @@
           <empty-course
             v-if="!listItem.items.length && listItem.finished"
             :has-button="false"
-            text="暂无错题"
+            :text="$t('wrongQuestion.empty')"
           />
           <div class="wrong-question-number">
-            {{ listItem.totalTitle }}：{{ listItem.total }}
+            {{ $t(listItem.totalTitle) }}：{{ listItem.total }}
           </div>
         </van-tab>
       </template>
@@ -61,14 +61,14 @@ export default {
       currentActive: 'course',
       list: [
         {
-          title: '课程错题',
+          title: 'wrongQuestion.fromCourse',
           type: 'course',
-          placeholder: '搜索相应课程',
+          placeholder: 'wrongQuestion.searchCourse',
           items: [],
           keyword: '',
           loading: false,
           finished: false,
-          totalTitle: '课程错题数量',
+          totalTitle: 'wrongQuestion.numberOfWrongQuestionsInTheCourse',
           total: 0,
           paging: {
             current: 0,
@@ -76,14 +76,14 @@ export default {
           },
         },
         {
-          title: '班级错题',
+          title: 'wrongQuestion.fromClass',
           type: 'classroom',
-          placeholder: '搜索相应班级',
+          placeholder: 'wrongQuestion.searchClass',
           items: [],
           keyword: '',
           loading: false,
           finished: false,
-          totalTitle: '班级错题数量',
+          totalTitle: 'wrongQuestion.numberOfWrongQuestionsInTheClass',
           total: 0,
           paging: {
             current: 0,
@@ -91,14 +91,14 @@ export default {
           },
         },
         {
-          title: '题库错题',
+          title: 'wrongQuestion.fromQuestionBank',
           type: 'exercise',
-          placeholder: '搜索相应练习名称',
+          placeholder: 'wrongQuestion.searchByQuestionBank',
           items: [],
           keyword: '',
           loading: false,
           finished: false,
-          totalTitle: '题库错题数量',
+          totalTitle: 'wrongQuestion.numberOfWrongQuestionsInTheQuestionBank',
           total: 0,
           paging: {
             current: 0,

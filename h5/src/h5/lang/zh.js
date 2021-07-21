@@ -103,5 +103,19 @@ export default {
     getTime2: '发证日期',
     effectiveTime2: '有效日期',
     longPressToSaveThePicture: '长按图片保存'
+  },
+  wrongQuestion: {
+    title: '我的错题本',
+    fromCourse: '课程错题',
+    fromClass: '班级错题',
+    fromQuestionBank: '题库错题',
+    searchCourse: '搜索相应课程',
+    searchClass: '搜索相应班级',
+    searchByQuestionBank: '搜索相应练习名称',
+    question: '道题',
+    numberOfWrongQuestionsInTheCourse: '课程错题数量',
+    numberOfWrongQuestionsInTheClass: '班级错题数量',
+    numberOfWrongQuestionsInTheQuestionBank: '题库错题数量',
+    empty: '暂无错题'
   }
 };

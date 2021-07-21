@@ -830,7 +830,8 @@ const routes = [
     path: '/my/wrong-quesition-book',
     name: 'myWrongQuestionBook',
     meta: {
-      title: '我的错题本',
+      i18n: true,
+      title: 'wrongQuestion.title',
     },
     component: () =>
       import(
