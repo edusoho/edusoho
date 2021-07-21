@@ -14,12 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DeveloperSettingController extends BaseController
 {
+    public function swaggerApiAction()
+    {
+        return $this->render('admin-v2/developer/swagger-ui/index.html.twig', [
+        ]);
+    }
+
     public function indexAction(Request $request)
     {
-        $developerSetting = $this->getSettingService()->get('developer', array());
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $developerSetting = $this->getSettingService()->get('developer', []);
+        $storageSetting = $this->getSettingService()->get('storage', []);
 
-        $default = array(
+        $default = [
             'debug' => '0',
             'without_network' => '0',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
@@ -35,7 +41,7 @@ class DeveloperSettingController extends BaseController
             'hls_encrypted' => '1',
             'mp_service_url' => 'http://mp-service.qiqiuyun.net',
             'platform_news_api_server' => empty($storageSetting['platform_news_api_server']) ? '' : $storageSetting['platform_news_api_server'],
-        );
+        ];
 
         $developerSetting = array_merge($default, $developerSetting);
 
@@ -62,9 +68,9 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/developer/developer-setting/index.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/index.html.twig', [
             'developerSetting' => $developerSetting,
-        ));
+        ]);
     }
 
     protected function dealServerConfigFile()
@@ -92,9 +98,9 @@ class DeveloperSettingController extends BaseController
         $appCount = $this->getAppservice()->findAppCount();
         $apps = $this->getAppservice()->findApps(0, $appCount);
 
-        return $this->render('admin-v2/developer/developer-setting/version.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/version.html.twig', [
             'apps' => $apps,
-        ));
+        ]);
     }
 
     public function magicAction(Request $request)
@@ -104,7 +110,7 @@ class DeveloperSettingController extends BaseController
             $setting = json_decode($setting, true);
 
             if (empty($setting)) {
-                $setting = array('export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0);
+                $setting = ['export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0];
             }
 
             $this->getSettingService()->set('magic', $setting);
@@ -112,12 +118,12 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $setting = $this->getSettingService()->get('magic', array());
+        $setting = $this->getSettingService()->get('magic', []);
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('admin-v2/developer/developer-setting/magic.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/magic.html.twig', [
             'setting' => $setting,
-        ));
+        ]);
     }
 
     private function openDevModeIfDebugEnable($developerSetting)
