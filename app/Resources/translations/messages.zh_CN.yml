@@ -166,6 +166,10 @@ site.mobile_bind.reasons: 绑定手机号的三大理由
 site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
 site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
 site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+site.mobile_bind.binded_tip: 手机号已被绑定，如何处理？
+site.mobile_bind.binded_tip_origin: 1、PC端登录原有手机号修改绑定手机号；
+site.mobile_bind.binded_tip_destory: 2、原有手机号注销；
+site.mobile_bind.binded_tip_admin: 3、如以上均不能处理，可联系网校管理员。
 
 # email 模板
 email.password_reset: >

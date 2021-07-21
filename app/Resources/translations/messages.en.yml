@@ -147,10 +147,14 @@ site.mobile_bind.ignore: skip
 site.mobile_bind.title: Bind phone number
 site.mobile_bind.login_password: Your login password
 site.mobile_bind.phone_number: Phone number
-site.mobile_bind.reasons: Three reasons to bind mobile phone numbers
+site.mobile_bind.reasons: Three reasons to bind a mobile phone numbers
 site.mobile_bind.reasons.network_office_regulations: 1.The Internet Office requires Internet registered users to provide real identity based on mobile phone numbers and the like.
 site.mobile_bind.reasons.login_while_third_party_fail: 2.When the third-party login fails, the mobile phone number can still be successfully logged in, and the course learning is not affected.
 site.mobile_bind.reasons.login_while_forget_password: 3.Even if you forget the password for a third-party account, you can still log in with the phone number and password you have bound.
+site.mobile_bind.binded_tip: The phone number has been bound, how to deal with it?
+site.mobile_bind.binded_tip_origin: 1. Log in to the original mobile phone number on the PC to modify the bound mobile phone number;
+site.mobile_bind.binded_tip_destory: 2. Cancellation of the original mobile phone number;
+site.mobile_bind.binded_tip_admin: 3. If none of the above can be handled, you can contact the online school administrator.
 
 site.cloud.file.convert_failed_tips: Transcoding failed, please contact the administrator.
 site.cloud.file.converting_tips: Course content preparation, please wait a moment.

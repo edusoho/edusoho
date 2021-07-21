@@ -40,8 +40,7 @@ class KernelControllerListener
                 || strstr($request->getPathInfo(), '/mapi_v2')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
-                || $_COOKIE[$currentUser['id'].'-last-mobile-bind']
-                || $currentUser['id'] === $_COOKIE[$currentUser['id'].'-last-mobile-bind']
+                || ($login_bind['mobile_bind_mode'] !== 'constraint' && ($_COOKIE[$currentUser['id'].'-last-mobile-bind'] || $currentUser['id'] === $_COOKIE[$currentUser['id'].'-last-mobile-bind']))
             ) {
                 return;
             }

@@ -270,7 +270,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
 
         if (!$avaliable) {
-            return array('error_duplicate', '手机号码已存在!');
+            return array('error_duplicate', '手机号已被绑定，请更换其他手机号');
         }
 
         return array('success', '');

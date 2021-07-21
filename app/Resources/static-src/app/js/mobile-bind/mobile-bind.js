@@ -59,8 +59,10 @@ export default class MobileBind {
             callback: (bool) => {
               if (bool) {
                 self.$smsCode.removeAttr('disabled');
+                $('.binded-tip').addClass('hidden');
               } else {
                 self.$smsCode.attr('disabled', true);
+                $('.binded-tip').removeClass('hidden');
               }
             }
           },
