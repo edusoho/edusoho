@@ -3268,6 +3268,9 @@ user.settings.password_reset.success_tips: 重置密码成功
 user.settings.password_reset.login_btn: 立即登录
 user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
+user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
+user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
+user.settings.password_level.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 
 
 # 账户中心模块
