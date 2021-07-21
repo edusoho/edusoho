@@ -43,7 +43,11 @@ export default {
     switchSucceeded: '切换成功',
     pleaseWait: '请稍等',
     signInSuccessfully: '登录成功',
-    contactTheAdministrator: '网校未开启手机注册，请联系管理员'
+    contactTheAdministrator: '网校未开启手机注册，请联系管理员',
+    enterUpTo20Characters: '最大输入 20 个字符',
+    bindingSuccess: '绑定成功',
+    registrationSuccess: '注册成功',
+    pleaseCompleteThePuzzleVerification: '请先完成拼图验证'
   },
   placeholder: {
     voucherCode: '请输入 8 位兑换码',

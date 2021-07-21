@@ -33,7 +33,7 @@ export default {
     registerNow: 'Register now',
     loginWithMobileNumber: 'Login with mobile number',
     sendCode: 'Send code',
-    register: 'Register',
+    register: 'Registered',
     binding: 'Binding',
     switchAccountPasswordToLogin: 'Switch account & password to login',
     userServiceAgreement: 'User Service Agreement',
@@ -43,7 +43,11 @@ export default {
     switchSucceeded: 'Switch succeeded',
     pleaseWait: 'Please wait',
     signInSuccessfully: 'Sign in successfully',
-    contactTheAdministrator: 'The online school has not opened the mobile phone registration, please contact the administrator'
+    contactTheAdministrator: 'The online school has not opened the mobile phone registration, please contact the administrator',
+    enterUpTo20Characters: 'Enter up to 20 characters',
+    bindingSuccess: 'Binding success',
+    registrationSuccess: 'Registration success',
+    pleaseCompleteThePuzzleVerification: 'Please complete the puzzle verification'
   },
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',

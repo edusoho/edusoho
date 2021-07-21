@@ -160,7 +160,7 @@ export default {
       }
 
       if (type === 'encrypt_password' && ele.length > 20) {
-        this.errorMessage[type] = '最大输入20个字符';
+        this.errorMessage[type] = this.$t('toast.enterUpTo20Characters');
         return false;
       }
 
@@ -202,7 +202,7 @@ export default {
           .then(res => {
             Toast.success({
               duration: 2000,
-              message: '绑定成功',
+              message: this.$t('toast.bindingSuccess')
             });
             this.afterLogin();
           })
@@ -217,7 +217,7 @@ export default {
         .then(res => {
           Toast.success({
             duration: 2000,
-            message: '注册成功',
+            message: this.$t('toast.registrationSuccess')
           });
           this.afterLogin();
         })
@@ -238,7 +238,7 @@ export default {
       }
       // 验证码组件更新数据
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       this.$refs.dragComponent.initDragCaptcha();

@@ -122,7 +122,7 @@ export default {
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: '请稍后',
+        message: this.$t('toast.pleaseWait')
       });
       this.afterLogin();
       return;

@@ -134,7 +134,7 @@ export default {
       }
 
       if (type === 'encrypt_password' && ele.length > 20) {
-        this.errorMessage[type] = '最大输入20个字符';
+        this.errorMessage[type] = this.$t('toast.enterUpTo20Characters');
         return false;
       }
 
@@ -152,7 +152,7 @@ export default {
     },
     handleSubmit() {
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       const resetInfo = Object.assign({}, this.resetInfo);
@@ -224,7 +224,7 @@ export default {
     },
     clickSmsBtn() {
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       this.handleSendSms();
