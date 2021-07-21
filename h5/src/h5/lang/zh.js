@@ -40,7 +40,10 @@ export default {
     privacyAgreemen: '隐私协议'
   },
   toast: {
-    switchSucceeded: '切换成功'
+    switchSucceeded: '切换成功',
+    pleaseWait: '请稍等',
+    signInSuccessfully: '登录成功',
+    contactTheAdministrator: '网校未开启手机注册，请联系管理员'
   },
   placeholder: {
     voucherCode: '请输入 8 位兑换码',

@@ -41,6 +41,9 @@ export default {
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
+    pleaseWait: 'Please wait',
+    signInSuccessfully: 'Sign in successfully',
+    contactTheAdministrator: 'The online school has not opened the mobile phone registration, please contact the administrator'
   },
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',

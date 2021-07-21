@@ -82,7 +82,7 @@ export default {
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: '请稍后',
+        message: this.$t('toast.pleaseWait')
       });
       this.afterLogin();
       return;
@@ -101,7 +101,7 @@ export default {
     this.username =
       this.$route.params.username || this.$route.query.account || '';
     Toast.loading({
-      message: '请稍后',
+      message: this.$t('toast.pleaseWait')
     });
     this.faceLogin();
     this.thirdPartyLogin();
@@ -126,7 +126,7 @@ export default {
         .then(res => {
           Toast.success({
             duration: 2000,
-            message: '登录成功',
+            message: this.$t('toast.signInSuccessfully'),
           });
           this.afterLogin();
         })
@@ -140,7 +140,7 @@ export default {
         this.registerSettings.mode === 'closed' ||
         this.registerSettings.mode === 'email'
       ) {
-        Toast('网校未开启手机注册，请联系管理员');
+        Toast(this.$t('toast.contactTheAdministrator'));
         return;
       }
       this.$router.push({
