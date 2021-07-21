@@ -55,9 +55,9 @@
             </router-link>
           </div>
           <div v-else class="user-vip user-vip-open">
-            <router-link to="/vip" class="clearfix">
-              <span>{{ $t('vip.youAreNotAVipYet') }}</span>
-              <span class="pull-right">
+            <router-link to="/vip" style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="max-width: 72%;">{{ $t('vip.youAreNotAVipYet') }}</span>
+              <span>
                 {{ $t('vip.joinNow') }}
                 <van-icon name="arrow" />
               </span>
