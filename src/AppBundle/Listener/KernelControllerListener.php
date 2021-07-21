@@ -31,15 +31,17 @@ class KernelControllerListener
         $request = $event->getRequest();
 
         $currentUser = $this->getBiz()['user'];
-        $auth = $this->getSettingService()->get('auth');
+        $login_bind = $this->getSettingService()->get('login_bind');
 
-        if ($currentUser->isLogin() && 'closed' !== $auth['mobile_bind_mode'] && empty($currentUser['verifiedMobile'])) {
+        if ($currentUser->isLogin() && 'closed' !== $login_bind['mobile_bind_mode'] && empty($currentUser['verifiedMobile'])) {
             $whiteList = $this->getRouteWhiteList();
 
             if (in_array($request->getPathInfo(), $whiteList)
                 || strstr($request->getPathInfo(), '/mapi_v2')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
+                || $_COOKIE[$currentUser['id'].'-last-mobile-bind']
+                || $currentUser['id'] === $_COOKIE[$currentUser['id'].'-last-mobile-bind']
             ) {
                 return;
             }

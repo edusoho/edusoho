@@ -1,4 +1,5 @@
 import SmsSender from 'app/common/widget/sms-sender';
+import Cookies from 'js-cookie';
 import notify from 'common/notify';
 import Drag from 'app/common/drag';
 
@@ -12,6 +13,7 @@ export default class MobileBind {
     this.initValidator();
     this.initMobileCodeSendBtn();
     this.bindMobile();
+    this.initCheckCookie();
   }
 
   dragEvent() {
@@ -21,6 +23,19 @@ export default class MobileBind {
         self.$smsCode.removeClass('disabled').attr('disabled', false);
       });
     }
+  }
+
+  initCheckCookie() {
+    let self = this;
+    $('.js-skip-bind').click(function (){
+      let key = self.$form.data('userId') + '-last-mobile-bind';
+
+      if (!Cookies.get(key) || Cookies.get(key) != self.$form.data('userId')) {
+        Cookies.set(key, self.$form.data('userId'));
+      }
+
+      window.location.href = $('#submit-btn').data('targetUrl');
+    })
   }
 
   initDrag() {
@@ -50,13 +65,13 @@ export default class MobileBind {
             }
           },
         },
-        // sms_code: {
-        //   required: true,
-        //   unsigned_integer: true,
-        //   es_remote: {
-        //     type: 'get',
-        //   },
-        // },
+        sms_code: {
+          required: true,
+          unsigned_integer: true,
+          es_remote: {
+            type: 'get',
+          },
+        },
       },
       messages: {
         sms_code: {

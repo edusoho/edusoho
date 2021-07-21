@@ -625,8 +625,7 @@ class SettingsController extends BaseController
     public function bindMobileAction(Request $request)
     {
         $user = $this->getCurrentUser();
-//        $verifiedMobile = '';
-        $verifiedMobile = '18739949711';
+        $verifiedMobile = '';
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
 
         if ($hasVerifiedMobile) {
@@ -646,16 +645,16 @@ class SettingsController extends BaseController
         }
 
         if ('POST' === $request->getMethod()) {
-//             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
-//            if ($result) {
-//                $verifiedMobile = $sessionField['to'];
+            if ($result) {
+                $verifiedMobile = $sessionField['to'];
                 $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
 
                 return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.success']);
-//            } else {
-//                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
-//            }
+            } else {
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
+            }
         }
 
         return $this->render('settings/bind-mobile.html.twig', [

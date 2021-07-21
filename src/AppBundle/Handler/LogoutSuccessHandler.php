@@ -41,6 +41,9 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
 
+        $user = ServiceKernel::instance()->getCurrentUser();
+        setcookie($user['id'].'-last-mobile-bind', 0, -1);
+
         setcookie('_last_logout_locale', $request->getSession()->get('_locale'), -1);
         // setcookie("U_LOGIN_TOKEN", '', -1);
         return parent::onLogoutSuccess($request);

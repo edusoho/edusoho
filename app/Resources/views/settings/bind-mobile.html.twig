@@ -43,8 +43,8 @@
         <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-target-url="{{ path('homepage') }}">
           {{'user.bind.confirm_bind_btn'|trans}}
         </button>
-        {% if setting('auth.mobile_bind_mode') != 'constraint' %}
-          <button type="button" class="close cd-link-assist" data-dismiss="modal" aria-hidden="true">
+        {% if setting('login_bind.mobile_bind_mode') != 'constraint' %}
+          <button type="button" class="close cd-link-assist js-skip-bind" data-dismiss="modal" aria-hidden="true">
             {{'site.mobile_bind.ignore'|trans}}
           </button>
         {% endif %}
