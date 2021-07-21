@@ -18,7 +18,9 @@ export default {
   },
   btn: {
     save: 'Save',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    dropOut: 'Drop out'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
@@ -28,6 +30,9 @@ export default {
   },
   enter: {
     coupon: 'Coupon',
-    myCertificate: 'My certificate'
+    myCertificate: 'My certificate',
+    headPortrait: 'Head portrait',
+    userName: 'User name',
+    language: 'Language'
   }
 };

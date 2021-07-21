@@ -7,7 +7,7 @@
       :key="index"
       @click="handleSetting(index)"
     >
-      <span class="my_setting-title title-18">{{ item.name }}</span>
+      <span class="my_setting-title title-18">{{ $t(item.name) }}</span>
       <div class="my_setting-content">
         <img
           v-if="!index"
@@ -34,14 +34,14 @@
             />
           </div>
           <div class="dialog-footer">
-            <van-button @click="dialogVisible = false">取 消</van-button>
-            <van-button type="primary" @click="stopCropFn">确 定</van-button>
+            <van-button @click="dialogVisible = false">{{ $t('btn.cancel') }}</van-button>
+            <van-button type="primary" @click="stopCropFn">{{ $t('btn.confirm') }}</van-button>
           </div>
         </van-popup>
       </van-uploader>
     </div>
     <div class="log-out-btn title-18" @click="logout">
-      <span>退出登录</span>
+      <span>{{ $t('btn.dropOut') }}</span>
     </div>
   </div>
 </template>
@@ -61,15 +61,16 @@ export default {
     return {
       settings: [
         {
-          name: '头像',
+          name: 'enter.headPortrait',
           info: '',
         },
         {
-          name: '用户名',
+          name: 'enter.userName',
           info: '',
         },
         {
-          name: '多语言',
+          name: 'enter.language',
+          info: ''
         },
       ],
       dialogVisible: false,

@@ -18,7 +18,9 @@ export default {
   },
   btn: {
     save: '保存',
-    confirm: '确认'
+    confirm: '确认',
+    cancel: '取消',
+    dropOut: '退出登录'
   },
   toast: {
     switchSucceeded: '切换成功'
@@ -28,6 +30,9 @@ export default {
   },
   enter: {
     coupon: '兑换卡券',
-    myCertificate: '我的证书'
+    myCertificate: '我的证书',
+    headPortrait: '头像',
+    userName: '用户名',
+    language: '多语言'
   }
 };
