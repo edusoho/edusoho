@@ -14,7 +14,7 @@
           <label for="purchaseAgreementContent" class="control-label-required">{{ 'admin_v2.course_purchase_agreement.title'|trans }}</label>
         </div>
         <div class="col-md-8 controls">
-          <input type="text" id="purchaseAgreementTitle" name="purchaseAgreementTitle" class="form-control" value="{{ purchaseAgreement.title|default('') }}" placeholder="{{ 'admin_v2.course_purchase_agreement.default_title'|trans }}">
+          <input required="required" type="text" id="purchaseAgreementTitle" name="purchaseAgreementTitle" class="form-control" value="{{ purchaseAgreement.title|default('admin_v2.course_purchase_agreement.default_title'|trans) }}" placeholder="{{ 'admin_v2.course_purchase_agreement.default_title'|trans }}">
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
@@ -24,7 +24,7 @@
           <label class="control-label-required">{{'admin_v2.course_purchase_agreement.content'|trans}}</label>
         </div>
         <div class="controls col-md-9">
-          <textarea id="purchaseAgreementContent" name="purchaseAgreementContent" rows="30" class="form-control ">{% if purchaseAgreement  %}{{purchaseAgreement.content}}{% endif %}</textarea>
+          <textarea required="required" id="purchaseAgreementContent" name="purchaseAgreementContent" rows="30" class="form-control ">{% if purchaseAgreement  %}{{purchaseAgreement.content}}{% endif %}</textarea>
         </div>
 
         <div class="col-md-2 control-label"></div>

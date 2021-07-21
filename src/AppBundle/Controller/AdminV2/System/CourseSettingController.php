@@ -182,7 +182,6 @@ class CourseSettingController extends BaseController
     {
         $purchaseAgreement = $this->getSettingService()->get('course_purchase_agreement');
         if ($request->isMethod('POST')) {
-            $purchaseAgreement['is_sign'] = 1;
             $purchaseAgreement['title'] = $request->request->get('purchaseAgreementTitle');
             $purchaseAgreement['content'] = $request->request->get('purchaseAgreementContent');
             $this->getSettingService()->set('course_purchase_agreement', $purchaseAgreement);
