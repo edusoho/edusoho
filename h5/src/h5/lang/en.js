@@ -64,9 +64,6 @@ export default {
     dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle'
   },
   enter: {
-    heads: 'Heads',
-    nickname: 'Nickname',
-    language: 'Language',
     coupon: 'Coupon',
     distribution: 'Distribution',
     myCertificate: 'My certificate',
@@ -77,6 +74,16 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',
     and: 'and'
+  },
+  setting: {
+    heads: 'Heads',
+    nickname: 'Nickname',
+    language: 'Language',
+    dropOut: 'Drop out',
+    dropOutCancelConfirm: 'Drop out Cancel Confirm ?',
+    fileTypeOnlySupportsImageFormat: 'File type only supports image format',
+    fileSizeMustNotExceed2MB: 'File size must not exceed 2 MB',
+    modifySuccess: 'Modify success'
   },
   vip: {
     memberExpirationTime: 'Member expiration time',

@@ -64,9 +64,6 @@ export default {
     dragTheSliderToCompleteThePuzzle: '拖动左边滑块完成上方拼图'
   },
   enter: {
-    heads: '头像',
-    nickname: '用户名',
-    language: '多语言',
     coupon: '兑换卡券',
     distribution: '分销中心',
     myCertificate: '我的证书',
@@ -77,6 +74,16 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
     and: '和'
+  },
+  setting: {
+    heads: '头像',
+    nickname: '用户名',
+    language: '多语言',
+    dropOut: '退出登录',
+    dropOutCancelConfirm: '确定要退出登录吗？',
+    fileTypeOnlySupportsImageFormat: '文件类型仅支持图片格式',
+    fileSizeMustNotExceed2MB: '文件大小不得超过 2 MB',
+    modifySuccess: '修改成功'
   },
   vip: {
     memberExpirationTime: '会员到期时间',
