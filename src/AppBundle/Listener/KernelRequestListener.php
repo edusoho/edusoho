@@ -139,11 +139,6 @@ class KernelRequestListener
         return $this->getBiz()->service('System:SettingService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
-    }
-
     protected function trans($id, array $parameters = array())
     {
         return $this->container->get('translator')->trans($id, $parameters);
