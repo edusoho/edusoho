@@ -17,9 +17,8 @@
 <body>
   {% if purchaseAgreement.content != '' %}
     <h3 class="center">{{ purchaseAgreement.title }}</h3>
-    <pre>
-    {{ purchaseAgreement.content }}
-    </pre>
+
+    <p style="word-wrap:break-word;word-break:keep-all;white-space:pre-wrap;">{{ purchaseAgreement.content }}</p>
 {% else %}
       <p>{{ 'admin_v2.course_purchase_agreement.not_set_tips'|trans }}</p>
   {% endif %}
