@@ -64,14 +64,26 @@ export default {
     dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle'
   },
   enter: {
-    coupon: 'Coupon',
-    myCertificate: 'My certificate',
     heads: 'Heads',
     nickname: 'Nickname',
-    language: 'Language'
+    language: 'Language',
+    coupon: 'Coupon',
+    distribution: 'Distribution',
+    myCertificate: 'My certificate',
+    mistakesCollection: 'Mistakes collection',
+    myOrder: 'My order',
+    activities: 'Activities'
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',
     and: 'and'
+  },
+  vip: {
+    memberExpirationTime: 'Member expiration time',
+    renewalUpgrade: 'Renewal/Upgrade',
+    yourMembershipHasExpired: 'Your membership has expired',
+    immediatelyRenewals: 'Immediately renewals',
+    joinNow: 'Join now',
+    youAreNotAVipYet: 'You are not a VIP yet，you can enioy the privileges'
   }
 };

@@ -64,14 +64,26 @@ export default {
     dragTheSliderToCompleteThePuzzle: '拖动左边滑块完成上方拼图'
   },
   enter: {
-    coupon: '兑换卡券',
-    myCertificate: '我的证书',
     heads: '头像',
     nickname: '用户名',
-    language: '多语言'
+    language: '多语言',
+    coupon: '兑换卡券',
+    distribution: '分销中心',
+    myCertificate: '我的证书',
+    mistakesCollection: '我的错题本',
+    myOrder: '我的订单',
+    activities: '我的活动',
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
     and: '和'
+  },
+  vip: {
+    memberExpirationTime: '会员到期时间',
+    renewalUpgrade: '续费/升级',
+    yourMembershipHasExpired: '您的会员已过期',
+    immediatelyRenewals: '立即续费',
+    joinNow: '去开通',
+    youAreNotAVipYet: '您还不是会员，开通会员享特权'
   }
 };
