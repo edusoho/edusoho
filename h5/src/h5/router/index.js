@@ -47,7 +47,8 @@ const routes = [
     path: '/fastlogin',
     name: 'fastlogin',
     meta: {
-      title: '登录',
+      i18n: true,
+      title: 'title.login',
     },
     component: () =>
       import(
@@ -102,7 +103,8 @@ const routes = [
     path: '/settings',
     name: 'my_setting',
     meta: {
-      title: '设置',
+      i18n: true,
+      title: 'title.setting',
     },
     component: () =>
       import(
@@ -113,12 +115,22 @@ const routes = [
     path: '/setting/nickname',
     name: 'setting_nickname',
     meta: {
-      title: '昵称设置',
+      i18n: true,
+      title: 'title.nicknameSetting',
     },
     component: () =>
       import(
         /* webpackChunkName: "nickname" */ '@/containers/my/setting/nickname.vue'
       ),
+  },
+  {
+    path: '/setting/lang',
+    name: 'settingLang',
+    meta: {
+      i18n: true,
+      title: 'title.switchLanguage',
+    },
+    component: () => import(/* webpackChunkName: "lang" */ '@/containers/my/setting/lang.vue')
   },
   {
     path: '/course/explore',
@@ -493,12 +505,10 @@ const routes = [
     path: '/coupon/covert',
     name: 'couponCovert',
     meta: {
-      title: '兑换卡券',
+      i18n: true,
+      title: 'title.coupon'
     },
-    component: () =>
-      import(
-        /* webpackChunkName: "auth_social" */ '@/containers/coupon/covert/index.vue'
-      ),
+    component: () => import(/* webpackChunkName: "auth_social" */ '@/containers/coupon/covert/index.vue')
   },
   {
     path: '/search',
@@ -701,12 +711,10 @@ const routes = [
     path: '/my/certificate',
     name: 'my_certificate',
     meta: {
-      title: '我的证书',
+      i18n: true,
+      title: 'certificate.title',
     },
-    component: () =>
-      import(
-        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue'
-      ),
+    component: () => import(/* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue')
   },
   {
     path: '/certificate_records/:id',

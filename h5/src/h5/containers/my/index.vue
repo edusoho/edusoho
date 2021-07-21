@@ -4,7 +4,7 @@
     <user />
     <router-link :to="{ name: 'couponCovert' }">
       <div v-if="hasBusinessDrainage" class="coupon-code-entrance">
-        兑换卡券
+        {{ $t('enter.coupon') }}
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </router-link>
@@ -13,13 +13,13 @@
       :href="drpSetting.distributor_login_url"
     >
       <div class="coupon-code-entrance">
-        分销中心
+        {{ $t('enter.distribution') }}
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </a>
     <router-link :to="{ name: 'my_certificate' }">
       <div class="coupon-code-entrance">
-        我的证书
+        {{ $t('enter.myCertificate') }}
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </router-link>
@@ -27,14 +27,14 @@
     <template v-for="(entry, index) in entryData">
       <router-link :to="{ name: entry.link }" :key="index">
         <div class="coupon-code-entrance">
-          {{ entry.name }}
+          {{ $t(entry.name) }}
           <i class="van-icon van-icon-arrow pull-right" />
         </div>
       </router-link>
     </template>
 
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
-      <van-tab v-for="(item, index) in tabs" :title="item" :key="index" />
+      <van-tab v-for="(item, index) in tabs" :title="$t(item)" :key="index" />
     </van-tabs>
     <orders v-show="activeIndex === 0" />
     <activity v-show="activeIndex === 1" />
@@ -50,7 +50,7 @@ import Api from '@/api';
 
 const entryData = [
   {
-    name: '我的错题本',
+    name: 'enter.mistakesCollection',
     link: 'myWrongQuestionBook',
   },
 ];
@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       activeIndex: 0,
-      tabs: ['我的订单', '我的活动'],
+      tabs: ['enter.myOrder', 'enter.activities'],
       hasBusinessDrainage: false,
       isShowDistributorEntrance: false, // 是否展示分销中心入口
       drpSetting: {},

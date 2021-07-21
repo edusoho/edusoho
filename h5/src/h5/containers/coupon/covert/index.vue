@@ -1,10 +1,10 @@
 <template>
   <div class="coupon-covert-container">
-    <h2 class="title">兑换卡券</h2>
+    <h2 class="title">{{ $t('title.coupon') }}</h2>
     <van-field
       v-model.trim="code"
       :class="[{ 'error-code': isErrorCode }, 'e-input', 'coupon-input']"
-      placeholder="请输入8位兑换码"
+      :placeholder="$t('placeholder.voucherCode')"
       clearable
       @input="checkCodeChange(code)"
     />
@@ -14,7 +14,7 @@
       type="info"
       class="covert-submit"
       @click="codeCovert(code)"
-      >确认</van-button
+      >{{ $t('btn.confirm') }}</van-button
     >
     <van-popup
       v-model="popupShow"
