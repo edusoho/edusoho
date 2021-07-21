@@ -37,7 +37,9 @@ export default {
     binding: '绑定',
     switchAccountPasswordToLogin: '切换账号密码登录',
     userServiceAgreement: '用户服务',
-    privacyAgreemen: '隐私协议'
+    privacyAgreemen: '隐私协议',
+    viewAfterLogin: '登录后查看更多信息',
+    loginNow: '立即登录'
   },
   toast: {
     switchSucceeded: '切换成功',

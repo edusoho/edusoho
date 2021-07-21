@@ -37,7 +37,9 @@ export default {
     binding: 'Binding',
     switchAccountPasswordToLogin: 'Switch account & password to login',
     userServiceAgreement: 'User Service Agreement',
-    privacyAgreemen: 'Privacy Agreement'
+    privacyAgreemen: 'Privacy Agreement',
+    viewAfterLogin: 'View after login',
+    loginNow: 'Login now'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
