@@ -3,7 +3,7 @@
     <div class="info-learn__header clearfix">
       <slot class="header-title pull-left" name="title"></slot>
       <span class="header-more pull-right" @click="onMore"
-        >更多<i class="iconfont icon-About"></i
+        >{{ $t('enter.more') }}<i class="iconfont icon-About"></i
       ></span>
     </div>
     <div class="info-learn__body">

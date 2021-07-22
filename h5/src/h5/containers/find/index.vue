@@ -71,7 +71,7 @@
         v-if="part.type === 'search'"
         shape="round"
         background="#ffffff"
-        placeholder="搜索课程、班级"
+        :placeholder="$t('search.placeholder')"
         @focus="goSearch"
       />
     </div>

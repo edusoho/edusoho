@@ -13,7 +13,7 @@
         }}</span>
         <span class="e-course-list__more">
           <span class="more-text pull-left" @click="jumpTo(courseList.source)"
-            >更多</span
+            >{{ $t('enter.more') }}</span
           >
         </span>
       </div>
@@ -35,7 +35,7 @@
             class="more-text pull-left"
             style="font-size: 12px;"
             @click="jumpTo(courseList.source)"
-            >更多</span
+            >{{ $t('enter.more') }}</span
           >
         </span>
       </div>

@@ -71,6 +71,7 @@ export default {
     mistakesCollection: '我的错题本',
     myOrder: '我的订单',
     activities: '我的活动',
+    more: '更多'
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',

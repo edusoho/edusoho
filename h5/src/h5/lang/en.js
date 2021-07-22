@@ -70,7 +70,8 @@ export default {
     myCertificate: 'My certificate',
     mistakesCollection: 'Mistakes collection',
     myOrder: 'My order',
-    activities: 'Activities'
+    activities: 'Activities',
+    more: 'More'
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',
