@@ -6,6 +6,7 @@ import Router from 'vue-router';
 import find from './find';
 import learning from './learning';
 import my from './my';
+
 /* eslint-disable no-new */
 Vue.use(Router);
 // 路由懒加载 实现代码分离
@@ -84,7 +85,7 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "binding" */ '@/containers/register/index.vue'
+        /* webpackChunkName: "binding" */ '@/containers/binding/index.vue'
       ),
   },
   {
@@ -1019,4 +1020,5 @@ router.afterEach(to => {
     setVipSwitch();
   }
 });
+
 export default router;

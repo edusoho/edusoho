@@ -56,6 +56,11 @@ export default [
     method: 'POST',
   },
   {
+    name: 'mobileBindCheck',
+    url: '/user/{userId}/mobile_bind_check',
+    method: 'POST',
+  },
+  {
     // 获取滑动验证参数
     name: 'dragCaptcha',
     url: '/drag_captcha',
