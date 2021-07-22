@@ -117,7 +117,7 @@
         </div>
       </div>
       <div v-show="courseItemData" class="e-course__empty">
-        暂无{{ typeList === 'course_list' ? '课程' : '班级' }}
+        {{ typeList === 'course_list' ? $t('e.noCourses') : $t('e.noClass') }}
       </div>
     </div>
   </div>

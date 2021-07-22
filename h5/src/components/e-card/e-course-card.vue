@@ -32,9 +32,9 @@
             v-if="course.content.right.isShow"
             @click="toTask()"
           >
-            继续学习
+            {{ $t('e.keepStuding') }}
           </div>
-          <div class="live-btn live-btn--none" v-else>暂不支持</div>
+          <div class="live-btn live-btn--none" v-else>{{ $t('e.notCurrentlySupported') }}</div>
         </div>
       </div>
       <!-- classroom -->

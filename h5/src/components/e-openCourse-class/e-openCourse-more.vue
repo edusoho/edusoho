@@ -4,7 +4,7 @@
       <img v-lazy="course.middlePicture" />
       <div class="openCourse-class-left__live">
         <div>
-          <span>直播</span>
+          <span>{{ $t('e.live') }}</span>
         </div>
         <div v-if="course.hitNum">
           <i class="iconfont icon-renqi" />
@@ -20,7 +20,7 @@
       <div class="openCourse-class-right__bottom">
         <div class="openCourse-class-right__live">
           <span :class="getStatusClass(status)" v-if="status === 'default'">
-            正在直播
+            {{ $t('e.liveStreaming') }}
             <i class="iconfont icon-zhibo1"></i>
           </span>
           <span :class="getStatusClass(status)" v-else>
@@ -37,7 +37,7 @@
             >
               {{ status | liveBtnText }}
             </div>
-            <div v-else>暂无回放</div>
+            <div v-else>{{ $t('e.noReplay') }}</div>
           </div>
         </div>
       </div>
