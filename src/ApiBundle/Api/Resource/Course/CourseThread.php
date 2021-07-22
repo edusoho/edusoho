@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\File\UploadFileException;
@@ -114,20 +113,6 @@ class CourseThread extends AbstractResource
         }
 
         return $thread;
-    }
-
-    protected function filterHtml($text)
-    {
-        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
-        if (empty($matches)) {
-            return $text;
-        }
-
-        foreach ($matches[1] as $url) {
-            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
-        }
-
-        return $text;
     }
 
     protected function getQuestionType($fileIds)
