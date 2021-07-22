@@ -147,6 +147,23 @@ export default {
     right: 'Right',
     wrong: 'Wrong',
     right2: 'Right',
-    wrong2: 'Wrong'
+    wrong2: 'Wrong',
+    reset: 'Reset',
+    check: 'Check',
+    sort: 'Sort',
+    all: 'All',
+    highToLow: 'High to low',
+    LowToHigh: 'Low to high',
+    allPlan: 'All plan',
+    questionSource: 'Question source',
+    missionName: 'Mission name',
+    choosePlan: 'Choose plan',
+    chooseSource: 'Choose source',
+    chooseMission: 'Choose mission',
+    courseName: 'Course name',
+    chooseName: 'Choose name',
+    examTask: 'Exam task',
+    homeworkTask: 'Homework task',
+    practiceTask: 'Practice task'
   }
 };

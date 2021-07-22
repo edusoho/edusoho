@@ -147,6 +147,23 @@ export default {
     right: '对',
     wrong: '错',
     right2: '正确',
-    wrong2: '错误'
+    wrong2: '错误',
+    reset: '重置',
+    check: '查看错题',
+    sort: '排序',
+    all: '综合排序',
+    highToLow: '由高至低',
+    LowToHigh: '由低至高',
+    allPlan: '全部计划',
+    questionSource: '题目来源',
+    missionName: '任务名称',
+    choosePlan: '选择计划',
+    chooseSource: '选择题目来源',
+    chooseMission: '选择任务名称',
+    courseName: '课程名称',
+    chooseName: '选择课程名称',
+    examTask: '考试任务',
+    homeworkTask: '作业任务',
+    practiceTask: '练习任务'
   }
 };
