@@ -38,9 +38,10 @@ class KernelControllerListener
 
             if (in_array($request->getPathInfo(), $whiteList)
                 || strstr($request->getPathInfo(), '/mapi_v2')
+                || strstr($request->getPathInfo(), '/api')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
-                || ($login_bind['mobile_bind_mode'] !== 'constraint' && ($_COOKIE[$currentUser['id'].'-last-mobile-bind'] || $currentUser['id'] === $_COOKIE[$currentUser['id'].'-last-mobile-bind']))
+                || ($login_bind['mobile_bind_mode'] === 'option' && (isset($_COOKIE['is_skip_mobile_bind']) && $_COOKIE['is_skip_mobile_bind'] == 1))
             ) {
                 return;
             }

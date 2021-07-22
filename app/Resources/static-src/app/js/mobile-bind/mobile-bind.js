@@ -26,12 +26,11 @@ export default class MobileBind {
   }
 
   initCheckCookie() {
-    let self = this;
     $('.js-skip-bind').click(function (){
-      let key = self.$form.data('userId') + '-last-mobile-bind';
+      let key = 'is_skip_mobile_bind';
 
-      if (!Cookies.get(key) || Cookies.get(key) != self.$form.data('userId')) {
-        Cookies.set(key, self.$form.data('userId'));
+      if (!Cookies.get(key)) {
+        Cookies.set(key, 1);
       }
 
       window.location.href = $('#submit-btn').data('targetUrl');

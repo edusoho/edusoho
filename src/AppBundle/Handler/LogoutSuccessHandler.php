@@ -42,7 +42,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         }
 
         $user = ServiceKernel::instance()->getCurrentUser();
-        setcookie($user['id'].'-last-mobile-bind', 0, -1);
+        setcookie('is_skip_mobile_bind', 0, -1);
 
         setcookie('_last_logout_locale', $request->getSession()->get('_locale'), -1);
         // setcookie("U_LOGIN_TOKEN", '', -1);
