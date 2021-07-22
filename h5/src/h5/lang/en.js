@@ -51,7 +51,8 @@ export default {
     registrationSuccess: 'Registration success',
     pleaseCompleteThePuzzleVerification: 'Please complete the puzzle verification',
     oasswordResetSuccessful: 'Password reset successful',
-    verificationLinkHasBeenSentTo: 'Verification link has been sent to'
+    verificationLinkHasBeenSentTo: 'Verification link has been sent to',
+    loading: 'Loading...'
   },
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',
@@ -171,5 +172,13 @@ export default {
     timeSpentOnTheQuestion: 'Time spent on the question',
     minutes: 'Minutes',
     viewParsed: 'View parsed'
+  },
+  search: {
+    title: 'Search',
+    placeholder: 'Search course/class/Question bank',
+    course: 'Course',
+    classroom: 'Classroom',
+    questionBank: 'Question bank',
+    noFound: 'Sorry, no related content was found'
   }
 };

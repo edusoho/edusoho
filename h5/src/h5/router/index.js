@@ -515,7 +515,8 @@ const routes = [
     path: '/search',
     name: 'search',
     meta: {
-      title: '搜索',
+      i18n: true,
+      title: 'search.title',
     },
     component: () =>
       import(/* webpackChunkName: "search" */ '@/containers/search/index.vue'),

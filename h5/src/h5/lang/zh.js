@@ -51,7 +51,8 @@ export default {
     registrationSuccess: '注册成功',
     pleaseCompleteThePuzzleVerification: '请先完成拼图验证',
     oasswordResetSuccessful: '密码重置成功',
-    verificationLinkHasBeenSentTo: '验证链接已发送到'
+    verificationLinkHasBeenSentTo: '验证链接已发送到',
+    loading: '加载中...',
   },
   placeholder: {
     voucherCode: '请输入 8 位兑换码',
@@ -171,5 +172,13 @@ export default {
     timeSpentOnTheQuestion: '做题用时',
     minutes: '分钟',
     viewParsed: '查看解析'
+  },
+  search: {
+    title: '搜索',
+    placeholder: '搜索课程、班级、题库',
+    course: '课程',
+    classroom: '班级',
+    questionBank: '题库',
+    noFound: '抱歉，没有找到相关内容'
   }
 };
