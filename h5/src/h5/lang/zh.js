@@ -219,5 +219,14 @@ export default {
     classroom: '班级',
     questionBank: '题库',
     noFound: '抱歉，没有找到相关内容'
+  },
+  learning: {
+    title: '我的学习',
+    course: '我的课程',
+    class: '我的班级',
+    questionBank: '我的题库',
+    noCourses: '暂无课程',
+    noClass: '暂无班级',
+    noQuestionBank: '暂无题库'
   }
 };

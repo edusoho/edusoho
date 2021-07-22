@@ -219,5 +219,14 @@ export default {
     classroom: 'Classroom',
     questionBank: 'Question bank',
     noFound: 'Sorry, no related content was found'
+  },
+  learning: {
+    title: 'Learn',
+    course: 'Course',
+    class: 'Class',
+    questionBank: 'Question bank',
+    noCourses: 'No courses',
+    noClass: 'No class',
+    noQuestionBank: 'No question bank'
   }
 };
