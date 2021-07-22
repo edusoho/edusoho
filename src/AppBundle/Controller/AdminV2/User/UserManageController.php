@@ -227,7 +227,7 @@ class UserManageController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth');
 
-        if (isset($auth['register_enabled']) && 'closed' === $auth['register_enabled']){
+        if (isset($auth['register_enabled']) && 'closed' === $auth['register_enabled']) {
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
