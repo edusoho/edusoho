@@ -164,6 +164,11 @@ export default {
     chooseName: 'Choose name',
     examTask: 'Exam task',
     homeworkTask: 'Homework task',
-    practiceTask: 'Practice task'
+    practiceTask: 'Practice task',
+    submitting: 'Submitting...',
+    correctRate: 'Correct rate',
+    timeSpentOnTheQuestion: 'Time spent on the question',
+    minutes: 'Minutes',
+    viewParsed: 'View parsed'
   }
 };

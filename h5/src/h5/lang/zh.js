@@ -164,6 +164,11 @@ export default {
     chooseName: '选择课程名称',
     examTask: '考试任务',
     homeworkTask: '作业任务',
-    practiceTask: '练习任务'
+    practiceTask: '练习任务',
+    submitting: '提交中...',
+    correctRate: '正确率',
+    timeSpentOnTheQuestion: '做题用时',
+    minutes: '分钟',
+    viewParsed: '查看解析'
   }
 };
