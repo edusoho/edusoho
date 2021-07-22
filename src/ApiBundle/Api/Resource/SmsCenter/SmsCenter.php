@@ -27,9 +27,9 @@ class SmsCenter extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $type = $this->convertType($type);
+        $smsType = $this->convertType($type);
 
-        return $this->$type($request, $type, $mobile);
+        return $this->$type($request, $smsType, $mobile);
     }
 
     protected function register($request, $type, $mobile)
@@ -51,7 +51,7 @@ class SmsCenter extends AbstractResource
     {
         $result = $this->getBizSms()->send($type, $mobile);
 
-        $this->getUserService()->getSmsCommonCaptchaStatus($request->getClientIp(), true);
+        $this->getUserService()->getSmsCommonCaptchaStatus($request->getHttpRequest()->getClientIp(), true);
 
         return [
             'smsToken' => $result['token'],
