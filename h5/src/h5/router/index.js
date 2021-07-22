@@ -858,7 +858,8 @@ const routes = [
     path: '/wrong-exercises/do',
     name: 'WrongExercisesDo',
     meta: {
-      title: '错题练习',
+      i18n: true,
+      title: 'wrongQuestion.exercise',
     },
     component: () =>
       import(
@@ -869,7 +870,8 @@ const routes = [
     path: '/wrong-exercises/result',
     name: 'WrongExercisesResult',
     meta: {
-      title: '错题练习',
+      i18n: true,
+      title: 'wrongQuestion.exercise',
     },
     component: () =>
       import(
@@ -880,7 +882,8 @@ const routes = [
     path: '/wrong-exercises/analysis',
     name: 'WrongExercisesAnalysis',
     meta: {
-      title: '错题解析',
+      i18n: true,
+      title: 'wrongQuestion.parsing',
     },
     component: () =>
       import(
