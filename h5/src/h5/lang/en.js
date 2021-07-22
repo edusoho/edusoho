@@ -86,6 +86,7 @@ export default {
     modifySuccess: 'Modify success'
   },
   vip: {
+    title: 'Vip center',
     memberExpirationTime: 'Member expiration time',
     renewalUpgrade: 'Renewal/Upgrade',
     yourMembershipHasExpired: 'Your membership has expired',

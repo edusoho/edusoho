@@ -86,6 +86,7 @@ export default {
     modifySuccess: '修改成功'
   },
   vip: {
+    title: '会员中心',
     memberExpirationTime: '会员到期时间',
     renewalUpgrade: '续费/升级',
     yourMembershipHasExpired: '您的会员已过期',

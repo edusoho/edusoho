@@ -463,7 +463,8 @@ const routes = [
     path: '/vip',
     name: 'vip',
     meta: {
-      title: '会员中心',
+      i18n: true,
+      title: 'vip.title',
     },
     component: () =>
       import(/* webpackChunkName: "vip" */ '@/containers/vip/index.vue'),
