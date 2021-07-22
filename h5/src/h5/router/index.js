@@ -136,7 +136,8 @@ const routes = [
     path: '/course/explore',
     name: 'more_course',
     meta: {
-      title: '所有课程',
+      i18n: true,
+      title: 'more.allCourses',
     },
     component: () =>
       import(
@@ -147,7 +148,8 @@ const routes = [
     path: '/classroom/explore',
     name: 'more_class',
     meta: {
-      title: '所有班级',
+      i18n: true,
+      title: 'more.allClasses',
     },
     component: () =>
       import(
@@ -158,7 +160,8 @@ const routes = [
     path: '/itembank/explore',
     name: 'more_itembank',
     meta: {
-      title: '所有题库',
+      i18n: true,
+      title: 'more.allQuestionBank',
     },
     component: () =>
       import(

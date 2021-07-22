@@ -228,5 +228,20 @@ export default {
     noCourses: 'No courses',
     noClass: 'No class',
     noQuestionBank: 'No question bank'
+  },
+  more: {
+    membersClass: 'Members class',
+    membersCourse: 'Members Course',
+    recommendation: 'Recommendation',
+    popular: 'Popular',
+    latest: 'Latest',
+    Classification: 'Classification',
+    courseType: 'Course type',
+    questionBankType: 'Question bank type',
+    allCourses: 'All courses',
+    allClasses: 'All classes',
+    allQuestionBank: 'All question bank',
+    noCourses: 'No courses',
+    noClass: 'No class',
   }
 };

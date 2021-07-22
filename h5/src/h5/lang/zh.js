@@ -228,5 +228,20 @@ export default {
     noCourses: '暂无课程',
     noClass: '暂无班级',
     noQuestionBank: '暂无题库'
+  },
+  more: {
+    membersClass: '会员班级',
+    membersCourse: '会员课程',
+    recommendation: '推荐',
+    popular: '热门',
+    latest: '最新',
+    Classification: '分类',
+    courseType: '课程类型',
+    questionBankType: '题库类型',
+    allCourses: '所有课程',
+    allClasses: '所有班级',
+    allQuestionBank: '所有题库',
+    noCourses: '暂无课程',
+    noClass: '暂无班级',
   }
 };

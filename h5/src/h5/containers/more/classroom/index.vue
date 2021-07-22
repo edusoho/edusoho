@@ -27,7 +27,7 @@
       v-if="isEmptyCourse && isRequestCompile"
       :has-button="false"
       :type="'classroom_list'"
-      text="暂无班级"
+      :text="$t('more.noClass')"
     />
   </div>
 </template>
