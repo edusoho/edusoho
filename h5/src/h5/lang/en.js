@@ -260,7 +260,7 @@ export default {
     findAGoodContent: 'Find a good content and share it with you~',
     gradeTheCourse: 'Grade the course',
     submit: 'Submit',
-    noCoursesYet: 'No courses yet~',
+    noCoursesYet: 'No courses yet...',
     top: 'Top',
     collected: 'Collected',
     favorites: 'Favorites',
@@ -270,6 +270,11 @@ export default {
     lesson: 'Lesson',
     more: 'More',
     noMore: 'No more',
-    preferentialPrice: 'Preferential price'
+    preferentialPrice: 'Preferential price',
+    longTermEffective: 'Long-term effective',
+    freeToJoin: 'Free to join',
+    certificate: 'Certificate',
+    certificate2: 'Certificate',
+    price: 'Price',
   }
 };

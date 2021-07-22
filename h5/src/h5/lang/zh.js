@@ -260,7 +260,7 @@ export default {
     findAGoodContent: '发现一个好内容，分享给你~',
     gradeTheCourse: '为课程评分',
     submit: '提交',
-    noCoursesYet: '暂时还没有课程哦~',
+    noCoursesYet: '暂时还没有课程哦...',
     top: '顶部',
     collected: '已收藏',
     favorites: '收藏',
@@ -271,5 +271,10 @@ export default {
     more: '点击查看更多',
     noMore: '没有更多了',
     preferentialPrice: '优惠价',
+    longTermEffective: '长期有效',
+    freeToJoin: '免费加入',
+    certificate: '证',
+    certificate2: '证书',
+    price: '价格',
   }
 };

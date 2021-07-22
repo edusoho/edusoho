@@ -1,7 +1,7 @@
 <template>
   <div class="back-to-top" @click="backToTop">
     <i class="iconfont icon-top"></i>
-    <span>顶部</span>
+    <span>{{ $t('goods.top') }}</span>
   </div>
 </template>
 

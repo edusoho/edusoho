@@ -1,7 +1,7 @@
 <template>
   <div class="detail-info" v-if="goods.id">
     <p class="detail-info__title" :class="isShare && 'detail-info__title--pr'">
-      <span class="certificate-icon" v-if="currentSku.hasCertificate">证</span>
+      <span class="certificate-icon" v-if="currentSku.hasCertificate">{{ $t('goods.certificate') }}</span>
       {{ goods.title }}
       <i
         v-if="isShare"
@@ -16,7 +16,7 @@
     >
       <div class="clearfix">
         <div class="pull-left">
-          优惠价
+          {{ $t('goods.preferentialPrice') }}
           <span
             v-if="currentSku.displayPriceObj.currency === 'RMB'"
             class="price"

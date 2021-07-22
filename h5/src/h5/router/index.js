@@ -689,7 +689,8 @@ const routes = [
       '/goods/:id/show' /* 商品的扩展必然不能通过入口来实现，入口只有一个，内部分为商品常态数据以及商品额外数据，借助插槽或者插件分开取舍 */,
     name: 'goods_show',
     meta: {
-      title: '商品详情',
+      i18n: true,
+      title: 'goods.title',
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/goods.vue'),

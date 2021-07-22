@@ -17,11 +17,11 @@
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
         <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
-        <span style="color: #FF7E56;">已收藏</span>
+        <span style="color: #FF7E56;">{{ $t('goods.collected') }}</span>
       </template>
       <template v-else>
         <i class="iconfont icon-aixin"></i>
-        <span>收藏</span>
+        <span>{{ $t('goods.favorites') }}</span>
       </template>
     </div>
 
@@ -130,14 +130,14 @@ export default {
       if (!memberInfo) {
         switch (this.currentSku.usageMode) {
           case 'forever':
-            return '长期有效';
+            return this.$t('goods.longTermEffective');
           case 'end_date':
             return (
               this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
-              '&nbsp;之前可学习'
+              `&nbsp;${this.$t('goods.canLearnBefore')}`
             );
           case 'days':
-            return this.currentSku.usageDays + '天内可学习';
+            return this.$t('goods.studyWithinDay', { number: this.currentSku.usageDays });
           case 'date':
             return (
               this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
@@ -149,11 +149,11 @@ export default {
         }
       } else {
         if (this.currentSku.usageMode === 'forever') {
-          return '长期有效';
+          return this.$t('goods.longTermEffective');
         }
         return memberInfo.deadline != 0
-          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '长期有效';
+          ? memberInfo.deadline.slice(0, 10) + this.$t('goods.canLearnBefore')
+          : this.$t('goods.longTermEffective');
       }
     },
 
@@ -236,11 +236,11 @@ export default {
       ];
 
       if (this.vipAccessToJoin && !notVipStatus.includes(code)) {
-        return '会员免费兑换';
+        return this.$t('goods.freeRedemptionForMembers');
       }
 
       if (displayPrice == 0 && this.accessToJoin) {
-        return '免费加入';
+        return this.$t('goods.freeToJoin');
       }
 
       return status[code];
@@ -361,7 +361,7 @@ export default {
       }
       Toast.loading({
         duration: 0,
-        message: '加载中...',
+        message: this.$t('toast.loading'),
         forbidClick: true,
       });
       this.getParamsList();
