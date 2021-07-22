@@ -127,6 +127,26 @@ export default {
     filter: '筛选',
     exercise: '错题练习',
     systemRandomlySelectsQuestions: '已为你随机筛选最多 20 题',
-    iKnow: '我知道了'
+    iKnow: '我知道了',
+    singleChoice: '单选题',
+    fill: '填空题',
+    uncertainChoice: "不定项选择题",
+    choice: "多选题",
+    determine: "判断题",
+    answerResult: '做题结果',
+    yourAnswer: '你的答案',
+    correctAnswer: '正确答案',
+    parsing: '做题解析',
+    source: '来源',
+    frequency: '做错频次',
+    times: '次',
+    noParsing: '无解析',
+    correctAnswer2: '回答正确',
+    wrongAnswer: '回答错误',
+    unanswered: '未作答',
+    right: '对',
+    wrong: '错',
+    right2: '正确',
+    wrong2: '错误'
   }
 };

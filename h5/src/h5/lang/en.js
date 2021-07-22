@@ -127,6 +127,26 @@ export default {
     filter: 'Filter',
     exercise: 'Exercise',
     systemRandomlySelectsQuestions: 'The system randomly selects up to 20 questions for you',
-    iKnow: 'I know'
+    iKnow: 'I know',
+    singleChoice: 'Single choice',
+    fill: 'Gap filling',
+    uncertainChoice: "Indefinite choice",
+    choice: "Multiple choice",
+    determine: "True or false",
+    answerResult: 'Answer result',
+    yourAnswer: 'Your answer',
+    correctAnswer: 'Correct answer',
+    parsing: 'Parsing',
+    source: 'Source',
+    frequency: 'Frequency',
+    times: 'Times',
+    noParsing: 'No parsing',
+    correctAnswer2: 'Correct answer',
+    wrongAnswer: 'Wrong answer',
+    unanswered: 'Unanswered',
+    right: 'Right',
+    wrong: 'Wrong',
+    right2: 'Right',
+    wrong2: 'Wrong'
   }
 };
