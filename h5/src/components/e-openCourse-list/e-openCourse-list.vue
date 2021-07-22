@@ -27,7 +27,7 @@
           :feedback="feedback"
         />
       </div>
-      <div v-show="courseItemData" class="e-course__empty">暂无公开课</div>
+      <div v-show="courseItemData" class="e-course__empty">{{ $t('e.noPublicClass') }}</div>
     </div>
   </div>
 </template>
