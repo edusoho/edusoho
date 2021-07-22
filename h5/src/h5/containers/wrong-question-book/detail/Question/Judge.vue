@@ -7,7 +7,7 @@
       :name="answer.radio.val"
     >
       <div class="question-option__content">
-        {{ answer.radio.val === 'T' ? '对' : '错' }}
+        {{ answer.radio.val === 'T' ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
       </div>
       <template slot="icon">
         <span
