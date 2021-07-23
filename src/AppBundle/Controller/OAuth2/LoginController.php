@@ -9,6 +9,7 @@ use AppBundle\Controller\LoginBindController;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -161,7 +162,12 @@ class LoginController extends LoginBindController
             }
 
             $this->registerAttemptCheck($request);
-            $this->register($request);
+
+            if ($request->request->get('originalEmailAccount') && $request->request->get('originalAccountPassword')){
+                $this->bindOriginalAccount($request);
+            }else{
+                $this->register($request);
+            }
             $this->authenticatedOauthUser();
 
             $response = $this->createSuccessJsonResponse(['url' => $this->generateUrl('oauth2_login_success')]);
@@ -185,6 +191,77 @@ class LoginController extends LoginBindController
         }
     }
 
+    protected function bindOriginalAccount(Request $request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        $registerFields = $request->request->all();
+        $originalEmailAccount = $request->request->get('originalEmailAccount');
+        $originalAccountPassword = $request->request->get('originalAccountPassword');
+
+        $user = $this->getUserService()->getUserByEmail($originalEmailAccount);
+        $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
+
+        if (!$validatePassed) {
+            throw UserException::PASSWORD_FAILED();
+        } else {
+            $this->loginAttemptCheck($oauthUser->account, $request);
+            $token = $request->getSession()->get('oauth_token');
+            $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+            if ($isSuccess){
+                $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+                $this->getUserService()->initPassword($user['id'], $registerFields['password']);
+            }
+        }
+    }
+
+    public function OriginalAccountCheckAction(Request $request, $type)
+    {
+        $account = $request->query->get('value');
+
+        return 'mobile' == $type ? $this->checkMobile($account) : $this->checkEmail($account);
+    }
+
+    protected function checkMobile($mobile)
+    {
+        $bindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
+
+        if ($bindMode == 'constraint' && empty($mobile)) {
+            return $this->validateResult('false', '请输入手机号');
+        }
+
+        if ($bindMode != 'constraint' && empty($mobile)){
+            return $this->validateResult('success', '');
+        }
+
+        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+
+        return $this->validateResult($result, $message);
+    }
+
+    protected function checkEmail($email)
+    {
+        $user = $this->getUserService()->getUserByEmail($email);
+        if (empty($user)) {
+            return $this->validateResult('false', '该邮箱帐号不存在');
+        }
+
+        if (!empty($user['verifiedMobile'])){
+            return $this->validateResult('false', '该邮箱帐号已被绑定');
+        }
+
+        return $this->validateResult('success', '');
+    }
+
+    protected function validateResult($result, $message)
+    {
+        $response = true;
+        if ('success' !== $result) {
+            $response = $message;
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     protected function validateRegisterRequest(Request $request)
     {
         $validateResult = [
@@ -198,6 +275,16 @@ class LoginController extends LoginBindController
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get(OAuthUser::MOBILE_TYPE);
             $smsCode = $request->request->get('smsCode');
+            $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
+
+            $validateResult['hasError'] = BizSms::STATUS_SUCCESS !== $status;
+            $validateResult['msg'] = $status;
+        }
+
+        if ($request->request->get('originalMobileAccount') && $request->request->get('accountSmsCode')){
+            $smsToken = $request->request->get('smsToken');
+            $mobile = $request->request->get('originalMobileAccount');
+            $smsCode = $request->request->get('accountSmsCode');
             $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
             $validateResult['hasError'] = BizSms::STATUS_SUCCESS !== $status;
@@ -237,6 +324,11 @@ class LoginController extends LoginBindController
         if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
             $registerFields['verifiedMobile'] = $oauthUser->account;
             $registerFields['email'] = $this->getUserService()->generateEmail($registerFields);
+        }
+
+        $bindMobile = $request->request->get('originalMobileAccount');
+        if (OAuthUser::EMAIL_TYPE == $oauthUser->accountType && $bindMobile) {
+            $registerFields['verifiedMobile'] = $bindMobile;
         }
 
         $registerFields = DistributorCookieToolkit::setCookieTokenToFields($request, $registerFields, DistributorCookieToolkit::USER);

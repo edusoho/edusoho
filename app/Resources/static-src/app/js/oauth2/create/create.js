@@ -49,6 +49,14 @@ export default class Create {
   }
 
   initValidator() {
+    $.validator.addMethod('sms_code_required', function (value, element) {
+      return $('#originalMobileAccount').val() ? false : true;
+    }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
+
+    $.validator.addMethod('account_password', function (value, element) {
+      return $('#originalEmailAccount').val() ? false : true;
+    }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
+
     this.rules = {
       username: {
         required: true,
@@ -84,6 +92,40 @@ export default class Create {
       },
       agree_policy: {
         required: true,
+      },
+      originalMobileAccount: {
+        required: false,
+        phone: true,
+        es_remote: {
+          type: 'get',
+          callback: (bool) => {
+            if (bool) {
+              $('.js-sms-send').removeAttr("disabled");
+            } else {
+              $('.js-sms-send').attr('disabled',"true");
+            }
+          }
+        }
+      },
+      originalEmailAccount: {
+        required: false,
+        email: true,
+        es_remote: {
+          type: 'get'
+        }
+      },
+      originalAccountPassword: {
+        required: false,
+        account_password: true,
+        es_remote: {
+          type: 'get'
+        }
+      },
+      accountSmsCode: {
+        required: false,
+        sms_code_required: true,
+        unsigned_integer: true,
+        rangelength: [6, 6],
       },
     };
 
@@ -156,6 +198,10 @@ export default class Create {
         dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
         invitedCode: $('#invitedCode').length > 0 ? $('#invitedCode').val() : '',
         registerVisitId: $('[name="registerVisitId"]').val(),
+        originalMobileAccount: $('[name="originalMobileAccount"]').val(),
+        accountSmsCode: $('[name="accountSmsCode"]').val(),
+        originalEmailAccount: $('[name="originalMobileAccount"]').val(),
+        originalAccountPassword: $('[name="originalAccountPassword"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
