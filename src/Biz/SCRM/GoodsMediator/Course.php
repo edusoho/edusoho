@@ -24,7 +24,7 @@ class Course extends AbstractMediator
                 'reason' => OperateReason::JOIN_BY_IMPORT,
                 'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
             ];
-            $this->getCourseMemberService()->becomeStudent($specs['targetId'], $user['id'], $data);
+            $this->getCourseMemberService()->becomeStudentAndCreateOrder($specs['targetId'], $user['id'], $data);
         }
     }
 
