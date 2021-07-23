@@ -384,7 +384,7 @@ export default {
     subscribe: 'Subscribe',
     subscriptionSucceeded: 'Subscription succeeded',
     learningCompletion: 'Learning completion',
-    CongratulationsOnCompletion: 'Congratulations on completion',
+    congratulationsOnCompletion: 'Congratulations on completion',
     nextLesson: 'Next lesson'
   }
 };
