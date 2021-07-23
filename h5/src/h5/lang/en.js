@@ -379,6 +379,12 @@ export default {
     live: 'Live',
     manuscripts: 'Manuscripts',
     learned: 'Learned',
-    completionConditions: 'Completion conditions'
+    completionConditions: 'Completion conditions',
+    pleaseClickSubscribe: 'Please click here to subscribe to course related notices',
+    subscribe: 'Subscribe',
+    subscriptionSucceeded: 'Subscription succeeded',
+    learningCompletion: 'Learning completion',
+    CongratulationsOnCompletion: 'Congratulations on completion',
+    nextLesson: 'Next lesson'
   }
 };

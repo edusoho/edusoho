@@ -379,6 +379,12 @@ export default {
     live: '直播中',
     manuscripts: '文稿',
     learned: '学过了',
-    completionConditions: '完成条件'
+    completionConditions: '完成条件',
+    pleaseClickSubscribe: '请点此订阅课程相关通知',
+    subscribe: '订阅',
+    subscriptionSucceeded: '订阅成功',
+    learningCompletion: '学习完成',
+    congratulationsOnCompletion: '恭喜完成',
+    nextLesson: '下一课'
   }
 };
