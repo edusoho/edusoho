@@ -1,6 +1,6 @@
-.mobile-bind-modal {
+.mobile-bind-container {
   position: relative;
-  left: 50%;
+  left: 45%;
   margin-left: -379px;
 
   @media(max-width: @screen-xs-max) {
@@ -13,9 +13,9 @@
   }
 
   .modal-content {
-    width: 758px;
-    height: 358px;
-    padding: 24px;
+    width: 900px;
+    height: 392px;
+    padding: 24px 40px;
     border-radius: 2px;
     display: table;
     @media(max-width: @screen-xs-max) {
@@ -32,17 +32,8 @@
       border: none;
       .mobile-bind__title {
         font-size: 16px;
-        line-height: 1;
-      }
-
-      .close {
-        padding-top: 2px;
-        font-size: 12px;
-        line-height: 16px;
-        opacity: 1;
-        &:hover {
-          opacity: 0.8;
-        }
+        line-height: 24px;
+        font-weight: 500;
       }
     }
 
@@ -58,14 +49,40 @@
     @media(max-width: @screen-xs-min) {
       width: 252px;
     }
+
+    .close {
+      width: 360px;
+      padding-top: 16px;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+      opacity: 1;
+      color: #333;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .binded-tip {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #fe4040;
+
+      p {
+        margin: 0;
+      }
+    }
   }
 
   .mobile-bind-form__divider {
     float: left;
     width: 2px;
-    height: 100%;
-    margin-left: 24px;
-    border: 1px dashed @brand-primary;
+    height: 85%;
+    margin-left: 54px;
+    border-width: 0px 2px 0px 0px;
+    border-style: dashed;
+    border-color: @brand-primary;
   }
 
   .mobile-bind-form__btn {
@@ -91,8 +108,8 @@
       line-height: 14px;
     }
     .mobile-bind-reasons__contents {
-      width: 300px;
-      height: 184px;
+      width: 346px;
+      height: 192px;
       margin-top: 16px;
       padding: 16px;
       background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
@@ -103,10 +120,11 @@
 
       @media(max-width: @screen-xs-min) {
         width: 252px;
+        height: 250px;
       }
       p {
         margin: 0;
-        font-size: 12px;
+        font-size: 14px;
         color: #616161;
         text-align: justify;
         line-height: 20px;
