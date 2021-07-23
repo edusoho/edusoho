@@ -8,7 +8,7 @@
       v-model="active"
       :class="tabFixed ? 'isFixed' : ''"
     >
-      <van-tab v-for="item in tabs" :title="item" :key="item" />
+      <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
     </van-tabs>
 
     <!-- 课程目录 -->
@@ -31,7 +31,7 @@
           <div class="assistant-show__text" @click="showAssistant">
             <i class="iconfont icon-weixin1"></i>
             <span class="text">
-              为了更好的学习，点击此处添加助教微信
+              {{ $t('courseLearning.addTeachingAssistantWeChat') }}
             </span>
             <van-icon class="arrow-icon" name="arrow" />
           </div>
@@ -47,22 +47,22 @@
             <img
               class="avatar"
               :src="details.assistant.avatar.middle"
-              alt="助教图片"
+              :alt="$t('courseLearning.picture')"
             />
             <p class="name">
               {{ details.assistant.nickname }}
             </p>
-            <p class="text">请务必添加助教老师微信，否则无法上课哦~</p>
+            <p class="text">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
             <img
               class="wechat"
               :src="details.assistant.weChatQrCode"
-              alt="二维码图片"
+              :alt="$t('courseLearning.qRCodePicture')"
             />
             <div class="tips" v-if="isWeixin">
-              长按图片识别二维码
+              {{ $t('courseLearning.longPressThePicture') }}
             </div>
             <div class="tips" v-else>
-              长按图片保存二维码，前往微信添加
+              {{ $t('courseLearning.longPressThePicture2') }}
             </div>
           </van-popup>
         </div>
@@ -76,7 +76,7 @@
 
         <div class="segmentation" />
         <!-- 课程介绍 -->
-        <e-panel title="课程介绍">
+        <e-panel :title="$t('courseLearning.intro')">
           <div v-html="summary" />
         </e-panel>
         <div class="segmentation" />
@@ -112,7 +112,7 @@
       @click.native="gotoGoodsPage"
       v-if="active == 0 && this.details.goodsId"
     >
-      去商品页
+      {{ $t('courseLearning.viewDetails') }}
     </e-footer>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
@@ -145,7 +145,7 @@ export default {
       headBottom: 0,
       active: 1,
       scrollFlag: false,
-      tabs: ['课程介绍', '课程目录'],
+      tabs: ['courseLearning.intro', 'courseLearning.catalogue'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度

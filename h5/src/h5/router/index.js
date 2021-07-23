@@ -201,7 +201,8 @@ const routes = [
     path: '/course/:id',
     name: 'course',
     meta: {
-      title: '课程详情',
+      i18n: true,
+      title: 'courseLearning.title',
     },
     component: () =>
       import(/* webpackChunkName: "course" */ '@/containers/course/index.vue'),

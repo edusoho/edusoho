@@ -85,7 +85,7 @@ export default {
           }
           if (res.url) {
             if (res.url.indexOf('/error/') > -1) {
-              Toast('暂无回放');
+              Toast(this.$t('courseLearning.noReplay'));
             } else {
               this.reprtData({ eventName: 'finish' });
               const index = res.url.indexOf('/');
