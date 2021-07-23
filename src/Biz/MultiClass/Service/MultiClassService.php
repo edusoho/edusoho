@@ -14,6 +14,8 @@ interface MultiClassService
 
     public function findMultiClassesByCreator($creator);
 
+    public function findMultiClassesByReplayShow($isReplayShow);
+
     public function getMultiClass($id);
 
     public function createMultiClass($fields);
