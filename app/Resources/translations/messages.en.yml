@@ -2845,6 +2845,9 @@ user.settings.password_reset.success_tips: 'Reset password succeed'
 user.settings.password_reset.login_btn: 'Login now'
 user.settings.password_reset.reset_btn: 'Reset Password'
 user.settings.password_reset.find_password_btn: 'Find password'
+user.settings.password_level.low: 5-20 digits in English, numerals, symbols, case sensitive
+user.settings.password_level.middle: 8-20 digits in English, numerals, symbols, including at least two types, case sensitive
+user.settings.password_level.high: 8-32 bits of English, numbers, symbols, including English uppercase, lowercase, numbers and symbols
 user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
