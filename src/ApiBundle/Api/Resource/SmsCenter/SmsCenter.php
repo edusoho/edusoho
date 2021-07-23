@@ -13,6 +13,7 @@ class SmsCenter extends AbstractResource
 {
     private $smsType = array(
         'register' => BizSms::SMS_BIND_TYPE,
+        'smsBind' => BizSms::SMS_BIND_TYPE,
     );
 
     /**
@@ -21,26 +22,40 @@ class SmsCenter extends AbstractResource
     public function add(ApiRequest $request)
     {
         $type = $request->request->get('type');
-        if ('register' == $type) {
-            $auth = $this->getSettingService()->get('auth', array());
-            if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
-                throw SettingException::FORBIDDEN_MOBILE_REGISTER();
-            }
-        }
 
-        if (!($type = $request->request->get('type'))
-            || !($mobile = $request->request->get('mobile'))) {
+        if (!$type || !($mobile = $request->request->get('mobile'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $type = $this->convertType($type);
+        $smsType = $this->convertType($type);
+
+        return $this->$type($request, $smsType, $mobile);
+    }
+
+    protected function register($request, $type, $mobile)
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+            throw SettingException::FORBIDDEN_MOBILE_REGISTER();
+        }
 
         $smsToken = $this->getBizSms()->send($type, $mobile);
         $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getHttpRequest()->getClientIp());
 
-        return array(
+        return [
             'smsToken' => $smsToken['token'],
-        );
+        ];
+    }
+
+    protected function smsBind($request, $type, $mobile)
+    {
+        $result = $this->getBizSms()->send($type, $mobile);
+
+        $this->getUserService()->getSmsCommonCaptchaStatus($request->getHttpRequest()->getClientIp(), true);
+
+        return [
+            'smsToken' => $result['token'],
+        ];
     }
 
     private function convertType($type)
