@@ -46,7 +46,7 @@ class KernelControllerListener
                 return;
             }
 
-            $url = $this->generateUrl('settings_bind_mobile');
+            $url = $this->generateUrl('settings_mobile_bind');
             $event->setController(function() use ($url) {
                 return new RedirectResponse($url);
             });
@@ -72,7 +72,7 @@ class KernelControllerListener
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile',
-            '/edu_cloud/sms_send_check_captcha',
+            '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind',
         ];
     }
 

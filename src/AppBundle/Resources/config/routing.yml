@@ -1336,6 +1336,10 @@ settings_bind_mobile:
     path:  /settings/bind_mobile
     defaults: { _controller: AppBundle:Settings:bindMobile }
 
+settings_mobile_bind:
+  path:  /settings/mobile_bind
+  defaults: { _controller: AppBundle:Settings:mobileBind }
+
 settings_check_login_password:
     path:  /settings/check_login_password
     defaults: { _controller: AppBundle:Settings:passwordCheck }
