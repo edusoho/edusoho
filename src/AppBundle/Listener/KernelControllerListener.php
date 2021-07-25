@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Listener;
-
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,7 +22,7 @@ class KernelControllerListener
 
     public function onKernelController(FilterControllerEvent $event)
     {
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
 
@@ -41,13 +39,13 @@ class KernelControllerListener
                 || strstr($request->getPathInfo(), '/api')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
-                || ($login_bind['mobile_bind_mode'] === 'option' && (isset($_COOKIE['is_skip_mobile_bind']) && $_COOKIE['is_skip_mobile_bind'] == 1))
+                || ('option' === $login_bind['mobile_bind_mode'] && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
             ) {
                 return;
             }
 
-            $url = $this->generateUrl('settings_bind_mobile');
-            $event->setController(function() use ($url) {
+            $url = $this->generateUrl('settings_mobile_bind');
+            $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
 
@@ -72,11 +70,11 @@ class KernelControllerListener
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile',
-            '/edu_cloud/sms_send_check_captcha',
+            '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind',
         ];
     }
 
-    protected function generateUrl($router, $params = array(), $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($router, $params = [], $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($router, $params, $withHost);
     }

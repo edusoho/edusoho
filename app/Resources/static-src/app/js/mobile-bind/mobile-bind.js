@@ -28,11 +28,9 @@ export default class MobileBind {
   initCheckCookie() {
     $('.js-skip-bind').click(function (){
       let key = 'is_skip_mobile_bind';
-
-      if (!Cookies.get(key)) {
+      if (!Cookies.get(key) || Cookies.get(key) == 0) {
         Cookies.set(key, 1);
       }
-
       window.location.href = $('#submit-btn').data('targetUrl');
     })
   }
