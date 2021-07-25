@@ -670,7 +670,6 @@ class SettingsController extends BaseController
             'setMobileResult' => $setMobileResult,
             'verifiedMobile' => $verifiedMobile,
         ]);
-
     }
 
     public function mobileBindAction(Request $request)
