@@ -227,7 +227,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
 
             if (!$avaliable) {
-                return array('error_duplicate', '名称已存在!');
+                return array('error_duplicate', '名称已被占用，请更换其他用户名');
             }
         }
 
@@ -270,7 +270,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
 
         if (!$avaliable) {
-            return array('error_duplicate', '手机号码已存在!');
+            return array('error_duplicate', '手机号已被绑定，请更换其他手机号');
         }
 
         return array('success', '');
@@ -352,6 +352,9 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
+        if ($auth && $auth['register_enabled'] === 'closed'){
+            return false;
+        }
         if ($auth && array_key_exists('register_mode', $auth)) {
             return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
         }

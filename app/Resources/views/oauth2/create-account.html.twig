@@ -60,6 +60,45 @@
         </div>
       {% endif %}
 
+      {% if oauthUser.accountType == "email" %}
+        <div class="form-group cd-form-group">
+          <label class="control-label" for="originalMobileAccount">{{'user.oauth.register_account.binding_account_by_mobile'|trans }}
+            {% if setting('login_bind.mobile_bind_mode') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
+          </label>
+          <div class="controls">
+            <input type="text" name="originalMobileAccount" id="originalMobileAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'mobile'})}}">
+          </div>
+        </div>
+
+        <div class="form-group cd-form-group third-party-sms-form-group">
+          <label for="accountSmsCode">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
+          <input class="form-control" type="text" maxlength="6" id="accountSmsCode" name="accountSmsCode" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
+          <div class="third-part-action-button">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
+              <span class="js-time-left"></span>
+              <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
+            </button>
+          </div>
+        </div>
+      {% else %}
+        <div class="form-group cd-form-group">
+          <label class="control-label" for="originalEmailAccount">
+            {{'user.oauth.register_account.binding_account_by_email'|trans}}
+            {% if setting('login_bind.mobile_bind_mode') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
+          </label>
+          <div class="controls">
+            <input type="text" name="originalEmailAccount" id="originalEmailAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'email'})}}">
+          </div>
+        </div>
+
+        <div class="form-group cd-form-group">
+          <label class="control-label" for="originalAccountPassword">{{ 'user.oauth.login_by_email'|trans }}{{ 'user.register.password_label'|trans }}</label>
+          <div class="controls">
+            <input type="text" name="originalAccountPassword" id="originalAccountPassword" class="form-control input-lg" data-url="{{path('invitecode_check')}}">
+          </div>
+        </div>
+      {% endif %}
+
       {% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser|default() %}
         <div class="form-group cd-form-group">
           <label class="control-label" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>

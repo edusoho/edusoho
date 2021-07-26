@@ -485,7 +485,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
-        if (isset($auth['register_mode']) && 'closed' == $auth['register_mode']) {
+        if (isset($auth['register_enabled']) && 'closed' == $auth['register_enabled']) {
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
         }
 

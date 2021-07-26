@@ -672,6 +672,36 @@ class SettingsController extends BaseController
         ]);
     }
 
+    public function mobileBindAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $scenario = 'sms_bind';
+
+        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' != $this->setting("cloud_sms.{$scenario}")) {
+            return $this->render('settings/edu-cloud-error.html.twig', []);
+        }
+
+        if ($this->isSocialLogin($user)) {
+            return $this->redirect($this->generateUrl('settings_setup_password', ['targetPath' => 'settings_bind_mobile']));
+        }
+
+        if ('POST' === $request->getMethod()) {
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+
+            if ($result) {
+                $verifiedMobile = $sessionField['to'];
+                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
+
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.success']);
+            } else {
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
+            }
+        }
+
+        return $this->render('settings/mobile-bind.html.twig');
+    }
+
     /**
      * if user login in  socail way such as QQ, user has no pasword
      *
