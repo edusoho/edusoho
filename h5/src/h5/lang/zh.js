@@ -516,6 +516,8 @@ export default {
     paid: '已付款',
     refunded: '已退款',
     successfulTrade: '交易成功',
-    transactionClosure: '交易关闭'
+    transactionClosure: '交易关闭',
+    vipJoinForfree: '会员免费加入',
+    totalOfTwoCourses: '共 {number} 门课程'
   }
 };

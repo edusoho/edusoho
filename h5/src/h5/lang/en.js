@@ -516,6 +516,8 @@ export default {
     paid: 'Paid',
     refunded: 'Refunded',
     successfulTrade: 'Successful trade',
-    transactionClosure: 'Transaction closure'
+    transactionClosure: 'Transaction closure',
+    vipJoinForfree: 'Vip join for free',
+    totalOfTwoCourses: 'Total of {number} courses'
   }
 };
