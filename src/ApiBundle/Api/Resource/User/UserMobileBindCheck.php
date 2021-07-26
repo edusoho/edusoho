@@ -21,7 +21,7 @@ class UserMobileBindCheck extends AbstractResource
 
         return [
             'is_bind_mobile' => empty($user['verifiedMobile']) ? false : true,
-            'mobile_bind_mode' => $this->getSettingService()->node('auth.mobile_bind_mode', 'constraint')
+            'mobile_bind_mode' => $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint')
         ];
     }
 

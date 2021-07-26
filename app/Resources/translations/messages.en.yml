@@ -2615,6 +2615,8 @@ user.oauth.bind_existed_account: 'bind existing account?'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
 user.oauth.register.password__placeholder: '5-20 words, number or symbol'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
+user.oauth.register_account.binding_account_by_email: Associated with the existing email account
+user.oauth.register_account.binding_account_by_mobile: 绑定手机号
 user.oauth.register.confirm_password_label: 'Confirm password'
 user.oauth.register.confirm_password_placeholder: 'input password again'
 user.oauth.register.input_sms_code_tips: 'input sms verify code'
