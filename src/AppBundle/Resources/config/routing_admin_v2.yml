@@ -2984,6 +2984,10 @@ admin_v2_user_content_control_review:
     path: /setting/ugc/user_content_control/review
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:review }
 
+admin_v2_course_purchase_agreement_eduit:
+    path: /setting/course-setting/purchase-agreement/eduit
+    defaults: { _controller: AppBundle:AdminV2/System/CourseSetting:coursePurchaseAgreement }
+
 admin_v2_user_content_control_note:
     path: /setting/ugc/user_content_control/note
     defaults: { _controller: AppBundle:AdminV2/System/UserContentCtrl:note }

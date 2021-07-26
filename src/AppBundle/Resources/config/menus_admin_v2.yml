@@ -1378,6 +1378,15 @@ admin_v2:
                                     name: admin_v2.system.user_content_ctrl.private_message
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
+                        admin_v2_course_purchase_agreement:
+                          router_name: admin_v2_course_purchase_agreement
+                          name: admin_v2.system.course_purchase_agreement_tab
+                          disable: true
+                          children:
+                            admin_v2_course_purchase_agreement_eduit:
+                              name: admin_v2_system.course_purchase_agreement.eduit
+                              router_name: admin_v2_course_purchase_agreement_eduit
+                              disable: true
                         # 用户内容审核设置
                         admin_v2_user_content_audit_control:
                             name: admin_v2.system.user_content_audit_menu

@@ -11987,4 +11987,8 @@ course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微�
 
 feedback_title: 谛听，直连EduSoho产品经理
 
+#课程购买协议设置
+admin_v2.course_purchase_agreement.title: 名称
+admin_v2.course_purchase_agreement.content: 内容
+admin_v2.course_purchase_agreement.default_title: 用户购买协议
 admin_v2.course_purchase_agreement.not_set_tips: 网校还未设置《用户购买协议》
