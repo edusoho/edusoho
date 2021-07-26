@@ -1,0 +1,37 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_course_purchase_agreement_eduit' %}
+
+{% block main %}
+  
+  <form class="form-horizontal" method="post">
+    <fieldset>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="purchaseAgreementContent" class="control-label-required">{{ 'admin_v2.course_purchase_agreement.title'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input required="required" type="text" id="purchaseAgreementTitle" name="purchaseAgreementTitle" class="form-control" value="{{ purchaseAgreement.title|default('admin_v2.course_purchase_agreement.default_title'|trans) }}" placeholder="{{ 'admin_v2.course_purchase_agreement.default_title'|trans }}">
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label class="control-label-required">{{'admin_v2.course_purchase_agreement.content'|trans}}</label>
+        </div>
+        <div class="controls col-md-9">
+          <textarea required="required" id="purchaseAgreementContent" name="purchaseAgreementContent" rows="30" class="form-control ">{% if purchaseAgreement  %}{{purchaseAgreement.content}}{% endif %}</textarea>
+        </div>
+
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-9" style="margin-top: 2%">
+          <button type="submit" class="btn btn-primary center-block">{{'form.btn.submit'|trans}}</button>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+{% endblock %}

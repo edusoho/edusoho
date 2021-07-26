@@ -3788,3 +3788,7 @@ feedback:
 agreement:
   path:  /agreement/course/purchase
   defaults: { _controller: AppBundle:Agreement:coursePurchaseAgreement }
+
+disclaimers:
+  path:  /disclaimers
+  defaults: { _controller: AppBundle:Agreement:disclaimers }
