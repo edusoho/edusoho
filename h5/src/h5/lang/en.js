@@ -302,6 +302,9 @@ export default {
     allQuestionBank: 'All question bank',
     noCourses: 'No courses',
     noClass: 'No class',
+    all: 'All',
+    course: 'Course',
+    live: 'Live'
   },
   goods: {
     title: 'Details',

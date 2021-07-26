@@ -302,6 +302,9 @@ export default {
     allQuestionBank: '所有题库',
     noCourses: '暂无课程',
     noClass: '暂无班级',
+    all: '全部',
+    course: '课程',
+    live: '直播'
   },
   goods: {
     title: '商品详情',
