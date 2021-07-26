@@ -519,5 +519,20 @@ export default {
     transactionClosure: 'Transaction closure',
     vipJoinForfree: 'Vip join for free',
     totalOfTwoCourses: 'Total of {number} courses'
+  },
+  order: {
+    coupon: 'Coupon',
+    noCoupons: 'No coupons',
+    use: 'Use',
+    couponCode: 'Please enter the coupon code',
+    doNotUseDiscount: 'Do not use discount',
+    validity: 'Validity',
+    paymentWay: 'Payment way',
+    pay: 'Pay',
+    pay2: 'Pay',
+    discounted: 'Discounted',
+    noCouponsAvailable: 'No coupons available',
+    available: 'available',
+    longTermEffective: 'Long-term effective'
   }
 };

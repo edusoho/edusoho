@@ -519,5 +519,20 @@ export default {
     transactionClosure: '交易关闭',
     vipJoinForfree: '会员免费加入',
     totalOfTwoCourses: '共 {number} 门课程'
+  },
+  order: {
+    coupon: '优惠券',
+    noCoupons: '暂无优惠券',
+    use: '使用',
+    couponCode: '请输入优惠码',
+    doNotUseDiscount: '不使用优惠',
+    validity: '学习有效期',
+    paymentWay: '支付方式',
+    pay: '实付',
+    pay2: '去支付',
+    discounted: '已优惠',
+    noCouponsAvailable: '无可用优惠券',
+    available: '张可用',
+    longTermEffective: '长期有效'
   }
 };
