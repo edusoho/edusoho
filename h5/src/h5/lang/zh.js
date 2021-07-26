@@ -450,7 +450,16 @@ export default {
     unanswered: '未作答',
     viewParsed: '查看解析',
     takeTheTestAgain: '再考一次',
-    takeTheTestAgainAfter: '在 {time} 后可以再考一次'
+    takeTheTestAgainAfter: '在 {time} 后可以再考一次',
+    questionCard: '题卡',
+    wrongQuestion: '错题',
+    answerResult: '做题结果',
+    yourAnswer: '你的答案',
+    correctAnswer: '正确答案',
+    parsing: '做题解析',
+    noParsing: '无解析',
+    correctAnswer2: '回答正确',
+    wrongAnswer: '回答错误',
   },
   filters: {
     free: '免费',

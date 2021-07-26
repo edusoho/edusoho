@@ -450,7 +450,16 @@ export default {
     unanswered: 'Unanswered',
     viewParsed: 'View parsed',
     takeTheTestAgain: 'Take the test again',
-    takeTheTestAgainAfter: 'You can take the test again after {time}'
+    takeTheTestAgainAfter: 'You can take the test again after {time}',
+    questionCard: 'Question card',
+    wrongQuestion: 'Wrong question',
+    answerResult: 'Answer result',
+    yourAnswer: 'Your answer',
+    correctAnswer: 'Correct answer',
+    parsing: 'Parsing',
+    noParsing: 'No parsing',
+    correctAnswer2: 'Correct answer',
+    wrongAnswer: 'Wrong answer',
   },
   filters: {
     free: 'Free',
