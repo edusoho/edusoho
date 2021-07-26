@@ -29,9 +29,9 @@ class KernelControllerListener
         $request = $event->getRequest();
 
         $currentUser = $this->getBiz()['user'];
-        $login_bind = $this->getSettingService()->get('login_bind');
+        $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
 
-        if ($currentUser->isLogin() && 'closed' !== $login_bind['mobile_bind_mode'] && empty($currentUser['verifiedMobile'])) {
+        if ($currentUser->isLogin() && 'closed' !== $mobileBindMode && empty($currentUser['verifiedMobile'])) {
             $whiteList = $this->getRouteWhiteList();
 
             if (in_array($request->getPathInfo(), $whiteList)
@@ -39,7 +39,7 @@ class KernelControllerListener
                 || strstr($request->getPathInfo(), '/api')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
-                || ('option' === $login_bind['mobile_bind_mode'] && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
+                || ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
             ) {
                 return;
             }
