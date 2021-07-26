@@ -30,7 +30,9 @@
         <div class="controls col-md-8">
           <div class="btn-group">
             <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'admin.user_auth.email'|trans}}</button>
-            <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'admin.user_auth.phone'|trans}}</button>
+            <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'admin.user_auth.phone'|trans}}
+            <span class="register-recommend-tag">荐</span>
+            </button>
             <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">{{'admin.user_auth.email_or_mobile'|trans}}</button>
           </div>
           <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
