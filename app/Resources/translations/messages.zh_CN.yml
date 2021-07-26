@@ -12004,3 +12004,5 @@ course.assistant.student_add_qrcode: 为了保证学习质量
 course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
 
 feedback_title: 谛听，直连EduSoho产品经理
+
+admin_v2.course_purchase_agreement.not_set_tips: 网校还未设置《用户购买协议》
