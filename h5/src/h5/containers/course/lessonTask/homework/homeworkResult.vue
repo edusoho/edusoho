@@ -9,7 +9,7 @@
     <e-loading v-if="isLoading" />
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
-        正确率
+        {{ $t('courseLearning.correctRate') }}
         <div
           v-if="isReadOver"
           class="result-data__bottom data-number-green data-medium"
@@ -17,13 +17,13 @@
           <span class="data-number">{{ result.rightRate }}</span
           >%
         </div>
-        <div v-else class="result-data__bottom data-text-blue">待批阅</div>
+        <div v-else class="result-data__bottom data-text-blue">{{ $t('courseLearning.toBeReviewed') }}</div>
       </div>
       <div class="result-data__item">
-        做题用时
+        {{ $t('courseLearning.timeSpentOnTheQuestion') }}
         <div class="result-data__bottom data-number-gray data-medium">
           <span class=" data-number">{{ usedTime }}</span
-          >分钟
+          >{{ $t('courseLearning.minutes') }}
         </div>
       </div>
     </div>
@@ -31,19 +31,19 @@
     <div ref="tag" class="result-tag">
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-green" />
-        正确
+        {{ $t('courseLearning.right') }}
       </div>
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-orange" />
-        错误
+        {{ $t('courseLearning.wrong') }}
       </div>
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-gray" />
-        未作答
+        {{ $t('courseLearning.unanswered') }}
       </div>
       <div v-show="!isReadOver" class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-brown" />
-        待批阅
+        {{ $t('courseLearning.toBeReviewed') }}
       </div>
     </div>
 
@@ -69,14 +69,14 @@
           class="result-footer__btn"
           type="primary"
           @click="viewAnalysis"
-          >查看解析
+          >{{ $t('courseLearning.viewParsed') }}
         </van-button>
         <van-button
           v-if="isReadOver"
           class="result-footer__btn"
           type="primary"
           @click="startHomework()"
-          >再做一次
+          >{{ $t('courseLearning.doItAgain') }}
         </van-button>
       </div>
     </div>

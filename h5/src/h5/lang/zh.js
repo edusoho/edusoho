@@ -450,6 +450,7 @@ export default {
     unanswered: '未作答',
     viewParsed: '查看解析',
     takeTheTestAgain: '再考一次',
+    doItAgain: '再做一次',
     takeTheTestAgainAfter: '在 {time} 后可以再考一次',
     questionCard: '题卡',
     wrongQuestion: '错题',
@@ -460,6 +461,14 @@ export default {
     noParsing: '无解析',
     correctAnswer2: '回答正确',
     wrongAnswer: '回答错误',
+    handInThePaper: '交卷',
+    submit2: '提交',
+    completed: '已完成',
+    notCompleted: '未完成',
+    jobName: '作业名称',
+    jobDescription: '作业说明',
+    viewResult2: '查看结果',
+    startAnsweringQuestions: '开始答题'
   },
   filters: {
     free: '免费',

@@ -450,6 +450,7 @@ export default {
     unanswered: 'Unanswered',
     viewParsed: 'View parsed',
     takeTheTestAgain: 'Take the test again',
+    doItAgain: 'Do it again',
     takeTheTestAgainAfter: 'You can take the test again after {time}',
     questionCard: 'Question card',
     wrongQuestion: 'Wrong question',
@@ -460,6 +461,14 @@ export default {
     noParsing: 'No parsing',
     correctAnswer2: 'Correct answer',
     wrongAnswer: 'Wrong answer',
+    handInThePaper: 'Hand in the paper',
+    submit2: 'Submit',
+    completed: 'Completed',
+    notCompleted: 'Not completed',
+    jobName: 'Job name',
+    jobDescription: 'Job description',
+    viewResult2: 'View result',
+    startAnsweringQuestions: 'Start answering questions'
   },
   filters: {
     free: 'Free',
