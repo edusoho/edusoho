@@ -63,7 +63,7 @@
       {% if oauthUser.accountType == "email" %}
         <div class="form-group cd-form-group">
           <label class="control-label" for="originalMobileAccount">{{'user.oauth.register_account.binding_account_by_mobile'|trans }}
-            {% if setting('login_bind.mobile_bind_mode') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
+            {% if setting('login_bind.mobile_bind_mode', 'constraint') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
           </label>
           <div class="controls">
             <input type="text" name="originalMobileAccount" id="originalMobileAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'mobile'})}}">
@@ -84,7 +84,7 @@
         <div class="form-group cd-form-group">
           <label class="control-label" for="originalEmailAccount">
             {{'user.oauth.register_account.binding_account_by_email'|trans}}
-            {% if setting('login_bind.mobile_bind_mode') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
+            {% if setting('login_bind.mobile_bind_mode', 'constraint') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
           </label>
           <div class="controls">
             <input type="text" name="originalEmailAccount" id="originalEmailAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'email'})}}">
