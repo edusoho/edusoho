@@ -8,10 +8,20 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 
+/**
+ * Class CourseReview
+ *
+ * @OA\Info(title="课程评价", version="0.1")
+ */
 class CourseReview extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
+     *
+     * @OA\Get(
+     *     path="/course/{courseId}/reviews",
+     *     @OA\Response(response="200", description="获取课程的评价")
+     * )
      */
     public function search(ApiRequest $request, $courseId)
     {
