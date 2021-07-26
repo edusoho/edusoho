@@ -386,5 +386,20 @@ export default {
     learningCompletion: 'Learning completion',
     congratulationsOnCompletion: 'Congratulations on completion',
     nextLesson: 'Next lesson'
+  },
+  filters: {
+    free: 'Free',
+    stayTuned: 'Stay tuned',
+    doesNotSupportThisType: 'Does not support this type',
+    over: 'Over',
+    replay: 'Replay',
+    live: 'Live',
+    notCurrentlySupported: 'Not currently supported',
+    start: 'Start',
+    toPay: 'To pay',
+    paid: 'Paid',
+    refunded: 'Refunded',
+    successfulTrade: 'Successful trade',
+    transactionClosure: 'Transaction closure'
   }
 };

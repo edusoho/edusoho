@@ -386,5 +386,20 @@ export default {
     learningCompletion: '学习完成',
     congratulationsOnCompletion: '恭喜完成',
     nextLesson: '下一课'
+  },
+  filters: {
+    free: '免费',
+    stayTuned: '敬请期待',
+    doesNotSupportThisType: '暂不支持此类型',
+    over: '已结束',
+    replay: '回放',
+    live: '直播中',
+    notCurrentlySupported: '暂不支持',
+    start: '开始',
+    toPay: '去支付',
+    paid: '已付款',
+    refunded: '已退款',
+    successfulTrade: '交易成功',
+    transactionClosure: '交易关闭'
   }
 };
