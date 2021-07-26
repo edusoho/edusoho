@@ -439,7 +439,18 @@ export default {
     choice: "多选题",
     determine: "判断题",
     essay: '问答题',
-    material: '材料题'
+    material: '材料题',
+    thisScore: '本次得分',
+    toBeReviewed: '待批阅',
+    correctRate: '正确率',
+    branch: '分',
+    timeSpentOnTheQuestion: '做题用时',
+    right: '正确',
+    wrong: '错误',
+    unanswered: '未作答',
+    viewParsed: '查看解析',
+    takeTheTestAgain: '再考一次',
+    takeTheTestAgainAfter: '在 {time} 后可以再考一次'
   },
   filters: {
     free: '免费',

@@ -439,7 +439,18 @@ export default {
     choice: "Multiple choice",
     determine: "True or false",
     essay: 'Essay',
-    material: 'Material'
+    material: 'Material',
+    thisScore: 'This score',
+    toBeReviewed: 'To be reviewed',
+    correctRate: 'Correct rate',
+    branch: 'Branch',
+    timeSpentOnTheQuestion: 'Time spent on the question',
+    right: 'Right',
+    wrong: 'Wrong',
+    unanswered: 'Unanswered',
+    viewParsed: 'View parsed',
+    takeTheTestAgain: 'Take the test again',
+    takeTheTestAgainAfter: 'You can take the test again after {time}'
   },
   filters: {
     free: 'Free',
