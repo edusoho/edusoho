@@ -16,7 +16,7 @@ class AgreementController extends BaseController
         ]);
     }
 
-    public function DisclaimersAction()
+    public function disclaimersAction()
     {
         return $this->render('agreement/disclaimers.html.twig');
     }
