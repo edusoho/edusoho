@@ -468,7 +468,15 @@ export default {
     jobName: '作业名称',
     jobDescription: '作业说明',
     viewResult2: '查看结果',
-    startAnsweringQuestions: '开始答题'
+    startAnsweringQuestions: '开始答题',
+    subjectiveQuestion: '主观题',
+    accuracyOfObjectiveQuestions: '客观题正确率',
+    exerciseName: '练习名称',
+    sureSubmit: '题目已经做完，确认提交吗？',
+    notSureSubmit: '还有 {number} 题未做，确认提交吗？',
+    submitNow: '立即提交',
+    check: '检查一下',
+    confirmSubmission: '确认交卷'
   },
   filters: {
     free: '免费',

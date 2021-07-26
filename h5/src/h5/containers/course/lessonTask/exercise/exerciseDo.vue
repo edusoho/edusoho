@@ -321,7 +321,7 @@ export default {
     // 提交练习
     submitpaper() {
       let index = 0;
-      let message = '题目已经做完，确认提交吗?';
+      let message = this.$t('courseLearning.sureSubmit');
       const answer = JSON.parse(JSON.stringify(this.answer));
       Object.keys(answer).forEach(key => {
         // 去除空数据
@@ -333,13 +333,13 @@ export default {
       });
 
       if (index > 0) {
-        message = `还有${index}题未做，确认提交吗？`;
+        message = this.$t('courseLearning.notSureSubmit', { number: index });
       }
       // return new Promise((resolve,reject)=>{
       Dialog.confirm({
-        title: '提交',
-        cancelButtonText: '立即提交',
-        confirmButtonText: '检查一下',
+        title: this.$t('courseLearning.submit2'),
+        cancelButtonText: this.$t('courseLearning.submitNow'),
+        confirmButtonText: this.$t('courseLearning.check'),
         message: message,
       })
         .then(() => {

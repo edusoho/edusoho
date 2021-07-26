@@ -428,7 +428,7 @@ export default {
     fullMark: 'Full score  {number}',
     numberOfTopics: 'Number of topics',
     fullScoreOfTestPaper: 'Full score of test paper',
-    topic: 'Topic',
+    topic: 'topic',
     total: 'Total',
     viewResult: 'View result',
     startTheExam: 'Start the exam',
@@ -468,7 +468,15 @@ export default {
     jobName: 'Job name',
     jobDescription: 'Job description',
     viewResult2: 'View result',
-    startAnsweringQuestions: 'Start answering questions'
+    startAnsweringQuestions: 'Start answering questions',
+    subjectiveQuestion: 'Subjective question',
+    accuracyOfObjectiveQuestions: 'Accuracy of objective questions',
+    exerciseName: 'Exercise name',
+    sureSubmit: 'The title has been completed. Are you sure to submit it?',
+    notSureSubmit: 'There is still {number} question not done. Are you sure to submit it?',
+    submitNow: 'Submit now',
+    check: 'Check',
+    confirmSubmission: 'Confirm submission'
   },
   filters: {
     free: 'Free',
