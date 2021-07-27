@@ -35,12 +35,12 @@
                 <span
                   v-if="isTry(lessonItem.tasks[lessonItem.index])"
                   class="tryLes"
-                  >试看</span
+                  >{{ $t('goods.preview') }}</span
                 >
                 <span
                   v-if="isFree(lessonItem.tasks[lessonItem.index])"
                   class="freeAdmission"
-                  >免费</span
+                  >{{ $t('goods.free') }}</span
                 >
                 <i
                   :class="iconfont(lessonItem.tasks[lessonItem.index])"
@@ -49,7 +49,7 @@
                 {{
                   Number(lessonItem.tasks[lessonItem.index].isOptional)
                     ? ''
-                    : '课时'
+                    : $t('goods.lesson')
                 }}{{
                   Number(lessonItem.tasks[lessonItem.index].isOptional)
                     ? lessonItem.title
@@ -76,12 +76,12 @@
                   <span
                     v-if="isTry(lessonItem.tasks[lessonItem.index])"
                     class="tryLes"
-                    >试看</span
+                    >{{ $t('goods.preview') }}</span
                   >
                   <span
                     v-if="isFree(lessonItem.tasks[lessonItem.index])"
                     class="freeAdmission"
-                    >免费</span
+                    >{{ $t('goods.free') }}</span
                   >
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
@@ -90,7 +90,7 @@
                   {{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
                       ? ''
-                      : '课时'
+                      : $t('goods.lesson')
                   }}{{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
                       ? lessonItem.title
@@ -118,7 +118,7 @@
             class="elective-tag"
             v-if="Number(lessonItem.tasks[lessonItem.index].isOptional)"
           >
-            选修
+            {{ $t('goods.optional') }}
           </span>
           <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
             lessonItem.tasks[lessonItem.index] | filterTaskTime
@@ -143,10 +143,10 @@
               :class="{ lessonactive: currentTask == Number(taskItem.id) }"
               class="litem-r text-overflow"
             >
-              <span v-if="isTry(taskItem)" class="tryLes">试看</span>
-              <span v-if="isFree(taskItem)" class="freeAdmission">免费</span>
+              <span v-if="isTry(taskItem)" class="tryLes">{{ $t('goods.preview') }}</span>
+              <span v-if="isFree(taskItem)" class="freeAdmission">{{ $t('goods.free') }}</span>
               <i :class="iconfont(taskItem)" class="iconfont" />
-              {{ Number(taskItem.isOptional) ? '' : '课时'
+              {{ Number(taskItem.isOptional) ? '' : $t('goods.lesson')
               }}{{
                 Number(taskItem.isOptional)
                   ? taskItem.title
@@ -165,7 +165,7 @@
     </div>
     <div v-if="isNoData" class="noneItem">
       <img src="static/images/none.png" class="notask" />
-      <p>暂时还没有课时哦...</p>
+      <p>{{ $t('goods.thereIsNoClassYet') }}</p>
     </div>
   </div>
 </template>
@@ -338,21 +338,21 @@ export default {
             });
             break;
           default:
-            return Toast(`请先加入课程`);
+            return Toast(this.$t('goods.pleaseJoinTheCourses'));
         }
       } else {
-        this.joinStatus ? this.showTypeDetail(task) : Toast(`请先加入课程`);
+        this.joinStatus ? this.showTypeDetail(task) : Toast(this.$t('goods.pleaseJoinTheCourses'));
       }
       // join after click
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
-        Toast('敬请期待');
+        Toast(this.$t('goods.stayTuned'));
         return;
       }
 
       if (task.lock) {
-        Toast('需要解锁上一个任务');
+        Toast(this.$t('goods.needToUnlockThePreviousTask'));
         return;
       }
       switch (task.type) {
@@ -363,7 +363,7 @@ export default {
               taskId: task.id,
             });
           } else {
-            Toast('暂不支持此类型');
+            Toast(this.$t('goods.doesNotSupportThisType'));
           }
           break;
         case 'audio':
@@ -397,11 +397,11 @@ export default {
                   taskId: task.id,
                 });
               } else {
-                Toast('暂不支持此类型');
+                Toast(this.$t('goods.doesNotSupportThisType'));
               }
               return;
             } else if (task.activity.replayStatus === 'ungenerated') {
-              Toast('暂无回放');
+              Toast(this.$t('goods.noReplay'));
               return;
             } else {
               replay = true;
@@ -450,7 +450,7 @@ export default {
           });
           break;
         default:
-          Toast('暂不支持此类型');
+          Toast(this.$t('goods.doesNotSupportThisType'));
       }
     },
     // 任务图标(缺少下载)

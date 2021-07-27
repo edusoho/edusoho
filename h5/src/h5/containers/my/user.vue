@@ -36,29 +36,29 @@
                 <span class="pull-left">
                   <p>{{ user.vip.vipName }}</p>
                   <p style="font-size: 12px; margin-top: 2px;">
-                    会员到期时间：
+                    {{ $t('vip.memberExpirationTime') }}：
                     {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
                   </p>
                 </span>
                 <span class="pull-right" style="margin-top: 10px;">
-                  续费/升级
+                  {{ $t('vip.renewalUpgrade') }}
                   <van-icon name="arrow" />
                 </span>
               </template>
               <template v-else>
-                <span>您的会员已过期</span>
+                <span>{{ $t('vip.yourMembershipHasExpired') }}</span>
                 <span class="pull-right">
-                  立即续费
+                  {{ $t('vip.immediatelyRenewals') }}
                   <van-icon name="arrow" />
                 </span>
               </template>
             </router-link>
           </div>
           <div v-else class="user-vip user-vip-open">
-            <router-link to="/vip" class="clearfix">
-              <span>您还不是会员，开通会员享特权</span>
-              <span class="pull-right">
-                去开通
+            <router-link to="/vip" style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="max-width: 72%;">{{ $t('vip.youAreNotAVipYet') }}</span>
+              <span>
+                {{ $t('vip.joinNow') }}
                 <van-icon name="arrow" />
               </span>
             </router-link>

@@ -13,14 +13,14 @@
         </div>
         <div class="list-item__detail">
           <h3 class="title text-overflow">{{ exercise.module }}</h3>
-          <p class="number text-overflow">{{ exercise.wrong_number }}道题</p>
+          <p class="number text-overflow">{{ exercise.wrong_number }} {{ $t('wrongQuestion.question') }}</p>
         </div>
       </div>
 
       <empty-course
         v-if="!exerciseList.length && !isLoading"
         :has-button="false"
-        text="暂无错题"
+        :text="$t('wrongQuestion.empty')"
       />
     </div>
   </div>

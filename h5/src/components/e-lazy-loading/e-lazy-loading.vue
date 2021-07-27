@@ -1,5 +1,5 @@
 <template>
-  <van-list v-model="loading" :finished="finished" @load="onLoad">
+  <van-list v-model="loading" :finished="finished" :loading-text="$t('toast.loading')" @load="onLoad">
     <template v-if="typeList === 'item_bank_exercise'">
       <courseRow
         v-for="(course, index) in courseList"

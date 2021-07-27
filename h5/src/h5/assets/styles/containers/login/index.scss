@@ -1,147 +1,164 @@
 .prelogin {
-  font-size: vw(12);
-  color: #666;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #666;
+	font-size: vw(12);
 
-  &-img {
-    width: vw(120);
-    margin-top: 21vh;
-  }
-  &-text {
-    color: #B0BDC9;
-    font-size: vw(14);
-    margin-top: 16px;
-  }
-  &-btn {
-    -webkit-text-fill-color: white;
-    margin-top: vw(32);
-    border-radius: vw(47);
-    min-width: vw(156);
-    background: $primary-color;
-  }
+	&-img {
+		width: vw(120);
+		margin-top: 21vh;
+	}
+
+	&-text {
+		margin-top: 16px;
+		color: #b0bdc9;
+		font-size: vw(14);
+	}
+
+	&-btn {
+		min-width: vw(156);
+		margin-top: vw(32);
+		background: $primary-color;
+		border-radius: vw(47);
+		-webkit-text-fill-color: white;
+	}
 }
 
 .login {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: vw(50) vw(15);
-  align-items: center;
-  .van-checkbox{
-    display: inline!important;
-  }
-  .van-checkbox__icon{
-    display: inline-block;
-  }
-  &-title {
-    font-size: vw(20);
-    font-weight:500;
-    -webkit-text-fill-color: #2b333b;
-    font-family: PingFangSC-Regular;
-  }
-  &-des{
-    font-size: vw(14);
-    color: #B4B4B4;
-    line-height: vw(28);
-  }
-  &-hint {
-    font-size: vw(15);
-    -webkit-text-fill-color: #bdc2c6;
-    font-family: PingFangSC-Regular;
-    margin-top: vw(20);
-  }
-  &-input {
-    margin-top: vw(30);
-    left: 0;
-    padding: vw(10) 0;
-   // border-bottom: vw(1) solid #D8D8D8;
-    .van-field__body{
-      padding-bottom: vw(15);
-      border-bottom: 0.26667vw solid #D8D8D8;
-    }
-    &.van-cell:not(:last-child)::after {
-      left: 0;
-    }
-  }
-  &-account {
-    margin-top: vw(15);
-    align-self: flex-end;
-    font-size: vw(13);
-    font-family: PingFangSC-Regular;
-    color: $primary-color;
-  }
-  &-change{
-    display: flex;
-    margin: vw(39) auto;
-    width: vw(140);
-    justify-content: center;
-    align-items: center;
-    font-size: vw(14);
-    color: $primary-color;
-    .login_change-icon{
-      margin-right: vw(7);
-      width: vw(15);
-      height: vw(15);
-    }
-  }
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-sizing: border-box;
+	padding: vw(50) vw(15);
 
-  &-agree{
-    color: #BEBEBE;
-    text-align: center;
-    font-size: vw(14);
-    font-family:PingFangSC-Regular;
-    .van-checkbox__label {
-      color: #BEBEBE;
-    }
-    i{
-      color: $primary-color;
-      font-style: normal;
-    }
-    .agree-text{
-      margin-top:vw(10);
-      color: #323133;
-    }
-  }
-  .van-checkbox {
-    justify-content: center;
-  }
-  &-bottom {
-    width: 100%;
-    a {
-      color: #71777D;
-      font-size: vw(13);
-    }
-  }
+	.van-checkbox {
+		display: inline !important;
+		justify-content: center;
+	}
 
-  &-footer{
-    position: fixed;
-    bottom: vw(56);
-    width: 100%;
-    text-align: center;
-    color: #333333;
-    font-size: vw(14);
-  }
-  
-  .social-login {
-    position: absolute;
-    bottom: vw(50);
-    .social-login-button {
-      img {
-        width: vw(40);
-        height: vw(40);
-      }
-      &:not(:first-child) {
-        margin-left: 20px;
-      }
-      i {
-        font-size: vw(40);
-        position: relative;
-        bottom: vw(4);
-        color: #1ec354;
-      }
-    }
-  }
+	.van-checkbox__icon {
+		display: inline-block;
+	}
+
+	&-title {
+		font-weight: 500;
+		font-size: vw(20);
+		font-family: PingFangSC-Regular;
+		-webkit-text-fill-color: #2b333b;
+	}
+
+	&-des {
+		color: #b4b4b4;
+		font-size: vw(14);
+		line-height: vw(28);
+	}
+
+	&-hint {
+		margin-top: vw(20);
+		font-size: vw(15);
+		font-family: PingFangSC-Regular;
+		-webkit-text-fill-color: #bdc2c6;
+	}
+
+	&-input {
+		left: 0;
+		margin-top: vw(30);
+		padding: vw(10) 0;
+		// border-bottom: vw(1) solid #D8D8D8;
+		.van-field__body {
+			padding-bottom: vw(15);
+			border-bottom: 0.26667vw solid #d8d8d8;
+		}
+
+		&.van-cell:not(:last-child)::after {
+			left: 0;
+		}
+	}
+
+	&-account {
+		align-self: flex-end;
+		margin-top: vw(15);
+		color: $primary-color;
+		font-size: vw(13);
+		font-family: PingFangSC-Regular;
+	}
+
+	&-change {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: vw(39) auto;
+		color: $primary-color;
+		font-size: vw(14);
+
+		.login_change-icon {
+			width: vw(15);
+			height: vw(15);
+			margin-right: vw(7);
+		}
+	}
+
+	&-agree {
+		color: #bebebe;
+		font-size: vw(14);
+		font-family: PingFangSC-Regular;
+		text-align: center;
+
+		.van-checkbox__label {
+			color: #bebebe;
+		}
+
+		i {
+			color: $primary-color;
+			font-style: normal;
+		}
+
+		.agree-text {
+			margin-top: vw(10);
+			color: #323133;
+		}
+	}
+
+	&-bottom {
+		width: 100%;
+
+		a {
+			color: #71777d;
+			font-size: vw(13);
+		}
+	}
+
+	&-footer {
+		position: fixed;
+		bottom: vw(56);
+		width: 100%;
+		color: #333;
+		font-size: vw(14);
+		text-align: center;
+	}
+
+	.social-login {
+		position: absolute;
+		bottom: vw(50);
+
+		.social-login-button {
+			img {
+				width: vw(40);
+				height: vw(40);
+			}
+
+			&:not(:first-child) {
+				margin-left: 20px;
+			}
+
+			i {
+				position: relative;
+				bottom: vw(4);
+				color: #1ec354;
+				font-size: vw(40);
+			}
+		}
+	}
 }

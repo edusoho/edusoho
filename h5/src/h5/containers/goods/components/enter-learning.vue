@@ -10,7 +10,7 @@
           <span class="hot">Hot</span>
         </span>
       </div>
-      <div class="enter-learning-container__add">加入学习</div>
+      <div class="enter-learning-container__add">{{ $t('goods.join') }}</div>
     </div>
   </div>
 </template>

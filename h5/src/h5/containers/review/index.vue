@@ -40,7 +40,7 @@
               <div class="review-post-content pull-left">
                 <div class="review-content__header clearfix">
                   <span class="review-content__header__nickname pull-left">
-                    {{ post.user.nickname }} 回复{{ review.user.nickname }} ：
+                    {{ post.user.nickname }} {{ $t('goods.reply') }}{{ review.user.nickname }} ：
                   </span>
                 </div>
                 <div class="review-content_text">{{ post.content }}</div>
@@ -51,7 +51,7 @@
       </div>
     </div>
     <div v-else-if="searched" class="info-evaluate__item">
-      暂无评价~
+      {{ $t('goods.noContent') }}
     </div>
     <div v-if="reviews.length">
       <div
@@ -67,10 +67,10 @@
           )
         "
       >
-        点击查看更多
+        {{ $t('goods.more') }}
       </div>
       <div v-else class="load-more__footer">
-        没有更多了
+        {{ $t('goods.noMore') }}
       </div>
     </div>
   </div>
@@ -78,6 +78,7 @@
 
 <script>
 import Api from '@/api';
+import i18n from '@/lang'
 
 export default {
   name: 'reviews',
@@ -157,13 +158,13 @@ export default {
       const hour = time.slice(11, 13);
       let str = '';
       if (hour >= 0 && hour < 6) {
-        str = '凌晨';
+        str = i18n.t('goods.beforeDawn');
       } else if (hour >= 6 && hour < 12) {
-        str = '上午';
+        str = i18n.t('goods.am');
       } else if (hour >= 12 && hour < 18) {
-        str = '下午';
+        str = i18n.t('goods.pm');
       } else if (hour >= 18 && hour < 24) {
-        str = '晚上';
+        str = i18n.t('goods.night');
       }
       const reg2 = new RegExp('T', 'g');
       time = time.replace(reg2, ' ' + str);

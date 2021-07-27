@@ -15,7 +15,7 @@
         <span
           v-if="item.deadlineMode === 'day' && !item.currentUserCoupon"
           class="text-10"
-          >领取后{{ item.fixedDay }}天内有效</span
+          >{{ $t('e.validWithinDayAfterReceiving', { number: item.fixedDay }) }}</span
         >
         <!-- 有效期模式且用户已经领取 -->
         <span
@@ -32,16 +32,16 @@
           class="stamp"
         />
         <span class="coupon-button" @click="handleClick(item)">{{
-          item.currentUserCoupon ? '去使用' : '领券'
+          item.currentUserCoupon ? $t('e.toUse') : $t('e.getCoupons')
         }}</span>
       </div>
       <div v-else>
-        <span class="coupon-button">领券</span>
+        <span class="coupon-button">{{ $t('e.getCoupons') }}</span>
       </div>
     </div>
     <div class="e-coupon__middle" />
     <div class="e-coupon__bottom text-overflow">
-      可用范围：{{ scopeFilter(item) }}
+      {{ $t('e.availableRange') }}：{{ scopeFilter(item) }}
     </div>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
       ) {
         return 'coupon-used';
       }
+      return '';
     },
   },
 };
