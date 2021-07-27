@@ -17,23 +17,23 @@
     <div slot="setting">
       <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips"></e-suggest>
       <header class="title">
-        题库列表设置
+        {{ $t('questionBankList.questionBankSettingList') }}
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
-        <setting-cell title="列表名称：" left-class="required-option">
+        <setting-cell :title="$t('questionBankList.listName')" left-class="required-option">
           <el-input
             v-model="copyModuleData.data.title"
             size="mini"
             max-length="15"
-            placeholder="请输入列表名称"
+            :placeholder="$t('questionBankList.pleaseEnterTheNameOfTheList')"
             clearable
           />
         </setting-cell>
 
         <!-- 排列方式： -->
-        <setting-cell v-if="portal !== 'miniprogram'" title="排列方式：">
-          <el-select v-model="displayStyle" placeholder="排列方式" size="mini">
+        <setting-cell v-if="portal !== 'miniprogram'" :title="$t('questionBankList.sortOrder3')">
+          <el-select v-model="displayStyle" :placeholder="$t('questionBankList.sortOrder')" size="mini">
             <el-option
               v-for="item in layoutOptions"
               :key="item.value"
@@ -51,20 +51,20 @@
         </setting-cell> -->
 
         <!-- 课程分类 -->
-        <setting-cell :title="typeLabel + '分类：'">
+        <setting-cell :title="typeLabel + $t('questionBankList.classification')">
           <el-cascader
             v-show="sourceType === 'condition'"
             :options="itemBankCategories"
             :props="cascaderProps"
             v-model="categoryTempId"
             size="mini"
-            placeholder="请输入列表名称"
+            :placeholder="$t('questionBankList.pleaseEnterTheNameOfTheList')"
             filterable
             change-on-select
           />
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal"
-              >选择{{ typeLabel }}</el-button
+              >{{ $t('questionBankList.choose') }}{{ typeLabel }}</el-button
             >
           </div>
         </setting-cell>
@@ -90,7 +90,7 @@
         </draggable>
 
         <!-- 排列顺序 -->
-        <setting-cell v-show="sourceType === 'condition'" title="排列顺序：">
+        <setting-cell v-show="sourceType === 'condition'" :title="$t('questionBankList.sortOrder2')">
           <div class="section-right__item pull-left">
             <el-select v-model="sort" placeholder="顺序" size="mini">
               <el-option
@@ -114,7 +114,7 @@
         </setting-cell>
 
         <!-- 显示个数 -->
-        <setting-cell v-show="sourceType === 'condition'" title="显示个数：">
+        <setting-cell v-show="sourceType === 'condition'" :title="$t('questionBankList.theNumberOfDisplay')">
           <el-select v-model="limit" placeholder="请选择个数" size="mini">
             <el-option
               v-for="item in limitOptions"
@@ -179,29 +179,29 @@ export default {
       layoutOptions: [
         {
           value: 'row',
-          label: '一行一列',
+          label: this.$t('questionBankList.rowByColumn')
         },
         {
           value: 'distichous',
-          label: '一行两列',
+          label: this.$t('questionBankList.oneRowAndTwoColumn')
         },
       ],
       sortOptions: [
         {
           value: '-studentNum',
-          label: '加入最多',
+          label: this.$t('questionBankList.joinMost')
         },
         {
           value: '-createdTime',
-          label: '最近创建',
+          label: this.$t('questionBankList.recentlyCreated')
         },
         {
           value: '-rating',
-          label: '评分最高',
+          label: this.$t('questionBankList.highestScore')
         },
         {
           value: 'recommendedSeq',
-          label: `推荐题库`,
+          label: this.$t('questionBankList.recommend')
         },
       ],
       cascaderProps: {
@@ -214,19 +214,19 @@ export default {
       dateOptions: [
         {
           value: '7',
-          label: '最近7天',
+          label: this.$t('questionBankList.last7Days')
         },
         {
           value: '30',
-          label: '最近30天',
+          label: this.$t('questionBankList.last30Days')
         },
         {
           value: '90',
-          label: '最近90天',
+          label: this.$t('questionBankList.last90Days')
         },
         {
           value: '0',
-          label: '历史所有',
+          label: this.$t('questionBankList.allHistory')
         },
       ],
     };
@@ -234,7 +234,7 @@ export default {
   computed: {
     ...mapState(['courseCategories', 'classCategories', 'itemBankCategories']),
     typeLabel() {
-      return '题库';
+      return this.$t('questionBankList.questionBank');
     },
     isActive: {
       get() {

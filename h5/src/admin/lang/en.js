@@ -155,5 +155,28 @@ export default {
     openClassSorts: 'Open class sorts:',
     addNavigation: 'Add navigation',
     replacePicture: 'Replace picture',
+  },
+  questionBankList: {
+    questionBankSettingList: 'Question bank setting list',
+    listName: 'List name:',
+    pleaseEnterTheNameOfTheList: 'Please enter the name of the list',
+    sortOrder: 'Sort order',
+    sortOrder3: 'Sort order:',
+    rowByColumn: 'Row by column',
+    oneRowAndTwoColumn: 'One row and two columns',
+    sortOrder2: 'Sort order:',
+    theNumberOfDisplay: 'The number of display:',
+    custom: 'Custom',
+    choose: 'Choose',
+    joinMost: 'Join most',
+    recentlyCreated: 'Recently created',
+    highestScore: 'Highest score',
+    recommend: 'Recommend question bank',
+    last7Days: 'Last 7 days',
+    last30Days: 'Last 30 days',
+    last90Days: 'Last 90 days',
+    allHistory: 'All history',
+    questionBank: 'Question bank',
+    classification: ' classification:'
   }
 };

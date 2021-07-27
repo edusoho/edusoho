@@ -155,5 +155,28 @@ export default {
     openClassSorts: '公开课分类：',
     addNavigation: '添加图文导航',
     replacePicture: '更换图片',
+  },
+  questionBankList: {
+    questionBankSettingList: '题库列表设置',
+    listName: '列表名称：',
+    pleaseEnterTheNameOfTheList: '请输入列表名称',
+    sortOrder: '排列方式',
+    sortOrder3: '排列方式：',
+    rowByColumn: '一行一列',
+    oneRowAndTwoColumn: '一行两列',
+    sortOrder2: '排列顺序：',
+    theNumberOfDisplay: '显示个数：',
+    custom: '自定义',
+    choose: '选择',
+    joinMost: '加入最多',
+    recentlyCreated: '最近创建',
+    highestScore: '评分最高',
+    recommend: '推荐题库',
+    last7Days: '最近 7 天',
+    last30Days: '最近 30 天',
+    last90Days: '最近 90 天',
+    allHistory: '历史所有',
+    questionBank: '题库',
+    classification: ' 分类：'
   }
 };
