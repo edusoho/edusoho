@@ -186,5 +186,26 @@ export default {
     noDisplay: 'No display',
     selectCoupons: 'Select coupons',
     addCoupons: 'Add coupons'
+  },
+  member: {
+    memberSettings: 'Member settings',
+    title: 'Title:',
+    display: 'Display',
+    noDisplay: 'No display',
+    sortOrder: 'Sort order:',
+    lowToHigh: 'Low to high',
+    highToLow: 'High to low'
+  },
+  groupPurchase: {
+    groupPurchaseSetting: 'Group purchase settings',
+    flashSaleSettings: 'Flash sale settings',
+    bargainSettings: 'Bargain settings',
+    title: 'Title:',
+    display: 'Display',
+    noDisplay: 'No display',
+    activity: 'Activity:',
+    selectActivity: 'Select activity',
+    activityLabel: 'Activity label:',
+    placeholder: 'Please enter the event name'
   }
 };

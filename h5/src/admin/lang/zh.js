@@ -186,5 +186,26 @@ export default {
     noDisplay: '不显示',
     selectCoupons: '优惠券选择：',
     addCoupons: '添加优惠券'
+  },
+  member: {
+    memberSettings: '会员设置',
+    title: '标题栏：',
+    display: '显示',
+    noDisplay: '不显示',
+    sortOrder: '排列顺序：',
+    lowToHigh: '从低到高',
+    highToLow: '从高到低'
+  },
+  groupPurchase: {
+    groupPurchaseSetting: '拼团设置',
+    bargainSettings: '砍价设置',
+    flashSaleSettings: '秒杀设置',
+    title: '标题栏：',
+    display: '显示',
+    noDisplay: '不显示',
+    activity: '活动：',
+    selectActivity: '选择活动',
+    activityLabel: '活动标签：',
+    placeholder: '请输入活动名称'
   }
 };
