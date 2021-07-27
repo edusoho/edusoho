@@ -58,7 +58,9 @@ export default [
   {
     name: 'mobileBindCheck',
     url: '/user/{userId}/mobile_bind_check',
-    method: 'POST',
+    method: 'GET',
+    // is_bind_mobile: 是否绑定手机号（false：未绑定，true：已绑定
+    // mobile_bind_mode: 绑定手机号方式（constraint：强制绑定，option：非强制绑定，closed：不绑定）
   },
   {
     // 获取滑动验证参数

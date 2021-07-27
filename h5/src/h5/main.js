@@ -192,19 +192,6 @@ Api.getSettings({
       store,
       render: h => h(App),
     }).$mount('#app');
-
-    let user = window.localStorage.getItem('user');
-    user = user ? JSON.parse(user) : user;
-
-    if (user.id) {
-      Api.mobileBindCheck({
-        query: { userId: user.id },
-      }).then(res => {
-        if (!res.is_bind_mobile) {
-          router.$router.push({ name: 'binding' });
-        }
-      });
-    }
   })
   .catch(err => {
     console.log(err.message);

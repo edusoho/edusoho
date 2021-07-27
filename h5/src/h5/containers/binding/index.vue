@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div class="register mobile-binding">
     <e-loading v-if="isLoading" />
     <span class="register-title">绑定手机</span>
 
@@ -46,6 +46,14 @@
       >确认绑定</van-button
     >
 
+    <div
+      v-if="mobileBind.mobile_bind_mode === 'option'"
+      class="mobile-bindding__skipping"
+      @click="mobileBindSkip"
+    >
+      跳过
+    </div>
+
     <div class="binding-tip">绑定手机号的三大理由</div>
 
     <div class="binding-reasons">
@@ -64,10 +72,11 @@
 <script>
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
 // eslint-disable-next-line no-unused-vars
 import '@/utils/xxtea.js';
-import { Toast } from 'vant';
+import { Toast, Dialog } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
 
 export default {
@@ -93,11 +102,13 @@ export default {
       },
       submitLoading: false,
       sendSmsLoading: false,
+      isShowDialog: false,
     };
   },
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
+      mobileBind: state => state.mobile_bind,
     }),
     btnDisable() {
       return !this.registerInfo.mobile || !this.registerInfo.smsCode;
@@ -105,6 +116,7 @@ export default {
   },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
+    ...mapMutations([types.SET_MOBILE_BIND]),
     validateMobileOrPsw(type = 'mobile') {
       const ele = this.registerInfo[type];
       const rule = rulesConfig[type];
@@ -127,6 +139,15 @@ export default {
 
       this.validated.mobile = rule.validator(mobile);
     },
+    showDialog() {
+      Dialog.alert({
+        title: '手机号已绑定，请更换手机号',
+        confirmButtonText: '我知道了',
+        confirmButtonColor: '#03C777',
+        messageAlign: 'left',
+        message: `手机号已被绑定，如何处理？\n\n1、PC端登录原有手机号修改绑定手机号。\n2、原有手机号注销。\n3、如以上均不能处理，可联系网校管理员。`,
+      });
+    },
     handleSubmit() {
       const { mobile, smsCode, smsToken } = this.registerInfo;
 
@@ -144,6 +165,9 @@ export default {
           Toast.success({
             duration: 2000,
             message: '绑定成功',
+          });
+          this[types.SET_MOBILE_BIND]({
+            is_bind_mobile: true,
           });
           this.afterLogin();
         })
@@ -170,6 +194,9 @@ export default {
               this.registerInfo.smsToken = '';
               Toast.fail(err.message);
               break;
+            case 4030107:
+              this.showDialog();
+              break;
             default:
               Toast.fail(err.message);
               break;
@@ -195,11 +222,23 @@ export default {
         this.count.num--;
       }, 1000);
     },
+    mobileBindSkip() {
+      let redirect = this.$route.query.redirect;
+
+      redirect = redirect || '/';
+      window.localStorage.setItem('mobile_bind_skip', true);
+      this.$router.replace({ path: redirect });
+    },
   },
 };
 </script>
 
 <style scoped>
+.mobile-binding {
+  position: relative;
+  z-index: 1002;
+}
+
 .binding-tip {
   width: 100%;
   margin-bottom: 16px;
@@ -220,6 +259,16 @@ export default {
 
 .binding-reasons__item {
   font-size: 14px;
+  color: #666;
+}
+
+.mobile-bindding__skipping {
+  width: 100%;
+  margin-top: -4vw;
+  margin-bottom: 4vw;
+  margin-right: 4px;
+  text-align: right;
+  font-size: 16px;
   color: #666;
 }
 </style>
