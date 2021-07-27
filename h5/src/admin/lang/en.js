@@ -76,9 +76,28 @@ export default {
   },
   btn: {
     cancel: 'Cancel',
+    confirm: 'Confirm',
     preview: 'Preview',
     savaAndPublish: 'Save and publish',
     reset: 'Reset',
     publish: 'Publish'
+  },
+  carousel: {
+    carousel: 'Carousel',
+    carouselSettings: 'Carousel settings',
+    tips: 'The recommended image size is 750x400px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    tips2: 'The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    addPictures: 'Add pictures',
+    title: 'Title',
+    pleaseEnterATitle: 'Please enter a title',
+    links: 'Links',
+    siteLink: 'Site link',
+    addLink: 'Add link',
+    addCarousel: 'Add carousel',
+    replacePicture: 'Replace picture',
+    customLink: 'Custom link',
+    chooseCourse: 'Choose course',
+    chooseClass: 'Choose class',
+    chooseMember: 'Choose member'
   }
 };

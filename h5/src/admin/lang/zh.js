@@ -76,9 +76,28 @@ export default {
   },
   btn: {
     cancel: '取消',
+    confirm: '确定',
     preview: '预览',
     savaAndPublish: '保存并发布',
     reset: '重置',
     publish: '发布'
+  },
+  carousel: {
+    carousel: '轮播图',
+    carouselSettings: '轮播图设置',
+    tips: '建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips2: '建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB',
+    addPictures: '添加图片',
+    title: '标题',
+    pleaseEnterATitle: '请输入标题',
+    links: '链接',
+    siteLink: '站内链接',
+    addLink: '添加链接',
+    addCarousel: '添加一个轮播图',
+    replacePicture: '更换图片',
+    customLink: '自定义链接',
+    chooseCourse: '选择课程',
+    chooseClass: '选择班级',
+    chooseMember: '选择会员'
   }
 };
