@@ -6,7 +6,7 @@
   >
     <div slot="preview" class="poster-image-container">
       <div class="image-mask" v-show="!copyModuleData.image.uri">
-        广告图片
+        {{ $t('imageAds.adPictures2') }}
       </div>
       <poster
         v-show="copyModuleData.image.uri"
@@ -23,15 +23,15 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        图片广告设置
+        {{ $t('imageAds.imageAdsSettings') }}
         <div class="help-text">
-          建议图片宽度为750px,支持jpg/png/gif格式，图片大小不超过2MB
+          {{ $t('imageAds.tips') }}
         </div>
       </header>
 
       <div class="default-allocate__content clearfix">
         <setting-cell
-          title="广告图片："
+          :title="$t('imageAds.adPictures')"
           customClass="poster-item-setting__section"
           leftClass="required-option"
         >
@@ -49,22 +49,22 @@
                 class="poster-img"
               />
               <div class="add-img" v-show="!copyModuleData.image.uri">
-                <span><i class="text-18">+</i> 添加图片</span>
+                <span><i class="text-18">+</i> {{ $t('imageAds.addPictures') }}</span>
               </div>
               <div class="uploader-mask" v-show="copyModuleData.image.uri">
-                更换图片
+                {{ $t('imageAds.replacePicture') }}
               </div>
             </div>
           </el-upload>
         </setting-cell>
 
-        <setting-cell title="链接：" customClass="poster-item-setting__section">
-          <el-radio v-model="radio" label="insideLink">站内链接</el-radio>
+        <setting-cell :title="$t('imageAds.links')" customClass="poster-item-setting__section">
+          <el-radio v-model="radio" label="insideLink">{{ $t('imageAds.siteLink') }}</el-radio>
           <el-radio
             v-if="pathName !== 'miniprogramSetting'"
             v-model="radio"
             label="url"
-            >自定义链接</el-radio
+            >{{ $t('imageAds.customLink') }}</el-radio
           >
         </setting-cell>
 
@@ -75,7 +75,7 @@
         >
           <el-dropdown v-show="!courseLinkText">
             <el-button size="mini" class="el-dropdown-link">
-              添加链接
+              {{ $t('imageAds.addLink') }}
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -119,14 +119,14 @@
         </setting-cell>
 
         <setting-cell
-          title="自适应手机屏幕："
+          :title="$t('imageAds.adaptiveMobilePhoneScreen')"
           customClass="poster-item-setting__section"
         >
           <el-radio v-model="copyModuleData.responsive" label="1"
-            >开启</el-radio
+            >{{ $t('btn.open') }}</el-radio
           >
           <el-radio v-model="copyModuleData.responsive" label="0"
-            >关闭</el-radio
+            >{{ $t('btn.close') }}</el-radio
           >
         </setting-cell>
       </div>
@@ -172,17 +172,17 @@ export default {
         {
           key: 0,
           type: 'course_list',
-          label: '选择课程',
+          label: this.$t('imageAds.chooseCourse')
         },
         {
           key: 1,
           type: 'classroom_list',
-          label: '选择班级',
+          label: this.$t('imageAds.chooseClass')
         },
         {
           key: 2,
           type: 'vip',
-          label: '选择会员',
+          label: this.$t('imageAds.chooseMember')
         },
       ],
       pathName: this.$route.name,
@@ -223,6 +223,7 @@ export default {
       set() {},
     },
     courseLinkText: {
+      // eslint-disable-next-line vue/return-in-computed-property
       get() {
         if (this.type === 'vip') {
           return '会员专区';

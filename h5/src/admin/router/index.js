@@ -85,6 +85,7 @@ router.beforeEach((to, from, next) => {
         type: 'classroom',
         key: 'classroomSettings',
       }),
+      store.dispatch('getLanguage')
     ])
       .then(([vipPlugin, vipRes]) => {
         console.log(vipPlugin, 8888);

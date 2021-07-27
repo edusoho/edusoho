@@ -15,7 +15,7 @@
         :class="{ 'image-mask__app': pathName === 'appSetting' }"
         class="image-mask"
       >
-        轮播图
+        {{ $t('carousel.carousel') }}
       </div>
       <div v-if="pathName !== 'appSetting'" class="carousel-title ellipsis">
         {{ carouselTitle }}
@@ -29,12 +29,12 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        轮播图设置
+        {{ $t('carousel.carouselSettings') }}
         <div v-if="pathName !== 'appSetting'" class="help-text">
-          建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB
+          {{ $t('carousel.tips') }}
         </div>
         <div v-else class="help-text">
-          建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB
+          {{ $t('carousel.tips2') }}
         </div>
       </header>
       <div v-for="(item, index) in copyModuleData.data" :key="index">
@@ -57,7 +57,7 @@
         type="info"
         size="medium"
         @click="addItem"
-        >添加一个轮播图</el-button
+        >{{ $t('carousel.addCarousel') }}</el-button
       >
     </div>
 

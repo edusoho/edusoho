@@ -20,28 +20,27 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        会员设置
+        {{ $t('member.memberSettings') }}
         <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">
           使用会员专区配置功能，小程序版本需要升级到1.3.4及以上
         </div>
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 标题栏 -->
-        <setting-cell title="标题栏：">
-          <el-radio v-model="radio" label="show">显示</el-radio>
-          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+        <setting-cell :title="$t('member.title')">
+          <el-radio v-model="radio" label="show">{{ $t('member.display') }}</el-radio>
+          <el-radio v-model="radio" label="unshow">{{ $t('member.noDisplay') }}</el-radio>
         </setting-cell>
-        <setting-cell title="排列顺序：">
+        <setting-cell :title="$t('member.sortOrder')">
           <el-radio v-model="copyModuleData.sort" label="asc"
-            >从低到高</el-radio
+            >{{ $t('member.lowToHigh') }}</el-radio
           >
           <el-radio v-model="copyModuleData.sort" label="desc"
-            >从高到低</el-radio
+            >{{ $t('member.highToLow') }}</el-radio
           >
         </setting-cell>
 
         <div
-          v-model="items"
           class="default-draggable__list still-draggable__list"
         >
           <div

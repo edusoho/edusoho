@@ -29,11 +29,11 @@
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">
           <!-- 标题栏 -->
-          <setting-cell title="标题栏：" class="mbm">
-            <el-radio v-model="radio" label="show">显示</el-radio>
-            <el-radio v-model="radio" label="unshow">不显示</el-radio>
+          <setting-cell :title="$t('groupPurchase.title')" class="mbm">
+            <el-radio v-model="radio" label="show">{{ $t('groupPurchase.display') }}</el-radio>
+            <el-radio v-model="radio" label="unshow">{{ $t('groupPurchase.noDisplay') }}</el-radio>
           </setting-cell>
-          <p class="pull-left section-left">活动：</p>
+          <p class="pull-left section-left">{{ $t('groupPurchase.activity') }}</p>
           <div class="section-right">
             <div class="required-option">
               <el-button
@@ -41,7 +41,7 @@
                 size="mini"
                 @click="openModal"
                 v-show="!activityName"
-                >选择活动</el-button
+                >{{ $t('groupPurchase.selectActivity') }}</el-button
               >
               <el-tag
                 class="courseLink"
@@ -63,13 +63,13 @@
           </div>
         </div>
         <div class="groupon-item-setting__section clearfix">
-          <p class="pull-left section-left">活动标签：</p>
+          <p class="pull-left section-left">{{ $t('groupPurchase.activityLabel') }}</p>
           <div class="section-right pull-left">
             <el-input
               size="mini"
               v-model="copyModuleData.tag"
               maxLength="8"
-              placeholder="请输入活动名称"
+              :placeholder="$t('groupPurchase.placeholder')"
               clearable
             ></el-input>
           </div>
@@ -137,9 +137,9 @@ export default {
     },
     activityTitle() {
       const type = this.moduleData.type;
-      if (type === 'seckill') return '秒杀设置';
-      if (type === 'cut') return '砍价设置';
-      return '拼团设置';
+      if (type === 'seckill') return this.$t('groupPurchase.flashSaleSettings');
+      if (type === 'cut') return this.$t('coupon.bargainSettings');
+      return this.$t('groupPurchase.groupPurchaseSetting');
     },
     radio: {
       get() {
