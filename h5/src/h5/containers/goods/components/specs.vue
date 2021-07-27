@@ -5,7 +5,7 @@
       v-if="goods.type === 'course' && goods.specs.length > 1"
       @click="showPopup"
     >
-      <div class="pull-left plan-left">教学计划</div>
+      <div class="pull-left plan-left">{{ $t('goods.plan') }}</div>
       <div class="pull-left plan-right">
         {{ currentSku.title }}
         <i
@@ -24,7 +24,7 @@
     >
       <div class="plan-popup__title">
         <span></span>
-        选择教学计划
+        {{ $t('goods.choosePlan') }}
       </div>
       <div class="plan-popup__type">
         <span
@@ -51,13 +51,13 @@
         </div> -->
         <!-- 承诺服务 -->
         <div class="popup-other clearfix">
-          <div class="pull-left popup-other__left">承诺服务</div>
+          <div class="pull-left popup-other__left">{{ $t('goods.services') }}</div>
           <div class="pull-left popup-other__right">
             <span
               class="popup-other__right__promise"
               v-for="(item, index) in currentSku.services"
               :key="index"
-              >练</span
+              >{{ $t('goods.practice') }}</span
             >
           </div>
         </div>
@@ -90,7 +90,7 @@
       class="detail-plan__plan clearfix"
       v-if="!(currentSku.services === null) && currentSku.services.length"
     >
-      <div class="pull-left plan-left">承诺服务</div>
+      <div class="pull-left plan-left">{{ $t('goods.services') }}</div>
       <div class="pull-left plan-right">
         <span
           class="plan-right__promise"
@@ -107,10 +107,10 @@
         v-if="marketingActivities.groupon"
         @click="activityHandle(marketingActivities.groupon.id)"
       >
-        <div class="pull-left plan-left">拼团</div>
+        <div class="pull-left plan-left">{{ $t('goods.groupPurchase') }}</div>
         <div class="pull-left plan-right">
-          <van-tag class="van-tag--primary">拼团 </van-tag>
-          <span class="text-12 dark">跟好友一起买更划算哦！</span>
+          <van-tag class="van-tag--primary">{{ $t('goods.groupPurchase') }}</van-tag>
+          <span class="text-12 dark">{{ $t('goods.buyWithFriends') }}</span>
         </div>
       </div>
 
@@ -119,10 +119,10 @@
         v-if="marketingActivities.cut"
         @click="activityHandle(marketingActivities.cut.id)"
       >
-        <div class="pull-left plan-left">砍价</div>
+        <div class="pull-left plan-left">{{ $t('goods.bargain') }}</div>
         <div class="pull-left plan-right">
-          <van-tag class="van-tag--success">砍价 </van-tag>
-          <span class="text-12 dark">最低可砍至1分钱！</span>
+          <van-tag class="van-tag--success">{{ $t('goods.bargain') }} </van-tag>
+          <span class="text-12 dark">{{ $t('goods.theMinimumCanBeCutTo1Point') }}</span>
         </div>
       </div>
 
@@ -131,10 +131,10 @@
         v-if="marketingActivities.seckill"
         @click="activityHandle(marketingActivities.seckill.id)"
       >
-        <div class="pull-left plan-left">秒杀</div>
+        <div class="pull-left plan-left">{{ $t('goods.flashSale') }}</div>
         <div class="pull-left plan-right">
-          <van-tag class="van-tag--warning">秒杀 </van-tag>
-          <span class="text-12 dark">去秒杀！</span>
+          <van-tag class="van-tag--warning">{{ $t('goods.flashSale') }} </van-tag>
+          <span class="text-12 dark">{{ $t('goods.flashSale2') }}</span>
         </div>
       </div>
     </div>
@@ -254,14 +254,14 @@ export default {
       if (!memberInfo) {
         switch (this.currentSku.usageMode) {
           case 'forever':
-            return '长期有效';
+            return this.$t('goods.longTermEffective');
           case 'end_date':
             return (
               this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
-              '&nbsp;之前可学习'
+              `&nbsp;${this.$t('goods.canLearnBefore')}`
             );
           case 'days':
-            return this.currentSku.usageDays + '天内可学习';
+            return  this.$t('goods.studyWithinDay', { number: this.currentSku.usageDays });
           case 'date':
             return (
               this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
@@ -273,11 +273,11 @@ export default {
         }
       } else {
         if (this.currentSku.usageMode == 'forever') {
-          return '长期有效';
+          return this.$t('goods.longTermEffective');
         }
         return memberInfo.deadline != 0
-          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '长期有效';
+          ? memberInfo.deadline.slice(0, 10) + this.$t('goods.canLearnBefore')
+          : this.$t('goods.longTermEffective');
       }
     },
   },

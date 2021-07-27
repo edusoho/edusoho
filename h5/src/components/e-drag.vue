@@ -113,7 +113,7 @@ export default {
           query: { token },
         })
           .then(res => {
-            Toast.success('验证成功');
+            Toast.success(this.$t('e.verificationSuccess'));
             this.$emit('success', token);
           })
           .catch(err => {

@@ -18,7 +18,7 @@
       </div>
     </template>
     <div v-else class="info-teacher__item">
-      暂无教师~
+      {{ $t('goods.noTeachers') }}
     </div>
   </div>
 </template>

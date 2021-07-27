@@ -14,7 +14,7 @@
       <!-- 使用优惠券 -->
       <div v-show="couponSwitch" class="order-coupon">
         <div class="coupon-column" @click="showList = true">
-          <span>优惠券</span>
+          <span>{{ $t('order.coupon') }}</span>
           <span :class="['red', itemData ? 'coupon-money' : '']"
             >{{ couponShow
             }}<span v-if="itemData" class="coupon-type">{{
@@ -31,7 +31,7 @@
         >
           <van-nav-bar
             :left-arrow="true"
-            title="优惠券"
+            :title="$t('order.coupon')"
             class="nav-bar"
             @click-left="disuse"
           />
@@ -39,7 +39,7 @@
             :class="['btn-coupon-exit', { active: activeItemIndex < 0 }]"
             @click="disuse"
           >
-            不使用优惠 <i class="iconfont icon-About" />
+            {{ $t('order.doNotUseDiscount') }} <i class="iconfont icon-About" />
           </div>
           <div class="e-popup__content coupon-popup__content">
             <div class="coupon-number-change">
@@ -48,7 +48,7 @@
                 center
                 border
                 clearable
-                placeholder="请输入优惠码"
+                :placeholder="$t('order.couponCode')"
               >
                 <van-button
                   slot="button"
@@ -56,7 +56,7 @@
                   size="small"
                   type="primary"
                   @click="usePreferenceCode"
-                  >使用</van-button
+                  >{{ $t('order.use') }}</van-button
                 >
               </van-field>
             </div>
@@ -72,13 +72,13 @@
             />
             <div v-show="!course.availableCoupons.length" class="coupon-empty">
               <img class="empty-img" src="static/images/coupon_empty.png" />
-              <div class="empty-text">暂无优惠券</div>
+              <div class="empty-text">{{ $t('order.noCoupons') }}</div>
             </div>
           </div>
         </van-popup>
       </div>
       <div v-if="targetType !== 'vip'" class="order-goods-item">
-        <span>学习有效期</span>
+        <span>{{ $t('order.validity') }}</span>
         <span class="gray-dark" v-html="getValidity" />
       </div>
     </div>
@@ -115,7 +115,7 @@
       <e-loading v-if="isLoading" />
       <div class="payPage__order">
         <div class="order__head">
-          支付方式
+          {{ $t('order.paymentWay') }}
         </div>
         <div class="order__infomation">
           <!-- <div class="title">{{ detail.title }}</div>
@@ -161,15 +161,15 @@
     <div class="order-footer">
       <div class="order-footer__text">
         <div>
-          实付：<span class="price">{{ total }}</span>
+          {{ $t('order.pay') }}：<span class="price">{{ total }}</span>
         </div>
-        <div v-show="itemData" class="discount">已优惠{{ couponMoney }}</div>
+        <div v-show="itemData" class="discount">{{ $t('order.discounted') }}{{ couponMoney }}</div>
       </div>
       <div
         :class="['order-footer__btn', { disabled: !validPayWay }]"
         @click="shouldCollectUserInfo"
       >
-        去支付
+        {{ $t('order.pay2') }}
       </div>
     </div>
   </div>
@@ -270,15 +270,15 @@ export default {
     },
     couponShow() {
       if (this.course.availableCoupons.length == 0) {
-        return '无可用优惠券';
+        return this.$t('order.noCouponsAvailable');
       }
       if (!this.couponNumber) {
-        return this.course.availableCoupons.length + '张可用';
+        return this.course.availableCoupons.length + this.$t('order.available');
       }
       return parseFloat(this.itemData.rate);
     },
     getValidity() {
-      return this.$route.query.expiryScope || '长期有效';
+      return this.$route.query.expiryScope || this.$t('order.longTermEffective');
     },
     validPayWay() {
       if (this.IsCollectUserInfoType && !this.isReqUserInfoCollect) {

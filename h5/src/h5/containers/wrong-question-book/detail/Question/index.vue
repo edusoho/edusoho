@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-head">
-      <div class="head-left">{{ currentQuestionComponent.name }}</div>
+      <div class="head-left">{{ $t(currentQuestionComponent.name) }}</div>
       <div class="head-right">
         <span class="right-color">{{ order }}</span>
         /{{ total }}
@@ -24,14 +24,14 @@
 
     <div class="analysis">
       <div class="mt10 analysis-result">
-        <div class="analysis-title">做题结果</div>
+        <div class="analysis-title">{{ $t('wrongQuestion.answerResult') }}</div>
         <div class="analysis-content">
           <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">做题结果</div>
+            <div class="analysis-item__title">{{ $t('wrongQuestion.answerResult') }}</div>
             <div :class="[status.color]">{{ status.text }}</div>
           </div>
           <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">正确答案</div>
+            <div class="analysis-item__title">{{ $t('wrongQuestion.correctAnswer') }}</div>
             <div
               class="analysis-item_right analysis-content__item--column"
               v-html="rightAnswer"
@@ -39,7 +39,7 @@
           </div>
 
           <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">你的答案</div>
+            <div class="analysis-item__title">{{ $t('wrongQuestion.yourAnswer') }}</div>
             <div
               class="analysis-item_right analysis-content__item--column"
               :class="[status.color]"
@@ -50,24 +50,24 @@
       </div>
 
       <div class="mt10 analysis-result">
-        <div class="analysis-title">做题解析</div>
+        <div class="analysis-title">{{ $t('wrongQuestion.parsing') }}</div>
         <div
           class="analysis-content mt10"
-          v-html="questions.analysis || '无解析'"
+          v-html="questions.analysis || $t('wrongQuestion.noParsing')"
         />
       </div>
 
       <div class="mt10 analysis-result">
         <div class="question-situation">
-          <div class="situation-top">来源：{{ sourcesStr }}</div>
+          <div class="situation-top">{{ $t('wrongQuestion.source') }}：{{ sourcesStr }}</div>
           <div class="situation-bottom">
             <span>{{
               $moment(question.submit_time * 1000).format('YYYY-MM-DD HH:mm:ss')
             }}</span>
             <span>
-              做错频次：
+              {{ $t('wrongQuestion.frequency') }}：
               <span class="frequency">{{ question.wrong_times }}</span>
-              次
+              {{ $t('wrongQuestion.times') }}
             </span>
           </div>
         </div>
@@ -113,23 +113,23 @@ export default {
     return {
       questionComponents: {
         single_choice: {
-          name: '单选题',
+          name: 'wrongQuestion.singleChoice',
           component: 'SingleChoice',
         },
         text: {
-          name: '填空题',
+          name: 'wrongQuestion.fill',
           component: '',
         },
         choice: {
-          name: '多选题',
+          name: 'wrongQuestion.choice',
           component: 'Choice',
         },
         uncertain_choice: {
-          name: '不定项选择题',
+          name: 'wrongQuestion.uncertainChoice',
           component: 'Choice',
         },
         true_false: {
-          name: '判断题',
+          name: 'wrongQuestion.determine',
           component: 'Judge',
         },
       },
@@ -165,19 +165,19 @@ export default {
       const statusResult = {
         right: {
           color: 'analysis-item_right',
-          text: '回答正确',
+          text: this.$t('wrongQuestion.correctAnswer2')
         },
         wrong: {
           color: 'analysis-item_worng',
-          text: '回答错误',
+          text: this.$t('wrongQuestion.wrongAnswer')
         },
         partRight: {
           color: 'analysis-item_worng',
-          text: '回答错误',
+          text: this.$t('wrongQuestion.wrongAnswer')
         },
         no_answer: {
           color: 'analysis-item_noAnswer',
-          text: '未回答',
+          text: this.$t('wrongQuestion.unanswered')
         },
       };
       const { response, status } = this.questions.report;
@@ -194,7 +194,7 @@ export default {
 
       if (answer_mode === 'true_false') {
         answer = _.map(answer, function(item) {
-          return item === 'T' ? '对' : '错';
+          return item === 'T' ? this.$t('wrongQuestion.right') : this.$t('wrongQuestion.wrong');
         });
       }
 
@@ -218,14 +218,14 @@ export default {
 
       if (!_.size(response)) {
         if (answer_mode === 'text') {
-          return '<div class="fill-answer">（1）未作答</div>';
+          return `<div class="fill-answer">（1）${this.$t('wrongQuestion.unanswered')}</div>`;
         }
-        return '未作答';
+        return this.$t('wrongQuestion.unanswered');
       }
 
       if (answer_mode === 'true_false') {
         response = _.map(response, function(item) {
-          return item === 'T' ? '正确' : '错误';
+          return item === 'T' ? this.$t('wrongQuestion.right2') : this.$t('wrongQuestion.wrong2');
         });
       }
 
@@ -233,15 +233,13 @@ export default {
         let result = '';
         _.forEach(response, (item, index) => {
           result += `<div style="margin-bottom: 2vw"> (${index + 1}) ${item ||
-            '未作答'}</div>`;
+            this.$t('wrongQuestion.unanswered')}</div>`;
         });
         return result;
       }
 
       return _.join(response, '、');
     },
-  },
-
-  methods: {},
+  }
 };
 </script>

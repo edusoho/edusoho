@@ -1,6 +1,6 @@
 <template>
   <div class="goods-certificate" @click="toCertificate(selectedPlanId)">
-    <span><span class="certificate-icon">证</span>证书</span>
+    <span><span class="certificate-icon">{{ $t('goods.certificate') }}</span>{{ $t('goods.certificate2') }}</span>
     <i class="van-icon van-icon-arrow pull-right" />
   </div>
 </template>

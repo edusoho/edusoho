@@ -25,7 +25,8 @@ const routes = [
         path: '/prelogin',
         name: 'prelogin',
         meta: {
-          title: '我的',
+          i18n: true,
+          title: 'title.me',
         },
         component: () =>
           import(
@@ -136,7 +137,8 @@ const routes = [
     path: '/course/explore',
     name: 'more_course',
     meta: {
-      title: '所有课程',
+      i18n: true,
+      title: 'more.allCourses',
     },
     component: () =>
       import(
@@ -147,7 +149,8 @@ const routes = [
     path: '/classroom/explore',
     name: 'more_class',
     meta: {
-      title: '所有班级',
+      i18n: true,
+      title: 'more.allClasses',
     },
     component: () =>
       import(
@@ -158,7 +161,8 @@ const routes = [
     path: '/itembank/explore',
     name: 'more_itembank',
     meta: {
-      title: '所有题库',
+      i18n: true,
+      title: 'more.allQuestionBank',
     },
     component: () =>
       import(
@@ -176,7 +180,8 @@ const routes = [
     path: '/course/explore/vip',
     name: 'vip_course',
     meta: {
-      title: '会员课程',
+      i18n: true,
+      title: 'title.membersCourse',
     },
     component: () =>
       import(
@@ -187,7 +192,8 @@ const routes = [
     path: '/classroom/explore/vip',
     name: 'vip_classroom',
     meta: {
-      title: '会员班级',
+      i18n: true,
+      title: 'title.membersClass',
     },
     component: () =>
       import(
@@ -198,7 +204,8 @@ const routes = [
     path: '/course/:id',
     name: 'course',
     meta: {
-      title: '课程详情',
+      i18n: true,
+      title: 'courseLearning.title',
     },
     component: () =>
       import(/* webpackChunkName: "course" */ '@/containers/course/index.vue'),
@@ -237,7 +244,8 @@ const routes = [
     path: '/testpaper',
     name: 'testpaperIntro',
     meta: {
-      title: '考试说明',
+      i18n: true,
+      title: 'title.testDescription',
     },
     component: () =>
       import(
@@ -296,7 +304,8 @@ const routes = [
     path: '/homeworkIntro',
     name: 'homeworkIntro',
     meta: {
-      title: '作业说明',
+      i18n: true,
+      title: 'title.jobDescription',
     },
     component: () =>
       import(
@@ -331,7 +340,8 @@ const routes = [
     path: '/exerciseIntro',
     name: 'exerciseIntro',
     meta: {
-      title: '练习说明',
+      i18n: true,
+      title: 'title.exerciseInstructions'
     },
     component: () =>
       import(
@@ -342,7 +352,8 @@ const routes = [
     path: '/classroom/:id',
     name: 'classroom',
     meta: {
-      title: '班级详情',
+      i18n: true,
+      title: 'title.classDetails'
     },
     component: () =>
       import(
@@ -353,7 +364,8 @@ const routes = [
     path: '/comment/:id',
     name: 'comment',
     meta: {
-      title: '学员评价',
+      i18n: true,
+      title: 'title.studentEvaluation'
     },
     component: () =>
       import(
@@ -364,7 +376,8 @@ const routes = [
     path: '/order/:id',
     name: 'order',
     meta: {
-      title: '确认订单',
+      i18n: true,
+      title: 'title.confirmOrder'
     },
     component: () =>
       import(/* webpackChunkName: "order" */ '@/containers/order/index.vue'),
@@ -373,7 +386,8 @@ const routes = [
     path: '/pay',
     name: 'pay',
     meta: {
-      title: '订单支付',
+      i18n: true,
+      title: 'title.orderPayment'
     },
     component: () =>
       import(/* webpackChunkName: "pay" */ '@/containers/pay/index.vue'),
@@ -382,7 +396,8 @@ const routes = [
     path: '/weixin_pay',
     name: 'wxpay',
     meta: {
-      title: '微信支付',
+      i18n: true,
+      title: 'title.wechatPayment'
     },
     component: () =>
       import(/* webpackChunkName: "wxpay" */ '@/containers/wxpay/index.vue'),
@@ -391,7 +406,8 @@ const routes = [
     path: '/pay_success',
     name: 'paySuccess',
     meta: {
-      title: '支付成功',
+      i18n: true,
+      title: 'title.paymentSuccessful'
     },
     component: () =>
       import(/* webpackChunkName: "pay" */ '@/containers/pay/success.vue'),
@@ -400,7 +416,8 @@ const routes = [
     path: '/pay_center',
     name: 'pay_center',
     meta: {
-      title: '支付成功中转页',
+      i18n: true,
+      title: 'title.paymentSuccessfulTransferPage'
     },
     component: () =>
       import(/* webpackChunkName: "pay" */ '@/containers/pay/center.vue'),
@@ -409,7 +426,8 @@ const routes = [
     path: '/pay_collectInfo',
     name: 'pay_collectInfo',
     meta: {
-      title: '信息填写',
+      i18n: true,
+      title: 'title.informationFilling'
     },
     component: () =>
       import(/* webpackChunkName: "pay" */ '@/containers/pay/collectInfo.vue'),
@@ -418,7 +436,8 @@ const routes = [
     path: '/preview',
     name: 'preview',
     meta: {
-      title: '预览',
+      i18n: true,
+      title: 'title.preview'
     },
     component: () =>
       import(
@@ -429,7 +448,8 @@ const routes = [
     path: '/sts',
     name: 'sts',
     meta: {
-      title: '人脸识别登录',
+      i18n: true,
+      title: 'title.faceRecognitionLogin'
     },
     component: () =>
       import(
@@ -440,7 +460,8 @@ const routes = [
     path: '/face_verification',
     name: 'verification',
     meta: {
-      title: '人脸认证',
+      i18n: true,
+      title: 'title.faceAuthentication'
     },
     component: () =>
       import(
@@ -451,8 +472,9 @@ const routes = [
     path: '/coupon/:token/receive',
     name: 'coupon_receive',
     meta: {
-      title: '优惠券领取',
-      hideTitle: true,
+      i18n: true,
+      title: 'title.couponCollection',
+      hideTitle: true
     },
     component: () =>
       import(
@@ -463,7 +485,8 @@ const routes = [
     path: '/vip',
     name: 'vip',
     meta: {
-      title: '会员中心',
+      i18n: true,
+      title: 'vip.title',
     },
     component: () =>
       import(/* webpackChunkName: "vip" */ '@/containers/vip/index.vue'),
@@ -514,7 +537,8 @@ const routes = [
     path: '/search',
     name: 'search',
     meta: {
-      title: '搜索',
+      i18n: true,
+      title: 'search.title',
     },
     component: () =>
       import(/* webpackChunkName: "search" */ '@/containers/search/index.vue'),
@@ -523,7 +547,8 @@ const routes = [
     path: '/moneycard',
     name: 'study_card',
     meta: {
-      title: '学习卡充值',
+      i18n: true,
+      title: 'title.learningCardRecharge'
     },
     component: () =>
       import(
@@ -536,7 +561,8 @@ const routes = [
         name: 'fixed_receive',
         meta: {
           hideTitle: true,
-          title: '学习卡充值',
+          i18n: true,
+          title: 'title.learningCardRecharge',
           color: 'white',
         },
         component: () =>
@@ -549,7 +575,8 @@ const routes = [
         name: 'receive',
         meta: {
           hideTitle: true,
-          title: '学习卡充值',
+          i18n: true,
+          title: 'title.learningCardRecharge',
           color: 'white',
         },
         component: () =>
@@ -562,7 +589,8 @@ const routes = [
         name: 'receive',
         meta: {
           hideTitle: true,
-          title: '学习卡充值',
+          i18n: true,
+          title: 'title.learningCardRecharge',
           color: 'white',
         },
         component: () =>
@@ -576,7 +604,8 @@ const routes = [
     path: '/my/history/learning',
     name: 'history-learn',
     meta: {
-      title: '历史学习',
+      i18n: true,
+      title: 'title.historyLearning',
       hideTitle: true,
     },
     component: () =>
@@ -588,7 +617,8 @@ const routes = [
     path: '/live-timetable',
     name: 'live-timetable',
     meta: {
-      title: '直播课表',
+      i18n: true,
+      title: 'title.liveSchedule',
       hideTitle: true,
     },
     component: () =>
@@ -600,7 +630,8 @@ const routes = [
     path: '/more/live',
     name: 'moreLive',
     meta: {
-      title: '今日直播',
+      i18n: true,
+      title: 'title.liveToday',
       hideTitle: true,
     },
     component: () =>
@@ -612,7 +643,8 @@ const routes = [
     path: '/course/explore/new',
     name: 'more_course_new',
     meta: {
-      title: '所有课程',
+      i18n: true,
+      title: 'title.allCourses',
       hideTitle: true,
     },
     component: () =>
@@ -624,7 +656,8 @@ const routes = [
     path: '/classroom/explore/new',
     name: 'more_class_new',
     meta: {
-      title: '所有班级',
+      i18n: true,
+      title: 'title.allClasses',
       hideTitle: true,
     },
     component: () =>
@@ -636,7 +669,8 @@ const routes = [
     path: '/itemBank/explore/new',
     name: 'more_item-Bank',
     meta: {
-      title: '所有题库',
+      i18n: true,
+      title: 'title.allQuestionBank',
       hideTitle: true,
     },
     component: () =>
@@ -648,7 +682,8 @@ const routes = [
     path: '/openCourse/explore/new',
     name: 'more_openCourse',
     meta: {
-      title: '免费直播课',
+      i18n: true,
+      title: 'title.freeLiveClass',
       hideTitle: true,
     },
     component: () =>
@@ -660,7 +695,8 @@ const routes = [
     path: '/goods/:id/course' /* 不要采用此路由，入口统一为/goods/:id/show */,
     name: 'goods_course',
     meta: {
-      title: '商品页',
+      i18n: true,
+      title: 'title.productPage'
     },
     component: () =>
       import(
@@ -672,7 +708,8 @@ const routes = [
       '/goods/:id/classroom' /* 不要采用此路由，入口统一为/goods/:id/show */,
     name: 'goods_classroom',
     meta: {
-      title: '商品页',
+      i18n: true,
+      title: 'title.productPage'
     },
     component: () =>
       import(
@@ -684,7 +721,8 @@ const routes = [
       '/goods/:id/show' /* 商品的扩展必然不能通过入口来实现，入口只有一个，内部分为商品常态数据以及商品额外数据，借助插槽或者插件分开取舍 */,
     name: 'goods_show',
     meta: {
-      title: '商品详情',
+      i18n: true,
+      title: 'goods.title',
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/goods.vue'),
@@ -693,7 +731,8 @@ const routes = [
     path: '/goods/qr',
     name: 'goods_qr',
     meta: {
-      title: '进群免费学习课程',
+      i18n: true,
+      title: 'title.groupFreeLearningCourse'
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/qr.vue'),
@@ -702,7 +741,8 @@ const routes = [
     path: '/goods/reviews',
     name: 'goods_reviews',
     meta: {
-      title: '评分',
+      i18n: true,
+      title: 'title.score'
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/reviews.vue'),
@@ -731,7 +771,8 @@ const routes = [
     path: '/certificate/list/:id',
     name: 'certificate_list',
     meta: {
-      title: '可获得证书',
+      i18n: true,
+      title: 'title.certificateAvailable'
     },
     component: () =>
       import(
@@ -764,7 +805,8 @@ const routes = [
     path: '/brushExercise',
     name: 'brush_exercise',
     meta: {
-      title: '刷题',
+      i18n: true,
+      title: 'title.brushQuestions'
     },
     component: () =>
       import(
@@ -775,7 +817,8 @@ const routes = [
     path: '/brushDo',
     name: 'brush_do',
     meta: {
-      title: '刷题',
+      i18n: true,
+      title: 'title.brushQuestions'
     },
     component: () =>
       import(
@@ -786,7 +829,8 @@ const routes = [
     path: '/brushReport/:answerRecordId',
     name: 'brush_report',
     meta: {
-      title: '查看解析',
+      i18n: true,
+      title: 'title.viewParsed'
     },
     component: () =>
       import(
@@ -797,7 +841,8 @@ const routes = [
     path: '/brushResult/:answerRecordId',
     name: 'brush_result',
     meta: {
-      title: '答题结果',
+      i18n: true,
+      title: 'title.answerResult'
     },
     component: () =>
       import(
@@ -808,7 +853,8 @@ const routes = [
     path: '/brushReview/:answerRecordId',
     name: 'brush_review',
     meta: {
-      title: '答题批阅',
+      i18n: true,
+      title: 'title.answerMarking'
     },
     component: () =>
       import(
@@ -819,7 +865,8 @@ const routes = [
     path: '/item_bank_exercise/:id',
     name: 'item_bank_exercise',
     meta: {
-      title: '题库详情',
+      i18n: true,
+      title: 'title.questionBankDetails'
     },
     component: () =>
       import(
@@ -830,7 +877,8 @@ const routes = [
     path: '/my/wrong-quesition-book',
     name: 'myWrongQuestionBook',
     meta: {
-      title: '我的错题本',
+      i18n: true,
+      title: 'wrongQuestion.title',
     },
     component: () =>
       import(
@@ -857,7 +905,8 @@ const routes = [
     path: '/wrong-exercises/do',
     name: 'WrongExercisesDo',
     meta: {
-      title: '错题练习',
+      i18n: true,
+      title: 'wrongQuestion.exercise',
     },
     component: () =>
       import(
@@ -868,7 +917,8 @@ const routes = [
     path: '/wrong-exercises/result',
     name: 'WrongExercisesResult',
     meta: {
-      title: '错题练习',
+      i18n: true,
+      title: 'wrongQuestion.exercise',
     },
     component: () =>
       import(
@@ -879,7 +929,8 @@ const routes = [
     path: '/wrong-exercises/analysis',
     name: 'WrongExercisesAnalysis',
     meta: {
-      title: '错题解析',
+      i18n: true,
+      title: 'wrongQuestion.parsing',
     },
     component: () =>
       import(

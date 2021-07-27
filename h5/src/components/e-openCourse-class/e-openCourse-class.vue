@@ -4,7 +4,7 @@
       <img v-lazy="course.middlePicture" />
       <div class="column-class-left__live">
         <div>
-          <span v-show="course.type === 'liveOpen'">直播</span>
+          <span v-show="course.type === 'liveOpen'">{{ $t('e.live') }}</span>
         </div>
         <div v-if="course.hitNum">
           <i class="iconfont icon-renqi" />

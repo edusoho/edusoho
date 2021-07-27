@@ -61,15 +61,15 @@ export default {
     return {
       settings: [
         {
-          name: 'enter.heads',
+          name: 'setting.heads',
           info: '',
         },
         {
-          name: 'enter.nickname',
+          name: 'setting.nickname',
           info: '',
         },
         {
-          name: 'enter.language',
+          name: 'setting.language',
           info: ''
         },
       ],
@@ -123,8 +123,10 @@ export default {
     },
     logout() {
       Dialog.confirm({
-        title: '退出登录',
-        message: '确定要退出登录吗？',
+        title: this.$t('setting.dropOut'),
+        message: this.$t('setting.dropOutCancelConfirm'),
+        confirmButtonText: this.$t('btn.confirm'),
+        cancelButtonText: this.$t('btn.cancel')
       }).then(() => {
         this.$store.commit(types.USER_LOGIN, {
           token: '',
@@ -150,12 +152,12 @@ export default {
       const size = file.size / 1024 / 1024;
 
       if (type.indexOf('image') === -1) {
-        Toast.fail('文件类型仅支持图片格式');
+        Toast.fail(this.$t('setting.fileTypeOnlySupportsImageFormat'));
         return;
       }
 
       if (size > 2) {
-        Toast.fail('文件大小不得超过 2 MB');
+        Toast.fail(this.$t('setting.fileSizeMustNotExceed2MB'));
         return;
       }
 
@@ -181,7 +183,7 @@ export default {
             avatarId: res.id,
           })
             .then(() => {
-              Toast.success('修改成功');
+              Toast.success(this.$t('setting.modifySuccess'));
             })
             .catch(err => {
               Toast.fail(err.message);

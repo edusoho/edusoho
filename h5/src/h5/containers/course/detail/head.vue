@@ -14,7 +14,7 @@
       class="course-detail__nav--btn"
       @click="viewAudioDoc"
     >
-      文稿
+      {{ $t('courseLearning.manuscripts') }}
     </div>
     <div
       v-if="textContent"
@@ -77,7 +77,7 @@
         class="course-detail__head--btn course-detail__head--activebtn"
       >
         <i class="iconfont icon-markdone"></i>
-        学过了
+        {{ $t('courseLearning.learned') }}
       </div>
 
       <div v-if="!isFinish">
@@ -86,14 +86,14 @@
           v-if="enableFinish"
           @click="toLearned"
         >
-          学过了
+          {{ $t('courseLearning.learned') }}
         </div>
         <div
           class="course-detail__head--btn"
           v-if="!enableFinish"
           @click="toToast"
         >
-          完成条件
+          {{ $t('courseLearning.completionConditions') }}
         </div>
       </div>
     </template>

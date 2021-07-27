@@ -8,12 +8,12 @@
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="homework" class="intro-body">
-      <van-panel class="panel intro-panel" title="作业名称">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.jobName')">
         <div class="intro-panel__content intro-panel__content--title">
           {{ homework.name }}
         </div>
       </van-panel>
-      <van-panel class="panel intro-panel" title="作业说明">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.jobDescription')">
         <div class="intro-panel__content" v-html="homework.description" />
       </van-panel>
     </div>
@@ -23,14 +23,14 @@
         class="intro-footer__btn"
         type="primary"
         @click="showResult"
-        >查看结果</van-button
+        >{{ $t('courseLearning.viewResult2') }}</van-button
       >
       <van-button
         v-else
         class="intro-footer__btn"
         type="primary"
         @click="startHomework()"
-        >开始答题</van-button
+        >{{ $t('courseLearning.startAnsweringQuestions') }}</van-button
       >
     </div>
   </div>

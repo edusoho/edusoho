@@ -6,40 +6,40 @@
     class="wrong-question-search"
   >
     <van-nav-bar
-      title="筛选"
+      :title="$t('wrongQuestion.filter')"
       @click-left="onClickReset"
       @click-right="onClickSearch"
     >
       <template #left>
-        <span class="search-reset">重置</span>
+        <span class="search-reset">{{ $t('wrongQuestion.reset') }}</span>
       </template>
       <template #right>
-        <span class="search-btn">查看错题</span>
+        <span class="search-btn">{{ $t('wrongQuestion.check') }}</span>
       </template>
     </van-nav-bar>
 
     <van-divider style="margin-top: 4px;" />
 
     <div class="search-sort">
-      <div class="search-sort__title">排序</div>
+      <div class="search-sort__title">{{ $t('wrongQuestion.sort') }}</div>
       <div class="search-sort__btns">
         <div
           :class="['sort-btn', { active: sortType === 'default' }]"
           @click="onClickSort('default')"
         >
-          综合排序
+          {{ $t('wrongQuestion.all') }}
         </div>
         <div
           :class="['sort-btn', { active: sortType === 'DESC' }]"
           @click="onClickSort('DESC')"
         >
-          由高至低
+          {{ $t('wrongQuestion.highToLow') }}
         </div>
         <div
           :class="['sort-btn', { active: sortType === 'ASC' }]"
           @click="onClickSort('ASC')"
         >
-          由低至高
+          {{ $t('wrongQuestion.LowToHigh') }}
         </div>
       </div>
     </div>
@@ -51,15 +51,15 @@
         :class="['search-checked__item', { active: currentIndex == index }]"
         @click="currentIndex = index"
       >
-        <div class="checked-title">{{ condition.title }}</div>
-        <div class="checked-result">{{ condition.selectdText }}</div>
+        <div class="checked-title text-overflow">{{ $t(condition.title) }}</div>
+        <div class="checked-result">{{ $t(condition.selectdText) }}</div>
       </div>
     </div>
 
     <div class="search-select">
       <div class="search-select__toolbar">
-        {{ currentCondition.placeholder }}
-        <div class="search-select__confirm" @click="onClickConfirm">确定</div>
+        {{  $t(currentCondition.placeholder) }}
+        <div class="search-select__confirm" @click="onClickConfirm">{{ $t('btn.confirm') }}</div>
       </div>
 
       <van-picker
@@ -77,9 +77,9 @@ import _ from 'lodash';
 import Api from '@/api';
 
 const sources = {
-  testpaper: '考试任务',
-  homework: '作业任务',
-  exercise: '练习任务',
+  testpaper: 'wrongQuestion.examTask',
+  homework: 'wrongQuestion.homeworkTask',
+  exercise: 'wrongQuestion.practiceTask',
 };
 
 export default {
@@ -105,24 +105,24 @@ export default {
       searchParams: {},
       conditions: [
         {
-          title: '全部计划',
-          placeholder: '选择计划',
+          title: 'wrongQuestion.allPlan',
+          placeholder: 'wrongQuestion.choosePlan',
           columns: [],
-          selectdText: '选择计划',
+          selectdText: 'wrongQuestion.choosePlan',
           selectdIndex: 0,
         },
         {
-          title: '题目来源',
-          placeholder: '选择题目来源',
+          title: 'wrongQuestion.questionSource',
+          placeholder: 'wrongQuestion.chooseSource',
           columns: [],
-          selectdText: '选择题目来源',
+          selectdText: 'wrongQuestion.chooseSource',
           selectdIndex: 0,
         },
         {
-          title: '任务名称',
-          placeholder: '选择任务名称',
+          title: 'wrongQuestion.missionName',
+          placeholder: 'wrongQuestion.chooseMission',
           columns: [],
-          selectdText: '选择任务名称',
+          selectdText: 'wrongQuestion.chooseMission',
           selectdIndex: 0,
         },
       ],
@@ -167,7 +167,7 @@ export default {
         _.forEach(source, item => {
           newSource.push({
             type: item,
-            text: sources[item],
+            text: this.$t(sources[item]),
           });
         });
 
@@ -189,9 +189,9 @@ export default {
       this.conditions[0].selectdIndex = 0;
       this.conditions[1].selectdIndex = 0;
       this.conditions[2].selectdIndex = 0;
-      this.conditions[0].selectdText = '选择计划';
-      this.conditions[1].selectdText = '选择题目来源';
-      this.conditions[2].selectdText = '选择任务名称';
+      this.conditions[0].selectdText = this.$t('wrongQuestion.choosePlan');
+      this.conditions[1].selectdText = this.$t('wrongQuestion.chooseSource');
+      this.conditions[2].selectdText = this.$t('wrongQuestion.chooseMission');
       this.fetchCondition();
     },
 
@@ -226,15 +226,15 @@ export default {
       if (this.currentIndex === 0) {
         this.searchParams.courseId = value.id;
         this.conditions[1].selectdIndex = 0;
-        this.conditions[1].selectdText = '选择题目来源';
+        this.conditions[1].selectdText = this.$t('wrongQuestion.chooseSource');
         this.conditions[2].selectdIndex = 0;
-        this.conditions[2].selectdText = '选择任务名称';
+        this.conditions[2].selectdText = this.$t('wrongQuestion.chooseMission');
         delete this.searchParams.courseMediaType;
         delete this.searchParams.courseTaskId;
       } else if (this.currentIndex === 1) {
         this.searchParams.courseMediaType = value.type;
         this.conditions[2].selectdIndex = 0;
-        this.conditions[2].selectdText = '选择任务名称';
+        this.conditions[2].selectdText = this.$t('wrongQuestion.chooseMission');
         delete this.searchParams.courseTaskId;
       } else if (this.currentIndex === 2) {
         this.searchParams.courseTaskId = value.id;

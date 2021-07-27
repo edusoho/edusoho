@@ -1,7 +1,7 @@
 <template>
   <div class="detail-info" v-if="goods.id">
     <p class="detail-info__title" :class="isShare && 'detail-info__title--pr'">
-      <span class="certificate-icon" v-if="currentSku.hasCertificate">证</span>
+      <span class="certificate-icon" v-if="currentSku.hasCertificate">{{ $t('goods.certificate') }}</span>
       {{ goods.title }}
       <i
         v-if="isShare"
@@ -16,12 +16,12 @@
     >
       <div class="clearfix">
         <div class="pull-left">
-          优惠价
+          {{ $t('goods.preferentialPrice') }}
           <span
             v-if="currentSku.displayPriceObj.currency === 'RMB'"
             class="price"
           >
-            {{ currentSku.displayPriceObj.amount | formatPrice }}元
+            {{ currentSku.displayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}
           </span>
           <span
             v-if="currentSku.displayPriceObj.currency === 'coin'"
@@ -35,7 +35,7 @@
         </div>
         <div class="pull-right study-num">
           <i class="iconfont icon-renqi"></i>
-          {{ goods.product.target.studentNum }}人
+          {{ goods.product.target.studentNum }}{{ $t('goods.person') }}
         </div>
       </div>
     </div>
@@ -46,12 +46,12 @@
     >
       <div class="clearfix">
         <div class="pull-left">
-          价格
+          {{ $t('goods.price') }}
           <span
             v-if="currentSku.displayPriceObj.currency === 'RMB'"
             class="price"
           >
-            {{ currentSku.displayPriceObj.amount | formatPrice }}元
+            {{ currentSku.displayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}
           </span>
           <span
             v-if="currentSku.displayPriceObj.currency === 'coin'"
@@ -82,7 +82,7 @@
 
     <!-- 学习有效期 -->
     <div class="detail-info__validity">
-      学习有效期
+      {{ $t('goods.validity') }}
       <span
         class="detail-info__validity__content"
         v-html="buyableModeHtml"
@@ -130,13 +130,13 @@ export default {
       if (!memberInfo) {
         switch (usageMode) {
           case 'forever':
-            return '长期有效';
+            return this.$t('goods.longTermEffective');
           case 'end_date':
             return (
-              this.formatDate(usageEndTime.slice(0, 10)) + '&nbsp;之前可学习'
+              this.formatDate(usageEndTime.slice(0, 10)) + `&nbsp;${this.$t('goods.canLearnBefore')}`
             );
           case 'days':
-            return usageDays + '天内可学习';
+            return this.$t('goods.studyWithinDay', { number: usageDays });
           case 'date':
             return (
               this.formatDate(usageStartTime.slice(0, 10)) +
@@ -148,9 +148,9 @@ export default {
         }
       } else {
         if (usageMode == 'forever' || memberInfo.deadline == 0) {
-          return '长期有效';
+          return this.$t('goods.longTermEffective');
         }
-        return memberInfo.deadline.slice(0, 10) + '之前可学习';
+        return memberInfo.deadline.slice(0, 10) + this.$t('goods.canLearnBefore');
       }
     },
   },

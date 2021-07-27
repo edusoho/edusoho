@@ -19,7 +19,7 @@
           :style="index == item.length - 1 && 'margin-right: 0;'"
         >
           <i class="iconfont icon-wuzhangjieliang" />
-          无章节
+          {{ $t('goods.noChapter') }}
         </div>
         <div
           v-if="items.isExist == 1"
@@ -30,14 +30,14 @@
           :style="index == item.length - 1 && 'margin-right: 0;'"
         >
           <p class="chapter-title text-overflow">
-            第{{ items.number }}{{ hasChapter ? '章' : '节' }}：{{
+            第{{ items.number }}{{ hasChapter ? $t('goods.chapter') : $t('goods.section2') }}：{{
               items.title
             }}
           </p>
           <p class="chapter-des text-overflow">
-            {{ hasChapter ? `节(${items.unitNum})` : '' }} 课时({{
+            {{ hasChapter ? `${$t('goods.section2')}(${items.unitNum})` : '' }} {{ $t('goods.lesson') }}({{
               items.lessonNum
-            }}) 学习任务({{ items.tasksNum }})
+            }}) {{ $t('goods.learningTasks') }}({{ items.tasksNum }})
           </p>
         </div>
       </van-swipe-item>

@@ -36,7 +36,7 @@
                   {{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
                       ? ''
-                      : '课时'
+                      : $t('courseLearning.lesson')
                   }}{{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
                       ? lessonItem.title
@@ -68,7 +68,7 @@
                     {{
                       Number(lessonItem.tasks[lessonItem.index].isOptional)
                         ? ''
-                        : '课时'
+                        : $t('courseLearning.lesson')
                     }}{{
                       Number(lessonItem.tasks[lessonItem.index].isOptional)
                         ? lessonItem.title
@@ -96,7 +96,7 @@
               class="elective-tag"
               v-if="Number(lessonItem.tasks[lessonItem.index].isOptional)"
             >
-              选修
+              {{ $t('courseLearning.optional') }}
             </span>
             <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
               lessonItem.tasks[lessonItem.index] | filterTaskTime
@@ -124,7 +124,7 @@
               >
                 <!-- <span class="tryLes">试听</span> -->
                 <i :class="iconfont(taskItem)" class="iconfont" />
-                {{ Number(taskItem.isOptional) ? '' : '课时'
+                {{ Number(taskItem.isOptional) ? '' : $t('courseLearning.lesson')
                 }}{{
                   Number(taskItem.isOptional)
                     ? taskItem.title
@@ -144,7 +144,7 @@
     </template>
     <div v-if="isNoData" class="noneItem">
       <img src="static/images/none.png" class="notask" />
-      <p>暂时还没有课时哦...</p>
+      <p>{{ $t('courseLearning.thereIsNoClassYet') }}</p>
     </div>
   </div>
 </template>
@@ -255,12 +255,12 @@ export default {
         return;
       }
       if (task.lock) {
-        Toast('需要解锁上一个任务');
+        Toast(this.$t('courseLearning.needToUnlockThePreviousTask'));
         return;
       }
       // 课程再创建阶段或者和未发布状态
       if (task.status === 'create' || task.status !== 'published') {
-        Toast('敬请期待');
+        Toast(this.$t('courseLearning.stayTuned'));
         return;
       }
       const nextTask = {
@@ -284,7 +284,7 @@ export default {
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
-        Toast('敬请期待');
+        Toast(this.$t('courseLearning.stayTuned'));
         return;
       }
       switch (task.type) {
@@ -295,7 +295,7 @@ export default {
               taskId: task.id,
             });
           } else {
-            Toast('暂不支持此类型');
+            Toast(this.$t('courseLearning.doesNotSupportThisType'));
           }
           break;
         case 'audio':
@@ -329,11 +329,11 @@ export default {
                   taskId: task.id,
                 });
               } else {
-                Toast('暂不支持此类型');
+                Toast(this.$t('courseLearning.doesNotSupportThisType'));
               }
               return;
             } else if (task.activity.replayStatus == 'ungenerated') {
-              Toast('暂无回放');
+              Toast(this.$t('courseLearning.noReplay'));
               return;
             } else {
               replay = true;
