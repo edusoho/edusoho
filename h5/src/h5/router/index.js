@@ -981,30 +981,37 @@ const setVipSwitch = () => {
 
 // 校验是否有绑定手机号
 const mobileBindCheck = (to, from, next) => {
-  const mobileBindSkip = window.localStorage.getItem('mobile_bind_skip');
+  return new Promise((resolve) => {
+    const mobileBindSkip = window.localStorage.getItem('mobile_bind_skip');
 
-  if (mobileBindSkip === '1') return;
-
-  if (store.state.mobile_bind.is_bind_mobile) return;
-
-  let user = window.localStorage.getItem('user');
-  user = user ? JSON.parse(user) : user;
-
-  if (!user || !user.id) return;
-
-  Api.mobileBindCheck({
-    query: { userId: user.id },
-  }).then(({ is_bind_mobile, mobile_bind_mode }) => {
-    store.commit(types.SET_MOBILE_BIND, { is_bind_mobile, mobile_bind_mode });
-
-    if (is_bind_mobile) {
+    if (mobileBindSkip === '1' || store.state.mobile_bind.is_bind_mobile) {
+      resolve()
       return;
     }
 
-    if (mobile_bind_mode !== 'closed') {
-      next({ name: 'binding', query: to.query || from.query });
+    let user = window.localStorage.getItem('user');
+    user = user ? JSON.parse(user) : user;
+
+    if (!user || !user.id) {
+      resolve()
+      return;
     }
-  });
+    
+    Api.mobileBindCheck({
+      query: { userId: user.id },
+    }).then(({ is_bind_mobile, mobile_bind_mode }) => {
+      store.commit(types.SET_MOBILE_BIND, { is_bind_mobile, mobile_bind_mode });
+  
+      if (is_bind_mobile) {
+        resolve();
+        return;
+      }
+  
+      if (mobile_bind_mode !== 'closed') {
+        next({ name: 'binding', query: to.query || from.query });
+      }
+    })
+  })
 };
 
 // 检查微信公众号开关配置
@@ -1033,7 +1040,7 @@ const setWeChatSwitch = () => {
   });
 };
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const shouldUpdateMetaTitle = [
     'binding',
     'password_reset',
@@ -1056,8 +1063,8 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  if (to.name !== 'bindding') {
-    mobileBindCheck(to, from, next);
+  if (to.name !== 'binding') {
+    await mobileBindCheck(to, from, next);
   }
 
   // 站点后台设置、会员后台配置
