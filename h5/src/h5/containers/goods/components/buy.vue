@@ -196,7 +196,7 @@ export default {
 
       // 已加入, 去学习
       if (isMember) {
-        return '去学习';
+        return this.$t('goods.toLearn');
       }
 
       // 不可加入 + 会员免费学 时的文案
