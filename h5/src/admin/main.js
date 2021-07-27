@@ -1,5 +1,8 @@
 import Vue from 'vue';
 
+import i18n from './lang';
+
+
 import 'vant/lib/swipe/style';
 import 'vant/lib/swipe-cell/style';
 import 'vant/lib/swipe-item/style';
@@ -79,5 +82,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App),
 }).$mount('#app');

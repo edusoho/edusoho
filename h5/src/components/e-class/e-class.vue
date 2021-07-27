@@ -4,7 +4,7 @@
       <div class="e-course__left pull-left">
         <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
         <div v-if="normalTagShow">
-          <span v-if="courseType === 'live'" class="tag tag-live">直播</span>
+          <span v-if="courseType === 'live'" class="tag tag-live">{{ $t('e.live') }}</span>
           <span v-if="discountNum" class="tag tag-discount">{{
             discountNum
           }}</span>
@@ -12,13 +12,13 @@
         <span
           v-if="vipTagShow && vipSwitch && Number(isVip)"
           class="tag tag-vip"
-          >会员免费</span
+          >{{ $t('e.freeForMembers') }}</span
         >
       </div>
       <div class="e-course__right pull-left">
         <!-- header -->
         <div class="e-course__header text-overflow">
-          <span class="certificate-icon" v-if="course.hasCertificate">证</span
+          <span class="certificate-icon" v-if="course.hasCertificate">{{ $t('e.certificate') }}</span
           >{{ course.header }}
         </div>
         <!-- middle -->
@@ -110,13 +110,13 @@ export default {
         const discount = Number(this.discount);
         // 减价
         if (this.discountType === 'reduce') {
-          return `减${discount}`;
+          return `${this.$t('e.reduction')}${discount}`;
         }
         // 打折
         if (this.discountType === 'discount') {
           if (discount === 10) return false;
-          if (discount == 0) return '限免';
-          return `${discount}折`;
+          if (discount == 0) return this.$t('e.limitedExemption');
+          return `${discount}${this.$t('e.discount')}`;
         }
       }
     },

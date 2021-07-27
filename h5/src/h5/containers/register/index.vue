@@ -1,13 +1,13 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading" />
-    <span class="register-title">{{ registerType[pathName] }}</span>
+    <span class="register-title">{{ $t(registerType[pathName]) }}</span>
 
     <van-field
       v-model="registerInfo.mobile"
       :border="false"
       :error-message="errorMessage.mobile"
-      placeholder="请输入手机号"
+      :placeholder="$t('placeholder.mobileNumber')"
       max-length="11"
       @blur="validateMobileOrPsw('mobile')"
       @keyup="validatedChecker()"
@@ -17,7 +17,7 @@
       v-model="registerInfo.encrypt_password"
       :border="false"
       :error-message="errorMessage.encrypt_password"
-      :placeholder="placeHolder[pathName]"
+      :placeholder="$t(placeHolder[pathName])"
       type="password"
       max-length="20"
       @blur="validateMobileOrPsw('encrypt_password')"
@@ -37,7 +37,7 @@
       center
       clearable
       max-length="6"
-      placeholder="请输入验证码"
+      :placeholder="$t('placeholder.verificationCode')"
     >
       <van-button
         slot="button"
@@ -46,7 +46,7 @@
         type="primary"
         @click="clickSmsBtn"
       >
-        发送验证码
+        {{ $t('btn.sendCode') }}
         <span v-show="count.showCount">({{ count.num }})</span>
       </van-button>
     </van-field>
@@ -56,7 +56,7 @@
       type="default"
       class="primary-btn mb20"
       @click="handleSubmit"
-      >{{ btnType[pathName] }}</van-button
+      >{{ $t(btnType[pathName]) }}</van-button
     >
 
     <!-- <div class="login-bottom ">
@@ -85,16 +85,16 @@ import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
 
 const registerType = {
-  binding: '绑定手机',
-  register: '注册账号',
+  binding: 'title.bindingMobile',
+  register: 'title.registerAccount',
 };
 const btnType = {
-  binding: '绑定',
-  register: '注册',
+  binding: 'btn.binding',
+  register: 'btn.register',
 };
 const placeHolder = {
-  binding: '请输入密码',
-  register: '请设置密码（5-20位字符）',
+  binding: 'placeholder.password',
+  register: 'placeholder.setPassword',
 };
 
 export default {
@@ -160,7 +160,7 @@ export default {
       }
 
       if (type === 'encrypt_password' && ele.length > 20) {
-        this.errorMessage[type] = '最大输入20个字符';
+        this.errorMessage[type] = this.$t('toast.enterUpTo20Characters');
         return false;
       }
 
@@ -202,7 +202,7 @@ export default {
           .then(res => {
             Toast.success({
               duration: 2000,
-              message: '绑定成功',
+              message: this.$t('toast.bindingSuccess')
             });
             this.afterLogin();
           })
@@ -217,7 +217,7 @@ export default {
         .then(res => {
           Toast.success({
             duration: 2000,
-            message: '注册成功',
+            message: this.$t('toast.registrationSuccess')
           });
           this.afterLogin();
         })
@@ -238,7 +238,7 @@ export default {
       }
       // 验证码组件更新数据
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       this.$refs.dragComponent.initDragCaptcha();

@@ -42,7 +42,7 @@
 
     <div v-if="nodata && lessonNum == 0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
-      <p>暂时还没有课程哦...</p>
+      <p>{{ $t('courseLearning.thereIsNoCourseYet') }}</p>
     </div>
   </div>
 </template>
@@ -50,8 +50,7 @@
 import swiperDirectory from './swiper-directory.vue';
 import utilDirectory from './util-directory.vue';
 import lessonDirectory from './lesson-directory.vue';
-import Api from '@/api';
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types';
 export default {
   name: 'AfterjoinDirectory',

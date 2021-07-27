@@ -5,10 +5,10 @@
       <div v-if="discountNum" class="row-class-left__discount">
         {{ discountNum }}
       </div>
-      <div v-if="Number(isVip)" class="row-class-left__member">会员免费</div>
+      <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
       <div class="row-class-left__live">
         <div>
-          <span v-show="courseType === 'live'">直播</span>
+          <span v-show="courseType === 'live'">{{ $t('e.live') }}</span>
         </div>
         <div v-if="showNumberData === 'join'">
           <i class="iconfont icon-people" />
@@ -23,7 +23,7 @@
 
     <div class="row-class-right">
       <div class="row-class-right__top text-overflow">
-        <span class="certificate-icon" v-if="course.hasCertificate">证</span
+        <span class="certificate-icon" v-if="course.hasCertificate">{{ $t('e.certificate') }}</span
         >{{ course.header }}
       </div>
       <div class="row-class-right__center text-overflow">

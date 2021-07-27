@@ -7,31 +7,31 @@
     <div class="certificate-item__right item-right">
       <p class="item-right__title">{{ certificate.certificate.name }}</p>
       <p class="item-right__time">
-        获取时间：{{ certificate.issueTime | formatSlashTime }}
+        {{ $t('certificate.getTime') }}：{{ certificate.issueTime | formatSlashTime }}
       </p>
       <p class="item-right__time">
-        有效时间：<span
+        {{ $t('certificate.effectiveTime') }}：<span
           v-if="certificate.expiryTime == 0"
           class="item-right__time--green"
-          >长期有效</span
+          >{{ $t('certificate.longTermEffective') }}</span
         ><span
           v-else-if="certificate.status == 'expired'"
           class="item-right__time--red"
           >{{ certificate.expiryTime | formatSlashTime }}
-          <span>已过期</span>
+          <span>{{ $t('certificate.expired') }}</span>
         </span>
         <span
           v-else-if="certificate.status == 'valid'"
           class="item-right__time--green"
           >{{ certificate.expiryTime | formatSlashTime }}
-          <span>有效中</span></span
+          <span>{{ $t('certificate.effective') }}</span></span
         >
       </p>
       <div
         class="item-right__show"
         @click="toCertificateDetail(certificate.id)"
       >
-        查看证书
+        {{ $t('certificate.details') }}
       </div>
     </div>
   </div>

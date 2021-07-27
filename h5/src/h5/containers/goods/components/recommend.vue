@@ -3,7 +3,7 @@
     <div class="info-learn__header clearfix">
       <slot class="header-title pull-left" name="title"></slot>
       <span class="header-more pull-right" @click="onMore"
-        >更多<i class="iconfont icon-About"></i
+        >{{ $t('enter.more') }}<i class="iconfont icon-About"></i
       ></span>
     </div>
     <div class="info-learn__body">
@@ -31,9 +31,9 @@
             >
               {{
                 Number(goods.maxDisplayPriceObj.amount) == 0
-                  ? '免费'
+                  ? $t('goods.free')
                   : goods.minDisplayPriceObj.currency === 'RMB'
-                  ? `${goods.maxDisplayPriceObj.amount}元`
+                  ? `${goods.maxDisplayPriceObj.amount}${$t('goods.cny')}`
                   : goods.minDisplayPriceObj.coinAmount +
                     goods.minDisplayPriceObj.coinName
               }}
@@ -42,7 +42,7 @@
               <span
                 v-if="goods.minDisplayPriceObj.currency === 'RMB'"
                 class="price"
-                >{{ goods.minDisplayPriceObj.amount | formatPrice }}元</span
+                >{{ goods.minDisplayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}</span
               >
               <span
                 v-if="goods.minDisplayPriceObj.currency === 'coin'"
@@ -59,7 +59,7 @@
           </div>
         </div>
       </template>
-      <div v-else>暂时还没有推荐商品哦...</div>
+      <div v-else>{{ $t('goods.thereAreNoRecommendedProductsYet') }}</div>
     </div>
   </div>
 </template>

@@ -14,7 +14,7 @@
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
           <div v-if="typeList === 'classroom_list'" class="e-course__count">
-            共 {{ course.courseNum }} 门课程
+            {{ $t('e.totalOfTwoCourses', { number: course.courseNum }) }}
           </div>
           <div
             v-if="typeList === 'course_list'"

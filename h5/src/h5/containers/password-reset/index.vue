@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading" />
-    <span class="register-title">找回密码</span>
+    <span class="register-title">{{ $t('title.retrievePassword') }}</span>
 
     <e-drag ref="dragComponent" :key="dragKey" @success="handleSmsSuccess" />
 
@@ -19,7 +19,7 @@
       :error-message="errorMessage.encrypt_password"
       type="password"
       max-length="20"
-      placeholder="请设置密码（5-20位字符）"
+      :placeholder="$t('placeholder.setPassword')"
       @blur="validateAccountOrPsw('encrypt_password')"
     />
 
@@ -30,7 +30,7 @@
       center
       clearable
       max-length="6"
-      placeholder="请输入验证码"
+      :placeholder="$t('placeholder.verificationCode')"
     >
       <van-button
         slot="button"
@@ -39,7 +39,7 @@
         type="primary"
         @click="clickSmsBtn"
       >
-        发送验证码
+        {{ $t('btn.sendCode') }}
         <span v-show="count.showCount">({{ count.num }})</span>
       </van-button>
     </van-field>
@@ -49,7 +49,7 @@
       type="default"
       class="primary-btn mb20"
       @click="handleSubmit"
-      >确认</van-button
+      >{{ $t('btn.confirm') }}</van-button
     >
   </div>
 </template>
@@ -119,7 +119,7 @@ export default {
       }
     },
     accountPlaceHolder() {
-      return this.isEmail ? '请输入手机号或邮箱号' : '请输入手机号';
+      return this.isEmail ? this.$t('placeholder.mobileNumberOrEmail') : this.$t('placeholder.mobileNumber');
     },
   },
   methods: {
@@ -134,7 +134,7 @@ export default {
       }
 
       if (type === 'encrypt_password' && ele.length > 20) {
-        this.errorMessage[type] = '最大输入20个字符';
+        this.errorMessage[type] = this.$t('toast.enterUpTo20Characters');
         return false;
       }
 
@@ -152,7 +152,7 @@ export default {
     },
     handleSubmit() {
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       const resetInfo = Object.assign({}, this.resetInfo);
@@ -174,7 +174,8 @@ export default {
         })
           .then(res => {
             Dialog.alert({
-              message: '验证链接已发送到 ' + account,
+              message: this.$t('toast.verificationLinkHasBeenSentTo') + account,
+              confirmButtonText: this.$t('btn.confirm')
             }).then(() => {
               this.$router.replace({
                 name: 'login',
@@ -208,7 +209,8 @@ export default {
       })
         .then(res => {
           Dialog.alert({
-            message: '密码重置成功',
+            message: this.$t('toast.oasswordResetSuccessful'),
+            confirmButtonText: this.$t('btn.confirm')
           }).then(() => {
             this.$router.replace({
               name: 'login',
@@ -224,7 +226,7 @@ export default {
     },
     clickSmsBtn() {
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
         return;
       }
       this.handleSendSms();

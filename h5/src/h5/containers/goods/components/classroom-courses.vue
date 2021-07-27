@@ -29,15 +29,15 @@
           <span class="pull-left item-info__plan-mw text-overflow">{{
             course.title
           }}</span>
-          <span class="pull-right">共{{ course.compulsoryTaskNum }}课时</span>
+          <span class="pull-right">共{{ course.compulsoryTaskNum }}{{ $t('goods.lesson') }}</span>
         </p>
       </div>
     </div>
     <div v-if="page < page_count" class="load-more__footer" @click="loadMore">
-      点击查看更多
+      {{ $t('goods.more') }}
     </div>
     <div v-if="page >= page_count" class="load-more__footer">
-      没有更多了
+      {{ $t('goods.noMore') }}
     </div>
   </div>
 </template>

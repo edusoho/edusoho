@@ -1,12 +1,12 @@
 <template>
   <div class="login">
-    <span class="login-title">手机快捷登录</span>
-    <span class="login-des">新用户将为您自动注册</span>
+    <span class="login-title">{{ $t('title.loginWithMobileNumber') }}</span>
+    <span class="login-des">{{ $t('title.automaticallyRegistered') }}</span>
     <van-field
       v-model="userinfo.mobile"
       :border="false"
       :error-message="errorMessage.mobile"
-      placeholder="请输入手机号"
+      :placeholder="$t('placeholder.mobileNumber')"
       max-length="11"
       type="number"
       class="login-input e-input"
@@ -32,7 +32,7 @@
       clearable
       max-length="6"
       class="login-input e-input"
-      placeholder="请输入验证码"
+      :placeholder="$t('placeholder.verificationCode')"
     >
       <van-button
         slot="button"
@@ -41,7 +41,7 @@
         type="primary"
         @click="clickSmsBtn"
       >
-        发送验证码
+        {{ $t('btn.sendCode') }}
         <span v-show="count.showCount">({{ count.num }})</span>
       </van-button>
     </van-field>
@@ -50,7 +50,7 @@
       type="default"
       class="primary-btn mb20"
       @click="handleSubmit(handleSubmitSuccess)"
-      >登录</van-button
+      >{{ $t('btn.login') }}</van-button
     >
     <div class="login-bottom text-center">
       <div v-if="userTerms || privacyPolicy" class="login-agree">
@@ -60,18 +60,18 @@
           checked-color="#408ffb"
           @click="checkAgree"
         />
-        我已阅读并同意<i v-if="userTerms" @click="lookPrivacyPolicy"
-          >《用户服务》</i
-        ><span v-if="userTerms && privacyPolicy">和</span
-        ><span v-if="privacyPolicy"
-          >《<i @click="lookPrivacyPolicy">隐私协议</i>》</span
-        >
+        {{ $t('tips.iHaveReadAndAgreeToThe') }}
+        <i v-if="userTerms" @click="lookPrivacyPolicy">《{{ $t('btn.userServiceAgreement') }}》</i>
+        <span v-if="userTerms && privacyPolicy">{{ $t('tips.and') }}</span>
+        <span v-if="privacyPolicy">
+          <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
+        </span>
       </div>
       <div class="login-change" @click="changeLogin">
         <img
           src="static/images/login_change.png"
           class="login_change-icon"
-        />切换账号密码登录
+        />{{ $t('btn.switchAccountPasswordToLogin') }}
       </div>
     </div>
   </div>
@@ -122,7 +122,7 @@ export default {
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: '请稍后',
+        message: this.$t('toast.pleaseWait')
       });
       this.afterLogin();
       return;

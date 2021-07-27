@@ -14,7 +14,7 @@
           >{{ courseList.title }}</span
         >
         <span class="e-course-list__more">
-          <span class="more-text pull-left" style="font-size:12px">更多</span>
+          <span class="more-text pull-left" style="font-size:12px">{{ $t('enter.more') }}</span>
         </span>
       </div>
     </div>
@@ -27,7 +27,7 @@
           :feedback="feedback"
         />
       </div>
-      <div v-show="courseItemData" class="e-course__empty">暂无公开课</div>
+      <div v-show="courseItemData" class="e-course__empty">{{ $t('e.noPublicClass') }}</div>
     </div>
   </div>
 </template>

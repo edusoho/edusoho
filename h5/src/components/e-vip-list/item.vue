@@ -2,9 +2,9 @@
   <div class="e-vip-item" @click="handleClick">
     <img v-lazy="item.background" class="vip-background" />
     <span class="name text-overflow">{{ item.name }}</span>
-    <span class="explain"
-      >{{ item.freeCourseNum }}门课程 {{ item.freeClassroomNum }}门班级</span
-    >
+    <span class="explain">
+      {{ $t('e.courseClass', { numberCourse: item.freeCourseNum, numberClass: item.freeClassroomNum }) }}
+    </span>
   </div>
 </template>
 

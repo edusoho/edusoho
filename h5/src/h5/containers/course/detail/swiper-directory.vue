@@ -17,7 +17,7 @@
           @click="handleChapter(index)"
         >
           <i class="iconfont icon-wuzhangjieliang" />
-          无章节
+          {{ $t('courseLearning.noChapter') }}
         </div>
         <div
           v-if="items.isExist == 1"
@@ -26,14 +26,14 @@
           @click="handleChapter(index)"
         >
           <p class="chapter-title text-overflow">
-            第{{ items.number }}{{ hasChapter ? '章' : '节' }}：{{
+            第{{ items.number }}{{ hasChapter ? $t('courseLearning.chapter') : $t('courseLearning.section2') }}：{{
               items.title
             }}
           </p>
           <p class="chapter-des text-overflow">
-            {{ hasChapter ? `节(${items.unitNum})` : '' }} 课时({{
+            {{ hasChapter ? `节(${items.unitNum})` : '' }} {{ $t('courseLearning.lesson') }}({{
               items.lessonNum
-            }}) 学习任务({{ items.tasksNum }})
+            }}) {{ $t('courseLearning.learningTasks') }}({{ items.tasksNum }})
           </p>
         </div>
       </van-swipe-item>

@@ -18,7 +18,7 @@
     </div>
     <van-popup v-model="show" class="code-popup-body">
       <i class="icon-close h5-icon h5-icon-guanbi" @click="show = false" />
-      <div class="title text-14">扫描下方二维码，授权开启课程通知</div>
+      <div class="title text-14">{{ $t('e.scanTheQRCode') }}</div>
       <img
         v-if="wechatSettings"
         :src="wechatSettings.official_qrcode"

@@ -1,6 +1,6 @@
 <template>
   <div class="goods-reviews">
-    <h3>为课程评分</h3>
+    <h3>{{ $t('goods.gradeTheCourse') }}</h3>
     <van-rate
       v-model="value"
       :size="25"
@@ -15,7 +15,7 @@
       class="goods-reviews__content"
       v-model="content"
     ></textarea>
-    <div class="goods-reviews__submit" @click="onSubmit">提交</div>
+    <div class="goods-reviews__submit" @click="onSubmit">{{ $t('goods.submit') }}</div>
   </div>
 </template>
 

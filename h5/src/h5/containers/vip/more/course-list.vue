@@ -30,6 +30,7 @@ import { Toast } from 'vant';
 import eClass from '&/components/e-class/e-class';
 import courseListData from '@/utils/filter-course.js';
 import { mapState } from 'vuex';
+import i18n from '@/lang';
 
 export default {
   components: {
@@ -70,7 +71,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     // const navTitle = to.query.vipName || '';
-    to.meta.title = `会员课程`;
+    to.meta.title =  i18n.t('vip.membersCourse');
     next();
   },
   filters: {

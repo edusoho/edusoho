@@ -27,13 +27,13 @@
       <div>
         <span @click="cardShow = true">
           <i class="iconfont icon-Questioncard" />
-          题卡
+          {{ $t('courseLearning.questionCard') }}
         </span>
       </div>
       <div>
         <span @click="submitpaper">
           <i class="iconfont icon-submit" />
-          提交
+          {{ $t('courseLearning.submit2') }}
         </span>
       </div>
     </div>
@@ -43,8 +43,8 @@
       <div v-if="info.length > 0" class="card">
         <div class="card-title">
           <div>
-            <span class="card-finish">已完成</span>
-            <span class="card-nofinish">未完成</span>
+            <span class="card-finish">{{ $t('courseLearning.completed') }}</span>
+            <span class="card-nofinish">{{ $t('courseLearning.notCompleted') }}</span>
           </div>
           <i class="iconfont icon-no" @click="cardShow = false" />
         </div>
@@ -321,7 +321,7 @@ export default {
     // 提交练习
     submitpaper() {
       let index = 0;
-      let message = '题目已经做完，确认提交吗?';
+      let message = this.$t('courseLearning.sureSubmit');
       const answer = JSON.parse(JSON.stringify(this.answer));
       Object.keys(answer).forEach(key => {
         // 去除空数据
@@ -333,13 +333,13 @@ export default {
       });
 
       if (index > 0) {
-        message = `还有${index}题未做，确认提交吗？`;
+        message = this.$t('courseLearning.notSureSubmit', { number: index });
       }
       // return new Promise((resolve,reject)=>{
       Dialog.confirm({
-        title: '提交',
-        cancelButtonText: '立即提交',
-        confirmButtonText: '检查一下',
+        title: this.$t('courseLearning.submit2'),
+        cancelButtonText: this.$t('courseLearning.submitNow'),
+        confirmButtonText: this.$t('courseLearning.check'),
         message: message,
       })
         .then(() => {

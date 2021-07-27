@@ -1,12 +1,12 @@
 <template>
   <div class="course-reviews">
     <div class="course-reviews__heading">
-      我的评价
+      {{ $t('courseLearning.myEvaluation') }}
       <span
         v-if="reviews !== null"
         @click="onResetReviews"
         class="pull-right reset-reviews"
-        >重新评价</span
+        >{{ $t('courseLearning.reEvaluation') }}</span
       >
     </div>
     <div class="course-reviews__body">
@@ -25,7 +25,7 @@
           autosize
           type="textarea"
           maxlength="500"
-          placeholder="请输入评价"
+          :placeholder="$t('courseLearning.pleaseInputEvaluation')"
           show-word-limit
         />
         <van-button
@@ -33,7 +33,7 @@
           size="small"
           style="border-radius: 8px; margin-top: 10px; background: #408ffb; color: #fff;"
           @click="onSubmit"
-          >提交评价</van-button
+          >{{ $t('courseLearning.submit') }}</van-button
         >
       </div>
       <div class="clearfix" v-else>
@@ -94,11 +94,11 @@ export default {
   methods: {
     onSubmit() {
       if (this.value == 0) {
-        this.$toast('评分不能为空~');
+        this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
         return;
       }
       if (!this.message.trim()) {
-        this.$toast('评价内容不能为空~');
+        this.$toast(this.$t('courseLearning.evaluationContentCannotBeEmpty'));
         return;
       }
       let targetId, targetType;

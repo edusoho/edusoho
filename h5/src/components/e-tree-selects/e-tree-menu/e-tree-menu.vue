@@ -110,7 +110,7 @@ export default {
     },
     insertAll(children) {
       if (children[0].name !== '全部') {
-        children.unshift({ name: '全部', id: '0', children: [] });
+        children.unshift({ name: this.$t('e.all'), id: '0', children: [] });
       }
       return children;
     },

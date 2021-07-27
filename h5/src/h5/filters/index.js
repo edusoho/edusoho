@@ -3,6 +3,7 @@ import {
   formatCompleteTime,
   formatSimpleHour,
 } from '@/utils/date-toolkit';
+import i18n from '@/lang';
 
 const filters = [
   {
@@ -14,14 +15,14 @@ const filters = [
   {
     name: 'isFree',
     handler(value) {
-      return value ? 'value' : '免费';
+      return value ? 'value' : i18n.t('filters.free');
     },
   },
   {
     name: 'taskType',
     handler(task) {
       if (task.status !== 'published') {
-        return '敬请期待';
+        return i18n.t('filters.stayTuned');
       }
       const type = task.type;
       switch (type) {
@@ -43,7 +44,7 @@ const filters = [
         case 'exercise':
           return '练习';
         default:
-          return '暂不支持此类型';
+          return i18n.t('filters.doesNotSupportThisType');
       }
     },
   },
@@ -87,7 +88,7 @@ const filters = [
     name: 'filterTaskTime',
     handler(task) {
       if (task.status !== 'published') {
-        return '敬请期待';
+        return i18n.t('filters.stayTuned');
       }
       switch (task.type) {
         case 'video':
@@ -105,15 +106,15 @@ const filters = [
           const endTimeStamp = new Date(task.endTime * 1000);
           // 直播未开始
           if (now <= startTimeStamp) {
-            return `${formatCompleteTime(startTimeStamp)}开始`;
+            return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
           }
           if (now > endTimeStamp) {
             if (task.activity.replayStatus === 'ungenerated') {
-              return '已结束';
+              return i18n.t('filters.over');
             }
-            return '回放';
+            return i18n.t('filters.replay');
           }
-          return '直播中';
+          return i18n.t('filters.live');
         // case 'testpaper':
         //   const nowTime = new Date().getTime();
         //   const testStartTime = new Date(task.startTime * 1000);
@@ -130,7 +131,7 @@ const filters = [
         case 'exercise':
           return '';
         default:
-          return '暂不支持';
+          return i18n.t('filters.notCurrentlySupported');
       }
     },
   },
@@ -138,7 +139,7 @@ const filters = [
     name: 'filterCourse',
     handler(task) {
       if (task.status !== 'published') {
-        return '敬请期待';
+        return i18n.t('filters.stayTuned');
       }
       switch (task.type) {
         case 'live':
@@ -150,15 +151,15 @@ const filters = [
           const endTimeStamp = new Date(task.endTime);
           // 直播未开始
           if (now <= startTimeStamp) {
-            return `${formatCompleteTime(startTimeStamp)}开始`;
+            return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
           }
           if (now > endTimeStamp) {
             if (task.activity.replayStatus === 'ungenerated') {
-              return '已结束';
+              return i18n.t('filters.over');
             }
-            return '回放';
+            return i18n.t('filters.replay');
           }
-          return '直播中';
+          return i18n.t('filters.live');
         // case 'testpaper':
         //   const nowTime = new Date().getTime();
         //   const testStartTime = new Date(task.startTime * 1000);
@@ -175,7 +176,7 @@ const filters = [
         case 'exercise':
           return '';
         default:
-          return '暂不支持';
+          return i18n.t('filters.notCurrentlySupported');
       }
     },
   },
@@ -293,31 +294,31 @@ const filters = [
     handler(status) {
       switch (status) {
         case 'created':
-          status = '去支付';
+          status = i18n.t('filters.toPay');
           break;
         case 'paying':
-          status = '去支付';
+          status = i18n.t('filters.toPay');
           break;
         case 'success':
-          status = '已付款';
+          status = i18n.t('filters.paid');
           break;
         case 'refunded':
-          status = '已退款';
+          status = i18n.t('filters.refunded');
           break;
         case 'finished':
-          status = '交易成功';
+          status = i18n.t('filters.successfulTrade');
           break;
         case 'closed':
-          status = '交易关闭';
+          status = i18n.t('filters.transactionClosure');
           break;
         case 'paid':
-          status = '已付款';
+          status = i18n.t('filters.paid');
           break;
         case 'refunding':
-          status = '已付款';
+          status = i18n.t('filters.paid');
           break;
         case 'fail':
-          status = '已付款';
+          status = i18n.t('filters.paid');
           break;
         default:
       }
@@ -361,7 +362,7 @@ const filters = [
         case 'discuss':
           return '';
         default:
-          return '暂不支持';
+          return i18n.t('filters.notCurrentlySupported');
       }
     },
   },
