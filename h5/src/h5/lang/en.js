@@ -384,8 +384,8 @@ export default {
     am: 'AM',
     pm: 'PM',
     night: 'Night',
-    toLearn: '去学习'
-
+    toLearn: 'To learn',
+    buy: 'Buy'
   },
   courseLearning: {
     title: 'Details',

@@ -200,12 +200,12 @@ export default {
       }
 
       // 不可加入 + 会员免费学 时的文案
-      const onlyVipJoinWay = vipLevelInfo ? `${vipLevelInfo.name}免费` : '';
+      const onlyVipJoinWay = vipLevelInfo ? `${vipLevelInfo.name}${this.$t('goods.free')}` : '';
 
       // currentSku.access.code 存在的状态
       const status = {
-        success: '立即购买',
-        'user.not_login': '立即购买',
+        success: this.$t('goods.buy'),
+        'user.not_login': this.$t('goods.buy'),
         'user.locked': '用户被锁定',
         'member.member_exist': '课程学员已存在',
         'course.reach_max_student_num': '学员达到上限',

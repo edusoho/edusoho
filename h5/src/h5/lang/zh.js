@@ -384,7 +384,8 @@ export default {
     am: '上午',
     pm: '下午',
     night: '晚上',
-    toLearn: '去学习'
+    toLearn: '去学习',
+    buy: '立即购买'
   },
   courseLearning: {
     title: '课程详情',
