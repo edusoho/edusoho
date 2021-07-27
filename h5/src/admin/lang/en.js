@@ -55,7 +55,7 @@ export default {
   search: {
     placeholder: 'Search course/class/Question bank',
     searchSettings: 'Search settings',
-    atPresent: 'At present, the search function only supports searching classes and courses'
+    atPresent: 'The search function currently only supports searching classes and courses'
   },
   sidebar: {
     basicComponents: 'Basic components',
@@ -143,5 +143,17 @@ export default {
     chooseCourse: 'Choose course',
     chooseClass: 'Choose class',
     chooseMember: 'Choose member'
+  },
+  navigation: {
+    navigationSettings: 'Navigation settings',
+    tips: 'The recommended image size is 80x80px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    title: 'Title:',
+    linkSource: 'Link source:',
+    courseSorts: 'Course sorts:',
+    memberSorts: 'Member sorts:',
+    classSorts: 'Class sorts:',
+    openClassSorts: 'Open class sorts:',
+    addNavigation: 'Add navigation',
+    replacePicture: 'Replace picture',
   }
 };

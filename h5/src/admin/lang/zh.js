@@ -143,5 +143,17 @@ export default {
     chooseCourse: '选择课程',
     chooseClass: '选择班级',
     chooseMember: '选择会员'
+  },
+  navigation: {
+    navigationSettings: '图文导航设置',
+    tips: '建议图片尺寸为80x80px，支持 jpg/png/gif 格式，大小不超过2MB',
+    title: '标题：',
+    linkSource: '链接来源：',
+    memberSorts: '会员分类：',
+    courseSorts: '课程分类：',
+    classSorts: '班级分类：',
+    openClassSorts: '公开课分类：',
+    addNavigation: '添加图文导航',
+    replacePicture: '更换图片',
   }
 };
