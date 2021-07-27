@@ -132,7 +132,7 @@ export default {
           token: '',
           user: {},
         });
-        window.localStorage.setItem('mobile_bind_skip', false);
+        window.localStorage.setItem('mobile_bind_skip', '0');
         this.$router.push({
           name: 'my',
         });

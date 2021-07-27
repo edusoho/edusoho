@@ -49,9 +49,8 @@
     <div
       v-if="mobileBind.mobile_bind_mode === 'option'"
       class="mobile-bindding__skipping"
-      @click="mobileBindSkip"
     >
-      跳过
+      <span @click="mobileBindSkip">跳过</span>
     </div>
 
     <div class="binding-tip">绑定手机号的三大理由</div>
@@ -226,7 +225,7 @@ export default {
       let redirect = this.$route.query.redirect;
 
       redirect = redirect || '/';
-      window.localStorage.setItem('mobile_bind_skip', true);
+      window.localStorage.setItem('mobile_bind_skip', '1');
       this.$router.replace({ path: redirect });
     },
   },

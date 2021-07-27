@@ -33,10 +33,10 @@ export default {
             return;
           }
 
-          setTimeout(this.jumpAction, 2000);
+          setTimeout(this.jumpAction, 1000);
         })
         .catch(err => {
-          setTimeout(this.jumpAction, 2000);
+          setTimeout(this.jumpAction, 1000);
         });
     },
     jumpAction() {
