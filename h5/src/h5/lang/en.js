@@ -383,7 +383,9 @@ export default {
     beforeDawn: 'Before dawn',
     am: 'AM',
     pm: 'PM',
-    night: 'Night'
+    night: 'Night',
+    toLearn: '去学习'
+
   },
   courseLearning: {
     title: 'Details',
