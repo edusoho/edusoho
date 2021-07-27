@@ -20,9 +20,9 @@ export default {
   methods: {
     afterLogin() {
       this.checkMobileBind()
-        .then(res => {
+        .then(({ is_bind_mobile, mobile_bind_mode }) => {
           // res.mobile_bind_mode: constraint：强制绑定，option：非强制绑定，closed：不绑定
-          if (!res.is_bind_mobile) {
+          if (!is_bind_mobile && mobile_bind_mode !== 'closed') {
             this.$router.replace({
               name: 'binding',
               query: {

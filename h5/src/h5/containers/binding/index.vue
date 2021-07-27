@@ -263,10 +263,9 @@ export default {
 
 .mobile-bindding__skipping {
   width: 100%;
-  margin-top: -4vw;
-  margin-bottom: 4vw;
-  margin-right: 4px;
-  text-align: right;
+  margin-top: -6vw;
+  margin-bottom: 6vw;
+  text-align: center;
   font-size: 16px;
   color: #666;
 }
