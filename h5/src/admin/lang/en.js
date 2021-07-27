@@ -60,9 +60,25 @@ export default {
   sidebar: {
     basicComponents: 'Basic components',
     courseList: 'Course list',
+    carousel: 'Carousel',
     classList: 'Class list',
     imageAds: 'Image Ads',
     navigation: 'Navigation',
     search: 'Search',
+    coupon: 'Coupons',
+    memberArea: 'Member area',
+    questionBankList: 'Question bank list',
+    marketingComponents: 'Marketing Components',
+    groupPurchase: 'Group purchase',
+    bargain: 'Bargain',
+    flashSale: 'Flash sale',
+    openClassList: 'Open class list'
+  },
+  btn: {
+    cancel: 'Cancel',
+    preview: 'Preview',
+    savaAndPublish: 'Save and publish',
+    reset: 'Reset',
+    publish: 'Publish'
   }
 };

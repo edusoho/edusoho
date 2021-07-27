@@ -60,7 +60,7 @@
         </div>
         <template>
           <div class="section-title">
-            营销组件
+            {{ $t('sidebar.marketingComponents') }}
             <a
               class="color-primary pull-right text-12"
               :href="createMarketingUrl"
@@ -77,7 +77,7 @@
               v-for="(item, index) in marketingModules"
               :key="`marketing-${index}`"
             >
-              {{ item.name }}
+              {{ $t(item.name) }}
             </el-button>
           </div>
         </template>
@@ -98,7 +98,7 @@
             v-for="(item, index) in appBaseModules"
             :key="`app-base-${index}`"
           >
-            {{ item.name }}
+            {{ $t(item.name) }}
           </el-button>
         </div>
       </div>
@@ -113,14 +113,14 @@
         size="mini"
         @click="reset"
         :disabled="isLoading"
-        >重 置</el-button
+        >{{ $t('btn.reset') }}</el-button
       >
       <el-button
         class="setting-button-group__button text-14 btn-border-primary"
         size="mini"
         @click="save('draft')"
         :disabled="isLoading"
-        >预 览</el-button
+        >{{ $t('btn.preview') }}</el-button
       >
       <el-button
         class="setting-button-group__button text-14"
@@ -128,7 +128,7 @@
         size="mini"
         @click="save('published')"
         :disabled="isLoading"
-        >发 布</el-button
+        >{{ $t('btn.publish') }}</el-button
       >
     </div>
   </div>

@@ -20,14 +20,14 @@
                   @click="addModule(item, index)"
                 >
                   <i :class="['iconfont', item.icon]"></i>
-                  {{ item.name }}
+                  {{ $t(item.name) }}
                 </el-menu-item>
               </el-menu-item-group>
             </el-submenu>
 
             <el-submenu index="2">
               <template slot="title">
-                <span>营销组件</span>
+                <span>{{ $t('sidebar.marketingComponents') }}</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item
@@ -37,7 +37,7 @@
                   @click="addModule(item, index)"
                 >
                   <i :class="['iconfont', item.icon]"></i>
-                  {{ item.name }}
+                  {{ $t(item.name) }}
                 </el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -93,14 +93,14 @@
         size="mini"
         @click="quit"
         :disabled="isLoading"
-        >取消装修</el-button
+        >{{ $t('btn.cancel') }}</el-button
       >
       <el-button
         class="setting-button-group__button text-14 btn-border-primary"
         size="mini"
         @click="save('draft')"
         :disabled="isLoading"
-        >预 览</el-button
+        >{{ $t('btn.preview') }}</el-button
       >
       <el-button
         class="setting-button-group__button text-14"
@@ -108,7 +108,7 @@
         size="mini"
         @click="save('published')"
         :disabled="isLoading"
-        >保存并发布</el-button
+        >{{ $t('btn.savaAndPublish') }}</el-button
       >
     </div>
     <el-dialog title="提示" :visible.sync="quitDialogVisible" width="30%">

@@ -60,9 +60,25 @@ export default {
   sidebar: {
     basicComponents: '基础组件',
     courseList: '课程列表',
+    carousel: '轮播图',
     classList: '班级列表',
     imageAds: '图片广告',
     navigation: '图文导航',
     search: '搜索',
+    coupon: '优惠券',
+    memberArea: '会员专区',
+    questionBankList: '题库列表',
+    marketingComponents: '营销组件',
+    groupPurchase: '拼团',
+    bargain: '砍价',
+    flashSale: '秒杀',
+    openClassList: '公开课列表'
+  },
+  btn: {
+    cancel: '取消',
+    preview: '预览',
+    savaAndPublish: '保存并发布',
+    reset: '重置',
+    publish: '发布'
   }
 };
