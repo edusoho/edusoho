@@ -21,9 +21,9 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        {{ typeLabel }}列表设置
+        {{ $t('courseList.settingList', { type: typeLabel }) }}
         <div
-          v-if="portal === 'miniprogram' && typeLabel === '班级'"
+          v-if="portal === 'miniprogram' && ['班级', 'class'].includes(typeLabel)"
           class="text-12 color-gray mts"
         >
           使用班级配置功能，小程序版本需要升级到1.3.1及以上
@@ -31,19 +31,19 @@
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
-        <setting-cell title="列表名称：" left-class="required-option">
+        <setting-cell :title="$t('courseList.listName')" left-class="required-option">
           <el-input
             v-model="copyModuleData.data.title"
             size="mini"
             max-length="15"
-            placeholder="请输入列表名称"
+            :placeholder="$t('courseList.pleaseEnterTheNameOfTheList')"
             clearable
           />
         </setting-cell>
 
         <!-- 排列方式： -->
-        <setting-cell v-if="portal !== 'miniprogram'" title="排列方式：">
-          <el-select v-model="displayStyle" placeholder="排列方式" size="mini">
+        <setting-cell v-if="portal !== 'miniprogram'" :title="$t('courseList.sortOrder3')">
+          <el-select v-model="displayStyle" :placeholder="$t('courseList.sortOrder')" size="mini">
             <el-option
               v-for="item in layoutOptions"
               :key="item.value"
@@ -54,15 +54,15 @@
         </setting-cell>
 
         <!-- 课程来源 -->
-        <setting-cell :title="typeLabel + '来源：'">
+        <setting-cell :title="$t('courseList.source', { type: typeLabel })">
           <el-radio v-model="sourceType" label="condition"
-            >{{ typeLabel }}分类</el-radio
+            >{{ $t('courseList.sorts', { type: typeLabel }) }}</el-radio
           >
-          <el-radio v-model="sourceType" label="custom">自定义</el-radio>
+          <el-radio v-model="sourceType" label="custom">{{ $t('courseList.custom') }}</el-radio>
         </setting-cell>
 
         <!-- 课程分类 -->
-        <setting-cell :title="typeLabel + '分类：'">
+        <setting-cell :title="$t('courseList.sorts2', { type: typeLabel })">
           <el-cascader
             v-show="sourceType === 'condition'"
             :options="
@@ -71,13 +71,13 @@
             :props="cascaderProps"
             v-model="categoryTempId"
             size="mini"
-            placeholder="请输入列表名称"
+            :placeholder="$t('courseList.pleaseEnterTheNameOfTheList')"
             filterable
             change-on-select
           />
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal"
-              >选择{{ typeLabel }}</el-button
+              >{{ $t('courseList.choose') }}{{ typeLabel }}</el-button
             >
           </div>
         </setting-cell>
@@ -103,7 +103,7 @@
         </draggable>
 
         <!-- 排列顺序 -->
-        <setting-cell v-show="sourceType === 'condition'" title="排列顺序：">
+        <setting-cell v-show="sourceType === 'condition'" :title="$t('courseList.sortOrder2')">
           <div class="section-right__item pull-left">
             <el-select v-model="sort" placeholder="顺序" size="mini">
               <el-option
@@ -127,7 +127,7 @@
         </setting-cell>
 
         <!-- 显示个数 -->
-        <setting-cell v-show="sourceType === 'condition'" title="显示个数：">
+        <setting-cell v-show="sourceType === 'condition'" :title="$t('courseList.theNumberOfDisplay')">
           <el-select v-model="limit" placeholder="请选择个数" size="mini">
             <el-option
               v-for="item in limitOptions"
@@ -156,13 +156,13 @@ import courseList from '&/components/e-course-list/e-course-list';
 import courseModal from './modal/course-modal';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
-import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import treeDigger from 'admin/utils/tree-digger';
 import pathName2Portal from 'admin/config/api-portal-config';
 import suggest from '&/components/e-suggest/e-suggest.vue';
 const optionLabel = {
-  course_list: '课程',
-  classroom_list: '班级',
+  course_list: 'courseList.course',
+  classroom_list: 'courseList.class',
 };
 
 export default {
@@ -196,29 +196,29 @@ export default {
       layoutOptions: [
         {
           value: 'row',
-          label: '一行一列',
+          label: this.$t('courseList.rowByColumn')
         },
         {
           value: 'distichous',
-          label: '一行两列',
+          label: this.$t('courseList.oneRowAndTwoColumn')
         },
       ],
       sortOptions: [
         {
           value: '-studentNum',
-          label: '加入最多',
+          label: this.$t('courseList.joinMost')
         },
         {
           value: '-createdTime',
-          label: '最近创建',
+          label: this.$t('courseList.recentlyCreated')
         },
         {
           value: '-rating',
-          label: '评分最高',
+          label: this.$t('courseList.highestScore')
         },
         {
           value: 'recommendedSeq',
-          label: `推荐${optionLabel[this.moduleData.type]}`,
+          label: `${this.$t('courseList.recommend')}${this.$t(optionLabel[this.moduleData.type])}`,
         },
       ],
       cascaderProps: {
@@ -231,19 +231,19 @@ export default {
       dateOptions: [
         {
           value: '7',
-          label: '最近7天',
+          label: this.$t('courseList.last7Days')
         },
         {
           value: '30',
-          label: '最近30天',
+          label: this.$t('courseList.last30Days')
         },
         {
           value: '90',
-          label: '最近90天',
+          label: this.$t('courseList.last90Days')
         },
         {
           value: '0',
-          label: '历史所有',
+          label: this.$t('courseList.allHistory')
         },
       ],
     };
@@ -251,7 +251,7 @@ export default {
   computed: {
     ...mapState(['courseCategories', 'classCategories']),
     typeLabel() {
-      return optionLabel[this.type];
+      return this.$t(optionLabel[this.type]);
     },
     isActive: {
       get() {
@@ -293,6 +293,7 @@ export default {
 
       if (isNewCreated || isRecommend) {
         // 如果是 最新创建 或 推荐课程 时间区间为所有
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.moduleData.data.lastDays = '0';
       }
       return !isNewCreated && !isRecommend;
@@ -374,12 +375,14 @@ export default {
         const categoryExist = false;
         treeDigger(tree, (children, id) => {
           if (id) {
+            // eslint-disable-next-line no-unused-vars
             const categoryExist = id == this.categoryTempId;
           }
           return children;
         });
         this.categoryDiggered = true;
 
+        // eslint-disable-next-line no-useless-return
         if (categoryExist) return;
         // this.categoryTempId = ['0'];
       },
@@ -392,6 +395,7 @@ export default {
         const categoryExist = false;
         treeDigger(tree, (children, id) => {
           if (id) {
+            // eslint-disable-next-line no-unused-vars
             const categoryExist = id == this.categoryTempId;
           }
           return children;
