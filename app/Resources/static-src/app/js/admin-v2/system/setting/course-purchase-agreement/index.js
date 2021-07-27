@@ -20,6 +20,7 @@ export default class CoursePurchaseAgreement {
       rules: {
         purchaseAgreementTitle: {
           required: true,
+          maxlength: 10,
         },
         purchaseAgreementContent: {
           required: true,
