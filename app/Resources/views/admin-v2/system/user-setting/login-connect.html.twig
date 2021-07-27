@@ -19,7 +19,7 @@
           {{ radios('mobile_bind_mode', {'constraint':'admin.login_connect.mobile_bind.constraint'|trans, 'option':'admin.login_connect.mobile_bind.option'|trans, 'closed':'admin.login_connect.mobile_bind.close'|trans}, loginConnect.mobile_bind_mode) }}
           <p class="help-block constraint-tip {% if loginConnect.mobile_bind_mode != 'constraint' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.constraint_tip'|trans|raw }}</p>
           <p class="help-block option-tip {% if loginConnect.mobile_bind_mode != 'option' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.option_tip'|trans|raw }}</p>
-          <p class="help-block close-tip {% if loginConnect.mobile_bind_mode != 'close' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.close_tip'|trans|raw }}</p>
+          <p class="help-block close-tip {% if loginConnect.mobile_bind_mode != 'closed' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.close_tip'|trans|raw }}</p>
         </div>
       </div>
     </fieldset>
