@@ -26,6 +26,10 @@ class KernelControllerListener
             return;
         }
 
+        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node("cloud_sms.sms_bind")) {
+            return;
+        }
+
         $request = $event->getRequest();
 
         $currentUser = $this->getBiz()['user'];

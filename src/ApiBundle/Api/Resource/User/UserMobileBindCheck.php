@@ -19,9 +19,14 @@ class UserMobileBindCheck extends AbstractResource
             throw UserException::NOTFOUND_USER();
         }
 
+        $bindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
+        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node("cloud_sms.sms_bind")) {
+            $bindMode = 'closed';
+        }
+
         return [
             'is_bind_mobile' => empty($user['verifiedMobile']) ? false : true,
-            'mobile_bind_mode' => $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint')
+            'mobile_bind_mode' => $bindMode,
         ];
     }
 
