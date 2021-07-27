@@ -3,6 +3,7 @@
     <e-loading v-if="isLoading" />
     <div
       v-for="(item, index) in settings"
+      :key="item.name"
       class="my_setting-item"
       @click="handleSetting(index)"
     >
@@ -49,7 +50,6 @@ import { mapState, mapActions } from 'vuex';
 import { Toast, Dialog } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
-import store from '@/store';
 
 import { VueCropper } from 'vue-cropper';
 
@@ -127,6 +127,7 @@ export default {
           token: '',
           user: {},
         });
+        window.localStorage.setItem('mobile_bind_skip', false);
         this.$router.push({
           name: 'my',
         });

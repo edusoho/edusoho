@@ -6,6 +6,8 @@ import Router from 'vue-router';
 import find from './find';
 import learning from './learning';
 import my from './my';
+import Api from '@/api';
+
 /* eslint-disable no-new */
 Vue.use(Router);
 // 路由懒加载 实现代码分离
@@ -84,7 +86,7 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "binding" */ '@/containers/register/index.vue'
+        /* webpackChunkName: "binding" */ '@/containers/binding/index.vue'
       ),
   },
   {
@@ -897,7 +899,7 @@ const isWeixinBrowser = /micromessenger/.test(
 );
 
 // 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
-const setVipSwitch = () =>
+const setVipSwitch = () => {
   new Promise((resolve, reject) => {
     if (!Object.keys(store.state.vipSettings).length) {
       return store
@@ -916,9 +918,38 @@ const setVipSwitch = () =>
     }
     return resolve();
   });
+};
+
+// 校验是否有绑定手机号
+const mobileBindCheck = next => {
+  const mobileBindSkip = window.localStorage.getItem('mobile_bind_skip');
+
+  if (mobileBindSkip) return;
+
+  if (store.state.mobile_bind.is_bind_mobile) return;
+
+  let user = window.localStorage.getItem('user');
+  user = user ? JSON.parse(user) : user;
+
+  if (!user || !user.id) return;
+
+  Api.mobileBindCheck({
+    query: { userId: user.id },
+  }).then(({ is_bind_mobile, mobile_bind_mode }) => {
+    store.commit(types.SET_MOBILE_BIND, { is_bind_mobile, mobile_bind_mode });
+
+    if (is_bind_mobile) {
+      return;
+    }
+
+    if (mobile_bind_mode !== 'closed') {
+      next({ name: 'binding' });
+    }
+  });
+};
 
 // 检查微信公众号开关配置
-const setWeChatSwitch = () =>
+const setWeChatSwitch = () => {
   new Promise((resolve, reject) => {
     if (!Object.keys(store.state.wechatSwitch).length && isWeixinBrowser) {
       return store
@@ -941,6 +972,7 @@ const setWeChatSwitch = () =>
     }
     return resolve();
   });
+};
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = [
@@ -964,6 +996,8 @@ router.beforeEach((to, from, next) => {
     next('/');
     return;
   }
+
+  mobileBindCheck(next);
 
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {
@@ -1019,4 +1053,5 @@ router.afterEach(to => {
     setVipSwitch();
   }
 });
+
 export default router;

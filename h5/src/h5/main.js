@@ -197,17 +197,6 @@ Api.getSettings({
     console.log(err.message);
   });
 
-//   new Vue({
-//     el: '#app',
-//     router,
-//     store,
-//     components: { App },
-//     template: '<App/>'
-//   });
-// }).catch(err => {
-//   console.log(err.message);
-// });
-
 Api.getSettings({
   query: {
     type: 'site',
