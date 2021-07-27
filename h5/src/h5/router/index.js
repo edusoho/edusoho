@@ -921,10 +921,10 @@ const setVipSwitch = () => {
 };
 
 // 校验是否有绑定手机号
-const mobileBindCheck = next => {
+const mobileBindCheck = (to, from, next) => {
   const mobileBindSkip = window.localStorage.getItem('mobile_bind_skip');
 
-  if (mobileBindSkip) return;
+  if (mobileBindSkip === '1') return;
 
   if (store.state.mobile_bind.is_bind_mobile) return;
 
@@ -943,7 +943,7 @@ const mobileBindCheck = next => {
     }
 
     if (mobile_bind_mode !== 'closed') {
-      next({ name: 'binding' });
+      next({ name: 'binding', query: to.query || from.query });
     }
   });
 };
@@ -997,7 +997,9 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  mobileBindCheck(next);
+  if (to.name !== 'bindding') {
+    mobileBindCheck(to, from, next);
+  }
 
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {

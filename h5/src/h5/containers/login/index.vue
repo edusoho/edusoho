@@ -125,7 +125,7 @@ export default {
       })
         .then(res => {
           Toast.success({
-            duration: 2000,
+            duration: 1000,
             message: '登录成功',
           });
           this.afterLogin();
