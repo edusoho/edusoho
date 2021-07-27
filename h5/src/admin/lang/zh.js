@@ -178,5 +178,13 @@ export default {
     allHistory: '历史所有',
     questionBank: '题库',
     classification: ' 分类：'
+  },
+  coupon: {
+    couponSetting: '优惠券设置（仅显示未过期的优惠券）',
+    title: '标题栏：',
+    display: '显示',
+    noDisplay: '不显示',
+    selectCoupons: '优惠券选择：',
+    addCoupons: '添加优惠券'
   }
 };

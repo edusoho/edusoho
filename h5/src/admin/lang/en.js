@@ -178,5 +178,13 @@ export default {
     allHistory: 'All history',
     questionBank: 'Question bank',
     classification: ' classification:'
+  },
+  coupon: {
+    couponSetting: 'Coupon settings (Only show coupons that have not expired)',
+    title: 'Title:',
+    display: 'Display',
+    noDisplay: 'No display',
+    selectCoupons: 'Select coupons',
+    addCoupons: 'Add coupons'
   }
 };
