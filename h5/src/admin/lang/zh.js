@@ -2,7 +2,8 @@ export default {
   footer: {
     discover: '发现',
     learn: '学习',
-    me: '我的'
+    me: '我的',
+    message: '动态'
   },
   e: {
     freeForMembers: '会员免费',
@@ -52,11 +53,16 @@ export default {
     more: '更多'
   },
   search: {
-    title: '搜索',
     placeholder: '搜索课程、班级、题库',
-    course: '课程',
-    classroom: '班级',
-    questionBank: '题库',
-    noFound: '抱歉，没有找到相关内容'
+    searchSettings: '搜索设置',
+    atPresent: '搜索功能目前只支持搜索班级和课程'
+  },
+  sidebar: {
+    basicComponents: '基础组件',
+    courseList: '课程列表',
+    classList: '班级列表',
+    imageAds: '图片广告',
+    navigation: '图文导航',
+    search: '搜索',
   }
 };

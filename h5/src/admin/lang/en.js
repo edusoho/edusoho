@@ -2,7 +2,8 @@ export default {
   footer: {
     discover: 'Discover',
     learn: 'Learn',
-    me: 'Me'
+    me: 'Me',
+    message: 'Message'
   },
   e: {
     freeForMembers: 'Free for members',
@@ -52,11 +53,16 @@ export default {
     more: 'More'
   },
   search: {
-    title: 'Search',
     placeholder: 'Search course/class/Question bank',
-    course: 'Course',
-    classroom: 'Classroom',
-    questionBank: 'Question bank',
-    noFound: 'Sorry, no related content was found'
+    searchSettings: 'Search settings',
+    atPresent: 'At present, the search function only supports searching classes and courses'
+  },
+  sidebar: {
+    basicComponents: 'Basic components',
+    courseList: 'Course list',
+    classList: 'Class list',
+    imageAds: 'Image Ads',
+    navigation: 'Navigation',
+    search: 'Search',
   }
 };

@@ -45,7 +45,7 @@
         class="multi-find-section find-section clearfix"
         v-if="portal !== 'apps'"
       >
-        <div class="section-title">基础组件</div>
+        <div class="section-title">{{ $t('sidebar.basicComponents') }}</div>
         <div class="section-button-group clearfix">
           <el-button
             class="find-section-item"
@@ -88,7 +88,7 @@
         class="multi-find-section find-section clearfix"
         v-if="portal === 'apps'"
       >
-        <div class="section-title">基础组件</div>
+        <div class="section-title">{{ $t('sidebar.basicComponents') }}</div>
         <div class="section-button-group clearfix">
           <el-button
             class="find-section-item"

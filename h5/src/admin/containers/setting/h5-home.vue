@@ -10,7 +10,7 @@
           >
             <el-submenu index="1">
               <template slot="title">
-                <span>基础组件</span>
+                <span>{{ $t('sidebar.basicComponents') }}</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item
