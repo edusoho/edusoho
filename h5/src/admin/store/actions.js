@@ -1,6 +1,8 @@
 import * as types from 'admin/store/mutation-types';
 import Api from 'admin/api';
 import treeDigger from 'admin/utils/tree-digger';
+import i18n from '../lang';
+
 /* eslint-disable */
 export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
@@ -203,3 +205,12 @@ export const getCreateMarketingUrl = ({ commit }) =>
       );
     }
   });
+
+// 获取站点中英文配置
+export const getLanguage = () => Api.getSettings({
+  query: { type: 'locale' }
+}).then(res => {
+  const language = res.locale.toLowerCase().replace('_', '-');
+  // i18n.locale = language;
+  i18n.locale = 'en';
+});
