@@ -33,6 +33,7 @@ const state = {
   cloudSdkCdn: '', // 气球云 SDK 的 CDN 地址
   cloudPlayServer: '', // 云资源播放 SDK 的 API 地址
   language: getLanguage(), // 中英文
+  mobile_bind: {}, // 用户是否绑定了手机号
 };
 
 export default new Vuex.Store({

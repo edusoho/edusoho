@@ -71,4 +71,7 @@ export default {
   SET_LANGUAGE: (state, language) => {
     state.language = language;
   },
+  [types.SET_MOBILE_BIND](state, mobile_bind) {
+    state.mobile_bind = mobile_bind;
+  },
 };
