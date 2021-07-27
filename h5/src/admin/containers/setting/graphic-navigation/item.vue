@@ -12,12 +12,12 @@
           class="graphic-navigation-img"
         />
         <img v-else :src="item.image.uri" class="graphic-navigation-img" />
-        <div class="graphic-navigation-img-mask">更换图片</div>
+        <div class="graphic-navigation-img-mask">{{ $t('navigation.replacePicture') }}</div>
       </div>
     </div>
     <div class="graphic-navigation-item-right clearfix">
       <div class="add-title">
-        标题：<el-input
+        {{ $t('navigation.title') }}<el-input
           v-model="item.title"
           size="mini"
           placeholder="请输入标题"
@@ -26,7 +26,7 @@
         />
       </div>
       <div class="add-title">
-        链接来源：
+        {{ $t('navigation.linkSource') }}
         <el-select
           v-model="item.link.type"
           placeholder="请选择"
@@ -42,7 +42,7 @@
         </el-select>
       </div>
       <div class="add-choose" v-show="groupList.length">
-        {{ getTypeText(item.link.type) }}分类：
+        {{ getTypeText(item.link.type) }}
         <el-select
           v-model="item.link.categoryId"
           placeholder="请选择"
@@ -143,6 +143,7 @@ const { protocol, pathname, host } = window.location;
 export default {
   components: {
     VueCropper,
+    // eslint-disable-next-line vue/no-unused-components
     settingCell,
   },
   // eslint-disable-next-line vue/require-prop-types
@@ -155,6 +156,7 @@ export default {
         .join('/')}/`,
       chooseVisible: false,
       chooseType: '',
+      // eslint-disable-next-line no-undef
       imgChooseList: ICON_LIST,
       appTypeBaseList: [
         {
@@ -181,10 +183,10 @@ export default {
         },
       ],
       typeText: {
-        openCourse: '公开课',
-        classroom: '班级',
-        course: '课程',
-        vip: '会员',
+        openCourse: this.$t('navigation.openClassSorts'),
+        classroom: this.$t('navigation.classSorts'),
+        course: this.$t('navigation.courseSorts'),
+        vip: this.$t('navigation.memberSorts'),
       },
       groupList: [],
       activeIndex: this.active,
@@ -221,6 +223,7 @@ export default {
         !this.vipSettings.h5Enabled
       );
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     typeOptions() {
       if (this.pathName === 'h5Setting') {
         return this.h5TypeBaseList;

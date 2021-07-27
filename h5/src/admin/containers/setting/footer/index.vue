@@ -11,7 +11,7 @@
         <i v-if="item.icon" :class="item.icon" />
         <img v-else class="find-footer-item__icon" :src="item.iconUrl" />
       </div>
-      <span class="find-footer-item__text">{{ item.type }}</span>
+      <span class="find-footer-item__text">{{ $t(item.type) }}</span>
     </div>
   </div>
 </template>
@@ -20,22 +20,22 @@
 const appItems = [
   {
     name: 'find',
-    type: '发现',
+    type: 'footer.discover',
     iconUrl: 'static/images/apptab1.png',
   },
   {
     name: 'dynamic',
-    type: '学习',
+    type: 'footer.learn',
     iconUrl: 'static/images/apptab2.png',
   },
   {
     name: 'learn',
-    type: '动态',
+    type: 'footer.message',
     iconUrl: 'static/images/apptab3.png',
   },
   {
     name: 'my',
-    type: '我的',
+    type: 'footer.me',
     iconUrl: 'static/images/apptab4.png',
   },
 ];
@@ -43,17 +43,17 @@ const h5Items = [
   // footer
   {
     name: 'find',
-    type: '发现',
+    type: 'footer.discover',
     icon: 'iconfont icon-faxian',
   },
   {
     name: 'learning',
-    type: '学习',
+    type: 'footer.learn',
     icon: 'iconfont icon-xuexi',
   },
   {
     name: 'my',
-    type: '我的',
+    type: 'footer.me',
     icon: 'iconfont icon-faxian',
   },
 ];

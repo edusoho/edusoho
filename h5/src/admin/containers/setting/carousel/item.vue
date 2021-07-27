@@ -13,8 +13,8 @@
       accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
     >
       <img v-show="item.image.uri" :src="item.image.uri" class="carousel-img" />
-      <div v-show="item.image.uri" class="carousel-img-mask">更换图片</div>
-      <span v-show="!item.image.uri"><i class="text-18">+</i> 添加图片</span>
+      <div v-show="item.image.uri" class="carousel-img-mask">{{ $t('carousel.replacePicture') }}</div>
+      <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
     </el-upload>
 
     <el-dialog
@@ -39,8 +39,8 @@
         />
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="stopCrop">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('btn.cancel') }}</el-button>
+        <el-button type="primary" @click="stopCrop">{{ $t('btn.confirm') }}</el-button>
       </span>
     </el-dialog>
 
@@ -51,27 +51,27 @@
       @click="handleRemove($event, index, itemNum)"
     />
     <div v-if="pathName !== 'appSetting'" class="add-title">
-      标题：<el-input
+      {{ $t('carousel.title') }}：<el-input
         v-model="item.title"
         size="mini"
-        placeholder="请输入标题"
+        :placeholder="$t('carousel.pleaseEnterATitle')"
         max-length="15"
         clearable
       />
     </div>
     <div v-if="pathName !== 'appSetting'" class="add-choose">
-      链接：<el-radio v-model="radio" label="insideLink">站内链接</el-radio>
+      {{ $t('carousel.links') }}：<el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
     </div>
     <div v-else class="add-choose">
       <el-radio v-model="radio" class="mt16" label="insideLink"
-        >站内链接</el-radio
+        >{{ $t('carousel.siteLink') }}</el-radio
       >
-      <el-radio v-model="radio" class="mt16" label="url">自定义链接</el-radio>
+      <el-radio v-model="radio" class="mt16" label="url">{{ $t('carousel.customLink') }}</el-radio>
     </div>
     <div v-if="radio === 'insideLink'" class="add-inner">
       <el-dropdown v-show="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">
-          添加链接
+          {{ $t('carousel.addLink') }}
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
@@ -112,11 +112,11 @@
 <script>
 import Api from 'admin/api';
 import { VueCropper } from 'vue-cropper';
-import settingCell from '../module-frame/setting-cell';
+// import settingCell from '../module-frame/setting-cell';
 export default {
   components: {
     VueCropper,
-    settingCell,
+    // settingCell,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
@@ -138,17 +138,17 @@ export default {
         {
           key: 0,
           type: 'course_list',
-          label: '选择课程',
+          label: this.$t('carousel.chooseCourse')
         },
         {
           key: 1,
           type: 'classroom_list',
-          label: '选择班级',
+          label: this.$t('carousel.chooseClass')
         },
         {
           key: 2,
           type: 'vip',
-          label: '选择会员',
+          label: this.$t('carousel.chooseMember')
         },
       ],
       imageCropped: false,
