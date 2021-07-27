@@ -80,7 +80,9 @@ export default {
     preview: 'Preview',
     savaAndPublish: 'Save and publish',
     reset: 'Reset',
-    publish: 'Publish'
+    publish: 'Publish',
+    open: 'Open',
+    close: 'Close'
   },
   carousel: {
     carousel: 'Carousel',
@@ -125,5 +127,21 @@ export default {
     last30Days: 'Last 30 days',
     last90Days: 'Last 90 days',
     allHistory: 'All history',
+  },
+  imageAds: {
+    imageAdsSettings: 'Image ads settings',
+    adPictures2: 'Ad pictures',
+    adPictures: 'Ad pictures:',
+    addPictures: 'Add pictures',
+    links: 'Links:',
+    siteLink: 'Site link',
+    addLink: 'Add link',
+    tips: 'The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    customLink: 'Custom link',
+    replacePicture: 'Replace picture',
+    adaptiveMobilePhoneScreen: 'Adaptive mobile phone screen:',
+    chooseCourse: 'Choose course',
+    chooseClass: 'Choose class',
+    chooseMember: 'Choose member'
   }
 };

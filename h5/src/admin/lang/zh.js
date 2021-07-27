@@ -80,7 +80,9 @@ export default {
     preview: '预览',
     savaAndPublish: '保存并发布',
     reset: '重置',
-    publish: '发布'
+    publish: '发布',
+    open: '开启',
+    close: '关闭'
   },
   carousel: {
     carousel: '轮播图',
@@ -125,5 +127,21 @@ export default {
     last30Days: '最近 30 天',
     last90Days: '最近 90 天',
     allHistory: '历史所有',
+  },
+  imageAds: {
+    imageAdsSettings: '图片广告设置',
+    adPictures: '广告图片：',
+    adPictures2: '广告图片',
+    addPictures: '添加图片',
+    links: '链接：',
+    siteLink: '站内链接',
+    addLink: '添加链接',
+    replacePicture: '更换图片',
+    tips: '建议图片尺寸为750px，支持 jpg/png/gif 格式，大小不超过2MB',
+    customLink: '自定义链接',
+    adaptiveMobilePhoneScreen: '自适应手机屏幕：',
+    chooseCourse: '选择课程',
+    chooseClass: '选择班级',
+    chooseMember: '选择会员'
   }
 };
