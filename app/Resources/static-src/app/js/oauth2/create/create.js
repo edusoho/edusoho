@@ -158,6 +158,7 @@ export default class Create {
       let type = $(event.currentTarget).data('type');
       let data = {
         type: type,
+        unique: type === "register" ? true : false,
         mobile: type === "register" ? $('.js-account').text() : $('#originalMobileAccount').val(),
         dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()

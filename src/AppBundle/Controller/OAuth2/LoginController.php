@@ -168,7 +168,7 @@ class LoginController extends LoginBindController
             }else{
                 $bindMobile = $request->request->get('originalEmailAccount', '');
                 $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
-                if ($originMobileUser){
+                if ($originMobileUser && $request->request->get('accountSmsCode')){
                     $this->bindOriginalMobileAccount($request);
                 }else{
                     $this->register($request);
@@ -205,8 +205,11 @@ class LoginController extends LoginBindController
         $originalAccountPassword = $request->request->get('originalAccountPassword');
 
         $user = $this->getUserService()->getUserByEmail($originalEmailAccount);
-        $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
+        if (!$user || !empty($user['verifiedMobile'])){
+            throw UserException::FORBIDDEN_REGISTER();
+        }
 
+        $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
         if (!$validatePassed) {
             throw UserException::PASSWORD_FAILED();
         } else {
@@ -226,24 +229,19 @@ class LoginController extends LoginBindController
         $oauthUser = $this->getOauthUser($request);
         $registerFields = $request->request->all();
         $originalMobileAccount = $request->request->get('originalMobileAccount');
-        $accountSmsCode = $request->request->get('accountSmsCode');
 
         $user = $this->getUserService()->getUserByVerifiedMobile($originalMobileAccount);
-        if (!$user){
-            throw UserException::NOTFOUND_USER();
+        if (!$user || (!empty($user['email'] && $user['emailVerified']))){
+            throw UserException::FORBIDDEN_REGISTER();
         }
 
-        if (empty($originalMobileAccount) || empty($accountSmsCode)) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        } else {
-            $this->loginAttemptCheck($oauthUser->account, $request);
-            $token = $request->getSession()->get('oauth_token');
-            $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
-            if ($isSuccess){
-                $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
-                $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
-                $this->getUserService()->initPassword($user['id'], $registerFields['password']);
-            }
+        $this->loginAttemptCheck($oauthUser->account, $request);
+        $token = $request->getSession()->get('oauth_token');
+        $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+        if ($isSuccess){
+            $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+            $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
+            $this->getUserService()->initPassword($user['id'], $registerFields['password']);
         }
     }
 
@@ -266,6 +264,11 @@ class LoginController extends LoginBindController
             return $this->validateResult('success', '');
         }
 
+        $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
+        if ($user && !empty($user['email']) && $user['emailVerified']){
+            return $this->validateResult('false', '该手机账号已绑定邮箱');
+        }
+
         return $this->validateResult('success', '');
     }
 
@@ -277,7 +280,7 @@ class LoginController extends LoginBindController
         }
 
         if (!empty($user['verifiedMobile'])){
-            return $this->validateResult('false', '该邮箱帐号已被绑定');
+            return $this->validateResult('false', '该邮箱帐号已绑定手机号');
         }
 
         return $this->validateResult('success', '');

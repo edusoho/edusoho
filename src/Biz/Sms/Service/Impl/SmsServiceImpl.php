@@ -53,7 +53,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return true;
     }
 
-    public function sendVerifySms($smsType, $to, $smsLastTime = 0)
+    public function sendVerifySms($smsType, $to, $smsLastTime = 0, $unique = true)
     {
         if (!$this->checkPhoneNum($to)) {
             $this->createNewException(SmsException::ERROR_MOBILE());
@@ -73,7 +73,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $this->checkSmsType($smsType, $currentUser);
 
         if (in_array($smsType, ['sms_bind', 'sms_registration'])) {
-            if (!$this->getUserService()->isMobileUnique($to)) {
+            if (!$this->getUserService()->isMobileUnique($to) && $unique) {
                 $this->createNewException(UserException::ERROR_MOBILE_REGISTERED());
             }
         }

@@ -32,7 +32,7 @@ class SmsCenter extends AbstractResource
         return $this->$type($request, $smsType, $mobile);
     }
 
-    protected function register($request, $type, $mobile)
+    protected function register(ApiRequest $request, $type, $mobile)
     {
         $auth = $this->getSettingService()->get('auth', array());
         if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
@@ -47,9 +47,10 @@ class SmsCenter extends AbstractResource
         ];
     }
 
-    protected function smsBind($request, $type, $mobile)
+    protected function smsBind(ApiRequest $request, $type, $mobile)
     {
-        $result = $this->getBizSms()->send($type, $mobile);
+        $unique = $request->request->get('unique', true);
+        $result = $this->getBizSms()->send($type, $mobile, [], $unique);
 
         $this->getUserService()->getSmsCommonCaptchaStatus($request->getHttpRequest()->getClientIp(), true);
 
