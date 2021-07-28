@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use ApiBundle\Api\Exception\ErrorCode;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
@@ -211,7 +212,7 @@ class LoginController extends LoginBindController
 
         $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
         if (!$validatePassed) {
-            throw UserException::PASSWORD_FAILED();
+            throw new NotFoundHttpException('邮箱密码错误');
         } else {
             $this->loginAttemptCheck($oauthUser->account, $request);
             $token = $request->getSession()->get('oauth_token');
