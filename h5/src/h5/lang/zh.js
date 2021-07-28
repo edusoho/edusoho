@@ -508,6 +508,20 @@ export default {
     check: '检查一下',
     confirmSubmission: '确认交卷'
   },
+  classLearning: {
+    intor: '班级介绍',
+    teacher: '教师介绍',
+    classTeacher: '班主任',
+    headTeacherHasNotBeenSet: '尚未设置班主任',
+    course: '班级课程',
+    empty: '暂无课程',
+    viewDetails: '去商品页',
+    validity: '学习有效期',
+    studyWithinDay: '{number} 天内可学习',
+    canLearnBefore: '之前可学习',
+    permanent: '长期有效',
+    free: '免费',
+  },
   filters: {
     free: '免费',
     stayTuned: '敬请期待',
@@ -538,6 +552,7 @@ export default {
     discounted: '已优惠',
     noCouponsAvailable: '无可用优惠券',
     available: '张可用',
-    longTermEffective: '长期有效'
+    longTermEffective: '长期有效',
+    noOrderRecord: '暂无订单记录'
   }
 };

@@ -385,7 +385,7 @@ export default {
     pm: 'PM',
     night: 'Night',
     toLearn: 'To learn',
-    buy: 'Buy'
+    buy: 'Buy now'
   },
   courseLearning: {
     title: 'Details',
@@ -508,6 +508,20 @@ export default {
     check: 'Check',
     confirmSubmission: 'Confirm submission'
   },
+  classLearning: {
+    intor: 'Intro',
+    teacher: 'Teahcer',
+    classTeacher: 'Class teacher',
+    headTeacherHasNotBeenSet: 'Head teacher has not been set',
+    course: 'Course',
+    empty: 'Empty',
+    viewDetails: 'View details',
+    validity: 'Validity',
+    studyWithinDay: 'Study within {number} day',
+    canLearnBefore: 'can learn before',
+    permanent: 'Permanent',
+    free: 'Free',
+  },
   filters: {
     free: 'Free',
     stayTuned: 'Stay tuned',
@@ -538,6 +552,7 @@ export default {
     discounted: 'Discounted',
     noCouponsAvailable: 'No coupons available',
     available: 'available',
-    longTermEffective: 'Long-term effective'
+    longTermEffective: 'Permanent',
+    noOrderRecord: 'No order record'
   }
 };

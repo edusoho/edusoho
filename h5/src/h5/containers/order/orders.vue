@@ -5,7 +5,7 @@
       class="orders-container__empty"
     >
       <img src="static/images/orderEmpty.png" />
-      <span>暂无订单记录</span>
+      <span>{{ $t('order.noOrderRecord') }}</span>
     </div>
 
     <div v-else class="order">
