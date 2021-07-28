@@ -2,17 +2,17 @@
   <div class="brush-exercise-detail-bank">
     <img :src="cover.large" class="brush-exercise-cover" />
     <van-tabs v-model="active" sticky>
-      <van-tab title="课程简介">
+      <van-tab :title="$t('questionBank.intro')">
         <introduction></introduction>
       </van-tab>
-      <van-tab title="课程目录">
+      <van-tab :title="$t('questionBank.catalogue')">
         <directory :exerciseId="Number(id)" />
       </van-tab>
-      <van-tab title="学员评价" v-if="show_question_bank_review == 1">
+      <van-tab :title="$t('questionBank.comment')" v-if="show_question_bank_review == 1">
         <review-list
           ref="review"
-          title="学员评价"
-          defaul-value="暂无评价"
+          :title="$t('questionBank.comment')"
+          :defaul-value="$t('questionBank.noContent')"
           type="item_bank_exercise"
         />
       </van-tab>

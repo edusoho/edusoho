@@ -525,6 +525,21 @@ export default {
     permanent: 'Permanent',
     free: 'Free',
   },
+  questionBank: {
+    intro: 'Intro',
+    catalogue: 'Catalogue',
+    comment: 'Comment',
+    noContent: 'No content~',
+    exercises: 'Exercises',
+    test: 'Test',
+    start: 'Start',
+    validity: 'Validity',
+    permanent: 'Permanent',
+    free: 'Free',
+    personStudying: '{number} person studying',
+    viewReport: 'View report',
+    continue: 'Continue'
+  },
   filters: {
     free: 'Free',
     stayTuned: 'Stay tuned',

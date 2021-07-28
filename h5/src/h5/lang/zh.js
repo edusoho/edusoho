@@ -525,6 +525,21 @@ export default {
     permanent: '长期有效',
     free: '免费',
   },
+  questionBank: {
+    intro: '课程简介',
+    catalogue: '课程目录',
+    comment: '学员评价',
+    noContent: '暂无评价~',
+    exercises: '章节练习',
+    test: '模拟考试',
+    start: '开始做题',
+    validity: '学习有效期',
+    permanent: '长期有效',
+    free: '免费',
+    personStudying: '{number}人在学',
+    viewReport: '查看报告',
+    continue: '继续做题'
+  },
   filters: {
     free: '免费',
     stayTuned: '敬请期待',
