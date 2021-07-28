@@ -166,7 +166,7 @@ class LoginController extends LoginBindController
             if ($request->request->get('originalEmailAccount') && $request->request->get('originalAccountPassword')){
                 $this->bindOriginalEmailAccount($request);
             }else{
-                $bindMobile = $request->request->get('originalEmailAccount', '');
+                $bindMobile = $request->request->get('originalMobileAccount', '');
                 $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
                 if ($originMobileUser && $request->request->get('accountSmsCode')){
                     $this->bindOriginalMobileAccount($request);
@@ -215,12 +215,10 @@ class LoginController extends LoginBindController
         } else {
             $this->loginAttemptCheck($oauthUser->account, $request);
             $token = $request->getSession()->get('oauth_token');
-            $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
-            if ($isSuccess){
-                $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
-                $this->getUserService()->changeMobile($user['id'], $oauthUser->account);
-                $this->getUserService()->initPassword($user['id'], $registerFields['password']);
-            }
+            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+            $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+            $this->getUserService()->changeMobile($user['id'], $oauthUser->account);
+            $this->getUserService()->initPassword($user['id'], $registerFields['password']);
         }
     }
 
@@ -237,12 +235,10 @@ class LoginController extends LoginBindController
 
         $this->loginAttemptCheck($oauthUser->account, $request);
         $token = $request->getSession()->get('oauth_token');
-        $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
-        if ($isSuccess){
-            $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
-            $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
-            $this->getUserService()->initPassword($user['id'], $registerFields['password']);
-        }
+        $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+        $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+        $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
+        $this->getUserService()->initPassword($user['id'], $registerFields['password']);
     }
 
     public function OriginalAccountCheckAction(Request $request, $type)
