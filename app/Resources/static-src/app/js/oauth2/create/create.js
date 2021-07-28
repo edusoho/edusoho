@@ -199,7 +199,7 @@ export default class Create {
         registerVisitId: $('[name="registerVisitId"]').val(),
         originalMobileAccount: $('[name="originalMobileAccount"]').val(),
         accountSmsCode: $('[name="accountSmsCode"]').val(),
-        originalEmailAccount: $('[name="originalMobileAccount"]').val(),
+        originalEmailAccount: $('[name="originalEmailAccount"]').val(),
         originalAccountPassword: $('[name="originalAccountPassword"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
