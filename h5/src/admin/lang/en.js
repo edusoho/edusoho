@@ -41,7 +41,10 @@ export default {
     memberArea: 'Member area',
     courseClass: '{numberCourse} course {numberClass} class',
     verificationSuccess: 'Verification success',
-    all: 'All'
+    all: 'All',
+    moreCourse: 'More courses are waiting for you to join',
+    moreClass: 'More classes are waiting for you to join',
+    moreQuestionBanks: 'More question banks are waiting for you to join'
   },
   enter: {
     coupon: 'Coupon',

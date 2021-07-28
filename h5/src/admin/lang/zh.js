@@ -41,7 +41,10 @@ export default {
     memberArea: '会员专区',
     courseClass: '{numberCourse} 门课程 {numberClass} 门班级',
     verificationSuccess: '验证成功',
-    all: '全部'
+    all: '全部',
+    moreCourse: '更多好课等您加入',
+    moreClass: '更多班级等您加入',
+    moreQuestionBanks: '更多题库等您加入'
   },
   enter: {
     coupon: '兑换卡券',
