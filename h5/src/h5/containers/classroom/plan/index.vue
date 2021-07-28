@@ -29,7 +29,7 @@
       </div>
       <service v-if="details.service.length" :services="details.service" />
       <div>
-        <span>学习有效期：</span>
+        <span>{{ $t('classLearning.validity') }}：</span>
         <span v-html="learnExpiryHtml" />
       </div>
     </div>
@@ -47,6 +47,7 @@
 import { mapState } from 'vuex';
 import service from '../service';
 import { formatFullTime } from '@/utils/date-toolkit.js';
+import i18n from '@/lang';
 
 export default {
   components: {
@@ -55,7 +56,7 @@ export default {
   filters: {
     filterPrice(price) {
       const isFree = Number(price) === 0;
-      return isFree ? '免费' : `¥${price}`;
+      return isFree ? i18n.t('classLearning.free') : `¥${price}`;
     },
   },
   props: {
@@ -91,26 +92,26 @@ export default {
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return '长期有效';
+            return this.$t('classLearning.permanent');
             // eslint-disable-next-line no-unreachable
             break;
           case 'date':
             // eslint-disable-next-line no-case-declarations
             const time = new Date(learnExpiryData * 1000);
-            return formatFullTime(time).slice(0, 10) + '之前可学习';
+            return formatFullTime(time).slice(0, 10) + this.$t('classLearning.canLearnBefore');
             // eslint-disable-next-line no-unreachable
             break;
           case 'days':
-            return learnExpiryData + '天内可学习';
+            return this.$t('classLearning.studyWithinDay', { number: learnExpiryData });
             // eslint-disable-next-line no-unreachable
             break;
         }
       } else {
         if (expiryMode == 'forever') {
-          return '长期有效';
+          return this.$t('classLearning.permanent');
         }
         return memberInfo.deadline != 0
-          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
+          ? memberInfo.deadline.slice(0, 10) + this.$t('classLearning.canLearnBefore')
           : '永久有效';
       }
     },
