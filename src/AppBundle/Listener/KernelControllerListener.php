@@ -60,7 +60,7 @@ class KernelControllerListener
     protected function getRouteWhiteList()
     {
         return [
-            '/fill/userinfo', '/login', '/logout', '/login_check', '/register/mobile/check',
+            '/login', '/logout', '/login_check', '/register/mobile/check',
             '/register/email/check', '/login/bind/weixinmob/newset',
             '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
             '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
