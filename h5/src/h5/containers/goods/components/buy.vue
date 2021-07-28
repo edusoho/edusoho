@@ -108,7 +108,7 @@ export default {
 
       if (!vipUser.level) return vipAccess;
 
-      if (vipLevelInfo.seq <= vipUser.level.seq) {
+      if (Number(vipLevelInfo.seq) <= Number(vipUser.level.seq)) {
         const vipExpired =
           parseInt(vipUser.deadline) * 1000 < new Date().getTime();
         vipAccess = !vipExpired;

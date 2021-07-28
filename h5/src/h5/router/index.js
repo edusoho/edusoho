@@ -996,17 +996,17 @@ const mobileBindCheck = (to, from, next) => {
       resolve()
       return;
     }
-    
+
     Api.mobileBindCheck({
       query: { userId: user.id },
     }).then(({ is_bind_mobile, mobile_bind_mode }) => {
       store.commit(types.SET_MOBILE_BIND, { is_bind_mobile, mobile_bind_mode });
-  
+
       if (is_bind_mobile) {
         resolve();
         return;
       }
-  
+
       if (mobile_bind_mode !== 'closed') {
         next({ name: 'binding', query: to.query || from.query });
       }
