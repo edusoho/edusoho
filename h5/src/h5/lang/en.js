@@ -540,7 +540,9 @@ export default {
     successfulTrade: 'Successful trade',
     transactionClosure: 'Transaction closure',
     vipJoinForfree: 'Vip join for free',
-    totalOfTwoCourses: 'Total of {number} courses'
+    totalOfTwoCourses: 'Total of {number} courses',
+    answerRate: 'Answer rate ',
+    accuracy: 'Accuracy '
   },
   order: {
     coupon: 'Coupon',

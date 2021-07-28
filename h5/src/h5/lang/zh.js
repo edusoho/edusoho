@@ -540,7 +540,9 @@ export default {
     successfulTrade: '交易成功',
     transactionClosure: '交易关闭',
     vipJoinForfree: '会员免费加入',
-    totalOfTwoCourses: '共 {number} 门课程'
+    totalOfTwoCourses: '共 {number} 门课程',
+    answerRate: '答题率',
+    accuracy: '掌握率'
   },
   order: {
     coupon: '优惠券',
