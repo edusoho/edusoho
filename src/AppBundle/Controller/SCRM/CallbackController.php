@@ -47,6 +47,7 @@ class CallbackController extends BaseController
                 'nickname' => '游客',
                 'currentIp' => '',
                 'roles' => [],
+                'email' => 'null@edusoho.com'
             ]);
 
             return $this->createJsonResponse(['message' => $e->getMessage()]);
