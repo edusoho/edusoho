@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\OAuth2;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
