@@ -12,7 +12,6 @@ use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Psr7\try_fopen;
 
 class LoginController extends LoginBindController
 {

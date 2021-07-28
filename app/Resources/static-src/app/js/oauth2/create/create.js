@@ -54,9 +54,6 @@ export default class Create {
     }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
 
     $.validator.addMethod('account_password', function (value, element) {
-      console.log($('#originalEmailAccount').val())
-      console.log(value)
-      console.log($('#originalEmailAccount').val() && value ? true : false)
       return $('#originalEmailAccount').val() && value ? true : false;
     }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
 
