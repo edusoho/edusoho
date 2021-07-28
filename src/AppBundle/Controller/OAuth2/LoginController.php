@@ -163,7 +163,7 @@ class LoginController extends LoginBindController
 
             $this->registerAttemptCheck($request);
 
-            if ($request->request->get('originalEmailAccount') && $request->request->get('originalAccountPassword')){
+            if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')){
                 $this->bindOriginalEmailAccount($request);
             }else{
                 $bindMobile = $request->request->get('originalMobileAccount', '');
