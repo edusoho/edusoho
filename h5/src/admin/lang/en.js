@@ -69,7 +69,7 @@ export default {
     navigation: 'Navigation',
     search: 'Search',
     coupon: 'Coupons',
-    memberArea: 'Member area',
+    memberArea: 'Member',
     questionBankList: 'Question bank list',
     marketingComponents: 'Marketing Components',
     groupPurchase: 'Group purchase',
@@ -106,9 +106,9 @@ export default {
     chooseMember: 'Choose member'
   },
   courseList: {
-    course: 'Course',
-    class: 'Class',
-    settingList: '{type} setting list',
+    course: 'course',
+    class: 'class',
+    settingList: 'Setting {type} list',
     listName: 'List name:',
     pleaseEnterTheNameOfTheList: 'Please enter the name of the list',
     sortOrder: 'Sort order',
