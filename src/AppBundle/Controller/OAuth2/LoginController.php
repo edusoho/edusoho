@@ -12,6 +12,7 @@ use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function GuzzleHttp\Psr7\try_fopen;
 
 class LoginController extends LoginBindController
 {
@@ -164,9 +165,15 @@ class LoginController extends LoginBindController
             $this->registerAttemptCheck($request);
 
             if ($request->request->get('originalEmailAccount') && $request->request->get('originalAccountPassword')){
-                $this->bindOriginalAccount($request);
+                $this->bindOriginalEmailAccount($request);
             }else{
-                $this->register($request);
+                $bindMobile = $request->request->get('originalEmailAccount', '');
+                $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
+                if ($originMobileUser){
+                    $this->bindOriginalMobileAccount($request);
+                }else{
+                    $this->register($request);
+                }
             }
             $this->authenticatedOauthUser();
 
@@ -191,7 +198,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    protected function bindOriginalAccount(Request $request)
+    protected function bindOriginalEmailAccount(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
         $registerFields = $request->request->all();
@@ -209,6 +216,33 @@ class LoginController extends LoginBindController
             $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
             if ($isSuccess){
                 $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+                $this->getUserService()->changeMobile($user['id'], $oauthUser->account);
+                $this->getUserService()->initPassword($user['id'], $registerFields['password']);
+            }
+        }
+    }
+
+    protected function bindOriginalMobileAccount(Request $request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        $registerFields = $request->request->all();
+        $originalMobileAccount = $request->request->get('originalMobileAccount');
+        $accountSmsCode = $request->request->get('accountSmsCode');
+
+        $user = $this->getUserService()->getUserByVerifiedMobile($originalMobileAccount);
+        if (!$user){
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if (empty($originalMobileAccount) || empty($accountSmsCode)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        } else {
+            $this->loginAttemptCheck($oauthUser->account, $request);
+            $token = $request->getSession()->get('oauth_token');
+            $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+            if ($isSuccess){
+                $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+                $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
                 $this->getUserService()->initPassword($user['id'], $registerFields['password']);
             }
         }
@@ -233,9 +267,7 @@ class LoginController extends LoginBindController
             return $this->validateResult('success', '');
         }
 
-        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
-
-        return $this->validateResult($result, $message);
+        return $this->validateResult('success', '');
     }
 
     protected function checkEmail($email)

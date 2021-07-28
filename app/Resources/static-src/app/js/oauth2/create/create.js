@@ -50,11 +50,14 @@ export default class Create {
 
   initValidator() {
     $.validator.addMethod('sms_code_required', function (value, element) {
-      return $('#originalMobileAccount').val() ? false : true;
+      return $('#originalMobileAccount').val() && value ? true : false;
     }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
 
     $.validator.addMethod('account_password', function (value, element) {
-      return $('#originalEmailAccount').val() ? false : true;
+      console.log($('#originalEmailAccount').val())
+      console.log(value)
+      console.log($('#originalEmailAccount').val() && value ? true : false)
+      return $('#originalEmailAccount').val() && value ? true : false;
     }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
 
     this.rules = {
@@ -117,9 +120,6 @@ export default class Create {
       originalAccountPassword: {
         required: false,
         account_password: true,
-        es_remote: {
-          type: 'get'
-        }
       },
       accountSmsCode: {
         required: false,
@@ -158,9 +158,10 @@ export default class Create {
       }
       
       self.$sendBtn.attr('disabled', true);
+      let type = $(event.currentTarget).data('type');
       let data = {
-        type: 'register',
-        mobile: $('.js-account').text(),
+        type: type,
+        mobile: type === "register" ? $('.js-account').text() : $('#originalMobileAccount').val(),
         dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()
       };
