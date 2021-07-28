@@ -4,7 +4,7 @@
     <span class="register-title">绑定手机</span>
 
     <van-field
-      v-model="registerInfo.mobile"
+      v-model="bindingInfo.mobile"
       :border="false"
       :error-message="errorMessage.mobile"
       placeholder="请输入手机号"
@@ -13,8 +13,15 @@
       @keyup="validatedChecker()"
     />
 
+    <e-drag
+      v-if="dragEnable"
+      ref="dragComponent"
+      :key="dragKey"
+      @success="handleSmsSuccess"
+    />
+
     <van-field
-      v-model="registerInfo.smsCode"
+      v-model="bindingInfo.smsCode"
       :border="false"
       type="text"
       center
@@ -29,7 +36,7 @@
         loading-text="发送验证码中..."
         size="small"
         type="primary"
-        @click="handleSendSms"
+        @click="clickSmsBtn"
       >
         发送验证码
         <span v-show="count.showCount">({{ count.num }})</span>
@@ -72,6 +79,7 @@
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions, mapState, mapMutations } from 'vuex';
+import EDrag from '&/components/e-drag';
 import * as types from '@/store/mutation-types';
 // eslint-disable-next-line no-unused-vars
 import '@/utils/xxtea.js';
@@ -80,13 +88,18 @@ import rulesConfig from '@/utils/rule-config.js';
 
 export default {
   mixins: [activityMixin, redirectMixin],
+  components: {
+    EDrag
+  },
   data() {
     return {
-      registerInfo: {
+      bindingInfo: {
         mobile: '',
         smsToken: '',
+        dragCaptchaToken: undefined,
         type: 'register',
       },
+      dragEnable: false,
       dragKey: 0,
       errorMessage: {
         mobile: '',
@@ -110,14 +123,14 @@ export default {
       mobileBind: state => state.mobile_bind,
     }),
     btnDisable() {
-      return !this.registerInfo.mobile || !this.registerInfo.smsCode;
+      return !this.bindingInfo.mobile || !this.bindingInfo.smsCode;
     },
   },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
     ...mapMutations([types.SET_MOBILE_BIND]),
     validateMobileOrPsw(type = 'mobile') {
-      const ele = this.registerInfo[type];
+      const ele = this.bindingInfo[type];
       const rule = rulesConfig[type];
 
       if (ele.length == 0) {
@@ -133,7 +146,7 @@ export default {
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
     validatedChecker() {
-      const mobile = this.registerInfo.mobile;
+      const mobile = this.bindingInfo.mobile;
       const rule = rulesConfig.mobile;
 
       this.validated.mobile = rule.validator(mobile);
@@ -147,8 +160,12 @@ export default {
         message: `手机号已被绑定，如何处理？\n\n1、PC端登录原有手机号修改绑定手机号。\n2、原有手机号注销。\n3、如以上均不能处理，可联系网校管理员。`,
       });
     },
+    handleSmsSuccess(token) {
+      this.bindingInfo.dragCaptchaToken = token;
+      this.handleSendSms();
+    },
     handleSubmit() {
-      const { mobile, smsCode, smsToken } = this.registerInfo;
+      const { mobile, smsCode, smsToken } = this.bindingInfo;
 
       this.submitLoading = true;
       this.setMobile({
@@ -177,11 +194,25 @@ export default {
           this.submitLoading = false;
         });
     },
+    clickSmsBtn() {
+      if (!this.dragEnable) {
+        this.handleSendSms();
+        return;
+      }
+
+      // 验证码组件更新数据
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
+        return;
+      }
+
+      this.$refs.dragComponent.initDragCaptcha();
+    },
     handleSendSms() {
       this.sendSmsLoading = true;
-      this.sendSmsCenter(this.registerInfo)
+      this.sendSmsCenter(this.bindingInfo)
         .then(res => {
-          this.registerInfo.smsToken = res.smsToken;
+          this.bindingInfo.smsToken = res.smsToken;
           this.countDown();
         })
         .catch(err => {
@@ -189,12 +220,19 @@ export default {
             case 4030301:
             case 4030302:
               this.dragKey++;
-              this.registerInfo.dragCaptchaToken = '';
-              this.registerInfo.smsToken = '';
+              this.bindingInfo.dragCaptchaToken = '';
+              this.bindingInfo.smsToken = '';
               Toast.fail(err.message);
               break;
             case 4030107:
               this.showDialog();
+              break;
+            case 4030303:
+              if (this.dragEnable) {
+                Toast.fail(err.message);
+              } else {
+                this.dragEnable = true;
+              }
               break;
             default:
               Toast.fail(err.message);
