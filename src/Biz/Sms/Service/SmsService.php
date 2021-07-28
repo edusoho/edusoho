@@ -8,7 +8,7 @@ interface SmsService
 
     public function smsSend($smsType, $userIds, $description, $parameters);
 
-    public function sendVerifySms($smsType, $to, $smsLastTime, $unique = true);
+    public function sendVerifySms($smsType, $to, $smsLastTime, $unique = 1);
 
     public function checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode);
 }

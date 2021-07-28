@@ -53,7 +53,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return true;
     }
 
-    public function sendVerifySms($smsType, $to, $smsLastTime = 0, $unique = true)
+    public function sendVerifySms($smsType, $to, $smsLastTime = 0, $unique = 1)
     {
         if (!$this->checkPhoneNum($to)) {
             $this->createNewException(SmsException::ERROR_MOBILE());

@@ -22,7 +22,7 @@ class BizSms extends BizAware
 
     const SMS_LOGIN = 'sms_login';
 
-    public function send($smsType, $mobile, $options = array(), $unique = true)
+    public function send($smsType, $mobile, $options = array(), $unique = 1)
     {
         $options = array_merge(array('duration' => TimeMachine::HALF_HOUR, 'times' => 10, 'userId' => 0), $options);
         $result = $this->getSmsService()->sendVerifySms($smsType, $mobile, 0, $unique);

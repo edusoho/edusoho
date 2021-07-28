@@ -39,7 +39,8 @@ class SmsCenter extends AbstractResource
             throw SettingException::FORBIDDEN_MOBILE_REGISTER();
         }
 
-        $smsToken = $this->getBizSms()->send($type, $mobile);
+        $unique = 'true' == $request->request->get('unique', 'true') ? 1 : 0;
+        $smsToken = $this->getBizSms()->send($type, $mobile, [], $unique);
         $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getHttpRequest()->getClientIp());
 
         return [
@@ -49,7 +50,7 @@ class SmsCenter extends AbstractResource
 
     protected function smsBind(ApiRequest $request, $type, $mobile)
     {
-        $unique = $request->request->get('unique', true);
+        $unique = 'true' == $request->request->get('unique', 'true') ? 1 : 0;
         $result = $this->getBizSms()->send($type, $mobile, [], $unique);
 
         $this->getUserService()->getSmsCommonCaptchaStatus($request->getHttpRequest()->getClientIp(), true);
