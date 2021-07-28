@@ -163,14 +163,14 @@ class LoginController extends LoginBindController
 
             $this->registerAttemptCheck($request);
 
-            if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')){
+            if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')) {
                 $this->bindOriginalEmailAccount($request);
-            }else{
+            } else {
                 $bindMobile = $request->request->get('originalMobileAccount', '');
                 $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
-                if ($originMobileUser && $request->request->get('accountSmsCode')){
+                if ($originMobileUser && $request->request->get('accountSmsCode')) {
                     $this->bindOriginalMobileAccount($request);
-                }else{
+                } else {
                     $this->register($request);
                 }
             }
@@ -205,7 +205,7 @@ class LoginController extends LoginBindController
         $originalAccountPassword = $request->request->get('originalAccountPassword');
 
         $user = $this->getUserService()->getUserByEmail($originalEmailAccount);
-        if (!$user || !empty($user['verifiedMobile'])){
+        if (!$user || !empty($user['verifiedMobile'])) {
             throw UserException::FORBIDDEN_REGISTER();
         }
 
@@ -229,7 +229,7 @@ class LoginController extends LoginBindController
         $originalMobileAccount = $request->request->get('originalMobileAccount');
 
         $user = $this->getUserService()->getUserByVerifiedMobile($originalMobileAccount);
-        if (!$user || (!empty($user['email'] && $user['emailVerified']))){
+        if (!$user || (!empty($user['email'] && $user['emailVerified']))) {
             throw UserException::FORBIDDEN_REGISTER();
         }
 
@@ -252,16 +252,16 @@ class LoginController extends LoginBindController
     {
         $bindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
 
-        if ($bindMode == 'constraint' && empty($mobile)) {
+        if ('constraint' == $bindMode && empty($mobile)) {
             return $this->validateResult('false', '请输入手机号');
         }
 
-        if ($bindMode != 'constraint' && empty($mobile)){
+        if ('constraint' != $bindMode && empty($mobile)) {
             return $this->validateResult('success', '');
         }
 
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
-        if ($user && !empty($user['email']) && $user['emailVerified']){
+        if ($user && !empty($user['email']) && $user['emailVerified']) {
             return $this->validateResult('false', '该手机账号已绑定邮箱');
         }
 
@@ -275,7 +275,7 @@ class LoginController extends LoginBindController
             return $this->validateResult('false', '该邮箱帐号不存在');
         }
 
-        if (!empty($user['verifiedMobile'])){
+        if (!empty($user['verifiedMobile'])) {
             return $this->validateResult('false', '该邮箱帐号已绑定手机号');
         }
 
@@ -311,7 +311,7 @@ class LoginController extends LoginBindController
             $validateResult['msg'] = $status;
         }
 
-        if ($request->request->get('originalMobileAccount') && $request->request->get('accountSmsCode')){
+        if ($request->request->get('originalMobileAccount') && $request->request->get('accountSmsCode')) {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('originalMobileAccount');
             $smsCode = $request->request->get('accountSmsCode');
