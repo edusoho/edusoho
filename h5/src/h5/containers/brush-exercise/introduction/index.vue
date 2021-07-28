@@ -3,15 +3,15 @@
     <e-panel :title="ItemBankExercise.title">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }">{{ filterPrice() }} </span>
-        <span class="plan-price__student-num"
-          >{{ ItemBankExercise.studentNum }}人在学</span
-        >
+        <span class="plan-price__student-num">
+          {{ $t('questionBank.personStudying', { number: ItemBankExercise.studentNum }) }}
+        </span>
       </div>
     </e-panel>
 
     <div class="course-detail__validity">
       <div>
-        <span class="mr20">学习有效期</span>
+        <span class="mr20">{{ $t('questionBank.validity') }}</span>
         <span class="dark">{{ learnExpiryHtml() }}</span>
       </div>
     </div>
@@ -44,7 +44,7 @@ export default {
         ItemBankExercise.price === '0.00'
       ) {
         this.isFree = true;
-        return '免费';
+        return this.$t('questionBank.free');
       }
       this.isFree = false;
       return `¥${ItemBankExercise.price}`;

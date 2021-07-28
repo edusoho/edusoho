@@ -45,7 +45,10 @@ export default {
     memberArea: '会员专区',
     courseClass: '{numberCourse} 门课程 {numberClass} 门班级',
     verificationSuccess: '验证成功',
-    all: '全部'
+    all: '全部',
+    moreCourse: '更多好课等您加入',
+    moreClass: '更多班级等您加入',
+    moreQuestionBanks: '更多题库等您加入',
   },
   title: {
     me: '我的',
@@ -508,6 +511,35 @@ export default {
     check: '检查一下',
     confirmSubmission: '确认交卷'
   },
+  classLearning: {
+    intor: '班级介绍',
+    teacher: '教师介绍',
+    classTeacher: '班主任',
+    headTeacherHasNotBeenSet: '尚未设置班主任',
+    course: '班级课程',
+    empty: '暂无课程',
+    viewDetails: '去商品页',
+    validity: '学习有效期',
+    studyWithinDay: '{number} 天内可学习',
+    canLearnBefore: '之前可学习',
+    permanent: '长期有效',
+    free: '免费',
+  },
+  questionBank: {
+    intro: '课程简介',
+    catalogue: '课程目录',
+    comment: '学员评价',
+    noContent: '暂无评价~',
+    exercises: '章节练习',
+    test: '模拟考试',
+    start: '开始做题',
+    validity: '学习有效期',
+    permanent: '长期有效',
+    free: '免费',
+    personStudying: '{number}人在学',
+    viewReport: '查看报告',
+    continue: '继续做题'
+  },
   filters: {
     free: '免费',
     stayTuned: '敬请期待',
@@ -523,7 +555,9 @@ export default {
     successfulTrade: '交易成功',
     transactionClosure: '交易关闭',
     vipJoinForfree: '会员免费加入',
-    totalOfTwoCourses: '共 {number} 门课程'
+    totalOfTwoCourses: '共 {number} 门课程',
+    answerRate: '答题率',
+    accuracy: '掌握率'
   },
   order: {
     coupon: '优惠券',
@@ -538,6 +572,7 @@ export default {
     discounted: '已优惠',
     noCouponsAvailable: '无可用优惠券',
     available: '张可用',
-    longTermEffective: '长期有效'
+    longTermEffective: '长期有效',
+    noOrderRecord: '暂无订单记录'
   }
 };

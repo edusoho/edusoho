@@ -3,13 +3,12 @@
     <img class="empty-course__img" src="static/images/courseEmpty.png" alt="" />
     <p class="empty-course__text">{{ emptyText }}</p>
     <div v-if="hasButton" class="empty-course__btn" @click="jumpBack">
-      + 更多{{ moreText }}等您加入
+      + {{ moreText }}
     </div>
   </div>
 </template>
 
 <script>
-import store from '@/store';
 
 export default {
   props: {
@@ -34,12 +33,13 @@ export default {
       const type = this.type;
       switch (type) {
         case 'course_list':
-          return '好课';
+          return this.$t('e.moreCourse');
         case 'classroom_list':
-          return '班级';
+          return this.$t('e.moreClass');
         case 'item_bank_exercise':
-          return '题库';
+          return this.$t('e.moreQuestionBanks');
       }
+      return '';
     },
   },
   methods: {

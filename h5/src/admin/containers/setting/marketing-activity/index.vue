@@ -138,7 +138,7 @@ export default {
     activityTitle() {
       const type = this.moduleData.type;
       if (type === 'seckill') return this.$t('groupPurchase.flashSaleSettings');
-      if (type === 'cut') return this.$t('coupon.bargainSettings');
+      if (type === 'cut') return this.$t('groupPurchase.bargainSettings');
       return this.$t('groupPurchase.groupPurchaseSetting');
     },
     radio: {

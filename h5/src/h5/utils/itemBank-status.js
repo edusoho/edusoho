@@ -1,21 +1,22 @@
+import i18n from '@/lang';
 import { formatFullTime } from './date-toolkit';
 const getBtnText = status => {
   switch (status) {
     case 'doing':
     case 'paused':
       return {
-        text: '继续做题',
+        text: i18n.t('questionBank.continue'),
         class: 'learn-btn learn-btn-doing',
       };
     case 'reviewing':
     case 'finished':
       return {
-        text: '查看报告',
+        text: i18n.t('questionBank.viewReport'),
         class: 'learn-btn learn-btn-report',
       };
     default:
       return {
-        text: '开始做题',
+        text: i18n.t('questionBank.start'),
         class: 'learn-btn',
       };
   }
@@ -31,7 +32,7 @@ const learnExpiry = ItemBankExercise => {
   );
   switch (expiryMode) {
     case 'forever':
-      return '永久有效';
+      return i18n.t('questionBank.permanent');
     case 'end_date':
       return endDateStr + '之前可学习';
     case 'days':
