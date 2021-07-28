@@ -74,7 +74,8 @@ class KernelControllerListener
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile',
-            '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language'
+            '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
+            '/scrm/buy/goods/callback',
         ];
     }
 
