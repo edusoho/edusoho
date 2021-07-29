@@ -1010,7 +1010,9 @@ const mobileBindCheck = (to, from, next) => {
       if (mobile_bind_mode !== 'closed') {
         next({ name: 'binding', query: to.query || from.query });
       }
-    }).finally(() => {
+      
+      resolve()
+    }).catch(() => {
       resolve()
     })
   })
