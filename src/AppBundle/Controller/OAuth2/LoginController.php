@@ -211,7 +211,7 @@ class LoginController extends LoginBindController
 
         $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
         if (!$validatePassed) {
-            throw new NotFoundHttpException('邮箱密码错误');
+            throw UserException::EMAIL_PASSWORD_ERROR();
         } else {
             $this->loginAttemptCheck($oauthUser->account, $request);
             $token = $request->getSession()->get('oauth_token');

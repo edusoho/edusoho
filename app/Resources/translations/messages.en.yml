@@ -9112,6 +9112,7 @@ exception.user.register_limit: The number of registrations has reached the maxim
 exception.user.not_match_auth: 'User is not match auth'
 exception.user.mobile_not_found: 'User mobile is not found'
 exception.user.user_is_destroyed: User is destroyed
+exception.user.email_password_error: The email password is incorrect
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
