@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Tests\Unit\AppBundle\Component\RateLimit;
