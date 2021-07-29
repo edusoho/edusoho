@@ -162,9 +162,7 @@ class LoginController extends LoginBindController
             }
 
             $bindMobile = $request->request->get('originalMobileAccount', '');
-            if ($bindMobile && OAuthUser::MOBILE_TYPE != $oauthUser->accountType){
-                $oauthUser->captchaEnabled = false;
-            }
+            $oauthUser->captchaEnabled = $bindMobile ? false : $oauthUser->captchaEnabled;
             $this->registerAttemptCheck($request);
 
             if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')) {
