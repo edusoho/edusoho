@@ -46,6 +46,7 @@ class AddMultiClassGroup extends Migration
             ALTER TABLE `assistant_student` ADD COLUMN `group_id` int(10) not null default 0 COMMENT '分组ID';
             ALTER TABLE `multi_class` ADD COLUMN `status` varchar(32) not null default '' COMMENT '状态';
             ALTER TABLE `multi_class` ADD COLUMN `type` varchar(32) not null default 'normal' COMMENT '班课或者分组班课(normal, group)';
+            ALTER TABLE `multi_class` ADD COLUMN `service_setting_type` varchar(32) not null default 'normal' COMMENT '助教服务人数设置类型(default, custom)';
             ALTER TABLE `multi_class` ADD COLUMN `service_num` int(10) unsigned not null default 0 COMMENT '助教服务人数';
             ALTER TABLE `multi_class` ADD COLUMN `group_limit_num` int(10) unsigned not null default 0 COMMENT '分组人数限制';
         ");
