@@ -23,7 +23,7 @@ class UserSettingController extends BaseController
         $userDefaultSet = $this->getUserDefaultSet();
         $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
-        $registerEnabled = $auth && $auth['register_mode'] && $auth['register_mode'] == 'closed' ? 'closed' : 'opened';
+        $registerEnabled = $auth && $auth['register_mode'] && 'closed' == $auth['register_mode'] ? 'closed' : 'opened';
         $default = [
             'register_enabled' => $registerEnabled,
             'register_mode' => 'mobile',
