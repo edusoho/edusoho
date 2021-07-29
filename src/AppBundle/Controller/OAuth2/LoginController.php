@@ -161,12 +161,15 @@ class LoginController extends LoginBindController
                 return $this->createFailJsonResponse(['msg' => $validateResult['msg']]);
             }
 
+            $bindMobile = $request->request->get('originalMobileAccount', '');
+            if ($bindMobile && OAuthUser::MOBILE_TYPE != $oauthUser->accountType){
+                $oauthUser->captchaEnabled = false;
+            }
             $this->registerAttemptCheck($request);
 
             if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')) {
                 $this->bindOriginalEmailAccount($request);
             } else {
-                $bindMobile = $request->request->get('originalMobileAccount', '');
                 $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
                 if ($originMobileUser && $request->request->get('accountSmsCode')) {
                     $this->bindOriginalMobileAccount($request);
