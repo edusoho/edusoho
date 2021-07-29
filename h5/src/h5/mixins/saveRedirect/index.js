@@ -38,10 +38,9 @@ export default {
           }
 
           setTimeout(this.jumpAction, 1000);
-        })
-        .catch(err => {
+        }).catch(() => {
           setTimeout(this.jumpAction, 1000);
-        });
+        })
     },
     jumpAction() {
       /* eslint handle-callback-err: 0 */

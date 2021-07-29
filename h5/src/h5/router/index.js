@@ -981,7 +981,7 @@ const setVipSwitch = () => {
 
 // 校验是否有绑定手机号
 const mobileBindCheck = (to, from, next) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const mobileBindSkip = window.localStorage.getItem('mobile_bind_skip');
 
     if (mobileBindSkip === '1' || store.state.mobile_bind.is_bind_mobile) {
@@ -1010,6 +1010,8 @@ const mobileBindCheck = (to, from, next) => {
       if (mobile_bind_mode !== 'closed') {
         next({ name: 'binding', query: to.query || from.query });
       }
+    }).finally(() => {
+      resolve()
     })
   })
 };
@@ -1063,7 +1065,7 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  if (to.name !== 'binding') {
+  if (to.name !== 'binding' && store.state.mobile_bind.mobile_bind_mode !== 'closed') {
     await mobileBindCheck(to, from, next);
   }
 
