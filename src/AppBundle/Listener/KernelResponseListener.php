@@ -40,6 +40,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
             if (in_array($request->getPathInfo(), $whiteList) || strstr($request->getPathInfo(), '/admin')
                 || strstr($request->getPathInfo(), '/register/submited') || strstr($request->getPathInfo(), '/mapi_v2')
+                || strstr($request->getPathInfo(), '/drag_captcha')
             ) {
                 return;
             }
