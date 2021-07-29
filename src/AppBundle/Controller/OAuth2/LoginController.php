@@ -163,10 +163,16 @@ class LoginController extends LoginBindController
 
             $this->registerAttemptCheck($request);
 
-            if ($request->request->get('originalEmailAccount') && $request->request->get('originalAccountPassword')){
-                $this->bindOriginalAccount($request);
-            }else{
-                $this->register($request);
+            if ($request->request->get('originalEmailAccount', '') && $request->request->get('originalAccountPassword', '')) {
+                $this->bindOriginalEmailAccount($request);
+            } else {
+                $bindMobile = $request->request->get('originalMobileAccount', '');
+                $originMobileUser = $this->getUserService()->getUserByVerifiedMobile($bindMobile);
+                if ($originMobileUser && $request->request->get('accountSmsCode')) {
+                    $this->bindOriginalMobileAccount($request);
+                } else {
+                    $this->register($request);
+                }
             }
             $this->authenticatedOauthUser();
 
@@ -191,7 +197,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    protected function bindOriginalAccount(Request $request)
+    protected function bindOriginalEmailAccount(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
         $registerFields = $request->request->all();
@@ -199,19 +205,40 @@ class LoginController extends LoginBindController
         $originalAccountPassword = $request->request->get('originalAccountPassword');
 
         $user = $this->getUserService()->getUserByEmail($originalEmailAccount);
-        $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
+        if (!$user || !empty($user['verifiedMobile'])) {
+            throw UserException::FORBIDDEN_REGISTER();
+        }
 
+        $validatePassed = $this->getAuthService()->checkPassword($user['id'], $originalAccountPassword);
         if (!$validatePassed) {
-            throw UserException::PASSWORD_FAILED();
+            throw UserException::EMAIL_PASSWORD_ERROR();
         } else {
             $this->loginAttemptCheck($oauthUser->account, $request);
             $token = $request->getSession()->get('oauth_token');
-            $isSuccess = $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
-            if ($isSuccess){
-                $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
-                $this->getUserService()->initPassword($user['id'], $registerFields['password']);
-            }
+            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+            $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+            $this->getUserService()->changeMobile($user['id'], $oauthUser->account);
+            $this->getUserService()->initPassword($user['id'], $registerFields['password']);
         }
+    }
+
+    protected function bindOriginalMobileAccount(Request $request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        $registerFields = $request->request->all();
+        $originalMobileAccount = $request->request->get('originalMobileAccount');
+
+        $user = $this->getUserService()->getUserByVerifiedMobile($originalMobileAccount);
+        if (!$user || (!empty($user['email'] && $user['emailVerified']))) {
+            throw UserException::FORBIDDEN_REGISTER();
+        }
+
+        $this->loginAttemptCheck($oauthUser->account, $request);
+        $token = $request->getSession()->get('oauth_token');
+        $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
+        $registerFields['nickname'] && $this->getUserService()->changeNickname($user['id'], $registerFields['nickname']);
+        $this->getUserService()->changeEmail($user['id'], $oauthUser->account);
+        $this->getUserService()->initPassword($user['id'], $registerFields['password']);
     }
 
     public function OriginalAccountCheckAction(Request $request, $type)
@@ -225,17 +252,20 @@ class LoginController extends LoginBindController
     {
         $bindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
 
-        if ($bindMode == 'constraint' && empty($mobile)) {
+        if ('constraint' == $bindMode && empty($mobile)) {
             return $this->validateResult('false', '请输入手机号');
         }
 
-        if ($bindMode != 'constraint' && empty($mobile)){
+        if ('constraint' != $bindMode && empty($mobile)) {
             return $this->validateResult('success', '');
         }
 
-        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
+        if ($user && !empty($user['email']) && $user['emailVerified']) {
+            return $this->validateResult('false', '该手机账号已绑定邮箱');
+        }
 
-        return $this->validateResult($result, $message);
+        return $this->validateResult('success', '');
     }
 
     protected function checkEmail($email)
@@ -245,8 +275,8 @@ class LoginController extends LoginBindController
             return $this->validateResult('false', '该邮箱帐号不存在');
         }
 
-        if (!empty($user['verifiedMobile'])){
-            return $this->validateResult('false', '该邮箱帐号已被绑定');
+        if (!empty($user['verifiedMobile'])) {
+            return $this->validateResult('false', '该邮箱帐号已绑定手机号');
         }
 
         return $this->validateResult('success', '');
@@ -281,7 +311,7 @@ class LoginController extends LoginBindController
             $validateResult['msg'] = $status;
         }
 
-        if ($request->request->get('originalMobileAccount') && $request->request->get('accountSmsCode')){
+        if ($request->request->get('originalMobileAccount') && $request->request->get('accountSmsCode')) {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('originalMobileAccount');
             $smsCode = $request->request->get('accountSmsCode');

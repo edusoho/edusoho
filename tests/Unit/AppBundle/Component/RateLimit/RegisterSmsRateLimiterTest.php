@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Tests\Unit\AppBundle\Component\RateLimit;
@@ -17,6 +18,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'mobile' => '13967340627',
                     'dragCaptchaToken' => 'kuozhi',
                     'phrase' => 'password',
+                    'unique' => 'true',
                 ),
                 'getClientIp' => '128.2.2.1',
             )

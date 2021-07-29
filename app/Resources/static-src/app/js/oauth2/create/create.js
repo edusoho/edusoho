@@ -50,11 +50,11 @@ export default class Create {
 
   initValidator() {
     $.validator.addMethod('sms_code_required', function (value, element) {
-      return $('#originalMobileAccount').val() ? false : true;
+      return $('#originalMobileAccount').val() && value ? true : false;
     }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
 
     $.validator.addMethod('account_password', function (value, element) {
-      return $('#originalEmailAccount').val() ? false : true;
+      return $('#originalEmailAccount').val() && value ? true : false;
     }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
 
     this.rules = {
@@ -117,9 +117,6 @@ export default class Create {
       originalAccountPassword: {
         required: false,
         account_password: true,
-        es_remote: {
-          type: 'get'
-        }
       },
       accountSmsCode: {
         required: false,
@@ -158,9 +155,11 @@ export default class Create {
       }
       
       self.$sendBtn.attr('disabled', true);
+      let type = $(event.currentTarget).data('type');
       let data = {
-        type: 'register',
-        mobile: $('.js-account').text(),
+        type: type,
+        unique: type === "register" ? true : false,
+        mobile: type === "register" ? $('.js-account').text() : $('#originalMobileAccount').val(),
         dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()
       };
@@ -200,7 +199,7 @@ export default class Create {
         registerVisitId: $('[name="registerVisitId"]').val(),
         originalMobileAccount: $('[name="originalMobileAccount"]').val(),
         accountSmsCode: $('[name="accountSmsCode"]').val(),
-        originalEmailAccount: $('[name="originalMobileAccount"]').val(),
+        originalEmailAccount: $('[name="originalEmailAccount"]').val(),
         originalAccountPassword: $('[name="originalAccountPassword"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
