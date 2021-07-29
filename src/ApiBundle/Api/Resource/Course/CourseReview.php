@@ -20,7 +20,7 @@ class CourseReview extends AbstractResource
      *
      * @OA\Get(
      *     path="/course/{courseId}/reviews",
-     *     @OA\Response(response="200", description="获取课程的评价")
+     *     @OA\Response(response="200", description="获取课程的评价 ")
      * )
      */
     public function search(ApiRequest $request, $courseId)
