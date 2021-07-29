@@ -50,11 +50,19 @@ export default class Create {
 
   initValidator() {
     $.validator.addMethod('sms_code_required', function (value, element) {
-      return $('#originalMobileAccount').val() && value ? true : false;
+      if (($('#originalMobileAccount').val() && value) || !$('#originalMobileAccount').val()){
+        return true;
+      }else{
+        return false;
+      }
     }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
 
     $.validator.addMethod('account_password', function (value, element) {
-      return $('#originalEmailAccount').val() && value ? true : false;
+      if (($('#originalEmailAccount').val() && value) || !$('#originalMobileAccount').val()){
+        return true;
+      }else{
+        return false;
+      }
     }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
 
     this.rules = {
