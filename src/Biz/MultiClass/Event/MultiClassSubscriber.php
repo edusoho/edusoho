@@ -2,11 +2,8 @@
 
 namespace Biz\MultiClass\Event;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -14,11 +11,11 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'live.activity.create' => 'onLiveActivityCreate',
             'live.activity.update' => 'onLiveActivityUpdate',
             'live.activity.delete' => 'onLiveActivityDelete',
-        );
+        ];
     }
 
     public function onLiveActivityCreate(Event $event)
