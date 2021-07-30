@@ -14,6 +14,7 @@ use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
+use Biz\Task\Service\TaskService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -73,6 +74,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
             $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            $this->generateMultiClassTimeRange($fields['courseId']);
 
             $this->getLogService()->info(
                 'multi_class',
@@ -284,6 +286,23 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByCourseId($courseId);
     }
 
+    public function generateMultiClassTimeRange($courseId)
+    {
+        $multiClass = $this->getMultiClassByCourseId($courseId);
+        if (empty($multiClass)) {
+            return;
+        }
+
+        $firstLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'ASC'], 0, 1);
+        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'DESC'], 0, 1);
+
+        if (!empty($firstLive)) {
+            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => $firstLive['startTime'], 'end_time' => $endLive['endTime']]);
+        } else {
+            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => 0, 'end_time' => 0]);
+        }
+    }
+
     private function filterConditions($conditions)
     {
         if (isset($conditions['ids']) && empty($conditions['ids'])) {
@@ -358,6 +377,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
