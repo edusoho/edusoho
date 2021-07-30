@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Common\CommonException;
 use Biz\OrderFacade\CoinCurrency;
@@ -21,7 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'multiClass'
+        'consult', 'wechat_message_subscribe', 'locale',
     ];
 
     public static function convertUnderline($str)
@@ -682,39 +681,6 @@ class Setting extends AbstractResource
         }
 
         return $default;
-    }
-
-    public function getMultiClass()
-    {
-        $default = $this->getMultiClassDefaultSettings();
-        $multiClassSetting = $this->getSettingService()->get('multi_class', []);
-
-        return array_merge($default, $multiClassSetting);
-    }
-
-    public function add(ApiRequest $request)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_v2_education')) {
-            throw new AccessDeniedException();
-        }
-
-        $multiClassSetting = $this->getSettingService()->get('multi_class', []);
-        $multiClassSetting = empty($multiClassSetting) ? $this->getMultiClassDefaultSettings() : $multiClassSetting;
-        $updateSettings = $request->request->all();
-        $settings = array_merge($multiClassSetting, $updateSettings);
-        $this->getSettingService()->set('multi_class', $settings);
-
-        return $this->getSettingService()->get('multi_class');
-    }
-
-    private function getMultiClassDefaultSettings()
-    {
-        return [
-            'group_number_limit' => '20',
-            'assistant_service_limit' => '200',
-            'review_time_limit' => '24',
-        ];
     }
 
     /**
