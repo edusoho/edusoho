@@ -14,7 +14,7 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
         return [
             'live.activity.create' => 'onLiveActivityCreate',
             'live.activity.update' => 'onLiveActivityUpdate',
-            'live.activity.delete' => 'onLiveActivityDelete',
+            'course.task.delete' => 'onTaskDelete',
         ];
     }
 
@@ -30,10 +30,12 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId']);
     }
 
-    public function onLiveActivityDelete(Event $event)
+    public function onTaskDelete(Event $event)
     {
-        $activity = $event->getArgument('activity');
-        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId']);
+        $task = $event->getSubject();
+        if ('live' === $task['type']) {
+            $this->getMultiClassService()->generateMultiClassTimeRange($task['courseId']);
+        }
     }
 
     /**
