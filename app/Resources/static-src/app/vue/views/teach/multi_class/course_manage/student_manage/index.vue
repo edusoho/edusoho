@@ -1,8 +1,8 @@
 <template>
   <div class="student-manage">
     <div class="clearfix" style="margin-bottom: 24px;">
-      <a-input-search class="pull-left" placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
-      <a-space class="pull-left cd-ml24" size="middle">
+      <a-input-search class="pull-left" placeholder="请输入姓名或手机号搜索" style="width: 200px" @search="onSearch" />
+      <a-space class="pull-left cd-ml16" size="middle">
         <a-button
           v-if="isPermission('course_member_create')"
           icon="plus"
@@ -71,9 +71,19 @@
             批量修改有效期
           </a-space>
         </a-button>
+
+        <a-button
+          type="primary"
+          @click="clickBatchStudentGroupModal"
+        >
+          <a-space>
+            <svg-icon icon="icon-change" />
+            变更分组
+          </a-space>
+        </a-button>
       </a-space>
 
-      <a-space class="pull-right" size="middle">
+      <a-space class="right-export" size="middle">
         <a-button
           v-if="isPermission('course_member_export')"
           type="primary"
@@ -100,49 +110,68 @@
         <a-button key="back" @click="close"> 关闭 </a-button>
       </template>
     </a-modal>
-    <a-table
-      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-      :columns="columns"
-      :row-key="record => record.id"
-      :pagination="paging"
-      :data-source="students"
-      @change="handleStudentTableChange"
-    >
-      <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
+  <div>
+    <a-row> 
+      <a-col :span="3">
+       <div class="student-group">学员分组</div>
+        <a-menu mode="inline" @select="onGroupClick">
+          <a-menu-item>
+            <span>全部学员</span>
+          </a-menu-item>
+          <a-menu-item v-for="Group in groupList" :key="Group.id">
+            <span>{{Group.name}}</span>
+            <span>({{Group.groupCnt}})</span>
+          </a-menu-item>
+        </a-menu>
+      </a-col>
+      <a-col :span="21">
+        <a-table
+          :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+          :columns="columns"
+          :row-key="record => record.id"
+          :pagination="paging"
+          :data-source="students"
+          @change="handleStudentTableChange"
+        >
+          <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
-      <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
+          <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
 
-      <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
+          <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
-      <template slot="assistant" slot-scope="assistant">{{ assistant.nickname }}</template>
+          <template slot="assistant" slot-scope="assistant">{{ assistant.nickname }}</template>
 
-      <template slot="threadCount" slot-scope="threadCount">{{ threadCount }}</template>
+          <template slot="threadCount" slot-scope="threadCount">{{ threadCount }}</template>
 
-      <a slot="finishedHomeworkCount" @click="onClickHomeworkModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.homeworkCount }}</a>
+          <a slot="finishedHomeworkCount" @click="onClickHomeworkModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.homeworkCount }}</a>
 
-      <a slot="finishedTestpaperCount" @click="onClickTestpaperModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
+          <a slot="finishedTestpaperCount" @click="onClickTestpaperModal(record.user)" slot-scope="value, record">{{ value }}/{{ record.testpaperCount }}</a>
 
-      <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') || '--' }}</template>
+          <template slot="deadline" slot-scope="deadline">{{ $dateFormat(deadline, 'YYYY-MM-DD HH:mm') || '--' }}</template>
 
-      <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm')|| '--' }}</template>
+          <template slot="createdTime" slot-scope="createdTime">{{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm')|| '--' }}</template>
 
-      <template slot="actions" slot-scope="actions, record">
-        <a-space size="middle">
-          <a class="ant-dropdown-link" @click="viewStudentInfo(record.user)">查看</a>
-          <a-popconfirm
-            title="确定移除?"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="confirm(record.user.id)"
-          >
-            <span v-if="isPermission('course_member_delete')" style="color: #fe4040; cursor: pointer;">移除</span>
-          </a-popconfirm>
-        </a-space>
-      </template>
-    </a-table>
-
+          <template slot="actions" slot-scope="actions, record">
+            <a-space size="middle">
+              <a class="ant-dropdown-link" @click="viewStudentInfo(record.user)">查看</a>
+              <a-popconfirm
+                title="确定移除?"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="confirm(record.user.id)"
+              >
+                <span v-if="isPermission('course_member_delete')" style="color: #fe4040; cursor: pointer;">移除</span>
+              </a-popconfirm>
+            </a-space>
+          </template>
+        </a-table>
+      </a-col>
+   </a-row>
+  </div>
     <assistant-list-modal :visible="assistantListModalVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
+    <change-group-modal :visible="changeGroupVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="changeGroupVisible = false;"></change-group-modal>
+    
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -241,6 +270,7 @@ import StudentInfoModal from './StudentInfoModal.vue';
 import AssistantListModal from 'app/vue/views/teach/assistant/components/AssistantListModal';
 import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
+import ChangeGroupModal from './ChangeGroupModal.vue';
 
 const columns = [
   {
@@ -356,16 +386,34 @@ const defaultExamPaging = {
     pageSize: 5,
   }
 };
-
+const groupList = [
+  {
+    groupCnt: 0,
+    id: 15,
+    name: "000"
+  },
+  {
+    groupCnt: 0,
+    id: 14,
+    name: "221"
+  },
+  {
+    groupCnt: 11,
+    id: 11,
+    name: "默认分组"
+  }
+];
 export default {
   components: {
     AddStudentModal,
     StudentInfoModal,
     AssistantListModal,
     userInfoTable,
+    ChangeGroupModal,
   },
   data() {
     return {
+      groupList,
       resultColumns,
       students: [],
       modalShowUser: {},
@@ -382,6 +430,7 @@ export default {
       loading: false,
       addStudentVisible: false,
       viewStudentInfoVisible: false,
+      changeGroupVisible: false,
       assistantListModalVisible: false,
       selectedStudentIds: [],
       id: this.$route.params.id,
@@ -631,6 +680,15 @@ export default {
       this.assistantListModalVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
+    clickBatchStudentGroupModal()
+    {
+      if (this.selectedRowKeys.length === 0) {
+        this.$message.error('请至少选中一项后修改', 1);
+        return;
+      }
+      this.changeGroupVisible = true;
+      this.selectedStudentIds = this.selectedUserIds
+    },
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后移除', 1);
@@ -659,6 +717,10 @@ export default {
         },
       });
 
+    },
+    onGroupClick(res){
+      const keyId = res.key; 
+      this.getMultiClassStudents({ keyId });
     },
     onSelectEmpty() {
       this.$message.error('请至少选中一项后进行修改！', 1);
@@ -743,6 +805,64 @@ export default {
   white-space: nowrap;
   word-wrap: normal;
 }
+
+ .ant-menu-vertical .ant-menu-item::before,
+    .ant-menu-vertical-left .ant-menu-item::before,
+    .ant-menu-vertical-right .ant-menu-item::before,
+    .ant-menu-inline .ant-menu-item::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border-left: 4px solid @brand-primary;
+        transform: scaleY(0.0001);
+        opacity: 0;
+        transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
+        content: '';
+    }
+
+    .ant-menu-inline .ant-menu-selected::before,
+    .ant-menu-inline .ant-menu-item-selected::before {
+        transform: scaleY(1);
+        opacity: 1;
+        transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+
+    .ant-menu-vertical .ant-menu-item::after,
+    .ant-menu-vertical-left .ant-menu-item::after,
+    .ant-menu-vertical-right .ant-menu-item::after,
+    .ant-menu-inline .ant-menu-item::after {
+        border-right: none;
+    }
+    .student-group{
+      padding: 14px 24px;
+      border-right: 1px solid #ebebeb;
+      border-bottom: 1px solid #ebebeb;
+      font-size: 16px;
+      color: #333333;
+      letter-spacing: 0;
+      line-height: 24px;
+      font-weight: 500;
+    }
+    .ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title{
+      margin-top: unset;
+    }
+    .ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-menu-inline .ant-menu-item:not(:last-child){
+      margin-bottom: unset;
+    }
+    @media only screen and (max-width: 1400px) {
+    /* For mobile phones: */
+    .right-export {
+        margin: 24px 0 016px;
+    }
+   
+    }
+    @media only screen and (min-width: 1400px) {
+        /* For mobile phones: */
+        .right-export {
+            float: right;
+        }
+    }
 @screen-xs-min:              480px;
 @screen-sm-min:              768px;
 @screen-md-min:              992px;

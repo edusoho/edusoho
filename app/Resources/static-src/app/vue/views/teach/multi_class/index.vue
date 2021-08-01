@@ -2,10 +2,71 @@
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
-        <a-input-search placeholder="请输入班课名称" style="width: 224px"
-          :allowClear="true"
-          @search="searchMultiClass" />
-        <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
+        <a-select
+            v-model="search.productScreen"
+            show-search
+            placeholder="所属产品筛选"
+            option-filter-prop="children"
+            style="width: 150px"
+            :filter-option="filterOption"
+            @change="handleChange"
+        >
+          <a-select-option v-for="status in classStatusList" :key="status.status">
+              {{ status.name }}
+          </a-select-option>
+        </a-select>
+
+        <a-select 
+            v-model="search.classStatus"
+            placeholder="班课状态"
+            style="width: 120px"
+            @change="handleChange">
+          <a-select-option v-for="status in classStatusList" :key="status.status">
+              {{ status.name }}
+          </a-select-option>
+        </a-select>
+
+        <a-select
+            v-model="search.teacher"
+            show-search
+            placeholder="授课老师"
+            option-filter-prop="children"
+            style="width: 150px"
+            :filter-option="filterOption"
+            @change="handleChange"
+        >
+          <a-select-option v-for="status in classStatusList" :key="status.status">
+              {{ status.name }}
+          </a-select-option>
+        </a-select>
+
+        <a-select 
+            v-model="search.classType"
+            placeholder="班课类型"
+            style="width: 120px"
+            @change="handleChange">
+          <a-select-option v-for="type in classTypeList" :key="type.status">
+              {{ type.name }}
+          </a-select-option>
+        </a-select>
+        
+        <a-input 
+          v-model="search.keywords" 
+          placeholder="请输入班课名称" 
+          style="width: 224px"
+          :allowClear="true" />
+          <a-button type="primary" @click="searchMultiClass">检索</a-button>
+        <a-dropdown v-if="isPermission('multi_class_create')">
+          <a-button class="pull-right" type="primary">新建班课</a-button>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a @click="goToCreateMultiClassPage" href="javascript:;">大班课</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="javascript:;">分组大班课</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </div>
 
       <a-table :columns="columns"
@@ -96,6 +157,12 @@ const columns = [
     scopedSlots: { customRender: 'course' },
   },
   {
+    title: '班课状态',
+    dataIndex: 'status',
+    width: '10%',
+    ellipsis: true,
+  },
+  {
     title: '所属产品',
     dataIndex: 'product',
     key: 'productIds',
@@ -150,7 +217,17 @@ const columns = [
     scopedSlots: { customRender: 'action' },
   },
 ];
-
+const classStatusList = [
+      { status: "", name: "课程状态" },
+      { status: "0", name: "开课中" },
+      { status: "1", name: "未开课" },
+      { status: "2", name: "已结课" },
+];
+const classTypeList = [
+      { status: "", name: "班课类型" },
+      { status: "1", name: "大班课" },
+      { status: "2", name: "分组大班课" },
+];
 export default {
   name: 'MultiClassList',
 
@@ -163,6 +240,15 @@ export default {
   data () {
     return {
       columns,
+      search:{
+        productScreen: "",
+        classStatus: "",
+        teacher: "",
+        classType: "",
+        keywords: ""
+      },
+      classStatusList,
+      classTypeList,
       multiClassList: [],
       productList: [],
       getListLoading: false,
@@ -215,7 +301,7 @@ export default {
       params.limit = params.pageSize || 10
       params.offset = params.offset || 0
       params.keywords = params.keywords || ''
-
+     
       this.getListLoading = true;
       try {
         const { data, paging } = await MultiClass.search(params)
@@ -230,8 +316,8 @@ export default {
         this.getListLoading = false;
       }
     },
-    searchMultiClass (keywords) {
-      this.getMultiClassList({ keywords })
+    searchMultiClass () {
+      this.getMultiClassList(this.search)
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
@@ -304,7 +390,16 @@ export default {
           paging: this.paging
         }
       });
-    }
+    },
+    handleChange() {
+      console.log(this.search);
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
   }
 }
 </script>
+

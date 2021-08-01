@@ -130,7 +130,32 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
+      <a-form-item label="助教服务上限人数">
+        <a-select 
+            placeholder="班课状态"
+            style="width: 140px"
+             v-decorator="['paramId', { initialValue: '1'}]"
+            >
+          <a-select-option value="1">
+              默认参数设置
+          </a-select-option>
+          <a-select-option value="2">
+              自定义设置
+          </a-select-option>
+        </a-select>
+         <a-form-item v-show="form.getFieldValue('paramId') === '2'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+           <a-input v-decorator="['maxAssistantNum', {
+              rules: [
+                { required: true, message: '请输入助教服务上限人数' },
+                { validator: validateAssistantNum }
+               ]
+             }]"
+            >
+          <span slot="suffix">人</span>
+        </a-input>
+      </a-form-item>
 
+      </a-form-item>
       <a-form-item label="排课">
         <Schedule
           :course-id="selectedCourseId"
@@ -650,11 +675,22 @@ export default {
 
       callback()
     },
+     validateAssistantNum(rule, value, callback) {
+      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback('请输入正整数')
+      }
+
+      // if (value > Number(this.maxStudentNum)) {
+      //   callback(`人数范围在0-${this.maxStudentNum}人`)
+      // }
+
+      callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (err) return
-
+        console.log(values);
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -694,7 +730,7 @@ export default {
         name: 'MultiClass',
         params
       });
-    }
+    },
   }
 }
 </script>
@@ -735,7 +771,11 @@ export default {
   text-align: right;
   background-color: #f5f5f5;
 }
-
+.assistant-max-number{
+  .ant-form-explain{
+    width: 250px
+  }
+}
 
 @import "~app/less/admin-v2/variables.less";
 @import "~app/less/page/course-manage/task/create.less";
