@@ -1362,6 +1362,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     protected function updateTags($localFile, $fields)
     {
+        if (!isset($fields['tags'])) {
+            return;
+        }
+
         if (!empty($fields['tags'])) {
             $tagNames = explode(',', $fields['tags']);
             $this->getUploadFileTagDao()->deleteByFileId($localFile['id']);

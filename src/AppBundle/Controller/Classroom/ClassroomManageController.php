@@ -652,6 +652,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $class = $request->request->all();
+        $class['service'] = empty($class['service']) ? [] : $class['service'];
 
         $class['tagIds'] = $this->getTagIdsFromRequest($request);
 

@@ -7,6 +7,7 @@ use AppBundle\Common\SimpleValidator;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\OAuth2\OAuthUser;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
@@ -332,5 +333,13 @@ class LoginBindController extends BaseController
     protected function getWeChatService()
     {
         return $this->createService('WeChat:WeChatService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }
