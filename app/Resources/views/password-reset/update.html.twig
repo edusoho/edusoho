@@ -16,6 +16,7 @@
 						{{ form_label(form.password, 'user.settings.security.password_modify.new_password'|trans, {label_attr:{class:'control-label'}}) }}
 						<div class="controls">
 							{{ form_widget(form.password, {attr:{class:'form-control'}}) }}
+              <p class="help-block">{{ ('user.settings.password_level.'~setting('auth.password_level')|default('low'))|trans }}</p>
 						</div>
 					</div>
 					

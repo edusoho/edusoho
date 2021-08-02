@@ -6,8 +6,9 @@
 {% endblock %}
 
 {% block panel_body %}
+  {% set mobileBindMode = setting('login_bind.mobile_bind_mode', 'constraint') %}
   <div class="alert cd-alert cd-alert-warning cd-mb32">
-    {% if oauthUser.mode == 'mobile' %}{% set accountType = 'user.oauth.login_by_mobile'|trans %} {% elseif oauthUser.mode == 'email' %} {% set accountType = 'user.oauth.login_by_email'|trans %} {% else %}{% set accountType = 'user.oauth.login_by_mobile_or_email_tip'|trans %}{% endif %}
+    {% if mobileBindMode == 'constraint' %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% elseif oauthUser.mode == 'mobile' %}{% set accountType = 'user.oauth.login_by_mobile'|trans %} {% elseif oauthUser.mode == 'email' %} {% set accountType = 'user.oauth.login_by_email'|trans %} {% else %}{% set accountType = 'user.oauth.login_by_mobile_or_email_tip'|trans %}{% endif %}
     {{ 'user.oauth.bind_account.tip'|trans({ '%accountType%':accountType }) }}
   </div>
 
@@ -16,7 +17,12 @@
   </div>
 
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
-    {% if oauthUser.mode == 'mobile' %}
+    {% if mobileBindMode == 'constraint' %}
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="mobile">{{ 'user.oauth.login_by_mobile'|trans }}</label>
+        <input class="form-control" type="number" id="mobile" name="account" required>
+      </div>
+    {% elseif oauthUser.mode == 'mobile' %}
       <div class="form-group cd-form-group">
         <label class="third-party-form__label" for="mobile">{{ 'user.oauth.login_by_mobile'|trans }}</label>
         <input class="form-control" type="number" id="mobile" name="account" required>

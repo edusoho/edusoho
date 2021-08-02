@@ -42,6 +42,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->findByCreator($creator);
     }
 
+    public function findMultiClassesByReplayShow($isReplayShow)
+    {
+        return $this->getMultiClassDao()->findByReplayShow($isReplayShow);
+    }
+
     public function getMultiClass($id)
     {
         return $this->getMultiClassDao()->get($id);

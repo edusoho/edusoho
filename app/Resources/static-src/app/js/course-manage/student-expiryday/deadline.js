@@ -21,8 +21,9 @@ export default class Deadline {
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
-    }).on('hide', () => {
+    }).on('changeDate', () => {
       this.validator.form();
+      $picker.blur();
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
@@ -85,7 +86,6 @@ export default class Deadline {
         $deadline.prop('disabled', false);
         $day.val(0);
         $('[name="waveType"]').val('plus');
-        console.log(111);
         this.elementAddRules($deadline, this.getDateRules());
         break;
       default:
