@@ -8,12 +8,12 @@
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div class="intro-body">
-      <van-panel class="panel intro-panel" title="考试名称">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.testName')">
         <div class="intro-panel__content intro-panel__content--title">
           {{ testpaperTitle }}
         </div>
       </van-panel>
-      <van-panel v-if="startTime" class="panel intro-panel" title="开考时间">
+      <van-panel v-if="startTime" class="panel intro-panel" :title="$t('courseLearning.openingTime')">
         <div
           :class="[
             'intro-panel__content',
@@ -23,7 +23,7 @@
           {{ formateStartTime(startTime) }}
         </div>
       </van-panel>
-      <van-panel class="panel intro-panel" title="考试时长">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.examinationDuration')">
         <div
           v-if="limitTime"
           :class="[
@@ -31,27 +31,27 @@
             result || !disabled ? '' : 'intro-tip',
           ]"
         >
-          {{ limitTime }}分钟
+          {{ limitTime }}{{ $t('courseLearning.minutes') }}
         </div>
-        <div v-else class="intro-panel__content">不限制</div>
+        <div v-else class="intro-panel__content">{{ $t('courseLearning.noRestrictions') }}</div>
       </van-panel>
-      <van-panel class="panel intro-panel" title="试卷满分">
-        <div class="intro-panel__content">满分{{ score }}分</div>
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.fullScoreOfTestPaper')">
+        <div class="intro-panel__content">{{ $t('courseLearning.fullMark', { number: score }) }}</div>
       </van-panel>
-      <van-panel class="panel intro-panel" title="题目数量">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.numberOfTopics')">
         <div class="intro-panel__content">
           <van-cell
             :border="false"
-            :value="`${sum}题`"
+            :value="`${sum}${$t('courseLearning.topic')}`"
             class="intro-cell intro-cell--total"
-            title="共计"
+            :title="$t('courseLearning.total')"
           />
           <van-cell
             v-for="item in question_type_seq"
             :border="false"
             :key="item"
-            :title="obj[item]"
-            :value="`${counts[item]}题`"
+            :title="$t(obj[item])"
+            :value="`${counts[item]}${$t('courseLearning.topic')}`"
             class="intro-cell"
           />
         </div>
@@ -63,7 +63,7 @@
         class="intro-footer__btn"
         type="primary"
         @click="showResult"
-        >查看成绩</van-button
+        >{{ $t('courseLearning.viewResult') }}</van-button
       >
       <van-button
         v-else
@@ -71,7 +71,7 @@
         class="intro-footer__btn"
         type="primary"
         @click="startTestpaper()"
-        >开始考试</van-button
+        >{{ $t('courseLearning.startTheExam') }}</van-button
       >
     </div>
   </div>
@@ -112,13 +112,13 @@ export default {
       answer: null,
       time: null,
       obj: {
-        single_choice: '单选题',
-        choice: '多选题',
-        essay: '问答题',
-        uncertain_choice: '不定项选择题',
-        determine: '判断题',
-        fill: '填空题',
-        material: '材料题',
+        single_choice: 'courseLearning.singleChoice',
+        choice: 'courseLearning.choice',
+        essay: 'courseLearning.essay',
+        uncertain_choice: 'courseLearning.uncertainChoice',
+        determine: 'courseLearning.determine',
+        fill: 'courseLearning.fill',
+        material: 'courseLearning.material',
       },
     };
   },
@@ -221,7 +221,7 @@ export default {
       if (this.enable_facein === 1) {
         Dialog.alert({
           title: '',
-          confirmButtonText: '知道了',
+          confirmButtonText: this.$t('courseLearning.iKnow'),
           message:
             '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
         }).then(() => {});

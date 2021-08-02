@@ -10,7 +10,7 @@
     }"
   >
     <div class="exercise-search">
-      <div class="exercise-search__title">题目来源</div>
+      <div class="exercise-search__title">{{ $t('wrongQuestion.questionSource') }}</div>
 
       <!-- 考试筛选 -->
       <template v-if="exerciseMediaType === 'testpaper'">
@@ -31,7 +31,7 @@
               })
             "
           >
-            查看错题
+            {{ $t('wrongQuestion.check') }}
           </div>
         </div>
       </template>
@@ -64,7 +64,7 @@
                 })
               "
             >
-              查看错题
+              {{ $t('wrongQuestion.check') }}
             </div>
           </div>
 
@@ -98,7 +98,7 @@
                     })
                   "
                 >
-                  查看错题
+                  {{ $t('wrongQuestion.check') }}
                 </div>
               </div>
 
@@ -130,7 +130,7 @@
                         })
                       "
                     >
-                      查看错题
+                      {{ $t('wrongQuestion.check') }}
                     </div>
                   </div>
                 </div>

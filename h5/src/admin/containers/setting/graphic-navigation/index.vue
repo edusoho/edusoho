@@ -15,9 +15,9 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        图文导航设置
+        {{ $t('navigation.navigationSettings') }}
         <div class="help-text">
-          建议图片尺寸为80x80px，支持 jpg/png/gif 格式，大小不超过2MB
+          {{ $t('navigation.tips') }}
         </div>
       </header>
       <div v-for="(item, index) in copyModuleData.data" :key="index">
@@ -33,14 +33,14 @@
         type="primary"
         class="setting-graphicNavigation-add"
         @click="addHandler"
-        >添加图文导航</el-button
+        >{{ $t('navigation.addNavigation') }}</el-button
       >
     </div>
   </module-frame>
 </template>
 
 <script>
-import { MODULE_DEFAULT } from 'admin/config/module-default-config';
+// import { MODULE_DEFAULT } from 'admin/config/module-default-config';
 import item from './item';
 import moduleFrame from '../module-frame';
 import eGraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue';

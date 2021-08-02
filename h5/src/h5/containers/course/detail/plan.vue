@@ -37,22 +37,22 @@
 
     <div class="course-detail__validity">
       <div v-if="details.vipLevel && vipSwitch" class="mb15">
-        <span class="mr20">会员免费</span>
+        <span class="mr20">{{ $t('courseLearning.freeForMembers') }}</span>
         <img :src="details.vipLevel.icon" class="vipIcon" />
         <router-link
           :to="{ path: '/vip', query: { id: details.vipLevel.id } }"
           class="color-primary"
         >
-          {{ details.vipLevel.name }}免费学</router-link
+          {{ details.vipLevel.name }}{{ $t('courseLearning.freeLearning') }}</router-link
         >
       </div>
       <service v-if="details.services.length" :services="details.services" />
       <div>
-        <span class="mr20">学习有效期</span>
+        <span class="mr20">{{ $t('courseLearning.validity') }}</span>
         <span class="dark" v-html="learnExpiryHtml" />
       </div>
       <div v-if="details.buyExpiryTime != 0" class="mt5">
-        <span class="mr20">购买截止日期</span>
+        <span class="mr20">{{ $t('courseLearning.purchaseDeadline') }}</span>
         <span class="validity orange">{{ buyExpiryTime }}</span>
       </div>
     </div>
@@ -61,7 +61,7 @@
       @click="toCertificate(selectedPlanId)"
       v-if="details.hasCertificate"
     >
-      <span><span class="certificate-icon">证</span>证书</span>
+      <span><span class="certificate-icon">{{ $t('courseLearning.certificate') }}</span>{{ $t('courseLearning.certificate2') }}</span>
       <i class="van-icon van-icon-arrow pull-right" />
     </div>
   </div>
@@ -132,11 +132,11 @@ export default {
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return '长期有效';
+            return this.$t('courseLearning.longTermEffective');
           case 'end_date':
-            return endDateStr + '之前可学习';
+            return endDateStr + this.$t('courseLearning.canLearnBefore');
           case 'days':
-            return learnExpiryData.expiryDays + '天内可学习';
+            return this.$t('courseLearning.studyWithinDay', { number: learnExpiryData.expiryDays });
           case 'date':
             return (
               '<div class = "mt5">' +
@@ -150,11 +150,11 @@ export default {
         }
       } else {
         if (expiryMode == 'forever') {
-          return '长期有效';
+          return this.$t('courseLearning.longTermEffective');
         }
         return memberInfo.deadline != 0
-          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '长期有效';
+          ? memberInfo.deadline.slice(0, 10) + this.$t('courseLearning.canLearnBefore')
+          : this.$t('courseLearning.longTermEffective');
       }
       return '';
     },
@@ -227,7 +227,7 @@ export default {
 
       if (Number(details.isFree) || details.price === '0.00') {
         this.isFree = true;
-        return '免费';
+        return this.$t('courseLearning.free');
       }
 
       this.isFree = false;

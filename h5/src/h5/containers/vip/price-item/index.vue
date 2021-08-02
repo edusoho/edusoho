@@ -28,7 +28,7 @@ export default {
     price() {
       const { currency, amount, coinAmount, coinName } = this.item.price;
       if (currency == 'RMB') {
-        return `${amount}元`;
+        return `${amount}${this.$t('vip.cny')}`;
       }
       return `${coinAmount}${coinName}`;
     },

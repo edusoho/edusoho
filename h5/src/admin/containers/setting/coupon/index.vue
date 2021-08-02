@@ -18,21 +18,21 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        优惠券设置（仅显示未过期的优惠券）
+        {{ $t('coupon.couponSetting') }}
         <div v-if="portal === 'miniprogram'" class="text-12 color-gray mts">
           使用优惠券配置功能，小程序版本需要升级到1.3.2及以上
         </div>
       </header>
       <div class="default-allocate__content">
         <!-- 标题栏 -->
-        <setting-cell title="标题栏：">
-          <el-radio v-model="radio" label="show">显示</el-radio>
-          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+        <setting-cell :title="$t('coupon.title')">
+          <el-radio v-model="radio" label="show">{{ $t('coupon.display') }}</el-radio>
+          <el-radio v-model="radio" label="unshow">{{ $t('coupon.noDisplay') }}</el-radio>
         </setting-cell>
 
         <!-- 优惠券选择 -->
-        <setting-cell title="优惠券选择：" left-class="required-option">
-          <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+        <setting-cell :title="$t('coupon.selectCoupons')" left-class="required-option">
+          <el-button size="mini" @click="addCoupon">{{ $t('coupon.addCoupons') }}</el-button>
         </setting-cell>
 
         <div v-if="copyModuleData.data.items">
@@ -157,6 +157,7 @@ export default {
     },
     getUpdatedCourses(data) {
       this.copyModuleData.data.items = data;
+      // eslint-disable-next-line no-useless-return
       if (!data.length) return;
     },
     addCoupon() {

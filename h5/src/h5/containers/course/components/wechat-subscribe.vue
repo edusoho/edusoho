@@ -1,7 +1,7 @@
 <template>
   <div v-if="isWechatSubscribe" class="wechat-subscribe">
     <div v-if="firstGuide" class="wechat-subscribe-first-guide">
-      请点此订阅课程相关通知
+      {{ $t('courseLearning.pleaseClickSubscribe') }}
     </div>
 
     <!-- <div v-if="secondGuide" class="wechat-subscribe-second-guide">
@@ -29,7 +29,7 @@
       </script>
       <script type="text/wxtag-template">
         <span class="subscribe-btn">
-          订阅
+          {{ $t('courseLearning.subscribe') }}
         </span>
       </script>
     </wx-open-subscribe>
@@ -107,7 +107,7 @@ export default {
       const subscribeDetails = e.detail.subscribeDetails;
       if (reg.test(subscribeDetails)) {
         this.isSubscribe = true;
-        this.$toast('订阅成功');
+        this.$toast(this.$t('courseLearning.subscriptionSucceeded'));
       }
     },
 

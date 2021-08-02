@@ -1,6 +1,6 @@
 <template>
   <div class="e-coupon">
-    <div v-if="showTitle === 'show'" class="e-coupon__title">优惠券</div>
+    <div v-if="showTitle === 'show'" class="e-coupon__title">{{ $t('e.coupon') }}</div>
     <div
       v-show="coupons.length"
       :class="['e-coupon__container', 'clearfix', couponNum]"

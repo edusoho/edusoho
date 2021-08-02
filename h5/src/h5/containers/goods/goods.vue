@@ -49,13 +49,13 @@
       <div class="goods-info">
         <ul id="goods-info__nav" class="goods-info__nav">
           <li @click="onActive(0, 'introduction')">
-            <a :class="active == 0 ? 'active' : ''" href="javascript:;">简介</a>
+            <a :class="active == 0 ? 'active' : ''" href="javascript:;">{{ $t('goods.intro') }}</a>
           </li>
           <li @click="onActive(1, 'teacher')">
-            <a :class="active == 1 ? 'active' : ''" href="javascript:;">教师</a>
+            <a :class="active == 1 ? 'active' : ''" href="javascript:;">{{ $t('goods.teacher') }}</a>
           </li>
           <li @click="onActive(2, 'catalog')">
-            <a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a>
+            <a :class="active == 2 ? 'active' : ''" href="javascript:;">{{ $t('goods.catalogue') }}</a>
           </li>
           <li
             @click="onActive(3, 'evaluate')"
@@ -64,19 +64,19 @@
                 (show_classroom_review == 1 && goods.type === 'classroom')
             "
           >
-            <a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a>
+            <a :class="active == 3 ? 'active' : ''" href="javascript:;">{{ $t('goods.comment') }}</a>
           </li>
         </ul>
 
         <!-- 简介 -->
         <section class="js-scroll-top goods-info__item" id="introduction">
-          <div class="goods-info__title">简介</div>
+          <div class="goods-info__title">{{ $t('goods.intro') }}</div>
           <div class="info-introduction" v-html="summary"></div>
         </section>
 
         <!-- 教师 -->
         <section class="js-scroll-top goods-info__item" id="teacher">
-          <div class="goods-info__title">教师风采</div>
+          <div class="goods-info__title">{{ $t('goods.teacherStyle') }}</div>
           <teacher :teachers="currentSku.teachers" />
         </section>
 
@@ -86,7 +86,7 @@
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
-          <div class="goods-info__title">课程目录</div>
+          <div class="goods-info__title">{{ $t('goods.tableOfContents') }}</div>
           <!-- 课程详情 -->
           <afterjoin-directory />
         </section>
@@ -96,7 +96,7 @@
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
-          <div class="goods-info__title">学习课程</div>
+          <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
           <!-- 学习课程目录 -->
           <classroom-courses
             :classroomCourses="componentsInfo.classroomCourses"
@@ -112,7 +112,7 @@
               (show_classroom_review == 1 && goods.type == 'classroom')
           "
         >
-          <div class="goods-info__title">课程评价</div>
+          <div class="goods-info__title">{{ $t('goods.courseEvaluation') }}</div>
           <reviews
             v-if="
               (show_course_review == 1 && goods.type == 'course') ||
@@ -123,7 +123,7 @@
             :limit="5"
           ></reviews>
           <div v-else class="info-introduction">
-            暂无评价~
+            {{ $t('goods.noContent') }}
           </div>
         </section>
 
@@ -137,7 +137,7 @@
                 : componentsInfo.recommendGoods
             "
           >
-            <span slot="title">猜你想学</span>
+            <span slot="title">{{ $t('goods.guessYouWantToLearn') }}</span>
           </Recommend>
         </section>
 
@@ -214,7 +214,7 @@ export default {
     ...mapState(['vipSwitch']),
 
     summary() {
-      if (!this.goods.summary) return '暂无简介~';
+      if (!this.goods.summary) return this.$t('goods.noIntrodution');
       return this.goods.summary;
     },
   },
@@ -256,7 +256,7 @@ export default {
         title: message.title || '',
         link: message.link,
         imgUrl: message.imgUrl,
-        desc: '发现一个好内容，分享给你~',
+        desc: this.$t('goods.findAGoodContent')
       };
       initShare({ ...shareMessage });
     },

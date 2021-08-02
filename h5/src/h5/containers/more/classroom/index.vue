@@ -27,12 +27,13 @@
       v-if="isEmptyCourse && isRequestCompile"
       :has-button="false"
       :type="'classroom_list'"
-      text="暂无班级"
+      :text="$t('more.noClass')"
     />
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import Api from '@/api';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
@@ -99,6 +100,9 @@ export default {
     if (this.vipOpenStatus && !this.vipLevels.length) {
       await this.getVipLevels();
     }
+
+    this.initI18n();
+
     // 初始化下拉筛选数据
     this.initDropdownData();
 
@@ -108,15 +112,24 @@ export default {
     ...mapActions('classroom', ['setClassRoomList']),
     ...mapActions('vip', ['getVipLevels', 'getVipOpenStatus']),
 
+    initI18n() {
+      _.forEach(this.dataDefault, item => {
+        _.forEach(item.options, option => {
+          const { text, i18n } = option;
+          option.text = i18n ? this.$t(text) : text;
+        });
+      });
+    },
+
     async initDropdownData() {
       // 获取班级分类数据
       const res = await Api.getClassCategories();
       this.dataDefault[0].options = this.initOptions({
-        text: '全部',
+        text: this.$t('more.all'),
         data: res,
       });
       this.dataDefault[1].options = this.initOptions({
-        text: '会员班级',
+        text: this.$t('more.membersClass'),
         data: this.vipLevels,
       });
 

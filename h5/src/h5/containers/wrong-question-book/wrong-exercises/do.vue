@@ -67,7 +67,7 @@ export default {
 
     getAnswerData(data) {
       Toast.loading({
-        message: '提交中...',
+        message: this.$t('wrongQuestion.submitting'),
         forbidClick: true,
       });
       Api.submitWrongQuestionAnswer({

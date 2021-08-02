@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import Api from '@/api';
 import infiniteScroll from '&/components/e-infinite-scroll/e-infinite-scroll.vue';
 import empty from '&/components/e-empty/e-empty.vue';
@@ -114,6 +115,15 @@ export default {
     ...mapActions('classroom', ['setClassRoomList']),
     ...mapActions('vip', ['getVipLevels', 'getVipOpenStatus']),
 
+    initI18n() {
+      _.forEach(this.dataDefault, item => {
+        _.forEach(item.options, option => {
+          const { text, i18n } = option;
+          option.text = i18n ? this.$t(text) : text;
+        });
+      });
+    },
+
     setTitle() {
       window.postNativeMessage({
         action: 'kuozhi_native_header',
@@ -125,11 +135,11 @@ export default {
       // 获取班级分类数据
       const res = await Api.getClassCategories();
       this.dataDefault[0].options = this.initOptions({
-        text: '全部',
+        text: this.$t('more.all'),
         data: res,
       });
       this.dataDefault[1].options = this.initOptions({
-        text: '会员班级',
+        text: this.$t('more.membersClass'),
         data: this.vipLevels,
       });
 

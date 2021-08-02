@@ -226,145 +226,145 @@ const MODULE_DEFAULT = {
 // 各端对应的组件
 const BASE_MODULE = [
   {
-    name: '轮播图',
+    name: 'sidebar.carousel',
     default: MODULE_DEFAULT.slideShow,
   },
   {
-    name: '课程列表',
+    name: 'sidebar.courseList',
     default: MODULE_DEFAULT.courseList,
   },
   {
-    name: '班级列表',
+    name: 'sidebar.classList',
     default: MODULE_DEFAULT.classList,
   },
   {
-    name: '图片广告',
+    name: 'sidebar.imageAds',
     default: MODULE_DEFAULT.poster,
   },
   {
-    name: '优惠券',
+    name: 'sidebar.coupon',
     default: MODULE_DEFAULT.coupon,
   },
   {
-    name: '会员专区',
+    name: 'sidebar.memberArea',
     default: MODULE_DEFAULT.vip,
   },
 ];
 
 const MARKETING_MODULE = [
   {
-    name: '拼团',
+    name: 'sidebar.groupPurchase',
     default: MODULE_DEFAULT.groupon,
   },
   {
-    name: '砍价',
+    name: 'sidebar.bargain',
     default: MODULE_DEFAULT.cut,
   },
   {
-    name: '秒杀',
+    name: 'sidebar.flashSale',
     default: MODULE_DEFAULT.seckill,
   },
 ];
 
 const APP_BASE_MODULE = [
   {
-    name: '轮播图',
+    name: 'sidebar.carousel',
     default: MODULE_DEFAULT.slideShow,
   },
   {
-    name: '课程列表',
+    name: 'sidebar.courseList',
     default: MODULE_DEFAULT.courseList,
   },
   {
-    name: '班级列表',
+    name: 'sidebar.classList',
     default: MODULE_DEFAULT.classList,
   },
   {
-    name: '图片广告',
+    name: 'sidebar.imageAds',
     default: MODULE_DEFAULT.poster,
   },
   {
-    name: '优惠券',
+    name: 'sidebar.coupon',
     default: MODULE_DEFAULT.coupon,
   },
   {
-    name: '会员专区',
+    name: 'sidebar.memberArea',
     default: MODULE_DEFAULT.vip,
   },
   {
-    name: '图文导航',
+    name: 'sidebar.navigation',
     default: MODULE_DEFAULT.graphicNavigation,
   },
   {
-    name: '公开课列表',
+    name: 'sidebar.openClassList',
     default: MODULE_DEFAULT.openCourseList,
   },
   {
-    name: '题库列表',
+    name: 'sidebar.questionBankList',
     default: MODULE_DEFAULT.itemBankList,
   },
 ];
 
 const H5_BASE_MODULE = [
   {
-    name: '轮播图',
+    name: 'sidebar.carousel',
     default: MODULE_DEFAULT.slideShow,
     icon: 'icon-lunbotu',
   },
   {
-    name: '课程列表',
+    name: 'sidebar.courseList',
     default: MODULE_DEFAULT.courseList,
     icon: 'icon-kechengliebiao',
   },
   {
-    name: '班级列表',
+    name: 'sidebar.classList',
     default: MODULE_DEFAULT.classList,
     icon: 'icon-banjiliebiao',
   },
   {
-    name: '图片广告',
+    name: 'sidebar.imageAds',
     default: MODULE_DEFAULT.poster,
     icon: 'icon-tuwenguanggao',
   },
   {
-    name: '图文导航',
+    name: 'sidebar.navigation',
     default: MODULE_DEFAULT.h5GraphicNavigation,
     icon: 'icon-tuwendaohang',
   },
   {
-    name: '搜索',
+    name: 'sidebar.search',
     default: MODULE_DEFAULT.search,
     icon: 'icon-sousuo',
   },
   {
-    name: '题库列表',
+    name: 'sidebar.questionBankList',
     default: MODULE_DEFAULT.itemBankList,
   },
 ];
 
 const H5_MARKETING_MODULE = [
   {
-    name: '优惠券',
+    name: 'sidebar.coupon',
     default: MODULE_DEFAULT.coupon,
     icon: 'icon-youhuiquan',
   },
   {
-    name: '会员专区',
+    name: 'sidebar.memberArea',
     default: MODULE_DEFAULT.vip,
     icon: 'icon-huiyuanzhuanqu',
   },
   {
-    name: '拼团',
+    name: 'sidebar.groupPurchase',
     default: MODULE_DEFAULT.groupon,
     icon: 'icon-pintuan',
   },
   {
-    name: '砍价',
+    name: 'sidebar.bargain',
     default: MODULE_DEFAULT.cut,
     icon: 'icon-kanjia',
   },
   {
-    name: '秒杀',
+    name: 'sidebar.flashSale',
     default: MODULE_DEFAULT.seckill,
     icon: 'icon-miaosha',
   },

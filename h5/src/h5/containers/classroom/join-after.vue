@@ -9,7 +9,7 @@
       />
 
       <van-tabs v-model="active" :class="tabsClass">
-        <van-tab v-for="item in tabs" :title="item" :key="item" />
+        <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
       </van-tabs>
 
       <!-- 班级介绍 -->
@@ -20,7 +20,7 @@
           :showNumberData="showNumberData"
         />
         <div class="segmentation" />
-        <e-panel ref="about" title="班级介绍" class="about">
+        <e-panel ref="about" :title="$t('classLearning.intor')" class="about">
           <div v-html="details.summary" />
         </e-panel>
         <div class="segmentation" />
@@ -29,15 +29,15 @@
         <teacher
           :teacher-info="details.teachers"
           class="teacher"
-          title="教师介绍"
+          :title="$t('classLearning.teacher')"
         />
         <div class="segmentation" />
 
         <teacher
           :teacher-info="details.headTeacher ? [details.headTeacher] : []"
           class="teacher"
-          title="班主任"
-          defaul-value="尚未设置班主任"
+          :title="$t('classLearning.classTeacher')"
+          :defaul-value="$t('classLearning.headTeacherHasNotBeenSet')"
         />
         <div class="segmentation" />
 
@@ -55,8 +55,8 @@
           :feedback="!errorMsg"
           :course-sets="details.courses"
           :disable-mask="true"
-          title="班级课程"
-          defaul-value="暂无课程"
+          :title="$t('classLearning.course')"
+          :defaul-value="$t('classLearning.empty')"
           @click.native="showDialog('click')"
         />
       </div>
@@ -81,7 +81,7 @@
       @click.native="gotoGoodsPage"
       v-if="active == 0 && this.details.goodsId"
     >
-      去商品页
+      {{ $t('classLearning.viewDetails') }}
     </e-footer>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
@@ -121,7 +121,7 @@ export default {
       headBottom: 0,
       active: 1,
       scrollFlag: false,
-      tabs: ['班级介绍', '班级课程'],
+      tabs: ['classLearning.intor', 'classLearning.course'],
       tabsClass: '',
       errorMsg: '',
       classroomSettings: {},

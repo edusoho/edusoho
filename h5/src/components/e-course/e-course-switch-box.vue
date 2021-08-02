@@ -3,18 +3,18 @@
     <!-- price -->
     <div v-if="type === 'price'" class="switch-box">
       <span class="switch-box__price">
-        <p v-if="isFree" class="free">免费</p>
+        <p v-if="isFree" class="free">{{ $t('e.free') }}</p>
         <p v-if="!isFree" class="price">¥ {{ course.price }}</p>
       </span>
       <span class="switch-box__state">
-        <p v-if="showStudent">{{ course.studentNum }}人在学</p>
+        <p v-if="showStudent">{{ $t('e.personStudying', { number: course.studentNum }) }}</p>
       </span>
     </div>
 
     <!-- order -->
     <div v-if="type === 'order'" class="switch-box">
       <span class="switch-box__price">
-        <p v-if="isFree" class="free">免费</p>
+        <p v-if="isFree" class="free">{{ $t('e.free') }}</p>
         <p v-if="!isFree" class="price">
           {{ displayPrice(order.priceConvert) }}
         </p>

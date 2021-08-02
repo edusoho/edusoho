@@ -4,9 +4,10 @@
     <div
       v-for="(item, index) in settings"
       class="my_setting-item"
+      :key="index"
       @click="handleSetting(index)"
     >
-      <span class="my_setting-title title-18">{{ item.name }}</span>
+      <span class="my_setting-title title-18">{{ $t(item.name) }}</span>
       <div class="my_setting-content">
         <img
           v-if="!index"
@@ -33,14 +34,14 @@
             />
           </div>
           <div class="dialog-footer">
-            <van-button @click="dialogVisible = false">取 消</van-button>
-            <van-button type="primary" @click="stopCropFn">确 定</van-button>
+            <van-button @click="dialogVisible = false">{{ $t('btn.cancel') }}</van-button>
+            <van-button type="primary" @click="stopCropFn">{{ $t('btn.confirm') }}</van-button>
           </div>
         </van-popup>
       </van-uploader>
     </div>
     <div class="log-out-btn title-18" @click="logout">
-      <span>退出登录</span>
+      <span>{{ $t('btn.dropOut') }}</span>
     </div>
   </div>
 </template>
@@ -49,7 +50,6 @@ import { mapState, mapActions } from 'vuex';
 import { Toast, Dialog } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
-import store from '@/store';
 
 import { VueCropper } from 'vue-cropper';
 
@@ -61,15 +61,16 @@ export default {
     return {
       settings: [
         {
-          name: '头像',
+          name: 'setting.heads',
           info: '',
         },
         {
-          name: '用户名',
+          name: 'setting.nickname',
           info: '',
-          // }, {
-          //   name: '手机',
-          //   info: ''
+        },
+        {
+          name: 'setting.language',
+          info: ''
         },
       ],
       dialogVisible: false,
@@ -95,7 +96,7 @@ export default {
   created() {
     this.$set(this.settings[0], 'info', this.user.avatar.large);
     this.$set(this.settings[1], 'info', this.user.nickname);
-    // this.$set(this.settings[2], 'info', this.user.school);
+    this.$set(this.settings[2], 'info', this.$t('lang.language'));
   },
   methods: {
     ...mapActions(['setAvatar']),
@@ -112,7 +113,9 @@ export default {
           });
           break;
         case 2:
-          Toast('更改手机号，后续开通');
+          this.$router.push({
+            name: 'settingLang',
+          });
           break;
         default:
           break;
@@ -120,13 +123,16 @@ export default {
     },
     logout() {
       Dialog.confirm({
-        title: '退出登录',
-        message: '确定要退出登录吗？',
+        title: this.$t('setting.dropOut'),
+        message: this.$t('setting.dropOutCancelConfirm'),
+        confirmButtonText: this.$t('btn.confirm'),
+        cancelButtonText: this.$t('btn.cancel')
       }).then(() => {
         this.$store.commit(types.USER_LOGIN, {
           token: '',
           user: {},
         });
+        window.localStorage.setItem('mobile_bind_skip', '0');
         this.$router.push({
           name: 'my',
         });
@@ -147,12 +153,12 @@ export default {
       const size = file.size / 1024 / 1024;
 
       if (type.indexOf('image') === -1) {
-        Toast.fail('文件类型仅支持图片格式');
+        Toast.fail(this.$t('setting.fileTypeOnlySupportsImageFormat'));
         return;
       }
 
       if (size > 2) {
-        Toast.fail('文件大小不得超过 2 MB');
+        Toast.fail(this.$t('setting.fileSizeMustNotExceed2MB'));
         return;
       }
 
@@ -178,7 +184,7 @@ export default {
             avatarId: res.id,
           })
             .then(() => {
-              Toast.success('修改成功');
+              Toast.success(this.$t('setting.modifySuccess'));
             })
             .catch(err => {
               Toast.fail(err.message);

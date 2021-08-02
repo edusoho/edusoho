@@ -1,19 +1,19 @@
 export default [
   {
     name: 'find',
-    type: '发现',
+    type: 'footer.discover',
     normal: 'static/images/explore.png',
     active: 'static/images/exploreHL.png',
   },
   {
     name: 'learning',
-    type: '学习',
+    type: 'footer.learn',
     normal: 'static/images/learning.png',
     active: 'static/images/learningHL.png',
   },
   {
     name: 'my',
-    type: '我的',
+    type: 'footer.me',
     normal: 'static/images/me.png',
     active: 'static/images/meHL.png',
   },

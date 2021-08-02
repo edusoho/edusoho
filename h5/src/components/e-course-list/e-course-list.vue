@@ -13,7 +13,7 @@
         }}</span>
         <span class="e-course-list__more">
           <span class="more-text pull-left" @click="jumpTo(courseList.source)"
-            >更多</span
+            >{{ $t('enter.more') }}</span
           >
         </span>
       </div>
@@ -35,7 +35,7 @@
             class="more-text pull-left"
             style="font-size: 12px;"
             @click="jumpTo(courseList.source)"
-            >更多</span
+            >{{ $t('enter.more') }}</span
           >
         </span>
       </div>
@@ -117,7 +117,7 @@
         </div>
       </div>
       <div v-show="courseItemData" class="e-course__empty">
-        暂无{{ typeList === 'course_list' ? '课程' : '班级' }}
+        {{ typeList === 'course_list' ? $t('e.noCourses') : $t('e.noClass') }}
       </div>
     </div>
   </div>

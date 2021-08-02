@@ -5,7 +5,7 @@
     </div>
     <div class="list-item__detail">
       <h3 class="title text-overflow">{{ question.target_data.title }}</h3>
-      <p class="number text-overflow">{{ question.item_num }}道题</p>
+      <p class="number text-overflow">{{ question.item_num }} {{ $t('wrongQuestion.question') }}</p>
     </div>
   </div>
 </template>

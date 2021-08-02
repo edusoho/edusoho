@@ -68,4 +68,10 @@ export default {
   SET_CLOUD_PLAY_SERVER(state, address) {
     state.cloudPlayServer = address;
   },
+  SET_LANGUAGE: (state, language) => {
+    state.language = language;
+  },
+  [types.SET_MOBILE_BIND](state, mobile_bind) {
+    state.mobile_bind = mobile_bind;
+  },
 };

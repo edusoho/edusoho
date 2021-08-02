@@ -6,7 +6,7 @@
       @change="onChange"
     >
       <van-tabbar-item v-for="item in items" :key="item.type">
-        <span>{{ item.type }}</span>
+        <span>{{ $t(item.type) }}</span>
         <template slot="icon" slot-scope="props">
           <img :src="props.active ? item.active : item.normal" />
         </template>

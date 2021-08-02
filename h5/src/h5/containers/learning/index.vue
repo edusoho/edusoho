@@ -1,22 +1,22 @@
 <template>
   <div class="e-learn e-learn-padding">
     <van-tabs v-model="active" class="after-tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item" />
+      <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
     </van-tabs>
     <emptyCourse
       v-if="active == 0 && isEmptyCourse && isCourseFirstRequestCompile"
       :type="typeList"
-      　text="暂无课程"
+      :text="$t('learning.noCourses')"
     />
     <emptyCourse
       v-if="active == 1 && isEmptyClass && isClassFirstRequestCompile"
       :type="typeList"
-      　text="暂无班级"
+      :text="$t('learning.noClass')"
     />
     <emptyCourse
       v-if="active == 2 && isEmptyBank && isBankFirstRequestCompile"
       :type="typeList"
-      text="暂无题库"
+      :text="$t('learning.noQuestionBank')"
     />
     <div v-else>
       <lazyLoading
@@ -93,7 +93,7 @@ export default {
       isCourseFirstRequestCompile: false,
       isClassFirstRequestCompile: false,
       isBankFirstRequestCompile: false,
-      tabs: ['我的课程', '我的班级', '我的题库'],
+      tabs: ['learning.course', 'learning.class', 'learning.questionBank'],
     };
   },
   computed: {
@@ -167,6 +167,7 @@ export default {
         params: setting,
       })
         .then(data => {
+          // eslint-disable-next-line prefer-const
           let isAllCourse;
           if (!isAllCourse) {
             this.courseList = [...this.courseList, ...data.data];
@@ -188,6 +189,7 @@ export default {
         params: { ...setting, format: 'pagelist' },
       })
         .then(data => {
+          // eslint-disable-next-line prefer-const
           let isAllClass;
           if (!isAllClass) {
             this.classList = [...this.classList, ...data.data];
@@ -209,6 +211,7 @@ export default {
         params: { ...setting, format: 'pagelist' },
       })
         .then(data => {
+          // eslint-disable-next-line prefer-const
           let isAllBank;
           if (!isAllBank) {
             this.bankList = [...this.bankList, ...data.data];

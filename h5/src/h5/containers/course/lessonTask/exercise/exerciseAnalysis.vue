@@ -23,7 +23,7 @@
       <div>
         <span @click="cardShow = true">
           <i class="iconfont icon-Questioncard" />
-          题卡
+          {{ $t('courseLearning.questionCard') }}
         </span>
       </div>
       <div>
@@ -41,7 +41,7 @@
               alt
             />
           </i>
-          错题
+          {{ $t('courseLearning.wrongQuestion') }}
         </span>
       </div>
     </div>
@@ -50,9 +50,9 @@
       <div v-if="info.length > 0" class="card">
         <div class="card-title">
           <div>
-            <span class="card-right">正确</span>
-            <span class="card-wrong">错误</span>
-            <span class="card-nofinish">未作答</span>
+            <span class="card-right">{{ $t('courseLearning.right') }}</span>
+            <span class="card-wrong">{{ $t('courseLearning.wrong') }}</span>
+            <span class="card-nofinish">{{ $t('courseLearning.unanswered') }}</span>
             <span class="card-subjective">主观题</span>
           </div>
           <i class="iconfont icon-no" @click="cardShow = false" />
@@ -85,6 +85,7 @@ import { Toast } from 'vant';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
+import i18n from '@/lang';
 
 export default {
   name: 'ExerciseAnalysis',
@@ -92,19 +93,19 @@ export default {
     type: function(type) {
       switch (type) {
         case 'single_choice':
-          return '单选题';
+          return i18n.t('courseLearning.singleChoice');
         case 'choice':
-          return '多选题';
+          return i18n.t('courseLearning.choice');
         case 'essay':
-          return '问答题';
+          return i18n.t('courseLearning.essay');
         case 'uncertain_choice':
-          return '不定项选择题';
+          return i18n.t('courseLearning.uncertainChoice');
         case 'determine':
-          return '判断题';
+          return i18n.t('courseLearning.determine');
         case 'fill':
-          return '填空题';
+          return 'courseLearning.fill';
         case 'material':
-          return '材料题';
+          return i18n.t('courseLearning.material');
       }
     },
   },
