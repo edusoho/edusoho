@@ -120,6 +120,29 @@ class MultiClass extends AbstractResource
             $prepareConditions['productId'] = $conditions['productId'];
         }
 
+        if (!empty($conditions['status'])) {
+            switch ($conditions['status']){
+                case 'notStart':
+                    $prepareConditions['startTime_GT'] = time();
+                    break;
+                case 'living':
+                    $prepareConditions['startTime_LE'] = time();
+                    $prepareConditions['endTime_GE'] = time();
+                    break;
+                case 'end':
+                    $prepareConditions['endTime_LT'] = time();
+                    break;
+            }
+        }
+
+        if (!empty($conditions['teacherId'])) {
+            $prepareConditions['ids'] = $this->getMemberService()->findMultiClassByTeacherId($conditions['teacherId']);
+        }
+
+        if (!empty($conditions['type'])) {
+            $prepareConditions['type'] = $conditions['type'];
+        }
+
         return $prepareConditions;
     }
 
@@ -162,6 +185,14 @@ class MultiClass extends AbstractResource
             $teacher = $teachers[$multiClass['id']];
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
+            if ($multiClass['start_time'] > time()) {
+                $multiClass['status'] = 'notStart';
+            } elseif ($multiClass['start_time'] <= time() && time() <= $multiClass['end_time']) {
+                $multiClass['status'] = 'living';
+            } elseif ($multiClass['end_time'] < time()) {
+                $multiClass['status'] = 'end';
+            }
+            $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
             $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['courseId' => $multiClass['courseId'], 'status' => 'published', 'isLesson' => 1]);
