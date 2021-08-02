@@ -13,6 +13,20 @@
     <fieldset>
       <div class="form-group">
         <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.user_mobile_bind_setting'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('mobile_bind_mode', {'constraint':'admin.login_connect.mobile_bind.constraint'|trans, 'option':'admin.login_connect.mobile_bind.option'|trans, 'closed':'admin.login_connect.mobile_bind.close'|trans}, loginConnect.mobile_bind_mode|default('constraint')) }}
+          <p class="help-block constraint-tip {% if loginConnect.mobile_bind_mode != 'constraint' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.constraint_tip'|trans|raw }}</p>
+          <p class="help-block option-tip {% if loginConnect.mobile_bind_mode != 'option' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.option_tip'|trans|raw }}</p>
+          <p class="help-block close-tip {% if loginConnect.mobile_bind_mode != 'closed' %}hidden{% endif %}">{{ 'admin.login_connect.mobile_bind.close_tip'|trans|raw }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
           <label>{{ 'admin.login_connect.User_login_restrictions'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
