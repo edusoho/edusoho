@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2\Teach;
+namespace AppBundle\Controller\AdminV2\Education;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
@@ -10,34 +10,12 @@ use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassService;
 use Symfony\Component\HttpFoundation\Request;
 
-class MultiClassController extends BaseController
+class OverviewController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('admin-v2/teach/multi_class/index.html.twig', [
+        return $this->render('admin-v2/education/overview/index.html.twig', [
         ]);
-    }
-
-    public function overviewAction(Request $request, $multiClassId)
-    {
-        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
-        if (empty($multiClass)) {
-            throw MultiClassException::MULTI_CLASS_NOT_EXIST();
-        }
-
-        $course = $this->getCourseService()->tryManageCourse($multiClass['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        $summary = $this->getReportService()->summary($course['id']);
-
-        return $this->render(
-            'admin-v2/teach/multi-class/overview/overview.html.twig',
-            [
-                'summary' => $summary,
-                'courseSet' => $courseSet,
-                'course' => $course,
-            ]
-        );
     }
 
     /**
