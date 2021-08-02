@@ -204,6 +204,12 @@ const columns = [
     scopedSlots: { customRender: 'studentNum' },
   },
   {
+    title: '最大服务人数',
+    dataIndex: 'maxNum',
+    width: '120px',
+    ellipsis: true,
+  },
+  {
     title: '创建时间',
     dataIndex: 'createdTime',
     width: '160px',

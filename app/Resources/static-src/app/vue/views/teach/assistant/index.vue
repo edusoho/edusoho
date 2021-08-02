@@ -17,10 +17,8 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <img slot="mediumAvatar" slot-scope="mediumAvatar" :src="mediumAvatar" width="50px" height="50px" />
-
-      <template slot="weChatQrCode" slot-scope="weChatQrCode">
-        <img v-if="weChatQrCode" :src="weChatQrCode" width="50px" height="50px" />
+      <template slot="mediumAvatar" slot-scope="mediumAvatar">
+        <a-avatar :size="48" :src="mediumAvatar" icon="user"></a-avatar>
       </template>
 
       <div slot="loginInfo" slot-scope="item">
@@ -62,17 +60,6 @@
                 修改用户头像
               </a>
             </a-menu-item>
-            <a-menu-item>
-              <a
-                data-toggle="modal"
-                data-target="#modal"
-                data-backdrop="static"
-                data-keyboard="false"
-                :data-url="`/admin/v2/user/${item.id}/assistant/qrcode`"
-              >
-                修改助教二维码
-              </a>
-            </a-menu-item>
           </a-menu>
         </a-dropdown>
       </template>
@@ -94,10 +81,12 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
+import { Avatar } from "ant-design-vue";
 
 const columns = [
   {
     title: "用户名",
+    ellipsis: true,
     dataIndex: "nickname",
   },
   {
@@ -106,12 +95,34 @@ const columns = [
     scopedSlots: { customRender: "mediumAvatar" },
   },
   {
-    title: "微信二维码",
-    dataIndex: 'weChatQrCode',
-    scopedSlots: {customRender: "weChatQrCode"},
+    title: "是否绑定销客助手",
+    dataIndex: 'isBind',
+    ellipsis: true,
+    scopedSlots: { customRender: "isBind" },
+  },
+  {
+    title: "现带班课总数",
+    dataIndex: 'totalClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "现学员总数",
+    dataIndex: 'studentNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课总数",
+    dataIndex: 'endClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课学员总数",
+    dataIndex: 'endClassStuNum',
+    ellipsis: true,
   },
   {
     title: "最近登录",
+    ellipsis: true,
     scopedSlots: { customRender: "loginInfo" },
   },
   {
@@ -125,6 +136,7 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
+    AAvatar: Avatar,
   },
   data() {
     return {

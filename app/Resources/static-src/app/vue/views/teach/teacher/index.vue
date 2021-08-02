@@ -18,6 +18,9 @@
       :loading="loading"
       @change="handleTableChange"
     >
+      <template slot="mediumAvatar" slot-scope="mediumAvatar">
+        <a-avatar :size="48" :src="mediumAvatar" icon="user"></a-avatar>
+      </template>
       <a slot="nickname" slot-scope="text, item" @click="edit(item.id)">{{ text }}</a>
 
       <div slot="promoteInfo" slot-scope="item">
@@ -31,7 +34,40 @@
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
+      <template slot="action" slot-scope="item">
+        <a-button type="link" @click="edit(item.id)">
+          查看
+        </a-button>
+        <a-dropdown>
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
+            <a-icon type="caret-down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/edit`"
+              >
+                编辑用户信息
+              </a>
+            </a-menu-item>
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/avatar`"
+              >
+                修改用户头像
+              </a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </template>
     </a-table>
 
     <a-modal title="教师详细信息" :visible="visible" @cancel="close">
@@ -74,27 +110,49 @@ import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
+import { Avatar } from 'ant-design-vue'
 
 const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
-    width: '25%',
     scopedSlots: { customRender: "nickname" },
+  },
+   {
+    title: "头像",
+    dataIndex: "avatar.middle",
+    scopedSlots: { customRender: "mediumAvatar" },
+  },
+  {
+    title: "现带班课总数",
+    dataIndex: 'totalClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "现学员总数",
+    dataIndex: 'studentNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课总数",
+    dataIndex: 'endClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课学员总数",
+    dataIndex: 'endClassStuNum',
+    ellipsis: true,
   },
   {
     title: "是否推荐",
-    width: '25%',
     scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
-    width: '25%',
     scopedSlots: { customRender: "loginInfo" },
   },
   {
     title: "操作",
-    width: '25%',
     scopedSlots: { customRender: "action" },
   },
 ];
@@ -104,7 +162,8 @@ export default {
 
   components: {
     userInfoTable,
-    AsideLayout
+    AsideLayout,
+    AAvatar: Avatar
   },
 
   data() {
