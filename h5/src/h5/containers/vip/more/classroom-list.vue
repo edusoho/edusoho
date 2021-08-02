@@ -26,6 +26,7 @@ import Api from '@/api';
 import { Toast } from 'vant';
 import eClass from '&/components/e-class/e-class';
 import courseListData from '@/utils/filter-course.js';
+import i18n from '@/lang';
 
 export default {
   components: {
@@ -66,7 +67,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     // const navTitle = to.query.vipName || '会员';
-    to.meta.title = `会员班级`;
+    to.meta.title = i18n.t('vip.membersClass');
     next();
   },
   methods: {

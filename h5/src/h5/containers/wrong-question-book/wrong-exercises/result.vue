@@ -3,17 +3,17 @@
     <e-loading v-if="isLoading" />
     <div class="result-data">
       <div class="result-data__item">
-        正确率
+        {{ $t('wrongQuestion.correctRate') }}
         <div class="result-data__bottom data-number-green">
           <span class="data-number">{{ rightRate }}</span
           >%
         </div>
       </div>
       <div class="result-data__item">
-        做题用时
+        {{ $t('wrongQuestion.timeSpentOnTheQuestion') }}
         <div class="result-data__bottom data-number-gray">
           <span class="data-number">{{ usedTime }}</span>
-          分钟
+          {{ $t('wrongQuestion.minutes') }}
         </div>
       </div>
     </div>
@@ -21,15 +21,15 @@
     <div class="result-tag">
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-green" />
-        正确
+        {{ $t('wrongQuestion.right2') }}
       </div>
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-orange" />
-        错误
+        {{ $t('wrongQuestion.wrong2') }}
       </div>
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-gray" />
-        未作答
+        {{ $t('wrongQuestion.unanswered') }}
       </div>
     </div>
 
@@ -51,7 +51,7 @@
         type="primary"
         @click="viewAnalysis()"
       >
-        查看解析
+        {{ $t('wrongQuestion.viewParsed') }}
       </van-button>
     </div>
   </div>

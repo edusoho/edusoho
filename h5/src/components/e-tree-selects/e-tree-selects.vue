@@ -45,7 +45,7 @@
           </div>
         </template>
         <div class="showfree" v-show="type == 'course'">
-          仅显示免费
+          {{ $t('e.freeOnly') }}
           <van-switch v-model="showFree" size="12px" active-color="#03C777" />
         </div>
       </div>

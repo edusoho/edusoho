@@ -5,7 +5,8 @@
         v-model="selectedData.courseSetTitle"
         shape="round"
         show-action
-        placeholder="搜索课程、班级、题库"
+        :placeholder="$t('search.placeholder')"
+        :action-text="$t('btn.cancel')"
         @search="onSearch"
         @cancel="onCancel"
       />
@@ -18,7 +19,7 @@
       line-width="30"
       title-active-color="#408FFB"
     >
-      <van-tab title="课程">
+      <van-tab :title="$t('search.course')">
         <lazyLoading
           :course-list="courseList"
           :is-all-data="isAllCourse"
@@ -32,11 +33,11 @@
         <emptyCourse
           v-if="isEmptyCourse && course.isRequestCompile"
           :has-button="false"
-          text="抱歉，没有找到相关内容"
+          :text="$t('search.noFound')"
           :type="'course_list'"
         />
       </van-tab>
-      <van-tab title="班级">
+      <van-tab :title="$t('search.classroom')">
         <div v-if="active === 1">
           <lazyLoading
             :course-list="classroomList"
@@ -52,12 +53,12 @@
           <emptyCourse
             v-if="isEmptyClassroom && classroom.isRequestCompile"
             :has-button="false"
-            text="抱歉，没有找到相关内容"
+            :text="$t('search.noFound')"
             :type="'classroom_list'"
           />
         </div>
       </van-tab>
-      <van-tab title="题库">
+      <van-tab :title="$t('search.questionBank')">
         <div v-if="active === 2">
           <lazyLoading
             :course-list="itemBankList"
@@ -72,7 +73,7 @@
           <emptyCourse
             v-if="isEmptyItemBank && itemBank.isRequestCompile"
             :has-button="false"
-            text="抱歉，没有找到相关内容"
+            :text="$t('search.noFound')"
             :type="'item_bank_exercise'"
           />
         </div>

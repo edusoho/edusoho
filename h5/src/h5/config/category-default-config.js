@@ -81,9 +81,9 @@ const CATEGORY_DEFAULT = {
       type: 'type',
       value: 'all',
       options: [
-        { text: '全部', value: 'all' },
-        { text: '课程', value: 'normal' },
-        { text: '直播', value: 'live' },
+        { text: 'more.all', value: 'all', i18n: true },
+        { text: 'more.course', value: 'normal', i18n: true },
+        { text: 'more.live', value: 'live', i18n: true },
       ],
     },
     {
@@ -95,9 +95,9 @@ const CATEGORY_DEFAULT = {
       type: 'sort',
       value: 'recommendedSeq',
       options: [
-        { text: '推荐', value: 'recommendedSeq' },
-        { text: '热门', value: '-studentNum' },
-        { text: '最新', value: '-createdTime' },
+        { text: 'more.recommendation', value: 'recommendedSeq', i18n: true },
+        { text: 'more.popular', value: '-studentNum', i18n: true },
+        { text: 'more.latest', value: '-createdTime', i18n: true },
       ],
     },
   ],
@@ -116,9 +116,9 @@ const CATEGORY_DEFAULT = {
       type: 'sort',
       value: 'recommendedSeq',
       options: [
-        { text: '推荐', value: 'recommendedSeq' },
-        { text: '热门', value: '-studentNum' },
-        { text: '最新', value: '-createdTime' },
+        { text: 'more.recommendation', value: 'recommendedSeq', i18n: true },
+        { text: 'more.popular', value: '-studentNum', i18n: true },
+        { text: 'more.latest', value: '-createdTime', i18n: true },
       ],
     },
   ],

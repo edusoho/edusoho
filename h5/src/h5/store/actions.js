@@ -200,3 +200,8 @@ export const setCloudAddress = ({ commit }) =>
     .catch(err => {
       console.log(err);
     });
+
+// 设置站点中英文
+export const setLanguage = ({ commit }, language) => {
+  commit('SET_LANGUAGE', language);
+};

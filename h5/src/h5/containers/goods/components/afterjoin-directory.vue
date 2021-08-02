@@ -43,7 +43,7 @@
 
     <div v-if="nodata && lessonNum == 0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
-      <p>暂时还没有课程哦...</p>
+      <p>{{ $t('goods.noCoursesYet') }}</p>
     </div>
   </div>
 </template>

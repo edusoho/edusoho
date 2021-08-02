@@ -1,7 +1,7 @@
 <template>
-  <e-panel :hidde-title="hiddeTitle" title="课程目录" class="directory">
+  <e-panel :hidde-title="hiddeTitle" :title="$t('goods.tableOfContents')" class="directory">
     <!-- 暂无学习任务 -->
-    <div v-if="courseLessons.length == 0" class="empty">暂无学习任务</div>
+    <div v-if="courseLessons.length == 0" class="empty">{{ $t('goods.noLearningTasks') }}</div>
     <div v-else class="directory-list">
       <div
         v-for="(item, chapterIndex) in chapters"
@@ -62,7 +62,7 @@
               <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18" />
                 <span
-                  >{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }}
+                  >{{ Number(lesson.isOptional) ? $t('goods.optional') : $t('goods.lesson') }}
                   {{
                     Number(lesson.isOptional)
                       ? ' '
@@ -130,7 +130,7 @@
                 />
                 <div class="lesson-cell__text ">
                   <span class="pl3 text-overflow"
-                    >{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }}
+                    >{{ Number(lesson.isOptional) ? $t('goods.optional') : $t('goods.lesson') }}
                     {{
                       Number(lesson.isOptional)
                         ? ' '
@@ -176,11 +176,10 @@
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex';
-import { Dialog, Toast } from 'vant';
+import { Toast } from 'vant';
 import { formatCompleteTime } from '@/utils/date-toolkit';
 import * as types from '@/store/mutation-types';
 import redirectMixin from '@/mixins/saveRedirect';
-import Api from '@/api';
 
 export default {
   mixins: [redirectMixin],
@@ -214,7 +213,7 @@ export default {
     }),
     ...mapState(['courseSettings', 'user']),
     currentCourseType() {
-      return Number(this.details.parentId) ? '班级' : '课程';
+      return Number(this.details.parentId) ? this.$t('goods.classroom') : this.$t('goods.course');
     },
     liveClass() {
       return lesson => {
@@ -286,7 +285,7 @@ export default {
       if (single) {
         return '';
       }
-      return task.isOptional === '1' ? '选修' : index + 1;
+      return task.isOptional === '1' ? this.$t('goods.optional') : index + 1;
     },
     getTasks(data) {
       let temp = [];
@@ -359,10 +358,10 @@ export default {
     },
     filterTaskStatus(task) {
       if (!this.details.member && task.tagStatus === 'is-free') {
-        return '免费';
+        return this.$t('goods.free');
       }
       if (!this.details.member && task.tagStatus === 'is-tryLook') {
-        return '试看';
+        return this.$t('goods.preview');
       }
       return '';
     },
@@ -413,18 +412,18 @@ export default {
             });
             break;
           default:
-            return Toast(`请先加入${this.currentCourseType}`);
+            return Toast(`${this.$t('goods.pleaseJoinFirst')}${this.currentCourseType}`);
         }
       } else {
         this.joinStatus
           ? this.showTypeDetail(task)
-          : Toast(`请先加入${this.currentCourseType}`);
+          : Toast(`${this.$t('goods.pleaseJoinFirst')}${this.currentCourseType}`);
       }
       // join after click
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
-        Toast('敬请期待');
+        Toast(this.$t('goods.stayTuned'));
         return;
       }
       switch (task.type) {
@@ -435,7 +434,7 @@ export default {
               taskId: task.id,
             });
           } else {
-            Toast('暂不支持此类型');
+            Toast(this.$t('goods.doesNotSupportThisType'));
           }
           break;
         case 'audio':
@@ -457,9 +456,12 @@ export default {
           });
           break;
         case 'live':
+          // eslint-disable-next-line no-case-declarations
           const nowDate = new Date();
+          // eslint-disable-next-line no-case-declarations
           const endDate = new Date(task.endTime * 1000);
-          const startDate = new Date(task.startTime * 1000);
+          // const startDate = new Date(task.startTime * 1000);
+          // eslint-disable-next-line no-case-declarations
           let replay = false;
           if (nowDate > endDate) {
             if (task.activity.replayStatus == 'videoGenerated') {
@@ -470,11 +472,11 @@ export default {
                   taskId: task.id,
                 });
               } else {
-                Toast('暂不支持此类型');
+                Toast(this.$t('goods.doesNotSupportThisType'));
               }
               return;
             } else if (task.activity.replayStatus == 'ungenerated') {
-              Toast('暂无回放');
+              Toast(this.$t('goods.noReplay'));
               return;
             } else {
               replay = true;
@@ -493,7 +495,7 @@ export default {
           });
           break;
         default:
-          Toast('暂不支持此类型');
+          Toast(this.$t('goods.doesNotSupportThisType'));
       }
     },
   },
@@ -508,11 +510,11 @@ export default {
       }
       if (now > endTimeStamp) {
         if (lesson.activity.replayStatus === 'ungenerated') {
-          return '已结束';
+          return this.$t('goods.over');
         }
-        return '回放';
+        return this.$t('goods.replay');
       }
-      return '直播中';
+      return this.$t('goods.live');
     },
   },
 };

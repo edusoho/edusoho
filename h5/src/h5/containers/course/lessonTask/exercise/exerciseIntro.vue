@@ -8,13 +8,13 @@
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="exercise" class="intro-body">
-      <van-panel class="panel intro-panel" title="练习名称">
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.exerciseName')">
         <div class="intro-panel__content intro-panel__content--title">
           {{ exercise.name }}
         </div>
       </van-panel>
-      <van-panel class="panel intro-panel" title="题目数量">
-        <div class="intro-panel__content">共计 {{ exercise.itemCount }} 题</div>
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.numberOfTopics')">
+        <div class="intro-panel__content">{{ $t('courseLearning.total') }} {{ exercise.itemCount }} {{ $t('courseLearning.topic') }}</div>
       </van-panel>
     </div>
     <div v-if="exercise" class="intro-footer">
@@ -23,14 +23,14 @@
         class="intro-footer__btn"
         type="primary"
         @click="showResult"
-        >查看结果</van-button
+        >{{ $t('courseLearning.viewResult2') }}</van-button
       >
       <van-button
         v-else
         class="intro-footer__btn"
         type="primary"
         @click="startExercise()"
-        >开始答题</van-button
+        >{{ $t('courseLearning.startAnsweringQuestions') }}</van-button
       >
     </div>
   </div>

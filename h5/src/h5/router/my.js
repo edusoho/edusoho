@@ -3,9 +3,9 @@ export default [
     path: '/my/orders',
     name: 'my',
     meta: {
-      title: '我的',
+      i18n: true,
+      title: 'title.me'
     },
-    component: () =>
-      import(/* webpackChunkName: "my" */ '@/containers/my/index.vue'),
-  },
+    component: () => import(/* webpackChunkName: "my" */ '@/containers/my/index.vue')
+  }
 ];

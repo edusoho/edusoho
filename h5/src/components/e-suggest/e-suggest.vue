@@ -20,7 +20,7 @@
       <el-carousel-item v-for="item in suggest" :key="item">
         <div class="setting-tip__main">
           <div class="setting-tip__title">
-            <i class="iconfont icon-jianyi"></i>装修小建议：
+            <i class="iconfont icon-jianyi"></i>{{ $t('e.decorationSuggestions') }}：
           </div>
           <div class="setting-tip__content">{{ item }}</div>
         </div>

@@ -28,7 +28,7 @@
     <empty-course
       v-else
       :has-button="false"
-      text="暂无错题"
+      :text="$t('wrongQuestion.empty')"
       style="margin-top: 0; padding-top: 36.53333vw;"
     />
 
@@ -52,7 +52,7 @@
 
     <div class="question-search" @click="showSearch">
       <van-icon name="filter-o" />
-      筛选
+      {{ $t('wrongQuestion.filter') }}
     </div>
 
     <!-- 筛选组件 -->
@@ -70,7 +70,7 @@
       class="question-foot"
       @click="onClickWrongExercise"
     >
-      错题练习
+      {{ $t('wrongQuestion.exercise') }}
     </div>
   </div>
 </template>
@@ -216,8 +216,8 @@ export default {
     onClickWrongExercise() {
       if (!localStorage.getItem('first_wrong_exercises')) {
         Dialog.alert({
-          message: '已为你随机筛选最多 20 题',
-          confirmButtonText: '我知道了',
+          message: this.$t('wrongQuestion.systemRandomlySelectsQuestions'),
+          confirmButtonText: this.$t('wrongQuestion.iKnow'),
           confirmButtonColor: '#03c777 !important',
         }).then(() => {
           this.goToStartAnswer();

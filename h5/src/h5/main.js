@@ -3,6 +3,8 @@ import router from '@/router';
 import filters from '@/filters';
 import utils from '@/utils';
 import store from '@/store';
+import i18n from '@/lang';
+import Cookies from 'js-cookie';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
@@ -54,6 +56,7 @@ import {
   DropdownItem,
   Divider,
   Empty,
+  CellGroup,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -80,6 +83,7 @@ Vue.component('van-overlay', Overlay);
 Vue.component('van-search', Search);
 Vue.component('van-count-down', CountDown);
 Vue.component('van-divider', Divider);
+Vue.component('van-cell-group', CellGroup);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -116,6 +120,7 @@ Vue.use(Empty);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
+Vue.prototype.$cookie = Cookies;
 Vue.prototype.$version = require('../../package.json').version;
 Vue.config.ignoredElements = ['wx-open-subscribe'];
 
@@ -190,23 +195,13 @@ Api.getSettings({
     new Vue({
       router,
       store,
+      i18n,
       render: h => h(App),
     }).$mount('#app');
   })
   .catch(err => {
     console.log(err.message);
   });
-
-//   new Vue({
-//     el: '#app',
-//     router,
-//     store,
-//     components: { App },
-//     template: '<App/>'
-//   });
-// }).catch(err => {
-//   console.log(err.message);
-// });
 
 Api.getSettings({
   query: {
@@ -238,3 +233,15 @@ Api.getSettings({
   .catch(error => {
     console.error(error);
   });
+
+if (!Cookies.get('language')) {
+  Api.getSettings({
+    query: {
+      type: 'locale',
+    },
+  }).then(res => {
+    const language = res.locale.toLowerCase().replace('_', '-');
+    store.state.language = language;
+    i18n.locale = language;
+  });
+}

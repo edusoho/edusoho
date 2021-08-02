@@ -13,7 +13,7 @@
       </div>
 
       <div ref="bar" class="e-drag-bar">
-        <span>{{ tips }}</span>
+        <span>{{ $t(tips) }}</span>
         <div
           :style="{ width: `${dragState.maskWidth}px` }"
           class="e-drag-bar__mask"
@@ -33,13 +33,13 @@
 </template>
 <script>
 import Api from '@/api';
-import { Toast, Loading } from 'vant';
+import { Toast } from 'vant';
 
 export default {
   props: {
     tips: {
       type: String,
-      default: '拖动左边滑块完成上方拼图',
+      default: 'placeholder.dragTheSliderToCompleteThePuzzle',
     },
     limitType: {
       type: String,
@@ -71,7 +71,7 @@ export default {
   mounted() {
     const bar = this.$refs.bar;
     const dragBtn = this.$refs.dragBtn;
-    const drag = this.$refs.drag;
+    // const drag = this.$refs.drag;
     const barRect = bar.getBoundingClientRect();
     Object.assign(this.dragState, {
       left: Number(barRect.left.toFixed(2)),
@@ -113,7 +113,7 @@ export default {
           query: { token },
         })
           .then(res => {
-            Toast.success('验证成功');
+            Toast.success(this.$t('e.verificationSuccess'));
             this.$emit('success', token);
           })
           .catch(err => {
@@ -129,7 +129,7 @@ export default {
       e.preventDefault();
 
       const dragBtn = this.$refs.dragBtn;
-      const bg = this.$refs.dragImgBg;
+      // const bg = this.$refs.dragImgBg;
       const dragState = this.dragState;
       const pageX = e.clientX
         ? e.clientX.toFixed(2)

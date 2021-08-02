@@ -1,3 +1,5 @@
+import i18n from '@/lang';
+
 const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
   const status = listObj.showNumberData;
@@ -33,8 +35,8 @@ const getDisplayStyle = (data, listObj) => {
       header: data.title,
       middle: {
         value: data.courseNum,
-        html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`,
-        vipHtml: `<span class="e-course__count">共 ${data.courseNum} 门课程</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
+        html: `<div class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</div>`,
+        vipHtml: `<span class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
       },
       bottom: {
         value: data.price || data.studentNum,
@@ -57,7 +59,7 @@ const getDisplayStyle = (data, listObj) => {
       html: `<div class="e-course__project text-overflow">
                   <span>${data.title}</span>
                 </div>`,
-      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">会员免费加入</span>`,
+      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
     },
     bottom: {
       value: data.price || data.studentNum,
@@ -92,7 +94,7 @@ const getPriceDisplay = (data, platform) => {
   } else if (dataPrice > 0 && currency === 'RMB') {
     price = `<span style="color: #ff5353">¥ ${amount}</span>`;
   } else {
-    price = `<span style="color:${primaryColor[platform]}">免费</span>`;
+    price = `<span style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
   }
   return price;
 };
@@ -112,7 +114,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
     header: data.title,
     middle: {
       value: data.courseNum,
-      html: `<span>共 ${data.courseNum} 门课程</span>`,
+      html: `<span>${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</span>`,
     },
     bottom: {
       value: data.price,
@@ -176,11 +178,11 @@ const getstudyItemBankDisplay = data => {
     header: data.itemBankExercise.title,
     middle: {
       value: data.completionRate,
-      html: ` <class class="completionRate">答题率${data.completionRate}％</class>`,
+      html: ` <class class="completionRate">${i18n.t('filters.answerRate')}${data.completionRate}％</class>`,
     },
     bottom: {
       value: data.masteryRate,
-      html: `<class class="masteryRate">掌握率${data.masteryRate}％</class>`,
+      html: `<class class="masteryRate">${i18n.t('filters.accuracy')}${data.masteryRate}％</class>`,
     },
   };
 };
@@ -225,7 +227,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
           middle: '',
           bottom: {
             value: data.courseNum,
-            html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`,
+            html: `<div class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</div>`,
           },
         };
       }

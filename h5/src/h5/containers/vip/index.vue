@@ -27,7 +27,7 @@
     <!-- 开通会员 -->
     <div class="vip-sec">
       <module-title
-        :title="userLevelStatus == 'upgrade' ? '会员升级' : '选择开通时长'"
+        :title="userLevelStatus == 'upgrade' ? $t('vip.memberUpgrade') : $t('vip.chooseTheActivationTime')"
       />
       <div class="vip-open">
         <swiper v-if="!vipUpgradeMode" :options="vipOpenSwiperOption">
@@ -44,7 +44,7 @@
 
         <div class="vip-upgrade" v-else>
           <span class="vip-upgrade__deadline">
-            会员升级期限至：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
+            {{ $t('vip.memberUpgradePeriodTo') }}：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
           </span>
         </div>
 
@@ -60,16 +60,16 @@
 
     <!-- 专属权益 -->
     <div class="vip-sec">
-      <module-title title="专属权益" />
+      <module-title :title="$t('vip.exclusiveRights')" />
       <div class="vip-interest">
         <div class="vip-interest__item" v-if="currentLevel.courses.data.length">
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_course.png" />
           </div>
-          <div class="vip-interest__item__title">会员课程</div>
+          <div class="vip-interest__item__title">{{ $t('vip.membersCourse') }}</div>
           <div class="vip-interest__item__total">
             {{ currentLevel.courses.paging.total }}
-            <span class="company">个</span>
+            <span class="company">{{ $t('vip.piece') }}</span>
           </div>
         </div>
         <div
@@ -79,10 +79,10 @@
           <div class="vip-interest__item__img">
             <img src="static/images/vip/vip_classroom.png" />
           </div>
-          <div class="vip-interest__item__title">会员班级</div>
+          <div class="vip-interest__item__title">{{ $t('vip.membersClass') }}</div>
           <div class="vip-interest__item__total">
             {{ currentLevel.classrooms.paging.total }}
-            <span class="company">个</span>
+            <span class="company">{{ $t('vip.piece') }}</span>
           </div>
         </div>
         <div
@@ -93,23 +93,23 @@
           "
         >
           <img src="static/images/vip/empty.png" alt="" />
-          <p>暂无专属权益</p>
+          <p>{{ $t('vip.noExclusiveRightsAndInterests') }}</p>
         </div>
       </div>
     </div>
 
     <!-- 专属介绍 -->
     <div class="vip-sec">
-      <module-title title="专属介绍" />
+      <module-title :title="$t('vip.exclusiveIntroduction')" />
       <div
         class="vip-introduce"
-        v-html="currentLevel.description || '暂无介绍'"
+        v-html="currentLevel.description || $t('vip.noIntroduction')"
       />
     </div>
 
     <!-- 专属特权 -->
     <div class="vip-sec">
-      <module-title title="专属特权" />
+      <module-title :title="$t('vip.exclusivePrivileges')" />
       <div class="vip-privilege">
         <!-- 会员免费课程 -->
         <e-course-list
@@ -237,24 +237,24 @@ export default {
       const title = this.activePrice ? this.activePrice.title : '';
       const actions = {
         opening: {
-          text: `立即开通${title}特权`,
+          text: this.$t('vip.openPrivileges', { title: title }),
           status: true,
-          type: '开通',
+          type: this.$t('vip.open')
         },
         renew: {
-          text: `续费${title}特权`,
+          text: this.$t('vip.renewPrivileges', { title: title }),
           status: true,
-          type: '续费',
+          type: this.$t('vip.renew')
         },
         upgrade: {
-          text: '升级为当前会员特权',
+          text: this.$t('vip.upgradeToCurrentMemberPrivileges'),
           status: true,
-          type: '升级',
+          type: this.$t('vip.upgrade')
         },
         low: {
-          text: '等级低于已购会员',
+          text: this.$t('vip.rankLowerThanPurchasedMembers'),
           status: false,
-          type: '低于',
+          type: this.$t('vip.lowerThan')
         },
       };
 
@@ -266,7 +266,7 @@ export default {
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: `会员课程(${paging.total})`,
+        title: this.$t('vip.membersCourseTotal', { total: paging.total }),
         source: {},
         limit: 4,
         vipCenter: true,
@@ -280,7 +280,7 @@ export default {
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: `会员班级(${paging.total})`,
+        title: this.$t('vip.membersClassTotal', { total: paging.total }),
         source: {},
         limit: 4,
         vipCenter: true,
@@ -367,7 +367,7 @@ export default {
     // 轮播图 vip 状态
     vipStatus(data) {
       if (!this.vipInfo) {
-        return '您还不是会员，开通享特权';
+        return this.$t('vip.youAreNotAVipYet')
       }
       const seq = Number(this.vipInfo.seq);
       const deadline = this.vipInfo.deadline;
@@ -375,17 +375,17 @@ export default {
 
       if (this.vipDated) {
         return seq === currentVipSeq
-          ? '会员身份已到期'
-          : '您还不是会员，开通享特权';
+          ? this.$t('vip.membershipExpired')
+          : this.$t('vip.youAreNotAVipYet');
       }
 
       if (seq === currentVipSeq) {
-        return `会员有效期至：${this.$moment(deadline).format('YYYY/MM/DD')}`;
+        return `${this.$t('vip.membershipUntil')}：${this.$moment(deadline).format('YYYY/MM/DD')}`;
       }
       if (seq > currentVipSeq) {
-        return '等级低于已购会员';
+        return this.$t('vip.rankLowerThanPurchasedMembers');
       }
-      return '您还不是该等级会员请升级';
+      return this.$t('vip.notMemberPleaseUpgrade');
     },
 
     // 首次进入，切换到对应会员

@@ -1,6 +1,6 @@
 <template>
   <div v-if="util.isExist == 1" class="util-directory text-overflow">
-    第{{ util.number }}节：{{ util.title }}
+    {{ $t('goods.section', { number: util.number }) }}：{{ util.title }}
   </div>
 </template>
 <script>

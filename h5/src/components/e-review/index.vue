@@ -45,10 +45,10 @@
       </more-mask>
 
       <span v-if="courseTitle" class="e-review-origin text-12"
-        >来自：{{ courseTitle }}</span
+        >{{ $t('e.from') }}：{{ courseTitle }}</span
       >
 
-      <div v-for="post in posts" class="e-review__post">
+      <div v-for="post in posts" :key="post" class="e-review__post">
         <img
           :src="post.user | avatar"
           class="e-review-avatar e-review__post-avatar avatar-img"
@@ -56,7 +56,7 @@
         />
         <div class="e-review__post-body">
           <span class="e-review-nickname text-14"
-            >{{ post.user | userName }} 回复
+            >{{ post.user | userName }} {{ $t('e.reply') }}
             {{ review.user | userName }}：</span
           >
           <div class="e-review-content text-14">{{ post.content }}</div>
@@ -145,7 +145,7 @@ export default {
         paddingTop: 70,
         lineHeight: 25,
         align: 'right',
-        content: '显示全部',
+        content: this.$t('e.displayAll')
       };
     },
     courseTitle() {

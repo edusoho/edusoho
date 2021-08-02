@@ -12,12 +12,11 @@
       type="default"
       class="primary-btn my_setting-nickname—-btn"
       @click="modifyNickname"
-      >确定</van-button
+      >{{ $t('btn.confirm') }}</van-button
     >
   </div>
 </template>
 <script>
-import Api from '@/api';
 import { Toast } from 'vant';
 import { mapActions, mapState } from 'vuex';
 

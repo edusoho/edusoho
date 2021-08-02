@@ -221,25 +221,25 @@ export default {
 
       switch (type) {
         case 'single_choice':
-          typeName = '单选题';
+          typeName = this.$t('courseLearning.singleChoice');
           break;
         case 'choice':
-          typeName = '多选题';
+          typeName = this.$t('courseLearning.choice');
           break;
         case 'essay':
-          typeName = '问答题';
+          typeName = this.$t('courseLearning.essay');
           break;
         case 'uncertain_choice':
-          typeName = '不定项选择题';
+          typeName = this.$t('courseLearning.uncertainChoice');
           break;
         case 'determine':
-          typeName = '判断题';
+          typeName = this.$t('courseLearning.determine');
           break;
         case 'fill':
-          typeName = '填空题';
+          typeName = this.$t('courseLearning.fill');
           break;
         case 'material':
-          typeName = '材料题';
+          typeName = this.$t('courseLearning.material');
           break;
         default:
           typeName = '';

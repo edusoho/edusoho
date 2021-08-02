@@ -1,7 +1,7 @@
 <template>
   <div :class="items.length <= 1 ? 'single' : ''" class="e-vip-list">
     <div v-if="showTitle === 'show'" class="e-vip-list__title text-18 mb20">
-      会员专区
+      {{ $t('e.memberArea') }}
     </div>
     <van-swipe
       v-if="items.length > 1"

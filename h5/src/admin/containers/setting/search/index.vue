@@ -8,7 +8,7 @@
       <van-search
         shape="round"
         background="#ffffff"
-        placeholder="搜索课程、班级"
+        :placeholder="$t('search.placeholder')"
       />
     </div>
 
@@ -19,17 +19,16 @@
         :key="moduleData.moduleType"
       ></e-suggest>
       <header class="title">
-        搜索设置
+        {{ $t('search.searchSettings') }}
       </header>
       <div class="text-14 color-gray mts">
         <i class="el-icon-warning"></i>
-        搜索功能目前只支持搜索班级和课程
+        {{ $t('search.atPresent') }}
       </div>
     </div>
   </module-frame>
 </template>
 <script>
-import courseList from '&/components/e-course-list/e-course-list.vue';
 import moduleFrame from '../module-frame';
 import suggest from '&/components/e-suggest/e-suggest.vue';
 export default {

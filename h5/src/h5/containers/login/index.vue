@@ -1,6 +1,6 @@
 <template>
   <div :style="{ height: bodyHeight + 'px' }" class="login">
-    <span class="login-title">登录账号</span>
+    <span class="login-title">{{ $t('title.loginAccount') }}</span>
     <img class="login-avatarimg" src="" />
     <van-field
       v-model="username"
@@ -8,7 +8,7 @@
       :border="false"
       type="textarea"
       class="login-input e-input"
-      placeholder="邮箱/手机/用户名"
+      :placeholder="$t('placeholder.emailMobileNumberUserName')"
     />
 
     <van-field
@@ -17,7 +17,7 @@
       :error-message="errorMessage.password"
       type="password"
       class="login-input e-input"
-      placeholder="请输入密码"
+      :placeholder="$t('placeholder.password')"
     />
 
     <van-button
@@ -25,20 +25,20 @@
       type="info"
       class="primary-btn mb20"
       @click="onSubmit"
-      >登录</van-button
+      >{{ $t('btn.login') }}</van-button
     >
     <div class="login-bottom text-center">
-      <router-link to="/setting/password/reset" class="login-account"
-        >忘记密码？ &nbsp;|</router-link
-      >
-      <span class="login-account" @click="jumpRegister"
-        >&nbsp; 立即注册 &nbsp;</span
-      >
+      <router-link to="/setting/password/reset" class="login-account">
+        {{ $t('btn.forgetPassword') }} ？ &nbsp;|
+      </router-link>
+      <span class="login-account" @click="jumpRegister">
+        &nbsp; {{ $t('btn.registerNow') }} &nbsp;
+      </span>
       <div v-show="cloudSetting" class="login-change" @click="changeLogin">
         <img
           src="static/images/login_change.png"
           class="login_change-icon"
-        />切换手机快捷登录
+        />{{ $t('btn.loginWithMobileNumber') }}
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@ export default {
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: '请稍后',
+        message: this.$t('toast.pleaseWait')
       });
       this.afterLogin();
       return;
@@ -101,7 +101,7 @@ export default {
     this.username =
       this.$route.params.username || this.$route.query.account || '';
     Toast.loading({
-      message: '请稍后',
+      message: this.$t('toast.pleaseWait')
     });
     this.faceLogin();
     this.thirdPartyLogin();
@@ -125,8 +125,8 @@ export default {
       })
         .then(res => {
           Toast.success({
-            duration: 2000,
-            message: '登录成功',
+            duration: 1000,
+            message: this.$t('toast.signInSuccessfully'),
           });
           this.afterLogin();
         })
@@ -140,7 +140,7 @@ export default {
         this.registerSettings.mode === 'closed' ||
         this.registerSettings.mode === 'email'
       ) {
-        Toast('网校未开启手机注册，请联系管理员');
+        Toast(this.$t('toast.contactTheAdministrator'));
         return;
       }
       this.$router.push({
