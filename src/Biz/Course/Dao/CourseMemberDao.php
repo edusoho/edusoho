@@ -109,6 +109,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function findByUserIdsAndClassroomId($userIds, $classroomId);
 
+    public function findByUserIdsAndRole($userIds, $role);
+
     public function findByCourseId($courseId);
 
     public function findUserIdsByCourseId($courseId);

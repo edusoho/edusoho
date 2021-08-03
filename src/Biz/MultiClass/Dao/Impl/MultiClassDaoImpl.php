@@ -85,6 +85,9 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
                 'courseId IN ( :courseIds)',
                 'copyId = :copyId',
                 'multi_class.title LIKE :titleLike',
+                'start_time >= startTimeGE',
+                'end_time <= endTimeLE',
+                'end_time < endTimeLT',
             ],
         ];
     }
