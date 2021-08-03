@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2\Teach;
+namespace AppBundle\Controller\AdminV2\Education;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
@@ -38,6 +38,18 @@ class MultiClassController extends BaseController
                 'course' => $course,
             ]
         );
+    }
+
+    public function inspectionAction(Request $request)
+    {
+        return $this->render('admin-v2/education/inspection/index.html.twig', [
+        ]);
+    }
+
+    public function settingAction(Request $request)
+    {
+        return $this->render('admin-v2/education/setting/index.html.twig', [
+        ]);
     }
 
     /**
