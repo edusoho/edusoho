@@ -16,10 +16,13 @@
         </a-col>
       </a-row>
     </div>
+    <back-to-top />
   </div>
 </template>
 
 <script>
+import BackToTop from 'app/vue/components/BackToTop.vue';
+
 const certificateList = [];
 
 for (let index = 0; index < 100; index++) {
@@ -32,6 +35,10 @@ for (let index = 0; index < 100; index++) {
 
 export default {
   name: 'TeacherCertificate',
+
+  components: {
+    BackToTop
+  },
 
   data() {
     return {
