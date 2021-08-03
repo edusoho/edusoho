@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\MultiClass\Service\Impl;
-
 
 use Biz\BaseService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
@@ -13,6 +11,11 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
     public function findByIds($ids)
     {
         return $this->getMultiClassGroupDao()->findByIds($ids);
+    }
+
+    public function findGroupsByMultiClassId($multiClassId)
+    {
+        return $this->getMultiClassGroupDao()->findGroupsByMultiClassId($multiClassId);
     }
 
     /**

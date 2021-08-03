@@ -14,6 +14,13 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
         return $this->findInField('id', $ids);
     }
 
+    public function findGroupsByMultiClassId($multiClassId)
+    {
+        return $this->findByFields([
+            'multi_class_id' => $multiClassId,
+        ]);
+    }
+
     public function declares()
     {
         return [
@@ -26,5 +33,4 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
             ],
         ];
     }
-
 }
