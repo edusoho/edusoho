@@ -113,7 +113,7 @@
           @change="(value) => handleChange(value, 'assistant')"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
-            {{ item.nickname }}
+            {{ item.nickname }} <span class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
@@ -775,6 +775,10 @@ export default {
   .ant-form-explain{
     width: 250px
   }
+}
+.assistant-tip{
+  margin-left: 48px;
+  color: @brand-danger
 }
 
 @import "~app/less/admin-v2/variables.less";
