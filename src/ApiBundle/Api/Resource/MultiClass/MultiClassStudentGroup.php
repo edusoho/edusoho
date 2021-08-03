@@ -36,7 +36,7 @@ class MultiClassStudentGroup extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        return $this->getAssistantStudentService()->batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId);
+        $this->getAssistantStudentService()->batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId);
 
         return [
             'success' => true,

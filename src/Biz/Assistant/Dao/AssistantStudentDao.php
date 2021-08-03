@@ -24,5 +24,5 @@ interface AssistantStudentDao extends AdvancedDaoInterface
 
     public function findByMultiClassId($multiClassId);
 
-    public function updateMultiClassStudentsGroup($multiClassId, $studentIds, $groupId);
+    public function updateMultiClassStudentsGroup($multiClassId, $conditions);
 }
