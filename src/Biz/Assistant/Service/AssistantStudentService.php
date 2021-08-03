@@ -29,4 +29,6 @@ interface AssistantStudentService
     public function deleteByStudentIdAndCourseId($studentId, $courseId);
 
     public function findByMultiClassId($multiClassId);
+
+    public function batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId);
 }

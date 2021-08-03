@@ -8,6 +8,10 @@ use Biz\MultiClass\Service\MultiClassRecordService;
 
 class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecordService
 {
+    public function mackSign()
+    {
+        return sha1(uniqid(mt_rand(), true));
+    }
 
     /**
      * @return MultiClassRecordDao

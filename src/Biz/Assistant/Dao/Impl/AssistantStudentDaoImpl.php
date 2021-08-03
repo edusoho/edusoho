@@ -16,6 +16,18 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds)
+    {
+        if (empty($groupIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($groupIds) - 1).'?';
+        $sql = "SELECT group_id as groupId, count(id) as 'studentNum' FROM {$this->table} WHERE multiClassId = ? AND group_id IN ({$marks}) GROUP BY group_id";
+
+        return $this->db()->fetchAll($sql, [$multiClassId, $groupIds]) ?: [];
+    }
+
     public function getByStudentIdAndCourseId($studentId, $courseId)
     {
         return $this->getByFields(['studentId' => $studentId, 'courseId' => $courseId]);
@@ -62,6 +74,17 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         $sql = "SELECT * FROM {$this->table()} WHERE multiClassId = ? AND studentId IN ({$marks})";
 
         return $this->db()->fetchAll($sql, array_merge([$multiClassId], $studentIds)) ?: [];
+    }
+
+    public function updateMultiClassStudentsGroup($multiClassId, $studentIds, $groupId)
+    {
+        if (empty($studentIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($studentIds) - 1).'?';
+        $sql = "UPDATE {$this->table} set group_id = ? WHERE multiClassId = ? AND studentId IN ({$marks})";
+        return $this->db()->executeQuery($sql, array_merge([$groupId, $multiClassId], $studentIds));
     }
 
     public function declares()
