@@ -85,6 +85,7 @@ export default {
   z-index: 1;
   text-align: center;
   transition: all 0.3s ease;
+  border-radius: 8px;
 
   svg {
     margin-top: 15px;

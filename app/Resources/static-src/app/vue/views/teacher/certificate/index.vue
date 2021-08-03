@@ -52,11 +52,11 @@ export default {
 .banner {
   padding-top: 40px;
   height: 120px;
-  background-image: linear-gradient(210deg, #2fc664 0%, #21c849 100%);
   font-size: 32px;
   color: #fff;
   line-height: 40px;
   font-weight: 500;
+  background: url('/static-dist/app/img/vue/teacher/certificate_bg.png') center no-repeat;
 }
 
 .certificate-item {
