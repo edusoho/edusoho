@@ -88,7 +88,10 @@ export default {
   border-radius: 8px;
 
   svg {
-    margin-top: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 30px;
   }
 }
