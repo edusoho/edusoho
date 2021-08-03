@@ -881,6 +881,10 @@ teacher:
 teacher_search:
     path: /teacher/search
     defaults: {_controller: AppBundle:Teacher:search }
+    
+teacher_certificate:
+    path: /teacher/certificate
+    defaults: { _controller: AppBundle:Teacher:certificate }
 
 partner_login:
     path: /partner/login
