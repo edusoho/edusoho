@@ -4,6 +4,8 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
@@ -21,9 +23,12 @@ class MultiClassGroup extends AbstractResource
 
         $groups = $this->getMultiClassGroupService()->findGroupsByMultiClassId($multiClassId);
         $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($groups, 'assistant_id'));
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filters($assistants);
         $assistants = ArrayToolkit::index($assistants, 'id');
         foreach ($groups as &$group){
-            $group['assistantName'] = isset($assistants[$group['assistant_id']]) && $assistants[$group['assistant_id']] ? $assistants[$group['assistant_id']]['nickname'] : '';
+            $group['assistant'] = isset($assistants[$group['assistant_id']]) && $assistants[$group['assistant_id']] ? $assistants[$group['assistant_id']] : [];
         }
 
         return $groups;
