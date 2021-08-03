@@ -140,7 +140,7 @@ class MultiClassStudent extends AbstractResource
             }
 
             $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']];
-            $member['group'] = isset($groups[$assistantStudentRef['group_id']]) && !empty($groups[$assistantStudentRef['group_id']]) ? $groups[$assistantStudentRef['group_id']] : [];
+            $member['group'] = isset($groups[$assistantStudentRef['group_id']]) ? $groups[$assistantStudentRef['group_id']] : [];
         }
 
         return $members;
