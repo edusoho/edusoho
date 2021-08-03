@@ -650,7 +650,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'multiClassId' => $multiClassId,
         ];
 
-        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
+        $this->getMemberDao()->updateMembers(array_merge($conditions, ['role' => 'teacher']), ['multiClassId' => 0]);
+
+        $this->getMemberDao()->batchDelete(array_merge($conditions, ['role' => 'assistant']));
 
         $this->getLogService()->info(
             'course',
