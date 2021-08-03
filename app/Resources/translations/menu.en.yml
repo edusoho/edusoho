@@ -467,7 +467,13 @@ admin_v2.nav.statistics: Statistics
 admin_v2.nav.system: System
 
 # 教务-教务管理
-admin_v2.education.basic_group: Education Manage
+admin_v2.education.basic_group: Basic Setup
+admin_v2.education_overview.basic_group: overview
+admin_v2.education_overview_data.basic_group: Academic Affairs Dashboard
+admin_v2.multi_class.basic_menu: Multi Class
+admin_v2.multi_class.basic_group: Multi Class Manage
+admin_v2.multi_class_inspection.basic_menu: Multi Class Inspection
+admin_v2.multi_class_setting.basic_menu: Parameter Setting
 
 # 教学模块-课程管理
 
@@ -475,9 +481,6 @@ admin_v2.course.basic_group: Teach Manage
 
 # 教学-课程管理-产品库
 admin_v2.multi_class_product.basic_menu: Product Library
-
-# 教学-课程管理-班课
-admin_v2.multi_class.basic_menu: Multi Class
 
 # 教学-课程管理-教师管理
 admin_v2.teacher.basic_menu: Teachers
