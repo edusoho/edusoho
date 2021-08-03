@@ -9,11 +9,6 @@ const router = new Router({
       path: '/',
       name: 'Teacher',
       component: () => import(/* webpackChunkName: "app/vue/dist/Teacher" */ 'app/vue/views/teach/teacher/index.vue')
-    },
-    {
-      path: '/params_setup',
-      name: 'Setting',
-      component: () => import(/* webpackChunkName: "app/vue/dist/Teacher" */ 'app/vue/views/teach/params_setting/index.vue')
     }
   ]
 })

@@ -60,10 +60,10 @@
           <a-button class="pull-right" type="primary">新建班课</a-button>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a @click="goToCreateMultiClassPage" href="javascript:;">大班课</a>
+              <a @click="goToCreateMultiClassPage('MultiClassCreate')" href="javascript:;">大班课</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">分组大班课</a>
+              <a @click="goToCreateMultiClassPage('MultiClassCreateGroup')" href="javascript:;">分组大班课</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -278,9 +278,9 @@ export default {
     this.getMultiClassProductList()
   },
   methods: {
-    goToCreateMultiClassPage() {
+    goToCreateMultiClassPage(param) {
       this.$router.push({
-        name: 'MultiClassCreate'
+        name: param
       })
     },
     async getMultiClassProductList() {

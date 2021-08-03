@@ -143,6 +143,16 @@
               自定义设置
           </a-select-option>
         </a-select>
+         <a-form-item v-if="form.getFieldValue('paramId') === '2'" class="mt12 assistant-max-number" label="分组上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+           <a-input v-decorator="['maxGroupNum', {
+              rules: [
+                { required: true, message: '请输入分组上限人数' },
+                { validator: validateGroupNum }
+               ]
+             }]">
+              <span slot="suffix">人</span>
+            </a-input>
+         </a-form-item>
          <a-form-item v-if="form.getFieldValue('paramId') === '2'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['maxAssistantNum', {
               rules: [
@@ -152,7 +162,7 @@
              }]">
               <span slot="suffix">人</span>
             </a-input>
-        </a-form-item>
+          </a-form-item>
 
       </a-form-item>
       <a-form-item label="排课">
@@ -225,7 +235,7 @@
 import _ from 'lodash';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import Schedule from './Schedule.vue';
+import Schedule from '../create/Schedule.vue';
 
 export default {
   name: 'MultiClassCreate',
@@ -290,8 +300,8 @@ export default {
   computed: {
     breadcrumbName() {
       const names = {
-        create: '新建班课',
-        editor: '编辑班课'
+        create: '新建分组大班课',
+        editor: '编辑分组大班课'
       }
       return names[this.mode];
     }
@@ -675,6 +685,17 @@ export default {
       callback()
     },
      validateAssistantNum(rule, value, callback) {
+      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback('请输入正整数')
+      }
+
+      // if (value > Number(this.maxStudentNum)) {
+      //   callback(`人数范围在0-${this.maxStudentNum}人`)
+      // }
+
+      callback()
+    },
+    validateGroupNum(rule, value, callback) {
       if (/^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }

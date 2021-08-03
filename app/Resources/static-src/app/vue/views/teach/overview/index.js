@@ -7,8 +7,13 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Setting',
-      component: () => import(/* webpackChunkName: "app/vue/dist/Setting" */ 'app/vue/views/teach/params_setting/index.vue')
+      name: 'Overview',
+      component: () => import(/* webpackChunkName: "app/vue/dist/Overview" */ 'app/vue/views/teach/overview/index.vue')
+    },
+    {
+      path: '/over_time',
+      name: 'Overtime',
+      component: () => import(/* webpackChunkName: "app/vue/dist/Overtime" */ 'app/vue/views/teach/overview/overtime/index.vue')
     }
   ]
 })
