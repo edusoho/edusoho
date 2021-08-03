@@ -136,7 +136,7 @@ class MultiClass extends AbstractResource
         }
 
         if (!empty($conditions['teacherId'])) {
-            $prepareConditions['ids'] = $this->getMemberService()->findMultiClassByTeacherId($conditions['teacherId']);
+            $prepareConditions['ids'] = $this->getMemberService()->findMultiClassIdsByUserId($conditions['teacherId']);
         }
 
         if (!empty($conditions['type'])) {
@@ -185,13 +185,7 @@ class MultiClass extends AbstractResource
             $teacher = $teachers[$multiClass['id']];
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
-            if ($multiClass['start_time'] > time()) {
-                $multiClass['status'] = 'notStart';
-            } elseif ($multiClass['start_time'] <= time() && time() <= $multiClass['end_time']) {
-                $multiClass['status'] = 'living';
-            } elseif ($multiClass['end_time'] < time()) {
-                $multiClass['status'] = 'end';
-            }
+            $multiClass['status'] = $this->getMultiClassStatus($multiClass['start_time'], $multiClass['end_time']);
             $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
             $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
@@ -219,6 +213,17 @@ class MultiClass extends AbstractResource
         }
 
         return $multiClasses;
+    }
+
+    private function getMultiClassStatus($startTime, $endTime)
+    {
+        if ($startTime > time()) {
+            return 'notStart';
+        } elseif ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        } elseif ($endTime < time()) {
+            return 'end';
+        }
     }
 
     private function checkDataFields($multiClass)

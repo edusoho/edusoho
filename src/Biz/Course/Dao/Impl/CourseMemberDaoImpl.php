@@ -149,15 +149,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->delete($this->table(), ['multiClassId' => $multiClassId, 'role' => $role]);
     }
 
-    public function findMultiClassByTeacherId($teacherId)
+    public function findMultiClassIdsByUserId($userId)
     {
-        if (empty($teacherId)) {
+        if (empty($userId)) {
             return [];
         }
 
         $sql = "SELECT multiClassId FROM {$this->table()} WHERE userId = ? AND role = 'teacher'";
 
-        return $this->db()->fetchAll($sql, [$teacherId]);
+        return $this->db()->fetchAll($sql, [$userId]);
     }
 
     public function deleteByCourseId($courseId)

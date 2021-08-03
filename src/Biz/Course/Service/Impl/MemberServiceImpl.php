@@ -1760,9 +1760,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->getByMultiClassIdAndUserId($multiClassId, $userId);
     }
 
-    public function findMultiClassByTeacherId($teacherId)
+    public function findMultiClassIdsByUserId($userId)
     {
-        return $this->getMemberDao()->findMultiClassByTeacherId($teacherId);
+        return $this->getMemberDao()->findMultiClassIdsByUserId($userId);
     }
 
     /**

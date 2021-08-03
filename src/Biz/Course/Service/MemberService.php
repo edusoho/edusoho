@@ -207,5 +207,5 @@ interface MemberService
 
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
 
-    public function findMultiClassByTeacherId($teacherId);
+    public function findMultiClassIdsByUserId($userId);
 }
