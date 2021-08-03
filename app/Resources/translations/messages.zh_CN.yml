@@ -7812,6 +7812,8 @@ admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
 admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
 admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
+admin.setting_course.play_continuously: 音视频支持连续播放
+admin.setting_course.play_continuously_help_block: 开启后播放器出现连续播放控制选项，关闭后不允许连续播放
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
 admin.setting_course.effective_learning_time.playing_time: 视频播放时长

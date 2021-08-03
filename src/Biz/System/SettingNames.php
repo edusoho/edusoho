@@ -28,4 +28,14 @@ class SettingNames
      * UGC用户内容审核配置
      */
     const UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT = 'ugc_content_audit';
+
+    /**
+     * 课程设置
+     */
+    const COURSE_SETTING = 'course';
+
+    /**
+     * 直播课程
+     */
+    const LIVE_COURSE_SETTING = 'live-setting';
 }

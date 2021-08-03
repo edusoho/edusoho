@@ -48,6 +48,7 @@ class VideoTaskSettingController extends BaseController
         $default = [
             'statistical_dimension' => 'page',
             'play_rule' => 'no_action',
+            'play_continuously' => 'off',
         ];
 
         $effectiveTimeSetting = array_merge($default, $effectiveTimeSetting);
