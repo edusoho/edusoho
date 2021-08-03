@@ -9,7 +9,6 @@ use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Common\CommonException;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
-use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 
 class MultiClassStudentGroup extends AbstractResource
@@ -66,13 +65,5 @@ class MultiClassStudentGroup extends AbstractResource
     private function getMultiClassGroupService()
     {
         return $this->service('MultiClass:MultiClassGroupService');
-    }
-
-    /**
-     * @return MultiClassRecordService
-     */
-    private function getMultiClassRecordService()
-    {
-        return $this->service('MultiClass:MultiClassRecordService');
     }
 }
