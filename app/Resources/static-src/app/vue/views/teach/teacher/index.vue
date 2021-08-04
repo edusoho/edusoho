@@ -31,7 +31,20 @@
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
+      <template slot="action" slot-scope="item">
+        <a-button type="link" @click="edit(item.id)">查看</a-button>
+
+        <a-dropdown>
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
+            <a-icon type="caret-down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              编辑教师资质
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </template>
     </a-table>
 
     <a-modal title="教师详细信息" :visible="visible" @cancel="close">
