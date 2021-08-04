@@ -289,7 +289,7 @@ export default {
         offset: 0,
         limit: 100000,
       })
-
+      
       const index = _.findIndex(this.columns, item => item.dataIndex === 'product');
       const productItem = this.columns[index];
 
@@ -300,7 +300,6 @@ export default {
           value: item.id
         })
       })
-
       this.$set(this.columns, index, productItem)
     },
     async getMultiClassList (params = {}) {
@@ -367,7 +366,8 @@ export default {
       if (sorter && sorter.order) {
         params[`${sorter.field}Sort`] = sorter.order === 'ascend' ? 'ASC' : 'DESC'
       }
-
+      console.log(sorter);
+console.log(params);
       if (Object.keys(params).length > 0) {
         this.getMultiClassList(params)
       }
