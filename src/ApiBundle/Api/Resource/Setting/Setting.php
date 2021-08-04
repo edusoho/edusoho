@@ -11,6 +11,7 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Common\CommonException;
 use Biz\OrderFacade\CoinCurrency;
 use Biz\System\SettingException;
+use Biz\System\SettingModule\SettingMaintainer;
 use Biz\User\UserException;
 
 class Setting extends AbstractResource
@@ -20,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config',
     ];
 
     public static function convertUnderline($str)
@@ -289,7 +290,7 @@ class Setting extends AbstractResource
 
         $result = [
             'auth' => [
-                'register_mode' => $authSetting['register_enabled'] === 'closed' ? 'closed' :$authSetting['register_mode'],
+                'register_mode' => 'closed' === $authSetting['register_enabled'] ? 'closed' : $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
             ],
@@ -403,7 +404,7 @@ class Setting extends AbstractResource
     public function getRegister($request = null)
     {
         $registerSetting = $this->getSettingService()->get('auth', ['register_enabled' => 'closed', 'register_mode' => 'mobile', 'email_enabled' => 'closed']);
-        $registerMode = $registerSetting['register_enabled'] === 'closed' ? 'closed' : $registerSetting['register_mode'];
+        $registerMode = 'closed' === $registerSetting['register_enabled'] ? 'closed' : $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
         $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
@@ -500,6 +501,17 @@ class Setting extends AbstractResource
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
             'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
+        ];
+    }
+
+    public function getTaskLearningConfig($request = null)
+    {
+        $courseTaskLearning = SettingMaintainer::courseSetting($this->biz)->getCourseTaskLearnConfig();
+
+        return [
+            'non_focus_learning_video_play_rule' => $courseTaskLearning['non_focus_learning_video_play_rule'],
+            'media_play_continuously' => $courseTaskLearning['media_play_continuously'],
+            'multiple_learn' => $courseTaskLearning['multiple_learn'],
         ];
     }
 

@@ -43,4 +43,9 @@ class SettingNames
      * 视频课时学习配置
      */
     const VIDEO_LEARN_SETTING = 'videoEffectiveTimeStatistics';
+
+    /**
+     * 任务多开设置
+     */
+    const TASK_MULTIPLE_SETTING = 'taskPlayMultiple';
 }

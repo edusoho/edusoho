@@ -36,10 +36,16 @@ class CourseSetting extends AbstractSetting
         'play_continuously' => 'off',
     ];
 
-    const allowSettingNames = [
+    const defaultMultipleLearnSetting = [
+        'multiple_learn_enable' => '1',
+        'multiple_learn_kick_mode' => 'kick_previous',
+    ];
+
+    protected $allowSettingNames = [
         SettingNames::COURSE_SETTING,
         SettingNames::LIVE_COURSE_SETTING,
         SettingNames::VIDEO_LEARN_SETTING,
+        SettingNames::TASK_MULTIPLE_SETTING,
     ];
 
     public function getCourseSetting()
@@ -54,6 +60,24 @@ class CourseSetting extends AbstractSetting
             'teacher_search_order' => $courseSetting['teacher_search_order'],
             'teacher_manage_student' => $courseSetting['teacher_manage_student'],
             'teacher_export_student' => $courseSetting['teacher_export_student'],
+        ];
+    }
+
+    /**
+     * @return array 课程任务学习设置
+     */
+    public function getCourseTaskLearnConfig()
+    {
+        $videoConfig = $this->get(SettingNames::VIDEO_LEARN_SETTING, self::defaultVideoMediaSetting);
+        $multipleLearnSetting = $this->get(SettingNames::TASK_MULTIPLE_SETTING, self::defaultMultipleLearnSetting);
+
+        return [
+            'non_focus_learning_video_play_rule' => $videoConfig['play_rule'], //非专注学习播放规则：auto_pause（自动暂停）, no_action（不作操作）
+            'media_play_continuously' => $videoConfig['play_continuously'], //音视频自动播放开关： on(开启)， off（关闭）
+            'multiple_learn' => [
+                'multiple_learn_enable' => empty($multipleLearnSetting['multiple_learn_enable']) ? 'off' : 'on', //是否开启多开 on|off
+                'multiple_learn_kick_mode' => $multipleLearnSetting['multiple_learn_kick_mode'],
+            ],
         ];
     }
 }

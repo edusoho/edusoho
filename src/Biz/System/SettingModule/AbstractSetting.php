@@ -13,7 +13,12 @@ abstract class AbstractSetting
      */
     protected $biz;
 
-    const allowSettingNames = [];
+    protected $allowSettingNames = [];
+
+    public function getAllowSettingNames()
+    {
+        return $this->allowSettingNames;
+    }
 
     public function __construct(Biz $biz)
     {
@@ -22,19 +27,20 @@ abstract class AbstractSetting
 
     public function set($settingName, $content)
     {
-        if (!in_array($settingName, self::allowSettingNames, true)) {
+        if (!in_array($settingName, $this->getAllowSettingNames(), true)) {
             throw CommonException::ERROR_PARAMETER();
         }
         $this->getSettingService()->set($settingName, $content);
     }
 
-    public function get($settingName, $default)
+    public function get($settingName, $default = [])
     {
-        if (!in_array($settingName, self::allowSettingNames, true)) {
+        if (!in_array($settingName, $this->getAllowSettingNames(), true)) {
             throw CommonException::ERROR_PARAMETER();
         }
+        $setting = $this->getSettingService()->get($settingName);
 
-        return $this->getSettingService()->get($settingName, $default);
+        return array_merge($default, $setting);
     }
 
     /**
