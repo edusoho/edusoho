@@ -11,6 +11,7 @@
         <upload-picture
           :aspect-ratio="1 / 1"
           tip="请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过2MB"
+          @success="uploadedSuccessfully"
         />
       </a-form-model-item>
     </a-form-model>
@@ -60,6 +61,10 @@ export default {
 
     resetForm() {
       this.$refs.ruleForm.resetFields();
+    },
+
+    uploadedSuccessfully(img) {
+      console.log(img);
     }
   }
 }

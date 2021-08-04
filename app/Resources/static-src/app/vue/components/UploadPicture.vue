@@ -16,7 +16,7 @@
         </div>
       </div>
     </a-upload>
-    <p class="mb0" style="font-size: 14px; line-height: 20px;">{{ tip }}</p>
+    <p v-if="tip" class="mb0" style="font-size: 14px; line-height: 20px;">{{ tip }}</p>
 
     <a-modal
       :title="title"
@@ -165,6 +165,7 @@ export default {
           const { url } = await File.uploadFile(formData);
 
           this.pictureUrl = url;
+          this.$emit('success', url)
 
           const formData1 = new FormData();
           for(const key in cropResult) {
