@@ -6,6 +6,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
+use Biz\System\SettingModule\CourseSetting;
 use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
 use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
 use Biz\Visualization\Job\RefreshCourseTaskResultJob;
@@ -45,11 +46,7 @@ class VideoTaskSettingController extends BaseController
     {
         $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
 
-        $default = [
-            'statistical_dimension' => 'page',
-            'play_rule' => 'no_action',
-            'play_continuously' => 'off',
-        ];
+        $default = CourseSetting::defaultVideoMediaSetting;
 
         $effectiveTimeSetting = array_merge($default, $effectiveTimeSetting);
 

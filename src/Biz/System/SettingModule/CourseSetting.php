@@ -2,6 +2,8 @@
 
 namespace Biz\System\SettingModule;
 
+use Biz\System\SettingNames;
+
 class CourseSetting extends AbstractSetting
 {
     const defaultCourseSetting = [
@@ -28,18 +30,22 @@ class CourseSetting extends AbstractSetting
         'live_student_capacity' => '0',
     ];
 
-    const allowSettingNames = [
+    const defaultVideoMediaSetting = [
+        'statistical_dimension' => 'page',
+        'play_rule' => 'no_action',
+        'play_continuously' => 'off',
     ];
 
-    public function getBaseCourseSetting()
-    {
-//        SettingMaintainer::courseSetting($this->biz)->getBaseCourseSetting();
-    }
+    const allowSettingNames = [
+        SettingNames::COURSE_SETTING,
+        SettingNames::LIVE_COURSE_SETTING,
+        SettingNames::VIDEO_LEARN_SETTING,
+    ];
 
     public function getCourseSetting()
     {
-        $courseSetting = $this->getSettingService()->get('course', self::defaultCourseSetting);
-        $liveCourseSetting = $this->getSettingService()->get('live-course', self::defaultLiveCourseSetting);
+        $courseSetting = $this->get(SettingNames::COURSE_SETTING, self::defaultCourseSetting);
+        $liveCourseSetting = $this->get(SettingNames::LIVE_COURSE_SETTING, self::defaultLiveCourseSetting);
 
         return [
             'welcome_message_enabled' => !empty($courseSetting['welcome_message_enabled']),

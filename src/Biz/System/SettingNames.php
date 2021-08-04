@@ -35,7 +35,12 @@ class SettingNames
     const COURSE_SETTING = 'course';
 
     /**
-     * 直播课程
+     * 直播课程设置
      */
     const LIVE_COURSE_SETTING = 'live-setting';
+
+    /**
+     * 视频课时学习配置
+     */
+    const VIDEO_LEARN_SETTING = 'videoEffectiveTimeStatistics';
 }
