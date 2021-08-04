@@ -53,6 +53,8 @@
         <thead>
         <tr>
           <th>{{ 'user.fields.username_label'|trans }}</th>
+          <th>{{ 'user.fields.mobile_label'|trans }}</th>
+          <th>{{ 'user.fields.email_label'|trans }}</th>
           <th>{{ 'course.live_statistics.first_join'|trans }}</th>
           <th>{{ 'course.live_statistics.last_leave'|trans }}</th>
           <th>{{ 'course.live_statistics.learn_time'|trans }}</th>
@@ -60,8 +62,12 @@
         </thead>
         <tbody>
         {% for user in statistics %}
+          {% set student = (users[user.userId]) %}
+          {% set profile = (profiles[user.userId]) %}
           <tr>
             <td>{{ user.nickname|default('') }}</td>
+            <td>{{ profile.mobile|default('') }}</td>
+            <td>{{ student.email|default('') }}</td>
             <td>{{ user.firstJoin|date('Y-m-d H:i:s')|default('') }}</td>
             <td>{{ user.lastLeave|date('Y-m-d H:i:s')|default('') }}</td>
             <td>{{ (user.learnTime/60)|round(0, 'ceil')|default(0) }}</td>
