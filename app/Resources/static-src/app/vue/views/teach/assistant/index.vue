@@ -17,8 +17,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="mediumAvatar" slot-scope="mediumAvatar">
-        <a-avatar :size="48" :src="mediumAvatar" icon="user"></a-avatar>
+      <template slot="nickname" slot-scope="text, item">
+        <div class="avatar-name">
+          <a-avatar :size="48" :src="item.avatar.middle" icon="user"></a-avatar>
+          <a @click="check(item.id)" style="margin-left: 8px">{{ text }}</a>
+        </div>
       </template>
 
       <div slot="loginInfo" slot-scope="item">
@@ -88,11 +91,8 @@ const columns = [
     title: "用户名",
     ellipsis: true,
     dataIndex: "nickname",
-  },
-  {
-    title: "头像",
-    dataIndex: 'avatar.middle',
-    scopedSlots: { customRender: "mediumAvatar" },
+    scopedSlots: { customRender: "nickname" },
+
   },
   {
     title: "是否绑定销客助手",

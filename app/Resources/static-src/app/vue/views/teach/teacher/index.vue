@@ -18,10 +18,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="mediumAvatar" slot-scope="mediumAvatar">
-        <a-avatar :size="48" :src="mediumAvatar" icon="user"></a-avatar>
+      <template slot="nickname" slot-scope="text, record">
+          <a-avatar :size="48" :src="record.mediumAvatar" icon="user"></a-avatar>
+          <a @click="edit(item.id)" style="margin-left: 8px">{{ text }}</a>
       </template>
-      <a slot="nickname" slot-scope="text, item" @click="edit(item.id)">{{ text }}</a>
+      
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
@@ -116,12 +117,8 @@ const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
+    ellipsis: true,
     scopedSlots: { customRender: "nickname" },
-  },
-   {
-    title: "头像",
-    dataIndex: "avatar.middle",
-    scopedSlots: { customRender: "mediumAvatar" },
   },
   {
     title: "现带班课总数",
