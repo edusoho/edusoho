@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface MultiClassGroupDao extends AdvancedDaoInterface
 {
-    public function findByIds($ids);
+    public function findGroupsByIds($ids);
 
     public function findGroupsByMultiClassId($multiClassId);
 }

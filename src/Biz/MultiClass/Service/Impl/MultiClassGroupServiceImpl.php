@@ -8,7 +8,7 @@ use Biz\MultiClass\Service\MultiClassGroupService;
 
 class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupService
 {
-    public function findByIds($ids)
+    public function findGroupsByIds($ids)
     {
         return $this->getMultiClassGroupDao()->findByIds($ids);
     }

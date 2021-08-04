@@ -64,7 +64,7 @@ class MultiClassStudent extends AbstractResource
         if (!empty($conditions['groupId'])) {
             $assistantStudentRelations = $this->getAssistantStudentService()->findByMultiClassIdAndGroupId($id, $conditions['groupId']);
             $studentIds = ArrayToolkit::column($assistantStudentRelations, 'studentId');
-            $userIds = isset($conditions['userIds']) ? array_merge($conditions['userIds'], $studentIds) : $studentIds;
+            $userIds = isset($conditions['userIds']) ? array_unique(array_merge($conditions['userIds'], $studentIds)) : $studentIds;
             $conditions['userIds'] = empty($userIds) ? [-1] : $userIds;
         }
 
@@ -125,7 +125,7 @@ class MultiClassStudent extends AbstractResource
         $assistantInfos = ArrayToolkit::index($assistantInfos, 'id');
         $assistantStudentRefs = $this->getAssistantStudentService()->findRelationsByMultiClassIdAndStudentIds($multiClass['id'], ArrayToolkit::column($members, 'userId'));
         $assistantStudentRefs = ArrayToolkit::index($assistantStudentRefs, 'studentId');
-        $groups = $this->getMultiClassGroupService()->findByIds(ArrayToolkit::column($assistantStudentRefs, 'group_id'));
+        $groups = $this->getMultiClassGroupService()->findGroupsByIds(ArrayToolkit::column($assistantStudentRefs, 'group_id'));
         $groups = ArrayToolkit::index($groups, 'id');
         foreach ($members as &$member) {
             if (empty($assistantStudentRefs[$member['userId']])) {
