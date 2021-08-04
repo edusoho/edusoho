@@ -39,7 +39,7 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay">
-            <a-menu-item>
+            <a-menu-item @click="handleEditorCertificate">
               编辑教师资质
             </a-menu-item>
           </a-menu>
@@ -78,6 +78,16 @@
       </a-form>
     </a-modal>
 
+    <a-modal
+      title="编辑教师资质"
+      width="900px"
+      :footer="null"
+      :visible="certificateVisible"
+      @ok="handleSaveCertificate"
+      @cancel="handleCancelEditCertificate"
+    >
+      <editor-certificate />
+    </a-modal>
   </aside-layout>
 </template>
 
@@ -87,6 +97,7 @@ import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
+import EditorCertificate from 'app/vue/views/components/Teacher/EditorCertificate.vue';
 
 const columns = [
   {
@@ -117,7 +128,8 @@ export default {
 
   components: {
     userInfoTable,
-    AsideLayout
+    AsideLayout,
+    EditorCertificate
   },
 
   data() {
@@ -132,6 +144,7 @@ export default {
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
+      certificateVisible: false // 编辑教师资质
     };
   },
 
@@ -253,6 +266,18 @@ export default {
       }
 
       callback()
+    },
+
+    handleEditorCertificate() {
+      this.certificateVisible = true;
+    },
+
+    handleSaveCertificate() {
+
+    },
+
+    handleCancelEditCertificate() {
+      this.certificateVisible = false;
     }
   },
 };
