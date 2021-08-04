@@ -48,4 +48,39 @@ class SettingNames
      * 任务多开设置
      */
     const TASK_MULTIPLE_SETTING = 'taskPlayMultiple';
+
+    /**
+     * 虚拟币设置
+     */
+    const COIN_SETTING = 'coin';
+
+    /**
+     * 发帖数量限制
+     */
+    const POST_NUMBER_RULES_SETTING = 'post_num_rules';
+
+    /**
+     * 邮箱设置
+     */
+    const MAILER_SETTING = 'mailer';
+
+    /**
+     * 客服设置
+     */
+    const CONTACT_SETTING = 'contact';
+
+    /**
+     * 支付设置
+     */
+    const PAYMENT_SETTING = 'payment';
+
+    /**
+     * 退款设置
+     */
+    const REFUND_SETTING = 'refund';
+
+    /**
+     * 优惠券设置（主程序）
+     */
+    const COUPON_SETTING = 'coupon';
 }

@@ -14,6 +14,9 @@ use Biz\System\SettingException;
 use Biz\System\SettingModule\SettingMaintainer;
 use Biz\User\UserException;
 
+/**
+ * @OA\Info(title="设置接口", version="0.1")
+ */
 class Setting extends AbstractResource
 {
     private $supportTypes = [
@@ -64,6 +67,13 @@ class Setting extends AbstractResource
         return $result;
     }
 
+    /**
+     * @return array
+     * @OA\Get(
+     *     path="/api/settings/sign_security",
+     *     @OA\Response(response="200",description="接口加密设置")
+     * )
+     */
     public function getSignSecurity()
     {
         $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
