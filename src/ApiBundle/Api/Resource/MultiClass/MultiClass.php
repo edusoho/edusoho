@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 
@@ -181,12 +182,14 @@ class MultiClass extends AbstractResource
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $products = $this->getMultiClassProductService()->findProductByIds($productIds);
 
+        $defaultAssistantServiceNum = $this->getSettingService()->node('multi_class.assistant_service_limit', 200);
         foreach ($multiClasses as &$multiClass) {
             $teacher = $teachers[$multiClass['id']];
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
             $multiClass['status'] = $this->getMultiClassStatus($multiClass['start_time'], $multiClass['end_time']);
-            $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
+            $assistantServiceNum = 'default' == $multiClass['service_setting_type'] ? $defaultAssistantServiceNum : $multiClass['service_num'];
+            $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $assistantServiceNum * count($assistantIds) : 0;
             $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['courseId' => $multiClass['courseId'], 'status' => 'published', 'isLesson' => 1]);
@@ -297,5 +300,13 @@ class MultiClass extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }
