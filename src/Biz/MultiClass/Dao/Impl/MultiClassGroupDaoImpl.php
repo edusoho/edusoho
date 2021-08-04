@@ -9,7 +9,7 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
 {
     protected $table = 'multi_class_group';
 
-    public function findGroupsByIds($ids)
+    public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
     }
