@@ -16,5 +16,11 @@ export const MultiClassStudent = _.assignIn({
 
   async batchDeleteClassMember(multiClassId, data) {
     return apiClient.post(`/api/multi_class/${multiClassId}/student_batch_delete`, data);
-  }
+  },
+  async getGroup(multiClassId) {
+    return apiClient.get(`/api/multi_class/${multiClassId}/groups`);
+  },
+  async editGroup(multiClassId, groupId, params) {
+    return apiClient.post(`/api/multi_class/${multiClassId}/student_groups/${groupId}`, { params });
+  },
 })

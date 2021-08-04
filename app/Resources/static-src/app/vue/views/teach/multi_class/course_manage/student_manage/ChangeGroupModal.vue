@@ -4,7 +4,7 @@
       <a-form-model-item label="选择分组" prop="group">
         <a-select v-model="form.group" show-search placeholder="请选择分组">
           <a-select-option v-for="item in groupList" :key="item.id">
-            {{ item.nickname }}
+            {{ item.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { MultiClassAssistant } from "common/vue/service";
+import { MultiClassStudent } from "common/vue/service";
 
 export default {
   name: "ChangeGroupModal",
@@ -23,6 +23,11 @@ export default {
       type: Boolean,
       required: true,
       default: false,
+    },
+    groupList: {
+      type: Array,
+      require: true,
+      default: {},
     },
     selectedStudentIds: {
       type: Array,
@@ -49,22 +54,14 @@ export default {
         group: undefined,
       },
       rules,
-      groupList: [],
     };
   },
 
   computed: {},
 
-  mounted() {
-    this.fetchGroup();
-  },
+  created() {},
 
   methods: {
-    async fetchGroup() {
-      const params = { id: 1 };
-      this.groupList = await MultiClassAssistant.search(params);
-      console.log(this.form);
-    },
     handleCancel() {
       this.$emit("handle-cancel");
       this.$refs.form.resetFields();
@@ -73,8 +70,13 @@ export default {
       this.$refs.form
         .validate()
         .then(async () => {
-          this.handleCancel();
+          await MultiClassStudent.editGroup(
+            this.multiClassId,
+            this.form.group,
+            { studentIds: this.selectedStudentIds }
+          );
           this.$message.success("分组修改成功！");
+          this.handleCancel();
         })
         .catch((error) => {
           this.$message.warning("分组修改失败");

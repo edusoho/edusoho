@@ -115,12 +115,13 @@
       <a-col :span="3">
        <div class="student-group">学员分组</div>
         <a-menu mode="inline" @select="onGroupClick">
-          <a-menu-item>
+          <a-menu-item key="">
             <span>全部学员</span>
           </a-menu-item>
           <a-menu-item v-for="Group in groupList" :key="Group.id">
             <span>{{Group.name}}</span>
-            <span>({{Group.groupCnt}})</span>
+            <span>({{Group.student_num}})</span>
+            <span style="margin-left: 4px;">{{Group.assistant.nickname}}</span>
           </a-menu-item>
         </a-menu>
       </a-col>
@@ -170,7 +171,7 @@
   </div>
     <assistant-list-modal :visible="assistantListModalVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
-    <change-group-modal :visible="changeGroupVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="changeGroupVisible = false;"></change-group-modal>
+    <change-group-modal :visible="changeGroupVisible" :groupList="groupList" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="updateStudentList"></change-group-modal>
     
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
@@ -387,22 +388,51 @@ const defaultExamPaging = {
   }
 };
 const groupList = [
-  {
-    groupCnt: 0,
-    id: 15,
-    name: "000"
-  },
-  {
-    groupCnt: 0,
-    id: 14,
-    name: "221"
-  },
-  {
-    groupCnt: 11,
-    id: 11,
-    name: "默认分组"
-  }
-];
+        // {
+        //   id: "1",
+        //   name: "分组1",
+        //   assistant_id: "227",
+        //   multi_class_id: "4",
+        //   course_id: "129",
+        //   student_num: "10",
+        //   created_time: "1627893419",
+        //   assistant: {
+        //     id: "227",
+        //     nickname: "教师3",
+        //     destroyed: "0",
+        //     title: "",
+        //     weChatQrCode: "",
+        //     uuid: "f9430fe37d20fee22b2fe5436b1cb9dc6f7b0693",
+        //     avatar: {
+        //       small: "http://es.dev.cn/assets/img/default/avatar.png",
+        //       middle: "http://es.dev.cn/assets/img/default/avatar.png",
+        //       large: "http://es.dev.cn/assets/img/default/avatar.png",
+        //     },
+        //   },
+        // },
+        // {
+        //   id: "2",
+        //   name: "分组2",
+        //   assistant_id: "226",
+        //   multi_class_id: "4",
+        //   course_id: "129",
+        //   student_num: "10",
+        //   created_time: "1627893419",
+        //   assistant: {
+        //     id: "226",
+        //     nickname: "教师2",
+        //     destroyed: "0",
+        //     title: "",
+        //     weChatQrCode: "",
+        //     uuid: "6cb985d1a0603bd3a36af51a0df5399155ab3965",
+        //     avatar: {
+        //       small: "http://es.dev.cn/assets/img/default/avatar.png",
+        //       middle: "http://es.dev.cn/assets/img/default/avatar.png",
+        //       large: "http://es.dev.cn/assets/img/default/avatar.png",
+        //     },
+        //   },
+        // },
+      ];
 export default {
   components: {
     AddStudentModal,
@@ -497,9 +527,10 @@ export default {
     }
   },
 
-  created() {
-    this.getMultiClassStudents();
-    this.getMultiClass();
+  async created() {
+    await this.getMultiClassStudents();
+    await this.getMultiClass();
+    await this.getMultiClassStudentsGroup();
   },
 
   befeoreRouteUpdate(to, from, next) {
@@ -520,6 +551,13 @@ export default {
       this.currentTestpaperTab = 0;
       this.testpaperPaging = defaultExamPaging;
       this.testpaperResultList = {};
+    },
+    async getMultiClassStudentsGroup(){
+     this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
+    },
+    updateStudentList(){
+      this.changeGroupVisible = false;
+      this.getMultiClassStudents();
     },
     async getMultiClassStudents(params = {}) {
       const { data, paging } = await MultiClassStudent.search({
@@ -719,6 +757,7 @@ export default {
 
     },
     onGroupClick(res){
+      console.log(res);
       const keyId = res.key; 
       this.getMultiClassStudents({ keyId });
     },
