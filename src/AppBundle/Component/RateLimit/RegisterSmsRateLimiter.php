@@ -2,8 +2,8 @@
 
 namespace AppBundle\Component\RateLimit;
 
-use Symfony\Component\HttpFoundation\Request;
 use Biz\User\UserException;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegisterSmsRateLimiter extends SmsRateLimiter
 {
