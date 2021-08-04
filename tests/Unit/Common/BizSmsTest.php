@@ -12,19 +12,19 @@ class BizSmsTest extends BaseTestCase
         $mobile = '15012345678';
         $smsType = BizSms::SMS_BIND_TYPE;
         $code = '123456';
-        $this->mockBiz('Sms:SmsService', array(
-            array('functionName' => 'sendVerifySms', 'withParams' => array($smsType, $mobile, 0), 'returnValue' => array('captcha_code' => $code)),
-        ));
+        $this->mockBiz('Sms:SmsService', [
+            ['functionName' => 'sendVerifySms', 'withParams' => [$smsType, $mobile, 0, 1], 'returnValue' => ['captcha_code' => $code]],
+        ]);
 
-        $options = array(
+        $options = [
             'times' => 20,
             'userId' => 1,
             'duration' => 120,
-        );
+        ];
 
-        $token = $this->getBizSms()->send($smsType, $mobile, $options);
-        $this->assertArraySubset(array('times' => $options['times'], 'userId' => $options['userId']), $token);
-        $this->assertEquals(array('code' => $code, 'mobile' => $mobile), $token['data']);
+        $token = $this->getBizSms()->send($smsType, $mobile, $options, 1);
+        $this->assertArraySubset(['times' => $options['times'], 'userId' => $options['userId']], $token);
+        $this->assertEquals(['code' => $code, 'mobile' => $mobile], $token['data']);
     }
 
     /**
