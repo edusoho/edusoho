@@ -334,7 +334,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $liveGroups = $this->getEdusohoLiveClient()->batchCreateLiveGroups([
             'liveId' => $live['id'],
-            'groupNames' => ArrayToolkit::column($groups, 'name')
+            'groupNames' => ArrayToolkit::column($groups, 'name'),
         ]);
 
         $createGroups = [];
@@ -342,7 +342,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $createGroups[] = [
                 'group_id' => $group['id'],
                 'live_id' => $live['id'],
-                'live_code' => $liveGroups[$key]['code']
+                'live_code' => $liveGroups[$key]['code'],
             ];
         }
 

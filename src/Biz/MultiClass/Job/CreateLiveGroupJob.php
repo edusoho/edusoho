@@ -34,7 +34,7 @@ class CreateLiveGroupJob extends AbstractJob
 
             $liveGroups = $this->getEduSohoLiveClient()->batchCreateLiveGroups([
                 'liveId' => $activity['ext']['liveId'],
-                'groupNames' => ArrayToolkit::column($groups, 'name')
+                'groupNames' => ArrayToolkit::column($groups, 'name'),
             ]);
 
             $createLiveGroups = [];
@@ -42,7 +42,7 @@ class CreateLiveGroupJob extends AbstractJob
                 $createLiveGroups[] = [
                     'group_id' => $group['id'],
                     'live_id' => $activity['ext']['liveId'],
-                    'live_code' => $liveGroups[$key]['code']
+                    'live_code' => $liveGroups[$key]['code'],
                 ];
             }
 
