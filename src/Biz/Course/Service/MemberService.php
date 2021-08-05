@@ -206,4 +206,6 @@ interface MemberService
     public function findMembersByUserIdAndRoles($userId, $roles);
 
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
+
+    public function findMultiClassIdsByUserId($userId);
 }
