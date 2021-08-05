@@ -23,9 +23,6 @@
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
           提交
         </a-button>
-        <a-button>
-          取消
-        </a-button>
       </a-space>
     </div>
   </aside-layout>
@@ -96,7 +93,7 @@ export default {
 
   methods: {
     async getParams() {
-      this.form = await MultiClassSetting.get();
+      this.form = await MultiClassSetting.search();
       console.log(this.form);
     },
     validatorGroupNumber(rule, value, callback) {
@@ -118,8 +115,8 @@ export default {
       callback();
     },
     validatorReviewTime(rule, value, callback) {
-      if (value > 24) {
-        callback(`时间范围在0-24小时`);
+      if (value > 200) {
+        callback(`时间范围在0-200小时`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
         callback("请输入正整数");
@@ -130,7 +127,7 @@ export default {
       this.$refs.form.validate().then(async () => {
         this.ajaxLoading = true;
         try {
-          await MultiClassSetting.save(this.form);
+          await MultiClassSetting.add(this.form);
           this.$message.success("保存成功");
         } finally {
           this.ajaxLoading = false;

@@ -6,6 +6,7 @@
             v-model="search.productId"
             show-search
             allowClear
+            notFoundContent="暂无数据"
             placeholder="所属产品筛选"
             option-filter-prop="children"
             style="width: 150px"
@@ -32,6 +33,7 @@
             v-model="search.teacherId"
             show-search
             allowClear
+            notFoundContent="暂无数据"
             placeholder="授课老师"
             option-filter-prop="children"
             style="width: 150px"
@@ -118,7 +120,7 @@
             @click="goToMultiClassManage(record.id)">查看</a-button>
           <a-button v-if="isPermission('multi_class_edit')"
             type="link"
-            @click="goToEditorMultiClass(record.id)">编辑</a-button>
+            @click="goToEditorMultiClass(record.id, record.type)">编辑</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
               <a-icon type="caret-down" />
@@ -414,9 +416,10 @@ export default {
       }
     },
 
-    goToEditorMultiClass(id) {
+    goToEditorMultiClass(id, type) {
+      const routeName = {normal: "MultiClassCreate", group: "MultiClassCreateGroup"}
       this.$router.push({
-        name: 'MultiClassCreate',
+        name: routeName[type],
         query: {
           id
         },

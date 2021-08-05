@@ -113,7 +113,7 @@
           @change="(value) => handleChange(value, 'assistant')"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
-            {{ item.nickname }} <span class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
+            {{ item.nickname }} <span v-if="item.isScrmBind === '0'" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
@@ -132,19 +132,19 @@
       </a-form-item>
       <a-form-item label="助教服务上限人数">
         <a-select 
-            placeholder="班课状态"
-            style="width: 140px"
-             v-decorator="['paramId', { initialValue: '1'}]"
+            placeholder="默认参数设置"
+            style="width: 200px"
+            v-decorator="['service_setting_type']"
             >
-          <a-select-option value="1">
+          <a-select-option value="default">
               默认参数设置
           </a-select-option>
-          <a-select-option value="2">
+          <a-select-option value="custom">
               自定义设置
           </a-select-option>
         </a-select>
-         <a-form-item v-if="form.getFieldValue('paramId') === '2'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-           <a-input v-decorator="['maxAssistantNum', {
+         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+           <a-input v-decorator="['service_num', {
               rules: [
                 { required: true, message: '请输入助教服务上限人数' },
                 { validator: validateAssistantNum }
@@ -419,8 +419,9 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        console.log(res);
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -678,18 +679,13 @@ export default {
       if (/^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
-
-      // if (value > Number(this.maxStudentNum)) {
-      //   callback(`人数范围在0-${this.maxStudentNum}人`)
-      // }
-
       callback()
     },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
+        console.log('values:',values);
         if (err) return
-        console.log(values);
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;

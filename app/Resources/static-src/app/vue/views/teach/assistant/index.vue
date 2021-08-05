@@ -102,22 +102,22 @@ const columns = [
   },
   {
     title: "现带班课总数",
-    dataIndex: 'totalClassNum',
+    dataIndex: 'liveMultiClassNum',
     ellipsis: true,
   },
   {
     title: "现学员总数",
-    dataIndex: 'studentNum',
+    dataIndex: 'liveMultiClassStudentNum',
     ellipsis: true,
   },
   {
     title: "已结班班课总数",
-    dataIndex: 'endClassNum',
+    dataIndex: 'endMultiClassNum',
     ellipsis: true,
   },
   {
     title: "已结班班课学员总数",
-    dataIndex: 'endClassStuNum',
+    dataIndex: 'endMultiClassStudentNum',
     ellipsis: true,
   },
   {
