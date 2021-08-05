@@ -2,10 +2,77 @@
    <aside-layout :breadcrumbs="[{ name: '班课管理' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
-        <a-input-search placeholder="请输入班课名称" style="width: 224px"
-          :allowClear="true"
-          @search="searchMultiClass" />
-        <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
+        <a-select
+            v-model="search.productId"
+            show-search
+            allowClear
+            notFoundContent="暂无数据"
+            placeholder="所属产品筛选"
+            option-filter-prop="children"
+            style="width: 150px"
+            :filter-option="filterOption"
+            @change="handleChange"
+        >
+          <a-select-option v-for="item in productList" :key="item.id">
+              {{ item.title }}
+          </a-select-option>
+        </a-select>
+
+        <a-select 
+            v-model="search.status"
+            allowClear
+            placeholder="班课状态"
+            style="width: 120px"
+            @change="handleChange">
+          <a-select-option v-for="status in classStatusList" :key="status.status">
+              {{ status.name }}
+          </a-select-option>
+        </a-select>
+
+        <a-select
+            v-model="search.teacherId"
+            show-search
+            allowClear
+            notFoundContent="暂无数据"
+            placeholder="授课老师"
+            option-filter-prop="children"
+            style="width: 150px"
+            :filter-option="filterOption"
+            @change="handleChange"
+        >
+          <a-select-option v-for="item in teacher" :key="item.id">
+              {{ item.nickname }}
+          </a-select-option>
+        </a-select>
+
+        <a-select 
+            v-model="search.type"
+            allowClear
+            placeholder="班课类型"
+            style="width: 120px"
+            @change="handleChange">
+          <a-select-option v-for="type in classTypeList" :key="type.status">
+              {{ type.name }}
+          </a-select-option>
+        </a-select>
+        
+        <a-input 
+          v-model="search.keywords" 
+          placeholder="请输入班课名称" 
+          style="width: 224px"
+          :allowClear="true" />
+          <a-button type="primary" @click="searchMultiClass">检索</a-button>
+        <a-dropdown v-if="isPermission('multi_class_create')">
+          <a-button class="pull-right" type="primary">新建班课</a-button>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a @click="goToCreateMultiClassPage('MultiClassCreate')" href="javascript:;">大班课</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a @click="goToCreateMultiClassPage('MultiClassCreateGroup')" href="javascript:;">分组大班课</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </div>
 
       <a-table :columns="columns"
@@ -31,6 +98,14 @@
           :href="`/course/${course.id}`" target="_blank" :title="course.courseSetTitle">
           {{ course.courseSetTitle }}
         </a>
+        <template slot="type" slot-scope="text">
+          <span>{{text === 'normal'? '大班课':'分组大班课'}}</span>
+        </template>
+        <template slot="status" slot-scope="text">
+          <span v-if="text === 'notStart'">未开课</span>
+          <span v-else-if="text === 'living'">开课中</span>
+          <span v-else>已结课</span>
+        </template>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
           href="javascript:;"
@@ -45,7 +120,7 @@
             @click="goToMultiClassManage(record.id)">查看</a-button>
           <a-button v-if="isPermission('multi_class_edit')"
             type="link"
-            @click="goToEditorMultiClass(record.id)">编辑</a-button>
+            @click="goToEditorMultiClass(record.id, record.type)">编辑</a-button>
           <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
             <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
               <a-icon type="caret-down" />
@@ -76,7 +151,7 @@
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { MultiClass, MultiClassProduct } from 'common/vue/service/index.js';
+import { MultiClass, MultiClassProduct, Teacher } from 'common/vue/service/index.js';
 import Assistant from './course_manage/components/Assistant.vue';
 import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
@@ -94,6 +169,20 @@ const columns = [
     width: '15%',
     ellipsis: true,
     scopedSlots: { customRender: 'course' },
+  },
+  {
+    title: '班课类型',
+    dataIndex: 'type',
+    width: '10%',
+    ellipsis: true,
+    scopedSlots: { customRender: 'type' },
+  },
+  {
+    title: '班课状态',
+    dataIndex: 'status',
+    width: '10%',
+    ellipsis: true,
+    scopedSlots: { customRender: 'status' },
   },
   {
     title: '所属产品',
@@ -137,6 +226,12 @@ const columns = [
     scopedSlots: { customRender: 'studentNum' },
   },
   {
+    title: '最大服务人数',
+    dataIndex: 'maxServiceNum',
+    width: '120px',
+    ellipsis: true,
+  },
+  {
     title: '创建时间',
     dataIndex: 'createdTime',
     width: '160px',
@@ -150,7 +245,15 @@ const columns = [
     scopedSlots: { customRender: 'action' },
   },
 ];
-
+const classStatusList = [
+      { status: "living", name: "开课中" },
+      { status: "notStart", name: "未开课" },
+      { status: "end", name: "已结课" },
+];
+const classTypeList = [
+      { status: "normal", name: "大班课" },
+      { status: "group", name: "分组大班课" },
+];
 export default {
   name: 'MultiClassList',
 
@@ -163,8 +266,18 @@ export default {
   data () {
     return {
       columns,
+      search:{
+        productId: undefined,
+        status: undefined,
+        teacherId: undefined,
+        type: undefined,
+        keywords: ""
+      },
+      classStatusList,
+      classTypeList,
       multiClassList: [],
       productList: [],
+      teacher: [],
       getListLoading: false,
       paging: {
         total: 0,
@@ -184,20 +297,30 @@ export default {
     }
     this.getMultiClassList(this.paging)
     this.getMultiClassProductList()
+    this.getTeacherList();
   },
   methods: {
-    goToCreateMultiClassPage() {
+    goToCreateMultiClassPage(param) {
       this.$router.push({
-        name: 'MultiClassCreate'
+        name: param
       })
     },
+    async getTeacherList(){
+     const { data } =  await Teacher.search({
+       offset: 0,
+       limit: 100000
+     });
+     this.teacher = data;
+     console.log(this.teacher);
+    },
+
     async getMultiClassProductList() {
       const { data } = await MultiClassProduct.search({
         keywords: '',
         offset: 0,
         limit: 100000,
       })
-
+      this.productList = data;
       const index = _.findIndex(this.columns, item => item.dataIndex === 'product');
       const productItem = this.columns[index];
 
@@ -208,14 +331,13 @@ export default {
           value: item.id
         })
       })
-
       this.$set(this.columns, index, productItem)
     },
     async getMultiClassList (params = {}) {
       params.limit = params.pageSize || 10
       params.offset = params.offset || 0
       params.keywords = params.keywords || ''
-
+     
       this.getListLoading = true;
       try {
         const { data, paging } = await MultiClass.search(params)
@@ -230,8 +352,8 @@ export default {
         this.getListLoading = false;
       }
     },
-    searchMultiClass (keywords) {
-      this.getMultiClassList({ keywords })
+    searchMultiClass () {
+      this.getMultiClassList(this.search);
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
@@ -294,9 +416,10 @@ export default {
       }
     },
 
-    goToEditorMultiClass(id) {
+    goToEditorMultiClass(id, type) {
+      const routeName = {normal: "MultiClassCreate", group: "MultiClassCreateGroup"}
       this.$router.push({
-        name: 'MultiClassCreate',
+        name: routeName[type],
         query: {
           id
         },
@@ -304,7 +427,16 @@ export default {
           paging: this.paging
         }
       });
-    }
+    },
+    handleChange() {
+      console.log(this.search);
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
   }
 }
 </script>
+

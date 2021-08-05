@@ -19,6 +19,14 @@ const router = new Router({
       }
     },
     {
+      path: '/create_group',
+      name: 'MultiClassCreateGroup',
+      component: () => import(/* webpackChunkName: "app/vue/dist/MultiClassCreateGroup" */ 'app/vue/views/teach/multi_class/create_group/index.vue'),
+      meta: {
+        keepAlive: true,
+      }
+    },
+    {
       path: '/create_course',
       name: 'MultiClassCreateCourse',
       component: () => import(/* webpackChunkName: "app/vue/dist/CreateCourse" */ 'app/vue/views/teach/multi_class/create_course/index.vue'),

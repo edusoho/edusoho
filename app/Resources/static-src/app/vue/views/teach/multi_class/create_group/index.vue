@@ -45,7 +45,7 @@
             </a-select>
           </a-col>
           <a-col :span="4" v-if="mode !== 'editor'">
-            <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse' })">
+            <a-button type="primary" :block="true" @click="$router.push({ name: 'MultiClassCreateCourse', query: { type: 'group' } })">
               <a-icon type="plus" />
               创建新课程
             </a-button>
@@ -132,7 +132,7 @@
       </a-form-item>
       <a-form-item label="助教服务上限人数">
         <a-select 
-            placeholder="默认参数设置"
+            placeholder="班课状态"
             style="width: 200px"
             v-decorator="['service_setting_type']"
             >
@@ -143,6 +143,16 @@
               自定义设置
           </a-select-option>
         </a-select>
+         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="分组上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+           <a-input v-decorator="['group_limit_num', {
+              rules: [
+                { required: true, message: '请输入分组上限人数' },
+                { validator: validateGroupNum }
+               ]
+             }]">
+              <span slot="suffix">人</span>
+            </a-input>
+         </a-form-item>
          <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['service_num', {
               rules: [
@@ -152,7 +162,7 @@
              }]">
               <span slot="suffix">人</span>
             </a-input>
-        </a-form-item>
+          </a-form-item>
 
       </a-form-item>
       <a-form-item label="排课">
@@ -225,7 +235,7 @@
 import _ from 'lodash';
 import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import Schedule from './Schedule.vue';
+import Schedule from '../create/Schedule.vue';
 
 export default {
   name: 'MultiClassCreate',
@@ -290,8 +300,8 @@ export default {
   computed: {
     breadcrumbName() {
       const names = {
-        create: '新建班课',
-        editor: '编辑班课'
+        create: '新建分组大班课',
+        editor: '编辑分组大班课'
       }
       return names[this.mode];
     }
@@ -419,9 +429,8 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        console.log(res);
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, group_limit_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'group_limit_num':group_limit_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -681,11 +690,18 @@ export default {
       }
       callback()
     },
+    validateGroupNum(rule, value, callback) {
+      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback('请输入正整数')
+      }
+      callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
-        console.log('values:',values);
         if (err) return
+        values.type = 'group';
+        console.log(values);
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
