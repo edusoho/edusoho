@@ -227,7 +227,7 @@ const columns = [
   },
   {
     title: '最大服务人数',
-    dataIndex: 'maxNum',
+    dataIndex: 'maxServiceNum',
     width: '120px',
     ellipsis: true,
   },
