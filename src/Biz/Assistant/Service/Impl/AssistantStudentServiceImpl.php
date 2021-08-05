@@ -274,6 +274,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->createService('MultiClass:MultiClassRecordService');
     }
 
+    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
+    {
+        return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
+    }
+
     /**
      * @return CourseService
      */
