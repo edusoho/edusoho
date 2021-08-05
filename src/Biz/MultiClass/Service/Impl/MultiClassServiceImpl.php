@@ -15,6 +15,7 @@ use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
+use Codeages\Biz\Framework\Event\Event;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -82,6 +83,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
                 "创建班课#{$multiClass['id']}《{$multiClass['title']}》",
                 $multiClass
             );
+
+            $this->dispatch('multi_class.create', new Event($multiClass));
 
             $this->commit();
         } catch (\Exception $e) {
