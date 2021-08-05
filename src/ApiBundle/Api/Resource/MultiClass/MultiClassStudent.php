@@ -65,7 +65,7 @@ class MultiClassStudent extends AbstractResource
             $assistantStudentRelations = $this->getAssistantStudentService()->findByMultiClassIdAndGroupId($id, $conditions['groupId']);
             $studentIds = ArrayToolkit::column($assistantStudentRelations, 'studentId');
             $userIds = isset($conditions['userIds']) ? array_unique(array_merge($conditions['userIds'], $studentIds)) : $studentIds;
-            $conditions['userIds'] = empty($userIds) ? [-1] : $userIds;
+            $conditions['userIds'] = empty($userIds) ? [-1] : array_values($userIds);
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
