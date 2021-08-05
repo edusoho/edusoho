@@ -14,10 +14,11 @@ paths:
     get:
       tags:
         - setting
+      summary: 获取接口加密设置
       operationId: 8ed9f8d52a1a77b3fca95af0a358f86e
       responses:
         '200':
-          description: 接口加密设置
+          description: 加密设置
           content:
             application/vnd.edusoho.v2+json:
               schema:
@@ -26,14 +27,28 @@ paths:
     get:
       tags:
         - setting
+      summary: 获取系统语言设置
       operationId: da6717a0a0755cd98fdc224128d9ffe5
       responses:
         '200':
-          description: 获取语言设置
+          description: 语言设置
           content:
             application/vnd.edusoho.v2+json:
               schema:
                 $ref: '#/components/schemas/locale'
+  /api/settings/ugc:
+    get:
+      tags:
+        - settings
+      summary: 获取UGC设置
+      operationId: fbe2ddf171e61a81da3c90b382638095
+      responses:
+        '200':
+          description: 全部UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/ugc'
 components:
   schemas:
     signSecurity:
@@ -74,6 +89,59 @@ components:
           enum:
             - en
             - zh_CN
+      type: object
+    ugc_review:
+      title: ugc_review
+      description: 评价UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 评价总开关
+          type: integer
+          default: 1
+      type: object
+    ugc_note:
+      title: ugc_note
+      description: 笔记UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 笔记总开关
+          type: integer
+          default: 1
+      type: object
+    ugc_thread:
+      title: ugc_thread
+      description: 话题讨论UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 话题讨论总开关
+          type: integer
+          default: 1
+      type: object
+    ugc_private_message:
+      title: ugc_private_message
+      description: 私信UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 私信总开关
+          type: integer
+          default: 1
+      type: object
+    ugc:
+      title: ugc
+      description: 全局UGC设定
+      properties:
+        ugc_review:
+          $ref: '#/components/schemas/ugc_review'
+        ugc_note:
+          $ref: '#/components/schemas/ugc_note'
+        ugc_thread:
+          $ref: '#/components/schemas/ugc_thread'
+        ugc_private_message:
+          $ref: '#/components/schemas/ugc_private_message'
       type: object
 tags:
   -

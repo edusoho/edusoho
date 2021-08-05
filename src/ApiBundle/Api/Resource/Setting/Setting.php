@@ -69,9 +69,10 @@ class Setting extends AbstractResource
      * @OA\Get(
      *     path="/api/settings/signSecurity",
      *     tags={"setting"},
+     *     summary="获取接口加密设置",
      *     @OA\Response(
      *          response="200",
-     *          description="接口加密设置",
+     *          description="加密设置",
      *          @OA\MediaType(
      *              mediaType="application/vnd.edusoho.v2+json",
      *              @OA\Schema(ref="#/components/schemas/signSecurity"),
@@ -96,9 +97,10 @@ class Setting extends AbstractResource
      * @OA\Get(
      *     path="/api/settings/locale",
      *     tags={"setting"},
+     *     summary="获取系统语言设置",
      *     @OA\Response(
      *         response=200,
-     *         description="获取语言设置",
+     *         description="语言设置",
      *         @OA\MediaType(
      *             mediaType="application/vnd.edusoho.v2+json",
      *             @OA\Schema(ref="#/components/schemas/locale"),
@@ -116,6 +118,23 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @return \int[][]
+     * @OA\Get(
+     *     path="/api/settings/ugc",
+     *     summary="获取UGC设置",
+     *     tags={"settings"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="全部UGC设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/ugc"),
+     *         ),
+     *     )
+     *
+     * )
+     */
     public function getUgc()
     {
         return [
@@ -787,5 +806,67 @@ class Setting extends AbstractResource
  *          default="zh_CN",
  *          enum = {"en", "zh_CN"}
  *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ugc_review",
+ *     title="ugc_review",
+ *     description="评价UGC设定",
+ *     @OA\Property(
+ *          property="enable",
+ *          title="enable",
+ *          description="评价总开关",
+ *          type="integer",
+ *          default=1,
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ugc_note",
+ *     title="ugc_note",
+ *     description="笔记UGC设定",
+ *     @OA\Property(
+ *          property="enable",
+ *          title="enable",
+ *          description="笔记总开关",
+ *          type="integer",
+ *          default=1,
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ugc_thread",
+ *     title="ugc_thread",
+ *     description="话题讨论UGC设定",
+ *     @OA\Property(
+ *          property="enable",
+ *          title="enable",
+ *          description="话题讨论总开关",
+ *          type="integer",
+ *          default=1,
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ugc_private_message",
+ *     title="ugc_private_message",
+ *     description="私信UGC设定",
+ *     @OA\Property(
+ *          property="enable",
+ *          title="enable",
+ *          description="私信总开关",
+ *          type="integer",
+ *          default=1,
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ugc",
+ *     title="ugc",
+ *     description="全局UGC设定",
+ *     @OA\Property(property="ugc_review",ref="#/components/schemas/ugc_review"),
+ *     @OA\Property(property="ugc_note",ref="#/components/schemas/ugc_note"),
+ *     @OA\Property(property="ugc_thread",ref="#/components/schemas/ugc_thread"),
+ *     @OA\Property(property="ugc_private_message",ref="#/components/schemas/ugc_private_message"),
  * )
  */
