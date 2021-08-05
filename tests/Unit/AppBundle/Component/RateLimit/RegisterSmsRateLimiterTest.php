@@ -17,7 +17,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'mobile' => '13967340627',
                     'dragCaptchaToken' => 'kuozhi',
                     'phrase' => 'password',
-                    'unique' => 'true',
+                    'unique' => 1,
                 ],
                 'getClientIp' => '128.2.2.1',
             ]
@@ -69,7 +69,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
                     'captchaToken' => 'kuozhi',
                     'phrase' => 'password',
                     'mobile' => '13967340627',
-                    'unique' => 'true',
+                    'unique' => 1,
                 ],
                 'getClientIp' => '128.2.2.1',
             ]
