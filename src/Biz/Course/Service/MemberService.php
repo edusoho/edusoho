@@ -133,6 +133,8 @@ interface MemberService
 
     public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId);
 
+    public function findMembersByUserIdsAndRole($userIds, $role);
+
     public function becomeStudentByClassroomJoined($courseId, $userId);
 
     public function refreshMemberNoteNumber($courseId, $userId);
