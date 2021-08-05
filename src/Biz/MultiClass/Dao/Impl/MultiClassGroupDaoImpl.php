@@ -9,6 +9,11 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
 {
     protected $table = 'multi_class_group';
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function findGroupsByMultiClassId($multiClassId)
     {
         return $this->findByFields([
@@ -23,6 +28,7 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
             'orderbys' => ['id', 'created_time'],
             'conditions' => [
                 'id = :id',
+                'id in (:ids)',
                 'multi_class_id = :multiClassId',
             ],
         ];
