@@ -1,25 +1,10 @@
 <template>
   <transition name="fade">
-    <div v-if="show" class="go-to-top" @click="scrollToTop">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 49.484 28.284"
-      >
+    <div v-if="show" class="back-to-top" @click="scrollToTop">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49.484 28.284">
         <g transform="translate(-229 -126.358)">
-          <rect
-            fill="currentColor"
-            width="35"
-            height="5"
-            rx="2"
-            transform="translate(229 151.107) rotate(-45)"
-          />
-          <rect
-            fill="currentColor"
-            width="35"
-            height="5"
-            rx="2"
-            transform="translate(274.949 154.642) rotate(-135)"
-          />
+          <rect fill="currentColor" width="35" height="5" rx="2" transform="translate(229 151.107) rotate(-45)" />
+          <rect fill="currentColor" width="35" height="5" rx="2" transform="translate(274.949 154.642) rotate(-135)" />
         </g>
       </svg>
     </div>
@@ -46,7 +31,7 @@ export default {
   },
 
   computed: {
-    show () {
+    show() {
       return this.scrollTop > this.threshold;
     }
   },
@@ -72,7 +57,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.go-to-top {
+.back-to-top {
   cursor: pointer;
   position: fixed;
   bottom: 50px;
@@ -94,15 +79,15 @@ export default {
     transform: translate(-50%, -50%);
     width: 30px;
   }
-}
 
-.go-to-top:hover {
-  background-color: #46c37b;
-  color: #fff;
+  &:hover {
+    background-color: #46c37b;
+    color: #fff;
+  }
 }
 
 @media (max-width: 1200px) {
-  .go-to-top {
+  .back-to-top {
     display: none;
   }
 }
