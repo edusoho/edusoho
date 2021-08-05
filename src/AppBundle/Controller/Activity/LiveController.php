@@ -9,7 +9,6 @@ use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\MultiClass\Service\MultiClassGroupService;
-use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
