@@ -46,7 +46,7 @@ import 'cropperjs/dist/cropper.css';
 import { UploadToken, File } from 'common/vue/service/index.js';
 
 export default {
-  name: 'CropPicture',
+  name: 'UploadPicture',
 
   components: {
     VueCropper
