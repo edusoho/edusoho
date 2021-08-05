@@ -207,7 +207,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          */
         $this->createIndex('course_task_result', 'courseId_status', 'courseId, status');
 
-        /**
+        /*
          * Table  biz_wrong_question
          */
         $this->createIndex('biz_wrong_question', 'collect_id', 'collect_id');
@@ -218,14 +218,14 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 
         $this->createIndex('biz_wrong_question', 'answer_scene_id', 'answer_scene_id');
 
-        /**
+        /*
          * Table  biz_wrong_question_collect
          */
         $this->createIndex('biz_wrong_question_collect', 'poolId_itemId', 'pool_id, item_id');
 
         $this->createIndex('biz_wrong_question_collect', 'item_id', 'item_id');
 
-        /**
+        /*
          * Table  biz_wrong_question_book_pool
          */
         $this->createIndex('biz_wrong_question_book_pool', 'user_id', 'user_id');
