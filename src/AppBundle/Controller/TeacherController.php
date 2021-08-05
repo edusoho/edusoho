@@ -64,8 +64,8 @@ class TeacherController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
-    public function certificateAction()
+    public function qualificationAction()
     {
-        return $this->render('teacher/certificate.html.twig');
+        return $this->render('teacher/qualification.html.twig');
     }
 }

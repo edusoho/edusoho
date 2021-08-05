@@ -5,8 +5,8 @@ import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 const routes = [
   {
     path: '/',
-    name: 'TeacherCertificate',
-    component: () => import(/* webpackChunkName: "app/vue/dist/TeacherCertificate" */ 'app/vue/views/teacher/certificate/index.vue')
+    name: 'TeacherQualification',
+    component: () => import(/* webpackChunkName: "app/vue/dist/TeacherQualification" */ 'app/vue/views/teacher/qualification/index.vue')
   }
 ];
 

@@ -101,7 +101,7 @@ export default {
   color: #fff;
 }
 
-@media (max-width: 959px) {
+@media (max-width: 1200px) {
   .go-to-top {
     display: none;
   }
