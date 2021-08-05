@@ -14,9 +14,6 @@ use Biz\System\SettingException;
 use Biz\System\SettingModule\SettingMaintainer;
 use Biz\User\UserException;
 
-/**
- * @OA\Info(title="设置接口", version="0.1")
- */
 class Setting extends AbstractResource
 {
     private $supportTypes = [
@@ -70,8 +67,16 @@ class Setting extends AbstractResource
     /**
      * @return array
      * @OA\Get(
-     *     path="/api/settings/sign_security",
-     *     @OA\Response(response="200",description="接口加密设置")
+     *     path="/api/settings/signSecurity",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *          response="200",
+     *          description="接口加密设置",
+     *          @OA\MediaType(
+     *              mediaType="application/vnd.edusoho.v2+json",
+     *              @OA\Schema(ref="#/components/schemas/signSecurity"),
+     *          ),
+     *     )
      * )
      */
     public function getSignSecurity()
@@ -84,6 +89,23 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @param $request
+     *
+     * @return string[]
+     * @OA\Get(
+     *     path="/api/settings/locale",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="获取语言设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/locale"),
+     *         )
+     *     )
+     * )
+     */
     public function getLocale($request)
     {
         $developer = $this->getSettingService()->get('developer', []);
@@ -723,3 +745,47 @@ class Setting extends AbstractResource
         return $this->service('Mp:MpService');
     }
 }
+/**
+ * @OA\Tag(
+ *     name="setting",
+ *     description="系统设置接口集合"
+ * )
+ *
+ * @OA\Schema(
+ *     schema="signSecurity",
+ *     title="signSecurity",
+ *     description="接口安全加密设置信息",
+ *     @OA\Property(
+ *          property="level",
+ *          title="level",
+ *          description="安全校验等级：close（不校验）、optional（佛系校验）、open（强制校验）",
+ *          type="string",
+ *          enum={"close", "optional","open"},
+ *          default="close",
+ *     ),
+ *     @OA\Property(
+ *          property="clients",
+ *          title="clients",
+ *          description="需要校验的设备列表：包含ios、android、miniprogram、other",
+ *          type="array",
+ *          default=null,
+ *          @OA\Items(
+ *               type="string",
+ *               enum = {"ios", "android", "miniprogram","other"},
+ *          ),
+ *     )
+ * )
+ * @OA\Schema(
+ *     schema="locale",
+ *     title="locale",
+ *     description="语言信息",
+ *     @OA\Property(
+ *          property="locale",
+ *          title="locale",
+ *          description="语言：en,zh-CN",
+ *          type="string",
+ *          default="zh_CN",
+ *          enum = {"en", "zh_CN"}
+ *     )
+ * )
+ */

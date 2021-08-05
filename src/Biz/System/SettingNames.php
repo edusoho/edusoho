@@ -83,4 +83,39 @@ class SettingNames
      * 优惠券设置（主程序）
      */
     const COUPON_SETTING = 'coupon';
+
+    /**
+     * 账户设置相关
+     */
+    const AUTH_SETTING = 'auth';
+
+    /**
+     * 手机设置
+     */
+    const MOBILE_SETTING = 'mobile';
+
+    /**
+     * 网站设置
+     */
+    const SITE_SETTING = 'site';
+
+    /**
+     * 教育云相关设置
+     */
+    const STORAGE_SETTING = 'storage';
+
+    /**
+     * 主题设置
+     */
+    const THEME_SETTING = 'theme';
+
+    /**
+     * MAGIC 设置
+     */
+    const MAGIC_SETTING = 'magic';
+
+    /**
+     * 新手指引设置
+     */
+    const NEWCOMER_TASK = 'newcomer_task';
 }

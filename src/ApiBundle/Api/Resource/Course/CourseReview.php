@@ -10,8 +10,6 @@ use Biz\Course\CourseException;
 
 /**
  * Class CourseReview
- *
- * @OA\Info(title="课程评价", version="0.1")
  */
 class CourseReview extends AbstractResource
 {
