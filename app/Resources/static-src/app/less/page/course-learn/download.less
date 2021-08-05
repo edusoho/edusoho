@@ -21,3 +21,69 @@
       }
     }
   }
+
+.download-materials-list {
+  padding: 16px;
+  list-style: none;
+
+  .download-materials-item {
+    position: relative;
+    padding: 12px 16px 12px 56px;
+    margin-top: 16px;
+    background-color: @bg-color;
+    border-radius: 4px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    .materials-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+    }
+
+    .materials-content {
+      position: relative;
+      padding-right: 80px;
+
+      p {
+        margin-bottom: 0;
+      }
+
+      &__title {
+        color: #333;
+        line-height: 18px;
+      }
+
+      &__desc {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #999;
+        line-height: 16px;
+      }
+
+      .download-materials-btn {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 4px 20px;
+        background: #03c777;
+        box-shadow: 0 2px 4px 0 rgba(3, 199, 119, 0.20);
+        border-radius: 12px;
+        color: #fff !important;
+        font-size: 12px;
+        line-height: 16px;
+        .es-transition();
+
+        &:hover {
+          background: rgba(3, 199, 119, .8);
+        }
+      }
+    }
+  }
+}

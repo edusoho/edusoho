@@ -3,28 +3,35 @@
 {% do script(['libs/perfect-scrollbar.js','downloadactivity/js/show/index.js']) %}
 
 {% block body %}
-    {% set materials = find_materials_by_activity_id_and_source(activity.id, 'coursematerial') %}
-    {% set download = activity.ext %}
-    <div class="iframe-parent-content iframe-parent-full" id="download-activity">
-        <ul class="download-activity-list">
-            {% for material in materials %}
-                <li>
-                  {% set file = get_file_by_file_id(material.fileId) %}
-                  {% set iconPath = get_file_ext_icon_Path(file.ext) %}
-                  <img  src="{{ asset(iconPath) }}" class="img-responsive" width="1.5%">
-                    <a class="link-darker" data-file-id="{{ material.id }}"
-                       data-url="{{ path('course_activity_download', {courseId:activity.fromCourseId, activityId:material.lessonId , materialId:material.id }) }}"
-                       target="_blank">{{ material.title }}
-                        {% if material.link|default(null) %}
-                            (link)
-                        {% else %}
-                            ({{ material.fileSize|file_size }})
-                        {% endif %}
-                        <i class="es-icon es-icon-filedownload download-icon"></i>
-                        <div class="text-xs color-gray mts">{{ material.description|default('') }}</div>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+  {% set materials = find_materials_by_activity_id_and_source(activity.id, 'coursematerial') %}
+  {% set download = activity.ext %}
+  <div class="iframe-parent-content iframe-parent-full" id="download-activity">
+    <ul class="download-activity-list download-materials-list">
+      {% for material in materials %}
+        {% set file = get_file_by_file_id(material.fileId) %}
+        {% set iconPath = get_file_ext_icon_Path(file.ext) %}
+        <li class="download-materials-item">
+          <img class="materials-icon" src="{{ asset(iconPath) }}">
+          <div class="materials-content">
+            <p class="materials-content__title text-overflow">{{ material.title }}</p>
+            <p class="materials-content__desc">
+              {{ material.description|default('') }}
+              {% if material.link|default(null) %}
+                (link)
+              {% else %}
+                ({{ material.fileSize|file_size }})
+              {% endif %}
+            </p>
+            <a
+              class="link-darker download-materials-btn"
+              data-file-id="{{ material.id }}"
+              data-url="{{ path('course_activity_download', { courseId: activity.fromCourseId, activityId: material.lessonId, materialId: material.id }) }}"
+            >
+              下载
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}
