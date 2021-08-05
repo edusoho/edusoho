@@ -3,21 +3,23 @@
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
         <a-select
-            v-model="search.productScreen"
+            v-model="search.productId"
             show-search
+            allowClear
             placeholder="所属产品筛选"
             option-filter-prop="children"
             style="width: 150px"
             :filter-option="filterOption"
             @change="handleChange"
         >
-          <a-select-option v-for="status in classStatusList" :key="status.status">
-              {{ status.name }}
+          <a-select-option v-for="item in productList" :key="item.id">
+              {{ item.title }}
           </a-select-option>
         </a-select>
 
         <a-select 
-            v-model="search.classStatus"
+            v-model="search.status"
+            allowClear
             placeholder="班课状态"
             style="width: 120px"
             @change="handleChange">
@@ -27,21 +29,23 @@
         </a-select>
 
         <a-select
-            v-model="search.teacher"
+            v-model="search.teacherId"
             show-search
+            allowClear
             placeholder="授课老师"
             option-filter-prop="children"
             style="width: 150px"
             :filter-option="filterOption"
             @change="handleChange"
         >
-          <a-select-option v-for="status in classStatusList" :key="status.status">
-              {{ status.name }}
+          <a-select-option v-for="item in teacher" :key="item.id">
+              {{ item.nickname }}
           </a-select-option>
         </a-select>
 
         <a-select 
-            v-model="search.classType"
+            v-model="search.type"
+            allowClear
             placeholder="班课类型"
             style="width: 120px"
             @change="handleChange">
@@ -92,6 +96,14 @@
           :href="`/course/${course.id}`" target="_blank" :title="course.courseSetTitle">
           {{ course.courseSetTitle }}
         </a>
+        <template slot="type" slot-scope="text">
+          <span>{{text === 'normal'? '大班课':'分组大班课'}}</span>
+        </template>
+        <template slot="status" slot-scope="text">
+          <span v-if="text === 'notStart'">未开课</span>
+          <span v-else-if="text === 'living'">开课中</span>
+          <span v-else>已结课</span>
+        </template>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
           href="javascript:;"
@@ -137,7 +149,7 @@
 
 <script>
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { MultiClass, MultiClassProduct } from 'common/vue/service/index.js';
+import { MultiClass, MultiClassProduct, Teacher } from 'common/vue/service/index.js';
 import Assistant from './course_manage/components/Assistant.vue';
 import CopyMultiClassModal from './CopyMultiClassModal.vue';
 
@@ -157,10 +169,18 @@ const columns = [
     scopedSlots: { customRender: 'course' },
   },
   {
+    title: '班课类型',
+    dataIndex: 'type',
+    width: '10%',
+    ellipsis: true,
+    scopedSlots: { customRender: 'type' },
+  },
+  {
     title: '班课状态',
     dataIndex: 'status',
     width: '10%',
     ellipsis: true,
+    scopedSlots: { customRender: 'status' },
   },
   {
     title: '所属产品',
@@ -224,15 +244,13 @@ const columns = [
   },
 ];
 const classStatusList = [
-      { status: "", name: "课程状态" },
-      { status: "0", name: "开课中" },
-      { status: "1", name: "未开课" },
-      { status: "2", name: "已结课" },
+      { status: "living", name: "开课中" },
+      { status: "notStart", name: "未开课" },
+      { status: "end", name: "已结课" },
 ];
 const classTypeList = [
-      { status: "", name: "班课类型" },
-      { status: "1", name: "大班课" },
-      { status: "2", name: "分组大班课" },
+      { status: "normal", name: "大班课" },
+      { status: "group", name: "分组大班课" },
 ];
 export default {
   name: 'MultiClassList',
@@ -247,16 +265,17 @@ export default {
     return {
       columns,
       search:{
-        productScreen: "",
-        classStatus: "",
-        teacher: "",
-        classType: "",
+        productId: undefined,
+        status: undefined,
+        teacherId: undefined,
+        type: undefined,
         keywords: ""
       },
       classStatusList,
       classTypeList,
       multiClassList: [],
       productList: [],
+      teacher: [],
       getListLoading: false,
       paging: {
         total: 0,
@@ -276,6 +295,7 @@ export default {
     }
     this.getMultiClassList(this.paging)
     this.getMultiClassProductList()
+    this.getTeacherList();
   },
   methods: {
     goToCreateMultiClassPage(param) {
@@ -283,13 +303,22 @@ export default {
         name: param
       })
     },
+    async getTeacherList(){
+     const { data } =  await Teacher.search({
+       offset: 0,
+       limit: 100000
+     });
+     this.teacher = data;
+     console.log(this.teacher);
+    },
+
     async getMultiClassProductList() {
       const { data } = await MultiClassProduct.search({
         keywords: '',
         offset: 0,
         limit: 100000,
       })
-      
+      this.productList = data;
       const index = _.findIndex(this.columns, item => item.dataIndex === 'product');
       const productItem = this.columns[index];
 
@@ -322,7 +351,7 @@ export default {
       }
     },
     searchMultiClass () {
-      this.getMultiClassList(this.search)
+      this.getMultiClassList(this.search);
     },
     deleteMultiClass (multiClass) {
       this.$confirm({
@@ -366,8 +395,7 @@ export default {
       if (sorter && sorter.order) {
         params[`${sorter.field}Sort`] = sorter.order === 'ascend' ? 'ASC' : 'DESC'
       }
-      console.log(sorter);
-console.log(params);
+
       if (Object.keys(params).length > 0) {
         this.getMultiClassList(params)
       }
