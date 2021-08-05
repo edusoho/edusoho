@@ -39,7 +39,7 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay">
-            <a-menu-item @click="handleEditorCertificate">
+            <a-menu-item @click="handleEditorQualification">
               编辑教师资质
             </a-menu-item>
           </a-menu>
@@ -82,11 +82,10 @@
       title="编辑教师资质"
       width="900px"
       :footer="null"
-      :visible="certificateVisible"
-      @ok="handleSaveCertificate"
-      @cancel="handleCancelEditCertificate"
+      :visible="qualificationVisible"
+      @cancel="handleCancelEditQualification"
     >
-      <editor-certificate />
+      <editor-qualification />
     </a-modal>
   </aside-layout>
 </template>
@@ -97,7 +96,7 @@ import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import EditorCertificate from 'app/vue/views/components/Teacher/EditorCertificate.vue';
+import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
 const columns = [
   {
@@ -129,7 +128,7 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    EditorCertificate
+    EditorQualification
   },
 
   data() {
@@ -144,7 +143,7 @@ export default {
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
-      certificateVisible: false // 编辑教师资质
+      qualificationVisible: false // 编辑教师资质
     };
   },
 
@@ -268,16 +267,12 @@ export default {
       callback()
     },
 
-    handleEditorCertificate() {
-      this.certificateVisible = true;
+    handleEditorQualification() {
+      this.qualificationVisible = true;
     },
 
-    handleSaveCertificate() {
-
-    },
-
-    handleCancelEditCertificate() {
-      this.certificateVisible = false;
+    handleCancelEditQualification() {
+      this.qualificationVisible = false;
     }
   },
 };
