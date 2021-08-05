@@ -33,7 +33,7 @@
       />
       <template slot="footer">
         <a-button @click="handleReselect">重新选择</a-button>
-        <a-button type="primary" @click="handleSaveCropper" :loading="uploadLoading">保存图片</a-button>
+        <a-button type="primary" @click="handleSaveCropper2" :loading="uploadLoading">保存图片</a-button>
       </template>
     </a-modal>
   </div>
@@ -173,6 +173,35 @@ export default {
           }
 
           this.imgs = await File.imgCrop(formData1);
+        } finally {
+          this.loading = false;
+          this.visible = false;
+          this.uploadLoading = false;
+        }
+      });
+    },
+
+    async handleSaveCropper2() {
+      this.loading = true;
+
+      if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
+        await this.getUploadToken();
+      }
+
+      const cropper = this.$refs.cropper;
+
+      cropper.getCroppedCanvas().toBlob(async blob => {
+        const formData = new FormData();
+
+        formData.append('file', blob, this.pictureName);
+        formData.append('token', this.uploadToken.token);
+
+        this.uploadLoading = true;
+
+        try {
+          const { url } = await File.uploadFile(formData);
+          this.pictureUrl = url;
+          this.$emit('success', url);
         } finally {
           this.loading = false;
           this.visible = false;
