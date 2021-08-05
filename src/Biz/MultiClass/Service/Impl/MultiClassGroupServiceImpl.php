@@ -3,6 +3,7 @@
 namespace Biz\MultiClass\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
@@ -19,6 +20,21 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
     public function findGroupsByCourseId($courseId)
     {
         return $this->getMultiClassGroupDao()->findByCourseId($courseId);
+    }
+
+    public function getLiveGroupByUserIdAndCourseId($userId, $courseId, $liveId)
+    {
+        $assistantRef = $this->getAssistantStudentService()->getByStudentIdAndCourseId($userId, $courseId);
+        if (empty($assistantRef) || empty($assistantRef['group_id'])) {
+            return [];
+        }
+
+        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupIdAndLiveId($assistantRef['group_id'], $liveId);
+        if (empty($liveGroup) || empty($liveGroup['live_code'])) {
+            return [];
+        }
+
+        return $liveGroup;
     }
 
     public function createLiveGroup($fields)
@@ -53,6 +69,14 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
      * @return MultiClassLiveGroupDao
      */
     protected function getMultiClassLiveGroupDao()
+    {
+        return $this->createDao('MultiClass:MultiClassLiveGroupDao');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
     {
         return $this->createDao('MultiClass:MultiClassLiveGroupDao');
     }

@@ -9,6 +9,11 @@ class MultiClassLiveGroupDaoImpl extends AdvancedDaoImpl implements MultiClassLi
 {
     protected $table = 'multi_class_live_group';
 
+    public function getByGroupIdAndLiveId($groupId, $liveId)
+    {
+        return $this->getByFields(['live_id' => $liveId, 'group_id' => $groupId]);
+    }
+
     public function declares()
     {
         return [
