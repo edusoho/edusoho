@@ -75,7 +75,7 @@ class Setting extends AbstractResource
      *          description="加密设置",
      *          @OA\MediaType(
      *              mediaType="application/vnd.edusoho.v2+json",
-     *              @OA\Schema(ref="#/components/schemas/signSecurity"),
+     *              @OA\Schema(ref="#/components/schemas/setting.signSecurity"),
      *          ),
      *     )
      * )
@@ -103,7 +103,7 @@ class Setting extends AbstractResource
      *         description="语言设置",
      *         @OA\MediaType(
      *             mediaType="application/vnd.edusoho.v2+json",
-     *             @OA\Schema(ref="#/components/schemas/locale"),
+     *             @OA\Schema(ref="#/components/schemas/setting.locale"),
      *         )
      *     )
      * )
@@ -123,16 +123,15 @@ class Setting extends AbstractResource
      * @OA\Get(
      *     path="/api/settings/ugc",
      *     summary="获取UGC设置",
-     *     tags={"settings"},
+     *     tags={"setting"},
      *     @OA\Response(
      *         response=200,
      *         description="全部UGC设置",
      *         @OA\MediaType(
      *             mediaType="application/vnd.edusoho.v2+json",
-     *             @OA\Schema(ref="#/components/schemas/ugc"),
+     *             @OA\Schema(ref="#/components/schemas/setting.ugc"),
      *         ),
      *     )
-     *
      * )
      */
     public function getUgc()
@@ -145,6 +144,22 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @return int[]
+     * @OA\Get(
+     *     path="/api/settings/ugc_review",
+     *     summary="获取评价UGC设置",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="评价UGC设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/setting.ugc_review"),
+     *         ),
+     *     )
+     * )
+     */
     public function getUgcReview()
     {
         $reviewSetting = $this->getSettingService()->get('ugc_review', []);
@@ -159,6 +174,22 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @return int[]
+     * @OA\Get(
+     *     path="/api/settings/ugc_note",
+     *     summary="获取笔记UGC设置",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="笔记UGC设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/setting.ugc_note"),
+     *         ),
+     *     )
+     * )
+     */
     public function getUgcNote()
     {
         $noteSetting = $this->getSettingService()->get('ugc_note', []);
@@ -170,6 +201,22 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @return int[]
+     * @OA\Get(
+     *     path="/api/settings/ugc_thread",
+     *     summary="获取话题问答UGC设置",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="话题问答UGC设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/setting.ugc_thread"),
+     *         ),
+     *     )
+     * )
+     */
     public function getUgcThread()
     {
         $threadSetting = $this->getSettingService()->get('ugc_thread', []);
@@ -184,6 +231,22 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @return int[]
+     * @OA\Get(
+     *     path="/api/settings/ugc_private_message",
+     *     summary="获取私信UGC设置",
+     *     tags={"setting"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="私信UGC设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/setting.ugc_private_message"),
+     *         ),
+     *     )
+     * )
+     */
     public function getUgcPrivateMessage()
     {
         $privateMessageSetting = $this->getSettingService()->get('ugc_private_message', []);
@@ -555,6 +618,24 @@ class Setting extends AbstractResource
         ];
     }
 
+    /**
+     * @param null $request
+     *
+     * @return array
+     * @OA\Get(
+     *     path="/api/settings/task_learning_config",
+     *     tags={"setting"},
+     *     summary="任务学习设置",
+     *     @OA\Response(
+     *         response=200,
+     *         description="任务学习设置",
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.edusoho.v2+json",
+     *             @OA\Schema(ref="#/components/schemas/setting.task_learning_config")
+     *         )
+     *     )
+     * )
+     */
     public function getTaskLearningConfig($request = null)
     {
         $courseTaskLearning = SettingMaintainer::courseSetting($this->biz)->getCourseTaskLearnConfig();
@@ -771,8 +852,8 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="signSecurity",
- *     title="signSecurity",
+ *     schema="setting.signSecurity",
+ *     title="setting.signSecurity",
  *     description="接口安全加密设置信息",
  *     @OA\Property(
  *          property="level",
@@ -795,13 +876,13 @@ class Setting extends AbstractResource
  *     )
  * )
  * @OA\Schema(
- *     schema="locale",
- *     title="locale",
+ *     schema="setting.locale",
+ *     title="setting.locale",
  *     description="语言信息",
  *     @OA\Property(
  *          property="locale",
  *          title="locale",
- *          description="语言：en,zh-CN",
+ *          description="语言：en,zh_CN",
  *          type="string",
  *          default="zh_CN",
  *          enum = {"en", "zh_CN"}
@@ -809,8 +890,8 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="ugc_review",
- *     title="ugc_review",
+ *     schema="setting.ugc_review",
+ *     title="setting.ugc_review",
  *     description="评价UGC设定",
  *     @OA\Property(
  *          property="enable",
@@ -822,8 +903,8 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="ugc_note",
- *     title="ugc_note",
+ *     schema="setting.ugc_note",
+ *     title="setting.ugc_note",
  *     description="笔记UGC设定",
  *     @OA\Property(
  *          property="enable",
@@ -835,8 +916,8 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="ugc_thread",
- *     title="ugc_thread",
+ *     schema="setting.ugc_thread",
+ *     title="setting.ugc_thread",
  *     description="话题讨论UGC设定",
  *     @OA\Property(
  *          property="enable",
@@ -848,8 +929,8 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="ugc_private_message",
- *     title="ugc_private_message",
+ *     schema="setting.ugc_private_message",
+ *     title="setting.ugc_private_message",
  *     description="私信UGC设定",
  *     @OA\Property(
  *          property="enable",
@@ -861,12 +942,27 @@ class Setting extends AbstractResource
  * )
  *
  * @OA\Schema(
- *     schema="ugc",
- *     title="ugc",
+ *     schema="setting.ugc",
+ *     title="setting.ugc",
  *     description="全局UGC设定",
- *     @OA\Property(property="ugc_review",ref="#/components/schemas/ugc_review"),
- *     @OA\Property(property="ugc_note",ref="#/components/schemas/ugc_note"),
- *     @OA\Property(property="ugc_thread",ref="#/components/schemas/ugc_thread"),
- *     @OA\Property(property="ugc_private_message",ref="#/components/schemas/ugc_private_message"),
+ *     @OA\Property(property="ugc_review",ref="#/components/schemas/setting.ugc_review"),
+ *     @OA\Property(property="ugc_note",ref="#/components/schemas/setting.ugc_note"),
+ *     @OA\Property(property="ugc_thread",ref="#/components/schemas/setting.ugc_thread"),
+ *     @OA\Property(property="ugc_private_message",ref="#/components/schemas/setting.ugc_private_message"),
+ * )
+ *
+ * @OA\Schema(
+ *     schema="setting.task_learning_config",
+ *     title="setting.task_learning_config",
+ *     description="课程任务学习配置",
+ *     @OA\Property(property="non_focus_learning_video_play_rule",description="非专注学习规则,auto_pause:自动暂停、no_action:无操作",type="string",default="no_action",enum={"auto_pause","no_action"}),
+ *     @OA\Property(property="media_play_continuously",description="音视频连续播放",type="string",default="off",enum={"on","off"}),
+ *     @OA\Property(
+ *         property="multiple_learn",
+ *         description="多开学习",
+ *         type="object",
+ *         @OA\Property(property="multiple_learn_enable",description="是否多开学习",type="string",default="off",enum={"on","off"}),
+ *         @OA\Property(property="multiple_learn_kick_mode",description="多开学习模式，kick_previous：踢掉上一个播放、reject_current：拒绝本次播放",type="string",default="kick_previous",enum={"kick_previous","reject_current"}),
+ *     ),
  * )
  */

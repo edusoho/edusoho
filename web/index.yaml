@@ -22,7 +22,7 @@ paths:
           content:
             application/vnd.edusoho.v2+json:
               schema:
-                $ref: '#/components/schemas/signSecurity'
+                $ref: '#/components/schemas/setting.signSecurity'
   /api/settings/locale:
     get:
       tags:
@@ -35,11 +35,11 @@ paths:
           content:
             application/vnd.edusoho.v2+json:
               schema:
-                $ref: '#/components/schemas/locale'
+                $ref: '#/components/schemas/setting.locale'
   /api/settings/ugc:
     get:
       tags:
-        - settings
+        - setting
       summary: 获取UGC设置
       operationId: fbe2ddf171e61a81da3c90b382638095
       responses:
@@ -48,11 +48,76 @@ paths:
           content:
             application/vnd.edusoho.v2+json:
               schema:
-                $ref: '#/components/schemas/ugc'
+                $ref: '#/components/schemas/setting.ugc'
+  /api/settings/ugc_review:
+    get:
+      tags:
+        - setting
+      summary: 获取评价UGC设置
+      operationId: d9ee7b8abf0da7958fbbb7ad8f65ba87
+      responses:
+        '200':
+          description: 评价UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_review'
+  /api/settings/ugc_note:
+    get:
+      tags:
+        - setting
+      summary: 获取笔记UGC设置
+      operationId: eefcfd2c7a802749fd835d7a72d599e3
+      responses:
+        '200':
+          description: 笔记UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_note'
+  /api/settings/ugc_thread:
+    get:
+      tags:
+        - setting
+      summary: 获取话题问答UGC设置
+      operationId: e1eeb36c0de6ddde545f22501c2b067a
+      responses:
+        '200':
+          description: 话题问答UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_thread'
+  /api/settings/ugc_private_message:
+    get:
+      tags:
+        - setting
+      summary: 获取私信UGC设置
+      operationId: 401f4d03d6c0fc2923b2581dd54af864
+      responses:
+        '200':
+          description: 私信UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_private_message'
+  /api/settings/task_learning_config:
+    get:
+      tags:
+        - setting
+      summary: 任务学习设置
+      operationId: 25c87099a1649eccd35f73d470085874
+      responses:
+        '200':
+          description: 任务学习设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.task_learning_config'
 components:
   schemas:
-    signSecurity:
-      title: signSecurity
+    setting.signSecurity:
+      title: setting.signSecurity
       description: 接口安全加密设置信息
       properties:
         level:
@@ -77,21 +142,21 @@ components:
               - other
           default: null
       type: object
-    locale:
-      title: locale
+    setting.locale:
+      title: setting.locale
       description: 语言信息
       properties:
         locale:
           title: locale
-          description: '语言：en,zh-CN'
+          description: '语言：en,zh_CN'
           type: string
           default: zh_CN
           enum:
             - en
             - zh_CN
       type: object
-    ugc_review:
-      title: ugc_review
+    setting.ugc_review:
+      title: setting.ugc_review
       description: 评价UGC设定
       properties:
         enable:
@@ -100,8 +165,8 @@ components:
           type: integer
           default: 1
       type: object
-    ugc_note:
-      title: ugc_note
+    setting.ugc_note:
+      title: setting.ugc_note
       description: 笔记UGC设定
       properties:
         enable:
@@ -110,8 +175,8 @@ components:
           type: integer
           default: 1
       type: object
-    ugc_thread:
-      title: ugc_thread
+    setting.ugc_thread:
+      title: setting.ugc_thread
       description: 话题讨论UGC设定
       properties:
         enable:
@@ -120,8 +185,8 @@ components:
           type: integer
           default: 1
       type: object
-    ugc_private_message:
-      title: ugc_private_message
+    setting.ugc_private_message:
+      title: setting.ugc_private_message
       description: 私信UGC设定
       properties:
         enable:
@@ -130,18 +195,55 @@ components:
           type: integer
           default: 1
       type: object
-    ugc:
-      title: ugc
+    setting.ugc:
+      title: setting.ugc
       description: 全局UGC设定
       properties:
         ugc_review:
-          $ref: '#/components/schemas/ugc_review'
+          $ref: '#/components/schemas/setting.ugc_review'
         ugc_note:
-          $ref: '#/components/schemas/ugc_note'
+          $ref: '#/components/schemas/setting.ugc_note'
         ugc_thread:
-          $ref: '#/components/schemas/ugc_thread'
+          $ref: '#/components/schemas/setting.ugc_thread'
         ugc_private_message:
-          $ref: '#/components/schemas/ugc_private_message'
+          $ref: '#/components/schemas/setting.ugc_private_message'
+      type: object
+    setting.task_learning_config:
+      title: setting.task_learning_config
+      description: 课程任务学习配置
+      properties:
+        non_focus_learning_video_play_rule:
+          description: '非专注学习规则,auto_pause:自动暂停、no_action:无操作'
+          type: string
+          default: no_action
+          enum:
+            - auto_pause
+            - no_action
+        media_play_continuously:
+          description: 音视频连续播放
+          type: string
+          default: 'off'
+          enum:
+            - 'on'
+            - 'off'
+        multiple_learn:
+          description: 多开学习
+          properties:
+            multiple_learn_enable:
+              description: 是否多开学习
+              type: string
+              default: 'off'
+              enum:
+                - 'on'
+                - 'off'
+            multiple_learn_kick_mode:
+              description: 多开学习模式，kick_previous：踢掉上一个播放、reject_current：拒绝本次播放
+              type: string
+              default: kick_previous
+              enum:
+                - kick_previous
+                - reject_current
+          type: object
       type: object
 tags:
   -
