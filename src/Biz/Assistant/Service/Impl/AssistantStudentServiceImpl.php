@@ -225,7 +225,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
         $updateRecords = [];
         foreach ($groupIds as $groupId) {
-            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ? $groupStudentNum[$groupId]['studentNum'] : 0 ];
+            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ? $groupStudentNum[$groupId]['studentNum'] : 0];
         }
 
         return $this->getMultiClassGroupDao()->batchUpdate($groupIds, $updateRecords);
@@ -237,8 +237,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $currentRelations = ArrayToolkit::index($currentRelations, 'studentId');
 
         $records = [];
-        foreach ($studentIds as $studentId)
-        {
+        foreach ($studentIds as $studentId) {
             $records[] = [
                 'user_id' => $studentId,
                 'multi_class_id' => $multiClassId,
