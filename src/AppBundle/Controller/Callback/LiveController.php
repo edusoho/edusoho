@@ -3,10 +3,9 @@
 namespace AppBundle\Controller\Callback;
 
 use AppBundle\Common\JWTAuth;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class LiveController extends BaseController
@@ -15,6 +14,7 @@ class LiveController extends BaseController
     {
         $this->validToken($request);
         $event = $request->request->get('event');
+
         return new JsonResponse(['success' => true]);
     }
 
