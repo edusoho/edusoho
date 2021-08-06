@@ -1,0 +1,32 @@
+
+<section class="teacher-qualification">
+  <div class="container">
+    <div class="text-line gray">
+      <h5>
+        <span>教师资质公示</span>
+        <div class="line"></div>
+      </h5>
+      <div class="subtitle">教师资格证信息公示</div>
+    </div>
+    <div class="teacher-qualification-list row">
+      {% for item in 1..6 %}
+        <div class="col-lg-2 col-md-4 col-xs-6">
+          <div class="teacher-qualification-item">
+            <div class="img-box">
+              <img src="http://t5.edusoho.cn/files/system/2021/05-27/1003440220ca719525.jpg">
+            </div>
+            <div class="teacher-name">方丽琰</div>
+            <p>教师资格证编号</p>
+            <p>20191100123003393</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="section-more-btn">
+      <a href="{{ path('teacher_qualification') }}" class="btn btn-default btn-lg">
+        更多教师
+        <i class="mrs-o es-icon es-icon-chevronright"></i>
+      </a>
+    </div>
+  </div>
+</section>
