@@ -3776,3 +3776,7 @@ scrm_buy_goods_callback:
 feedback:
   path: /feedback
   defaults: { _controller: AppBundle:Default:feedback }
+
+live_cloud_callback:
+  path: /live/callback
+  defaults: { _controller: AppBundle:Callback/Live:handle }
