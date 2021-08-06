@@ -3,11 +3,10 @@
 namespace AppBundle\Command;
 
 use Biz\Util\EdusohoLiveClient;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Console\Input\InputOption;
 
 class UploadLiveCallbackUrlCommand extends BaseCommand
 {
@@ -23,7 +22,7 @@ class UploadLiveCallbackUrlCommand extends BaseCommand
         $host = $input->getArgument('host');
         $client = new EdusohoLiveClient();
 
-        $result = $client->uploadCallbackUrl($host . '/live/callback');
+        $result = $client->uploadCallbackUrl($host.'/live/callback');
         var_dump($result);
     }
 
