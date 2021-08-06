@@ -11,9 +11,9 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
 {
     public function makeSign()
     {
-        $sign = time() . '_' . Uuid::uuid4();
+        $sign = time().'_'.Uuid::uuid4();
         $record = $this->getMultiClassRecordDao()->getRecordBySign($sign);
-        if ($record){
+        if ($record) {
             $sign = $this->makeSign();
         }
 
