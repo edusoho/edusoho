@@ -3778,5 +3778,5 @@ feedback:
   defaults: { _controller: AppBundle:Default:feedback }
 
 live_cloud_callback:
-  path: /live/callback
+  path: /callback/live/handle
   defaults: { _controller: AppBundle:Callback/Live:handle }

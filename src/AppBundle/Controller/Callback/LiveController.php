@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class LiveController extends BaseController
 {
-    public function handle(Request $request)
+    public function handleAction(Request $request)
     {
         $this->validToken($request);
         $event = $request->request->get('event');
@@ -21,7 +21,7 @@ class LiveController extends BaseController
     protected function validToken($request)
     {
         $token = $request->headers->get('Authorization');
-        $result = $this->getJWTAuth()->auth($token);
+        $result = $this->getJWTAuth()->valid($token);
         if (!$result) {
             throw new BadRequestHttpException('Token Error');
         }

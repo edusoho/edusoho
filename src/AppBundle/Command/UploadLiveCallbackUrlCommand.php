@@ -22,7 +22,7 @@ class UploadLiveCallbackUrlCommand extends BaseCommand
         $host = $input->getArgument('host');
         $client = new EdusohoLiveClient();
 
-        $result = $client->uploadCallbackUrl($host.'/live/callback');
+        $result = $client->uploadCallbackUrl($host.'/callback/live/handle');
         var_dump($result);
     }
 
