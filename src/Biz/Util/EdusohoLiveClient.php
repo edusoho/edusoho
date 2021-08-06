@@ -164,7 +164,7 @@ class EdusohoLiveClient
 
     public function uploadCallbackUrl($url)
     {
-        return $this->createCloudApi('root')->post('liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
+        return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
     }
 
     protected function createCloudApi($server)
