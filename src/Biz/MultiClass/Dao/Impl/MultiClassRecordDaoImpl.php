@@ -9,6 +9,11 @@ class MultiClassRecordDaoImpl extends AdvancedDaoImpl implements MultiClassRecor
 {
     protected $table = 'multi_class_record';
 
+    public function getRecordBySign($sign)
+    {
+        return $this->getByFields(['sign' => $sign]);
+    }
+
     public function declares()
     {
         return [
@@ -17,6 +22,7 @@ class MultiClassRecordDaoImpl extends AdvancedDaoImpl implements MultiClassRecor
             'conditions' => [
                 'id = :id',
                 'user_id = :userId',
+                'sign = :sign',
                 'multi_class_id = :multiClassId',
             ],
         ];

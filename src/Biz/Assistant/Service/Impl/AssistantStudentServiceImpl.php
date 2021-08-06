@@ -205,7 +205,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
             $originRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
             $originRelations = ArrayToolkit::index($originRelations, 'studentId');
-            $this->getAssistantStudentDao()->updateMultiClassStudentsGroup($multiClassId, ['groupId' => $groupId, 'studentIds' =>$studentIds]);
+            $this->getAssistantStudentDao()->updateMultiClassStudentsGroup($multiClassId, ['groupId' => $groupId, 'studentIds' => $studentIds]);
             $this->batchCreateRecords($multiClassId, $studentIds, $originRelations);
             $this->batchUpdateGroupStudentNum($multiClassId, array_merge([$groupId], ArrayToolkit::column($originRelations, 'group_id')));
 
@@ -219,7 +219,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function batchUpdateGroupStudentNum($multiClassId, $groupIds)
     {
-        $groupIds = array_unique($groupIds);
+        $groupIds = array_values(array_unique($groupIds));
         $groupStudentNum = $this->getAssistantStudentDao()->countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds);
         $groupStudentNum = ArrayToolkit::index($groupStudentNum, 'groupId');
 
@@ -243,7 +243,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
                 'user_id' => $studentId,
                 'multi_class_id' => $multiClassId,
                 'data' => json_encode(['title' => '变更分组', 'message' => sprintf('原分组id：%s, 变更后分组id：%s', $originRelations[$studentId]['group_id'], $currentRelations[$studentId]['group_id'])]),
-                'sign' => $this->getMultiClassRecordService()->mackSign(),
+                'sign' => $this->getMultiClassRecordService()->makeSign(),
             ];
         }
 

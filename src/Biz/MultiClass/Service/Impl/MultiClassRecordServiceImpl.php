@@ -5,12 +5,19 @@ namespace Biz\MultiClass\Service\Impl;
 use Biz\BaseService;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassRecordService;
+use Ramsey\Uuid\Uuid;
 
 class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecordService
 {
-    public function mackSign()
+    public function makeSign()
     {
-        return sha1(uniqid(mt_rand(), true));
+        $sign = time() . '_' . Uuid::uuid4();
+        $record = $this->getMultiClassRecordDao()->getRecordBySign($sign);
+        if ($record){
+            $sign = $this->makeSign();
+        }
+
+        return $sign;
     }
 
     /**
@@ -18,6 +25,6 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
      */
     protected function getMultiClassRecordDao()
     {
-        return $this->createDao('MultiClass:MultiClassRecordDa');
+        return $this->createDao('MultiClass:MultiClassRecordDao');
     }
 }
