@@ -237,6 +237,7 @@ user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
+user.fields.mobile_simple_label: 'Phone'
 user.fields.profile_mobile_label: Phone(from personal data)
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
