@@ -10,6 +10,9 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Dao\MultiClassGroupDao;
+use Biz\MultiClass\Dao\MultiClassRecordDao;
+use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\System\Service\LogService;
 
 class AssistantStudentServiceImpl extends BaseService implements AssistantStudentService
@@ -193,6 +196,81 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $conditions['userIds'] = !empty($conditions['userIds']) ? array_intersect($studentIds, $conditions['userIds']) : $studentIds;
 
         return $conditions;
+    }
+
+    public function batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId)
+    {
+        try {
+            $this->beginTransaction();
+
+            $originRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
+            $originRelations = ArrayToolkit::index($originRelations, 'studentId');
+            $this->getAssistantStudentDao()->updateMultiClassStudentsGroup($multiClassId, ['groupId' => $groupId, 'studentIds' => $studentIds]);
+            $this->batchCreateRecords($multiClassId, $studentIds, $originRelations);
+            $this->batchUpdateGroupStudentNum($multiClassId, array_merge([$groupId], ArrayToolkit::column($originRelations, 'group_id')));
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('batchUpdateStudentsGroup:'.$e->getMessage(), ['multiClassId' => $multiClassId, 'studentIds' => $studentIds, 'groupId' => $groupId]);
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    private function batchUpdateGroupStudentNum($multiClassId, $groupIds)
+    {
+        $groupIds = array_values(array_unique($groupIds));
+        $groupStudentNum = $this->getAssistantStudentDao()->countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds);
+        $groupStudentNum = ArrayToolkit::index($groupStudentNum, 'groupId');
+
+        $updateRecords = [];
+        foreach ($groupIds as $groupId) {
+            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ? $groupStudentNum[$groupId]['studentNum'] : 0];
+        }
+
+        return $this->getMultiClassGroupDao()->batchUpdate($groupIds, $updateRecords);
+    }
+
+    private function batchCreateRecords($multiClassId, $studentIds, $originRelations)
+    {
+        $currentRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
+        $currentRelations = ArrayToolkit::index($currentRelations, 'studentId');
+
+        $records = [];
+        foreach ($studentIds as $studentId) {
+            $records[] = [
+                'user_id' => $studentId,
+                'multi_class_id' => $multiClassId,
+                'data' => json_encode(['title' => '变更分组', 'message' => sprintf('原分组id：%s, 变更后分组id：%s', $originRelations[$studentId]['group_id'], $currentRelations[$studentId]['group_id'])]),
+                'sign' => $this->getMultiClassRecordService()->makeSign(),
+            ];
+        }
+
+        return $this->getMultiClassRecordDao()->batchCreate($records);
+    }
+
+    /**
+     * @return MultiClassGroupDao
+     */
+    private function getMultiClassGroupDao()
+    {
+        return $this->createDao('MultiClass:MultiClassGroupDao');
+    }
+
+    /**
+     * @return MultiClassRecordDao
+     */
+    private function getMultiClassRecordDao()
+    {
+        return $this->createDao('MultiClass:MultiClassRecordDao');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    private function getMultiClassRecordService()
+    {
+        return $this->createService('MultiClass:MultiClassRecordService');
     }
 
     public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
