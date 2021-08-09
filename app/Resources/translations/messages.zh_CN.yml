@@ -5928,6 +5928,7 @@ admin.setting.navigation.tips: >
   <p>题库练习列表页：域名/exercise/explore</p>
   <p>课程分类：域名/course/explore/分类编码</p>
   <p>资讯栏目：域名/article/栏目编码</p>
+  <p>教师资质公示：域名/teacher/qualification</p>
 admin.setting.navigation.top.add: 新增顶部导航
 admin.setting.navigation.top.edit: 编辑顶部导航
 admin.setting.navigation.foot.add: 新增底部导航
@@ -8318,6 +8319,10 @@ admin.invite_setting.rewards_count_required: 请输入 1-1000 的数字
 admin.invite_setting.mobile_required: 请输入手机号
 admin.invite_setting.mobile_for_receive: 接收提醒的手机号：
 admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时生效，且短信通知将扣除网校云短信的条数
+
+admin.teacher_qualification.enable: 教师资质公示功能
+admin.teacher_qualification.tips: 该功能在EduSoho官方主题下生效，第三方主题暂不支持。
+admin.teacher_qualification.upload_url: 前往上传教师资质
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.find: 发现页设置
