@@ -30,5 +30,7 @@ interface AssistantStudentService
 
     public function findByMultiClassId($multiClassId);
 
+    public function findByMultiClassIds($multiClassIds);
+
     public function findByMultiClassIdAndGroupId($multiClassId, $groupId);
 }

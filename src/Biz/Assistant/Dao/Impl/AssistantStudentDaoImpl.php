@@ -69,6 +69,18 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, array_merge([$multiClassId], $studentIds)) ?: [];
     }
 
+    public function findByMultiClassIds($multiClassIds)
+    {
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($multiClassIds) - 1).'?';
+        $sql = "SELECT *,concat(multiClassId, '_', studentId) as unitKey FROM {$this->table()} WHERE multiClassId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $multiClassIds) ?: [];
+    }
+
     public function declares()
     {
         return [
