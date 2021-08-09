@@ -47,6 +47,8 @@ class FileExtension extends \Twig_Extension
             'png' => 'assets/img/file/image.png',
             'jpg' => 'assets/img/file/image.png',
             'xlsx' => 'assets/img/file/xlsx.png',
+            'csv' => 'assets/img/file/xlsx.png',
+            'xls' => 'assets/img/file/xlsx.png',
             'file' => 'assets/img/file/file.png',
         ];
 
