@@ -23,7 +23,7 @@ class LiveStatisticsVisitorListExporter extends Exporter
     {
         return [
             'user.fields.username_label',
-            'user.fields.mobile_label',
+            'user.fields.mobile_simple_label',
             'user.fields.email_label',
             'course.live_statistics.first_join',
             'course.live_statistics.last_leave',

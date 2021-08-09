@@ -23,7 +23,7 @@ class LiveStatisticsCheckinListExporter extends Exporter
     {
         return [
             'user.fields.username_label',
-            'user.fields.mobile_label',
+            'user.fields.mobile_simple_label',
             'user.fields.email_label',
             'course.live_statistics.checkin_status',
         ];
