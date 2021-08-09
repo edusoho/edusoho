@@ -289,7 +289,7 @@ user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
 user.fields.username_label: 用户名
-user.fields.email_label: Email
+user.fields.email_label: 邮箱
 user.fields.truename_label: 姓名
 user.fields.gender_label: 性别
 user.fields.company_label: 公司

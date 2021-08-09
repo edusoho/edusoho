@@ -4,13 +4,19 @@
   <thead>
   <tr>
     <th>{{ 'user.fields.username_label'|trans }}</th>
+    <th>{{ 'user.fields.mobile_label'|trans }}</th>
+    <th>{{ 'user.fields.email_label'|trans }}</th>
     <th>{{ 'course.live_statistics.checkin_status'|trans }}</th>
   </tr>
   </thead>
   <tbody>
   {% for user in statistics %}
+    {% set student = (users[user.userId]) %}
+    {% set profile = (profiles[user.userId]) %}
     <tr>
       <td>{{ user.nickname|default('') }}</td>
+      <td>{{ profile.mobile|default('') }}</td>
+      <td>{{ student.email|default('') }}</td>
       <td>
         {% if user.checkin|default(0) %}
           {{ 'course.live_statistics.checkin_status.checked'|trans }}

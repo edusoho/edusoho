@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Course\Service\CourseService;
 use Biz\Live\Service\LiveStatisticsService;
@@ -11,19 +12,21 @@ class LiveStatisticsCheckinListExporter extends Exporter
 {
     public function buildCondition($conditions)
     {
-        return array(
+        return [
             'liveId' => $conditions['liveId'],
             'courseId' => $conditions['courseId'],
             'taskId' => $conditions['taskId'],
-        );
+        ];
     }
 
     public function getTitles()
     {
-        return array(
+        return [
             'user.fields.username_label',
+            'user.fields.mobile_label',
+            'user.fields.email_label',
             'course.live_statistics.checkin_status',
-        );
+        ];
     }
 
     public function canExport()
@@ -51,13 +54,19 @@ class LiveStatisticsCheckinListExporter extends Exporter
         $statistics = array_slice($statistics['data']['detail'], $start, $limit);
         $translator = $this->container->get('translator');
 
-        $data = array();
+        $data = [];
+
+        $userIds = ArrayToolkit::column($statistics, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($statistics as $user) {
-            $data[] = array(
+            $data[] = [
                 $user['nickname'],
+                $profiles[$user['userId']]['mobile'] ?: '',
+                $users[$user['userId']]['email'] ?: '',
                 $user['checkin'] ? $translator->trans('course.live_statistics.checkin_status.checked') : $translator->trans('course.live_statistics.checkin_status.not_checked'),
-            );
+            ];
         }
 
         return $data;
