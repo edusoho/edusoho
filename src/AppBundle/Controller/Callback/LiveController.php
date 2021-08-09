@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Callback;
 
-use AppBundle\Common\JWTAuth;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\LiveReplayService;
 use Firebase\JWT\JWT;
