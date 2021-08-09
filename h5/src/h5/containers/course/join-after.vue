@@ -150,7 +150,7 @@ export default {
       headBottom: 0,
       active: 0,
       scrollFlag: false,
-      tabs: ['课程学习', '问答', '话题', '笔记', '评价'],
+      tabs: ['目录', '问答', '话题', '笔记', '评价'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
