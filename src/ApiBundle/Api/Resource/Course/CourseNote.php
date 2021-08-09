@@ -17,8 +17,10 @@ class CourseNote extends AbstractResource
         if ('published' !== $course['status']) {
             throw CourseException::UNPUBLISHED_COURSE();
         }
+        $note = $this->getCourseNoteService()->getNote($noteId);
+        $this->getOCUtil()->single($note, ['userId']);
 
-        return $this->getCourseNoteService()->getNote($noteId);
+        return $note;
     }
 
     public function search(ApiRequest $request, $courseId)
@@ -31,6 +33,7 @@ class CourseNote extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $notes = $this->getCourseNoteService()->searchNotes($conditions, $orderBys, $offset, $limit);
         $count = $this->getCourseNoteService()->countCourseNotes($conditions);
+        $this->getOCUtil()->multiple($notes, ['userId']);
 
         return $this->makePagingObject($notes, $count, $offset, $limit);
     }

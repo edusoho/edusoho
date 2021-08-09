@@ -10,12 +10,23 @@ paths:
       responses:
         '200':
           description: '获取课程的评价 '
+  '/api/course/{courseId}/notes/{noteId}':
+    get:
+      tags:
+        - course
+      summary: 课程单个笔记获取接口
+      responses:
+        '200':
+          description: 单条笔记
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '@/components/schemas/course.note'
   /api/settings/signSecurity:
     get:
       tags:
         - setting
       summary: 获取接口加密设置
-      operationId: 8ed9f8d52a1a77b3fca95af0a358f86e
       responses:
         '200':
           description: 加密设置
@@ -28,7 +39,6 @@ paths:
       tags:
         - setting
       summary: 获取系统语言设置
-      operationId: da6717a0a0755cd98fdc224128d9ffe5
       responses:
         '200':
           description: 语言设置
@@ -41,7 +51,6 @@ paths:
       tags:
         - setting
       summary: 获取UGC设置
-      operationId: fbe2ddf171e61a81da3c90b382638095
       responses:
         '200':
           description: 全部UGC设置
@@ -54,7 +63,6 @@ paths:
       tags:
         - setting
       summary: 获取评价UGC设置
-      operationId: d9ee7b8abf0da7958fbbb7ad8f65ba87
       responses:
         '200':
           description: 评价UGC设置
@@ -67,7 +75,6 @@ paths:
       tags:
         - setting
       summary: 获取笔记UGC设置
-      operationId: eefcfd2c7a802749fd835d7a72d599e3
       responses:
         '200':
           description: 笔记UGC设置
@@ -80,7 +87,6 @@ paths:
       tags:
         - setting
       summary: 获取话题问答UGC设置
-      operationId: e1eeb36c0de6ddde545f22501c2b067a
       responses:
         '200':
           description: 话题问答UGC设置
@@ -93,7 +99,6 @@ paths:
       tags:
         - setting
       summary: 获取私信UGC设置
-      operationId: 401f4d03d6c0fc2923b2581dd54af864
       responses:
         '200':
           description: 私信UGC设置
@@ -106,7 +111,6 @@ paths:
       tags:
         - setting
       summary: 任务学习设置
-      operationId: 25c87099a1649eccd35f73d470085874
       responses:
         '200':
           description: 任务学习设置
@@ -116,6 +120,13 @@ paths:
                 $ref: '#/components/schemas/setting.task_learning_config'
 components:
   schemas:
+    course.note:
+      title: course.note
+      description: 课程笔记
+      properties:
+        '':
+          $ref: '#/components/schemas/user.simple'
+      type: object
     setting.signSecurity:
       title: setting.signSecurity
       description: 接口安全加密设置信息
@@ -245,7 +256,18 @@ components:
                 - reject_current
           type: object
       type: object
+    user.simple:
+      title: user.simple
+      description: Simple用户对象
+      properties:
+        id:
+          description: 用户ID
+          type: integer
+      type: object
 tags:
+  -
+    name: course
+    description: 课程接口集合
   -
     name: setting
     description: 系统设置接口集合
