@@ -6967,6 +6967,9 @@ admin.invite_setting.rewards_count_required: Please enter a number from 1-1000
 admin.invite_setting.mobile_required: Phone number required
 admin.invite_setting.mobile_for_receive: Phone number to receive reminders
 admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
+admin.teacher_qualification.enable: Teacher Qualification Publicity Function
+admin.teacher_qualification.tips: This feature is effective under the official EduSoho theme, third-party themes are not supported at the moment.
+admin.teacher_qualification.upload_url: Go to Upload Teacher Qualifications
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.site: 'Mobile settings'

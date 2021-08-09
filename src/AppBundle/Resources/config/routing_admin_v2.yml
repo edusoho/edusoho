@@ -1997,6 +1997,10 @@ admin_v2_invite_set:
     path:  /setting/invite
     defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:inviteSet }
 
+admin_v2_teacher_qualification_set:
+    path: /setting/teacher_qualification
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:teacherQualificationSet }
+
 admin_v2_message_open_set:
     path:  /setting/message-setting
     defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:messageOpen }

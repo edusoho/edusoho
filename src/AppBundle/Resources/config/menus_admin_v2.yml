@@ -1335,6 +1335,8 @@ admin_v2:
                                     name: admin_v2.system.operation.group_tab
                                 admin_v2_invite_set:
                                     name: admin_v2.system.operation.invite_tab
+                                admin_v2_teacher_qualification_set:
+                                    name: admin_v2.system.teacher_qualification_tab
 #                                admin_v2_message_send_set:
 #                                    name: admin_v2.system.operation.message_send_tab
 #                                admin_v2_message_open_set:
