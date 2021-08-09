@@ -44,7 +44,8 @@ function addStyleResource(rule) {
       .loader('style-resources-loader')
       .options({
         patterns: [
-          resolve('./src/styles/mixins.scss')
+          resolve('./src/styles/mixins.scss'),
+          resolve('./src/styles/variables.scss'),
         ]
       })
 }

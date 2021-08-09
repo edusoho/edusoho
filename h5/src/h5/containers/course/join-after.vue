@@ -3,8 +3,7 @@
     <detail-head :course-set="details.courseSet" />
 
     <van-tabs
-      id="tabs"
-      ref="tabs"
+      class="tabs"
       v-model="active"
       :class="tabFixed ? 'isFixed' : ''"
     >
@@ -13,16 +12,21 @@
 
     <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-show="active == 1">
-        <div
-          id="progress-bar"
-          :class="['progress-bar', tabFixed ? 'progress-bar-fix' : '']"
-        >
-          <div class="progress-bar__content">
-            <div :style="{ width: progress }" class="progress-bar__rate" />
+      <div v-show="active == 0">
+
+        <div class="course-info" @click="gotoGoodsPage">
+          <div class="course-info__left">
+            <div class="title">课程标题</div>
+            <div class="learning-progress">
+              <div class="learning-progress__bar" :style="{ width: progress }" />
+              <div class="learning-progress__text">
+                {{ progress }}
+              </div>
+            </div>
           </div>
-          <div class="progress-bar__text">{{ progress }}</div>
+          <van-icon name="arrow" v-if="details.goodsId" />
         </div>
+
         <!-- 助教 -->
         <div
           v-if="details.assistant.weChatQrCode"
@@ -70,7 +74,7 @@
         <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
       </div>
 
-      <div v-show="active == 0">
+      <div v-show="active == 2">
         <!-- 课程计划 -->
         <detail-plan @switchPlan="showDialog" />
 
@@ -92,7 +96,6 @@
         <div class="segmentation" />
       </div>
     </div>
-
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
@@ -108,12 +111,12 @@
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
-    <e-footer
+    <!-- <e-footer
       @click.native="gotoGoodsPage"
       v-if="active == 0 && this.details.goodsId"
     >
       {{ $t('courseLearning.viewDetails') }}
-    </e-footer>
+    </e-footer> -->
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
@@ -134,18 +137,20 @@ import * as types from '@/store/mutation-types.js';
 
 export default {
   inheritAttrs: true,
+
   props: {
     details: {
       type: Object,
-      value: () => {},
-    },
+      value: () => {}
+    }
   },
+
   data() {
     return {
       headBottom: 0,
-      active: 1,
+      active: 0,
       scrollFlag: false,
-      tabs: ['courseLearning.intro', 'courseLearning.catalogue'],
+      tabs: ['课程学习', '问答', '话题', '笔记', '评价'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
@@ -163,24 +168,30 @@ export default {
       assistantShow: false,
     };
   },
+
   mixins: [collectUserInfo],
+
   computed: {
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
       currentJoin: state => state.currentJoin,
     }),
+
     ...mapState(['user']),
+
     progress() {
       if (!Number(this.details.publishedTaskNum)) return '0%';
-
       return parseInt(this.details.progress.percent) + '%';
     },
+
     summary() {
       return this.details.summary || this.details.courseSet.summary;
     },
+
     isClassCourse() {
       return Number(this.details.parentId);
     },
+
     currentTypeText() {
       return this.details.classroom ? '班级' : '课程';
     },
@@ -188,11 +199,11 @@ export default {
     isWeixin() {
       const ua = navigator.userAgent.toLowerCase();
       return ua.match(/MicroMessenger/i) == 'micromessenger';
-    },
+    }
   },
   watch: {
     selectedPlanId: function(val, oldVal) {
-      this.active = 1;
+      this.active = 0;
     },
     currentJoin: {
       handler(val, oldVal) {
@@ -264,6 +275,9 @@ export default {
     }),
 
     gotoGoodsPage() {
+      // 班级课程，不存在 goodsId
+      if (!this.details.goodsId) return;
+
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
         query: {
@@ -496,3 +510,65 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.tabs {
+  box-shadow: 0px 2px 6px 0px rgba(49, 49, 49, 0.1);
+
+  /deep/ .van-tabs__wrap {
+    height: vw(56);
+  }
+}
+
+.course-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: vw(16);
+  padding-left: vw(16);
+  height: vw(56);
+  border-bottom: vw(8) solid #f5f5f5;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+
+    .title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      line-height: 20px;
+    }
+
+    .learning-progress {
+      position: relative;
+      width: vw(250);
+      height: vw(8);
+      background: #f5f5f5;
+      border-radius: 4px;
+
+      &__bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 110px;
+        height: 8px;
+        background: $primary-color;
+        border-radius: 4px;
+      }
+
+      &__text {
+        position: absolute;
+        right: vw(-8);
+        top: 50%;
+        transform: translate(100%, -50%);
+        font-size: 12px;
+        color: $primary-color;
+        line-height: 16px;
+      }
+    }
+  }
+}
+</style>
