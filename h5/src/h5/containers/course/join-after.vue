@@ -16,7 +16,7 @@
 
         <div class="course-info" @click="gotoGoodsPage">
           <div class="course-info__left">
-            <div class="title">课程标题</div>
+            <div class="title text-overflow">{{ details.courseSet && details.courseSet.title }}</div>
             <div class="learning-progress">
               <div class="learning-progress__bar" :style="{ width: progress }" />
               <div class="learning-progress__text">
@@ -28,46 +28,29 @@
         </div>
 
         <!-- 助教 -->
-        <div
-          v-if="details.assistant.weChatQrCode"
-          class="assistant-show clearfix"
-        >
-          <div class="assistant-show__text" @click="showAssistant">
-            <i class="iconfont icon-weixin1"></i>
-            <span class="text">
+        <div class="assistant" v-if="details.assistant && details.assistant.weChatQrCode">
+          <div class="assistant-btn" @click="showAssistant">
+            <div class="assistant-btn__text">
+              <i class="iconfont icon-weixin1"></i>
               {{ $t('courseLearning.addTeachingAssistantWeChat') }}
-            </span>
+            </div>
+
             <van-icon class="arrow-icon" name="arrow" />
           </div>
 
-          <!-- 助教弹出框 -->
           <van-popup
-            class="assistant-show__content"
+            class="assistant-info"
             v-model="assistantShow"
             position="bottom"
             closeable
             round
           >
-            <img
-              class="avatar"
-              :src="details.assistant.avatar.middle"
-              :alt="$t('courseLearning.picture')"
-            />
-            <p class="name">
-              {{ details.assistant.nickname }}
-            </p>
-            <p class="text">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
-            <img
-              class="wechat"
-              :src="details.assistant.weChatQrCode"
-              :alt="$t('courseLearning.qRCodePicture')"
-            />
-            <div class="tips" v-if="isWeixin">
-              {{ $t('courseLearning.longPressThePicture') }}
-            </div>
-            <div class="tips" v-else>
-              {{ $t('courseLearning.longPressThePicture2') }}
-            </div>
+            <img class="avatar" :src="details.assistant.avatar.middle" :alt="$t('courseLearning.picture')" />
+            <p class="nickname">{{ details.assistant.nickname }}</p>
+            <p class="desc">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
+            <img class="wechat" :src="details.assistant.weChatQrCode" :alt="$t('courseLearning.qRCodePicture')" />
+            <div class="tips" v-if="isWeixin">{{ $t('courseLearning.longPressThePicture') }}</div>
+            <div class="tips" v-else>{{ $t('courseLearning.longPressThePicture2') }}</div>
           </van-popup>
         </div>
 
@@ -75,25 +58,7 @@
       </div>
 
       <div v-show="active == 2">
-        <!-- 课程计划 -->
-        <detail-plan @switchPlan="showDialog" />
 
-        <div class="segmentation" />
-        <!-- 课程介绍 -->
-        <e-panel :title="$t('courseLearning.intro')">
-          <div v-html="summary" />
-        </e-panel>
-        <div class="segmentation" />
-
-        <!-- 教师介绍 -->
-        <teacher :teacher-info="details.teachers" class="teacher" />
-        <div class="segmentation" />
-
-        <!-- 评价 -->
-        <reviews :details="details" v-if="show_course_review == 1" />
-        <div class="segmentation" />
-        <div class="segmentation" />
-        <div class="segmentation" />
       </div>
     </div>
     <!-- 个人信息表单填写 -->
@@ -111,12 +76,6 @@
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
-    <!-- <e-footer
-      @click.native="gotoGoodsPage"
-      v-if="active == 0 && this.details.goodsId"
-    >
-      {{ $t('courseLearning.viewDetails') }}
-    </e-footer> -->
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
@@ -124,10 +83,7 @@
 <script>
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
-import DetailPlan from './detail/plan';
-import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
-import Reviews from '@/components/reviews';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
@@ -259,11 +215,8 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     Directory,
     DetailHead,
-    DetailPlan,
-    Teacher,
     afterjoinDirectory,
-    infoCollection,
-    Reviews,
+    infoCollection
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -536,10 +489,11 @@ export default {
     height: 100%;
 
     .title {
-      font-size: 14px;
+      width: vw(300);
+      font-size: vw(14);
       font-weight: 500;
       color: #333;
-      line-height: 20px;
+      line-height: vw(20);
     }
 
     .learning-progress {
@@ -553,8 +507,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        width: 110px;
-        height: 8px;
+        height: vw(8);
         background: $primary-color;
         border-radius: 4px;
       }
@@ -564,10 +517,65 @@ export default {
         right: vw(-8);
         top: 50%;
         transform: translate(100%, -50%);
-        font-size: 12px;
+        font-size: vw(12);
         color: $primary-color;
-        line-height: 16px;
+        line-height: vw(16);
       }
+    }
+  }
+}
+
+.assistant {
+  .assistant-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 vw(16);
+    height: vw(32);
+    border-bottom: 1px solid #f5f5f5;
+
+    &__text {
+      display: flex;
+      align-items: center;
+      width: vw(300);
+      font-size: 12px;
+      color: #666;
+      line-height: 16px;
+
+      i {
+        margin-right: vw(4);
+        color: #03c777;
+      }
+    }
+  }
+
+  .assistant-info {
+    text-align: center;
+
+    .avatar {
+      width: 20%;
+      height: 20%;
+      margin-top: vw(40);
+      margin-top: vw(24);
+      border-radius: 50%;
+    }
+
+    .nickname {
+      padding-top: vw(10);
+      color: #bbb;
+    }
+
+    .desc {
+      padding-top: vw(10);
+    }
+
+    .wechat {
+      margin: vw(20) 0 vw(10);
+    }
+
+    .tips {
+      margin-bottom: vw(10);
+      font-size: vw(14);
     }
   }
 }
