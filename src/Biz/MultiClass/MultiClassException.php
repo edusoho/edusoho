@@ -42,6 +42,8 @@ class MultiClassException extends AbstractException
 
     const FORBIDDEN_CLOSE_MULTI_CLASS_COURSE = 5008117;
 
+    const GROUP_NOT_FOUND = 4048118;
+
     public $messages = [
         5008101 => 'exception.multi_class.multi_class_product_exist',
         4048102 => 'exception.multi_class.product_not_found',
@@ -60,5 +62,6 @@ class MultiClassException extends AbstractException
         5008115 => 'exception.multi_class.multi_teacher_cannot_be_assistant',
         5008116 => 'exception.multi_class.forbidden_delete_course',
         5008117 => 'exception.multi_class.forbidden_close_course',
+        4048118 => 'exception.multi_class.group_not_found',
     ];
 }

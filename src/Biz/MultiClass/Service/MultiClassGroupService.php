@@ -7,4 +7,6 @@ interface MultiClassGroupService
     public function findGroupsByIds($ids);
 
     public function findGroupsByMultiClassId($multiClassId);
+
+    public function getById($id);
 }
