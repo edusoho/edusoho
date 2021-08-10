@@ -7,7 +7,7 @@
     <div class="col-sm-4">
       {% set selectOptions = {6: 6, 12: 12} %}
       <select class="form-control width-input-large" name="count">
-        {{ select_options(selectOptions, config.count|default(4)) }}
+        {{ select_options(selectOptions, config.count|default(12)) }}
       </select>
     </div>
   </div>
