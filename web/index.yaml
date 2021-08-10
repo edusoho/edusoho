@@ -21,7 +21,7 @@ paths:
           content:
             application/vnd.edusoho.v2+json:
               schema:
-                $ref: '@/components/schemas/course.note'
+                $ref: '#/components/schemas/course.note'
   /api/settings/signSecurity:
     get:
       tags:
@@ -124,7 +124,39 @@ components:
       title: course.note
       description: 课程笔记
       properties:
-        '':
+        id:
+          title: id
+          description: ID
+          type: integer
+        userId:
+          title: userId
+          description: userId
+          type: integer
+        taskId:
+          title: taskId
+          description: taskId
+          type: integer
+        content:
+          title: content
+          description: content
+          type: string
+        length:
+          title: length
+          description: length
+          type: integer
+        likeNum:
+          title: likeNum
+          description: likeNum
+          type: integer
+        createdTime:
+          title: createdTime
+          description: 创建时间
+          type: datetime
+        updatedTime:
+          title: updatedTime
+          description: 更新时间
+          type: datetime
+        user:
           $ref: '#/components/schemas/user.simple'
       type: object
     setting.signSecurity:
@@ -262,6 +294,31 @@ components:
       properties:
         id:
           description: 用户ID
+          type: integer
+        nickname:
+          description: nickname
+          type: string
+        title:
+          description: 头衔
+          type: string
+        uuid:
+          description: 用户UUID
+          type: string
+        destroyed:
+          description: 是都已注销，0|1
+          type: integer
+        avatar:
+          description: 是都已注销，0|1
+          properties:
+            small:
+              description: 小图
+              type: string
+            middle:
+              description: 中图
+              type: string
+            large:
+              description: 大图
+              type: string
           type: integer
       type: object
 tags:
