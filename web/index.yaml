@@ -35,7 +35,7 @@ paths:
               schema:
                 properties:
                   data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
-                  paging: { properties: { total: { type: integer }, offset: { type: integer }, limit: { type: integer } }, type: object }
+                  paging: { properties: { total: { type: integer, default: 0 }, offset: { type: integer, default: 0 }, limit: { type: integer, default: 10 } }, type: object }
                 type: object
   /api/settings/signSecurity:
     get:

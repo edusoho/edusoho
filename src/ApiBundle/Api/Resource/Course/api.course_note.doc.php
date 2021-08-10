@@ -32,9 +32,9 @@
  *                 ),
  *                 @OA\Property(
  *                     property="paging",
- *                     @OA\Property(property="total", type="integer"),
- *                     @OA\Property(property="offset", type="integer"),
- *                     @OA\Property(property="limit", type="integer")
+ *                     @OA\Property(property="total", type="integer",default=0),
+ *                     @OA\Property(property="offset", type="integer", default=0),
+ *                     @OA\Property(property="limit", type="integer", default=10)
  *                 ),
  *             ),
  *         )
