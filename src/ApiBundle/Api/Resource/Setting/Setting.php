@@ -20,7 +20,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale',
+        'consult', 'wechat_message_subscribe', 'locale', 'qualification',
     ];
 
     public static function convertUnderline($str)
@@ -70,6 +70,16 @@ class Setting extends AbstractResource
         return [
             'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
             'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
+    }
+
+    public function getQualification()
+    {
+        $qualification = $this->getSettingService()->get('qualification', []);
+        $enable = $qualification['qualification_enabled'] ?: 0;
+
+        return [
+            'qualification' => intval($enable),
         ];
     }
 
@@ -289,7 +299,7 @@ class Setting extends AbstractResource
 
         $result = [
             'auth' => [
-                'register_mode' => $authSetting['register_enabled'] === 'closed' ? 'closed' :$authSetting['register_mode'],
+                'register_mode' => 'closed' === $authSetting['register_enabled'] ? 'closed' : $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
             ],
@@ -403,7 +413,7 @@ class Setting extends AbstractResource
     public function getRegister($request = null)
     {
         $registerSetting = $this->getSettingService()->get('auth', ['register_enabled' => 'closed', 'register_mode' => 'mobile', 'email_enabled' => 'closed']);
-        $registerMode = $registerSetting['register_enabled'] === 'closed' ? 'closed' : $registerSetting['register_mode'];
+        $registerMode = 'closed' === $registerSetting['register_enabled'] ? 'closed' : $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
         $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
