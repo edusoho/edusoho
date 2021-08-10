@@ -44,14 +44,15 @@ class Teacher extends AbstractResource
 
         $teacherQualifications = $this->getTeacherQualificationService()->findByUserIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
+        $userInfo = [];
         foreach ($users as $userId => $user) {
             $qualification = $teacherQualifications[$userId];
             $qualification['truename'] = $profiles[$userId]['truename'] ?: '';
-            $users[$userId]['qualification'] = $qualification;
+            $user['qualification'] = $qualification;
+            $userInfo[] = $user;
         }
 
-        return $users;
+        return $userInfo;
     }
 
     /**
