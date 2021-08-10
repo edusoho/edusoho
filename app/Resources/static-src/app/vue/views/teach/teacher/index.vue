@@ -34,7 +34,8 @@
       <template slot="action" slot-scope="item">
         <a-button type="link" @click="edit(item.id)">查看</a-button>
 
-        <a-dropdown>
+        <!-- v-if="showEditorSualification" 判断是否可以编辑教师资质，后续新增，把判断给编辑教师资质按钮即可 -->
+        <a-dropdown v-if="showEditorSualification">
           <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
             <a-icon type="caret-down" />
           </a>
@@ -97,7 +98,7 @@
 <script>
 import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, UserProfiles } from "common/vue/service/index.js";
+import { Teacher, UserProfiles, Setting } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
 import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
@@ -147,11 +148,14 @@ export default {
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
       qualificationVisible: false, // 编辑教师资质
-      currentTeacherUserId: 0 // 用于教师上传教师资质的 userId
+      currentTeacherUserId: 0, // 用于教师上传教师资质的 userId
+      showEditorSualification: false // 后台是否开启了教师资质功能
     };
   },
 
-  created() {
+  async created() {
+    const status = await Setting.get('qualification');
+    this.showEditorSualification = Boolean(status.qualification);
     this.fetchTeacher();
   },
 
