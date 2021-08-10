@@ -87,9 +87,8 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
             return [];
         }
 
-        $marks = str_repeat('?,', count($multiClassIds) - 1) . '?';
+        $marks = str_repeat('?,', count($multiClassIds) - 1).'?';
         $sql = "SELECT *,concat(multiClassId, '_', studentId) as unitKey FROM {$this->table()} WHERE multiClassId IN ({$marks})";
-
     }
 
     public function updateMultiClassStudentsGroup($multiClassId, $conditions)
