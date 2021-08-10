@@ -61,6 +61,9 @@ class OperationSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $qualificationSetting = $request->request->all();
 
+            if ($qualificationSetting['qualification_enabled'] === 0) {
+
+            }
             $this->getSettingService()->set('qualification', $qualificationSetting);
 
             return $this->createJsonResponse(true);

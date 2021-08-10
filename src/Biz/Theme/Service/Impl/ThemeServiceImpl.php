@@ -173,6 +173,35 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->editThemeConfig($currentTheme['name'], $config);
     }
 
+    public function cancelConfirmConfigByName($name, $id)
+    {
+        $theme = $this->getThemeConfigByName($name);
+        $confirmConfig = $theme['confirmConfig'] ?: [];
+        if (isset($confirmConfig[$id])) {
+            unset($confirmConfig[$id]);
+        }
+        $theme['confirmConfig'] = $confirmConfig;
+        $theme['updatedTime'] = time();
+        $theme['updatedUserId'] = $this->getCurrentUser()->id;
+
+        return $this->getThemeConfigDao()->updateThemeConfigByName($name, $theme);
+    }
+
+    public function reloadConfirmConfigByName($name, $id)
+    {
+        $theme = $this->getThemeConfigByName($name);
+        $config  = $theme['config'] ?: [];
+        $confirmConfig = $theme['config'] ?: [];
+        if (isset($config[$id])) {
+            $confirmConfig[$id] = $config[$id];
+        }
+        $theme['confirmConfig'] = $confirmConfig;
+        $theme['updatedTime'] = time();
+        $theme['updatedUserId'] = $this->getCurrentUser()->id;
+
+        return $this->getThemeConfigDao()->updateThemeConfigByName($name, $theme);
+    }
+
     public function changeTheme($theme)
     {
         if (empty($theme)) {
