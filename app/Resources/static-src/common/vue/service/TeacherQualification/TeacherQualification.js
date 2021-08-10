@@ -11,5 +11,10 @@ export const TeacherQualification = {
   // 教师资质展示页
   async search(params) {
     return apiClient.get(`${baseUrl}`, { params })
+  },
+
+  // 教师资质信息
+  async get(params) {
+    return apiClient.get(`${baseUrl}/${params.user_id}`)
   }
 }
