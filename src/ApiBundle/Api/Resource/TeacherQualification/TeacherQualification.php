@@ -19,6 +19,24 @@ class TeacherQualification extends AbstractResource
         'code',
     ];
 
+    public function get(ApiRequest $request, $userId)
+    {
+        if (!$this->isTeacher($userId)) {
+            throw TeacherQualificationException::TEACHER_QUALIFICATION_NOT_TEACHER();
+        }
+
+        $qualification = $this->getTeacherQualificationService()->getByUserId($userId);
+
+        if ($qualification['avatar']) {
+            $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+        }
+
+        $profile = $this->getUserService()->getUserProfile($userId);
+        $qualification['truename'] = $profile['truename'] ?: '';
+
+        return $qualification;
+    }
+
     public function add(ApiRequest $request)
     {
         $qualification = $this->getSettingService()->get('qualification', []);
@@ -30,8 +48,7 @@ class TeacherQualification extends AbstractResource
 
         $fields = $request->request->all();
 
-        $user = $this->getUserService()->getUser($fields['userId']);
-        if (!in_array('ROLE_TEACHER', $user['roles'])) {
+        if (!$this->isTeacher($fields['userId'])) {
             throw TeacherQualificationException::TEACHER_QUALIFICATION_NOT_TEACHER();
         }
 
@@ -54,6 +71,13 @@ class TeacherQualification extends AbstractResource
         $this->getOCUtil()->multiple($qualification, ['user_id'], 'profile', 'profile');
 
         return $this->makePagingObject($qualification, $total, $offset, $limit);
+    }
+
+    protected function isTeacher($userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        return in_array('ROLE_TEACHER', $user['roles']);
     }
 
     /**
