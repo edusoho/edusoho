@@ -10,7 +10,6 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
-use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -82,14 +81,6 @@ class MultiClassInspection extends AbstractResource
     private function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->service('Activity:ActivityService');
     }
 
     /**
