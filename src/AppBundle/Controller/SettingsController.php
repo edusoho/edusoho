@@ -96,7 +96,9 @@ class SettingsController extends BaseController
 
     public function qualificationAction()
     {
-        return $this->render('settings/qualification.html.twig');
+        return $this->render('settings/qualification.html.twig',[
+            'user_id' => $this->getCurrentUser()->getId()
+        ]);
     }
 
     public function nicknameAction(Request $request)
