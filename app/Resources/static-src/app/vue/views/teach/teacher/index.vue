@@ -300,7 +300,12 @@ export default {
       this.qualificationVisible = true;
     },
 
-    handleCancelEditQualification() {
+    handleCancelEditQualification(qualification) {
+      _.forEach(this.pageData, item => {
+        if (item.id == qualification.user_id) {
+          item.qualification = qualification;
+        }
+      });
       this.qualificationVisible = false;
     }
   },

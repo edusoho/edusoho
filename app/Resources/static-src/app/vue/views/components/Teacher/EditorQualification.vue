@@ -95,12 +95,13 @@ export default {
 
   methods: {
     setFormValue() {
+      const { truename, avatarFileId, code, url } = this.editInfo;
       _.assign(this.form, {
-        truename: this.editInfo.truename,
-        avatarFileId: '',
-        code: this.editInfo.code
+        truename: truename,
+        avatarFileId: avatarFileId,
+        code: code
       });
-      this.file = this.editInfo.avatar;
+      this.file = url;
     },
 
     onSubmit() {
@@ -108,7 +109,7 @@ export default {
         if (valid) {
           const result = await TeacherQualification.add({ ...this.form, userId: this.userId });
           this.$message.success('保存成功');
-          this.$emit('handle-cancel-modal');
+          this.$emit('handle-cancel-modal', result);
         }
       });
     },
