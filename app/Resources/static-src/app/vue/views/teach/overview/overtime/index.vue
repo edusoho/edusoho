@@ -2,17 +2,35 @@
   <aside-layout :breadcrumbs="[{ name: '超时未批阅作业' }]">
     <a-spin :spinning="getListLoading">
       <a-table :columns="columns" :data-source="overTimeTaskList" :pagination="paging" @change="change" rowKey="id">
-        <template slot="createdTime" slot-scope="createdTime">
-          {{ $dateFormat(createdTime, 'YYYY-MM-DD HH:mm') }}
+        <template slot="userInfo" slot-scope="userInfo">
+          <a href="javascript:;" @click="viewStudentInfo(userInfo.id)">{{userInfo.nickname}}</a>
+        </template>
+        <template slot="multiClass" slot-scope="multiClass">
+          <a href="javascript:;" @click="goToMultiClassManage(multiClass.id)">{{multiClass.title}}</a>
+        </template>
+        <template slot="activity" slot-scope="activity">
+          <span>{{activity.title}}</span>
+          <a-tag v-if="activity.mediaType === 'testpaper'" color="#fb8d4d" style="margin-left:8px">考</a-tag>
+        </template>
+        <template slot="end_time" slot-scope="end_time">
+          {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
         </template>
       </a-table>
+      <a-modal title="学员详细信息" :visible="viewStudentInfoVisible" @cancel="close">
+        <userInfoTable :user="modalShowUser" />
+        <template slot="footer">
+          <a-button key="back" @click="close"> 关闭 </a-button>
+        </template>
+      </a-modal>
     </a-spin>
   </aside-layout>
 </template>
 
 <script>
 import AsideLayout from "app/vue/views/layouts/aside.vue";
-import { OverView } from 'common/vue/service';
+import userInfoTable from "app/vue/views/components/userInfoTable";
+
+import { OverView, UserProfiles } from "common/vue/service";
 import { Card } from "ant-design-vue";
 
 const columns = [
@@ -25,93 +43,62 @@ const columns = [
   },
   {
     title: "课时名称",
-    dataIndex: "multiClass",
+    dataIndex: "activity.title",
     width: "15%",
+    ellipsis: true,
+  },
+  {
+    title: "所属班课",
+    dataIndex: "multiClass",
+    width: "10%",
     ellipsis: true,
     scopedSlots: { customRender: "multiClass" },
   },
   {
-    title: "所属班课",
-    dataIndex: "class",
-    width: "10%",
-    ellipsis: true,
-  },
-  {
     title: "助教老师",
     dataIndex: "assistantInfo.nickname",
-    width: "100",
   },
   {
     title: "作业/考试",
-    dataIndex: "task",
-    key: "taskIds",
-    width: "10%",
+    dataIndex: "activity",
     ellipsis: true,
-    filters: [],
+    scopedSlots: { customRender: "activity" },
   },
   {
     title: "题量",
-    dataIndex: "assessment.status",
+    dataIndex: "assessment.item_count",
     width: "8%",
     ellipsis: true,
   },
   {
     title: "创建时间",
-    dataIndex: "createdTime",
+    dataIndex: "end_time",
     width: "160px",
     sorter: true,
-    scopedSlots: { customRender: "createdTime" },
+    scopedSlots: { customRender: "end_time" },
   },
 ];
-const overTimeTaskList = [
-  {
-    id: 1,
-    student: "aaaa",
-    course: "是是是",
-    class: "随时随地所",
-    assistant: "是多少",
-    task: "发发发",
-    question: 111,
-    createdTime: 1627374168,
-  },
-  {
-    id: 2,
-    student: "aaaa",
-    course: "是是是",
-    class: "随时随地所",
-    assistant: "是多少",
-    task: "毒贩夫妇",
-    question: 111,
-    createdTime: 1627374168,
-  },
-  {
-    id: 3,
-    student: "aaaa",
-    course: "是是是",
-    class: "随时随地所",
-    assistant: "是多少",
-    task: "私聊是对的",
-    question: 111,
-    createdTime: 1627374168,
-  },
-];
+
 export default {
   name: "index",
   components: {
     AsideLayout,
     ACard: Card,
+    userInfoTable,
   },
 
   data() {
     return {
       columns,
-      overTimeTaskList,
+      overTimeTaskList: [],
       getListLoading: false,
       paging: {
         total: 0,
         offset: 0,
         pageSize: 10,
       },
+      modalShowUser: {},
+      viewStudentInfoVisible: false,
     };
   },
 
@@ -119,7 +106,7 @@ export default {
 
   created() {
     this.getOverTimeList(this.paging);
-    this.getOverTimeTaskList();
+    // this.getOverTimeTaskList();
   },
 
   methods: {
@@ -139,28 +126,41 @@ export default {
         this.getListLoading = false;
       }
     },
-    async getOverTimeTaskList() {
-      // const { data } = await MultiClassProduct.search({
-      //   keywords: "",
-      //   offset: 0,
-      //   limit: 100000,
-      // });
-      const data = this.overTimeTaskList;
+    // async getOverTimeTaskList() {
+    //   // const { data } = await MultiClassProduct.search({
+    //   //   keywords: "",
+    //   //   offset: 0,
+    //   //   limit: 100000,
+    //   // });
+    //   const data = this.overTimeTaskList;
 
-      const index = _.findIndex(
-        this.columns,
-        (item) => item.dataIndex === "task"
-      );
-      const taskItem = this.columns[index];
+    //   const index = _.findIndex(
+    //     this.columns,
+    //     (item) => item.dataIndex === "task"
+    //   );
+    //   const taskItem = this.columns[index];
 
-      taskItem.filters = [];
-      _.forEach(data, (item) => {
-        taskItem.filters.push({
-          text: item.task,
-          value: item.id,
-        });
+    //   taskItem.filters = [];
+    //   _.forEach(data, (item) => {
+    //     taskItem.filters.push({
+    //       text: item.task,
+    //       value: item.id,
+    //     });
+    //   });
+    //   this.$set(this.columns, index, taskItem);
+    // },
+    async viewStudentInfo(id) {
+      this.modalShowUser = await UserProfiles.get(id);
+      this.viewStudentInfoVisible = true;
+    },
+    close() {
+      this.viewStudentInfoVisible = false;
+    },
+    goToMultiClassManage(id) {
+      this.$router.push({
+        name: "MultiClassCourseManage",
+        params: { id },
       });
-      this.$set(this.columns, index, taskItem);
     },
     change(pagination, filters, sorter) {
       console.log("pagination: ", pagination);
@@ -168,17 +168,17 @@ export default {
       console.log("sorter: ", sorter);
       const params = {};
 
-      // if (pagination) {
-      //   params.offset = pagination.pageSize * (pagination.current - 1);
-      //   (params.pageSize = pagination.pageSize),
-      //     (params.current = pagination.current);
-      // }
-
-      if (filters && Object.keys(filters).length > 0) {
-        _.forEach(Object.keys(filters), (key) => {
-          params[key] = filters[key];
-        });
+      if (pagination) {
+        params.offset = pagination.pageSize * (pagination.current - 1);
+        (params.pageSize = pagination.pageSize),
+          (params.current = pagination.current);
       }
+
+      // if (filters && Object.keys(filters).length > 0) {
+      //   _.forEach(Object.keys(filters), (key) => {
+      //     params[key] = filters[key];
+      //   });
+      // }
       console.log(params);
       // if (sorter && sorter.order) {
       //   params[`${sorter.field}Sort`] =

@@ -28,17 +28,19 @@
         </a-card>
       </a-col>
       <a-col :span="6">
-        <a-card :bordered="false" style="border-top: 2px solid #42D668">
-          <a-row>
-            <div class="card">
-              <svg-icon class="icon icon-live-broad" icon="icon-live-broad" />
-              <div class="right-block">
-                <p class="card-title text-size">今日直播课程数</p>
-                <span class="card-count text-size" style="color: #42D668">999/ <span style="color: #BEBEBE">999</span></span>
+        <router-link :to="{ name: 'MultiClassInspection' }">
+          <a-card :bordered="false" style="border-top: 2px solid #42D668">
+            <a-row>
+              <div class="card">
+                <svg-icon class="icon icon-live-broad" icon="icon-live-broad" />
+                <div class="right-block">
+                  <p class="card-title text-size">今日直播课程数</p>
+                  <span class="card-count text-size" style="color: #42D668">999/ <span style="color: #BEBEBE">999</span></span>
+                </div>
               </div>
-            </div>
-          </a-row>
-        </a-card>
+            </a-row>
+          </a-card>
+        </router-link>
       </a-col>
       <a-col :span="6">
         <router-link :to="{ name: 'Overtime' }">
