@@ -28,10 +28,7 @@ class TimeoutReview extends AbstractResource
             throw new AccessDeniedException();
         }
 
-        $multiClasses = $this->getMultiClassService()->searchMultiClass([], [], 0, PHP_INT_MAX);
-
-        $assistantStudentRelations = $this->getAssistantStudentService()->findByMultiClassIds(ArrayToolkit::column($multiClasses, 'id'));
-        $studentIds = ArrayToolkit::column($assistantStudentRelations, 'studentId');
+        $multiClasses = $this->getMultiClassService()->findAllMultiClass();
 
         $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
         $activities = $this->getActivityService()->findActivitiesByCourseIdsAndTypes($courseIds, ['homework', 'testpaper'], true);
@@ -45,7 +42,6 @@ class TimeoutReview extends AbstractResource
         $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 24);
         $conditions = [
             'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
-            'user_ids' => empty($studentIds) ? [-1] : $studentIds,
             'status' => 'reviewing',
             'endTime_LE' => time() - $reviewTimeLimit * 3600,
         ];
@@ -58,16 +54,16 @@ class TimeoutReview extends AbstractResource
             $limit
         );
 
-        $answerRecords = $this->filterRecords($answerRecords, $multiClasses, $sceneIndexActivities, $assistantStudentRelations);
+        $answerRecords = $this->filterRecords($answerRecords, $multiClasses, $sceneIndexActivities);
 
         return $this->makePagingObject($answerRecords, $total, $offset, $limit);
     }
 
-    protected function filterRecords($answerRecords, $multiClasses, $sceneIndexActivities, $assistantStudentRelations)
+    protected function filterRecords($answerRecords, $multiClasses, $sceneIndexActivities)
     {
         $assessments = ArrayToolkit::index($this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id')), 'id');
         $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
-        $assistantStudentRelations = ArrayToolkit::index($assistantStudentRelations, 'unitKey');
+        $assistantStudentRelations = ArrayToolkit::index($this->getAssistantStudentService()->findByMultiClassIds(ArrayToolkit::column($multiClasses, 'id')), 'unitKey');
         $studentIds = ArrayToolkit::column($assistantStudentRelations, 'studentId');
         $assistantIds = ArrayToolkit::column($assistantStudentRelations, 'assistantId');
         $userIds = array_merge($studentIds, $assistantIds);
