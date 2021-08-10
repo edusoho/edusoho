@@ -92,6 +92,12 @@ export default {
     this.pictureUrl = this.file;
   },
 
+  watch: {
+    file() {
+      this.pictureUrl = this.file;
+    }
+  },
+
   methods: {
     async getUploadToken() {
       this.uploadToken = await UploadToken.get('default');
