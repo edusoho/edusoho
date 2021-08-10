@@ -14,6 +14,32 @@
  *         )
  *     ),
  * )
+ *
+ * @OA\Get(
+ *     path="/api/course/{courseId}/notes",
+ *     tags={"course"},
+ *     summary="课程多个笔记获取接口",
+ *     @OA\Response(
+ *         response=200,
+ *         description="多条笔记",
+ *         @OA\MediaType(
+ *             mediaType="application/vnd.edusoho.v2+json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="data",
+ *                     type="array",
+ *                     @OA\Items(ref="#/components/schemas/course.note")
+ *                 ),
+ *                 @OA\Property(
+ *                     property="paging",
+ *                     @OA\Property(property="total", type="integer"),
+ *                     @OA\Property(property="offset", type="integer"),
+ *                     @OA\Property(property="limit", type="integer")
+ *                 ),
+ *             ),
+ *         )
+ *     ),
+ * )
  */
 
 /**
@@ -31,4 +57,5 @@
  *      @OA\Property(property="updatedTime",title="updatedTime",description="更新时间",type="datetime"),
  *      @OA\Property(property="user",title="id",ref="#/components/schemas/user.simple")
  * )
+ *
  */

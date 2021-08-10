@@ -22,6 +22,21 @@ paths:
             application/vnd.edusoho.v2+json:
               schema:
                 $ref: '#/components/schemas/course.note'
+  '/api/course/{courseId}/notes':
+    get:
+      tags:
+        - course
+      summary: 课程多个笔记获取接口
+      responses:
+        '200':
+          description: 多条笔记
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
+                  paging: { properties: { total: { type: integer }, offset: { type: integer }, limit: { type: integer } }, type: object }
+                type: object
   /api/settings/signSecurity:
     get:
       tags:
