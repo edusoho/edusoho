@@ -47,6 +47,9 @@ class Teacher extends AbstractResource
         $userInfo = [];
         foreach ($users as $userId => $user) {
             $qualification = $teacherQualifications[$userId];
+            if ($qualification['avatar']) {
+                $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+            }
             $qualification['truename'] = $profiles[$userId]['truename'] ?: '';
             $user['qualification'] = $qualification;
             $userInfo[] = $user;

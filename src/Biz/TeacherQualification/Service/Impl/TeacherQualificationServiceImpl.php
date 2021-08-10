@@ -62,12 +62,14 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
                 $qualificationFields = [
                     'user_id' => $userId,
                     'avatar' => $file['uri'],
+                    'avatarFileId' => $file['id'],
                     'code' => $fields['code'],
                 ];
                 $qualification = $this->getTeacherQualificationDao()->create($qualificationFields);
             } else {
                 $qualificationFields = [
                     'avatar' => $file['uri'],
+                    'avatarFileId' => $file['id'],
                     'code' => $fields['code'],
                 ];
                 $qualification = $this->getTeacherQualificationDao()->update($qualification['id'], $qualificationFields);
