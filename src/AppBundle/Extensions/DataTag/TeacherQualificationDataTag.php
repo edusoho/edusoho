@@ -8,8 +8,9 @@ class TeacherQualificationDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)
     {
-        $teacherQualifications = $this->getTeacherQualification()->search([],
-            ['created_time' => 'DESC'],
+        $teacherQualifications = $this->getTeacherQualification()->searchTeacherQualification(
+            ['roles' => '|ROLE_TEACHER|'],
+            ['updated_time' => 'DESC'],
             0, $arguments['count']
         );
 
@@ -18,6 +19,9 @@ class TeacherQualificationDataTag extends CourseBaseDataTag implements DataTag
         $teacherProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($teacherQualifications, 'user_id'));
 
         foreach ($teacherQualifications as $userId => $teacherQualification) {
+            if ($teacherQualification['avatar']) {
+                $teacherQualifications[$userId]['url'] = $this->getWebExtension()->getFpath($teacherQualification['avatar']);
+            }
             $teacherQualifications[$userId]['truename'] = $teacherProfiles[$userId]['truename'] ?: '';
         }
 
