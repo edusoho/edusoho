@@ -15,3 +15,4 @@ export * from './Setting/index.js';
 
 // 接口规范
 export * from './WrongBook';
+export * from './TeacherQualification';
