@@ -26,6 +26,10 @@
         <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
+      <template slot="qualification" slot-scope="qualification">
+        {{ qualification.code }}
+      </template>
+
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
@@ -126,6 +130,13 @@ const columns = [
   },
 ];
 
+const teahcerQualificationColumns =  {
+  title: "教师资格证编号",
+  dataIndex: "qualification",
+  width: '20%',
+  scopedSlots: { customRender: "qualification" }
+};
+
 export default {
   name: "Teachers",
 
@@ -156,6 +167,12 @@ export default {
   async created() {
     const status = await Setting.get('qualification');
     this.showEditorSualification = Boolean(status.qualification);
+    if (this.showEditorSualification) {
+      _.forEach(this.columns, item => {
+        item.width = '20%';
+      });
+      this.columns.splice(2, 0, teahcerQualificationColumns);
+    }
     this.fetchTeacher();
   },
 
