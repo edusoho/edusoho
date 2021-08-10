@@ -1,6 +1,7 @@
 <template>
   <a-form-model
     ref="ruleForm"
+    :key="userId"
     :model="form"
     :rules="rules"
     :label-col="labelCol"
@@ -32,6 +33,7 @@
 
 <script>
 import _ from 'lodash';
+import { TeacherQualification } from 'common/vue/service/index.js';
 import UploadPicture from 'app/vue/components/UploadPicture.vue';
 
 export default {
@@ -39,6 +41,13 @@ export default {
 
   components: {
     UploadPicture
+  },
+
+  props: {
+    userId: {
+      type: String,
+      required: true
+    }
   },
 
   data() {
@@ -69,9 +78,11 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate(async valid => {
         if (valid) {
-          console.log('submit!');
+          const result = await TeacherQualification.add(_.assign(this.form, { userId: this.userId }));
+          this.$message.success('保存成功');
+          this.$emit('handle-cancel-modal');
         }
       });
     },

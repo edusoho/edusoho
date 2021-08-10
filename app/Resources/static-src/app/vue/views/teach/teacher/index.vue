@@ -39,7 +39,7 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay">
-            <a-menu-item @click="handleEditorQualification">
+            <a-menu-item @click="handleEditorQualification(item.id)">
               编辑教师资质
             </a-menu-item>
           </a-menu>
@@ -85,7 +85,10 @@
       :visible="qualificationVisible"
       @cancel="handleCancelEditQualification"
     >
-      <editor-qualification />
+      <editor-qualification
+        :user-id="currentTeacherUserId"
+        @handle-cancel-modal="handleCancelEditQualification"
+      />
     </a-modal>
   </aside-layout>
 </template>
@@ -143,7 +146,8 @@ export default {
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
-      qualificationVisible: false // 编辑教师资质
+      qualificationVisible: false, // 编辑教师资质
+      currentTeacherUserId: 0 // 用于教师上传教师资质的 userId
     };
   },
 
@@ -267,7 +271,8 @@ export default {
       callback()
     },
 
-    handleEditorQualification() {
+    handleEditorQualification(id) {
+      this.currentTeacherUserId = id;
       this.qualificationVisible = true;
     },
 
