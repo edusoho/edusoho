@@ -12,22 +12,23 @@
 
 <script>
 import AsideLayout from "app/vue/views/layouts/aside.vue";
+import { OverView } from 'common/vue/service';
 import { Card } from "ant-design-vue";
 
 const columns = [
   {
     title: "学员",
-    dataIndex: "student",
+    dataIndex: "userInfo",
     width: "15%",
     ellipsis: true,
-    scopedSlots: { customRender: "student" },
+    scopedSlots: { customRender: "userInfo" },
   },
   {
     title: "课时名称",
-    dataIndex: "course",
+    dataIndex: "multiClass",
     width: "15%",
     ellipsis: true,
-    scopedSlots: { customRender: "course" },
+    scopedSlots: { customRender: "multiClass" },
   },
   {
     title: "所属班课",
@@ -37,9 +38,8 @@ const columns = [
   },
   {
     title: "助教老师",
-    dataIndex: "assistant",
+    dataIndex: "assistantInfo.nickname",
     width: "100",
-    sorter: true,
   },
   {
     title: "作业/考试",
@@ -51,7 +51,7 @@ const columns = [
   },
   {
     title: "题量",
-    dataIndex: "question",
+    dataIndex: "assessment.status",
     width: "8%",
     ellipsis: true,
   },
@@ -129,12 +129,12 @@ export default {
 
       this.getListLoading = true;
       try {
-        // const { data, paging } = await MultiClass.search(params);
-        // paging.page = paging.offset / paging.limit + 1;
-        // paging.pageSize = Number(paging.limit);
-        // paging.current = params.current || 1;
-        // this.multiClassList = data;
-        // this.paging = paging;
+        const { data, paging } = await OverView.search(params);
+        paging.page = paging.offset / paging.limit + 1;
+        paging.pageSize = Number(paging.limit);
+        paging.current = params.current || 1;
+        this.overTimeTaskList = data;
+        this.paging = paging;
       } finally {
         this.getListLoading = false;
       }
