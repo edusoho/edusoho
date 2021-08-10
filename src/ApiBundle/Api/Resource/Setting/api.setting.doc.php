@@ -110,14 +110,6 @@
  */
 
 /**
- * @OA\Tag(
- *     name="setting",
- *     description="系统设置接口集合"
- * )
- */
-
-/**
- *
  * @OA\Schema(
  *     schema="setting.signSecurity",
  *     title="setting.signSecurity",
@@ -160,52 +152,44 @@
  *     schema="setting.ugc_review",
  *     title="setting.ugc_review",
  *     description="评价UGC设定",
- *     @OA\Property(
- *          property="enable",
- *          title="enable",
- *          description="评价总开关",
- *          type="integer",
- *          default=1,
- *     )
+ *     @OA\Property(property="enable", title="enable", description="评价总开关", type="integer", default=1),
+ *     @OA\Property(property="course_enable", title="course_enable", description="课程评价开关", type="integer", default=1),
+ *     @OA\Property(property="classroom_enable", title="classroom_enable", description="班级评价开关", type="integer", default=1),
+ *     @OA\Property(property="question_bank_enable", title="question_bank_enable", description="题库评价开关", type="integer", default=1),
+ *     @OA\Property(property="open_course_enable", title="open_course_enable", description="公开课评价开关", type="integer", default=1),
+ *     @OA\Property(property="article_enable", title="article_enable", description="资讯评论开关", type="integer", default=1),
  * )
  *
  * @OA\Schema(
  *     schema="setting.ugc_note",
  *     title="setting.ugc_note",
  *     description="笔记UGC设定",
- *     @OA\Property(
- *          property="enable",
- *          title="enable",
- *          description="笔记总开关",
- *          type="integer",
- *          default=1,
- *     )
+ *     @OA\Property(property="enable", title="enable", description="笔记总开关", type="integer", default=1),
+ *     @OA\Property(property="classroom_enable", title="classroom_enable", description="班级笔记开关", default=1),
+ *     @OA\Property(property="course_enable", title="course_enable", description="课程笔记开关", default=1),
  * )
  *
  * @OA\Schema(
  *     schema="setting.ugc_thread",
  *     title="setting.ugc_thread",
  *     description="话题讨论UGC设定",
- *     @OA\Property(
- *          property="enable",
- *          title="enable",
- *          description="话题讨论总开关",
- *          type="integer",
- *          default=1,
- *     )
+ *     @OA\Property(property="enable", title="enable", description="话题讨论总开关", type="integer", default=1),
+ *     @OA\Property(property="course_question_enable", title="course_question_enable", description="课程提问开关", type="integer", default=1),
+ *     @OA\Property(property="course_thread_enable", title="course_thread_enable", description="课程话题开关", type="integer", default=1),
+ *     @OA\Property(property="classroom_question_enable", title="classroom_question_enable", description="班级提问开关", type="integer", default=1),
+ *     @OA\Property(property="classroom_thread_enable", title="classroom_thread_enable", description="班级话题开关", type="integer", default=1),
+ *     @OA\Property(property="group_thread_enable", title="group_thread_enable", description="小组话题开关", type="integer", default=1),
  * )
  *
  * @OA\Schema(
  *     schema="setting.ugc_private_message",
  *     title="setting.ugc_private_message",
  *     description="私信UGC设定",
- *     @OA\Property(
- *          property="enable",
- *          title="enable",
- *          description="私信总开关",
- *          type="integer",
- *          default=1,
- *     )
+ *     @OA\Property(property="enable", title="enable", description="私信总开关", type="integer", default=1),
+ *     @OA\Property(property="student_to_student", title="student_to_student", description="学员之间发送私信", type="integer", default=1),
+ *     @OA\Property(property="student_to_teacher", title="student_to_teacher", description="学员向老师发送私信", type="integer", default=1),
+ *     @OA\Property(property="teacher_to_student", title="teacher_to_student", description="教师向学员发送私信", type="integer", default=1),
+ *
  * )
  *
  * @OA\Schema(
