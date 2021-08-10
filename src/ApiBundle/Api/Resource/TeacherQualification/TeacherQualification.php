@@ -27,6 +27,10 @@ class TeacherQualification extends AbstractResource
 
         $qualification = $this->getTeacherQualificationService()->getByUserId($userId);
 
+        if ($qualification['avatar']) {
+            $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+        }
+
         $profile = $this->getUserService()->getUserProfile($userId);
         $qualification['truename'] = $profile['truename'] ?: '';
 
