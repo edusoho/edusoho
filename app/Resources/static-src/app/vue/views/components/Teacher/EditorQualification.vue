@@ -6,11 +6,11 @@
     :label-col="labelCol"
     :wrapper-col="wrapperCol"
   >
-    <a-form-model-item ref="name" label="姓名" prop="name">
-      <a-input v-model="form.name" @blur="() => {$refs.name.onFieldBlur();}" />
+    <a-form-model-item ref="truename" label="姓名" prop="truename">
+      <a-input v-model="form.truename" @blur="() => { $refs.truename.onFieldBlur(); }" />
     </a-form-model-item>
 
-    <a-form-model-item label="照片" prop="picture">
+    <a-form-model-item label="照片" prop="avatarFileId">
       <upload-picture
         :aspect-ratio="1 / 1"
         tip="请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过2MB"
@@ -18,8 +18,8 @@
       />
     </a-form-model-item>
 
-    <a-form-model-item ref="number" label="教师资格证书编号" prop="number">
-      <a-input v-model="form.number" @blur="() => {$refs.number.onFieldBlur();}" />
+    <a-form-model-item ref="code" label="教师资格证书编号" prop="code">
+      <a-input v-model="form.code" @blur="() => { $refs.code.onFieldBlur();}" />
     </a-form-model-item>
 
     <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import UploadPicture from 'app/vue/components/UploadPicture.vue';
 
 export default {
@@ -45,21 +46,22 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 16 },
       form: {
-        name: '',
-        imgUrl: '',
-        number: '',
+        truename: '',
+        avatarFileId: '',
+        code: '',
       },
       rules: {
-        name: [
+        truename: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }
+          { min: 2, message: '最少需要输入 2 个字符', trigger: 'blur' },
+          { max: 36, message: '最多只能输入 36 个字符', trigger: 'blur' },
+          { pattern: /^[\u4E00-\u9FA5A-Za-z0-9_]+$/, message: '只支持中文字、英文字母、数字及_', trigger: 'blur' }
         ],
-        picture: [
-          { required: true, message: 'Please select activity resource', trigger: 'change' },
-        ],
-        number: [
-          { required: true, message: '请输入编号', trigger: 'blur' },
-          { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }
+        avatarFileId: [{ required: true, message: '请上传图片' }],
+        code: [
+          { required: true, message: '请输入教师资格证书编号', trigger: 'blur' },
+          { len: 17, message: '请输入 17 位字符', trigger: 'blur' },
+          { pattern: /^[0-9]*$/, message: '请输入整数', trigger: 'blur' }
         ]
       }
     }
@@ -69,16 +71,13 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
+          console.log('submit!');
         }
       });
     },
 
-    uploadedSuccessfully(img) {
-      console.log(img);
+    uploadedSuccessfully(id) {
+      this.form.avatarFileId = id;
     }
   }
 }
