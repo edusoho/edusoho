@@ -12,8 +12,11 @@ define(function(require, exports, module) {
         $('body').data('themeManage', themeManage);
 
         $("#iframepage").load(function(){
-            var mainheight = $(this).contents().find("body").outerHeight();
-            $(this).height(mainheight);
+          var iframe = $(window.frames["iframepage"].document)[0];
+          var bHeight = iframe.body.scrollHeight;
+          var dHeight = iframe.documentElement.scrollHeight;
+          var height = Math.max(bHeight, dHeight);
+          $(this).height(height);
         });
     };
 

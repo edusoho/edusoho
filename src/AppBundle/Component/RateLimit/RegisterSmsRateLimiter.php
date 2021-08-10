@@ -2,14 +2,15 @@
 
 namespace AppBundle\Component\RateLimit;
 
-use Symfony\Component\HttpFoundation\Request;
 use Biz\User\UserException;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegisterSmsRateLimiter extends SmsRateLimiter
 {
     public function handle(Request $request)
     {
-        if ('true' == $request->request->get('unique', 'true') && !$this->getUserService()->isMobileUnique($request->request->get('mobile'))) {
+        $unique = $request->request->get('unique') ? $request->request->get('unique') : 1;
+        if (1 == $unique && !$this->getUserService()->isMobileUnique($request->request->get('mobile'))) {
             throw UserException::ERROR_MOBILE_REGISTERED();
         }
 
