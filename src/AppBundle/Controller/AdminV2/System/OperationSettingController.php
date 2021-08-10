@@ -52,6 +52,28 @@ class OperationSettingController extends BaseController
         ]);
     }
 
+    public function teacherQualificationSetAction(Request $request)
+    {
+        $default = [
+            'qualification_enabled' => 0,
+        ];
+
+        if ('POST' == $request->getMethod()) {
+            $qualificationSetting = $request->request->all();
+
+            $this->getSettingService()->set('qualification', $qualificationSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $qualificationSetting = $this->getSettingService()->get('qualification', []);
+        $qualificationSetting = array_merge($default, $qualificationSetting);
+
+        return $this->render('admin-v2/system/operation/qualification-set.html.twig', [
+            'qualificationSetting' => $qualificationSetting,
+        ]);
+    }
+
     public function inviteSetAction(Request $request)
     {
         $default = [
