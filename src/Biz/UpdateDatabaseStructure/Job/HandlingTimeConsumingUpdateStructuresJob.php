@@ -229,6 +229,8 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          * Table  biz_wrong_question_book_pool
          */
         $this->createIndex('biz_wrong_question_book_pool', 'user_id', 'user_id');
+
+        $this->createIndex('member_operation_record', 'userId', 'user_id');
     }
 
     protected function changeTableFiledType()
