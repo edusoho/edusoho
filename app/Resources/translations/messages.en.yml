@@ -10765,3 +10765,7 @@ feedback_title: Diting, directly connected to EduSoho product manager
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
+
+exception.teacher_qualification_not_enable: Teacherqualification not enable
+exception.teacher_qualification_not_teacher: Teacherqualification not teacher
+
