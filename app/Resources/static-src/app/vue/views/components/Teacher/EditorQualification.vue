@@ -13,6 +13,7 @@
 
     <a-form-model-item label="照片" prop="avatarFileId">
       <upload-picture
+        :file="file"
         :aspect-ratio="1 / 1"
         tip="请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过2MB"
         @success="uploadedSuccessfully"
@@ -47,6 +48,11 @@ export default {
     userId: {
       type: String,
       required: true
+    },
+
+    editInfo: {
+      type: Object,
+      required: true
     }
   },
 
@@ -72,15 +78,35 @@ export default {
           { len: 17, message: '请输入 17 位字符', trigger: 'blur' },
           { pattern: /^[0-9]*$/, message: '请输入整数', trigger: 'blur' }
         ]
-      }
+      },
+      file: ''
     }
   },
 
+  watch: {
+    editInfo() {
+      this.setFormValue();
+    }
+  },
+
+  created() {
+    this.setFormValue();
+  },
+
   methods: {
+    setFormValue() {
+      _.assign(this.form, {
+        truename: this.editInfo.truename,
+        avatarFileId: '',
+        code: this.editInfo.code
+      });
+      this.file = this.editInfo.avatar;
+    },
+
     onSubmit() {
       this.$refs.ruleForm.validate(async valid => {
         if (valid) {
-          const result = await TeacherQualification.add(_.assign(this.form, { userId: this.userId }));
+          const result = await TeacherQualification.add({ ...this.form, userId: this.userId });
           this.$message.success('保存成功');
           this.$emit('handle-cancel-modal');
         }

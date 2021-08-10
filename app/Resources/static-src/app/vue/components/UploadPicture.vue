@@ -66,6 +66,11 @@ export default {
 
     aspectRatio: {
       type: Number
+    },
+
+    file: {
+      type: String,
+      default: ''
     }
   },
 
@@ -81,6 +86,10 @@ export default {
       cropperKey: 0,
       imgs: {}
     }
+  },
+
+  created() {
+    this.pictureUrl = this.file;
   },
 
   methods: {
