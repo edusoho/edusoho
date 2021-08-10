@@ -11,7 +11,7 @@ class TeacherQualificationDaoImpl extends GeneralDaoImpl implements TeacherQuali
 
     public function getByUserId($userId)
     {
-        return $this->getByFields(['userId' => $userId]);
+        return $this->getByFields(['user_id' => $userId]);
     }
 
     public function declares()
