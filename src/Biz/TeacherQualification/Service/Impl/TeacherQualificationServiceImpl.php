@@ -2,6 +2,7 @@
 
 namespace Biz\TeacherQualification\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
 use Biz\TeacherQualification\Dao\TeacherQualificationDao;
@@ -15,6 +16,13 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
         return $this->getTeacherQualificationDao()->getByUserId($userId);
     }
 
+    public function findByUserIds($userIds)
+    {
+        $qualification = $this->getTeacherQualificationDao()->findByUserIds($userIds);
+
+        return  ArrayToolkit::index($qualification, 'user_id');
+    }
+
     public function search($conditions, $orderBys, $start, $limit)
     {
         return $this->getTeacherQualificationDao()->search($conditions, $orderBys, $start, $limit);
@@ -23,6 +31,16 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
     public function count($conditions)
     {
         return $this->getTeacherQualificationDao()->count($conditions);
+    }
+
+    public function countTeacherQualification($conditions)
+    {
+        return $this->getTeacherQualificationDao()->countTeacherQualification($conditions);
+    }
+
+    public function searchTeacherQualification($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getTeacherQualificationDao()->searchTeacherQualification($conditions, $orderBys, $start, $limit);
     }
 
     /**
