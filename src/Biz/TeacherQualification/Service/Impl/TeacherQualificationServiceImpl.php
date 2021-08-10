@@ -58,6 +58,9 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
                 $this->getProfileDao()->update($qualification['user_id'], ['truename' => trim($fields['truename'])]);
             }
 
+            $profile = $this->getProfileDao()->get($qualification['user_id']);
+            $qualification['truename'] = $profile['truename'] ?: '';
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
