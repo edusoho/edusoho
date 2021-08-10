@@ -10,6 +10,7 @@ use Topxia\Service\Common\ServiceKernel;
 class TeacherQualification extends AbstractResource
 {
     private $requiredFields = [
+        'truename',
         'userId',
         'avatarFileId',
         'code',
