@@ -553,6 +553,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('course.thread.post.delete', $post);
     }
 
+    public function countThreadsGroupedByCourseId($conditions, $sort = 'ASC')
+    {
+        $conditions = $this->prepareThreadSearchConditions($conditions);
+
+        return $this->getThreadDao()->countThreadsGroupedByCourseId($conditions, $sort);
+    }
+
     protected function prepareThreadSearchConditions($conditions)
     {
         if (isset($conditions['threadType'])) {
