@@ -1,5 +1,5 @@
 {% set qualifications = data('TeacherQualification',{'count': config.count|default(12)}) %}
-{% if qualifications %}
+{% if qualifications and setting('qualification.qualification_enabled') == '1' %}
 <section class="teacher-qualification {{config.background|default("")}}">
   <div class="container">
     <div class="text-line gray">
