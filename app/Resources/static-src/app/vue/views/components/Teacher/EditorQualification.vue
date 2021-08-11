@@ -34,7 +34,7 @@
 
 <script>
 import _ from 'lodash';
-import { TeacherQualification } from 'common/vue/service/index.js';
+import { TeacherQualification } from 'common/vue/service';
 import UploadPicture from 'app/vue/components/UploadPicture.vue';
 
 export default {
