@@ -40,6 +40,9 @@
     <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}" {% if app.request.locale == 'en' %} style="display: none" {% endif %}>
       <a href="{{ path('setting_approval_submit') }}">{{'user.settings.verification_menu'|trans}}</a>
     </li>
+    <li class="cd-sidebar__item {% if side_nav == 'qualification' %}active{% endif %}" {% if app.request.locale == 'en' %} style="display: none" {% endif %}>
+      <a href="{{ path('setting_qualification') }}">{{'user.settings.teacher_qualification'|trans}}</a>
+    </li>
     <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
       <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
     </li>
