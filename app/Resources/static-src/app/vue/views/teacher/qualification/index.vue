@@ -9,7 +9,7 @@
             <div class="img-box">
               <img v-lazy="item.url">
             </div>
-            <div class="name">{{ item.profile.truename }}</div>
+            <div class="name text-overflow">{{ item.profile.truename }}</div>
             <p>教师资格证编号</p>
             <p>{{ item.code }}</p>
           </div>
