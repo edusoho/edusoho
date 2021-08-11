@@ -12024,3 +12024,6 @@ admin_v2.course_purchase_agreement.not_set_tips: 请联系网校管理员添加�
 #教师资质
 exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
+homepage.teacher_qualification.code: 教师资格证编号
+homepage.teacher_qualification.more: 更多教师
+

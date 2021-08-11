@@ -4,6 +4,7 @@ import 'moment';
 import { AssistantPermission } from 'common/vue/service';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
+import VueLazyload from 'vue-lazyload';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
@@ -64,6 +65,7 @@ if (!window.Vue) {
   });
 
   Vue.component('svg-icon', SvgIcon);
+  Vue.use(VueLazyload);
 }
 
 if (!window.Vue) {
