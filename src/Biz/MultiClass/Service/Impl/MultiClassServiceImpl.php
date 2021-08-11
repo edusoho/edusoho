@@ -345,7 +345,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     public function isScrmBind()
     {
         $isScrmBind = $this->getCacheService()->get('scrm_bind');
-        if (empty($isScrmBind)) {
+        if (!isset($isScrmBind)) {
             try {
                 $scrmBind = $this->getSCRMService()->isScrmBind();
                 $isScrmBind = empty($scrmBind['ok']) ? 0 : 1;
