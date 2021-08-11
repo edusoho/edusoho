@@ -75,7 +75,7 @@ export default {
         avatarFileId: [{ required: true, message: '请上传图片' }],
         code: [
           { required: true, message: '请输入教师资格证书编号', trigger: 'blur' },
-          { len: 17, message: '请输入 17 位字符', trigger: 'blur' },
+          { len: 17, message: '请输入 17 位数字', trigger: 'blur' },
           { pattern: /^[0-9]*$/, message: '请输入整数', trigger: 'blur' }
         ]
       },
