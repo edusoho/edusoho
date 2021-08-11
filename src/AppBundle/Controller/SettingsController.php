@@ -7,6 +7,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Content\Service\FileService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -994,6 +995,48 @@ class SettingsController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function scrmAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($currentUser->getId());
+
+        return $this->render('settings/scrm.html.twig', ['user' => $user]);
+    }
+
+    public function scrmQrcodeAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        try {
+            $url = $this->getMultiClassService()->getAssistantBindUrl();
+        } catch (\Exception $e) {
+            $url = '';
+        }
+
+        if (empty($url)) {
+            return $this->createJsonResponse('');
+        }
+
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            [
+                'userId' => $user['id'],
+                'data' => [
+                    'url' => $url,
+                ],
+                'times' => 1,
+                'duration' => 3600,
+            ]
+        );
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $response = [
+            'img' => $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL),
+        ];
+
+        return $this->createJsonResponse($response);
+    }
+
     protected function checkBindsName($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
@@ -1111,6 +1154,14 @@ class SettingsController extends BaseController
     protected function getWeChatService()
     {
         return $this->getBiz()->service('WeChat:WeChatService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->getBiz()->service('MultiClass:MultiClassService');
     }
 
     protected function downloadImg($url)

@@ -502,6 +502,14 @@ settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
 
+settings_scrm:
+    path: /settings/scrm
+    defaults: { _controller: AppBundle:Settings:scrm }
+
+settings_scrm_bind_qrcode:
+    path: /settings/scrm/bind/qrcode
+    defaults: { _controller: AppBundle:Settings:scrmQrcode }
+
 settings_setup_password:
     path: /settings/setup_password
     defaults: { _controller: AppBundle:Settings:setupPassword }

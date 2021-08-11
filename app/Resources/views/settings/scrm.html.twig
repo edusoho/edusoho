@@ -1,0 +1,39 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{'user.settings.scrm'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'scrm' %}
+
+{% do script(['app/js/settings/scrm/index.js']) %}
+
+{% block page_title %}
+  {{'user.settings.scrm'|trans}}
+{% endblock %}
+
+{% block main_body %}
+  <div class="es-setting">
+    <span class="setting-icon"><i class="cd-icon cd-icon-email"></i></span>
+    <span class="setting-title">{{'user.settings.scrm'|trans}}</span>
+    <span class="setting-content">
+      {{ 'user.settings.scrm.tips'|trans }}
+    </span>
+    <span class="setting-action">
+      {% if user.scrmUuid %}
+        <span class="es-setting-status es-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
+      {% else %}
+        <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
+      {% endif %}
+    </span>
+  </div>
+
+  {% if not user.scrmUuid %}
+    <div class="wechat-inform-section text-center">
+      <div class="wechat-inform-content cd-mt40 row text-center" style="display: inline-block">
+        <div class="wechat-inform-title">{{ '扫码绑定微信'|trans }}</div>
+        <div class="wechat-inform-content__qcode text-center">
+          <img id="scrm-qrcode" data-url="{{ path('settings_scrm_bind_qrcode') }}" src="">
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

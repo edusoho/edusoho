@@ -8,6 +8,20 @@ class ScrmService extends BaseService
 
     protected $service = 'scrm';
 
+    public function isScrmBind()
+    {
+        return $this->request('GET', '/api/external/corpBind/get');
+    }
+
+    public function getStaff($ticket)
+    {
+        return $this->request('GET', '/api/external/staff/get', array('ticket' => $ticket));
+    }
+
+    public function getStaffBindUrl($ticket, $redirectUri)
+    {
+        return $this->request('GET', '/api/external/staff/getBindAuthUrl', array('ticket' => $ticket, 'redirectUri' => $redirectUri));
+    }
 
     public function getUserByToken($token)
     {

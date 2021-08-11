@@ -13,8 +13,12 @@ use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use ESCloud\SDK\Service\ScrmService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -339,12 +343,53 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
     }
 
+    public function isScrmBind()
+    {
+        $isScrmBind = $this->getCacheService()->get('scrm_bind');
+        if (empty($isScrmBind)) {
+            try {
+                $scrmBind = $this->getSCRMService()->isScrmBind();
+                $isScrmBind = empty($scrmBind['ok']) ? 0 : 1;
+            } catch (\Exception $e) {
+                $isScrmBind = 0;
+            }
+
+            $this->getCacheService()->set('scrm_bind', $isScrmBind, time() + 7200);
+        }
+
+        return $isScrmBind;
+    }
+
+    public function getAssistantBindUrl()
+    {
+        $user = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($user->getId());
+
+        return $this->getSCRMService()->getStaffBindUrl($user['uuid'], '');
+    }
+
+    /**
+     * @return ScrmService
+     */
+    protected function getSCRMService()
+    {
+        return $this->biz['ESCloudSdk.scrm'];
+    }
+
     /**
      * @return CourseService
      */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -393,5 +438,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getMultiClassDao()
     {
         return $this->createDao('MultiClass:MultiClassDao');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
