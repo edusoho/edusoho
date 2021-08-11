@@ -1,30 +1,30 @@
-
-<section class="teacher-qualification">
+{% set qualifications = data('TeacherQualification',{'count': config.count|default(12)}) %}
+<section class="teacher-qualification {{config.background|default("")}}">
   <div class="container">
     <div class="text-line gray">
       <h5>
-        <span>教师资质公示</span>
+        <span>{{ config.title|default(config.defaultTitle) }}</span>
         <div class="line"></div>
       </h5>
-      <div class="subtitle">教师资格证信息公示</div>
+      <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
     </div>
     <div class="teacher-qualification-list row">
-      {% for item in 1..6 %}
+      {% for qualification in qualifications %}
         <div class="col-lg-2 col-md-4 col-xs-6">
           <div class="teacher-qualification-item">
             <div class="img-box">
-              <img src="http://t5.edusoho.cn/files/system/2021/05-27/1003440220ca719525.jpg">
+              <img src="{{ qualification.url }}">
             </div>
-            <div class="teacher-name">方丽琰</div>
-            <p>教师资格证编号</p>
-            <p>20191100123003393</p>
+            <div class="teacher-name">{{ qualification.truename }}</div>
+            <p>{{ 'homepage.teacher_qualification.code'|trans }}</p>
+            <p>{{ qualification.code }}</p>
           </div>
         </div>
       {% endfor %}
     </div>
     <div class="section-more-btn">
       <a href="{{ path('teacher_qualification') }}" class="btn btn-default btn-lg">
-        更多教师
+        {{'homepage.teacher_qualification.more'|trans}}
         <i class="mrs-o es-icon es-icon-chevronright"></i>
       </a>
     </div>
