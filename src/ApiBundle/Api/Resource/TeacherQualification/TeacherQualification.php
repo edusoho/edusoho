@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource\TeacherQualification;
 
+use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\SettingService;
@@ -19,6 +21,12 @@ class TeacherQualification extends AbstractResource
         'code',
     ];
 
+    /**
+     * @param ApiRequest $request
+     * @param $userId
+     * @return mixed
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
+     */
     public function get(ApiRequest $request, $userId)
     {
         if (!$this->isTeacher($userId)) {
@@ -37,6 +45,11 @@ class TeacherQualification extends AbstractResource
         return $qualification;
     }
 
+    /**
+     * @param ApiRequest $request
+     * @return mixed
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
+     */
     public function add(ApiRequest $request)
     {
         $qualification = $this->getSettingService()->get('qualification', []);
@@ -54,9 +67,18 @@ class TeacherQualification extends AbstractResource
 
         $this->checkRequiredFields($this->requiredFields, $fields);
 
-        return $this->getTeacherQualificationService()->changeQualification($fields['userId'], $fields);
+        $qualification =  $this->getTeacherQualificationService()->changeQualification($fields['userId'], $fields);
+
+        if ($qualification['avatar']) {
+            $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+        }
+
+        return $qualification;
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request)
     {
         $condition = ['roles' => '|ROLE_TEACHER|'];
