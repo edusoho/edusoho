@@ -14,7 +14,7 @@
             <label for="name">{{'admin.setting.theme.manage.custom_name'|trans}}</label>
           </div>
           <div class="col-md-7 controls">
-            <input type="text"  class="form-control" name="title" value="{{ title|trans }}">
+            <input type="text"  maxlength="20" class="form-control" name="title" value="{{ title|trans }}">
             <div class="titleTip hidden" style="color: red;margin-top: 10px">{{ 'admin_v2.byte_maxlength.message'|trans({'%max%':100}) }}</div>
           </div>
         </div>
@@ -26,7 +26,7 @@
             <label for="subname">{{'admin.setting.theme.manage.modal.subname'|trans}}</label>
           </div>
           <div class="col-md-7 controls">
-            <input type="text"  class="form-control" name="subTitle" value="{{ subTitle }}">
+            <input type="text"  maxlength="50" class="form-control" name="subTitle" value="{{ subTitle }}">
           </div>
         </div>
       {% endblock %}
