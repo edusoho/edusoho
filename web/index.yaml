@@ -408,7 +408,104 @@ components:
               description: 大图
               type: string
           type: integer
+        weChatQrCode:
+          description: 微信二维码地址
+          type: string
       type: object
+    user.public:
+      title: user.public
+      allOf:
+        -
+          $ref: '#/components/schemas/user.simple'
+        -
+          properties:
+            about:
+              description: 个人介绍
+              type: string
+            faceRegistered:
+              description: 人脸识别是否录入（注册）0|1
+              type: integer
+          type: object
+    user.authenticated:
+      title: user.authenticated
+      allOf:
+        -
+          $ref: '#/components/schemas/user.public'
+        -
+          properties:
+            email:
+              description: 邮箱
+              type: string
+            locale:
+              description: 语言：zh_CN|en
+              type: string
+            uri:
+              description: '-'
+              type: string
+            type:
+              description: 注册类型
+              type: string
+            roles:
+              description: 用户角色（组）
+              type: array
+              items: {  }
+            promotedSeq:
+              description: ''
+            locked:
+              description: ''
+            currentIp:
+              description: ''
+            gender:
+              description: ''
+            iam:
+              description: ''
+            city:
+              description: ''
+            qq:
+              description: ''
+            signature:
+              description: ''
+            company:
+              description: ''
+            job:
+              description: ''
+            school:
+              description: ''
+            class:
+              description: ''
+            weibo:
+              description: ''
+            weixin:
+              description: ''
+            isQQPublic:
+              description: ''
+            isWeixinPublic:
+              description: ''
+            isWeiboPublic:
+              description: ''
+            following:
+              description: ''
+            follower:
+              description: ''
+            verifiedMobile:
+              description: ''
+            promotedTime:
+              description: ''
+            lastPasswordFailTime:
+              description: ''
+            loginTime:
+              description: ''
+            approvalTime:
+              description: ''
+            vip:
+              description: ''
+            token:
+              description: ''
+            havePayPassword:
+              description: ''
+            fingerPrintSetting:
+              description: ''
+          type: object
 tags:
   -
     name: setting
