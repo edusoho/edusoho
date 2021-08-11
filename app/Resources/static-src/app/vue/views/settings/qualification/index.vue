@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { TeacherQualification } from 'common/vue/service/index.js';
+import { TeacherQualification } from 'common/vue/service';
 import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
 export default {

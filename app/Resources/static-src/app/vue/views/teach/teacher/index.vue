@@ -103,7 +103,7 @@
 <script>
 import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, UserProfiles, Setting } from "common/vue/service/index.js";
+import { Teacher, UserProfiles, Setting } from "common/vue/service";
 import userInfoTable from "../../components/userInfoTable";
 import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
