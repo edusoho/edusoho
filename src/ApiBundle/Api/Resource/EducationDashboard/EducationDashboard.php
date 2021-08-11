@@ -21,7 +21,7 @@ class EducationDashboard extends AbstractResource
     public function search(ApiRequest $request)
     {
         $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
-        return$newStudentData = $this->getNewStudentsData($allMultiClasses);
+        $newStudentData = $this->getNewStudentsData($allMultiClasses);
         $totalFinishedStudentNum = $this->getTotalFinishedStudentNum($allMultiClasses);
         $todayLiveData = $this->getTodayLiveData($allMultiClasses);
         $reviewData = $this->getReviewData($allMultiClasses);
@@ -40,22 +40,22 @@ class EducationDashboard extends AbstractResource
             'startTimeGreaterThan' => strtotime(date('Y-m-d')),
             'startTimeLessThan' => strtotime('tomorrow'),
         ];
-        return$totalNewStudentNum = $this->getCourseMemberService()->countMembers($conditions);
+        $totalNewStudentNum = $this->getCourseMemberService()->countMembers($conditions);
         $newAscSortStudents = $this->getCourseMemberService()->countGroupByMultiClassId($conditions);
         $newDescSortStudents = $this->getCourseMemberService()->countGroupByMultiClassId($conditions, 'DESC');
         $newAscSortStudents = $this->filterStudentNum($newAscSortStudents, $allMultiClasses);
         $newDescSortStudents = $this->filterStudentNum($newDescSortStudents, $allMultiClasses);
 
         return [
-            'totalNewStudentNum' => $totalNewStudentNum,
-            'newStudentRankList' => ['ascSort' => $newAscSortStudents, 'descSort' => $newDescSortStudents]
+            'totalNum' => $totalNewStudentNum,
+            'rankList' => ['ascSort' => $newAscSortStudents, 'descSort' => $newDescSortStudents]
         ];
     }
 
     protected function filterStudentNum($numList, $allMultiClasses)
     {
         foreach ($numList as &$list){
-            $list['multiClass'] = isset($allMultiClasses[$list['multiClassId']]) ? $allMultiClasses[$list['multiClassId']] : [];
+            $list['multiClass'] = isset($allMultiClasses[$list['multiClassId']]) ? $allMultiClasses[$list['multiClassId']]['title'] : '';
         }
 
         return $numList;
@@ -99,8 +99,10 @@ class EducationDashboard extends AbstractResource
         $courseIds = ArrayToolkit::column($allMultiClasses, 'courseId');
         $activities = $this->getActivityService()->findActivitiesByCourseIdsAndTypes($courseIds, ['homework', 'testpaper'], true);
         $answerSceneIds = [];
+        $sceneIndexActivities = [];
         foreach ($activities as $activity) {
             $answerSceneIds[] = $activity['ext']['answerSceneId'];
+            $sceneIndexActivities[$activity['ext']['answerSceneId']] = $activity;
         }
 
         $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 24);
@@ -110,15 +112,28 @@ class EducationDashboard extends AbstractResource
             'endTime_LE' => time() - $reviewTimeLimit * 3600,
         ]);
 
+        list($reviewRate, $descReviewRate) = $this->filterReviewRate($allMultiClasses, $answerSceneIds, $sceneIndexActivities);
+
+        return ['timeoutReviewNum' => $timeoutReviewNum, 'reviewRateList' => ['ascSort' => $reviewRate, 'descSort' => $descReviewRate]];
+    }
+
+    protected function filterReviewRate($multiClasses, $answerSceneIds, $sceneIndexActivities)
+    {
         $answerSceneIds = empty($answerSceneIds) ? [-1] : $answerSceneIds;
         $totalAnswerRecords = $this->getAnswerRecordService()->countGroupByAnswerSceneId(['answer_scene_ids' => $answerSceneIds]);
         $reviewedRecords = $this->getAnswerRecordService()->countGroupByAnswerSceneId(['answer_scene_ids' => $answerSceneIds, 'status' => 'finished']);
         $reviewRate = [];
+        $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
         foreach ($totalAnswerRecords as $answerRecord) {
+            $activity = isset($sceneIndexActivities[$answerRecord['answer_scene_id']]) ? $sceneIndexActivities[$answerRecord['answer_scene_id']] : [];
+            $reviewRate[$answerRecord['answer_scene_id']]['multiClass'] = isset($multiClasses[$activity['courseId']]) ? $multiClasses[$activity['courseId']]['title'] : '';
             $reviewRate[$answerRecord['answer_scene_id']]['rate'] = $answerRecord['count'] && $reviewedRecords[$answerRecord['answer_scene_id']]['count'] ? round($reviewedRecords[$answerRecord['answer_scene_id']]['count'] / $answerRecord['count'], 2) : 0;
         }
+        $descReviewRate = $reviewRate;
+        asort($reviewRate);
+        arsort($descReviewRate);
 
-        return ['timeoutReviewNum' => $timeoutReviewNum, 'reviewRateList' => ['ascSort' => asort($reviewRate), 'descSort' => arsort($reviewRate)]];
+        return [$reviewRate, $descReviewRate];
     }
 
     protected function getMultiClassData()
@@ -154,17 +169,19 @@ class EducationDashboard extends AbstractResource
         $ascFinishedStudents = $this->getCourseMemberService()->countGroupByMultiClassId($conditions);
         $descFinishedStudents = $this->getCourseMemberService()->countGroupByMultiClassId($conditions, 'DESC');
         $courseIds = ArrayToolkit::column($allMultiClasses, 'courseId');
-        $ascFinishedStudents = $this->filterRateList($ascFinishedStudents, $courseIds);
-        $descFinishedStudents = $this->filterRateList($descFinishedStudents, $courseIds);
+        $ascFinishedStudents = $this->filterRateList($allMultiClasses, $ascFinishedStudents, $courseIds);
+        $descFinishedStudents = $this->filterRateList($allMultiClasses, $descFinishedStudents, $courseIds);
 
         return ['ascSort' => $ascFinishedStudents, 'descSort' => $descFinishedStudents];
     }
 
-    protected function filterRateList($finishedStudents, $courseIds)
+    protected function filterRateList($multiClasses, $finishedStudents, $courseIds)
     {
         $finishedRateList = [];
         $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'multiClassId');
+        $multiClasses = ArrayToolkit::index($multiClasses, 'id');
         foreach ($finishedStudents as $finishedStudent) {
+            $answerRate[$finishedStudent['multiClassId']]['multiClass'] = isset($multiClasses[$finishedStudent['multiClassId']]) ? $multiClasses[$finishedStudent['multiClassId']]['title'] : '';
             $finishedRateList[$finishedStudent['multiClassId']]['rate'] = $finishedStudent['count'] && $courses[$finishedStudent['multiClassId']] ? round($finishedStudent['count'] / $courses[$finishedStudent['multiClassId']]['studentNum'], 2) : 0;
         }
 
@@ -180,18 +197,20 @@ class EducationDashboard extends AbstractResource
         ];
         $ascAnsweredThread = $this->getThreadService()->countThreadsGroupedByCourseId($conditions);
         $descAnsweredThread = $this->getThreadService()->countThreadsGroupedByCourseId($conditions, 'DESC');
-        $ascAnsweredThread = $this->filterAnswerRate($ascAnsweredThread, $courseIds);
-        $descAnsweredThread = $this->filterAnswerRate($descAnsweredThread, $courseIds);
+        $ascAnsweredThread = $this->filterAnswerRate($allMultiClasses, $ascAnsweredThread, $courseIds);
+        $descAnsweredThread = $this->filterAnswerRate($allMultiClasses, $descAnsweredThread, $courseIds);
 
         return ['acrSort' => $ascAnsweredThread, 'descSort' => $descAnsweredThread];
     }
 
-    protected function filterAnswerRate($answeredThreads, $courseIds)
+    protected function filterAnswerRate($multiClasses, $answeredThreads, $courseIds)
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $answerRate = [];
         $answeredThreads = ArrayToolkit::index($answeredThreads, 'courseId');
+        $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
         foreach ($courses as $course) {
+            $answerRate[$course['id']]['multiClass'] = isset($multiClasses[$course['id']]) ? $multiClasses[$course['id']]['title'] : '';
             $answerRate[$course['id']]['rate'] = $course['questionNum'] && $answeredThreads[$course['id']]['count'] ? round($answeredThreads[$course['id']]['count'] / $course['questionNum'], 2) : 0;
         }
 
