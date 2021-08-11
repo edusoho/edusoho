@@ -51,45 +51,49 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.banner {
-  padding-top: 40px;
-  height: 120px;
-  font-size: 32px;
-  color: #fff;
-  line-height: 40px;
-  font-weight: 500;
-  background: url('/static-dist/app/img/vue/teacher/qualification_bg.png') center no-repeat;
-}
+.teacher-qualification {
+  min-height: 540px;
 
-.qualification-item {
-  padding: 0 12px;
+  .banner {
+    padding-top: 40px;
+    height: 120px;
+    font-size: 32px;
+    color: #fff;
+    line-height: 40px;
+    font-weight: 500;
+    background: url('/static-dist/app/img/vue/teacher/qualification_bg.png') center no-repeat;
+  }
 
-  .img-box {
-    position: relative;
-    padding-bottom: 100%;
-    width: 100%;
+  .qualification-item {
+    padding: 0 12px;
 
-    img {
-      position: absolute;
-      left: 0;
-      top: 0;
+    .img-box {
+      position: relative;
+      padding-bottom: 100%;
       width: 100%;
-      height: 100%;
-      border-radius: 8px;
+
+      img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+      }
     }
-  }
 
-  .name {
-    margin-top: 8px;
-    color: #333;
-  }
+    .name {
+      margin-top: 8px;
+      color: #333;
+    }
 
-  p {
-    margin-top: 4px;
-    margin-bottom: 0;
-    font-size: 12px;
-    color: #666;
-    line-height: 16px;
+    p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      font-size: 12px;
+      color: #666;
+      line-height: 16px;
+    }
   }
 }
 </style>
