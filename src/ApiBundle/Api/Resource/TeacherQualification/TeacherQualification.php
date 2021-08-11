@@ -62,15 +62,21 @@ class TeacherQualification extends AbstractResource
         $condition = ['roles' => '|ROLE_TEACHER|'];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getTeacherQualificationService()->countTeacherQualification($condition);
-        $qualification = $this->getTeacherQualificationService()->searchTeacherQualification(
+        $qualifications = $this->getTeacherQualificationService()->searchTeacherQualification(
             $condition,
             ['updated_time' => 'DESC'],
             0,
             $total
         );
-        $this->getOCUtil()->multiple($qualification, ['user_id'], 'profile', 'profile');
 
-        return $this->makePagingObject($qualification, $total, $offset, $limit);
+        foreach ($qualifications as $key => $qualification) {
+            if ($qualification['avatar']) {
+                $qualifications[$key]['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+            }
+        }
+        $this->getOCUtil()->multiple($qualifications, ['user_id'], 'profile', 'profile');
+
+        return $this->makePagingObject($qualifications, $total, $offset, $limit);
     }
 
     protected function isTeacher($userId)
