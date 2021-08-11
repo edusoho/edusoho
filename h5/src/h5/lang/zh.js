@@ -393,7 +393,11 @@ export default {
   courseLearning: {
     title: '课程详情',
     intro: '课程介绍',
-    catalogue: '课程目录',
+    catalogue: '目录',
+    question: '问答',
+    discussion: '话题',
+    notes: '笔记',
+    evaluation: '评价',
     validity: '学习有效期',
     teacherStyle: '教师介绍',
     myEvaluation: '我的评价',

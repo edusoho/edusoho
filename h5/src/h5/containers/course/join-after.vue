@@ -7,60 +7,61 @@
       v-model="active"
       :class="tabFixed ? 'isFixed' : ''"
     >
-      <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
+      <van-tab v-for="item in tabs" :title="$t(`courseLearning.${item}`)" :key="item" />
     </van-tabs>
 
-    <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-show="active == 0">
-
-        <div class="course-info" @click="gotoGoodsPage">
-          <div class="course-info__left">
-            <div class="title text-overflow">{{ details.courseSet && details.courseSet.title }}</div>
-            <div class="learning-progress">
-              <div class="learning-progress__bar" :style="{ width: progress }" />
-              <div class="learning-progress__text">
-                {{ progress }}
+      <keep-alive>
+        <!-- 目录 -->
+        <div v-if="active == 0">
+          <div class="course-info" @click="gotoGoodsPage">
+            <div class="course-info__left">
+              <div class="title text-overflow">{{ details.courseSet && details.courseSet.title }}</div>
+              <div class="learning-progress">
+                <div class="learning-progress__bar" :style="{ width: progress }" />
+                <div class="learning-progress__text">
+                  {{ progress }}
+                </div>
               </div>
             </div>
+            <van-icon name="arrow" v-if="details.goodsId" />
           </div>
-          <van-icon name="arrow" v-if="details.goodsId" />
-        </div>
 
-        <!-- 助教 -->
-        <div class="assistant" v-if="details.assistant && details.assistant.weChatQrCode">
-          <div class="assistant-btn" @click="showAssistant">
-            <div class="assistant-btn__text">
-              <i class="iconfont icon-weixin1"></i>
-              {{ $t('courseLearning.addTeachingAssistantWeChat') }}
+          <!-- 助教 -->
+          <div class="assistant" v-if="details.assistant && details.assistant.weChatQrCode">
+            <div class="assistant-btn" @click="showAssistant">
+              <div class="assistant-btn__text">
+                <i class="iconfont icon-weixin1"></i>
+                {{ $t('courseLearning.addTeachingAssistantWeChat') }}
+              </div>
+
+              <van-icon class="arrow-icon" name="arrow" />
             </div>
 
-            <van-icon class="arrow-icon" name="arrow" />
+            <van-popup
+              class="assistant-info"
+              v-model="assistantShow"
+              position="bottom"
+              closeable
+              round
+            >
+              <img class="avatar" :src="details.assistant.avatar.middle" :alt="$t('courseLearning.picture')" />
+              <p class="nickname">{{ details.assistant.nickname }}</p>
+              <p class="desc">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
+              <img class="wechat" :src="details.assistant.weChatQrCode" :alt="$t('courseLearning.qRCodePicture')" />
+              <div class="tips" v-if="isWeixin">{{ $t('courseLearning.longPressThePicture') }}</div>
+              <div class="tips" v-else>{{ $t('courseLearning.longPressThePicture2') }}</div>
+            </van-popup>
           </div>
 
-          <van-popup
-            class="assistant-info"
-            v-model="assistantShow"
-            position="bottom"
-            closeable
-            round
-          >
-            <img class="avatar" :src="details.assistant.avatar.middle" :alt="$t('courseLearning.picture')" />
-            <p class="nickname">{{ details.assistant.nickname }}</p>
-            <p class="desc">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
-            <img class="wechat" :src="details.assistant.weChatQrCode" :alt="$t('courseLearning.qRCodePicture')" />
-            <div class="tips" v-if="isWeixin">{{ $t('courseLearning.longPressThePicture') }}</div>
-            <div class="tips" v-else>{{ $t('courseLearning.longPressThePicture2') }}</div>
-          </van-popup>
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
         </div>
 
-        <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
-      </div>
-
-      <div v-show="active == 2">
-
-      </div>
+        <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
+        <component v-else :is="currentTabComponent"></component>
+      </keep-alive>
     </div>
+
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
@@ -91,8 +92,28 @@ import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 
+// tabs 子组件
+import Question from './question/index.vue';
+import Discussion from './discussion/index.vue';
+import Notes from './notes/index.vue';
+import Evaluation from './evaluation/index.vue';
+// 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
+const tabComponent = ['', 'Question', 'Discussion', 'Notes', 'Evaluation'];
+
 export default {
   inheritAttrs: true,
+
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    Directory,
+    DetailHead,
+    afterjoinDirectory,
+    infoCollection,
+    Question,
+    Discussion,
+    Notes,
+    Evaluation
+  },
 
   props: {
     details: {
@@ -106,7 +127,7 @@ export default {
       headBottom: 0,
       active: 0,
       scrollFlag: false,
-      tabs: ['目录', '问答', '话题', '笔记', '评价'],
+      tabs: ['catalogue', 'question', 'discussion', 'notes', 'evaluation'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
@@ -155,6 +176,10 @@ export default {
     isWeixin() {
       const ua = navigator.userAgent.toLowerCase();
       return ua.match(/MicroMessenger/i) == 'micromessenger';
+    },
+
+    currentTabComponent() {
+      return tabComponent[this.active];
     }
   },
   watch: {
@@ -211,13 +236,7 @@ export default {
       console.error(err);
     });
   },
-  components: {
-    // eslint-disable-next-line vue/no-unused-components
-    Directory,
-    DetailHead,
-    afterjoinDirectory,
-    infoCollection
-  },
+
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
   },
