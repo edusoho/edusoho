@@ -3226,6 +3226,9 @@ user.settings.verification.approve_failed_reason_tips: 审核未通过，原因�
 user.settings.verification.notice: 认证须知
 user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
 
+# 个人设置模块-教师资质
+user.settings.teacher_qualification: 教师资质
+
 # 个人设置模块-头像设置
 user.settings.avatar.page_title: 头像设置
 user.settings.avatar.crop: 头像图片
