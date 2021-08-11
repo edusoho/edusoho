@@ -15,7 +15,6 @@ use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use ESCloud\SDK\Service\ScrmService;
