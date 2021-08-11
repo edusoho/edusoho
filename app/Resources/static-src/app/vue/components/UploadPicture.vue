@@ -27,7 +27,7 @@
     >
       <vue-cropper
         ref="cropper"
-        :view-mode="3"
+        :view-mode="1"
         :auto-crop-area="1"
         :aspect-ratio="aspectRatio"
         :src="imgUrl"
