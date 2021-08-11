@@ -44,7 +44,7 @@
 import _ from 'lodash';
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
-import { UploadToken, File } from 'common/vue/service/index.js';
+import { UploadToken, File } from 'common/vue/service';
 
 export default {
   name: 'UploadPicture',
@@ -83,8 +83,7 @@ export default {
       visible: false,
       uploadLoading: false,
       uploadToken: {},
-      cropperKey: 0,
-      imgs: {}
+      cropperKey: 0
     }
   },
 
@@ -153,73 +152,6 @@ export default {
           const { url, id } = await File.uploadFile(formData);
           this.pictureUrl = url;
           this.$emit('success', id);
-        } finally {
-          this.loading = false;
-          this.visible = false;
-          this.uploadLoading = false;
-        }
-      });
-    },
-
-    // 后端负责裁剪
-    async handleSaveCropper2() {
-      this.loading = true;
-
-      if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
-        await this.getUploadToken();
-      }
-
-      const cropper = this.$refs.cropper;
-
-      cropper.getCroppedCanvas().toBlob(async blob => {
-        const { x, y, width, height } = cropper.getData();
-        const { naturalWidth, naturalHeight } = cropper.getImageData();
-
-        const cropperData = {
-          x: _.ceil(_.max([0, x])),
-          y: _.ceil(_.max([0, y])),
-          width: _.ceil(width),
-          height: _.ceil(height)
-        };
-
-        const cropResult = {
-          x: cropperData.x,
-          y: cropperData.y,
-          x2: _.add(cropperData.x, cropperData.width),
-          y2: _.add(cropperData.y, cropperData.height),
-          w: cropperData.width, // 裁剪后宽度
-          h: cropperData.height, // 裁剪后高度
-          'imgs[large][0]': 480,
-          'imgs[large][1]': 270,
-          'imgs[middle][0]': 304,
-          'imgs[middle][1]': 171,
-          'imgs[small][0]': 96,
-          'imgs[small][1]': 54,
-          post: false,
-          width: naturalWidth, // 原图片宽度
-          height: naturalHeight, // 原图片高度
-          group: 'course',
-          post: false
-        };
-        const formData = new FormData();
-
-        formData.append('file', blob, this.pictureName);
-        formData.append('token', this.uploadToken.token);
-
-        this.uploadLoading = true;
-
-        try {
-          const { url } = await File.uploadFile(formData);
-
-          this.pictureUrl = url;
-          this.$emit('success', url)
-
-          const formData1 = new FormData();
-          for(const key in cropResult) {
-            formData1.append(key, cropResult[key]);
-          }
-
-          this.imgs = await File.imgCrop(formData1);
         } finally {
           this.loading = false;
           this.visible = false;

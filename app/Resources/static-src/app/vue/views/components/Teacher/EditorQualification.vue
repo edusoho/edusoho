@@ -97,20 +97,20 @@ export default {
     setFormValue() {
       const { truename, avatarFileId, code, url } = this.editInfo;
       _.assign(this.form, {
-        truename: truename,
-        avatarFileId: avatarFileId,
-        code: code
+        truename,
+        avatarFileId,
+        code
       });
       this.file = url;
     },
 
     onSubmit() {
       this.$refs.ruleForm.validate(async valid => {
-        if (valid) {
-          const result = await TeacherQualification.add({ ...this.form, userId: this.userId });
-          this.$message.success('保存成功');
-          this.$emit('handle-cancel-modal', result);
-        }
+        if (!valid) return;
+
+        const result = await TeacherQualification.add({ ...this.form, userId: this.userId });
+        this.$message.success('保存成功');
+        this.$emit('handle-cancel-modal', result);
       });
     },
 
