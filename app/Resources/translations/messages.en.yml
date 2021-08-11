@@ -2806,7 +2806,8 @@ user.settings.verification.approve_failed_reason_tips: 'The review failed, due t
 user.settings.verification.notice: 'Notice'
 user.settings.verification.notice_content: "<p>1, please make sure that the photo of the ID card is clear and identifiable. PS is strictly forbidden, otherwise you will bear the corresponding legal consequences. <br> 2. After the real name authentication is successful, the real name information cannot be modified and deleted. Please fill in carefully. <br> 3. We will review the information you submitted as soon as possible, and you will receive a system notification when processing is complete. </p>"
 
-
+# 个人设置模块-教师资质
+user.settings.teacher_qualification: 'Teacher qualification'
 
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
@@ -10765,3 +10766,7 @@ feedback_title: Diting, directly connected to EduSoho product manager
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
+
+exception.teacher_qualification_not_enable: Teacherqualification not enable
+exception.teacher_qualification_not_teacher: Teacherqualification not teacher
+

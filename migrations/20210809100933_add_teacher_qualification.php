@@ -15,6 +15,7 @@ class AddTeacherQualification extends Migration
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 		        `user_id` int(10) unsigned NOT NULL DEFAULT '0',
 		        `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '教师资质照片',
+                `avatarFileId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件id',
 		        `code` varchar(64) NOT NULL DEFAULT '' COMMENT '教师资质编号',
 		        `created_time` int(10) unsigned NOT NULL DEFAULT 0,
                 `updated_time` int(10) unsigned NOT NULL DEFAULT 0,

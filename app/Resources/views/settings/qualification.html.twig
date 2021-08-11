@@ -1,0 +1,14 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% do script(['app/vue/views/settings/qualification/index.js']) %}
+
+{% set side_nav = 'qualification' %}
+
+{% block page_title %}
+  {{'user.settings.teacher_qualification'|trans}}
+{% endblock %}
+
+{% block main_body %}
+  <input type="hidden" value="{{ user_id }}" class="js-user-id">
+  <div id="app" />
+{% endblock %}

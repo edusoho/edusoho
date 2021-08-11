@@ -2,6 +2,7 @@
 
 namespace Biz\TeacherQualification\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
 use Biz\TeacherQualification\Dao\TeacherQualificationDao;
@@ -15,6 +16,13 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
         return $this->getTeacherQualificationDao()->getByUserId($userId);
     }
 
+    public function findByUserIds($userIds)
+    {
+        $qualification = $this->getTeacherQualificationDao()->findByUserIds($userIds);
+
+        return  ArrayToolkit::index($qualification, 'user_id');
+    }
+
     public function search($conditions, $orderBys, $start, $limit)
     {
         return $this->getTeacherQualificationDao()->search($conditions, $orderBys, $start, $limit);
@@ -23,6 +31,16 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
     public function count($conditions)
     {
         return $this->getTeacherQualificationDao()->count($conditions);
+    }
+
+    public function countTeacherQualification($conditions)
+    {
+        return $this->getTeacherQualificationDao()->countTeacherQualification($conditions);
+    }
+
+    public function searchTeacherQualification($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getTeacherQualificationDao()->searchTeacherQualification($conditions, $orderBys, $start, $limit);
     }
 
     /**
@@ -41,22 +59,27 @@ class TeacherQualificationServiceImpl extends BaseService implements TeacherQual
         $this->beginTransaction();
         try {
             if (empty($qualification)) {
-                $fields = [
+                $qualificationFields = [
                     'user_id' => $userId,
                     'avatar' => $file['uri'],
+                    'avatarFileId' => $file['id'],
                     'code' => $fields['code'],
                 ];
-                $qualification = $this->getTeacherQualificationDao()->create($fields);
+                $qualification = $this->getTeacherQualificationDao()->create($qualificationFields);
             } else {
-                $fields = [
+                $qualificationFields = [
                     'avatar' => $file['uri'],
+                    'avatarFileId' => $file['id'],
                     'code' => $fields['code'],
                 ];
-                $qualification = $this->getTeacherQualificationDao()->update($qualification['id'], $fields);
+                $qualification = $this->getTeacherQualificationDao()->update($qualification['id'], $qualificationFields);
             }
             if (!empty($fields['truename'])) {
                 $this->getProfileDao()->update($qualification['user_id'], ['truename' => trim($fields['truename'])]);
             }
+
+            $profile = $this->getProfileDao()->get($qualification['user_id']);
+            $qualification['truename'] = $profile['truename'] ?: '';
 
             $this->commit();
         } catch (\Exception $e) {
