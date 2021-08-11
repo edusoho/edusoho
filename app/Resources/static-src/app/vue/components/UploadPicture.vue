@@ -89,6 +89,7 @@ export default {
 
   created() {
     this.pictureUrl = this.file;
+    this.toBlobPolyfillInIE();
   },
 
   watch: {
@@ -98,6 +99,28 @@ export default {
   },
 
   methods: {
+    // IE toBlob 兼容处理
+    toBlobPolyfillInIE() {
+      if (!HTMLCanvasElement.prototype.toBlob) {
+        Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+          value: function (callback, type, quality) {
+            var canvas = this;
+            setTimeout(function() {
+              var binStr = atob( canvas.toDataURL(type, quality).split(',')[1] );
+              var len = binStr.length;
+              var arr = new Uint8Array(len);
+
+              for (var i = 0; i < len; i++) {
+                arr[i] = binStr.charCodeAt(i);
+              }
+
+              callback(new Blob([arr], { type: type || 'image/png' }));
+            });
+          }
+        });
+      }
+    },
+
     async getUploadToken() {
       this.uploadToken = await UploadToken.get('default');
     },
