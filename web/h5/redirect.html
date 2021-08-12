@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>跳转中...</title>
+</head>
+<body>
+<script>
+  //获取地址参数信息
+  let url = location.href.split("?");
+  let params = url[1].split("&");
+  let data = {};
+  params.forEach((n, i) => {
+    let p = n.split("=");
+    data[p[0]] = p[1];
+  });
+
+  if (!!data.shareRedirect) {
+    window.location.href = decodeURIComponent(data.shareRedirect);
+  }
+</script>
+</body>
+</html>
