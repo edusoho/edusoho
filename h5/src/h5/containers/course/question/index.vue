@@ -23,7 +23,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
-import QuestionItem from './components/QuestionItem.vue';
+import QuestionItem from './components/ListItem.vue';
 
 export default {
   name: 'Question',
