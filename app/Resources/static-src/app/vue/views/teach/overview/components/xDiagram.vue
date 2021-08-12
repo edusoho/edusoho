@@ -47,6 +47,9 @@ export default {
           formatter: (text, item, index) => {
             return `${text}: ${this.chartDataDouble[index].count}`;
           },
+          style: {
+            fontSize: 18,
+          },
         },
       });
       chart.tooltip({
@@ -61,10 +64,11 @@ export default {
         .adjust("stack")
         .position("count")
         .color("item", ["#5AD8A6", "#5B8FF9"])
-        .label("count", (percent) => {
+        .label("item", () => {
           return {
-            content: (data) => {
-              return data.item;
+            offset: 18,
+            style: {
+              fontSize: 18,
             },
           };
         })

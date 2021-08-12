@@ -1,19 +1,22 @@
 <template>
   <div class="inspection-card">
     <div class="inspection-card__info">
-      <div class="inspection-card__title info">班课名称：Python入门课</div>
-      <div class="inspection-card__item info">课时名称：第一章</div>
-      <div class="inspection-card__item info">课程时间：2021/7/21 20：00-21：00</div>
-      <div class="inspection-card__item info">完课情况：70/100</div>
+      <div class="inspection-card__title info">班课名称：{{ inspection.multiClass.title }}</div>
+      <div class="inspection-card__item info">课时名称：{{ inspection.title }}</div>
+      <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
+      <div class="inspection-card__item info">课程时长：{{ inspection.length }}</div>
+      <div class="inspection-card__item info">实时学员人数：{{ inspection.studentNum }}</div>
       <div class="inspection-card__item info">授课教师：
-        <span class="teacher">邓利维
-          <svg-icon class="icon-check-circle" icon="icon-check-circle" />
+        <span class="teacher">
+          {{ inspection.teacherInfo.nickname }}
+          <!-- <svg-icon class="icon-check-circle" icon="icon-check-circle" /> -->
           <svg-icon class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
       <div class="inspection-card__item info">助教出席：
-        <span class="teacher">阿斯顿
-          <svg-icon class="icon-check-circle" icon="icon-check-circle" />
+        <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
+          {{ assistant.nickname }}
+          <!-- <svg-icon class="icon-check-circle" icon="icon-check-circle" /> -->
           <svg-icon class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
@@ -21,7 +24,7 @@
     <div class="inspection-card__button not-live-start">
       直播未按时开始
     </div>
-    <div class="inspection-card__button live-start">
+    <!-- <div class="inspection-card__button live-start">
       <svg-icon class="icon-live" icon="icon-live" />
       进入直播
     </div>
@@ -32,7 +35,7 @@
     <div class="inspection-card__button no-start-live">
       <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
       直播未开始
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -40,7 +43,12 @@
 export default {
   name: "InspectionCard",
   components: {},
-
+  props: {
+    inspection: {
+      type: Object,
+      require: true,
+    },
+  },
   data() {
     return {};
   },
@@ -54,7 +62,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .inspection-card {
-  min-height: 269px;
+  // min-height: 269px;
   background: #fff;
   box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
   border-radius: 12px;

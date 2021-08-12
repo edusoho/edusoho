@@ -13,6 +13,7 @@ export * from './AssistantPermission/index.js';
 export * from './LiveCapacity/index.js';
 export * from './Setting/index.js';
 export * from './OverView/index.js';
+export * from './MultiClassInspection/index.js';
 
 // 接口规范
 export * from './WrongBook';
