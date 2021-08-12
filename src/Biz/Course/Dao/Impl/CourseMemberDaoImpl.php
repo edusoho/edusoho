@@ -559,7 +559,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function countGroupByCourseId($conditions, $sort = 'ASC')
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("count(*) as count, courseId")
+            ->select('count(*) as count, courseId')
             ->groupBy('courseId')
             ->orderBy('count', $sort);
 
