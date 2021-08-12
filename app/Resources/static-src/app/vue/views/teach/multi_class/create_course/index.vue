@@ -587,6 +587,15 @@
         }
 
         if (_.isObject(course)) {
+          if (this.$route.query.type === 'group') {
+            this.$router.replace({
+            name: 'MultiClassCreateGroup',
+            query: {
+              course: JSON.stringify(course)
+            }
+          })
+          return
+        }
           this.$router.replace({
             name: 'MultiClassCreate',
             query: {

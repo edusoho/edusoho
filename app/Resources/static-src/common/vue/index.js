@@ -4,6 +4,7 @@ import 'moment';
 import { AssistantPermission } from 'common/vue/service';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
+// import './mock';
 
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,

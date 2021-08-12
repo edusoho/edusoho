@@ -79,7 +79,7 @@ class Assistant extends AbstractResource
         $members = $this->getMemberService()->findMembersByUserIdsAndRole(array_column($assistants, 'id'), 'assistant');
 
         $multiClassIds = empty($members) ? [-1] : array_column($members, 'multiClassId');
-        $liveMultiClasses = $this->findMultiClassesByConditions(['ids' => $multiClassIds, 'startTimeGE' => $currentTime, 'endTimeLE' => $currentTime]);
+        $liveMultiClasses = $this->findMultiClassesByConditions(['ids' => $multiClassIds, 'startTime_LE' => $currentTime, 'endTime_GE' => $currentTime]);
         $endMultiClasses = $this->findMultiClassesByConditions(['ids' => $multiClassIds, 'endTimeLT' => $currentTime]);
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
