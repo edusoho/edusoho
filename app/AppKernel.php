@@ -244,13 +244,21 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     protected function registerSessionServiceProvider($biz)
     {
-        if ($this->getContainer()->hasParameter('redis_host')) {
+        if ($this->getContainer()->hasParameter('session_redis')) {
+            $session_redis = $this->getContainer()->getParameter('session_redis');
             $biz->register(
                 new \Codeages\Biz\Framework\Provider\SessionServiceProvider(),
                 [
                     'session.options' => [
                         'max_life_time' => 7200,
-                        'session_storage' => 'redis', // exapmle: db, redis
+                        'session_storage' => 'redis',
+                        'session_redis_host' => $session_redis['host'],
+                        'session_redis_port' => $session_redis['port'],
+                        'session_redis_timeout' => $session_redis['timeout'],
+                        'session_redis_reserved' => $session_redis['reserved'],
+                        'session_redis_retry_interval' => $session_redis['retry_interval'],
+                        'session_redis_key_prefix' => $session_redis['key_prefix'],
+                        'session_redis_password' => $session_redis['password'],
                     ],
                 ]
             );
