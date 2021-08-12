@@ -90,14 +90,6 @@ if (!window.Vue) {
     }
     return moment(value * 1000).format(format)
   }
-
-  Vue.mixin({
-    methods: {
-      isPermission(code) {
-        return true;
-      }
-    }
-  });
 }
 
 window.Vue = window.Vue || Vue;
