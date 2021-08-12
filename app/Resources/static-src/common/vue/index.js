@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.esm.js';
 import _ from 'lodash';
 import 'moment';
-import { AssistantPermission } from 'common/vue/service';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
 import VueLazyload from 'vue-lazyload';
@@ -91,23 +90,6 @@ if (!window.Vue) {
     }
     return moment(value * 1000).format(format)
   }
-
-  AssistantPermission.get('portal').then(res => {
-    const { isAssistant, permissions } = res;
-    Vue.prototype.$isAssistant = isAssistant;
-    Vue.prototype.$permissions = permissions;
-  });
-
-  Vue.mixin({
-    methods: {
-      isPermission(code) {
-        if (!this.$isAssistant || _.includes(this.$permissions, code)) {
-          return true;
-        }
-        return false;
-      }
-    }
-  });
 }
 
 window.Vue = window.Vue || Vue;

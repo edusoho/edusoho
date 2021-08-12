@@ -175,6 +175,11 @@ export default {
           const { url, id } = await File.uploadFile(formData);
           this.pictureUrl = url;
           this.$emit('success', id);
+        } catch(error) {
+          const { status } = error.response;
+          if (status == 413) {
+            Vue.prototype.$message.error('文件过大，请上传小于 2M 的文件！');
+          }
         } finally {
           this.loading = false;
           this.visible = false;

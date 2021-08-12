@@ -5,7 +5,7 @@
         <a-input-search placeholder="请输入班课名称" style="width: 224px"
           :allowClear="true"
           @search="searchMultiClass" />
-        <a-button v-if="isPermission('multi_class_create')" class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
+        <a-button class="pull-right" type="primary" @click="goToCreateMultiClassPage">新建班课</a-button>
       </div>
 
       <a-table :columns="columns"
@@ -43,23 +43,23 @@
         <template slot="action" slot-scope="text, record">
           <a-button type="link"
             @click="goToMultiClassManage(record.id)">查看</a-button>
-          <a-button v-if="isPermission('multi_class_edit')"
+          <a-button
             type="link"
             @click="goToEditorMultiClass(record.id)">编辑</a-button>
-          <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
+          <a-dropdown>
             <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
               <a-icon type="caret-down" />
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a v-if="isPermission('multi_class_copy')" href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
+                <a href="javascript:;" @click="copyMultiClass(record)">复制班课</a>
               </a-menu-item>
               <a-menu-item>
-                <a v-if="isPermission('multi_class_delete')" href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
+                <a href="javascript:;" class="color-danger" @click="deleteMultiClass(record)">删除</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-          <a-button v-if="isPermission('course_statistics_view')"
+          <a-button
             type="link"
             @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
         </template>

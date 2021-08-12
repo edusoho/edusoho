@@ -10,7 +10,7 @@
     <div class="actions pull-left">
       <a-space size="large">
         <a-icon
-          v-if="lessonData.mode && isPermission('course_lesson_manage')"
+          v-if="lessonData.mode"
           type="edit"
           data-toggle="modal"
           data-target="#modal"
@@ -24,7 +24,7 @@
           @click="handleEditorClick"
         />
         <a-icon
-          v-if="lessonData.type !== 'lesson' && lessonData.status !== 'published' && isPermission('course_lesson_manage')"
+          v-if="lessonData.type !== 'lesson' && lessonData.status !== 'published'"
           type="delete"
           style="color: #fe4040;"
           @click="handleDeleteClick"
