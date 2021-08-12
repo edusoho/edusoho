@@ -122,4 +122,11 @@ export default [
     url: '/lessons/{taskId}',
     method: 'GET',
   },
+  {
+    // 搜索课程话题信息
+    name: 'getCoursesThreads',
+    url: '/courses/{courseId}/threads',
+    method: 'GET',
+    disableLoading: true
+  }
 ];

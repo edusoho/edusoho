@@ -1,6 +1,18 @@
 <template>
   <div class="question">
-    <question-item v-for="question in 10" :key="question" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <question-item
+        v-for="item in list"
+        :key="item.id"
+        :item="item"
+      />
+    </van-list>
+
 
     <div class="question-btn">
       <van-button type="primary" block>发起问答</van-button>
@@ -9,6 +21,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import Api from '@/api';
 import QuestionItem from './components/QuestionItem.vue';
 
 export default {
@@ -16,6 +30,46 @@ export default {
 
   components: {
     QuestionItem
+  },
+
+  data() {
+    return {
+      list: [],
+      loading: false,
+      finished: false,
+      paging: {
+        offset: 0,
+        limit: 20
+      }
+    }
+  },
+
+  methods: {
+    onLoad() {
+      const { offset, limit } = this.paging;
+      Api.getCoursesThreads({
+        query: {
+          courseId: 5231
+        },
+        params: {
+          limit: limit,
+          offset: offset
+        }
+      }).then(res => {
+        const { data, paging: { total } } = res;
+
+        _.assign(this, {
+          list: _.concat(this.list, data),
+          loading: false
+        });
+
+        this.paging.offset++;
+
+        if (this.list.length >= total) {
+          this.finished = true;
+        }
+      });
+    }
   }
 }
 </script>
@@ -36,6 +90,10 @@ export default {
       border-radius: 8px;
       font-size: vw(16);
     }
+  }
+
+  .van-list {
+    margin-top: 0;
   }
 }
 </style>

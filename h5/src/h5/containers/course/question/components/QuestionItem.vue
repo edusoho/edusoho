@@ -1,20 +1,33 @@
 <template>
   <div class="question-item">
-    <h3 class="question-title text-overflow">Photoshop基础入门班级课程阿建设大街爱Photoshop基础入门班级课程阿建设大街爱好</h3>
-    <p class="question-desc">Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级…Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级Photoshop基础入门班级…</p>
+    <h3 class="question-title text-overflow">{{ item.title }}</h3>
+    <p class="question-desc" v-html="content" />
     <div class="question-details">
       <div class="question-details__left">
-        <img class="user-avatar" src="">
-        <span>曲敬良发起 03/21 20:25</span>
+        <img class="user-avatar" :src="item.user.avatar.small">
+        <span>{{ item.user.nickname }}发起 03/21 20:25</span>
       </div>
-      <div class="question-details__right">1.4k</div>
+      <div class="question-details__right">{{ item.postNum }}</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'QuestionItem'
+  name: 'QuestionItem',
+
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  },
+
+  computed: {
+    content() {
+      return this.item.content.replace(/<img .*?>/g, '');
+    }
+  }
 }
 </script>
 
