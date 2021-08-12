@@ -17,6 +17,8 @@ define(function(require, exports, module) {
         });
       });
 
+      $('#qualification-submit').removeAttr("disabled");
+
       $("input[name='qualification_enabled']").change(function(){
         if($(this).val()=='0') {
           $(".qualification_tip").addClass('hidden');
