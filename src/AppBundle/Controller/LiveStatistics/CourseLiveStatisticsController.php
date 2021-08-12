@@ -20,13 +20,13 @@ class CourseLiveStatisticsController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        $taskConditions = array(
+        $taskConditions = [
             'courseId' => $courseId,
             'fromCourseSetId' => $courseSetId,
             'type' => 'live',
             'titleLike' => $request->query->get('title'),
             'status' => 'published',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -36,19 +36,19 @@ class CourseLiveStatisticsController extends BaseController
 
         $liveTasks = $this->getTaskService()->searchTasks(
             $taskConditions,
-            array('seq' => 'ASC'),
+            ['seq' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render(
             'course-manage/live/live-statistics.html.twig',
-            array(
+            [
                 'course' => $course,
                 'courseSet' => $courseSet,
                 'liveTasks' => $liveTasks,
                 'paginator' => $paginator,
-            )
+            ]
         );
     }
 
@@ -62,12 +62,12 @@ class CourseLiveStatisticsController extends BaseController
 
         return $this->render(
             'course-manage/live/live-statistics-detail.html.twig',
-            array(
+            [
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'task' => $task,
                 'activity' => $activity,
-            )
+            ]
         );
     }
 
@@ -81,18 +81,18 @@ class CourseLiveStatisticsController extends BaseController
 
             if ($status && !empty($statistics['data']['detail'])) {
                 $groupedStatistics = ArrayToolkit::group($statistics['data']['detail'], 'checkin');
-                $groupedStatistics = array(
-                    empty($groupedStatistics[0]) ? array() : $groupedStatistics[0],
-                    empty($groupedStatistics[1]) ? array() : $groupedStatistics[1],
-                );
+                $groupedStatistics = [
+                    empty($groupedStatistics[0]) ? [] : $groupedStatistics[0],
+                    empty($groupedStatistics[1]) ? [] : $groupedStatistics[1],
+                ];
 
-                $statistics['data']['detail'] = $status == 'checked' ? $groupedStatistics[1] : $groupedStatistics[0];
+                $statistics['data']['detail'] = 'checked' == $status ? $groupedStatistics[1] : $groupedStatistics[0];
             }
         } else {
             $statistics = $this->getLiveStatisticsService()->getVisitorStatisticsByLiveId($liveId);
         }
 
-        $statistics = empty($statistics['data']['detail']) ? array() : $statistics['data']['detail'];
+        $statistics = empty($statistics['data']['detail']) ? [] : $statistics['data']['detail'];
 
         $paginator = new Paginator(
             $request,
@@ -102,14 +102,20 @@ class CourseLiveStatisticsController extends BaseController
 
         $statistics = array_slice($statistics, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        return $this->render('course-manage/live/live-statistics-modal.html.twig', array(
+        $userIds = ArrayToolkit::column($statistics, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
+        return $this->render('course-manage/live/live-statistics-modal.html.twig', [
             'liveId' => $liveId,
             'task' => $task,
             'statistics' => $statistics,
             'type' => $type,
             'paginator' => $paginator,
             'status' => $status,
-        ));
+            'users' => $users,
+            'profiles' => $profiles,
+        ]);
     }
 
     public function jsonDataAction(Request $request, $taskId, $liveId)
@@ -136,10 +142,10 @@ class CourseLiveStatisticsController extends BaseController
             $visitor['data']['totalLearnTime'] = ceil($visitor['data']['totalLearnTime'] / 60);
         }
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'checkin' => $checkin,
             'visitor' => $visitor,
-        ));
+        ]);
     }
 
     /**

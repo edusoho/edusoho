@@ -237,6 +237,7 @@ user.fields.idcard_label: Id card
 user.fields.idcard_front_title: Upload Id card front
 user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
+user.fields.mobile_simple_label: 'Phone'
 user.fields.profile_mobile_label: Phone(from personal data)
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
@@ -2805,7 +2806,8 @@ user.settings.verification.approve_failed_reason_tips: 'The review failed, due t
 user.settings.verification.notice: 'Notice'
 user.settings.verification.notice_content: "<p>1, please make sure that the photo of the ID card is clear and identifiable. PS is strictly forbidden, otherwise you will bear the corresponding legal consequences. <br> 2. After the real name authentication is successful, the real name information cannot be modified and deleted. Please fill in carefully. <br> 3. We will review the information you submitted as soon as possible, and you will receive a system notification when processing is complete. </p>"
 
-
+# 个人设置模块-教师资质
+user.settings.teacher_qualification: 'Teacher qualification'
 
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
@@ -4977,7 +4979,7 @@ admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
 admin.setting.navigation.operation: Action
-\admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Exercise List Page：domain/exercise/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
+\admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Exercise List Page：domain/exercise/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p> <p>Teacher qualification public notice: domain/teacher/qualification</p>\n"
 admin.setting.navigation.top.add: 'Add Top Navigation Menu Item'
 admin.setting.navigation.top.edit: 'Edit Top Navigation Menu Item'
 admin.setting.navigation.foot.add: 'Add Bottom Navigation Menu Item'
@@ -6967,6 +6969,9 @@ admin.invite_setting.rewards_count_required: Please enter a number from 1-1000
 admin.invite_setting.mobile_required: Phone number required
 admin.invite_setting.mobile_for_receive: Phone number to receive reminders
 admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
+admin.teacher_qualification.enable: Teacher Qualification Publicity Function
+admin.teacher_qualification.tips: This feature is effective under the official EduSoho theme, third-party themes are not supported at the moment.
+admin.teacher_qualification.upload_url: Go to Upload Teacher Qualifications
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.site: 'Mobile settings'
@@ -10761,3 +10766,10 @@ feedback_title: Diting, directly connected to EduSoho product manager
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
+
+exception.teacher_qualification_not_enable: Teacher qualification not enable
+exception.teacher_qualification_not_teacher: Teacher qualification not teacher
+homepage.teacher_qualification.code: 'Teacher qualification code'
+homepage.teacher_qualification.more: 'More'
+
+

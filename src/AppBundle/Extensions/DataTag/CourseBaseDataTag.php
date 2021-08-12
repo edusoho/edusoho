@@ -75,6 +75,11 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->createService('Activity:ActivityService');
     }
 
+    protected function getTeacherQualification()
+    {
+        return $this->getServiceKernel()->createService('TeacherQualification:TeacherQualificationService');
+    }
+
     protected function checkUserId(array $arguments)
     {
         if (empty($arguments['userId'])) {

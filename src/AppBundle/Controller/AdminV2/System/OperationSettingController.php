@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
+use Biz\Theme\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OperationSettingController extends BaseController
@@ -49,6 +50,33 @@ class OperationSettingController extends BaseController
         }
 
         return $this->render('admin-v2/system/operation/group-set.html.twig', [
+        ]);
+    }
+
+    public function teacherQualificationSetAction(Request $request)
+    {
+        $default = [
+            'qualification_enabled' => 0,
+        ];
+
+        if ('POST' == $request->getMethod()) {
+            $qualificationSetting = $request->request->all();
+
+            $currentTheme = $this->getSettingService()->get('theme');
+
+            if ('0' === $qualificationSetting['qualification_enabled'] && '简墨' === $currentTheme['name']) {
+                $this->getThemeService()->cancelConfirmConfigByName('简墨', 'TeacherQualification');
+            }
+            $this->getSettingService()->set('qualification', $qualificationSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $qualificationSetting = $this->getSettingService()->get('qualification', []);
+        $qualificationSetting = array_merge($default, $qualificationSetting);
+
+        return $this->render('admin-v2/system/operation/qualification-set.html.twig', [
+            'qualificationSetting' => $qualificationSetting,
         ]);
     }
 
@@ -313,6 +341,14 @@ class OperationSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->createService('Theme:ThemeService');
     }
 
     /**
