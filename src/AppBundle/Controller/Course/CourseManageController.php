@@ -19,6 +19,7 @@ use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService as S2B2CProductService;
@@ -108,6 +109,8 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $liveTasks = array_filter(
@@ -135,6 +138,7 @@ class CourseManageController extends BaseController
                 'tasks' => $liveTasks,
                 'default' => $default,
                 'lessons' => $lessons,
+                'multiClass' => $multiClass,
             ]
         );
     }
@@ -522,6 +526,7 @@ class CourseManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            $data['services'] = empty($data['services']) ? [] : $data['services'];
 
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
@@ -918,6 +923,7 @@ class CourseManageController extends BaseController
         $ids = $request->request->get('ids', []);
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
         $this->getCourseService()->sortCourseItems($courseId, $ids);
+        $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $ids);
 
         return $this->createJsonResponse(['result' => true]);
     }
@@ -1346,6 +1352,14 @@ class CourseManageController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 
     protected function getVipRightService()

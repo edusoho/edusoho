@@ -2,6 +2,7 @@
 
 namespace Biz\MultiClass\Job;
 
+use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -36,6 +37,7 @@ class CloneMultiClassJob extends AbstractJob
                 'id' => $cloneMultiClass['teacherId'],
                 'isVisable' => 1, ]], $newMultiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($newMultiClass['courseId'], $cloneMultiClass['assistantIds'], $newMultiClass['id']);
+            $this->getAssistantStudentService()->setAssistantStudents($newMultiClass['courseId'], $newMultiClass['id']);
 
             $course = $this->getCourseService()->getCourse($newMultiClass['courseId']);
             $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
@@ -90,6 +92,14 @@ class CloneMultiClassJob extends AbstractJob
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return AssistantStudentService
+     */
+    protected function getAssistantStudentService()
+    {
+        return $this->biz->service('Assistant:AssistantStudentService');
     }
 
     /**

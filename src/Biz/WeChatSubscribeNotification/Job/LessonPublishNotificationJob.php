@@ -37,9 +37,9 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         }
 
         $userIds = ArrayToolkit::column($members, 'userId');
-        $cloudSmsType = 'live' === $courseSet['type'] ? 'sms_live_lesson_publish' : 'sms_normal_lesson_publish';
-        $smsTemplateId = 'live' === $courseSet['type'] ? SmsType::LIVE_NOTIFY : SmsType::TASK_PUBLISH;
-        $smsParams = 'live' === $courseSet['type'] ? [
+        $cloudSmsType = 'live' === $task['type'] ? 'sms_live_lesson_publish' : 'sms_normal_lesson_publish';
+        $smsTemplateId = 'live' === $task['type'] ? SmsType::LIVE_NOTIFY : SmsType::TASK_PUBLISH;
+        $smsParams = 'live' === $task['type'] ? [
             'course_title' => '课程：'.$this->getCourseNameByCourse($course),
             'lesson_title' => '学习任务：'.$task['title'],
             'startTime' => date('Y-m-d H:i', $task['startTime']),

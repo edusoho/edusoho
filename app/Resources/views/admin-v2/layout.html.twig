@@ -150,10 +150,9 @@
 
     <div id="modal" class="modal" ></div>
     <div id="attachment-modal" class="modal" ></div>
-    {% if setting('copyright.thirdCopyright') != 1 %}
+    {% if setting('copyright.thirdCopyright') != 1 and is_saas() %}
       <div class="fixed-bar">
-        <a href="{{path('admin_v2_feedback')}}"  target='_blank' class="icon-question-text feedback">
-          <i class="es-icon es-icon-help"></i>
+        <a href="{{path('feedback')}}"  target='_blank' class="icon-question-text feedback">
           <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
         </a>
       </div>

@@ -5,11 +5,10 @@ namespace AppBundle\Extension;
 use Biz\Favorite\Types\Course;
 use Biz\Favorite\Types\Goods;
 use Biz\Favorite\Types\OpenCourse;
-use Deployer\Exception\Exception;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class FavoriteTypesExtension extends Exception implements ServiceProviderInterface
+class FavoriteTypesExtension extends Extension implements ServiceProviderInterface
 {
     public function getFavoriteTypes()
     {

@@ -183,7 +183,7 @@ class UserManageController extends BaseController
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
-                $roles[] = 'ROLE_TEACHER';
+                $roles = $formData['roles'];
                 array_push($roles, 'ROLE_USER');
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
@@ -227,7 +227,9 @@ class UserManageController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth');
 
-        if (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
+        if (isset($auth['register_enabled']) && 'closed' === $auth['register_enabled']) {
+            return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
+        } elseif (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && 'mobile' == $auth['register_mode']) {
             return 'admin-v2/user/user-manage/create-by-mobile-modal.html.twig';
@@ -390,6 +392,15 @@ class UserManageController extends BaseController
         ]);
     }
 
+    public function qrCodeAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        return $this->render('admin-v2/user/user-manage/assistant-qrcode-modal.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     protected function getFields()
     {
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -434,6 +445,28 @@ class UserManageController extends BaseController
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('admin-v2/user/user-manage/user-avatar-crop-modal.html.twig', [
+            'user' => $user,
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ]);
+    }
+
+    public function assistantQrCodeCropAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        if ('POST' === $request->getMethod()) {
+            $options = $request->request->all();
+            $this->getUserService()->changeAssistantQrCode($id, $options['images']);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $fileId = $request->getSession()->get('fileId');
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        return $this->render('admin-v2/user/user-manage/assistant-qrcode-crop-modal.html.twig', [
             'user' => $user,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,

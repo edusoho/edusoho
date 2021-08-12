@@ -2,14 +2,13 @@ admin_v2:
     name: admin_v2.basic_menu
     parent: null
     children:
-        # 教学模块
-        admin_v2_teach:
+        # 教务模块
+        admin_v2_education:
             quick_entrance_icon_class: 'icon-color-green'
-            name: admin_v2.nav.teach
+            name: admin_v2.nav.education
             children:
-                # 课程管理（group）
-                admin_v2_course_group:
-                    name: admin_v2.course.basic_group
+                admin_v2_education_manage:
+                    name: admin_v2.education.basic_group
                     is_group: true
                     children:
                         # 产品库
@@ -28,6 +27,33 @@ admin_v2:
                                 admin_v2_multi_class_manage:
                                     name: admin_v2.multi_class.basic_menu
                                     router_name: admin_v2_multi_class
+                        # 教师管理
+                        admin_v2_teacher:
+                            quick_entrance_icon: 'teacher'
+                            name: admin_v2.teacher.basic_menu
+                            router_name: admin_v2_teacher
+                            children:
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.teacher.basic_menu
+                                    router_name: admin_v2_teacher
+                        # 助教管理
+                        admin_v2_assistant:
+                            name: admin_v2.assistant.basic_menu
+                            router_name: admin_v2_assistant
+                            children:
+                                admin_v2_assistant_manage:
+                                    name: admin_v2.assistant.basic_menu
+                                    router_name: admin_v2_assistant
+        # 教学模块
+        admin_v2_teach:
+            quick_entrance_icon_class: 'icon-color-green'
+            name: admin_v2.nav.teach
+            children:
+                # 课程管理（group）
+                admin_v2_course_group:
+                    name: admin_v2.course.basic_group
+                    is_group: true
+                    children:
                         # 课程管理
                         admin_v2_course_show:
                             quick_entrance_icon: 'course'
@@ -335,24 +361,6 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
-                        # 教师管理
-                        admin_v2_teacher:
-                            quick_entrance_icon: 'teacher'
-                            name: admin_v2.teacher.basic_menu
-                            router_name: admin_v2_teacher
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin_v2.teacher.basic_menu
-                                    router_name: admin_v2_teacher
-
-                        # 助教管理
-                        admin_v2_assistant:
-                            name: admin_v2.assistant.basic_menu
-                            router_name: admin_v2_assistant
-                            children:
-                                admin_v2_assistant_manage:
-                                    name: admin_v2.assistant.basic_menu
-                                    router_name: admin_v2_assistant
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
@@ -985,6 +993,20 @@ admin_v2:
                                             visible: (user.type != 'system')
                                             router_params:
                                                 id: (user.id)
+                                        admin_v2_user_avatar:
+                                            name: admin_v2.user.basic.basic_tab.update_avatar_btn
+                                            mode: modal
+                                            group: groupButton
+                                            visible: (user.type != 'system')
+                                            router_params:
+                                                id: (user.id)
+                                        admin_v2_assistant_qrcode:
+                                            name: admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn
+                                            mode: modal
+                                            group: groupButton
+                                            visible: (is_assistant(user.id))
+                                            router_params:
+                                                id: (user.id)
                                         admin_v2_user_roles:
                                             name: admin_v2.user.basic.basic_tab.setting_roles_btn
                                             mode: modal
@@ -999,13 +1021,6 @@ admin_v2:
                                             visible: (user.type != 'system')
                                             router_params:
                                                 userId: (user.id)
-                                        admin_v2_user_avatar:
-                                            name: admin_v2.user.basic.basic_tab.update_avatar_btn
-                                            mode: modal
-                                            group: groupButton
-                                            visible: (user.type != 'system')
-                                            router_params:
-                                                id: (user.id)
                                         admin_v2_user_change_password:
                                             name: admin_v2.user.basic.basic_tab.change_password_btn
                                             mode: modal
@@ -1363,6 +1378,15 @@ admin_v2:
                                     name: admin_v2.system.user_content_ctrl.private_message
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
+                        admin_v2_course_purchase_agreement:
+                          router_name: admin_v2_course_purchase_agreement
+                          name: admin_v2.system.course_purchase_agreement_tab
+                          disable: true
+                          children:
+                            admin_v2_course_purchase_agreement_eduit:
+                              name: admin_v2_system.course_purchase_agreement.eduit
+                              router_name: admin_v2_course_purchase_agreement_eduit
+                              disable: true
                         # 用户内容审核设置
                         admin_v2_user_content_audit_control:
                             name: admin_v2.system.user_content_audit_menu

@@ -15,6 +15,14 @@ class ExerciseDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expectedResult, $result, $this->getCompareKeys());
     }
 
+    public function testFindByQuestionBankIds()
+    {
+        $this->mockDataObject(['id' => 1, 'questionBankId' => 1]);
+        $this->mockDataObject(['id' => 2, 'questionBankId' => 2]);
+        $exercise = $this->getDao()->findByQuestionBankIds([1, 2]);
+        $this->assertCount(2, $exercise);
+    }
+
     public function testFindByIds()
     {
         $this->mockDataObject(['id' => 1]);

@@ -30,6 +30,7 @@ use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\Framework\Event\Event;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
@@ -122,6 +123,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
+
         if (!$this->hasCourseSetManageRole($id)) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
@@ -142,7 +144,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return $user->hasPermission('admin_v2_course_content_manage');
+            return $user->isTeacher();
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
@@ -152,6 +154,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         if ($courseSet['creator'] == $user->getId()) {
             return true;
+        }
+
+        if ($courseSet['parentId'] > 0) {
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSetId);
+            if (!empty($classroomCourse)) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+                if (!empty($classroom) && $classroom['headTeacherId'] == $user['id'] || $user->hasPermission('admin_v2_classroom')) {
+                    return true;
+                }
+            }
         }
 
         $teachers = $this->getCourseMemberService()->findCourseSetTeachersAndAssistant($courseSetId);
@@ -540,8 +552,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
         $this->getCourseSetGoodsMediator()->onDelete($courseSet);
-
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
+        $this->dispatchEvent('wrong_question_pool.delete', ['target_id' => $courseSet['id'], 'target_type' => 'course']);
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
@@ -1285,5 +1297,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    protected function getWrongQuestionService()
+    {
+        return $this->createService('WrongBook:WrongQuestionService');
     }
 }

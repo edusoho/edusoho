@@ -2,16 +2,16 @@
   <aside-layout :breadcrumbs="[{ name: '班课', pathName: 'MultiClass' }, { name: multiClass.title }]" class="course-manage">
     <div class="clearfix" style="margin-bottom: 16px;">
       <a-menu class="manage-menu pull-left" v-model="current" mode="horizontal">
-        <a-menu-item class="manage-menu-item" key="class-info">
+        <a-menu-item class="manage-menu-item" key="class_info">
           <router-link :to="{ name: 'MultiClassCourseManage' }">课时管理</router-link>
         </a-menu-item>
-        <a-menu-item class="manage-menu-item" key="student-manage">
+        <a-menu-item class="manage-menu-item" key="student_manage">
           <router-link :to="{ name: 'MultiClassStudentManage' }">学员管理</router-link>
         </a-menu-item>
-        <a-menu-item class="manage-menu-item" key="homework-review">
+        <a-menu-item class="manage-menu-item" key="homework_review">
           <router-link v-if="isPermission('course_homework_review') || isPermission('course_exam_review')" :to="{ name: 'MultiClassHomewordReview' }">作业批阅</router-link>
         </a-menu-item>
-        <a-menu-item class="manage-menu-item manage-menu-item--space" key="data-preview">
+        <a-menu-item class="manage-menu-item manage-menu-item--space" key="data_preview">
           <router-link v-if="isPermission('course_statistics_view')" :to="{ name: 'MultiClassDataPreview'}">数据预览</router-link>
         </a-menu-item>
       </a-menu>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { Course, MultiClass } from 'common/vue/service';
+import { MultiClass } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 
 export default {
@@ -46,7 +46,7 @@ export default {
 
   data() {
     return {
-      current: ['class-info'],
+      current: ['class_info'],
       id: this.$route.params.id,
       multiClass: {}
     }

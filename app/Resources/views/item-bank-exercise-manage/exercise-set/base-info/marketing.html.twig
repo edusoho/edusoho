@@ -7,7 +7,7 @@
 {% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
 
 {% block main_body %}
-  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles) %}
+  {% if has_permission('admin_v2_item_bank_exercise_content_manage') or ('ROLE_TEACHER' in app.user.roles) %}
 
     <form class="form-horizontal" role="form" id="course-info-form" action="{{ path('item_bank_exercise_manage_marketing_info', {exerciseId:exercise.id}) }}" method="post">
       {# 营销设置 #}

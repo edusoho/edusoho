@@ -91,12 +91,21 @@
           {% if canManage %}
             <li>
               {% if page_type|default('guest') == 'member' %}
-                <a class="btn btn-default btn-xs "
-                  href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
-                  data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
-                  data-trigger="hover">
-                  <i class="es-icon es-icon-setting"></i>
-                </a>
+                {% if member.role|default('') == 'assistant' %}
+                  <a class="btn btn-default btn-xs "
+                     href="{{ path('course_set_manage_course_students', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+                     data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
+                     data-trigger="hover">
+                    <i class="es-icon es-icon-setting"></i>
+                  </a>
+                {% else %}
+                  <a class="btn btn-default btn-xs "
+                    href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+                    data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
+                    data-trigger="hover">
+                    <i class="es-icon es-icon-setting"></i>
+                  </a>
+                {% endif %}
               {% else %}
                 <a class="btn btn-default btn-xs "
                   href="{{ path('course_set_manage_base', {id: course.courseSetId}) }}"

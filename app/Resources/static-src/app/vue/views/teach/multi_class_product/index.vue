@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '产品库' }]">
+  <aside-layout :breadcrumbs="[{ name: '产品库' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin class="multi-class-product" :spinning="getListLoading || ajaxProductLoading">
       <div class="clearfix">
         <a-input-search placeholder="请输入产品名称"
@@ -24,7 +24,7 @@
       </a-row>
 
       <div class="text-center">
-        <a-pagination class="mt6"
+        <a-pagination class="mt24"
                       v-if="paging && productList.length > 0"
                       v-model="paging.page"
                       :total="paging.total"
@@ -41,6 +41,7 @@
         :visible="modalVisible"
         @cancel="closeModal"
       >
+      <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
         <a-form :form="form" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }">
           <a-form-item label="产品名称">
             <a-input
@@ -119,7 +120,9 @@ export default {
       ajaxProductLoading: false,
       editingProduct: null,
       currentProduct: {},
-      modalTitle: ''
+      modalTitle: '',
+      headerTitle: '什么是产品库？',
+      headerTip: '<p>产品是相同课程内容不同班课的集合，方便教务人员,实时了解产品的经营状况。机构可以根据自身课程情况进行差异设置。 产品可开设多个班课，班课可关联直播大班课课程</p> <p>范例1：<br>K12英语大班产品（产品）- K12英语大班三月班（班课）- k12英语大班直播课程（课程）</p> <p>范例2：<br>K12英语大班三月班（产品）-K12英语3月班1班/ k12英语三月班2班-k12英语大班直播课程（课程）</p>'
     };
   },
   created() {
@@ -143,6 +146,7 @@ export default {
       }
     },
     searchProductList (title = '') {
+      this.paging.offset = 0;
       this.getProductList({ title })
     },
     createMultiClassProduct(){

@@ -1481,18 +1481,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $isAssistant = $this->getMemberService()->isCourseAssistant($courseId, $user->getId());
-        if ($isAssistant) {
-            $permission = $this->biz['assistant_permission'];
-            if (!empty($action) && $permission->hasActionPermission($action)) {
-                return true;
-            }
-
-            if (empty($action)) {
-                return true;
-            }
-
-            return false;
+        if ($this->getMemberService()->isCourseAssistant($courseId, $user->getId())) {
+            return true;
         }
 
         if ($course['parentId'] > 0) {
@@ -1506,7 +1496,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $classroomRef['classroomId'],
                     $user['id']
                 );
-                if ($isTeacher || $isHeadTeacher) {
+                if ($isTeacher || $isHeadTeacher || $user->hasPermission('admin_v2_classroom')) {
                     return true;
                 }
             }
@@ -2963,6 +2953,90 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function sumTotalIncomeByIds($ids)
     {
         return $this->getCourseDao()->sumTotalIncomeByIds($ids);
+    }
+
+    public function sortLiveTasksWithLiveCourse($courseId, $chapterIds, $isCreate = false)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($courseId);
+        if ((empty($multiClass) && !$isCreate) || $this->isLiveTaskSortByTime($courseId)) {
+            return $chapterIds;
+        }
+
+        $liveTasks = $this->getTaskService()->findTasksByCourseIdAndType($courseId, 'live');
+        $liveTasks = ArrayToolkit::index($liveTasks, 'categoryId');
+
+        $chapters = $this->findChaptersByCourseId($courseId);
+        uasort($chapters, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+        $chapters = ArrayToolkit::index($chapters, 'id');
+
+        $sorts = [];
+        $liveChapter = [];
+        foreach ($chapters as $chapter) {
+            if ('lesson' != $chapter['type']) {
+                $liveChapter['chapters'][] = $chapter;
+                continue;
+            }
+
+            $task = empty($liveTasks[$chapter['id']]) ? [] : $liveTasks[$chapter['id']];
+            if (empty($task)) {
+                $liveChapter['chapters'][] = $chapter;
+                continue;
+            }
+
+            if (!empty($liveChapter)) {
+                $sorts[] = $liveChapter;
+            }
+
+            $liveChapter = [];
+            $liveChapter['task'] = $task;
+            $liveChapter['chapters'][] = $chapter;
+        }
+        $sorts[] = $liveChapter;
+
+        uasort($sorts, function ($item1, $item2) {
+            if (empty($item1['task'])) {
+                return false;
+            }
+
+            if (empty($item2['task'])) {
+                return true;
+            }
+
+            return $item1['task']['startTime'] > $item2['task']['startTime'];
+        });
+
+        $chapterSort = [];
+        foreach ($sorts as $sort) {
+            foreach ($sort['chapters'] as $chapter) {
+                $chapterSort[] = 'chapter-'.$chapter['id'];
+            }
+        }
+
+        $this->sortCourseItems($courseId, $chapterSort);
+    }
+
+    protected function isLiveTaskSortByTime($courseId)
+    {
+        $liveTasks = $this->getTaskService()->findTasksByCourseIdAndType($courseId, 'live');
+        uasort($liveTasks, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+
+        $nowSortIds = ArrayToolkit::column($liveTasks, 'id');
+        uasort($liveTasks, function ($item1, $item2) {
+            return $item1['startTime'] > $item2['startTime'];
+        });
+        $sortIds = ArrayToolkit::column($liveTasks, 'id');
+
+        foreach ($nowSortIds as $key => $id) {
+            if ($id != $sortIds[$key]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

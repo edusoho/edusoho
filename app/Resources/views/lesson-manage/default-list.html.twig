@@ -8,14 +8,14 @@
   {% endif %}
 {% endblock %}
 {% block main_body %}
-  {% set assistant = data('AssistantPermission', {courseId: course.id}) %}
-  {% if not assistant.isAssistant or 'course_lesson_manage' in assistant.permissions %}
+  {% set multiClass = data('MultiClass',{'courseId':course.id}) %}
+  {% if has_permission('admin_v2_course_content_manage') or 'ROLE_TEACHER' in app.user.roles or (courseSet.parentId > 0 and has_permission('admin_v2_classroom')) %}
     <div class="js-lesson-manage">
       {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
-      <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+      <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}' data-multi-class="{{ multiClass }}">
         {% for key, item in items %}
           {% if item.type == 'lesson' %}
-            {% include 'lesson-manage/default/lesson.html.twig' with {course: course, lesson: item} %}
+            {% include 'lesson-manage/default/lesson.html.twig' with {course: course, lesson: item, multiClass: multiClass} %}
           {% else %}
             {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
           {% endif %}

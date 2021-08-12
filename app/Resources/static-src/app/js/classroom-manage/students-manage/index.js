@@ -103,3 +103,20 @@ function exportStudents(start, fileName) {
     }
   });
 }
+
+$('.js-search-btn').click(function (e) {
+  let deadLineStartDate = Date.parse($('#deadLineStartDate').val());
+  let deadLineEndDate = Date.parse($('#deadLineEndDate').val());
+  if (deadLineStartDate > 0 && deadLineEndDate > 0 && deadLineStartDate > deadLineEndDate) {
+    notify('danger', Translator.trans('start.end.datetime_picker.error.hint'));
+    return;
+  }
+  $('.class-student-filter-form').submit();
+});
+
+$('#deadLineStartDate, #deadLineEndDate').datetimepicker({
+  format: 'yyyy-mm-dd',
+  language: document.documentElement.lang,
+  minView: 2,
+  autoclose: true,
+});

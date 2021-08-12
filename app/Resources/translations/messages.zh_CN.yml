@@ -166,6 +166,10 @@ site.mobile_bind.reasons: 绑定手机号的三大理由
 site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
 site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
 site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+site.mobile_bind.binded_tip: 手机号已被绑定，如何处理？
+site.mobile_bind.binded_tip_origin: 1、PC端登录原有手机号修改绑定手机号。
+site.mobile_bind.binded_tip_destory: 2、原有手机号注销。
+site.mobile_bind.binded_tip_admin: 3、如以上均不能处理，可联系网校管理员。
 
 # email 模板
 email.password_reset: >
@@ -413,6 +417,7 @@ form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
 form.placeholder.start_date: 起始时间
+form.placeholder.deadline_range: 学习有效期时间
 form.placeholder.end_date: 结束时间
 form.placeholder.nickname: 用户名
 form.placeholder.keyword: 关键词
@@ -1724,6 +1729,7 @@ course.question_manage.import.reupload_document: 重新上传文档
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
+course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
 course.question_manage.import.rule: 导入规则说明
@@ -1988,6 +1994,7 @@ course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
+course.student.add.assistant.tip: 扫一扫右侧二维码，添加助教微信，加入班级群，保证更好的学习效果哦～
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
@@ -2387,6 +2394,7 @@ open_course.lesson.create_error: 课时创建失败
 
 # 班级
 classroom: 班级
+column: 专栏
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -2999,6 +3007,8 @@ user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
 user.oauth.register_account_by_ways: 使用%accountType%创建帐号
+user.oauth.register_account.binding_account_by_email: 关联已有邮箱帐号
+user.oauth.register_account.binding_account_by_mobile: 绑定手机号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
@@ -3026,6 +3036,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.qrcode.tip: 助教请务必上传二维码
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -3034,6 +3045,7 @@ user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机�
 user.settings.profile.change_avatar: 修改头像
 user.settings.profile.choose_again: 重新选择
 user.settings.profile.save_avatar: 保存头像
+user.settings.profile.save_qrcode: 保存二维码
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -3191,6 +3203,7 @@ user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.shange_avatar: 修改头像
+user.settings.basic_info.shange_qrcode: 修改二维码
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -3227,6 +3240,8 @@ user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
+user.settings.qrcode.crop: 二维码图片
+
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
 user.settings.email.content_title: 邮箱设置
@@ -3259,6 +3274,9 @@ user.settings.password_reset.success_tips: 重置密码成功
 user.settings.password_reset.login_btn: 立即登录
 user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
+user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
+user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
+user.settings.password_level.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 
 
 # 账户中心模块
@@ -4040,6 +4058,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.multi_class_menu: 在教班课
 my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
@@ -4155,6 +4174,11 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+
+#班课
+my.teaching.multi_class.my_students: 我的学员
+my.teaching.multi_class.status: 班课状态
+my.teaching.multi_class.student_num: 班课学员
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
@@ -4429,6 +4453,7 @@ my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 user.certificate_menu: 我的证书
+my.wrong_question_book: 我的错题本
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
@@ -4977,6 +5002,8 @@ courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,�
 role.student: 学员
 # 教师
 role.teacher: 教师
+role.assistant: 助教
+role.academic_staf: 教务
 
 # 后台
 admin.process_bar: 优化课程文件
@@ -6636,9 +6663,12 @@ admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
 admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.assistant_qrcode.upload_btn: 上传新二维码
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
@@ -6647,7 +6677,9 @@ admin.user.manage.change_password.input_data_explain.confirm_password: 再输入
 admin.user.manage.create.heading_title: 添加新用户
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
 admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
@@ -7455,6 +7487,8 @@ admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍�
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
+admin.user_auth.user_sign_up_setting: 用户注册设置
+admin.user_auth.user_sign_up_setting.help_block: 根据国家法律规定需收集用户手机号满足实名制要求，需开启云短信才可使用三种注册模式，<a href="%smsUrl%" target="_blank">前往设置</a>
 admin.user_auth.User_sign_up_type: 用户注册模式
 admin.user_auth.email: 邮箱注册
 admin.user_auth.phone: 手机注册
@@ -7527,11 +7561,18 @@ admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
 admin.user_auth.mobile_bind_tips: >
-  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
+  <span style="color:red">使用手机号码注册可以满足国家相关法律法规的网络实名制要求，若不使用手机注册方式，可能会面临相关法律风险。</span>针对国内用户，之前未绑定手机号的用户，会在登录成功后弹框强制用户绑定手机号。据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务。</b>这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。
+admin.login_connect.user_mobile_bind_setting: 绑定手机号实名
+admin.login_connect.mobile_bind.constraint: 强制绑定
+admin.login_connect.mobile_bind.option: 非强制绑定
+admin.login_connect.mobile_bind.close: 不绑定
+admin.login_connect.mobile_bind.constraint_tip: 选择强制绑定后，未绑定手机号的帐号需强制绑定手机号，不可跳过<br><span style="color:red">一个手机号只能绑定一个帐号</span>
+admin.login_connect.mobile_bind.option_tip: 选择非强制绑定后，未绑定手机号的帐号引导绑定手机号，可跳过，<span style="color:red">不符合法律规定，请谨慎选择</span>
+admin.login_connect.mobile_bind.close_tip: 选择不绑定手机号后，未绑定手机号的帐号登录不会弹出绑定手机号，<span style="color:red">不符合法律规定，请谨慎选择</span>
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.client_login_restrictions: 设备终端登录限制
-admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
+admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
 admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
 admin.login_connect.Third_party_login: 第三方登录
@@ -9183,6 +9224,8 @@ log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
 log.module.item_bank_exercise: 题库练习
+log.module.multi_class_assistant: 班课助教
+log.module.multi_class: 班课
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -10344,6 +10387,7 @@ exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
 exception.user.user_is_destroyed: 用户已注销
+exception.user.email_password_error: 邮箱密码错误
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10370,7 +10414,7 @@ exception.sms.send_failed: 发送失败！
 exception.sms.bind_mobile_not_found: 用户没有被绑定的手机号
 exception.sms.mobile_username_not_match: 手机与用户名不匹配
 exception.sms.error_mobile: 手机号错误
-exception.sms.need_wait: 请等待120秒再申请!
+exception.sms.need_wait: 您的操作过于频繁，请在119s后申请发送验证码!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
@@ -10825,6 +10869,7 @@ exception.coupon.over_batch_limit: 超过批次总额限制
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 exception.coupon.target_type_error: 该批次不支持查看详情
 exception.coupon.setting_close: 优惠券全局开关未开启
+exception.coupon.receive_late: 您来晚了一步，优惠券已被领完！
 
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
@@ -11938,6 +11983,8 @@ exception.multi_class.multi_class_course_exist: 班课中已存在此课程
 exception.multi_class.multi_teacher_cannot_be_assistant: 班课教师无法设置为助教
 exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
+exception.multi_class.assistant_require: 班课需要设置助教
+exception.multi_class.assistant_student_not_found: 助教学员关系未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
@@ -11947,3 +11994,20 @@ admin.multi_class_copy.success.notify: 您的新班课《%newTitle%》从原班�
 admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班课《%originTitle%》复制失败！
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
+
+exception.wrong_book.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
+exception.wrong_book.wrong_book.wrong_question.not_exist: 错题本题目不存在
+
+course.replay_manage.no_permission_tips: 抱歉，您无权管理课程录播，如有需要请联系网站管理员！
+course.teacher_manage.no_permission_tips: 抱歉，您无权管理课程教师，如有需要请联系网站管理员！
+
+course.assistant.student_add_qrcode: 为了保证学习质量
+course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
+
+feedback_title: 谛听，直连EduSoho产品经理
+
+#课程购买协议设置
+admin_v2.course_purchase_agreement.title: 名称
+admin_v2.course_purchase_agreement.content: 内容
+admin_v2.course_purchase_agreement.default_title: 用户购买协议
+admin_v2.course_purchase_agreement.not_set_tips: 请联系网校管理员添加《用户购买协议》

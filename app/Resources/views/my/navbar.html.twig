@@ -2,22 +2,23 @@
   <ul class="nav nav-tabs nav-header-section clearfix">
     <div class="nav-header-section__heading">{{ 'my.teaching.menu_heading'|trans }}</div>
 
-    {% if has_permission('admin_v2_course_content_manage') %}
-      <li class="nav-header-section__item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
-        <a href="{{ path('my_teaching_live_calendar') }}">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
-      </li>
-    {% endif %}
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
+      <a href="{{ path('my_teaching_live_calendar') }}">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
+    </li>
 
     <li class="nav-header-section__item {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
       <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
     </li>
 
-    {% if has_permission('admin_v2_course_content_manage') %}
-      <li class="nav-header-section__item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-        <a href="{{ path('my_teaching_classrooms') }}">{{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
-        </a>
-      </li>
-    {% endif %}
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
+      <a href="{{ path('my_teaching_classrooms') }}">{{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("column"|trans)}) }}
+      </a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-teaching-multi-class' %} active {% endif %}">
+      <a href="{{ path('my_teaching_multi_class') }}">{{ 'my.teaching.multi_class_menu'|trans }}
+      </a>
+    </li>
 
     <li class="nav-header-section__item {% if side_nav == 'my-teaching-open-courses' %} active {% endif %}">
       <a href="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{ 'my.teaching.open_course_menu'|trans }}
@@ -43,10 +44,8 @@
       <a href="{{ path('material_lib_browsing') }}">{{ 'my.teaching.material_lib_menu'|trans }}</a>
     </li>
 
-    {% if has_permission('admin_v2_course_content_manage') %}
-      <li class="nav-header-section__item {% if side_nav == 'my-question-bank' %} active {% endif %}">
-        <a href="{{ path('question_bank_list') }}">{{ 'my.teaching.question_bank_menu'|trans }}</a>
-      </li>
-    {% endif %}
+    <li class="nav-header-section__item {% if side_nav == 'my-question-bank' %} active {% endif %}">
+      <a href="{{ path('question_bank_list') }}">{{ 'my.teaching.question_bank_menu'|trans }}</a>
+    </li>
   </ul>
 </div>

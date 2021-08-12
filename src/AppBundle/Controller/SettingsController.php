@@ -185,6 +185,23 @@ class SettingsController extends BaseController
         return $this->render('settings/profile-avatar-crop-modal.html.twig');
     }
 
+    public function assistantQrCodeCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ('POST' === $request->getMethod()) {
+            $options = $request->request->all();
+            $result = $this->getUserService()->changeAssistantQrCode($currentUser['id'], $options['images']);
+            $image = $this->getWebExtension()->getFpath($result['weChatQrCode']);
+
+            return $this->createJsonResponse([
+                'image' => $image,
+            ], 200);
+        }
+
+        return $this->render('settings/assistant-qrcode-crop-modal.html.twig');
+    }
+
     public function avatarFetchPartnerAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -653,6 +670,41 @@ class SettingsController extends BaseController
             'setMobileResult' => $setMobileResult,
             'verifiedMobile' => $verifiedMobile,
         ]);
+    }
+
+    public function mobileBindAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $scenario = 'sms_bind';
+
+        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' != $this->setting("cloud_sms.{$scenario}")) {
+            return $this->render('settings/edu-cloud-error.html.twig', []);
+        }
+
+        if ($this->isSocialLogin($user)) {
+            return $this->redirect($this->generateUrl('settings_setup_password', ['targetPath' => 'settings_bind_mobile']));
+        }
+
+        $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
+        if ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind'])){
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
+        if ('POST' === $request->getMethod()) {
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+
+            if ($result) {
+                $verifiedMobile = $sessionField['to'];
+                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
+
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.success']);
+            } else {
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
+            }
+        }
+
+        return $this->render('settings/mobile-bind.html.twig');
     }
 
     /**

@@ -10,7 +10,7 @@ use Biz\Common\CommonException;
 class TeacherLiveCourse extends AbstractResource
 {
     /**
-     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER_ASSISTANT")
      */
     public function search(ApiRequest $request)
     {
@@ -21,16 +21,16 @@ class TeacherLiveCourse extends AbstractResource
         $user = $this->getCurrentUser();
         $liveCourses = $this->getCourseService()->findLiveCourse($conditions, $user['id'], 'teacher');
         foreach ($liveCourses as &$liveCourse) {
-            $liveCourse['url'] = $this->generateUrl('course_task_show', array(
+            $liveCourse['url'] = $this->generateUrl('course_task_show', [
                 'courseId' => $liveCourse['courseId'],
                 'id' => $liveCourse['taskId'],
-            ));
+            ]);
         }
         $openLiveCourses = $this->getOpenCourseService()->findOpenLiveCourse($conditions, $user['id']);
         foreach ($openLiveCourses as &$openLiveCourse) {
-            $openLiveCourse['url'] = $this->generateUrl('open_course_show', array(
+            $openLiveCourse['url'] = $this->generateUrl('open_course_show', [
                 'courseId' => $openLiveCourse['id'],
-            ));
+            ]);
         }
 
         return array_merge($liveCourses, $openLiveCourses);

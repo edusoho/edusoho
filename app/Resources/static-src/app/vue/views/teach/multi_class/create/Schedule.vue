@@ -2,7 +2,7 @@
   <div>
     <div v-if="isPermission('course_lesson_manage')">
       <a-icon type="exclamation-circle" style="color: #bebebe;" />
-      排课只涉及直播课时，其他类型课时设置，请点击-<a :href="courseSetId ? `/course_set/${courseSetId}/manage/course/${courseId}/tasks` : 'javascript:;'" :target="courseSetId ? '_blank' : ''">更多课时设置</a>
+      排课只涉及直播课时
     </div>
     <div class="clearfix">
       <a-space size="large">
@@ -97,7 +97,7 @@ export default {
 
   mounted() {
     $('#modal').on('hide.bs.modal', () => {
-      this.fetchCourseLesson();
+      this.sortItems();
     });
   },
 
@@ -149,6 +149,26 @@ export default {
         loop(sortInfos, addData);
       }
 
+      Course.courseSort(this.courseId, { sortInfos }).then(res => {
+        this.fetchCourseLesson();
+      });
+    },
+
+    sortItems() {
+      const data = this.lessonDirectory;
+      const sortInfos = [];
+
+      const loop = (sortInfos, data) => {
+        _.forEach(data, lesson => {
+          const { type, id } = lesson;
+          sortInfos.push(`${type}-${id}`);
+          if (lesson.children) {
+            loop(sortInfos, lesson.children)
+          }
+        });
+      };
+
+      loop(sortInfos, data);
       Course.courseSort(this.courseId, { sortInfos }).then(res => {
         this.fetchCourseLesson();
       });

@@ -8,6 +8,8 @@ interface ExerciseDao extends AdvancedDaoInterface
 {
     public function getByQuestionBankId($questionBankId);
 
+    public function findByQuestionBankIds($questionBankIds);
+
     public function findByIds($ids);
 
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);

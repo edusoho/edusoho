@@ -24,6 +24,8 @@ interface TaskDao extends AdvancedDaoInterface
 
     public function findByCourseIdAndCategoryId($courseId, $categoryId);
 
+    public function findByCourseIdAndType($courseId, $type);
+
     public function findByCourseIdAndIsFree($ids, $isFree);
 
     public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);

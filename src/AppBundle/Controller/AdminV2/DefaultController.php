@@ -4,7 +4,6 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ChangelogToolkit;
-use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\System;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -83,17 +82,6 @@ class DefaultController extends BaseController
             'newOrderCount' => $newOrderCount,
             'newPaidOrderCount' => $newPaidOrderCount,
         ]);
-    }
-
-    public function feedbackAction(Request $request)
-    {
-        $site = $this->getSettingService()->get('site');
-        $user = $this->getUser();
-        $token = CurlToolkit::request('POST', 'https://www.edusoho.com/question/get/token', []);
-        $site = ['name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname];
-        $site = urlencode(http_build_query($site));
-
-        return $this->redirect('https://www.edusoho.com/question?site='.$site.'');
     }
 
     public function infoAction(Request $request)

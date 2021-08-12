@@ -457,6 +457,7 @@ admin.operation.query_menu.basic_tab: Use Query
 admin_v2.basic_menu: Admin
 
 # 新版后台顶部导航
+admin_v2.nav.education: Education
 admin_v2.nav.teach: Teach
 admin_v2.nav.marketing: Marketing
 admin_v2.nav.operating: Operating
@@ -464,6 +465,9 @@ admin_v2.nav.user: User
 admin_v2.nav.trade: Trade
 admin_v2.nav.statistics: Statistics
 admin_v2.nav.system: System
+
+# 教务-教务管理
+admin_v2.education.basic_group: Education Manage
 
 # 教学模块-课程管理
 
@@ -733,6 +737,7 @@ admin_v2.operation.message_menu: Message Manage
 admin_v2.operation.message.basic_tab: Message Manage
 
 # 用户-用户管理-用户管理-tab
+admin_v2.user.basic_menu: User management
 admin_v2.user.basic.basic_tab: User Manage
 admin_v2.user.basic.fans_tab: Wechat Fans
 admin_v2.user.basic.online_tab: Online User
@@ -743,6 +748,7 @@ admin_v2.user.basic.basic_tab.create_btn: 'Add'
 admin_v2.user.basic.basic_tab.edit_btn: 'Edit'
 admin_v2.user.basic.basic_tab.setting_roles_btn: 'Role setting'
 admin_v2.user.basic.basic_tab.update_avatar_btn: 'Change avatar'
+admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: 'Change assistant qrcode'
 admin_v2.user.basic.basic_tab.change_nickname_btn: 'Change nickname'
 admin_v2.user.basic.basic_tab.change_password_btn: 'Change password'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset email'
@@ -784,6 +790,8 @@ admin_v2.trade.coin.basic_tab: Coin Manage
 
 # 交易-发票管理
 admin_v2.trade.invoice_manage.basic_group: Invoice Manage
+admin_v2.trade.invoice_manage.application_group: Invoice application
+admin_v2.trade.invoice_manage.invoice_group: Invoice setting
 
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: Data Analysis
@@ -1005,3 +1013,24 @@ admin_v2.operating.goods_setting: Goods Setting
 admin_v2.information.collection_menu: Information Collection
 admin_v2.information.collection_tab: Information Collection
 admin_v2.information_collect.create: Create
+
+admin_v2.vip.basic_menu: VIP management
+admin_v2.vip_user.basic_menu: VIP user MGT
+admin_v2.vip_user.add_btn: Add new VIP
+admin_v2.vip_user.batch_add_btn: Batch add
+admin_v2.vip_user.edit: Edit VIP
+admin_v2.vip_user.cancel: Cancel VIP
+admin_v2.vip_user.export: Export VIP
+admin_v2.vip_user.manage_tab: VIP user MGT
+admin_v2.vip_level.manage_tab: VIP level MGT
+admin_v2.vip_level.edit: Edit
+admin_v2.vip_level.publish: Pubilsh
+admin_v2.vip_level.cancel_publish: Cancel pubilsh
+admin_v2.vip_level.delete: Delete
+admin_v2.vip_function.manage_tab: VIP function MGT
+admin_v2.vip_user.list_tab: VIP user
+admin_v2.vip_user.operation_record_tab: VIP operation records
+
+admin.wap_setting.find: 'Discovery page settings'
+admin.wap_setting.version_setting: 'Version setting'
+admin.wap_setting.pay_setting: 'Payment setting'

@@ -8981,6 +8981,7 @@ t.add("exception.coupon.over_batch_limit", "\u8d85\u8fc7\u6279\u6b21\u603b\u989d
 t.add("exception.educloud.user_disabled_hint", "\u6559\u80b2\u4e91\u5df2\u88ab\u5c01\u7981\uff0c\u7f34\u6e05\u8d39\u7528\u7cfb\u7edf\u81ea\u52a8\u89e3\u7981\uff0c\u6559\u7a0b<a href=\"http:\/\/www.qiqiuyu.com\/faq\/438\/detail\" target=\"_blank\">\u770b\u8fd9\u91cc<\/a>", "js", "zh_CN");
 t.add("exception.coupon.target_type_error", "\u8be5\u6279\u6b21\u4e0d\u652f\u6301\u67e5\u770b\u8be6\u60c5", "js", "zh_CN");
 t.add("exception.coupon.setting_close", "\u4f18\u60e0\u5238\u5168\u5c40\u5f00\u5173\u672a\u5f00\u542f", "js", "zh_CN");
+t.add("exception.coupon.receive_late", "\u60a8\u6765\u665a\u4e86\u4e00\u6b65\uff0c\u4f18\u60e0\u5238\u5df2\u88ab\u9886\u5b8c\uff01", "js", "zh_CN");
 t.add("course.thread.edit_hint", "\u7f16\u8f91\u79fb\u52a8\u4fa7\u7684\u95ee\u7b54\u80fd\u529b\u5373\u5c06\u5230\u6765\uff0c\u656c\u8bf7\u671f\u5f85\uff01", "js", "zh_CN");
 t.add("course.question.question_background", "\u95ee\u9898\u80cc\u666f", "js", "zh_CN");
 t.add("course.activity.video.beyond_watch_limit_tip", "\u60a8\u5df2\u89c2\u770b\u672c\u89c6\u9891\u5b66\u4e60\u4efb\u52a1\u8fbe\u5230%watchedTime%\uff08%watchLimit%\u500d\u89c6\u9891\u65f6\u957f\uff09\uff0c\u4e0d\u80fd\u518d\u7ee7\u7eed\u89c2\u770b\u3002", "js", "zh_CN");

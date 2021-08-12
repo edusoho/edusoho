@@ -327,6 +327,7 @@ t.add("activity.manage.choose_teacher_hint", "Please choose a teacher", "js", "e
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">Congratulations! You have completed this task<\/span>\n", "js", "en");
 t.add("announcement.create_datetime.error.hint", "The announcement start time cannot be later than the end time", "js", "en");
 t.add("announcement.delete_hint", "Really want to delete the announcement?", "js", "en");
+t.add("start.end.datetime_picker.error.hint", "Start time cannot be later than the end time", "js", "en");
 t.add("auth.login_bind_choose.service_agreement_hint", "Check to agree to this service agreement before continue to register!", "js", "en");
 t.add("auth.login_bind_choose.login_success_hint", "Log in successfully, redirecting to the homepage!", "js", "en");
 t.add("auth.login_bind_choose.login_failed_hint", "Log in failed, please try again!", "js", "en");
@@ -1239,7 +1240,9 @@ t.add("admin.user.valid_remark_length_hint", "Sorry, the remarks is too long, pl
 t.add("admin.user.approve_submiting_hint", "submitting...", "js", "en");
 t.add("admin.user.cancel_approval_hint", "Are you sure you want to cancel this successful approval?", "js", "en");
 t.add("admin.user.update_avatar_success_hint", "The avatar update is successful!", "js", "en");
+t.add("admin.user.update_assistant_qrcode_success_hint", "The qrcode update is successful!", "js", "en");
 t.add("admin.user.upload_avatar_success_hint", "Uploaded successfully!", "js", "en");
+t.add("admin.user.upload_assistant_qrcode_success_hint", "Uploaded successfully!", "js", "en");
 t.add("admin.user.password_modify_success_hint", "Password modified successfully", "js", "en");
 t.add("admin.user.password_modify_error_hint", "operation failed", "js", "en");
 t.add("admin.user.create_new_user_success_hint", "New user added successfully", "js", "en");

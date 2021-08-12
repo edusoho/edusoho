@@ -452,6 +452,7 @@ admin.operation.query_menu.basic_tab: 使用查询
 admin_v2.basic_menu: 后台管理员
 
 # 新版后台顶部导航
+admin_v2.nav.education: 教务
 admin_v2.nav.teach: 教学
 admin_v2.nav.marketing: 营销
 admin_v2.nav.operating: 运营
@@ -459,6 +460,9 @@ admin_v2.nav.user: 用户
 admin_v2.nav.trade: 交易
 admin_v2.nav.statistics: 数据
 admin_v2.nav.system: 系统
+
+# 教务-教务管理
+admin_v2.education.basic_group: 教务管理
 
 # 教学-课程管理
 admin_v2.course.basic_group: 教学管理
@@ -746,6 +750,7 @@ admin_v2.user.basic.basic_tab.create_btn: '添加新用户'
 admin_v2.user.basic.basic_tab.edit_btn: '编辑用户信息'
 admin_v2.user.basic.basic_tab.setting_roles_btn: '设置用户组'
 admin_v2.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
+admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
 admin_v2.user.basic.basic_tab.change_nickname_btn: '修改用户名'
 admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
@@ -792,6 +797,8 @@ admin_v2.trade.coin.basic_tab: 虚拟币管理
 
 # 交易-发票管理
 admin_v2.trade.invoice_manage.basic_group: 发票管理
+admin_v2.trade.invoice_manage.application_group: 申请管理
+admin_v2.trade.invoice_manage.invoice_group: 发票设置
 
 # 应用中心-内容云-内容结算
 admin_v2.basic_app_resource_group: 内容云
@@ -900,6 +907,8 @@ admin_v2.system.user_content_ctrl.thread: 话题问答
 admin_v2.system.user_content_ctrl.private_message: 私信
 admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
+admin_v2.system.course_purchase_agreement_tab: 用户购买协议设置
+admin_v2_system.course_purchase_agreement.eduit: 协议编辑
 
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置
@@ -1017,3 +1026,24 @@ admin_v2.operating.goods_setting: 商品页管理
 admin_v2.information_collect.menu: 用户信息采集
 admin_v2.information_collect.tab: 用户信息采集
 admin_v2.information_collect.create: 新建
+
+admin_v2.vip.basic_menu: 会员管理
+admin_v2.vip_user.basic_menu: 会员用户管理
+admin_v2.vip_user.add_btn: 添加会员用户
+admin_v2.vip_user.batch_add_btn: 批量添加会员用户
+admin_v2.vip_user.edit: 编辑会员
+admin_v2.vip_user.cancel: 取消会员
+admin_v2.vip_user.export: 会员导出
+admin_v2.vip_user.manage_tab: 会员用户管理
+admin_v2.vip_level.manage_tab: 会员等级管理
+admin_v2.vip_level.edit: 编辑
+admin_v2.vip_level.publish: 发布
+admin_v2.vip_level.cancel_publish: 取消发布
+admin_v2.vip_level.delete: 删除
+admin_v2.vip_function.manage_tab: 会员功能设置
+admin_v2.vip_user.list_tab: 会员用户列表
+admin_v2.vip_user.operation_record_tab: 会员用户操作记录
+
+admin.wap_setting.find: 发现页设置
+admin.wap_setting.version_setting: 版本设置
+admin.wap_setting.pay_setting: 支付设置

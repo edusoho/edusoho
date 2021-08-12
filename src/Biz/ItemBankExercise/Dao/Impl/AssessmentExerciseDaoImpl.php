@@ -14,6 +14,11 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
         return $this->findByFields(['moduleId' => $moduleId]);
     }
 
+    public function findByModuleIds($moduleIds)
+    {
+        return $this->findInField('moduleId', $moduleIds);
+    }
+
     public function findByExerciseIdAndModuleId($exerciseId, $moduleId)
     {
         return $this->findByFields(['exerciseId' => $exerciseId, 'moduleId' => $moduleId]);

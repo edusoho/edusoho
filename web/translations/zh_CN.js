@@ -267,6 +267,7 @@ t.add("activity.manage.choose_teacher_hint", "\u8bf7\u9009\u62e9\u8001\u5e08", "
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">\u606d\u559c\uff01\u4f60\u5df2\u5b8c\u6210\u8be5\u4efb\u52a1<\/span>\n", "js", "zh_CN");
 t.add("announcement.create_datetime.error.hint", "\u516c\u544a\u53d1\u5e03\u65f6\u95f4\u4e0d\u80fd\u665a\u4e8e\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("announcement.delete_hint", "\u771f\u7684\u8981\u5220\u9664\u8be5\u516c\u544a\u5417?", "js", "zh_CN");
+t.add("start.end.datetime_picker.error.hint", "\u5f00\u59cb\u65f6\u95f4\u4e0d\u80fd\u665a\u4e8e\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("auth.login_bind_choose.service_agreement_hint", "\u52fe\u9009\u540c\u610f\u6b64\u670d\u52a1\u534f\u8bae\uff0c\u624d\u80fd\u7ee7\u7eed\u6ce8\u518c\uff01", "js", "zh_CN");
 t.add("auth.login_bind_choose.login_success_hint", "\u767b\u5f55\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c\u81f3\u9996\u9875\uff01", "js", "zh_CN");
 t.add("auth.login_bind_choose.login_failed_hint", "\u767b\u5f55\u5931\u8d25\uff0c\u8bf7\u91cd\u65b0\u767b\u5f55\u540e\u518d\u8bd5\uff01", "js", "zh_CN");
@@ -1186,7 +1187,9 @@ t.add("admin.user.valid_remark_length_hint", "\u4e0d\u597d\u610f\u601d\uff0c\u59
 t.add("admin.user.approve_submiting_hint", "\u63d0\u4ea4\u4e2d...", "js", "zh_CN");
 t.add("admin.user.cancel_approval_hint", "\u786e\u5b9a\u8981\u64a4\u9500\u8fd9\u6761\u8ba4\u8bc1\u6210\u529f\u7684\u5b9e\u540d\u8ba4\u8bc1\u5417\uff1f", "js", "zh_CN");
 t.add("admin.user.update_avatar_success_hint", "\u5934\u50cf\u66f4\u65b0\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.user.update_assistant_qrcode_success_hint", "\u4e8c\u7ef4\u7801\u66f4\u65b0\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.upload_avatar_success_hint", "\u4e0a\u4f20\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.user.upload_assistant_qrcode_success_hint", "\u4e0a\u4f20\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.password_modify_success_hint", "\u5bc6\u7801\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("admin.user.password_modify_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 t.add("admin.user.create_new_user_success_hint", "\u65b0\u7528\u6237\u6dfb\u52a0\u6210\u529f", "js", "zh_CN");

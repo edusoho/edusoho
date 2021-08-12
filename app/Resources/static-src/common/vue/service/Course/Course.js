@@ -32,6 +32,10 @@ export const Course = {
     return apiClient.get(`${baseUrl}/${courseId}`)
   },
 
+  async searchCourses(params) {
+    return apiClient.get(`${baseUrl}`, {params})
+  },
+
   // 新增章节
   async addChapter(courseId, params) {
     return apiClient.post(`${baseUrl}/${courseId}/chapter`, params)

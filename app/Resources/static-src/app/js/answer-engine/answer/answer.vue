@@ -6,6 +6,7 @@
       :answerRecord="answerRecord"
       :answerScene="answerScene"
       :showCKEditorData="showCKEditorData"
+      :showSaveProgressBtn="showSaveProgressBtn"
       :assessmentResponse="assessmentResponse"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
@@ -48,6 +49,7 @@
           jqueryPath: $('[name=jquery_path]').val()
         },
         showAttachment: $('[name=show_attachment]').val(),
+        showSaveProgressBtn: $('[name=show_save_progress_btn]').val() === undefined ? 0 : parseInt($('[name=show_save_progress_btn]').val()),
         cdnHost: $('[name=cdn_host]').val(),
         uploadSDKInitData: {
           sdkBaseUri: app.cloudSdkBaseUri,

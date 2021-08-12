@@ -14,7 +14,15 @@ interface ActivityService
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false);
 
+    public function findActivitiesByCourseSetId($courseSetId);
+
+    public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false);
+
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false);
+
+    public function findActivitiesByCourseSetIdsAndType($courseSetIds, $type, $fetchMedia = false);
+
+    public function findActivitiesByCourseSetIdsAndTypes($courseSetIds, $types, $fetchMedia = false);
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
 
