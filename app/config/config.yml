@@ -7,7 +7,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: service_listener.yml }
-    - { resource: session_redis.yml }
+    - { resource: session_redis.yml, ignore_errors: true }
     - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
     - { resource: "@CustomBundle/Resources/config/services.yml" }
@@ -152,5 +152,5 @@ services:
             - '@request_stack'
             - 'getMasterRequest'
         shared: true
-    
+
     templating.helper.assets: '@assets.packages'
