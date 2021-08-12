@@ -23,7 +23,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $builder->execute()->fetchAll();
     }
 
-    public function countThreadsGroupedByCourseId($conditions, $sort = 'ASC')
+    public function countThreadsGroupedByCourseId($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('count(*) as count, `courseId`')

@@ -1770,9 +1770,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findMultiClassIdsByUserId($userId);
     }
 
-    public function countGroupByMultiClassId($conditions, $sort = 'ASC')
+    public function countGroupByCourseId($conditions, $sort = 'ASC')
     {
-        return $this->getMemberDao()->countGroupByMultiClassId($conditions, $sort);
+        return $this->getMemberDao()->countGroupByCourseId($conditions, $sort);
     }
 
     /**

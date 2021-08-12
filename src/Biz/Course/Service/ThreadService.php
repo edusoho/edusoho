@@ -134,5 +134,5 @@ interface ThreadService
 
     public function findPostThreadIds($conditions);
 
-    public function countThreadsGroupedByCourseId($conditions, $sort = 'ASC');
+    public function countThreadsGroupedByCourseId($conditions);
 }
