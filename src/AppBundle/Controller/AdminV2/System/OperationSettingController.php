@@ -69,7 +69,7 @@ class OperationSettingController extends BaseController
             }
             $this->getSettingService()->set('qualification', $qualificationSetting);
 
-            return $this->createJsonResponse(true);
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $qualificationSetting = $this->getSettingService()->get('qualification', []);
