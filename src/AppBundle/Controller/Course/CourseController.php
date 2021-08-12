@@ -20,11 +20,13 @@ use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
+use Biz\System\Service\CacheService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\TokenService;
 use Biz\User\UserException;
+use ESCloud\SDK\Service\ScrmService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -700,9 +702,62 @@ class CourseController extends CourseBaseController
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
 
+        if (!empty($assistant['scrmUuid'])) {
+            $scrmBindQrCode = $this->generateScrmBindQrCode();
+            if (!empty($scrmBindQrCode)) {
+                $assistant['weChatQrCode'] = $scrmBindQrCode;
+            }
+        }
+
         return $this->render('course/widgets/course-assistant-info.html.twig', [
             'assistant' => $assistant,
         ]);
+    }
+
+    protected function generateScrmBindQrCode()
+    {
+        $user = $this->getCurrentUser();
+        $url = $this->getScrmStudentBindUrl();
+        if (empty($url)) {
+            return '';
+        }
+
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            [
+                'userId' => $user['id'],
+                'data' => [
+                    'url' => $url,
+                ],
+                'times' => 1,
+                'duration' => 3600,
+            ]
+        );
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    protected function getScrmStudentBindUrl()
+    {
+        $scrmBind = $this->getCacheService()->get('scrm_bind');
+        if (empty($scrmBind)) {
+            return '';
+        }
+
+        $currentUser = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($currentUser->getId());
+        if (!empty($user['scrmUuid'])) {
+            return '';
+        }
+
+        try {
+            $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user['uuid'], '', '');
+        } catch (\Exception $e) {
+            $bindUrl = '';
+        }
+
+        return $bindUrl;
     }
 
     public function newestStudentsAction($course, $member = [])
@@ -1080,5 +1135,23 @@ class CourseController extends CourseBaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return ScrmService
+     */
+    protected function getSCRMService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['ESCloudSdk.scrm'];
     }
 }
