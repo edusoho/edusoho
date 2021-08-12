@@ -10,11 +10,6 @@ define(function(require, exports, module) {
             return false;
           }
         }
-
-        $.post($form.attr('action'), $form.serialize(), function(data){
-          Notify.success(Translator.trans('site.save_success_hint'));
-          window.location.reload();
-        });
       });
 
       $('#qualification-submit').removeAttr("disabled");
