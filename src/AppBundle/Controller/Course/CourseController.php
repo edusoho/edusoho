@@ -703,12 +703,12 @@ class CourseController extends CourseBaseController
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
 
-//        if (!empty($assistant['scrmUuid'])) {
+        if (!empty($assistant['scrmUuid'])) {
             $scrmBindQrCode = $this->generateScrmBindQrCode();
             if (!empty($scrmBindQrCode)) {
                 $assistant['weChatQrCode'] = $scrmBindQrCode;
             }
-//        }
+        }
 
         return $this->render('course/widgets/course-assistant-info.html.twig', [
             'assistant' => $assistant,
