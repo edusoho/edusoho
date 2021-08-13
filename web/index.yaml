@@ -10,7 +10,7 @@ paths:
       responses:
         '200':
           description: '获取课程的评价 '
-  '/api/course/{courseId}/notes/{noteId}':
+  '/api/courses/{courseId}/notes/{noteId}':
     get:
       tags:
         - course
@@ -22,7 +22,7 @@ paths:
             application/vnd.edusoho.v2+json:
               schema:
                 $ref: '#/components/schemas/course.note'
-  '/api/course/{courseId}/notes':
+  '/api/courses/{courseId}/notes':
     get:
       tags:
         - course
@@ -37,6 +37,18 @@ paths:
                   data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
                   paging: { properties: { total: { type: integer, default: 0 }, offset: { type: integer, default: 0 }, limit: { type: integer, default: 10 } }, type: object }
                 type: object
+  '/api/courses/{courseId}/threads/{id}':
+    get:
+      tags:
+        - course
+      summary: 获取单条问答/话题
+      responses:
+        '200':
+          description: 获取课程话题
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/course.thread'
   /api/settings/signSecurity:
     get:
       tags:
@@ -142,15 +154,15 @@ components:
         id:
           title: id
           description: ID
-          type: integer
+          type: number
         userId:
           title: userId
           description: userId
-          type: integer
+          type: number
         taskId:
           title: taskId
           description: taskId
-          type: integer
+          type: number
         content:
           title: content
           description: content
@@ -158,21 +170,38 @@ components:
         length:
           title: length
           description: length
-          type: integer
+          type: number
         likeNum:
           title: likeNum
           description: likeNum
-          type: integer
+          type: number
         createdTime:
           title: createdTime
           description: 创建时间
-          type: datetime
+          type: date-time
         updatedTime:
           title: updatedTime
           description: 更新时间
-          type: datetime
+          type: date-time
         user:
           $ref: '#/components/schemas/user.simple'
+      type: object
+    course.thread:
+      title: course.thread
+      description: 课程话题、问答
+      properties:
+        id:
+          title: ID
+          description: ID
+          type: number
+        courseId:
+          title: courseId
+          description: 课程ID
+          type: number
+        taskId:
+          title: taskId
+          description: 任务ID
+          type: number
       type: object
     setting.signSecurity:
       title: setting.signSecurity
@@ -455,28 +484,36 @@ components:
               description: ''
             currentIp:
               description: ''
+              type: string
             gender:
               description: ''
             iam:
               description: ''
             city:
               description: ''
+              type: string
             qq:
               description: ''
+              type: string
             signature:
               description: ''
             company:
               description: ''
+              type: string
             job:
               description: ''
+              type: string
             school:
               description: ''
+              type: string
             class:
               description: ''
             weibo:
               description: ''
+              type: string
             weixin:
               description: ''
+              type: string
             isQQPublic:
               description: ''
             isWeixinPublic:
