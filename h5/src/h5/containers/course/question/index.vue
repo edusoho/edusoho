@@ -6,7 +6,7 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <question-item
+      <discussion-item
         v-for="item in list"
         :key="item.id"
         :item="item"
@@ -23,13 +23,13 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
-import QuestionItem from './components/ListItem.vue';
+import DiscussionItem from '../components/DiscussionItem.vue';
 
 export default {
   name: 'Question',
 
   components: {
-    QuestionItem
+    DiscussionItem
   },
 
   data() {

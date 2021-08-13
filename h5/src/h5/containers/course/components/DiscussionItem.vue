@@ -1,20 +1,20 @@
 <template>
-  <div class="question-item">
-    <h3 class="question-title text-overflow">{{ item.title }}</h3>
-    <p class="question-desc" v-html="content" />
-    <div class="question-details">
-      <div class="question-details__left">
+  <div class="discussion-item">
+    <h3 class="discussion-title text-overflow">{{ item.title }}</h3>
+    <p class="discussion-desc" v-html="content" />
+    <div class="discussion-details">
+      <div class="discussion-details__left">
         <img class="user-avatar" :src="item.user.avatar.small">
         <span>{{ item.user.nickname }}发起 03/21 20:25</span>
       </div>
-      <div class="question-details__right">{{ item.postNum }}</div>
+      <div class="discussion-details__right">{{ item.postNum }}</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'QuestionItem',
+  name: 'DiscussionItem',
 
   props: {
     item: {
@@ -32,11 +32,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.question-item {
+.discussion-item {
   padding: vw(16);
   border-bottom: 1px solid #f5f5f5;
 
-  .question-title {
+  .discussion-title {
     margin: 0;
     font-size: vw(16);
     font-weight: 500;
@@ -44,7 +44,7 @@ export default {
     line-height: vw(24);
   }
 
-  .question-desc {
+  .discussion-desc {
     margin-top: vw(8);
     font-size: vw(12);
     color: #666;
@@ -52,7 +52,7 @@ export default {
     @include text-overflow(2);
   }
 
-  .question-details {
+  .discussion-details {
     display: flex;
     justify-content: space-between;
     align-items: center;
