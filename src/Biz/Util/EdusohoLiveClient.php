@@ -164,7 +164,7 @@ class EdusohoLiveClient
 
     public function getLiveRoomRealTimeInfo($liveId)
     {
-        return $this->createCloudApi('root')->get("/v1/liveCloud/room/{$liveId}/info");
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$liveId}/info");
     }
 
     protected function createCloudApi($server)
