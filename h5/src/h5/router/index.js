@@ -1093,6 +1093,11 @@ router.beforeEach(async (to, from, next) => {
     await mobileBindCheck(to, from, next);
   }
 
+  if (store.state.settingUgc) {
+    const result = await Api.getSettings({ query: { type: 'ugc' }});
+    store.commit('SET_SETTING_UGC', result);
+  }
+
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {
     store
