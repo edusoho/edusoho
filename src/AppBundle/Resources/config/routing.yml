@@ -3784,3 +3784,7 @@ scrm_buy_goods_callback:
 feedback:
   path: /feedback
   defaults: { _controller: AppBundle:Default:feedback }
+
+scrm_user_bind_result:
+  path: /scrm/user/{uuid}/bind/result
+  defaults: { _controller: AppBundle:SCRM/Bind:result }
