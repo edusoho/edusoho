@@ -207,8 +207,7 @@ const routes = [
     name: 'course',
     meta: {
       i18n: true,
-      title: 'courseLearning.title',
-      keepAlive: true
+      title: 'courseLearning.title'
     },
     component: () =>
       import(/* webpackChunkName: "course" */ '@/containers/course/index.vue'),
