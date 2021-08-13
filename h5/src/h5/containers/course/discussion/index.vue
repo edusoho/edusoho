@@ -1,132 +1,50 @@
 <template>
-  <div class="question">
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
-    >
-      <list-item
-        v-for="item in list"
-        :key="item.id"
-        :item="item"
-        @click.native="handleClickViewDetail(item.id)"
-      />
-    </van-list>
-
-
-    <div class="question-btn">
-      <van-button
-        type="primary"
-        block
-        @click="handleClickCreateDiscussion"
-      >
-        发起问答
-      </van-button>
-    </div>
+  <div class="discussion">
+    <component
+      :is="currentComponent"
+      :id="currentDiscussionId"
+      @change-current-component="changeCurrentComponent"
+    />
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-import Api from '@/api';
-import ListItem from './components/ListItem.vue';
+import List from './list.vue';
+import Detail from './detail.vue';
+import Create from './create.vue';
 
 export default {
-  name: 'Question',
+  name: 'Discussion',
 
   components: {
-    ListItem
-  },
-
-  props: {
-    courseId: {
-      type: String,
-      required: true
-    }
+    List,
+    Detail,
+    Create
   },
 
   data() {
     return {
-      list: [],
-      loading: false,
-      finished: false,
-      paging: {
-        offset: 0,
-        limit: 20
-      }
+      currentComponent: 'List',
+      currentDiscussionId: 0
+    }
+  },
+
+  watch: {
+    currentComponent() {
+      this.$emit('chang-tabs-status', this.currentComponent === 'List');
     }
   },
 
   methods: {
-    onLoad() {
-      const { offset, limit } = this.paging;
-      Api.getCoursesThreads({
-        query: {
-          courseId: this.courseId
-        },
-        params: {
-          limit: limit,
-          offset: offset
-        }
-      }).then(res => {
-        const { data, paging: { total } } = res;
+    changeCurrentComponent(params) {
+      const { component, id } = params;
 
-        _.assign(this, {
-          list: _.concat(this.list, data),
-          loading: false
-        });
-
-        this.paging.offset++;
-
-        if (this.list.length >= total) {
-          this.finished = true;
-        }
-      });
-    },
-
-    handleClickViewDetail(value) {
-      this.$router.push({
-        name: 'DiscussionDetail',
-        query: {
-          courseId: this.courseId,
-          discussionId: value
-        }
-      });
-    },
-
-    handleClickCreateDiscussion() {
-      this.$router.push({
-        name: 'CreateDiscussion',
-        query: {
-          id: this.courseId
-        }
+      _.assign(this, {
+        currentComponent: component,
+        currentDiscussionId: id
       });
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.question {
-  padding-bottom: vw(80);
-
-  &-btn {
-    position: fixed;
-    bottom: vw(16);
-    left: 50%;
-    transform: translateX(-50%);
-    width: vw(340);
-
-    .van-button {
-      box-shadow: 0px 2px 6px 0px rgba(64, 143, 251, 0.5);
-      border-radius: 8px;
-      font-size: vw(16);
-    }
-  }
-
-  .van-list {
-    margin-top: 0;
-  }
-}
-</style>

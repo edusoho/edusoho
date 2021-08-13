@@ -3,6 +3,7 @@
     <detail-head :course-set="details.courseSet" />
 
     <van-tabs
+      v-show="showTabs"
       class="tabs"
       v-model="active"
       :class="tabFixed ? 'isFixed' : ''"
@@ -62,6 +63,7 @@
           v-else
           :is="currentTabComponent"
           :course-id="details.id"
+          @chang-tabs-status="changTabsStatus"
         />
       </keep-alive>
     </div>
@@ -146,6 +148,7 @@ export default {
       show: false,
       show_course_review: this.$store.state.goods.show_course_review,
       assistantShow: false,
+      showTabs: true // 是否显示 tabs
     };
   },
 
@@ -496,6 +499,10 @@ export default {
     showAssistant() {
       this.assistantShow = true;
     },
+
+    changTabsStatus(value) {
+      this.showTabs = value;
+    }
   },
 };
 </script>
