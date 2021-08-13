@@ -25,7 +25,7 @@ class ScrmService extends BaseService
 
     public function getWechatOauthLoginUrl($ticket, $redirectUri, $thirdRedirectUrl)
     {
-        return $this->request('GET', '/api/external/customer/getWechatOauthLoginUrl', array('ticket' => $tikcet, 'redirectUri' => $redirectUri, 'thirdRedirectUrl' => $thirdRedirectUrl));
+        return $this->request('GET', '/api/external/customer/getWechatOauthLoginUrl', array('ticket' => $ticket, 'redirectUri' => $redirectUri, 'thirdRedirectUrl' => $thirdRedirectUrl));
     }
 
     public function getUserByToken($token)
