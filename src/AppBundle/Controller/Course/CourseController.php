@@ -17,6 +17,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
@@ -702,12 +703,12 @@ class CourseController extends CourseBaseController
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
 
-        if (!empty($assistant['scrmUuid'])) {
+//        if (!empty($assistant['scrmUuid'])) {
             $scrmBindQrCode = $this->generateScrmBindQrCode();
             if (!empty($scrmBindQrCode)) {
                 $assistant['weChatQrCode'] = $scrmBindQrCode;
             }
-        }
+//        }
 
         return $this->render('course/widgets/course-assistant-info.html.twig', [
             'assistant' => $assistant,
@@ -740,7 +741,7 @@ class CourseController extends CourseBaseController
 
     protected function getScrmStudentBindUrl()
     {
-        $scrmBind = $this->getCacheService()->get('scrm_bind');
+        $scrmBind = $this->getMultiClassService()->isScrmBind();
         if (empty($scrmBind)) {
             return '';
         }
@@ -1143,6 +1144,14 @@ class CourseController extends CourseBaseController
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 
     /**
