@@ -162,6 +162,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('leaf')->get("/lives/{$liveId}/history");
     }
 
+    public function getLiveRoomRealTimeInfo($liveId)
+    {
+        return $this->createCloudApi('root')->get("/v1/liveCloud/room/{$liveId}/info");
+    }
+
     protected function createCloudApi($server)
     {
         if (empty($this->cloudApi[$server])) {
