@@ -10,6 +10,7 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -49,6 +50,7 @@ class MultiClassInspection extends AbstractResource
         $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
         $multiClassIds = ArrayToolkit::column($multiClasses, 'id');
         $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds(ArrayToolkit::column($multiClasses, 'courseId')), 'id');
+        $activities = ArrayToolkit::index($this->getActivityService()->findActivities(ArrayToolkit::column($tasks, 'activityId'), true), 'id');
         $teachers = ArrayToolkit::index($this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'teacher'), 'courseId');
         $teacherIds = ArrayToolkit::column($teachers, 'userId');
         $assistants = $this->getCourseMemberService()->findMultiClassMembersByMultiClassIdsAndRole($multiClassIds, 'assistant');
@@ -66,6 +68,7 @@ class MultiClassInspection extends AbstractResource
         }
 
         foreach ($tasks as &$task) {
+            $task['activityInfo'] = isset($activities[$task['activityId']]) ? $activities[$task['activityId']] : [];
             $task['multiClass'] = isset($multiClasses[$task['courseId']]) ? $multiClasses[$task['courseId']] : [];
             $task['studentNum'] = isset($courses[$task['courseId']]) ? $courses[$task['courseId']]['studentNum'] : 0;
             $task['teacherInfo'] = isset($users[$teachers[$task['courseId']]['userId']]) ? $users[$teachers[$task['courseId']]['userId']] : [];
@@ -113,5 +116,13 @@ class MultiClassInspection extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
     }
 }
