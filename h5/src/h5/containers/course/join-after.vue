@@ -93,12 +93,12 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 
 // tabs 子组件
-import Question from './question/index.vue';
-import Discussion from './discussion/index.vue';
+import firstDiscussion from './discussion/index.vue'; // 问答
+import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
 import Evaluation from './evaluation/index.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
-const tabComponent = ['', 'Question', 'Discussion', 'Notes', 'Evaluation'];
+const tabComponent = ['', 'firstDiscussion', 'secondDiscussion', 'Notes', 'Evaluation'];
 
 export default {
   inheritAttrs: true,
@@ -109,8 +109,8 @@ export default {
     DetailHead,
     afterjoinDirectory,
     infoCollection,
-    Question,
-    Discussion,
+    firstDiscussion,
+    secondDiscussion,
     Notes,
     Evaluation
   },
