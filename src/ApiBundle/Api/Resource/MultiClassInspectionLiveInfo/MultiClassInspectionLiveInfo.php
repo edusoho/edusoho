@@ -17,11 +17,15 @@ class MultiClassInspectionLiveInfo extends AbstractResource
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
         if (!$activity) {
-            ActivityException::NOTFOUND_ACTIVITY();
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
         if ($activity['mediaType'] != 'live') {
-            LiveActivityException::NOTFOUND_LIVE();
+            throw LiveActivityException::NOTFOUND_LIVE();
+        }
+
+        if ($activity['ext']['liveProvider'] != EdusohoLiveClient::SELF_ES_LIVE_PROVIDER) {
+            throw LiveActivityException::LIVE_PROVIDER_NOT_SUPPORT();
         }
 
         return $this->getLiveClient()->getLiveRoomRealTimeInfo($activity['ext']['liveId']);

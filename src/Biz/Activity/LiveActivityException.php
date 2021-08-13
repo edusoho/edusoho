@@ -18,11 +18,14 @@ class LiveActivityException extends AbstractException
 
     const LIVE_STATUS_INVALID = 5005105;
 
+    const LIVE_PROVIDER_NOT_SUPPORT = 4035106;
+
     public $messages = [
         4045101 => 'exception.live_activity.not_found',
         5005102 => 'exception.live_activity.roomtype_invalid',
         5005103 => 'exception.live_activity.live_time_invalid',
         5005104 => 'exception.live_activity.create_liveroom_failed',
         5005105 => 'exception.live_activity.live_status_invalid',
+        4035106 => 'exception.live_activity.live_provider_not_support',
     ];
 }

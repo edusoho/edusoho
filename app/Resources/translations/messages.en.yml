@@ -9446,6 +9446,7 @@ exception.live_activity.roomtype_invalid: Type of live room is invalid
 exception.live_activity.live_time_invalid: Start time or live broadcast time is incorrect
 exception.live_activity.create_liveroom_failed: Create liveroom failed, please try again
 exception.live_activity.live_status_invalid: Live status is invalid
+exception.live_activity.live_provider_not_support: Only self-research live broadcast is supported
 exception.course.thread.not_found: Course topic does not exist
 exception.course.thread.not_in_course: Course topics are not in the teaching plan
 exception.course.thread.not_found_post: Course topic reply does not exist

@@ -10726,6 +10726,7 @@ exception.live_activity.roomtype_invalid: 直播间类型错误
 exception.live_activity.live_time_invalid: 开始时间或直播时长有误
 exception.live_activity.create_liveroom_failed: 创建直播间失败
 exception.live_activity.live_status_invalid: 直播状态不合法
+exception.live_activity.live_provider_not_support: 仅支持自研直播
 exception.course.thread.not_found: 课程话题不存在
 exception.course.thread.not_in_course: 课程话题不在教学计划中
 exception.course.thread.not_found_post: 课程话题回复不存在
