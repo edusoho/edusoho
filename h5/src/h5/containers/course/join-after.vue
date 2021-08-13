@@ -131,13 +131,12 @@ export default {
       headBottom: 0,
       active: 0,
       scrollFlag: false,
-      tabs: ['catalogue', 'question', 'discussion', 'notes', 'evaluation'],
+      tabs: ['catalogue'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
       offsetHeight: '', // 元素自身的高度
       isFixed: false,
-      courseSettings: {},
       isShowForm: false,
       paramsList: {
         action: 'buy_after',
@@ -158,7 +157,7 @@ export default {
       currentJoin: state => state.currentJoin,
     }),
 
-    ...mapState(['user']),
+    ...mapState(['user', 'settingUgc']),
 
     progress() {
       if (!Number(this.details.publishedTaskNum)) return '0%';
@@ -232,13 +231,7 @@ export default {
   },
   async created() {
     this.showDialog();
-    this.courseSettings = await Api.getSettings({
-      query: {
-        type: 'course',
-      },
-    }).catch(err => {
-      console.error(err);
-    });
+    this.initTabs();
   },
 
   destroyed() {
@@ -249,6 +242,26 @@ export default {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
+
+    initTabs() {
+      const { thread, note, review } = this.settingUgc;
+
+      if (thread.course_question_enable) {
+        this.tabs.push('question');
+      }
+
+      if (thread.course_thread_enable) {
+        this.tabs.push('discussion');
+      }
+
+      if (note.course_enable) {
+        this.tabs.push('notes');
+      }
+
+      if (review.course_enable) {
+        this.tabs.push('evaluation');
+      }
+    },
 
     gotoGoodsPage() {
       // 班级课程，不存在 goodsId
