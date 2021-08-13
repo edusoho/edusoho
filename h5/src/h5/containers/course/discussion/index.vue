@@ -10,7 +10,7 @@
         v-for="item in list"
         :key="item.id"
         :item="item"
-        @click.native="handleClickViewDetail"
+        @click.native="handleClickViewDetail(item.id)"
       />
     </van-list>
 
@@ -19,8 +19,10 @@
       <van-button
         type="primary"
         block
-        @click="handleClickInitiateDiscussion"
-      >发起问答</van-button>
+        @click="handleClickCreateDiscussion"
+      >
+        发起问答
+      </van-button>
     </div>
   </div>
 </template>
@@ -37,6 +39,13 @@ export default {
     ListItem
   },
 
+  props: {
+    courseId: {
+      type: String,
+      required: true
+    }
+  },
+
   data() {
     return {
       list: [],
@@ -49,16 +58,12 @@ export default {
     }
   },
 
-  created() {
-    console.log('fsadf');
-  },
-
   methods: {
     onLoad() {
       const { offset, limit } = this.paging;
       Api.getCoursesThreads({
         query: {
-          courseId: 5231
+          courseId: this.courseId
         },
         params: {
           limit: limit,
@@ -80,12 +85,23 @@ export default {
       });
     },
 
-    handleClickViewDetail() {
-      console.log('vuiew');
+    handleClickViewDetail(value) {
+      this.$router.push({
+        name: 'DiscussionDetail',
+        query: {
+          courseId: this.courseId,
+          discussionId: value
+        }
+      });
     },
 
-    handleClickInitiateDiscussion() {
-
+    handleClickCreateDiscussion() {
+      this.$router.push({
+        name: 'CreateDiscussion',
+        query: {
+          id: this.courseId
+        }
+      });
     }
   }
 }

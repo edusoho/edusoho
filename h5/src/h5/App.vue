@@ -10,7 +10,11 @@
       style="z-index: 1001;"
       @click-left="backFn()"
     />
-    <router-view v-if="isRouterAlive" />
+
+    <keep-alive v-if="$route.meta.keepAlive">
+      <router-view v-if="isRouterAlive" />
+    </keep-alive>
+    <router-view v-else-if="isRouterAlive" />
   </div>
 </template>
 <script>

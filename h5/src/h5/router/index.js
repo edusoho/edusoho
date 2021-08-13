@@ -208,6 +208,7 @@ const routes = [
     meta: {
       i18n: true,
       title: 'courseLearning.title',
+      keepAlive: true
     },
     component: () =>
       import(/* webpackChunkName: "course" */ '@/containers/course/index.vue'),
@@ -939,6 +940,26 @@ const routes = [
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/analysis.vue'
       ),
   },
+
+  // -------------------------------
+  {
+    path: '/course/discussion/detail',
+    name: 'DiscussionDetail',
+    meta: {
+      title: '查看详情',
+      keepAlive: true
+    },
+    component: () => import(/* webpackChunkName: "course-discussion" */ '@/containers/course/discussion/detail.vue')
+  },
+  {
+    path: '/course/discussion/create',
+    name: 'CreateDiscussion',
+    meta: {
+      title: '创建话题',
+      keepAlive: true
+    },
+    component: () => import(/* webpackChunkName: "course-discussion" */ '@/containers/course/discussion/create.vue')
+  }
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
@@ -1011,7 +1032,7 @@ const mobileBindCheck = (to, from, next) => {
         next({ name: 'binding', query: to.query || from.query });
         return;
       }
-      
+
       resolve()
     }).catch(() => {
       resolve()

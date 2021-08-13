@@ -58,7 +58,11 @@
         </div>
 
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
-        <component v-else :is="currentTabComponent"></component>
+        <component
+          v-else
+          :is="currentTabComponent"
+          :course-id="details.id"
+        />
       </keep-alive>
     </div>
 
