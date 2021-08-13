@@ -2,9 +2,6 @@
 
 namespace AppBundle\Controller\SCRM;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\DeviceToolkit;
-use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
