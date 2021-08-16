@@ -82,15 +82,15 @@ class UploaderExtension extends \Twig_Extension
             ],
             'ppt' => [
                 'extensions' => ['ppt', 'pptx'],
-                'mimeTypes' => ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'],
+                'mimeTypes' => ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', '.pptx', '.ppt'],
             ],
             'cloud_document' => [
                 'extensions' => ['doc', 'docx', 'pdf', 'xls', 'xlsx'],
                 'mimeTypes' => ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
             ],
             'document' => [
-                'extensions' => ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'],
-                'mimeTypes' => ['application/vnd.ms-excel', 'application/vnd.ms-outlook', 'application/vnd.ms-pkicertstore', 'application/vnd.ms-pkiseccat', 'application/vnd.ms-pkistl', 'application/vnd.ms-powerpoint', 'application/vnd.ms-project', 'application/vnd.ms-works', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                'extensions' => ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt', 'ppt', 'pptx'],
+                'mimeTypes' => ['application/vnd.ms-excel', 'application/vnd.ms-outlook', 'application/vnd.ms-pkicertstore', 'application/vnd.ms-pkiseccat', 'application/vnd.ms-pkistl', 'application/vnd.ms-powerpoint', 'application/vnd.ms-project', 'application/vnd.ms-works', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', '.pptx', '.ppt'],
             ],
             'zip' => [
                 'extensions' => ['zip', 'rar', 'gz', 'tar', '7z'],

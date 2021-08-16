@@ -26,6 +26,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             $this->targetUrl = $this->httpUtils->generateUri($request, 'homepage');
         }
 
+        setcookie('is_skip_mobile_bind', 0, -1);
         if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
             setcookie('REMEMBERME');
