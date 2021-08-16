@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ApiBundle\Api\Resource\EducationDashboardGraphicData;
+namespace ApiBundle\Api\Resource\DashboardGraphicDatum;
 
 
 use ApiBundle\Api\ApiRequest;
@@ -14,7 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
-class EducationDashboardGraphicData extends AbstractResource
+class DashboardGraphicDatum extends AbstractResource
 {
     public function search(ApiRequest $request)
     {

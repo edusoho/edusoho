@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ApiBundle\Api\Resource\EducationDashboardRankList;
+namespace ApiBundle\Api\Resource\DashboardRankList;
 
 
 use ApiBundle\Api\ApiRequest;
@@ -13,7 +13,7 @@ use Biz\Course\Service\ThreadService;
 use Biz\MultiClass\Service\MultiClassService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
-class EducationDashboardRankList extends AbstractResource
+class DashboardRankList extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
