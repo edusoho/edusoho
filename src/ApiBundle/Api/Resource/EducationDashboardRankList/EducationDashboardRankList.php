@@ -1,36 +1,29 @@
 <?php
 
 
-namespace ApiBundle\Api\Resource\EducationDashboard;
+namespace ApiBundle\Api\Resource\EducationDashboardRankList;
 
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
-class EducationDashboard extends AbstractResource
+class EducationDashboardRankList extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
         $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
-        $newStudentData = $this->getNewStudentsData($allMultiClasses);
-        $totalFinishedStudentNum = $this->getTotalFinishedStudentNum($allMultiClasses);
-        $todayLiveData = $this->getTodayLiveData($allMultiClasses);
+        $newStudentRankList = $this->getNewStudentsData($allMultiClasses);
         $reviewData = $this->getReviewData($allMultiClasses);
-        $multiClassData = $this->getMultiClassData();
-        $studyStudentData = $this->getStudyStudentData();
         $finishedRateList = $this->getFinishedRateList($allMultiClasses);
         $questionAnswerRateList = $this->getQuestionAnswerRateList($allMultiClasses);
 
-        return compact('newStudentData', 'totalFinishedStudentNum', 'todayLiveData', 'reviewData', 'multiClassData', 'studyStudentData', 'finishedRateList', 'questionAnswerRateList');
+        return compact('newStudentRankList', 'reviewData', 'finishedRateList', 'questionAnswerRateList');
     }
 
     protected function getNewStudentsData($allMultiClasses)
@@ -40,16 +33,12 @@ class EducationDashboard extends AbstractResource
             'startTimeGreaterThan' => strtotime('yesterday'),
             'startTimeLessThan' => strtotime(date('Y-m-d')) - 1,
         ];
-        $totalNewStudentNum = $this->getCourseMemberService()->countMembers($conditions);
         $newAscSortStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions);
         $newDescSortStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions, 'DESC');
         $newAscSortStudents = $this->filterStudentNum($newAscSortStudents, $allMultiClasses);
         $newDescSortStudents = $this->filterStudentNum($newDescSortStudents, $allMultiClasses);
 
-        return [
-            'totalNum' => $totalNewStudentNum,
-            'rankList' => ['ascSort' => $newAscSortStudents, 'descSort' => $newDescSortStudents]
-        ];
+        return ['ascSort' => $newAscSortStudents, 'descSort' => $newDescSortStudents];
     }
 
     protected function filterStudentNum($numList, $allMultiClasses)
@@ -60,39 +49,6 @@ class EducationDashboard extends AbstractResource
         }
 
         return $numList;
-    }
-
-    protected function getTotalFinishedStudentNum($allMultiClasses)
-    {
-        return $this->getCourseMemberService()->countMembers([
-            'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
-            'finishedTime_GE' => strtotime('yesterday'),
-            'finishedTime_LE' => strtotime(date('Y-m-d')) - 1,
-        ]);
-    }
-
-    protected function getTodayLiveData($allMultiClasses)
-    {
-        $conditions = [
-            'type' => 'live',
-            'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
-            'isLesson' => 1,
-            'status' => 'published',
-        ];
-
-        $totalConditions = [
-            'startTime_GE' => strtotime(date('Y-m-d')),
-            'startTime_LE' => strtotime('tomorrow') - 1,
-        ];
-        $totalLives = $this->getTaskService()->countTasks(array_merge($conditions, $totalConditions));
-
-        $overConditions = [
-            'startTime_GE' => strtotime(date('Y-m-d')),
-            'startTime_LE' => time(),
-        ];
-        $overLives = $this->getTaskService()->countTasks(array_merge($conditions, $overConditions));
-
-        return ['totalLiveNum' => $totalLives, 'overLiveNum' => $overLives];
     }
 
     protected function getReviewData($allMultiClasses)
@@ -106,16 +62,9 @@ class EducationDashboard extends AbstractResource
             $sceneIndexActivities[$activity['ext']['answerSceneId']] = $activity;
         }
 
-        $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 24);
-        $timeoutReviewNum =  $this->getAnswerRecordService()->count([
-            'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
-            'status' => 'reviewing',
-            'endTime_LE' => time() - $reviewTimeLimit * 3600,
-        ]);
-
         list($reviewRate, $descReviewRate) = $this->filterReviewRate($allMultiClasses, $answerSceneIds, $sceneIndexActivities);
 
-        return ['timeoutReviewNum' => $timeoutReviewNum, 'reviewRateList' => ['ascSort' => $reviewRate, 'descSort' => $descReviewRate]];
+        return ['ascSort' => $reviewRate, 'descSort' => $descReviewRate];
     }
 
     protected function filterReviewRate($multiClasses, $answerSceneIds, $sceneIndexActivities)
@@ -148,29 +97,6 @@ class EducationDashboard extends AbstractResource
         }
 
         return $records;
-    }
-
-    protected function getMultiClassData()
-    {
-        $startNum = $this->getMultiClassService()->countMultiClass(['startTimeLE' => time()]);
-        $notStartNum = $this->getMultiClassService()->countMultiClass(['startTimeGT' => time()]);
-
-        return ['startNum' => $startNum, 'notStartNum' => $notStartNum];
-    }
-
-    protected function getStudyStudentData()
-    {
-        $studyNum = $this->getMemberNum(['startTimeLE' => time()]);
-        $notStudyNum =  $this->getMemberNum(['startTimeGT' => time()]);
-
-        return compact('studyNum', 'notStudyNum');
-    }
-
-    protected function getMemberNum($conditions)
-    {
-        $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, [], 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
-        return $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds]);
     }
 
     protected function getFinishedRateList($allMultiClasses)
@@ -256,14 +182,6 @@ class EducationDashboard extends AbstractResource
     }
 
     /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->service('Task:TaskService');
-    }
-
-    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -277,22 +195,6 @@ class EducationDashboard extends AbstractResource
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->service('Course:CourseService');
     }
 
     /**
