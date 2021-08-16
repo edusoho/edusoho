@@ -3,7 +3,6 @@
 namespace Biz\SCRM\Service\Impl;
 
 use Biz\BaseService;
-use Biz\SCRM\Service\SCRMUserService;
 use Biz\System\Service\CacheService;
 use Biz\User\Service\UserService;
 use ESCloud\SDK\Service\ScrmService;

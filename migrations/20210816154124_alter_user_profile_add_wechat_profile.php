@@ -22,9 +22,9 @@ class AlterUserProfileAddWechatProfile extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `user_profile` drop COLUMN `wechat_nickname`;
             ALTER TABLE `user_profile` drop COLUMN `wechat_picture`;
-        ");
+        ');
     }
 }

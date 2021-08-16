@@ -6,7 +6,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
-use Biz\SCRM\GoodsMediatorFactory;
 use Biz\User\Dao\UserDao;
 use ESCloud\SDK\Service\ScrmService;
 use Symfony\Component\HttpFoundation\Request;
