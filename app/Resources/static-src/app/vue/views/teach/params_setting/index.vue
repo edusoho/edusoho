@@ -94,7 +94,6 @@ export default {
   methods: {
     async getParams() {
       this.form = await MultiClassSetting.search();
-      console.log(this.form);
     },
     validatorGroupNumber(rule, value, callback) {
       if (value > 10000 || value == 0) {

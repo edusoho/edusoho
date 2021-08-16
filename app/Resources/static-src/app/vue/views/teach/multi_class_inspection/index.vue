@@ -91,19 +91,6 @@ export default {
           },
           assistantInfo: [
             {
-              id: "227",
-              nickname: "教师3",
-              destroyed: "0",
-              title: "",
-              weChatQrCode: "",
-              uuid: "f9430fe37d20fee22b2fe5436b1cb9dc6f7b0693",
-              avatar: {
-                small: "http://es.dev.cn/assets/img/default/avatar.png",
-                middle: "http://es.dev.cn/assets/img/default/avatar.png",
-                large: "http://es.dev.cn/assets/img/default/avatar.png",
-              },
-            },
-            {
               id: "225",
               nickname: "教师1",
               destroyed: "0",
@@ -117,6 +104,32 @@ export default {
                   "http://es.dev.cn/files/user/2021/05-06/161413511336660950.jpg",
                 large:
                   "http://es.dev.cn/files/user/2021/05-06/16141350ff81824873.jpg",
+              },
+            },
+            {
+              id: "227",
+              nickname: "教师3",
+              destroyed: "0",
+              title: "",
+              weChatQrCode: "",
+              uuid: "f9430fe37d20fee22b2fe5436b1cb9dc6f7b0693",
+              avatar: {
+                small: "http://es.dev.cn/assets/img/default/avatar.png",
+                middle: "http://es.dev.cn/assets/img/default/avatar.png",
+                large: "http://es.dev.cn/assets/img/default/avatar.png",
+              },
+            },
+            {
+              id: "228",
+              nickname: "教师3",
+              destroyed: "0",
+              title: "",
+              weChatQrCode: "",
+              uuid: "f9430fe37d20fee22b2fe5436b1cb9dc6f7b0693",
+              avatar: {
+                small: "http://es.dev.cn/assets/img/default/avatar.png",
+                middle: "http://es.dev.cn/assets/img/default/avatar.png",
+                large: "http://es.dev.cn/assets/img/default/avatar.png",
               },
             },
           ],

@@ -4,42 +4,49 @@
       <div class="inspection-card__title info">班课名称：{{ inspection.multiClass.title }}</div>
       <div class="inspection-card__item info">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
-      <div class="inspection-card__item info">课程时长：{{ inspection.length }}</div>
-      <div class="inspection-card__item info">实时学员人数：{{ inspection.studentNum }}</div>
+      <div class="inspection-card__item info">课程时长：{{ inspection.length }}分钟</div>
+      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.currentOnlineNum }}</div>
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <!-- <svg-icon class="icon-check-circle" icon="icon-check-circle" /> -->
-          <svg-icon class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="liveInfo.info.status === 'unstart'" class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-else class="icon-check-circle" icon="icon-check-circle" />
         </span>
       </div>
       <div class="inspection-card__item info">助教出席：
         <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
           {{ assistant.nickname }}
-          <!-- <svg-icon class="icon-check-circle" icon="icon-check-circle" /> -->
-          <svg-icon class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
+          <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
     </div>
-    <div class="inspection-card__button not-live-start">
+    <div v-if="liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
       直播未按时开始
     </div>
-    <!-- <div class="inspection-card__button live-start">
+    <div v-if="liveInfo.info.status === 'living'" class="inspection-card__button live-start">
       <svg-icon class="icon-live" icon="icon-live" />
       进入直播
     </div>
-    <div class="inspection-card__button live-start">
+    <div v-if="liveInfo.info.status === 'finished'" class="inspection-card__button live-start">
       <svg-icon class="icon-live" icon="icon-live-playback" />
       查看回放
     </div>
-    <div class="inspection-card__button no-start-live">
+    <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generated'" class="inspection-card__button live-start">
+      <svg-icon class="icon-live" icon="icon-live-playback" />
+      直播已结束，回放生成中
+    </div>
+    <div v-if="liveInfo.info.status === 'unstart'" class="inspection-card__button no-start-live">
       <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
       直播未开始
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
+import { MultiClassInspectionLiveInfo } from "common/vue/service/index.js";
+import _ from "lodash";
+
 export default {
   name: "InspectionCard",
   components: {},
@@ -50,19 +57,55 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      liveInfo: {
+        base: {
+          id: 110,
+          title: "20210113",
+          provider: "zhangsan",
+          startTime: 1611299495,
+          endTime: 1611299495,
+        },
+        info: {
+          actualStartTime: 1611299495,
+          actualEndTime: 1611299495,
+          status: "living",
+          currentOnlineNum: 1231,
+        },
+        onlineAssistants: [
+          {
+            userId: 225,
+            userName: "张三",
+            groupCode: "14ee1asokf643kfj6sa",
+          },
+        ],
+      },
+    };
   },
 
   computed: {},
 
-  mounted() {},
+  created() {
+    this.getLiveInfo();
+  },
 
-  methods: {},
+  methods: {
+    async getLiveInfo() {
+      try {
+        this.liveInfo = await MultiClassInspectionLiveInfo.get(
+          this.inspection.activityId
+        );
+      } catch (error) {}
+    },
+
+    assistantAttend(id) {
+      return _.find(this.liveInfo.onlineAssistants, ["userId", Number(id)]);
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
 .inspection-card {
-  // min-height: 269px;
   background: #fff;
   box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
   border-radius: 12px;

@@ -223,7 +223,7 @@
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
           {{ mode === 'editor' ? '确定' : '立即创建' }}
         </a-button>
-        <a-button @click="clickCancelCreate">
+        <a-button @click="cancelCreate">
           取消
         </a-button>
       </a-space>
@@ -310,30 +310,9 @@ export default {
   created() {
     // 编辑班课
     this.fetchNotificationSetting();
-    const id = this.$route.query.id;
-    if (id) {
-      this.multiClassId = id;
-      this.mode = 'editor';
-      this.fetchEditorMultiClass();
-      return;
-    }
-
+    this.isEdit();
     // 创建新课程后
-    let course = this.$route.query.course
-    if (course) {
-      course = JSON.parse(course)
-
-      this.selectedCourseId = course.id;
-      this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
-      this.course.list.push(course)
-      this.$set(this.course, 'initialValue', course.id)
-      this.fetchCourse();
-      this.fetchProducts();
-      this.fetchCourseInfo(course.id);
-      return;
-    }
-
+    this.afterCreateCourse();
     this.initFetch();
   },
 
@@ -343,6 +322,33 @@ export default {
       this.fetchAssistants();
       this.fetchProducts();
       this.fetchTeacher();
+    },
+
+    isEdit() {
+      const id = this.$route.query.id;
+      if (id) {
+        this.multiClassId = id;
+        this.mode = 'editor';
+        this.fetchEditorMultiClass();
+        return;
+      }
+    },
+
+    afterCreateCourse() {
+      let course = this.$route.query.course
+      if (course) {
+        course = JSON.parse(course)
+
+        this.selectedCourseId = course.id;
+        this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
+        this.course.list.push(course)
+        this.$set(this.course, 'initialValue', course.id)
+        this.fetchCourse();
+        this.fetchProducts();
+        this.fetchCourseInfo(course.id);
+        return;
+      }
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
@@ -701,7 +707,6 @@ export default {
       this.form.validateFields((err, values) => {
         if (err) return
         values.type = 'group';
-        console.log(values);
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -716,7 +721,7 @@ export default {
     createMultiClass(values) {
       this.ajaxLoading = true
       MultiClass.add(values).then(() => {
-        this.clickCancelCreate();
+        this.cancelCreate();
       }).finally(() => {
         this.ajaxLoading = false
       })
@@ -725,21 +730,16 @@ export default {
     editorMultiClass(values) {
       this.ajaxLoading = true
       MultiClass.editorMultiClass(this.multiClassId, values).then(() => {
-        this.clickCancelCreate();
+        this.cancelCreate();
       }).finally(() => {
         this.ajaxLoading = false
       })
     },
 
-    clickCancelCreate() {
-      const params = {};
-      const paging = this.$route.params.paging;
-      if (paging) {
-        params.paging = paging;
-      }
+    cancelCreate() {
       this.$router.push({
         name: 'MultiClass',
-        params
+        params: this.$route.params.paging || {}
       });
     },
   }

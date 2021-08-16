@@ -528,7 +528,8 @@ export default {
   },
 
   async created() {
-    await this.getMultiClassStudents();
+    this.getMultiClassStudents();
+    
     await this.getMultiClass();
     await this.getMultiClassStudentsGroup();
   },
@@ -618,14 +619,10 @@ export default {
       this.getMultiClassStudents(params);
     },
 
-
     async getMultiClass() {
-      await MultiClass.get(this.id).then(res => {
-        this.multiClass = res;
-      }).catch(err => {
-
-      });
+      this.multiClass = await MultiClass.get(this.id);
     },
+
     onRemoveStudent(userId) {
       MultiClassStudent.deleteMultiClassMember(this.multiClass.id, userId).then(res => {
         this.getMultiClassStudents();
@@ -709,21 +706,21 @@ export default {
       this.viewStudentInfoVisible = true;
     },
 
-    clickBatchUpdateAssistantModal()
-    {
+    clickBatchUpdateAssistantModal() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后修改', 1);
         return;
       }
+
       this.assistantListModalVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
-    clickBatchStudentGroupModal()
-    {
+    clickBatchStudentGroupModal() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后修改', 1);
         return;
       }
+
       this.changeGroupVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
@@ -756,8 +753,7 @@ export default {
       });
 
     },
-    onGroupClick(res){
-      console.log(res);
+    onGroupClick(res) {
       const keyId = res.key; 
       this.getMultiClassStudents({ keyId });
     },
