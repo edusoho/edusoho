@@ -122,4 +122,32 @@ export default [
     url: '/lessons/{taskId}',
     method: 'GET',
   },
+  {
+    // 搜索课程话题信息
+    name: 'getCoursesThreads',
+    url: '/courses/{courseId}/threads',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 搜索课程话题回复
+    name: 'getCoursesThreadPost',
+    url: '/courses/{courseId}/thread_post/{threadId}',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 添加课程话题回复信息
+    name: 'createCoursesThreadPost',
+    url: '/courses/{courseId}/thread/{threadId}/posts',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
+    // 添加课程话题
+    name: 'createCoursesThread',
+    url: '/courses/{courseId}/threads',
+    method: 'POST',
+    disableLoading: true
+  }
 ];
