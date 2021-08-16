@@ -9,8 +9,8 @@ class RegisterSmsRateLimiter extends SmsRateLimiter
 {
     public function handle(Request $request)
     {
-        $unique = !empty($request->request->get('unique')) ? $request->request->get('unique') : 'true';
-        if ('true' == $unique && !$this->getUserService()->isMobileUnique($request->request->get('mobile'))) {
+        $unique = $request->request->get('unique') ? $request->request->get('unique') : 1;
+        if (1 == $unique && !$this->getUserService()->isMobileUnique($request->request->get('mobile'))) {
             throw UserException::ERROR_MOBILE_REGISTERED();
         }
 

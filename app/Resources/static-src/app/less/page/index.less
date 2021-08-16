@@ -511,3 +511,43 @@
   left: -1px;
 }
 
+.teacher-qualification {
+  // background-color: #fff;
+  padding-bottom: 20px;
+  
+  @media(max-width:@screen-xs-max) {
+    padding-bottom: 0;
+  }
+
+  &-item {
+    margin-bottom: 20px;
+    text-align: center;
+
+    .img-box {
+      position: relative;
+      padding-bottom: 100%;
+      width: 100%;
+
+      img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+      }
+    }
+
+    .teacher-name {
+      margin-top: 8px;
+      color: #333;
+    }
+
+    p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      font-size: 12px;
+      color: #666;
+    }
+  }
+}

@@ -27,6 +27,7 @@
           </div>
           <div class="col-md-7 controls">
             <input type="text"  class="form-control" name="subTitle" value="{{ subTitle }}">
+            <div class="subTitleTip hidden" style="color: red;margin-top: 10px">{{ 'admin_v2.byte_maxlength.message'|trans({'%max%':100}) }}</div>
           </div>
         </div>
       {% endblock %}
