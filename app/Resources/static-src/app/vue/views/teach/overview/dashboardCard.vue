@@ -63,13 +63,9 @@
 </template>
 
 <script>
-import { Card } from "ant-design-vue";
-
 export default {
   name: "dashboardCard",
-  components: {
-    ACard: Card,
-  },
+  components: {},
 
   data() {
     return {};

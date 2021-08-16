@@ -20,7 +20,7 @@
     >
       <template slot="nickname" slot-scope="text, record">
           <a-avatar :size="48" :src="record.mediumAvatar" icon="user"></a-avatar>
-          <a @click="edit(item.id)" style="margin-left: 8px">{{ text }}</a>
+          <a class="ml8" @click="edit(item.id)">{{ text }}</a>
       </template>
       
 
@@ -111,7 +111,6 @@ import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import { Avatar } from 'ant-design-vue'
 
 const columns = [
   {
@@ -160,7 +159,6 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    AAvatar: Avatar
   },
 
   data() {

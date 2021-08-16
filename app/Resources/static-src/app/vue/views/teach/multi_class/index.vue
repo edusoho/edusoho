@@ -300,9 +300,9 @@ export default {
     this.getTeacherList();
   },
   methods: {
-    goToCreateMultiClassPage(param) {
+    goToCreateMultiClassPage(params) {
       this.$router.push({
-        name: param
+        name: params
       })
     },
     async getTeacherList(){
@@ -311,7 +311,6 @@ export default {
        limit: 100000
      });
      this.teacher = data;
-     console.log(this.teacher);
     },
 
     async getMultiClassProductList() {

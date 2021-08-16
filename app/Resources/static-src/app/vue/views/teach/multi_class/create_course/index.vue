@@ -586,8 +586,10 @@
           return
         }
 
-        if (_.isObject(course)) {
-          if (this.$route.query.type === 'group') {
+        if (!_.isObject(course)) {
+          return
+        }
+        if (this.$route.query.type === 'group') {
             this.$router.replace({
             name: 'MultiClassCreateGroup',
             query: {
@@ -602,7 +604,6 @@
               course: JSON.stringify(course)
             }
           })
-        }
       },
       validatePrice(rule, value, callback) {
         if (/^[0-9]{0,8}(\.\d{0,2})?$/.test(value) === false) {

@@ -29,9 +29,8 @@
 <script>
 import AsideLayout from "app/vue/views/layouts/aside.vue";
 import userInfoTable from "app/vue/views/components/userInfoTable";
-
 import { OverView, UserProfiles } from "common/vue/service";
-import { Card } from "ant-design-vue";
+import _ from 'lodash';
 
 const columns = [
   {
@@ -83,7 +82,6 @@ export default {
   name: "index",
   components: {
     AsideLayout,
-    ACard: Card,
     userInfoTable,
   },
 
@@ -126,29 +124,7 @@ export default {
         this.getListLoading = false;
       }
     },
-    // async getOverTimeTaskList() {
-    //   // const { data } = await MultiClassProduct.search({
-    //   //   keywords: "",
-    //   //   offset: 0,
-    //   //   limit: 100000,
-    //   // });
-    //   const data = this.overTimeTaskList;
 
-    //   const index = _.findIndex(
-    //     this.columns,
-    //     (item) => item.dataIndex === "task"
-    //   );
-    //   const taskItem = this.columns[index];
-
-    //   taskItem.filters = [];
-    //   _.forEach(data, (item) => {
-    //     taskItem.filters.push({
-    //       text: item.task,
-    //       value: item.id,
-    //     });
-    //   });
-    //   this.$set(this.columns, index, taskItem);
-    // },
     async viewStudentInfo(id) {
       this.modalShowUser = await UserProfiles.get(id);
       this.viewStudentInfoVisible = true;
@@ -163,9 +139,6 @@ export default {
       });
     },
     change(pagination, filters, sorter) {
-      console.log("pagination: ", pagination);
-      console.log("filters: ", Object.keys(filters));
-      console.log("sorter: ", sorter);
       const params = {};
 
       if (pagination) {
@@ -174,18 +147,7 @@ export default {
           (params.current = pagination.current);
       }
 
-      // if (filters && Object.keys(filters).length > 0) {
-      //   _.forEach(Object.keys(filters), (key) => {
-      //     params[key] = filters[key];
-      //   });
-      // }
-      console.log(params);
-      // if (sorter && sorter.order) {
-      //   params[`${sorter.field}Sort`] =
-      //     sorter.order === "ascend" ? "ASC" : "DESC";
-      // }
-
-      if (Object.keys(params).length > 0) {
+      if (_.keys(params).length > 0) {
         this.getOverTimeList(params);
       }
     },

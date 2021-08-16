@@ -684,7 +684,6 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
-        console.log('values:',values);
         if (err) return
         if (this.mode === 'create') {
           this.createMultiClass(values);
