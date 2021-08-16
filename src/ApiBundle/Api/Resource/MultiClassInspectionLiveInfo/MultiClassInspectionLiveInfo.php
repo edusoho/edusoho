@@ -28,7 +28,13 @@ class MultiClassInspectionLiveInfo extends AbstractResource
             throw LiveActivityException::LIVE_PROVIDER_NOT_SUPPORT();
         }
 
-        return $this->getLiveClient()->getLiveRoomRealTimeInfo($activity['ext']['liveId']);
+        try {
+            $info = $this->getLiveClient()->getLiveRoomRealTimeInfo($activity['ext']['liveId']);
+        }catch (\Exception $e){
+            throw $e;
+        }
+
+        return $info;
     }
 
     /**
