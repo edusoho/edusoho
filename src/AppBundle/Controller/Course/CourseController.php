@@ -753,6 +753,16 @@ class CourseController extends CourseBaseController
         }
 
         try {
+            $userScrmData = $this->getSCRMService()->getCustomer($user['uuid']);
+            $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['customerUniqueId']);
+        } catch (\Exception $e) {
+        }
+
+        if (!empty($user['scrmUuid'])) {
+            return '';
+        }
+
+        try {
             $result = $this->getSCRMService()->getWechatOauthLoginUrl($user['uuid'], '', $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
             $bindUrl = $result['url'];
         } catch (\Exception $e) {
