@@ -2,7 +2,7 @@
 {% if is_un_multi_courseset(courseSet.id) %}
   {% set type = 'site.default.course'|trans %}
 {% endif %}
-{% if courseSet.isClassroomRef == 0 %}
+{% if courseSet.parentId == 0 %}
   {% if app.user.isAdmin() or (setting('course.teacher_manage_student', 0) and 'ROLE_TEACHER' in app.user.roles) %}
     {% if course.status == 'published' %}
       <button class="cd-btn cd-btn-info cd-btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'course.members_manage.add_btn'|trans}}</button>

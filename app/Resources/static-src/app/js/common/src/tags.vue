@@ -44,7 +44,7 @@
                     params: {q: query},
                 }).then((response) => {
                     this.tags = response.data;
-                }).finnaly(() => {
+                }).finally(() => {
                     this.loading = false
                 })
 

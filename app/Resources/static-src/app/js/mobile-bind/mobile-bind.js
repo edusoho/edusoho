@@ -8,10 +8,12 @@ export default class MobileBind {
     this.$form = $('#mobile-bind-form');
     this.$smsCode = this.$form.find('.js-sms-send');
     this.drag = null;
-    this.initCheckCookie();
+    this.initDrag();
     this.dragEvent();
     this.initValidator();
     this.initMobileCodeSendBtn();
+    this.bindMobile();
+    this.initCheckCookie();
   }
 
   dragEvent() {
@@ -24,15 +26,19 @@ export default class MobileBind {
   }
 
   initCheckCookie() {
-    let key = this.$form.data('userId') + '-last-login-in';
+    $('.js-skip-bind').click(function (){
+      let key = 'is_skip_mobile_bind';
+      if (!Cookies.get(key) || Cookies.get(key) == 0) {
+        Cookies.set(key, 1);
+      }
+      window.location.href = $('#submit-btn').data('targetUrl');
+    })
+  }
 
-    if (!Cookies.get(key) || Cookies.get(key) != new Date().getDate()) {
-      this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
-        limitType: 'web_register'
-      }) : null
-      $('#mobile-bind-modal').modal('show');
-      Cookies.set(key, new Date().getDate());
-    }
+  initDrag() {
+    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+      limitType: 'web_register'
+    }) : null
   }
 
   initValidator() {
@@ -42,12 +48,6 @@ export default class MobileBind {
       currentDom: '#submit-btn',
       ajax: true,
       rules: {
-        password: {
-          required: true,
-          es_remote: {
-            type: 'post'
-          },
-        },
         mobile: {
           required: true,
           phone: true,
@@ -56,8 +56,10 @@ export default class MobileBind {
             callback: (bool) => {
               if (bool) {
                 self.$smsCode.removeAttr('disabled');
+                $('.binded-tip').addClass('hidden');
               } else {
                 self.$smsCode.attr('disabled', true);
+                $('.binded-tip').removeClass('hidden');
               }
             }
           },
@@ -72,12 +74,11 @@ export default class MobileBind {
       },
       messages: {
         sms_code: {
-          required: Translator.trans('site.captcha_code.required')
+          required: Translator.trans('auth.mobile_captcha_required_error_hint')
         }
       },
       submitSuccess(data) {
         notify('success', Translator.trans(data.message));
-        $('.modal').modal('hide');
       },
       submitError(data) {
         notify('danger',  Translator.trans(data.responseJSON.message));
@@ -118,4 +119,17 @@ export default class MobileBind {
     });
   }
 
+  bindMobile() {
+    let self =  this;
+    $('#submit-btn').click(function(){
+      if (self.validator.form()){
+        $.post(self.$form.data('url'), self.$form.serialize(), function(response) {
+          notify('success', Translator.trans(response.message));
+          window.location.href = $('#submit-btn').data('targetUrl');
+        }).error(function(response){
+          notify('danger',  Translator.trans(response.responseJSON.message));
+        });
+      }
+    })
+  }
 }

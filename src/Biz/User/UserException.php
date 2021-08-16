@@ -102,6 +102,8 @@ class UserException extends AbstractException
 
     const USER_IS_DESTROYED = 4040120;
 
+    const EMAIL_PASSWORD_ERROR = 4040121;
+
     public $messages = [
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
@@ -150,5 +152,6 @@ class UserException extends AbstractException
         4030145 => 'exception.user.file_permission_denied',
         4040119 => 'exception.user.mobile_not_found',
         4040120 => 'exception.user.user_is_destroyed',
+        4040121 => 'exception.user.email_password_error',
     ];
 }

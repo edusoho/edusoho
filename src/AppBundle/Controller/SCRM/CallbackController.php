@@ -47,6 +47,10 @@ class CallbackController extends BaseController
                 'nickname' => '游客',
                 'currentIp' => '',
                 'roles' => [],
+                'email' => '',
+                'locked' => 0,
+                'type' => '',
+                'password' => '',
             ]);
 
             return $this->createJsonResponse(['message' => $e->getMessage()]);

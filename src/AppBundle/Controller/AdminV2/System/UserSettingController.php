@@ -23,8 +23,10 @@ class UserSettingController extends BaseController
         $userDefaultSet = $this->getUserDefaultSet();
         $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
+        $registerEnabled = $auth && $auth['register_mode'] && 'closed' == $auth['register_mode'] ? 'closed' : 'opened';
         $default = [
-            'register_mode' => 'closed',
+            'register_enabled' => $registerEnabled,
+            'register_mode' => 'mobile',
             'email_enabled' => 'closed',
             'setting_time' => -1,
             'email_activation_title' => '',
@@ -458,6 +460,7 @@ class UserSettingController extends BaseController
     private function getDefaultLoginConnect($clients)
     {
         $default = [
+            'mobile_bind_mode' => 'constraint',
             'login_limit' => 0,
             'client_login_limit' => 0,
             'enabled' => 0,
