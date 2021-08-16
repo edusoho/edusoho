@@ -4,7 +4,6 @@
       <a-input-search class="pull-left" placeholder="请输入姓名或手机号搜索" style="width: 260px" @search="onSearch" />
       <a-space class="pull-left cd-ml24" size="middle">
         <a-button
-          v-if="isPermission('course_member_create')"
           icon="plus"
           type="primary"
           @click="addStudent()"
@@ -36,7 +35,6 @@
         </a-button>
 
         <a-button
-          v-if="isPermission('course_member_delete')"
           type="primary"
           @click="onBatchRemoveStudent"
         >
@@ -47,7 +45,7 @@
         </a-button>
 
         <a-button
-          v-if="selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
+          v-if="selectedRowKeys.length === 0"
           type="primary"
           @click="onSelectEmpty"
         >
@@ -58,7 +56,7 @@
         </a-button>
 
         <a-button
-          v-if="selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
+          v-if="selectedRowKeys.length > 0"
           type="primary"
           data-toggle="modal"
           data-target="#modal"
@@ -75,7 +73,6 @@
 
       <a-space class="pull-right" size="middle">
         <a-button
-          v-if="isPermission('course_member_export')"
           type="primary"
           class="js-export-btn"
           href="javascript:;"
@@ -135,7 +132,7 @@
             cancel-text="取消"
             @confirm="confirm(record.user.id)"
           >
-            <span v-if="isPermission('course_member_delete')" style="color: #fe4040; cursor: pointer;">移除</span>
+            <span style="color: #fe4040; cursor: pointer;">移除</span>
           </a-popconfirm>
         </a-space>
       </template>
@@ -552,17 +549,11 @@ export default {
       this.getMultiClassStudents({ keyword })
     },
     onClickHomeworkModal(user) {
-      if (!this.isPermission('course_homework_review')) {
-        return;
-      }
       this.selectedUser = user;
       this.getHomeworkResults();
       this.homeworkModalVisible = true;
     },
     onClickTestpaperModal(user) {
-      if (!this.isPermission('course_exam_review')) {
-        return;
-      }
       this.selectedUser = user;
       this.getTestpaperResults();
       this.testpaperModalVisible = true;

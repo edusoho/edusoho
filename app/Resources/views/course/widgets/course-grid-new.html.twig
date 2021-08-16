@@ -47,7 +47,7 @@
       {% if can_obtain_certificates(courseSet.id, 'courseSet') %}
         <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
       {% endif %}
-      <a class="link-darker" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+      <a class="link-darker" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" title="{{ courseSet.title|raw }}">
         {{ courseSet.title|raw }}
       </a>
     </div>

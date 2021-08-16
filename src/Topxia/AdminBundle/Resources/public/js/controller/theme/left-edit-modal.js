@@ -68,6 +68,16 @@ define(function(require, exports, module) {
         }
       });
 
+      $('[name="subTitle"]').on('change', function (){
+        if (getTitleLength($(this).val()) > 100){
+          $('#save-btn').addClass('disabled');
+          $('.subTitleTip').removeClass('hidden');
+        }else{
+          $('#save-btn').removeClass('disabled');
+          $('.subTitleTip').addClass('hidden');
+        }
+      });
+
       getTitleLength = function(title) {
         if (title == null) return 0;
         if (typeof title != "string"){

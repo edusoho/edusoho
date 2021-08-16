@@ -887,6 +887,7 @@ admin_v2.system.mailer_setting_tab: 邮件服务器设置
 admin_v2.system.operation.article_tab: 资讯
 admin_v2.system.operation.group_tab: 小组
 admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.teacher_qualification_tab: 教师资质公示
 admin_v2.system.operation.message_open_tab: 私信开启
 admin_v2.system.operation.message_send_tab: 私信发送
 

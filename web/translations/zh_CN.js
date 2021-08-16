@@ -1580,4 +1580,5 @@ t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.aud
 t.add("admin_v2.operation.audit_center.batch_operate_tips", "\u672a\u9009\u4e2d\u4efb\u4f55\u5185\u5bb9", "js", "zh_CN");
 t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
 t.add("homepage", "\u9996\u9875", "js", "zh_CN");
+t.add("admin_v2.teacher_qualification.setting_required", "\u6559\u5e08\u8d44\u8d28\u516c\u793a\u529f\u80fd\u5173\u95ed\u540e\uff0c\u9996\u9875\u5c06\u9690\u85cf[\u6559\u5e08\u8d44\u8d28\u516c\u793a]\u9875\u9762\uff0c\u7528\u6237\u65e0\u6cd5\u770b\u5230\u6559\u5e08\u8d44\u8d28\u516c\u793a\u6a21\u5757\u3002", "js", "zh_CN");
 })(Translator);
