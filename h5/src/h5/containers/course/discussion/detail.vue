@@ -53,7 +53,7 @@ export default {
           courseId: this.courseId,
           threadId: this.id
         },
-        params: {
+        data: {
           limit: 10,
           offset: 0
         }

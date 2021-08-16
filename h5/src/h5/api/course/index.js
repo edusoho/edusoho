@@ -130,10 +130,17 @@ export default [
     disableLoading: true
   },
   {
-    // 搜索课程话题信息
+    // 搜索课程话题回复
     name: 'getCoursesThreadPost',
     url: '/courses/{courseId}/thread_post/{threadId}',
     method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 添加课程话题
+    name: 'createCoursesThread',
+    url: '/courses/{courseId}/threads',
+    method: 'POST',
     disableLoading: true
   },
 ];
