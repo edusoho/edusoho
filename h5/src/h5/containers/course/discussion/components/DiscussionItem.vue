@@ -5,7 +5,7 @@
     <div class="discussion-details">
       <div class="discussion-details__left">
         <img class="user-avatar" :src="item.user.avatar.small">
-        <span>{{ item.user.nickname }}发起 03/21 20:25</span>
+        <span>{{ item.user.nickname }}发起 {{ $moment(item.createdTime).format('YY-MM-DD HH:mm') }}</span>
       </div>
       <div class="discussion-details__right">{{ item.postNum }}</div>
     </div>
