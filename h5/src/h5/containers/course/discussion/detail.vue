@@ -1,6 +1,15 @@
 <template>
   <div class="discussion-detail">
-    <h3>f </h3>
+    <div class="detail-header">
+      <van-icon
+        name="cross"
+        size="18px"
+        color="#000"
+        @click="handleClickGoToList"
+      />
+      <h3 class="detail-header__title">话题详情</h3>
+      <span class="detail-header__btn">回复</span>
+    </div>
 
     <div class="reply">
       <van-field
@@ -14,16 +23,44 @@
 </template>
 
 <script>
+import Api from '@/api';
+
 export default {
   name: 'DiscussionDetail',
 
-  data() {
-    return {
-      value: ''
+  props: {
+    id: {
+      type: String,
+      required: true
     }
   },
 
+  data() {
+    return {
+      value: '',
+      courseId: this.$route.params.id
+    }
+  },
+
+  created() {
+    this.fetchCourseThreadPost();
+  },
+
   methods: {
+    async fetchCourseThreadPost() {
+      const result = await Api.getCoursesThreadPost({
+        query: {
+          courseId: this.courseId,
+          threadId: this.id
+        },
+        params: {
+          limit: 10,
+          offset: 0
+        }
+      });
+      console.log(result);
+    },
+
     handleClickGoToList() {
       this.$emit('change-current-component', { component: 'List' });
     },
@@ -37,6 +74,25 @@ export default {
 
 <style lang="scss" scoped>
 .discussion-detail {
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: vw(16);
+
+    &__title {
+      margin: 0;
+      font-size: vw(16);
+      font-weight: 500;
+      color: #333;
+      line-height: vw(24);
+    }
+
+    &__btn {
+      visibility: hidden;
+    }
+  }
 
   .reply {
     position: fixed;

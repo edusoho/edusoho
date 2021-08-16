@@ -38,6 +38,13 @@ export default {
     ListItem
   },
 
+  props: {
+    type: {
+      type: String,
+      required: true
+    }
+  },
+
   data() {
     return {
       list: [],
@@ -59,6 +66,7 @@ export default {
           courseId: this.courseId
         },
         params: {
+          type: this.type,
           limit: limit,
           offset: offset
         }

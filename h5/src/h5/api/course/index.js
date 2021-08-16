@@ -128,5 +128,12 @@ export default [
     url: '/courses/{courseId}/threads',
     method: 'GET',
     disableLoading: true
-  }
+  },
+  {
+    // 搜索课程话题信息
+    name: 'getCoursesThreadPost',
+    url: '/courses/{courseId}/thread_post/{threadId}',
+    method: 'GET',
+    disableLoading: true
+  },
 ];

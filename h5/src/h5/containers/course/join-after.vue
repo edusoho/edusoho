@@ -61,8 +61,8 @@
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
         <component
           v-else
-          :is="currentTabComponent"
-          :course-id="details.id"
+          :is="currentTabComponent.name"
+          :type="currentTabComponent.type"
           @chang-tabs-status="changTabsStatus"
         />
       </keep-alive>
@@ -104,7 +104,28 @@ import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
 import Evaluation from './evaluation/index.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
-const tabComponent = ['', 'firstDiscussion', 'secondDiscussion', 'Notes', 'Evaluation'];
+const tabComponent = [
+ {
+    name: '',
+    type: 'catalogue'
+  },
+  {
+    name: 'firstDiscussion',
+    type: 'question'
+  },
+  {
+    name: 'secondDiscussion',
+    type: 'discussion'
+  },
+  {
+    name: 'Notes',
+    type: 'notes'
+  },
+  {
+    name: 'Evaluation',
+    type: 'evaluation'
+  }
+];
 
 export default {
   inheritAttrs: true,

@@ -3,6 +3,7 @@
     <component
       :is="currentComponent"
       :id="currentDiscussionId"
+      :type="type"
       @change-current-component="changeCurrentComponent"
     />
   </div>
@@ -21,6 +22,13 @@ export default {
     List,
     Detail,
     Create
+  },
+
+  props: {
+    type: {
+      type: String,
+      required: true
+    }
   },
 
   data() {
