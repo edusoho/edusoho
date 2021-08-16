@@ -28,12 +28,13 @@ class MultiClassInspection extends AbstractResource
 
         $multiClasses = $this->getMultiClassService()->findAllMultiClass();
 
+        $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
         $tasks = $this->getTaskService()->searchTasks(
             [
                 'type' => 'live',
                 'startTime_GE' => strtotime(date('Y-m-d')),
                 'startTime_LE' => strtotime('tomorrow') - 1,
-                'courseIds' => ArrayToolkit::column($multiClasses, 'courseId'),
+                'courseIds' => !empty($courseIds) ? $courseIds : [-1],
                 'isLesson' => 1,
                 'status' => 'published',
             ],
@@ -64,7 +65,9 @@ class MultiClassInspection extends AbstractResource
 
         $multiAssistants = [];
         foreach ($assistants as $assistant) {
-            $multiAssistants[$assistant['courseId']]['assistantInfo'][] = isset($users[$assistant['userId']]) ? $users[$assistant['userId']] : [];
+            if (isset($users[$assistant['userId']])) {
+                $multiAssistants[$assistant['courseId']]['assistantInfo'][] = $users[$assistant['userId']];
+            }
         }
 
         foreach ($tasks as &$task) {
