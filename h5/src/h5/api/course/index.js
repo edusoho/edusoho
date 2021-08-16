@@ -137,6 +137,13 @@ export default [
     disableLoading: true
   },
   {
+    // 添加课程话题回复信息
+    name: 'createCoursesThreadPost',
+    url: '/courses/{courseId}/thread/{threadId}/posts',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
     // 添加课程话题
     name: 'createCoursesThread',
     url: '/courses/{courseId}/threads',

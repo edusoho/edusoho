@@ -14,7 +14,7 @@
     <div class="reply">
       <van-field
         ref="replyInput"
-        v-model="value"
+        v-model="content"
         placeholder="回复..."
         @keyup.enter="handleClickEnter"
       />
@@ -24,6 +24,7 @@
 
 <script>
 import Api from '@/api';
+import _ from 'lodash';
 
 export default {
   name: 'DiscussionDetail',
@@ -37,7 +38,7 @@ export default {
 
   data() {
     return {
-      value: '',
+      content: '',
       courseId: this.$route.params.id
     }
   },
@@ -53,7 +54,7 @@ export default {
           courseId: this.courseId,
           threadId: this.id
         },
-        data: {
+        params: {
           limit: 10,
           offset: 0
         }
@@ -65,8 +66,21 @@ export default {
       this.$emit('change-current-component', { component: 'List' });
     },
 
-    handleClickEnter() {
-      // alert(this.value)
+    async handleClickEnter() {
+      const content = _.trim(this.content);
+
+      if (!content) return;
+
+      const result = await Api.createCoursesThreadPost({
+        query: {
+          courseId: this.courseId,
+          threadId: this.id
+        },
+        data: {
+          content
+        }
+      });
+      console.log(result);
     }
   }
 }
