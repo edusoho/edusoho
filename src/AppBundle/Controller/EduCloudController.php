@@ -3,14 +3,14 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
-use Biz\System\Service\LogService;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\System\Service\SettingService;
-use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,9 +33,9 @@ class EduCloudController extends BaseController
         if ('captchaRequired' == $status) {
             $captchaNum = $request->request->get('captcha_num');
             if (empty($captchaNum)) {
-                return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
+                return $this->createJsonResponse(['ACK' => 'captchaRequired']);
             } elseif (!$this->validateDragCaptcha($request)) {
-                return $this->createJsonResponse(array('error' => '验证码错误'));
+                return $this->createJsonResponse(['error' => '验证码错误']);
             }
         } elseif ('smsUnsendable' == $status) {
             return;
@@ -58,9 +58,9 @@ class EduCloudController extends BaseController
         if ('captchaRequired' == $status) {
             $captchaNum = $request->request->get('captcha_num');
             if (empty($captchaNum)) {
-                return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
+                return $this->createJsonResponse(['ACK' => 'captchaRequired']);
             } elseif (!$this->validateDragCaptcha($request)) {
-                return $this->createJsonResponse(array('error' => '验证码错误'));
+                return $this->createJsonResponse(['error' => '验证码错误']);
             }
         }
 
@@ -85,19 +85,19 @@ class EduCloudController extends BaseController
         }
 
         if ('' === (string) $postSmsCode || '' === (string) $targetSession['sms_code']) {
-            $response = array('success' => false, 'message' => 'json_response.verification_code_error.message');
+            $response = ['success' => false, 'message' => 'json_response.verification_code_error.message'];
         }
 
         $mobile = $request->query->get('mobile', '');
 
         if ('' != $mobile && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
-            return $this->createJsonResponse(array('success' => false, 'message' => 'json_response.verification_code_not_match.message'));
+            return $this->createJsonResponse(['success' => false, 'message' => 'json_response.verification_code_not_match.message']);
         }
 
-        $response = array(
+        $response = [
             'success' => false,
             'message' => 'json_response.verification_code_error.message',
-        );
+        ];
 
         if ($targetSession['sms_code'] == $request->query->get('value')) {
             $response['success'] = true;
@@ -109,7 +109,7 @@ class EduCloudController extends BaseController
 
     public function cloudCallBackAction(Request $request)
     {
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         $data = $request->request->all();
         $webAccessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
@@ -121,10 +121,10 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('cloud_sms', $setting);
 
-            return $this->createJsonResponse(array('status' => 'ok'));
+            return $this->createJsonResponse(['status' => 'ok']);
         }
 
-        return $this->createJsonResponse(array('error' => 'accessKey error!'));
+        return $this->createJsonResponse(['error' => 'accessKey error!']);
     }
 
     public function smsCallBackAction(Request $request, $targetType, $targetId)
@@ -135,13 +135,13 @@ class EduCloudController extends BaseController
 
         $url = $this->setting('site.url', '');
         $url = empty($url) ? $url : rtrim($url, ' \/');
-        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
+        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', ['targetType' => $targetType, 'targetId' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL) : $url.$this->generateUrl('edu_cloud_sms_send_callback', ['targetType' => $targetType, 'targetId' => $targetId]);
         $url .= '?index='.$index.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
-            return $this->createJsonResponse(array('error' => 'sign error'));
+            return $this->createJsonResponse(['error' => 'sign error']);
         }
 
         $processor = SmsProcessorFactory::create($targetType);
@@ -168,7 +168,7 @@ class EduCloudController extends BaseController
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
-            return $this->createJsonResponse(array('error' => 'sign不正确'));
+            return $this->createJsonResponse(['error' => 'sign不正确']);
         }
 
         $searchSetting['search_enabled'] = 1;
@@ -206,11 +206,11 @@ class EduCloudController extends BaseController
 
     protected function checkSmsType($smsType, CurrentUser $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
+        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'])) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
-        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
+        if ((!$user->isLogin()) && (in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_forget_pay_password']))) {
             $this->createNewException(UserException::UN_LOGIN());
         }
 
@@ -260,7 +260,7 @@ class EduCloudController extends BaseController
             return $errorMsg;
         }
 
-        if (!in_array($smsType, array('sms_registration', 'sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
+        if (!in_array($smsType, ['sms_registration', 'sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'])) {
             if ($this->validateCaptcha($request)) {
                 return '验证码错误';
             }
@@ -271,12 +271,12 @@ class EduCloudController extends BaseController
         $allowedTime = 120;
 
         if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-            $errorMsg = '请等待120秒再申请';
+            $errorMsg = '您的操作过于频繁，请在119s后申请发送验证码';
 
             return $errorMsg;
         }
 
-        if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
+        if (in_array($smsType, ['sms_bind', 'sms_registration'])) {
             if ('sms_bind' == $smsType) {
                 $description = '手机绑定';
             } else {
@@ -321,7 +321,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
+        if (in_array($smsType, ['sms_user_pay', 'sms_forget_pay_password'])) {
             if ('sms_user_pay' == $smsType) {
                 $description = '网站余额支付';
             } else {
@@ -414,7 +414,7 @@ class EduCloudController extends BaseController
         $errorMsg = $this->checkErrorMsg($currentUser, $currentTime, $smsType, $request);
 
         if (!empty($errorMsg)) {
-            return array('error' => $errorMsg);
+            return ['error' => $errorMsg];
         }
 
         $description = $this->generateDescription($smsType);
@@ -422,20 +422,20 @@ class EduCloudController extends BaseController
 
         try {
             $api = CloudAPIFactory::create('leaf');
-            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
+            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", [
                     'mobile' => $to,
                     'category' => $smsType,
                     'sendStyle' => 'templateId',
                     'description' => $description,
                     'verify' => $smsCode,
-                ));
+                ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();
 
-            return array('error' => sprintf('发送失败, %s', $message));
+            return ['error' => sprintf('发送失败, %s', $message)];
         }
         if (isset($result['error'])) {
-            return array('error' => sprintf('发送失败, %s', $result['error']));
+            return ['error' => sprintf('发送失败, %s', $result['error'])];
         }
 
         $result['to'] = $to;
@@ -448,11 +448,11 @@ class EduCloudController extends BaseController
 
         $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
-        $request->getSession()->set($smsType, array(
+        $request->getSession()->set($smsType, [
             'to' => $to,
             'sms_code' => $smsCode,
             'sms_last_time' => $currentTime,
-        ));
+        ]);
 
         if ($currentUser->isLogin()) {
             $key = $currentUser['email'];
@@ -462,7 +462,7 @@ class EduCloudController extends BaseController
 
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
 
-        return array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance);
+        return ['ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance];
     }
 
     private function validateDragCaptcha(Request $request)

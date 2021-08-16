@@ -166,6 +166,10 @@ site.mobile_bind.reasons: 绑定手机号的三大理由
 site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
 site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
 site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+site.mobile_bind.binded_tip: 手机号已被绑定，如何处理？
+site.mobile_bind.binded_tip_origin: 1、PC端登录原有手机号修改绑定手机号。
+site.mobile_bind.binded_tip_destory: 2、原有手机号注销。
+site.mobile_bind.binded_tip_admin: 3、如以上均不能处理，可联系网校管理员。
 
 # email 模板
 email.password_reset: >
@@ -3003,6 +3007,8 @@ user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
 user.oauth.register_account_by_ways: 使用%accountType%创建帐号
+user.oauth.register_account.binding_account_by_email: 关联已有邮箱帐号
+user.oauth.register_account.binding_account_by_mobile: 绑定手机号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
@@ -3268,6 +3274,9 @@ user.settings.password_reset.success_tips: 重置密码成功
 user.settings.password_reset.login_btn: 立即登录
 user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
+user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
+user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
+user.settings.password_level.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 
 
 # 账户中心模块
@@ -7478,6 +7487,8 @@ admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍�
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
+admin.user_auth.user_sign_up_setting: 用户注册设置
+admin.user_auth.user_sign_up_setting.help_block: 根据国家法律规定需收集用户手机号满足实名制要求，需开启云短信才可使用三种注册模式，<a href="%smsUrl%" target="_blank">前往设置</a>
 admin.user_auth.User_sign_up_type: 用户注册模式
 admin.user_auth.email: 邮箱注册
 admin.user_auth.phone: 手机注册
@@ -7550,11 +7561,18 @@ admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
 admin.user_auth.mobile_bind_tips: >
-  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
+  <span style="color:red">使用手机号码注册可以满足国家相关法律法规的网络实名制要求，若不使用手机注册方式，可能会面临相关法律风险。</span>针对国内用户，之前未绑定手机号的用户，会在登录成功后弹框强制用户绑定手机号。据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务。</b>这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。
+admin.login_connect.user_mobile_bind_setting: 绑定手机号实名
+admin.login_connect.mobile_bind.constraint: 强制绑定
+admin.login_connect.mobile_bind.option: 非强制绑定
+admin.login_connect.mobile_bind.close: 不绑定
+admin.login_connect.mobile_bind.constraint_tip: 选择强制绑定后，未绑定手机号的帐号需强制绑定手机号，不可跳过<br><span style="color:red">一个手机号只能绑定一个帐号</span>
+admin.login_connect.mobile_bind.option_tip: 选择非强制绑定后，未绑定手机号的帐号引导绑定手机号，可跳过，<span style="color:red">不符合法律规定，请谨慎选择</span>
+admin.login_connect.mobile_bind.close_tip: 选择不绑定手机号后，未绑定手机号的帐号登录不会弹出绑定手机号，<span style="color:red">不符合法律规定，请谨慎选择</span>
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.client_login_restrictions: 设备终端登录限制
-admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
+admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
 admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
 admin.login_connect.Third_party_login: 第三方登录
@@ -10369,6 +10387,7 @@ exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
 exception.user.user_is_destroyed: 用户已注销
+exception.user.email_password_error: 邮箱密码错误
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10395,7 +10414,7 @@ exception.sms.send_failed: 发送失败！
 exception.sms.bind_mobile_not_found: 用户没有被绑定的手机号
 exception.sms.mobile_username_not_match: 手机与用户名不匹配
 exception.sms.error_mobile: 手机号错误
-exception.sms.need_wait: 请等待120秒再申请!
+exception.sms.need_wait: 您的操作过于频繁，请在119s后申请发送验证码!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
@@ -11987,3 +12006,9 @@ course.assistant.student_add_qrcode: 为了保证学习质量
 course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微信
 
 feedback_title: 谛听，直连EduSoho产品经理
+
+#课程购买协议设置
+admin_v2.course_purchase_agreement.title: 名称
+admin_v2.course_purchase_agreement.content: 内容
+admin_v2.course_purchase_agreement.default_title: 用户购买协议
+admin_v2.course_purchase_agreement.not_set_tips: 请联系网校管理员添加《用户购买协议》

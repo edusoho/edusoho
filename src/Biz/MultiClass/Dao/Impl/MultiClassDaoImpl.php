@@ -40,6 +40,11 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
         return $this->findByFields(['creator' => $creator]);
     }
 
+    public function findByReplayShow($isReplayShow)
+    {
+        return $this->findByFields(['isReplayShow' => $isReplayShow]);
+    }
+
     public function getByTitle($title)
     {
         return $this->getByFields(['title' => $title]);

@@ -64,6 +64,7 @@
           <div class="controls">
             <input type="password" id="reset_password" name="reset_password" required="required" class="form-control"
                    aria-required="true">
+            <p class="help-block">{{ ('user.settings.password_level.'~setting('auth.password_level')|default('low'))|trans }}</p>
           </div>
         </div>
 

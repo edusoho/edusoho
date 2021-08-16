@@ -3,9 +3,9 @@
 namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Classroom\Dao\ClassroomMemberDao;
+use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Dao\CourseMemberDao;
 
 class ClassroomTeacherCopy extends AbstractEntityCopy
 {
@@ -18,7 +18,7 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
      * @param mixed $source oldCourse
      * @param array $course $config['classroomId'] = newClassroomId
      */
-    protected function copyEntity($source, $course = array())
+    protected function copyEntity($source, $course = [])
     {
         $classroomId = $course['classroomId'];
 
@@ -27,34 +27,44 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
 
     protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
     {
-        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole(
-            $classroomId,
-            'teacher',
-            0,
-            PHP_INT_MAX
-        );
-
-        $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
-
         $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
 
         if (empty($teachers)) {
             return;
         }
 
-        $newTeachers = array();
+        $teacherIds = ArrayToolkit::column($teachers, 'userId');
+        $existMembers = $this->getClassroomMemberDao()->findByClassroomIdAndUserIds($classroomId, $teacherIds);
+        $existMembers = ArrayToolkit::index($existMembers, 'userId');
+
+        $newTeachers = $needUpdateTeachers = [];
         foreach ($teachers as $teacher) {
-            if (!empty($existTeachers[$teacher['userId']])) {
-                continue;
+            if (!empty($existMembers[$teacher['userId']])) {
+                $existMember = $existMembers[$teacher['userId']];
+                if (in_array('teacher', $existMember['role'])) {
+                    continue;
+                }
+                if (in_array('student', $existMember['role'])) {
+                    $needUpdateTeacher = [
+                        'id' => $existMember['id'],
+                        'role' => array_merge($existMember['role'], ['teacher']),
+                    ];
+                    $needUpdateTeachers[] = $needUpdateTeacher;
+                    continue;
+                }
             }
 
-            $newTeacher = array(
+            $newTeacher = [
                 'classroomId' => $classroomId,
                 'userId' => $teacher['userId'],
-                'role' => array('teacher'),
-            );
+                'role' => ['teacher'],
+            ];
 
             $newTeachers[] = $newTeacher;
+        }
+
+        if (!empty($needUpdateTeachers)) {
+            $this->getClassroomMemberDao()->batchUpdate(array_column($needUpdateTeachers, 'id'), $needUpdateTeachers);
         }
 
         if (!empty($newTeachers)) {
