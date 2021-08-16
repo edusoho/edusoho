@@ -149,5 +149,5 @@ export default [
     url: '/courses/{courseId}/threads',
     method: 'POST',
     disableLoading: true
-  },
+  }
 ];
