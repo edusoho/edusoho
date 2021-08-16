@@ -704,7 +704,7 @@ class CourseController extends CourseBaseController
         }
 
         if (!empty($assistant['scrmUuid'])) {
-            $scrmBindQrCode = $this->generateScrmBindQrCode();
+            $scrmBindQrCode = $this->generateScrmBindQrCode($assistant);
             if (!empty($scrmBindQrCode)) {
                 $assistant['weChatQrCode'] = $scrmBindQrCode;
             }
@@ -715,10 +715,10 @@ class CourseController extends CourseBaseController
         ]);
     }
 
-    protected function generateScrmBindQrCode()
+    protected function generateScrmBindQrCode($assistant)
     {
         $user = $this->getCurrentUser();
-        $url = $this->getScrmStudentBindUrl();
+        $url = $this->getScrmStudentBindUrl($assistant);
         if (empty($url)) {
             return '';
         }
@@ -739,31 +739,21 @@ class CourseController extends CourseBaseController
         return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    protected function getScrmStudentBindUrl()
+    protected function getScrmStudentBindUrl($assistant)
     {
-        $scrmBind = $this->getMultiClassService()->isScrmBind();
+        $scrmBind = $this->getSCRMService()->isScrmBind();
         if (empty($scrmBind)) {
             return '';
         }
 
-        $currentUser = $this->getCurrentUser();
-        $user = $this->getUserService()->getUser($currentUser->getId());
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+        $user = $this->getSCRMService()->setUserSCRMData($user);
         if (!empty($user['scrmUuid'])) {
             return '';
         }
 
         try {
-            $userScrmData = $this->getSCRMService()->getCustomer($user['uuid']);
-            $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['customerUniqueId']);
-        } catch (\Exception $e) {
-        }
-
-        if (!empty($user['scrmUuid'])) {
-            return '';
-        }
-
-        try {
-            $result = $this->getSCRMService()->getWechatOauthLoginUrl($user['uuid'], '', $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
+            $result = $this->getSCRMSdk()->getWechatOauthLoginUrl($user['uuid'], '', $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['scrmUuid']], UrlGeneratorInterface::ABSOLUTE_URL));
             $bindUrl = $result['url'];
         } catch (\Exception $e) {
             $bindUrl = '';
@@ -1166,9 +1156,17 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @return ScrmService
+     * @return \Biz\SCRM\Service\SCRMService
      */
     protected function getSCRMService()
+    {
+        return $this->createService('SCRM:SCRMService');
+    }
+
+    /**
+     * @return ScrmService
+     */
+    protected function getSCRMSdk()
     {
         $biz = $this->getBiz();
 

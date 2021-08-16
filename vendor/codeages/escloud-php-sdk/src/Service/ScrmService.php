@@ -23,6 +23,11 @@ class ScrmService extends BaseService
         return $this->request('GET', '/api/external/staff/getBindAuthUrl', array('ticket' => $ticket, 'redirectUri' => $redirectUri));
     }
 
+    public function getStaffQrCode($staffId)
+    {
+        return $this->request('GET', '/api/external/staff/getQrCode', array('staffId' => $staffId));
+    }
+
     public function getWechatOauthLoginUrl($ticket, $redirectUri, $thirdRedirectUrl)
     {
         return $this->request('GET', '/api/external/customer/getWechatOauthLoginUrl', array('ticket' => $ticket, 'redirectUri' => $redirectUri, 'thirdRedirectUrl' => $thirdRedirectUrl));

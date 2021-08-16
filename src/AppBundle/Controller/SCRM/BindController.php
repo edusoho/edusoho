@@ -15,15 +15,15 @@ class BindController extends BaseController
 {
     public function resultAction(Request $request, $uuid)
     {
-        try {
-            $result = $this->getScrmSdk()->getCustomer($uuid);
-            $user = $this->getUserService()->getUserByUUID($uuid);
-            $this->getUserService()->setUserScrmUuid($user['id'], $result['customerUniqueId']);
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(['message' => $e->getMessage()]);
-        }
+        $assistantUuid = $request->query->get('assistantUuid');
+        $user = $this->getUserService()->getUserByUUID($uuid);
+        $this->getSCRMService()->setUserSCRMData($user);
 
-        return $this->redirect($this->generateUrl('homepage'));
+        $assistant = empty($assistantUuid) ? [] : $this->getUserService()->getUserByScrmUuid($assistantUuid);
+
+        $qrCodeUrl = $this->getSCRMService()->getAssistantQrCode($assistant);
+
+        return $this->render('scrm/assistant-qrcode.html.twig', ['qrCodeUrl' => $qrCodeUrl]);
     }
 
     /**
@@ -32,6 +32,14 @@ class BindController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return \Biz\SCRM\Service\SCRMService
+     */
+    protected function getSCRMService()
+    {
+        return $this->createService('SCRM:SCRMService');
     }
 
     /**
@@ -66,15 +74,5 @@ class BindController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
-    }
-
-    /**
-     * @return GoodsMediatorFactory
-     */
-    protected function getGoodsMediatorFactory()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['scrm_goods_mediator_factory'];
     }
 }

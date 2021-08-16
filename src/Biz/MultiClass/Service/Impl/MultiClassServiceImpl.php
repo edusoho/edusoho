@@ -342,23 +342,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
     }
 
-    public function isScrmBind()
-    {
-        $isScrmBind = $this->getCacheService()->get('scrm_bind');
-        if (!isset($isScrmBind)) {
-            try {
-                $scrmBind = $this->getSCRMService()->isScrmBind();
-                $isScrmBind = empty($scrmBind['ok']) ? 0 : 1;
-            } catch (\Exception $e) {
-                $isScrmBind = 0;
-            }
-
-            $this->getCacheService()->set('scrm_bind', $isScrmBind, time() + 7200);
-        }
-
-        return $isScrmBind;
-    }
-
     public function getAssistantBindUrl()
     {
         $user = $this->getCurrentUser();

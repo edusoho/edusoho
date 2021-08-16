@@ -2,7 +2,7 @@
 
 namespace AppBundle\Twig;
 
-use Biz\MultiClass\Service\MultiClassService;
+use Biz\SCRM\Service\SCRMService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -38,7 +38,7 @@ class MultiClassExtension extends \Twig_Extension
 
     public function isScrmBind()
     {
-        return $this->getMultiClassService()->isScrmBind();
+        return $this->getSCRMService()->isScrmBind();
     }
 
     /**
@@ -50,10 +50,10 @@ class MultiClassExtension extends \Twig_Extension
     }
 
     /**
-     * @return MultiClassService
+     * @return SCRMService
      */
-    protected function getMultiClassService()
+    protected function getSCRMService()
     {
-        return $this->biz->service('MultiClass:MultiClassService');
+        return $this->biz->service('SCRM:SCRMService');
     }
 }
