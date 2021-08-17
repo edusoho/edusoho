@@ -43,7 +43,7 @@ import YDiagram from "./components/yDiagram.vue";
 import TableData from "./components/TableData.vue";
 
 export default {
-  name: "index",
+  name: "overview",
   components: {
     AsideLayout,
     DashboardCard,
@@ -95,7 +95,7 @@ export default {
 
   computed: {},
 
-  mounted() {
+  created() {
     this.getGraphicData();
     this.getRankData();
   },

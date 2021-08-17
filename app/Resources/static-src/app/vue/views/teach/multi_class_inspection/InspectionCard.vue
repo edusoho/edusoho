@@ -94,8 +94,8 @@ export default {
       try {
         this.liveInfo = await MultiClassInspection.getLiveInfoById({
           query: {
-            id: this.inspection.activityId
-          }
+            id: this.inspection.activityId,
+          },
         });
       } catch (error) {}
     },

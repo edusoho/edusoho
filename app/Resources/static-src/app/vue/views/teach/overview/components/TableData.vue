@@ -16,8 +16,8 @@
         {{ index + 1 }}
       </template>
       <template slot="rate" slot-scope="rate, record">
-        <span v-if="record.count">{{ record.count }}</span>
-        <span v-else>{{ rate * 100 }}%</span>
+        <span v-if="rate || rate === 0">{{ rate * 100 }}%</span>
+        <span v-else>{{ record.count }}</span>
       </template>
       <template slot="rateTitle">
         <span>{{ title }}</span>
@@ -64,20 +64,22 @@ export default {
     ];
     return {
       columns,
-      tableData: this.data.descSort,
+      order: "descSort",
     };
   },
 
-  computed: {},
+  computed: {
+    tableData() {
+      const { ascSort, descSort } = this.data;
+      return this.order === "ascSort" ? ascSort : descSort;
+    },
+  },
 
   mounted() {},
 
   methods: {
     changeOrder(res) {
-      const order = res.target.value;
-      order === "ascSort"
-        ? (this.tableData = this.data.ascSort)
-        : (this.tableData = this.data.descSort);
+      this.order = res.target.value;
     },
   },
 };

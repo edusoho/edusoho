@@ -14,12 +14,7 @@ export default {
     graphicData: Object,
   },
   data() {
-    return {
-      // chartDataDouble: [
-      //   { item: "已开班班课", count: this.graphicData.startNum },
-      //   { item: "未开班班课", count: this.graphicData.notStartNum },
-      // ],
-    };
+    return {};
   },
 
   computed: {
