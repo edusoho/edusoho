@@ -2,7 +2,7 @@
   <div class="discussion">
     <component
       :is="currentComponent"
-      :id="currentDiscussionId"
+      :discussion="currentDiscussion"
       :type="type"
       @change-current-component="changeCurrentComponent"
     />
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       currentComponent: 'List',
-      currentDiscussionId: 0
+      currentDiscussion: {}
     }
   },
 
@@ -46,11 +46,11 @@ export default {
 
   methods: {
     changeCurrentComponent(params) {
-      const { component, id } = params;
+      const { component, data } = params;
 
       _.assign(this, {
         currentComponent: component,
-        currentDiscussionId: id
+        currentDiscussion: data
       });
     }
   }

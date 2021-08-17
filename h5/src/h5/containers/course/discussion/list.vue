@@ -10,7 +10,7 @@
         v-for="item in list"
         :key="item.id"
         :item="item"
-        @click.native="handleClickViewDetail(item.id)"
+        @click.native="handleClickViewDetail(item)"
       />
     </van-list>
 
@@ -80,14 +80,14 @@ export default {
 
         this.paging.offset++;
 
-        if (this.list.length >= total) {
+        if (_.size(this.list) >= total) {
           this.finished = true;
         }
       });
     },
 
-    handleClickViewDetail(id) {
-      this.$emit('change-current-component', { component: 'Detail', id });
+    handleClickViewDetail(data) {
+      this.$emit('change-current-component', { component: 'Detail', data });
     },
 
     handleClickCreateDiscussion() {

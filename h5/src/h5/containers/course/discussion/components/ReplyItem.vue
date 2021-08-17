@@ -4,9 +4,7 @@
       <img class="avatar" :src="item.user.avatar.small">
       <span>{{ item.user.nickname }} {{ $moment(item.createdTime).format('HH:mm') }}</span>
     </div>
-    <div class="reply-item__content">
-      {{ item.content }}
-    </div>
+    <div class="reply-item__content" v-html="item.content" />
   </div>
 </template>
 

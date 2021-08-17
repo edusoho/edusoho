@@ -13,16 +13,14 @@
 
     <div class="discussion-body">
       <div class="discussion-body__info">
-        <img class="avatar" src="http://try6.edusoho.cn/files/user/2021/04-22/1528579ec515309441.png">
+        <img class="avatar" :src="discussion.user.avatar.small">
         <div class="info-right">
-          <span class="info-nickname">曲敬良发起</span>
-          <span class="info-time">20:25</span>
+          <span class="info-nickname">{{ discussion.user.nickname }}发起</span>
+          <span class="info-time">{{ $moment(discussion.createdTime).format('HH:mm') }}</span>
         </div>
       </div>
-      <div class="discussion-body__title">Photoshop基础入门班级课程阿建设大街</div>
-      <div class="discussion-body__content">
-        Photoshop基础入门班级Photoshop基础入门班级Photoshop础入门班级Photoshop基础入门班级Photoshop基础入门班级大开杀戒打卡机卡萨丁就爱看山东矿机奥斯卡了低级趣味坡地区欧派我看到强迫我看懂情况的迫切看我的皮卡丘颇为读卡器坡屋顶看破情况的迫切我看到我都快亲我阿斯达是阿
-      </div>
+      <div class="discussion-body__title">{{ discussion.title }}</div>
+      <div class="discussion-body__content" v-html="discussion.content" />
     </div>
 
     <van-list
@@ -58,8 +56,8 @@ export default {
   },
 
   props: {
-    id: {
-      type: String,
+    discussion: {
+      type: Object,
       required: true
     }
   },
@@ -70,27 +68,37 @@ export default {
       courseId: this.$route.params.id,
       loading: false,
       finished: false,
+      paging: {
+        offset: 0,
+        limit: 10
+      },
       replyList: []
     }
   },
 
-  created() {
-    this.fetchCourseThreadPost();
-  },
-
   methods: {
     async fetchCourseThreadPost() {
-      const result = await Api.getCoursesThreadPost({
+      const { offset, limit } = this.paging;
+      const { data, paging: { total} } = await Api.getCoursesThreadPost({
         query: {
           courseId: this.courseId,
-          threadId: this.id
+          threadId: this.discussion.id
         },
         params: {
-          limit: 10,
-          offset: 0
+          limit: limit,
+          offset: offset
         }
       });
-      console.log(result);
+      _.assign(this, {
+        replyList: _.concat(this.replyList, data),
+        loading: false
+      });
+
+      this.paging.offset++;
+
+      if (_.size(this.replyList) >= total) {
+        this.finished = true;
+      }
     },
 
     handleClickGoToList() {
@@ -105,7 +113,7 @@ export default {
       const result = await Api.createCoursesThreadPost({
         query: {
           courseId: this.courseId,
-          threadId: this.id
+          threadId: this.discussion.id
         },
         data: {
           content

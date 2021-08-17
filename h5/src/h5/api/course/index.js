@@ -132,7 +132,7 @@ export default [
   {
     // 搜索课程话题回复
     name: 'getCoursesThreadPost',
-    url: '/courses/{courseId}/thread_post/{threadId}',
+    url: '/courses/{courseId}/threads/{threadId}/posts',
     method: 'GET',
     disableLoading: true
   },
