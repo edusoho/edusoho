@@ -61,14 +61,14 @@ export default {
           totalLiveNum: 0,
           overLiveNum: 0,
         },
-        timeoutReviewNum: 2,
+        timeoutReviewNum: 0,
         multiClassData: {
-          startNum: 4,
+          startNum: 0,
           notStartNum: 0,
         },
         studyStudentData: {
-          studyNum: 17,
-          notStudyNum: 68,
+          studyNum: 0,
+          notStudyNum: 0,
         },
       },
       studentDataSource: {
@@ -197,7 +197,7 @@ export default {
 
   computed: {},
 
-  created() {
+  mounted() {
     this.getGraphicData();
     this.getRankData();
   },
@@ -207,6 +207,7 @@ export default {
       try {
         this.getListLoading = true;
         this.graphicData = await Dashboard.search();
+        console.log(this.graphicData);
       } finally {
         this.getListLoading = false;
       }
@@ -215,6 +216,7 @@ export default {
       try {
         this.getListLoading = true;
         this.studentDataSource = await DashboardRank.search();
+        console.log(this.studentDataSource);
       } finally {
         this.getListLoading = false;
       }

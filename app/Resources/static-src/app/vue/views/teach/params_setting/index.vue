@@ -1,8 +1,13 @@
 <template>
   <aside-layout :breadcrumbs="[{ name: '参数设置' }]">
     <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 10 }" :wrapper-col="{ span: 10 }" style="max-width: 500px;">
-      <a-form-model-item ref="group_number_limit" label="分组学员人数上限" prop="group_number_limit">
+      <a-form-model-item ref="group_number_limit" label="分组容纳学员上限" prop="group_number_limit">
         <a-input v-model="form.group_number_limit">
+          <span slot="suffix">人</span>
+        </a-input>
+      </a-form-model-item>
+      <a-form-model-item ref="assistant_group_limit" label="助教服务组数上限" prop="assistant_group_limit">
+        <a-input v-model="form.assistant_group_limit">
           <span slot="suffix">人</span>
         </a-input>
       </a-form-model-item>
@@ -51,6 +56,17 @@ export default {
           trigger: "blur",
         },
       ],
+      assistant_group_limit: [
+        {
+          required: true,
+          message: "请输入助教服务组数上限",
+          trigger: "blur",
+        },
+        {
+          validator: this.validatorAssistantService,
+          trigger: "blur",
+        },
+      ],
       assistant_service_limit: [
         {
           required: true,
@@ -80,6 +96,7 @@ export default {
         group_number_limit: "",
         assistant_service_limit: "",
         review_time_limit: "",
+        assistant_group_limit: "",
       },
       ajaxLoading: false,
     };
@@ -108,6 +125,12 @@ export default {
       if (value > 10000 || value == 0) {
         callback(`人数范围在1-10000人`);
       }
+      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback("请输入正整数");
+      }
+      callback();
+    },
+    validatorAssistantGroup(rule, value, callback) {
       if (/^\+?[1-9][0-9]*$/.test(value) === false) {
         callback("请输入正整数");
       }

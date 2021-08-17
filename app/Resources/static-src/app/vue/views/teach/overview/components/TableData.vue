@@ -11,7 +11,7 @@
         </a-radio-button>
       </a-radio-group>
     </div>
-    <a-table :columns="columns" :data-source="tableData" :pagination="false" row-key="id">
+    <a-table :columns="columns" :data-source="tableData" :pagination="false" row-key="courseId">
       <template slot="rank" slot-scope="text, record, index">
         {{ index + 1 }}
       </template>
@@ -70,7 +70,9 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  mounted() {
+    console.log(this.tableData);
+  },
 
   methods: {
     changeOrder(res) {
