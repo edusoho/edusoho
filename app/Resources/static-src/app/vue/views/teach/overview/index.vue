@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { Dashboard, DashboardRank } from "common/vue/service";
+import DashBoard from "common/vue/service/DashBoard";
 import AsideLayout from "app/vue/views/layouts/aside.vue";
 import DashboardCard from "./dashboardCard.vue";
 import XDiagram from "./components/xDiagram.vue";
@@ -104,7 +104,7 @@ export default {
     async getGraphicData() {
       try {
         this.getListLoading = true;
-        this.graphicData = await Dashboard.search();
+        this.graphicData = await DashBoard.searchGraphicDatum();
       } finally {
         this.getListLoading = false;
       }
@@ -112,8 +112,7 @@ export default {
     async getRankData() {
       try {
         this.getListLoading = true;
-        this.studentDataSource = await DashboardRank.search();
-        console.log("11", this.studentDataSource);
+        this.studentDataSource = await DashBoard.searchRankList();
       } finally {
         this.getListLoading = false;
       }
