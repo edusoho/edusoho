@@ -19,6 +19,7 @@ class CourseNote extends AbstractResource
         }
         $note = $this->getCourseNoteService()->getNote($noteId);
         $this->getOCUtil()->single($note, ['userId']);
+        $this->getOCUtil()->single($note, ['taskId'], 'task');
 
         return $note;
     }
@@ -34,6 +35,7 @@ class CourseNote extends AbstractResource
         $notes = $this->getCourseNoteService()->searchNotes($conditions, $orderBys, $offset, $limit);
         $count = $this->getCourseNoteService()->countCourseNotes($conditions);
         $this->getOCUtil()->multiple($notes, ['userId']);
+        $this->getOCUtil()->multiple($notes, ['taskId'], 'task');
 
         return $this->makePagingObject($notes, $count, $offset, $limit);
     }
