@@ -24,7 +24,7 @@ class BindController extends BaseController
 
         return $this->render('scrm/assistant-qrcode.html.twig', [
             'qrCodeUrl' => $qrCodeUrl,
-            'assistant' => $assistant
+            'assistant' => $assistant,
         ]);
     }
 

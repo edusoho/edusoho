@@ -1009,7 +1009,7 @@ class SettingsController extends BaseController
 
         return $this->render('settings/scrm.html.twig', [
             'user' => $user,
-            'assistantQrCodeUrl' => $assistantQrCodeUrl
+            'assistantQrCodeUrl' => $assistantQrCodeUrl,
         ]);
     }
 
