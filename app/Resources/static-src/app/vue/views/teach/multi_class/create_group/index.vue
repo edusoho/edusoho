@@ -130,40 +130,43 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-      <a-form-item label="助教服务上限人数">
-        <a-select 
-            placeholder="班课状态"
-            style="width: 200px"
-            v-decorator="['service_setting_type']"
-            >
-          <a-select-option value="default">
-              默认参数设置
-          </a-select-option>
-          <a-select-option value="custom">
-              自定义设置
-          </a-select-option>
-        </a-select>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="分组上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+      <a-form-item label="助教及分组设置">
+         <div class="tip-color">（将学员分成若干组，并将组分配给助教管理）</div>
+         <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['group_limit_num', {
               rules: [
-                { required: true, message: '请输入分组上限人数' },
+                { required: true, message: '请输入分组容纳学员人数' },
                 { validator: validateGroupNum }
                ]
              }]">
               <span slot="suffix">人</span>
             </a-input>
+            <a-tooltip placement="right">
+               <template slot="title">
+                第1组学员达到上限后，将自动生成第2组添加学员，依次类推
+               </template>
+              <svg-icon class="icon-tip" icon="icon-tip" />
+            </a-tooltip>
+            <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
          </a-form-item>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+         <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['service_num', {
               rules: [
-                { required: true, message: '请输入助教服务上限人数' },
+                { required: true, message: '请输入助教服务组数' },
                 { validator: validateAssistantNum }
                ]
              }]">
-              <span slot="suffix">人</span>
+              <span slot="suffix">组</span>
             </a-input>
+            <a-tooltip placement="right">
+               <template slot="title">
+                第1位助教达到组数上限后，新增组将自动分配给第2个助教，依次类推
+                如所有助教皆达到组数上限，新增组将平均分配至每位助教
+               </template>
+              <svg-icon class="icon-tip" icon="icon-tip" />
+            </a-tooltip>
           </a-form-item>
-
+          <div class="total-number-tip">助教上限学员数：每组上限学员数*助教上限组数=<span v-if="form.getFieldValue('service_num') && form.getFieldValue('group_limit_num')">{{form.getFieldValue('service_num')*form.getFieldValue('group_limit_num')}}</span>人</div>
       </a-form-item>
       <a-form-item label="排课">
         <Schedule
@@ -223,7 +226,7 @@
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
           {{ mode === 'editor' ? '确定' : '立即创建' }}
         </a-button>
-        <a-button @click="clickCancelCreate">
+        <a-button @click="cancelCreate">
           取消
         </a-button>
       </a-space>
@@ -310,30 +313,9 @@ export default {
   created() {
     // 编辑班课
     this.fetchNotificationSetting();
-    const id = this.$route.query.id;
-    if (id) {
-      this.multiClassId = id;
-      this.mode = 'editor';
-      this.fetchEditorMultiClass();
-      return;
-    }
-
+    this.isEdit();
     // 创建新课程后
-    let course = this.$route.query.course
-    if (course) {
-      course = JSON.parse(course)
-
-      this.selectedCourseId = course.id;
-      this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
-      this.course.list.push(course)
-      this.$set(this.course, 'initialValue', course.id)
-      this.fetchCourse();
-      this.fetchProducts();
-      this.fetchCourseInfo(course.id);
-      return;
-    }
-
+    this.afterCreateCourse();
     this.initFetch();
   },
 
@@ -343,6 +325,33 @@ export default {
       this.fetchAssistants();
       this.fetchProducts();
       this.fetchTeacher();
+    },
+
+    isEdit() {
+      const id = this.$route.query.id;
+      if (id) {
+        this.multiClassId = id;
+        this.mode = 'editor';
+        this.fetchEditorMultiClass();
+        return;
+      }
+    },
+
+    afterCreateCourse() {
+      let course = this.$route.query.course
+      if (course) {
+        course = JSON.parse(course)
+
+        this.selectedCourseId = course.id;
+        this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
+        this.course.list.push(course)
+        this.$set(this.course, 'initialValue', course.id)
+        this.fetchCourse();
+        this.fetchProducts();
+        this.fetchCourseInfo(course.id);
+        return;
+      }
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
@@ -701,7 +710,6 @@ export default {
       this.form.validateFields((err, values) => {
         if (err) return
         values.type = 'group';
-        console.log(values);
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -716,7 +724,7 @@ export default {
     createMultiClass(values) {
       this.ajaxLoading = true
       MultiClass.add(values).then(() => {
-        this.clickCancelCreate();
+        this.cancelCreate();
       }).finally(() => {
         this.ajaxLoading = false
       })
@@ -725,21 +733,16 @@ export default {
     editorMultiClass(values) {
       this.ajaxLoading = true
       MultiClass.editorMultiClass(this.multiClassId, values).then(() => {
-        this.clickCancelCreate();
+        this.cancelCreate();
       }).finally(() => {
         this.ajaxLoading = false
       })
     },
 
-    clickCancelCreate() {
-      const params = {};
-      const paging = this.$route.params.paging;
-      if (paging) {
-        params.paging = paging;
-      }
+    cancelCreate() {
       this.$router.push({
         name: 'MultiClass',
-        params
+        params: this.$route.params.paging || {}
       });
     },
   }
@@ -790,6 +793,26 @@ export default {
 .assistant-tip{
   margin-left: 48px;
   color: @brand-danger
+}
+.tip-color{
+  color: @cdv2-dark-assist;
+}
+.icon-tip{
+  position: absolute;
+  top: 0;
+  left: 82px;
+  width:16px;
+  height:16px;
+  color: #31A1FF;
+}
+.setup-tip{
+  position: absolute;
+  left: 110px;
+  width: 200px;
+}
+.total-number-tip{
+  color: @cdv2-dark-assist;
+  margin-left: 18px;
 }
 
 @import "~app/less/admin-v2/variables.less";

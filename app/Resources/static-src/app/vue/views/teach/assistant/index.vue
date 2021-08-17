@@ -20,7 +20,7 @@
       <template slot="nickname" slot-scope="text, item">
         <div class="avatar-name">
           <a-avatar :size="48" :src="item.avatar.middle" icon="user"></a-avatar>
-          <a @click="check(item.id)" style="margin-left: 8px">{{ text }}</a>
+          <a class="ml8" @click="check(item.id)">{{ text }}</a>
         </div>
       </template>
 
@@ -84,7 +84,6 @@
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Assistant, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import { Avatar } from "ant-design-vue";
 
 const columns = [
   {
@@ -136,7 +135,6 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    AAvatar: Avatar,
   },
   data() {
     return {
