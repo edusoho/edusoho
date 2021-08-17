@@ -17,38 +17,40 @@ class DashboardRankList extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
-        $newStudentRankList = $this->getNewStudentsData($allMultiClasses);
-        $reviewData = $this->getReviewData($allMultiClasses);
-        $finishedRateList = $this->getFinishedRateList($allMultiClasses);
-        $questionAnswerRateList = $this->getQuestionAnswerRateList($allMultiClasses);
+        $startMultiClasses = $this->getMultiClassService()->searchMultiClass(['startTimeLE' => time()], [], 0, PHP_INT_MAX);
+        $newStudentRankList = $this->getNewStudentsData();
+        $reviewData = $this->getReviewData($startMultiClasses);
+        $finishedRateList = $this->getFinishedRateList($startMultiClasses);
+        $questionAnswerRateList = $this->getQuestionAnswerRateList($startMultiClasses);
 
         return compact('newStudentRankList', 'reviewData', 'finishedRateList', 'questionAnswerRateList');
     }
 
-    protected function getNewStudentsData($allMultiClasses)
+    protected function getNewStudentsData()
     {
+        $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
         $conditions = [
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'startTimeGreaterThan' => strtotime('yesterday'),
             'startTimeLessThan' => strtotime(date('Y-m-d')) - 1,
         ];
-        $newAscSortStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions);
-        $newDescSortStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions, 'DESC');
-        $newAscSortStudents = $this->filterStudentNum($newAscSortStudents, $allMultiClasses);
-        $newDescSortStudents = $this->filterStudentNum($newDescSortStudents, $allMultiClasses);
+        $newSortStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions);
+        $newSortStudents = $this->filterStudentNum($newSortStudents, $allMultiClasses);
 
-        return ['ascSort' => $newAscSortStudents, 'descSort' => $newDescSortStudents];
+        return ['ascSort' => $this->sortRateList($newSortStudents, SORT_ASC, 'count'), 'descSort' => $this->sortRateList($newSortStudents, SORT_DESC, 'count')];
     }
 
     protected function filterStudentNum($numList, $allMultiClasses)
     {
-        $allMultiClasses = ArrayToolkit::index($allMultiClasses, 'courseId');
-        foreach ($numList as &$list){
-            $list['multiClass'] = isset($allMultiClasses[$list['courseId']]) ? $allMultiClasses[$list['courseId']]['title'] : '';
+        $studentNumList = [];
+        $numList = ArrayToolkit::index($numList, 'courseId');
+        foreach ($allMultiClasses as $multiClass){
+            $studentNumList[$multiClass['courseId']]['multiClass'] = $multiClass['title'];
+            $studentNumList[$multiClass['courseId']]['courseId'] = $multiClass['courseId'];
+            $studentNumList[$multiClass['courseId']]['count'] = isset($numList[$multiClass['courseId']]) ? $numList[$multiClass['courseId']]['count'] : 0;
         }
 
-        return $numList;
+        return $studentNumList;
     }
 
     protected function getReviewData($allMultiClasses)
@@ -75,11 +77,10 @@ class DashboardRankList extends AbstractResource
         $totalAnswerRecords = $this->filterAnswerRecord($totalAnswerRecords, $sceneIndexActivities);
         $reviewedRecords = $this->filterAnswerRecord($reviewedRecords, $sceneIndexActivities);
         $reviewRate = [];
-        $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
-        foreach ($totalAnswerRecords as $answerRecord) {
-            $reviewRate[$answerRecord['courseId']]['courseId'] = $answerRecord['courseId'];
-            $reviewRate[$answerRecord['courseId']]['multiClass'] = isset($multiClasses[$answerRecord['courseId']]) ? $multiClasses[$answerRecord['courseId']]['title'] : '';
-            $reviewRate[$answerRecord['courseId']]['rate'] = $answerRecord['count'] && $reviewedRecords[$answerRecord['courseId']]['count'] ? round($reviewedRecords[$answerRecord['courseId']]['count'] / $answerRecord['count'], 2) : 0;
+        foreach ($multiClasses as $multiClass) {
+            $reviewRate[$multiClass['courseId']]['courseId'] = $multiClass['courseId'];
+            $reviewRate[$multiClass['courseId']]['multiClass'] = $multiClass['title'];
+            $reviewRate[$multiClass['courseId']]['rate'] =  isset($totalAnswerRecords[$multiClass['courseId']]) && isset($reviewedRecords[$multiClass['courseId']]) && $totalAnswerRecords[$multiClass['courseId']]['count'] && $reviewedRecords[$multiClass['courseId']]['count'] ? round($reviewedRecords[$multiClass['courseId']]['count'] / $totalAnswerRecords[$multiClass['courseId']]['count'], 2) : 0;
         }
 
         return [$this->sortRateList($reviewRate,SORT_ASC), $this->sortRateList($reviewRate, SORT_DESC)];
@@ -107,12 +108,10 @@ class DashboardRankList extends AbstractResource
             'finishedTime_GE' => strtotime('yesterday'),
             'finishedTime_LE' => strtotime(date('Y-m-d')) - 1,
         ];
-        $ascFinishedStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions);
-        $descFinishedStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions, 'DESC');
-        $ascFinishedStudents = $this->filterRateList($allMultiClasses, $ascFinishedStudents);
-        $descFinishedStudents = $this->filterRateList($allMultiClasses, $descFinishedStudents);
+        $finishedStudents = $this->getCourseMemberService()->countGroupByCourseId($conditions);
+        $finishedStudents = $this->filterRateList($allMultiClasses, $finishedStudents);
 
-        return ['ascSort' => $ascFinishedStudents, 'descSort' => $descFinishedStudents];
+        return ['ascSort' => $this->sortRateList($finishedStudents, SORT_ASC), 'descSort' => $this->sortRateList($finishedStudents, SORT_DESC)];
     }
 
     protected function filterRateList($multiClasses, $finishedStudents)
@@ -146,24 +145,23 @@ class DashboardRankList extends AbstractResource
 
     protected function filterAnswerRate($multiClasses, $answeredThreads)
     {
-        $courses = $this->getThreadService()->countThreadsGroupedByCourseId(['courseIds' =>ArrayToolkit::column($multiClasses, 'courseId')]);
+        $courses = ArrayToolkit::index($this->getThreadService()->countThreadsGroupedByCourseId(['courseIds' =>ArrayToolkit::column($multiClasses, 'courseId')]), 'courseId');
         $answerRate = [];
         $answeredThreads = ArrayToolkit::index($answeredThreads, 'courseId');
-        $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
-        foreach ($courses as $course) {
-            $answerRate[$course['courseId']]['courseId'] = $course['courseId'];
-            $answerRate[$course['courseId']]['multiClass'] = isset($multiClasses[$course['courseId']]) ? $multiClasses[$course['courseId']]['title'] : '';
-            $answerRate[$course['courseId']]['rate'] = $course['count'] && $answeredThreads[$course['courseId']]['count'] ? round($answeredThreads[$course['courseId']]['count'] / $course['count'], 2) : 0;
+        foreach ($multiClasses as $multiClass) {
+            $answerRate[$multiClass['courseId']]['courseId'] = $multiClass['courseId'];
+            $answerRate[$multiClass['courseId']]['multiClass'] = $multiClass['title'];
+            $answerRate[$multiClass['courseId']]['rate'] = isset($courses[$multiClass['courseId']]) && isset($answeredThreads[$multiClass['courseId']]) && $courses[$multiClass['courseId']]['count'] && $answeredThreads[$multiClass['courseId']]['count'] ? round($answeredThreads[$multiClass['courseId']]['count'] / $courses[$multiClass['courseId']]['count'], 2) : 0;
         }
 
         return $answerRate;
     }
 
-    protected function sortRateList($reviewRate, $order)
+    protected function sortRateList($reviewRate, $order, $filed = 'rate')
     {
         $refer = [];
         foreach ($reviewRate as $key => $value) {
-            $refer[$key] = $value['rate'];
+            $refer[$key] = $value[$filed];
         }
         array_multisort($refer, $order, SORT_NUMERIC, $reviewRate);
 

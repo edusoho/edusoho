@@ -211,5 +211,5 @@ interface MemberService
 
     public function findMultiClassIdsByUserId($userId);
 
-    public function countGroupByCourseId($conditions, $sort = 'ASC');
+    public function countGroupByCourseId($conditions);
 }
