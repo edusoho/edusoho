@@ -1,54 +1,36 @@
 <template>
-  <div class="discussion-list">
+  <div class="note-list">
     <van-list
       v-model="loading"
       :finished="finished"
       @load="onLoad"
     >
-      <discussion-item
+      <note-item
         v-for="item in list"
         :key="item.id"
         :item="item"
         @click.native="handleClickViewDetail(item)"
       />
     </van-list>
-
     <empty
       v-if="!list.length && finished"
       text="暂无笔记"
     />
-
-    <div class="create-btn">
-      <van-button
-        type="primary"
-        block
-        @click="handleClickCreateDiscussion"
-      >
-        发起问答
-      </van-button>
-    </div>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
 import Api from '@/api';
-import DiscussionItem from './components/DiscussionItem.vue';
+import NoteItem from './components/NoteItem.vue';
 import Empty from '&/components/e-empty/e-empty.vue';
 
 export default {
-  name: 'DiscussionList',
+  name: 'Note-list',
 
   components: {
-    DiscussionItem,
+    NoteItem,
     Empty
-  },
-
-  props: {
-    type: {
-      type: String,
-      required: true
-    }
   },
 
   data() {
@@ -58,7 +40,7 @@ export default {
       finished: false,
       paging: {
         offset: 0,
-        limit: 20
+        limit: 10
       },
       courseId: this.$route.params.id
     }
@@ -67,12 +49,11 @@ export default {
   methods: {
     onLoad() {
       const { offset, limit } = this.paging;
-      Api.getCoursesThreads({
+      Api.getCoursesNotes({
         query: {
           courseId: this.courseId
         },
         params: {
-          type: this.type,
           limit: limit,
           offset: offset
         }
@@ -92,34 +73,16 @@ export default {
       });
     },
 
+
     handleClickViewDetail(data) {
       this.$emit('change-current-component', { component: 'Detail', data });
-    },
-
-    handleClickCreateDiscussion() {
-      this.$emit('change-current-component', { component: 'Create' });
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.discussion-list {
-  padding-bottom: vw(80);
-
-  .create-btn {
-    position: fixed;
-    bottom: vw(16);
-    left: 50%;
-    transform: translateX(-50%);
-    width: vw(340);
-
-    .van-button {
-      box-shadow: 0px 2px 6px 0px rgba(64, 143, 251, 0.5);
-      border-radius: 8px;
-      font-size: vw(16);
-    }
-  }
+.note-list {
 
   .van-list {
     margin-top: 0;

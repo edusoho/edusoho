@@ -48,6 +48,10 @@ export default {
     font-size: vw(14);
     color: #666;
     line-height: vw(20);
+
+    /deep/ img {
+      max-width: 100%;
+    }
   }
 }
 </style>
