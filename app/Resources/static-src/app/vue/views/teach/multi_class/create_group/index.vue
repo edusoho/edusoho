@@ -132,8 +132,8 @@
       </a-form-item>
       <a-form-item label="助教及分组设置">
          <div class="tip-color">（将学员分成若干组，并将组分配给助教管理）</div>
-         <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-           <a-input v-decorator="['group_limit_num', {
+         <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
+           <a-input type="number" v-decorator="['group_limit_num', {
               rules: [
                 { required: true, message: '请输入分组容纳学员人数' },
                 { validator: validateGroupNum }
@@ -149,8 +149,8 @@
             </a-tooltip>
             <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
          </a-form-item>
-         <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-           <a-input v-decorator="['service_num', {
+         <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
+           <a-input typr="number" v-decorator="['service_group_num', {
               rules: [
                 { required: true, message: '请输入助教服务组数' },
                 { validator: validateAssistantNum }
@@ -166,7 +166,7 @@
               <svg-icon class="icon-tip" icon="icon-tip" />
             </a-tooltip>
           </a-form-item>
-          <div class="total-number-tip">助教上限学员数：每组上限学员数*助教上限组数=<span v-if="form.getFieldValue('service_num') && form.getFieldValue('group_limit_num')">{{form.getFieldValue('service_num')*form.getFieldValue('group_limit_num')}}</span>人</div>
+          <div class="total-number-tip">助教上限学员数：每组上限学员数*助教上限组数=<span v-if="form.getFieldValue('service_group_num') && form.getFieldValue('group_limit_num')">{{form.getFieldValue('service_group_num')*form.getFieldValue('group_limit_num')}}</span>人</div>
       </a-form-item>
       <a-form-item label="排课">
         <Schedule
@@ -438,8 +438,8 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, group_limit_num, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'group_limit_num':group_limit_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_group_num, group_limit_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_group_num':service_group_num, 'group_limit_num':group_limit_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -800,14 +800,14 @@ export default {
 .icon-tip{
   position: absolute;
   top: 0;
-  left: 82px;
+  left: 120px;
   width:16px;
   height:16px;
   color: #31A1FF;
 }
 .setup-tip{
   position: absolute;
-  left: 110px;
+  left: 150px;
   width: 200px;
 }
 .total-number-tip{
