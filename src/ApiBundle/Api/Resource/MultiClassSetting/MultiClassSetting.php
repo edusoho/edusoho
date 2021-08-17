@@ -36,9 +36,10 @@ class MultiClassSetting extends AbstractResource
     private function getMultiClassDefaultSettings()
     {
         return [
-            'group_number_limit' => '20',
-            'assistant_service_limit' => '200',
-            'review_time_limit' => '24',
+            'group_number_limit' => '',
+            'assistant_group_limit' => '',
+            'assistant_service_limit' => '',
+            'review_time_limit' => '',
         ];
     }
 
