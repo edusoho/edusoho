@@ -1,85 +1,50 @@
 <template>
   <div class="notes">
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      @load="onLoad"
-    >
-      <note-item
-        v-for="item in list"
-        :key="item.id"
-        :item="item"
-        @click.native="handleClickViewDetail(item)"
+    <keep-alive>
+      <component
+        :is="currentComponent"
+        :note="currentNote"
+        @change-current-component="changeCurrentComponent"
       />
-    </van-list>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-import Api from '@/api';
-import NoteItem from './components/NoteItem.vue';
+import List from './list.vue';
+import Detail from './detail.vue';
 
 export default {
   name: 'Notes',
 
   components: {
-    NoteItem
+    List,
+    Detail
   },
 
   data() {
     return {
-      list: [],
-      loading: false,
-      finished: false,
-      paging: {
-        offset: 0,
-        limit: 10
-      },
-      courseId: this.$route.params.id
+      currentComponent: 'List',
+      currentNote: {}
+    }
+  },
+
+  watch: {
+    currentComponent() {
+      this.$emit('chang-tabs-status', this.currentComponent === 'List');
     }
   },
 
   methods: {
-    onLoad() {
-      const { offset, limit } = this.paging;
-      Api.getCoursesNotes({
-        query: {
-          courseId: this.courseId
-        },
-        params: {
-          limit: limit,
-          offset: offset
-        }
-      }).then(res => {
-        const { data, paging: { total } } = res;
+    changeCurrentComponent(params) {
+      const { component, data } = params;
 
-        _.assign(this, {
-          list: _.concat(this.list, data),
-          loading: false
-        });
-
-        this.paging.offset++;
-
-        if (_.size(this.list) >= total) {
-          this.finished = true;
-        }
+      _.assign(this, {
+        currentComponent: component,
+        currentNote: data
       });
-    },
-
-
-    handleClickViewDetail(note) {
-      console.log(note);
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.notes {
-
-  .van-list {
-    margin-top: 0;
-  }
-}
-</style>

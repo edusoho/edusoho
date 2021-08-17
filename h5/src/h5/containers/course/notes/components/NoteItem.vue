@@ -4,7 +4,7 @@
       <div class="note-info">
         <img class="avatar" :src="item.user.avatar.small" alt="">
         <span class="">{{ item.user.nickname }} {{ $moment(item.createdTime).format('YY-MM-DD HH:mm') }}</span>
-        <span class="tag">一年级算数</span>
+        <span class="tag">{{ item.task.title }}</span>
       </div>
       <div class="note-like">
         {{ item.likeNum }}
