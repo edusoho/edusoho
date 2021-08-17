@@ -14,20 +14,28 @@ export default {
   },
 
   data() {
-    return {
-      chartDataDouble: [
+    return {};
+  },
+
+  computed: {
+    chartDataDouble() {
+      return [
         { item: "班课在读学员人数", count: this.graphicData.studyNum },
         { item: "未开班学员人数", count: this.graphicData.notStudyNum },
-      ],
-    };
+      ];
+    },
   },
 
-  computed: {},
+  mounted() {},
 
-  mounted() {
-    this.initChart();
+  watch: {
+    chartDataDouble: {
+      handler() {
+        this.initChart();
+      },
+      deep: true,
+    },
   },
-
   methods: {
     initChart() {
       const chart = new Chart({

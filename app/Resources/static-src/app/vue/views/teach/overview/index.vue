@@ -73,122 +73,20 @@ export default {
       },
       studentDataSource: {
         newStudentRankList: {
-          ascSort: [
-            {
-              id: 9,
-              count: "1",
-              courseId: "123",
-              multiClass: "新建班课1",
-            },
-            {
-              id: 10,
-              count: "2",
-              courseId: "120",
-              multiClass: "班课2",
-            },
-          ],
-          descSort: [
-            {
-              count: "2",
-              courseId: "120",
-              multiClass: "班课2",
-            },
-            {
-              count: "1",
-              courseId: "123",
-              multiClass: "新建班课1",
-            },
-          ],
+          ascSort: [],
+          descSort: [],
         },
         reviewData: {
-          ascSort: [
-            {
-              id: 1,
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-            {
-              id: 2,
-              multiClass: "班课2",
-              rate: 1,
-            },
-          ],
-          descSort: [
-            {
-              multiClass: "班课2",
-              rate: 1,
-            },
-            {
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-          ],
+          ascSort: [],
+          descSort: [],
         },
         finishedRateList: {
-          ascSort: [
-            {
-              id: 3,
-              multiClass: "班课2",
-              rate: 0,
-            },
-            {
-              id: 7,
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-            {
-              id: 8,
-              multiClass: "班课1",
-              rate: 1,
-            },
-          ],
-          descSort: [
-            {
-              multiClass: "班课1",
-              rate: 1,
-            },
-            {
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-            {
-              multiClass: "班课2",
-              rate: 0,
-            },
-          ],
+          ascSort: [],
+          descSort: [],
         },
         questionAnswerRateList: {
-          ascSort: [
-            {
-              id: 4,
-              multiClass: "班课2",
-              rate: 0,
-            },
-            {
-              id: 5,
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-            {
-              id: 6,
-              multiClass: "班课1",
-              rate: 1,
-            },
-          ],
-          descSort: [
-            {
-              multiClass: "班课1",
-              rate: 1,
-            },
-            {
-              multiClass: "新建班课1",
-              rate: 0.33,
-            },
-            {
-              multiClass: "班课2",
-              rate: 0,
-            },
-          ],
+          ascSort: [],
+          descSort: [],
         },
       },
       getListLoading: false,
@@ -207,7 +105,6 @@ export default {
       try {
         this.getListLoading = true;
         this.graphicData = await Dashboard.search();
-        console.log(this.graphicData);
       } finally {
         this.getListLoading = false;
       }
@@ -216,7 +113,7 @@ export default {
       try {
         this.getListLoading = true;
         this.studentDataSource = await DashboardRank.search();
-        console.log(this.studentDataSource);
+        console.log("11", this.studentDataSource);
       } finally {
         this.getListLoading = false;
       }

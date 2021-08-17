@@ -38,9 +38,9 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: [],
     },
   },
+
   data() {
     const columns = [
       {
@@ -70,9 +70,7 @@ export default {
 
   computed: {},
 
-  mounted() {
-    console.log(this.tableData);
-  },
+  mounted() {},
 
   methods: {
     changeOrder(res) {

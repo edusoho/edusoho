@@ -15,17 +15,31 @@ export default {
   },
   data() {
     return {
-      chartDataDouble: [
-        { item: "已开班班课", count: this.graphicData.startNum },
-        { item: "未开班班课", count: this.graphicData.notStartNum },
-      ],
+      // chartDataDouble: [
+      //   { item: "已开班班课", count: this.graphicData.startNum },
+      //   { item: "未开班班课", count: this.graphicData.notStartNum },
+      // ],
     };
   },
 
-  computed: {},
+  computed: {
+    chartDataDouble() {
+      return [
+        { item: "已开班班课", count: this.graphicData.startNum },
+        { item: "未开班班课", count: this.graphicData.notStartNum },
+      ];
+    },
+  },
 
-  mounted() {
-    this.initChart();
+  mounted() {},
+
+  watch: {
+    chartDataDouble: {
+      handler() {
+        this.initChart();
+      },
+      deep: true,
+    },
   },
 
   methods: {
