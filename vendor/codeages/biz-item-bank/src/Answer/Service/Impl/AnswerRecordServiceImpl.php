@@ -99,7 +99,12 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
     {
         return $this->getAnswerRecordDao()->findByAnswerSceneId($answerSceneId);
     }
-    
+
+    public function countGroupByAnswerSceneId($conditions)
+    {
+        return $this->getAnswerRecordDao()->countGroupByAnswerSceneId($conditions);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */

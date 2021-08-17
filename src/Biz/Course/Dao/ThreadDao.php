@@ -10,6 +10,8 @@ interface ThreadDao extends GeneralDaoInterface
 
     public function countThreadsGroupedByUserId($conditions);
 
+    public function countThreadsGroupedByCourseId($conditions);
+
     public function findLatestThreadsByType($type, $start, $limit);
 
     public function findEliteThreadsByType($type, $status, $start, $limit);

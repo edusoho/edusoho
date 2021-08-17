@@ -556,6 +556,16 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, [$courseId, $multiClassId, $role]);
     }
 
+    public function countGroupByCourseId($conditions, $sort = 'ASC')
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(*) as count, courseId')
+            ->groupBy('courseId')
+            ->orderBy('count', $sort);
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
@@ -577,6 +587,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'userId = :userId',
                 'courseSetId = :courseSetId',
                 'multiClassId = :multiClassId',
+                'multiClassId IN (:multiClassIds)',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
