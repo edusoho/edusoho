@@ -102,7 +102,7 @@ import * as types from '@/store/mutation-types.js';
 import firstDiscussion from './discussion/index.vue'; // 问答
 import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
-import Evaluation from './evaluation/index.vue';
+import Reviews from './reviews/index.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
 const tabComponent = [
  {
@@ -122,8 +122,8 @@ const tabComponent = [
     type: 'notes'
   },
   {
-    name: 'Evaluation',
-    type: 'evaluation'
+    name: 'Reviews',
+    type: 'reviews'
   }
 ];
 
@@ -139,7 +139,7 @@ export default {
     firstDiscussion,
     secondDiscussion,
     Notes,
-    Evaluation
+    Reviews
   },
 
   props: {
