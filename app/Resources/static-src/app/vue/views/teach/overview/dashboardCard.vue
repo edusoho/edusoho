@@ -8,7 +8,7 @@
               <svg-icon class="icon icon-add-student" icon="icon-add-student" />
               <div class="right-block">
                 <p class="card-title text-size">昨日新增班课学员总数</p>
-                <span class="card-count text-size" style="color: #5CCFEA">999</span>
+                <span class="card-count text-size" style="color: #5CCFEA">{{ graphicData.totalNewStudentNum }}</span>
               </div>
             </div>
           </a-row>
@@ -21,7 +21,7 @@
               <svg-icon class="icon icon-add-student-success" icon="icon-add-student-success" />
               <div class="right-block">
                 <p class="card-title text-size">昨日班课结课学员总数</p>
-                <span class="card-count text-size" style="color: #FFC173">999</span>
+                <span class="card-count text-size" style="color: #FFC173">{{ graphicData.totalFinishedStudentNum }}</span>
               </div>
             </div>
           </a-row>
@@ -35,7 +35,7 @@
                 <svg-icon class="icon icon-live-broad" icon="icon-live-broad" />
                 <div class="right-block">
                   <p class="card-title text-size">今日直播课程数</p>
-                  <span class="card-count text-size" style="color: #42D668">999/ <span style="color: #BEBEBE">999</span></span>
+                  <span class="card-count text-size" style="color: #42D668">{{ graphicData.todayLiveData.overLiveNum }}/<span style="color: #BEBEBE">{{ graphicData.todayLiveData.totalLiveNum }}</span></span>
                 </div>
               </div>
             </a-row>
@@ -50,7 +50,7 @@
                 <svg-icon class="icon icon-edit-group" icon="icon-edit-group" />
                 <div class="right-block">
                   <p class="card-title text-size">超时未批阅数</p>
-                  <span class="card-count text-size" style="color: #FF6666">999</span>
+                  <span class="card-count text-size" style="color: #FF6666">{{ graphicData.timeoutReviewNum }}</span>
                 </div>
               </div>
             </a-row>
@@ -66,7 +66,12 @@
 export default {
   name: "dashboardCard",
   components: {},
-
+  props: {
+    graphicData: {
+      type: Object,
+      require: true,
+    },
+  },
   data() {
     return {};
   },

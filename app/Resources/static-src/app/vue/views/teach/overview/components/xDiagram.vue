@@ -10,12 +10,14 @@ import { Chart } from "@antv/g2";
 export default {
   name: "xDiagram",
   components: {},
-
+  props: {
+    graphicData: Object,
+  },
   data() {
     return {
       chartDataDouble: [
-        { item: "事例一", count: 20 },
-        { item: "事例二", count: 10 },
+        { item: "已开班班课", count: this.graphicData.startNum },
+        { item: "未开班班课", count: this.graphicData.notStartNum },
       ],
     };
   },

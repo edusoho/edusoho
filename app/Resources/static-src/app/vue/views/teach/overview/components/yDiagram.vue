@@ -9,11 +9,15 @@ export default {
   name: "yDiagram",
   components: {},
 
+  props: {
+    graphicData: Object,
+  },
+
   data() {
     return {
       chartDataDouble: [
-        { item: "事例一", count: 40 },
-        { item: "事例二", count: 21 },
+        { item: "班课在读学员人数", count: this.graphicData.studyNum },
+        { item: "未开班学员人数", count: this.graphicData.notStudyNum },
       ],
     };
   },

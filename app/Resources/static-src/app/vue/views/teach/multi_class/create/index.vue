@@ -130,31 +130,7 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-      <a-form-item label="助教服务上限人数">
-        <a-select 
-            placeholder="默认参数设置"
-            style="width: 200px"
-            v-decorator="['service_setting_type']"
-            >
-          <a-select-option value="default">
-              默认参数设置
-          </a-select-option>
-          <a-select-option value="custom">
-              自定义设置
-          </a-select-option>
-        </a-select>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-           <a-input v-decorator="['service_num', {
-              rules: [
-                { required: true, message: '请输入助教服务上限人数' },
-                { validator: validateAssistantNum }
-               ]
-             }]">
-              <span slot="suffix">人</span>
-            </a-input>
-        </a-form-item>
-
-      </a-form-item>
+      
       <a-form-item label="排课">
         <Schedule
           :course-id="selectedCourseId"
@@ -420,8 +396,8 @@ export default {
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
         console.log(res);
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -675,12 +651,6 @@ export default {
 
       callback()
     },
-     validateAssistantNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
-        callback('请输入正整数')
-      }
-      callback()
-    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
@@ -765,11 +735,7 @@ export default {
   text-align: right;
   background-color: #f5f5f5;
 }
-.assistant-max-number{
-  .ant-form-explain{
-    width: 250px
-  }
-}
+
 .assistant-tip{
   margin-left: 48px;
   color: @brand-danger

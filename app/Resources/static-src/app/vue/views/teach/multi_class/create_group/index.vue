@@ -130,37 +130,26 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-      <a-form-item label="助教服务上限人数">
-        <a-select 
-            placeholder="班课状态"
-            style="width: 200px"
-            v-decorator="['service_setting_type']"
-            >
-          <a-select-option value="default">
-              默认参数设置
-          </a-select-option>
-          <a-select-option value="custom">
-              自定义设置
-          </a-select-option>
-        </a-select>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="分组上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+      <a-form-item label="助教及分组设置">
+         <div class="tip-color">（将学员分成若干组，并将组分配给助教管理）</div>
+         <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['group_limit_num', {
               rules: [
-                { required: true, message: '请输入分组上限人数' },
+                { required: true, message: '请输入分组容纳学员人数' },
                 { validator: validateGroupNum }
                ]
              }]">
               <span slot="suffix">人</span>
             </a-input>
          </a-form-item>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+         <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['service_num', {
               rules: [
-                { required: true, message: '请输入助教服务上限人数' },
+                { required: true, message: '请输入助教服务组数' },
                 { validator: validateAssistantNum }
                ]
              }]">
-              <span slot="suffix">人</span>
+              <span slot="suffix">组</span>
             </a-input>
           </a-form-item>
 
@@ -790,6 +779,9 @@ export default {
 .assistant-tip{
   margin-left: 48px;
   color: @brand-danger
+}
+.tip-color{
+  color: @cdv2-dark-assist;
 }
 
 @import "~app/less/admin-v2/variables.less";

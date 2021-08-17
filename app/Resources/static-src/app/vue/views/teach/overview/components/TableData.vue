@@ -1,17 +1,27 @@
 <template>
   <div class="table-data">
     <div class="title">
-      <span class="text">{{title}}</span>
-      <a-radio-group class="title-button" default-value="up" button-style="solid" @change="changeOrder">
-        <a-radio-button value="up">
+      <span class="text">{{ title }}</span>
+      <a-radio-group class="title-button" default-value="descSort" button-style="solid" @change="changeOrder">
+        <a-radio-button value="ascSort">
           升序
         </a-radio-button>
-        <a-radio-button value="down">
+        <a-radio-button value="descSort">
           降序
         </a-radio-button>
       </a-radio-group>
     </div>
-    <a-table :columns="columns" :data-source="data" :pagination="false">
+    <a-table :columns="columns" :data-source="tableData" :pagination="false" row-key="id">
+      <template slot="rank" slot-scope="text, record, index">
+        {{ index + 1 }}
+      </template>
+      <template slot="rate" slot-scope="rate, record">
+        <span v-if="record.count">{{ record.count }}</span>
+        <span v-else>{{ rate * 100 }}%</span>
+      </template>
+      <template slot="rateTitle">
+        <span>{{ title }}</span>
+      </template>
     </a-table>
   </div>
 </template>
@@ -26,7 +36,7 @@ export default {
       require: true,
     },
     data: {
-      type: Array,
+      type: Object,
       required: true,
       default: [],
     },
@@ -39,20 +49,22 @@ export default {
         align: "center",
         width: "30%",
         ellipsis: true,
+        scopedSlots: { customRender: "rank" },
       },
       {
         title: "班级名称",
-        dataIndex: "class",
+        dataIndex: "multiClass",
         ellipsis: true,
       },
       {
-        title: "昨日新增人数",
-        dataIndex: "add",
+        dataIndex: "rate",
         ellipsis: true,
+        scopedSlots: { customRender: "rate", title: "rateTitle" },
       },
     ];
     return {
       columns,
+      tableData: this.data.descSort,
     };
   },
 
@@ -62,7 +74,10 @@ export default {
 
   methods: {
     changeOrder(res) {
-      console.log(res.target.value);
+      const order = res.target.value;
+      order === "ascSort"
+        ? (this.tableData = this.data.ascSort)
+        : (this.tableData = this.data.descSort);
     },
   },
 };
