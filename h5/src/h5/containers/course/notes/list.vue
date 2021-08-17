@@ -12,6 +12,10 @@
         @click.native="handleClickViewDetail(item)"
       />
     </van-list>
+    <empty
+      v-if="!list.length && finished"
+      text="暂无笔记"
+    />
   </div>
 </template>
 
@@ -19,12 +23,14 @@
 import _ from 'lodash';
 import Api from '@/api';
 import NoteItem from './components/NoteItem.vue';
+import Empty from '&/components/e-empty/e-empty.vue';
 
 export default {
   name: 'Note-list',
 
   components: {
-    NoteItem
+    NoteItem,
+    Empty
   },
 
   data() {
@@ -80,6 +86,10 @@ export default {
 
   .van-list {
     margin-top: 0;
+  }
+
+  .e-empty {
+    margin-top: vw(50);
   }
 }
 </style>

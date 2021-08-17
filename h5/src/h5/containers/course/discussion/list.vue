@@ -3,7 +3,6 @@
     <van-list
       v-model="loading"
       :finished="finished"
-      finished-text="没有更多了"
       @load="onLoad"
     >
       <discussion-item
@@ -13,6 +12,11 @@
         @click.native="handleClickViewDetail(item)"
       />
     </van-list>
+
+    <empty
+      v-if="!list.length && finished"
+      text="暂无笔记"
+    />
 
     <div class="create-btn">
       <van-button
@@ -30,12 +34,14 @@
 import _ from 'lodash';
 import Api from '@/api';
 import DiscussionItem from './components/DiscussionItem.vue';
+import Empty from '&/components/e-empty/e-empty.vue';
 
 export default {
   name: 'DiscussionList',
 
   components: {
-    DiscussionItem
+    DiscussionItem,
+    Empty
   },
 
   props: {
@@ -117,6 +123,10 @@ export default {
 
   .van-list {
     margin-top: 0;
+  }
+
+  .e-empty {
+    margin-top: vw(50);
   }
 }
 </style>
