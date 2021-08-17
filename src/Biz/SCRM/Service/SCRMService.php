@@ -8,5 +8,9 @@ interface SCRMService
 
     public function setUserSCRMData($user);
 
+    public function setStaffSCRMData($user);
+
     public function getAssistantQrCode($assistant);
+
+    public function getStaffBindQrCodeUrl($assistant);
 }

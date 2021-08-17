@@ -3,11 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Content\Service\FileService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\SCRM\Service\SCRMService;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -999,42 +1001,30 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($currentUser->getId());
+        if (1 == count($currentUser->getRoles())) {
+            throw new AccessDeniedException();
+        }
 
-        return $this->render('settings/scrm.html.twig', ['user' => $user]);
+        $assistantQrCodeUrl = $this->getSCRMService()->getStaffBindQrCodeUrl($user);
+
+        return $this->render('settings/scrm.html.twig', [
+            'user' => $user,
+            'assistantQrCodeUrl' => $assistantQrCodeUrl
+        ]);
     }
 
-    public function scrmQrcodeAction(Request $request)
+    public function scrmBindAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($user['id']);
 
-        try {
-            $url = $this->getMultiClassService()->getAssistantBindUrl();
-        } catch (\Exception $e) {
-            $url = '';
+        $this->getSCRMService()->setStaffSCRMData($user);
+
+        if (empty($user['scrmUuid'])) {
+            return $this->createJsonResponse(false);
         }
 
-        if (empty($url)) {
-            return $this->createJsonResponse('');
-        }
-
-        $token = $this->getTokenService()->makeToken(
-            'qrcode',
-            [
-                'userId' => $user['id'],
-                'data' => [
-                    'url' => $url,
-                ],
-                'times' => 1,
-                'duration' => 3600,
-            ]
-        );
-        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $response = [
-            'img' => $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL),
-        ];
-
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse(true);
     }
 
     protected function checkBindsName($type)
@@ -1082,6 +1072,14 @@ class SettingsController extends BaseController
             $dragcaptchaToken = empty($registration['dragCaptchaToken']) ? '' : $registration['dragCaptchaToken'];
             $bizDragCaptcha->check($dragcaptchaToken);
         }
+    }
+
+    /**
+     * @return SCRMService
+     */
+    protected function getSCRMService()
+    {
+        return $this->getBiz()->service('SCRM:SCRMService');
     }
 
     /**

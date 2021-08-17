@@ -704,7 +704,7 @@ class CourseController extends CourseBaseController
         }
 
         if (!empty($assistant['scrmUuid'])) {
-            $scrmBindQrCode = $this->generateScrmBindQrCode($assistant);
+            $scrmBindQrCode = $this->generateScrmQrCode($assistant);
             if (!empty($scrmBindQrCode)) {
                 $assistant['weChatQrCode'] = $scrmBindQrCode;
             }
@@ -715,7 +715,7 @@ class CourseController extends CourseBaseController
         ]);
     }
 
-    protected function generateScrmBindQrCode($assistant)
+    protected function generateScrmQrCode($assistant)
     {
         $user = $this->getCurrentUser();
         $url = $this->getScrmStudentBindUrl($assistant);
@@ -749,7 +749,7 @@ class CourseController extends CourseBaseController
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
         $user = $this->getSCRMService()->setUserSCRMData($user);
         if (!empty($user['scrmUuid'])) {
-            return '';
+            return $this->getSCRMService()->getAssistantQrCode($assistant);
         }
 
         try {

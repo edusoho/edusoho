@@ -15,14 +15,17 @@ class BindController extends BaseController
     public function resultAction(Request $request, $uuid)
     {
         $assistantUuid = $request->query->get('assistantUuid');
-        $user = $this->getUserService()->getUserByUUID($uuid);
-        $this->getSCRMService()->setUserSCRMData($user);
+//        $user = $this->getUserService()->getUserByUUID($uuid);
+//        $this->getSCRMService()->setUserSCRMData($user);
 
         $assistant = empty($assistantUuid) ? [] : $this->getUserService()->getUserByScrmUuid($assistantUuid);
 
         $qrCodeUrl = $this->getSCRMService()->getAssistantQrCode($assistant);
 
-        return $this->render('scrm/assistant-qrcode.html.twig', ['qrCodeUrl' => $qrCodeUrl]);
+        return $this->render('scrm/assistant-qrcode.html.twig', [
+            'qrCodeUrl' => $qrCodeUrl,
+            'assistant' => $assistant
+        ]);
     }
 
     /**

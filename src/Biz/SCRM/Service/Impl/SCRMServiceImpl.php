@@ -45,6 +45,21 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         return $user;
     }
 
+    public function setStaffSCRMData($user)
+    {
+        if (!empty($user['scrmUuid'])) {
+            return $user;
+        }
+
+        try {
+            $userScrmData = $this->getSCRMSdk()->getStaff($user['uuid']);
+            $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['staffId']);
+        } catch (\Exception $e) {
+        }
+
+        return $user;
+    }
+
     public function getAssistantQrCode($assistant)
     {
         if (empty($assistant)) {
@@ -59,6 +74,11 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         }
 
         return $qrCodeUrl;
+    }
+
+    public function getStaffBindQrCodeUrl($assistant)
+    {
+        return $this->getSCRMSdk()->getStaffBindQrCodeUrl($assistant['scrmUuid']);
     }
 
     /**

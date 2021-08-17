@@ -27,11 +27,11 @@
   </div>
 
   {% if not user.scrmUuid %}
-    <div class="wechat-inform-section text-center">
+    <div class="wechat-inform-section text-center js-qrcode-content" data-url="{{ path('settings_scrm_bind') }}">
       <div class="wechat-inform-content cd-mt40 row text-center" style="display: inline-block">
         <div class="wechat-inform-title">{{ '扫码绑定微信'|trans }}</div>
         <div class="wechat-inform-content__qcode text-center">
-          <img id="scrm-qrcode" data-url="{{ path('settings_scrm_bind_qrcode') }}" src="">
+          <iframe src="{{ assistantQrCodeUrl }}"></iframe>
         </div>
       </div>
     </div>

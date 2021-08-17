@@ -53,4 +53,13 @@ class ScrmService extends BaseService
         return $this->request('POST', '/api/console/order/callback', $callbackData);
     }
 
+    public function getStaffBindQrCodeUrl($ticket, $protocol = 'http')
+    {
+        $uri = 'customer-h5/external/staffBindAuth';
+        $data = ['ticket' => $ticket];
+        $uri = $uri . (strpos($uri, '?') > 0 ? '&' : '?') . http_build_query($data);
+        $authorization = $this->auth->makeRequestAuthorization($uri, '', 600, true, $this->service);
+
+        return $protocol . '://' . $this->host . $uri . '&authorization=' . $authorization;
+    }
 }
