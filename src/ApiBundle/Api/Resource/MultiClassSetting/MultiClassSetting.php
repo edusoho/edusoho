@@ -39,7 +39,7 @@ class MultiClassSetting extends AbstractResource
             'group_number_limit' => '',
             'assistant_group_limit' => '',
             'assistant_service_limit' => '',
-            'review_time_limit' => '',
+            'review_time_limit' => '0',
         ];
     }
 

@@ -80,13 +80,17 @@ class DashboardGraphicDatum extends AbstractResource
             $answerSceneIds[] = $activity['ext']['answerSceneId'];
         }
 
-        $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 24);
+        $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 0);
+        $timeoutReviewNum = 0;
+        if ($reviewTimeLimit) {
+            $timeoutReviewNum =  $this->getAnswerRecordService()->count([
+                'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
+                'status' => 'reviewing',
+                'endTime_LE' => time() - $reviewTimeLimit * 3600,
+            ]);
+        }
 
-        return $timeoutReviewNum =  $this->getAnswerRecordService()->count([
-            'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
-            'status' => 'reviewing',
-            'endTime_LE' => time() - $reviewTimeLimit * 3600,
-        ]);
+        return $timeoutReviewNum;
     }
 
     protected function getMultiClassData()
