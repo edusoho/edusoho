@@ -16,7 +16,7 @@
 import AsideLayout from "app/vue/views/layouts/aside.vue";
 import Empty from "app/vue/views/components/Empty.vue";
 import InspectionCard from "./InspectionCard.vue";
-import { MultiClassInspection } from "common/vue/service/index.js";
+import MultiClassInspection from "common/vue/service/MultiClassInspection";
 
 export default {
   name: "index",

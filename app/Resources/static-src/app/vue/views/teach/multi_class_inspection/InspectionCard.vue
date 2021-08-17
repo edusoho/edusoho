@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { MultiClassInspectionLiveInfo } from "common/vue/service/index.js";
+import MultiClassInspection from "common/vue/service/MultiClassInspection";
 import _ from "lodash";
 
 export default {
@@ -92,9 +92,11 @@ export default {
   methods: {
     async getLiveInfo() {
       try {
-        this.liveInfo = await MultiClassInspectionLiveInfo.get(
-          this.inspection.activityId
-        );
+        this.liveInfo = await MultiClassInspection.getLiveInfoById({
+          query: {
+            id: this.inspection.activityId
+          }
+        });
       } catch (error) {}
     },
 

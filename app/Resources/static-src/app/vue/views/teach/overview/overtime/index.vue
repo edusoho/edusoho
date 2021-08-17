@@ -29,7 +29,8 @@
 <script>
 import AsideLayout from "app/vue/views/layouts/aside.vue";
 import userInfoTable from "app/vue/views/components/userInfoTable";
-import { OverView, UserProfiles } from "common/vue/service";
+import { UserProfiles } from "common/vue/service";
+import OverView from 'common/vue/service/OverView';
 import _ from 'lodash';
 
 const columns = [
@@ -114,7 +115,7 @@ export default {
 
       this.getListLoading = true;
       try {
-        const { data, paging } = await OverView.search(params);
+        const { data, paging } = await OverView.search({ params });
         paging.page = paging.offset / paging.limit + 1;
         paging.pageSize = Number(paging.limit);
         paging.current = params.current || 1;
