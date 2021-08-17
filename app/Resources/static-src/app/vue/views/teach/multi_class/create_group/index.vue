@@ -141,6 +141,13 @@
              }]">
               <span slot="suffix">人</span>
             </a-input>
+            <a-tooltip placement="right">
+               <template slot="title">
+                第1组学员达到上限后，将自动生成第2组添加学员，依次类推
+               </template>
+              <svg-icon class="icon-tip" icon="icon-tip" />
+            </a-tooltip>
+            <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
          </a-form-item>
          <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
            <a-input v-decorator="['service_num', {
@@ -151,8 +158,15 @@
              }]">
               <span slot="suffix">组</span>
             </a-input>
+            <a-tooltip placement="right">
+               <template slot="title">
+                第1位助教达到组数上限后，新增组将自动分配给第2个助教，依次类推
+                如所有助教皆达到组数上限，新增组将平均分配至每位助教
+               </template>
+              <svg-icon class="icon-tip" icon="icon-tip" />
+            </a-tooltip>
           </a-form-item>
-
+          <div class="total-number-tip">助教上限学员数：每组上限学员数*助教上限组数=<span v-if="form.getFieldValue('service_num') && form.getFieldValue('group_limit_num')">{{form.getFieldValue('service_num')*form.getFieldValue('group_limit_num')}}</span>人</div>
       </a-form-item>
       <a-form-item label="排课">
         <Schedule
@@ -782,6 +796,23 @@ export default {
 }
 .tip-color{
   color: @cdv2-dark-assist;
+}
+.icon-tip{
+  position: absolute;
+  top: 0;
+  left: 82px;
+  width:16px;
+  height:16px;
+  color: #31A1FF;
+}
+.setup-tip{
+  position: absolute;
+  left: 110px;
+  width: 200px;
+}
+.total-number-tip{
+  color: @cdv2-dark-assist;
+  margin-left: 18px;
 }
 
 @import "~app/less/admin-v2/variables.less";
