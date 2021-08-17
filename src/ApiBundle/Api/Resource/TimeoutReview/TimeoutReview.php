@@ -39,12 +39,14 @@ class TimeoutReview extends AbstractResource
             $sceneIndexActivities[$activity['ext']['answerSceneId']] = $activity;
         }
 
-        $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 24);
         $conditions = [
             'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
             'status' => 'reviewing',
-            'endTime_LE' => time() - $reviewTimeLimit * 3600,
         ];
+        $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 0);
+        if ($reviewTimeLimit) {
+            $conditions['endTime_LE'] = time() - $reviewTimeLimit * 3600;
+        }
         $total = $this->getAnswerRecordService()->count($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $answerRecords = $this->getAnswerRecordService()->search(
