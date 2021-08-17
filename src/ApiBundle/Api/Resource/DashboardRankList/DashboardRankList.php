@@ -30,6 +30,7 @@ class DashboardRankList extends AbstractResource
     {
         $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
         $conditions = [
+            'role' => 'student',
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'startTimeGreaterThan' => strtotime('yesterday'),
             'startTimeLessThan' => strtotime(date('Y-m-d')) - 1,
@@ -117,7 +118,7 @@ class DashboardRankList extends AbstractResource
     protected function filterRateList($multiClasses, $finishedStudents)
     {
         $finishedRateList = [];
-        $courses = $this->getCourseMemberService()->countGroupByCourseId(['courseIds' => ArrayToolkit::column($multiClasses, 'courseId')]);
+        $courses = $this->getCourseMemberService()->countGroupByCourseId(['role' => 'student', 'courseIds' => ArrayToolkit::column($multiClasses, 'courseId')]);
         $multiClasses = ArrayToolkit::index($multiClasses, 'courseId');
         $finishedStudents = ArrayToolkit::index($finishedStudents, 'courseId');
         $i = 0;
