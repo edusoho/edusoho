@@ -2,14 +2,14 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Codeages\Biz\ItemBank\BaseService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\ErrorCode;
-use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
@@ -252,7 +252,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $reviewQuestionReports = ArrayToolkit::index($reviewReport['question_reports'], 'id');
         $questionReportIds = ArrayToolkit::column($reviewReport['question_reports'], 'id');
         if (empty($questionReportIds)) {
-            return $answerReport;
+            goto changeReportStatus;
         }
         $conditions = [
             'ids' => $questionReportIds,
@@ -265,18 +265,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             list($score, $status) = $this->getQuestionReportScoreAndStatus(
                 $answerScene,
                 $questionReport,
-                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']],
-                empty($assessmentQuestions[$questionReport['question_id']]) ? array() : $assessmentQuestions[$questionReport['question_id']]
+                empty($reviewQuestionReports[$questionReport['id']]) ? [] : $reviewQuestionReports[$questionReport['id']],
+                empty($assessmentQuestions[$questionReport['question_id']]) ? [] : $assessmentQuestions[$questionReport['question_id']]
             );
             $questionReport['score'] = $score;
             $questionReport['status'] = $status;
             $questionReport['total_score'] = empty($assessmentQuestions['score']) ? 0 : $assessmentQuestions['score'];
         }
 
+        changeReportStatus:
         try {
             $this->beginTransaction();
 
-            if ($questionReports) {
+            if (!empty($questionReports)) {
                 $this->getAnswerQuestionReportService()->batchUpdate($questionReports);
             }
 
@@ -325,8 +326,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if (empty($reviewQuestionReport['status'])) {
                 $status = AnswerQuestionReportService::STATUS_RIGHT;
             } else {
-                $status = $reviewQuestionReport['status'] == AnswerQuestionReportService::STATUS_WRONG ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
+                $status = AnswerQuestionReportService::STATUS_WRONG == $reviewQuestionReport['status'] ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
             }
+
             return [0, $status];
         }
 
@@ -464,6 +466,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $this->dispatch('answer.saved', $assessmentResponse);
+
         return $assessmentResponse;
     }
 
