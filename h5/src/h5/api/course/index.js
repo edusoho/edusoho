@@ -149,5 +149,19 @@ export default [
     url: '/courses/{courseId}/threads',
     method: 'POST',
     disableLoading: true
+  },
+  {
+    // 课程多个笔记获取
+    name: 'getCoursesNotes',
+    url: '/courses/{courseId}/notes',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 获取课程的评价
+    name: 'getCoursesReviews',
+    url: '/courses/{courseId}/reviews',
+    method: 'GET',
+    disableLoading: true
   }
 ];
