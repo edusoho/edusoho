@@ -122,7 +122,7 @@ class MultiClass extends AbstractResource
         }
 
         if (!empty($conditions['status'])) {
-            switch ($conditions['status']){
+            switch ($conditions['status']) {
                 case 'notStart':
                     $prepareConditions['startTime_GT'] = time();
                     break;
@@ -229,7 +229,7 @@ class MultiClass extends AbstractResource
 
     private function checkDataFields($multiClass)
     {
-        if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId'])) {
+        if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId', 'type'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
