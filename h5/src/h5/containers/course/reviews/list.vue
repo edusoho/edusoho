@@ -5,7 +5,7 @@
       :finished="finished"
       @load="onLoad"
     >
-      <reviews-item v-for="item in list" :key="item.id" />
+      <review-item v-for="item in 4" :key="item.id" />
     </van-list>
 
     <empty
@@ -28,14 +28,14 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
-import ReviewsItem from './components/ReviewsItem.vue';
+import ReviewItem from './components/ReviewItem.vue';
 import Empty from '&/components/e-empty/e-empty.vue';
 
 export default {
   name: 'ReviewsCreate',
 
   components: {
-    ReviewsItem,
+    ReviewItem,
     Empty
   },
 

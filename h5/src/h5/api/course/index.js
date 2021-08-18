@@ -160,7 +160,7 @@ export default [
   {
     // 获取课程的评价
     name: 'getCoursesReviews',
-    url: '/courses/{courseId}/reviews',
+    url: '/course/{courseId}/reviews',
     method: 'GET',
     disableLoading: true
   }
