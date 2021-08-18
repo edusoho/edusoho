@@ -6398,6 +6398,7 @@ admin.user_fields.Require_personal: 'Fill in personal information required while
 admin.user_fields.Personal_info_configiration.open: 'Turn on'
 admin.user_fields.Personal_info_configiration.closed: Close
 admin.user_fields.Personal_info_configiration.help_block: 'If turned on,student must fill in personal information when purchase course'
+admin.user_fields.open_student_info_diable_tips: 'After closing, the personal home page information cannot be viewed between students on PC, app and new micro online school'
 admin.user_fields.Formart_verifcation: 'Format checkout'
 admin.user_fields.Formart_mobile_verifcation: 'Format and sms code checkout,open cloud SMS first'
 admin.user_fields.Formart_verifcation.help_block: 'Drag ato djustment order. Check the field that needs to collect. And if you need a new field, add in the [custom fields] .'
@@ -6408,6 +6409,7 @@ admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
 admin.user_fields.other_setting.edit_user_name: 'Users to update username'
 admin.user_fields.verified_mobile_tip: With SMS code validate
+admin.user_fields.other_setting.open_student_info: 'Publicly display personal information of trainees'
 
 admin.user_fields.modal.delete_field: 'Delete field'
 admin.user_fields.modal.delete_field_tips: 'Determined to delete <b style="color:red;" >%title%</b> field? <br><b style="color:red;" > All the history field  data will be deleted! </b><br> If you want to retain history data, hide the field.'

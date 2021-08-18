@@ -7649,6 +7649,8 @@ admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
 admin.user_fields.Personal_info_configiration.open: 开启
 admin.user_fields.Personal_info_configiration.closed: 关闭
 admin.user_fields.Personal_info_configiration.help_block: 开启后，学员购买课程时，需填写个人资料
+admin.user_fields.open_student_info_diable_tips: 关闭后，PC端、APP端和新微网校端学员与学员之间不能查看个人主页信息
+
 admin.user_fields.Formart_verifcation: 带格式校检
 admin.user_fields.Formart_mobile_verifcation: 带格式和短信校检，需要开启云短信
 admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
@@ -7658,6 +7660,8 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.other_setting.open_student_info: 公开展示学员个人信息
+
 admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
