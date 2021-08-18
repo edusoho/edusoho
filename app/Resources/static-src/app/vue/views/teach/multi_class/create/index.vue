@@ -662,10 +662,9 @@ export default {
       callback()
     },
      validateAssistantNum(rule, value, callback) {
-        if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
-          callback("请输入正整数");
-        }
-
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback("请输入正整数");
+      }
       callback()
     },
     handleSubmit(e) {
