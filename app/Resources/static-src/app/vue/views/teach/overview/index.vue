@@ -72,22 +72,10 @@ export default {
         },
       },
       studentDataSource: {
-        newStudentRankList: {
-          ascSort: [],
-          descSort: [],
-        },
-        reviewData: {
-          ascSort: [],
-          descSort: [],
-        },
-        finishedRateList: {
-          ascSort: [],
-          descSort: [],
-        },
-        questionAnswerRateList: {
-          ascSort: [],
-          descSort: [],
-        },
+        newStudentRankList: {},
+        reviewData: {},
+        finishedRateList: {},
+        questionAnswerRateList: {},
       },
       getListLoading: false,
     };
