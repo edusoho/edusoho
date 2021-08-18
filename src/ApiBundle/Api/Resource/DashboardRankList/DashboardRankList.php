@@ -125,7 +125,7 @@ class DashboardRankList extends AbstractResource
         foreach ($courses as $course) {
             $finishedRateList[$i]['courseId'] = $course['courseId'];
             $finishedRateList[$i]['multiClass'] = isset($multiClasses[$course['courseId']]) ? $multiClasses[$course['courseId']]['title'] : '';
-            $finishedRateList[$i]['rate'] = $finishedStudents[$course['courseId']]['count'] && $courses['count'] ? round($finishedStudents[$course['courseId']] / $courses['count'], 2) : 0;
+            $finishedRateList[$i]['rate'] = $finishedStudents[$course['courseId']]['count'] && $course['count'] ? round($finishedStudents[$course['courseId']]['count'] / $course['count'], 2) : 0;
             $i++;
         }
 
