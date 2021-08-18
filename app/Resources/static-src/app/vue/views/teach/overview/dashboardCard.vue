@@ -151,9 +151,7 @@ export default {
       width: 48px !important;
       height: 48px !important;
     }
-    .text-size {
-      font-size: 12px !important;
-    }
+    
     .right-block {
       padding-left: 5% !important;
     }
