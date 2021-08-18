@@ -19,7 +19,7 @@
         block
         @click="handleClickCreateDiscussion"
       >
-        写评价
+        {{ createReviewBtnText }}
       </van-button>
     </div>
   </div>
@@ -39,6 +39,13 @@ export default {
     Empty
   },
 
+  props: {
+    userReview: {
+      type: Object,
+      required: true
+    }
+  },
+
   data() {
     return {
       list: [],
@@ -52,6 +59,12 @@ export default {
     }
   },
 
+  computed: {
+    createReviewBtnText() {
+      return _.size(this.userReview) ? '重新评价' : '写评价';
+    }
+  },
+
   methods: {
     onLoad() {
       const { offset, limit } = this.paging;
@@ -60,7 +73,7 @@ export default {
           limit: limit,
           offset: offset,
           targetId: this.courseId,
-          targetType: 'goods'
+          targetType: 'course'
         }
       }).then(res => {
         const { data, paging: { total } } = res;

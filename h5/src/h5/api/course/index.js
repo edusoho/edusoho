@@ -107,6 +107,7 @@ export default [
     name: 'createReview',
     url: '/review',
     method: 'POST',
+    disableLoading: true
   },
   {
     // 数据上报
