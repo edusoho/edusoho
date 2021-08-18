@@ -44,23 +44,23 @@ const columns = [
   {
     title: "课时名称",
     dataIndex: "activity.title",
-    width: "15%",
     ellipsis: true,
   },
   {
     title: "所属班课",
     dataIndex: "multiClass",
-    width: "10%",
     ellipsis: true,
     scopedSlots: { customRender: "multiClass" },
   },
   {
     title: "助教老师",
+    width: "15%",
     dataIndex: "assistantInfo.nickname",
   },
   {
     title: "作业/考试",
     dataIndex: "activity",
+    width: "10%",
     ellipsis: true,
     scopedSlots: { customRender: "activity" },
   },
