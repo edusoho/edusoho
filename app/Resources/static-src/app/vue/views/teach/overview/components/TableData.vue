@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   name: "TableData",
   components: {},
@@ -70,12 +71,14 @@ export default {
 
   computed: {
     tableData() {
-      const { ascSort, descSort } = this.data;
+      let { ascSort, descSort } = this.data;
+      ascSort = _.slice(ascSort, 0, 10);
+      descSort = _.slice(descSort, 0, 10);
       return this.order === "ascSort" ? ascSort : descSort;
     },
   },
 
-  mounted() {},
+  created() {},
 
   methods: {
     changeOrder(res) {

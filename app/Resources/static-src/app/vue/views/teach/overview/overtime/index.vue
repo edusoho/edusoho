@@ -30,8 +30,8 @@
 import AsideLayout from "app/vue/views/layouts/aside.vue";
 import userInfoTable from "app/vue/views/components/userInfoTable";
 import { UserProfiles } from "common/vue/service";
-import OverView from 'common/vue/service/OverView';
-import _ from 'lodash';
+import OverView from "common/vue/service/OverView";
+import _ from "lodash";
 
 const columns = [
   {
@@ -105,7 +105,6 @@ export default {
 
   created() {
     this.getOverTimeList(this.paging);
-    // this.getOverTimeTaskList();
   },
 
   methods: {

@@ -20,7 +20,7 @@ export default {
   computed: {
     chartDataDouble() {
       return [
-        { item: "班课在读学员人数", count: this.graphicData.studyNum },
+        { item: "在读学员人数", count: this.graphicData.studyNum },
         { item: "未开班学员人数", count: this.graphicData.notStudyNum },
       ];
     },

@@ -341,7 +341,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             }
         }
 
-        return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime', 'service_num', 'service_group_num', 'group_limit_num']);
+        return ArrayToolkit::parts($fields, ['type', 'title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime', 'service_num', 'service_group_num', 'group_limit_num']);
     }
 
     /**
