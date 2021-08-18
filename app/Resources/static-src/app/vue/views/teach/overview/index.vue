@@ -16,18 +16,18 @@
       </a-row>
       <a-row :gutter="[24,32]">
         <a-col :span="12">
-          <table-data title="班课昨日新增学员数" :data="studentDataSource.newStudentRankList"></table-data>
+          <table-data title="昨日新增学员人数" :data="studentDataSource.newStudentRankList"></table-data>
         </a-col>
         <a-col :span="12">
-          <table-data title="班课昨日完课率" :data="studentDataSource.finishedRateList"></table-data>
+          <table-data title="昨日完课率" :data="studentDataSource.finishedRateList"></table-data>
         </a-col>
       </a-row>
       <a-row :gutter="[24,32]">
         <a-col :span="12">
-          <table-data title="班课作业批改率" :data="studentDataSource.reviewData"></table-data>
+          <table-data title="作业批改率" :data="studentDataSource.reviewData"></table-data>
         </a-col>
         <a-col :span="12">
-          <table-data title="班课问答回答率" :data="studentDataSource.questionAnswerRateList"></table-data>
+          <table-data title="问答回答率" :data="studentDataSource.questionAnswerRateList"></table-data>
         </a-col>
       </a-row>
     </a-spin>
