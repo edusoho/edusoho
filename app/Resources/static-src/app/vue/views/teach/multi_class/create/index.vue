@@ -131,7 +131,7 @@
         </div>
       </a-form-item>
       <a-form-item class="assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-          <a-input type="number" v-decorator="['service_num', {
+          <a-input v-decorator="['service_num', {
             rules: [
               { required: true, message: '请输入助教服务上限人数' },
               { validator: validateAssistantNum }
@@ -651,7 +651,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
 
@@ -662,9 +662,10 @@ export default {
       callback()
     },
      validateAssistantNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
-        callback('请输入正整数')
-      }
+        if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
+          callback("请输入正整数");
+        }
+
       callback()
     },
     handleSubmit(e) {
