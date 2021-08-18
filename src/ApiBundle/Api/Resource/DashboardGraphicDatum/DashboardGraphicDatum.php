@@ -8,6 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\SettingService;
@@ -50,9 +51,10 @@ class DashboardGraphicDatum extends AbstractResource
 
     protected function getTodayLiveData($allMultiClasses)
     {
+        $courses = $this->getCourseService()->searchWithJoinCourseSet(['ids' => ArrayToolkit::column($allMultiClasses, 'courseId'), 'courseSetStatus' => 'published'], [], 0, PHP_INT_MAX);
         $conditions = [
             'type' => 'live',
-            'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
+            'courseIds' => ArrayToolkit::column($courses, 'id'),
             'isLesson' => 1,
             'status' => 'published',
         ];
@@ -119,6 +121,14 @@ class DashboardGraphicDatum extends AbstractResource
         $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
 
         return $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds, 'role' => 'student']);
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('course:CourseService');
     }
 
     /**
