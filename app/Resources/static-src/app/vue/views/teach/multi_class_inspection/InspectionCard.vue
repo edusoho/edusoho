@@ -1,8 +1,8 @@
 <template>
   <div class="inspection-card">
     <div class="inspection-card__info">
-      <div class="inspection-card__title info">班课名称：{{ inspection.multiClass.title }}</div>
-      <div class="inspection-card__item info">课时名称：{{ inspection.title }}</div>
+      <div class="inspection-card__title info text-overflow">班课名称：{{ inspection.multiClass.title }}</div>
+      <div class="inspection-card__item info text-overflow">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
       <div class="inspection-card__item info">课程时长：{{ inspection.length }}分钟</div>
       <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.currentOnlineNum }}</div>
@@ -59,26 +59,9 @@ export default {
   data() {
     return {
       liveInfo: {
-        base: {
-          id: 110,
-          title: "20210113",
-          provider: "zhangsan",
-          startTime: 1611299495,
-          endTime: 1611299495,
-        },
-        info: {
-          actualStartTime: 1611299495,
-          actualEndTime: 1611299495,
-          status: "living",
-          currentOnlineNum: 1231,
-        },
-        onlineAssistants: [
-          {
-            userId: 225,
-            userName: "张三",
-            groupCode: "14ee1asokf643kfj6sa",
-          },
-        ],
+        base: {},
+        info: {},
+        onlineAssistants: [{}],
       },
     };
   },
