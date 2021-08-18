@@ -158,9 +158,9 @@ export default [
     disableLoading: true
   },
   {
-    // 获取课程的评价
-    name: 'getCoursesReviews',
-    url: '/course/{courseId}/reviews',
+    // 获取评价
+    name: 'getReview',
+    url: '/review',
     method: 'GET',
     disableLoading: true
   }

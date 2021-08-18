@@ -1,26 +1,27 @@
 <template>
   <div class="review-item">
-    <div class="user-avatar"></div>
+    <div class="user-avatar">
+      <img :src="item.user.avatar.small">
+    </div>
     <div class="review-detail">
       <div class="review-detail__rate">
-        <div class="nickname">洪布斯</div>
+        <div class="nickname">{{ item.user.nickname }}</div>
         <van-rate
-          :value="4"
+          :value="item.rating * 1"
           :size="16"
           color="#ffd21e"
           void-icon="star"
           void-color="#eee"
         />
       </div>
-      <div class="review-detail__time">2020-11-08 15:32</div>
+      <div class="review-detail__time">{{ $moment(item.createdTime).format('YYYY-MM-DD HH:mm') }}</div>
       <div
         ref="content"
         class="review-detail__content"
-        :class="{ overflow: isOverflow }"
-      >
-        老师讲的真好，登封市析的细。师讲的真好，登封市析的细。师讲的真好，登封市析的细。师讲的真好，登封市析的细。师讲的真好，登封市析的细。
-      </div>
-      <div class="all-content-btn" @click="handleClickToggleOverflow">{{ allConentBtnText }}</div>
+        :class="classObject"
+        v-html="item.content"
+      />
+      <div class="all-content-btn" v-if="isAllBtn" @click="handleClickToggleOverflow">{{ allConentBtnText }}</div>
     </div>
   </div>
 </template>
@@ -29,9 +30,30 @@
 export default {
   name: 'ReviewItem',
 
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  },
+
   data() {
     return {
-      isOverflow: true
+      isOverflow: true,
+      isAllBtn: false
+    }
+  },
+
+  computed: {
+    allConentBtnText() {
+      return this.isOverflow ? '显示全部' : '收起';
+    },
+
+    classObject() {
+      return {
+        overflow: this.isOverflow,
+        mask: this.isAllBtn && this.isOverflow
+      }
     }
   },
 
@@ -39,17 +61,11 @@ export default {
     this.checkOverFlow();
   },
 
-  computed: {
-    allConentBtnText() {
-      return this.isOverflow ? '显示全部' : '收起';
-    }
-  },
-
   methods: {
     checkOverFlow() {
       const el = this.$refs.content;
 
-      this.isOverflow = el.scrollHeight > el.clientHeight;
+      this.isAllBtn = el.scrollHeight > el.clientHeight;
     },
 
     handleClickToggleOverflow() {
@@ -111,16 +127,16 @@ export default {
       &.overflow {
         position: relative;
         @include text-overflow(3);
+      }
 
-        &:after {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: '';
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
-        }
+      &.mask:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
       }
     }
 

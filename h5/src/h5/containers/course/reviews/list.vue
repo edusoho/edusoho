@@ -5,7 +5,7 @@
       :finished="finished"
       @load="onLoad"
     >
-      <review-item v-for="item in list" :key="item.id" />
+      <review-item v-for="item in list" :key="item.id" :item="item" />
     </van-list>
 
     <empty
@@ -55,13 +55,12 @@ export default {
   methods: {
     onLoad() {
       const { offset, limit } = this.paging;
-      Api.getCoursesReviews({
-        query: {
-          courseId: this.courseId
-        },
+      Api.getReview({
         params: {
           limit: limit,
-          offset: offset
+          offset: offset,
+          targetId: this.courseId,
+          targetType: 'goods'
         }
       }).then(res => {
         const { data, paging: { total } } = res;
