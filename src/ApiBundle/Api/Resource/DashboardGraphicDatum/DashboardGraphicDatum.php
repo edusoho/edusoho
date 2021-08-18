@@ -32,6 +32,7 @@ class DashboardGraphicDatum extends AbstractResource
     protected function getTotalNewStudentNum($allMultiClasses)
     {
         return $this->getCourseMemberService()->countMembers([
+            'role' => 'student',
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'startTimeGreaterThan' => strtotime('yesterday'),
             'startTimeLessThan' => strtotime(date('Y-m-d')) - 1,
@@ -112,8 +113,12 @@ class DashboardGraphicDatum extends AbstractResource
     protected function getMemberNum($conditions)
     {
         $multiClasses = $this->getMultiClassService()->searchMultiClass($conditions, [], 0, PHP_INT_MAX);
+        if (empty($multiClasses)) {
+            return 0;
+        }
         $courseIds = ArrayToolkit::column($multiClasses, 'courseId');
-        return $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds]);
+
+        return $this->getCourseMemberService()->countMembers(['courseIds' => $courseIds, 'role' => 'student']);
     }
 
     /**
