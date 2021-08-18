@@ -5,7 +5,7 @@
       :finished="finished"
       @load="onLoad"
     >
-      <review-item v-for="item in 4" :key="item.id" />
+      <review-item v-for="item in list" :key="item.id" />
     </van-list>
 
     <empty

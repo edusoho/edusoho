@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      isOverflow: false
+      isOverflow: true
     }
   },
 
