@@ -103,9 +103,9 @@
           <span>{{text === 'normal'? '大班课':'分组大班课'}}</span>
         </template>
         <template slot="status" slot-scope="text">
-          <span v-if="text === 'notStart'">未开课</span>
-          <span v-else-if="text === 'living'">开课中</span>
-          <span v-else>已结课</span>
+          <span v-if="text === 'notStart'" style="font-size: 14px; color: #fb8d4d;">未开课</span>
+          <span v-else-if="text === 'living'" style="font-size: 14px; color: #43bc60;">开课中</span>
+          <span v-else style="font-size: 14px; color: #999;">已结课</span>
         </template>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
