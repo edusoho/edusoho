@@ -3,14 +3,14 @@
     <a-spin :spinning="getListLoading">
       <a-table :columns="columns" :data-source="overTimeTaskList" :pagination="paging" @change="change" rowKey="id">
         <template slot="userInfo" slot-scope="userInfo">
-          <a href="javascript:;" @click="viewStudentInfo(userInfo.id)">{{userInfo.nickname}}</a>
+          <a href="javascript:;" :title="userInfo.nickname" @click="viewStudentInfo(userInfo.id)">{{userInfo.nickname}}</a>
         </template>
         <template slot="multiClass" slot-scope="multiClass">
-          <a href="javascript:;" @click="goToMultiClassManage(multiClass.id)">{{multiClass.title}}</a>
+          <a href="javascript:;" :title="multiClass.title" @click="goToMultiClassManage(multiClass.id)">{{multiClass.title}}</a>
         </template>
         <template slot="activity" slot-scope="activity">
-          <span>{{activity.title}}</span>
-          <a-tag v-if="activity.mediaType === 'testpaper'" color="#fb8d4d" style="margin-left:8px">考</a-tag>
+          <span v-if="activity.mediaType === 'testpaper'">考试</span>
+          <span v-if="activity.mediaType === 'homework'">作业</span>
         </template>
         <template slot="end_time" slot-scope="end_time">
           {{ $dateFormat(end_time, 'YYYY-MM-DD HH:mm') }}
@@ -71,10 +71,9 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: "创建时间",
+    title: "提交时间",
     dataIndex: "end_time",
     width: "160px",
-    sorter: true,
     scopedSlots: { customRender: "end_time" },
   },
 ];
