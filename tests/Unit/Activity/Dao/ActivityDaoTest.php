@@ -115,6 +115,16 @@ class ActivityDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($activity3, $activities[1], $this->getCompareKeys());
     }
 
+    public function testFindActivitiesByCourseIdsAndTypes()
+    {
+        $this->mockActivity(array('title' => 'activity1', 'fromCourseId' => 1, 'mediaType' => 'homework'));
+        $this->mockActivity(array('title' => 'activity2', 'fromCourseId' => 1, 'mediaType' => 'testpaper'));
+        $this->mockActivity(array('title' => 'activity3', 'fromCourseId' => 2, 'mediaType' => 'homework'));
+
+        $result = $this->getActivityDao()->findActivitiesByCourseIdsAndTypes([1], ['homework', 'testpaper']);
+        $this->assertEquals(2, count($result));
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

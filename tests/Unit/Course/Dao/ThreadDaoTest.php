@@ -139,6 +139,16 @@ class ThreadDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $result[1], $this->getCompareKeys());
     }
 
+    public function testCountThreadsGroupedByCourseId()
+    {
+        $this->mockDataObject(['courseId' => 1]);
+        $this->mockDataObject(['courseId' => 1]);
+        $this->mockDataObject(['courseId' => 2]);
+
+        $result = $this->getDao()->countThreadsGroupedByCourseId(['courseIds' => [1]]);
+        $this->assertEquals(2, $result[0]['count']);
+    }
+
     protected function mockDataObject($fields = array())
     {
         return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));
