@@ -51,7 +51,7 @@ class DashboardGraphicDatum extends AbstractResource
 
     protected function getTodayLiveData($allMultiClasses)
     {
-        $courses = $this->getCourseService()->searchCourses(['ids' => ArrayToolkit::column($allMultiClasses, 'courseId'), 'status' => 'published'], [], 0, PHP_INT_MAX);
+        $courses = $this->getCourseService()->searchWithJoinCourseSet(['ids' => ArrayToolkit::column($allMultiClasses, 'courseId'), 'courseSetStatus' => 'published'], [], 0, PHP_INT_MAX);
         $conditions = [
             'type' => 'live',
             'courseIds' => ArrayToolkit::column($courses, 'id'),
