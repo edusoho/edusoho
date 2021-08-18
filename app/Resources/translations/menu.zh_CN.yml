@@ -476,7 +476,7 @@ admin_v2.course.basic_group: 教学管理
 admin_v2.multi_class_product.basic_menu: 产品库
 
 # 教学-课程管理-班课
-admin_v2.multi_class.basic_menu: 班课
+admin_v2.multi_class.basic_menu: 班课列表
 
 # 教学-课程管理-助教管理
 admin_v2.teacher.basic_menu: 教师管理
