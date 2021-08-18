@@ -8,88 +8,88 @@ class ThreadDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $expected = array();
+        $expected = [];
         for ($i = 0; $i < 10; ++$i) {
             $expected[] = $this->mockDataObject();
         }
 
-        $testConditions = array(
-            array(
-                'condition' => array(),
+        $testConditions = [
+            [
+                'condition' => [],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('courseId' => 1),
+            ],
+            [
+                'condition' => ['courseId' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('courseSetId' => 1),
+            ],
+            [
+                'condition' => ['courseSetId' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('taskId' => 1),
+            ],
+            [
+                'condition' => ['taskId' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('userId' => 1),
+            ],
+            [
+                'condition' => ['userId' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('type' => 'discussion'),
+            ],
+            [
+                'condition' => ['type' => 'discussion'],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('types' => array('discussion', 'question')),
+            ],
+            [
+                'condition' => ['types' => ['discussion', 'question']],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('isStick' => 1),
+            ],
+            [
+                'condition' => ['isStick' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('isElite' => 1),
+            ],
+            [
+                'condition' => ['isElite' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('postNum' => 1),
+            ],
+            [
+                'condition' => ['postNum' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('postNumLargerThan' => 0),
+            ],
+            [
+                'condition' => ['postNumLargerThan' => 0],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('title' => '哼'),
+            ],
+            [
+                'condition' => ['title' => '哼'],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('content' => '爱上地方'),
+            ],
+            [
+                'condition' => ['content' => '爱上地方'],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('courseIds', array(1, 2)),
+            ],
+            [
+                'condition' => ['courseIds', [1, 2]],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-            array(
-                'condition' => array('private' => 1),
+            ],
+            [
+                'condition' => ['private' => 1],
                 'expectedResults' => $expected,
                 'expectedCount' => 10,
-            ),
-        );
+            ],
+        ];
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
@@ -98,44 +98,44 @@ class ThreadDaoTest extends BaseDaoTestCase
     {
         $res[0] = $this->mockDataObject();
         $res[1] = $this->mockDataObject();
-        $res[2] = $this->mockDataObject(array('userId' => 2));
+        $res[2] = $this->mockDataObject(['userId' => 2]);
 
-        $this->assertEquals(2, count($this->getDao()->findThreadIds(array('userId' => 1))));
+        $this->assertEquals(2, count($this->getDao()->findThreadIds(['userId' => 1])));
     }
 
     public function testFindLatestThreadsByType()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('createdTime' => 1000));
+        $expected[] = $this->mockDataObject(['createdTime' => 1000]);
         $result = $this->getDao()->findLatestThreadsByType('discussion', 0, 5);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testFindEliteThreadsByType()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('createdTime' => 1000));
+        $expected[] = $this->mockDataObject(['createdTime' => 1000]);
         $result = $this->getDao()->findEliteThreadsByType('discussion', 1, 0, 5);
         $this->assertArrayEquals($expected[1], $result[1], $this->getCompareKeys());
     }
 
     public function testFindThreadsByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('createdTime' => 1000));
-        $result = $this->getDao()->findThreadsByCourseId(1, array('createdTime'), 0, 5);
+        $expected[] = $this->mockDataObject(['createdTime' => 1000]);
+        $result = $this->getDao()->findThreadsByCourseId(1, ['createdTime'], 0, 5);
         $this->assertArrayEquals($expected[1], $result[1], $this->getCompareKeys());
     }
 
     public function testFindThreadsByCourseIdAndType()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('createdTime' => 1000));
-        $result = $this->getDao()->findThreadsByCourseIdAndType(1, 'discussion', array('createdTime'), 0, 5);
+        $expected[] = $this->mockDataObject(['createdTime' => 1000]);
+        $result = $this->getDao()->findThreadsByCourseIdAndType(1, 'discussion', ['createdTime'], 0, 5);
         $this->assertArrayEquals($expected[1], $result[1], $this->getCompareKeys());
     }
 
@@ -149,14 +149,14 @@ class ThreadDaoTest extends BaseDaoTestCase
         $this->assertEquals(2, $result[0]['count']);
     }
 
-    protected function mockDataObject($fields = array())
+    protected function mockDataObject($fields = [])
     {
         return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));
     }
 
     protected function getDefaultMockFields()
     {
-        return array(
+        return [
             'courseId' => 1,
             'taskId' => 1,
             'userId' => 1,
@@ -172,6 +172,6 @@ class ThreadDaoTest extends BaseDaoTestCase
             'followNum' => 1,
             'latestPostTime' => time(),
             'courseSetId' => 1,
-        );
+        ];
     }
 }
