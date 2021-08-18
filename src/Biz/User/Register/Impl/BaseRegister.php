@@ -215,6 +215,10 @@ abstract class BaseRegister
         $profile = [];
         $profile['id'] = $user['id'];
 
+        if ($user['verifiedMobile']) {
+            $profile['mobile'] = $user['verifiedMobile'];
+        }
+
         foreach ($this->getCreatedProfileFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $profile[$attr] = $registration[$attr];
