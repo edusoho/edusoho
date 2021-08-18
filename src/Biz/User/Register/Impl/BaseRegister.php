@@ -215,10 +215,6 @@ abstract class BaseRegister
         $profile = [];
         $profile['id'] = $user['id'];
 
-        if ($user['verifiedMobile']) {
-            $profile['mobile'] = $user['verifiedMobile'];
-        }
-
         foreach ($this->getCreatedProfileFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $profile[$attr] = $registration[$attr];
@@ -236,6 +232,10 @@ abstract class BaseRegister
         for ($i = 1; $i <= 10; ++$i) {
             $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? '' : $registration['varcharField'.$i];
             $profile['textField'.$i] = empty($registration['textField'.$i]) ? '' : $registration['textField'.$i];
+        }
+
+        if ($user['verifiedMobile']) {
+            $profile['mobile'] = $user['verifiedMobile'];
         }
 
         $this->getProfileDao()->create($profile);
