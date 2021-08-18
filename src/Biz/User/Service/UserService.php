@@ -422,5 +422,7 @@ interface UserService
 
     public function updatePasswordChanged($id, $passwordChanged);
 
+    public function getStudentOpenInfo($userId);
+
     public function findUserLikeNickname($nickname);
 }

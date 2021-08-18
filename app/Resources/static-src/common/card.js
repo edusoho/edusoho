@@ -61,7 +61,11 @@ if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
             });
             // _this.popover("show");
           },
-          success: callback
+          success: function (res) {
+            if (res !== 'false') {
+              callback(res)
+            }
+          }
         });
       } else {
         var html = $('#user-card-' + userId).clone();

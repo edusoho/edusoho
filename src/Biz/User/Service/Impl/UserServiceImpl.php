@@ -2245,6 +2245,25 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($id, ['passwordChanged' => $passwordChanged]);
     }
 
+    public function getStudentOpenInfo($userId)
+    {
+        $user = $this->getUserDao()->get(intval($userId));
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        $userSetting = $this->getSettingService()->get('user_partner', []);
+        $enable = $userSetting['open_student_info'] ?: 1;
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->isTeacher() || $currentUser->isAdmin() || $currentUser->isSuperAdmin() || $user['id'] === $currentUser->getId()
+            || !empty(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER']))) {
+            $enable = 1;
+        }
+
+        return $enable;
+    }
+
     protected function filterCustomField($fields)
     {
         $numericalFields = ['intField1', 'intField2', 'intField3', 'intField4', 'intField5', 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5'];

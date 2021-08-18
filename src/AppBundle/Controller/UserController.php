@@ -449,6 +449,11 @@ class UserController extends BaseController
 
     public function cardShowAction(Request $request, $userId)
     {
+        $studentInfoEnable = $this->getUserService()->getStudentOpenInfo($userId);
+        if (0 === $studentInfoEnable) {
+            return $this->createJsonResponse(false);
+        }
+
         $user = $this->tryGetUser($userId);
         $currentUser = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($userId);
