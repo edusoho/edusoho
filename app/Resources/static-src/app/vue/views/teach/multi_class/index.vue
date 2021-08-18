@@ -174,7 +174,7 @@ const columns = [
   {
     title: '班课类型',
     dataIndex: 'type',
-    width: '100px',
+    width: '120px',
     scopedSlots: { customRender: 'type' },
   },
   {
@@ -188,6 +188,7 @@ const columns = [
     dataIndex: 'product',
     key: 'productIds',
     width: '130px',
+    ellipsis: true,
     filters: [],
   },
   {
