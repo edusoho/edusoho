@@ -619,6 +619,17 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         self::assertArrayHasKey(11, $members2);
     }
 
+    public function testFindMultiClassIdsByUserId()
+    {
+        $this->mockDataObject(['userId' => 1, 'courseId' => 1, 'role' => 'teacher', 'courseSetId' => 1, 'locked' => 0, 'multiClassId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'courseId' => 2, 'role' => 'teacher', 'courseSetId' => 2, 'locked' => 0, 'multiClassId' => 3]);
+        $this->mockDataObject(['userId' => 2, 'courseId' => 3, 'role' => 'teacher', 'courseSetId' => 3, 'locked' => 0, 'multiClassId' => 4]);
+
+        $result = $this->getDao()->findMultiClassIdsByUserId(1);
+
+        self::assertCount(2, $result);
+    }
+
     protected function getDefaultMockFields()
     {
         return [
