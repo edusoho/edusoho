@@ -89,8 +89,8 @@ export default {
             value: count,
           };
         });
-
-      chart.interaction("element-active");
+      // 移除图例点击过滤交互
+      chart.removeInteraction("legend-filter");
 
       chart.render();
     },
