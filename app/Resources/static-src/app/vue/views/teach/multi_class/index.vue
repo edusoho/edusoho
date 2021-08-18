@@ -1,5 +1,5 @@
 <template>
-   <aside-layout :breadcrumbs="[{ name: '班课管理' }]" :headerTip="headerTip" :headerTitle="headerTitle">
+   <aside-layout :breadcrumbs="[{ name: '班课列表' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
         <a-select
@@ -61,7 +61,7 @@
           placeholder="请输入班课名称" 
           style="width: 224px"
           :allowClear="true" />
-          <a-button type="primary" @click="searchMultiClass">检索</a-button>
+          <a-button type="primary" @click="searchMultiClass">搜索</a-button>
         <a-dropdown v-if="isPermission('multi_class_create')">
           <a-button class="pull-right" type="primary">新建班课</a-button>
           <a-menu slot="overlay">
@@ -160,13 +160,15 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
-    width: '100px',
+    width: '150px',
+    ellipsis: true,
     scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
     dataIndex: 'course',
-    width: '100px',
+    width: '150px',
+    ellipsis: true,
     scopedSlots: { customRender: 'course' },
   },
   {

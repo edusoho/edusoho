@@ -7,7 +7,7 @@
             <div class="card">
               <svg-icon class="icon icon-add-student" icon="icon-add-student" />
               <div class="right-block">
-                <p class="card-title text-size">昨日新增班课学员总数</p>
+                <p class="card-title text-size">昨日新增学员总人数</p>
                 <span class="card-count text-size" style="color: #5CCFEA">{{ graphicData.totalNewStudentNum }}</span>
               </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="card">
               <svg-icon class="icon icon-add-student-success" icon="icon-add-student-success" />
               <div class="right-block">
-                <p class="card-title text-size">昨日班课结课学员总数</p>
+                <p class="card-title text-size">昨日结课学员总人数</p>
                 <span class="card-count text-size" style="color: #FFC173">{{ graphicData.totalFinishedStudentNum }}</span>
               </div>
             </div>
@@ -34,7 +34,7 @@
               <div class="card">
                 <svg-icon class="icon icon-live-broad" icon="icon-live-broad" />
                 <div class="right-block">
-                  <p class="card-title text-size">今日直播课程数</p>
+                  <p class="card-title text-size">今日直播数</p>
                   <span class="card-count text-size" style="color: #42D668">{{ graphicData.todayLiveData.overLiveNum }}/<span style="color: #BEBEBE">{{ graphicData.todayLiveData.totalLiveNum }}</span></span>
                 </div>
               </div>
@@ -151,7 +151,7 @@ export default {
       width: 48px !important;
       height: 48px !important;
     }
-    
+
     .right-block {
       padding-left: 5% !important;
     }
