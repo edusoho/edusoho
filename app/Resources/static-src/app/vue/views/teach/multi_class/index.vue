@@ -60,7 +60,8 @@
           v-model="search.keywords" 
           placeholder="请输入班课名称" 
           style="width: 224px"
-          :allowClear="true" />
+          :allowClear="true"
+          @pressEnter="searchMultiClass" />
           <a-button type="primary" @click="searchMultiClass">搜索</a-button>
         <a-dropdown v-if="isPermission('multi_class_create')">
           <a-button class="pull-right" type="primary">新建班课</a-button>
