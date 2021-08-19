@@ -703,7 +703,7 @@ class CourseController extends CourseBaseController
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
 
-        if (!empty($assistant['scrmUuid'])) {
+        if (!empty($assistant['scrmStaffId'])) {
             $scrmBindQrCode = $this->generateScrmQrCode($assistant);
             if (!empty($scrmBindQrCode)) {
                 $assistant['weChatQrCode'] = $scrmBindQrCode;

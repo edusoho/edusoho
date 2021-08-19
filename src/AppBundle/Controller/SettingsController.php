@@ -1024,7 +1024,7 @@ class SettingsController extends BaseController
 
         $user = $this->getSCRMService()->setStaffSCRMData($user);
 
-        if (empty($user['scrmUuid'])) {
+        if (empty($user['scrmStaffId'])) {
             return $this->createJsonResponse(false);
         }
 

@@ -53,7 +53,7 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
 
         try {
             $userScrmData = $this->getSCRMSdk()->getStaff($user['uuid']);
-            !empty($userScrmData['staffId']) ? $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['staffId']) : null;
+            !empty($userScrmData['staffId']) ? $user = $this->getUserService()->setUserScrmStaffId($user['id'], $userScrmData['staffId']) : null;
         } catch (\Exception $e) {
         }
 
@@ -67,7 +67,7 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         }
 
         try {
-            $assistantData = $this->getScrmSdk()->getStaffQrCode($assistant['scrmUuid']);
+            $assistantData = $this->getScrmSdk()->getStaffQrCode($assistant['scrmStaffId']);
             $qrCodeUrl = $assistantData['qrCodeUrl'];
         } catch (\Exception $e) {
             $qrCodeUrl = empty($assistant['weChatQrCode']) ? '' : $assistant['weChatQrCode'];
