@@ -209,7 +209,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClassSetting, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -286,30 +286,10 @@ export default {
   created() {
     // 编辑班课
     this.fetchNotificationSetting();
-    const id = this.$route.query.id;
-    if (id) {
-      this.multiClassId = id;
-      this.mode = 'editor';
-      this.fetchEditorMultiClass();
-      return;
-    }
-
+    this.isEdit();
+    this.getMultiClassSetting();
     // 创建新课程后
-    let course = this.$route.query.course
-    if (course) {
-      course = JSON.parse(course)
-
-      this.selectedCourseId = course.id;
-      this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
-      this.course.list.push(course)
-      this.$set(this.course, 'initialValue', course.id)
-      this.fetchCourse();
-      this.fetchProducts();
-      this.fetchCourseInfo(course.id);
-      return;
-    }
-
+    this.afterCreateCourse();
     this.initFetch();
   },
 
@@ -319,6 +299,32 @@ export default {
       this.fetchAssistants();
       this.fetchProducts();
       this.fetchTeacher();
+    },
+    isEdit() {
+      const id = this.$route.query.id;
+      if (id) {
+        this.multiClassId = id;
+        this.mode = 'editor';
+        this.fetchEditorMultiClass();
+        return;
+      }
+    },
+
+    afterCreateCourse() {
+      let course = this.$route.query.course
+      if (course) {
+        course = JSON.parse(course)
+
+        this.selectedCourseId = course.id;
+        this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
+        this.course.list.push(course)
+        this.$set(this.course, 'initialValue', course.id)
+        this.fetchCourse();
+        this.fetchProducts();
+        this.fetchCourseInfo(course.id);
+        return;
+      }
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
@@ -407,7 +413,7 @@ export default {
       MultiClass.get(this.multiClassId).then(res => {
         console.log(res);
         const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_num, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_num': service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -711,6 +717,11 @@ export default {
         name: 'MultiClass',
         params
       });
+    },
+    async getMultiClassSetting() {
+      if (this.mode == 'editor') return;
+      const { assistant_service_limit } = await MultiClassSetting.search();
+      this.form.setFieldsValue({ 'service_num': assistant_service_limit });
     },
   }
 }
