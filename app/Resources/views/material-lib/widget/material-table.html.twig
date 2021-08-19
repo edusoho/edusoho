@@ -36,7 +36,7 @@
           </div>
           <div class="material-table-info">
             <p class="title text-overflow mbs" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
-              {{ uploadFile.filename|html_special_chars_decode }}
+              {{ uploadFile.filename }}
             </p>
             {% if type|default is empty %}
               {% if source in ['public','sharing','favorite'] %}
