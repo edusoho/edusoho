@@ -93,7 +93,7 @@ class Teacher extends AbstractResource
         }
 
         $courseStudentNum = $this->getMemberService()->searchMemberCountGroupByFields(
-            ['courseIds' => $courseIds],
+            ['courseIds' => $courseIds, 'role' => 'student'],
             'courseId',
             0,
             PHP_INT_MAX
