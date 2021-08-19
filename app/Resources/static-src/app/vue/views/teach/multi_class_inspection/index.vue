@@ -3,10 +3,10 @@
     <a-spin class="multi-class-inspection" :spinning="getListLoading">
       <a-row :gutter="[24,24]">
         <a-col :sm="24" :lg="12" :xl="8" :xxl="6" v-for="inspection in inspectionList" :key="inspection.id">
-          <inspection-card :inspection="inspection" @getCardLiveInfo="getLiveInfo" />
+          <inspection-card :inspection="inspection" />
         </a-col>
       </a-row>
-      <empty v-if="!(getListLoading || liveInfo) && !inspectionList.length" />
+      <empty v-if="!getListLoading && !inspectionList.length" />
     </a-spin>
   </aside-layout>
 </template>
@@ -30,7 +30,6 @@ export default {
       inspectionList: [],
       getListLoading: false,
       headerTip: "班课巡检仅展示今天所有直播课",
-      liveInfo: "",
     };
   },
 
@@ -48,9 +47,6 @@ export default {
       } finally {
         this.getListLoading = false;
       }
-    },
-    getLiveInfo() {
-      this.liveInfo = true;
     },
   },
 };
