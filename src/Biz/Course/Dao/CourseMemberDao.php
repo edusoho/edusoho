@@ -161,5 +161,5 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function countGroupByCourseId($conditions);
 
-    public function findGroupUserIdsByCourseIdAndRoles($courseId, $roles);
+    public function findUserIdsByCourseIdAndRoles($courseId, $roles);
 }

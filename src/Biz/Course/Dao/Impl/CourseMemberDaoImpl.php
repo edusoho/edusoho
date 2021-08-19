@@ -122,14 +122,14 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array_merge([$userId], $roles));
     }
 
-    public function findGroupUserIdsByCourseIdAndRoles($courseId, $roles)
+    public function findUserIdsByCourseIdAndRoles($courseId, $roles)
     {
         if (empty($roles) || empty($courseId)) {
             return [];
         }
 
         $marks = str_repeat('?,', count($roles) - 1).'?';
-        $sql = "SELECT userId FROM {$this->table()} WHERE courseId = ? AND role in ($marks) GROUP BY `role`;";
+        $sql = "SELECT userId, role FROM {$this->table()} WHERE courseId = ? AND role in ($marks);";
 
         return $this->db()->fetchAll($sql, array_merge([$courseId], $roles));
     }

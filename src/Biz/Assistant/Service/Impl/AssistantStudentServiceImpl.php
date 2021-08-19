@@ -121,8 +121,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
         $data = $result = [];
         if ('group' == $multiClass['type']) {
-            $this->assignGroups($multiClassId, $assistantIds);
-
+            $this->assignGroups($multiClass, $assistantIds);
         } else {
             $this->assignStudents($data, $noAssistantStudentIds, $assistantIds, $studentNumGroup, $multiClass['service_num']);
             foreach ($data as $assistantId => $studentIds) {
@@ -175,6 +174,9 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function assignGroup(&$data, $assistantIds, $groupIds, $multiClassGroupNumGroup, $assistantGroupNum, $remaining = false)
     {
+        if (empty($multiClassGroupNumGroup)) {
+            return;
+        }
         foreach ($assistantIds as $assistantId) {
             $group = empty($multiClassGroupNumGroup[$assistantId]) ? ['groupNum' => 0] : $multiClassGroupNumGroup[$assistantId];
 
@@ -200,6 +202,10 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
     {
+        if (empty($studentNumGroup)) {
+            return;
+        }
+
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($studentNumGroup[$assistantId]) ? ['studentNum' => 0] : $studentNumGroup[$assistantId];
 
