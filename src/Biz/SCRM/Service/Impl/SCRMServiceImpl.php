@@ -53,7 +53,7 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
 
         try {
             $userScrmData = $this->getSCRMSdk()->getStaff($user['uuid']);
-            $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['staffId']);
+            !empty($userScrmData['staffId']) ? $user = $this->getUserService()->setUserScrmUuid($user['id'], $userScrmData['staffId']) : null;
         } catch (\Exception $e) {
         }
 
