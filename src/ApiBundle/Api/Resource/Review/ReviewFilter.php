@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class ReviewFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'userId', 'user', 'targetId', 'targetType', 'target', 'targetName', 'content', 'rating', 'parentId', 'createdTime', 'updatedTime', 'posts', 'me_report', 'student_info',
+        'id', 'userId', 'user', 'targetId', 'targetType', 'target', 'targetName', 'content', 'rating', 'parentId', 'createdTime', 'updatedTime', 'posts', 'me_report',
     ];
 
     protected $targetFilters = [

@@ -6,7 +6,7 @@
             <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
                            :current-user-id="currentUserId"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
-                <a :href="`/user/${review.user.id}`"  target="_blank">
+                <a  target="_blank" :class="'card-'+review.user.id">
                     <img class="js-user-card reviews-item__img"
                          :src="review.user.avatar.large"
                          :data-user-id="review.user.id"

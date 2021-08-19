@@ -104,8 +104,6 @@ class Review extends AbstractResource
                     $review['me_report'] = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $reportType, $review['id']);
                 }
             }
-            $review['student_info'] = $this->getUserService()->getStudentOpenInfo($review['user']['id']);
-
             $review['posts'] = $this->getReviewService()->searchReviews(
                 ['parentId' => $review['id'], 'excludeAuditStatus' => 'illegal'],
                 ['createdTime' => 'ASC'],
@@ -127,7 +125,6 @@ class Review extends AbstractResource
                 if (!empty($reportType)) {
                     foreach ($review['posts'] as &$post) {
                         $post['me_report'] = $this->getReportRecordService()->getUserReportRecordByTargetTypeAndTargetId($currentUser['id'], $reportType, $post['id']);
-                        $post['student_info'] = $this->getUserService()->getStudentOpenInfo($post['userId']);
                     }
                 }
             }

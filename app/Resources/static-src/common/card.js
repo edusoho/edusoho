@@ -62,7 +62,11 @@ if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
             // _this.popover("show");
           },
           success: function (res) {
+            var studentCard = $(".card-" + userId);
             if (res !== 'false') {
+              if (studentCard.length > 0) {
+                studentCard.attr('href',"/user/" + userId);
+              }
               callback(res)
             }
           }
