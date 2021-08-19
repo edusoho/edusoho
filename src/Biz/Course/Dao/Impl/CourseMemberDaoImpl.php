@@ -149,6 +149,17 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->delete($this->table(), ['multiClassId' => $multiClassId, 'role' => $role]);
     }
 
+    public function findMultiClassIdsByUserId($userId)
+    {
+        if (empty($userId)) {
+            return [];
+        }
+
+        $sql = "SELECT multiClassId FROM {$this->table()} WHERE userId = ? AND role = 'teacher'";
+
+        return $this->db()->fetchAll($sql, [$userId]);
+    }
+
     public function deleteByCourseId($courseId)
     {
         return $this->db()->delete($this->table(), ['courseId' => $courseId]);
@@ -182,6 +193,18 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge([$classroomId], $userIds));
+    }
+
+    public function findByUserIdsAndRole($userIds, $role)
+    {
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE role = ? AND userId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$role], $userIds));
     }
 
     public function countLearningMembers($conditions)
@@ -533,6 +556,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, [$courseId, $multiClassId, $role]);
     }
 
+    public function countGroupByCourseId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(*) as count, courseId')
+            ->groupBy('courseId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
@@ -554,6 +586,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'userId = :userId',
                 'courseSetId = :courseSetId',
                 'multiClassId = :multiClassId',
+                'multiClassId IN (:multiClassIds)',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',

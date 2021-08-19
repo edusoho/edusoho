@@ -84,6 +84,19 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, array_merge($courseIds, [$mediaType]));
     }
 
+    public function findActivitiesByCourseIdsAndTypes($courseIds, $mediaTypes)
+    {
+        if (empty($courseIds) || empty($mediaTypes)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks1 = str_repeat('?,', count($mediaTypes) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId IN({$marks}) AND mediaType IN ({$marks1});";
+
+        return $this->db()->fetchAll($sql, array_merge($courseIds, $mediaTypes));
+    }
+
     public function findFinishedLivesWithinTwoHours()
     {
         $currentTime = time();
@@ -100,12 +113,15 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
+            'fromCourseId NOT IN (:excludeCourseIds)',
             'mediaType IN (:mediaTypes)',
             'mediaId = :mediaId',
             'fromCourseSetId = :fromCourseSetId',
             'fromCourseSetId IN (:courseSetIds)',
             'startTime >= :startTime_GT',
             'endTime <= :endTime_LT',
+            'endTime >= :endTime_GE',
+            'copyId = :copyId',
         ];
 
         return $declares;

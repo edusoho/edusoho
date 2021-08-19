@@ -40,5 +40,7 @@ interface LiveActivityService
 
     public function getByLiveId($liveId);
 
+    public function findLiveActivitiesByLiveIds($liveIds);
+
     public function getBySyncIdGTAndLiveId($liveId);
 }

@@ -650,7 +650,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'multiClassId' => $multiClassId,
         ];
 
-        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
+        $this->getMemberDao()->updateMembers(array_merge($conditions, ['role' => 'teacher']), ['multiClassId' => 0]);
+
+        $this->getMemberDao()->batchDelete(array_merge($conditions, ['role' => 'assistant']));
 
         $this->getLogService()->info(
             'course',
@@ -1245,6 +1247,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdsAndClassroomId($userIds, $classroomId);
     }
 
+    public function findMembersByUserIdsAndRole($userIds, $role)
+    {
+        return $this->getMemberDao()->findByUserIdsAndRole($userIds, $role);
+    }
+
     public function becomeStudentByClassroomJoined($courseId, $userId)
     {
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
@@ -1758,6 +1765,16 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId)
     {
         return $this->getMemberDao()->getByMultiClassIdAndUserId($multiClassId, $userId);
+    }
+
+    public function findMultiClassIdsByUserId($userId)
+    {
+        return $this->getMemberDao()->findMultiClassIdsByUserId($userId);
+    }
+
+    public function countGroupByCourseId($conditions)
+    {
+        return $this->getMemberDao()->countGroupByCourseId($conditions);
     }
 
     /**

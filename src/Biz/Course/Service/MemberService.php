@@ -133,6 +133,8 @@ interface MemberService
 
     public function findCourseMembersByUserIdsAndClassroomId($userIds, $classroomId);
 
+    public function findMembersByUserIdsAndRole($userIds, $role);
+
     public function becomeStudentByClassroomJoined($courseId, $userId);
 
     public function refreshMemberNoteNumber($courseId, $userId);
@@ -206,4 +208,8 @@ interface MemberService
     public function findMembersByUserIdAndRoles($userId, $roles);
 
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
+
+    public function findMultiClassIdsByUserId($userId);
+
+    public function countGroupByCourseId($conditions);
 }

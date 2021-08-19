@@ -44,6 +44,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->findByCreator($creator);
     }
 
+    public function findMultiClassesByReplayShow($isReplayShow)
+    {
+        return $this->getMultiClassDao()->findByReplayShow($isReplayShow);
+    }
+
     public function getMultiClass($id)
     {
         return $this->getMultiClassDao()->get($id);
@@ -64,7 +69,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $assistantIds = $fields['assistantIds'];
 
         $fields = $this->filterMultiClassFields($fields);
-        if (!ArrayToolkit::requireds($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow'])) {
+        if (!ArrayToolkit::requireds($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'type'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -300,7 +305,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'DESC'], 0, 1);
 
         if (!empty($firstLive)) {
-            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => $firstLive['startTime'], 'end_time' => $endLive['endTime']]);
+            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => current($firstLive)['startTime'], 'end_time' => current($endLive)['endTime']]);
         } else {
             return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => 0, 'end_time' => 0]);
         }
@@ -339,7 +344,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             }
         }
 
-        return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
+        return ArrayToolkit::parts($fields, ['type', 'title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime', 'service_num', 'service_group_num', 'group_limit_num']);
     }
 
     /**

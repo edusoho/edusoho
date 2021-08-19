@@ -113,7 +113,7 @@
           @change="(value) => handleChange(value, 'assistant')"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
-            {{ item.nickname }}
+            {{ item.nickname }} <span v-if="item.isScrmBind === '0'" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
@@ -130,7 +130,17 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-
+      <a-form-item class="assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+          <a-input v-decorator="['service_num', {
+            rules: [
+              { required: true, message: '请输入助教服务上限人数' },
+              { validator: validateAssistantNum }
+              ]
+            }]">
+            <span slot="suffix">人</span>
+          </a-input>
+          <span class="setup-tip">可去【参数设置】中设置默认值</span>
+      </a-form-item>
       <a-form-item label="排课">
         <Schedule
           :course-id="selectedCourseId"
@@ -395,8 +405,9 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        console.log(res);
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -640,7 +651,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
 
@@ -650,11 +661,17 @@ export default {
 
       callback()
     },
+     validateAssistantNum(rule, value, callback) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
+        callback("请输入正整数");
+      }
+      callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (err) return
-
+        values.type = 'normal';
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -694,7 +711,7 @@ export default {
         name: 'MultiClass',
         params
       });
-    }
+    },
   }
 }
 </script>
@@ -735,7 +752,21 @@ export default {
   text-align: right;
   background-color: #f5f5f5;
 }
-
+.assistant-max-number{
+  .ant-form-explain{
+    width: 250px
+  }
+}
+.assistant-tip{
+  margin-left: 48px;
+  color: @brand-danger
+}
+.setup-tip{
+  position: absolute;
+  left: 110px;
+  width: 200px;
+  color: @cdv2-dark-assist;
+}
 
 @import "~app/less/admin-v2/variables.less";
 @import "~app/less/page/course-manage/task/create.less";

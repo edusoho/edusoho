@@ -4,6 +4,8 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassGroupService
 {
+    public function findGroupsByIds($ids);
+
     public function findGroupsByMultiClassId($multiClassId);
 
     public function findGroupsByCourseId($courseId);
@@ -13,4 +15,6 @@ interface MultiClassGroupService
     public function createLiveGroup($fields);
 
     public function batchCreateLiveGroups($liveGroups);
+
+    public function getById($id);
 }

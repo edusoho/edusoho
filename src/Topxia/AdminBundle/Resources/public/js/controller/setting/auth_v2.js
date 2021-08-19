@@ -107,7 +107,7 @@ define(function(require, exports, module) {
 
     $('.hiddenJsAction').click();
 
-    $('.model').on('click', function() {
+    $('.model').on('click', function()  {
       let old_modle_value = $('.model.btn-primary').data('modle');
       $('.model').removeClass('btn-primary');
       $(this).addClass('btn-primary');
@@ -143,6 +143,16 @@ define(function(require, exports, module) {
       }
 
       $('.hiddenJsAction').click();
+    });
+
+    $('input[name=register_enabled]').change(function() {
+      if ($(this).val() === 'closed'){
+        $('#register-enabled-tip').addClass('hidden');
+        $('#sign-up-setting').addClass('hidden');
+      }else{
+        $('#register-enabled-tip').removeClass('hidden');
+        $('#sign-up-setting').removeClass('hidden');
+      }
     });
   };
 });
