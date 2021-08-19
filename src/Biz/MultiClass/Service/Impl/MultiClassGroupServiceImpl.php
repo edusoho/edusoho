@@ -77,7 +77,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         }
 
         $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
-        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : $roleGroupMemberUserIds['student'];
+        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['student'], 'userId');
         $groupNum = ceil(count($studentIds) / $multiClass['group_limit_num']);
 
         $groupAssignStudentIds = [];
@@ -94,6 +94,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field['name'] = self::MULTI_CLASS_GROUP_NAME.$groupSerialNum;
             $field['course_id'] = $courseId;
             $field['multi_class_id'] = $multiClass['id'];
+            $field['assistant_id'] = 0;
 
             $multiClassGroup = $this->getMultiClassGroupDao()->create($field);
 
