@@ -42,6 +42,7 @@ export default {
         container: "yDiagram",
         autoFit: true,
         height: 258,
+        defaultInteractions: ["tooltip"], // 仅保留 tooltip
       });
       chart.data(this.chartDataDouble);
 

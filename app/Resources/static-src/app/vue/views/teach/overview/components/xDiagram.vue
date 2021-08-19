@@ -43,6 +43,7 @@ export default {
         container: "xDiagram",
         autoFit: true,
         height: 258,
+        defaultInteractions: ["tooltip"],
       });
       chart.data(this.chartDataDouble);
 

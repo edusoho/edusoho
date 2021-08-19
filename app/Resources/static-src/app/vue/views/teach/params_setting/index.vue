@@ -67,7 +67,7 @@ export default {
           trigger: "blur",
         },
         {
-          validator: this.validatorAssistantService,
+          validator: this.validatorAssistantGroup,
           trigger: "blur",
         },
       ],
@@ -117,25 +117,28 @@ export default {
       this.form = await MultiClassSetting.search();
     },
     validatorGroupNumber(rule, value, callback) {
-      if (value > 10000 || value == 0) {
-        callback(`人数范围在1-10000人`);
+      if (value > 10000) {
+        callback(`超出最大人数`);
       }
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
         callback("请输入正整数");
       }
       callback();
     },
     validatorAssistantService(rule, value, callback) {
-      if (value > 10000 || value == 0) {
-        callback(`人数范围在1-10000人`);
+      if (value > 10000) {
+        callback(`超出最大人数`);
       }
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
         callback("请输入正整数");
       }
       callback();
     },
     validatorAssistantGroup(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value > 10000) {
+        callback(`超出最大组数`);
+      }
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
         callback("请输入正整数");
       }
       callback();
