@@ -31,6 +31,16 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->post('/lives', $args);
     }
 
+    public function batchCreateLiveGroups(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/groups', $args);
+    }
+
+    public function createLiveGroup(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/one_groups', $args);
+    }
+
     public function createLiveCourseware(array $args)
     {
         return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/courseware', $args['resources']);
