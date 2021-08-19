@@ -236,7 +236,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, MultiClassSetting, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from '../create/Schedule.vue';
 
@@ -314,6 +314,7 @@ export default {
     // 编辑班课
     this.fetchNotificationSetting();
     this.isEdit();
+    this.getMultiClassSetting();
     // 创建新课程后
     this.afterCreateCourse();
     this.initFetch();
@@ -744,6 +745,12 @@ export default {
         name: 'MultiClass',
         params: this.$route.params.paging || {}
       });
+    },
+
+    async getMultiClassSetting() {
+      if (this.mode == 'editor') return;
+      const { group_number_limit, assistant_group_limit } = await MultiClassSetting.search();
+      this.form.setFieldsValue({ 'group_limit_num': group_number_limit, 'service_group_num': assistant_group_limit });
     },
   }
 }
