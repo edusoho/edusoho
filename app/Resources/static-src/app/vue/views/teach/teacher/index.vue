@@ -94,7 +94,6 @@
             style="width: 100%;"
             v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' },
-              { type: 'integer', message: '请输入整数' },
               { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
           />
@@ -289,7 +288,7 @@ export default {
     },
 
     validateRange(rule, value, callback) {
-      if (_.inRange(value, 0, 10001) === false) {
+      if (value && (_.inRange(value, 0, 10001) === false || /^\+?[0-9][0-9]*$/.test(value) === false)) {
         callback('请输入0-10000的整数')
       }
 
