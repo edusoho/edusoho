@@ -60,6 +60,6 @@ class ScrmService extends BaseService
         $uri = $uri . (strpos($uri, '?') > 0 ? '&' : '?') . http_build_query($data);
         $authorization = $this->auth->makeRequestAuthorization($uri, '', 600, true, $this->service);
 
-        return $protocol . '://' . $this->host . $uri . '&authorization=' . $authorization;
+        return $protocol . '://' . $this->host . $uri . '&authorization=' . urlencode($authorization);
     }
 }

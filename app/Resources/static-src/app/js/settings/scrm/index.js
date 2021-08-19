@@ -1,12 +1,12 @@
 class SCRMBind {
-  constructor(props) {
+  constructor() {
     this.intervalCheckOrderId = null;
     this.init();
   }
 
   init() {
     if ($('.js-qrcode-content').length > 0) {
-      this.intervalCheckOrderId = setInterval(this.bindScrm(), 2000);
+      this.intervalCheckOrderId = setInterval(() => this.bindScrm(), 2000);
     }
   }
 
@@ -16,14 +16,12 @@ class SCRMBind {
     }
 
     let self = this;
-    $.post($('.js-qrcode-content').data('url'))
-      .then((response) => {
-        if (response) {
-          clearInterval(self.intervalCheckOrderId);
-          window.location.reload();
-        }
-      }).catch((e) => {
-      });
+    $.post($('.js-qrcode-content').data('url'), function (res) {
+      if (res == true) {
+        clearInterval(self.intervalCheckOrderId);
+        window.location.reload();
+      }
+    });
   }
 }
 

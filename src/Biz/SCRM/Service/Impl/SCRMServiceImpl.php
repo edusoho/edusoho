@@ -78,7 +78,7 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
 
     public function getStaffBindQrCodeUrl($assistant)
     {
-        return $this->getSCRMSdk()->getStaffBindQrCodeUrl($assistant['scrmUuid']);
+        return $this->getSCRMSdk()->getStaffBindQrCodeUrl($assistant['uuid']);
     }
 
     /**

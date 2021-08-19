@@ -999,6 +999,10 @@ class SettingsController extends BaseController
 
     public function scrmAction(Request $request)
     {
+        if (!$this->getSCRMService()->isSCRMBind()) {
+            throw new AccessDeniedException();
+        }
+
         $currentUser = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($currentUser->getId());
         if (1 == count($currentUser->getRoles())) {
@@ -1018,7 +1022,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $user = $this->getUserService()->getUser($user['id']);
 
-        $this->getSCRMService()->setStaffSCRMData($user);
+        $user = $this->getSCRMService()->setStaffSCRMData($user);
 
         if (empty($user['scrmUuid'])) {
             return $this->createJsonResponse(false);
