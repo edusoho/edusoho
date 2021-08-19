@@ -21,6 +21,25 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
         ]);
     }
 
+    public function findGroupsByMultiClassIdAndAssistantIds($multiClassId, $assistantIds)
+    {
+        if (empty($multiClassId) || empty($assistantIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($assistantIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table()} WHERE multi_class_id = ? AND assistant_id in ($marks);";
+
+        return $this->db()->fetchAll($sql, array_merge([$multiClassId], $assistantIds));
+    }
+
+    public function countMultiClassGroupAssistant($multiClassId)
+    {
+        $sql = "SELECT assistant_id, count(id) as 'groupNum' FROM {$this->table} WHERE multi_class_id = ? GROUP BY assistant_id";
+
+        return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
+    }
+
     public function findByCourseId($courseId)
     {
         return $this->findByFields([

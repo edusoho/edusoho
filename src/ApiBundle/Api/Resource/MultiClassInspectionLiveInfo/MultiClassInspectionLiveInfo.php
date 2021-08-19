@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\MultiClassInspectionLiveInfo;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -20,11 +18,11 @@ class MultiClassInspectionLiveInfo extends AbstractResource
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        if ($activity['mediaType'] != 'live') {
+        if ('live' != $activity['mediaType']) {
             throw LiveActivityException::NOTFOUND_LIVE();
         }
 
-        if ($activity['ext']['liveProvider'] != EdusohoLiveClient::SELF_ES_LIVE_PROVIDER) {
+        if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
             throw LiveActivityException::LIVE_PROVIDER_NOT_SUPPORT();
         }
 
@@ -33,7 +31,7 @@ class MultiClassInspectionLiveInfo extends AbstractResource
             if ($info['base']['startTime'] == time() && 'unstart' == $info['info']['status']) {
                 $info['info']['status'] = 'ontOnTime';
             }
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw $e;
         }
 

@@ -9,12 +9,10 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class Teacher extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @return array
      */
     public function search(ApiRequest $request)
@@ -48,7 +46,7 @@ class Teacher extends AbstractResource
 
         $courseIds = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseId');
         $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLT' => $currentTime]);
-        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);;
+        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
         $endMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($endMultiClasses, 'courseId'));

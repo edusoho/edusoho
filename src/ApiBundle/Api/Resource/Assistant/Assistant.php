@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Assistant;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -80,7 +79,7 @@ class Assistant extends AbstractResource
 
         $courseIds = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseId');
         $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLT' => $currentTime]);
-        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);;
+        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
         $endMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($endMultiClasses, 'courseId'));
