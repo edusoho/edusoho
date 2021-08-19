@@ -304,7 +304,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
 
         $firstLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'ASC'], 0, 1);
-        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'DESC'], 0, 1);
+        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['endTime' => 'DESC'], 0, 1);
 
         if (!empty($firstLive)) {
             return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => current($firstLive)['startTime'], 'end_time' => current($endLive)['endTime']]);
