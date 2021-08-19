@@ -722,7 +722,7 @@ class CourseController extends CourseBaseController
             return $this->getSCRMService()->getAssistantQrCode($assistant);
         }
 
-        $url = $this->getScrmStudentBindUrl();
+        $url = $this->getScrmStudentBindUrl($assistant);
         if (empty($url)) {
             return '';
         }
@@ -751,7 +751,7 @@ class CourseController extends CourseBaseController
         return $user;
     }
 
-    protected function getScrmStudentBindUrl()
+    protected function getScrmStudentBindUrl($assistant)
     {
         $scrmBind = $this->getSCRMService()->isScrmBind();
         if (empty($scrmBind)) {
