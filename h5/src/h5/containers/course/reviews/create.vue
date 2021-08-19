@@ -47,6 +47,11 @@ export default {
     userReview: {
       type: Object,
       required: true
+    },
+
+    targetInfo: {
+      type: Object,
+      required: true
     }
   },
 
@@ -68,12 +73,9 @@ export default {
       this.$refs.form.validate().then(async () => {
         if (this.rateHasError) return;
 
-        const targetId = this.$route.params.id;
-
         const result = await Api.createReview({
           data: {
-            targetType: 'course',
-            targetId,
+            ...this.targetInfo,
             content: this.content,
             rating: this.rating
           }

@@ -3,6 +3,7 @@
     <component
       :is="currentComponent"
       :user-review="userReview"
+      :target-info="targetInfo"
       @change-current-component="changeCurrentComponent"
     />
   </div>
@@ -23,17 +24,39 @@ export default {
     Create
   },
 
+  props: {
+    details: {
+      type: Object,
+      required: true
+    }
+  },
+
   data() {
     return {
       currentComponent: 'List',
-      userReview: {}
+      userReview: {},
+      courseId: this.$route.params.id
     }
   },
 
   computed: {
     ...mapState({
       user: state => state.user
-    })
+    }),
+
+    // 课程，取商品页评价, targetType: goods, targetId: goodsId
+    // 班级课程, 取课程评价, targetType: course, targetId: courseId
+    targetInfo() {
+      const { classroom, goodsId } = this.details;
+
+      const targetType = classroom ? 'course' : 'goods';
+      const targetId = classroom ? this.courseId : goodsId;
+
+      return {
+        targetType,
+        targetId
+      };
+    }
   },
 
   watch: {
@@ -60,8 +83,7 @@ export default {
     getUserReviews() {
       Api.getReview({
         params: {
-          targetId: this.courseId,
-          targetType: 'course',
+          ...this.targetInfo,
           userId: this.user.id
         }
       }).then(res => {

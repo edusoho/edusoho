@@ -43,6 +43,11 @@ export default {
     userReview: {
       type: Object,
       required: true
+    },
+
+    targetInfo: {
+      type: Object,
+      required: true
     }
   },
 
@@ -54,8 +59,7 @@ export default {
       paging: {
         offset: 0,
         limit: 10
-      },
-      courseId: this.$route.params.id
+      }
     }
   },
 
@@ -70,10 +74,9 @@ export default {
       const { offset, limit } = this.paging;
       Api.getReview({
         params: {
+          ...this.targetInfo,
           limit: limit,
-          offset: offset,
-          targetId: this.courseId,
-          targetType: 'course'
+          offset: offset
         }
       }).then(res => {
         const { data, paging: { total } } = res;
