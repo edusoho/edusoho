@@ -20,7 +20,7 @@ class MultiClassStudentGroup extends AbstractResource
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
         }
 
-        $group = $this->getMultiClassGroupService()->getById($groupId);
+        $group = $this->getMultiClassGroupService()->getMultiClassGroup($groupId);
         if (empty($group)) {
             throw MultiClassException::GROUP_NOT_FOUND();
         }

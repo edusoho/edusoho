@@ -8,6 +8,10 @@ interface MultiClassGroupService
 
     public function findGroupsByMultiClassId($multiClassId);
 
+    public function getMultiClassGroup($id);
+
+    public function createMultiClassGroups($courseId, $multiClass);
+
     public function findGroupsByCourseId($courseId);
 
     public function getLiveGroupByUserIdAndCourseId($userId, $courseId, $liveId);
@@ -15,6 +19,4 @@ interface MultiClassGroupService
     public function createLiveGroup($fields);
 
     public function batchCreateLiveGroups($liveGroups);
-
-    public function getById($id);
 }

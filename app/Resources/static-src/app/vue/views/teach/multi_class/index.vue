@@ -230,7 +230,7 @@ const columns = [
   {
     title: '创建时间',
     dataIndex: 'createdTime',
-    width: '160px',
+    width: '150px',
     sorter: true,
     scopedSlots: { customRender: 'createdTime' },
   },

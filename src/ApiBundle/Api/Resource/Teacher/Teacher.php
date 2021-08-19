@@ -9,12 +9,10 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
-use ApiBundle\Api\Annotation\Access;
 
 class Teacher extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @return array
      */
     public function search(ApiRequest $request)

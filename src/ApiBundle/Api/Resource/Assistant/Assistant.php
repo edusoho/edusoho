@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Assistant;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
