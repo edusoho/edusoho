@@ -3,8 +3,8 @@
     <div class="note-item__top">
       <div class="note-info">
         <img class="avatar" :src="item.user.avatar.small" alt="">
-        <span class="">{{ item.user.nickname }} {{ $moment(item.createdTime).format('YY-MM-DD HH:mm') }}</span>
-        <span class="tag">{{ item.task.title }}</span>
+        <span>{{ item.user.nickname }} {{ item.createdTime | formatCourseTime }}</span>
+        <span class="tag text-overflow">{{ item.task.title }}</span>
       </div>
       <div class="note-like">
         {{ item.likeNum }}
@@ -59,6 +59,7 @@ export default {
 
       .tag {
         margin-left: vw(4);
+        max-width: vw(120);
         color: $primary-color;
       }
     }

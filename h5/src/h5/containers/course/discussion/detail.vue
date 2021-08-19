@@ -16,7 +16,7 @@
         <img class="avatar" :src="discussion.user.avatar.small">
         <div class="info-right">
           <span class="info-nickname">{{ discussion.user.nickname }}发起</span>
-          <span class="info-time">{{ $moment(discussion.createdTime).format('HH:mm') }}</span>
+          <span class="info-time">{{ discussion.createdTime | formatCourseTime }}</span>
         </div>
       </div>
       <div class="discussion-body__title">{{ discussion.title }}</div>

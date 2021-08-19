@@ -2,7 +2,7 @@
   <div class="reply-item">
     <div class="reply-item__info">
       <img class="avatar" :src="item.user.avatar.small">
-      <span>{{ item.user.nickname }} {{ $moment(item.createdTime).format('HH:mm') }}</span>
+      <span>{{ item.user.nickname }} {{ item.createdTime | formatCourseTime }}</span>
     </div>
     <div class="reply-item__content" v-html="item.content" />
   </div>

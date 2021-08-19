@@ -17,9 +17,9 @@
         <div class="info-right">
           <span>{{ note.user.nickname }}</span>
           <div class="info-right-bottom">
-            <div>
-              <span class="info-time">{{ $moment(note.createdTime).format('HH:mm') }}</span>
-              <span class="info-task">{{ note.task.title }}</span>
+            <div class="info">
+              <span class="info-time">{{ note.createdTime | formatCourseTime }}</span>
+              <span class="info-task text-overflow">{{ note.task.title }}</span>
             </div>
             <span class="like-num">{{ note.likeNum }}</span>
           </div>
@@ -89,6 +89,11 @@ export default {
         border-radius: 50%;
       }
 
+      .info {
+        display: flex;
+        align-items: center;
+      }
+
       .info-right {
         display: flex;
         flex-direction: column;
@@ -109,6 +114,8 @@ export default {
         }
 
         .info-task {
+          display: inline-block;
+          max-width: vw(150);
           color: $primary-color;
         }
 

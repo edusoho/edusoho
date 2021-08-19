@@ -14,7 +14,7 @@
           void-color="#eee"
         />
       </div>
-      <div class="review-detail__time">{{ $moment(item.createdTime).format('YYYY-MM-DD HH:mm') }}</div>
+      <div class="review-detail__time">{{ item.createdTime | formatCourseTime }}</div>
       <div
         ref="content"
         class="review-detail__content"
