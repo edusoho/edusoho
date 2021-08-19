@@ -476,7 +476,7 @@ admin_v2.course.basic_group: 教学管理
 admin_v2.multi_class_product.basic_menu: 产品库
 
 # 教学-课程管理-班课
-admin_v2.multi_class.basic_menu: 班课
+admin_v2.multi_class.basic_menu: 班课列表
 
 # 教学-课程管理-助教管理
 admin_v2.teacher.basic_menu: 教师管理
@@ -912,6 +912,8 @@ admin_v2.system.user_content_ctrl.thread: 话题问答
 admin_v2.system.user_content_ctrl.private_message: 私信
 admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
+admin_v2.system.course_purchase_agreement_tab: 用户购买协议设置
+admin_v2_system.course_purchase_agreement.eduit: 协议编辑
 
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置

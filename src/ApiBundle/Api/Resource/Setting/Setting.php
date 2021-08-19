@@ -289,7 +289,7 @@ class Setting extends AbstractResource
 
         $result = [
             'auth' => [
-                'register_mode' => $authSetting['register_mode'],
+                'register_mode' => $authSetting['register_enabled'] === 'closed' ? 'closed' :$authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
             ],
@@ -402,8 +402,8 @@ class Setting extends AbstractResource
 
     public function getRegister($request = null)
     {
-        $registerSetting = $this->getSettingService()->get('auth', ['register_mode' => 'closed', 'email_enabled' => 'closed']);
-        $registerMode = $registerSetting['register_mode'];
+        $registerSetting = $this->getSettingService()->get('auth', ['register_enabled' => 'closed', 'register_mode' => 'mobile', 'email_enabled' => 'closed']);
+        $registerMode = $registerSetting['register_enabled'] === 'closed' ? 'closed' : $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
         $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];

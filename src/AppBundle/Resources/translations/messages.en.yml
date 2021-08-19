@@ -2040,7 +2040,7 @@ PPT文档还在转换中，还不能查看，请稍等。: 'PPT conversion is on
 '上传类型不正确！': 'Upload type is incorrect!'
 '短信服务被管理员关闭了': 'Message service is closed.'
 '验证码错误': 'Verification code is error'
-'请等待120秒再申请': 'Please waiting for 120s, and try again.'
+'您的操作过于频繁，请在119s后申请发送验证码': 'Your operation is too frequent, please apply to send verification code after 119S.'
 用户注册: 'Sign Up'
 '您已经绑定了该手机号码': 'You have been binding the telephone successfully'
 '该手机号码已被其他用户绑定': 'The phone number have been bond by other user.'

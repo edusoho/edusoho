@@ -40,6 +40,11 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
         return $this->findByFields(['creator' => $creator]);
     }
 
+    public function findByReplayShow($isReplayShow)
+    {
+        return $this->findByFields(['isReplayShow' => $isReplayShow]);
+    }
+
     public function getByTitle($title)
     {
         return $this->getByFields(['title' => $title]);
@@ -85,7 +90,10 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
                 'courseId IN ( :courseIds)',
                 'copyId = :copyId',
                 'multi_class.title LIKE :titleLike',
+                'start_time > :startTimeGT',
                 'start_time >= :startTimeGE',
+                'start_time <= :startTimeLE',
+                'end_time >= :endTimeGE',
                 'end_time <= :endTimeLE',
                 'end_time < :endTimeLT',
                 'multi_class.type = :type',

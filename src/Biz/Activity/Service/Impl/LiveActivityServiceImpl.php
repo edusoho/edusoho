@@ -207,6 +207,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->getByLiveId($liveId);
     }
 
+    public function findLiveActivitiesByLiveIds($liveIds)
+    {
+        return $this->getLiveActivityDao()->findByLiveIds($liveIds);
+    }
+
     /**
      * 是否可以更新 roomType， 直播开始前10分钟内和直播结束后不可修改
      *

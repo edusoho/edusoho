@@ -387,52 +387,6 @@ const defaultExamPaging = {
     pageSize: 5,
   }
 };
-const groupList = [
-        // {
-        //   id: "1",
-        //   name: "分组1",
-        //   assistant_id: "227",
-        //   multi_class_id: "4",
-        //   course_id: "129",
-        //   student_num: "10",
-        //   created_time: "1627893419",
-        //   assistant: {
-        //     id: "227",
-        //     nickname: "教师3",
-        //     destroyed: "0",
-        //     title: "",
-        //     weChatQrCode: "",
-        //     uuid: "f9430fe37d20fee22b2fe5436b1cb9dc6f7b0693",
-        //     avatar: {
-        //       small: "http://es.dev.cn/assets/img/default/avatar.png",
-        //       middle: "http://es.dev.cn/assets/img/default/avatar.png",
-        //       large: "http://es.dev.cn/assets/img/default/avatar.png",
-        //     },
-        //   },
-        // },
-        // {
-        //   id: "2",
-        //   name: "分组2",
-        //   assistant_id: "226",
-        //   multi_class_id: "4",
-        //   course_id: "129",
-        //   student_num: "10",
-        //   created_time: "1627893419",
-        //   assistant: {
-        //     id: "226",
-        //     nickname: "教师2",
-        //     destroyed: "0",
-        //     title: "",
-        //     weChatQrCode: "",
-        //     uuid: "6cb985d1a0603bd3a36af51a0df5399155ab3965",
-        //     avatar: {
-        //       small: "http://es.dev.cn/assets/img/default/avatar.png",
-        //       middle: "http://es.dev.cn/assets/img/default/avatar.png",
-        //       large: "http://es.dev.cn/assets/img/default/avatar.png",
-        //     },
-        //   },
-        // },
-      ];
 export default {
   components: {
     AddStudentModal,
@@ -443,7 +397,7 @@ export default {
   },
   data() {
     return {
-      groupList,
+      groupList:[],
       resultColumns,
       students: [],
       modalShowUser: {},
@@ -528,7 +482,8 @@ export default {
   },
 
   async created() {
-    await this.getMultiClassStudents();
+    this.getMultiClassStudents();
+    
     await this.getMultiClass();
     await this.getMultiClassStudentsGroup();
   },
@@ -618,14 +573,10 @@ export default {
       this.getMultiClassStudents(params);
     },
 
-
     async getMultiClass() {
-      await MultiClass.get(this.id).then(res => {
-        this.multiClass = res;
-      }).catch(err => {
-
-      });
+      this.multiClass = await MultiClass.get(this.id);
     },
+
     onRemoveStudent(userId) {
       MultiClassStudent.deleteMultiClassMember(this.multiClass.id, userId).then(res => {
         this.getMultiClassStudents();
@@ -709,21 +660,21 @@ export default {
       this.viewStudentInfoVisible = true;
     },
 
-    clickBatchUpdateAssistantModal()
-    {
+    clickBatchUpdateAssistantModal() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后修改', 1);
         return;
       }
+
       this.assistantListModalVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
-    clickBatchStudentGroupModal()
-    {
+    clickBatchStudentGroupModal() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后修改', 1);
         return;
       }
+
       this.changeGroupVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
@@ -756,8 +707,7 @@ export default {
       });
 
     },
-    onGroupClick(res){
-      console.log(res);
+    onGroupClick(res) {
       const keyId = res.key; 
       this.getMultiClassStudents({ keyId });
     },

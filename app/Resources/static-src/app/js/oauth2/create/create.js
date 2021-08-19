@@ -49,6 +49,22 @@ export default class Create {
   }
 
   initValidator() {
+    $.validator.addMethod('sms_code_required', function (value, element) {
+      if (($('#originalMobileAccount').val() && value) || !$('#originalMobileAccount').val()){
+        return true;
+      }else{
+        return false;
+      }
+    }, $.validator.format(Translator.trans('auth.mobile_captcha_required_error_hint')));
+
+    $.validator.addMethod('account_password', function (value, element) {
+      if (($('#originalEmailAccount').val() && value) || !$('#originalMobileAccount').val()){
+        return true;
+      }else{
+        return false;
+      }
+    }, $.validator.format(Translator.trans('auth.login.password_required_error_hint')));
+
     this.rules = {
       username: {
         required: true,
@@ -85,6 +101,37 @@ export default class Create {
       agree_policy: {
         required: true,
       },
+      originalMobileAccount: {
+        required: false,
+        phone: true,
+        es_remote: {
+          type: 'get',
+          callback: (bool) => {
+            if (bool) {
+              $('.js-sms-send').removeAttr("disabled");
+            } else {
+              $('.js-sms-send').attr('disabled',"true");
+            }
+          }
+        }
+      },
+      originalEmailAccount: {
+        required: false,
+        email: true,
+        es_remote: {
+          type: 'get'
+        }
+      },
+      originalAccountPassword: {
+        required: false,
+        account_password: true,
+      },
+      accountSmsCode: {
+        required: false,
+        sms_code_required: true,
+        unsigned_integer: true,
+        rangelength: [6, 6],
+      },
     };
 
     this.validator = this.$form.validate({
@@ -116,9 +163,11 @@ export default class Create {
       }
       
       self.$sendBtn.attr('disabled', true);
+      let type = $(event.currentTarget).data('type');
       let data = {
-        type: 'register',
-        mobile: $('.js-account').text(),
+        type: type,
+        unique: type === "register" ? true : false,
+        mobile: type === "register" ? $('.js-account').text() : $('#originalMobileAccount').val(),
         dragCaptchaToken: this.dragCaptchaToken,
         phrase: $captchaCode.val()
       };
@@ -156,6 +205,10 @@ export default class Create {
         dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
         invitedCode: $('#invitedCode').length > 0 ? $('#invitedCode').val() : '',
         registerVisitId: $('[name="registerVisitId"]').val(),
+        originalMobileAccount: $('[name="originalMobileAccount"]').val(),
+        accountSmsCode: $('[name="accountSmsCode"]').val(),
+        originalEmailAccount: $('[name="originalEmailAccount"]').val(),
+        originalAccountPassword: $('[name="originalAccountPassword"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
