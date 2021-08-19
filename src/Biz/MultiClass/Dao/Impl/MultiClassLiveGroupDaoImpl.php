@@ -17,8 +17,8 @@ class MultiClassLiveGroupDaoImpl extends AdvancedDaoImpl implements MultiClassLi
     public function declares()
     {
         return [
-            'timestamps' => ['createdTime'],
-            'orderbys' => ['id', 'createdTime'],
+            'timestamps' => ['created_time'],
+            'orderbys' => ['id', 'created_time'],
             'conditions' => [
                 'id = :id',
             ],
