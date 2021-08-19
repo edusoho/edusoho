@@ -80,6 +80,7 @@ export default {
             id: this.inspection.activityId,
           },
         });
+        this.$emit("getCardLiveInfo");
       } catch (error) {}
     },
 
