@@ -137,7 +137,7 @@ class MultiClass extends AbstractResource
         }
 
         if (!empty($conditions['teacherId'])) {
-            $prepareConditions['ids'] = $this->getMemberService()->findMultiClassIdsByUserId($conditions['teacherId']);
+            $prepareConditions['courseIds'] = ArrayToolkit::column($this->getMemberService()->findMembersByUserIdAndRoles($conditions['teacherId'], ['teacher']), 'courseId');
         }
 
         if (!empty($conditions['type'])) {

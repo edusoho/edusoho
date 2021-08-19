@@ -42,6 +42,7 @@ export default {
         container: "yDiagram",
         autoFit: true,
         height: 258,
+        defaultInteractions: ["tooltip"], // 仅保留 tooltip
       });
       chart.data(this.chartDataDouble);
 
@@ -88,8 +89,8 @@ export default {
             value: count,
           };
         });
-
-      chart.interaction("element-active");
+      // 移除图例点击过滤交互
+      chart.removeInteraction("legend-filter");
 
       chart.render();
     },

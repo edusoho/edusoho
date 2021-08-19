@@ -4,6 +4,7 @@ namespace Biz\MultiClass\Event;
 
 use Biz\MultiClass\Service\MultiClassService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -15,6 +16,7 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
             'live.activity.create' => 'onLiveActivityCreate',
             'live.activity.update' => 'onLiveActivityUpdate',
             'course.task.delete' => 'onTaskDelete',
+            'multi_class.create' => 'onMultiClassCreate',
         ];
     }
 
@@ -38,11 +40,34 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
         }
     }
 
+    public function onMultiClassCreate(Event $event)
+    {
+        $multiClass = $event->getSubject();
+
+        $this->getSchedulerService()->register([
+            'name' => 'CreateLiveGroupJob_'.$multiClass['id'],
+            'expression' => time(),
+            'class' => 'Biz\MultiClass\Job\CreateLiveGroupJob',
+            'misfire_threshold' => 60 * 60,
+            'args' => [
+                'multiClassId' => $multiClass['id'],
+            ],
+        ]);
+    }
+
     /**
      * @return MultiClassService
      */
     protected function getMultiClassService()
     {
         return $this->getBiz()->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

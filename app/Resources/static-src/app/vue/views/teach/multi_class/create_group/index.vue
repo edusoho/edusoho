@@ -133,7 +133,7 @@
       <a-form-item label="助教及分组设置">
          <div class="tip-color">（将学员分成若干组，并将组分配给助教管理）</div>
          <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
-           <a-input type="number" v-decorator="['group_limit_num', {
+           <a-input v-decorator="['group_limit_num', {
               rules: [
                 { required: true, message: '请输入分组容纳学员人数' },
                 { validator: validateGroupNum }
@@ -150,7 +150,7 @@
             <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
          </a-form-item>
          <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
-           <a-input typr="number" v-decorator="['service_group_num', {
+           <a-input v-decorator="['service_group_num', {
               rules: [
                 { required: true, message: '请输入助教服务组数' },
                 { validator: validateAssistantNum }
@@ -683,7 +683,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
 
@@ -694,13 +694,13 @@ export default {
       callback()
     },
      validateAssistantNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
       callback()
     },
     validateGroupNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
       callback()

@@ -40,6 +40,13 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function findByCourseId($courseId)
+    {
+        return $this->findByFields([
+            'course_id' => $courseId,
+        ]);
+    }
+
     public function declares()
     {
         return [

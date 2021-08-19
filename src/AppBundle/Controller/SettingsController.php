@@ -687,7 +687,7 @@ class SettingsController extends BaseController
         }
 
         $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
-        if ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind'])){
+        if ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind'])) {
             return $this->redirect($this->generateUrl('homepage'));
         }
 

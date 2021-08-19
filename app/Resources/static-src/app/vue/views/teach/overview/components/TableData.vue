@@ -53,7 +53,7 @@ export default {
         scopedSlots: { customRender: "rank" },
       },
       {
-        title: "班级名称",
+        title: "班课名称",
         dataIndex: "multiClass",
         ellipsis: true,
       },

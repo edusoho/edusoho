@@ -78,6 +78,7 @@ class MemberServiceTest extends BaseTestCase
             'courseSetId' => 1,
             'deadline' => time() + 3600,
             'lastLearnTime' => time(),
+            'role' => 'teacher',
         ];
         $this->getMemberDao()->create($member);
         $this->getMemberService()->releaseMultiClassMember(1, $multiClass['id']);

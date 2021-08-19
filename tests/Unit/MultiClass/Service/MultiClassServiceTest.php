@@ -17,22 +17,22 @@ class MultiClassServiceTest extends BaseTestCase
 {
     public function testFindByProductIds()
     {
-        $multiClass1 = $this->createMultiClass();
-        $multiClass2 = $this->createMultiClass();
+        $multiClass1 = $this->createMultiClass(['type' => 'normal']);
+        $multiClass2 = $this->createMultiClass(['type' => 'normal']);
         $findMultiClass = $this->getMultiClassService()->findByProductIds([$multiClass1['productId'], $multiClass2['productId']]);
         $this->assertCount(2, $findMultiClass);
     }
 
     public function testFindByProductId()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $findMultiClass = $this->getMultiClassService()->findByProductIds($multiClass);
         $this->assertCount(1, $findMultiClass);
     }
 
     public function testGetMultiClass()
     {
-        $createMultiClass = $this->createMultiClass();
+        $createMultiClass = $this->createMultiClass(['type' => 'normal']);
 
         $getMultiClass = $this->getMultiClassService()->getMultiClass($createMultiClass['id']);
 
@@ -41,7 +41,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testCreateMultiClass()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $getMultiClass = $this->getMultiClassService()->getMultiClass($multiClass['id']);
         $teacher = $this->getCourseMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
         $assistants = $this->getCourseMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
@@ -53,7 +53,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testUpdateMultiClass()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $teacher = $this->createUser(['ROLE_TEACHER', 'ROLE_USER']);
         $assistant1 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
         $assistant2 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
@@ -78,7 +78,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testDeleteMultiClass()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $this->getMultiClassService()->deleteMultiClass($multiClass['id']);
         $getMultiClass = $this->getMultiClassService()->getMultiClass($multiClass['id']);
         $teacher = $this->getCourseMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'teacher');
@@ -91,7 +91,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testSearchMultiClassJoinCourse()
     {
-        $this->createMultiClass();
+        $this->createMultiClass(['type' => 'normal']);
         $conditions = [
             'productId' => 1,
         ];
@@ -102,7 +102,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testCountMultiClass()
     {
-        $this->createMultiClass();
+        $this->createMultiClass(['type' => 'normal']);
         $conditions = [
             'productId' => 1,
         ];
@@ -113,7 +113,7 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testGetMultiClassByTitle()
     {
-        $createMultiClass = $this->createMultiClass();
+        $createMultiClass = $this->createMultiClass(['type' => 'normal']);
         $getMultiClass = $this->getMultiClassService()->getMultiClassByTitle('multi class 1');
 
         $this->assertArrayValueEquals($createMultiClass, $getMultiClass);
@@ -122,7 +122,7 @@ class MultiClassServiceTest extends BaseTestCase
     public function testCloneMultiClass()
     {
         $this->createMultiClassDefaultProduct();
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $this->getMultiClassProductDao()->create(['title' => '系统默认', 'type' => 'default']);
         $cloneMultiClass = [
             'title' => '复制课程',
@@ -134,12 +134,12 @@ class MultiClassServiceTest extends BaseTestCase
 
     public function testGetMultiClassByCourseId()
     {
-        $createMultiClass = $this->createMultiClass();
+        $createMultiClass = $this->createMultiClass(['type' => 'normal']);
         $getMultiClass = $this->getMultiClassService()->getMultiClassByCourseId($createMultiClass['courseId']);
         $this->assertNotEmpty($getMultiClass);
     }
 
-    protected function createMultiClass()
+    protected function createMultiClass($multiClassFields)
     {
         $product = $this->createMultiClassProduct();
         $course = $this->createCourse();
@@ -157,6 +157,7 @@ class MultiClassServiceTest extends BaseTestCase
             'maxStudentNum' => 10,
             'isReplayShow' => 1,
         ];
+        $fields = array_merge($multiClassFields, $fields);
 
         return $this->getMultiClassService()->createMultiClass($fields);
     }
