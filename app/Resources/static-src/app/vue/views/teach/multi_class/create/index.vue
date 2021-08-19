@@ -13,8 +13,7 @@
             trigger: 'blur',
             rules: [
               { required: true, message: '请填写班课名称' },
-              { validator: validatorTitle },
-              { validator: validatorTitleLength }
+              { validator: validatorTitle }
             ]
           }]"
           placeholder="请输入班课名称"
@@ -643,13 +642,13 @@ export default {
         title: value,
         exceptId: this.multiClassId
       });
-
-      result ? callback() : callback('班课名称不能与已创建的相同');
-    },
-
-    validatorTitleLength(rule, value, callback) {
-      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
-      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+      if (!result) {
+        callback('班课名称不能与已创建的相同')
+      }
+      if (value && value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2) {
+        callback('班课名称不能超过40个字符')
+      }
+      callback();
     },
 
     validatorAssistant: (rule, value, callback) => {
