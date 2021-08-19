@@ -89,6 +89,50 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
     }
 
+    public function setGroupAssistantAndStudents($courseId, $multiClassId)
+    {
+        if (empty($multiClassId) || empty($courseId)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        if ('group' != $multiClass['type']) {
+            return;
+        }
+
+        $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
+        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['student'], 'userId');
+        $assistantIds = empty($roleGroupMemberUserIds['assistant']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['assistant'], 'userId');
+
+        if (empty($assistantIds) || empty($studentIds)) {
+            return;
+        }
+
+        $groups = $this->getMultiClassGroupDao()->findGroupsByMultiClassId($multiClassId);
+        foreach ($groups as $group) {
+            if (!in_array($group['assistant_id'], $assistantIds)) {
+                $this->getMultiClassGroupDao()->update($group['id'], ['assistant_id' => 0]);
+            }
+        }
+
+        $unAssignGroups = $this->getMultiClassGroupDao()->findUnAssignGroups($multiClassId);
+        $unAssignGroupIds = ArrayToolkit::column($unAssignGroups, 'id');
+        $assistantNumGroup = $this->getMultiClassGroupDao()->countMultiClassGroupAssistant($multiClassId);
+        $assistantNumGroup = ArrayToolkit::index($assistantNumGroup, 'assistant_id');
+        $data = [];
+        $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, $multiClass['service_group_num']);
+        foreach ($data as $assistantId => $groupIds) {
+            foreach ($groupIds as $groupId) {
+                $this->getMultiClassGroupDao()->update($groupId, ['assistant_id' => $assistantId]);
+                $this->getAssistantStudentDao()->update(['group_id' => $groupId], ['assistantId' => $assistantId]);
+            }
+        }
+
+        if (!empty($data)) {
+            $this->getLogService()->info('group_multi_class_assistant', 'update_assistant_student', '助教和学员变更', $data);
+        }
+    }
+
     public function setAssistantStudents($courseId, $multiClassId)
     {
         if (empty($multiClassId) || empty($courseId)) {
@@ -107,10 +151,9 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $existAssistantIds = ArrayToolkit::column($multiClassAssistants, 'assistantId');
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
 
-        $deleteAssistantIds = array_diff($existAssistantIds, $assistantIds);
+        $deleteAssistantIds = array_unique(array_diff($existAssistantIds, $assistantIds));
         if (!empty($deleteAssistantIds)) {
             $this->getAssistantStudentDao()->batchDelete(['assistantIds' => $deleteAssistantIds]);
-            $this->handleMultiClassGroupAssistants($multiClass, $deleteAssistantIds);
         }
 
         $students = $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
@@ -120,22 +163,18 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $studentNumGroup = ArrayToolkit::index($studentNumGroup, 'assistantId');
 
         $data = $result = [];
-        if ('group' == $multiClass['type']) {
-            $this->assignGroups($multiClass, $assistantIds);
-        } else {
-            $this->assignStudents($data, $noAssistantStudentIds, $assistantIds, $studentNumGroup, $multiClass['service_num']);
-            foreach ($data as $assistantId => $studentIds) {
-                $fields = [];
-                foreach ($studentIds as $studentId) {
-                    $field['assistantId'] = $assistantId;
-                    $field['studentId'] = $studentId;
-                    $field['courseId'] = $courseId;
-                    $field['multiClassId'] = $multiClassId;
-                    $fields[] = $field;
-                }
-                $this->getAssistantStudentDao()->batchCreate($fields);
-                $result[] = $fields;
+        $this->assignStudents($data, $noAssistantStudentIds, $assistantIds, $studentNumGroup, $multiClass['service_num']);
+        foreach ($data as $assistantId => $studentIds) {
+            $fields = [];
+            foreach ($studentIds as $studentId) {
+                $field['assistantId'] = $assistantId;
+                $field['studentId'] = $studentId;
+                $field['courseId'] = $courseId;
+                $field['multiClassId'] = $multiClassId;
+                $fields[] = $field;
             }
+            $this->getAssistantStudentDao()->batchCreate($fields);
+            $result[] = $fields;
         }
 
         if (!empty($result)) {
@@ -145,55 +184,28 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return true;
     }
 
-    private function assignGroups($multiClass, $assistantIds)
-    {
-        $multiClassGroupNumGroups = $this->getMultiClassGroupDao()->countMultiClassGroupAssistant($multiClass['id']);
-        $multiClassGroups = $this->getMultiClassGroupDao()->findGroupsByMultiClassId($multiClass['id']);
-
-        $assistantGroupNum = ceil($multiClass['service_group_num'] / count($assistantIds));
-        $data = [];
-        $this->assignGroup($data, $assistantIds, ArrayToolkit::column($multiClassGroups, 'id'), $multiClassGroupNumGroups, $assistantGroupNum);
-        foreach ($data as $assistantId => $groupIds) {
-            foreach ($groupIds as $groupId) {
-                $this->getMultiClassGroupDao()->update($groupId, ['assistant_id' => $assistantId]);
-            }
-        }
-    }
-
-    private function handleMultiClassGroupAssistants($multiClass, $deleteAssistantIds)
-    {
-        if ('group' != $multiClass['type']) {
-            return;
-        }
-
-        $multiClassGroups = $this->getMultiClassGroupDao()->findGroupsByMultiClassIdAndAssistantIds($multiClass['id'], $deleteAssistantIds);
-        foreach ($multiClassGroups as $multiClassGroup) {
-            $this->getMultiClassGroupDao()->update($multiClassGroup['id'], ['assistant_id' => 0]);
-        }
-    }
-
-    private function assignGroup(&$data, $assistantIds, $groupIds, $multiClassGroupNumGroup, $assistantGroupNum, $remaining = false)
+    private function assignGroups(&$data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, $assignNum, $remaining = false)
     {
         foreach ($assistantIds as $assistantId) {
-            $group = empty($multiClassGroupNumGroup[$assistantId]) ? ['groupNum' => 0] : $multiClassGroupNumGroup[$assistantId];
+            $assistant = empty($assistantNumGroup[$assistantId]) ? ['groupNum' => 0] : $assistantNumGroup[$assistantId];
 
             if ($remaining) {
-                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($groupIds, 0, $assistantGroupNum));
-                $assistantIds = array_diff($groupIds, $data[$assistantId]);
+                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($unAssignGroupIds, 0, $assignNum));
+                $unAssignGroupIds = array_diff($unAssignGroupIds, $data[$assistantId]);
                 continue;
             }
 
-            if ($group['groupNum'] >= $assistantGroupNum) {
+            if ($assistant['groupNum'] >= $assignNum) {
                 continue;
             }
 
-            $needGroupNum = $assistantGroupNum - $group['groupNum'];
-            $data[$assistantId] = array_slice($groupIds, 0, $needGroupNum);
-            $groupIds = array_diff($groupIds, $data[$assistantId]);
-        }
+            $needAssignNum = $assignNum - $assistant['groupNum'];
+            $data[$assistantId] = array_slice($unAssignGroupIds, 0, $needAssignNum);
+            $unAssignGroupIds = array_diff($unAssignGroupIds, $data[$assistantId]);
 
-        if (!empty($groupIds)) {
-            $this->assignGroup($data, $assistantIds, $groupIds, $multiClassGroupNumGroup, 1, true);
+            if (!empty($unAssignGroupIds)) {
+                $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, 1, true);
+            }
         }
     }
 

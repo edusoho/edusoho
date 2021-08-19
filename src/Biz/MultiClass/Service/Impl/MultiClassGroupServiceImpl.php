@@ -82,8 +82,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
         $groupAssignStudentIds = [];
         $assignedNum = 0;
-        for ($assignedTimes = 0; $assignedTimes <= $groupNum; ++$assignedTimes) {
-            $groupAssignStudentIds[$assignedNum] = array_slice($studentIds, $assignedNum, $groupNum);
+        for ($assignedTimes = 0; $assignedTimes < $groupNum; ++$assignedTimes) {
+            $groupAssignStudentIds[$assignedNum] = array_slice($studentIds, $assignedNum, $multiClass['group_limit_num']);
             $assignedNum += count($groupAssignStudentIds[$assignedNum]);
         }
 

@@ -40,6 +40,13 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function findUnAssignGroups($multiClassId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE multi_class_id = ? AND assistant_id = 0";
+
+        return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
+    }
+
     public function findByCourseId($courseId)
     {
         return $this->findByFields([

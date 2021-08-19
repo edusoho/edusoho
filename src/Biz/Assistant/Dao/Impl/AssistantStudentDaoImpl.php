@@ -116,6 +116,7 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
                 'multiClassId = :multiClassId',
                 'assistantId IN (:assistantIds)',
                 'studentId IN (:studentIds)',
+                'group_id = :group_id',
             ],
         ];
     }
