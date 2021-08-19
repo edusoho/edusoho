@@ -12,7 +12,7 @@ class TeacherFilter extends Filter
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile',
         'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting', 'weChatQrCode',
-        'loginIp', 'liveMultiClassNum', 'liveMultiClassStudentNum', 'endMultiClassNum', 'endMultiClassStudentNum',
+        'loginIp', 'liveMultiClassNum', 'liveMultiClassStudentNum', 'endMultiClassNum', 'endMultiClassStudentNum', 'promoted',
     ];
 
     protected $mode = self::SIMPLE_MODE;
