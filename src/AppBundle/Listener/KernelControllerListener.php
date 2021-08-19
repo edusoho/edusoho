@@ -26,7 +26,7 @@ class KernelControllerListener
             return;
         }
 
-        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node("cloud_sms.sms_bind")) {
+        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
             return;
         }
 

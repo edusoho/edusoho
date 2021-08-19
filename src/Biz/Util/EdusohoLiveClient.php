@@ -162,6 +162,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('leaf')->get("/lives/{$liveId}/history");
     }
 
+    public function uploadCallbackUrl($url)
+    {
+        return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
+    }
+
     protected function createCloudApi($server)
     {
         if (empty($this->cloudApi[$server])) {
