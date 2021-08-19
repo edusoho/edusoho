@@ -21,7 +21,10 @@
               <span class="info-time">{{ note.createdTime | formatCourseTime }}</span>
               <span class="info-task text-overflow">{{ note.task.title }}</span>
             </div>
-            <span class="like-num">{{ note.likeNum }}</span>
+            <span class="like-num">
+              <i class="iconfont icon-like"></i>
+              {{ note.likeNum }}
+            </span>
           </div>
         </div>
       </div>

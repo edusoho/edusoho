@@ -15,7 +15,7 @@
 
     <empty
       v-if="!list.length && finished"
-      text="暂无笔记"
+      :text="emptyText"
     />
 
     <div class="create-btn">
@@ -61,6 +61,12 @@ export default {
         limit: 20
       },
       courseId: this.$route.params.id
+    }
+  },
+
+  computed: {
+    emptyText() {
+      return this.type === 'question' ? '暂无问答' : '暂无话题';
     }
   },
 

@@ -7,6 +7,7 @@
         <span class="tag text-overflow">{{ item.task.title }}</span>
       </div>
       <div class="note-like">
+        <i class="iconfont icon-like"></i>
         {{ item.likeNum }}
       </div>
     </div>
@@ -62,6 +63,10 @@ export default {
         max-width: vw(120);
         color: $primary-color;
       }
+    }
+
+    .note-like {
+      color: #999;
     }
   }
 

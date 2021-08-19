@@ -7,7 +7,10 @@
         <img class="user-avatar" :src="item.user.avatar.small">
         <span>{{ item.user.nickname }}发起 {{ item.createdTime | formatCourseTime }}</span>
       </div>
-      <div class="discussion-details__right">{{ item.postNum }}</div>
+      <div class="discussion-details__right">
+        <i class="iconfont icon-review"></i>
+        {{ item.postNum }}
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +78,10 @@ export default {
 
     &__right {
       color: #999;
+
+      i {
+        vertical-align: middle;
+      }
     }
   }
 }
