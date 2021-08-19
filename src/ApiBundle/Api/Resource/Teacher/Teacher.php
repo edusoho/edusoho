@@ -47,8 +47,8 @@ class Teacher extends AbstractResource
         $members = $this->getMemberService()->findMembersByUserIdsAndRole(array_column($teachers, 'id'), 'teacher');
 
         $courseIds = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseId');
-        $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLT' => $currentTime]);
-        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);;
+        $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGT' => $currentTime]);
+        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLE' => $currentTime]);;
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
         $endMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($endMultiClasses, 'courseId'));
