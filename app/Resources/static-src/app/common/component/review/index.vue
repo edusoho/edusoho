@@ -48,7 +48,7 @@
                             <li class="thread-post media" :class="'thread-subpost-'+post.id"
                                 v-for="post in review.posts" :key="post.id">
                                 <div class="media-left">
-                                    <a :href="`/user/${post.user.id}`" target="_blank">
+                                    <a  target="_blank" :class="'card-'+post.user.id">
                                         <img class="avatar-sm js-user-card"
                                              :src="post.user.avatar.large"
                                              :data-user-id="post.user.id"
