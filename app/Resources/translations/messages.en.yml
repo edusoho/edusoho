@@ -2432,6 +2432,9 @@ classroom.username: Username
 classroom.student_name: Student
 classroom.student_study_status: 'Learning progress'
 classroom.student_study_expiry_date: Available
+classroom.student_study_expiry_date.not: Out of date
+classroom.student_study_expiry_date.in: In the date
+classroom.delete_condition_student: Remove search results
 classroom.student_opertion: Action
 classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
