@@ -30,7 +30,7 @@ admin_v2:
                                 admin_v2_multi_class_inspection_manage:
                                     name: admin_v2.multi_class.basic_menu
                                     router_name: admin_v2_multi_class_inspection
-                        # 班课
+                        # 班课列表
                         admin_v2_multi_class:
                             name: admin_v2.multi_class.basic_menu
                             router_name: admin_v2_multi_class

@@ -12,7 +12,7 @@ class UserProfileFilter extends Filter
     protected $simpleFields = ['user', 'profile', 'fields'];
 
     protected $userFields = [
-        'id', 'nickname', 'email', 'loginTime', 'loginIp', 'createdTime', 'createdIp', 'roles'
+        'id', 'nickname', 'email', 'loginTime', 'loginIp', 'createdTime', 'createdIp', 'roles', 'title'
     ];
 
     protected $mode = self::SIMPLE_MODE;

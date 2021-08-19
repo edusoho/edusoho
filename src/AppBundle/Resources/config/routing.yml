@@ -3785,6 +3785,10 @@ feedback:
   path: /feedback
   defaults: { _controller: AppBundle:Default:feedback }
 
+live_cloud_callback:
+  path: /callback/live/handle
+  defaults: { _controller: AppBundle:Callback/Live:handle }
+
 agreement:
   path:  /agreement/course/purchase
   defaults: { _controller: AppBundle:Agreement:coursePurchaseAgreement }
