@@ -140,9 +140,9 @@ class ClassroomManageController extends BaseController
     private function filterDeadlineConditions(&$condition, $expired)
     {
         if (!empty($expired)) {
-            if ('out' == $expired){
+            if ('out' == $expired) {
                 $condition['deadline_LE'] = time();
-            }else{
+            } else {
                 $condition['deadline_GT'] = time();
             }
         }
