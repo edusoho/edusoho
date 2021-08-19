@@ -178,7 +178,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
 
             if (isset($fields['name'])) {
-                $fields['filename'] = $fields['name'];
+                $fields['filename'] = htmlspecialchars($fields['name'],ENT_COMPAT);
                 unset($fields['name']);
             }
 
