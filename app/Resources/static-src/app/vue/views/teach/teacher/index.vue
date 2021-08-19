@@ -19,8 +19,8 @@
       @change="handleTableChange"
     >
       <template slot="nickname" slot-scope="text, record">
-          <a-avatar :size="48" :src="record.mediumAvatar" icon="user"></a-avatar>
-          <a class="ml8" @click="edit(item.id)">{{ text }}</a>
+          <a-avatar :size="48" :src="record.avatar.middle" icon="user"></a-avatar>
+          <a class="ml8" @click="edit(record.id)">{{ text }}</a>
       </template>
       
 
@@ -211,7 +211,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
+      this.pagination = pagination;
     },
 
     async onSearch(nickname) {
