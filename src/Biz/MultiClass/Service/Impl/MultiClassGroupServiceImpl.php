@@ -79,7 +79,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         $noFullGroup = $this->getMultiClassGroupDao()->getNoFullGroup($multiClass['id'], $multiClass['group_limit_num']);
         if (empty($noFullGroup)) {
             $field = [];
-            $groupNum = $this->getMultiClassGroupDao()->count(['multi_class_id' => $multiClass['id']]);
+            $groupNum = $this->getMultiClassGroupDao()->count(['multiClassId' => $multiClass['id']]);
             $field['name'] = self::MULTI_CLASS_GROUP_NAME.($groupNum + 1);
             $field['multi_class_id'] = $multiClass['id'];
             $field['course_id'] = $multiClass['courseId'];
