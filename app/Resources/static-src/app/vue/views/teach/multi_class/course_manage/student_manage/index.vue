@@ -312,6 +312,10 @@ const columns = [
     scopedSlots: { customRender: 'finishedTestpaperCount' }
   },
   {
+    title: '分组',
+    dataIndex: 'group.name',
+  },
+  {
     title: '有效期',
     dataIndex: 'deadline',
     scopedSlots: { customRender: 'deadline' }
