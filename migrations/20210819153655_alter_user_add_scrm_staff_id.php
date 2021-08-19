@@ -19,6 +19,6 @@ class AlterUserAddScrmStaffId extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `user` DROP COLUMN `scrmStaffId`;");
+        $biz['db']->exec('ALTER TABLE `user` DROP COLUMN `scrmStaffId`;');
     }
 }
