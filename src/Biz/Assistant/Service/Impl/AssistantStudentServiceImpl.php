@@ -96,8 +96,8 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
-        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : $roleGroupMemberUserIds['student'];
-        $assistantIds = empty($roleGroupMemberUserIds['assistant']) ? [] : $roleGroupMemberUserIds['assistant'];
+        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['student'], 'userId');
+        $assistantIds = empty($roleGroupMemberUserIds['assistant']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['assistant'], 'userId');
 
         if (empty($assistantIds) || empty($studentIds)) {
             return;
@@ -174,9 +174,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function assignGroup(&$data, $assistantIds, $groupIds, $multiClassGroupNumGroup, $assistantGroupNum, $remaining = false)
     {
-        if (empty($multiClassGroupNumGroup)) {
-            return;
-        }
         foreach ($assistantIds as $assistantId) {
             $group = empty($multiClassGroupNumGroup[$assistantId]) ? ['groupNum' => 0] : $multiClassGroupNumGroup[$assistantId];
 
@@ -202,10 +199,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
     {
-        if (empty($studentNumGroup)) {
-            return;
-        }
-
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($studentNumGroup[$assistantId]) ? ['studentNum' => 0] : $studentNumGroup[$assistantId];
 
