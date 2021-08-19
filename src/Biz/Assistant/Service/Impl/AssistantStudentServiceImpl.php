@@ -101,10 +101,9 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
-        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['student'], 'userId');
         $assistantIds = empty($roleGroupMemberUserIds['assistant']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['assistant'], 'userId');
 
-        if (empty($assistantIds) || empty($studentIds)) {
+        if (empty($assistantIds)) {
             return;
         }
 
@@ -202,10 +201,10 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             $needAssignNum = $assignNum - $assistant['groupNum'];
             $data[$assistantId] = array_slice($unAssignGroupIds, 0, $needAssignNum);
             $unAssignGroupIds = array_diff($unAssignGroupIds, $data[$assistantId]);
+        }
 
-            if (!empty($unAssignGroupIds)) {
-                $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, 1, true);
-            }
+        if (!empty($unAssignGroupIds)) {
+            $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, 1, true);
         }
     }
 

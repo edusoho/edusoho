@@ -70,6 +70,38 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         return $this->getMultiClassGroupDao()->get($id);
     }
 
+    public function setGroupNewStudent($multiClass, $studentId)
+    {
+        if ('group' != $multiClass['type'] || empty($multiClass['group_limit_num'])) {
+            return;
+        }
+
+        $noFullGroup = $this->getMultiClassGroupDao()->getNoFullGroup($multiClass['id'], $multiClass['group_limit_num']);
+        if (empty($noFullGroup)) {
+            $field = [];
+            $groupNum = $this->getMultiClassGroupDao()->count(['multi_class_id' => $multiClass['id']]);
+            $field['name'] = self::MULTI_CLASS_GROUP_NAME.($groupNum + 1);
+            $field['multi_class_id'] = $multiClass['id'];
+            $field['course_id'] = $multiClass['courseId'];
+            $field['student_num'] = 1;
+            $field['assistant_id'] = 0;
+            $group = $this->getMultiClassGroupDao()->create($field);
+        } else {
+            $group = $this->getMultiClassGroupDao()->update($noFullGroup['id'], ['student_num' => $noFullGroup['student_num'] + 1]);
+        }
+        $studentField = [];
+        $studentField['studentId'] = $studentId;
+        $studentField['courseId'] = $multiClass['courseId'];
+        $studentField['multiClassId'] = $multiClass['id'];
+        $studentField['group_id'] = $group['id'];
+        if (!empty($group)) {
+            $studentField['assistantId'] = $group['assistant_id'];
+        }
+        $this->getAssistantStudentDao()->create($studentField);
+
+        $this->getAssistantStudentService()->setGroupAssistantAndStudents($multiClass['courseId'], $multiClass['id']);
+    }
+
     public function createMultiClassGroups($courseId, $multiClass)
     {
         if ('group' != $multiClass['type'] || empty($multiClass['group_limit_num'])) {
@@ -146,6 +178,6 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
      */
     protected function getAssistantStudentService()
     {
-        return $this->createDao('MultiClass:MultiClassLiveGroupDao');
+        return $this->createService('Assistant:AssistantStudentService');
     }
 }

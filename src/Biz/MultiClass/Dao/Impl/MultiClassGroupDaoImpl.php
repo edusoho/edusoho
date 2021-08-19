@@ -47,6 +47,13 @@ class MultiClassGroupDaoImpl extends AdvancedDaoImpl implements MultiClassGroupD
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function getNoFullGroup($multiClassId, $fullNum)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE multi_class_id = ? AND student_num < ? order by `id` limit 1";
+
+        return $this->db()->fetchAssoc($sql, [$multiClassId, $fullNum]) ?: [];
+    }
+
     public function findByCourseId($courseId)
     {
         return $this->findByFields([
