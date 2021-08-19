@@ -18,7 +18,7 @@ class BindController extends BaseController
         $user = $this->getUserService()->getUserByUUID($uuid);
         $this->getSCRMService()->setUserSCRMData($user);
 
-        $assistant = empty($assistantUuid) ? [] : $this->getUserService()->getUserByScrmUuid($assistantUuid);
+        $assistant = empty($assistantUuid) ? [] : $this->getUserService()->getUserByUUID($assistantUuid);
 
         $qrCodeUrl = $this->getSCRMService()->getAssistantQrCode($assistant);
 
