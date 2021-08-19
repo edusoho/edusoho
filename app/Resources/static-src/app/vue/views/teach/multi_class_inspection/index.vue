@@ -1,13 +1,12 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '班课巡检' }]">
+  <aside-layout :breadcrumbs="[{ name: '班课巡检' }]" :headerTip="headerTip">
     <a-spin class="multi-class-inspection" :spinning="getListLoading">
-      <div class="inspection-title">今日课程</div>
       <a-row :gutter="[24,24]">
         <a-col :sm="24" :lg="12" :xl="8" :xxl="6" v-for="inspection in inspectionList" :key="inspection.id">
-          <inspection-card :inspection="inspection" />
+          <inspection-card :inspection="inspection" @getCardLiveInfo="getLiveInfo" />
         </a-col>
       </a-row>
-      <empty v-if="!getListLoading && !inspectionList.length" />
+      <empty v-if="!(getListLoading || liveInfo) && !inspectionList.length" />
     </a-spin>
   </aside-layout>
 </template>
@@ -30,6 +29,8 @@ export default {
     return {
       inspectionList: [],
       getListLoading: false,
+      headerTip: "班课巡检仅展示今天所有直播课",
+      liveInfo: "",
     };
   },
 
@@ -48,17 +49,11 @@ export default {
         this.getListLoading = false;
       }
     },
+    getLiveInfo() {
+      this.liveInfo = true;
+    },
   },
 };
 </script>
 <style lang='less' scoped>
-.multi-class-inspection {
-  .inspection-title {
-    font-size: 16px;
-    color: #333333;
-    letter-spacing: 0;
-    line-height: 24px;
-    font-weight: 400;
-  }
-}
 </style>

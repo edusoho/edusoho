@@ -645,7 +645,7 @@ export default {
       if (!result) {
         callback('班课名称不能与已创建的相同')
       }
-      if (value && value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2) {
+      if (value && ((value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2) > 40)) {
         callback('班课名称不能超过40个字符')
       }
       callback();
