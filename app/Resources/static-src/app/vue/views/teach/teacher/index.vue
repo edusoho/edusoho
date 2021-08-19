@@ -256,8 +256,6 @@ export default {
     },
 
     async changePromoted(checked, id) {
-      console.log(checked);
-      console.log(id);
       let result = {};
 
       if (checked) {
