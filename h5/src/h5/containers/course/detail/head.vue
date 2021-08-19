@@ -62,7 +62,7 @@
     <div v-show="!isShowOutFocusMask">
       <div
         v-show="
-          ['video', 'audio'].includes(sourceType) &&
+          ['video', 'audio', 'ppt'].includes(sourceType) &&
             !isEncryptionPlus &&
             !finishDialog
         "
@@ -182,7 +182,7 @@ export default {
       allTask: state => state.allTask,
     }),
     showLearnBtn() {
-      return this.joinStatus && ['video', 'audio'].includes(this.sourceType);
+      return this.joinStatus && ['video', 'audio', 'ppt'].includes(this.sourceType);
     },
   },
   watch: {
@@ -241,7 +241,7 @@ export default {
       return !!navigator.userAgent.match(new RegExp('android', 'i'));
     },
     initHead() {
-      if (['video', 'audio'].includes(this.sourceType)) {
+      if (['video', 'audio', 'ppt'].includes(this.sourceType)) {
         window.scrollTo(0, 0);
         if (this.joinStatus) {
           this.initReport();
@@ -344,6 +344,10 @@ export default {
           }
           if (mediaType === 'video') {
             this.formateVedioData(res);
+            return;
+          }
+          if (mediaType === 'ppt') {
+            this.formatePptData(res);
           }
         })
         .catch(err => {
@@ -444,6 +448,46 @@ export default {
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
     },
+
+    async formatePptData(playerParams) {
+      const media = playerParams.media;
+
+      if (!this.cloudSdkCdn) {
+        await this.setCloudAddress();
+      }
+
+      const playerSDKUri = `//${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?` + ~~(Date.now() / 1000 / 60);
+
+      loadScript(playerSDKUri, err => {
+        if (err) throw err;
+
+        const player = new window.QiQiuYun.Player({
+          id: 'course-detail__head--video',
+          resNo: media.resNo,
+          token: media.token,
+          source: {
+            type: playerParams.mediaType,
+            args: media
+          }
+        });
+        this.player = player;
+        player.on('ready', () => {
+          this.initReportData(
+            this.selectedPlanId,
+            this.taskId,
+            this.sourceType,
+          );
+        });
+        player.on('pagechanged', e => {
+          if (e.page === e.total) {
+            if (this.finishCondition && this.finishCondition.type === 'end') {
+              this.reprtData({ eventName: 'finish' });
+            }
+          }
+        });
+      });
+    },
+
     async initPlayer(options) {
       if (!this.cloudSdkCdn) {
         await this.setCloudAddress();
