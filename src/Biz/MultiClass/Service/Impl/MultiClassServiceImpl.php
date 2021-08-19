@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
@@ -79,6 +80,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
+            $this->getMultiClassGroupService()->createMultiClassGroups($fields['courseId'], $multiClass);
             $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
             $this->generateMultiClassTimeRange($fields['courseId']);
 
@@ -385,6 +387,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 
     /**

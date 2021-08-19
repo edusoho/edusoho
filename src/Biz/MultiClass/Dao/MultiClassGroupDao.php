@@ -10,5 +10,9 @@ interface MultiClassGroupDao extends AdvancedDaoInterface
 
     public function findGroupsByMultiClassId($multiClassId);
 
+    public function findGroupsByMultiClassIdAndAssistantIds($multiClassId, $assistantIds);
+
+    public function countMultiClassGroupAssistant($multiClassId);
+
     public function findByCourseId($courseId);
 }
