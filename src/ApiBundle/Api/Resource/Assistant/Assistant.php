@@ -78,9 +78,9 @@ class Assistant extends AbstractResource
         $currentTime = time();
         $members = $this->getMemberService()->findMembersByUserIdsAndRole(array_column($assistants, 'id'), 'assistant');
 
-        $multiClassIds = empty($members) ? [-1] : array_column($members, 'multiClassId');
-        $liveMultiClasses = $this->findMultiClassesByConditions(['ids' => $multiClassIds, 'startTime_LE' => $currentTime, 'endTime_GE' => $currentTime]);
-        $endMultiClasses = $this->findMultiClassesByConditions(['ids' => $multiClassIds, 'endTimeLT' => $currentTime]);
+        $courseIds = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseId');
+        $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLT' => $currentTime]);
+        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGE' => $currentTime]);;
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
         $endMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($endMultiClasses, 'courseId'));
@@ -89,15 +89,19 @@ class Assistant extends AbstractResource
             $assistantMembers = empty($members[$assistant['id']]) ? [] : $members[$assistant['id']];
             $liveMultiClassStudentNum = 0;
             $endMultiClassStudentNum = 0;
+            $liveMultiClassNum = 0;
+            $endMultiClassNum = 0;
             foreach ($assistantMembers as $assistantMember) {
                 $liveMultiClassStudentNum += empty($liveMultiClassStudentCount[$assistantMember['courseId']]) ? 0 : $liveMultiClassStudentCount[$assistantMember['courseId']]['count'];
                 $endMultiClassStudentNum += empty($endMultiClassStudentCount[$assistantMember['courseId']]) ? 0 : $endMultiClassStudentCount[$assistantMember['courseId']]['count'];
+                $liveMultiClassNum += empty($liveMultiClasses[$assistantMember['courseId']]) ? 0 : 1;
+                $endMultiClassNum += empty($endMultiClasses[$assistantMember['courseId']]) ? 0 : 1;
             }
             $assistant['isScrmBind'] = empty($assistant['scrmUuid']) ? 0 : 1;
             $assistant['liveMultiClassStudentNum'] = $liveMultiClassStudentNum;
             $assistant['endMultiClassStudentNum'] = $endMultiClassStudentNum;
-            $assistant['liveMultiClassNum'] = empty($liveMultiClasses[$assistant['id']]) ? 0 : count($liveMultiClasses[$assistant['id']]);
-            $assistant['endMultiClassNum'] = empty($endMultiClasses[$assistant['id']]) ? 0 : count($endMultiClasses[$assistant['id']]);
+            $assistant['liveMultiClassNum'] = $liveMultiClassNum;
+            $assistant['endMultiClassNum'] = $endMultiClassNum;
         }
 
         return $assistants;
@@ -112,7 +116,7 @@ class Assistant extends AbstractResource
             PHP_INT_MAX
         );
 
-        return ArrayToolkit::group($multiClasses, 'userId');
+        return ArrayToolkit::index($multiClasses, 'courseId');
     }
 
     protected function findCourseStudentCount($courseIds)
