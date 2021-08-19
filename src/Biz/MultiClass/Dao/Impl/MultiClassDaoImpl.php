@@ -93,6 +93,7 @@ class MultiClassDaoImpl extends AdvancedDaoImpl implements MultiClassDao
                 'start_time > :startTimeGT',
                 'start_time >= :startTimeGE',
                 'start_time <= :startTimeLE',
+                'end_time > :endTimeGT',
                 'end_time >= :endTimeGE',
                 'end_time <= :endTimeLE',
                 'end_time < :endTimeLT',
