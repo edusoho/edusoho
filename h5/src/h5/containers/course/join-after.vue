@@ -63,6 +63,7 @@
           v-else
           :is="currentTabComponent.name"
           :type="currentTabComponent.type"
+          :details="details"
           @chang-tabs-status="changTabsStatus"
         />
       </keep-alive>

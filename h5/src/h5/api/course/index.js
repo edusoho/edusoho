@@ -107,6 +107,7 @@ export default [
     name: 'createReview',
     url: '/review',
     method: 'POST',
+    disableLoading: true
   },
   {
     // 数据上报
@@ -158,9 +159,9 @@ export default [
     disableLoading: true
   },
   {
-    // 获取课程的评价
-    name: 'getCoursesReviews',
-    url: '/courses/{courseId}/reviews',
+    // 获取评价
+    name: 'getReview',
+    url: '/review',
     method: 'GET',
     disableLoading: true
   }
