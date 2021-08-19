@@ -9,7 +9,7 @@ class AssistantFilter extends Filter
 {
     protected $simpleFields = [
         'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed',
-        'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
+        'email', 'locale', 'uri', 'type', 'roles', 'promoted', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile',
         'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting', 'weChatQrCode',
         'loginIp', 'isScrmBind', 'liveMultiClassNum', 'liveMultiClassStudentNum', 'endMultiClassNum', 'endMultiClassStudentNum',
