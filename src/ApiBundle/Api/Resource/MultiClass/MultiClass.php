@@ -34,7 +34,7 @@ class MultiClass extends AbstractResource
         $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
         $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds'], 'user');
+        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
         $this->getOCUtil()->single($multiClass, ['courseId'], 'course');
 
         $userFilter = new UserFilter();

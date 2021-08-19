@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassRecordService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 
 class AssistantStudentServiceImpl extends BaseService implements AssistantStudentService
@@ -94,55 +95,109 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $assistants = $this->getMemberService()->searchMembers(['courseId' => $courseId, 'role' => 'assistant'], [], 0, PHP_INT_MAX, ['userId']);
-        $assistantIds = ArrayToolkit::column($assistants, 'userId');
+        $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
+        $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : $roleGroupMemberUserIds['student'];
+        $assistantIds = empty($roleGroupMemberUserIds['assistant']) ? [] : $roleGroupMemberUserIds['assistant'];
 
-        if (empty($assistantIds)) {
+        if (empty($assistantIds) || empty($studentIds)) {
             return;
         }
 
         $multiClassAssistants = $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
         $existAssistantIds = ArrayToolkit::column($multiClassAssistants, 'assistantId');
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
 
         $deleteAssistantIds = array_diff($existAssistantIds, $assistantIds);
         if (!empty($deleteAssistantIds)) {
             $this->getAssistantStudentDao()->batchDelete(['assistantIds' => $deleteAssistantIds]);
+            $this->handleMultiClassGroupAssistants($multiClass, $deleteAssistantIds);
         }
 
         $students = $this->getAssistantStudentDao()->findByMultiClassId($multiClassId);
-        $courseMembers = $this->getMemberService()->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['userId']);
-        $noAssistantStudentIds = array_diff(ArrayToolkit::column($courseMembers, 'userId'), ArrayToolkit::column($students, 'studentId'));
+        $noAssistantStudentIds = array_diff($studentIds, ArrayToolkit::column($students, 'studentId'));
 
         $studentNumGroup = $this->getAssistantStudentDao()->countMultiClassGroupStudent($multiClassId);
         $studentNumGroup = ArrayToolkit::index($studentNumGroup, 'assistantId');
 
-        $averageStudentNum = floor(count($courseMembers) / count($assistantIds));
-
-        $data = [];
-        $this->assign($data, $noAssistantStudentIds, $assistantIds, $studentNumGroup, $averageStudentNum);
-
-        $result = [];
-        foreach ($data as $assistantId => $studentIds) {
-            $fields = [];
-            foreach ($studentIds as $studentId) {
-                $field['assistantId'] = $assistantId;
-                $field['studentId'] = $studentId;
-                $field['courseId'] = $courseId;
-                $field['multiClassId'] = $multiClassId;
-                $fields[] = $field;
+        $data = $result = [];
+        if ('group' == $multiClass['type']) {
+            $this->assignGroups($multiClassId, $assistantIds);
+        } else {
+            $this->assignStudents($data, $noAssistantStudentIds, $assistantIds, $studentNumGroup, $multiClass['service_num']);
+            foreach ($data as $assistantId => $studentIds) {
+                $fields = [];
+                foreach ($studentIds as $studentId) {
+                    $field['assistantId'] = $assistantId;
+                    $field['studentId'] = $studentId;
+                    $field['courseId'] = $courseId;
+                    $field['multiClassId'] = $multiClassId;
+                    $fields[] = $field;
+                }
+                $this->getAssistantStudentDao()->batchCreate($fields);
+                $result[] = $fields;
             }
-            $this->getAssistantStudentDao()->batchCreate($fields);
-            $result[] = $fields;
         }
 
         if (!empty($result)) {
-            $this->getLogService()->info('multi_class_assistant', 'update_assistant_student', '调整助教学员', $result);
+            $this->getLogService()->info('multi_class_assistant', 'update_assistant_student', '助教学员变更', $result);
         }
 
         return true;
     }
 
-    private function assign(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
+    private function assignGroups($multiClass, $assistantIds)
+    {
+        $multiClassGroupNumGroups = $this->getMultiClassGroupDao()->countMultiClassGroupAssistant($multiClass['id']);
+        $multiClassGroups = $this->getMultiClassGroupDao()->findGroupsByMultiClassId($multiClass['id']);
+
+        $assistantGroupNum = ceil($multiClass['service_group_num'] / count($assistantIds));
+        $data = [];
+        $this->assignGroup($data, $assistantIds, ArrayToolkit::column($multiClassGroups, 'id'), $multiClassGroupNumGroups, $assistantGroupNum);
+        foreach ($data as $assistantId => $groupIds) {
+            foreach ($groupIds as $groupId) {
+                $this->getMultiClassGroupDao()->update($groupId, ['assistant_id' => $assistantId]);
+            }
+        }
+    }
+
+    private function handleMultiClassGroupAssistants($multiClass, $deleteAssistantIds)
+    {
+        if ('group' != $multiClass['type']) {
+            return;
+        }
+
+        $multiClassGroups = $this->getMultiClassGroupDao()->findGroupsByMultiClassIdAndAssistantIds($multiClass['id'], $deleteAssistantIds);
+        foreach ($multiClassGroups as $multiClassGroup) {
+            $this->getMultiClassGroupDao()->update($multiClassGroup['id'], ['assistant_id' => 0]);
+        }
+    }
+
+    private function assignGroup(&$data, $assistantIds, $groupIds, $multiClassGroupNumGroup, $assistantGroupNum, $remaining = false)
+    {
+        foreach ($assistantIds as $assistantId) {
+            $group = empty($multiClassGroupNumGroup[$assistantId]) ? ['groupNum' => 0] : $multiClassGroupNumGroup[$assistantId];
+
+            if ($remaining) {
+                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($groupIds, 0, $assistantGroupNum));
+                $assistantIds = array_diff($groupIds, $data[$assistantId]);
+                continue;
+            }
+
+            if ($group['groupNum'] >= $assistantGroupNum) {
+                continue;
+            }
+
+            $needGroupNum = $assistantGroupNum - $group['groupNum'];
+            $data[$assistantId] = array_slice($groupIds, 0, $needGroupNum);
+            $groupIds = array_diff($groupIds, $data[$assistantId]);
+        }
+
+        if (!empty($groupIds)) {
+            $this->assignStudents($data, $assistantIds, $groupIds, $multiClassGroupNumGroup, 1, true);
+        }
+    }
+
+    private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
     {
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($studentNumGroup[$assistantId]) ? ['studentNum' => 0] : $studentNumGroup[$assistantId];
@@ -163,7 +218,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         if (!empty($studentIds)) {
-            $this->assign($data, $studentIds, $assistantIds, $studentNumGroup, 1, true);
+            $this->assignStudents($data, $studentIds, $assistantIds, $studentNumGroup, 1, true);
         }
     }
 
@@ -185,7 +240,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function filterAssistantConditions($conditions, $courseId)
     {
         $user = $this->getCurrentUser();
-        $member = $this->getMemberService()->getCourseMember($courseId, $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('assistant' != $member['role']) {
             return $conditions;
         }
@@ -230,7 +285,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
         $updateRecords = [];
         foreach ($groupIds as $groupId) {
-            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ? $groupStudentNum[$groupId]['studentNum'] : 0];
+            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ?: 0];
         }
 
         return $this->getMultiClassGroupDao()->batchUpdate($groupIds, $updateRecords);
@@ -294,7 +349,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     /**
      * @return MemberService
      */
-    protected function getMemberService()
+    protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
     }
@@ -313,5 +368,13 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     protected function getAssistantStudentDao()
     {
         return $this->createDao('Assistant:AssistantStudentDao');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
     }
 }

@@ -1762,6 +1762,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdAndRoles($userId, $roles);
     }
 
+    public function findGroupUserIdsByCourseIdAndRoles($courseId, $roles)
+    {
+        return $this->getMemberDao()->findGroupUserIdsByCourseIdAndRoles($courseId, $roles);
+    }
+
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId)
     {
         return $this->getMemberDao()->getByMultiClassIdAndUserId($multiClassId, $userId);
