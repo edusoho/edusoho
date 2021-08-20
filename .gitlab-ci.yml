@@ -33,37 +33,6 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-#5.3 with nothing:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-#
-#5.3 with Redis:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#    - redis:latest
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-
 7.1 with php-cs-fixer only for custom:
   stage: test
   image: codeages/ci-php71:6
@@ -93,6 +62,7 @@ check env:
   only:
     refs:
       - merge_requests
+      - project/multi-class-two
     variables:
       - $REPOSITORY == "main"
 
