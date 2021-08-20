@@ -23,13 +23,13 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
     public function onLiveActivityCreate(Event $event)
     {
         $activity = $event->getArgument('activity');
-        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId']);
+        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId'], $activity);
     }
 
     public function onLiveActivityUpdate(Event $event)
     {
-        $activity = $event->getArgument('activity');
-        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId']);
+        $activity = $event->getArgument('updateParams');
+        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId'], $activity);
     }
 
     public function onTaskDelete(Event $event)
