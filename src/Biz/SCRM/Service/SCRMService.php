@@ -13,4 +13,6 @@ interface SCRMService
     public function getAssistantQrCode($assistant);
 
     public function getStaffBindQrCodeUrl($assistant);
+
+    public function getWechatOauthLoginUrl($user, $redirectUrl);
 }

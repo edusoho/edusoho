@@ -760,12 +760,7 @@ class CourseController extends CourseBaseController
 
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
 
-        try {
-            $result = $this->getSCRMSdk()->getWechatOauthLoginUrl($user['uuid'], '', $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
-            $bindUrl = $result['url'];
-        } catch (\Exception $e) {
-            $bindUrl = '';
-        }
+        $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user, $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
 
         return $bindUrl;
     }
@@ -1169,15 +1164,5 @@ class CourseController extends CourseBaseController
     protected function getSCRMService()
     {
         return $this->createService('SCRM:SCRMService');
-    }
-
-    /**
-     * @return ScrmService
-     */
-    protected function getSCRMSdk()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['ESCloudSdk.scrm'];
     }
 }
