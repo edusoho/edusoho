@@ -28,7 +28,7 @@ class MultiClassInspectionLiveInfo extends AbstractResource
 
         try {
             $info = $this->getLiveClient()->getLiveRoomRealTimeInfo($activity['ext']['liveId']);
-            if ($info['base']['startTime'] == time() && 'unstart' == $info['info']['status']) {
+            if ($info['base']['startTime'] <= time() && 'unstart' == $info['info']['status']) {
                 $info['info']['status'] = 'ontOnTime';
             }
         } catch (\Exception $e) {
