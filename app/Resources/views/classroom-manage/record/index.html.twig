@@ -4,7 +4,7 @@
 
 {% set submenu = type ~ '_record' %}
 
- {% do script(['libs/bootstrap-datetimepicker.js', 'app/js/classroom-manage/students-manage/index.js']) %}
+ {% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 {% block maincontent %}
     {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'classroom', targetId: classroom.id, operatType: type})) }}
 {% endblock %}
