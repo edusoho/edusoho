@@ -13,25 +13,27 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return [
-            'live.activity.create' => 'onLiveActivityCreate',
-            'live.activity.update' => 'onLiveActivityUpdate',
+            'course.task.create' => 'onTaskCreate',
+            'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'multi_class.create' => 'onMultiClassCreate',
         ];
     }
 
-    public function onLiveActivityCreate(Event $event)
+    public function onTaskCreate(Event $event)
     {
-        $activity = $event->getArgument('activity');
-        $activity['endTime'] = (string) ($activity['startTime'] + $activity['length'] * 60);
-        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId'], $activity);
+        $task = $event->getSubject();
+        if ('live' === $task['type']) {
+            $this->getMultiClassService()->generateMultiClassTimeRange($task['courseId']);
+        }
     }
 
-    public function onLiveActivityUpdate(Event $event)
+    public function onTaskUpdate(Event $event)
     {
-        $activity = $event->getArgument('updateParams');
-        $activity['endTime'] = (string) ($activity['startTime'] + $activity['length'] * 60);
-        $this->getMultiClassService()->generateMultiClassTimeRange($activity['fromCourseId'], $activity);
+        $task = $event->getSubject();
+        if ('live' === $task['type']) {
+            $this->getMultiClassService()->generateMultiClassTimeRange($task['courseId']);
+        }
     }
 
     public function onTaskDelete(Event $event)

@@ -304,7 +304,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByCourseId($courseId);
     }
 
-    public function generateMultiClassTimeRange($courseId, $activity = [])
+    public function generateMultiClassTimeRange($courseId)
     {
         $multiClass = $this->getMultiClassByCourseId($courseId);
         if (empty($multiClass)) {
@@ -313,11 +313,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
 
         $firstLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'ASC'], 0, 1);
         $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['endTime' => 'DESC'], 0, 1);
-
-        if (!empty($activity['startTime'])) {
-            $firstLive = current($firstLive)['startTime'] > $activity['startTime'] ? [$activity] : $firstLive;
-            $endLive = current($endLive)['endTime'] < $activity['endTime'] ? [$activity] : $endLive;
-        }
 
         if (!empty($firstLive)) {
             return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => current($firstLive)['startTime'], 'end_time' => current($endLive)['endTime']]);
