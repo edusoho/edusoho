@@ -70,6 +70,16 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         return $this->getMultiClassGroupDao()->get($id);
     }
 
+    public function deleteMultiClassGroup($id)
+    {
+        return $this->getMultiClassGroupDao()->delete($id);
+    }
+
+    public function updateMultiClassGroup($id, $fields)
+    {
+        return $this->getMultiClassGroupDao()->update($id, $fields);
+    }
+
     public function setGroupNewStudent($multiClass, $studentId)
     {
         if ('group' != $multiClass['type'] || empty($multiClass['group_limit_num'])) {

@@ -1724,7 +1724,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             $result = $this->getMemberDao()->delete($member['id']);
-            $this->getAssistantStudentService()->deleteByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            if (!empty($assistantStudent['group_id'])) {
+                $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($assistantStudent['group_id']);
+                if ($multiClassGroup['student_num'] <= 1) {
+                    $this->getMultiClassGroupService()->deleteMultiClassGroup($multiClassGroup['id']);
+                } else {
+                    $this->getMultiClassGroupService()->updateMultiClassGroup($multiClassGroup['id'], ['student_num' => $multiClassGroup['student_num'] - 1]);
+                }
+            }
+            $this->getAssistantStudentService()->delete($assistantStudent['id']);
 
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'exit', $reason);
@@ -1804,6 +1813,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 
     /**
