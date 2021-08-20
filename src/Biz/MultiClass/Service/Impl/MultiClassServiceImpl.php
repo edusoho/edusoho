@@ -315,8 +315,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['endTime' => 'DESC'], 0, 1);
 
         if (!empty($activity['startTime'])) {
-            $firstLive = $firstLive['startTime'] > $activity['startTime'] ? $activity : $firstLive;
-            $endLive = $endLive['endTime'] < $activity['endTime'] ? $activity : $endLive;
+            $firstLive = current($firstLive)['startTime'] > $activity['startTime'] ? [$activity] : $firstLive;
+            $endLive = current($endLive)['endTime'] < $activity['endTime'] ? [$activity] : $endLive;
         }
 
         if (!empty($firstLive)) {
