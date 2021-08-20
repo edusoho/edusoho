@@ -25,7 +25,7 @@
       <div v-if="liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
         直播未按时开始
       </div>
-      <div v-if="inspection.activityInfo.ext.replayStatus === 'ungenerated' && inspection.startTime <= nowTime" class="inspection-card__button live-start">
+      <div v-if="inspection.activityInfo.ext.replayStatus === 'ungenerated' && (inspection.startTime <= nowTime && inspection.endTime > nowTime) " class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live" />
         进入直播
       </div>
