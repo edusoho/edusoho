@@ -517,6 +517,7 @@ export default {
     updateStudentList(){
       this.changeGroupVisible = false;
       this.getMultiClassStudents();
+      this.getMultiClassStudentsGroup();
     },
     async getMultiClassStudents(params = {}) {
       const { data, paging } = await MultiClassStudent.search({
@@ -584,6 +585,7 @@ export default {
     onRemoveStudent(userId) {
       MultiClassStudent.deleteMultiClassMember(this.multiClass.id, userId).then(res => {
         this.getMultiClassStudents();
+        this.getMultiClassStudentsGroup();
         this.$message.success('移除学员成功！');
       }).catch(err => {
         this.$message.warning('移除学员失败！');
