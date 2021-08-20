@@ -76,9 +76,16 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         return $qrCodeUrl;
     }
 
-    public function getStaffBindQrCodeUrl($assistant)
+    public function getStaffBindUrl($assistant)
     {
-        return $this->getSCRMSdk()->getStaffBindQrCodeUrl($assistant['uuid']);
+        try {
+            $result = $this->getSCRMSdk()->getStaffBindUrl($assistant['uuid']);
+            $bindUrl = $result['url'];
+        } catch (\Exception $e) {
+            $bindUrl = '';
+        }
+
+        return $bindUrl;
     }
 
     public function getWechatOauthLoginUrl($user, $redirectUrl)

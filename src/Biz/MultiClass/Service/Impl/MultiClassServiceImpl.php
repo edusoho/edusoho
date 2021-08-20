@@ -342,14 +342,6 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
     }
 
-    public function getAssistantBindUrl()
-    {
-        $user = $this->getCurrentUser();
-        $user = $this->getUserService()->getUser($user->getId());
-
-        return $this->getSCRMService()->getStaffBindUrl($user['uuid'], '');
-    }
-
     /**
      * @return ScrmService
      */

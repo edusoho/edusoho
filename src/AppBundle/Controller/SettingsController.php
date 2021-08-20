@@ -1009,12 +1009,35 @@ class SettingsController extends BaseController
             throw new AccessDeniedException();
         }
 
-        $assistantQrCodeUrl = $this->getSCRMService()->getStaffBindQrCodeUrl($user);
+        $assistantQrCodeUrl = $this->generateAssistantQrCode($user);
 
         return $this->render('settings/scrm.html.twig', [
             'user' => $user,
             'assistantQrCodeUrl' => $assistantQrCodeUrl,
         ]);
+    }
+
+    protected function generateAssistantQrCode($user)
+    {
+        $url = $this->getSCRMService()->getStaffBindUrl($user);
+        if (empty($url)) {
+            return '';
+        }
+
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            [
+                'userId' => $user['id'],
+                'data' => [
+                    'url' => $url,
+                ],
+                'times' => 1,
+                'duration' => 3600,
+            ]
+        );
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function scrmBindAction(Request $request)
