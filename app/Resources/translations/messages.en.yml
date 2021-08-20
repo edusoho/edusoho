@@ -9438,6 +9438,7 @@ exception.blacklist.not_found: Blacklist does not exist
 exception.course.note.not_found: Note does not exist
 exception.course.note.no_permission: Permission denied
 exception.course.note.duplicate_like: Can't repeat a note on a note！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: Course comment does not exist
 exception.message.not_found_sender_or_receiver: The sender or receiver does not exist
 exception.message.send_to_self: Can't send messages to yourself
