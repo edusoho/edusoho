@@ -25,7 +25,7 @@
       <div v-if="liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
         直播未按时开始
       </div>
-      <div v-if="liveInfo.info.status === 'living'" class="inspection-card__button live-start">
+      <div v-if="inspection.activityInfo.ext.replayStatus === 'ungenerated' && (inspection.startTime <= nowTime && inspection.endTime > nowTime) " class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live" />
         进入直播
       </div>
@@ -33,11 +33,11 @@
         <svg-icon class="icon-live" icon="icon-live-playback" />
         查看回放
       </div>
-      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generating'" class="inspection-card__button live-start">
+      <div v-if="inspection.activityInfo.ext.replayStatus === 'generating'" class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live-playback" />
         直播已结束，回放生成中
       </div>
-      <div v-if="liveInfo.info.status === 'unstart'" class="inspection-card__button no-start-live">
+      <div v-if="inspection.activityInfo.ext.replayStatus === 'ungenerated' && inspection.startTime > nowTime" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
         直播未开始
       </div>
@@ -65,6 +65,7 @@ export default {
         info: {},
         onlineAssistants: [{}],
       },
+      nowTime: Date.parse(new Date()) / 1000,
     };
   },
 
