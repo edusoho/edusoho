@@ -558,7 +558,7 @@ class ClassroomManageController extends BaseController
     {
         $exitReason = '';
         if ($user['id'] != $operator['id'] && $operator) {
-            $exitReason .= $operator['nickname'];
+            $exitReason .= '（'.$operator['nickname'].'）';
         }
         $exitReason .= $record['reason_type'] == 'remove' ? '手动移除' : $record['reason'];
 

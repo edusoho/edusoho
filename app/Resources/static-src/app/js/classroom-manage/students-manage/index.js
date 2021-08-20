@@ -98,7 +98,11 @@ function exportStudents(start, fileName) {
       exportStudents(response.start, response.fileName);
     } else {
       $exportBtn.button('reset');
-      location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
+      if ($exportBtn.data('role')) {
+        location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
+      }else{
+        location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
+      }
     }
   });
 }
