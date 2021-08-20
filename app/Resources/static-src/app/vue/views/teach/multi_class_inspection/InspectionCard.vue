@@ -5,7 +5,7 @@
       <div class="inspection-card__item info text-overflow">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
       <div class="inspection-card__item info">课程时长：{{ inspection.length }}分钟</div>
-      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.currentOnlineNum }}</div>
+      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.currentOnlineNum ? liveInfo.info.currentOnlineNum : 0 }}/{{ inspection.studentNum }}</div>
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
@@ -29,11 +29,11 @@
         <svg-icon class="icon-live" icon="icon-live" />
         进入直播
       </div>
-      <div v-if="liveInfo.info.status === 'finished'" class="inspection-card__button live-start">
+      <div v-if="inspection.activityInfo.ext.replayStatus === 'generated'" class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live-playback" />
         查看回放
       </div>
-      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generated'" class="inspection-card__button live-start">
+      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generating'" class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live-playback" />
         直播已结束，回放生成中
       </div>
