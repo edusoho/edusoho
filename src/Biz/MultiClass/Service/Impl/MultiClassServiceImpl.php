@@ -80,8 +80,12 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-            $this->getMultiClassGroupService()->createMultiClassGroups($fields['courseId'], $multiClass);
-            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            if ('group' == $multiClass['type']) {
+                $this->getMultiClassGroupService()->createMultiClassGroups($fields['courseId'], $multiClass);
+                $this->getAssistantStudentService()->setGroupAssistantAndStudents($fields['courseId'], $multiClass['id']);
+            } else {
+                $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            }
             $this->generateMultiClassTimeRange($fields['courseId']);
 
             $this->getLogService()->info(
@@ -123,7 +127,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            if ('group' == $multiClass['type']) {
+                $this->getAssistantStudentService()->setGroupAssistantAndStudents($fields['courseId'], $multiClass['id']);
+            } else {
+                $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            }
 
             $this->getLogService()->info(
                 'multi_class',
@@ -304,7 +312,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
 
         $firstLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'ASC'], 0, 1);
-        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'DESC'], 0, 1);
+        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['endTime' => 'DESC'], 0, 1);
 
         if (!empty($firstLive)) {
             return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => current($firstLive)['startTime'], 'end_time' => current($endLive)['endTime']]);

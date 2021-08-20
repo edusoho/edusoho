@@ -18,13 +18,13 @@ use Biz\User\Service\UserService;
 
 class AssistantStudentServiceTest extends BaseTestCase
 {
-    public function testSetAssistantStudents()
+    public function testSetAssistantStudents_whenUserEmpty()
     {
         $multiClass = $this->createMultiClass(['type' => 'normal']);
         $this->batchCreateCourseMembers();
 
         $result = $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
-        $this->assertEquals(true, $result);
+        $this->assertEquals(null, $result);
     }
 
     public function testGetByStudentIdAndMultiClassId()

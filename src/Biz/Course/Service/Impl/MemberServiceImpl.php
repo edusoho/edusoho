@@ -20,6 +20,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
@@ -1663,7 +1664,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
             $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($member['courseId']);
             if (!empty($multiClass)) {
-                $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
+                $member = $this->getMemberDao()->update($member['id'], ['multiClassId' => $multiClass['id']]);
+                if ('group' == $multiClass['type']) {
+                    $this->getMultiClassGroupService()->setGroupNewStudent($multiClass, $member['userId']);
+                } else {
+                    $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
+                }
             }
 
             if (!empty($reason)) {
@@ -1718,7 +1724,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             $result = $this->getMemberDao()->delete($member['id']);
-            $this->getAssistantStudentService()->deleteByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            if (!empty($assistantStudent['group_id'])) {
+                $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($assistantStudent['group_id']);
+                if ($multiClassGroup['student_num'] <= 1) {
+                    $this->getMultiClassGroupService()->deleteMultiClassGroup($multiClassGroup['id']);
+                } else {
+                    $this->getMultiClassGroupService()->updateMultiClassGroup($multiClassGroup['id'], ['student_num' => $multiClassGroup['student_num'] - 1]);
+                }
+            }
+            $this->getAssistantStudentService()->delete($assistantStudent['id']);
 
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'exit', $reason);
@@ -1798,6 +1813,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 
     /**

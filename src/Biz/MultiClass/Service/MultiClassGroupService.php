@@ -19,4 +19,10 @@ interface MultiClassGroupService
     public function createLiveGroup($fields);
 
     public function batchCreateLiveGroups($liveGroups);
+
+    public function setGroupNewStudent($multiClass, $studentId);
+
+    public function deleteMultiClassGroup($id);
+
+    public function updateMultiClassGroup($id, $fields);
 }
