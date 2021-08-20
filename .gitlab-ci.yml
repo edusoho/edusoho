@@ -49,6 +49,8 @@ check env:
       - $REPOSITORY == "custom"
 
 5.6 with php-cs-fixer only for main:
+  variables:
+    USER_NAME: $GITLAB_USER_NAME
   stage: test
   image: zhongyunchang/php56-ci
   services:
