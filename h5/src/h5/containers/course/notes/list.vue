@@ -10,6 +10,7 @@
         :key="item.id"
         :item="item"
         @click.native="handleClickViewDetail(item)"
+        @handle-like="handleClickLike"
       />
     </van-list>
     <empty
@@ -76,6 +77,28 @@ export default {
 
     handleClickViewDetail(data) {
       this.$emit('change-current-component', { component: 'Detail', data });
+    },
+
+    handleClickLike(params) {
+      const { noteId, status } = params;
+      const query = {
+        courseId: this.courseId,
+        noteId
+      };
+
+      _.forEach(this.list, item => {
+        const { id, likeNum } = item;
+
+        if (noteId === id) {
+          const note = status ? { like: {}, likeNum: likeNum - 1 } : { like: { status: 1 }, likeNum: (likeNum * 1) + 1 };
+
+          status ? Api.cancelNoteLike({ query }) : Api.noteLike({ query });
+
+          _.assign(item, note);
+
+          return false;
+        }
+      });
     }
   }
 }

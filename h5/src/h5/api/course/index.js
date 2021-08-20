@@ -164,5 +164,19 @@ export default [
     url: '/review',
     method: 'GET',
     disableLoading: true
+  },
+  {
+    // 笔记点赞
+    name: 'noteLike',
+    url: '/course/{courseId}/notes/{noteId}/like',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
+    // 取消笔记点赞
+    name: 'cancelNoteLike',
+    url: '/course/{courseId}/notes/{noteId}/like',
+    method: 'DELETE',
+    disableLoading: true
   }
 ];

@@ -21,9 +21,9 @@
               <span class="info-time">{{ note.createdTime | formatCourseTime }}</span>
               <span class="info-task text-overflow">{{ note.task.title }}</span>
             </div>
-            <span class="like-num">
+            <span class="like-num" :class="{ like: isLike }" @click="handleClickLike">
               <i class="iconfont icon-like"></i>
-              {{ note.likeNum }}
+              {{ noteDetail.likeNum }}
             </span>
           </div>
         </div>
@@ -34,6 +34,9 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import Api from '@/api';
+
 export default {
   name: 'NoteDetail',
 
@@ -44,9 +47,37 @@ export default {
     }
   },
 
+  data() {
+    return {
+      noteDetail: this.note,
+      courseId: this.$route.params.id
+    }
+  },
+
+  computed: {
+    isLike() {
+      return !!_.size(this.noteDetail.like);
+    }
+  },
+
   methods: {
     handleClickGoToList() {
       this.$emit('change-current-component', { component: 'List' });
+    },
+
+    handleClickLike() {
+      const { id, likeNum } = this.noteDetail;
+
+      const query = {
+        courseId: this.courseId,
+        noteId: id
+      };
+
+      const note = this.isLike ? { like: {}, likeNum: likeNum - 1 } : { like: { status: 1 }, likeNum: (likeNum * 1) + 1 };
+
+      this.isLike ? Api.cancelNoteLike({ query }) : Api.noteLike({ query });
+
+      _.assign(this.noteDetail, note);
     }
   }
 }
@@ -124,6 +155,10 @@ export default {
 
         .like-num {
           color: #999;
+        }
+
+        .like {
+          color: $primary-color;
         }
       }
     }
