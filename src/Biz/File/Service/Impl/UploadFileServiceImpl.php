@@ -178,7 +178,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
 
             if (isset($fields['name'])) {
-                $fields['filename'] = $this->purifyHtml($fields['name']);
+                $fields['filename'] = strip_tags($fields['name']);
                 unset($fields['name']);
             }
 
