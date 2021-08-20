@@ -62,7 +62,7 @@ class ClassroomPool extends AbstractPool
             'classroomId' => $targetId,
         ]);
 
-        return $this->prepareCommonSceneIds($conditions, $targetId);
+        return $this->prepareCommonSceneIds($conditions, $targetId, true);
     }
 
     public function buildConditions($pool, $conditions)
