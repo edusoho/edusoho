@@ -33,7 +33,7 @@
         <svg-icon class="icon-live" icon="icon-live-playback" />
         查看回放
       </div>
-      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generating'" class="inspection-card__button live-start">
+      <div v-if="liveInfo.info.status === 'finished'" class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live-playback" />
         直播已结束，回放生成中
       </div>
