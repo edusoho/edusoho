@@ -117,7 +117,7 @@ export default {
         callback(`超出最大人数`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+        callback("请输入整数");
       }
       callback();
     },
@@ -126,7 +126,7 @@ export default {
         callback(`超出最大人数`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+        callback("请输入整数");
       }
       callback();
     },
@@ -135,7 +135,7 @@ export default {
         callback(`超出最大组数`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+        callback("请输入整数");
       }
       callback();
     },
@@ -144,7 +144,7 @@ export default {
         callback(`时间范围在0-200小时`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+        callback("请输入整数");
       }
       callback();
     },
