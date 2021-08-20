@@ -90,6 +90,11 @@ class Course extends AbstractResource
 
     protected function generateScrmQrCode($assistant)
     {
+        $scrmBind = $this->getSCRMService()->isScrmBind();
+        if (empty($scrmBind)) {
+            return '';
+        }
+
         $user = $this->setScrmData();
         if (!empty($user['scrmUuid'])) {
             return $this->getSCRMService()->getAssistantQrCode($assistant);
@@ -126,11 +131,6 @@ class Course extends AbstractResource
 
     protected function getScrmStudentBindUrl($assistant)
     {
-        $scrmBind = $this->getSCRMService()->isScrmBind();
-        if (empty($scrmBind)) {
-            return '';
-        }
-
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
 
         $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user, $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
