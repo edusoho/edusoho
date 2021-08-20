@@ -1949,14 +1949,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @return MultiClassGroupService
-     */
-    private function getMultiClassGroupService()
-    {
-        return $this->createService('MultiClass:MultiClassGroupService');
-    }
-
-    /**
      * @return CategoryService
      */
     protected function getCategoryService()
