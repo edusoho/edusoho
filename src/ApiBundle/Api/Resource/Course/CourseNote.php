@@ -20,6 +20,8 @@ class CourseNote extends AbstractResource
         $note = $this->getCourseNoteService()->getNote($noteId);
         $this->getOCUtil()->single($note, ['userId']);
         $this->getOCUtil()->single($note, ['taskId'], 'task');
+        $user = $this->getCurrentUser();
+        $note['like'] = $this->getCourseNoteService()->getNoteLikeByNoteIdAndUserId($noteId, $user['id']);
 
         return $note;
     }
@@ -33,6 +35,10 @@ class CourseNote extends AbstractResource
         $orderBys = $this->getSortByStr($request->query->get('sort'));
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $notes = $this->getCourseNoteService()->searchNotes($conditions, $orderBys, $offset, $limit);
+        $user = $this->getCurrentUser();
+        foreach ($notes as &$note) {
+            $note['like'] = $this->getCourseNoteService()->getNoteLikeByNoteIdAndUserId($note['id'], $user['id']);
+        }
         $count = $this->getCourseNoteService()->countCourseNotes($conditions);
         $this->getOCUtil()->multiple($notes, ['userId']);
         $this->getOCUtil()->multiple($notes, ['taskId'], 'task');
