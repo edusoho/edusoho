@@ -1074,6 +1074,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return (empty($member) || !in_array('headTeacher', $member['role'])) ? false : true;
     }
 
+    public function findTeacherCanManagerClassRoomCourseSet($classroomId)
+    {
+        $user = $this->getCurrentUser();
+        $userId = $user->getId();
+        $classRoomCourseSets = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $courseSetIds = ArrayToolkit::column($classRoomCourseSets, 'courseSetId');
+        if ($user->isSuperAdmin() || $user->isAdmin() || $this->isClassroomHeadTeacher($classroomId, $userId)) {
+            return $courseSetIds;
+        }
+
+        if ($this->isClassroomTeacher($classroomId, $userId)) {
+            $teacherCourseSets = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+            $courseSetIds = array_intersect(ArrayToolkit::column($teacherCourseSets, 'courseSetId'), $courseSetIds);
+        }
+
+        return  $courseSetIds;
+    }
+
     // becomeStudent的逻辑条件，写注释
     public function becomeStudent($classroomId, $userId, $info = [])
     {

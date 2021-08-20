@@ -32,9 +32,9 @@ class ClassroomPool extends AbstractPool
         return $this->prepareCommonSceneIds($conditions, $pool['target_id']);
     }
 
-    protected function prepareCommonSceneIds($conditions, $targetId)
+    protected function prepareCommonSceneIds($conditions, $targetId, $manage = false)
     {
-        $sceneIds = $this->findSceneIdsByClassroomId($targetId);
+        $sceneIds = $this->findSceneIdsByClassroomId($targetId, $manage);
 
         if (!empty($conditions['classroomCourseSetId'])) {
             $sceneIdsByClassroomCourseSetId = $this->findSceneIdsByClassroomCourseSetId($conditions['classroomCourseSetId']);
@@ -56,7 +56,7 @@ class ClassroomPool extends AbstractPool
 
     public function prepareSceneIdsByTargetId($targetId, $conditions)
     {
-        $this->getClassroomService()->tryManageClassroom($targetId);
+        $this->getClassroomService()->canHandleClassroom($targetId);
 
         $conditions = array_merge($conditions, [
             'classroomId' => $targetId,
@@ -88,7 +88,7 @@ class ClassroomPool extends AbstractPool
         $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
         $wrongQuestions = ArrayToolkit::group($wrongQuestions, 'answer_scene_id');
-        $courSets = $this->classroomCourseSetIdSearch($targetId, $wrongQuestions);
+        $courSets = $this->classroomCourseSetIdSearch($targetId, $wrongQuestions, true);
         $searchConditions['courseSets'] = $courSets;
         $searchConditions['mediaTypes'] = empty($courSets) ? [] : $this->classroomMediaTypeSearch($courSets, $conditions, $wrongQuestions);
         $searchConditions['tasks'] = empty($courSets) ? [] : $this->classroomTaskIdSearch($courSets, $conditions, $wrongQuestions);
@@ -96,7 +96,14 @@ class ClassroomPool extends AbstractPool
         return $searchConditions;
     }
 
-    protected function classroomCourseSetIdSearch($classroomId, $wrongQuestions)
+    protected function teacherManagerClassroomCourseSet($courSetsIds, $classroomId)
+    {
+        $managerClassroomCourseSetIds = $this->getClassroomService()->findTeacherCanManagerClassRoomCourseSet($classroomId);
+
+        return array_intersect(array_values($managerClassroomCourseSetIds), array_values($courSetsIds));
+    }
+
+    protected function classroomCourseSetIdSearch($classroomId, $wrongQuestions, $manage = false)
     {
         if (empty($wrongQuestions)) {
             return [];
@@ -104,6 +111,9 @@ class ClassroomPool extends AbstractPool
 
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        if ($manage) {
+            $courseSetIds = $this->teacherManagerClassroomCourseSet($courseSetIds, $classroomId);
+        }
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSetsGroupId = ArrayToolkit::index($courseSets, 'id');
         $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
@@ -178,11 +188,13 @@ class ClassroomPool extends AbstractPool
         return $courseTasksInfo;
     }
 
-    protected function findSceneIdsByClassroomId($classroomId)
+    protected function findSceneIdsByClassroomId($classroomId, $manage = false)
     {
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
-
+        if ($manage) {
+            $courseSetIds = $this->teacherManagerClassroomCourseSet($courseSetIds, $classroomId);
+        }
         $activates = $this->findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds);
 
         return $this->generateSceneIds($activates);
