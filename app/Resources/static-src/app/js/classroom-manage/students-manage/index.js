@@ -86,7 +86,6 @@ let $exportBtn = $('#export-students-btn');
 
 $exportBtn.on('click', function () {
   $exportBtn.button('loading');
-
   exportStudents();
 });
 

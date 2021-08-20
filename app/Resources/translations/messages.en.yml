@@ -2437,6 +2437,7 @@ classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
+classroom.student_export.exit_record: Export Record
 classroom.add_student_btn: 'Add'
 classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'

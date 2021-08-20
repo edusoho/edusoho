@@ -47,6 +47,9 @@ class MemberOperationRecordController extends BaseController
         $operaterIds = ArrayToolkit::column($records, 'operator_id');
         $users = $this->getUserService()->findUsersByIds(array_merge($userIds, $operaterIds));
 
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
         $orderIds = ArrayToolkit::column($records, 'order_id');
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
@@ -60,6 +63,7 @@ class MemberOperationRecordController extends BaseController
                 'paginator' => $paginator,
                 'records' => $records,
                 'users' => $users,
+                'profiles' => $profiles,
                 'orders' => $orders,
                 'conditions' => $condition,
             )

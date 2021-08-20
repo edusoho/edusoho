@@ -2802,6 +2802,7 @@ classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
+classroom.student_export.exit_record: 导出退出记录
 classroom.add_student_btn: 添加学员
 classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
