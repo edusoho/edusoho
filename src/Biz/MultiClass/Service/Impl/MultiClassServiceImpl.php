@@ -18,8 +18,8 @@ use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use ESCloud\SDK\Service\ScrmService;
 use Codeages\Biz\Framework\Event\Event;
+use ESCloud\SDK\Service\ScrmService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
