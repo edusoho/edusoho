@@ -563,7 +563,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $teacherMembers = $this->buildTeachers($course, $teachers, $multiClassId);
+        $teacherMembers = $this->buildTeachers($course, $teachers, $existTeacherMembers, $multiClassId);
         if (empty($teacherMembers)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
@@ -671,17 +671,24 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseDao()->update($courseId, $fields);
     }
 
-    private function buildTeachers($course, $teachers, $multiClassId)
+    private function buildTeachers($course, $teachers, $existTeachers, $multiClassId)
     {
         $teacherMembers = [];
         $teachers = ArrayToolkit::index($teachers, 'id');
         $users = $this->getUserService()->findUsersByIds(array_keys($teachers));
+        $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
         $seq = 0;
         foreach ($teachers as $index => $teacher) {
             $user = $users[$teacher['id']];
             if (in_array('ROLE_TEACHER', $user['roles']) || $course['creator'] == $user['id']) {
+                if (empty($multiClassId)) {
+                    $teacherMultiClassId = empty($existTeachers[$teacher['id']]) ? 0 : $existTeachers[$teacher['id']]['multiClassId'];
+                } else {
+                    $teacherMultiClassId = $multiClassId;
+                }
+
                 $teacherMembers[] = [
-                    'multiClassId' => $multiClassId,
+                    'multiClassId' => $teacherMultiClassId,
                     'courseId' => $course['id'],
                     'courseSetId' => $course['courseSetId'],
                     'userId' => $teacher['id'],
