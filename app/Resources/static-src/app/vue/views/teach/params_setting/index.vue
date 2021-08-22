@@ -1,23 +1,28 @@
 <template>
   <aside-layout :breadcrumbs="[{ name: '参数设置' }]">
-    <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 10 }" :wrapper-col="{ span: 10 }" style="max-width: 500px;">
-      <a-form-model-item ref="group_number_limit" label="分组学员人数上限" prop="group_number_limit">
+    <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 10 }" :wrapper-col="{ span: 14 }" style="max-width: 500px;">
+      <a-form-model-item ref="group_number_limit" label="分组容纳学员上限" prop="group_number_limit" extra='新建分组大班课时将默认填入该参数'>
         <a-input v-model="form.group_number_limit">
           <span slot="suffix">人</span>
         </a-input>
       </a-form-model-item>
-      <a-form-model-item ref="assistant_service_limit" label="助教服务学员人数上限" prop="assistant_service_limit">
+      <a-form-model-item ref="assistant_group_limit" label="助教服务组数上限" prop="assistant_group_limit" extra='新建分组大班课时将默认填入该参数'>
+        <a-input v-model="form.assistant_group_limit">
+          <span slot="suffix">人</span>
+        </a-input>
+      </a-form-model-item>
+      <a-form-model-item ref="assistant_service_limit" label="助教服务学员人数上限" prop="assistant_service_limit" extra='新建大班课时将默认填入该参数'>
         <a-input v-model="form.assistant_service_limit">
           <span slot="suffix">人</span>
         </a-input>
       </a-form-model-item>
-      <a-form-model-item ref="review_time_limit" label="超时未批阅时间设定" prop="review_time_limit">
+      <a-form-model-item ref="review_time_limit" label="超时未批阅时间设定" prop="review_time_limit" extra='针对所有班课的参数设置'>
         <a-input v-model="form.review_time_limit">
           <span slot="suffix">小时</span>
         </a-input>
+        <span class="default-time">默认0为不限时间</span>
       </a-form-model-item>
     </a-form-model>
-    <p class="setup-tip">此处为全局设置，将应用到默认分组大班课，大班课和分组大班课内设置可覆盖全局设置</p>
     <div class="setup-btn">
       <a-space size="large">
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
@@ -51,6 +56,17 @@ export default {
           trigger: "blur",
         },
       ],
+      assistant_group_limit: [
+        {
+          required: true,
+          message: "请输入助教服务组数上限",
+          trigger: "blur",
+        },
+        {
+          validator: this.validatorAssistantGroup,
+          trigger: "blur",
+        },
+      ],
       assistant_service_limit: [
         {
           required: true,
@@ -80,6 +96,7 @@ export default {
         group_number_limit: "",
         assistant_service_limit: "",
         review_time_limit: "",
+        assistant_group_limit: "",
       },
       ajaxLoading: false,
     };
@@ -94,23 +111,31 @@ export default {
   methods: {
     async getParams() {
       this.form = await MultiClassSetting.search();
-      console.log(this.form);
     },
     validatorGroupNumber(rule, value, callback) {
-      if (value > 10000 || value == 0) {
-        callback(`人数范围在1-10000人`);
+      if (value > 10000) {
+        callback(`超出最大人数`);
       }
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
+        callback("请输入整数");
       }
       callback();
     },
     validatorAssistantService(rule, value, callback) {
-      if (value > 10000 || value == 0) {
-        callback(`人数范围在1-10000人`);
+      if (value > 10000) {
+        callback(`超出最大人数`);
       }
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
+        callback("请输入整数");
+      }
+      callback();
+    },
+    validatorAssistantGroup(rule, value, callback) {
+      if (value > 10000) {
+        callback(`超出最大组数`);
+      }
+      if (/^\+?[0-9][0-9]*$/.test(value) === false) {
+        callback("请输入整数");
       }
       callback();
     },
@@ -119,7 +144,7 @@ export default {
         callback(`时间范围在0-200小时`);
       }
       if (/^\+?[0-9][0-9]*$/.test(value) === false) {
-        callback("请输入正整数");
+        callback("请输入整数");
       }
       callback();
     },
@@ -137,14 +162,7 @@ export default {
   },
 };
 </script>
-<style scoped>
-.setup-tip {
-  margin-left: 48px;
-  font-size: 14px;
-  color: #999999;
-  line-height: 20px;
-  font-weight: 400;
-}
+<style lang='less' scoped>
 .setup-btn {
   position: fixed;
   bottom: 0;
@@ -153,6 +171,16 @@ export default {
   padding: 12px 0 12px 164px;
   margin: 0;
   border-top: solid 1px #ebebeb;
-  background-color: #ffffff;
+  background-color: #fff;
+}
+.default-time {
+  position: absolute;
+  left: 310px;
+  width: 150px;
+  color: #999;
+  font-size: 14px;
+}
+/deep/.ant-form-extra {
+  color: #999;
 }
 </style>

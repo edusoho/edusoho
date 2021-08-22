@@ -13,8 +13,7 @@
             trigger: 'blur',
             rules: [
               { required: true, message: '请填写班课名称' },
-              { validator: validatorTitle },
-              { validator: validatorTitleLength }
+              { validator: validatorTitle }
             ]
           }]"
           placeholder="请输入班课名称"
@@ -130,30 +129,16 @@
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-      <a-form-item label="助教服务上限人数">
-        <a-select 
-            placeholder="默认参数设置"
-            style="width: 200px"
-            v-decorator="['service_setting_type']"
-            >
-          <a-select-option value="default">
-              默认参数设置
-          </a-select-option>
-          <a-select-option value="custom">
-              自定义设置
-          </a-select-option>
-        </a-select>
-         <a-form-item v-if="form.getFieldValue('service_setting_type') === 'custom'" class="mt12 assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
-           <a-input v-decorator="['service_num', {
-              rules: [
-                { required: true, message: '请输入助教服务上限人数' },
-                { validator: validateAssistantNum }
-               ]
-             }]">
-              <span slot="suffix">人</span>
-            </a-input>
-        </a-form-item>
-
+      <a-form-item class="assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+          <a-input v-decorator="['service_num', {
+            rules: [
+              { required: true, message: '请输入助教服务上限人数' },
+              { validator: validateAssistantNum }
+              ]
+            }]">
+            <span slot="suffix">人</span>
+          </a-input>
+          <span class="setup-tip">可去【参数设置】中设置默认值</span>
       </a-form-item>
       <a-form-item label="排课">
         <Schedule
@@ -223,7 +208,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClassSetting, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -300,30 +285,10 @@ export default {
   created() {
     // 编辑班课
     this.fetchNotificationSetting();
-    const id = this.$route.query.id;
-    if (id) {
-      this.multiClassId = id;
-      this.mode = 'editor';
-      this.fetchEditorMultiClass();
-      return;
-    }
-
+    this.isEdit();
+    this.getMultiClassSetting();
     // 创建新课程后
-    let course = this.$route.query.course
-    if (course) {
-      course = JSON.parse(course)
-
-      this.selectedCourseId = course.id;
-      this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
-      this.course.list.push(course)
-      this.$set(this.course, 'initialValue', course.id)
-      this.fetchCourse();
-      this.fetchProducts();
-      this.fetchCourseInfo(course.id);
-      return;
-    }
-
+    this.afterCreateCourse();
     this.initFetch();
   },
 
@@ -333,6 +298,32 @@ export default {
       this.fetchAssistants();
       this.fetchProducts();
       this.fetchTeacher();
+    },
+    isEdit() {
+      const id = this.$route.query.id;
+      if (id) {
+        this.multiClassId = id;
+        this.mode = 'editor';
+        this.fetchEditorMultiClass();
+        return;
+      }
+    },
+
+    afterCreateCourse() {
+      let course = this.$route.query.course
+      if (course) {
+        course = JSON.parse(course)
+
+        this.selectedCourseId = course.id;
+        this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
+        this.course.list.push(course)
+        this.$set(this.course, 'initialValue', course.id)
+        this.fetchCourse();
+        this.fetchProducts();
+        this.fetchCourseInfo(course.id);
+        return;
+      }
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
@@ -420,8 +411,8 @@ export default {
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
         console.log(res);
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_setting_type, service_num, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_setting_type':service_setting_type , 'service_num':service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_num': service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -651,13 +642,13 @@ export default {
         title: value,
         exceptId: this.multiClassId
       });
-
-      result ? callback() : callback('班课名称不能与已创建的相同');
-    },
-
-    validatorTitleLength(rule, value, callback) {
-      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
-      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+      if (!result) {
+        callback('班课名称不能与已创建的相同')
+      }
+      if (value && ((value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2) > 40)) {
+        callback('班课名称不能超过40个字符')
+      }
+      callback();
     },
 
     validatorAssistant: (rule, value, callback) => {
@@ -665,7 +656,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
 
@@ -676,16 +667,16 @@ export default {
       callback()
     },
      validateAssistantNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
-        callback('请输入正整数')
+      if (value && /^\+?[0-9][0-9]*$/.test(value) === false) {
+        callback("请输入整数");
       }
       callback()
     },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
-        console.log('values:',values);
         if (err) return
+        values.type = 'normal';
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -725,6 +716,11 @@ export default {
         name: 'MultiClass',
         params
       });
+    },
+    async getMultiClassSetting() {
+      if (this.mode == 'editor') return;
+      const { assistant_service_limit } = await MultiClassSetting.search();
+      this.form.setFieldsValue({ 'service_num': assistant_service_limit });
     },
   }
 }
@@ -774,6 +770,12 @@ export default {
 .assistant-tip{
   margin-left: 48px;
   color: @brand-danger
+}
+.setup-tip{
+  position: absolute;
+  left: 110px;
+  width: 200px;
+  color: @cdv2-dark-assist;
 }
 
 @import "~app/less/admin-v2/variables.less";

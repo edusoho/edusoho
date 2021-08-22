@@ -1,5 +1,5 @@
 <template>
-   <aside-layout :breadcrumbs="[{ name: '班课管理' }]" :headerTip="headerTip" :headerTitle="headerTitle">
+   <aside-layout :breadcrumbs="[{ name: '班课列表' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin :spinning="getListLoading">
       <div class="clearfix cd-mb16">
         <a-select
@@ -60,8 +60,9 @@
           v-model="search.keywords" 
           placeholder="请输入班课名称" 
           style="width: 224px"
-          :allowClear="true" />
-          <a-button type="primary" @click="searchMultiClass">检索</a-button>
+          :allowClear="true"
+          @pressEnter="searchMultiClass" />
+          <a-button type="primary" @click="searchMultiClass">搜索</a-button>
         <a-dropdown v-if="isPermission('multi_class_create')">
           <a-button class="pull-right" type="primary">新建班课</a-button>
           <a-menu slot="overlay">
@@ -79,6 +80,7 @@
         :pagination="paging"
         :data-source="multiClassList"
         @change="change"
+        :scroll="{ x: 2000 }"
         :rowKey="record => record.id">
         <a
           slot="class_title"
@@ -102,9 +104,9 @@
           <span>{{text === 'normal'? '大班课':'分组大班课'}}</span>
         </template>
         <template slot="status" slot-scope="text">
-          <span v-if="text === 'notStart'">未开课</span>
-          <span v-else-if="text === 'living'">开课中</span>
-          <span v-else>已结课</span>
+          <span v-if="text === 'notStart'" style="font-size: 14px; color: #fb8d4d;">未开课</span>
+          <span v-else-if="text === 'living'" style="font-size: 14px; color: #43bc60;">开课中</span>
+          <span v-else style="font-size: 14px; color: #999;">已结课</span>
         </template>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
@@ -159,36 +161,34 @@ const columns = [
   {
     title: '班课名称',
     dataIndex: 'title',
-    width: '15%',
+    width: '150px',
     ellipsis: true,
     scopedSlots: { customRender: 'class_title' },
   },
   {
     title: '课程名称',
     dataIndex: 'course',
-    width: '15%',
+    width: '150px',
     ellipsis: true,
     scopedSlots: { customRender: 'course' },
   },
   {
     title: '班课类型',
     dataIndex: 'type',
-    width: '10%',
-    ellipsis: true,
+    width: '120px',
     scopedSlots: { customRender: 'type' },
   },
   {
     title: '班课状态',
     dataIndex: 'status',
-    width: '10%',
-    ellipsis: true,
+    width: '100px',
     scopedSlots: { customRender: 'status' },
   },
   {
     title: '所属产品',
     dataIndex: 'product',
     key: 'productIds',
-    width: '10%',
+    width: '130px',
     ellipsis: true,
     filters: [],
   },
@@ -201,27 +201,24 @@ const columns = [
   {
     title: '已完成/课时',
     dataIndex: 'taskNum',
-    width: '10%',
+    width: '120px',
     scopedSlots: { customRender: 'taskNum' },
   },
   {
     title: '授课老师',
     dataIndex: 'teacher',
-    width: '8%',
-    ellipsis: true
+    width: '150px',
   },
   {
     title: '助教老师',
     dataIndex: 'assistant',
     width: '160px',
-    ellipsis: true,
     scopedSlots: { customRender: 'assistant' },
   },
   {
     title: '已报班人数',
     dataIndex: 'studentNum',
-    width: '108px',
-    ellipsis: true,
+    width: '130px',
     sorter: true,
     scopedSlots: { customRender: 'studentNum' },
   },
@@ -229,12 +226,11 @@ const columns = [
     title: '最大服务人数',
     dataIndex: 'maxServiceNum',
     width: '120px',
-    ellipsis: true,
   },
   {
     title: '创建时间',
     dataIndex: 'createdTime',
-    width: '160px',
+    width: '150px',
     sorter: true,
     scopedSlots: { customRender: 'createdTime' },
   },
@@ -242,6 +238,7 @@ const columns = [
     title: '操作',
     dataIndex: 'action',
     width: '200px',
+    fixed: 'right',
     scopedSlots: { customRender: 'action' },
   },
 ];
@@ -300,9 +297,9 @@ export default {
     this.getTeacherList();
   },
   methods: {
-    goToCreateMultiClassPage(param) {
+    goToCreateMultiClassPage(params) {
       this.$router.push({
-        name: param
+        name: params
       })
     },
     async getTeacherList(){
@@ -311,7 +308,6 @@ export default {
        limit: 100000
      });
      this.teacher = data;
-     console.log(this.teacher);
     },
 
     async getMultiClassProductList() {

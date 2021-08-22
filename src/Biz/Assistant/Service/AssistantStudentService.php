@@ -6,6 +6,8 @@ interface AssistantStudentService
 {
     public function setAssistantStudents($courseId, $multiClassId);
 
+    public function setGroupAssistantAndStudents($courseId, $multiClassId);
+
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId);
 
     public function getByStudentIdAndCourseId($studentId, $courseId);
@@ -29,6 +31,8 @@ interface AssistantStudentService
     public function deleteByStudentIdAndCourseId($studentId, $courseId);
 
     public function findByMultiClassId($multiClassId);
+
+    public function findByMultiClassIds($multiClassIds);
 
     public function batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId);
 

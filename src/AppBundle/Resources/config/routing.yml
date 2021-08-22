@@ -99,6 +99,10 @@ oauth2_login_create:
     path:  /oauth2/login/create
     defaults: { _controller: AppBundle:OAuth2/Login:create }
 
+original_account_check:
+  path: /original_account_check/{type}
+  defaults: { _controller: AppBundle:OAuth2/Login:OriginalAccountCheck }
+
 oauth2_login_success:
     path:  /oauth2/login/success
     defaults: { _controller: AppBundle:OAuth2/Login:success }
@@ -1343,6 +1347,10 @@ edu_cloud_search_callback:
 settings_bind_mobile:
     path:  /settings/bind_mobile
     defaults: { _controller: AppBundle:Settings:bindMobile }
+
+settings_mobile_bind:
+  path:  /settings/mobile_bind
+  defaults: { _controller: AppBundle:Settings:mobileBind }
 
 settings_check_login_password:
     path:  /settings/check_login_password
@@ -3788,3 +3796,16 @@ feedback:
 scrm_user_bind_result:
   path: /scrm/user/{uuid}/bind/result
   defaults: { _controller: AppBundle:SCRM/Bind:result }
+
+live_cloud_callback:
+  path: /callback/live/handle
+  defaults: { _controller: AppBundle:Callback/Live:handle }
+
+agreement:
+  path:  /agreement/course/purchase
+  defaults: { _controller: AppBundle:Agreement:coursePurchaseAgreement }
+
+disclaimers:
+  path:  /disclaimers
+  defaults: { _controller: AppBundle:Agreement:disclaimers }
+

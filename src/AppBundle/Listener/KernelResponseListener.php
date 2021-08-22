@@ -3,9 +3,9 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Controller\OAuth2\OAuthUser;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelResponseListener extends AbstractSecurityDisabledListener
@@ -40,6 +40,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
             if (in_array($request->getPathInfo(), $whiteList) || strstr($request->getPathInfo(), '/admin')
                 || strstr($request->getPathInfo(), '/register/submited') || strstr($request->getPathInfo(), '/mapi_v2')
+                || strstr($request->getPathInfo(), '/drag_captcha')
             ) {
                 return;
             }
@@ -47,7 +48,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
             //TODO 因为移动端的第三方注册做到了web端，所以增加一个 skip 判断，如果以后移动端端这块业务剥离，这个判断要去掉
             if (!$isFillUserInfo && !$request->getSession()->get(OAuthUser::SESSION_SKIP_KEY)) {
-                $url = $this->container->get('router')->generate('login_after_fill_userinfo', array('goto' => $this->getTargetPath($request)));
+                $url = $this->container->get('router')->generate('login_after_fill_userinfo', ['goto' => $this->getTargetPath($request)]);
 
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
@@ -59,7 +60,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
     protected function getRouteWhiteList()
     {
-        return array(
+        return [
             '/fill/userinfo', '/login', '/logout', '/login_check', '/register/mobile/check',
             '/register/email/check', '/login/bind/weixinmob/newset',
             '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
@@ -73,11 +74,12 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
-            '/register/email_or_mobile/check', '/settings/bind_mobile',
-        );
+            '/register/email_or_mobile/check', '/settings/bind_mobile', '/scrm/buy/goods/callback',
+            '/settings/mobile_bind', '/edu_cloud/sms_send_check_captcha',
+        ];
     }
 
-    protected function generateUrl($router, $params = array(), $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($router, $params = [], $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($router, $params, $withHost);
     }
@@ -92,18 +94,18 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             $targetPath = $request->headers->get('Referer');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($targetPath == $this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        if ($url[0] == $this->generateUrl('password_reset_update', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $targetPath;

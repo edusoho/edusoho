@@ -2,9 +2,9 @@
 
 namespace AppBundle\Handler;
 
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler;
+use Topxia\Service\Common\ServiceKernel;
 
 class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 {
@@ -26,6 +26,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             $this->targetUrl = $this->httpUtils->generateUri($request, 'homepage');
         }
 
+        setcookie('is_skip_mobile_bind', 0, -1);
         if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
             setcookie('REMEMBERME');
@@ -35,7 +36,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             }
 
             $url = $this->httpUtils->generateUri($request, 'partner_logout');
-            $queries = array('userId' => $user['id'], 'goto' => $this->targetUrl);
+            $queries = ['userId' => $user['id'], 'goto' => $this->targetUrl];
             $url = $url.'?'.http_build_query($queries);
 
             return $this->httpUtils->createRedirectResponse($request, $url);

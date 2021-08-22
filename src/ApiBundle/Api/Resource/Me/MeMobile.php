@@ -22,7 +22,6 @@ class MeMobile extends AbstractResource
         if (!ArrayToolkit::requireds($fields, array(
             'smsToken',
             'smsCode',
-            'password',
         ))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -32,7 +31,7 @@ class MeMobile extends AbstractResource
             throw UserException::ERROR_MOBILE_REGISTERED();
         }
 
-        if (!$this->getUserService()->verifyPassword($user['id'], $fields['password'])) {
+        if (!empty($fields['password']) && !$this->getUserService()->verifyPassword($user['id'], $fields['password'])) {
             throw UserException::PASSWORD_ERROR();
         }
 

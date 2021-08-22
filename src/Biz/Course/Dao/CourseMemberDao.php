@@ -158,4 +158,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
     public function deleteByMultiClassAndRole($multiClassId, $role);
 
     public function findMultiClassIdsByUserId($userId);
+
+    public function countGroupByCourseId($conditions);
+
+    public function findUserIdsByCourseIdAndRoles($courseId, $roles);
 }

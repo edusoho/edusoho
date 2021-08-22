@@ -22,7 +22,7 @@ class AddMultiClassGroup extends Migration
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='班课分组';
 
-            CREATE TABLE IF NOT EXISTS `multi_class_group_live` (
+            CREATE TABLE IF NOT EXISTS `multi_class_live_group` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `group_id` int(10) unsigned NOT NULL COMMENT '分组ID',
                 `live_code` varchar(64) NOT NULL default '' COMMENT '直播分组Code',

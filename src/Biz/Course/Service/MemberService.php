@@ -210,4 +210,8 @@ interface MemberService
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId);
 
     public function findMultiClassIdsByUserId($userId);
+
+    public function countGroupByCourseId($conditions);
+
+    public function findGroupUserIdsByCourseIdAndRoles($courseId, $roles);
 }

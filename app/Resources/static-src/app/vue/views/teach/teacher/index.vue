@@ -19,8 +19,8 @@
       @change="handleTableChange"
     >
       <template slot="nickname" slot-scope="text, record">
-          <a-avatar :size="48" :src="record.mediumAvatar" icon="user"></a-avatar>
-          <a @click="edit(item.id)" style="margin-left: 8px">{{ text }}</a>
+          <a-avatar :size="48" :src="record.avatar.middle" icon="user"></a-avatar>
+          <a class="ml8" @click="edit(record.id)">{{ text }}</a>
       </template>
       
 
@@ -94,7 +94,6 @@
             style="width: 100%;"
             v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' },
-              { type: 'integer', message: '请输入整数' },
               { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
           />
@@ -111,7 +110,6 @@ import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import { Teacher, UserProfiles } from "common/vue/service/index.js";
 import userInfoTable from "../../components/userInfoTable";
-import { Avatar } from 'ant-design-vue'
 
 const columns = [
   {
@@ -160,7 +158,6 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    AAvatar: Avatar
   },
 
   data() {
@@ -213,7 +210,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
+      this.pagination = pagination;
     },
 
     async onSearch(nickname) {
@@ -291,7 +288,7 @@ export default {
     },
 
     validateRange(rule, value, callback) {
-      if (_.inRange(value, 0, 10001) === false) {
+      if (value && (_.inRange(value, 0, 10001) === false || /^\+?[0-9][0-9]*$/.test(value) === false)) {
         callback('请输入0-10000的整数')
       }
 
