@@ -12,7 +12,7 @@ class AddUploadScrmUserDataJob extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $job = $connection->fetchAssoc("select * from biz_scheduler_job where name = 'GenerateMultiClassRecordJob'");
+        $job = $connection->fetchAssoc("select * from biz_scheduler_job where name = 'UploadSCRMUserDataJob'");
         if (empty($job)) {
             $randNum = rand(1, 29);
             $currentTime = time();
@@ -33,10 +33,10 @@ class AddUploadScrmUserDataJob extends Migration
                 `created_time`
             ) VALUES
             (
-                'GenerateMultiClassRecordJob',
+                'UploadSCRMUserDataJob',
                 'default',
                 '{$randNum}/30 * * * *',
-                'Biz\\\\MultiClass\\\\Job\\\\GenerateMultiClassRecordJob',
+                'Biz\\\\SCRM\\\\Job\\\\UploadSCRMUserDataJob',
                 '',
                 '100',
                 '{$currentTime}',

@@ -33,11 +33,11 @@ class UploadSCRMUserDataJob extends AbstractJob
                 $user = $users[$record['user_id']];
                 $assistant = $assistants[$record['assistant_id']];
                 $uploadList[] = [
-                    'customerUniqueId' => $user['scrmUuid'],
-                    'staffId' => $assistant['scrmStaffId'],
                     'ticket' => $record['sign'],
                     'title' => $record['data']['title'],
                     'content' => $record['data']['content'],
+                    'customerUniqueId' => $user['scrmUuid'],
+                    'staffId' => (int) $assistant['scrmStaffId'],
                 ];
 
                 $updateData[] = [

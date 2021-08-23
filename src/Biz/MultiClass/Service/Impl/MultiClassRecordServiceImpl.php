@@ -80,11 +80,11 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
 
         try {
             $list = [[
-                'customerUniqueId' => $user['scrmUuid'],
-                'staffId' => $assistant['scrmStaffId'],
                 'ticket' => $record['sign'],
                 'title' => $record['data']['title'],
                 'content' => $record['data']['content'],
+                'customerUniqueId' => $user['scrmUuid'],
+                'staffId' => (int) $assistant['scrmStaffId'],
             ]];
 
             $result = $this->getSCRMService()->uploadSCRMUserData($list);
