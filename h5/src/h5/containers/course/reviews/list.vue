@@ -3,6 +3,7 @@
     <van-list
       v-model="loading"
       :finished="finished"
+      :loading-text="$t('toast.loading')"
       @load="onLoad"
     >
       <review-item v-for="item in list" :key="item.id" :item="item" />
@@ -10,7 +11,7 @@
 
     <empty
       v-if="!list.length && finished"
-      text="暂无评价"
+      :text="$t('courseLearning.noContent')"
     />
 
     <div class="create-btn">
@@ -65,7 +66,7 @@ export default {
 
   computed: {
     createReviewBtnText() {
-      return _.size(this.userReview) ? '重新评价' : '写评价';
+      return _.size(this.userReview) ? this.$t('courseLearning.reEvaluation') : this.$t('courseLearning.writeEvaluation');
     }
   },
 

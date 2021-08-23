@@ -8,14 +8,14 @@
         @click="handleClickGoToList"
       />
       <h3 class="detail-header__title">{{ titleText }}</h3>
-      <span class="detail-header__btn">回复</span>
+      <span class="detail-header__btn">{{ $t('courseLearning.reply') }}</span>
     </div>
 
     <div class="discussion-body">
       <div class="discussion-body__info">
         <img class="avatar" :src="discussion.user.avatar.small">
         <div class="info-right">
-          <span class="info-nickname">{{ discussion.user.nickname }}发起</span>
+          <span class="info-nickname">{{ discussion.user.nickname }} {{ $t('courseLearning.initiate') }}</span>
           <span class="info-time">{{ discussion.createdTime | formatCourseTime }}</span>
         </div>
       </div>
@@ -26,7 +26,6 @@
     <van-list
       v-model="loading"
       :finished="finished"
-      finished-text="没有更多了"
       @load="fetchCourseThreadPost"
     >
       <reply-item v-for="item in replyList" :key="item.id" :item="item" />
@@ -36,7 +35,7 @@
       <van-field
         ref="replyInput"
         v-model="content"
-        placeholder="回复..."
+        :placeholder="$t('courseLearning.reply2')"
         @keyup.enter="handleClickEnter"
       />
     </div>
@@ -83,7 +82,7 @@ export default {
 
   computed: {
     titleText() {
-      return this.type === 'question' ? '问答详情' : '话题详情';
+      return this.type === 'question' ? this.$t('courseLearning.QADetails') : this.$t('courseLearning.topicDetails');
     }
   },
 

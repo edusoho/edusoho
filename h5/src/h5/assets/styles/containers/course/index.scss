@@ -246,6 +246,9 @@
 				position: absolute;
 				top: 50%;
 				left: 50%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				width: 80%;
 				color: #fff;
 				transform: translate(-50%, -50%);
@@ -259,12 +262,11 @@
 				}
 
 				&__btn {
-					width: vw(72);
-					height: vw(24);
-					margin: vw(16) auto 0;
+					display: inline-block;
+					margin-top: vw(16);
+					padding: vw(4) vw(12);
 					font-size: vw(12);
-					line-height: vw(24);
-					text-align: center;
+					line-height: vw(16);
 					background: rgba(255, 255, 255, 0.3);
 					border-radius: vw(18);
 				}

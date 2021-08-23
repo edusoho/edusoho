@@ -7,16 +7,16 @@
         color="#000"
         @click="handleClickGoToList"
       />
-      <h3 class="create-header__title">发话题</h3>
-      <span class="create-header__btn" @click="createDiscussion">发布</span>
+      <h3 class="create-header__title">{{ text.title }}</h3>
+      <span class="create-header__btn" @click="createDiscussion">{{ $t('courseLearning.publish') }}</span>
     </div>
 
     <van-form ref="form">
       <div class="discussion-create__title">
         <van-field
           v-model="title"
-          placeholder="发起话题标题"
-          :rules="[{ required: true, message: '请输入标题' }]"
+          :placeholder="text.placeholderTitle"
+          :rules="[{ required: true, message: $t('courseLearning.pleaseEnterATitle') }]"
         />
       </div>
 
@@ -25,8 +25,8 @@
           v-model="content"
           type="textarea"
           autosize
-          placeholder="发起话题内容..."
-          :rules="[{ required: true, message: '请输入内容' }]"
+          :placeholder="text.placeholderContent"
+          :rules="[{ required: true, message: $t('courseLearning.pleaseEnterContent') }]"
         />
       </div>
     </van-form>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import Api from '@/api';
 
 export default {
@@ -50,6 +51,30 @@ export default {
     return {
       title: '',
       content: ''
+    }
+  },
+
+  computed: {
+    text() {
+      const langKey = {
+        discussion: {
+          title: 'courseLearning.sendQA',
+          placeholderTitle: 'courseLearning.QATitle',
+          placeholderContent: 'courseLearning.QAContent'
+        },
+        question: {
+          title: 'courseLearning.postTopic',
+          placeholderTitle: 'courseLearning.topicTitle',
+          placeholderContent: 'courseLearning.topicContent'
+        }
+      }
+      const langObj = langKey[this.type];
+
+      _.forEach(langObj, (value, key) => {
+        langObj[key] = this.$t(value);
+      });
+
+      return langObj;
     }
   },
 

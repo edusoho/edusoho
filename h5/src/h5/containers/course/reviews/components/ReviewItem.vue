@@ -46,7 +46,7 @@ export default {
 
   computed: {
     allConentBtnText() {
-      return this.isOverflow ? '显示全部' : '收起';
+      return this.isOverflow ? this.$t('courseLearning.showAll') : this.$t('courseLearning.collapse');
     },
 
     classObject() {
