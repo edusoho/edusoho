@@ -13,8 +13,6 @@ use Biz\MultiClass\Service\MultiClassGroupService;
 
 class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupService
 {
-    const MULTI_CLASS_GROUP_NAME = '分组';
-
     public function findGroupsByIds($ids)
     {
         return ArrayToolkit::index($this->getMultiClassGroupDao()->findByIds($ids), 'id');
@@ -75,6 +73,20 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         return $this->getMultiClassGroupDao()->delete($id);
     }
 
+    public function sortMultiClassGroup($multiClassId)
+    {
+        $groups = $this->getMultiClassGroupDao()->findMultiClassGroupsByMultiClassId($multiClassId);
+
+        if (empty($groups)) {
+            return;
+        }
+
+        $ids = ArrayToolkit::column($groups, 'id');
+        foreach ($ids as $index => $id) {
+            $this->getMultiClassGroupDao()->update($id, ['seq' => $index + 1]);
+        }
+    }
+
     public function updateMultiClassGroup($id, $fields)
     {
         return $this->getMultiClassGroupDao()->update($id, $fields);
@@ -95,7 +107,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         if (empty($noFullGroup)) {
             $field = [];
             $latestGroup = $this->getLatestGroup($multiClass['id']);
-            $field['name'] = self::MULTI_CLASS_GROUP_NAME.(str_replace(self::MULTI_CLASS_GROUP_NAME, '', $latestGroup['name']) + 1);
+            $field['name'] = empty($latestGroup) ? self::MULTI_CLASS_GROUP_NAME.'0' : self::MULTI_CLASS_GROUP_NAME.($latestGroup['seq'] + 1);
+            $field['seq'] = empty($latestGroup) ? 0 : $latestGroup['seq'] + 1;
             $field['multi_class_id'] = $multiClass['id'];
             $field['course_id'] = $multiClass['courseId'];
             $field['student_num'] = 1;
@@ -139,6 +152,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             ++$groupSerialNum;
             $field['student_num'] = count($assignStudentIds);
             $field['name'] = self::MULTI_CLASS_GROUP_NAME.$groupSerialNum;
+            $field['seq'] = $groupSerialNum;
             $field['course_id'] = $courseId;
             $field['multi_class_id'] = $multiClass['id'];
             $field['assistant_id'] = 0;

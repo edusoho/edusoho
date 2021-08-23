@@ -4,6 +4,8 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassGroupService
 {
+    const MULTI_CLASS_GROUP_NAME = '分组';
+
     public function findGroupsByIds($ids);
 
     public function findGroupsByMultiClassId($multiClassId);
@@ -23,6 +25,8 @@ interface MultiClassGroupService
     public function setGroupNewStudent($multiClass, $studentId);
 
     public function deleteMultiClassGroup($id);
+
+    public function sortMultiClassGroup($multiClassId);
 
     public function updateMultiClassGroup($id, $fields);
 
