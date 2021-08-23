@@ -20,6 +20,5 @@ class AlterEducationAdminPermission extends Migration
      */
     public function down()
     {
-
     }
 }
