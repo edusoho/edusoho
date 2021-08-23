@@ -424,6 +424,7 @@ export default {
       id: this.$route.params.id,
       getListLoading: false,
       keyword: '',
+      groupId: '',
       paging: {
         total: 0,
         offset: 0,
@@ -522,8 +523,8 @@ export default {
     async getMultiClassStudents(params = {}) {
       const { data, paging } = await MultiClassStudent.search({
         id: this.id,
-        keyword: params.keyword ||this.keyword || '',
-        groupId: params.groupId || '',
+        keyword: params.keyword || this.keyword || '',
+        groupId: params.groupId || this.groupId || '',
         offset: params.offset || this.paging.offset || 0,
         limit: params.limit || this.paging.pageSize || 10,
       });
@@ -716,6 +717,7 @@ export default {
     },
     onGroupClick(res) {
       const groupId = res.key; 
+      this.groupId = groupId;
       this.getMultiClassStudents({ groupId });
     },
     onSelectEmpty() {
