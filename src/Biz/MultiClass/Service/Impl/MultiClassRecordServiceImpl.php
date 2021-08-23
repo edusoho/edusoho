@@ -124,7 +124,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
      */
     protected function getAssistantStudentService()
     {
-        return $this->createService('MultiClass:AssistantStudentService');
+        return $this->createService('Assistant:AssistantStudentService');
     }
 
     /**
