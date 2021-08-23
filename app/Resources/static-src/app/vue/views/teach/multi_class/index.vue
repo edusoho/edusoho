@@ -61,6 +61,7 @@
           placeholder="请输入班课名称"
           style="width: 224px"
           :allowClear="true"
+          @search="searchMultiClass"
           @pressEnter="searchMultiClass" />
           <a-button type="primary" @click="searchMultiClass">搜索</a-button>
         <a-dropdown>
@@ -122,13 +123,8 @@
             @click="goToMultiClassManage(record.id)">查看</a-button>
           <a-button
             type="link"
-<<<<<<< HEAD
             @click="goToEditorMultiClass(record.id, record.type)">编辑</a-button>
-          <a-dropdown v-if="isPermission('multi_class_copy') || isPermission('multi_class_delete')">
-=======
-            @click="goToEditorMultiClass(record.id)">编辑</a-button>
           <a-dropdown>
->>>>>>> d9711b476968ad70ae295bbf8f7a847bfd7532ca
             <a class="ant-dropdown-link" style="margin-left: -6px;" @click="e => e.preventDefault()">
               <a-icon type="caret-down" />
             </a>

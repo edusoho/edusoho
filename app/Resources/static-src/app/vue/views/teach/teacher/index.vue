@@ -71,6 +71,7 @@
               >
                 修改用户头像
               </a>
+            </a-menu-item>
             <a-menu-item @click="handleEditorQualification(item)">
               编辑教师资质
             </a-menu-item>
