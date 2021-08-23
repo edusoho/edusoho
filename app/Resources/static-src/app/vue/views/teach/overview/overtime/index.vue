@@ -6,7 +6,7 @@
           <a href="javascript:;" :title="userInfo.nickname" @click="viewStudentInfo(userInfo.id)">{{userInfo.nickname}}</a>
         </template>
         <template slot="multiClass" slot-scope="multiClass">
-          <a :href="`/manage/${multiClass.id}/class_info`" :title="multiClass.title">{{multiClass.title}}</a>
+          <a :href="`/admin/v2/multi_class/index#/manage/${multiClass.id}/class_info`" :title="multiClass.title">{{multiClass.title}}</a>
         </template>
         <template slot="activity" slot-scope="activity">
           <span v-if="activity.mediaType === 'testpaper'">考试</span>
