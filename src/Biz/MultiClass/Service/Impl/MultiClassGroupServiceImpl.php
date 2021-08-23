@@ -107,7 +107,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         if (empty($noFullGroup)) {
             $field = [];
             $latestGroup = $this->getLatestGroup($multiClass['id']);
-            $field['name'] = empty($latestGroup) ? self::MULTI_CLASS_GROUP_NAME.'0' : self::MULTI_CLASS_GROUP_NAME.($latestGroup['seq'] + 1);
+            $field['name'] = empty($latestGroup) ? self::MULTI_CLASS_GROUP_NAME.'1' : self::MULTI_CLASS_GROUP_NAME.($latestGroup['seq'] + 1);
             $field['seq'] = empty($latestGroup) ? 0 : $latestGroup['seq'] + 1;
             $field['multi_class_id'] = $multiClass['id'];
             $field['course_id'] = $multiClass['courseId'];
@@ -147,12 +147,12 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $assignedNum += count($groupAssignStudentIds[$assignedNum]);
         }
 
-        $groupSerialNum = 0;
+        $groupSeqNum = 0;
         foreach ($groupAssignStudentIds as $assignStudentIds) {
-            ++$groupSerialNum;
+            ++$groupSeqNum;
             $field['student_num'] = count($assignStudentIds);
-            $field['name'] = self::MULTI_CLASS_GROUP_NAME.$groupSerialNum;
-            $field['seq'] = $groupSerialNum;
+            $field['name'] = self::MULTI_CLASS_GROUP_NAME.$groupSeqNum;
+            $field['seq'] = $groupSeqNum;
             $field['course_id'] = $courseId;
             $field['multi_class_id'] = $multiClass['id'];
             $field['assistant_id'] = 0;
