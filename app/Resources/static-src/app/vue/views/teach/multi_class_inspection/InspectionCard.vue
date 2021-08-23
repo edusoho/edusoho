@@ -9,7 +9,7 @@
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <svg-icon v-if="liveInfo.info.status === 'unstart' && liveInfo.info.status === 'notOnTime'" class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="liveInfo.info.status === 'unstart' || liveInfo.info.status === 'notOnTime'" class="icon-a-closecircle" icon="icon-a-closecircle" />
           <svg-icon v-else class="icon-check-circle" icon="icon-check-circle" />
         </span>
       </div>
