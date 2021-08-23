@@ -237,6 +237,38 @@
 				right: 20px;
 				z-index: 1002;
 			}
+
+			.continue-learning-img {
+				filter: blur(2px);
+			}
+
+			.continue-learning {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 80%;
+				color: #fff;
+				transform: translate(-50%, -50%);
+
+				&__title {
+					margin: 0;
+					font-weight: 500;
+					font-size: vw(16);
+					line-height: vw(24);
+					text-align: center;
+				}
+
+				&__btn {
+					width: vw(72);
+					height: vw(24);
+					margin: vw(16) auto 0;
+					font-size: vw(12);
+					line-height: vw(24);
+					text-align: center;
+					background: rgba(255, 255, 255, 0.3);
+					border-radius: vw(18);
+				}
+			}
 		}
 
 		#course-detail__head--video {

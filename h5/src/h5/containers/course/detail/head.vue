@@ -42,8 +42,12 @@
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
-      <button @click="handleClickContinueLearning">继续学习</button>
-      <img v-if="courseSet.cover" :src="courseSet.cover.large" alt />
+
+      <img v-if="courseSet.cover" :class="{ 'continue-learning-img': nextStudy.nextTask }" :src="courseSet.cover.large" alt />
+      <div class="continue-learning" v-if="nextStudy.nextTask">
+        <h3 class="continue-learning__title">{{ nextStudy.nextTask.title }}</h3>
+        <div class="continue-learning__btn" @click="handleClickContinueLearning">{{ continueLearningText }}</div>
+      </div>
       <countDown
         v-if="
           seckillActivities &&
@@ -187,6 +191,11 @@ export default {
     showLearnBtn() {
       return this.joinStatus && ['video', 'audio', 'ppt'].includes(this.sourceType);
     },
+
+    continueLearningText() {
+      const { nextTask } = this.nextStudy;
+      return nextTask && nextTask.result ? '继续学习' : '开始学习';
+    }
   },
   watch: {
     taskId(value, oldValue) {
@@ -634,11 +643,11 @@ export default {
         Toast('课时创建中，敬请期待');
         return;
       }
-      const nextTask = {
-        id: task.id
-      };
+      // const nextTask = {
+      //   id: task.id
+      // };
       // 更改store中的当前学习
-      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask: task });
       this.showTypeDetail(task);
       this.show = false;
       this.setSourceType({
