@@ -49,7 +49,7 @@ class MultiClassInspectionLiveInfo extends AbstractResource
             case 'finished':
                 if (in_array($activity['ext']['replayStatus'], ['generated', 'videoGenerated'])) {
                     $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-                    $info['info']['viewUrl'] = empty($task) ? '' : $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
+                    $info['info']['viewUrl'] = $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
                 }
                 break;
             default:
