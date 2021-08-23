@@ -6,7 +6,7 @@
           <a href="javascript:;" :title="userInfo.nickname" @click="viewStudentInfo(userInfo.id)">{{userInfo.nickname}}</a>
         </template>
         <template slot="multiClass" slot-scope="multiClass">
-          <a href="javascript:;" :title="multiClass.title" @click="goToMultiClassManage(multiClass.id)">{{multiClass.title}}</a>
+          <a :href="`/manage/${multiClass.id}/class_info`" :title="multiClass.title">{{multiClass.title}}</a>
         </template>
         <template slot="activity" slot-scope="activity">
           <span v-if="activity.mediaType === 'testpaper'">考试</span>
@@ -130,12 +130,6 @@ export default {
     },
     close() {
       this.viewStudentInfoVisible = false;
-    },
-    goToMultiClassManage(id) {
-      this.$router.push({
-        name: "MultiClassCourseManage",
-        params: { id },
-      });
     },
     change(pagination, filters, sorter) {
       const params = {};
