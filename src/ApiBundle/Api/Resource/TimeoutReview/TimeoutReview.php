@@ -46,6 +46,8 @@ class TimeoutReview extends AbstractResource
         $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 0);
         if ($reviewTimeLimit) {
             $conditions['endTime_LE'] = time() - $reviewTimeLimit * 3600;
+        } else {
+            $conditions['id'] = -1;
         }
         $total = $this->getAnswerRecordService()->count($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
