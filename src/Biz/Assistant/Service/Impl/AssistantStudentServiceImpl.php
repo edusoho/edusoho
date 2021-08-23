@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
@@ -313,15 +314,23 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $currentRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
         $currentRelations = ArrayToolkit::index($currentRelations, 'studentId');
         $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($currentRelations, 'assistant_id'));
+        $groups = $this->getMultiClassGroupService()->findGroupsByIds(ArrayToolkit::column($currentRelations, 'group_id'));
 
         $records = [];
         foreach ($studentIds as $studentId) {
-            $assistant = $assistants[$currentRelations[$studentId]['assistant_id']];
+            $relation = $currentRelations[$studentId]['assistantId'];
+            $assistant = $assistants[$currentRelations[$studentId]['assistantId']];
+            if (empty($groups[$relation['group_id']])) {
+                $content = sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname']);
+            } else {
+                $group = $groups[$relation['group_id']];
+                $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$group['seq'], $assistant['nickname']);
+            }
             $records[] = [
                 'user_id' => $studentId,
-                'assistant_id' => $currentRelations[$studentId]['assistant_id'],
+                'assistant_id' => $currentRelations[$studentId]['assistantId'],
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
+                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
                 'is_push' => 0,
             ];
@@ -405,5 +414,13 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    protected function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 }
