@@ -98,7 +98,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
                 $multiClass
             );
 
-            $this->dispatch('multi_class.create', new Event($multiClass));
+            $this->dispatchEvent('multi_class.create', new Event($multiClass));
 
             $this->commit();
         } catch (\Exception $e) {

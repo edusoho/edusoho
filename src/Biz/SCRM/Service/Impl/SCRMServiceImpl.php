@@ -100,6 +100,17 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         return $bindUrl;
     }
 
+    public function uploadSCRMUserData($list)
+    {
+        if (empty($list)) {
+            return;
+        }
+
+        $data = ['eventTime' => time(), 'dynamicList' => $list];
+
+        return $this->getSCRMSdk()->uploadUserMessage($data);
+    }
+
     /**
      * @return ScrmService
      */

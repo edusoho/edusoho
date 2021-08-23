@@ -52,4 +52,9 @@ class ScrmService extends BaseService
     {
         return $this->request('POST', '/api/console/order/callback', $callbackData);
     }
+
+    public function uploadUserMessage($data)
+    {
+        return $this->request('POST', 'api/external/customerDynamic/report', $data);
+    }
 }

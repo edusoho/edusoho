@@ -15,6 +15,7 @@ use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
+use Biz\User\Service\UserService;
 
 class AssistantStudentServiceImpl extends BaseService implements AssistantStudentService
 {
@@ -304,16 +305,21 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
     private function batchCreateRecords($multiClassId, $studentIds, $originRelations)
     {
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         $currentRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
         $currentRelations = ArrayToolkit::index($currentRelations, 'studentId');
+        $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($currentRelations, 'assistant_id'));
 
         $records = [];
         foreach ($studentIds as $studentId) {
+            $assistant = $assistants[$currentRelations[$studentId]['assistant_id']];
             $records[] = [
                 'user_id' => $studentId,
+                'assistant_id' => $currentRelations[$studentId]['assistant_id'],
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '变更分组', 'message' => sprintf('原分组id：%s, 变更后分组id：%s', $originRelations[$studentId]['group_id'], $currentRelations[$studentId]['group_id'])]),
+                'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
+                'is_push' => 0,
             ];
         }
 
@@ -355,6 +361,14 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**

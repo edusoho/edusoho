@@ -15,4 +15,6 @@ interface SCRMService
     public function getStaffBindUrl($assistant);
 
     public function getWechatOauthLoginUrl($user, $redirectUrl);
+
+    public function uploadSCRMUserData($list);
 }
