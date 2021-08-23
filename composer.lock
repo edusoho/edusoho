@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4db22ad8776a29da816fbcc6457bcd25",
+    "content-hash": "eba3d763b2530f422e92eb8c64b4a340",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -397,16 +397,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.37",
+            "version": "v0.9.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff"
+                "reference": "8585b546d34cf3d31a8ef09b2c98b42b5f9473fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/cd9c4e96e7c079771794b3da4837aad6182385ff",
-                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8585b546d34cf3d31a8ef09b2c98b42b5f9473fe",
+                "reference": "8585b546d34cf3d31a8ef09b2c98b42b5f9473fe",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -458,9 +458,9 @@
             "description": "A service layer framework.",
             "support": {
                 "issues": "https://github.com/codeages/biz-framework/issues",
-                "source": "https://github.com/codeages/biz-framework/tree/v0.9.37"
+                "source": "https://github.com/codeages/biz-framework/tree/v0.9.38"
             },
-            "time": "2021-01-21T00:44:26+00:00"
+            "time": "2021-08-12T01:18:30+00:00"
         },
         {
             "name": "codeages/biz-item-bank",
@@ -9210,7 +9210,8 @@
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
         "codeages/biz-order-pay": 20,
-        "codeages/plumber2": 20
+        "codeages/plumber2": 20,
+        "codeages/biz-item-bank": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

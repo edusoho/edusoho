@@ -22,13 +22,17 @@
           <a-avatar :size="48" :src="record.avatar.middle" icon="user"></a-avatar>
           <a class="ml8" @click="edit(record.id)">{{ text }}</a>
       </template>
-      
+
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
         <span v-if="item.isPromoted" class="color-gray text-sm">{{ item.promotedSeq }}</span>
         <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
+
+      <template slot="qualification" slot-scope="qualification">
+        {{ qualification.code }}
+      </template>
 
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
@@ -39,7 +43,9 @@
         <a-button type="link" @click="edit(item.id)">
           查看
         </a-button>
-        <a-dropdown>
+
+        <!-- v-if="showEditorSualification" 判断是否可以编辑教师资质，后续新增，把判断给编辑教师资质按钮即可 -->
+        <a-dropdown v-if="showEditorSualification">
           <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
             <a-icon type="caret-down" />
           </a>
@@ -65,6 +71,8 @@
               >
                 修改用户头像
               </a>
+            <a-menu-item @click="handleEditorQualification(item)">
+              编辑教师资质
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -101,6 +109,19 @@
       </a-form>
     </a-modal>
 
+    <a-modal
+      title="编辑教师资质"
+      width="900px"
+      :footer="null"
+      :visible="qualificationVisible"
+      @cancel="handleCancelEditQualification"
+    >
+      <editor-qualification
+        :user-id="currentTeacherUserId"
+        :edit-info="currentTeacherQualification"
+        @handle-cancel-modal="handleCancelEditQualification"
+      />
+    </a-modal>
   </aside-layout>
 </template>
 
@@ -108,8 +129,9 @@
 <script>
 import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, UserProfiles } from "common/vue/service/index.js";
+import { Teacher, UserProfiles, Setting } from "common/vue/service";
 import userInfoTable from "../../components/userInfoTable";
+import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
 const columns = [
   {
@@ -152,12 +174,20 @@ const columns = [
   },
 ];
 
+const teahcerQualificationColumns =  {
+  title: "教师资格证编号",
+  dataIndex: "qualification",
+  width: '20%',
+  scopedSlots: { customRender: "qualification" }
+};
+
 export default {
   name: "Teachers",
 
   components: {
     userInfoTable,
     AsideLayout,
+    EditorQualification,
   },
 
   data() {
@@ -172,10 +202,22 @@ export default {
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
+      qualificationVisible: false, // 编辑教师资质
+      currentTeacherUserId: 0, // 用于教师上传教师资质的 userId
+      currentTeacherQualification: {},
+      showEditorSualification: false // 后台是否开启了教师资质功能
     };
   },
 
-  created() {
+  async created() {
+    const status = await Setting.get('qualification');
+    this.showEditorSualification = Boolean(status.qualification);
+    if (this.showEditorSualification) {
+      _.forEach(this.columns, item => {
+        item.width = '20%';
+      });
+      this.columns.splice(2, 0, teahcerQualificationColumns);
+    }
     this.fetchTeacher();
   },
 
@@ -293,6 +335,21 @@ export default {
       }
 
       callback()
+    },
+
+    handleEditorQualification(item) {
+      this.currentTeacherUserId = item.id;
+      this.currentTeacherQualification = item.qualification;
+      this.qualificationVisible = true;
+    },
+
+    handleCancelEditQualification(qualification) {
+      _.forEach(this.pageData, item => {
+        if (item.id == qualification.user_id) {
+          item.qualification = qualification;
+        }
+      });
+      this.qualificationVisible = false;
     }
   },
 };

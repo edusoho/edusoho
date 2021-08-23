@@ -889,6 +889,10 @@ teacher:
 teacher_search:
     path: /teacher/search
     defaults: {_controller: AppBundle:Teacher:search }
+    
+teacher_qualification:
+    path: /teacher/qualification
+    defaults: { _controller: AppBundle:Teacher:qualification }
 
 partner_login:
     path: /partner/login
@@ -933,6 +937,10 @@ systeminfo:
 setting_approval_submit:
     path: /settings/approval/submit
     defaults: { _controller: AppBundle:Settings:approvalSubmit }
+
+setting_qualification:
+    path: /settings/qualification
+    defaults: { _controller: AppBundle:Settings:qualification }
 
 article_show:
     path: /article

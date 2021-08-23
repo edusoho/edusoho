@@ -881,6 +881,7 @@ admin_v2.system.mailer_setting_tab: Mailer Setting
 admin_v2.system.operation.article_tab: Article
 admin_v2.system.operation.group_tab: Group
 admin_v2.system.operation.invite_tab: Invitation Setting
+admin_v2.system.teacher_qualification_tab: Teacher Qualification Announcement
 admin_v2.system.operation.message_open_tab: Message Open
 admin_v2.system.operation.message_send_tab: Message Send
 

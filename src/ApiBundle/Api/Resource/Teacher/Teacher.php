@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\TeacherQualification\Service\TeacherQualificationService;
 use Biz\User\Service\UserService;
 
 class Teacher extends AbstractResource
@@ -32,6 +33,7 @@ class Teacher extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $users = $this->getUserService()->searchUsers($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $users = $this->handleTeacherInfos($users);
         $total = $this->getUserService()->countUsers($conditions);
 
         $users = $this->appendTeacherData($users);
@@ -100,6 +102,27 @@ class Teacher extends AbstractResource
         return ArrayToolkit::index($courseStudentNum, 'courseId');
     }
 
+    protected function handleTeacherInfos($users)
+    {
+        $users = ArrayToolkit::index($users, 'id');
+        $userIds = ArrayToolkit::column($users, 'id');
+
+        $teacherQualifications = $this->getTeacherQualificationService()->findByUserIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        $userInfo = [];
+        foreach ($users as $userId => $user) {
+            $qualification = $teacherQualifications[$userId];
+            if ($qualification['avatar']) {
+                $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);
+            }
+            $qualification['truename'] = $profiles[$userId]['truename'] ?: '';
+            $user['qualification'] = $qualification;
+            $userInfo[] = $user;
+        }
+
+        return $userInfo;
+    }
+
     /**
      * @return UserService
      */
@@ -122,5 +145,13 @@ class Teacher extends AbstractResource
     protected function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return TeacherQualificationService
+     */
+    private function getTeacherQualificationService()
+    {
+        return $this->service('TeacherQualification:TeacherQualificationService');
     }
 }

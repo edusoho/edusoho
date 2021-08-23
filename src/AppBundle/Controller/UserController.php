@@ -712,6 +712,14 @@ class UserController extends BaseController
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
+        if ($user['locked']) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        if ($user['destroyed']) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
         return $user;
     }
 

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="isPermission('course_lesson_manage')">
+    <div>
       <a-icon type="exclamation-circle" style="color: #bebebe;" />
       排课只涉及直播课时
     </div>
     <div class="clearfix">
       <a-space size="large">
-        <a-button v-if="isPermission('course_lesson_manage')" type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
+        <a-button type="primary" :disabled="courseId == 0" @click="showCreateLiveModal">
           <a-icon type="plus" />
           添加直播课时
         </a-button>
