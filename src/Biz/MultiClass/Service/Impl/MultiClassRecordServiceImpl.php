@@ -59,7 +59,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             'is_push' => 0,
         ];
 
-        $record =  $this->getMultiClassRecordDao()->create($record);
+        $record = $this->getMultiClassRecordDao()->create($record);
 
         $this->uploadRecord($record);
 

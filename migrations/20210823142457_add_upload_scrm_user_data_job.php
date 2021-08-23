@@ -56,6 +56,5 @@ class AddUploadScrmUserDataJob extends Migration
      */
     public function down()
     {
-
     }
 }

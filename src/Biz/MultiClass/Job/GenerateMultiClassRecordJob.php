@@ -3,16 +3,13 @@
 namespace Biz\MultiClass\Job;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Service\ActivityService;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
-use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class GenerateMultiClassRecordJob extends AbstractJob
