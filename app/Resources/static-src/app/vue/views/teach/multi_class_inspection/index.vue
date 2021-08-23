@@ -46,7 +46,7 @@ export default {
       this.getListLoading = true;
       try {
         this.inspectionList = await MultiClassInspection.search();
-        _.forEach(this.inspectionList, async (inspection) => {
+        await _.forEach(this.inspectionList, async (inspection) => {
           this.liveInfo.push(
             await MultiClassInspection.getLiveInfoById({
               query: {
