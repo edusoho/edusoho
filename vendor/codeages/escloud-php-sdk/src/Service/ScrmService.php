@@ -55,6 +55,6 @@ class ScrmService extends BaseService
 
     public function uploadUserMessage($data)
     {
-        return $this->request('POST', 'api/external/customerDynamic/report', $data);
+        return $this->request('POST', '/api/external/customerDynamic/report', $data);
     }
 }
