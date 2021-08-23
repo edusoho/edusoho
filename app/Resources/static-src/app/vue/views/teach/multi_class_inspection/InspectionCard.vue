@@ -5,7 +5,7 @@
       <div class="inspection-card__item info text-overflow">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
       <div class="inspection-card__item info">课程时长：{{ inspection.length }}分钟</div>
-      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.currentOnlineNum ? liveInfo.info.currentOnlineNum : 0 }}/{{ inspection.studentNum }}</div>
+      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.viewerOnlineNum ? liveInfo.info.viewerOnlineNum : 0 }}/{{ inspection.studentNum }}</div>
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
@@ -25,17 +25,21 @@
       <div v-if="liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
         直播未按时开始
       </div>
-      <div v-if="liveInfo.info.status === 'living'" class="inspection-card__button live-start">
-        <svg-icon class="icon-live" icon="icon-live" />
-        进入直播
+      <div v-if="liveInfo.info.status === 'living'" class="inspection-card__button">
+        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+          <svg-icon class="icon-live" icon="icon-live" />
+          进入直播
+        </a>
       </div>
       <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generated'" class="inspection-card__button live-start">
         <svg-icon class="icon-live" icon="icon-live-playback" />
         查看回放
       </div>
       <div v-if="liveInfo.info.status === 'finished'" class="inspection-card__button live-start">
-        <svg-icon class="icon-live" icon="icon-live-playback" />
-        直播已结束，回放生成中
+        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+          <svg-icon class="icon-live" icon="icon-live-playback" />
+          直播已结束，回放生成中
+        </a>
       </div>
       <div v-if="liveInfo.info.status === 'unstart'" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
@@ -144,7 +148,6 @@ export default {
     border-radius: 0 0 12px 12px;
     text-align: center;
     line-height: 52px;
-    cursor: pointer;
   }
 
   .not-live-start {
@@ -172,6 +175,11 @@ export default {
     width: 20px;
     height: 20px;
     margin-right: 4px;
+  }
+  .url-block {
+    display: block;
+    width: auto;
+    height: auto;
   }
 }
 </style>
