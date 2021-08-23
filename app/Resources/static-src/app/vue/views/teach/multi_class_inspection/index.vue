@@ -2,8 +2,8 @@
   <aside-layout :breadcrumbs="[{ name: '班课巡检' }]" :headerTip="headerTip">
     <a-spin class="multi-class-inspection" :spinning="getListLoading">
       <a-row :gutter="[24,24]">
-        <a-col :sm="24" :lg="12" :xl="8" :xxl="6" v-for="inspection in inspectionList" :key="inspection.id">
-          <inspection-card :inspection="inspection" />
+        <a-col :sm="24" :lg="12" :xl="8" :xxl="6" v-for="(inspection,index) in inspectionList" :key="inspection.id">
+          <inspection-card :inspection="inspection" :liveInfo="liveInfo[index]" />
         </a-col>
       </a-row>
       <empty v-if="!getListLoading && !inspectionList.length" />
@@ -16,6 +16,7 @@ import AsideLayout from "app/vue/views/layouts/aside.vue";
 import Empty from "app/vue/views/components/Empty.vue";
 import InspectionCard from "./InspectionCard.vue";
 import MultiClassInspection from "common/vue/service/MultiClassInspection";
+import _ from "lodash";
 
 export default {
   name: "index",
@@ -30,6 +31,7 @@ export default {
       inspectionList: [],
       getListLoading: false,
       headerTip: "班课巡检仅展示今天所有直播课",
+      liveInfo: [],
     };
   },
 
@@ -44,6 +46,14 @@ export default {
       this.getListLoading = true;
       try {
         this.inspectionList = await MultiClassInspection.search();
+        _.forEach(this.inspectionList, async (inspection) => {
+          const info = await MultiClassInspection.getLiveInfoById({
+            query: {
+              id: inspection.activityId,
+            },
+          });
+          this.liveInfo.push(info);
+        });
       } finally {
         this.getListLoading = false;
       }
