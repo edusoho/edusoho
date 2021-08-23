@@ -94,7 +94,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
                 $this->getMultiClassRecordDao()->update($record['id'], ['is_push' => 1]);
             }
 
-            $this->rollback();
+            $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
         }
