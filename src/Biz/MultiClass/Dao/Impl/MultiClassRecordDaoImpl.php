@@ -19,6 +19,9 @@ class MultiClassRecordDaoImpl extends AdvancedDaoImpl implements MultiClassRecor
         return [
             'timestamps' => ['created_time'],
             'orderbys' => ['id', 'created_time'],
+            'serializes' => [
+                'data' => 'json',
+            ],
             'conditions' => [
                 'id = :id',
                 'user_id = :userId',

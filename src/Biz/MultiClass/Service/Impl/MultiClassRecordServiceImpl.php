@@ -54,7 +54,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             'user_id' => $userId,
             'assistant_id' => $relation['assistantId'],
             'multi_class_id' => $multiClassId,
-            'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
+            'data' => ['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])],
             'sign' => $this->makeSign(),
             'is_push' => 0,
         ];
