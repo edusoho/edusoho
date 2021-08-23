@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\System\Service\LogService;
@@ -26,18 +27,27 @@ class GenerateMultiClassRecordJob extends AbstractJob
         $relations = $this->getAssistantStudentService()->findByMultiClassId($multiClassId);
         $relations = ArrayToolkit::index($relations, 'studentId');
         $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'assistantId'));
+        $groups = $this->getMultiClassGroupService()->findGroupsByIds(ArrayToolkit::column($relations, 'group_id'));
         $records = [];
         foreach ($members as $member) {
             if ($relations[$member['userId']]) {
                 continue;
             }
 
+            $relation = $relations[$member['userId']];
             $assistant = $assistants[$relations[$member['userId']]['assistantId']];
+
+            if (empty($groups[$relation['group_id']])) {
+                $content = sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname']);
+            } else {
+                $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], $groups[$relation['group_id']]['name'], $assistant['nickname']);
+            }
+
             $records[] = [
                 'user_id' => $member['userId'],
                 'assistant_id' => $relations[$member['userId']]['assistantId'],
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
+                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
                 'is_push' => 0,
             ];
@@ -92,6 +102,14 @@ class GenerateMultiClassRecordJob extends AbstractJob
     private function getMultiClassRecordService()
     {
         return $this->biz->service('MultiClass:MultiClassRecordService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->biz->service('MultiClass:MultiClassGroupService');
     }
 
     /**

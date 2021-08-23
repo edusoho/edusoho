@@ -17,7 +17,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
     public function findGroupsByIds($ids)
     {
-        return $this->getMultiClassGroupDao()->findByIds($ids);
+        return ArrayToolkit::index($this->getMultiClassGroupDao()->findByIds($ids), 'id');
     }
 
     public function findGroupsByMultiClassId($multiClassId)
