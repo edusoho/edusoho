@@ -73,7 +73,7 @@ export default {
           await MultiClassStudent.editGroup(
             this.multiClassId,
             this.form.group,
-            { studentIds: this.selectedStudentIds }
+            this.selectedStudentIds
           );
           this.$message.success("分组修改成功！");
           this.handleCancel();
