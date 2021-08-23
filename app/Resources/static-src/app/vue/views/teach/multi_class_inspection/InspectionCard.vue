@@ -52,7 +52,7 @@
 </template>
 
 <script>
-// import MultiClassInspection from "common/vue/service/MultiClassInspection";
+import MultiClassInspection from "common/vue/service/MultiClassInspection";
 import _ from "lodash";
 
 export default {
@@ -63,18 +63,14 @@ export default {
       type: Object,
       require: true,
     },
-    liveInfo: {
-      type: Object,
-      require: true,
-    },
   },
   data() {
     return {
-      // liveInfo: {
-      //   base: {},
-      //   info: {},
-      //   onlineAssistants: [{}],
-      // },
+      liveInfo: {
+        base: {},
+        info: {},
+        onlineAssistants: [{}],
+      },
     };
   },
 
@@ -85,15 +81,15 @@ export default {
   },
 
   methods: {
-    // async getLiveInfo() {
-    //   try {
-    //     this.liveInfo = await MultiClassInspection.getLiveInfoById({
-    //       query: {
-    //         id: this.inspection.activityId,
-    //       },
-    //     });
-    //   } catch (error) {}
-    // },
+    async getLiveInfo() {
+      try {
+        this.liveInfo = await MultiClassInspection.getLiveInfoById({
+          query: {
+            id: this.inspection.activityId,
+          },
+        });
+      } catch (error) {}
+    },
 
     assistantAttend(id) {
       return _.find(this.liveInfo.onlineAssistants, ["userId", Number(id)]);
