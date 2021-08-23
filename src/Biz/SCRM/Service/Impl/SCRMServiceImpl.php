@@ -106,7 +106,7 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
             return;
         }
 
-        $data = ['eventTime' => time(), 'dynamicList' => $list];
+        $data = ['dynamicList' => $list, 'eventTime' => time()];
 
         return $this->getSCRMSdk()->uploadUserMessage($data);
     }
