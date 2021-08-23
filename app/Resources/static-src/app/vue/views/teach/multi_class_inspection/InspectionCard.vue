@@ -77,7 +77,7 @@ export default {
   computed: {},
 
   created() {
-    // this.getLiveInfo();
+    this.getLiveInfo();
   },
 
   methods: {
