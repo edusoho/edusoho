@@ -163,9 +163,9 @@ class LessonManageController extends BaseController
 
     public function publishAction(Request $request, $courseId, $lessonId)
     {
-        $lesson = $this->getCourseLessonService()->publishLesson($courseId, $lessonId);
-
-        if (false === $lesson) {
+        try {
+            $this->getCourseLessonService()->publishLesson($courseId, $lessonId);
+        } catch (\Exception $e) {
             return $this->createJsonResponse(['success' => false, 'message' => $this->trans('course.manage.lesson_copy_ing')]);
         }
 
@@ -174,9 +174,9 @@ class LessonManageController extends BaseController
 
     public function unpublishAction(Request $request, $courseId, $lessonId)
     {
-        $lesson = $this->getCourseLessonService()->unpublishLesson($courseId, $lessonId);
-
-        if (false === $lesson) {
+        try {
+            $this->getCourseLessonService()->unpublishLesson($courseId, $lessonId);
+        } catch (\Exception $e) {
             return $this->createJsonResponse(['success' => false, 'message' => $this->trans('course.manage.lesson_copy_ing')]);
         }
 

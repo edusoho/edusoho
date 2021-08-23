@@ -108,8 +108,8 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-
-            return false;
+            throw $e;
+//            return false;
         }
 
         return $lesson;
@@ -177,8 +177,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-
-            return false;
+            throw $e;
         }
 
         return $lesson;
