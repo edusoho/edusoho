@@ -15,7 +15,7 @@
 
     <empty
       v-if="!list.length && finished"
-      text="暂无笔记"
+      :text="emptyText"
     />
 
     <div class="create-btn">
@@ -24,7 +24,7 @@
         block
         @click="handleClickCreateDiscussion"
       >
-        发起问答
+        {{ createText }}
       </van-button>
     </div>
   </div>
@@ -61,6 +61,16 @@ export default {
         limit: 20
       },
       courseId: this.$route.params.id
+    }
+  },
+
+  computed: {
+    emptyText() {
+      return this.type === 'question' ? '暂无问答' : '暂无话题';
+    },
+
+    createText() {
+      return this.type === 'question' ? '发起问答' : '发起话题';
     }
   },
 

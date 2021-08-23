@@ -3,10 +3,11 @@
     <div class="note-item__top">
       <div class="note-info">
         <img class="avatar" :src="item.user.avatar.small" alt="">
-        <span class="">{{ item.user.nickname }} {{ $moment(item.createdTime).format('YY-MM-DD HH:mm') }}</span>
-        <span class="tag">{{ item.task.title }}</span>
+        <span>{{ item.user.nickname }} {{ item.createdTime | formatCourseTime }}</span>
+        <span class="tag text-overflow">{{ item.task.title }}</span>
       </div>
-      <div class="note-like">
+      <div class="note-like" :class="{ like: isLike }" @click.stop="handleClickLike">
+        <i class="iconfont icon-like"></i>
         {{ item.likeNum }}
       </div>
     </div>
@@ -15,6 +16,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   name: 'NoteItem',
 
@@ -28,6 +31,16 @@ export default {
   computed: {
     content() {
       return this.item.content.replace(/<img .*?>/g, '');
+    },
+
+    isLike() {
+      return !!_.size(this.item.like);
+    }
+  },
+
+  methods: {
+    handleClickLike() {
+      this.$emit('handle-like', { noteId: this.item.id, status: this.isLike });
     }
   }
 }
@@ -59,8 +72,17 @@ export default {
 
       .tag {
         margin-left: vw(4);
+        max-width: vw(120);
         color: $primary-color;
       }
+    }
+
+    .note-like {
+      color: #999;
+    }
+
+    .like {
+      color: $primary-color;
     }
   }
 

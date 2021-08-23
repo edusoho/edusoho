@@ -17,11 +17,14 @@
         <div class="info-right">
           <span>{{ note.user.nickname }}</span>
           <div class="info-right-bottom">
-            <div>
-              <span class="info-time">{{ $moment(note.createdTime).format('HH:mm') }}</span>
-              <span class="info-task">{{ note.task.title }}</span>
+            <div class="info">
+              <span class="info-time">{{ note.createdTime | formatCourseTime }}</span>
+              <span class="info-task text-overflow">{{ note.task.title }}</span>
             </div>
-            <span class="like-num">{{ note.likeNum }}</span>
+            <span class="like-num" :class="{ like: isLike }" @click="handleClickLike">
+              <i class="iconfont icon-like"></i>
+              {{ noteDetail.likeNum }}
+            </span>
           </div>
         </div>
       </div>
@@ -31,6 +34,9 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import Api from '@/api';
+
 export default {
   name: 'NoteDetail',
 
@@ -41,9 +47,37 @@ export default {
     }
   },
 
+  data() {
+    return {
+      noteDetail: this.note,
+      courseId: this.$route.params.id
+    }
+  },
+
+  computed: {
+    isLike() {
+      return !!_.size(this.noteDetail.like);
+    }
+  },
+
   methods: {
     handleClickGoToList() {
       this.$emit('change-current-component', { component: 'List' });
+    },
+
+    handleClickLike() {
+      const { id, likeNum } = this.noteDetail;
+
+      const query = {
+        courseId: this.courseId,
+        noteId: id
+      };
+
+      const note = this.isLike ? { like: {}, likeNum: likeNum - 1 } : { like: { status: 1 }, likeNum: (likeNum * 1) + 1 };
+
+      this.isLike ? Api.cancelNoteLike({ query }) : Api.noteLike({ query });
+
+      _.assign(this.noteDetail, note);
     }
   }
 }
@@ -89,6 +123,11 @@ export default {
         border-radius: 50%;
       }
 
+      .info {
+        display: flex;
+        align-items: center;
+      }
+
       .info-right {
         display: flex;
         flex-direction: column;
@@ -109,11 +148,17 @@ export default {
         }
 
         .info-task {
+          display: inline-block;
+          max-width: vw(150);
           color: $primary-color;
         }
 
         .like-num {
           color: #999;
+        }
+
+        .like {
+          color: $primary-color;
         }
       }
     }

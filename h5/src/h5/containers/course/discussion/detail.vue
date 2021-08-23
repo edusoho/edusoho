@@ -7,7 +7,7 @@
         color="#000"
         @click="handleClickGoToList"
       />
-      <h3 class="detail-header__title">话题详情</h3>
+      <h3 class="detail-header__title">{{ titleText }}</h3>
       <span class="detail-header__btn">回复</span>
     </div>
 
@@ -16,7 +16,7 @@
         <img class="avatar" :src="discussion.user.avatar.small">
         <div class="info-right">
           <span class="info-nickname">{{ discussion.user.nickname }}发起</span>
-          <span class="info-time">{{ $moment(discussion.createdTime).format('HH:mm') }}</span>
+          <span class="info-time">{{ discussion.createdTime | formatCourseTime }}</span>
         </div>
       </div>
       <div class="discussion-body__title">{{ discussion.title }}</div>
@@ -59,6 +59,11 @@ export default {
     discussion: {
       type: Object,
       required: true
+    },
+
+    type: {
+      type: String,
+      required: true
     }
   },
 
@@ -73,6 +78,12 @@ export default {
         limit: 10
       },
       replyList: []
+    }
+  },
+
+  computed: {
+    titleText() {
+      return this.type === 'question' ? '问答详情' : '话题详情';
     }
   },
 

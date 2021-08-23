@@ -42,7 +42,12 @@
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
-      <img v-if="courseSet.cover" :src="courseSet.cover.large" alt />
+
+      <img v-if="courseSet.cover" :class="{ 'continue-learning-img': nextStudy.nextTask }" :src="courseSet.cover.large" alt />
+      <div class="continue-learning" v-if="nextStudy.nextTask">
+        <h3 class="continue-learning__title">{{ nextStudy.nextTask.title }}</h3>
+        <div class="continue-learning__btn" @click="handleClickContinueLearning">{{ continueLearningText }}</div>
+      </div>
       <countDown
         v-if="
           seckillActivities &&
@@ -62,7 +67,7 @@
     <div v-show="!isShowOutFocusMask">
       <div
         v-show="
-          ['video', 'audio'].includes(sourceType) &&
+          ['video', 'audio', 'ppt'].includes(sourceType) &&
             !isEncryptionPlus &&
             !finishDialog
         "
@@ -110,7 +115,7 @@
 </template>
 <script>
 import loadScript from 'load-script';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import Api from '@/api';
 import { Toast, Dialog } from 'vant';
 import countDown from '&/components/e-marketing/e-count-down/index';
@@ -120,6 +125,7 @@ import qs from 'qs';
 import report from '@/mixins/course/report';
 import VideoReportMask from '@/components/video-report-mask';
 import WechatSubscribe from '../components/wechat-subscribe';
+import * as types from '@/store/mutation-types.js';
 
 export default {
   components: {
@@ -180,10 +186,16 @@ export default {
       joinStatus: state => state.joinStatus,
       user: state => state.joinStatus?.user || {},
       allTask: state => state.allTask,
+      nextStudy: state => state.nextStudy
     }),
     showLearnBtn() {
-      return this.joinStatus && ['video', 'audio'].includes(this.sourceType);
+      return this.joinStatus && ['video', 'audio', 'ppt'].includes(this.sourceType);
     },
+
+    continueLearningText() {
+      const { nextTask } = this.nextStudy;
+      return nextTask && nextTask.result ? '继续学习' : '开始学习';
+    }
   },
   watch: {
     taskId(value, oldValue) {
@@ -223,6 +235,10 @@ export default {
   methods: {
     ...mapActions(['setCloudAddress']),
 
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE
+    }),
+
     toToast() {
       const condition = this.finishCondition;
       if (!condition) return;
@@ -241,7 +257,7 @@ export default {
       return !!navigator.userAgent.match(new RegExp('android', 'i'));
     },
     initHead() {
-      if (['video', 'audio'].includes(this.sourceType)) {
+      if (['video', 'audio', 'ppt'].includes(this.sourceType)) {
         window.scrollTo(0, 0);
         if (this.joinStatus) {
           this.initReport();
@@ -344,6 +360,10 @@ export default {
           }
           if (mediaType === 'video') {
             this.formateVedioData(res);
+            return;
+          }
+          if (mediaType === 'ppt') {
+            this.formatePptData(res);
           }
         })
         .catch(err => {
@@ -444,6 +464,46 @@ export default {
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
     },
+
+    async formatePptData(playerParams) {
+      const media = playerParams.media;
+
+      if (!this.cloudSdkCdn) {
+        await this.setCloudAddress();
+      }
+
+      const playerSDKUri = `//${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?` + ~~(Date.now() / 1000 / 60);
+
+      loadScript(playerSDKUri, err => {
+        if (err) throw err;
+
+        const player = new window.QiQiuYun.Player({
+          id: 'course-detail__head--video',
+          resNo: media.resNo,
+          token: media.token,
+          source: {
+            type: playerParams.mediaType,
+            args: media
+          }
+        });
+        this.player = player;
+        player.on('ready', () => {
+          this.initReportData(
+            this.selectedPlanId,
+            this.taskId,
+            this.sourceType,
+          );
+        });
+        player.on('pagechanged', e => {
+          if (e.page === e.total) {
+            if (this.finishCondition && this.finishCondition.type === 'end') {
+              this.reprtData({ eventName: 'finish' });
+            }
+          }
+        });
+      });
+    },
+
     async initPlayer(options) {
       if (!this.cloudSdkCdn) {
         await this.setCloudAddress();
@@ -563,6 +623,144 @@ export default {
     closeFinishDialog() {
       this.finishDialog = false;
     },
+
+    handleClickContinueLearning() {
+      const { id } = this.nextStudy.nextTask;
+      const params = {
+        courseId: this.selectedPlanId,
+        taskId: id
+      };
+
+      Api.getCourseData({ query: params }).then(res => {
+        this.toLearnTask(res);
+      });
+    },
+
+     // 跳转到task
+    toLearnTask(task) {
+      // 课程再创建阶段或者和未发布状态
+      if (task.status === 'create') {
+        Toast('课时创建中，敬请期待');
+        return;
+      }
+      // const nextTask = {
+      //   id: task.id
+      // };
+      // 更改store中的当前学习
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask: task });
+      this.showTypeDetail(task);
+      this.show = false;
+      this.setSourceType({
+        sourceType: 'img',
+        taskId: task.id,
+      });
+    },
+
+    showTypeDetail(task) {
+      if (task.status !== 'published') {
+        Toast('敬请期待');
+        return;
+      }
+      switch (task.type) {
+        case 'video':
+          this.setSourceType({
+            sourceType: 'video',
+            taskId: task.id,
+          });
+          break;
+        case 'audio':
+          this.setSourceType({
+            sourceType: 'audio',
+            taskId: task.id,
+          });
+          break;
+        case 'text':
+        case 'ppt':
+        case 'doc':
+          this.$router.push({
+            name: 'course_web',
+            query: {
+              courseId: this.selectedPlanId,
+              taskId: task.id,
+              type: task.type,
+              backUrl: `/course/${this.selectedPlanId}`,
+            },
+          });
+          break;
+        case 'live':
+          // eslint-disable-next-line no-case-declarations
+          const nowDate = new Date();
+          // eslint-disable-next-line no-case-declarations
+          const endDate = new Date(task.endTime * 1000);
+          // const startDate = new Date(task.startTime * 1000);
+          // eslint-disable-next-line no-case-declarations
+          let replay = false;
+          if (nowDate > endDate) {
+            if (
+              task.activity &&
+              task.activity.replayStatus === 'videoGenerated'
+            ) {
+              // 本站文件
+              if (task.mediaSource === 'self') {
+                this.setSourceType({
+                  sourceType: 'video',
+                  taskId: task.id,
+                });
+              }
+              return;
+            } else if (
+              task.activity &&
+              task.activity.replayStatus === 'ungenerated'
+            ) {
+              Toast('暂无回放');
+              return;
+            } else {
+              replay = true;
+            }
+          }
+
+          this.$router.push({
+            name: 'live',
+            query: {
+              courseId: this.selectedPlanId,
+              taskId: task.id,
+              type: task.type,
+              title: task.title,
+              replay,
+            },
+          });
+          break;
+        case 'testpaper':
+          // eslint-disable-next-line no-case-declarations
+          const testId = task.activity.testpaperInfo.testpaperId;
+          this.$router.push({
+            name: 'testpaperIntro',
+            query: {
+              testId: testId,
+              targetId: task.id,
+            },
+          });
+          break;
+        case 'homework':
+          this.$router.push({
+            name: 'homeworkIntro',
+            query: {
+              courseId: this.selectedPlanId,
+              taskId: task.id,
+            },
+          });
+          break;
+        case 'exercise':
+          this.$router.push({
+            name: 'exerciseIntro',
+            query: {
+              courseId: this.selectedPlanId,
+              taskId: task.id,
+            },
+          });
+          break;
+      }
+    }
   },
 };
 </script>

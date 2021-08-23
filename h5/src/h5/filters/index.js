@@ -4,6 +4,7 @@ import {
   formatSimpleHour,
 } from '@/utils/date-toolkit';
 import i18n from '@/lang';
+import moment from 'moment';
 
 const filters = [
   {
@@ -372,6 +373,33 @@ const filters = [
       return `${formatSimpleHour(new Date(time))} | `;
     },
   },
+  {
+    name: 'formatCourseTime',
+    /**
+     *
+     * @param {*} time
+     * @returns
+     * 1. 不同年：2021-08-19 17:11
+     * 2. 同年不同天：08-19 17:11
+     * 3. 同天：17:11
+     */
+    handler(time) {
+      const nowTime = moment();
+      const createdTime = moment(time);
+
+      let formatStr = 'HH:mm';
+
+      if (!nowTime.isSame(createdTime, 'year')) {
+        formatStr = 'YYYY-MM-DD HH:mm';
+      }
+
+      if (!nowTime.isSame(createdTime, 'day')) {
+        formatStr = 'MM-DD HH:mm';
+      }
+
+      return createdTime.format(formatStr)
+    }
+  }
 ];
 
 export default {
