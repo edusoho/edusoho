@@ -523,6 +523,7 @@ export default {
       const { data, paging } = await MultiClassStudent.search({
         id: this.id,
         keyword: params.keyword ||this.keyword || '',
+        groupId: params.groupId || '',
         offset: params.offset || this.paging.offset || 0,
         limit: params.limit || this.paging.pageSize || 10,
       });
@@ -714,9 +715,8 @@ export default {
 
     },
     onGroupClick(res) {
-      console.log(res);
-      const keyId = res.key; 
-      this.getMultiClassStudents({ keyId });
+      const groupId = res.key; 
+      this.getMultiClassStudents({ groupId });
     },
     onSelectEmpty() {
       this.$message.error('请至少选中一项后进行修改！', 1);
