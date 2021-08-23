@@ -19,4 +19,6 @@ interface MultiClassGroupDao extends AdvancedDaoInterface
     public function findUnAssignGroups($multiClassId);
 
     public function getNoFullGroup($multiClassId, $fullNum);
+
+    public function getLatestGroup($multiClassId);
 }

@@ -25,4 +25,6 @@ interface MultiClassGroupService
     public function deleteMultiClassGroup($id);
 
     public function updateMultiClassGroup($id, $fields);
+
+    public function getLatestGroup($multiClassId);
 }

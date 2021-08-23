@@ -3,7 +3,6 @@
 namespace Biz\Assistant\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Assistant\AssistantException;
 use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
@@ -45,7 +44,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     {
         $assistantStudent = $this->get($id);
         if (empty($assistantStudent)) {
-            $this->createNewException(AssistantException::ASSISTANT_STUDENT_NOT_FOUND());
+            return;
         }
 
         return $this->getAssistantStudentDao()->delete($id);
@@ -295,8 +294,13 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $groupStudentNum = ArrayToolkit::index($groupStudentNum, 'groupId');
 
         $updateRecords = [];
-        foreach ($groupIds as $groupId) {
-            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum'] ?: 0];
+        foreach ($groupIds as $key => $groupId) {
+            if (empty($groupStudentNum[$groupId]['studentNum'])) {
+                $this->getMultiClassGroupDao()->delete($groupId);
+                unset($groupIds[$key]);
+                continue;
+            }
+            $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum']];
         }
 
         return $this->getMultiClassGroupDao()->batchUpdate($groupIds, $updateRecords);
