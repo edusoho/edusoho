@@ -16,7 +16,8 @@
     "lint:fix": "eslint  --fix  --ext .js --ext .jsx --ext .vue src/",
     "style-lint": "stylelint  src/**/*.scss",
     "style-lint:fix": "stylelint src/**/*.scss --fix",
-    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
+    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\"",
+    "try6": "php vendor/bin/dep deploy dev"
   },
   "husky": {
     "hooks": {
