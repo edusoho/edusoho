@@ -714,6 +714,7 @@ export default {
 
     },
     onGroupClick(res) {
+      console.log(res);
       const keyId = res.key; 
       this.getMultiClassStudents({ keyId });
     },
