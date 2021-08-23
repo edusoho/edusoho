@@ -1737,6 +1737,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($assistantStudent['group_id']);
                 if ($multiClassGroup['student_num'] <= 1) {
                     $this->getMultiClassGroupService()->deleteMultiClassGroup($multiClassGroup['id']);
+                    $this->getMultiClassGroupService()->sortMultiClassGroup($multiClassGroup['multi_class_id']);
                 } else {
                     $this->getMultiClassGroupService()->updateMultiClassGroup($multiClassGroup['id'], ['student_num' => $multiClassGroup['student_num'] - 1]);
                 }

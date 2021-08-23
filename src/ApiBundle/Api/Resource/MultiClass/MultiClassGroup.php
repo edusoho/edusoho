@@ -33,8 +33,9 @@ class MultiClassGroup extends AbstractResource
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filters($assistants);
         $assistants = ArrayToolkit::index($assistants, 'id');
-        foreach ($groups as &$group){
+        foreach ($groups as &$group) {
             $group['assistant'] = !empty($assistants[$group['assistant_id']]) ? $assistants[$group['assistant_id']] : [];
+            $group['name'] = MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$group['seq'];
         }
 
         return $groups;
