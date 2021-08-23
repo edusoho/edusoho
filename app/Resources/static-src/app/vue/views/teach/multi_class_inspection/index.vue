@@ -47,12 +47,13 @@ export default {
       try {
         this.inspectionList = await MultiClassInspection.search();
         _.forEach(this.inspectionList, async (inspection) => {
-          const info = await MultiClassInspection.getLiveInfoById({
-            query: {
-              id: inspection.activityId,
-            },
-          });
-          this.liveInfo.push(info);
+          this.liveInfo.push(
+            await MultiClassInspection.getLiveInfoById({
+              query: {
+                id: inspection.activityId,
+              },
+            })
+          );
         });
       } finally {
         this.getListLoading = false;
