@@ -48,11 +48,11 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             return;
         }
 
-        $assistant = $this->getUserService()->getUser($relation['assistant_id']);
+        $assistant = $this->getUserService()->getUser($relation['assistantId']);
 
         $record = [
             'user_id' => $userId,
-            'assistant_id' => $relation['assistant_id'],
+            'assistant_id' => $relation['assistantId'],
             'multi_class_id' => $multiClassId,
             'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
             'sign' => $this->makeSign(),

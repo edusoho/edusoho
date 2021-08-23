@@ -32,10 +32,10 @@ class GenerateMultiClassRecordJob extends AbstractJob
                 continue;
             }
 
-            $assistant = $assistants[$relations[$member['userId']]['assistant_id']];
+            $assistant = $assistants[$relations[$member['userId']]['assistantId']];
             $records[] = [
                 'user_id' => $member['userId'],
-                'assistant_id' => $relations[$member['userId']]['assistant_id'],
+                'assistant_id' => $relations[$member['userId']]['assistantId'],
                 'multi_class_id' => $multiClassId,
                 'data' => json_encode(['title' => '加入班课', 'content' => sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname'])]),
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
