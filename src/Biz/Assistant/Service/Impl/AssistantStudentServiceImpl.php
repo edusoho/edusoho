@@ -318,7 +318,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
         $records = [];
         foreach ($studentIds as $studentId) {
-            $relation = $currentRelations[$studentId]['assistantId'];
+            $relation = $currentRelations[$studentId];
             $assistant = $assistants[$currentRelations[$studentId]['assistantId']];
             if (empty($groups[$relation['group_id']])) {
                 $content = sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname']);
