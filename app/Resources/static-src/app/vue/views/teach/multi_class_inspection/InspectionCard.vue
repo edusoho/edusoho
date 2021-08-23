@@ -32,10 +32,12 @@
         </a>
       </div>
       <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generated'" class="inspection-card__button live-start">
-        <svg-icon class="icon-live" icon="icon-live-playback" />
-        查看回放
+        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+          <svg-icon class="icon-live" icon="icon-live-playback" />
+          查看回放
+        </a>
       </div>
-      <div v-if="liveInfo.info.status === 'finished'" class="inspection-card__button live-start">
+      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'generating'" class="inspection-card__button live-start">
         <a class="live-start url-block" :href="liveInfo.info.viewUrl">
           <svg-icon class="icon-live" icon="icon-live-playback" />
           直播已结束，回放生成中
