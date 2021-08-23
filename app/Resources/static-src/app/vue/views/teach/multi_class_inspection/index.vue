@@ -45,9 +45,10 @@ export default {
     async getMultiClassInspectionList() {
       this.getListLoading = true;
       try {
+        const result = [];
         this.inspectionList = await MultiClassInspection.search();
-        await _.forEach(this.inspectionList, async (inspection) => {
-          this.liveInfo.push(
+        _.forEach(this.inspectionList, async (inspection) => {
+          result.push(
             await MultiClassInspection.getLiveInfoById({
               query: {
                 id: inspection.activityId,
@@ -55,6 +56,7 @@ export default {
             })
           );
         });
+        this.liveInfo = Promise.all(result);
       } finally {
         this.getListLoading = false;
       }
