@@ -38,6 +38,10 @@ class GenerateReplayJob extends AbstractJob
             }
 
             $activity = $activities[$liveActivity['id']];
+            if ($activity['startTime'] > time()) {
+                continue;
+            }
+
             try {
                 $result = $this->getLiveReplayService()->generateReplay(
                     $liveActivity['liveId'],
