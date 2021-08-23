@@ -54,7 +54,8 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             $content = sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname']);
         } else {
             $group = $this->getMultiClassGroupService()->getMultiClassGroup($relation['group_id']);
-            $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], $group['name'], $assistant['nickname']);
+            $groupName = empty($group) ? MultiClassGroupService::MULTI_CLASS_GROUP_NAME.'0' : MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$group['seq'];
+            $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], $groupName, $assistant['nickname']);
         }
 
         $record = [

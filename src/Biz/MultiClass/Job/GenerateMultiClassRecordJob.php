@@ -40,7 +40,8 @@ class GenerateMultiClassRecordJob extends AbstractJob
             if (empty($groups[$relation['group_id']])) {
                 $content = sprintf('加入班课(%s), 分配助教(%s)', $multiClass['title'], $assistant['nickname']);
             } else {
-                $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], $groups[$relation['group_id']]['name'], $assistant['nickname']);
+                $groupName = MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$groups[$relation['group_id']]['seq'];
+                $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], $groupName, $assistant['nickname']);
             }
 
             $records[] = [
