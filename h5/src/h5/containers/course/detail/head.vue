@@ -194,7 +194,7 @@ export default {
 
     continueLearningText() {
       const { nextTask } = this.nextStudy;
-      return nextTask && nextTask.result ? '继续学习' : '开始学习';
+      return nextTask && nextTask.result ? this.$t('courseLearning.continueLearning') : this.$t('courseLearning.startLearning');
     }
   },
   watch: {

@@ -3,6 +3,7 @@
     <van-list
       v-model="loading"
       :finished="finished"
+      :loading-text="$t('toast.loading')"
       @load="onLoad"
     >
       <discussion-item
@@ -66,11 +67,11 @@ export default {
 
   computed: {
     emptyText() {
-      return this.type === 'question' ? '暂无问答' : '暂无话题';
+      return this.type === 'question' ? this.$t('courseLearning.noQA') : this.$t('courseLearning.noTopics');
     },
 
     createText() {
-      return this.type === 'question' ? '发起问答' : '发起话题';
+      return this.type === 'question' ? this.$t('courseLearning.initiateQA') : this.$t('courseLearning.initiateTopics') ;
     }
   },
 

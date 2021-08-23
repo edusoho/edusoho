@@ -7,8 +7,8 @@
         color="#000"
         @click="handleClickGoToList"
       />
-      <h3 class="detail-header__title">笔记详情</h3>
-      <span class="detail-header__btn">回复</span>
+      <h3 class="detail-header__title">{{ $t('courseLearning.noteDetails') }}</h3>
+      <span class="detail-header__btn">{{ $t('courseLearning.reply') }}</span>
     </div>
 
     <div class="note-body">

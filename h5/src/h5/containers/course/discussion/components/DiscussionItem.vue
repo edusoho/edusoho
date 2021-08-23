@@ -5,7 +5,7 @@
     <div class="discussion-details">
       <div class="discussion-details__left">
         <img class="user-avatar" :src="item.user.avatar.small">
-        <span>{{ item.user.nickname }}发起 {{ item.createdTime | formatCourseTime }}</span>
+        <span>{{ item.user.nickname }}{{ $t('courseLearning.initiate') }} {{ item.createdTime | formatCourseTime }}</span>
       </div>
       <div class="discussion-details__right">
         <i class="iconfont icon-review"></i>

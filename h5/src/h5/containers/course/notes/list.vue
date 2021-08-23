@@ -3,6 +3,7 @@
     <van-list
       v-model="loading"
       :finished="finished"
+      :loading-text="$t('toast.loading')"
       @load="onLoad"
     >
       <note-item
@@ -15,7 +16,7 @@
     </van-list>
     <empty
       v-if="!list.length && finished"
-      text="暂无笔记"
+      :text="$t('courseLearning.noNotes')"
     />
   </div>
 </template>

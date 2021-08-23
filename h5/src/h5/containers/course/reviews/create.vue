@@ -7,8 +7,8 @@
         color="#000"
         @click="handleClickGoToList"
       />
-      <h3 class="create-header__title">评价</h3>
-      <span class="create-header__btn" @click="createReview">发布</span>
+      <h3 class="create-header__title">{{ $t('courseLearning.evaluation') }}</h3>
+      <span class="create-header__btn" @click="createReview">{{ $t('courseLearning.publish') }}</span>
     </div>
 
     <van-form ref="form">
@@ -20,7 +20,7 @@
           void-icon="star"
           void-color="#eee"
         />
-        <p v-if="rateHasError" class="error-message">请打分</p>
+        <p v-if="rateHasError" class="error-message">{{ $t('courseLearning.scoring') }}</p>
       </div>
 
       <div class="review-create__content">
@@ -29,8 +29,8 @@
           type="textarea"
           rows="3"
           autosize
-          placeholder="评价内容..."
-          :rules="[{ required: true, message: '请输入评价内容' }]"
+          :placeholder="$t('courseLearning.evaluationContent')"
+          :rules="[{ required: true, message: $t('courseLearning.inputEvaluationContent') }]"
         />
       </div>
     </van-form>
