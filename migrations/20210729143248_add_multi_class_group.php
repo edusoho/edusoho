@@ -34,9 +34,11 @@ class AddMultiClassGroup extends Migration
             CREATE TABLE IF NOT EXISTS `multi_class_record` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+                `assistant_id` int(10) unsigned NOT NULL COMMENT '助教ID',
                 `multi_class_id` int(10) NOT NULL COMMENT '班课ID',
                 `data` text COMMENT 'json格式信息',
                 `sign` varchar(64) not null default '' COMMENT '唯一标识',
+                `is_push` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否上传',
                 `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='班课上报记录'; 

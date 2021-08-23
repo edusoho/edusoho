@@ -21,6 +21,7 @@ use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
+use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
@@ -1671,12 +1672,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
             $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($member['courseId']);
             if (!empty($multiClass)) {
-                $member = $this->getMemberDao()->update($member['id'], ['multiClassId' => $multiClass['id']]);
                 if ('group' == $multiClass['type']) {
                     $this->getMultiClassGroupService()->setGroupNewStudent($multiClass, $member['userId']);
                 } else {
                     $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
                 }
+                $this->getMultiClassRecordService()->createRecord($member['userId'], $multiClass['id']);
             }
 
             if (!empty($reason)) {
@@ -2018,5 +2019,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    protected function getMultiClassRecordService()
+    {
+        return $this->createService('MultiClass:MultiClassRecordService');
     }
 }

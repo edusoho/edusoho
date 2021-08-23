@@ -14,9 +14,12 @@ use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use ESCloud\SDK\Service\ScrmService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -95,7 +98,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
                 $multiClass
             );
 
-            $this->dispatch('multi_class.create', new Event($multiClass));
+            $this->dispatchEvent('multi_class.create', new Event($multiClass));
 
             $this->commit();
         } catch (\Exception $e) {
@@ -358,11 +361,27 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     }
 
     /**
+     * @return ScrmService
+     */
+    protected function getSCRMService()
+    {
+        return $this->biz['ESCloudSdk.scrm'];
+    }
+
+    /**
      * @return CourseService
      */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -419,5 +438,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getMultiClassDao()
     {
         return $this->createDao('MultiClass:MultiClassDao');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

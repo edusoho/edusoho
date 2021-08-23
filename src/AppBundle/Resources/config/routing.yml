@@ -506,6 +506,14 @@ settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
 
+settings_scrm:
+    path: /settings/scrm
+    defaults: { _controller: AppBundle:Settings:scrm }
+
+settings_scrm_bind:
+    path: /settings/scrm/bind
+    defaults: { _controller: AppBundle:Settings:scrmBind }
+
 settings_setup_password:
     path: /settings/setup_password
     defaults: { _controller: AppBundle:Settings:setupPassword }
@@ -3785,6 +3793,10 @@ feedback:
   path: /feedback
   defaults: { _controller: AppBundle:Default:feedback }
 
+scrm_user_bind_result:
+  path: /scrm/user/{uuid}/bind/result
+  defaults: { _controller: AppBundle:SCRM/Bind:result }
+
 live_cloud_callback:
   path: /callback/live/handle
   defaults: { _controller: AppBundle:Callback/Live:handle }
@@ -3796,3 +3808,4 @@ agreement:
 disclaimers:
   path:  /disclaimers
   defaults: { _controller: AppBundle:Agreement:disclaimers }
+

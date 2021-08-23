@@ -17,9 +17,11 @@ use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Goods\Service\GoodsService;
+use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
+use Biz\System\Service\CacheService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -700,9 +702,66 @@ class CourseController extends CourseBaseController
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
 
+        if (!empty($assistant['scrmStaffId'])) {
+            $scrmBindQrCode = $this->generateScrmQrCode($assistant);
+            if (!empty($scrmBindQrCode)) {
+                $assistant['weChatQrCode'] = $scrmBindQrCode;
+            }
+        }
+
         return $this->render('course/widgets/course-assistant-info.html.twig', [
             'assistant' => $assistant,
         ]);
+    }
+
+    protected function generateScrmQrCode($assistant)
+    {
+        $scrmBind = $this->getSCRMService()->isScrmBind();
+        if (empty($scrmBind)) {
+            return '';
+        }
+
+        $user = $this->setScrmData();
+        if (!empty($user['scrmUuid'])) {
+            return $this->getSCRMService()->getAssistantQrCode($assistant);
+        }
+
+        $url = $this->getScrmStudentBindUrl($assistant);
+        if (empty($url)) {
+            return '';
+        }
+
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            [
+                'userId' => $user['id'],
+                'data' => [
+                    'url' => $url,
+                ],
+                'times' => 1,
+                'duration' => 3600,
+            ]
+        );
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    protected function setScrmData()
+    {
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+        $user = $this->getSCRMService()->setUserSCRMData($user);
+
+        return $user;
+    }
+
+    protected function getScrmStudentBindUrl($assistant)
+    {
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+
+        $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user, $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
+
+        return $bindUrl;
     }
 
     public function newestStudentsAction($course, $member = [])
@@ -1080,5 +1139,29 @@ class CourseController extends CourseBaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return \Biz\SCRM\Service\SCRMService
+     */
+    protected function getSCRMService()
+    {
+        return $this->createService('SCRM:SCRMService');
     }
 }

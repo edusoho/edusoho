@@ -3037,6 +3037,8 @@ user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
+user.settings.scrm: 销客助手绑定
+user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -12008,8 +12010,11 @@ course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微�
 
 feedback_title: 谛听，直连EduSoho产品经理
 
+scrm.assistant.bind_title: 请使用企业微信扫码
+
 #课程购买协议设置
 admin_v2.course_purchase_agreement.title: 名称
 admin_v2.course_purchase_agreement.content: 内容
 admin_v2.course_purchase_agreement.default_title: 用户购买协议
 admin_v2.course_purchase_agreement.not_set_tips: 请联系网校管理员添加《用户购买协议》
+

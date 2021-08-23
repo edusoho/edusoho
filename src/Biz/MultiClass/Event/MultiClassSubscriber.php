@@ -57,6 +57,16 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
                 'multiClassId' => $multiClass['id'],
             ],
         ]);
+
+        $this->getSchedulerService()->register([
+            'name' => 'GenerateMultiClassRecordJob_'.$multiClass['id'],
+            'expression' => time(),
+            'class' => 'Biz\MultiClass\Job\GenerateMultiClassRecordJob',
+            'misfire_threshold' => 60 * 60,
+            'args' => [
+                'multiClassId' => $multiClass['id'],
+            ],
+        ]);
     }
 
     /**
