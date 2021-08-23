@@ -79,8 +79,6 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
         }
 
         try {
-            $this->beginTransaction();
-
             $list = [[
                 'customerUniqueId' => $user['scrmUuid'],
                 'staffId' => $assistant['scrmStaffId'],
@@ -93,10 +91,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             if ($result['ok']) {
                 $this->getMultiClassRecordDao()->update($record['id'], ['is_push' => 1]);
             }
-
-            $this->commit();
         } catch (\Exception $e) {
-            $this->rollback();
         }
     }
 
