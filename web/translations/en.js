@@ -1629,4 +1629,5 @@ t.add("admin_v2.system.user_content_control.content_audit_setting.auto_audit.aud
 t.add("admin_v2.operation.audit_center.batch_operate_tips", "Please select the content to be operated in batches first", "js", "en");
 t.add("admin_v2.operation.audit_center.batch_operate_success_tips", "Success", "js", "en");
 t.add("homepage", "Home", "js", "en");
+t.add("admin_v2.teacher_qualification.setting_required", "After the Teacher Qualification Announcement function is closed, the [Teacher Qualification Announcement] page will be hidden on the home page,users will not be able to see the Teacher Qualification Announcement module.", "js", "en");
 })(Translator);

@@ -4,7 +4,6 @@
       <a-input-search class="pull-left" placeholder="请输入姓名或手机号搜索" style="width: 200px" @search="onSearch" />
       <a-space class="pull-left cd-ml16" size="middle">
         <a-button
-          v-if="isPermission('course_member_create')"
           icon="plus"
           type="primary"
           @click="addStudent()"
@@ -36,7 +35,6 @@
         </a-button>
 
         <a-button
-          v-if="isPermission('course_member_delete')"
           type="primary"
           @click="onBatchRemoveStudent"
         >
@@ -47,7 +45,7 @@
         </a-button>
 
         <a-button
-          v-if="selectedRowKeys.length === 0 && isPermission('course_member_deadline_edit')"
+          v-if="selectedRowKeys.length === 0"
           type="primary"
           @click="onSelectEmpty"
         >
@@ -58,7 +56,7 @@
         </a-button>
 
         <a-button
-          v-if="selectedRowKeys.length > 0 && isPermission('course_member_deadline_edit')"
+          v-if="selectedRowKeys.length > 0"
           type="primary"
           data-toggle="modal"
           data-target="#modal"
@@ -85,7 +83,6 @@
 
       <a-space class="right-export" size="middle">
         <a-button
-          v-if="isPermission('course_member_export')"
           type="primary"
           class="js-export-btn"
           href="javascript:;"
@@ -111,7 +108,7 @@
       </template>
     </a-modal>
   <div>
-    <a-row> 
+    <a-row>
       <a-col :span="3">
        <div class="student-group">学员分组</div>
         <a-menu mode="inline" @select="onGroupClick">
@@ -161,7 +158,7 @@
                 cancel-text="取消"
                 @confirm="confirm(record.user.id)"
               >
-                <span v-if="isPermission('course_member_delete')" style="color: #fe4040; cursor: pointer;">移除</span>
+                <span style="color: #fe4040; cursor: pointer;">移除</span>
               </a-popconfirm>
             </a-space>
           </template>
@@ -172,7 +169,7 @@
     <assistant-list-modal :visible="assistantListModalVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <change-group-modal :visible="changeGroupVisible" :groupList="groupList" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="updateStudentList"></change-group-modal>
-    
+
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -488,7 +485,7 @@ export default {
 
   async created() {
     this.getMultiClassStudents();
-    
+
     await this.getMultiClass();
     await this.getMultiClassStudentsGroup();
   },
@@ -598,17 +595,11 @@ export default {
       this.getMultiClassStudents({ keyword })
     },
     onClickHomeworkModal(user) {
-      if (!this.isPermission('course_homework_review')) {
-        return;
-      }
       this.selectedUser = user;
       this.getHomeworkResults();
       this.homeworkModalVisible = true;
     },
     onClickTestpaperModal(user) {
-      if (!this.isPermission('course_exam_review')) {
-        return;
-      }
       this.selectedUser = user;
       this.getTestpaperResults();
       this.testpaperModalVisible = true;
@@ -853,7 +844,7 @@ export default {
     .right-export {
         margin: 24px 0 016px;
     }
-   
+
     }
     @media only screen and (min-width: 1400px) {
         /* For mobile phones: */

@@ -232,7 +232,19 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
             new \Twig_SimpleFunction('is_assistant', [$this, 'isAssistant']),
             new \Twig_SimpleFunction('is_saas', [$this, 'isSaas']),
+            new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
         ];
+    }
+
+    public function isTeacherRole($userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (in_array('ROLE_TEACHER', $user['roles'])) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isSaas()

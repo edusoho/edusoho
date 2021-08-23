@@ -141,6 +141,8 @@ class MultiClassStudent extends AbstractResource
 
             $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']];
             $member['group'] = isset($groups[$assistantStudentRef['group_id']]) ? $groups[$assistantStudentRef['group_id']] : [];
+            $groupName = empty($member['group']) ? MultiClassGroupService::MULTI_CLASS_GROUP_NAME.'0' : MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$member['group']['seq'];
+            $member['group']['name'] = $groupName;
         }
 
         return $members;

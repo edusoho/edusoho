@@ -433,6 +433,8 @@ admin_v2_group_set:
     - admin_group_set
 admin_v2_invite_set:
     - admin_invite_set
+admin_v2_teacher_qualification_set:
+    - admin_teacher_qualification_set
 admin_v2_message_open_set:
     - admin_message_setting
 admin_v2_message_send_set:

@@ -33,7 +33,6 @@ class ExceptionListener
 
         $user = $this->getUser();
         $request = $event->getRequest();
-
         if (!$request->isXmlHttpRequest()) {
             $this->setTargetPath($request);
             $exception = $this->convertException($exception);
@@ -43,7 +42,7 @@ class ExceptionListener
             } elseif (false !== strpos(get_parent_class($exception), 'AbstractException')) {
                 // 出现异常跳回原页面
                 $targetUrl = $request->server->get('HTTP_REFERER', '/login');
-                if ($this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) {
+                if (($this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) || !empty($user)) {
                     $targetUrl = $this->generateUrl('homepage');
                 }
                 $response = new RedirectResponse($targetUrl);
