@@ -3,7 +3,6 @@
 namespace Biz\Assistant\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Assistant\AssistantException;
 use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
@@ -45,7 +44,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     {
         $assistantStudent = $this->get($id);
         if (empty($assistantStudent)) {
-            $this->createNewException(AssistantException::ASSISTANT_STUDENT_NOT_FOUND());
+            return;
         }
 
         return $this->getAssistantStudentDao()->delete($id);
