@@ -292,9 +292,16 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     private function updateMultiClassStudentsGroup($assistantStudentIds, $groupId)
     {
         $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($groupId);
+        $fields = [];
         foreach ($assistantStudentIds as $assistantStudentId) {
-            $this->getAssistantStudentDao()->update($assistantStudentId, ['group_id' => $groupId, 'assistantId' => $multiClassGroup['assistant_id']]);
+            $fields[] = [
+                'id' => $assistantStudentId,
+                'group_id' => $groupId,
+                'assistantId' => $multiClassGroup['assistant_id'],
+            ];
         }
+
+        $this->getAssistantStudentDao()->batchUpdate($assistantStudentIds, $fields);
     }
 
     private function batchUpdateGroupStudentNum($multiClassId, $groupIds)
