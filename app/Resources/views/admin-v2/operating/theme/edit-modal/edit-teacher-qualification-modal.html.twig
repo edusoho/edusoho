@@ -1,0 +1,14 @@
+{% extends 'admin-v2/operating/theme/edit-modal-layout.html.twig' %}
+{% block custom_category_count %}{% endblock %}
+{% block custom_orderby %}{% endblock %}
+{% block custom_count %}
+  <div class="form-group">
+    <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_count'|trans}}</label>
+    <div class="col-sm-4">
+      {% set selectOptions = {6: 6, 12: 12} %}
+      <select class="form-control width-input-large" name="count">
+        {{ select_options(selectOptions, config.count|default(12)) }}
+      </select>
+    </div>
+  </div>
+{% endblock %}

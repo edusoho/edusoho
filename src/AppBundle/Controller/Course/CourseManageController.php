@@ -586,7 +586,8 @@ class CourseManageController extends BaseController
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
             $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
-            $course['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
+            $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            $course['vipLevelId'] = empty($vipRight) || !in_array($vipRight['vipLevelId'], $vipLevelIds) ? '0' : $vipRight['vipLevelId'];
         }
 
         return $this->render(

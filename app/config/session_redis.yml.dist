@@ -1,0 +1,9 @@
+# parameters:
+    # session_redis:
+        # host: 127.0.0.1
+        # port: 6380
+        # timeout: 1
+        # reserved: null
+        # retry_interval: 100
+        # key_prefix: ~
+        # password: ~

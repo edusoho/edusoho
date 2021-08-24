@@ -21,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification',
     ];
 
     public static function convertUnderline($str)
@@ -71,6 +71,16 @@ class Setting extends AbstractResource
         return [
             'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
             'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
+    }
+
+    public function getQualification()
+    {
+        $qualification = $this->getSettingService()->get('qualification', []);
+        $enable = $qualification['qualification_enabled'] ?: 0;
+
+        return [
+            'qualification' => intval($enable),
         ];
     }
 
@@ -713,4 +723,3 @@ class Setting extends AbstractResource
         return $this->service('Mp:MpService');
     }
 }
-

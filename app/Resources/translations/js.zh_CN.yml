@@ -1799,3 +1799,5 @@ admin_v2.system.user_content_control.content_audit_setting.auto_audit.audit_befo
 admin_v2.operation.audit_center.batch_operate_tips: 未选中任何内容
 admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功
 homepage: 首页
+
+admin_v2.teacher_qualification.setting_required: 教师资质公示功能关闭后，首页将隐藏[教师资质公示]页面，用户无法看到教师资质公示模块。
