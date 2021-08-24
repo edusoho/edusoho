@@ -110,8 +110,10 @@ class MultiClassInspection extends AbstractResource
         $livingTasks = [];
         $notStartTasks = [];
         $endTasks = [];
+        $otherTasks = [];
         foreach ($tasks as $task) {
             if (empty($task['liveInfo'])) {
+                $otherTasks[] = $task;
                 continue;
             }
 
@@ -139,7 +141,7 @@ class MultiClassInspection extends AbstractResource
             }
         }
 
-        return array_merge($errorTasks, $livingTasks, $notStartTasks, $endTasks);
+        return array_merge($errorTasks, $livingTasks, $notStartTasks, $endTasks, $otherTasks);
     }
 
     /**
