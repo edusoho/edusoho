@@ -12,7 +12,7 @@
           <router-link :to="{ name: 'MultiClassHomewordReview' }">作业批阅</router-link>
         </a-menu-item>
         <a-menu-item class="manage-menu-item manage-menu-item--space" key="data_preview">
-          <router-link :to="{ name: 'MultiClassDataPreview'}">数据预览</router-link>
+          <router-link :to="{ name: 'MultiClassDataPreview'}">数据概览</router-link>
         </a-menu-item>
       </a-menu>
 
