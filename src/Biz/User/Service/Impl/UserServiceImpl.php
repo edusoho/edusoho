@@ -2067,6 +2067,7 @@ class UserServiceImpl extends BaseService implements UserService
                 PHP_INT_MAX
             );
             $mobileNameUser = $this->getUserByNickname($keyword);
+
             $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : [];
             $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
             $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;

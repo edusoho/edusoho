@@ -63,7 +63,6 @@ check env:
       alias: redis
   script:
     - git config diff.nodiff.command /usr/bin/true
-    - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - git config --unset diff.nodiff.command
     - bin/phpunit-diff
   only:
@@ -84,6 +83,7 @@ check env:
     - name: dockerhub.codeages.work/library-proxy/library/redis:latest
       alias: redis
   script:
+    - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit-diff
   only:
     refs:
