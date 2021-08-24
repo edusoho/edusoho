@@ -525,7 +525,7 @@ export default {
       this.testpaperResultList = {};
     },
     async getMultiClassStudentsGroup(){
-    //  this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
+     this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
     },
     updateStudentList(){
       this.editAssistantVisible = false
