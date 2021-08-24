@@ -413,33 +413,7 @@ export default {
   },
   data() {
     return {
-      groupList:[
-        {
-          assistant:{
-            nickname:"1211"
-          },
-          assistant_id: "60",
-          course_id: "170",
-          created_time: "1629805870",
-          id: "54",
-          multi_class_id: "142",
-          name: "分组2",
-          seq: "2",
-          student_num: "4"
-          }, {
-          assistant:{
-            nickname:"1211"
-          },
-          assistant_id: "60",
-          course_id: "170",
-          created_time: "1629805870",
-          id: "54",
-          multi_class_id: "142",
-          name: "分组2",
-          seq: "2",
-          student_num: "4"
-          }
-      ],
+      groupList:[],
       resultColumns,
       students: [],
       modalShowUser: {},
@@ -552,7 +526,7 @@ export default {
       this.testpaperResultList = {};
     },
     async getMultiClassStudentsGroup(){
-    //  this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
+     this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
     },
     updateStudentList(){
       this.editAssistantVisible = false
