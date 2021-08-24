@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '班课巡检' }]" :headerTip="headerTip">
+  <aside-layout :breadcrumbs="[{ name: '班课巡检' }]" :headerTip="headerTip" :headerTitle="headerTitle">
     <a-spin class="multi-class-inspection" :spinning="getListLoading">
       <a-row :gutter="[24,24]">
         <a-col :sm="24" :lg="12" :xl="8" :xxl="6" v-for="(inspection, index) in inspectionList" :key="inspection.id">
@@ -30,6 +30,7 @@ export default {
       inspectionList: [],
       getListLoading: false,
       headerTip: "班课巡检仅展示今天所有直播课",
+      headerTitle:"仅支持EduSoho直播",
       liveInfo: [],
     };
   },

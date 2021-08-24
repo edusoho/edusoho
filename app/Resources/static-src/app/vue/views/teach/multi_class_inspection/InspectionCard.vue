@@ -82,8 +82,9 @@ export default {
   },
   computed: {
     realTimeStudent() {
-      const { info } = this.liveInfo;
-      return _.size(info) ? info.viewerOnlineNum : 0;
+      return this.liveInfo.info.viewerOnlineNum
+        ? this.liveInfo.info.viewerOnlineNum
+        : 0;
     },
   },
   methods: {
