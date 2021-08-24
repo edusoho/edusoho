@@ -7,6 +7,37 @@ admin_v2:
             quick_entrance_icon_class: 'icon-color-green'
             name: admin_v2.nav.education
             children:
+                admin_v2_education_overview:
+                    name: admin_v2.education_overview.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_education_overview_data:
+                            name: admin_v2.education_overview_data.basic_group
+                            router_name: admin_v2_multi_class_data_overview
+                            children:
+                                admin_v2_education_overview_manage:
+                                    name: admin_v2.education_overview.basic_group
+                                    router_name: admin_v2_multi_class_data_overview
+                admin_v2_education_multi_class:
+                    name: admin_v2.multi_class.basic_group
+                    is_group: true
+                    children:
+                        # 班课巡检
+                        admin_v2_multi_class_inspection:
+                            name: admin_v2.multi_class_inspection.basic_menu
+                            router_name: admin_v2_multi_class_inspection
+                            children:
+                                admin_v2_multi_class_inspection_manage:
+                                    name: admin_v2.multi_class.basic_menu
+                                    router_name: admin_v2_multi_class_inspection
+                        # 班课列表
+                        admin_v2_multi_class:
+                            name: admin_v2.multi_class.basic_menu
+                            router_name: admin_v2_multi_class
+                            children:
+                                admin_v2_multi_class_manage:
+                                    name: admin_v2.multi_class.basic_menu
+                                    router_name: admin_v2_multi_class
                 admin_v2_education_manage:
                     name: admin_v2.education.basic_group
                     is_group: true
@@ -19,14 +50,6 @@ admin_v2:
                                 admin_v2_multi_class_product_manage:
                                     name: admin_v2.multi_class_product.basic_menu
                                     router_name: admin_v2_multi_class_product
-                        # 班课
-                        admin_v2_multi_class:
-                            name: admin_v2.multi_class.basic_menu
-                            router_name: admin_v2_multi_class
-                            children:
-                                admin_v2_multi_class_manage:
-                                    name: admin_v2.multi_class.basic_menu
-                                    router_name: admin_v2_multi_class
                         # 教师管理
                         admin_v2_teacher:
                             quick_entrance_icon: 'teacher'
@@ -44,6 +67,14 @@ admin_v2:
                                 admin_v2_assistant_manage:
                                     name: admin_v2.assistant.basic_menu
                                     router_name: admin_v2_assistant
+                        # 参数设置
+                        admin_v2_multi_class_setting:
+                            name: admin_v2.multi_class_setting.basic_menu
+                            router_name: admin_v2_multi_class_setting
+                            children:
+                                admin_v2_multi_class_setting_manage:
+                                    name: admin_v2.multi_class_setting.basic_menu
+                                    router_name: admin_v2_multi_class_setting
         # 教学模块
         admin_v2_teach:
             quick_entrance_icon_class: 'icon-color-green'

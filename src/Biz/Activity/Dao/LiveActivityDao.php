@@ -12,6 +12,8 @@ interface LiveActivityDao extends GeneralDaoInterface
 
     public function getByLiveId($liveId);
 
+    public function findByLiveIds($liveIds);
+
     public function getBySyncIdGTAndLiveId($liveId);
 
     public function getBySyncId($syncId);

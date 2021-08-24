@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 
@@ -33,7 +34,7 @@ class MultiClass extends AbstractResource
         $assistants = $this->getMemberService()->findMultiClassMemberByMultiClassIdAndRole($multiClass['id'], 'assistant');
         $multiClass['assistantIds'] = ArrayToolkit::column($assistants, 'userId');
 
-        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds'], 'user');
+        $this->getOCUtil()->single($multiClass, ['teacherIds', 'assistantIds']);
         $this->getOCUtil()->single($multiClass, ['courseId'], 'course');
 
         $userFilter = new UserFilter();
@@ -120,6 +121,29 @@ class MultiClass extends AbstractResource
             $prepareConditions['productId'] = $conditions['productId'];
         }
 
+        if (!empty($conditions['status'])) {
+            switch ($conditions['status']) {
+                case 'notStart':
+                    $prepareConditions['startTime_GT'] = time();
+                    break;
+                case 'living':
+                    $prepareConditions['startTime_LE'] = time();
+                    $prepareConditions['endTime_GE'] = time();
+                    break;
+                case 'end':
+                    $prepareConditions['endTime_LT'] = time();
+                    break;
+            }
+        }
+
+        if (!empty($conditions['teacherId'])) {
+            $prepareConditions['courseIds'] = ArrayToolkit::column($this->getMemberService()->findMembersByUserIdAndRoles($conditions['teacherId'], ['teacher']), 'courseId');
+        }
+
+        if (!empty($conditions['type'])) {
+            $prepareConditions['type'] = $conditions['type'];
+        }
+
         return $prepareConditions;
     }
 
@@ -162,6 +186,8 @@ class MultiClass extends AbstractResource
             $teacher = $teachers[$multiClass['id']];
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
+            $multiClass['status'] = $this->getMultiClassStatus($multiClass['start_time'], $multiClass['end_time']);
+            $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
             $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['courseId' => $multiClass['courseId'], 'status' => 'published', 'isLesson' => 1]);
@@ -190,9 +216,20 @@ class MultiClass extends AbstractResource
         return $multiClasses;
     }
 
+    private function getMultiClassStatus($startTime, $endTime)
+    {
+        if ($startTime > time()) {
+            return 'notStart';
+        } elseif ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        } elseif ($endTime < time()) {
+            return 'end';
+        }
+    }
+
     private function checkDataFields($multiClass)
     {
-        if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId'])) {
+        if (!ArrayToolkit::requireds($multiClass, ['title', 'courseId', 'productId', 'type'])) {
             throw MultiClassException::MULTI_CLASS_DATA_FIELDS_MISSING();
         }
 
@@ -261,5 +298,13 @@ class MultiClass extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

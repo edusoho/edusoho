@@ -20,6 +20,8 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassGroupService;
+use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Order\OrderException;
 use Biz\Product\Service\ProductService;
@@ -562,7 +564,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $teacherMembers = $this->buildTeachers($course, $teachers, $multiClassId);
+        $teacherMembers = $this->buildTeachers($course, $teachers, $existTeacherMembers, $multiClassId);
         if (empty($teacherMembers)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
@@ -650,7 +652,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'multiClassId' => $multiClassId,
         ];
 
-        $this->getMemberDao()->updateMembers($conditions, ['multiClassId' => 0]);
+        $this->getMemberDao()->updateMembers(array_merge($conditions, ['role' => 'teacher']), ['multiClassId' => 0]);
+
+        $this->getMemberDao()->batchDelete(array_merge($conditions, ['role' => 'assistant']));
 
         $this->getLogService()->info(
             'course',
@@ -668,17 +672,24 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseDao()->update($courseId, $fields);
     }
 
-    private function buildTeachers($course, $teachers, $multiClassId)
+    private function buildTeachers($course, $teachers, $existTeachers, $multiClassId)
     {
         $teacherMembers = [];
         $teachers = ArrayToolkit::index($teachers, 'id');
         $users = $this->getUserService()->findUsersByIds(array_keys($teachers));
+        $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
         $seq = 0;
         foreach ($teachers as $index => $teacher) {
             $user = $users[$teacher['id']];
             if (in_array('ROLE_TEACHER', $user['roles']) || $course['creator'] == $user['id']) {
+                if (empty($multiClassId)) {
+                    $teacherMultiClassId = empty($existTeachers[$teacher['id']]) ? 0 : $existTeachers[$teacher['id']]['multiClassId'];
+                } else {
+                    $teacherMultiClassId = $multiClassId;
+                }
+
                 $teacherMembers[] = [
-                    'multiClassId' => $multiClassId,
+                    'multiClassId' => $teacherMultiClassId,
                     'courseId' => $course['id'],
                     'courseSetId' => $course['courseSetId'],
                     'userId' => $teacher['id'],
@@ -1245,6 +1256,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdsAndClassroomId($userIds, $classroomId);
     }
 
+    public function findMembersByUserIdsAndRole($userIds, $role)
+    {
+        return $this->getMemberDao()->findByUserIdsAndRole($userIds, $role);
+    }
+
     public function becomeStudentByClassroomJoined($courseId, $userId)
     {
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
@@ -1656,7 +1672,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
             $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($member['courseId']);
             if (!empty($multiClass)) {
-                $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
+                if ('group' == $multiClass['type']) {
+                    $this->getMultiClassGroupService()->setGroupNewStudent($multiClass, $member['userId']);
+                } else {
+                    $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
+                }
+                $this->getMultiClassRecordService()->createRecord($member['userId'], $multiClass['id']);
             }
 
             if (!empty($reason)) {
@@ -1711,7 +1732,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             $result = $this->getMemberDao()->delete($member['id']);
-            $this->getAssistantStudentService()->deleteByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            $assistantStudent = $this->getAssistantStudentService()->getByStudentIdAndCourseId($member['userId'], $member['courseId']);
+            if (!empty($assistantStudent['group_id'])) {
+                $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($assistantStudent['group_id']);
+                if ($multiClassGroup['student_num'] <= 1) {
+                    $this->getMultiClassGroupService()->deleteMultiClassGroup($multiClassGroup['id']);
+                    $this->getMultiClassGroupService()->sortMultiClassGroup($multiClassGroup['multi_class_id']);
+                } else {
+                    $this->getMultiClassGroupService()->updateMultiClassGroup($multiClassGroup['id'], ['student_num' => $multiClassGroup['student_num'] - 1]);
+                }
+            }
+            $this->getAssistantStudentService()->delete($assistantStudent['id']);
 
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'exit', $reason);
@@ -1736,7 +1767,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
     {
-        if ($this->isCourseTeacher($courseId, $userId)) {
+        $user = $this->getUserService()->getUser($userId);
+        if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
             $course = $this->getCourseService()->getCourse($courseId);
             $teacherId = array_shift($course['teacherIds']);
 
@@ -1755,9 +1787,26 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdAndRoles($userId, $roles);
     }
 
+    public function findGroupUserIdsByCourseIdAndRoles($courseId, $roles)
+    {
+        $courseMembers = $this->getMemberDao()->findUserIdsByCourseIdAndRoles($courseId, $roles);
+
+        return ArrayToolkit::group($courseMembers, 'role');
+    }
+
     public function getMemberByMultiClassIdAndUserId($multiClassId, $userId)
     {
         return $this->getMemberDao()->getByMultiClassIdAndUserId($multiClassId, $userId);
+    }
+
+    public function findMultiClassIdsByUserId($userId)
+    {
+        return $this->getMemberDao()->findMultiClassIdsByUserId($userId);
+    }
+
+    public function countGroupByCourseId($conditions)
+    {
+        return $this->getMemberDao()->countGroupByCourseId($conditions);
     }
 
     /**
@@ -1774,6 +1823,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 
     /**
@@ -1964,5 +2021,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    protected function getMultiClassRecordService()
+    {
+        return $this->createService('MultiClass:MultiClassRecordService');
     }
 }

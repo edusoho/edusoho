@@ -18,7 +18,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <a slot="nickname" slot-scope="text, item" @click="edit(item.id)">{{ text }}</a>
+      <template slot="nickname" slot-scope="text, record">
+          <a-avatar :size="48" :src="record.avatar.middle" icon="user"></a-avatar>
+          <a class="ml8" @click="edit(record.id)">{{ text }}</a>
+      </template>
+
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
@@ -36,7 +40,9 @@
       </div>
 
       <template slot="action" slot-scope="item">
-        <a-button type="link" @click="edit(item.id)">查看</a-button>
+        <a-button type="link" @click="edit(item.id)">
+          查看
+        </a-button>
 
         <!-- v-if="showEditorSualification" 判断是否可以编辑教师资质，后续新增，把判断给编辑教师资质按钮即可 -->
         <a-dropdown v-if="showEditorSualification">
@@ -44,6 +50,28 @@
             <a-icon type="caret-down" />
           </a>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/edit`"
+              >
+                编辑用户信息
+              </a>
+            </a-menu-item>
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/avatar`"
+              >
+                修改用户头像
+              </a>
+            </a-menu-item>
             <a-menu-item @click="handleEditorQualification(item)">
               编辑教师资质
             </a-menu-item>
@@ -75,7 +103,6 @@
             style="width: 100%;"
             v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' },
-              { type: 'integer', message: '请输入整数' },
               { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
           />
@@ -111,22 +138,39 @@ const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
-    width: '25%',
+    ellipsis: true,
     scopedSlots: { customRender: "nickname" },
   },
   {
+    title: "现带班课总数",
+    dataIndex: 'liveMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "现学员总数",
+    dataIndex: 'liveMultiClassStudentNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课总数",
+    dataIndex: 'endMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课学员总数",
+    dataIndex: 'endMultiClassStudentNum',
+    ellipsis: true,
+  },
+  {
     title: "是否推荐",
-    width: '25%',
     scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
-    width: '25%',
     scopedSlots: { customRender: "loginInfo" },
   },
   {
     title: "操作",
-    width: '25%',
     scopedSlots: { customRender: "action" },
   },
 ];
@@ -144,7 +188,7 @@ export default {
   components: {
     userInfoTable,
     AsideLayout,
-    EditorQualification
+    EditorQualification,
   },
 
   data() {
@@ -209,7 +253,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
+      this.pagination = pagination;
     },
 
     async onSearch(nickname) {
@@ -287,7 +331,7 @@ export default {
     },
 
     validateRange(rule, value, callback) {
-      if (_.inRange(value, 0, 10001) === false) {
+      if (value && (_.inRange(value, 0, 10001) === false || /^\+?[0-9][0-9]*$/.test(value) === false)) {
         callback('请输入0-10000的整数')
       }
 

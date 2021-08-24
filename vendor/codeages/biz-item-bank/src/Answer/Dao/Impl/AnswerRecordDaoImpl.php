@@ -28,6 +28,15 @@ class AnswerRecordDaoImpl extends GeneralDaoImpl implements AnswerRecordDao
         return $this->findByFields(['answer_scene_id' => $answerSceneId]);
     }
 
+    public function countGroupByAnswerSceneId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(*) as count, answer_scene_id")
+            ->groupBy('answer_scene_id');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
@@ -51,6 +60,7 @@ class AnswerRecordDaoImpl extends GeneralDaoImpl implements AnswerRecordDao
                 'status <> :statusNeq',
                 'begin_time > :beginTime_GT',
                 'begin_time <= :beginTime_ELT',
+                'end_time <= :endTime_LE',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'assessment_id = :assessment_id',
             ],
