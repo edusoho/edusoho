@@ -107,14 +107,24 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $this->beginTransaction();
 
             $groups = $this->findGroupsByIds($groupIds);
+            $groupFields = [];
             foreach ($groups as $group) {
-                $this->getMultiClassGroupDao()->update($group['id'], ['assistant_id' => $assistantId]);
+                $groupFields[] = [
+                    'id' => $group['id'],
+                    'assistant_id' => $assistantId
+                ];
             }
+            $this->getMultiClassGroupDao()->batchUpdate(ArrayToolkit::column($groups, 'id'), $groupFields);
 
             $assistantStudents = $this->getAssistantStudentService()->findAssistantStudentsByGroupIds($groupIds);
+            $assistantFields = [];
             foreach ($assistantStudents as $assistantStudent) {
-                $this->getAssistantStudentDao()->update($assistantStudent['id'], ['assistantId' => $assistantId]);
+                $assistantFields[] = [
+                    'id' => $assistantStudent['id'],
+                    'assistantId' => $assistantId
+                ];
             }
+            $this->getAssistantStudentDao()->batchUpdate(ArrayToolkit::column($assistantStudents, 'id'), $assistantFields);
 
             $this->batchCreateRecords($multiClassId, $groups, $assistantId, $assistantStudents);
 

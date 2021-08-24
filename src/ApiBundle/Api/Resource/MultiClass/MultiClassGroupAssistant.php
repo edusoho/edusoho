@@ -13,7 +13,7 @@ use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassService;
 
-class MultiClassAssistantGroup extends AbstractResource
+class MultiClassGroupAssistant extends AbstractResource
 {
     public function update(ApiRequest $request, $multiClassId, $assistantId)
     {
