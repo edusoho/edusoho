@@ -120,7 +120,7 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a-button type="link"
-            @click="goToMultiClassManage(record.id)">查看</a-button>
+            @click="goToMultiClassManage(record.id)">管理</a-button>
           <a-button
             type="link"
             @click="goToEditorMultiClass(record.id, record.type)">编辑</a-button>
