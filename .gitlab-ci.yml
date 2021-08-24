@@ -23,7 +23,7 @@ before_script:
 
 check env:
   stage: test
-  image: codeages/ci-php:5.3-2
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php:5.3-2
   script:
     - if [[ "${REPOSITORY}" != "main" ]]&&[[ "${REPOSITORY}" != "custom" ]];then
     - echo "必须在Gitlab中设置正确的REPOSITORY,当前的设置为：${REPOSITORY}, 请打开此文档链接地址去修改为正确的配置：http://kb.codeages.net/edusoho/projects/continuous-integration.html "
@@ -36,7 +36,7 @@ check env:
 
 7.1 with php-cs-fixer only for custom:
   stage: test
-  image: codeages/ci-php71:6
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71:6
   services:
     - mysql:5.5
     - redis:latest
@@ -53,7 +53,7 @@ check env:
   variables:
     USER_NAME: $GITLAB_USER_NAME
   stage: test
-  image: zhongyunchang/php56-ci
+  image: dockerhub.codeages.work/zhong-proxy/zhongyunchang/php56-ci
   services:
     - mysql:5.5
     - redis:latest
@@ -71,7 +71,7 @@ check env:
 
 7.1 For main:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest
@@ -88,7 +88,7 @@ check env:
 
 7.1 For main with MySQL80:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
     - name: mysql:8.0
       command: ["--default-authentication-plugin=mysql_native_password"]
@@ -106,7 +106,7 @@ check env:
 
 7.4 For main with MySQL80:
   stage: test
-  image: codeages/ci-php74
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
   services:
     - name: mysql:8.0
       command: ["--default-authentication-plugin=mysql_native_password"]
@@ -124,7 +124,7 @@ check env:
 
 7.1 For Develop:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest
@@ -193,7 +193,7 @@ AT With Java And Selenium:
 
 Api Test With 7.1:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest
@@ -225,7 +225,7 @@ Api Test With 7.1:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json --verbose
   only:
     refs:
-      - /^release/.*$/
+#      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"
