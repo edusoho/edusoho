@@ -143,9 +143,6 @@ export default {
 
         .info-time {
           margin-right: vw(8);
-          font-size: vw(12);
-          color: #999;
-          line-height: vw(16);
         }
 
         .info-task {

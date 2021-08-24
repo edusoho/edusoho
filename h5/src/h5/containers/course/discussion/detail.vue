@@ -14,8 +14,8 @@
       <div class="discussion-body__info">
         <img class="avatar" :src="discussion.user.avatar.small">
         <div class="info-right">
-          <span class="info-nickname">{{ discussion.user.nickname }} {{ $t('courseLearning.initiate') }}</span>
-          <span class="info-time">{{ discussion.createdTime | formatCourseTime }}</span>
+          <span>{{ discussion.user.nickname }}</span>
+          <span>{{ discussion.createdTime | formatCourseTime }}</span>
         </div>
       </div>
       <div class="discussion-body__title">{{ discussion.title }}</div>
@@ -180,18 +180,9 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-
-        .info-nickname {
-          font-size: vw(14);
-          color: #666;
-          line-height: vw(20);
-        }
-
-        .info-time {
-          font-size: vw(12);
-          color: #999;
-          line-height: vw(16);
-        }
+        font-size: vw(14);
+        color: #666;
+        line-height: vw(20);
       }
     }
 

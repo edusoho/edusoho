@@ -97,6 +97,8 @@ export default {
 
   .review-detail {
     flex-grow: 1;
+    font-size: vw(14);
+    line-height: vw(20);
 
     &__rate {
       display: flex;
@@ -104,25 +106,19 @@ export default {
       align-items: center;
 
       .nickname {
-        font-size: vw(14);
         font-weight: 500;
         color: #333;
-        line-height: vw(20);
       }
     }
 
     &__time {
       margin-top: vw(4);
-      font-size: vw(12);
-      color: #999;
-      line-height: vw(16);
+      color: #666;
     }
 
     &__content {
       margin-top: vw(4);
-      font-size: vw(14);
       color: #333;
-      line-height: vw(20);
 
       &.overflow {
         position: relative;
