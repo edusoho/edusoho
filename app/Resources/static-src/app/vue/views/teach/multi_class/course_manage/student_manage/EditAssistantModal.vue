@@ -1,5 +1,5 @@
 <template>
-  <a-modal title="批量修改助教" :visible="visible" @cancel="handleCancel">
+  <a-modal title="修改助教" :visible="visible" @cancel="handleCancel">
     <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form :form="form" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
       <a-form-item label="选择助教">

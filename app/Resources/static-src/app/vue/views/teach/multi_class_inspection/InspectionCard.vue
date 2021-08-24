@@ -9,23 +9,29 @@
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
-          <svg-icon v-if="!teacherAttend(inspection.teacherInfo.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <template v-if="inspection.liveInfo.length !== 0">
+            <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          </template>
         </span>
       </div>
       <div class="inspection-card__item info text-overflow" ref="assistant">助教出席：
         <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
           {{ assistant.nickname }}
-          <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
-          <svg-icon v-if="!assistantAttend(assistant.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <template v-if="inspection.liveInfo.length !== 0">
+            <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          </template>
         </span>
       </div>
       <a-popover class="inspection-card__popover">
         <template slot="content">
           <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
             {{ assistant.nickname }}
-            <svg-icon v-if="assistantAttend(assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
-            <svg-icon v-if="!assistantAttend(assistant.id)" icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
+            <template v-if="inspection.liveInfo.length !== 0">
+              <svg-icon v-if="assistantAttend(assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
+              <svg-icon v-else icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
+            </template>
           </span>
         </template>
         <div class="empty-block"></div>
@@ -88,6 +94,9 @@ export default {
       return _.find(this.inspection.liveInfo.speakers, ["userId", Number(id)]);
     },
     assistantAttend(id) {
+      console.log(
+        _.find(this.inspection.liveInfo.assistants, ["userId", Number(id)])
+      );
       return _.find(this.inspection.liveInfo.assistants, [
         "userId",
         Number(id),
@@ -122,7 +131,7 @@ export default {
       font-weight: 400;
     }
   }
-  .noborder{
+  .noborder {
     border-bottom: unset;
   }
   .inspection-card__popover {
