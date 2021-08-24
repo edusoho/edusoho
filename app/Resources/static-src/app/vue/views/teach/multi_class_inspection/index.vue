@@ -54,7 +54,7 @@ export default {
           });
         });
 
-        this.liveInfo = await Promise.any(result);
+        this.liveInfo = await Promise.all(result);
       } finally {
         this.getListLoading = false;
       }
