@@ -378,6 +378,10 @@ export default {
 
     change(pagination, filters, sorter) {
       const params = {}
+      params.productId = this.search.productId;
+      params.status = this.search.status;
+      params.teacherId = this.search.teacherId;
+      params.type = this.search.type;
 
       if (pagination) {
         params.offset = pagination.pageSize * (pagination.current - 1)
