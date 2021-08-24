@@ -31,4 +31,6 @@ interface MultiClassGroupService
     public function updateMultiClassGroup($id, $fields);
 
     public function getLatestGroup($multiClassId);
+
+    public function batchUpdateGroupAssistant($multiClassId, $groupIds, $assistantId);
 }

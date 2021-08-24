@@ -32,11 +32,24 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->create($fields);
     }
 
+    protected function filterAssistantStudentFields($fields)
+    {
+        return ArrayToolkit::parts(
+            $fields,
+            [
+                'courseId',
+                'studentId',
+                'assistantId',
+                'multiClassId',
+            ]
+        );
+    }
+
     public function updateStudentAssistant($id, $assistantId)
     {
         $user = $this->getUserService()->getUser($assistantId);
         if (empty($user)) {
-            throw AssistantException::MUTLICLASS_ASSISTANT_REQUIRE();
+            throw AssistantException::ASSISTANT_NOT_FOUND();
         }
 
         $relation =  $this->getAssistantStudentDao()->update($id, ['assistantId' => $assistantId]);
@@ -79,6 +92,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId)
     {
         return $this->getAssistantStudentDao()->findByAssistantIdAndCourseId($assistantId, $courseId);
+    }
+
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId);
     }
 
     public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds)
@@ -189,13 +207,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     {
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($assistantNumGroup[$assistantId]) ? ['groupNum' => 0] : $assistantNumGroup[$assistantId];
-
-            if ($remaining) {
-                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($unAssignGroupIds, 0, $assignNum));
-                $unAssignGroupIds = array_diff($unAssignGroupIds, $data[$assistantId]);
-                continue;
-            }
-
             if ($assistant['groupNum'] >= $assignNum) {
                 continue;
             }
@@ -206,21 +217,14 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         if (!empty($unAssignGroupIds)) {
-            $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, 1, true);
+            $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, $assignNum + 1, true);
         }
     }
 
-    private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
+    private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average)
     {
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($studentNumGroup[$assistantId]) ? ['studentNum' => 0] : $studentNumGroup[$assistantId];
-
-            if ($remaining) {
-                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($studentIds, 0, $average));
-                $studentIds = array_diff($studentIds, $data[$assistantId]);
-                continue;
-            }
-
             if ($assistant['studentNum'] >= $average) {
                 continue;
             }
@@ -231,7 +235,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         if (!empty($studentIds)) {
-            $this->assignStudents($data, $studentIds, $assistantIds, $studentNumGroup, 1, true);
+            $this->assignStudents($data, $studentIds, $assistantIds, $studentNumGroup, $average + 1);
         }
     }
 
@@ -338,6 +342,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         return $this->getMultiClassRecordDao()->batchCreate($records);
+    }
+
+    public function findAssistantStudentsByGroupIds($groupIds)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByGroupIds($groupIds);
     }
 
     /**

@@ -16,6 +16,8 @@ interface AssistantStudentService
 
     public function findRelationsByAssistantIdAndCourseId($assistantId, $courseId);
 
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId);
+
     public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds);
 
     public function create($fields);
@@ -37,4 +39,6 @@ interface AssistantStudentService
     public function batchUpdateStudentsGroup($multiClassId, $studentIds, $groupId);
 
     public function findByMultiClassIdAndGroupId($multiClassId, $groupId);
+
+    public function findAssistantStudentsByGroupIds($groupIds);
 }
