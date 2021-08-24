@@ -53,11 +53,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $payload['encrypt'] = 3;
         }
 
-        $context['token'] = '';
-        if ('cloud' == $file['storage']) {
-            $context['token'] = $this->makePlayToken($file, 600, $payload);
-        }
-
+        $context['token'] = 'cloud' == $file['storage'] ? $this->makePlayToken($file, 600, $payload) : '';
         $context['resNo'] = $file['globalId'];
 
         //转码状态
