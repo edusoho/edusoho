@@ -187,7 +187,12 @@ class MultiClass extends AbstractResource
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
             $multiClass['status'] = $this->getMultiClassStatus($multiClass['start_time'], $multiClass['end_time']);
-            $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
+            if ($multiClass['type'] == 'group') {
+                $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_group_num'] * $multiClass['group_limit_num'] * count($assistantIds) : 0;
+            } else {
+                $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
+            }
+
             $multiClass['course'] = empty($courses[$multiClass['courseId']]) ? [] : $courses[$multiClass['courseId']];
             $multiClass['product'] = $products[$multiClass['productId']]['title'];
             $multiClass['taskNum'] = $this->getTaskService()->countTasks(['courseId' => $multiClass['courseId'], 'status' => 'published', 'isLesson' => 1]);
