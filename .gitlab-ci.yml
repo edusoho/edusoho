@@ -176,7 +176,7 @@ AT With Java And Selenium:
     - selenium/standalone-chrome:latest
   script:
     # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: dockerhub.codeages.work-library-proxy-library-mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     # 启动web服务
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
@@ -214,7 +214,7 @@ Api Test With 7.1:
       alias: redis
   script:
     # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: dockerhub.codeages.work-library-proxy-library-mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
