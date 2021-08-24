@@ -43,6 +43,8 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
         } catch (\Exception $e) {
         }
 
+        $this->dispatchEvent('scrm.user_bind', new Event($user));
+
         return $user;
     }
 
@@ -57,8 +59,6 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
             !empty($userScrmData['staffId']) ? $user = $this->getUserService()->setUserScrmStaffId($user['id'], $userScrmData['staffId']) : null;
         } catch (\Exception $e) {
         }
-
-        $this->dispatchEvent('scrm.user_bind', new Event($user));
 
         return $user;
     }
