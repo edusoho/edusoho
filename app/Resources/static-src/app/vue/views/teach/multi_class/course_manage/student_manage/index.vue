@@ -118,18 +118,19 @@
             <span>全部学员</span>
           </a-menu-item>
           <a-menu-item class="menu-group" v-for="Group in groupList" :key="Group.id">
-            <span>{{Group.name}}</span>
-            <span>({{Group.student_num}})</span>
-            <span style="margin-left: 4px;">{{Group.assistant.nickname}}</span>
-            <a-button
+             <a-button
               class="edit-group-assistant"
               type="link"
               @click="clickAssistantGroupModal"
+              style="width:0px"
             >
               <a-space>
               <svg-icon icon="icon-edit" style="color:#46C37B"/>
               </a-space>
             </a-button>
+            <span>{{Group.name}}</span>
+            <span>({{Group.student_num}})</span>
+            <span style="margin-left: 4px;">{{Group.assistant.nickname}}</span>
           </a-menu-item>
         </a-menu>
       </a-col>
@@ -412,7 +413,33 @@ export default {
   },
   data() {
     return {
-      groupList:[],
+      groupList:[
+        {
+          assistant:{
+            nickname:"1211"
+          },
+          assistant_id: "60",
+          course_id: "170",
+          created_time: "1629805870",
+          id: "54",
+          multi_class_id: "142",
+          name: "分组2",
+          seq: "2",
+          student_num: "4"
+          }, {
+          assistant:{
+            nickname:"1211"
+          },
+          assistant_id: "60",
+          course_id: "170",
+          created_time: "1629805870",
+          id: "54",
+          multi_class_id: "142",
+          name: "分组2",
+          seq: "2",
+          student_num: "4"
+          }
+      ],
       resultColumns,
       students: [],
       modalShowUser: {},
@@ -525,7 +552,7 @@ export default {
       this.testpaperResultList = {};
     },
     async getMultiClassStudentsGroup(){
-     this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
+    //  this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
     },
     updateStudentList(){
       this.editAssistantVisible = false
@@ -779,10 +806,10 @@ export default {
 }
 
 .edit-group-assistant{
-  display: none;
+  visibility:hidden
 }
 .menu-group:hover .edit-group-assistant{
-  display: inline;
+  visibility:visible
 }
 
 .es-transition(@property:all,@time:.3s) {
@@ -865,6 +892,9 @@ export default {
     }
     .ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-menu-inline .ant-menu-item:not(:last-child){
       margin-bottom: unset;
+    }
+    .ant-menu-vertical .ant-menu-item:not(:first-child), .ant-menu-vertical-left .ant-menu-item:not(:first-child), .ant-menu-vertical-right .ant-menu-item:not(:first-child), .ant-menu-inline .ant-menu-item:not(:first-child){
+      padding-left: unset!important;
     }
     @media only screen and (max-width: 1400px) {
     /* For mobile phones: */

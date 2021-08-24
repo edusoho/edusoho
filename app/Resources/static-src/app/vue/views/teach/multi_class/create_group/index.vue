@@ -120,7 +120,7 @@
           用户中心设置助教
           <a href="/admin/v2/user" target="_blank">去设置</a>
         </div>
-        <div class="pull-left color-warning" v-if="multiClassId">
+        <div class="pull-right color-warning" v-if="multiClassId">
           <a-icon type="exclamation-circle" style="color: #ff8a0c;" />
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>

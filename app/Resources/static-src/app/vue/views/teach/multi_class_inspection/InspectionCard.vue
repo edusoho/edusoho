@@ -1,6 +1,6 @@
 <template>
   <div class="inspection-card">
-    <div class="inspection-card__info">
+    <div class="inspection-card__info" :class="{ 'noborder': inspection.liveInfo.length == 0 }">
       <div class="inspection-card__title info text-overflow">班课名称：{{ inspection.multiClass.title }}</div>
       <div class="inspection-card__item info text-overflow">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
@@ -10,14 +10,14 @@
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
           <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
-          <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="!teacherAttend(inspection.teacherInfo.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
       <div class="inspection-card__item info text-overflow" ref="assistant">助教出席：
         <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
           {{ assistant.nickname }}
           <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
-          <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="!assistantAttend(assistant.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
       <a-popover class="inspection-card__popover">
@@ -25,7 +25,7 @@
           <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
             {{ assistant.nickname }}
             <svg-icon v-if="assistantAttend(assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
-            <svg-icon v-else icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
+            <svg-icon v-if="!assistantAttend(assistant.id)" icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
           </span>
         </template>
         <div class="empty-block"></div>
@@ -121,6 +121,9 @@ export default {
       line-height: 20px;
       font-weight: 400;
     }
+  }
+  .noborder{
+    border-bottom: unset;
   }
   .inspection-card__popover {
     position: absolute;
