@@ -24,7 +24,7 @@ class MultiClassInspectionLiveInfo extends AbstractResource
         }
 
         if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
-            throw LiveActivityException::LIVE_PROVIDER_NOT_SUPPORT();
+            return [];
         }
 
         try {
