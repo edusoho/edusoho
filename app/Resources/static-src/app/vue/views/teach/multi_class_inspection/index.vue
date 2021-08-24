@@ -34,8 +34,6 @@ export default {
     };
   },
 
-  computed: {},
-
   created() {
     this.getMultiClassInspectionList();
   },
