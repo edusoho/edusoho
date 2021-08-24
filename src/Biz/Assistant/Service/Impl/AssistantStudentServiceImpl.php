@@ -40,6 +40,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
                 'studentId',
                 'assistantId',
                 'multiClassId',
+                'group_id',
             ]
         );
     }
