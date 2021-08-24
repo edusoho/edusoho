@@ -9,7 +9,7 @@
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <svg-icon v-if="liveInfo.info && (liveInfo.info.status === 'unstart' || liveInfo.info.status === 'notOnTime')" class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <svg-icon v-if="teacherAttend(teacherInfo.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
           <svg-icon v-else class="icon-check-circle" icon="icon-check-circle" />
         </span>
       </div>
@@ -32,28 +32,28 @@
       </a-popover>
     </div>
     <div class="inspection-card__button">
-      <div v-if="liveInfo.info && liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
+      <div v-if="inspection.liveInfo.status === 'notOnTime'" class="inspection-card__button not-live-start">
         直播未按时开始
       </div>
-      <div v-if="liveInfo.info && liveInfo.info.status === 'living'" class="inspection-card__button">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'living'" class="inspection-card__button">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live" />
           进入直播
         </a>
       </div>
-      <div v-if="liveInfo.info && liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus !== 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus !== 'ungenerated'" class="inspection-card__button live-start">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live-playback" />
           查看回放
         </a>
       </div>
-      <div v-if="liveInfo.info && liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live-playback" />
           直播已结束，回放生成中
         </a>
       </div>
-      <div v-if="liveInfo.info && liveInfo.info.status === 'unstart'" class="inspection-card__button no-start-live">
+      <div v-if="inspection.liveInfo.status === 'unstart'" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
         直播未开始
       </div>
@@ -72,24 +72,23 @@ export default {
       type: Object,
       require: true,
     },
-    liveInfo: {
-      type: Object,
-      require: true,
-    },
   },
   data() {
     return {};
   },
   computed: {
     realTimeStudent() {
-      return this.liveInfo.info.viewerOnlineNum
-        ? this.liveInfo.info.viewerOnlineNum
+      return this.inspection.liveInfo.viewerOnlineNum
+        ? this.inspection.liveInfo.viewerOnlineNum
         : 0;
     },
   },
   methods: {
+    teacherAttend(id) {
+      return _.find(this.inspection.liveInfo.speakers, ["userId", Number(id)]);
+    },
     assistantAttend(id) {
-      return _.find(this.liveInfo.onlineAssistants, ["userId", Number(id)]);
+      return _.find(this.inspection.liveInfo.assistants, ["userId", Number(id)]);
     },
   },
 };
