@@ -132,7 +132,7 @@ export default {
     }
   }
   .noborder {
-    border-bottom: unset;
+    border-bottom: transparent;
   }
   .inspection-card__popover {
     position: absolute;
