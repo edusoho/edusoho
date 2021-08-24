@@ -206,7 +206,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('open_student_info', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('user_partner.open_student_info')|default(1)) }}
-        <p class="help-block open_student_info_tip {% if setting('user_partner.open_student_info') == '1' %}hidden {% endif %}">{{ 'admin.user_fields.open_student_info_diable_tips'|trans }}</p>
+        <p class="help-block open_student_info_tip {% if setting('user_partner.open_student_info') != 0 %}hidden {% endif %}">{{ 'admin.user_fields.open_student_info_diable_tips'|trans }}</p>
       </div>
     </div>
   </fieldset>
