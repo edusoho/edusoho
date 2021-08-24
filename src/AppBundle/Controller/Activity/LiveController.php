@@ -235,6 +235,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $role = 'student';
+        } elseif ($this->getUser()->isAdmin()) {
+            $role = 'student';
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
