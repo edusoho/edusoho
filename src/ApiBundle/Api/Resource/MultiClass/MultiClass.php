@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\MultiClass;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Filter;
@@ -91,7 +90,6 @@ class MultiClass extends AbstractResource
 
     /**
      * @return array
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_TEACHER,ROLE_TEACHER_ASSISTANT,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request)
     {
@@ -187,7 +185,7 @@ class MultiClass extends AbstractResource
             $assistants = empty($assistantGroup[$multiClass['id']]) ? [] : $assistantGroup[$multiClass['id']];
             $assistantIds = ArrayToolkit::column($assistants, 'userId');
             $multiClass['status'] = $this->getMultiClassStatus($multiClass['start_time'], $multiClass['end_time']);
-            if ($multiClass['type'] == 'group') {
+            if ('group' == $multiClass['type']) {
                 $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_group_num'] * $multiClass['group_limit_num'] * count($assistantIds) : 0;
             } else {
                 $multiClass['maxServiceNum'] = count($assistantIds) > 0 ? $multiClass['service_num'] * count($assistantIds) : 0;
