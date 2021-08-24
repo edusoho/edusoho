@@ -36,8 +36,7 @@ export default class TaskSidebar extends Emitter {
   renderToolbar() {
     let html = `
       <div class="dashboard-toolbar js-dashboard-toolbar">
-          <i class="es-icon es-icon-angledoubleleft dashboard-toolbar__trigger"></i>
-        </span>
+        <i class="es-icon es-icon-angledoubleleft dashboard-toolbar__trigger"></i>
       </div>
     `;
     this.element.html(html);
