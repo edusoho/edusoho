@@ -86,11 +86,9 @@ export default {
   computed: {},
 
   mounted() {
-    setTimeout(() => {
-      const assistantRef = this.$refs.assistant;
-      this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
-      console.log(this.$refs.assistant);
-    },1000);
+    const assistantRef = this.$refs.assistant;
+    this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
+    console.log(this.$refs.assistant);
     console.log(this.$refs.assistant);
   },
   created() {},
