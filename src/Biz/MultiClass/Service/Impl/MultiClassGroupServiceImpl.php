@@ -170,7 +170,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field = [];
             $latestGroup = $this->getLatestGroup($multiClass['id']);
             $field['name'] = empty($latestGroup) ? self::MULTI_CLASS_GROUP_NAME.'1' : self::MULTI_CLASS_GROUP_NAME.($latestGroup['seq'] + 1);
-            $field['seq'] = empty($latestGroup) ? 0 : $latestGroup['seq'] + 1;
+            $field['seq'] = empty($latestGroup) ? 1 : $latestGroup['seq'] + 1;
             $field['multi_class_id'] = $multiClass['id'];
             $field['course_id'] = $multiClass['courseId'];
             $field['student_num'] = 1;

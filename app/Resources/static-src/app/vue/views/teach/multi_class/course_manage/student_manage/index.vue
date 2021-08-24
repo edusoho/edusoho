@@ -25,6 +25,7 @@
         </a-button>
 
         <a-button
+          v-if="multiClass.type === 'normal'"
           @click="clickBatchUpdateAssistantModal()"
           type="primary"
         >
@@ -116,10 +117,19 @@
           <a-menu-item key="">
             <span>全部学员</span>
           </a-menu-item>
-          <a-menu-item v-for="Group in groupList" :key="Group.id">
+          <a-menu-item class="menu-group" v-for="Group in groupList" :key="Group.id">
             <span>{{Group.name}}</span>
             <span>({{Group.student_num}})</span>
             <span style="margin-left: 4px;">{{Group.assistant.nickname}}</span>
+            <a-button
+              class="edit-group-assistant"
+              type="link"
+              @click="clickAssistantGroupModal"
+            >
+              <a-space>
+              <svg-icon icon="icon-edit" style="color:#46C37B"/>
+              </a-space>
+            </a-button>
           </a-menu-item>
         </a-menu>
       </a-col>
@@ -170,7 +180,8 @@
     <assistant-list-modal :visible="assistantListModalVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <change-group-modal :visible="changeGroupVisible" :groupList="groupList" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="updateStudentList"></change-group-modal>
-
+    <edit-assistant-modal :visible="editAssistantVisible" :multi-class-id="id" :multi-class="multiClass" :groupId="groupId" @handle-cancel="updateStudentList"></edit-assistant-modal>
+    
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -270,6 +281,7 @@ import AssistantListModal from 'app/vue/views/teach/assistant/components/Assista
 import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
 import ChangeGroupModal from './ChangeGroupModal.vue';
+import EditAssistantModal from './EditAssistantModal.vue';
 
 const columns = [
   {
@@ -396,6 +408,7 @@ export default {
     AssistantListModal,
     userInfoTable,
     ChangeGroupModal,
+    EditAssistantModal,
   },
   data() {
     return {
@@ -418,6 +431,7 @@ export default {
       viewStudentInfoVisible: false,
       changeGroupVisible: false,
       assistantListModalVisible: false,
+      editAssistantVisible: false,
       selectedStudentIds: [],
       id: this.$route.params.id,
       getListLoading: false,
@@ -514,6 +528,7 @@ export default {
      this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
     },
     updateStudentList(){
+      this.editAssistantVisible = false
       this.changeGroupVisible = false;
       this.getMultiClassStudents();
       this.getMultiClassStudentsGroup();
@@ -678,6 +693,9 @@ export default {
       this.changeGroupVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
+    clickAssistantGroupModal() {
+      this.editAssistantVisible = true;
+    },
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后移除', 1);
@@ -695,6 +713,7 @@ export default {
             userIds: self.selectedUserIds,
           }).then(res => {
             self.getMultiClassStudents();
+            self.getMultiClassStudentsGroup();
             self.$message.success('移除学员成功！');
             self.selectedRowKeys = [];
           }).catch(err => {
@@ -757,6 +776,13 @@ export default {
   -webkit-box-shadow: @box-shadow;
   -moz-box-shadow: @box-shadow;
   box-shadow: @box-shadow;
+}
+
+.edit-group-assistant{
+  display: none;
+}
+.menu-group:hover .edit-group-assistant{
+  display: inline;
 }
 
 .es-transition(@property:all,@time:.3s) {
