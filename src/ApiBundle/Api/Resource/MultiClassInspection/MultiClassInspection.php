@@ -73,7 +73,11 @@ class MultiClassInspection extends AbstractResource
 
         $liveInfos = $this->appendLiveInfo($activities);
 
-        foreach ($tasks as &$task) {
+        foreach ($tasks as $key => &$task) {
+            if (empty($multiClasses[$task['courseId']])) {
+                unset($tasks[$key]);
+                continue;
+            }
             $task['activityInfo'] = isset($activities[$task['activityId']]) ? $activities[$task['activityId']] : [];
             $task['multiClass'] = isset($multiClasses[$task['courseId']]) ? $multiClasses[$task['courseId']] : [];
             $task['studentNum'] = isset($courses[$task['courseId']]) ? $courses[$task['courseId']]['studentNum'] : 0;
