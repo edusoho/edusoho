@@ -17,6 +17,16 @@ class MultiClassGroupAssistant extends AbstractResource
 {
     public function update(ApiRequest $request, $multiClassId, $assistantId)
     {
+        $groupIds = $request->request->get('groupIds', []);
+        if (empty($groupIds)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2_education')) {
+            throw new AccessDeniedException();
+        }
+
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             throw MultiClassException::MULTI_CLASS_NOT_EXIST();
@@ -25,16 +35,6 @@ class MultiClassGroupAssistant extends AbstractResource
         $multiClassMember = $this->getCourseMemberService()->getMemberByMultiClassIdAndUserId($multiClassId, $assistantId);
         if (empty($multiClassMember) || 'assistant' != $multiClassMember['role']) {
             throw AssistantException::ASSISTANT_NOT_FOUND();
-        }
-
-        $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_v2_education')) {
-            throw new AccessDeniedException();
-        }
-
-        $groupIds = $request->request->get('groupIds', []);
-        if (empty($groupIds)) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $this->getMultiClassGroupService()->batchUpdateGroupAssistant($multiClassId, $groupIds, $assistantId);
