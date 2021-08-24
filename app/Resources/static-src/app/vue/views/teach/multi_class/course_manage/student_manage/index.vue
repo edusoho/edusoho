@@ -123,7 +123,7 @@
           </a-menu-item>
         </a-menu>
       </a-col>
-      <a-col :span="21">
+      <a-col :span="multiClass.type === 'group' ? 21 : 24">
         <a-table
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
           :columns="columns"
