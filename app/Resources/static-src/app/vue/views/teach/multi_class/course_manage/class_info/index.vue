@@ -105,7 +105,7 @@ const columns = [
     scopedSlots: { customRender: 'name' }
   },
   {
-    title: '教学模式',
+    title: '任务类型',
     dataIndex: 'mode',
     filters: [
       { text: '视频', value: 'video' },
