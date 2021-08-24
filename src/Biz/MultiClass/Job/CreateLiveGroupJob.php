@@ -33,7 +33,7 @@ class CreateLiveGroupJob extends AbstractJob
                 continue;
             }
 
-            if ($activity['startTime'] <= time()) {
+            if ($activity['endTime'] <= time()) {
                 continue;
             }
 
