@@ -26,7 +26,7 @@
     <div class="setup-btn">
       <a-space size="large">
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
-          提交
+          保存
         </a-button>
       </a-space>
     </div>
