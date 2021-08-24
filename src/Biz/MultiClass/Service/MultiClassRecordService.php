@@ -4,6 +4,8 @@ namespace Biz\MultiClass\Service;
 
 interface MultiClassRecordService
 {
+    public function findNotPushRecordsByUserId($userId);
+
     public function searchRecord($conditions, $orderBys, $start, $limit);
 
     public function batchUpdateRecords($records);

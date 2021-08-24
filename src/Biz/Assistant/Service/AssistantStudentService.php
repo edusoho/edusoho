@@ -20,7 +20,7 @@ interface AssistantStudentService
 
     public function create($fields);
 
-    public function update($id, $fields);
+    public function updateStudentAssistant($id, $assistantId);
 
     public function delete($id);
 

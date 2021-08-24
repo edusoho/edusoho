@@ -3,6 +3,7 @@
 namespace Biz\Assistant\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\AssistantException;
 use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
@@ -11,6 +12,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
+use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -30,11 +32,18 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->create($fields);
     }
 
-    public function update($id, $fields)
+    public function updateStudentAssistant($id, $assistantId)
     {
-        $fields = $this->filterAssistantStudentFields($fields);
+        $user = $this->getUserService()->getUser($assistantId);
+        if (empty($user)) {
+            throw AssistantException::MUTLICLASS_ASSISTANT_REQUIRE();
+        }
 
-        return $this->getAssistantStudentDao()->update($id, $fields);
+        $relation =  $this->getAssistantStudentDao()->update($id, ['assistantId' => $assistantId]);
+
+        $this->getMultiClassRecordService()->createRecord($relation['studentId'], $relation['multiClassId']);
+
+        return $relation;
     }
 
     public function get($id)
@@ -50,19 +59,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         return $this->getAssistantStudentDao()->delete($id);
-    }
-
-    protected function filterAssistantStudentFields($fields)
-    {
-        return ArrayToolkit::parts(
-            $fields,
-            [
-                'courseId',
-                'studentId',
-                'assistantId',
-                'multiClassId',
-            ]
-        );
     }
 
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId)
@@ -88,6 +84,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         return $this->getAssistantStudentDao()->findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+    }
+
+    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
+    {
+        return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
     }
 
     public function setGroupAssistantAndStudents($courseId, $multiClassId)
@@ -361,11 +362,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     private function getMultiClassRecordService()
     {
         return $this->createService('MultiClass:MultiClassRecordService');
-    }
-
-    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
-    {
-        return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
     }
 
     /**
