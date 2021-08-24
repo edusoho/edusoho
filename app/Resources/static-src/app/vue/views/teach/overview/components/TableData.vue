@@ -16,7 +16,7 @@
         {{ index + 1 }}
       </template>
       <template slot="rate" slot-scope="rate, record">
-        <span v-if="rate || rate === 0">{{ rate * 100 }}%</span>
+        <span v-if="rate || rate === 0">{{ toPercent(rate) }}</span>
         <span v-else>{{ record.count }}</span>
       </template>
       <template slot="rateTitle">
@@ -83,6 +83,11 @@ export default {
   methods: {
     changeOrder(res) {
       this.order = res.target.value;
+    },
+    toPercent(point) {
+      var str = Number(point * 100).toFixed(0);
+      str += "%";
+      return str;
     },
   },
 };
