@@ -135,6 +135,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $this->rollback();
             throw $e;
         }
+
+        return true;
     }
 
     private function batchCreateRecords($multiClassId, $groups, $assistantId, $assistantStudents)
@@ -192,6 +194,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         $this->getAssistantStudentDao()->create($studentField);
 
         $this->getAssistantStudentService()->setGroupAssistantAndStudents($multiClass['courseId'], $multiClass['id']);
+
+        return true;
     }
 
     public function createMultiClassGroups($courseId, $multiClass)
