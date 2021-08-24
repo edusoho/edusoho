@@ -150,7 +150,7 @@ const columns = [
     scopedSlots: { customRender: 'assistant' }
   },
   {
-    title: '问题讨论',
+    title: '问题',
     width: '10%',
     dataIndex: 'questionNum',
     scopedSlots: { customRender: 'questionNum' }
