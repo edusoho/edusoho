@@ -94,7 +94,7 @@ class MultiClassInspection extends AbstractResource
             return [];
         }
 
-        $infos = $this->getLiveClient()->getLiveRoomMonitors(ArrayToolkit::column($selfLives, 'liveId'));
+        $infos = $this->getLiveClient()->getLiveRoomMonitors(implode(',', ArrayToolkit::column($selfLives, 'liveId')));
         if (empty($infos) || !empty($infos['error'])) {
             return [];
         }

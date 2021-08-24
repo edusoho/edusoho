@@ -174,7 +174,7 @@ class EdusohoLiveClient
 
     public function getLiveRoomMonitors($ids)
     {
-        return $this->createCloudApi('root')->get("/liveCloud/room/monitors", $ids);
+        return $this->createCloudApi('root')->get('/liveCloud/room/monitors', ['ids' => $ids]);
     }
 
     public function uploadCallbackUrl($url)
