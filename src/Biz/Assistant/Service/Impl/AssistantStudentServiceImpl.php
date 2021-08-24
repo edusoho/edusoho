@@ -85,6 +85,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->findByAssistantIdAndCourseId($assistantId, $courseId);
     }
 
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId);
+    }
+
     public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         return $this->getAssistantStudentDao()->findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
@@ -366,6 +371,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
     {
         return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
+    }
+
+    public function findAssistantStudentsByGroupIds($groupIds)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByGroupIds($groupIds);
     }
 
     /**
