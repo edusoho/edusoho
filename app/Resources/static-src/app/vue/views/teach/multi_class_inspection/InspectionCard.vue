@@ -20,7 +20,7 @@
           <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
-      <a-popover v-if="ellipsis" class="inspection-card__popover">
+      <a-popover class="inspection-card__popover">
         <template slot="content">
           <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
             {{ assistant.nickname }}
@@ -28,7 +28,7 @@
             <svg-icon v-else icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
           </span>
         </template>
-        <svg-icon style="color: #979797;" icon="icon-more" />
+        <div class="empty-block"></div>
       </a-popover>
     </div>
     <div class="inspection-card__button">
@@ -78,20 +78,8 @@ export default {
     },
   },
   data() {
-    return {
-      ellipsis: false,
-    };
+    return {};
   },
-
-  computed: {},
-
-  mounted() {
-    const assistantRef = this.$refs.assistant;
-    this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
-    console.log(this.$refs.assistant);
-    console.log(this.$refs.assistant);
-  },
-  created() {},
 
   methods: {
     assistantAttend(id) {
@@ -190,6 +178,9 @@ export default {
     display: block;
     width: auto;
     height: auto;
+  }
+  .empty-block {
+    width: 80%;
   }
 }
 </style>
