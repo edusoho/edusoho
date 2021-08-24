@@ -3,6 +3,7 @@
 namespace Biz\Assistant\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Assistant\AssistantException;
 use Biz\Assistant\Dao\AssistantStudentDao;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
@@ -30,11 +31,31 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->create($fields);
     }
 
-    public function update($id, $fields)
+    protected function filterAssistantStudentFields($fields)
     {
-        $fields = $this->filterAssistantStudentFields($fields);
+        return ArrayToolkit::parts(
+            $fields,
+            [
+                'courseId',
+                'studentId',
+                'assistantId',
+                'multiClassId',
+            ]
+        );
+    }
 
-        return $this->getAssistantStudentDao()->update($id, $fields);
+    public function updateStudentAssistant($id, $assistantId)
+    {
+        $user = $this->getUserService()->getUser($assistantId);
+        if (empty($user)) {
+            throw AssistantException::ASSISTANT_NOT_FOUND();
+        }
+
+        $relation = $this->getAssistantStudentDao()->update($id, ['assistantId' => $assistantId]);
+
+        $this->getMultiClassRecordService()->createRecord($relation['studentId'], $relation['multiClassId']);
+
+        return $relation;
     }
 
     public function get($id)
@@ -50,19 +71,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         return $this->getAssistantStudentDao()->delete($id);
-    }
-
-    protected function filterAssistantStudentFields($fields)
-    {
-        return ArrayToolkit::parts(
-            $fields,
-            [
-                'courseId',
-                'studentId',
-                'assistantId',
-                'multiClassId',
-            ]
-        );
     }
 
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId)
@@ -85,9 +93,19 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->findByAssistantIdAndCourseId($assistantId, $courseId);
     }
 
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId);
+    }
+
     public function findRelationsByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         return $this->getAssistantStudentDao()->findByMultiClassIdAndStudentIds($multiClassId, $studentIds);
+    }
+
+    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
+    {
+        return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
     }
 
     public function setGroupAssistantAndStudents($courseId, $multiClassId)
@@ -188,13 +206,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     {
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($assistantNumGroup[$assistantId]) ? ['groupNum' => 0] : $assistantNumGroup[$assistantId];
-
-            if ($remaining) {
-                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($unAssignGroupIds, 0, $assignNum));
-                $unAssignGroupIds = array_diff($unAssignGroupIds, $data[$assistantId]);
-                continue;
-            }
-
             if ($assistant['groupNum'] >= $assignNum) {
                 continue;
             }
@@ -205,21 +216,14 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         if (!empty($unAssignGroupIds)) {
-            $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, 1, true);
+            $this->assignGroups($data, $unAssignGroupIds, $assistantIds, $assistantNumGroup, $assignNum + 1, true);
         }
     }
 
-    private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average, $remaining = false)
+    private function assignStudents(&$data, $studentIds, $assistantIds, $studentNumGroup, $average)
     {
         foreach ($assistantIds as $assistantId) {
             $assistant = empty($studentNumGroup[$assistantId]) ? ['studentNum' => 0] : $studentNumGroup[$assistantId];
-
-            if ($remaining) {
-                $data[$assistantId] = array_merge($data[$assistantId] ?: [], array_slice($studentIds, 0, $average));
-                $studentIds = array_diff($studentIds, $data[$assistantId]);
-                continue;
-            }
-
             if ($assistant['studentNum'] >= $average) {
                 continue;
             }
@@ -230,7 +234,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         }
 
         if (!empty($studentIds)) {
-            $this->assignStudents($data, $studentIds, $assistantIds, $studentNumGroup, 1, true);
+            $this->assignStudents($data, $studentIds, $assistantIds, $studentNumGroup, $average + 1);
         }
     }
 
@@ -339,6 +343,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getMultiClassRecordDao()->batchCreate($records);
     }
 
+    public function findAssistantStudentsByGroupIds($groupIds)
+    {
+        return $this->getAssistantStudentDao()->findAssistantStudentsByGroupIds($groupIds);
+    }
+
     /**
      * @return MultiClassGroupDao
      */
@@ -361,11 +370,6 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     private function getMultiClassRecordService()
     {
         return $this->createService('MultiClass:MultiClassRecordService');
-    }
-
-    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
-    {
-        return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
     }
 
     /**

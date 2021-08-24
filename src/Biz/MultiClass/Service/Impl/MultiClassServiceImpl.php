@@ -120,7 +120,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
-        $teacherId = [['id' => $fields['teacherId'], 'isVisable' => 1]];
+        $teacherId = [['id' => $fields['teacherId'], 'isVisible' => 1]];
         $assistantIds = $fields['assistantIds'];
 
         $fields = $this->filterMultiClassFields($fields, $id);

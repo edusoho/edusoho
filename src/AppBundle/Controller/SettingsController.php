@@ -1051,6 +1051,7 @@ class SettingsController extends BaseController
             throw new AccessDeniedException();
         }
 
+        $user = $this->getSCRMService()->setStaffSCRMData($user);
         $assistantQrCodeUrl = $this->generateAssistantQrCode($user);
 
         return $this->render('settings/scrm.html.twig', [

@@ -12,8 +12,11 @@ class AssistantException extends AbstractException
 
     const ASSISTANT_STUDENT_NOT_FOUND = 4048202;
 
+    const ASSISTANT_NOT_FOUND = 4048203;
+
     public $message = [
         5008201 => 'exception.multi_class.assistant_require',
-        4048202 => 'exception.multi_class.assistant_not_found',
+        4048202 => 'exception.multi_class.assistant_student_not_found',
+        4048203 => 'exception.multi_class.assistant_not_found',
     ];
 }

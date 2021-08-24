@@ -2,6 +2,7 @@
 
 namespace Biz\MultiClass\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
@@ -14,6 +15,11 @@ use Ramsey\Uuid\Uuid;
 
 class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecordService
 {
+    public function findNotPushRecordsByUserId($userId)
+    {
+        return $this->getMultiClassRecordDao()->findByUserIdAndIsPush($userId, 0);
+    }
+
     public function searchRecord($conditions, $orderBys, $start, $limit)
     {
         return $this->getMultiClassRecordDao()->search($conditions, $orderBys, $start, $limit);
@@ -98,6 +104,49 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             $result = $this->getSCRMService()->uploadSCRMUserData($list);
             if ($result['ok']) {
                 $this->getMultiClassRecordDao()->update($record['id'], ['is_push' => 1]);
+            }
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function uploadUserRecords($userId)
+    {
+        if (!$this->getSCRMService()->isSCRMBind()) {
+            return;
+        }
+
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user['scrmUuid'])) {
+            return;
+        }
+
+        $records = $this->findNotPushRecordsByUserId($userId);
+        $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'assistant_id'));
+
+        try {
+            $list = $updateRecords = [];
+            foreach ($records as $record) {
+                $assistant = empty($assistants[$record['assistant_id']]) ? [] : $assistants[$record['assistant_id']];
+                if (empty($assistant['scrmStaffId'])) {
+                    continue;
+                }
+
+                $list[] = [
+                    'ticket' => $record['sign'],
+                    'title' => $record['data']['title'],
+                    'content' => $record['data']['content'],
+                    'customerUniqueId' => $user['scrmUuid'],
+                    'staffId' => (int) $assistant['scrmStaffId'],
+                ];
+
+                $updateRecords[] = [
+                    'id' => $record['id'],
+                    'is_push' => 1,
+                ];
+            }
+            $result = $this->getSCRMService()->uploadSCRMUserData($list);
+            if ($result['ok']) {
+                $this->getMultiClassRecordDao()->batchUpdate(ArrayToolkit::column($updateRecords, 'id'), $updateRecords);
             }
         } catch (\Exception $e) {
         }
