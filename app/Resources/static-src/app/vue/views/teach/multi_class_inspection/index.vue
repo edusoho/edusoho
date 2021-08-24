@@ -55,8 +55,6 @@ export default {
         });
 
         this.liveInfo = await Promise.all(result);
-
-        console.log("liveInfo: ", this.liveInfo);
       } finally {
         this.getListLoading = false;
       }
