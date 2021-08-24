@@ -82,6 +82,8 @@ class MultiClassInspection extends AbstractResource
             $task['liveInfo'] = empty($liveInfos[$task['activityInfo']['ext']['liveId']]) ? [] : $liveInfos[$task['activityInfo']['ext']['liveId']];
         }
 
+        $tasks = $this->handleLiveData($tasks);
+
         return $tasks;
     }
 
@@ -100,6 +102,44 @@ class MultiClassInspection extends AbstractResource
         }
 
         return ArrayToolkit::index($infos, 'id');
+    }
+
+    public function handleLiveData($tasks)
+    {
+        $errorTasks = [];
+        $livingTasks = [];
+        $notStartTasks = [];
+        $endTasks = [];
+        foreach ($tasks as $task) {
+            if (empty($task['liveInfo'])) {
+                continue;
+            }
+
+            $activity = $task['activityInfo'];
+            switch ($task['liveInfo']['status']) {
+                case 'living':
+                    $task['liveInfo']['viewUrl'] = $this->generateUrl('task_live_entry', ['courseId' => $activity['fromCourseId'], 'activityId' => $activity['id']]);
+                    $livingTasks[] = $task;
+                    break;
+                case 'finished':
+                    if (in_array($activity['ext']['replayStatus'], ['generated', 'videoGenerated'])) {
+                        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+                        $task['liveInfo']['viewUrl'] = $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
+                    }
+                    $endTasks[] = $task;
+                    break;
+                default:
+                    $task['liveInfo']['status'] = $activity['startTime'] < time() ? 'notOnTime' : $task['liveInfo']['status'];
+                    $task['liveInfo']['viewUrl'] = '';
+                    if ($task['liveInfo']['status'] == 'notOnTime') {
+                        $errorTasks[] = $task;
+                    } else {
+                        $notStartTasks[] = $task;
+                    }
+            }
+        }
+
+        return array_merge($errorTasks, $livingTasks, $notStartTasks, $endTasks);
     }
 
     /**
