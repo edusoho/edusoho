@@ -70,7 +70,8 @@ class TimeoutReview extends AbstractResource
         $assistantStudentRelations = ArrayToolkit::index($this->getAssistantStudentService()->findByMultiClassIds(ArrayToolkit::column($multiClasses, 'id')), 'unitKey');
         $studentIds = ArrayToolkit::column($assistantStudentRelations, 'studentId');
         $assistantIds = ArrayToolkit::column($assistantStudentRelations, 'assistantId');
-        $userIds = array_merge($studentIds, $assistantIds);
+        $userIds = array_merge($assistantIds, ArrayToolkit::column($answerRecords, 'user_id'));
+        $userIds = array_values(array_unique($userIds));
         $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
