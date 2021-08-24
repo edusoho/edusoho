@@ -5,7 +5,6 @@ export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
     super();
     this.url = url;
-    this.isManualOperation = true;
     this.element = $(element);
     this.init();
   }
@@ -36,26 +35,37 @@ export default class TaskSidebar extends Emitter {
 
   renderToolbar() {
     let html = `
-    <div class="dashboard-toolbar">
-      <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
-        ${this.plugins.reduce((html, plugin) => {
-    return html += `<li data-plugin="${plugin.code}" data-url="${plugin.url}"><a href="#"><div class="mbs es-icon ${plugin.icon}"></div>${plugin.name}</a></li>`;
-  }, '')}
-      </ul>
-    </div>`;
+      <div class="dashboard-toolbar js-dashboard-toolbar">
+          <i class="es-icon es-icon-angledoubleleft dashboard-toolbar__trigger"></i>
+        </span>
+      </div>
+    `;
     this.element.html(html);
   }
 
   renderPane() {
-    let html = this.plugins.reduce((html, plugin) => {
+    let navItemWidth = 100 / this.plugins.length;
+
+    let html = `
+      <ul class="dashboard-nav js-dashboard-nav clearfix">
+        ${this.plugins.reduce((html, plugin) => {
+          return html += `<li class="dashboard-nav__item pull-left" style="width: ${navItemWidth}%" data-plugin="${plugin.code}" data-url="${plugin.url}">${plugin.name}</li>`; 
+        }, '')}
+      </ul>`;
+
+    html += this.plugins.reduce((html, plugin) => {
       return html += `<div data-pane="${plugin.code}" class=" ${plugin.code}-pane js-sidebar-pane" ><div class="${plugin.code}-pane-body js-sidebar-pane-body"></div></div>`;
     }, '');
     this.element.append(html);
-    
   }
 
   bindEvent() {
-    this.element.find('#dashboard-toolbar-nav').on('click', 'li', (event) => {
+    this.element.find('.js-dashboard-toolbar').on('click', (event) => {
+      let $btn = $(event.currentTarget);
+      this.operationContent($btn);
+    });
+
+    this.element.find('.js-dashboard-nav').on('click', 'li', (event) => {
       let $btn = $(event.currentTarget);
       let pluginCode = $btn.data('plugin');
       let url = $btn.data('url');
@@ -64,10 +74,11 @@ export default class TaskSidebar extends Emitter {
       if (pluginCode === undefined || url === undefined) {
         return;
       }
-      
-      if(this.isManualOperation){
-        this.operationContent($btn);
-      }
+
+      this.element.find('.js-dashboard-nav li').removeClass('active');
+      $btn.addClass('active');
+      this.element.find('[data-pane]').hide();
+      this.element.find(`[data-pane="${pluginCode}"]`).show();
   
       if ($btn.data('loaded')) {
         return;
@@ -78,26 +89,21 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          this.isManualOperation = true;
           this.emit($btn.data('plugin')+'-loaded', $paneBody);
         });
     });
+
+    this.element.find('.js-dashboard-nav li')[0].click();
   }
 
   operationContent($btn) {
     if ($btn.hasClass('active')) {
       this.foldContent();
       $btn.removeClass('active');
-      $('.dashboard-sidebar').removeClass('spread');
     } else {
-      this.element.find('#dashboard-toolbar-nav li').removeClass('active');
       $btn.addClass('active');
-      this.element.find('[data-pane]').hide();
-      this.element.find(`[data-pane="${$btn.data('plugin')}"]`).show();
       this.popupContent();
-      $('.dashboard-sidebar').addClass('spread');
     }
-    
   }
 
   popupContent(time = 500) {
@@ -123,7 +129,6 @@ export default class TaskSidebar extends Emitter {
   }
 
   reload() {
-    this.isManualOperation = false;
     const $currentPane = this.element.find('.js-sidebar-pane:visible');
     const pluginCode = $currentPane.data('pane');
     $currentPane.undelegate();
