@@ -152,12 +152,12 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: "已结班班课总数",
+    title: "已结课班课总数",
     dataIndex: 'endMultiClassNum',
     ellipsis: true,
   },
   {
-    title: "已结班班课学员总数",
+    title: "已结课班课学员总数",
     dataIndex: 'endMultiClassStudentNum',
     ellipsis: true,
   },
