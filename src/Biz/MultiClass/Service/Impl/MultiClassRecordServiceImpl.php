@@ -150,7 +150,6 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
             }
         } catch (\Exception $e) {
         }
-
     }
 
     public function makeSign()
