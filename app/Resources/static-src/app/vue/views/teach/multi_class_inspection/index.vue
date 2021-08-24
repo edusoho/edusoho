@@ -54,9 +54,7 @@ export default {
           });
         });
 
-        this.liveInfo = await Promise.all(result);
-
-        console.log("liveInfo: ", this.liveInfo);
+        this.liveInfo = await Promise.any(result);
       } finally {
         this.getListLoading = false;
       }
