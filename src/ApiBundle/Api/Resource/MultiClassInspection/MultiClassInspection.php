@@ -16,6 +16,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\Util\EdusohoLiveClient;
 
 class MultiClassInspection extends AbstractResource
 {
@@ -70,15 +71,35 @@ class MultiClassInspection extends AbstractResource
             }
         }
 
+        $liveInfos = $this->appendLiveInfo($activities);
+
         foreach ($tasks as &$task) {
             $task['activityInfo'] = isset($activities[$task['activityId']]) ? $activities[$task['activityId']] : [];
             $task['multiClass'] = isset($multiClasses[$task['courseId']]) ? $multiClasses[$task['courseId']] : [];
             $task['studentNum'] = isset($courses[$task['courseId']]) ? $courses[$task['courseId']]['studentNum'] : 0;
             $task['teacherInfo'] = isset($users[$teachers[$task['courseId']]['userId']]) ? $users[$teachers[$task['courseId']]['userId']] : [];
             $task['assistantInfo'] = isset($multiAssistants[$task['courseId']]) ? $multiAssistants[$task['courseId']]['assistantInfo'] : [];
+            $task['liveInfo'] = empty($liveInfos[$task['activityInfo']['ext']['liveId']]) ? [] : $liveInfos[$task['activityInfo']['ext']['liveId']];
         }
 
         return $tasks;
+    }
+
+    public function appendLiveInfo($activities)
+    {
+        $liveActivities = ArrayToolkit::column($activities, 'ext');
+        $liveActivities = ArrayToolkit::group($liveActivities, 'liveProvider');
+        $selfLives = $liveActivities[EdusohoLiveClient::SELF_ES_LIVE_PROVIDER];
+        if (empty($selfLives)) {
+            return [];
+        }
+
+        $infos = $this->getLiveClient()->getLiveRoomMonitors(ArrayToolkit::column($selfLives, 'liveId'));
+        if (empty($infos) || !empty($infos['error'])) {
+            return [];
+        }
+
+        return ArrayToolkit::index($infos, 'id');
     }
 
     /**
@@ -127,5 +148,13 @@ class MultiClassInspection extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return EdusohoLiveClient
+     */
+    protected function getLiveClient()
+    {
+        return $this->biz['educloud.live_client'];
     }
 }

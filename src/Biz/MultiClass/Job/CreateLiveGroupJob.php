@@ -20,15 +20,20 @@ class CreateLiveGroupJob extends AbstractJob
     public function execute()
     {
         $multiClassId = $this->args['multiClassId'];
+        $groupIds = $this->args['groupIds'];
         $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
         if (empty($multiClass)) {
             return;
         }
 
-        $groups = $this->getMultiClassGroupService()->findGroupsByMultiClassId($multiClassId);
+        $groups = $this->getMultiClassGroupService()->findGroupsByIds($groupIds);
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($multiClass['courseId'], 'live', true);
         foreach ($activities as $activity) {
             if (empty($activity['ext'])) {
+                continue;
+            }
+
+            if ($activity['startTime'] <= time()) {
                 continue;
             }
 
@@ -37,16 +42,18 @@ class CreateLiveGroupJob extends AbstractJob
                 'groupNames' => ArrayToolkit::column($groups, 'name'),
             ]);
 
-            $createLiveGroups = [];
-            foreach ($groups as $key => $group) {
-                $createLiveGroups[] = [
-                    'group_id' => $group['id'],
-                    'live_id' => $activity['ext']['liveId'],
-                    'live_code' => $liveGroups[$key]['code'],
-                ];
-            }
+            if (!empty(current($liveGroups['code']))) {
+                $createLiveGroups = [];
+                foreach ($groups as $key => $group) {
+                    $createLiveGroups[] = [
+                        'group_id' => $group['id'],
+                        'live_id' => $activity['ext']['liveId'],
+                        'live_code' => $liveGroups[$key]['code'],
+                    ];
+                }
 
-            $this->getMultiClassGroupService()->batchCreateLiveGroups($createLiveGroups);
+                $this->getMultiClassGroupService()->batchCreateLiveGroups($createLiveGroups);
+            }
         }
     }
 

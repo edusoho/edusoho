@@ -14,6 +14,7 @@ use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
 
 class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupService
 {
@@ -175,6 +176,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field['student_num'] = 1;
             $field['assistant_id'] = 0;
             $group = $this->getMultiClassGroupDao()->create($field);
+
+            $this->dispatchEvent('multi_class.group_create', new Event($multiClass, ['groups' => [$group]]));
         } else {
             $group = $this->getMultiClassGroupDao()->update($noFullGroup['id'], ['student_num' => $noFullGroup['student_num'] + 1]);
         }
@@ -209,6 +212,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         }
 
         $groupSeqNum = 0;
+        $groups = [];
         foreach ($groupAssignStudentIds as $assignStudentIds) {
             ++$groupSeqNum;
             $field['student_num'] = count($assignStudentIds);
@@ -218,7 +222,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field['multi_class_id'] = $multiClass['id'];
             $field['assistant_id'] = 0;
 
-            $multiClassGroup = $this->getMultiClassGroupDao()->create($field);
+            $groups[] = $multiClassGroup = $this->getMultiClassGroupDao()->create($field);
 
             $studentFields = [];
             foreach ($assignStudentIds as $assignStudentId) {
@@ -230,6 +234,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             }
             $this->getAssistantStudentDao()->batchCreate($studentFields);
         }
+
+        $this->dispatchEvent('multi_class.group_create', new Event($multiClass, ['groups' => $groups]));
 
         return true;
     }
