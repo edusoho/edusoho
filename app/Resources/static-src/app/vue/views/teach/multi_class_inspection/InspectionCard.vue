@@ -89,7 +89,9 @@ export default {
     setTimeout(() => {
       const assistantRef = this.$refs.assistant;
       this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
-    });
+      console.log(this.$refs.assistant);
+    },1000);
+    console.log(this.$refs.assistant);
   },
   created() {},
 
