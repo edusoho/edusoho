@@ -14,6 +14,11 @@ class MultiClassController extends CourseBaseController
     public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getMultiClassService()->countUserTeachMultiClass($user['id'], []),
