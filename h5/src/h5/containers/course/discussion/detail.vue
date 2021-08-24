@@ -35,7 +35,7 @@
         ref="replyInput"
         v-model="content"
         :placeholder="$t('courseLearning.reply2')"
-        @keyup.enter="handleClickEnter"
+        @keyup.enter.native="handleClickEnter"
       />
     </div>
   </div>
