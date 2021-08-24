@@ -1,9 +1,15 @@
 {% extends 'course-manage/layout.html.twig' %}
 
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
+
 {% block title %}{{'course.student_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'students' %}
 
 {% block page_title %}{{ 'course.student_manage'|trans }}{% endblock %}
+
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: type, btnGroup:1} %}
+{% endblock %}
 
 {% block main_body %}
   {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': type} %}

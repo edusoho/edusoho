@@ -2690,14 +2690,6 @@ classroom_manage_student_export_csv:
     path:  /classroom/{id}/manage/student/export
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:exportCsv }
 
-classroom_manage_student_exit_record_export_datum:
-    path:  /classroom/{id}/manage/student/exit_record/export_datum
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exitRecordExportDatum }
-
-classroom_manage_student_exit_record_export_csv:
-    path:  /classroom/{id}/manage/student/exit_record/export
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exitRecordExportCsv }
-
 classroom_manage_student_import:
     path:  /classroom/{id}/manage/student/import
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:importUsers }
@@ -3248,6 +3240,14 @@ try_export:
 member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
+
+member_operation_exit_record_export_datum:
+    path: /{targetType}/{targetId}/member_exit_record/export_datum
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportDatum }
+
+member_operation_exit_record_export_csv:
+    path: /{targetType}/{targetId}/member_exit_record/export
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportCsv }
 
 order_calculate_price:
     path: /order/price/calculate
