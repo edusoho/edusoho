@@ -63,31 +63,35 @@ export default {
       type: Object,
       require: true,
     },
+    liveInfo: {
+      type: Object,
+      require: true,
+    },
   },
   data() {
     return {
-      liveInfo: {
-        base: {},
-        info: {},
-        onlineAssistants: [{}],
-      },
+      // liveInfo: {
+      //   base: {},
+      //   info: {},
+      //   onlineAssistants: [{}],
+      // },
     };
   },
 
   computed: {},
 
   created() {
-    this.getLiveInfo();
+    // this.getLiveInfo();
   },
 
   methods: {
     async getLiveInfo() {
       try {
-        this.liveInfo = await MultiClassInspection.getLiveInfoById({
-          query: {
-            id: this.inspection.activityId,
-          },
-        });
+        // this.liveInfo = await MultiClassInspection.getLiveInfoById({
+        //   query: {
+        //     id: this.inspection.activityId,
+        //   },
+        // });
       } catch (error) {}
     },
 
