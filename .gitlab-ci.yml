@@ -11,9 +11,9 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - cp app/config/session_redis.yml.dist app/config/session_redis.yml
-  - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_host.*/    database_host: library-proxy-library-mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
-  - "echo '    redis_host: redis:6379' >> app/config/parameters_test.yml"
+  - "echo '    redis_host: library-proxy-library-redis:6379' >> app/config/parameters_test.yml"
   - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
   - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
   - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
@@ -163,7 +163,7 @@ AT With Java And Selenium:
     - selenium/standalone-chrome:latest
   script:
     # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_host.*/    database_host: library-proxy-library-mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     # 启动web服务
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
@@ -199,7 +199,7 @@ Api Test With 7.1:
     - dockerhub.codeages.work/library-proxy/library/redis:latest
   script:
     # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_host.*/    database_host: library-proxy-library-mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
