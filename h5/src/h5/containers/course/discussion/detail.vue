@@ -117,7 +117,10 @@ export default {
     async handleClickEnter() {
       const content = _.trim(this.content);
 
-      if (!content) return;
+      if (!content) {
+        this.$toast(this.$t('courseLearning.pleaseEnterContent'));
+        return;
+      };
 
       const result = await Api.createCoursesThreadPost({
         query: {
