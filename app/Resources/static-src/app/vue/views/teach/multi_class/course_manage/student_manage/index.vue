@@ -73,6 +73,7 @@
         <a-button
           type="primary"
           @click="clickBatchStudentGroupModal"
+          v-if="multiClass.type === 'group'"
         >
           <a-space>
             <svg-icon icon="icon-change" />
@@ -109,7 +110,7 @@
     </a-modal>
   <div>
     <a-row>
-      <a-col :span="3">
+      <a-col :span="3" v-if="multiClass.type === 'group'">
        <div class="student-group">学员分组</div>
         <a-menu mode="inline" @select="onGroupClick">
           <a-menu-item key="">
