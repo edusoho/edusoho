@@ -217,7 +217,7 @@ export default {
       _.forEach(this.columns, item => {
         item.width = '20%';
       });
-      this.columns.splice(2, 0, teahcerQualificationColumns);
+      this.columns.splice(1, 0, teahcerQualificationColumns);
     }
     this.fetchTeacher();
   },
