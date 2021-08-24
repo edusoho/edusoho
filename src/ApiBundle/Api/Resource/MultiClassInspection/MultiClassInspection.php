@@ -129,7 +129,6 @@ class MultiClassInspection extends AbstractResource
                     break;
                 case 'finished':
                     if (in_array($activity['ext']['replayStatus'], ['generated', 'videoGenerated'])) {
-                        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
                         $task['liveInfo']['viewUrl'] = $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
                     }
                     $endTasks[] = $task;
