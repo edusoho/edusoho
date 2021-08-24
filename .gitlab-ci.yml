@@ -51,7 +51,7 @@ check env:
     variables:
       - $REPOSITORY == "custom"
 
-5.6 with php-cs-fixer only for main:
+5.6 For main With php-cs-fixer:
   variables:
     USER_NAME: $GITLAB_USER_NAME
   stage: test
@@ -68,8 +68,10 @@ check env:
     - bin/phpunit-diff
   only:
     refs:
-      - merge_requests
-      - project/multi-class-two
+      - master
+      - develop
+      - /^release/.*$/
+      - trigger
     variables:
       - $REPOSITORY == "main"
 
@@ -86,8 +88,10 @@ check env:
   only:
     refs:
       - master
-      - release
+      - develop
+      - /^release/.*$/
       - trigger
+      - merge_requests
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
@@ -106,9 +110,9 @@ check env:
   only:
     refs:
       - /^release/.*$/
+      - /^project/.*$/
       - develop
       - master
-      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -126,13 +130,13 @@ check env:
   only:
     refs:
       - /^release/.*$/
+      - /^project/.*$/
       - develop
       - master
-      - project/data-visualization
     variables:
       - $REPOSITORY == "main"
 
-7.1 For Develop:
+7.1 Coverage For Main:
   stage: test
   image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
@@ -161,7 +165,40 @@ check env:
   only:
     refs:
       - develop
-      - project/wrong-qiestion-book
+      - master
+    variables:
+      - $REPOSITORY == "main"
+      - $REPOSITORY == "custom"
+
+7.1 Coverage For project:
+  stage: test
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
+  services:
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
+  script:
+    - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
+    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY-$CI_COMMIT_BRANCH/g" sonar-project.properties
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
+
+    - mkdir reports
+    - bin/caculate
+    - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
+    - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
+    - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - /opt/sonar-scanner/bin/sonar-scanner
+  only:
+    refs:
+      - /^project/.*$/
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
