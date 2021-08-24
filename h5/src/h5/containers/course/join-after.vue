@@ -6,6 +6,8 @@
       v-show="showTabs"
       class="tabs"
       v-model="active"
+      title-active-color="#408ffb"
+      title-inactive-color="#666"
       :class="tabFixed ? 'isFixed' : ''"
     >
       <van-tab v-for="item in tabs" :title="$t(`courseLearning.${item}`)" :key="item" />

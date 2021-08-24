@@ -92,10 +92,17 @@ export default {
 .review-create {
 
   .create-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
     padding: vw(16);
+    text-align: center;
+
+    .van-icon {
+      position: absolute;
+      left: vw(16);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
 
     &__title {
       margin: 0;
@@ -106,6 +113,10 @@ export default {
     }
 
     &__btn {
+      position: absolute;
+      right: vw(16);
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 16px;
       color: $primary-color;
       line-height: 24px;

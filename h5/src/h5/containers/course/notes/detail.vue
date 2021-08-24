@@ -8,7 +8,6 @@
         @click="handleClickGoToList"
       />
       <h3 class="detail-header__title">{{ $t('courseLearning.noteDetails') }}</h3>
-      <span class="detail-header__btn">{{ $t('courseLearning.reply') }}</span>
     </div>
 
     <div class="note-body">
@@ -88,10 +87,16 @@ export default {
   padding-bottom: vw(60);
 
   .detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
     padding: vw(16);
+    text-align: center;
+
+    .van-icon {
+      position: absolute;
+      left: vw(16);
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
     &__title {
       margin: 0;
@@ -99,10 +104,6 @@ export default {
       font-weight: 500;
       color: #333;
       line-height: vw(24);
-    }
-
-    &__btn {
-      visibility: hidden;
     }
   }
 
