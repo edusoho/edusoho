@@ -146,7 +146,7 @@
     border-radius: 100px 0px 0px 100px;
     cursor: pointer;
 
-    &__trigger {
+    i {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -155,10 +155,8 @@
       font-size: 24px;
     }
 
-    &.active {
-      .dashboard-toolbar__trigger {
-        transform: translate(-36%, -36%) rotate(180deg);
-      }
+    &.active i {
+      transform: translate(-36%, -36%) rotate(180deg);
     }
   }
 
