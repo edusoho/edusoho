@@ -93,18 +93,6 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, $multiClassIds) ?: [];
     }
 
-    public function updateMultiClassStudentsGroup($multiClassId, $conditions)
-    {
-        if (empty($conditions['studentIds'])) {
-            return [];
-        }
-
-        $marks = str_repeat('?,', count($conditions['studentIds']) - 1).'?';
-        $sql = "UPDATE {$this->table} set group_id = ? WHERE multiClassId = ? AND studentId IN ({$marks})";
-
-        $this->db()->executeQuery($sql, array_merge([$conditions['groupId'], $multiClassId], $conditions['studentIds']));
-    }
-
     public function declares()
     {
         return [
