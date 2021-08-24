@@ -111,7 +111,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             foreach ($groups as $group) {
                 $groupFields[] = [
                     'id' => $group['id'],
-                    'assistant_id' => $assistantId
+                    'assistant_id' => $assistantId,
                 ];
             }
             $this->getMultiClassGroupDao()->batchUpdate(ArrayToolkit::column($groups, 'id'), $groupFields);
@@ -121,7 +121,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             foreach ($assistantStudents as $assistantStudent) {
                 $assistantFields[] = [
                     'id' => $assistantStudent['id'],
-                    'assistantId' => $assistantId
+                    'assistantId' => $assistantId,
                 ];
             }
             $this->getAssistantStudentDao()->batchUpdate(ArrayToolkit::column($assistantStudents, 'id'), $assistantFields);

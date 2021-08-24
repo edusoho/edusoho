@@ -14,5 +14,7 @@ interface MultiClassRecordService
 
     public function createRecord($userId, $multiClassId);
 
+    public function uploadUserRecords($userId);
+
     public function makeSign();
 }

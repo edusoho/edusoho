@@ -109,7 +109,7 @@ class MultiClassRecordServiceImpl extends BaseService implements MultiClassRecor
         }
     }
 
-    public function uploadUserRecord($userId)
+    public function uploadUserRecords($userId)
     {
         if (!$this->getSCRMService()->isSCRMBind()) {
             return;

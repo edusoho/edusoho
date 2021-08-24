@@ -12,7 +12,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
-use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -52,7 +51,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             throw AssistantException::ASSISTANT_NOT_FOUND();
         }
 
-        $relation =  $this->getAssistantStudentDao()->update($id, ['assistantId' => $assistantId]);
+        $relation = $this->getAssistantStudentDao()->update($id, ['assistantId' => $assistantId]);
 
         $this->getMultiClassRecordService()->createRecord($relation['studentId'], $relation['multiClassId']);
 

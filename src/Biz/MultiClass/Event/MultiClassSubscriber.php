@@ -2,6 +2,7 @@
 
 namespace Biz\MultiClass\Event;
 
+use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -17,6 +18,7 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'multi_class.create' => 'onMultiClassCreate',
+            'scrm.user_bind' => 'onUserBind',
         ];
     }
 
@@ -69,6 +71,14 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
         ]);
     }
 
+    public function onUserBind(Event $event)
+    {
+        $user = $event->getSubject();
+        if (!empty($user['scrmUuid'])) {
+            $this->getMultiClassRecordService()->uploadUserRecords($user['id']);
+        }
+    }
+
     /**
      * @return MultiClassService
      */
@@ -83,5 +93,13 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    protected function getMultiClassRecordService()
+    {
+        return $this->getBiz()->service('MultiClass:MultiClassRecordService');
     }
 }
