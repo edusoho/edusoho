@@ -31,7 +31,6 @@ export default {
       getListLoading: false,
       headerTip: "班课巡检仅展示今天所有直播课",
       headerTitle: "仅支持EduSoho直播",
-      liveInfo: [],
     };
   },
 
