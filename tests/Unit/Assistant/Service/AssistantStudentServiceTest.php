@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassProductDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassProductService;
@@ -197,9 +198,13 @@ class AssistantStudentServiceTest extends BaseTestCase
     {
         $this->getAssistantStudentDao()->batchCreate([
             ['id' => 1, 'courseId' => 1, 'studentId' => 1, 'assistantId' => 1, 'multiClassId' => 1, 'group_id' => 1],
-            ['id' => 2, 'courseId' => 2, 'studentId' => 2, 'assistantId' => 1, 'multiClassId' => 2, 'group_id' => 1],
-            ['id' => 3, 'courseId' => 1, 'studentId' => 3, 'assistantId' => 2, 'multiClassId' => 1, 'group_id' => 2],
+            ['id' => 2, 'courseId' => 1, 'studentId' => 3, 'assistantId' => 2, 'multiClassId' => 1, 'group_id' => 2],
         ]);
+        $multiClassGroupFields = [
+            ['id' => 2, 'name' => '分组1', 'assistant_id' => 1, 'multi_class_id' => 1, 'course_id' => 1, 'student_num' => 1],
+            ['id' => 1, 'name' => '分组1', 'assistant_id' => 1, 'multi_class_id' => 2, 'course_id' => 1, 'student_num' => 1],
+        ];
+        $this->getMultiClassGroupDao()->batchCreate($multiClassGroupFields);
 
         $this->getAssistantStudentService()->batchUpdateStudentsGroup(1, [1], 2);
 
@@ -249,6 +254,14 @@ class AssistantStudentServiceTest extends BaseTestCase
     protected function getMultiClassProductDao()
     {
         return $this->createDao('MultiClass:MultiClassProductDao');
+    }
+
+    /**
+     * @return MultiClassGroupDao
+     */
+    private function getMultiClassGroupDao()
+    {
+        return $this->createDao('MultiClass:MultiClassGroupDao');
     }
 
     /**

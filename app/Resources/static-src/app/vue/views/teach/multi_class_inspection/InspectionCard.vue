@@ -9,8 +9,8 @@
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <svg-icon v-if="teacherAttend(teacherInfo.id)" class="icon-a-closecircle" icon="icon-a-closecircle" />
-          <svg-icon v-else class="icon-check-circle" icon="icon-check-circle" />
+          <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
+          <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
         </span>
       </div>
       <div class="inspection-card__item info text-overflow" ref="assistant">助教出席：
@@ -88,7 +88,10 @@ export default {
       return _.find(this.inspection.liveInfo.speakers, ["userId", Number(id)]);
     },
     assistantAttend(id) {
-      return _.find(this.inspection.liveInfo.assistants, ["userId", Number(id)]);
+      return _.find(this.inspection.liveInfo.assistants, [
+        "userId",
+        Number(id),
+      ]);
     },
   },
 };

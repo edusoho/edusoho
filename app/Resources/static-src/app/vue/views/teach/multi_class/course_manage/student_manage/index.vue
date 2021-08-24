@@ -112,7 +112,7 @@
   <div>
     <a-row>
       <a-col :span="3" v-if="multiClass.type === 'group'">
-       <div class="student-group">学员分组</div>
+       <div class="student-group">学员分布</div>
         <a-menu mode="inline" @select="onGroupClick">
           <a-menu-item key="">
             <span>全部学员</span>
