@@ -138,42 +138,65 @@
   }
   .dashboard-toolbar {
     position: absolute;
-    top:50%;
-    left: -58px;
-    margin-top: -112.5px;
-    .dashboard-toolbar-nav {
-      margin-bottom: 0;
-      vertical-align: middle;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      > li {
-        margin-bottom: 10px;
-        > a {
-          padding:12px 15px;
-          display: inline-block;
-          background-color: #fff;
-          color: @gray-dark;
-          text-align: center;
-          .box-shadow(-1px 0 10px rgba(0,0,0,0.1));
-        }
-        &.active,
-        &:hover {
-          > a {
-            background-color: @brand-primary;
-            color: #fff;
-          }
-        }
+    top: 50%;
+    left: -32px;
+    margin-top: -24px;
+    width: 32px;
+    height: 48px;
+    border-radius: 100px 0px 0px 100px;
+    cursor: pointer;
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-40%, -60%);
+      color: #fff;
+      font-size: 24px;
+    }
+
+    &.active i {
+      transform: translate(-36%, -36%) rotate(180deg);
+    }
+  }
+
+  .dashboard-nav {
+    padding: 0;
+    margin: 0;
+    height: 56px;
+    list-style: none;
+    text-align: center;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 56px;
+
+    &__item {
+      position: relative;
+      cursor: pointer;
+
+      &.active::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 2px;
+        border-radius: 1px;
       }
     }
   }
+
   .dashboard-pane {
     overflow: hidden;
     height: 100%;
   }
   .task-list-pane {
     position: absolute;
-    top: 0;
+    top: 57px;
     bottom: 0;
     width: 100%;
     overflow-y: hidden;
