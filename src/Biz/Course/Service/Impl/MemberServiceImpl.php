@@ -1770,7 +1770,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $currentUser = $this->getCurrentUser();
         if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || ($currentUser->getId() == $userId && $currentUser->isAdmin())) {
             $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
+            $teacherId = !empty($course['teacherIds']) && array_shift($course['teacherIds']);
 
             if ($teacherId == $userId) {
                 return 'teacher';
