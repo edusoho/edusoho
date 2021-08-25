@@ -24,7 +24,7 @@
           </template>
         </span>
       </div>
-      <a-popover class="inspection-card__popover">
+      <a-popover v-if="ellipsis" class="inspection-card__popover">
         <template slot="content">
           <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
             {{ assistant.nickname }}
@@ -81,7 +81,9 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      ellipsis: false,
+    };
   },
   computed: {
     realTimeStudent() {
@@ -92,7 +94,7 @@ export default {
   },
   mounted() {
     const assistantRef = this.$refs.assistant;
-    console.log(assistantRef);
+    this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
   },
   methods: {
     isAttend(type, id) {
