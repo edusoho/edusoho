@@ -2,9 +2,9 @@
 
 namespace AppBundle\Handler;
 
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler;
+use Topxia\Service\Common\ServiceKernel;
 
 class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 {
@@ -36,7 +36,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             }
 
             $url = $this->httpUtils->generateUri($request, 'partner_logout');
-            $queries = array('userId' => $user['id'], 'goto' => $this->targetUrl);
+            $queries = ['userId' => $user['id'], 'goto' => $this->targetUrl];
             $url = $url.'?'.http_build_query($queries);
 
             return $this->httpUtils->createRedirectResponse($request, $url);

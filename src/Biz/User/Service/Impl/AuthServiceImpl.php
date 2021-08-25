@@ -2,14 +2,14 @@
 
 namespace Biz\User\Service\Impl;
 
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Sensitive\SensitiveException;
 use Biz\User\Service\AuthService;
-use Codeages\RateLimiter\RateLimiter;
-use AppBundle\Common\SimpleValidator;
-use AppBundle\Common\TimeMachine;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\User\UserException;
+use Codeages\RateLimiter\RateLimiter;
+use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -54,7 +54,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function registerLimitValidator($registration)
     {
-        $authSettings = $this->getSettingService()->get('auth', array());
+        $authSettings = $this->getSettingService()->get('auth', []);
         $user = $this->getCurrentUser();
 
         if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
@@ -213,7 +213,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
             } catch (\Exception $e) {
-                return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+                return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
             }
 
             if ('success' != $result[0]) {
@@ -221,17 +221,17 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
 
             if (!SimpleValidator::nickname($username)) {
-                return array('error_mismatching', '用户名不合法!');
+                return ['error_mismatching', '用户名不合法!'];
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
 
             if (!$avaliable) {
-                return array('error_duplicate', '名称已被占用，请更换其他用户名');
+                return ['error_duplicate', '名称已被占用，请更换其他用户名'];
             }
         }
 
-        return array('success', '');
+        return ['success', ''];
     }
 
     public function checkEmail($email)
@@ -239,7 +239,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkEmail($email);
         } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+            return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
         }
 
         if ('success' != $result[0]) {
@@ -249,10 +249,10 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isEmailAvaliable($email);
 
         if (!$avaliable) {
-            return array('error_duplicate', 'Email已存在!');
+            return ['error_duplicate', 'Email已存在!'];
         }
 
-        return array('success', '');
+        return ['success', ''];
     }
 
     public function checkMobile($mobile)
@@ -260,7 +260,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkMobile($mobile);
         } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+            return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
         }
 
         if ('success' != $result[0]) {
@@ -270,10 +270,10 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
 
         if (!$avaliable) {
-            return array('error_duplicate', '手机号已被绑定，请更换其他手机号');
+            return ['error_duplicate', '手机号已被绑定，请更换其他手机号'];
         }
 
-        return array('success', '');
+        return ['success', ''];
     }
 
     public function checkEmailOrMobile($emailOrMobile)
@@ -283,7 +283,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         } elseif (SimpleValidator::mobile($emailOrMobile)) {
             return $this->checkMobile($emailOrMobile);
         } else {
-            return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
+            return ['error_dateInput', '电子邮箱或者手机号码格式不正确!'];
         }
     }
 
@@ -352,11 +352,11 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
-        if ($auth && $auth['register_enabled'] === 'closed'){
+        if ($auth && 'closed' === $auth['register_enabled']) {
             return false;
         }
         if ($auth && array_key_exists('register_mode', $auth)) {
-            return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
+            return in_array($auth['register_mode'], ['email', 'mobile', 'email_or_mobile']);
         }
 
         return true;
@@ -372,7 +372,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 $partner = $setting['mode'];
             }
 
-            if (!in_array($partner, array('discuz', 'phpwind', 'default'))) {
+            if (!in_array($partner, ['discuz', 'phpwind', 'default'])) {
                 throw $this->createInvalidArgumentException('Invalid partner');
             }
 

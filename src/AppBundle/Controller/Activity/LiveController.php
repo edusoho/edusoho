@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -92,7 +93,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
-        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id'])) {
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $user->isAdmin()) {
             $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
@@ -104,6 +105,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
          */
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
+
+        $liveGroup = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId($user['id'], $courseId, $activity['ext']['liveId']);
+        if (!empty($liveGroup)) {
+            $params['groupCode'] = $liveGroup['live_code'];
+        }
 
         /**
          * provider code in wiki
@@ -228,6 +234,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } elseif ($this->getUser()->isAdmin()) {
             $role = 'student';
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
@@ -457,5 +465,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    protected function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 }

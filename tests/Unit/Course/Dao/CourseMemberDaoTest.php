@@ -619,6 +619,28 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         self::assertArrayHasKey(11, $members2);
     }
 
+    public function testFindMultiClassIdsByUserId()
+    {
+        $this->mockDataObject(['userId' => 1, 'courseId' => 1, 'role' => 'teacher', 'courseSetId' => 1, 'locked' => 0, 'multiClassId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'courseId' => 2, 'role' => 'teacher', 'courseSetId' => 2, 'locked' => 0, 'multiClassId' => 3]);
+        $this->mockDataObject(['userId' => 2, 'courseId' => 3, 'role' => 'teacher', 'courseSetId' => 3, 'locked' => 0, 'multiClassId' => 4]);
+
+        $result = $this->getDao()->findMultiClassIdsByUserId(1);
+
+        self::assertCount(2, $result);
+    }
+
+    public function testCountGroupByCourseId()
+    {
+        $this->mockDataObject(['userId' => 1, 'courseId' => 1, 'role' => 'student', 'courseSetId' => 1, 'locked' => 0, 'multiClassId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'courseId' => 2, 'role' => 'teacher', 'courseSetId' => 2, 'locked' => 0, 'multiClassId' => 3]);
+        $this->mockDataObject(['userId' => 2, 'courseId' => 1, 'role' => 'student', 'courseSetId' => 1, 'locked' => 0, 'multiClassId' => 1]);
+
+        $result = $this->getDao()->countGroupByCourseId(['multiClassId' => 1, 'role' => 'student']);
+
+        $this->assertEquals(2, $result[0]['count']);
+    }
+
     protected function getDefaultMockFields()
     {
         return [
