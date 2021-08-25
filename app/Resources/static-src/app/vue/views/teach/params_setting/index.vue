@@ -8,7 +8,7 @@
       </a-form-model-item>
       <a-form-model-item ref="assistant_group_limit" label="助教服务组数上限" prop="assistant_group_limit" extra='新建分组大班课时将默认填入该参数'>
         <a-input v-model="form.assistant_group_limit">
-          <span slot="suffix">人</span>
+          <span slot="suffix">组</span>
         </a-input>
       </a-form-model-item>
       <a-form-model-item ref="assistant_service_limit" label="助教服务学员人数上限" prop="assistant_service_limit" extra='新建大班课时将默认填入该参数'>
@@ -26,7 +26,7 @@
     <div class="setup-btn">
       <a-space size="large">
         <a-button type="primary" @click="handleSubmit" :loading="ajaxLoading">
-          提交
+          保存
         </a-button>
       </a-space>
     </div>

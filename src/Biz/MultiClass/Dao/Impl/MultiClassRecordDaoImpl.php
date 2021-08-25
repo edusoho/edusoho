@@ -14,6 +14,11 @@ class MultiClassRecordDaoImpl extends AdvancedDaoImpl implements MultiClassRecor
         return $this->getByFields(['sign' => $sign]);
     }
 
+    public function findByUserIdAndIsPush($userId, $isPush)
+    {
+        return $this->findByFields(['user_id' => $userId, 'is_push' => $isPush]);
+    }
+
     public function declares()
     {
         return [

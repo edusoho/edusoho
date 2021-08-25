@@ -45,7 +45,7 @@
         </a-button>
 
         <!-- v-if="showEditorSualification" 判断是否可以编辑教师资质，后续新增，把判断给编辑教师资质按钮即可 -->
-        <a-dropdown v-if="showEditorSualification">
+        <a-dropdown>
           <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
             <a-icon type="caret-down" />
           </a>
@@ -72,7 +72,7 @@
                 修改用户头像
               </a>
             </a-menu-item>
-            <a-menu-item @click="handleEditorQualification(item)">
+            <a-menu-item @click="handleEditorQualification(item)" v-if="showEditorSualification">
               编辑教师资质
             </a-menu-item>
           </a-menu>
@@ -152,12 +152,12 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: "已结班班课总数",
+    title: "已结课班课总数",
     dataIndex: 'endMultiClassNum',
     ellipsis: true,
   },
   {
-    title: "已结班班课学员总数",
+    title: "已结课班课学员总数",
     dataIndex: 'endMultiClassStudentNum',
     ellipsis: true,
   },
@@ -217,7 +217,7 @@ export default {
       _.forEach(this.columns, item => {
         item.width = '20%';
       });
-      this.columns.splice(2, 0, teahcerQualificationColumns);
+      this.columns.splice(1, 0, teahcerQualificationColumns);
     }
     this.fetchTeacher();
   },

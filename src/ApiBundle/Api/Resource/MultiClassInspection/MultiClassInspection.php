@@ -14,6 +14,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\Util\EdusohoLiveClient;
 
 class MultiClassInspection extends AbstractResource
 {
@@ -68,15 +69,80 @@ class MultiClassInspection extends AbstractResource
             }
         }
 
-        foreach ($tasks as &$task) {
+        $liveInfos = $this->appendLiveInfo($activities);
+
+        foreach ($tasks as $key => &$task) {
+            if (empty($multiClasses[$task['courseId']])) {
+                unset($tasks[$key]);
+                continue;
+            }
             $task['activityInfo'] = isset($activities[$task['activityId']]) ? $activities[$task['activityId']] : [];
             $task['multiClass'] = isset($multiClasses[$task['courseId']]) ? $multiClasses[$task['courseId']] : [];
             $task['studentNum'] = isset($courses[$task['courseId']]) ? $courses[$task['courseId']]['studentNum'] : 0;
             $task['teacherInfo'] = isset($users[$teachers[$task['courseId']]['userId']]) ? $users[$teachers[$task['courseId']]['userId']] : [];
             $task['assistantInfo'] = isset($multiAssistants[$task['courseId']]) ? $multiAssistants[$task['courseId']]['assistantInfo'] : [];
+            $task['liveInfo'] = empty($liveInfos[$task['activityInfo']['ext']['liveId']]) ? [] : $liveInfos[$task['activityInfo']['ext']['liveId']];
         }
 
+        $tasks = $this->handleLiveData($tasks);
+
         return $tasks;
+    }
+
+    public function appendLiveInfo($activities)
+    {
+        $liveActivities = ArrayToolkit::column($activities, 'ext');
+        $liveActivities = ArrayToolkit::group($liveActivities, 'liveProvider');
+        $selfLives = $liveActivities[EdusohoLiveClient::SELF_ES_LIVE_PROVIDER];
+        if (empty($selfLives)) {
+            return [];
+        }
+
+        $infos = $this->getLiveClient()->getLiveRoomMonitors(implode(',', ArrayToolkit::column($selfLives, 'liveId')));
+        if (empty($infos) || !empty($infos['error'])) {
+            return [];
+        }
+
+        return ArrayToolkit::index($infos, 'id');
+    }
+
+    public function handleLiveData($tasks)
+    {
+        $errorTasks = [];
+        $livingTasks = [];
+        $notStartTasks = [];
+        $endTasks = [];
+        $otherTasks = [];
+        foreach ($tasks as $task) {
+            if (empty($task['liveInfo'])) {
+                $otherTasks[] = $task;
+                continue;
+            }
+
+            $activity = $task['activityInfo'];
+            switch ($task['liveInfo']['status']) {
+                case 'living':
+                    $task['liveInfo']['viewUrl'] = $this->generateUrl('task_live_entry', ['courseId' => $activity['fromCourseId'], 'activityId' => $activity['id']]);
+                    $livingTasks[] = $task;
+                    break;
+                case 'finished':
+                    if (in_array($activity['ext']['replayStatus'], ['generated', 'videoGenerated'])) {
+                        $task['liveInfo']['viewUrl'] = $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
+                    }
+                    $endTasks[] = $task;
+                    break;
+                default:
+                    $task['liveInfo']['status'] = $activity['startTime'] < time() ? 'notOnTime' : $task['liveInfo']['status'];
+                    $task['liveInfo']['viewUrl'] = '';
+                    if ('notOnTime' == $task['liveInfo']['status']) {
+                        $errorTasks[] = $task;
+                    } else {
+                        $notStartTasks[] = $task;
+                    }
+            }
+        }
+
+        return array_merge($errorTasks, $livingTasks, $notStartTasks, $endTasks, $otherTasks);
     }
 
     /**
@@ -125,5 +191,13 @@ class MultiClassInspection extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return EdusohoLiveClient
+     */
+    protected function getLiveClient()
+    {
+        return $this->biz['educloud.live_client'];
     }
 }

@@ -69,6 +69,16 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->findByFields(['multiClassId' => $multiClassId, 'group_id' => $groupId]);
     }
 
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId)
+    {
+        return $this->findByFields(['assistantId' => $assistantId, 'multiClassId' => $multiClassId]);
+    }
+
+    public function findAssistantStudentsByGroupIds($groupIds)
+    {
+        return $this->findInField('group_id', $groupIds);
+    }
+
     public function findByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         if (empty($studentIds)) {
@@ -91,18 +101,6 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         $sql = "SELECT *,concat(multiClassId, '_', studentId) as unitKey FROM {$this->table()} WHERE multiClassId IN ({$marks})";
 
         return $this->db()->fetchAll($sql, $multiClassIds) ?: [];
-    }
-
-    public function updateMultiClassStudentsGroup($multiClassId, $conditions)
-    {
-        if (empty($conditions['studentIds'])) {
-            return [];
-        }
-
-        $marks = str_repeat('?,', count($conditions['studentIds']) - 1).'?';
-        $sql = "UPDATE {$this->table} set group_id = ? WHERE multiClassId = ? AND studentId IN ({$marks})";
-
-        $this->db()->executeQuery($sql, array_merge([$conditions['groupId'], $multiClassId], $conditions['studentIds']));
     }
 
     public function declares()

@@ -9,7 +9,12 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
+use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassGroupService;
+use Biz\MultiClass\Service\MultiClassRecordService;
+use Biz\MultiClass\Service\MultiClassService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
 
 class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupService
 {
@@ -97,6 +102,65 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         return $this->getMultiClassGroupDao()->getLatestGroup($multiClassId);
     }
 
+    public function batchUpdateGroupAssistant($multiClassId, $groupIds, $assistantId)
+    {
+        try {
+            $this->beginTransaction();
+
+            $groups = $this->findGroupsByIds($groupIds);
+            $groupFields = [];
+            foreach ($groups as $group) {
+                $groupFields[] = [
+                    'id' => $group['id'],
+                    'assistant_id' => $assistantId,
+                ];
+            }
+            $this->getMultiClassGroupDao()->batchUpdate(ArrayToolkit::column($groups, 'id'), $groupFields);
+
+            $assistantStudents = $this->getAssistantStudentService()->findAssistantStudentsByGroupIds($groupIds);
+            $assistantFields = [];
+            foreach ($assistantStudents as $assistantStudent) {
+                $assistantFields[] = [
+                    'id' => $assistantStudent['id'],
+                    'assistantId' => $assistantId,
+                ];
+            }
+            $this->getAssistantStudentDao()->batchUpdate(ArrayToolkit::column($assistantStudents, 'id'), $assistantFields);
+
+            $this->batchCreateRecords($multiClassId, $groups, $assistantId, $assistantStudents);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('batchUpdateGroupAssistant:'.$e->getMessage(), ['multiClassId' => $multiClassId, 'groupIds' => $groupIds, 'assistantId' => $assistantId]);
+            $this->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
+    private function batchCreateRecords($multiClassId, $groups, $assistantId, $assistantStudents)
+    {
+        $multiClass = $this->getMultiClassService()->getMultiClass($multiClassId);
+        $assistant = $this->getUserService()->getUser($assistantId);
+
+        $records = [];
+        foreach ($assistantStudents as $assistantStudent) {
+            $group = $groups[$assistantStudent['group_id']];
+            $content = sprintf('加入班课(%s)的%s, 分配助教(%s)', $multiClass['title'], MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$group['seq'], $assistant['nickname']);
+            $records[] = [
+                'user_id' => $assistantStudent['studentId'],
+                'assistant_id' => $assistantId,
+                'multi_class_id' => $multiClassId,
+                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
+                'sign' => $this->getMultiClassRecordService()->makeSign(),
+                'is_push' => 0,
+            ];
+        }
+
+        return $this->getMultiClassRecordDao()->batchCreate($records);
+    }
+
     public function setGroupNewStudent($multiClass, $studentId)
     {
         if ('group' != $multiClass['type'] || empty($multiClass['group_limit_num'])) {
@@ -108,12 +172,14 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field = [];
             $latestGroup = $this->getLatestGroup($multiClass['id']);
             $field['name'] = empty($latestGroup) ? self::MULTI_CLASS_GROUP_NAME.'1' : self::MULTI_CLASS_GROUP_NAME.($latestGroup['seq'] + 1);
-            $field['seq'] = empty($latestGroup) ? 0 : $latestGroup['seq'] + 1;
+            $field['seq'] = empty($latestGroup) ? 1 : $latestGroup['seq'] + 1;
             $field['multi_class_id'] = $multiClass['id'];
             $field['course_id'] = $multiClass['courseId'];
             $field['student_num'] = 1;
             $field['assistant_id'] = 0;
             $group = $this->getMultiClassGroupDao()->create($field);
+
+            $this->dispatchEvent('multi_class.group_create', new Event($multiClass, ['groups' => [$group]]));
         } else {
             $group = $this->getMultiClassGroupDao()->update($noFullGroup['id'], ['student_num' => $noFullGroup['student_num'] + 1]);
         }
@@ -128,6 +194,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         $this->getAssistantStudentDao()->create($studentField);
 
         $this->getAssistantStudentService()->setGroupAssistantAndStudents($multiClass['courseId'], $multiClass['id']);
+
+        return true;
     }
 
     public function createMultiClassGroups($courseId, $multiClass)
@@ -148,6 +216,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         }
 
         $groupSeqNum = 0;
+        $groups = [];
         foreach ($groupAssignStudentIds as $assignStudentIds) {
             ++$groupSeqNum;
             $field['student_num'] = count($assignStudentIds);
@@ -157,7 +226,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $field['multi_class_id'] = $multiClass['id'];
             $field['assistant_id'] = 0;
 
-            $multiClassGroup = $this->getMultiClassGroupDao()->create($field);
+            $groups[] = $multiClassGroup = $this->getMultiClassGroupDao()->create($field);
 
             $studentFields = [];
             foreach ($assignStudentIds as $assignStudentId) {
@@ -170,6 +239,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
             $this->getAssistantStudentDao()->batchCreate($studentFields);
         }
 
+        $this->dispatchEvent('multi_class.group_create', new Event($multiClass, ['groups' => $groups]));
+
         return true;
     }
 
@@ -179,6 +250,38 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
     protected function getMultiClassGroupDao()
     {
         return $this->createDao('MultiClass:MultiClassGroupDao');
+    }
+
+    /**
+     * @return MultiClassRecordDao
+     */
+    private function getMultiClassRecordDao()
+    {
+        return $this->createDao('MultiClass:MultiClassRecordDao');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    private function getMultiClassRecordService()
+    {
+        return $this->createService('MultiClass:MultiClassRecordService');
+    }
+
+    /**
+     * @return MultiClassService
+     */
+    protected function getMultiClassService()
+    {
+        return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**

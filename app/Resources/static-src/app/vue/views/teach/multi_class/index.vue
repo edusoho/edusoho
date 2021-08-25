@@ -105,9 +105,9 @@
           <span>{{text === 'normal'? '大班课':'分组大班课'}}</span>
         </template>
         <template slot="status" slot-scope="text">
-          <span v-if="text === 'notStart'" style="font-size: 14px; color: #fb8d4d;">未开始</span>
+          <span v-if="text === 'notStart'" style="font-size: 14px; color: #fb8d4d;">未开课</span>
           <span v-else-if="text === 'living'" style="font-size: 14px; color: #43bc60;">开课中</span>
-          <span v-else style="font-size: 14px; color: #999;">已结束</span>
+          <span v-else style="font-size: 14px; color: #999;">已结课</span>
         </template>
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
@@ -120,7 +120,7 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <a-button type="link"
-            @click="goToMultiClassManage(record.id)">查看</a-button>
+            @click="goToMultiClassManage(record.id)">管理</a-button>
           <a-button
             type="link"
             @click="goToEditorMultiClass(record.id, record.type)">编辑</a-button>
@@ -378,6 +378,10 @@ export default {
 
     change(pagination, filters, sorter) {
       const params = {}
+      params.productId = this.search.productId;
+      params.status = this.search.status;
+      params.teacherId = this.search.teacherId;
+      params.type = this.search.type;
 
       if (pagination) {
         params.offset = pagination.pageSize * (pagination.current - 1)

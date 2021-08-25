@@ -1,49 +1,65 @@
 <template>
   <div class="inspection-card">
-    <div class="inspection-card__info">
+    <div class="inspection-card__info" :class="{ 'noborder': inspection.liveInfo.length == 0 }">
       <div class="inspection-card__title info text-overflow">班课名称：{{ inspection.multiClass.title }}</div>
       <div class="inspection-card__item info text-overflow">课时名称：{{ inspection.title }}</div>
       <div class="inspection-card__item info">开课时间：{{ $dateFormat(inspection.startTime, 'YYYY-MM-DD HH:mm') }}</div>
       <div class="inspection-card__item info">课程时长：{{ inspection.length }}分钟</div>
-      <div class="inspection-card__item info">实时学员人数：{{ liveInfo.info.viewerOnlineNum ? liveInfo.info.viewerOnlineNum : 0 }}/{{ inspection.studentNum }}</div>
+      <div class="inspection-card__item info">实时学员人数：{{ realTimeStudent }}/{{ inspection.studentNum }}</div>
       <div class="inspection-card__item info">授课教师：
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
-          <svg-icon v-if="liveInfo.info.status === 'unstart' || liveInfo.info.status === 'notOnTime'" class="icon-a-closecircle" icon="icon-a-closecircle" />
-          <svg-icon v-else class="icon-check-circle" icon="icon-check-circle" />
+          <template v-if="inspection.liveInfo.length !== 0">
+            <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          </template>
         </span>
       </div>
-      <div class="inspection-card__item info">助教出席：
+      <div class="inspection-card__item info text-overflow" ref="assistant">助教出席：
         <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
           {{ assistant.nickname }}
-          <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
-          <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          <template v-if="inspection.liveInfo.length !== 0">
+            <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
+          </template>
         </span>
       </div>
+      <a-popover class="inspection-card__popover">
+        <template slot="content">
+          <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
+            {{ assistant.nickname }}
+            <template v-if="inspection.liveInfo.length !== 0">
+              <svg-icon v-if="assistantAttend(assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
+              <svg-icon v-else icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
+            </template>
+          </span>
+        </template>
+        <div class="empty-block"></div>
+      </a-popover>
     </div>
     <div class="inspection-card__button">
-      <div v-if="liveInfo.info.status === 'notOnTime'" class="inspection-card__button not-live-start">
+      <div v-if="inspection.liveInfo.status === 'notOnTime'" class="inspection-card__button not-live-start">
         直播未按时开始
       </div>
-      <div v-if="liveInfo.info.status === 'living'" class="inspection-card__button">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'living'" class="inspection-card__button">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live" />
           进入直播
         </a>
       </div>
-      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus !== 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus !== 'ungenerated'" class="inspection-card__button live-start">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live-playback" />
           查看回放
         </a>
       </div>
-      <div v-if="liveInfo.info.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="liveInfo.info.viewUrl">
+      <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
+        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
           <svg-icon class="icon-live" icon="icon-live-playback" />
           直播已结束，回放生成中
         </a>
       </div>
-      <div v-if="liveInfo.info.status === 'unstart'" class="inspection-card__button no-start-live">
+      <div v-if="inspection.liveInfo.status === 'unstart'" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
         直播未开始
       </div>
@@ -62,22 +78,29 @@ export default {
       type: Object,
       require: true,
     },
-    liveInfo: {
-      type: Object,
-      require: true,
-    },
   },
   data() {
     return {};
   },
-
-  computed: {},
-
-  created() {},
-
+  computed: {
+    realTimeStudent() {
+      return this.inspection.liveInfo.viewerOnlineNum
+        ? this.inspection.liveInfo.viewerOnlineNum
+        : 0;
+    },
+  },
   methods: {
+    teacherAttend(id) {
+      return _.find(this.inspection.liveInfo.speakers, ["userId", Number(id)]);
+    },
     assistantAttend(id) {
-      return _.find(this.liveInfo.onlineAssistants, ["userId", Number(id)]);
+      console.log(
+        _.find(this.inspection.liveInfo.assistants, ["userId", Number(id)])
+      );
+      return _.find(this.inspection.liveInfo.assistants, [
+        "userId",
+        Number(id),
+      ]);
     },
   },
 };
@@ -108,7 +131,16 @@ export default {
       font-weight: 400;
     }
   }
-
+  .noborder {
+    border-bottom: transparent !important;
+  }
+  .inspection-card__popover {
+    position: absolute;
+    right: 16px;
+    bottom: 97px;
+    height: 18px;
+    width: 18px;
+  }
   .icon-check-circle {
     width: 14px;
     height: 14px;
@@ -125,7 +157,7 @@ export default {
     margin-left: 24px;
   }
 
-  .info:not(:last-child) {
+  .info {
     margin-bottom: 8px;
   }
 
@@ -166,6 +198,9 @@ export default {
     display: block;
     width: auto;
     height: auto;
+  }
+  .empty-block {
+    width: 80%;
   }
 }
 </style>

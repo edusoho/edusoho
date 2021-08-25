@@ -2,6 +2,8 @@
 
 namespace Biz\MultiClass\Event;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\MultiClass\Service\MultiClassRecordService;
 use Biz\MultiClass\Service\MultiClassService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -17,6 +19,8 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'multi_class.create' => 'onMultiClassCreate',
+            'multi_class.group_create' => 'onMultiClassGroupCreate',
+            'scrm.user_bind' => 'onUserBind',
         ];
     }
 
@@ -49,16 +53,6 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
         $multiClass = $event->getSubject();
 
         $this->getSchedulerService()->register([
-            'name' => 'CreateLiveGroupJob_'.$multiClass['id'],
-            'expression' => time(),
-            'class' => 'Biz\MultiClass\Job\CreateLiveGroupJob',
-            'misfire_threshold' => 60 * 60,
-            'args' => [
-                'multiClassId' => $multiClass['id'],
-            ],
-        ]);
-
-        $this->getSchedulerService()->register([
             'name' => 'GenerateMultiClassRecordJob_'.$multiClass['id'],
             'expression' => time(),
             'class' => 'Biz\MultiClass\Job\GenerateMultiClassRecordJob',
@@ -67,6 +61,31 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
                 'multiClassId' => $multiClass['id'],
             ],
         ]);
+    }
+
+    public function onMultiClassGroupCreate(Event $event)
+    {
+        $multiClass = $event->getSubject();
+        $groups = $event->getArgument('groups');
+
+        $this->getSchedulerService()->register([
+            'name' => 'CreateLiveGroupJob_'.$multiClass['id'],
+            'expression' => time(),
+            'class' => 'Biz\MultiClass\Job\CreateLiveGroupJob',
+            'misfire_threshold' => 60 * 60,
+            'args' => [
+                'multiClassId' => $multiClass['id'],
+                'groupIds' => ArrayToolkit::column($groups, 'id'),
+            ],
+        ]);
+    }
+
+    public function onUserBind(Event $event)
+    {
+        $user = $event->getSubject();
+        if (!empty($user['scrmUuid'])) {
+            $this->getMultiClassRecordService()->uploadUserRecords($user['id']);
+        }
     }
 
     /**
@@ -83,5 +102,13 @@ class MultiClassSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return MultiClassRecordService
+     */
+    protected function getMultiClassRecordService()
+    {
+        return $this->getBiz()->service('MultiClass:MultiClassRecordService');
     }
 }

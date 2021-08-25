@@ -5,6 +5,7 @@ namespace Biz\SCRM\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Service\CacheService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
 use ESCloud\SDK\Service\ScrmService;
 
 class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMService
@@ -41,6 +42,8 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
             ]);
         } catch (\Exception $e) {
         }
+
+        $this->dispatchEvent('scrm.user_bind', new Event($user));
 
         return $user;
     }

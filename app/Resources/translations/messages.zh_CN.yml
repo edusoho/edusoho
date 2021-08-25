@@ -12001,6 +12001,7 @@ exception.multi_class.forbidden_close_course: 无法关闭班课课程
 exception.multi_class.assistant_require: 班课需要设置助教
 exception.multi_class.assistant_student_not_found: 助教学员关系未找到
 exception.multi_class.group_not_found: 分组未找到
+exception.multi_class.assistant_not_found: 助教未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录

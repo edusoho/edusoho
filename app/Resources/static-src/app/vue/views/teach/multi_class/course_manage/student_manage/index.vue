@@ -25,6 +25,7 @@
         </a-button>
 
         <a-button
+          v-if="multiClass.type === 'normal'"
           @click="clickBatchUpdateAssistantModal()"
           type="primary"
         >
@@ -111,12 +112,22 @@
   <div>
     <a-row>
       <a-col :span="3" v-if="multiClass.type === 'group'">
-       <div class="student-group">学员分组</div>
+       <div class="student-group">学员分布</div>
         <a-menu mode="inline" @select="onGroupClick">
           <a-menu-item key="">
             <span>全部学员</span>
           </a-menu-item>
-          <a-menu-item v-for="Group in groupList" :key="Group.id">
+          <a-menu-item class="menu-group" v-for="Group in groupList" :key="Group.id">
+             <a-button
+              class="edit-group-assistant"
+              type="link"
+              @click="clickAssistantGroupModal"
+              style="width:0px"
+            >
+              <a-space>
+              <svg-icon icon="icon-edit" style="color:#46C37B"/>
+              </a-space>
+            </a-button>
             <span>{{Group.name}}</span>
             <span>({{Group.student_num}})</span>
             <span style="margin-left: 4px;">{{Group.assistant.nickname}}</span>
@@ -170,7 +181,8 @@
     <assistant-list-modal :visible="assistantListModalVisible" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="assistantListModalVisible = false;" />
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <change-group-modal :visible="changeGroupVisible" :groupList="groupList" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="updateStudentList"></change-group-modal>
-
+    <edit-assistant-modal :visible="editAssistantVisible" :multi-class-id="id" :multi-class="multiClass" :groupId="groupId" @handle-cancel="updateStudentList"></edit-assistant-modal>
+    
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -270,6 +282,7 @@ import AssistantListModal from 'app/vue/views/teach/assistant/components/Assista
 import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
 import ChangeGroupModal from './ChangeGroupModal.vue';
+import EditAssistantModal from './EditAssistantModal.vue';
 
 const columns = [
   {
@@ -396,6 +409,7 @@ export default {
     AssistantListModal,
     userInfoTable,
     ChangeGroupModal,
+    EditAssistantModal,
   },
   data() {
     return {
@@ -418,6 +432,7 @@ export default {
       viewStudentInfoVisible: false,
       changeGroupVisible: false,
       assistantListModalVisible: false,
+      editAssistantVisible: false,
       selectedStudentIds: [],
       id: this.$route.params.id,
       getListLoading: false,
@@ -514,6 +529,7 @@ export default {
      this.groupList = await MultiClassStudent.getGroup(this.multiClass.id);
     },
     updateStudentList(){
+      this.editAssistantVisible = false
       this.changeGroupVisible = false;
       this.getMultiClassStudents();
       this.getMultiClassStudentsGroup();
@@ -678,6 +694,9 @@ export default {
       this.changeGroupVisible = true;
       this.selectedStudentIds = this.selectedUserIds
     },
+    clickAssistantGroupModal() {
+      this.editAssistantVisible = true;
+    },
     onBatchRemoveStudent() {
       if (this.selectedRowKeys.length === 0) {
         this.$message.error('请至少选中一项后移除', 1);
@@ -695,6 +714,7 @@ export default {
             userIds: self.selectedUserIds,
           }).then(res => {
             self.getMultiClassStudents();
+            self.getMultiClassStudentsGroup();
             self.$message.success('移除学员成功！');
             self.selectedRowKeys = [];
           }).catch(err => {
@@ -757,6 +777,13 @@ export default {
   -webkit-box-shadow: @box-shadow;
   -moz-box-shadow: @box-shadow;
   box-shadow: @box-shadow;
+}
+
+.edit-group-assistant{
+  visibility:hidden
+}
+.menu-group:hover .edit-group-assistant{
+  visibility:visible
 }
 
 .es-transition(@property:all,@time:.3s) {
@@ -839,6 +866,9 @@ export default {
     }
     .ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-menu-inline .ant-menu-item:not(:last-child){
       margin-bottom: unset;
+    }
+    .ant-menu-vertical .ant-menu-item:not(:first-child), .ant-menu-vertical-left .ant-menu-item:not(:first-child), .ant-menu-vertical-right .ant-menu-item:not(:first-child), .ant-menu-inline .ant-menu-item:not(:first-child){
+      padding-left: unset!important;
     }
     @media only screen and (max-width: 1400px) {
     /* For mobile phones: */

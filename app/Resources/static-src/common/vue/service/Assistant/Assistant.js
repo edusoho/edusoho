@@ -9,4 +9,7 @@ export const Assistant = _.assignIn(baseService, {
   async add(params) {
     return apiClient.post(baseUrl, params);
   },
+  async addGroup(params) {
+    return apiClient.post(baseUrl, params);
+  },
 })

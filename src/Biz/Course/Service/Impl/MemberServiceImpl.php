@@ -1767,8 +1767,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
     {
-        $user = $this->getUserService()->getUser($userId);
-        if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
+        $currentUser = $this->getCurrentUser();
+        if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || ($currentUser->getId() == $userId && $currentUser->isAdmin())) {
             $course = $this->getCourseService()->getCourse($courseId);
             $teacherId = array_shift($course['teacherIds']);
 

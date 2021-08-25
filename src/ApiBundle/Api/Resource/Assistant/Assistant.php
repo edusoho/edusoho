@@ -65,7 +65,7 @@ class Assistant extends AbstractResource
 
                 $this->getAssistantStudentService()->create($fields);
             } else {
-                $this->getAssistantStudentService()->update($assistantStudents[$studentId]['id'], ['assistantId' => $assistantStudentData['assistantId']]);
+                $this->getAssistantStudentService()->updateStudentAssistant($assistantStudents[$studentId]['id'], $assistantStudentData['assistantId']);
             }
         }
 
