@@ -31,6 +31,7 @@ class CourseNote extends AbstractResource
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
+        $conditions['status'] = 1;
         $this->getCourseService()->getCourse($courseId);
         $orderBys = $this->getSortByStr($request->query->get('sort'));
         list($offset, $limit) = $this->getOffsetAndLimit($request);
