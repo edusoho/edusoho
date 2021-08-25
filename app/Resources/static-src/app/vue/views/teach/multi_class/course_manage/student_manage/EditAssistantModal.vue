@@ -30,7 +30,7 @@
 
 <script>
 import _ from "lodash";
-import { MultiClassStudent, MultiClassAssistant } from "common/vue/service";
+import { MultiClassAssistant } from "common/vue/service";
 import MultiClassGroupAssistant from "common/vue/service/MultiClassGroupAssistant";
 
 export default {
@@ -80,10 +80,9 @@ export default {
       if (title) {
         params.nickname = title;
       }
+      const res = await MultiClassAssistant.search(params);
+      this.assistant.list = _.concat(this.assistant.list, res);
 
-      MultiClassAssistant.search(params).then((res) => {
-        this.assistant.list = _.concat(this.assistant.list, res);
-      });
     },
     handleSearchAssistant: _.debounce(function (input) {
       this.assistant = {
@@ -92,15 +91,14 @@ export default {
       };
       this.fetchAssistants();
     }, 200),
+
     handleCancel() {
       this.$emit("handle-cancel");
       this.form.resetFields();
     },
+
     async handleSubmit() {
       this.form.validateFields(async (err, values) => {
-        console.log(this.multiClassId);
-        console.log(values.assistantId);
-        console.log(this.groupId);
         if (!err) {
           try {
             await MultiClassGroupAssistant.editGroupAssistant({
@@ -114,7 +112,6 @@ export default {
             });
             this.$message.success("助教修改成功！", 2);
             this.$emit("handle-cancel");
-            window.location.reload();
           } catch (error) {
             this.$message.warning("助教修改失败", 2);
           }

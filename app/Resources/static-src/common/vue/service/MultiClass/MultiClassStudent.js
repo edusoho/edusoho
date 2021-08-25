@@ -22,8 +22,5 @@ export const MultiClassStudent = _.assignIn({
   },
   async editGroup(multiClassId, groupId, params) {
     return apiClient.patch(`/api/multi_class/${multiClassId}/student_groups/${groupId}`, params);
-  },
-  async editGroupAssistant(multiClassId, assistantId, params) {
-    return apiClient.patch(`/api/multi_class/${multiClassId}/group_assistant/${assistantId}`, params);
-  },
+  }
 })
