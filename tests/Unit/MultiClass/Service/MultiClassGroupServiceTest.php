@@ -175,7 +175,7 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     protected function createMultiClass()
     {
-        $this->createMultiClassProduct();
+        $product = $this->createMultiClassProduct();
         $this->createCourse();
         $this->createCourseMember();
         $teacher = $this->createUser(['ROLE_TEACHER', 'ROLE_USER']);
@@ -185,7 +185,7 @@ class MultiClassGroupServiceTest extends BaseTestCase
         $fields = [
             'title' => 'multi class 1',
             'courseId' => 1,
-            'productId' => 1,
+            'productId' => $product['id'],
             'copyId' => 0,
             'type' => 'group',
             'teacherId' => $teacher['id'],
