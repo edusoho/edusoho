@@ -214,7 +214,7 @@ class LiveReplayServiceTest extends BaseTestCase
                         'user' => 'admin@admin.com',
                         'nickname' => 'admin',
                         'role' => 'teacher',
-                        'userId' => '1'
+                        'userId' => '1',
                     ]],
                 ],
             ]
