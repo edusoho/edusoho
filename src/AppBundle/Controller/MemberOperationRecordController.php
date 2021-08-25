@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
@@ -20,14 +20,14 @@ class MemberOperationRecordController extends BaseController
             $this->createNewException(CommonException::NOTFOUND_METHOD());
         }
 
-        $product = call_user_func(array($this, 'tryManage'.ucfirst($targetType)), $targetId);
+        $product = call_user_func([$this, 'tryManage'.ucfirst($targetType)], $targetId);
 
-        $condition = array(
+        $condition = [
             'target_id' => $targetId,
             'target_type' => $targetType,
             'status' => 'success',
             'operate_type' => $operatType,
-        );
+        ];
 
         $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
@@ -42,7 +42,7 @@ class MemberOperationRecordController extends BaseController
 
         $records = $this->getMemberOperationService()->searchRecords(
             $condition,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -62,7 +62,7 @@ class MemberOperationRecordController extends BaseController
 
         return $this->render(
             "member-record/{$operatType}.html.twig",
-            array(
+            [
                 'product' => $product,
                 'paginator' => $paginator,
                 'records' => $records,
@@ -70,7 +70,7 @@ class MemberOperationRecordController extends BaseController
                 'profiles' => $profiles,
                 'orders' => $orders,
                 'conditions' => $condition,
-            )
+            ]
         );
     }
 
@@ -88,7 +88,7 @@ class MemberOperationRecordController extends BaseController
 
         $file = '';
         if (0 == $start) {
-            $file = ExportHelp::addFileTitle($request, $targetType. '_students_exit_record', $title);
+            $file = ExportHelp::addFileTitle($request, $targetType.'_students_exit_record', $title);
         }
 
         $content = implode("\r\n", $records);
@@ -106,7 +106,7 @@ class MemberOperationRecordController extends BaseController
 
     public function exitRecordExportCsvAction(Request $request, $targetType, $targetId)
     {
-        $fileName = sprintf($targetType . '-%s-%s-(%s).csv', $targetId, 'exit_record', date('Y-n-d'));
+        $fileName = sprintf($targetType.'-%s-%s-(%s).csv', $targetId, 'exit_record', date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
     }
@@ -118,14 +118,14 @@ class MemberOperationRecordController extends BaseController
             $this->createNewException(CommonException::NOTFOUND_METHOD());
         }
 
-        call_user_func(array($this, 'tryManage'.ucfirst($targetType)), $targetId);
+        call_user_func([$this, 'tryManage'.ucfirst($targetType)], $targetId);
 
-        $condition = array(
+        $condition = [
             'target_id' => $targetId,
             'target_type' => $targetType,
             'status' => 'success',
             'operate_type' => 'exit',
-        );
+        ];
         $recordCount = $this->getMemberOperationService()->countRecords($condition);
 
         $recordCount = ($recordCount > $exportAllowCount) ? $exportAllowCount : $recordCount;
@@ -197,7 +197,7 @@ class MemberOperationRecordController extends BaseController
         if ($user['id'] != $operator['id'] && $operator) {
             $exitReason .= '（'.$operator['nickname'].'）';
         }
-        $exitReason .= $record['reason_type'] == 'remove' ? '手动移除' : $record['reason'];
+        $exitReason .= 'remove' == $record['reason_type'] ? '手动移除' : $record['reason'];
 
         return $exitReason;
     }
