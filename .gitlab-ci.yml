@@ -47,6 +47,7 @@ check env:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - git config --unset diff.nodiff.command
     - bin/phpunit-diff
+  interruptible: true
   only:
     variables:
       - $REPOSITORY == "custom"
@@ -65,6 +66,7 @@ check env:
     - git config diff.nodiff.command /usr/bin/true
     - git config --unset diff.nodiff.command
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - master
@@ -85,6 +87,7 @@ check env:
   script:
     - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - master
@@ -107,6 +110,7 @@ check env:
       alias: redis
   script:
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - /^release/.*$/
@@ -127,6 +131,7 @@ check env:
       alias: redis
   script:
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - /^release/.*$/
@@ -154,7 +159,6 @@ check env:
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
-
     - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
@@ -162,6 +166,7 @@ check env:
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
+  interruptible: true
   only:
     refs:
       - develop
@@ -189,7 +194,6 @@ check env:
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
-
     - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
@@ -197,6 +201,7 @@ check env:
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
+  interruptible: true
   only:
     refs:
       - /^project/.*$/
@@ -233,6 +238,7 @@ AT With Java And Selenium:
     - cd GUIAutomation2
     - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
     - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+  interruptible: true
   only:
     refs:
       - schedules
@@ -276,19 +282,9 @@ Api Test With 7.1:
     - npm config set registry https://registry.npm.taobao.org
     - npm install -g newman
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json --verbose
+  interruptible: true
   only:
     refs:
-#      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"
-# 5.5 with js-test-unit:
-#   stage: test
-#   image: tianshengjie/codeage-node
-#   script:
-#     - npm install yarn
-#     - node_modules/yarn/bin/yarn config set registry https://registry.npm.taobao.org
-#     - node_modules/yarn/bin/yarn
-#     - npm run test:simple tests/Js/test/*
-#   only:
-#     - develop
