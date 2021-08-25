@@ -199,11 +199,13 @@ components:
         createdTime:
           title: createdTime
           description: 创建时间
-          type: date-time
+          type: string
+          format: datetime
         updatedTime:
           title: updatedTime
           description: 更新时间
-          type: date-time
+          type: string
+          format: datetime
         user:
           $ref: '#/components/schemas/user.simple'
       type: object
