@@ -60,12 +60,12 @@ export default {
   computed: {
     text() {
       const langKey = {
-        discussion: {
+        question: {
           title: 'courseLearning.sendQA',
           placeholderTitle: 'courseLearning.QATitle',
           placeholderContent: 'courseLearning.QAContent'
         },
-        question: {
+        discussion: {
           title: 'courseLearning.postTopic',
           placeholderTitle: 'courseLearning.topicTitle',
           placeholderContent: 'courseLearning.topicContent'
