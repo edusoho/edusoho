@@ -2259,13 +2259,13 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $userSetting = $this->getSettingService()->get('user_partner', []);
-        $enable = $userSetting['open_student_info'] ?: 1;
+        $enable = isset($userSetting['open_student_info']) ? $userSetting['open_student_info'] : 1;
         $currentUserId = $this->getCurrentUser()->getId();
         if (!$this->decideUserJustStudentRole($userId) || $user['id'] === $currentUserId || !$this->decideUserJustStudentRole($currentUserId)) {
             $enable = 1;
         }
 
-        return $enable;
+        return intval($enable);
     }
 
     protected function decideUserJustStudentRole($userId)
