@@ -195,6 +195,8 @@ export default {
       font-weight: 500;
       color: #333;
       line-height: vw(24);
+      word-break: break-word;
+
     }
 
     &__content {
