@@ -207,7 +207,6 @@
  *     title="setting.task_learning_config",
  *     description="课程任务学习配置",
  *     @OA\Property(property="non_focus_learning_video_play_rule",description="非专注学习规则,auto_pause:自动暂停、no_action:无操作",type="string",default="no_action",enum={"auto_pause","no_action"}),
- *     @OA\Property(property="media_play_continuously",description="音视频连续播放",type="string",default="off",enum={"on","off"}),
  *     @OA\Property(
  *         property="multiple_learn",
  *         description="多开学习",

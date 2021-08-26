@@ -520,7 +520,6 @@ class Setting extends AbstractResource
 
         return [
             'non_focus_learning_video_play_rule' => $courseTaskLearning['non_focus_learning_video_play_rule'],
-            'media_play_continuously' => $courseTaskLearning['media_play_continuously'],
             'multiple_learn' => $courseTaskLearning['multiple_learn'],
         ];
     }

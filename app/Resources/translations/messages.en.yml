@@ -10779,9 +10779,6 @@ scrm.assistant.bind_title: Please use Enterprise WeChat to scan the code
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
-
-admin.setting_course.play_continuously: 音视频支持连续播放
-admin.setting_course.play_continuously_help_block: 开启后播放器出现连续播放控制选项，关闭后不允许连续播放
 exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'

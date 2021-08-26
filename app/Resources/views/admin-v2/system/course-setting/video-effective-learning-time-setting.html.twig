@@ -39,18 +39,6 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-3 control-label">
-        <label >{{'admin.setting_course.play_continuously'|trans}}</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('play_continuously', {'on':'site.datagrid.radios.open'|trans, 'off':'site.datagrid.radios.close'|trans}, effectiveTimeSetting.play_continuously) }}
-        <div class="help-block" >
-          {{ 'admin.setting_course.play_continuously_help_block'|trans }}
-        </div>
-      </div>
-    </div>
-
-    <div class="row form-group">
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8">
         <button type="button" class="btn btn-primary js-setting-submit">{{'form.btn.submit'|trans}}</button>

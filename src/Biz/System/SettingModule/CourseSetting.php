@@ -33,7 +33,6 @@ class CourseSetting extends AbstractSetting
     const defaultVideoMediaSetting = [
         'statistical_dimension' => 'page',
         'play_rule' => 'no_action',
-        'play_continuously' => 'off',
     ];
 
     const defaultMultipleLearnSetting = [
@@ -73,7 +72,6 @@ class CourseSetting extends AbstractSetting
 
         return [
             'non_focus_learning_video_play_rule' => $videoConfig['play_rule'], //非专注学习播放规则：auto_pause（自动暂停）, no_action（不作操作）
-            'media_play_continuously' => $videoConfig['play_continuously'], //音视频自动播放开关： on(开启)， off（关闭）
             'multiple_learn' => [
                 'multiple_learn_enable' => empty($multipleLearnSetting['multiple_learn_enable']) ? 'off' : 'on', //是否开启多开 on|off
                 'multiple_learn_kick_mode' => $multipleLearnSetting['multiple_learn_kick_mode'],
