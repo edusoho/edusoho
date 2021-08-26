@@ -1,11 +1,13 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
-        'aliases' => array(),
-        'reference' => 'ebd09a1d5923e4d62bbc3e5e92dde5341d1a48f3',
+        'aliases' => array(
+            0 => '2.8.x-dev',
+        ),
+        'reference' => '3814b6afb011cdc2cc4371b70deb67c990a2247e',
         'name' => 'topxia/edusoho',
         'dev' => true,
     ),
@@ -83,12 +85,12 @@
             'dev_requirement' => false,
         ),
         'codeages/biz-framework' => array(
-            'pretty_version' => 'v0.9.37',
-            'version' => '0.9.37.0',
+            'pretty_version' => 'v0.9.38',
+            'version' => '0.9.38.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeages/biz-framework',
             'aliases' => array(),
-            'reference' => 'cd9c4e96e7c079771794b3da4837aad6182385ff',
+            'reference' => '8585b546d34cf3d31a8ef09b2c98b42b5f9473fe',
             'dev_requirement' => false,
         ),
         'codeages/biz-item-bank' => array(
@@ -1668,12 +1670,14 @@
             'dev_requirement' => false,
         ),
         'topxia/edusoho' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'reference' => 'ebd09a1d5923e4d62bbc3e5e92dde5341d1a48f3',
+            'aliases' => array(
+                0 => '2.8.x-dev',
+            ),
+            'reference' => '3814b6afb011cdc2cc4371b70deb67c990a2247e',
             'dev_requirement' => false,
         ),
         'twig/twig' => array(

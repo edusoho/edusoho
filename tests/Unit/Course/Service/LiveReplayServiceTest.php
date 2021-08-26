@@ -183,7 +183,18 @@ class LiveReplayServiceTest extends BaseTestCase
         $mockLiveClient->shouldReceive('entryReplay')->times(1)->andReturn(['success' => 'ok']);
         $this->getLiveReplayService()->setLiveClient($mockLiveClient);
 
-        $result = $this->getLiveReplayService()->entryReplay(1, 1, 'ESLive');
+        $replay = $this->createLiveReplay();
+        $this->mockBiz(
+            'Course:CourseService',
+            [
+                [
+                    'functionName' => 'getCourse',
+                    'returnValue' => ['id' => 1, 'teacherIds' => [1]],
+                ],
+            ]
+        );
+
+        $result = $this->getLiveReplayService()->entryReplay($replay['id'], 1, 'ESLive');
 
         $this->assertEquals(['success' => 'ok'], $result);
     }
@@ -202,7 +213,7 @@ class LiveReplayServiceTest extends BaseTestCase
                         'provider' => 'ESLive',
                         'user' => 'admin@admin.com',
                         'nickname' => 'admin',
-                        'role' => 'student',
+                        'role' => 'teacher',
                         'userId' => '1',
                     ]],
                 ],
@@ -227,6 +238,15 @@ class LiveReplayServiceTest extends BaseTestCase
                 [
                     'functionName' => 'getBySyncIdGTAndLiveId',
                     'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Course:CourseService',
+            [
+                [
+                    'functionName' => 'getCourse',
+                    'returnValue' => ['id' => 1, 'teacherIds' => [1]],
                 ],
             ]
         );

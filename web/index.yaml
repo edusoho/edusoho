@@ -4,12 +4,6 @@ info:
   description: EduSoho接口，随版本动态变化
   version: default
 paths:
-  '/course/{courseId}/reviews':
-    get:
-      operationId: ba17b899ada47f1ec036809f24c1fc85
-      responses:
-        '200':
-          description: '获取课程的评价 '
   '/api/courses/{courseId}/notes/{noteId}':
     get:
       tags:
@@ -36,6 +30,33 @@ paths:
                 properties:
                   data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
                   paging: { properties: { total: { type: integer, default: 0 }, offset: { type: integer, default: 0 }, limit: { type: integer, default: 10 } }, type: object }
+                type: object
+  '/api/courses/{courseId}/notes/{noteId}/like':
+    post:
+      tags:
+        - course
+      summary: 课程笔记点赞接口
+      responses:
+        '200':
+          description: 笔记点赞回执
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  success: { title: success, type: boolean }
+                type: object
+    delete:
+      tags:
+        - course
+      summary: 课程笔记取消点赞接口
+      responses:
+        '200':
+          description: 笔记取消点赞回执
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  success: { title: success, type: boolean }
                 type: object
   '/api/courses/{courseId}/threads/{id}':
     get:
@@ -178,11 +199,13 @@ components:
         createdTime:
           title: createdTime
           description: 创建时间
-          type: date-time
+          type: string
+          format: datetime
         updatedTime:
           title: updatedTime
           description: 更新时间
-          type: date-time
+          type: string
+          format: datetime
         user:
           $ref: '#/components/schemas/user.simple'
       type: object

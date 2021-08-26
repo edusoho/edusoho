@@ -10,6 +10,7 @@ variables:
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
+  - cp app/config/session_redis.yml.dist app/config/session_redis.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
   - "echo '    redis_host: redis:6379' >> app/config/parameters_test.yml"
@@ -22,7 +23,7 @@ before_script:
 
 check env:
   stage: test
-  image: codeages/ci-php:5.3-2
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php:5.3-2
   script:
     - if [[ "${REPOSITORY}" != "main" ]]&&[[ "${REPOSITORY}" != "custom" ]];then
     - echo "必须在Gitlab中设置正确的REPOSITORY,当前的设置为：${REPOSITORY}, 请打开此文档链接地址去修改为正确的配置：http://kb.codeages.net/edusoho/projects/continuous-integration.html "
@@ -33,128 +34,121 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-#5.3 with nothing:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-#
-#5.3 with Redis:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#    - redis:latest
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-
 7.1 with php-cs-fixer only for custom:
   stage: test
-  image: codeages/ci-php71:6
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71:6
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - git config diff.nodiff.command /usr/bin/true
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - git config --unset diff.nodiff.command
     - bin/phpunit-diff
+  interruptible: true
   only:
     variables:
       - $REPOSITORY == "custom"
 
-5.6 with php-cs-fixer only for main:
+5.6 For main With php-cs-fixer:
+  variables:
+    USER_NAME: $GITLAB_USER_NAME
   stage: test
-  image: zhongyunchang/php56-ci
+  image: dockerhub.codeages.work/zhong-proxy/zhongyunchang/php56-ci
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - git config diff.nodiff.command /usr/bin/true
-    - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - git config --unset diff.nodiff.command
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
-      - merge_requests
+      - master
+      - develop
+      - /^release/.*$/
+      - trigger
     variables:
       - $REPOSITORY == "main"
 
 7.1 For main:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
+    - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - master
-      - release
+      - develop
+      - /^release/.*$/
       - trigger
+      - merge_requests
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
 7.1 For main with MySQL80:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - name: mysql:8.0
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
+      alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - /^release/.*$/
+      - /^project/.*$/
       - develop
       - master
-      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
 7.4 For main with MySQL80:
   stage: test
-  image: codeages/ci-php74
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
   services:
-    - name: mysql:8.0
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
+      alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - bin/phpunit-diff
+  interruptible: true
   only:
     refs:
       - /^release/.*$/
+      - /^project/.*$/
       - develop
       - master
-      - project/data-visualization
     variables:
       - $REPOSITORY == "main"
 
-7.1 For Develop:
+7.1 Coverage For Main:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
 #    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
@@ -165,7 +159,6 @@ check env:
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
-
     - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
@@ -173,57 +166,96 @@ check env:
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
+  interruptible: true
   only:
     refs:
       - develop
-      - project/wrong-qiestion-book
+      - master
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-AT With Java And Selenium:
-  stage: automation
-  image: ruanwenqin/ci:php5.5-jdk8
-
+7.1 Coverage For project:
+  stage: test
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.7
-    - selenium/standalone-chrome:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
-    # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
-    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-    # 启动web服务
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
-    # 安装插件
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
-    - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
-    - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
-    - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
-    - bin/phpmig migrate
-    - app/console server:start $SERVICE_IP:8000
-    - cd GUIAutomation2
-    - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
-    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+    - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
+    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY-$CI_COMMIT_REF_SLUG/g" sonar-project.properties
+    - cat sonar-project.properties
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
+    - mkdir reports
+    - bin/caculate
+    - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
+    - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
+    - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - /opt/sonar-scanner/bin/sonar-scanner
+  interruptible: true
   only:
     refs:
-      - schedules
-      - triggers
-      - web
-      - api
+      - /^project/.*$/
     variables:
       - $REPOSITORY == "main"
+      - $REPOSITORY == "custom"
+
+#AT With Java And Selenium:
+#  stage: automation
+#  image: ruanwenqin/ci:php5.5-jdk8
+#
+#  services:
+#    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.7
+#      alias: mysql
+#    - selenium/standalone-chrome:latest
+#  script:
+#    # 修改配置文件
+#    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+#    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+#    # 启动web服务
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+#    # 安装插件
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
+#    - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
+#    - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
+#    - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
+#    - bin/phpmig migrate
+#    - app/console server:start $SERVICE_IP:8000
+#    - cd GUIAutomation2
+#    - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
+#    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+#  interruptible: true
+#  only:
+#    refs:
+#      - schedules
+#      - triggers
+#      - web
+#      - api
+#    variables:
+#      - $REPOSITORY == "main"
 
 Api Test With 7.1:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
@@ -250,19 +282,9 @@ Api Test With 7.1:
     - npm config set registry https://registry.npm.taobao.org
     - npm install -g newman
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json --verbose
+  interruptible: true
   only:
     refs:
-      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"
-# 5.5 with js-test-unit:
-#   stage: test
-#   image: tianshengjie/codeage-node
-#   script:
-#     - npm install yarn
-#     - node_modules/yarn/bin/yarn config set registry https://registry.npm.taobao.org
-#     - node_modules/yarn/bin/yarn
-#     - npm run test:simple tests/Js/test/*
-#   only:
-#     - develop

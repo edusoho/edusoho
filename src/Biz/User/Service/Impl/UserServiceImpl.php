@@ -620,6 +620,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($userId, ['scrmUuid' => $scrmUuid]);
     }
 
+    public function setUserScrmStaffId($userId, $scrmStaffId)
+    {
+        return $this->getUserDao()->update($userId, ['scrmStaffId' => $scrmStaffId]);
+    }
+
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = [])
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
@@ -2062,6 +2067,7 @@ class UserServiceImpl extends BaseService implements UserService
                 PHP_INT_MAX
             );
             $mobileNameUser = $this->getUserByNickname($keyword);
+
             $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : [];
             $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
             $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;

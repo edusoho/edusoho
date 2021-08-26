@@ -40,6 +40,11 @@
     <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}" {% if app.request.locale == 'en' %} style="display: none" {% endif %}>
       <a href="{{ path('setting_approval_submit') }}">{{'user.settings.verification_menu'|trans}}</a>
     </li>
+    {% if setting('qualification.qualification_enabled') == '1' and is_teacher_role(app.user.getId()) %}
+    <li class="cd-sidebar__item {% if side_nav == 'qualification' %}active{% endif %}" {% if app.request.locale == 'en' %} style="display: none" {% endif %}>
+      <a href="{{ path('setting_qualification') }}">{{'user.settings.teacher_qualification'|trans}}</a>
+    </li>
+    {% endif %}
     <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
       <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
     </li>
@@ -51,6 +56,11 @@
     {% if setting('login_bind', []).enabled|default(false) %}
       <li class="cd-sidebar__item {% if side_nav == 'binds' %}active{% endif %}" >
         <a href="{{ path('settings_binds') }}">{{'user.settings.oauth_menu'|trans}}</a>
+      </li>
+    {% endif %}
+    {% if count(app.user.roles) > 1 and is_scrm_bind() %}
+      <li class="cd-sidebar__item {% if side_nav == 'scrm' %}active{% endif %}">
+        <a href="{{ path('settings_scrm') }}">{{'user.settings.scrm'|trans}}</a>
       </li>
     {% endif %}
   </ul>

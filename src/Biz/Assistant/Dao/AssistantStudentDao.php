@@ -8,6 +8,8 @@ interface AssistantStudentDao extends AdvancedDaoInterface
 {
     public function countMultiClassGroupStudent($multiClassId);
 
+    public function countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds);
+
     public function getByStudentIdAndMultiClassId($studentId, $multiClassId);
 
     public function getByStudentIdAndCourseId($studentId, $courseId);
@@ -21,4 +23,12 @@ interface AssistantStudentDao extends AdvancedDaoInterface
     public function deleteByStudentIdAndCourseId($studentId, $courseId);
 
     public function findByMultiClassId($multiClassId);
+
+    public function findByMultiClassIds($multiClassIds);
+
+    public function findByMultiClassIdAndGroupId($multiClassId, $groupId);
+
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId);
+
+    public function findAssistantStudentsByGroupIds($groupIds);
 }

@@ -49,7 +49,8 @@ class ClassroomManageController extends BaseController
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
             $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
-            $classroom['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
+            $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            $classroom['vipLevelId'] = empty($vipRight) || !in_array($vipRight['vipLevelId'], $vipLevelIds) ? '0' : $vipRight['vipLevelId'];
         }
 
         $coursePrice = 0;
@@ -107,7 +108,7 @@ class ClassroomManageController extends BaseController
 
         $condition = array_merge($condition, ['classroomId' => $id, 'role' => 'student']);
 
-        $this->filterDeadlineConditions($condition, $request);
+        $this->filterDeadlineConditions($condition, $request->query->get('expired'));
 
         $paginator = new Paginator(
             $request,
@@ -136,19 +137,14 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    private function filterDeadlineConditions(&$condition, $request)
+    private function filterDeadlineConditions(&$condition, $expired)
     {
-        $deadLineStartDate = $request->query->get('deadLineStartDate');
-        if (!empty($deadLineStartDate)) {
-            $condition['deadline_GE'] = strtotime($deadLineStartDate);
-        }
-
-        $deadLineEndDate = $request->query->get('deadLineEndDate');
-        if (!empty($deadLineEndDate)) {
-            if (empty($deadLineStartDate)) {
-                $condition['deadline_GT'] = 0;
+        if (!empty($expired)) {
+            if ('out' == $expired) {
+                $condition['deadline_LE'] = time();
+            } else {
+                $condition['deadline_GT'] = time();
             }
-            $condition['deadline_LE'] = strtotime($deadLineEndDate.' 23:59:59');
         }
     }
 
@@ -262,6 +258,40 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $studentIds = $request->request->get('studentIds', []);
+        if (empty($this->getUserService()->findUsersByIds($studentIds))) {
+            return $this->createJsonResponse(['success' => false]);
+        }
+
+        $this->getClassroomService()->removeStudents($id, $studentIds, [
+            'reason' => 'site.remove_by_manual',
+            'reason_type' => 'remove',
+        ]);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function removeAllStudentsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+
+        $fields = $request->request->all();
+        $condition = [];
+
+        if (!empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
+        }
+
+        $condition = array_merge($condition, ['classroomId' => $id, 'role' => 'student']);
+        $this->filterDeadlineConditions($condition, $request->request->get('expired'));
+
+        $students = $this->getClassroomService()->searchMembers(
+            $condition,
+            ['createdTime' => 'DESC'],
+            0,
+            $this->getClassroomService()->searchMemberCount($condition)
+        );
+
+        $studentIds = ArrayToolkit::column($students, 'userId');
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
             return $this->createJsonResponse(['success' => false]);
         }

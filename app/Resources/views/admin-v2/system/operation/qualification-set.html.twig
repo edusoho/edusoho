@@ -1,0 +1,35 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_teacher_qualification_set' %}
+{% set script_controller = 'qualification/setting' %}
+
+{#: 该功能在EduSoho官方主题下生效，第三方主题暂不支持。#}
+{#: 前往上传教师资质#}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post"  action="{{ path('admin_v2_teacher_qualification_set') }}" id="qualification-form">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label>{{'admin.teacher_qualification.enable'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          {{ radios('qualification_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, setting('qualification').qualification_enabled|default(0)) }}
+          <div class="help-block qualification_tip {% if not setting('qualification').qualification_enabled|default(0) %} hidden {% endif %}">
+            {{'admin.teacher_qualification.tips'|trans|raw}}
+            <a href="{{ path('admin_v2_teacher') }}" target="_blank">{{ 'admin.teacher_qualification.upload_url'|trans }}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button id = "qualification-submit" type="submit" class="btn btn-primary qualification-submit" disabled="disabled">{{'form.btn.submit'|trans}}</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+
+{% endblock %}

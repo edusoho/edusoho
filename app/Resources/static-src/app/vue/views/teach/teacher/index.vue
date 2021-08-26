@@ -18,7 +18,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <a slot="nickname" slot-scope="text, item" @click="edit(item.id)">{{ text }}</a>
+      <template slot="nickname" slot-scope="text, record">
+          <a-avatar :size="48" :src="record.avatar.middle" icon="user"></a-avatar>
+          <a class="ml8" @click="edit(record.id)">{{ text }}</a>
+      </template>
+
 
       <div slot="promoteInfo" slot-scope="item">
         <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
@@ -26,12 +30,54 @@
         <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
       </div>
 
+      <template slot="qualification" slot-scope="qualification">
+        {{ qualification.code }}
+      </template>
+
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
       </div>
 
-      <a slot="action" slot-scope="item" @click="edit(item.id)">查看</a>
+      <template slot="action" slot-scope="item">
+        <a-button type="link" @click="edit(item.id)">
+          查看
+        </a-button>
+
+        <!-- v-if="showEditorSualification" 判断是否可以编辑教师资质，后续新增，把判断给编辑教师资质按钮即可 -->
+        <a-dropdown>
+          <a class="ant-dropdown-link" style="margin-left: -6px;" @click.prevent>
+            <a-icon type="caret-down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/edit`"
+              >
+                编辑用户信息
+              </a>
+            </a-menu-item>
+            <a-menu-item>
+              <a
+                data-toggle="modal"
+                data-target="#modal"
+                data-backdrop="static"
+                data-keyboard="false"
+                :data-url="`/admin/v2/user/${item.id}/avatar`"
+              >
+                修改用户头像
+              </a>
+            </a-menu-item>
+            <a-menu-item @click="handleEditorQualification(item)" v-if="showEditorSualification">
+              编辑教师资质
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </template>
     </a-table>
 
     <a-modal title="教师详细信息" :visible="visible" @cancel="close">
@@ -57,7 +103,6 @@
             style="width: 100%;"
             v-decorator="['number', { rules: [
               { required: true, message: '请输入序号' },
-              { type: 'integer', message: '请输入整数' },
               { validator: validateRange, message: '请输入0-10000的整数' },
             ]}]"
           />
@@ -65,6 +110,19 @@
       </a-form>
     </a-modal>
 
+    <a-modal
+      title="编辑教师资质"
+      width="900px"
+      :footer="null"
+      :visible="qualificationVisible"
+      @cancel="handleCancelEditQualification"
+    >
+      <editor-qualification
+        :user-id="currentTeacherUserId"
+        :edit-info="currentTeacherQualification"
+        @handle-cancel-modal="handleCancelEditQualification"
+      />
+    </a-modal>
   </aside-layout>
 </template>
 
@@ -72,39 +130,65 @@
 <script>
 import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, UserProfiles } from "common/vue/service/index.js";
+import { Teacher, UserProfiles, Setting } from "common/vue/service";
 import userInfoTable from "../../components/userInfoTable";
+import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
 const columns = [
   {
     title: "用户名",
     dataIndex: "nickname",
-    width: '25%',
+    ellipsis: true,
     scopedSlots: { customRender: "nickname" },
   },
   {
+    title: "现带班课总数",
+    dataIndex: 'liveMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "现学员总数",
+    dataIndex: 'liveMultiClassStudentNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结课班课总数",
+    dataIndex: 'endMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结课班课学员总数",
+    dataIndex: 'endMultiClassStudentNum',
+    ellipsis: true,
+  },
+  {
     title: "是否推荐",
-    width: '25%',
     scopedSlots: { customRender: "promoteInfo" },
   },
   {
     title: "最近登录",
-    width: '25%',
     scopedSlots: { customRender: "loginInfo" },
   },
   {
     title: "操作",
-    width: '25%',
     scopedSlots: { customRender: "action" },
   },
 ];
+
+const teahcerQualificationColumns =  {
+  title: "教师资格证编号",
+  dataIndex: "qualification",
+  width: '20%',
+  scopedSlots: { customRender: "qualification" }
+};
 
 export default {
   name: "Teachers",
 
   components: {
     userInfoTable,
-    AsideLayout
+    AsideLayout,
+    EditorQualification,
   },
 
   data() {
@@ -119,10 +203,22 @@ export default {
       setNumId: 0,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
+      qualificationVisible: false, // 编辑教师资质
+      currentTeacherUserId: 0, // 用于教师上传教师资质的 userId
+      currentTeacherQualification: {},
+      showEditorSualification: false // 后台是否开启了教师资质功能
     };
   },
 
-  created() {
+  async created() {
+    const status = await Setting.get('qualification');
+    this.showEditorSualification = Boolean(status.qualification);
+    if (this.showEditorSualification) {
+      _.forEach(this.columns, item => {
+        item.width = '20%';
+      });
+      this.columns.splice(1, 0, teahcerQualificationColumns);
+    }
     this.fetchTeacher();
   },
 
@@ -157,7 +253,7 @@ export default {
 
       this.loading = false;
       this.pageData = data;
-      this.pagination = paging.total < Number(paging.limit) ? false : pagination;
+      this.pagination = pagination;
     },
 
     async onSearch(nickname) {
@@ -235,11 +331,26 @@ export default {
     },
 
     validateRange(rule, value, callback) {
-      if (_.inRange(value, 0, 10001) === false) {
+      if (value && (_.inRange(value, 0, 10001) === false || /^\+?[0-9][0-9]*$/.test(value) === false)) {
         callback('请输入0-10000的整数')
       }
 
       callback()
+    },
+
+    handleEditorQualification(item) {
+      this.currentTeacherUserId = item.id;
+      this.currentTeacherQualification = item.qualification;
+      this.qualificationVisible = true;
+    },
+
+    handleCancelEditQualification(qualification) {
+      _.forEach(this.pageData, item => {
+        if (item.id == qualification.user_id) {
+          item.qualification = qualification;
+        }
+      });
+      this.qualificationVisible = false;
     }
   },
 };

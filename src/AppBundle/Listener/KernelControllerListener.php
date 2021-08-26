@@ -26,7 +26,7 @@ class KernelControllerListener
             return;
         }
 
-        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node("cloud_sms.sms_bind")) {
+        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
             return;
         }
 
@@ -75,7 +75,7 @@ class KernelControllerListener
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile',
             '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
-            '/scrm/buy/goods/callback',
+            '/scrm/buy/goods/callback', '/file/upload', '/file/img/crop', '/online/sample',
         ];
     }
 

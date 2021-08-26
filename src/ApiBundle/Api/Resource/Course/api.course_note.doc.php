@@ -53,8 +53,8 @@
  *      @OA\Property(property="content",title="content",description="content",type="string"),
  *      @OA\Property(property="length",title="length",description="length",type="number"),
  *      @OA\Property(property="likeNum",title="likeNum",description="likeNum",type="number"),
- *      @OA\Property(property="createdTime",title="createdTime",description="创建时间",type="date-time"),
- *      @OA\Property(property="updatedTime",title="updatedTime",description="更新时间",type="date-time"),
+ *      @OA\Property(property="createdTime",title="createdTime",description="创建时间",type="string", format="datetime"),
+ *      @OA\Property(property="updatedTime",title="updatedTime",description="更新时间",type="string", format="datetime"),
  *      @OA\Property(property="user",title="id",ref="#/components/schemas/user.simple")
  * )
  */

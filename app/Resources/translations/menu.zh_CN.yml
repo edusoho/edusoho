@@ -462,7 +462,12 @@ admin_v2.nav.statistics: 数据
 admin_v2.nav.system: 系统
 
 # 教务-教务管理
-admin_v2.education.basic_group: 教务管理
+admin_v2.education.basic_group: 基础设置
+admin_v2.education_overview.basic_group: 总览
+admin_v2.education_overview_data.basic_group: 教务仪表盘
+admin_v2.multi_class.basic_group: 班课管理
+admin_v2.multi_class_inspection.basic_menu: 班课巡检
+admin_v2.multi_class_setting.basic_menu: 参数设置
 
 # 教学-课程管理
 admin_v2.course.basic_group: 教学管理
@@ -471,7 +476,7 @@ admin_v2.course.basic_group: 教学管理
 admin_v2.multi_class_product.basic_menu: 产品库
 
 # 教学-课程管理-班课
-admin_v2.multi_class.basic_menu: 班课
+admin_v2.multi_class.basic_menu: 班课列表
 
 # 教学-课程管理-助教管理
 admin_v2.teacher.basic_menu: 教师管理
@@ -887,6 +892,7 @@ admin_v2.system.mailer_setting_tab: 邮件服务器设置
 admin_v2.system.operation.article_tab: 资讯
 admin_v2.system.operation.group_tab: 小组
 admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.teacher_qualification_tab: 教师资质公示
 admin_v2.system.operation.message_open_tab: 私信开启
 admin_v2.system.operation.message_send_tab: 私信发送
 

@@ -109,6 +109,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function findByUserIdsAndClassroomId($userIds, $classroomId);
 
+    public function findByUserIdsAndRole($userIds, $role);
+
     public function findByCourseId($courseId);
 
     public function findUserIdsByCourseId($courseId);
@@ -154,4 +156,10 @@ interface CourseMemberDao extends AdvancedDaoInterface
     public function getByMultiClassIdAndUserId($multiClassId, $userId);
 
     public function deleteByMultiClassAndRole($multiClassId, $role);
+
+    public function findMultiClassIdsByUserId($userId);
+
+    public function countGroupByCourseId($conditions);
+
+    public function findUserIdsByCourseIdAndRoles($courseId, $roles);
 }

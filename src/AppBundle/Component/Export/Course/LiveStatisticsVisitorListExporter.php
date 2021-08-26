@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Course\Service\CourseService;
 use Biz\Live\Service\LiveStatisticsService;
@@ -11,21 +12,23 @@ class LiveStatisticsVisitorListExporter extends Exporter
 {
     public function buildCondition($conditions)
     {
-        return array(
+        return [
             'liveId' => $conditions['liveId'],
             'courseId' => $conditions['courseId'],
             'taskId' => $conditions['taskId'],
-        );
+        ];
     }
 
     public function getTitles()
     {
-        return array(
+        return [
             'user.fields.username_label',
+            'user.fields.mobile_simple_label',
+            'user.fields.email_label',
             'course.live_statistics.first_join',
             'course.live_statistics.last_leave',
             'course.live_statistics.learn_time',
-        );
+        ];
     }
 
     public function canExport()
@@ -52,15 +55,21 @@ class LiveStatisticsVisitorListExporter extends Exporter
 
         $statistics = array_slice($statistics['data']['detail'], $start, $limit);
 
-        $data = array();
+        $data = [];
+
+        $userIds = ArrayToolkit::column($statistics, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($statistics as $user) {
-            $data[] = array(
+            $data[] = [
                 $user['nickname'],
+                $profiles[$user['userId']]['mobile'] ?: '',
+                $users[$user['userId']]['email'] ?: '',
                 date('Y-m-d H:i:s', $user['firstJoin']),
                 date('Y-m-d H:i:s', $user['lastLeave']),
                 ceil($user['learnTime'] / 60),
-            );
+            ];
         }
 
         return $data;
