@@ -2267,7 +2267,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUserDao()->get($userId);
 
-        if (count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT' ,'ROLE_EDUCATIONAL_ADMIN'])) > 0) {
+        if (count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'])) > 0) {
             return false;
         }
 
