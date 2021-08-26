@@ -126,6 +126,7 @@ import report from '@/mixins/course/report';
 import VideoReportMask from '@/components/video-report-mask';
 import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
+import copyUrl from '@/mixins/copyUrl';
 
 export default {
   components: {
@@ -135,7 +136,7 @@ export default {
     VideoReportMask,
     WechatSubscribe,
   },
-  mixins: [report],
+  mixins: [report, copyUrl],
   props: {
     courseSet: {
       type: Object,
@@ -193,8 +194,8 @@ export default {
     },
 
     continueLearningText() {
-      const { nextTask } = this.nextStudy;
-      return nextTask && nextTask.result ? this.$t('courseLearning.continueLearning') : this.$t('courseLearning.startLearning');
+      const { nextTask, progress } = this.nextStudy;
+      return nextTask && progress == 0  ? this.$t('courseLearning.startLearning') : this.$t('courseLearning.continueLearning');
     }
   },
   watch: {
@@ -468,6 +469,8 @@ export default {
     async formatePptData(playerParams) {
       const media = playerParams.media;
 
+      this.isEncryptionPlus = media.isEncryptionPlus;
+
       if (!this.cloudSdkCdn) {
         await this.setCloudAddress();
       }
@@ -643,17 +646,9 @@ export default {
         Toast('课时创建中，敬请期待');
         return;
       }
-      // const nextTask = {
-      //   id: task.id
-      // };
       // 更改store中的当前学习
       this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask: task });
       this.showTypeDetail(task);
-      this.show = false;
-      this.setSourceType({
-        sourceType: 'img',
-        taskId: task.id,
-      });
     },
 
     showTypeDetail(task) {
@@ -663,16 +658,10 @@ export default {
       }
       switch (task.type) {
         case 'video':
-          this.setSourceType({
-            sourceType: 'video',
-            taskId: task.id,
-          });
+          this.playVedio(task);
           break;
         case 'audio':
-          this.setSourceType({
-            sourceType: 'audio',
-            taskId: task.id,
-          });
+          this.playAudio(task);
           break;
         case 'ppt':
           this.setSourceType({
@@ -711,6 +700,8 @@ export default {
                   sourceType: 'video',
                   taskId: task.id,
                 });
+              } else {
+                this.copyPcUrl(task.courseUrl);
               }
               return;
             } else if (
@@ -764,8 +755,50 @@ export default {
             },
           });
           break;
+        default:
+          this.copyPcUrl(task.courseUrl);
       }
-    }
+    },
+
+    playVedio(task) {
+      if (task.mediaSource === 'self') {
+        const path = `/course/${this.selectedPlanId}`;
+        if (this.$route.path === path) {
+          this.setSourceType({
+            sourceType: 'video',
+            taskId: task.id,
+          });
+        } else {
+          this.$router.push({
+            path: path,
+            query: {
+              sourceType: 'video',
+              taskId: task.id,
+            },
+          });
+        }
+      } else {
+        this.copyPcUrl(task.courseUrl);
+      }
+    },
+
+    playAudio(task) {
+      const path = `/course/${this.selectedPlanId}`;
+      if (this.$route.path === path) {
+        this.setSourceType({
+          sourceType: 'audio',
+          taskId: task.id,
+        });
+      } else {
+        this.$router.push({
+          path: path,
+          query: {
+            sourceType: 'audio',
+            taskId: task.id,
+          },
+        });
+      }
+    },
   },
 };
 </script>
