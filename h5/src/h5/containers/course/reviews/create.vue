@@ -28,6 +28,7 @@
           v-model="content"
           type="textarea"
           rows="3"
+          :error="false"
           autosize
           :placeholder="$t('courseLearning.evaluationContent')"
           :rules="[{ required: true, message: $t('courseLearning.inputEvaluationContent') }]"
