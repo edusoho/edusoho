@@ -71,7 +71,7 @@ export default {
   },
 
   methods: {
-    fetchAssistants() {
+    async fetchAssistants() {
       const { title } = this.assistant;
       const params = {
         id: this.multiClassId,
