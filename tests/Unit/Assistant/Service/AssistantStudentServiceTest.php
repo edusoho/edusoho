@@ -9,7 +9,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
+use Biz\MultiClass\Dao\MultiClassGroupDao;
 use Biz\MultiClass\Dao\MultiClassProductDao;
+use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
 use Biz\User\Dao\UserDao;
@@ -17,18 +19,18 @@ use Biz\User\Service\UserService;
 
 class AssistantStudentServiceTest extends BaseTestCase
 {
-    public function testSetAssistantStudents()
+    public function testSetAssistantStudents_whenUserEmpty()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $this->batchCreateCourseMembers();
 
         $result = $this->getAssistantStudentService()->setAssistantStudents($multiClass['courseId'], $multiClass['id']);
-        $this->assertEquals(true, $result);
+        $this->assertEquals(null, $result);
     }
 
     public function testGetByStudentIdAndMultiClassId()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $assistantStudent = $this->createAssistantStudent();
 
         $result = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($assistantStudent['studentId'], $multiClass['id']);
@@ -48,7 +50,7 @@ class AssistantStudentServiceTest extends BaseTestCase
 
     public function testFindRelationsByMultiClassIdAndStudentIds()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = $this->createMultiClass(['type' => 'normal']);
         $this->batchCreateAssistantStudents();
 
         $result = $this->getAssistantStudentService()->findRelationsByMultiClassIdAndStudentIds($multiClass['id'], [1, 2]);
@@ -108,7 +110,7 @@ class AssistantStudentServiceTest extends BaseTestCase
         return $this->getAssistantStudentService()->create($fields);
     }
 
-    protected function createMultiClass()
+    protected function createMultiClass($multiClassFields)
     {
         $product = $this->createMultiClassProduct();
         $course = $this->createCourse();
@@ -128,6 +130,7 @@ class AssistantStudentServiceTest extends BaseTestCase
             'teacherId' => $teacher['id'],
             'assistantIds' => [$assistant1['id'], $assistant2['id']],
         ];
+        $fields = array_merge($multiClassFields, $fields);
 
         return $this->getMultiClassService()->createMultiClass($fields);
     }
@@ -191,6 +194,36 @@ class AssistantStudentServiceTest extends BaseTestCase
         return $this->getCourseService()->createCourse($courseFields);
     }
 
+    public function testBatchUpdateStudentsGroup()
+    {
+        $this->getAssistantStudentDao()->batchCreate([
+            ['id' => 1, 'courseId' => 1, 'studentId' => 1, 'assistantId' => 1, 'multiClassId' => 1, 'group_id' => 1],
+            ['id' => 2, 'courseId' => 1, 'studentId' => 3, 'assistantId' => 2, 'multiClassId' => 1, 'group_id' => 2],
+        ]);
+        $multiClassGroupFields = [
+            ['id' => 2, 'name' => '分组1', 'assistant_id' => 1, 'multi_class_id' => 1, 'course_id' => 1, 'student_num' => 1],
+            ['id' => 1, 'name' => '分组1', 'assistant_id' => 1, 'multi_class_id' => 2, 'course_id' => 1, 'student_num' => 1],
+        ];
+        $this->getMultiClassGroupDao()->batchCreate($multiClassGroupFields);
+
+        $this->getAssistantStudentService()->batchUpdateStudentsGroup(1, [1], 2);
+
+        $records = $this->getMultiClassRecordDao()->search(['multiClassId' => 1, 'userId' => 1], [], 0, PHP_INT_MAX);
+        $relation = $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId(1, 2);
+
+        $this->assertEquals(2, count($relation));
+        $this->assertEquals(1, $relation[0]['studentId']);
+        $this->assertEquals(1, count($records));
+    }
+
+    /**
+     * @return MultiClassRecordDao
+     */
+    protected function getMultiClassRecordDao()
+    {
+        return $this->createDao('MultiClass:MultiClassRecordDao');
+    }
+
     /**
      * @return MultiClassDao
      */
@@ -221,6 +254,14 @@ class AssistantStudentServiceTest extends BaseTestCase
     protected function getMultiClassProductDao()
     {
         return $this->createDao('MultiClass:MultiClassProductDao');
+    }
+
+    /**
+     * @return MultiClassGroupDao
+     */
+    private function getMultiClassGroupDao()
+    {
+        return $this->createDao('MultiClass:MultiClassGroupDao');
     }
 
     /**

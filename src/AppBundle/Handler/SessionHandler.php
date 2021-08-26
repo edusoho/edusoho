@@ -11,7 +11,7 @@ class SessionHandler extends BizSessionHandler
         if (!$this->biz->offsetExists('session_redis')) {
             return parent::getLock($lockName, $lockTime);
         }
-        
+
         $time = time();
         $sessionKey = "sess_{$lockName}";
         $exist = $this->getRedis()->get($sessionKey);

@@ -11,9 +11,15 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassDao;
 use Biz\MultiClass\MultiClassException;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassProductService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use ESCloud\SDK\Service\ScrmService;
 
 class MultiClassServiceImpl extends BaseService implements MultiClassService
 {
@@ -63,11 +69,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
-        $teacherId = [['id' => $fields['teacherId'], 'isVisable' => 1]];
+        $teacherId = [['id' => $fields['teacherId'], 'isVisible' => 1]];
         $assistantIds = $fields['assistantIds'];
 
         $fields = $this->filterMultiClassFields($fields);
-        if (!ArrayToolkit::requireds($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow'])) {
+        if (!ArrayToolkit::requireds($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'type'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -77,7 +83,13 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->create($fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            if ('group' == $multiClass['type']) {
+                $this->getMultiClassGroupService()->createMultiClassGroups($fields['courseId'], $multiClass);
+                $this->getAssistantStudentService()->setGroupAssistantAndStudents($fields['courseId'], $multiClass['id']);
+            } else {
+                $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            }
+            $this->generateMultiClassTimeRange($fields['courseId']);
 
             $this->getLogService()->info(
                 'multi_class',
@@ -85,6 +97,8 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
                 "创建班课#{$multiClass['id']}《{$multiClass['title']}》",
                 $multiClass
             );
+
+            $this->dispatchEvent('multi_class.create', new Event($multiClass));
 
             $this->commit();
         } catch (\Exception $e) {
@@ -106,7 +120,7 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             throw MultiClassException::CAN_NOT_MANAGE_MULTI_CLASS();
         }
 
-        $teacherId = [['id' => $fields['teacherId'], 'isVisable' => 1]];
+        $teacherId = [['id' => $fields['teacherId'], 'isVisible' => 1]];
         $assistantIds = $fields['assistantIds'];
 
         $fields = $this->filterMultiClassFields($fields, $id);
@@ -116,7 +130,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             $multiClass = $this->getMultiClassDao()->update($id, $fields);
             $this->getCourseMemberService()->setCourseTeachers($fields['courseId'], $teacherId, $multiClass['id']);
             $this->getCourseMemberService()->setCourseAssistants($fields['courseId'], $assistantIds, $multiClass['id']);
-            $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            if ('group' == $multiClass['type']) {
+                $this->getAssistantStudentService()->setGroupAssistantAndStudents($fields['courseId'], $multiClass['id']);
+            } else {
+                $this->getAssistantStudentService()->setAssistantStudents($fields['courseId'], $multiClass['id']);
+            }
 
             $this->getLogService()->info(
                 'multi_class',
@@ -289,6 +307,23 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         return $this->getMultiClassDao()->getByCourseId($courseId);
     }
 
+    public function generateMultiClassTimeRange($courseId)
+    {
+        $multiClass = $this->getMultiClassByCourseId($courseId);
+        if (empty($multiClass)) {
+            return;
+        }
+
+        $firstLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['startTime' => 'ASC'], 0, 1);
+        $endLive = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'type' => 'live'], ['endTime' => 'DESC'], 0, 1);
+
+        if (!empty($firstLive)) {
+            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => current($firstLive)['startTime'], 'end_time' => current($endLive)['endTime']]);
+        } else {
+            return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => 0, 'end_time' => 0]);
+        }
+    }
+
     private function filterConditions($conditions)
     {
         if (isset($conditions['ids']) && empty($conditions['ids'])) {
@@ -322,7 +357,15 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
             }
         }
 
-        return ArrayToolkit::parts($fields, ['title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime']);
+        return ArrayToolkit::parts($fields, ['type', 'title', 'courseId', 'productId', 'maxStudentNum', 'isReplayShow', 'copyId', 'liveRemindTime', 'service_num', 'service_group_num', 'group_limit_num']);
+    }
+
+    /**
+     * @return ScrmService
+     */
+    protected function getSCRMService()
+    {
+        return $this->biz['ESCloudSdk.scrm'];
     }
 
     /**
@@ -331,6 +374,14 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -366,10 +417,34 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
     }
 
     /**
+     * @return MultiClassGroupService
+     */
+    private function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
      * @return MultiClassDao
      */
     protected function getMultiClassDao()
     {
         return $this->createDao('MultiClass:MultiClassDao');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

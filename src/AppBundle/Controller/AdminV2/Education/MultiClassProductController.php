@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2\Teach;
+namespace AppBundle\Controller\AdminV2\Education;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Symfony\Component\HttpFoundation\Request;

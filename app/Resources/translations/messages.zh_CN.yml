@@ -3041,6 +3041,8 @@ user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
+user.settings.scrm: 销客助手绑定
+user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -10761,6 +10763,7 @@ exception.live_activity.roomtype_invalid: 直播间类型错误
 exception.live_activity.live_time_invalid: 开始时间或直播时长有误
 exception.live_activity.create_liveroom_failed: 创建直播间失败
 exception.live_activity.live_status_invalid: 直播状态不合法
+exception.live_activity.live_provider_not_support: 仅支持自研直播
 exception.course.thread.not_found: 课程话题不存在
 exception.course.thread.not_in_course: 课程话题不在教学计划中
 exception.course.thread.not_found_post: 课程话题回复不存在
@@ -12001,6 +12004,8 @@ exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
 exception.multi_class.assistant_require: 班课需要设置助教
 exception.multi_class.assistant_student_not_found: 助教学员关系未找到
+exception.multi_class.group_not_found: 分组未找到
+exception.multi_class.assistant_not_found: 助教未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
@@ -12022,6 +12027,8 @@ course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微�
 
 feedback_title: 谛听，直连EduSoho产品经理
 
+scrm.assistant.bind_title: 请使用企业微信扫码
+
 #课程购买协议设置
 admin_v2.course_purchase_agreement.title: 名称
 admin_v2.course_purchase_agreement.content: 内容
@@ -12033,4 +12040,3 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
-
