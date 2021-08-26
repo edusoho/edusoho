@@ -202,6 +202,7 @@ export default {
       font-size: vw(12);
       color: #666;
       line-height: vw(16);
+      word-break: break-word;
 
       /deep/ img {
         max-width: 100%;
