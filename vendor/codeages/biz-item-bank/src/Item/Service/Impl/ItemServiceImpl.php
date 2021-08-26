@@ -59,7 +59,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
-    public function importItems($items, $bankId, $categoryId)
+    public function importItems($items, $bankId, $categoryId = 0)
     {
         $savedItems = [];
 
