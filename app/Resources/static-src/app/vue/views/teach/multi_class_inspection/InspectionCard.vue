@@ -77,7 +77,7 @@ export default {
     inspection: {
       type: Object,
       require: true,
-      default: {},
+      default: () => ({}),
     },
   },
   data() {
