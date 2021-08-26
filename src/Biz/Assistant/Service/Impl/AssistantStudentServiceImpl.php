@@ -109,6 +109,11 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->findByMultiClassIdAndGroupId($multiClassId, $groupId);
     }
 
+    public function countAssistantStudentGroup($assistantIds, $multiClassIds)
+    {
+        return ArrayToolkit::index($this->getAssistantStudentDao()->countAssistantStudentGroup($assistantIds, $multiClassIds), 'assistantId');
+    }
+
     public function setGroupAssistantAndStudents($courseId, $multiClassId)
     {
         if (empty($multiClassId) || empty($courseId)) {
@@ -350,7 +355,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
                 'user_id' => $studentId,
                 'assistant_id' => $currentRelations[$studentId]['assistantId'],
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
+                'data' => ['title' => '加入班课', 'content' => $content],
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
                 'is_push' => 0,
             ];
