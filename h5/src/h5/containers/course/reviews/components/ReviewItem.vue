@@ -119,6 +119,7 @@ export default {
     &__content {
       margin-top: vw(4);
       color: #333;
+      word-break: break-word;
 
       &.overflow {
         position: relative;

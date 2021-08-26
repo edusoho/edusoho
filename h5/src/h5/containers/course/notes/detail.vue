@@ -164,6 +164,7 @@ export default {
     &__content {
       margin-top: vw(16);
       color: #333;
+      word-break: break-word;
 
       /deep/ img {
         max-width: 100%;

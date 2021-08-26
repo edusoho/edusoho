@@ -53,6 +53,7 @@ export default {
     color: #666;
     line-height: vw(16);
     @include text-overflow(2);
+    word-break: break-word;
   }
 
   .discussion-details {

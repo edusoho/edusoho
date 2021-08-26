@@ -89,6 +89,7 @@ export default {
   &__content {
     margin-top: vw(10);
     @include text-overflow(2);
+    word-break: break-word;
   }
 }
 </style>

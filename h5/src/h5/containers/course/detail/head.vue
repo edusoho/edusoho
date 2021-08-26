@@ -674,8 +674,13 @@ export default {
             taskId: task.id,
           });
           break;
-        case 'text':
         case 'ppt':
+          this.setSourceType({
+            sourceType: 'ppt',
+            taskId: task.id,
+          });
+          break;
+        case 'text':
         case 'doc':
           this.$router.push({
             name: 'course_web',
