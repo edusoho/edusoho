@@ -19,8 +19,8 @@
         <div v-if="active == 0">
           <div class="course-info" @click="gotoGoodsPage">
             <div class="course-info__left">
-              <div class="title text-overflow">{{ details.courseSet && details.courseSet.title }}</div>
-              <div class="learning-progress">
+              <div class="title text-overflow" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
+              <div class="learning-progress" :class="{ 'learning-progress--full': !details.goodsId }">
                 <div class="learning-progress__bar" :style="{ width: progress }" />
                 <div class="learning-progress__text">
                   {{ progress }}
@@ -561,6 +561,10 @@ export default {
       font-weight: 500;
       color: #333;
       line-height: vw(20);
+
+      &--full {
+        width: vw(340)
+      }
     }
 
     .learning-progress {
@@ -569,6 +573,10 @@ export default {
       height: vw(8);
       background: #f5f5f5;
       border-radius: 4px;
+
+      &--full {
+        width: vw(320)
+      }
 
       &__bar {
         position: absolute;
