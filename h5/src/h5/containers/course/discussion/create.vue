@@ -15,6 +15,7 @@
       <div class="discussion-create__title">
         <van-field
           v-model="title"
+          :error="false"
           :placeholder="text.placeholderTitle"
           :rules="[{ required: true, message: $t('courseLearning.pleaseEnterATitle') }]"
         />
@@ -24,6 +25,8 @@
         <van-field
           v-model="content"
           type="textarea"
+          rows="1"
+          :error="false"
           autosize
           :placeholder="text.placeholderContent"
           :rules="[{ required: true, message: $t('courseLearning.pleaseEnterContent') }]"
