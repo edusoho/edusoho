@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Job;
+namespace Biz\Live\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -38,6 +38,10 @@ class GenerateReplayJob extends AbstractJob
             }
 
             $activity = $activities[$liveActivity['id']];
+            if ($activity['startTime'] > time()) {
+                continue;
+            }
+
             try {
                 $result = $this->getLiveReplayService()->generateReplay(
                     $liveActivity['liveId'],
@@ -64,10 +68,10 @@ class GenerateReplayJob extends AbstractJob
 
     protected function prepareConditions()
     {
-        $endTimeGE = strtotime('yesterday');
+        $endTimeGE = strtotime('-2 day');
         $conditions = [
             'endTime_GE' => $endTimeGE,
-            'endTime_LT' => $endTimeGE + self::DAYTIME,
+            'endTime_LT' => time(),
             'mediaType' => 'live',
             'copyId' => 0,
         ];

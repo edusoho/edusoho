@@ -16,6 +16,18 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds)
+    {
+        if (empty($groupIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($groupIds) - 1).'?';
+        $sql = "SELECT group_id as groupId, count(id) as 'studentNum' FROM {$this->table} WHERE multiClassId = ? AND group_id IN ({$marks}) GROUP BY group_id";
+
+        return $this->db()->fetchAll($sql, array_merge([$multiClassId], $groupIds)) ?: [];
+    }
+
     public function getByStudentIdAndCourseId($studentId, $courseId)
     {
         return $this->getByFields(['studentId' => $studentId, 'courseId' => $courseId]);
@@ -52,6 +64,21 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->findByFields(['multiClassId' => $multiClassId]);
     }
 
+    public function findByMultiClassIdAndGroupId($multiClassId, $groupId)
+    {
+        return $this->findByFields(['multiClassId' => $multiClassId, 'group_id' => $groupId]);
+    }
+
+    public function findAssistantStudentsByAssistantIdAndMultiClassId($assistantId, $multiClassId)
+    {
+        return $this->findByFields(['assistantId' => $assistantId, 'multiClassId' => $multiClassId]);
+    }
+
+    public function findAssistantStudentsByGroupIds($groupIds)
+    {
+        return $this->findInField('group_id', $groupIds);
+    }
+
     public function findByMultiClassIdAndStudentIds($multiClassId, $studentIds)
     {
         if (empty($studentIds)) {
@@ -62,6 +89,18 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         $sql = "SELECT * FROM {$this->table()} WHERE multiClassId = ? AND studentId IN ({$marks})";
 
         return $this->db()->fetchAll($sql, array_merge([$multiClassId], $studentIds)) ?: [];
+    }
+
+    public function findByMultiClassIds($multiClassIds)
+    {
+        if (empty($multiClassIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($multiClassIds) - 1).'?';
+        $sql = "SELECT *,concat(multiClassId, '_', studentId) as unitKey FROM {$this->table()} WHERE multiClassId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $multiClassIds) ?: [];
     }
 
     public function declares()
@@ -75,6 +114,7 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
                 'multiClassId = :multiClassId',
                 'assistantId IN (:assistantIds)',
                 'studentId IN (:studentIds)',
+                'group_id = :group_id',
             ],
         ];
     }

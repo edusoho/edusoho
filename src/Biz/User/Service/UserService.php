@@ -97,6 +97,8 @@ interface UserService
 
     public function setUserScrmUuid($userId, $scrmUuid);
 
+    public function setUserScrmStaffId($userId, $scrmStaffId);
+
     public function isNicknameAvaliable($nickname);
 
     public function isEmailAvaliable($email);

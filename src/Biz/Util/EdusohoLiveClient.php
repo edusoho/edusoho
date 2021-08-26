@@ -31,6 +31,16 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->post('/lives', $args);
     }
 
+    public function batchCreateLiveGroups(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/groups', $args);
+    }
+
+    public function createLiveGroup(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/one_groups', $args);
+    }
+
     public function createLiveCourseware(array $args)
     {
         return $this->createCloudApi('root')->post('/lives/'.$args['liveId'].'/courseware', $args['resources']);
@@ -160,6 +170,16 @@ class EdusohoLiveClient
     public function getLiveRoomHistory($liveId)
     {
         return $this->createCloudApi('leaf')->get("/lives/{$liveId}/history");
+    }
+
+    public function getLiveRoomMonitors($ids)
+    {
+        return $this->createCloudApi('root')->get('/liveCloud/room/monitors', ['ids' => $ids]);
+    }
+
+    public function uploadCallbackUrl($url)
+    {
+        return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
     }
 
     protected function createCloudApi($server)

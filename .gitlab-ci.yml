@@ -23,7 +23,7 @@ before_script:
 
 check env:
   stage: test
-  image: codeages/ci-php:5.3-2
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php:5.3-2
   script:
     - if [[ "${REPOSITORY}" != "main" ]]&&[[ "${REPOSITORY}" != "custom" ]];then
     - echo "必须在Gitlab中设置正确的REPOSITORY,当前的设置为：${REPOSITORY}, 请打开此文档链接地址去修改为正确的配置：http://kb.codeages.net/edusoho/projects/continuous-integration.html "
@@ -34,43 +34,14 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-#5.3 with nothing:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-#
-#5.3 with Redis:
-#  stage: test
-#  image: codeages/ci-php:5.3-2
-#  services:
-#    - mysql:5.5
-#    - redis:latest
-#  script:
-#    - bin/phpunit-diff
-#  only:
-#    refs:
-#      - develop
-#      - master
-#      - trigger
-#    variables:
-#      - $REPOSITORY == "main"
-
 7.1 with php-cs-fixer only for custom:
   stage: test
-  image: codeages/ci-php71:6
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71:6
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - git config diff.nodiff.command /usr/bin/true
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
@@ -81,11 +52,15 @@ check env:
       - $REPOSITORY == "custom"
 
 5.6 with php-cs-fixer only for main:
+  variables:
+    USER_NAME: $GITLAB_USER_NAME
   stage: test
-  image: zhongyunchang/php56-ci
+  image: dockerhub.codeages.work/zhong-proxy/zhongyunchang/php56-ci
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - git config diff.nodiff.command /usr/bin/true
     - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
@@ -94,15 +69,18 @@ check env:
   only:
     refs:
       - merge_requests
+      - project/multi-class-two
     variables:
       - $REPOSITORY == "main"
 
 7.1 For main:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - bin/phpunit-diff
   only:
@@ -116,11 +94,13 @@ check env:
 
 7.1 For main with MySQL80:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - name: mysql:8.0
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
+      alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - bin/phpunit-diff
   only:
@@ -134,11 +114,13 @@ check env:
 
 7.4 For main with MySQL80:
   stage: test
-  image: codeages/ci-php74
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
   services:
-    - name: mysql:8.0
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
+      alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - bin/phpunit-diff
   only:
@@ -152,10 +134,12 @@ check env:
 
 7.1 For Develop:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
 #    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
@@ -187,7 +171,8 @@ AT With Java And Selenium:
   image: ruanwenqin/ci:php5.5-jdk8
 
   services:
-    - mysql:5.7
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.7
+      alias: mysql
     - selenium/standalone-chrome:latest
   script:
     # 修改配置文件
@@ -221,10 +206,12 @@ AT With Java And Selenium:
 
 Api Test With 7.1:
   stage: test
-  image: codeages/ci-php71
+  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   services:
-    - mysql:5.5
-    - redis:latest
+    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
+      alias: mysql
+    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+      alias: redis
   script:
     # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
@@ -253,7 +240,7 @@ Api Test With 7.1:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json --verbose
   only:
     refs:
-      - /^release/.*$/
+#      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"

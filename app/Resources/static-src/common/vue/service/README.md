@@ -6,45 +6,56 @@
 
 ## 规范
 
-1. 文件名、层级结构要与后端接口对应。
-2. 参数统一使用对象方式传入（params）。
+1. 大模块单独拆分，比如MitiClass、File、CourSet
+2. 小模块合并，比如：MiltiClassAssistant、MultiClassExam 合并为MultiClass
+2. 参数统一使用对象方式传入（{ query = {}, params = {}, data = {} } = {}）。query是url上的参数，params是是get请求的参数，data是非get请求的参数
 
-## 目录结构（以 WrongBook 为例子）
+## 目录结构
 
 ``` js
 service
   WrongBook
     index.js
-    WrongBookQuestionShow.js
-    XxxxXxxx.js
-  index.js
+  DashBoard
+    index.js
+  MiltiClass
+    index.js
 ```
 
 ## 初始化
 
 ``` js
-// service/WrongBook/WrongBookQuestionShow.js
+// service/DashBoard/index.js
 
-import { apiClient } from 'common/vue/service/api-client';
+import { apiClient } from 'common/vue/service/api-client.js';
 
-const baseUrl = '/api/wrong_book';
+export default {
+	searchGraphicDatum ({ query = {}, params = {}, data = {} } = {}) {
+		return apiClient.get(`/api/dashboard_graphic_datum`, { params });
+	},
 
-export const WrongBookQuestionShow = {
-  // 课程、班级、题库练习错题展示
-  async search(params) {
-    return apiClient.get(`${baseUrl}/${params.id}/question_show`, { params });
+	getRankListById ({ query = {}, params = {}, data = {} } = {}) {
+		return apiClient.get(`/api/dashboard_rank_list/${query.id}`, { params });
+	},
+  
+  createGraphicDataum ({ query = {}, params = {}, data = {} } = {}) {
+    return apiClient.add(`/api/dashboard_graphic_datum`, { data });
   }
 }
+
 ```
+
+## 使用方式
 
 ``` js
-// service/WrongBook/index.js
 
-export * from './WrongBookQuestionShow';
+import DashBoard from 'common/vue/service/DashBoard';
+
+async searchGraphicDatum() {
+  this.graphicDatas = await DashBoard.searchGraphicDatum({
+    params: { title: 'xxx' }
+  });
+}
+
 ```
 
-``` js
-// service/index.js
-
-export * from './WrongBook';
-```

@@ -42,27 +42,33 @@ admin_v2_announcement_from_platform:
     path: /announcement_from_platform
     defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
 
-#教学-课程管理-产品库
+#教务-产品库
+admin_v2_multi_class_data_overview:
+    path:  /multi_class/overview
+    defaults: { _controller: AppBundle:AdminV2/Education/Overview:index }
+    permissions: [admin_v2_education_overview_manage]
+
+#教务-班课巡检
+admin_v2_multi_class_inspection:
+  path:  /multi_class/inspection
+  defaults: { _controller: AppBundle:AdminV2/Education/MultiClass:inspection }
+  permissions: [admin_v2_multi_class_inspection_manage]
+
+#教务-产品库
 admin_v2_multi_class_product:
     path:  /multi_class_product/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/MultiClassProduct:index }
+    defaults: { _controller: AppBundle:AdminV2/Education/MultiClassProduct:index }
     permissions: [admin_v2_multi_class_product_manage]
 
-#教学-课程管理-班课
+#教务-班课
 admin_v2_multi_class:
     path:  /multi_class/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/MultiClass:index }
+    defaults: { _controller: AppBundle:AdminV2/Education/MultiClass:index }
     permissions: [admin_v2_multi_class_manage]
 
-# 教学-课程管理-课程管理
-admin_v2_course_set:
-    path:  /course_set/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
-    permissions: [admin_v2_course_manage]
-
 admin_v2_multi_class_overview:
-  path:  /multi_class/overview/{multiClassId}
-  defaults: { _controller: AppBundle:AdminV2/Teach/MultiClass:overview }
+    path:  /multi_class/overview/{multiClassId}
+    defaults: { _controller: AppBundle:AdminV2/Education/MultiClass:overview }
 
 admin_v2_teacher:
     path:  /teacher/index
@@ -73,6 +79,17 @@ admin_v2_assistant:
     path:  /assistant/index
     defaults: { _controller: AppBundle:AdminV2/Teach/Assistant:index }
     permissions: [admin_v2_assistant_manage]
+
+admin_v2_multi_class_setting:
+    path:  /multi_class/setting
+    defaults: { _controller: AppBundle:AdminV2/Education/MultiClass:setting }
+    permissions: [admin_v2_multi_class_setting_manage]
+
+#教学-课程管理
+admin_v2_course_set:
+    path:  /course_set/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
+    permissions: [admin_v2_course_manage]
 
 admin_v2_course_list:
     path:  /course_set/{id}/course/list
@@ -1672,26 +1689,6 @@ admin_v2_show_idcard:
     path:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: AppBundle:AdminV2/User/UserApproval:showIdcard }
     permissions: [admin_v2_approval_manage]
-
-# 用户-用户管理-教师管理
-admin_v2_teacher:
-    path:  /teacher
-    defaults: { _controller: AppBundle:AdminV2/User/Teacher:index }
-
-admin_v2_teacher_promote:
-    path:  /teacher/{id}/promote
-    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promote }
-
-admin_v2_teacher_promote_list:
-    path: /teacher/promote/list
-    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promoteList }
-    permissions: [admin_v2_teacher_promote]
-
-admin_v2_teacher_promote_cancel:
-    path:  /teacher/{id}/promote/cancel
-    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promoteCancel }
-    methods:  [POST]
-    permissions: [admin_v2_teacher,admin_v2_teacher_promote]
 
 # 用户-用户管理-注销管理
 admin_v2_destroy_account_record:
