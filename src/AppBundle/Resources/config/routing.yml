@@ -2682,6 +2682,10 @@ classroom_manage_student_batch_remove:
   path: /classroom/{id}/manage/student/remove
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeStudents }
 
+classroom_manage_student_batch_remove_all:
+  path: /classroom/{id}/manage/student/remove/all
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeAllStudents }
+
 classroom_manage_student_create:
     path:  /classroom/{id}/manage/student/create
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:create }

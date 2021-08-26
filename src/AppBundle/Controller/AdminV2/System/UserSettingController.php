@@ -279,6 +279,7 @@ class UserSettingController extends BaseController
 
             $userPartner['avatar_alert'] = $request->request->get('avatar_alert');
             $userPartner['nickname_enabled'] = $request->request->get('nickname_enabled');
+            $userPartner['open_student_info'] = $request->request->get('open_student_info');
             $this->getSettingService()->set('user_partner', $userPartner);
 
             $auth['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
