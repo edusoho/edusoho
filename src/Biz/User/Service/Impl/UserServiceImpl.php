@@ -2255,13 +2255,23 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userSetting = $this->getSettingService()->get('user_partner', []);
         $enable = $userSetting['open_student_info'] ?: 1;
-        $currentUser = $this->getCurrentUser();
-        if ($currentUser->isTeacher() || $currentUser->isAdmin() || $currentUser->isSuperAdmin() || $user['id'] === $currentUser->getId()
-            || !empty(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER']))) {
+        $currentUserId = $this->getCurrentUser()->getId();
+        if (!$this->decideUserJustStudentRole($userId) || $user['id'] === $currentUserId || !$this->decideUserJustStudentRole($currentUserId)) {
             $enable = 1;
         }
 
         return $enable;
+    }
+
+    protected function decideUserJustStudentRole($userId)
+    {
+        $user = $this->getUserDao()->get($userId);
+
+        if (count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT' ,'ROLE_EDUCATIONAL_ADMIN'])) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function filterCustomField($fields)
