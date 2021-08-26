@@ -2797,6 +2797,9 @@ classroom.username: 用户名
 classroom.student_name: 学员
 classroom.student_study_status: 学习进度
 classroom.student_study_expiry_date: 学习有效期
+classroom.student_study_expiry_date.not: 有效期外
+classroom.student_study_expiry_date.in: 有效期内
+classroom.delete_condition_student: 移除搜索结果
 classroom.student_opertion: 操作
 classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
