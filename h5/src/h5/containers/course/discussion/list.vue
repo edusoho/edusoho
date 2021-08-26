@@ -59,7 +59,7 @@ export default {
       finished: false,
       paging: {
         offset: 0,
-        limit: 20
+        limit: 10
       },
       courseId: this.$route.params.id
     }
