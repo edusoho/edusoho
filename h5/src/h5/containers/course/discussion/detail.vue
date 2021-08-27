@@ -95,7 +95,7 @@ export default {
         },
         params: {
           limit: limit,
-          offset: offset
+          offset: offset * limit
         }
       });
       _.assign(this, {

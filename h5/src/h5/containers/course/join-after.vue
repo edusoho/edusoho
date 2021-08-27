@@ -107,28 +107,28 @@ import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
 import Reviews from './reviews/index.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
-const tabComponent = [
- {
+const tabComponent = {
+  catalogue: {
     name: '',
     type: 'catalogue'
   },
-  {
+  question: {
     name: 'firstDiscussion',
     type: 'question'
   },
-  {
+  discussion: {
     name: 'secondDiscussion',
     type: 'discussion'
   },
-  {
+  notes: {
     name: 'Notes',
     type: 'notes'
   },
-  {
+  evaluation: {
     name: 'Reviews',
     type: 'reviews'
   }
-];
+};
 
 export default {
   inheritAttrs: true,
@@ -209,7 +209,8 @@ export default {
     },
 
     currentTabComponent() {
-      return tabComponent[this.active];
+      const { tabs, active } = this;
+      return tabComponent[tabs[active]];
     }
   },
   watch: {

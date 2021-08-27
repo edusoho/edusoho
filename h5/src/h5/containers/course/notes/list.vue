@@ -57,7 +57,7 @@ export default {
         },
         params: {
           limit: limit,
-          offset: offset
+          offset: offset * limit
         }
       }).then(res => {
         const { data, paging: { total } } = res;
