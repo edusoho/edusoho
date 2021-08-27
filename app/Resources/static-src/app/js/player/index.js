@@ -40,9 +40,11 @@ class Show {
     this.autoplay = container.data('autoplay');
     this.rememberLastPos = container.data('rememberLastPos');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
-    if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+    if ($iframe.length > 0) {
+      //播放到最后一秒视为上次播放到0秒
+      let lastLearnTime = (parseInt(this.fileLength) === parseInt($iframe.data('lastLearnTime'))) ? 0 : $iframe.data('lastLearnTime');
       DurationStorage.del(this.userId, this.fileId);
-      DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
+      DurationStorage.set(this.userId, this.fileId, lastLearnTime);
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
     this.strictMode = container.data('strict');

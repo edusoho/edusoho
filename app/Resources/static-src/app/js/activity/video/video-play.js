@@ -48,6 +48,7 @@ export default class VideoPlay {
 
     messenger.on('ended', (msg) => {
       this.player.playing = false;
+      msg.playerMsg.playEnd = true; // 标记播放到最后
       this._onFinishLearnTask(msg);
     });
 
@@ -66,6 +67,7 @@ export default class VideoPlay {
   }
 
   _onFinishLearnTask(msg) {
+    console.log('video-play.js', msg);
     this.emitter.emit('finish', { data: msg }).then(() => {
       clearInterval(this.intervalId);
     }).catch((error) => {

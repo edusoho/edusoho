@@ -73,13 +73,25 @@
       height: 100%;
       overflow: hidden;
     }
+    .play-continue-switch {
+      position: relative;
+      top: 2px;
+      .cd-switch {
+        position: relative;
+        top: 5px;
+      }
+      color: @gray-dark;
+      @media(max-width:@screen-xs-max) {
+        display: none;
+      }
+    }
     .state-opration {
       position: relative;
       display: inline-block;
       height: 31px;
       text-align: right;
       vertical-align: middle;
-      min-width: 300px;
+      min-width: 150px;
       @media(max-width:@screen-xs-max) {
         min-width: 20px;
       }
@@ -330,7 +342,7 @@
     top: 100%;
     opacity: 0;
   }
-  100% { 
+  100% {
     opacity: 1;
     top:0;
   }
@@ -341,7 +353,7 @@
     top: 100%;
     opacity: 0;
   }
-  100% { 
+  100% {
     opacity: 1;
     top: 0;
   }
@@ -352,7 +364,7 @@
     top: 100%;
     opacity: 0;
   }
-  100% { 
+  100% {
     opacity: 1;
     top:0
   }
