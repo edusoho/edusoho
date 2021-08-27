@@ -5,6 +5,7 @@ namespace Biz\Coupon\Event;
 use AppBundle\Common\MathToolkit;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
+use Biz\Sms\SmsScenes;
 use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
@@ -120,6 +121,14 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
             'templateId' => $type,
             'templateParams' => $templateParams,
         ];
+
+        if (SmsType::INVITE_REWARD_INSUFFICIENT == $type) {
+            $smsParams['tag'] = SmsScenes::INSUFFICIENT_REGISTER_REWARD;
+        }
+
+        if (SmsType::INVITE_REWARD_EXHAUST == $type) {
+            $smsParams['tag'] = SmsScenes::CONSUMED_REGISTER_REWARD;
+        }
 
         try {
             $this->getSDKSmsService()->sendToOne($smsParams);
