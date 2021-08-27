@@ -170,6 +170,8 @@ interface ClassroomService
 
     public function isClassroomHeadTeacher($classroomId, $userId);
 
+    public function findTeacherCanManagerClassRoomCourseSet($classroomId);
+
     public function updateMember($id, $member);
 
     public function searchMemberCount($conditions);

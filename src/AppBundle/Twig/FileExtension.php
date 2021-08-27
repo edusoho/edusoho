@@ -49,6 +49,7 @@ class FileExtension extends \Twig_Extension
             'xlsx' => 'assets/img/file/xlsx.png',
             'csv' => 'assets/img/file/xlsx.png',
             'xls' => 'assets/img/file/xlsx.png',
+            'mp3' => 'assets/img/file/audio.png',
             'mp4' => 'assets/img/file/shipin.png',
             'mov' => 'assets/img/file/shipin.png',
             'rmvb' => 'assets/img/file/shipin.png',

@@ -73,7 +73,11 @@ class MultiClassInspection extends AbstractResource
 
         $liveInfos = $this->appendLiveInfo($activities);
 
-        foreach ($tasks as &$task) {
+        foreach ($tasks as $key => &$task) {
+            if (empty($multiClasses[$task['courseId']])) {
+                unset($tasks[$key]);
+                continue;
+            }
             $task['activityInfo'] = isset($activities[$task['activityId']]) ? $activities[$task['activityId']] : [];
             $task['multiClass'] = isset($multiClasses[$task['courseId']]) ? $multiClasses[$task['courseId']] : [];
             $task['studentNum'] = isset($courses[$task['courseId']]) ? $courses[$task['courseId']]['studentNum'] : 0;
@@ -81,6 +85,8 @@ class MultiClassInspection extends AbstractResource
             $task['assistantInfo'] = isset($multiAssistants[$task['courseId']]) ? $multiAssistants[$task['courseId']]['assistantInfo'] : [];
             $task['liveInfo'] = empty($liveInfos[$task['activityInfo']['ext']['liveId']]) ? [] : $liveInfos[$task['activityInfo']['ext']['liveId']];
         }
+
+        $tasks = $this->handleLiveData($tasks);
 
         return $tasks;
     }
@@ -94,12 +100,51 @@ class MultiClassInspection extends AbstractResource
             return [];
         }
 
-        $infos = $this->getLiveClient()->getLiveRoomMonitors(ArrayToolkit::column($selfLives, 'liveId'));
+        $infos = $this->getLiveClient()->getLiveRoomMonitors(implode(',', ArrayToolkit::column($selfLives, 'liveId')));
         if (empty($infos) || !empty($infos['error'])) {
             return [];
         }
 
         return ArrayToolkit::index($infos, 'id');
+    }
+
+    public function handleLiveData($tasks)
+    {
+        $errorTasks = [];
+        $livingTasks = [];
+        $notStartTasks = [];
+        $endTasks = [];
+        $otherTasks = [];
+        foreach ($tasks as $task) {
+            if (empty($task['liveInfo'])) {
+                $otherTasks[] = $task;
+                continue;
+            }
+
+            $activity = $task['activityInfo'];
+            switch ($task['liveInfo']['status']) {
+                case 'living':
+                    $task['liveInfo']['viewUrl'] = $this->generateUrl('task_live_entry', ['courseId' => $activity['fromCourseId'], 'activityId' => $activity['id']]);
+                    $livingTasks[] = $task;
+                    break;
+                case 'finished':
+                    if (in_array($activity['ext']['replayStatus'], ['generated', 'videoGenerated'])) {
+                        $task['liveInfo']['viewUrl'] = $this->generateUrl('course_task_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
+                    }
+                    $endTasks[] = $task;
+                    break;
+                default:
+                    $task['liveInfo']['status'] = $activity['startTime'] < time() ? 'notOnTime' : $task['liveInfo']['status'];
+                    $task['liveInfo']['viewUrl'] = '';
+                    if ($task['liveInfo']['status'] == 'notOnTime') {
+                        $errorTasks[] = $task;
+                    } else {
+                        $notStartTasks[] = $task;
+                    }
+            }
+        }
+
+        return array_merge($errorTasks, $livingTasks, $notStartTasks, $endTasks, $otherTasks);
     }
 
     /**

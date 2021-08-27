@@ -96,6 +96,14 @@ define(function(require, exports, module) {
             }
         })
 
+      $("input[name='open_student_info']").change(function(){
+        if($(this).val()=='1') {
+          $(".open_student_info_tip").addClass('hidden');
+        }else{
+          $(".open_student_info_tip").removeClass('hidden');
+        }
+      })
+
     };
 
 });

@@ -93,7 +93,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
-        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || in_array('ROLE_EDUCATIONAL_ADMIN', $user->getRoles())) {
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $user->isAdmin()) {
             $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
@@ -234,6 +234,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } elseif ($this->getUser()->isAdmin()) {
             $role = 'student';
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');

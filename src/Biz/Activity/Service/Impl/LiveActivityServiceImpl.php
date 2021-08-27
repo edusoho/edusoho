@@ -342,16 +342,18 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'groupNames' => ArrayToolkit::column($groups, 'name'),
         ]);
 
-        $createGroups = [];
-        foreach ($groups as $key => $group) {
-            $createGroups[] = [
-                'group_id' => $group['id'],
-                'live_id' => $live['id'],
-                'live_code' => $liveGroups[$key]['code'],
-            ];
-        }
+        if (!empty($liveGroups) && !empty(current($liveGroups)['code'])) {
+            $createGroups = [];
+            foreach ($groups as $key => $group) {
+                $createGroups[] = [
+                    'group_id' => $group['id'],
+                    'live_id' => $live['id'],
+                    'live_code' => $liveGroups[$key]['code'],
+                ];
+            }
 
-        $this->getMultiClassGroupService()->batchCreateLiveGroups($createGroups);
+            $this->getMultiClassGroupService()->batchCreateLiveGroups($createGroups);
+        }
     }
 
     /**

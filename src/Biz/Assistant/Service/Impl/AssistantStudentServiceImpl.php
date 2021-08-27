@@ -40,6 +40,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
                 'studentId',
                 'assistantId',
                 'multiClassId',
+                'group_id',
             ]
         );
     }
@@ -281,7 +282,7 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
 
             $originRelations = $this->findByStudentIdsAndMultiClassId($studentIds, $multiClassId);
             $originRelations = ArrayToolkit::index($originRelations, 'studentId');
-            $this->getAssistantStudentDao()->updateMultiClassStudentsGroup($multiClassId, ['groupId' => $groupId, 'studentIds' => $studentIds]);
+            $this->updateMultiClassStudentsGroup(ArrayToolkit::column($originRelations, 'id'), $groupId);
             $this->batchCreateRecords($multiClassId, $studentIds, $originRelations);
             $this->batchUpdateGroupStudentNum($multiClassId, array_merge([$groupId], ArrayToolkit::column($originRelations, 'group_id')));
 
@@ -291,6 +292,21 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
             $this->rollback();
             throw $e;
         }
+    }
+
+    private function updateMultiClassStudentsGroup($assistantStudentIds, $groupId)
+    {
+        $multiClassGroup = $this->getMultiClassGroupService()->getMultiClassGroup($groupId);
+        $fields = [];
+        foreach ($assistantStudentIds as $assistantStudentId) {
+            $fields[] = [
+                'id' => $assistantStudentId,
+                'group_id' => $groupId,
+                'assistantId' => $multiClassGroup['assistant_id'],
+            ];
+        }
+
+        $this->getAssistantStudentDao()->batchUpdate($assistantStudentIds, $fields);
     }
 
     private function batchUpdateGroupStudentNum($multiClassId, $groupIds)

@@ -59,7 +59,7 @@ class Live extends Activity
 
     public function create($fields)
     {
-        $files = json_decode($fields['materials'], true);
+        $files = empty($fields['materials']) ? [] : json_decode($fields['materials'], true);
         $fields['fileIds'] = empty($files) ? [] : ArrayToolkit::column($files, 'fileId');
 
         return $this->getLiveActivityService()->createLiveActivity($fields);
