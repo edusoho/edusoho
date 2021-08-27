@@ -55,4 +55,6 @@ class SmsScenes
     const SYSTEM_REMIND = '系统提醒';
 
     const USER_LOGIN = '用户登录';
+
+    const WECHAT_SUBSCRIBE = '微信订阅';
 }
