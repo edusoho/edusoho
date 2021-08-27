@@ -93,7 +93,7 @@ class Assistant extends AbstractResource
                 $liveMultiClassNum += empty($liveMultiClasses[$assistantMember['courseId']]) ? 0 : 1;
                 $endMultiClassNum += empty($endMultiClasses[$assistantMember['courseId']]) ? 0 : 1;
             }
-            $assistant['isScrmBind'] = empty($assistant['scrmUuid']) ? 0 : 1;
+            $assistant['isScrmBind'] = empty($assistant['scrmStaffId']) ? 0 : 1;
             $assistant['liveMultiClassStudentNum'] = empty($liveMultiClassStudentCount[$assistant['id']]) ? 0 : $liveMultiClassStudentCount[$assistant['id']]['studentNum'];
             $assistant['endMultiClassStudentNum'] = empty($endMultiClassStudentCount[$assistant['id']]) ? 0 : $endMultiClassStudentCount[$assistant['id']]['studentNum'];
             $assistant['liveMultiClassNum'] = $liveMultiClassNum;
