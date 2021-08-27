@@ -26,6 +26,7 @@ export default class AudioPlay {
 
     messenger.on('ended', (msg) => {
       this.player.playing = false;
+      msg.playerMsg.playEnd = true; // 标记播放到最后
       this._onFinishLearnTask(msg);
     });
 
