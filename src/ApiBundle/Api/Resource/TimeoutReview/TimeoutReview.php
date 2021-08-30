@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\TimeoutReview;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -82,7 +80,7 @@ class TimeoutReview extends AbstractResource
             $answerRecord['assessment'] = isset($assessments[$answerRecord['assessment_id']]) ? $assessments[$answerRecord['assessment_id']] : [];
             $answerRecord['multiClass'] = isset($multiClasses[$answerRecord['activity']['fromCourseId']]) ? $multiClasses[$answerRecord['activity']['fromCourseId']] : [];
             $answerRecord['userInfo'] = isset($users[$answerRecord['user_id']]) ? $users[$answerRecord['user_id']] : [];
-            $unitKey = $answerRecord['multiClass']['id'] . '_' . $answerRecord['user_id'];
+            $unitKey = $answerRecord['multiClass']['id'].'_'.$answerRecord['user_id'];
             $assistantId = isset($assistantStudentRelations[$unitKey]) ? $assistantStudentRelations[$unitKey]['assistantId'] : -1;
             $answerRecord['assistantInfo'] = isset($users[$assistantId]) ? $users[$assistantId] : [];
         }

@@ -1733,6 +1733,7 @@ course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.info.video.convert.audio.enable: 音频听课（试用）
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.enable.video.convert.audio.un_supported: 视频含弹题时，在APP端不支持转音频播放。
 course.video.convert.audio.status: 当前转音频完成情况
 course.video.convert.audio.detail: 查看详情
 course.marketing_setup.preview.minutes.try_watch: 分钟试看

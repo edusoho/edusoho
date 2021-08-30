@@ -124,6 +124,8 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     player.on('timeupdate', function(e) {
       //    player.__events get all the event;
+      self.currentTime = e.currentTime;
+      self.duration = e.duration;
       self.emit('timechange', e);
     });
 
@@ -136,7 +138,12 @@ class BalloonCloudVideoPlayer extends Emitter {
     });
 
     player.on('ended', function(e) {
-      self.emit('ended', e);
+      let message = {
+        'mode' : self.playMode,
+        'currentTime': self.currentTime,
+        'duration': self.duration,
+      };
+      self.emit('ended', message);
     });
 
     player.on('playing', function(e) {

@@ -16,9 +16,10 @@ $finder = Symfony\Component\Finder\Finder::create()
 
 return PhpCsFixer\Config::create()
     ->setCacheFile(__DIR__.'/.php_cs.cache')
-    ->setRules(array(
+    ->setRules([
         '@Symfony' => true,
         'phpdoc_summary' => false,
-    ))
+        'phpdoc_to_comment' => false,
+    ])
     ->setFinder($finder)
 ;

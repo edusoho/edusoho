@@ -10735,6 +10735,7 @@ exception.blacklist.not_found: 黑名单不存在
 exception.course.note.not_found: 笔记不存在
 exception.course.note.no_permission: 没有权限
 exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: 课程评价不存在
 exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
 exception.message.send_to_self: 不能给自己发消息
