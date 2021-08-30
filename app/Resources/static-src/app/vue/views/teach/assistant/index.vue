@@ -24,6 +24,10 @@
         </div>
       </template>
 
+      <template slot="isScrmBind" slot-scope="text">
+        <span>{{ text === 0? '否':'是' }}</span>
+      </template>
+
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
         <div class="color-gray text-sm">{{ item.loginIp }}</div>
@@ -95,9 +99,9 @@ const columns = [
   },
   {
     title: "是否绑定销客助手",
-    dataIndex: 'isBind',
+    dataIndex: 'isScrmBind',
     ellipsis: true,
-    scopedSlots: { customRender: "isBind" },
+    scopedSlots: { customRender: "isScrmBind" },
   },
   {
     title: "现带班课总数",
