@@ -31,7 +31,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
     {
         $params = [];
         if (isset($conditions['role'])) {
-            $params[] = $conditions['role'];
+            $params[] = '%|'.$conditions['role'].'|%';
             $sql .= ' AND role LIKE ?';
         }
         if (isset($conditions['userIds'])) {

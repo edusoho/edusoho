@@ -1008,6 +1008,60 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals([['id' => 111, 'role' => 'teacher']], $result);
     }
 
+    public function testSearchMembersByClassroomId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            [
+                [
+                    'functionName' => 'searchMembersByClassroomId',
+                    'returnValue' => [['id' => 111, 'role' => 'teacher']],
+                    'withParams' => [
+                        1,
+                        ['role' => '%teacher%', 'userId' => 111],
+                        0,
+                        5,
+                    ],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'User:UserService',
+            [
+                [
+                    'functionName' => 'getUserByNickname',
+                    'returnValue' => ['id' => 111],
+                    'withParams' => ['name'],
+                ],
+            ]
+        );
+        $result = $this->getClassroomService()->searchMembersByClassroomId(
+            1,
+            ['role' => 'teacher', 'nickname' => 'name'],
+            0,
+            5
+        );
+
+        $this->assertEquals([['id' => 111, 'role' => 'teacher']], $result);
+    }
+
+    public function testCountMembersByClassroomId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            [
+                [
+                    'functionName' => 'countMembersByClassroomId',
+                    'returnValue' => 1,
+                    'withParams' => [1, ['userId' => 1]],
+                ],
+            ]
+        );
+        $result = $this->getClassroomService()->countMembersByClassroomId(1, ['userId' => 1]);
+
+        $this->assertEquals(1, $result);
+    }
+
     public function testGetClassroomMember()
     {
         $textClassroom = [

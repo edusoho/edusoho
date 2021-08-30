@@ -197,7 +197,7 @@ class MemberOperationRecordController extends BaseController
         if ($user['id'] != $operator['id'] && $operator) {
             $exitReason .= '（'.$operator['nickname'].'）';
         }
-        $exitReason .= 'remove' == $record['reason_type'] ? '手动移除' : $record['reason'];
+        $exitReason .= $this->trans($record['reason']);
 
         return $exitReason;
     }
