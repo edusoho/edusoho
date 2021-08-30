@@ -25,7 +25,7 @@
       </template>
 
       <template slot="isScrmBind" slot-scope="text">
-        <span>{{ text === 0? '否':'是' }}</span>
+        <span>{{ text === 0? '':'已绑定' }}</span>
       </template>
 
       <div slot="loginInfo" slot-scope="item">
