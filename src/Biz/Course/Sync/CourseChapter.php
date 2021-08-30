@@ -10,17 +10,18 @@ class CourseChapter extends AbstractSychronizer
 {
     public function syncWhenCreate($sourceId)
     {
-        $this->getLock()->get("sync_lesson_{$sourceId}", 10);
-
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
-        if (empty($copiedCourses)) {
-            $this->getLock()->release("sync_lesson_{$sourceId}");
-
-            return;
-        }
 
         try {
+            $this->getLock()->get("sync_course_{$sourceChapter['courseId']}", 10);
+
+            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
+            if (empty($copiedCourses)) {
+                $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
+
+                return;
+            }
+
             $this->beginTransaction();
 
             $helper = $this->getBatchHelper(self::BATCH_CREATE_HELPER, $this->getCourseChapterDao());
@@ -36,28 +37,27 @@ class CourseChapter extends AbstractSychronizer
             unset($copiedCourses);
 
             $this->commit();
+            $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
         } catch (\Exception $e) {
             $this->rollback();
-            throw $e;
+            $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
         }
-
-        $this->getLock()->release("sync_lesson_{$sourceId}");
     }
 
     public function syncWhenUpdate($sourceId)
     {
-        $this->getLock()->get("sync_lesson_{$sourceId}", 10);
-
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
-        $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
-
-        if (empty($copiedChapters)) {
-            $this->getLock()->release("sync_lesson_{$sourceId}");
-
-            return;
-        }
 
         try {
+            $this->getLock()->get("sync_lesson_{$sourceId}", 10);
+
+            $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
+
+            if (empty($copiedChapters)) {
+                $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
+
+                return;
+            }
             $this->beginTransaction();
 
             $helper = $this->getBatchHelper(self::BATCH_UPDATE_HELPER, $this->getCourseChapterDao());
@@ -74,12 +74,12 @@ class CourseChapter extends AbstractSychronizer
             unset($copiedChapters);
 
             $this->commit();
+            $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
         } catch (\Exception $e) {
             $this->rollback();
+            $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
             throw $e;
         }
-
-        $this->getLock()->release("sync_lesson_{$sourceId}");
     }
 
     public function syncWhenDelete($sourceId)
