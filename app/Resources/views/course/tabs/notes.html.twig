@@ -70,9 +70,10 @@
     {% for note in notes %}
       {% set author = users[note.userId] %}
       {% set task = tasks[note.taskId]|default(null) %}
+      {% set isOpenInfo = data('StudentOpenInfo', {'userId': author.id}) %}
       <div class="media note-item main_hover_item">
         <div class="media-left">
-          <a class="{% if not author.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': author.id }) }}"
+          <a class="{% if not author.destroyed|default(0) %}js-user-card{% endif %}" {% if isOpenInfo == 1 %}href="{{ path('user_show', {'id': author.id }) }}"{% endif %}
             data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
             <img class="avatar-sm" src="{{ filepath(author.smallAvatar, 'avatar.png') }}">
           </a>
