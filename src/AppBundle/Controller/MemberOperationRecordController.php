@@ -74,7 +74,7 @@ class MemberOperationRecordController extends BaseController
         );
     }
 
-    public function exitRecordExportDatumAction(Request $request, $targetType, $targetId)
+    public function exitRecordExportDataAction(Request $request, $targetType, $targetId)
     {
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
@@ -156,7 +156,7 @@ class MemberOperationRecordController extends BaseController
         $exitRecords = [];
         foreach ($records as $record) {
             $member = '';
-            $member .= $users[$record['user_id']]['nickname']."\t".',';
+            $member .= is_numeric($users[$record['user_id']]['nickname']) ? $users[$record['user_id']]['nickname']."\t".',' : $users[$record['user_id']]['nickname'].',';
             $member .= $profiles[$record['user_id']]['mobile'] ? $profiles[$record['user_id']]['mobile'].',' : '-'.',';
             $member .= $users[$record['user_id']]['email'].',';
             $member .= date('Y-n-d H:i:s', $record['operate_time']).',';

@@ -3253,9 +3253,9 @@ member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
 
-member_operation_exit_record_export_datum:
-    path: /{targetType}/{targetId}/member_exit_record/export_datum
-    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportDatum }
+member_operation_exit_record_export_data:
+    path: /{targetType}/{targetId}/member_exit_record/export_data
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportData }
 
 member_operation_exit_record_export_csv:
     path: /{targetType}/{targetId}/member_exit_record/export
