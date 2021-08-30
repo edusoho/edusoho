@@ -2432,6 +2432,9 @@ classroom.username: Username
 classroom.student_name: Student
 classroom.student_study_status: 'Learning progress'
 classroom.student_study_expiry_date: Available
+classroom.student_study_expiry_date.not: Out of date
+classroom.student_study_expiry_date.in: In the date
+classroom.delete_condition_student: Remove search results
 classroom.student_opertion: Action
 classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
@@ -2645,6 +2648,8 @@ user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
 user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
+user.settings.scrm: SCRM Bind
+user.settings.scrm.tips: Synchronize teaching assistant information to enterprise WeChat, so that teaching assistants can manage students in WeChat groups and provide community services.
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
@@ -6399,6 +6404,7 @@ admin.user_fields.Require_personal: 'Fill in personal information required while
 admin.user_fields.Personal_info_configiration.open: 'Turn on'
 admin.user_fields.Personal_info_configiration.closed: Close
 admin.user_fields.Personal_info_configiration.help_block: 'If turned on,student must fill in personal information when purchase course'
+admin.user_fields.open_student_info_diable_tips: 'After closing, the personal home page information cannot be viewed between students on PC, app and new micro online school'
 admin.user_fields.Formart_verifcation: 'Format checkout'
 admin.user_fields.Formart_mobile_verifcation: 'Format and sms code checkout,open cloud SMS first'
 admin.user_fields.Formart_verifcation.help_block: 'Drag ato djustment order. Check the field that needs to collect. And if you need a new field, add in the [custom fields] .'
@@ -6409,6 +6415,7 @@ admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
 admin.user_fields.other_setting.edit_user_name: 'Users to update username'
 admin.user_fields.verified_mobile_tip: With SMS code validate
+admin.user_fields.other_setting.open_student_info: 'Publicly display personal information of trainees'
 
 admin.user_fields.modal.delete_field: 'Delete field'
 admin.user_fields.modal.delete_field_tips: 'Determined to delete <b style="color:red;" >%title%</b> field? <br><b style="color:red;" > All the history field  data will be deleted! </b><br> If you want to retain history data, hide the field.'
@@ -9471,6 +9478,7 @@ exception.live_activity.roomtype_invalid: Type of live room is invalid
 exception.live_activity.live_time_invalid: Start time or live broadcast time is incorrect
 exception.live_activity.create_liveroom_failed: Create liveroom failed, please try again
 exception.live_activity.live_status_invalid: Live status is invalid
+exception.live_activity.live_provider_not_support: Only self-research live broadcast is supported
 exception.course.thread.not_found: Course topic does not exist
 exception.course.thread.not_in_course: Course topics are not in the teaching plan
 exception.course.thread.not_found_post: Course topic reply does not exist
@@ -10730,6 +10738,7 @@ exception.multi_class.multi_class_exist: The Multi class name already exists
 exception.multi_class.multi_class_not_exist: The Multi class name not exists
 exception.multi_class.multi_class_teacher_require: The Multi class teacher need to be set up
 exception.multi_class.assistant_require: The Multi class assistant need to be set up
+exception.multi_class.assistant_not_found: Assistant not found
 exception.multi_class.assistant_student_not_found: Assistant student relationship not found
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
@@ -10745,6 +10754,7 @@ admin_v2.byte_maxlength.message: The character length must be less than or equal
 exception.multi_class.multi_teacher_cannot_be_assistant: The Multi class teacher cannot be assistant
 exception.multi_class.forbidden_delete_course: The course can not delete
 exception.multi_class.forbidden_close_course: The course can not close
+exception.multi_class.group_not_found: The group not found
 
 site.login.change_to_pwd: Change to account login
 site.login.change_to_sms: Change to sms login
@@ -10764,6 +10774,8 @@ course.assistant.student_add_qrcode_info: Please scan the code to add the class 
 
 feedback_title: Diting, directly connected to EduSoho product manager
 
+scrm.assistant.bind_title: Please use Enterprise WeChat to scan the code
+
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
@@ -10772,5 +10784,4 @@ exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'
 homepage.teacher_qualification.more: 'More'
-
 

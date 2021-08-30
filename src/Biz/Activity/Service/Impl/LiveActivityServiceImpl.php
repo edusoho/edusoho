@@ -11,6 +11,7 @@ use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -207,6 +208,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->getByLiveId($liveId);
     }
 
+    public function findLiveActivitiesByLiveIds($liveIds)
+    {
+        return $this->getLiveActivityDao()->findByLiveIds($liveIds);
+    }
+
     /**
      * 是否可以更新 roomType， 直播开始前10分钟内和直播结束后不可修改
      *
@@ -317,7 +323,37 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $live['coursewareIds'] = $this->createLiveroomCoursewares($live['id'], $activity['fileIds']);
         }
 
+        if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider']) {
+            $this->createLiveGroup($live, $activity['fromCourseId']);
+        }
+
         return $live;
+    }
+
+    public function createLiveGroup($live, $courseId)
+    {
+        $groups = $this->getMultiClassGroupService()->findGroupsByCourseId($courseId);
+        if (empty($groups)) {
+            return;
+        }
+
+        $liveGroups = $this->getEdusohoLiveClient()->batchCreateLiveGroups([
+            'liveId' => $live['id'],
+            'groupNames' => ArrayToolkit::column($groups, 'name'),
+        ]);
+
+        if (!empty($liveGroups) && !empty(current($liveGroups)['code'])) {
+            $createGroups = [];
+            foreach ($groups as $key => $group) {
+                $createGroups[] = [
+                    'group_id' => $group['id'],
+                    'live_id' => $live['id'],
+                    'live_code' => $liveGroups[$key]['code'],
+                ];
+            }
+
+            $this->getMultiClassGroupService()->batchCreateLiveGroups($createGroups);
+        }
     }
 
     /**
@@ -410,6 +446,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    protected function getMultiClassGroupService()
+    {
+        return $this->createService('MultiClass:MultiClassGroupService');
     }
 
     protected function getSchedulerService()

@@ -1,20 +1,12 @@
 <?php
-
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuestionReportService
 {
-    public function findByIds($ids)
-    {
-        $questionReports = $this->getAnswerQuestionReportDao()->findByIds($ids);
-
-        return ArrayToolkit::index($questionReports, 'id');
-    }
-
     public function batchCreate(array $answerQuestionReports)
     {
         return $this->getAnswerQuestionReportDao()->batchCreate($answerQuestionReports);
@@ -25,7 +17,7 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
         return $this->getAnswerQuestionReportDao()->findByAnswerRecordId($answerRecordId);
     }
 
-    public function search($conditions, $orderBys, $start, $limit, $columns = [])
+    public function search($conditions, $orderBys, $start, $limit, $columns = array())
     {
         return $this->getAnswerQuestionReportDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }

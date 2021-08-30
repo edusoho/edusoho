@@ -71,6 +71,17 @@ class AssistantStudentDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $res[0]['assistantId']);
     }
 
+    public function testFindByMultiClassIds()
+    {
+        $this->mockDataObject(['assistantId' => 1, 'studentId' => 1, 'courseId' => 1, 'multiClassId' => 1, 'group_id' => 1]);
+        $this->mockDataObject(['assistantId' => 1, 'studentId' => 2, 'courseId' => 2, 'multiClassId' => 2, 'group_id' => 1]);
+        $this->mockDataObject(['assistantId' => 2, 'studentId' => 3, 'courseId' => 1, 'multiClassId' => 1, 'group_id' => 1]);
+
+        $result = $this->getAssistantStudentDao()->findByMultiClassIds([1, 3]);
+
+        $this->assertEquals(2, count($result));
+    }
+
     protected function getDefaultMockFields()
     {
         return [
@@ -78,6 +89,7 @@ class AssistantStudentDaoTest extends BaseDaoTestCase
             'studentId' => 1,    // 学员ID
             'courseId' => 1, // 课程ID
             'multiClassId' => 1,  // 班课ID
+            'group_id' => 1,  // 分组ID
         ];
     }
 

@@ -83,10 +83,12 @@ class QuestionController extends BaseController
         if (empty($questionBank)) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
+        $categoryId = $request->query->get('categoryId', 0);
 
         if ($request->isMethod('POST')) {
             $fields = json_decode($request->getContent(), true);
             $fields['bank_id'] = $questionBank['itemBankId'];
+            $fields['category_id'] = $categoryId;
             $item = $this->getItemService()->createItem($fields);
 
             $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
@@ -111,6 +113,7 @@ class QuestionController extends BaseController
             'questionBank' => $questionBank,
             'type' => $type,
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
+            'categoryId' => $categoryId,
         ]);
     }
 
@@ -177,7 +180,9 @@ class QuestionController extends BaseController
         $conditions = $request->query->all();
         $conditions['bank_id'] = $questionBank['itemBankId'];
 
+        $categoryId = 0;
         if (!empty($conditions['category_id'])) {
+            $categoryId = $conditions['category_id'];
             $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
             $childrenIds[] = $conditions['category_id'];
             $conditions['category_ids'] = $childrenIds;
@@ -204,6 +209,7 @@ class QuestionController extends BaseController
             'paginator' => $paginator,
             'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
             'questionBank' => $questionBank,
+            'categoryId' => $categoryId,
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
         ]);
     }

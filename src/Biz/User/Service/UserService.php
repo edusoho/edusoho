@@ -97,6 +97,8 @@ interface UserService
 
     public function setUserScrmUuid($userId, $scrmUuid);
 
+    public function setUserScrmStaffId($userId, $scrmStaffId);
+
     public function isNicknameAvaliable($nickname);
 
     public function isEmailAvaliable($email);
@@ -421,6 +423,8 @@ interface UserService
     public function findUnLockedUsersByUserIds($userIds = []);
 
     public function updatePasswordChanged($id, $passwordChanged);
+
+    public function getStudentOpenInfo($userId);
 
     public function findUserLikeNickname($nickname);
 }

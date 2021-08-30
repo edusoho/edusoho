@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+  <div class="panel panel-default" style="height: 100%">
+    <div class="panel-heading text-center">
+      <h3 class="panel-title">{{ 'classroom.assistant'|trans }}</h3>
+    </div>
+    <div class="panel-body">
+      <div class="media media-middle">
+        <div class="text-center">
+          <img class="avatar-md " src="{{ filepath(assistant.largeAvatar, 'avatar.png') }}"><br>
+          <div class="mts">
+            <span>{{ assistant.nickname }}</span>
+          </div>
+          <div class="mtl text-bolder">
+            <span>{{ 'course.assistant.student_add_qrcode'|trans }}</span><br>
+            <span>{{ 'course.assistant.student_add_qrcode_info'|trans }}</span>
+          </div>
+          <img class="mts img-responsive center-block" height="65%" width="65%" src="{{ filepath(qrCodeUrl, 'avatar.png') }}"><br>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

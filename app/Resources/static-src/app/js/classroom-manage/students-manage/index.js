@@ -62,6 +62,21 @@ $('#batch-remove').on('click', function () {
   });
 });
 
+$('.js-delete-all').on('click', function () {
+
+  if (!confirm(Translator.trans('course.manage.students_delete_hint'))) {
+    return;
+  }
+  $.post($(this).data('url'), $('[data-role="search-conditions"]').serialize(), function (resp) {
+    if (resp.success) {
+      cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
+      location.reload();
+    } else {
+      cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + resp.message });
+    }
+  });
+});
+
 $('#refund-coin-tips').popover({
   html: true,
   trigger: 'hover',//'hover','click'

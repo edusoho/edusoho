@@ -314,6 +314,13 @@ services:
         public: true
 
     batch_exporter:
-      class: AppBundle\Component\Export\BatchExporter
-      arguments: ['@service_container']
-      public: true
+        class: AppBundle\Component\Export\BatchExporter
+        arguments: ['@service_container']
+        public: true
+
+    web.twig.multi_class_extension:
+        class: AppBundle\Twig\MultiClassExtension
+        arguments:    ['@service_container', '@biz']
+        public: true
+        tags:
+          - { name: twig.extension }

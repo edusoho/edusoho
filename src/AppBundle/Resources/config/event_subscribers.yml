@@ -442,3 +442,11 @@ services:
       public: true
       tags:
         - { name: codeages_plugin.event.subscriber }
+
+    multi_class_event_subscriber:
+      class: Biz\MultiClass\Event\MultiClassSubscriber
+      arguments: [ '@biz' ]
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }
+

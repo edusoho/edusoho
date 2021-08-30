@@ -248,7 +248,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $setting = $this->getSettingService()->get('course', []);
         $valuesToBeReplace = ['{{nickname}}', '{{course}}'];
-        $valuesToReplace = [$user['nickname'], ' '.$courseSet['title'].'-'.$course['title'].' '];
+        $valuesToReplace = empty($course['title']) ? [$user['nickname'], ' '.$courseSet['title'].' '] : [$user['nickname'], ' '.$courseSet['title'].'-'.$course['title'].' '];
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
 
         return $welcomeMessageBody;

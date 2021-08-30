@@ -54,6 +54,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $course = ArrayToolkit::parts($course, ['title', 'type', 'about', 'categoryId', 'orgCode']);
+        $course['title'] = strip_tags($course['title']);
         $course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['userId'] = $this->getCurrentUser()->id;
