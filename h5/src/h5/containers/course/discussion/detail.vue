@@ -35,8 +35,8 @@
         ref="replyInput"
         v-model="content"
         :placeholder="$t('courseLearning.reply2')"
-        @keyup.enter.native="handleClickEnter"
       />
+      <span class="reply-btn" @click="handleClickEnter">{{ $t('courseLearning.reply') }}</span>
     </div>
   </div>
 </template>
@@ -220,8 +220,18 @@ export default {
     width: vw(340);
 
     .van-cell {
+      padding-right: vw(70);
       background: #f5f5f5;
       border-radius: 24px;
+    }
+
+    .reply-btn {
+      position: absolute;
+      top: 50%;
+      right: vw(16);
+      line-height: 20px;
+      transform: translateY(-50%);
+      color: $primary-color;
     }
   }
 
