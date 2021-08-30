@@ -53,7 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-
+            'createIndexJob'
         );
 
         $funcNames = array();
@@ -88,7 +88,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function createAddMediaTypeJob()
+    protected function createIndexJob()
     {
         $currentTime = $time = time();
         $startTime = strtotime(date('Y-m-d', $currentTime) . '07:00:00');
