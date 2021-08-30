@@ -2261,6 +2261,9 @@ class UserServiceImpl extends BaseService implements UserService
         $userSetting = $this->getSettingService()->get('user_partner', []);
         $enable = isset($userSetting['open_student_info']) ? $userSetting['open_student_info'] : 1;
         $currentUserId = $this->getCurrentUser()->getId();
+        if (empty($currentUserId)) {
+            return 0;
+        }
         if (!$this->decideUserJustStudentRole($userId) || $user['id'] === $currentUserId || !$this->decideUserJustStudentRole($currentUserId)) {
             $enable = 1;
         }
@@ -2271,6 +2274,10 @@ class UserServiceImpl extends BaseService implements UserService
     protected function decideUserJustStudentRole($userId)
     {
         $user = $this->getUserDao()->get($userId);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
 
         if (count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'])) > 0) {
             return false;
