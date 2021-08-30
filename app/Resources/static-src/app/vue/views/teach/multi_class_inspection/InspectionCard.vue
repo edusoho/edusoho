@@ -54,10 +54,8 @@
         </a>
       </div>
       <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
-          <svg-icon class="icon-live" icon="icon-live-playback" />
-          直播已结束，回放生成中
-        </a>
+        <svg-icon class="icon-live" icon="icon-live-playback" />
+        直播已结束，回放生成中
       </div>
       <div v-if="inspection.liveInfo.status === 'unstart'" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
