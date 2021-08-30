@@ -1522,6 +1522,7 @@ t.add("course.marketing_setup.preview.try_watch", "\u89c6\u9891\u8bd5\u770b", "j
 t.add("course.marketing_setup.preview.try_watch_tips", "\u5e38\u7528\u4e8e\u6536\u8d39\u89c6\u9891\u5185\u5bb9\u7684\u524d\u51e0\u5206\u949f\u514d\u8d39\u8bd5\u770b", "js", "zh_CN");
 t.add("course.info.video.convert.audio.enable", "\u97f3\u9891\u542c\u8bfe\uff08\u8bd5\u7528\uff09", "js", "zh_CN");
 t.add("course.enable.video.convert.audio.benefit", "\u5f00\u542f\u540e\uff0c\u5b66\u5458\u5728\u5b66\u4e60\u65f6\uff0c\u53ef\u6309\u9700\u5207\u6362\u4e3a\u97f3\u9891\u542c\u8bfe\uff0c\u63d0\u9ad8\u5b8c\u6210\u7387\u3002", "js", "zh_CN");
+t.add("course.enable.video.convert.audio.un_supported", "\u89c6\u9891\u542b\u5f39\u9898\u65f6\uff0c\u5728APP\u7aef\u4e0d\u652f\u6301\u8f6c\u97f3\u9891\u64ad\u653e\u3002", "js", "zh_CN");
 t.add("course.video.convert.audio.status", "\u5f53\u524d\u8f6c\u97f3\u9891\u5b8c\u6210\u60c5\u51b5", "js", "zh_CN");
 t.add("course.video.convert.audio.detail", "\u67e5\u770b\u8be6\u60c5", "js", "zh_CN");
 t.add("course.marketing_setup.preview.minutes.try_watch", "\u5206\u949f\u8bd5\u770b", "js", "zh_CN");
