@@ -394,15 +394,18 @@
             $('.reviews').on('mouseover', '.js-user-url', function (event) {
               event.stopPropagation();
               let userid = $(event.currentTarget).data('userid')
-              axios({
+              let userUrl = $(".user-url-" + userid);
+              let attr = userUrl.attr('href');
+              if (typeof attr === typeof undefined) {
+                axios({
                   url: "/api/student_open_info/" + userid,
                   method: "GET",
-              }).then(res => {
+                }).then(res => {
                   if (res.data.enable === 1) {
-                    let userUrl = $(".user-url-" + userid);
                     userUrl.attr('href',"/user/" + userid);
                   }
-              });
+                });
+              }
             });
           },
         },
