@@ -42,12 +42,12 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         if (isset($conditions['in_validity'])) {
             $params[] = $conditions['in_validity']['deadline_GT'];
             $params[] = $conditions['in_validity']['deadline_EQ'];
-            $sql .= " AND (deadline > ? OR deadline = ?)";
+            $sql .= ' AND (deadline > ? OR deadline = ?)';
         }
         if (isset($conditions['out_validity'])) {
             $params[] = $conditions['out_validity']['deadline_LE'];
             $params[] = $conditions['out_validity']['deadline_GT'];
-            $sql .= " AND deadline <= ? AND deadline > ?";
+            $sql .= ' AND deadline <= ? AND deadline > ?';
         }
 
         return [$sql, $params];
