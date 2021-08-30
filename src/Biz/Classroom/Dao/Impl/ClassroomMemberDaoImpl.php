@@ -39,6 +39,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
             $marks = str_repeat('?,', count($conditions['userIds']) - 1).'?';
             $sql .= " AND userId IN ({$marks})";
         }
+<<<<<<< Updated upstream
         if (isset($conditions['in'])) {
             $params[] = $conditions['in']['deadline_GT'];
             $params[] = $conditions['in']['deadline_EQ'];
@@ -48,6 +49,17 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
             $params[] = $conditions['out']['deadline_LE'];
             $params[] = $conditions['out']['deadline_GT'];
             $sql .= ' AND deadline <= ? AND deadline > ?';
+=======
+        if (isset($conditions['in_validity'])) {
+            $params[] = $conditions['in_validity']['deadline_GT'];
+            $params[] = $conditions['in_validity']['deadline_EQ'];
+            $sql .= " AND (deadline > ? OR deadline = ?)";
+        }
+        if (isset($conditions['out_validity'])) {
+            $params[] = $conditions['out_validity']['deadline_LE'];
+            $params[] = $conditions['out_validity']['deadline_GT'];
+            $sql .= " AND deadline <= ? AND deadline > ?";
+>>>>>>> Stashed changes
         }
 
         return [$sql, $params];

@@ -142,11 +142,11 @@ class ClassroomManageController extends BaseController
     {
         if (!empty($expired)) {
             if ('out' == $expired) {
-                $condition['out']['deadline_LE'] = time();
-                $condition['out']['deadline_GT'] = 0;
+                $condition['out_validity']['deadline_LE'] = time();
+                $condition['out_validity']['deadline_GT'] = 0;
             } else {
-                $condition['in']['deadline_GT'] = time();
-                $condition['in']['deadline_EQ'] = 0;
+                $condition['in_validity']['deadline_GT'] = time();
+                $condition['in_validity']['deadline_EQ'] = 0;
             }
         }
     }
