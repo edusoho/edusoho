@@ -3280,7 +3280,7 @@ testpaper_re_edit:
   defaults: { _controller: AppBundle:Testpaper/Manage:reEdit }
 
 question_re_edit:
-  path: /question/re_edit/{token}
+  path: /question/re_edit/{token}/categoryId/{categoryId}
   defaults: { _controller: AppBundle:Question/Manage:reEdit }
 
 subject_edit_template:
