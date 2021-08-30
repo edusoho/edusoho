@@ -1,5 +1,6 @@
 {% import 'macro.html.twig' as web_macro %}
 {% set questionTypesDict = getQuestionTypes() %}
+<input type="hidden" id="select_category" value="{{ categoryId|default(0) }}">
 <table class="table table-striped table-hover" id="quiz-table">
   <thead>
   <tr>

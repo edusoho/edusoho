@@ -245,6 +245,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             'orderbys' => [
                 'seq',
                 'startTime',
+                'endTime',
                 'createdTime',
                 'updatedTime',
                 'id',

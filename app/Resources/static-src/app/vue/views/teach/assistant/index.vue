@@ -17,10 +17,11 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <img slot="mediumAvatar" slot-scope="mediumAvatar" :src="mediumAvatar" width="50px" height="50px" />
-
-      <template slot="weChatQrCode" slot-scope="weChatQrCode">
-        <img v-if="weChatQrCode" :src="weChatQrCode" width="50px" height="50px" />
+      <template slot="nickname" slot-scope="text, item">
+        <div class="avatar-name">
+          <a-avatar :size="48" :src="item.avatar.middle" icon="user"></a-avatar>
+          <a class="ml8" @click="check(item.id)">{{ text }}</a>
+        </div>
       </template>
 
       <div slot="loginInfo" slot-scope="item">
@@ -62,17 +63,6 @@
                 修改用户头像
               </a>
             </a-menu-item>
-            <a-menu-item>
-              <a
-                data-toggle="modal"
-                data-target="#modal"
-                data-backdrop="static"
-                data-keyboard="false"
-                :data-url="`/admin/v2/user/${item.id}/assistant/qrcode`"
-              >
-                修改助教二维码
-              </a>
-            </a-menu-item>
           </a-menu>
         </a-dropdown>
       </template>
@@ -98,20 +88,40 @@ import userInfoTable from "../../components/userInfoTable";
 const columns = [
   {
     title: "用户名",
+    ellipsis: true,
     dataIndex: "nickname",
+    scopedSlots: { customRender: "nickname" },
+
   },
   {
-    title: "头像",
-    dataIndex: 'avatar.middle',
-    scopedSlots: { customRender: "mediumAvatar" },
+    title: "是否绑定销客助手",
+    dataIndex: 'isScrmBind',
+    ellipsis: true,
+    scopedSlots: { customRender: "isScrmBind" },
   },
   {
-    title: "微信二维码",
-    dataIndex: 'weChatQrCode',
-    scopedSlots: {customRender: "weChatQrCode"},
+    title: "现带班课总数",
+    dataIndex: 'liveMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "现学员总数",
+    dataIndex: 'liveMultiClassStudentNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课总数",
+    dataIndex: 'endMultiClassNum',
+    ellipsis: true,
+  },
+  {
+    title: "已结班班课学员总数",
+    dataIndex: 'endMultiClassStudentNum',
+    ellipsis: true,
   },
   {
     title: "最近登录",
+    ellipsis: true,
     scopedSlots: { customRender: "loginInfo" },
   },
   {

@@ -20,7 +20,7 @@ class QuestionParserController extends BaseController
         $templateInfo = $this->getTemplateInfo($type);
         if ($request->isMethod('POST')) {
             $file = $request->files->get('importFile');
-
+            $categoryId = $request->request->get('category_Id');
             $filename = $file->getClientOriginalName();
             $filename = substr($filename, 0, strripos($filename, '.'));
             if (mb_strlen($filename) > 50) {
@@ -52,6 +52,7 @@ class QuestionParserController extends BaseController
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl($templateInfo['reEditRoute'], [
                         'token' => $token['token'],
+                        'categoryId' => $categoryId,
                     ]),
                     'success' => true,
                 ]);
@@ -65,7 +66,7 @@ class QuestionParserController extends BaseController
         ]);
     }
 
-    public function reEditAction(Request $request, $token, $type)
+    public function reEditAction(Request $request, $token, $type, $categoryId)
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         if (empty($token)) {
@@ -89,6 +90,7 @@ class QuestionParserController extends BaseController
             'questionBankId' => $questionBank['itemBankId'],
             'categoryTree' => $categoryTree,
             'type' => $type,
+            'categoryId' => $categoryId,
         ]);
     }
 
