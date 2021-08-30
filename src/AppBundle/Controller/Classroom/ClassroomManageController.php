@@ -18,6 +18,7 @@ use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Review\Service\ReviewService;
 use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
@@ -447,7 +448,7 @@ class ClassroomManageController extends BaseController
 
         foreach ($classroomMembers as $classroomMember) {
             $member = '';
-            $member .= $users[$classroomMember['userId']]['nickname']."\t".',';
+            $member .= is_numeric($users[$classroomMember['userId']]['nickname']) ? $users[$classroomMember['userId']]['nickname']."\t".',' : $users[$classroomMember['userId']]['nickname'].',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
             $member .= $classroomMember['learningProgressPercent'].',';
@@ -1497,6 +1498,9 @@ class ClassroomManageController extends BaseController
         return $this->createService('Classroom:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
