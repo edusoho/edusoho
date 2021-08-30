@@ -48,7 +48,7 @@ class GenerateMultiClassRecordJob extends AbstractJob
                 'user_id' => $member['userId'],
                 'assistant_id' => $relations[$member['userId']]['assistantId'],
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
+                'data' => ['title' => '加入班课', 'content' => $content],
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
                 'is_push' => 0,
             ];

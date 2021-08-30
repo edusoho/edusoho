@@ -95,9 +95,9 @@ const columns = [
   },
   {
     title: "是否绑定销客助手",
-    dataIndex: 'isBind',
+    dataIndex: 'isScrmBind',
     ellipsis: true,
-    scopedSlots: { customRender: "isBind" },
+    scopedSlots: { customRender: "isScrmBind" },
   },
   {
     title: "现带班课总数",
