@@ -16,7 +16,7 @@
                 </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
-                        <a class="link-dark" :href="`/user/${review.user.id}`" target="_blank">{{ review.user.nickname }}</a>
+                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.id" :data-userid ="review.user.id" target="_blank">{{ review.user.nickname }}</a>
                         <!--                    <span>{{ review.target.title }}</span>-->
                         {{ review.createdTime | createdTime }}
                     </div>
@@ -81,7 +81,7 @@
                                             </ul>
                                         </div>
 
-                                        <a class="link-dark" :href="`/user/${post.user.id}`" target="_blank">
+                                        <a class="link-dark js-user-url" :class="'user-url-'+post.user.id" :data-userid ="post.user.id"target="_blank">
                                             {{ post.user.nickname }}
                                         </a>
                                         <span class="bullet">•</span>
@@ -390,6 +390,21 @@
                     });
                 });
             },
+          onUserUrl() {
+            $('.reviews').on('mouseover', '.js-user-url', function (event) {
+              event.stopPropagation();
+              let userid = $(event.currentTarget).data('userid')
+              axios({
+                  url: "/api/student_open_info/" + userid,
+                  method: "GET",
+              }).then(res => {
+                  if (res.data.enable === 1) {
+                    let userUrl = $(".user-url-" + userid);
+                    userUrl.attr('href',"/user/" + userid);
+                  }
+              });
+            });
+          },
         },
         filters: {
             createdTime(date) {
@@ -467,6 +482,7 @@
         },
         mounted() {
             this.onDelete();
+            this.onUserUrl();
         }
     }
 </script>
