@@ -112,7 +112,7 @@
           @change="(value) => handleChange(value, 'assistant')"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
-            {{ item.nickname }} <span v-if="item.isScrmBind === '0'" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
+            {{ item.nickname }} <span v-if="Number(item.isScrmBind) === 0" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
@@ -394,7 +394,7 @@ export default {
     fetchCourseInfo(courseId) {
       this.form.resetFields(['teacherId', 'assistantIds']);
       Course.getSingleCourse(courseId).then(res => {
-        const { teachers, assistants } = res;
+        const { teachers, assistants, maxStudentNum } = res;
         const defaultTeacher = teachers[0];
         const defaultAssistant = assistants;
 
@@ -425,7 +425,8 @@ export default {
         };
         this.form.setFieldsValue({
           'teacherId': defaultTeacher.id,
-          'assistantIds': assistantIds
+          'assistantIds': assistantIds,
+          'maxStudentNum': maxStudentNum
         });
         this.fetchAssistants();
         this.fetchTeacher();
