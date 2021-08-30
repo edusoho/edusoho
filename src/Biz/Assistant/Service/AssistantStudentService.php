@@ -40,5 +40,7 @@ interface AssistantStudentService
 
     public function findByMultiClassIdAndGroupId($multiClassId, $groupId);
 
+    public function countAssistantStudentGroup($assistantIds, $multiClassIds);
+
     public function findAssistantStudentsByGroupIds($groupIds);
 }

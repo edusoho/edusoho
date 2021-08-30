@@ -16,6 +16,19 @@ class AssistantStudentDaoImpl extends AdvancedDaoImpl implements AssistantStuden
         return $this->db()->fetchAll($sql, [$multiClassId]) ?: [];
     }
 
+    public function countAssistantStudentGroup($assistantIds, $multiClassIds)
+    {
+        if (empty($multiClassIds) || empty($assistantIds)) {
+            return [];
+        }
+
+        $assistantIdMarks = str_repeat('?,', count($assistantIds) - 1).'?';
+        $multiClassIdMarks = str_repeat('?,', count($multiClassIds) - 1).'?';
+        $sql = "SELECT assistantId, count(id) as 'studentNum' FROM {$this->table} WHERE assistantId IN ({$assistantIdMarks}) AND multiClassId IN ({$multiClassIdMarks}) GROUP BY assistantId";
+
+        return $this->db()->fetchAll($sql, array_merge($assistantIds, $multiClassIds)) ?: [];
+    }
+
     public function countMultiClassGroupStudentByGroupIds($multiClassId, $groupIds)
     {
         if (empty($groupIds)) {
