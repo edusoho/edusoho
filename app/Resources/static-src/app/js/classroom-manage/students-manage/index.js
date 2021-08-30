@@ -113,7 +113,8 @@ function exportStudents(start, fileName) {
       exportStudents(response.start, response.fileName);
     } else {
       $exportBtn.button('reset');
-      if ($exportBtn.data('role')) {
+      console.log('role', $exportBtn.data('role'));
+      if ($exportBtn.data('role') == 'exit') {
         location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
       }else{
         location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;

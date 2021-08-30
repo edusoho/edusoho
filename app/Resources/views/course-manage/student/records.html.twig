@@ -8,7 +8,9 @@
 {% block page_title %}{{ 'course.student_manage'|trans }}{% endblock %}
 
 {% block main_heading %}
-  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: type, btnGroup:1} %}
+  {% if type == 'exit' %}
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: type, btnGroup:1} %}
+  {% endif %}
 {% endblock %}
 
 {% block main_body %}

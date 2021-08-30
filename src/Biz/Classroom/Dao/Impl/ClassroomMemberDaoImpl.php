@@ -9,6 +9,50 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
 {
     protected $table = 'classroom_member';
 
+    public function searchMembersByClassroomId($classroomId, $conditions, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ?";
+        list($sql, $conditions) = $this->filterSql($sql, $conditions);
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit};";
+
+        return $this->db()->fetchAll($sql, array_merge([$classroomId], $conditions)) ?: [];
+    }
+
+    public function countMembersByClassroomId($classroomId, $conditions)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE classroomId = ?";
+        list($sql, $conditions) = $this->filterSql($sql, $conditions);
+        $sql .= ';';
+
+        return $this->db()->fetchColumn($sql, array_merge([$classroomId], $conditions));
+    }
+
+    protected function filterSql($sql, $conditions)
+    {
+        $params = [];
+        if (isset($conditions['role'])) {
+            $params[] = '%|'.$conditions['role'].'|%';
+            $sql .= ' AND role LIKE ?';
+        }
+        if (isset($conditions['userIds'])) {
+            $params[] = empty($conditions['userIds']) ? [-1] : $conditions['userIds'];
+            $marks = str_repeat('?,', count($conditions['userIds']) - 1).'?';
+            $sql .= " AND userId IN ({$marks})";
+        }
+        if (isset($conditions['in_validity'])) {
+            $params[] = $conditions['in_validity']['deadline_GT'];
+            $params[] = $conditions['in_validity']['deadline_EQ'];
+            $sql .= ' AND (deadline > ? OR deadline = ?)';
+        }
+        if (isset($conditions['out_validity'])) {
+            $params[] = $conditions['out_validity']['deadline_LE'];
+            $params[] = $conditions['out_validity']['deadline_GT'];
+            $sql .= ' AND deadline <= ? AND deadline > ?';
+        }
+
+        return [$sql, $params];
+    }
+
     public function updateByClassroomIdAndRole($classroomId, $role, array $fields)
     {
         $conditions = [
