@@ -6,7 +6,7 @@ interface ItemService
 {
     public function createItem($item, $isBatch = false);
 
-    public function importItems($items, $bankId);
+    public function importItems($items, $bankId, $categoryId = 0);
 
     public function readWordFile($wordPath, $resourcePath = '');
 

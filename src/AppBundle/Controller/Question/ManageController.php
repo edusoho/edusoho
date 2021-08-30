@@ -61,12 +61,13 @@ class ManageController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
-    public function reEditAction(Request $request, $token)
+    public function reEditAction(Request $request, $token, $categoryId)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
             'request' => $request,
             'token' => $token,
             'type' => 'item',
+            'categoryId' => $categoryId,
         ]);
     }
 
@@ -79,7 +80,8 @@ class ManageController extends BaseController
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $postData = json_decode($request->getContent(), true);
-        $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
+        $categoryId = $request->query->get('categoryId');
+        $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId'], $categoryId);
 
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }

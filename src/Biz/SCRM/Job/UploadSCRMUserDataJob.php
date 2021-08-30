@@ -20,7 +20,7 @@ class UploadSCRMUserDataJob extends AbstractJob
 
         try {
             $this->biz['db']->beginTransaction();
-            $records = $this->getMultiClassRecordService()->searchRecord(['isPush' => 0], [], 0, PHP_INT_MAX);
+            $records = $this->getMultiClassRecordService()->searchRecord(['isPush' => 0, 'createdTimeGE' => time() - 1800], [], 0, PHP_INT_MAX);
             $assistants = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'assistant_id'));
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'user_id'));
             $updateData = [];
