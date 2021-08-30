@@ -19,4 +19,6 @@ interface AnswerRecordService
     public function getNextReviewingAnswerRecordByAnswerSceneId($answerSceneId);
 
     public function findByAnswerSceneId($answerSceneId);
+
+    public function countGroupByAnswerSceneId($conditions);
 }

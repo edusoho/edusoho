@@ -468,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "5ab2e3e4583fbd23f82eac8a6a6997a10e0bb6be"
+                "reference": "c32581253f4e81343724b358a7da44c8957e5696"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5ab2e3e4583fbd23f82eac8a6a6997a10e0bb6be",
-                "reference": "5ab2e3e4583fbd23f82eac8a6a6997a10e0bb6be",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/c32581253f4e81343724b358a7da44c8957e5696",
+                "reference": "c32581253f4e81343724b358a7da44c8957e5696",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -512,7 +512,7 @@
                 "issues": "https://github.com/codeages/biz-item-bank/issues",
                 "source": "https://github.com/codeages/biz-item-bank/tree/master"
             },
-            "time": "2021-08-30T01:20:18+00:00"
+            "time": "2021-08-30T02:50:20+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
