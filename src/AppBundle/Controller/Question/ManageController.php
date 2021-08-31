@@ -61,13 +61,12 @@ class ManageController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
-    public function reEditAction(Request $request, $token, $categoryId)
+    public function reEditAction(Request $request, $token)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
             'request' => $request,
             'token' => $token,
             'type' => 'item',
-            'categoryId' => $categoryId,
         ]);
     }
 

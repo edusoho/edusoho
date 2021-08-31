@@ -66,7 +66,7 @@ class QuestionParserController extends BaseController
         ]);
     }
 
-    public function reEditAction(Request $request, $token, $type, $categoryId)
+    public function reEditAction(Request $request, $token, $type)
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         if (empty($token)) {
@@ -83,6 +83,7 @@ class QuestionParserController extends BaseController
         $items = json_decode($itemsJson, true);
 
         $templateInfo = $this->getTemplateInfo($type);
+        $categoryId = $request->request->get('category_Id');
 
         return $this->render($templateInfo['reEditTemplate'], [
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
