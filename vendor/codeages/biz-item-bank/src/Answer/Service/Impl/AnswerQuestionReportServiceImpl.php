@@ -7,6 +7,13 @@ use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuestionReportService
 {
+    public function findByIds($ids)
+    {
+        $questionReports = $this->getAnswerQuestionReportDao()->findByIds($ids);
+
+        return ArrayToolkit::index($questionReports, 'id');
+    }
+
     public function batchCreate(array $answerQuestionReports)
     {
         return $this->getAnswerQuestionReportDao()->batchCreate($answerQuestionReports);
