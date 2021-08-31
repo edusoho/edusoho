@@ -126,6 +126,8 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}',
               '{$currentTime}'
         )");
+
+        return 1;
     }
 
 
