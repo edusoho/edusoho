@@ -79,8 +79,7 @@ class ManageController extends BaseController
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $postData = json_decode($request->getContent(), true);
-        $categoryId = $request->query->get('categoryId');
-        $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId'], $categoryId);
+        $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }

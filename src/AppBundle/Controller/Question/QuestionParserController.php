@@ -80,10 +80,14 @@ class QuestionParserController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         $itemsJson = file_get_contents($data['cacheFilePath']);
+        $categoryId = $request->query->get('categoryId');
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = json_decode($itemsJson, true);
-
+        foreach ($items as &$item) {
+            $item['category_id'] = $categoryId;
+            $item['category_name'] = $category['name'];
+        }
         $templateInfo = $this->getTemplateInfo($type);
-        $categoryId = $request->request->get('category_Id');
 
         return $this->render($templateInfo['reEditTemplate'], [
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
