@@ -7,7 +7,7 @@
         'aliases' => array(
             0 => '2.8.x-dev',
         ),
-        'reference' => '3b585f4d9103e26a5ff7d879be191a6ff0aef0a3',
+        'reference' => 'cb8f67c70d58c320967f06ea7349fb026e0bcbce',
         'name' => 'topxia/edusoho',
         'dev' => true,
     ),
@@ -101,7 +101,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => '2e0b4edccb6d37aae7ae7d72a7628b39f10c26ed',
+            'reference' => '5646a15d04a00171e117637ca42d4cf009df90a5',
             'dev_requirement' => false,
         ),
         'codeages/biz-order-pay' => array(
@@ -1677,7 +1677,7 @@
             'aliases' => array(
                 0 => '2.8.x-dev',
             ),
-            'reference' => '3b585f4d9103e26a5ff7d879be191a6ff0aef0a3',
+            'reference' => 'cb8f67c70d58c320967f06ea7349fb026e0bcbce',
             'dev_requirement' => false,
         ),
         'twig/twig' => array(
