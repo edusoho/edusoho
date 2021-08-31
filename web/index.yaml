@@ -29,7 +29,7 @@ paths:
               schema:
                 properties:
                   data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
-                  paging: { properties: { total: { type: integer, default: 0 }, offset: { type: integer, default: 0 }, limit: { type: integer, default: 10 } }, type: object }
+                  '': { $ref: '#/components/schemas/common.paging' }
                 type: object
   '/api/courses/{courseId}/notes/{noteId}/like':
     post:
@@ -402,13 +402,6 @@ components:
           enum:
             - auto_pause
             - no_action
-        media_play_continuously:
-          description: 音视频连续播放
-          type: string
-          default: 'off'
-          enum:
-            - 'on'
-            - 'off'
         multiple_learn:
           description: 多开学习
           properties:
@@ -566,6 +559,23 @@ components:
             fingerPrintSetting:
               description: ''
           type: object
+    common.paging:
+      title: common.paging
+      description: 公共分页paging
+      properties:
+        paging:
+          properties:
+            total:
+              type: integer
+              default: 0
+            offset:
+              type: integer
+              default: 0
+            limit:
+              type: integer
+              default: 10
+          type: object
+      type: object
 tags:
   -
     name: setting

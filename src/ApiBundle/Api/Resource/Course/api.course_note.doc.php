@@ -30,12 +30,7 @@
  *                     type="array",
  *                     @OA\Items(ref="#/components/schemas/course.note")
  *                 ),
- *                 @OA\Property(
- *                     property="paging",
- *                     @OA\Property(property="total", type="integer",default=0),
- *                     @OA\Property(property="offset", type="integer", default=0),
- *                     @OA\Property(property="limit", type="integer", default=10)
- *                 ),
+ *                 @OA\Property(ref="#/components/schemas/common.paging"),
  *             ),
  *         )
  *     ),

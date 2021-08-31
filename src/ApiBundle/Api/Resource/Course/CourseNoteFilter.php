@@ -25,6 +25,10 @@ class CourseNoteFilter extends Filter
 
         if (empty($data['like'])) {
             $data['like'] = (object) [];
+        } else {
+            $data['like']['createdTime'] = date('c', $data['like']['createdTime']);
         }
+
+
     }
 }
