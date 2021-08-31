@@ -59,7 +59,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
-    public function importItems($items, $bankId, $categoryId = 0)
+    public function importItems($items, $bankId)
     {
         $savedItems = [];
 
@@ -67,7 +67,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->beginTransaction();
             foreach ($items as $item) {
                 $item['bank_id'] = $bankId;
-                $item['category_id'] = $categoryId;
                 $savedItem = $this->createItem($item, true);
                 $savedItems[] = array_merge($savedItems, $savedItem);
             }

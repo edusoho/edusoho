@@ -1,0 +1,578 @@
+openapi: 3.0.0
+info:
+  title: EduSoho接口
+  description: EduSoho接口，随版本动态变化
+  version: default
+paths:
+  '/api/courses/{courseId}/notes/{noteId}':
+    get:
+      tags:
+        - course
+      summary: 课程单个笔记获取接口
+      responses:
+        '200':
+          description: 单条笔记
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/course.note'
+  '/api/courses/{courseId}/notes':
+    get:
+      tags:
+        - course
+      summary: 课程多个笔记获取接口
+      responses:
+        '200':
+          description: 多条笔记
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
+                  paging: { properties: { total: { type: integer, default: 0 }, offset: { type: integer, default: 0 }, limit: { type: integer, default: 10 } }, type: object }
+                type: object
+  '/api/courses/{courseId}/notes/{noteId}/like':
+    post:
+      tags:
+        - course
+      summary: 课程笔记点赞接口
+      responses:
+        '200':
+          description: 笔记点赞回执
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  success: { title: success, type: boolean }
+                type: object
+    delete:
+      tags:
+        - course
+      summary: 课程笔记取消点赞接口
+      responses:
+        '200':
+          description: 笔记取消点赞回执
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  success: { title: success, type: boolean }
+                type: object
+  '/api/courses/{courseId}/threads/{id}':
+    get:
+      tags:
+        - course
+      summary: 获取单条问答/话题
+      responses:
+        '200':
+          description: 获取课程话题
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/course.thread'
+  /api/settings/signSecurity:
+    get:
+      tags:
+        - setting
+      summary: 获取接口加密设置
+      responses:
+        '200':
+          description: 加密设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.signSecurity'
+  /api/settings/locale:
+    get:
+      tags:
+        - setting
+      summary: 获取系统语言设置
+      responses:
+        '200':
+          description: 语言设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.locale'
+  /api/settings/ugc:
+    get:
+      tags:
+        - setting
+      summary: 获取UGC设置
+      responses:
+        '200':
+          description: 全部UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc'
+  /api/settings/ugc_review:
+    get:
+      tags:
+        - setting
+      summary: 获取评价UGC设置
+      responses:
+        '200':
+          description: 评价UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_review'
+  /api/settings/ugc_note:
+    get:
+      tags:
+        - setting
+      summary: 获取笔记UGC设置
+      responses:
+        '200':
+          description: 笔记UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_note'
+  /api/settings/ugc_thread:
+    get:
+      tags:
+        - setting
+      summary: 获取话题问答UGC设置
+      responses:
+        '200':
+          description: 话题问答UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_thread'
+  /api/settings/ugc_private_message:
+    get:
+      tags:
+        - setting
+      summary: 获取私信UGC设置
+      responses:
+        '200':
+          description: 私信UGC设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.ugc_private_message'
+  /api/settings/task_learning_config:
+    get:
+      tags:
+        - setting
+      summary: 任务学习设置
+      responses:
+        '200':
+          description: 任务学习设置
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.task_learning_config'
+components:
+  schemas:
+    course.note:
+      title: course.note
+      description: 课程笔记
+      properties:
+        id:
+          title: id
+          description: ID
+          type: number
+        userId:
+          title: userId
+          description: userId
+          type: number
+        taskId:
+          title: taskId
+          description: taskId
+          type: number
+        content:
+          title: content
+          description: content
+          type: string
+        length:
+          title: length
+          description: length
+          type: number
+        likeNum:
+          title: likeNum
+          description: likeNum
+          type: number
+        createdTime:
+          title: createdTime
+          description: 创建时间
+          type: string
+          format: datetime
+        updatedTime:
+          title: updatedTime
+          description: 更新时间
+          type: string
+          format: datetime
+        user:
+          $ref: '#/components/schemas/user.simple'
+      type: object
+    course.thread:
+      title: course.thread
+      description: 课程话题、问答
+      properties:
+        id:
+          title: ID
+          description: ID
+          type: number
+        courseId:
+          title: courseId
+          description: 课程ID
+          type: number
+        taskId:
+          title: taskId
+          description: 任务ID
+          type: number
+      type: object
+    setting.signSecurity:
+      title: setting.signSecurity
+      description: 接口安全加密设置信息
+      properties:
+        level:
+          title: level
+          description: 安全校验等级：close（不校验）、optional（佛系校验）、open（强制校验）
+          type: string
+          default: close
+          enum:
+            - close
+            - optional
+            - open
+        clients:
+          title: clients
+          description: 需要校验的设备列表：包含ios、android、miniprogram、other
+          type: array
+          items:
+            type: string
+            enum:
+              - ios
+              - android
+              - miniprogram
+              - other
+          default: null
+      type: object
+    setting.locale:
+      title: setting.locale
+      description: 语言信息
+      properties:
+        locale:
+          title: locale
+          description: '语言：en,zh_CN'
+          type: string
+          default: zh_CN
+          enum:
+            - en
+            - zh_CN
+      type: object
+    setting.ugc_review:
+      title: setting.ugc_review
+      description: 评价UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 评价总开关
+          type: integer
+          default: 1
+        course_enable:
+          title: course_enable
+          description: 课程评价开关
+          type: integer
+          default: 1
+        classroom_enable:
+          title: classroom_enable
+          description: 班级评价开关
+          type: integer
+          default: 1
+        question_bank_enable:
+          title: question_bank_enable
+          description: 题库评价开关
+          type: integer
+          default: 1
+        open_course_enable:
+          title: open_course_enable
+          description: 公开课评价开关
+          type: integer
+          default: 1
+        article_enable:
+          title: article_enable
+          description: 资讯评论开关
+          type: integer
+          default: 1
+      type: object
+    setting.ugc_note:
+      title: setting.ugc_note
+      description: 笔记UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 笔记总开关
+          type: integer
+          default: 1
+        classroom_enable:
+          title: classroom_enable
+          description: 班级笔记开关
+          default: 1
+        course_enable:
+          title: course_enable
+          description: 课程笔记开关
+          default: 1
+      type: object
+    setting.ugc_thread:
+      title: setting.ugc_thread
+      description: 话题讨论UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 话题讨论总开关
+          type: integer
+          default: 1
+        course_question_enable:
+          title: course_question_enable
+          description: 课程提问开关
+          type: integer
+          default: 1
+        course_thread_enable:
+          title: course_thread_enable
+          description: 课程话题开关
+          type: integer
+          default: 1
+        classroom_question_enable:
+          title: classroom_question_enable
+          description: 班级提问开关
+          type: integer
+          default: 1
+        classroom_thread_enable:
+          title: classroom_thread_enable
+          description: 班级话题开关
+          type: integer
+          default: 1
+        group_thread_enable:
+          title: group_thread_enable
+          description: 小组话题开关
+          type: integer
+          default: 1
+      type: object
+    setting.ugc_private_message:
+      title: setting.ugc_private_message
+      description: 私信UGC设定
+      properties:
+        enable:
+          title: enable
+          description: 私信总开关
+          type: integer
+          default: 1
+        student_to_student:
+          title: student_to_student
+          description: 学员之间发送私信
+          type: integer
+          default: 1
+        student_to_teacher:
+          title: student_to_teacher
+          description: 学员向老师发送私信
+          type: integer
+          default: 1
+        teacher_to_student:
+          title: teacher_to_student
+          description: 教师向学员发送私信
+          type: integer
+          default: 1
+      type: object
+    setting.ugc:
+      title: setting.ugc
+      description: 全局UGC设定
+      properties:
+        ugc_review:
+          $ref: '#/components/schemas/setting.ugc_review'
+        ugc_note:
+          $ref: '#/components/schemas/setting.ugc_note'
+        ugc_thread:
+          $ref: '#/components/schemas/setting.ugc_thread'
+        ugc_private_message:
+          $ref: '#/components/schemas/setting.ugc_private_message'
+      type: object
+    setting.task_learning_config:
+      title: setting.task_learning_config
+      description: 课程任务学习配置
+      properties:
+        non_focus_learning_video_play_rule:
+          description: '非专注学习规则,auto_pause:自动暂停、no_action:无操作'
+          type: string
+          default: no_action
+          enum:
+            - auto_pause
+            - no_action
+        media_play_continuously:
+          description: 音视频连续播放
+          type: string
+          default: 'off'
+          enum:
+            - 'on'
+            - 'off'
+        multiple_learn:
+          description: 多开学习
+          properties:
+            multiple_learn_enable:
+              description: 是否多开学习
+              type: string
+              default: 'off'
+              enum:
+                - 'on'
+                - 'off'
+            multiple_learn_kick_mode:
+              description: 多开学习模式，kick_previous：踢掉上一个播放、reject_current：拒绝本次播放
+              type: string
+              default: kick_previous
+              enum:
+                - kick_previous
+                - reject_current
+          type: object
+      type: object
+    user.simple:
+      title: user.simple
+      description: Simple用户对象
+      properties:
+        id:
+          description: 用户ID
+          type: integer
+        nickname:
+          description: nickname
+          type: string
+        title:
+          description: 头衔
+          type: string
+        uuid:
+          description: 用户UUID
+          type: string
+        destroyed:
+          description: 是都已注销，0|1
+          type: integer
+        avatar:
+          description: 是都已注销，0|1
+          properties:
+            small:
+              description: 小图
+              type: string
+            middle:
+              description: 中图
+              type: string
+            large:
+              description: 大图
+              type: string
+          type: integer
+        weChatQrCode:
+          description: 微信二维码地址
+          type: string
+      type: object
+    user.public:
+      title: user.public
+      allOf:
+        -
+          $ref: '#/components/schemas/user.simple'
+        -
+          properties:
+            about:
+              description: 个人介绍
+              type: string
+            faceRegistered:
+              description: 人脸识别是否录入（注册）0|1
+              type: integer
+          type: object
+    user.authenticated:
+      title: user.authenticated
+      allOf:
+        -
+          $ref: '#/components/schemas/user.public'
+        -
+          properties:
+            email:
+              description: 邮箱
+              type: string
+            locale:
+              description: 语言：zh_CN|en
+              type: string
+            uri:
+              description: '-'
+              type: string
+            type:
+              description: 注册类型
+              type: string
+            roles:
+              description: 用户角色（组）
+              type: array
+              items: {  }
+            promotedSeq:
+              description: ''
+            locked:
+              description: ''
+            currentIp:
+              description: ''
+              type: string
+            gender:
+              description: ''
+            iam:
+              description: ''
+            city:
+              description: ''
+              type: string
+            qq:
+              description: ''
+              type: string
+            signature:
+              description: ''
+            company:
+              description: ''
+              type: string
+            job:
+              description: ''
+              type: string
+            school:
+              description: ''
+              type: string
+            class:
+              description: ''
+            weibo:
+              description: ''
+              type: string
+            weixin:
+              description: ''
+              type: string
+            isQQPublic:
+              description: ''
+            isWeixinPublic:
+              description: ''
+            isWeiboPublic:
+              description: ''
+            following:
+              description: ''
+            follower:
+              description: ''
+            verifiedMobile:
+              description: ''
+            promotedTime:
+              description: ''
+            lastPasswordFailTime:
+              description: ''
+            loginTime:
+              description: ''
+            approvalTime:
+              description: ''
+            vip:
+              description: ''
+            token:
+              description: ''
+            havePayPassword:
+              description: ''
+            fingerPrintSetting:
+              description: ''
+          type: object
+tags:
+  -
+    name: setting
+    description: 系统设置接口集合
+  -
+    name: course
+    description: 课程接口集合
+  -
+    name: user
+    description: 用户接口集合

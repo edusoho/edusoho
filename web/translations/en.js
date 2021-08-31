@@ -456,6 +456,7 @@ t.add("course.manage.task_publish_success_hint", "Published successfully", "js",
 t.add("course.manage.task_publish_fail_hint", "Publish failed", "js", "en");
 t.add("course.manage.task_unpublish_success_hint", "Publish cancelled successful", "js", "en");
 t.add("course.manage.task_unpublish_fail_hint", "Cancel publish failed", "js", "en");
+t.add("course.manage.lesson_copy_ing", "Lesson is copying", "js", "en");
 t.add("course.manage.live_replay_generate_success", "Generated playback succeed", "js", "en");
 t.add("course.manage.live_replay_generate_error", "The replay is not on or the video is trancoding. Please try again later.", "js", "en");
 t.add("course.manage.live_replay_upload_error_hint", "Please upload the video file", "js", "en");
@@ -1571,6 +1572,7 @@ t.add("course.marketing_setup.preview.try_watch", "Preview", "js", "en");
 t.add("course.marketing_setup.preview.try_watch_tips", "It is usally used to let student preview the paid course", "js", "en");
 t.add("course.info.video.convert.audio.enable", "Audio lecture (trial)", "js", "en");
 t.add("course.enable.video.convert.audio.benefit", "After opening, user can switch to audio and video.", "js", "en");
+t.add("course.enable.video.convert.audio.un_supported", "When the video contains quizzes, audio playback is not supported on the APP side.", "js", "en");
 t.add("course.video.convert.audio.status", "Audio transcoding", "js", "en");
 t.add("course.video.convert.audio.detail", "Details", "js", "en");
 t.add("course.marketing_setup.preview.minutes.try_watch", "Trial it in minutes", "js", "en");

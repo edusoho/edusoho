@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\DashboardGraphicDatum;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -86,7 +84,7 @@ class DashboardGraphicDatum extends AbstractResource
         $reviewTimeLimit = $this->getSettingService()->node('multi_class.review_time_limit', 0);
         $timeoutReviewNum = 0;
         if ($reviewTimeLimit) {
-            $timeoutReviewNum =  $this->getAnswerRecordService()->count([
+            $timeoutReviewNum = $this->getAnswerRecordService()->count([
                 'answer_scene_ids' => empty($answerSceneIds) ? [-1] : $answerSceneIds,
                 'status' => 'reviewing',
                 'endTime_LE' => time() - $reviewTimeLimit * 3600,
@@ -107,7 +105,7 @@ class DashboardGraphicDatum extends AbstractResource
     protected function getStudyStudentData()
     {
         $studyNum = $this->getMemberNum(['startTimeLE' => time()]);
-        $notStudyNum =  $this->getMemberNum(['startTimeGT' => time()]);
+        $notStudyNum = $this->getMemberNum(['startTimeGT' => time()]);
 
         return compact('studyNum', 'notStudyNum');
     }

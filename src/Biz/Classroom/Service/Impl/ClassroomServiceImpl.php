@@ -52,6 +52,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchMembersByClassroomId($classroomId, $conditions, $start, $limit)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->searchMembersByClassroomId($classroomId, $conditions, $start, $limit);
+    }
+
+    public function countMembersByClassroomId($classroomId, $conditions)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->countMembersByClassroomId($classroomId, $conditions);
+    }
+
     public function findClassroomsByIds(array $ids)
     {
         return ArrayToolkit::index($this->getClassroomDao()->findByIds($ids), 'id');

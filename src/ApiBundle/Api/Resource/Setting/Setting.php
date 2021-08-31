@@ -11,6 +11,7 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Common\CommonException;
 use Biz\OrderFacade\CoinCurrency;
 use Biz\System\SettingException;
+use Biz\System\SettingModule\SettingMaintainer;
 use Biz\User\UserException;
 
 class Setting extends AbstractResource
@@ -20,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'qualification',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification',
     ];
 
     public static function convertUnderline($str)
@@ -510,6 +511,16 @@ class Setting extends AbstractResource
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
             'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
+        ];
+    }
+
+    public function getTaskLearningConfig($request = null)
+    {
+        $courseTaskLearning = SettingMaintainer::courseSetting($this->biz)->getCourseTaskLearnConfig();
+
+        return [
+            'non_focus_learning_video_play_rule' => $courseTaskLearning['non_focus_learning_video_play_rule'],
+            'multiple_learn' => $courseTaskLearning['multiple_learn'],
         ];
     }
 

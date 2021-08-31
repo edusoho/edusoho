@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\DashboardRankList;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -45,7 +43,7 @@ class DashboardRankList extends AbstractResource
     {
         $studentNumList = [];
         $numList = ArrayToolkit::index($numList, 'courseId');
-        foreach ($allMultiClasses as $multiClass){
+        foreach ($allMultiClasses as $multiClass) {
             $studentNumList[$multiClass['courseId']]['multiClass'] = $multiClass['title'];
             $studentNumList[$multiClass['courseId']]['courseId'] = $multiClass['courseId'];
             $studentNumList[$multiClass['courseId']]['count'] = isset($numList[$multiClass['courseId']]) ? $numList[$multiClass['courseId']]['count'] : 0;
@@ -81,10 +79,10 @@ class DashboardRankList extends AbstractResource
         foreach ($multiClasses as $multiClass) {
             $reviewRate[$multiClass['courseId']]['courseId'] = $multiClass['courseId'];
             $reviewRate[$multiClass['courseId']]['multiClass'] = $multiClass['title'];
-            $reviewRate[$multiClass['courseId']]['rate'] =  isset($totalAnswerRecords[$multiClass['courseId']]) && isset($reviewedRecords[$multiClass['courseId']]) && $totalAnswerRecords[$multiClass['courseId']]['count'] && $reviewedRecords[$multiClass['courseId']]['count'] ? round($reviewedRecords[$multiClass['courseId']]['count'] / $totalAnswerRecords[$multiClass['courseId']]['count'], 2) : 0;
+            $reviewRate[$multiClass['courseId']]['rate'] = isset($totalAnswerRecords[$multiClass['courseId']]) && isset($reviewedRecords[$multiClass['courseId']]) && $totalAnswerRecords[$multiClass['courseId']]['count'] && $reviewedRecords[$multiClass['courseId']]['count'] ? round($reviewedRecords[$multiClass['courseId']]['count'] / $totalAnswerRecords[$multiClass['courseId']]['count'], 2) : 0;
         }
 
-        return [$this->sortRateList($reviewRate,SORT_ASC), $this->sortRateList($reviewRate, SORT_DESC)];
+        return [$this->sortRateList($reviewRate, SORT_ASC), $this->sortRateList($reviewRate, SORT_DESC)];
     }
 
     protected function filterAnswerRecord($answerRecords, $sceneIndexActivities)
@@ -126,7 +124,7 @@ class DashboardRankList extends AbstractResource
             $finishedRateList[$i]['courseId'] = $course['courseId'];
             $finishedRateList[$i]['multiClass'] = isset($multiClasses[$course['courseId']]) ? $multiClasses[$course['courseId']]['title'] : '';
             $finishedRateList[$i]['rate'] = $finishedStudents[$course['courseId']]['count'] && $course['count'] ? round($finishedStudents[$course['courseId']]['count'] / $course['count'], 2) : 0;
-            $i++;
+            ++$i;
         }
 
         return $finishedRateList;
@@ -136,7 +134,7 @@ class DashboardRankList extends AbstractResource
     {
         $conditions = [
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
-            'postNumLargerThan' => 0
+            'postNumLargerThan' => 0,
         ];
         $answeredThread = $this->getThreadService()->countThreadsGroupedByCourseId($conditions);
         $answeredThread = $this->filterAnswerRate($allMultiClasses, $answeredThread);
@@ -146,7 +144,7 @@ class DashboardRankList extends AbstractResource
 
     protected function filterAnswerRate($multiClasses, $answeredThreads)
     {
-        $courses = ArrayToolkit::index($this->getThreadService()->countThreadsGroupedByCourseId(['courseIds' =>ArrayToolkit::column($multiClasses, 'courseId')]), 'courseId');
+        $courses = ArrayToolkit::index($this->getThreadService()->countThreadsGroupedByCourseId(['courseIds' => ArrayToolkit::column($multiClasses, 'courseId')]), 'courseId');
         $answerRate = [];
         $answeredThreads = ArrayToolkit::index($answeredThreads, 'courseId');
         foreach ($multiClasses as $multiClass) {

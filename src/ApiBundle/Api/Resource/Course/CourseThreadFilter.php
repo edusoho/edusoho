@@ -7,10 +7,10 @@ use ApiBundle\Api\Resource\User\UserFilter;
 
 class CourseThreadFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
         'hitNum', 'followNum', 'questionType', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'course', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail', 'notReadPostNum', 'lastPost',
-    );
+    ];
 
     protected function publicFields(&$data)
     {
@@ -34,5 +34,7 @@ class CourseThreadFilter extends Filter
         if (isset($data['latestPostTime'])) {
             $data['latestPostTime'] = empty($data['latestPostTime']) ? 0 : date('c', $data['latestPostTime']);
         }
+
+        $data['content'] = $this->convertAbsoluteUrl($data['content']);
     }
 }

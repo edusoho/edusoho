@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\MultiClassInspection;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -136,7 +134,7 @@ class MultiClassInspection extends AbstractResource
                 default:
                     $task['liveInfo']['status'] = $activity['startTime'] < time() ? 'notOnTime' : $task['liveInfo']['status'];
                     $task['liveInfo']['viewUrl'] = '';
-                    if ($task['liveInfo']['status'] == 'notOnTime') {
+                    if ('notOnTime' == $task['liveInfo']['status']) {
                         $errorTasks[] = $task;
                     } else {
                         $notStartTasks[] = $task;

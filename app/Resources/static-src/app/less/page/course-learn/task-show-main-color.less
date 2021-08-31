@@ -9,14 +9,14 @@
     }
   }
   .dashboard-toolbar {
-    .dashboard-toolbar-nav {
-      > li {
-        &.active,
-        &:hover {
-          > a {
-            background-color: @brand-primary;
-          }
-        }
+    background: @brand-primary;
+  }
+
+  .dashboard-nav {
+
+    &__item {
+      &.active::after {
+        background: @brand-primary;
       }
     }
   }

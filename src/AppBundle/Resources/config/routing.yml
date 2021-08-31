@@ -3253,6 +3253,14 @@ member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
 
+member_operation_exit_record_export_data:
+    path: /{targetType}/{targetId}/member_exit_record/export_data
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportData }
+
+member_operation_exit_record_export_csv:
+    path: /{targetType}/{targetId}/member_exit_record/export
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportCsv }
+
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
@@ -3280,7 +3288,7 @@ testpaper_re_edit:
   defaults: { _controller: AppBundle:Testpaper/Manage:reEdit }
 
 question_re_edit:
-  path: /question/re_edit/{token}/categoryId/{categoryId}
+  path: /question/re_edit/{token}
   defaults: { _controller: AppBundle:Question/Manage:reEdit }
 
 subject_edit_template:

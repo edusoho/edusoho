@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Task\Job;
 
-use Biz\Task\Job\CourseTaskCreateSyncJob;
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
+use Biz\Task\Job\CourseTaskCreateSyncJob;
 use Tests\Unit\Task\Job\Tools\MockedText;
 
 class CourseTaskCreateSyncJobTest extends BaseTestCase
@@ -13,16 +13,16 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
     {
         $job = new CourseTaskCreateSyncJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
-        $job->args = array('taskId' => 110);
+        $job->args = ['taskId' => 110];
 
         $this->biz['activity_type.text'] = new MockedText($this->biz);
         $this->mockBiz(
             'Task:TaskService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getTask',
-                    'withParams' => array(110),
-                    'returnValue' => array(
+                    'withParams' => [110],
+                    'returnValue' => [
                         'id' => 110,
                         'courseId' => 3330,
                         'activityId' => 44443,
@@ -42,46 +42,46 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                         'maxOnlineNum' => 333,
                         'status' => 'ok',
                         'length' => 3,
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'getCourseTaskByCourseIdAndCopyId',
-                    'withParams' => array(3331, 110),
-                    'returnValue' => array(),
-                ),
-                array(
+                    'withParams' => [3331, 110],
+                    'returnValue' => [],
+                ],
+                [
                     'functionName' => 'getCourseTaskByCourseIdAndCopyId',
-                    'withParams' => array(3332, 110),
-                    'returnValue' => array(
+                    'withParams' => [3332, 110],
+                    'returnValue' => [
                         'id' => 110,
                         'courseId' => 3332,
                         'activityId' => 44445,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'Course:CourseDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findCoursesByParentIdAndLocked',
-                    'withParams' => array(3330, 1),
-                    'returnValue' => array(
-                        array('id' => 3331, 'courseSetId' => 222),
-                        array('id' => 3332),
-                    ),
-                ),
-            )
+                    'withParams' => [3330, 1],
+                    'returnValue' => [
+                        ['id' => 3331, 'courseSetId' => 222],
+                        ['id' => 3332],
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
             'Task:TaskDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'batchCreate',
-                    'withParams' => array(
-                        array(
-                            array(
+                    'withParams' => [
+                        [
+                            [
                                 'courseId' => 3331,
                                 'fromCourseSetId' => 222,
                                 'createdUserId' => 123,
@@ -101,20 +101,20 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                                 'maxOnlineNum' => 333,
                                 'status' => 'ok',
                                 'length' => 3,
-                            ),
-                        ),
-                    ),
-                ),
-            )
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
             'Activity:ActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array(44443),
-                    'returnValue' => array(
+                    'withParams' => [44443],
+                    'returnValue' => [
                         'id' => 44443,
                         'copyId' => 0,
                         'mediaType' => 'text',
@@ -128,12 +128,12 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                         'fromCourseId' => 3330,
                         'finishType' => 'time',
                         'finishData' => 1,
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'create',
-                    'withParams' => array(
-                        array(
+                    'withParams' => [
+                        [
                             'title' => 'activity title',
                             'remark' => 'activity remark',
                             'mediaType' => 'text',
@@ -147,10 +147,10 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                             'copyId' => 44443,
                             'finishType' => 'time',
                             'finishData' => 1,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $job->execute();
@@ -164,7 +164,7 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
 
         $mockedText = $this->biz['activity_type.text'];
         $this->assertEquals(
-            array(
+            [
                 'id' => 44443,
                 'copyId' => 0,
                 'mediaType' => 'text',
@@ -178,7 +178,7 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                 'fromCourseId' => 3330,
                 'finishType' => 'time',
                 'finishData' => 1,
-            ),
+            ],
             $mockedText->getCopiedActivity()
         );
     }
@@ -187,27 +187,27 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
     {
         $job = new CourseTaskCreateSyncJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
-        $job->args = array('taskId' => 110);
+        $job->args = ['taskId' => 110];
         $this->mockBiz(
             'Task:TaskService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getTask',
-                    'withParams' => array(110),
-                    'throwException' => new \Exception('error'),
-                ),
-            )
+                    'withParams' => [110],
+//                    'throwException' => new \Exception('error'),
+                ],
+            ]
         );
-        $count = $this->getLogDao()->count(array());
+        $count = $this->getLogDao()->count([]);
         $job->execute();
-        $result = $this->getLogDao()->count(array());
+        $result = $this->getLogDao()->count([]);
         $this->assertEquals($count + 1, $result);
     }
 
     public function testCreateMaterials()
     {
         $material = $this->getMaterialDao()->create(
-            array(
+            [
                 'title' => 'old title',
                 'description' => 'old description',
                 'link' => 'old link',
@@ -220,30 +220,30 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                 'type' => 'material',
                 'lessonId' => 1111,
                 'courseId' => 2222,
-            )
+            ]
         );
 
         $job = new CourseTaskCreateSyncJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
 
         ReflectionUtils::invokeMethod(
-            $job, 'createMaterials', array(
-                array('id' => 999),
-                array('id' => 1111, 'fromCourseId' => 2222),
-                array('courseSetId' => 77, 'id' => 88),
-            )
+            $job, 'createMaterials', [
+                ['id' => 999],
+                ['id' => 1111, 'fromCourseId' => 2222],
+                ['courseSetId' => 77, 'id' => 88],
+            ]
         );
 
         $oldMaterials = $this->getMaterialDao()->search(
-            array('lessonId' => 1111, 'courseId' => 2222),
-            array(),
+            ['lessonId' => 1111, 'courseId' => 2222],
+            [],
             0,
             PHP_INT_MAX
         );
 
         $newMaterials = $this->getMaterialDao()->search(
-            array('lessonId' => 999, 'courseId' => 88),
-            array(),
+            ['lessonId' => 999, 'courseId' => 88],
+            [],
             0,
             PHP_INT_MAX
         );

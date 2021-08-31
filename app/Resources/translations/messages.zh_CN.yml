@@ -1162,7 +1162,7 @@ course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，
 course.members_manage.quit_records: 退出记录
 course.members_manage.quit_type: 退出类型
 course.members_manage.is_refunded: 是否退款
-course.members_manage.records.name: 学员名称
+course.members_manage.records.name: 学员
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
 course.members_manage.quit_records.date: 退出日期
@@ -2804,7 +2804,8 @@ classroom.student_opertion: 操作
 classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
-classroom.student_export: 导出学生
+classroom.student_export: 导出学员
+classroom.student_export.exit_record: 导出
 classroom.add_student_btn: 添加学员
 classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
@@ -2819,7 +2820,7 @@ classroom.exit_record: 退出记录
 classroom.auditor_manage: 旁听生管理
 classroom.auditor_buy_tips: >
   旁听生是%name%的潜在购买者,只能参加该%classroomName%下的话题互动。
-classroom.student_username: 学员名称
+classroom.student_username: 学员
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
@@ -10735,6 +10736,7 @@ exception.blacklist.not_found: 黑名单不存在
 exception.course.note.not_found: 笔记不存在
 exception.course.note.no_permission: 没有权限
 exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: 课程评价不存在
 exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
 exception.message.send_to_self: 不能给自己发消息

@@ -1876,3 +1876,9 @@ admin_v2:
                             children:
                                 admin_v2_api_security_setting:
                                     name: 接口安全配置项
+                        admin_v2_api_swagger_ui:
+                            name: SwiggerUI API
+                            disable: true
+                            children:
+                                admin_v2_api_swagger_ui_api:
+                                    name: API 列表

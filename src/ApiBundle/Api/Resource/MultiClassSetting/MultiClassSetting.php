@@ -40,22 +40,22 @@ class MultiClassSetting extends AbstractResource
     private function checkSettings(ApiRequest $request)
     {
         $groupNumberLimit = $request->request->get('group_number_limit', '');
-        if ($groupNumberLimit && !is_numeric($groupNumberLimit) || strpos($groupNumberLimit,".") !== false) {
+        if ($groupNumberLimit && !is_numeric($groupNumberLimit) || false !== strpos($groupNumberLimit, '.')) {
             return false;
         }
 
         $assistantGroupLimit = $request->request->get('assistant_group_limit', '');
-        if ($assistantGroupLimit && !is_numeric($assistantGroupLimit) || strpos($assistantGroupLimit,".") !== false) {
+        if ($assistantGroupLimit && !is_numeric($assistantGroupLimit) || false !== strpos($assistantGroupLimit, '.')) {
             return false;
         }
 
         $assistantServiceLimit = $request->request->get('assistant_service_limit', '');
-        if ($assistantServiceLimit && !is_numeric($assistantServiceLimit) || strpos($assistantServiceLimit,".") !== false) {
+        if ($assistantServiceLimit && !is_numeric($assistantServiceLimit) || false !== strpos($assistantServiceLimit, '.')) {
             return false;
         }
 
         $reviewTimeLimit = $request->request->get('review_time_limit', '');
-        if ($reviewTimeLimit && !is_numeric($reviewTimeLimit) || strpos($reviewTimeLimit,".") !== false) {
+        if ($reviewTimeLimit && !is_numeric($reviewTimeLimit) || false !== strpos($reviewTimeLimit, '.')) {
             return false;
         }
 
