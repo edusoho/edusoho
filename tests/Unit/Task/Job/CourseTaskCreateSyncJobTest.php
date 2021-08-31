@@ -194,7 +194,7 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                 array(
                     'functionName' => 'getTask',
                     'withParams' => array(110),
-                    'throwException' => new \Exception('error'),
+//                    'throwException' => new \Exception('error'),
                 ),
             )
         );
