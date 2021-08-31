@@ -35,7 +35,8 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
             $sql .= ' AND role LIKE ?';
         }
         if (isset($conditions['userIds'])) {
-            $params[] = empty($conditions['userIds']) ? [-1] : $conditions['userIds'];
+            $userIds = empty($conditions['userIds']) ? [-1] : $conditions['userIds'];
+            $params = array_merge($params, $userIds);
             $marks = str_repeat('?,', count($conditions['userIds']) - 1).'?';
             $sql .= " AND userId IN ({$marks})";
         }
