@@ -111,7 +111,7 @@
           @blur="() => handleSearchAssistant('')"
           @change="(value) => handleChange(value, 'assistant')"
         >
-          <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
+          <a-select-option v-for="item in assistant.list" :key="item.id" :label="item.nickname" :disabled="item.disabled">
             {{ item.nickname }} <span v-if="Number(item.isScrmBind) === 0" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
