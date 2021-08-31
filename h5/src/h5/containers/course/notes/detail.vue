@@ -59,6 +59,12 @@ export default {
     }
   },
 
+  watch: {
+    note() {
+      this.noteDetail = this.note;
+    }
+  },
+
   methods: {
     handleClickGoToList() {
       this.$emit('change-current-component', { component: 'List' });
