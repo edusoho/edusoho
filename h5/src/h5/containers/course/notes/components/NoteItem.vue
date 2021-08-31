@@ -6,7 +6,7 @@
         <span>{{ item.user.nickname }} {{ item.createdTime | formatCourseTime }}</span>
         <span class="tag text-overflow">{{ item.task.title }}</span>
       </div>
-      <div class="note-like" :class="{ like: isLike }" @click.stop="handleClickLike">
+      <div class="note-like" :class="{ like: isLike }">
         <i class="iconfont icon-like"></i>
         {{ item.likeNum }}
       </div>
@@ -35,12 +35,6 @@ export default {
 
     isLike() {
       return !!_.size(this.item.like);
-    }
-  },
-
-  methods: {
-    handleClickLike() {
-      this.$emit('handle-like', { noteId: this.item.id, status: this.isLike });
     }
   }
 }
