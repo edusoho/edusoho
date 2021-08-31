@@ -29,7 +29,7 @@ paths:
               schema:
                 properties:
                   data: { type: array, items: { $ref: '#/components/schemas/course.note' } }
-                  '': { $ref: '#/components/schemas/common.paging' }
+                  paging: { $ref: '#/components/schemas/common.paging' }
                 type: object
   '/api/courses/{courseId}/notes/{noteId}/like':
     post:
@@ -208,6 +208,92 @@ components:
           format: datetime
         user:
           $ref: '#/components/schemas/user.simple'
+        like:
+          $ref: '#components/schemas/course.note.like'
+        task:
+          $ref: '#/components/schemas/course.task.public'
+      type: object
+    course.note.like:
+      title: course.note.like
+      description: 笔记点赞数据
+      properties:
+        id:
+          title: id
+          description: ID
+          type: number
+        noteId:
+          title: noteId
+          description: 笔记ID
+          type: number
+        userId:
+          title: userId
+          description: 点赞人ID
+          type: number
+        createdTime:
+          title: createdTime
+          description: 创建时间
+          type: string
+          format: datetime
+      type: object
+    course.task.public:
+      title: course.task.public
+      description: 课程任务
+      properties:
+        id:
+          title: id
+          description: ID
+          type: number
+        seq:
+          title: seq
+          description: 任务排序
+          type: number
+        categoryId:
+          title: categoryId
+          description: course_chapter.id
+          type: number
+        title:
+          title: title
+          description: 标题
+          type: string
+        isOptional:
+          title: isOptional
+          description: 是否选修
+          type: number
+        startTime:
+          title: startTime
+          description: 任务开始时间
+          type: number
+        endTime:
+          title: endTime
+          description: 任务截止时间
+          type: number
+        mode:
+          title: mode
+          description: 任务类型
+          type: string
+        status:
+          title: status
+          description: 任务状态
+          enum:
+            - create
+            - published
+            - unpublished
+        number:
+          title: number
+          description: 课时序号
+          type: number
+        type:
+          title: type
+          description: 任务类型
+          type: string
+        mediaSource:
+          title: mediaSource
+          description: 媒体资源来源默认self
+          type: string
+        length:
+          title: length
+          description: 长度可以是考试时长音视频时长等
+          type: number
       type: object
     course.thread:
       title: course.thread
@@ -563,18 +649,15 @@ components:
       title: common.paging
       description: 公共分页paging
       properties:
-        paging:
-          properties:
-            total:
-              type: integer
-              default: 0
-            offset:
-              type: integer
-              default: 0
-            limit:
-              type: integer
-              default: 10
-          type: object
+        total:
+          type: integer
+          default: 0
+        offset:
+          type: integer
+          default: 0
+        limit:
+          type: integer
+          default: 10
       type: object
 tags:
   -

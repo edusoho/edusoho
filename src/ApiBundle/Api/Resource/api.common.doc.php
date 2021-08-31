@@ -23,11 +23,8 @@
  *     type="object",
  *     schema="common.paging",
  *     title="common.paging",
- *     @OA\Property(
- *         property="paging",
- *         @OA\Property(property="total", type="integer",default=0),
- *         @OA\Property(property="offset", type="integer", default=0),
- *         @OA\Property(property="limit", type="integer", default=10)
- *     ),
+ *     @OA\Property(property="total", type="integer",default=0),
+ *     @OA\Property(property="offset", type="integer", default=0),
+ *     @OA\Property(property="limit", type="integer", default=10)
  * )
  */
