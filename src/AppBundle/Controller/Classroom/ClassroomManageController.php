@@ -107,7 +107,7 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
-        $condition = array_merge($condition, ['role' => 'student']);
+        $condition = array_merge($condition, ['role' => '|student|']);
 
         $this->filterDeadlineConditions($condition, $request->query->get('expired'));
 
