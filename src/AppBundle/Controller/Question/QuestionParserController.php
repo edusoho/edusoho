@@ -66,7 +66,7 @@ class QuestionParserController extends BaseController
         ]);
     }
 
-    public function reEditAction(Request $request, $token, $type, $categoryId)
+    public function reEditAction(Request $request, $token, $type)
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         if (empty($token)) {
@@ -80,8 +80,13 @@ class QuestionParserController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         $itemsJson = file_get_contents($data['cacheFilePath']);
+        $categoryId = $request->query->get('categoryId');
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = json_decode($itemsJson, true);
-
+        foreach ($items as &$item) {
+            $item['category_id'] = $categoryId;
+            $item['category_name'] = $category['name'];
+        }
         $templateInfo = $this->getTemplateInfo($type);
 
         return $this->render($templateInfo['reEditTemplate'], [
