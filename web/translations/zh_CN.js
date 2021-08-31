@@ -398,6 +398,7 @@ t.add("course.manage.task_publish_success_hint", "\u53d1\u5e03\u6210\u529f", "js
 t.add("course.manage.task_publish_fail_hint", "\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.task_unpublish_success_hint", "\u53d6\u6d88\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.task_unpublish_fail_hint", "\u53d6\u6d88\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
+t.add("course.manage.lesson_copy_ing", "\u5173\u8054\u8bfe\u65f6\u590d\u5236\u4e2d", "js", "zh_CN");
 t.add("course.manage.live_replay_generate_success", "\u751f\u6210\u5f55\u5236\u56de\u653e\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.live_replay_generate_error", "\u672a\u5f00\u542f\u76f4\u64ad\u56de\u653e\u6216\u89c6\u9891\u6b63\u5728\u8f6c\u7801\u4e2d\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5", "js", "zh_CN");
 t.add("course.manage.live_replay_upload_error_hint", "\u8bf7\u4e0a\u4f20\u5f55\u50cf\u6587\u4ef6", "js", "zh_CN");

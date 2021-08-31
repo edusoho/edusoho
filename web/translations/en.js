@@ -456,6 +456,7 @@ t.add("course.manage.task_publish_success_hint", "Published successfully", "js",
 t.add("course.manage.task_publish_fail_hint", "Publish failed", "js", "en");
 t.add("course.manage.task_unpublish_success_hint", "Publish cancelled successful", "js", "en");
 t.add("course.manage.task_unpublish_fail_hint", "Cancel publish failed", "js", "en");
+t.add("course.manage.lesson_copy_ing", "Lesson is copying", "js", "en");
 t.add("course.manage.live_replay_generate_success", "Generated playback succeed", "js", "en");
 t.add("course.manage.live_replay_generate_error", "The replay is not on or the video is trancoding. Please try again later.", "js", "en");
 t.add("course.manage.live_replay_upload_error_hint", "Please upload the video file", "js", "en");
