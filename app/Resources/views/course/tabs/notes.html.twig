@@ -90,7 +90,7 @@
           </a>
           <div class="metas clearfix">
             {% if not author.destroyed|default(0) %}
-              <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
+              <a class="link-dark name" {% if isOpenInfo == 1 %}href="{{ path('user_show', {'id': author.id }) }}"{% endif %}>{{ author.nickname }}</a>
             {% else %}
               <a class="link-dark name">{{ 'user.user_had_destroyed'|trans }}</a>
             {% endif %}
