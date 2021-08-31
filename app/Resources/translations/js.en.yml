@@ -546,6 +546,7 @@ course.manage.task_publish_success_hint: Published successfully
 course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
+course.manage.lesson_copy_ing: Lesson is copying
 course.manage.live_replay_generate_success: Generated playback succeed
 course.manage.live_replay_generate_error: The replay is not on or the video is trancoding. Please try again later.
 course.manage.live_replay_upload_error_hint: Please upload the video file

@@ -450,8 +450,12 @@ export default class Manage {
         self.sortList();
       }
       this._flushPublishLessonNum();
+      if (data.success) {
+        cd.message({ type: 'success', message: info.success });
+      } else {
+        cd.message({ type: 'danger', message: info.danger + data.message});
+      }
 
-      cd.message({ type: 'success', message: info.success });
     }).fail(function(data) {
       cd.message({ type: 'danger', message: info.danger + data.responseJSON.error.message });
     });
