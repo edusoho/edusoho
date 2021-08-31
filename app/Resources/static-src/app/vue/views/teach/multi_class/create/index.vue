@@ -113,7 +113,7 @@
           option-label-prop="label"
         >
           <a-select-option v-for="item in assistant.list" :key="item.id" :label="item.nickname" :disabled="item.disabled">
-            {{ item.nickname }} <span v-if="Number(item.isScrmBind) === 0" class="assistant-tip">提示：该助教未绑定销客助手，可能会影响学习服务</span>
+            {{ item.nickname }} <span v-if="Number(item.isScrmBind) === 0" class="assistant-tip">尚未绑定销课助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
