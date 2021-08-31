@@ -310,9 +310,6 @@ export default {
     this.fetchNotificationSetting();
     this.isEdit();
     this.getMultiClassSetting();
-    // 创建新课程后
-    this.afterCreateCourse();
-    this.initFetch();
   },
 
   methods: {
@@ -331,6 +328,7 @@ export default {
         this.fetchEditorMultiClass();
         return;
       }
+      this.afterCreateCourse();
     },
 
     afterCreateCourse() {
@@ -348,6 +346,7 @@ export default {
         this.fetchCourseInfo(course.id);
         return;
       }
+      this.initFetch();
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
