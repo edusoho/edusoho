@@ -5,18 +5,18 @@ namespace Codeages\Biz\ItemBank\Item\Service\Impl;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
-use Codeages\Biz\ItemBank\Item\Exception\ItemException;
-use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
 use Codeages\Biz\ItemBank\Item\Type\Item;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use ExamParser\Writer\WriteDocx;
-use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
 
 class ItemServiceImpl extends BaseService implements ItemService
 {
@@ -297,7 +297,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->rollback();
             throw $e;
         }
-
     }
 
     public function review($itemResponses)

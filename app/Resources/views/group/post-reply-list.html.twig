@@ -2,8 +2,9 @@
   <div class="reply-post-list-{{postMain.id}} main_hover_item">
     <ul class="media-list">
       {% for post in posts %}
+        {% set isOpenInfo = data('StudentOpenInfo', {'userId': post.userId}) %}
         <li class="media li-reply-{{postMain.id}} main_hover_item" {% if loop.index > 5 %}style="display:none;"{% endif %}>
-          <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
+          <a {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:post.userId}) }}"{% endif %} class="pull-left">
             <img src="{{ filepath(users[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md">
           </a>
           <div class="media-body">

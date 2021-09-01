@@ -40,7 +40,7 @@ class CallbackController extends BaseController
 
             $goodsMediatorFactory = $this->getGoodsMediatorFactory();
             $mediator = $goodsMediatorFactory->create($goods['type']);
-            $mediator->join($existUser, $specs, ['userInfo' => $userInfo]);
+            $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
         } catch (\Exception $e) {
             $this->authenticateUser([
                 'id' => 0,

@@ -18,10 +18,10 @@ interface AnswerQuestionReportService
 
     public function batchCreate(array $answerQuestionReports);
 
-    public function search($conditions, $orderBys, $start, $limit, $columns = []);
+    public function search($conditions, $orderBys, $start, $limit, $columns = array());
 
     public function count($conditions);
-
+  
     public function batchUpdate(array $answerQuestionReports);
 
     public function findByAnswerRecordId($answerRecordId);

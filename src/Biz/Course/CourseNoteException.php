@@ -14,9 +14,12 @@ class CourseNoteException extends AbstractException
 
     const DUPLICATE_LIKE = 5004203;
 
+    const NOTFOUND_NOTE_LIKE = 5004204;
+
     public $messages = [
         4044201 => 'exception.course.note.not_found',
         4034202 => 'exception.course.note.no_permission',
         5004203 => 'exception.course.note.duplicate_like',
+        5004204 => 'exception.course.note.like_not_found',
     ];
 }

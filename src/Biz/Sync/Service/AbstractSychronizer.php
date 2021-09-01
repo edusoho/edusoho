@@ -3,6 +3,7 @@
 namespace Biz\Sync\Service;
 
 use Biz\Common\CommonException;
+use Biz\Lock;
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchHelperInterface;
@@ -19,10 +20,35 @@ abstract class AbstractSychronizer extends BizAware
     const SYNC_WHEN_DELETE = 'syncWhenDelete';
 
     protected $batchHelperList;
+    private $lock;
 
     public function __construct()
     {
-        $this->batchHelperList = array();
+        $this->batchHelperList = [];
+    }
+
+    protected function beginTransaction()
+    {
+        $this->biz['db']->beginTransaction();
+    }
+
+    protected function commit()
+    {
+        $this->biz['db']->commit();
+    }
+
+    protected function rollback()
+    {
+        $this->biz['db']->rollback();
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 
     abstract public function syncWhenCreate($sourceId);

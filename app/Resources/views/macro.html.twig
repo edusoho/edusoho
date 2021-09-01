@@ -1,7 +1,8 @@
 {# user_avater 已废弃，请勿使用 #}
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
-    <a class="{{ class }} {% if card and not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+    {% set isOpenInfo = data('StudentOpenInfo', {'userId': user.id}) %}
+    <a class="{{ class }} {% if card and not user.destroyed|default(0) %}js-user-card{% endif %}" {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:user.id}) }}"{% endif %} data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
       {% if imgClass == 'avatar-md' %}
         {% set avatarType = 'medium' %}
       {% elseif imgClass == 'avatar-lg' %}
@@ -23,12 +24,16 @@
 {%- macro user_avatar_link(user, size, options = []) -%}
   {% set size = size|default('small') %}
   {% if user and not user.destroyed|default(0) %}
+    {% set isOpenInfo = data('StudentOpenInfo', {'userId': user.id}) %}
     <a
       class="avatar-link-{{ size }} {% if 'card' in options %}js-user-card{% endif %}"
       {% if '_blank' in options %}
         target="_blank"
       {% endif %}
-      href="{% if 'null_link' in options %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}{% endif %}"
+        {% if isOpenInfo == 1 %}
+        href="{% if 'null_link' in options %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}
+        {% endif %}
+      {% endif %}"
       data-card-url="{{ path('user_card_show', {userId:user.id}) }}"
       data-user-id="{{ user.id }}">
       {{ _self.user_avater_img(user, size) }}
@@ -57,8 +62,9 @@
 
 {%- macro user_link(user, class, card = true) -%}
   {% if user %}
+    {% set isOpenInfo = data('StudentOpenInfo', {'userId': user.id}) %}
     {% if not user.destroyed|default(0) %}
-      <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+      <a class="link-dark {{ class }}"  {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:user.id}) }}"{% endif %}" target="_blank">{{ user.nickname }}</a>
     {% else %}
       {{ 'user.user_had_destroyed'|trans }}
     {% endif %}

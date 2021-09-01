@@ -23,7 +23,9 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-3 control-label"><label >{{'admin.setting_course.learning_time_statistical_dimension'|trans}}</label></div>
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.learning_time_statistical_dimension'|trans}}</label>
+      </div>
       <div class="controls col-md-8 radios js-check-radio" data-url="{{ path('admin_v2_video_task_setting_job_check') }}" data-value="{{ effectiveTimeSetting.statistical_dimension }}">
         {{ radios('statistical_dimension', {'playing':'admin.setting_course.effective_learning_time.playing_time'|trans, 'page':'admin.setting_course.effective_learning_time.page_time'|trans}, effectiveTimeSetting.statistical_dimension) }}
         <div class="help-block js-statistical-dimension-help" >

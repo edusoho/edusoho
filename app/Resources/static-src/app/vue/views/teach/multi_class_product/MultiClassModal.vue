@@ -39,7 +39,7 @@
           {{ text }}
         </a>
         <template :size="8" slot="action" slot-scope="text, record">
-          <a-button type="link" @click="goToMultiClassManage(record.id)">查看</a-button>
+          <a-button type="link" @click="goToMultiClassManage(record.id)">管理</a-button>
           <a-button type="link" @click="goToEditMultiClass(record.id)">编辑</a-button>
           <a-button type="link" @click="goToMultiClassDataPreview(record.id)">数据概览</a-button>
         </template>

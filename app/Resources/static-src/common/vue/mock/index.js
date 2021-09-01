@@ -1,6 +1,6 @@
-const Mock = require('mockjs');
+import Mock from 'mockjs';
 
-const test = require('./class-course/index.js');
+import test from './multi-class/index';
 
 const mocks = [
   ...test

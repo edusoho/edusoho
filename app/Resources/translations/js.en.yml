@@ -546,6 +546,7 @@ course.manage.task_publish_success_hint: Published successfully
 course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
+course.manage.lesson_copy_ing: Lesson is copying
 course.manage.live_replay_generate_success: Generated playback succeed
 course.manage.live_replay_generate_error: The replay is not on or the video is trancoding. Please try again later.
 course.manage.live_replay_upload_error_hint: Please upload the video file
@@ -1780,6 +1781,7 @@ course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.info.video.convert.audio.enable: 'Audio lecture (trial)'
 course.enable.video.convert.audio.benefit: 'After opening, user can switch to audio and video.'
+course.enable.video.convert.audio.un_supported: When the video contains quizzes, audio playback is not supported on the APP side.
 course.video.convert.audio.status: 'Audio transcoding'
 course.video.convert.audio.detail: 'Details'
 course.marketing_setup.preview.minutes.try_watch: Trial it in minutes

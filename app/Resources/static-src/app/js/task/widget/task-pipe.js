@@ -8,6 +8,7 @@ import { Browser, isMobileDevice } from 'common/utils';
 
 export default class TaskPipe {
   constructor(element) {
+    this.playerEnd = null;
     this.element = $(element);
     this.eventUrl = this.element.data('eventUrl');
     this.videoPlayRule = this.element.data('videoPlayRule');
@@ -79,13 +80,14 @@ export default class TaskPipe {
       channel: 'activity-events',
       topic: '#',
       callback: ({event, data}) => {
+        console.log(event, data);
+        this.playerEnd = (event === 'finish');
         if (event == 'finish' && this.pushing) {
           this.waitingEvent = {event: event, data: data};
           this.waitingEventData[event] = data;
           return;
         }
         this.eventDatas[event] = data;
-        console.log(event, data);
         this._flush(data);
       }
     });
@@ -266,7 +268,7 @@ export default class TaskPipe {
         if (listners) {
           for (var i = listners.length - 1; i >= 0; i--) {
             let listner = listners[i];
-            listner(res);
+            listner(Object.assign(res, {waitingEventData: this.waitingEventData, playerEnd: this.playerEnd}));
           }
         }
       }

@@ -106,14 +106,14 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ],
+            ]
         ]);
 
         $this->getAnswerQuestionReportService()->batchUpdate([
             ['identify' => '1_1', 'answer_record_id' => 1],
             ['identify' => '1_2', 'answer_record_id' => 1],
         ]);
-
+        
         $result = $this->getAnswerQuestionReportDao()->findByAnswerRecordId(1);
 
         $this->assertEquals(count($result), 2);
@@ -141,7 +141,7 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ],
+            ]
         ]);
 
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId(1);
@@ -171,7 +171,7 @@ class AnswerQuestionReportServiceTest extends IntegrationTestCase
                 'item_id' => '2',
                 'question_id' => '2',
                 'response' => ['A'],
-            ],
+            ]
         ]);
 
         $questionReports = $this->getAnswerQuestionReportService()->search([], [], 0, 2);

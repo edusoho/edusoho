@@ -35,7 +35,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
         if (empty($file)) {
-            throw $this->createNewException(UploadFileException::NOTFOUND_FILE());
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if ('supplier' == $file['storage']) {
@@ -76,8 +76,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         $tagNames = explode(',', $tagNames);
 
-        foreach ($fileIds as $key => $fileId) {
-            foreach ($tagNames as $key => $tagName) {
+        foreach ($fileIds as $fileId) {
+            foreach ($tagNames as $tagName) {
                 $tag = $this->getTagService()->getTagByName($tagName);
 
                 $result = $this->getUploadFileTagService()->findByFileId($fileId);

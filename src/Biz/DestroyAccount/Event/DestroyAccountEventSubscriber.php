@@ -2,6 +2,7 @@
 
 namespace Biz\DestroyAccount\Event;
 
+use Biz\Sms\SmsScenes;
 use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
@@ -31,6 +32,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
                 'mobiles' => $user['verifiedMobile'],
                 'templateId' => SmsType::USER_DESTROYED,
                 'templateParams' => ['schoolName' => $siteName],
+                'tag' => SmsScenes::USER_DESTROYED,
             ];
 
             try {
@@ -57,6 +59,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
                 'mobiles' => $user['verifiedMobile'],
                 'templateId' => SmsType::USER_REJECT_DESTROYED,
                 'templateParams' => ['reason' => $reason],
+                'tag' => SmsScenes::USER_REJECT_DESTROYED,
             ];
 
             try {

@@ -8,6 +8,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 
+/**
+ * Class CourseReview
+ */
 class CourseReview extends AbstractResource
 {
     /**

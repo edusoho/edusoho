@@ -6,6 +6,10 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface ClassroomMemberDao extends AdvancedDaoInterface
 {
+    public function searchMembersByClassroomId($classroomId, $conditions, $start, $limit);
+
+    public function countMembersByClassroomId($classroomId, $conditions);
+
     public function countStudents($classroomId);
 
     public function countAuditors($classroomId);

@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsScenes;
 use Biz\Sms\SmsType;
 use Biz\System\SettingException;
 use Biz\User\UserException;
@@ -40,6 +41,7 @@ class SmsServiceImpl extends BaseService implements SmsService
                 'mobiles' => $to,
                 'templateId' => $templateId,
                 'templateParams' => $parameters,
+                'tag' => $this->matchSmsType($smsType),
             ];
 
             $this->getSDKSmsService()->sendToMany($smsParams);
@@ -119,6 +121,7 @@ class SmsServiceImpl extends BaseService implements SmsService
                 'mobiles' => $to,
                 'templateId' => SmsType::VERIFY_CODE,
                 'templateParams' => ['verify' => $smsCode],
+                'tag' => $this->matchSmsType($smsType),
             ];
 
             $this->getSDKSmsService()->sendToOne($smsParams);
@@ -178,6 +181,68 @@ class SmsServiceImpl extends BaseService implements SmsService
         if (!empty($smsSetting["{$smsType}"]) && 'on' != $smsSetting["{$smsType}"] && !$this->getUserService()->isMobileRegisterMode()) {
             $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
         }
+    }
+
+    protected function matchSmsType($smsType)
+    {
+        switch ($smsType) {
+            case 'sms_bind':
+                $smsTag = SmsScenes::MOBILE_PHONE_BINDING;
+                break;
+            case 'sms_user_pay':
+                $smsTag = SmsScenes::USER_PAY;
+                break;
+            case 'sms_registration':
+                $smsTag = SmsScenes::USER_REGISTRATION;
+                break;
+            case 'sms_forget_password':
+                $smsTag = SmsScenes::LOGIN_PASSWORD_RESET;
+                break;
+            case 'sms_forget_pay_password':
+                $smsTag = SmsScenes::PAYMENT_PASSWORD_RESER;
+                break;
+            case 'system_remind':
+                $smsTag = SmsScenes::SYSTEM_REMIND;
+                break;
+            case 'sms_login':
+                $smsTag = SmsScenes::USER_LOGIN;
+                break;
+            case 'sms_testpaper_check':
+                $smsTag = SmsScenes::TESTPAPER_MARKED;
+                break;
+             case 'sms_homework_check':
+                 $smsTag = SmsScenes::ASSIGNMENT_MARKED;
+                 break;
+            case 'sms_course_buy_notify':
+                $smsTag = SmsScenes::COURSE_PURCHASE_RECEIPT;
+                break;
+            case 'sms_classroom_buy_notify':
+                $smsTag = SmsScenes::CLASS_PURCHASE_RECEIPT;
+                break;
+            case 'sms_vip_buy_notify':
+                $smsTag = SmsScenes::VIP_PURCHASE_RECEIPT;
+                break;
+            case 'sms_classroom_publish':
+                $smsTag = SmsScenes::NEW_CLASS_RELEASE;
+                break;
+            case 'sms_course_publish':
+                $smsTag = SmsScenes::NEW_COURSE_RELEASE;
+                break;
+            case 'sms_normal_lesson_publish':
+                $smsTag = SmsScenes::COURSE_TASK_RELEASE;
+                break;
+            case 'sms_live_lesson_publish':
+                $smsTag = SmsScenes::LIVE_TASK_RELEASE;
+                break;
+            case 'sms_coin_buy_notify':
+                $smsTag = SmsScenes::VIRTUAL_COIN_RECEIPT;
+                break;
+            default:
+                $smsTag = '';
+                break;
+        }
+
+        return $smsTag;
     }
 
     protected function generateSmsCode($length = 6)

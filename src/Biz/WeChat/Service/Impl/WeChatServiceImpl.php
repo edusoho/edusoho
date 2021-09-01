@@ -9,6 +9,7 @@ use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Common\CommonException;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsScenes;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -367,6 +368,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'mobiles' => implode(',', $mobiles),
                 'templateId' => $templateId,
                 'templateParams' => $params,
+                'tag' => SmsScenes::WECHAT_SUBSCRIBE,
             ]);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_sms_notification', "发送微信通知失败:template:{$smsType}", ['error' => $e->getMessage()]);
