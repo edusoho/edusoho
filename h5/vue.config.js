@@ -37,6 +37,19 @@ page[projectname] = {
   chunks:
     process.env.NODE_ENV !== "development" ? chunks.prodChunks : chunks.dafault,
 };
+
+// 自动化导入全局 scss 变量
+function addStyleResource(rule) {
+  rule.use('style-resource')
+      .loader('style-resources-loader')
+      .options({
+        patterns: [
+          resolve('./src/styles/mixins.scss'),
+          resolve('./src/styles/variables.scss'),
+        ]
+      })
+}
+
 module.exports = {
   publicPath: publicPath, // 官方要求修改路径在这里做更改，默认是根目录下，可以自行配置
   outputDir: `dist${projectname === "h5" ? "" : "/" + projectname}`, //标识是打包哪个文件
@@ -195,5 +208,9 @@ module.exports = {
       });
       config.optimization.runtimeChunk("single");
     });
-  },
+
+    // 自动化导入全局 scss 变量
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal'];
+    types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)));
+  }
 };

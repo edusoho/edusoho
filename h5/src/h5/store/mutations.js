@@ -74,4 +74,7 @@ export default {
   [types.SET_MOBILE_BIND](state, mobile_bind) {
     state.mobile_bind = mobile_bind;
   },
+  SET_SETTING_UGC(state, obj) {
+    state.settingUgc = obj;
+  }
 };

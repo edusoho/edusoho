@@ -3,94 +3,72 @@
     <detail-head :course-set="details.courseSet" />
 
     <van-tabs
-      id="tabs"
-      ref="tabs"
+      v-show="showTabs"
+      class="tabs"
       v-model="active"
+      title-active-color="#408ffb"
+      title-inactive-color="#666"
       :class="tabFixed ? 'isFixed' : ''"
     >
-      <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
+      <van-tab v-for="item in tabs" :title="$t(`courseLearning.${item}`)" :key="item" />
     </van-tabs>
 
-    <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-show="active == 1">
-        <div
-          id="progress-bar"
-          :class="['progress-bar', tabFixed ? 'progress-bar-fix' : '']"
-        >
-          <div class="progress-bar__content">
-            <div :style="{ width: progress }" class="progress-bar__rate" />
-          </div>
-          <div class="progress-bar__text">{{ progress }}</div>
-        </div>
-        <!-- 助教 -->
-        <div
-          v-if="details.assistant.weChatQrCode"
-          class="assistant-show clearfix"
-        >
-          <div class="assistant-show__text" @click="showAssistant">
-            <i class="iconfont icon-weixin1"></i>
-            <span class="text">
-              {{ $t('courseLearning.addTeachingAssistantWeChat') }}
-            </span>
-            <van-icon class="arrow-icon" name="arrow" />
+      <keep-alive>
+        <!-- 目录 -->
+        <div v-if="active == 0">
+          <div class="course-info" @click="gotoGoodsPage">
+            <div class="course-info__left">
+              <div class="title text-overflow" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
+              <div class="learning-progress" :class="{ 'learning-progress--full': !details.goodsId }">
+                <div class="learning-progress__bar" :style="{ width: progress }" />
+                <div class="learning-progress__text">
+                  {{ progress }}
+                </div>
+              </div>
+            </div>
+            <van-icon name="arrow" v-if="details.goodsId" />
           </div>
 
-          <!-- 助教弹出框 -->
-          <van-popup
-            class="assistant-show__content"
-            v-model="assistantShow"
-            position="bottom"
-            closeable
-            round
-          >
-            <img
-              class="avatar"
-              :src="details.assistant.avatar.middle"
-              :alt="$t('courseLearning.picture')"
-            />
-            <p class="name">
-              {{ details.assistant.nickname }}
-            </p>
-            <p class="text">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
-            <img
-              class="wechat"
-              :src="details.assistant.weChatQrCode"
-              :alt="$t('courseLearning.qRCodePicture')"
-            />
-            <div class="tips" v-if="isWeixin">
-              {{ $t('courseLearning.longPressThePicture') }}
+          <!-- 助教 -->
+          <div class="assistant" v-if="details.assistant && details.assistant.weChatQrCode">
+            <div class="assistant-btn" @click="showAssistant">
+              <div class="assistant-btn__text">
+                <i class="iconfont icon-weixin1"></i>
+                {{ $t('courseLearning.addTeachingAssistantWeChat') }}
+              </div>
+
+              <van-icon class="arrow-icon" name="arrow" />
             </div>
-            <div class="tips" v-else>
-              {{ $t('courseLearning.longPressThePicture2') }}
-            </div>
-          </van-popup>
+
+            <van-popup
+              class="assistant-info"
+              v-model="assistantShow"
+              position="bottom"
+              closeable
+              round
+            >
+              <img class="avatar" :src="details.assistant.avatar.middle" :alt="$t('courseLearning.picture')" />
+              <p class="nickname">{{ details.assistant.nickname }}</p>
+              <p class="desc">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
+              <img class="wechat" :src="details.assistant.weChatQrCode" :alt="$t('courseLearning.qRCodePicture')" />
+              <div class="tips" v-if="isWeixin">{{ $t('courseLearning.longPressThePicture') }}</div>
+              <div class="tips" v-else>{{ $t('courseLearning.longPressThePicture2') }}</div>
+            </van-popup>
+          </div>
+
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
         </div>
 
-        <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
-      </div>
-
-      <div v-show="active == 0">
-        <!-- 课程计划 -->
-        <detail-plan @switchPlan="showDialog" />
-
-        <div class="segmentation" />
-        <!-- 课程介绍 -->
-        <e-panel :title="$t('courseLearning.intro')">
-          <div v-html="summary" />
-        </e-panel>
-        <div class="segmentation" />
-
-        <!-- 教师介绍 -->
-        <teacher :teacher-info="details.teachers" class="teacher" />
-        <div class="segmentation" />
-
-        <!-- 评价 -->
-        <reviews :details="details" v-if="show_course_review == 1" />
-        <div class="segmentation" />
-        <div class="segmentation" />
-        <div class="segmentation" />
-      </div>
+        <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
+        <component
+          v-else
+          :is="currentTabComponent.name"
+          :type="currentTabComponent.type"
+          :details="details"
+          @chang-tabs-status="changTabsStatus"
+        />
+      </keep-alive>
     </div>
 
     <!-- 个人信息表单填写 -->
@@ -108,12 +86,6 @@
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
-    <e-footer
-      @click.native="gotoGoodsPage"
-      v-if="active == 0 && this.details.goodsId"
-    >
-      {{ $t('courseLearning.viewDetails') }}
-    </e-footer>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
   </div>
@@ -121,10 +93,7 @@
 <script>
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
-import DetailPlan from './detail/plan';
-import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
-import Reviews from '@/components/reviews';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
@@ -132,26 +101,68 @@ import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 
+// tabs 子组件
+import firstDiscussion from './discussion/index.vue'; // 问答
+import secondDiscussion from './discussion/index.vue?second'; // 话题
+import Notes from './notes/index.vue';
+import Reviews from './reviews/index.vue';
+// 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
+const tabComponent = {
+  catalogue: {
+    name: '',
+    type: 'catalogue'
+  },
+  question: {
+    name: 'firstDiscussion',
+    type: 'question'
+  },
+  discussion: {
+    name: 'secondDiscussion',
+    type: 'discussion'
+  },
+  notes: {
+    name: 'Notes',
+    type: 'notes'
+  },
+  evaluation: {
+    name: 'Reviews',
+    type: 'reviews'
+  }
+};
+
 export default {
   inheritAttrs: true,
+
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    Directory,
+    DetailHead,
+    afterjoinDirectory,
+    infoCollection,
+    firstDiscussion,
+    secondDiscussion,
+    Notes,
+    Reviews
+  },
+
   props: {
     details: {
       type: Object,
-      value: () => {},
-    },
+      value: () => {}
+    }
   },
+
   data() {
     return {
       headBottom: 0,
-      active: 1,
+      active: 0,
       scrollFlag: false,
-      tabs: ['courseLearning.intro', 'courseLearning.catalogue'],
+      tabs: ['catalogue'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
       offsetHeight: '', // 元素自身的高度
       isFixed: false,
-      courseSettings: {},
       isShowForm: false,
       paramsList: {
         action: 'buy_after',
@@ -161,26 +172,33 @@ export default {
       show: false,
       show_course_review: this.$store.state.goods.show_course_review,
       assistantShow: false,
+      showTabs: true // 是否显示 tabs
     };
   },
+
   mixins: [collectUserInfo],
+
   computed: {
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
       currentJoin: state => state.currentJoin,
     }),
-    ...mapState(['user']),
+
+    ...mapState(['user', 'settingUgc']),
+
     progress() {
       if (!Number(this.details.publishedTaskNum)) return '0%';
-
       return parseInt(this.details.progress.percent) + '%';
     },
+
     summary() {
       return this.details.summary || this.details.courseSet.summary;
     },
+
     isClassCourse() {
       return Number(this.details.parentId);
     },
+
     currentTypeText() {
       return this.details.classroom ? '班级' : '课程';
     },
@@ -189,10 +207,15 @@ export default {
       const ua = navigator.userAgent.toLowerCase();
       return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
+
+    currentTabComponent() {
+      const { tabs, active } = this;
+      return tabComponent[tabs[active]];
+    }
   },
   watch: {
     selectedPlanId: function(val, oldVal) {
-      this.active = 1;
+      this.active = 0;
     },
     currentJoin: {
       handler(val, oldVal) {
@@ -236,24 +259,9 @@ export default {
   },
   async created() {
     this.showDialog();
-    this.courseSettings = await Api.getSettings({
-      query: {
-        type: 'course',
-      },
-    }).catch(err => {
-      console.error(err);
-    });
+    this.initTabs();
   },
-  components: {
-    // eslint-disable-next-line vue/no-unused-components
-    Directory,
-    DetailHead,
-    DetailPlan,
-    Teacher,
-    afterjoinDirectory,
-    infoCollection,
-    Reviews,
-  },
+
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
   },
@@ -263,7 +271,30 @@ export default {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
 
+    initTabs() {
+      const { thread, note, review } = this.settingUgc;
+
+      if (thread.course_question_enable) {
+        this.tabs.push('question');
+      }
+
+      if (thread.course_thread_enable) {
+        this.tabs.push('discussion');
+      }
+
+      if (note.course_enable) {
+        this.tabs.push('notes');
+      }
+
+      if (review.course_enable) {
+        this.tabs.push('evaluation');
+      }
+    },
+
     gotoGoodsPage() {
+      // 班级课程，不存在 goodsId
+      if (!this.details.goodsId) return;
+
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
         query: {
@@ -493,6 +524,135 @@ export default {
     showAssistant() {
       this.assistantShow = true;
     },
+
+    changTabsStatus(value) {
+      this.showTabs = value;
+    }
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.tabs {
+  box-shadow: 0px 2px 6px 0px rgba(49, 49, 49, 0.1);
+
+  /deep/ .van-tabs__wrap {
+    height: vw(56);
+  }
+}
+
+.course-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: vw(16);
+  padding-left: vw(16);
+  height: vw(56);
+  border-bottom: vw(8) solid #f5f5f5;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+
+    .title {
+      width: vw(300);
+      font-size: vw(14);
+      font-weight: 500;
+      color: #333;
+      line-height: vw(20);
+
+      &--full {
+        width: vw(340)
+      }
+    }
+
+    .learning-progress {
+      position: relative;
+      width: vw(250);
+      height: vw(8);
+      background: #f5f5f5;
+      border-radius: 4px;
+
+      &--full {
+        width: vw(320)
+      }
+
+      &__bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: vw(8);
+        background: $primary-color;
+        border-radius: 4px;
+      }
+
+      &__text {
+        position: absolute;
+        right: vw(-8);
+        top: 50%;
+        transform: translate(100%, -50%);
+        font-size: vw(12);
+        color: $primary-color;
+        line-height: vw(16);
+      }
+    }
+  }
+}
+
+.assistant {
+  .assistant-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 vw(16);
+    height: vw(32);
+    border-bottom: 1px solid #f5f5f5;
+
+    &__text {
+      display: flex;
+      align-items: center;
+      width: vw(300);
+      font-size: 12px;
+      color: #666;
+      line-height: 16px;
+
+      i {
+        margin-right: vw(4);
+        color: #03c777;
+      }
+    }
+  }
+
+  .assistant-info {
+    text-align: center;
+
+    .avatar {
+      width: 20%;
+      height: 20%;
+      margin-top: vw(40);
+      margin-top: vw(24);
+      border-radius: 50%;
+    }
+
+    .nickname {
+      padding-top: vw(10);
+      color: #bbb;
+    }
+
+    .desc {
+      padding-top: vw(10);
+    }
+
+    .wechat {
+      margin: vw(20) 0 vw(10);
+    }
+
+    .tips {
+      margin-bottom: vw(10);
+      font-size: vw(14);
+    }
+  }
+}
+</style>

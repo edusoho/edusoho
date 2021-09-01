@@ -23,6 +23,7 @@
             <van-rate
               class="plan-rate"
               readonly
+              color="#ffd21e"
               :value="review.rating * 1"
               gutter="2"
             />

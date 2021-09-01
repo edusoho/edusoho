@@ -389,6 +389,7 @@ export default {
         switch (task.type) {
           case 'video':
           case 'audio':
+          case 'ppt':
             this.$router.push({
               name: 'course_try',
             });
@@ -400,7 +401,6 @@ export default {
             break;
           case 'doc':
           case 'text':
-          case 'ppt':
             this.$router.push({
               name: 'course_web',
               query: {
@@ -443,8 +443,13 @@ export default {
             taskId: task.id,
           });
           break;
-        case 'text':
         case 'ppt':
+          this.setSourceType({
+            sourceType: 'ppt',
+            taskId: task.id,
+          });
+          break;
+        case 'text':
         case 'doc':
           this.$router.push({
             name: 'course_web',

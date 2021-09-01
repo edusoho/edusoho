@@ -34,7 +34,7 @@ foreach ($yaml['ssh']['options'] as $key => $option){
 
 desc('Build frontend');
 task('frontend:build', function() {
-    run('yarn install --production');
+    run('yarn install');
     run('yarn run build');
 })->local();
 
