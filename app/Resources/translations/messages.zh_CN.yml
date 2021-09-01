@@ -1162,7 +1162,7 @@ course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，
 course.members_manage.quit_records: 退出记录
 course.members_manage.quit_type: 退出类型
 course.members_manage.is_refunded: 是否退款
-course.members_manage.records.name: 学员名称
+course.members_manage.records.name: 学员
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
 course.members_manage.quit_records.date: 退出日期
@@ -2797,11 +2797,15 @@ classroom.username: 用户名
 classroom.student_name: 学员
 classroom.student_study_status: 学习进度
 classroom.student_study_expiry_date: 学习有效期
+classroom.student_study_expiry_date.not: 有效期外
+classroom.student_study_expiry_date.in: 有效期内
+classroom.delete_condition_student: 移除搜索结果
 classroom.student_opertion: 操作
 classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
-classroom.student_export: 导出学生
+classroom.student_export: 导出学员
+classroom.student_export.exit_record: 导出
 classroom.add_student_btn: 添加学员
 classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
@@ -2816,7 +2820,7 @@ classroom.exit_record: 退出记录
 classroom.auditor_manage: 旁听生管理
 classroom.auditor_buy_tips: >
   旁听生是%name%的潜在购买者,只能参加该%classroomName%下的话题互动。
-classroom.student_username: 学员名称
+classroom.student_username: 学员
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
@@ -3038,6 +3042,8 @@ user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
+user.settings.scrm: 销客助手绑定
+user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -7649,6 +7655,8 @@ admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
 admin.user_fields.Personal_info_configiration.open: 开启
 admin.user_fields.Personal_info_configiration.closed: 关闭
 admin.user_fields.Personal_info_configiration.help_block: 开启后，学员购买课程时，需填写个人资料
+admin.user_fields.open_student_info_diable_tips: 关闭后，PC端、APP端和新微网校端学员与学员之间不能查看个人主页信息
+
 admin.user_fields.Formart_verifcation: 带格式校检
 admin.user_fields.Formart_mobile_verifcation: 带格式和短信校检，需要开启云短信
 admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
@@ -7658,6 +7666,8 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.other_setting.open_student_info: 公开展示学员个人信息
+
 admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
@@ -10726,6 +10736,7 @@ exception.blacklist.not_found: 黑名单不存在
 exception.course.note.not_found: 笔记不存在
 exception.course.note.no_permission: 没有权限
 exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: 课程评价不存在
 exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
 exception.message.send_to_self: 不能给自己发消息
@@ -10754,6 +10765,7 @@ exception.live_activity.roomtype_invalid: 直播间类型错误
 exception.live_activity.live_time_invalid: 开始时间或直播时长有误
 exception.live_activity.create_liveroom_failed: 创建直播间失败
 exception.live_activity.live_status_invalid: 直播状态不合法
+exception.live_activity.live_provider_not_support: 仅支持自研直播
 exception.course.thread.not_found: 课程话题不存在
 exception.course.thread.not_in_course: 课程话题不在教学计划中
 exception.course.thread.not_found_post: 课程话题回复不存在
@@ -11994,6 +12006,8 @@ exception.multi_class.forbidden_delete_course: 无法删除班课课程
 exception.multi_class.forbidden_close_course: 无法关闭班课课程
 exception.multi_class.assistant_require: 班课需要设置助教
 exception.multi_class.assistant_student_not_found: 助教学员关系未找到
+exception.multi_class.group_not_found: 分组未找到
+exception.multi_class.assistant_not_found: 助教未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 site.login.change_to_pwd: 切换帐号密码登录
@@ -12015,6 +12029,8 @@ course.assistant.student_add_qrcode_info: 请扫码添加班课专属助教微�
 
 feedback_title: 谛听，直连EduSoho产品经理
 
+scrm.assistant.bind_title: 请使用企业微信扫码
+
 #课程购买协议设置
 admin_v2.course_purchase_agreement.title: 名称
 admin_v2.course_purchase_agreement.content: 内容
@@ -12026,4 +12042,3 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
-

@@ -52,6 +52,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
+    public function searchMembersByClassroomId($classroomId, $conditions, $start, $limit)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->searchMembersByClassroomId($classroomId, $conditions, $start, $limit);
+    }
+
+    public function countMembersByClassroomId($classroomId, $conditions)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getClassroomMemberDao()->countMembersByClassroomId($classroomId, $conditions);
+    }
+
     public function findClassroomsByIds(array $ids)
     {
         return ArrayToolkit::index($this->getClassroomDao()->findByIds($ids), 'id');
@@ -334,9 +348,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 }
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
-            }
-            if (!empty($newCourseIds)) {
-                $this->refreshCoursesSeq($classroomId, $newCourseIds);
             }
             $this->dispatchEvent(
                 'classroom.course.create',
@@ -1072,6 +1083,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($classroomId, $userId);
 
         return (empty($member) || !in_array('headTeacher', $member['role'])) ? false : true;
+    }
+
+    public function findTeacherCanManagerClassRoomCourseSet($classroomId)
+    {
+        $user = $this->getCurrentUser();
+        $userId = $user->getId();
+        $classRoomCourseSets = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $courseSetIds = ArrayToolkit::column($classRoomCourseSets, 'courseSetId');
+        if ($user->isSuperAdmin() || $user->isAdmin() || $this->isClassroomHeadTeacher($classroomId, $userId)) {
+            return $courseSetIds;
+        }
+
+        if ($this->isClassroomTeacher($classroomId, $userId)) {
+            $teacherCourseSets = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+            $courseSetIds = array_intersect(ArrayToolkit::column($teacherCourseSets, 'courseSetId'), $courseSetIds);
+        }
+
+        return  $courseSetIds;
     }
 
     // becomeStudent的逻辑条件，写注释

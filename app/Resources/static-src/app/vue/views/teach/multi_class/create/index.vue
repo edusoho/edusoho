@@ -13,8 +13,7 @@
             trigger: 'blur',
             rules: [
               { required: true, message: '请填写班课名称' },
-              { validator: validatorTitle },
-              { validator: validatorTitleLength }
+              { validator: validatorTitle }
             ]
           }]"
           placeholder="请输入班课名称"
@@ -111,9 +110,10 @@
           @search="handleSearchAssistant"
           @blur="() => handleSearchAssistant('')"
           @change="(value) => handleChange(value, 'assistant')"
+          option-label-prop="label"
         >
-          <a-select-option v-for="item in assistant.list" :key="item.id" :disabled="item.disabled">
-            {{ item.nickname }}
+          <a-select-option v-for="item in assistant.list" :key="item.id" :label="item.nickname" :disabled="item.disabled">
+            {{ item.nickname }} <span v-if="Number(item.isScrmBind) === 0" class="assistant-tip">尚未绑定销客助手，可能会影响学习服务</span>
           </a-select-option>
         </a-select>
         <div class="pull-left color-gray" >
@@ -121,16 +121,22 @@
           用户中心设置助教
           <a href="/admin/v2/user" target="_blank">去设置</a>
         </div>
-        <div class="pull-right color-gray">
-          <a-icon type="exclamation-circle" style="color: #bebebe;" />
-          默认学员自动平均分配至课程助教（手动设置前往学员管理）
-        </div>
-        <div class="pull-left color-warning" v-if="multiClassId">
+        <div class="pull-right color-warning" v-if="multiClassId">
           <a-icon type="exclamation-circle" style="color: #ff8a0c;" />
           删除助教，将导致该助教下已分配的学员平均分配给其他助教！
         </div>
       </a-form-item>
-
+      <a-form-item class="assistant-max-number" label="助教服务上限人数" :label-col="{ span: 4 }" :wrapper-col="{ span: 2 }">
+          <a-input v-decorator="['service_num', {
+            rules: [
+              { required: true, message: '请输入助教服务上限人数' },
+              { validator: validateAssistantNum }
+              ]
+            }]">
+            <span slot="suffix">人</span>
+          </a-input>
+          <span class="setup-tip">可去【参数设置】中设置默认值</span>
+      </a-form-item>
       <a-form-item label="排课">
         <Schedule
           :course-id="selectedCourseId"
@@ -199,7 +205,7 @@
 
 <script>
 import _ from 'lodash';
-import { ValidationTitle, Assistant, MultiClassProduct, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
+import { ValidationTitle, Assistant, MultiClassProduct, MultiClassSetting, MultiClass, Teacher, Me, Course, Setting } from 'common/vue/service';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
 import Schedule from './Schedule.vue';
 
@@ -276,31 +282,8 @@ export default {
   created() {
     // 编辑班课
     this.fetchNotificationSetting();
-    const id = this.$route.query.id;
-    if (id) {
-      this.multiClassId = id;
-      this.mode = 'editor';
-      this.fetchEditorMultiClass();
-      return;
-    }
-
-    // 创建新课程后
-    let course = this.$route.query.course
-    if (course) {
-      course = JSON.parse(course)
-
-      this.selectedCourseId = course.id;
-      this.selectedCourseSetId = course.courseSetId;
-      this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
-      this.course.list.push(course)
-      this.$set(this.course, 'initialValue', course.id)
-      this.fetchCourse();
-      this.fetchProducts();
-      this.fetchCourseInfo(course.id);
-      return;
-    }
-
-    this.initFetch();
+    this.isEdit();
+    this.getMultiClassSetting();
   },
 
   methods: {
@@ -309,6 +292,35 @@ export default {
       this.fetchAssistants();
       this.fetchProducts();
       this.fetchTeacher();
+    },
+    isEdit() {
+      const id = this.$route.query.id;
+      if (id) {
+        this.multiClassId = id;
+        this.mode = 'editor';
+        this.fetchEditorMultiClass();
+        return;
+      }
+      this.afterCreateCourse()
+
+    },
+
+    afterCreateCourse() {
+      let course = this.$route.query.course
+      if (course) {
+        course = JSON.parse(course)
+
+        this.selectedCourseId = course.id;
+        this.selectedCourseSetId = course.courseSetId;
+        this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
+        this.course.list.push(course)
+        this.$set(this.course, 'initialValue', course.id)
+        this.fetchCourse();
+        this.fetchProducts();
+        this.fetchCourseInfo(course.id);
+        return;
+      }
+      this.initFetch();
     },
 
     // 编辑模式下, 下拉选择数据去除默认值
@@ -355,7 +367,7 @@ export default {
     fetchCourseInfo(courseId) {
       this.form.resetFields(['teacherId', 'assistantIds']);
       Course.getSingleCourse(courseId).then(res => {
-        const { teachers, assistants } = res;
+        const { teachers, assistants, maxStudentNum } = res;
         const defaultTeacher = teachers[0];
         const defaultAssistant = assistants;
 
@@ -386,7 +398,8 @@ export default {
         };
         this.form.setFieldsValue({
           'teacherId': defaultTeacher.id,
-          'assistantIds': assistantIds
+          'assistantIds': assistantIds,
+          'maxStudentNum': maxStudentNum
         });
         this.fetchAssistants();
         this.fetchTeacher();
@@ -395,8 +408,9 @@ export default {
 
     fetchEditorMultiClass() {
       MultiClass.get(this.multiClassId).then(res => {
-        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, isReplayShow, liveRemindTime } = res;
-        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
+        console.log(res);
+        const { title, course, courseId, product, productId, teachers, teacherIds, assistants, assistantIds, maxStudentNum, service_num, isReplayShow, liveRemindTime } = res;
+        this.form.setFieldsValue({ 'title': title, 'maxStudentNum': maxStudentNum, 'service_num': service_num, 'isReplayShow': isReplayShow, 'liveRemindTime': Number(liveRemindTime) });
         this.selectedCourseId = courseId;
         this.selectedCourseSetId = course.courseSetId;
         this.maxStudentNum = course.maxStudentNum > 0 ? course.maxStudentNum : 100000;
@@ -626,13 +640,13 @@ export default {
         title: value,
         exceptId: this.multiClassId
       });
-
-      result ? callback() : callback('班课名称不能与已创建的相同');
-    },
-
-    validatorTitleLength(rule, value, callback) {
-      let realLength = value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2;
-      realLength <= 40 ? callback() : callback('班课名称不能超过40个字符');
+      if (!result) {
+        callback('班课名称不能与已创建的相同')
+      }
+      if (value && ((value.replace(/[\u0391-\uFFE5]/g, 'aa').length / 2) > 40)) {
+        callback('班课名称不能超过40个字符')
+      }
+      callback();
     },
 
     validatorAssistant: (rule, value, callback) => {
@@ -640,7 +654,7 @@ export default {
     },
 
     validateStudentNum(rule, value, callback) {
-      if (/^\+?[1-9][0-9]*$/.test(value) === false) {
+      if (value && /^\+?[1-9][0-9]*$/.test(value) === false) {
         callback('请输入正整数')
       }
 
@@ -650,11 +664,17 @@ export default {
 
       callback()
     },
+     validateAssistantNum(rule, value, callback) {
+      if (value && /^\+?[0-9][0-9]*$/.test(value) === false) {
+        callback("请输入整数");
+      }
+      callback()
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (err) return
-
+        values.type = 'normal';
         if (this.mode === 'create') {
           this.createMultiClass(values);
           return;
@@ -694,7 +714,12 @@ export default {
         name: 'MultiClass',
         params
       });
-    }
+    },
+    async getMultiClassSetting() {
+      if (this.mode == 'editor') return;
+      const { assistant_service_limit } = await MultiClassSetting.search();
+      this.form.setFieldsValue({ 'service_num': assistant_service_limit });
+    },
   }
 }
 </script>
@@ -735,7 +760,21 @@ export default {
   text-align: right;
   background-color: #f5f5f5;
 }
-
+.assistant-max-number{
+  .ant-form-explain{
+    width: 250px
+  }
+}
+.assistant-tip{
+  margin-left: 48px;
+  color: @brand-danger
+}
+.setup-tip{
+  position: absolute;
+  left: 110px;
+  width: 200px;
+  color: @cdv2-dark-assist;
+}
 
 @import "~app/less/admin-v2/variables.less";
 @import "~app/less/page/course-manage/task/create.less";

@@ -9,4 +9,8 @@ interface TeacherQualificationDao extends GeneralDaoInterface
     public function getByUserId($userId);
 
     public function findByUserIds($userIds);
+
+    public function countTeacherQualification($conditions);
+
+    public function searchTeacherQualification($conditions, $orderBys, $start, $limit);
 }

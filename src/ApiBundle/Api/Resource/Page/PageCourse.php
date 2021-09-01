@@ -11,6 +11,9 @@ use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -83,10 +86,75 @@ class PageCourse extends AbstractResource
             if (!empty($assistantStudent)) {
                 $course['assistantId'] = $assistantStudent['assistantId'];
                 $this->getOCUtil()->single($course, ['assistantId']);
+                $course['assistant'] = $this->getAssistantScrmQrCode($course['assistant']);
             }
         }
 
         return $course;
+    }
+
+    protected function getAssistantScrmQrCode($assistant)
+    {
+        if (empty($assistant['scrmStaffId'])) {
+            return $assistant;
+        }
+
+        $scrmBindQrCode = $this->generateScrmQrCode($assistant);
+        if (!empty($scrmBindQrCode)) {
+            $assistant['weChatQrCode'] = $scrmBindQrCode;
+        }
+
+        return $assistant;
+    }
+
+    protected function generateScrmQrCode($assistant)
+    {
+        $scrmBind = $this->getSCRMService()->isScrmBind();
+        if (empty($scrmBind)) {
+            return '';
+        }
+
+        $user = $this->setScrmData();
+        if (!empty($user['scrmUuid'])) {
+            return $this->getSCRMService()->getAssistantQrCode($assistant);
+        }
+
+        $url = $this->getScrmStudentBindUrl($assistant);
+        if (empty($url)) {
+            return '';
+        }
+
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            [
+                'userId' => $user['id'],
+                'data' => [
+                    'url' => $url,
+                ],
+                'times' => 1,
+                'duration' => 3600,
+            ]
+        );
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    protected function setScrmData()
+    {
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+        $user = $this->getSCRMService()->setUserSCRMData($user);
+
+        return $user;
+    }
+
+    protected function getScrmStudentBindUrl($assistant)
+    {
+        $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+
+        $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user, $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
+
+        return $bindUrl;
     }
 
     protected function getVipLevel($levelId)
@@ -216,5 +284,29 @@ class PageCourse extends AbstractResource
     protected function getAssistantStudentService()
     {
         return $this->service('Assistant:AssistantStudentService');
+    }
+
+    /**
+     * @return \Biz\SCRM\Service\SCRMService
+     */
+    protected function getSCRMService()
+    {
+        return $this->service('SCRM:SCRMService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->service('User:TokenService');
     }
 }

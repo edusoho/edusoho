@@ -1,0 +1,5 @@
+{% if courseSet.parentId == 0 %}
+  {% if app.user.isAdmin() or 'ROLE_TEACHER' in app.user.roles %}
+    <a class="btn btn-info btn-sm panel-bar mhs" id="export-students-btn" href="javascript:;" data-role="exit" data-url="{{ path('member_operation_exit_record_export_csv', {targetType:'course', targetId:course.id}) }}" data-datas-url="{{ path('member_operation_exit_record_export_data', {targetType: 'course', targetId:course.id}) }}" data-loading-text="{{'classroom.student_exporting'|trans}}"><i class="glyphicon glyphicon-export"></i> {{'classroom.student_export.exit_record'|trans}}</a>
+  {% endif %}
+{% endif %}

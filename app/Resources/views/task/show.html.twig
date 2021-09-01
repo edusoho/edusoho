@@ -39,6 +39,7 @@
             data-task-id="{{ task.id }}"
             data-task-type="{{ task.type }}"
             data-course-id="{{ course.id }}"
+            data-next-task="{{ nextTask|default({})|json_encode }}"
             data-next-task-url="{% if nextTask %}{{ path('course_task_show',{'courseId':nextTask.courseId,'id':nextTask.id}) }}{% endif %}"
             data-event-enable="{% if allowEventAutoTrigger %}1{% else %}0{% endif %}"
             data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
@@ -81,6 +82,14 @@
                 {% endif %}
               {% endif  %}><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
         </div>
+
+        {% if not preview and task.type in ['video', 'audio'] and not is_mobile_client() %}
+        <span class="play-continue-switch hidden">
+          <span class="text-bold">连续播放&nbsp;</span>
+          <label class="cd-switch checked js-play-sequence">
+          </label>
+        </span>
+        {% endif %}
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
           <a class="btn btn-gray text-sm js-learn-prompt {% if task.type in ['video'] %}js-learn-video-prompt{% endif %} {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;"

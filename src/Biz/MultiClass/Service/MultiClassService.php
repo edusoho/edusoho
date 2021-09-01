@@ -41,4 +41,6 @@ interface MultiClassService
     public function countMultiClassByCopyId($id);
 
     public function getMultiClassByCourseId($courseId);
+
+    public function generateMultiClassTimeRange($courseId);
 }

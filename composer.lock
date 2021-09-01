@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eba3d763b2530f422e92eb8c64b4a340",
+    "content-hash": "7abb0a07bbf404517e0d8ee8829f6d84",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -468,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "8692f8fe68e8254f3de92ab4c4bfc5081edbaad5"
+                "reference": "5646a15d04a00171e117637ca42d4cf009df90a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/8692f8fe68e8254f3de92ab4c4bfc5081edbaad5",
-                "reference": "8692f8fe68e8254f3de92ab4c4bfc5081edbaad5",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5646a15d04a00171e117637ca42d4cf009df90a5",
+                "reference": "5646a15d04a00171e117637ca42d4cf009df90a5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -512,7 +512,7 @@
                 "issues": "https://github.com/codeages/biz-item-bank/issues",
                 "source": "https://github.com/codeages/biz-item-bank/tree/master"
             },
-            "time": "2021-06-22T10:16:02+00:00"
+            "time": "2021-08-31T10:49:30+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -602,16 +602,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.2.0",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7"
+                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7",
-                "reference": "bb2bacea1e0d3d1b71d4a0ae95ea6afe1f06f3f7",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
+                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -652,9 +652,9 @@
             "description": "ESCloud PHP SDK",
             "support": {
                 "issues": "https://github.com/codeages/escloud-php-sdk/issues",
-                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.0"
+                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.2"
             },
-            "time": "2021-06-01T06:41:59+00:00"
+            "time": "2021-08-24T07:12:49+00:00"
         },
         {
             "name": "codeages/exam-parser",

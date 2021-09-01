@@ -22,8 +22,8 @@ class TeacherQualification extends AbstractResource
     ];
 
     /**
-     * @param ApiRequest $request
      * @param $userId
+     *
      * @return mixed
      * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
@@ -46,7 +46,6 @@ class TeacherQualification extends AbstractResource
     }
 
     /**
-     * @param ApiRequest $request
      * @return mixed
      * @Access(roles="ROLE_TEACHER,ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
@@ -67,7 +66,7 @@ class TeacherQualification extends AbstractResource
 
         $this->checkRequiredFields($this->requiredFields, $fields);
 
-        $qualification =  $this->getTeacherQualificationService()->changeQualification($fields['userId'], $fields);
+        $qualification = $this->getTeacherQualificationService()->changeQualification($fields['userId'], $fields);
 
         if ($qualification['avatar']) {
             $qualification['url'] = $this->getWebExtension()->getFpath($qualification['avatar']);

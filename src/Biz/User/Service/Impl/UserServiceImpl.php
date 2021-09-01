@@ -620,6 +620,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($userId, ['scrmUuid' => $scrmUuid]);
     }
 
+    public function setUserScrmStaffId($userId, $scrmStaffId)
+    {
+        return $this->getUserDao()->update($userId, ['scrmStaffId' => $scrmStaffId]);
+    }
+
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = [])
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
@@ -2062,6 +2067,7 @@ class UserServiceImpl extends BaseService implements UserService
                 PHP_INT_MAX
             );
             $mobileNameUser = $this->getUserByNickname($keyword);
+
             $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : [];
             $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
             $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
@@ -2243,6 +2249,42 @@ class UserServiceImpl extends BaseService implements UserService
     public function updatePasswordChanged($id, $passwordChanged)
     {
         return $this->getUserDao()->update($id, ['passwordChanged' => $passwordChanged]);
+    }
+
+    public function getStudentOpenInfo($userId)
+    {
+        $user = $this->getUserDao()->get(intval($userId));
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        $userSetting = $this->getSettingService()->get('user_partner', []);
+        $enable = isset($userSetting['open_student_info']) ? $userSetting['open_student_info'] : 1;
+        $currentUserId = $this->getCurrentUser()->getId();
+        if (empty($currentUserId)) {
+            return 0;
+        }
+        if (!$this->decideUserJustStudentRole($userId) || $user['id'] === $currentUserId || !$this->decideUserJustStudentRole($currentUserId)) {
+            $enable = 1;
+        }
+
+        return intval($enable);
+    }
+
+    protected function decideUserJustStudentRole($userId)
+    {
+        $user = $this->getUserDao()->get($userId);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        if (count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'])) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function filterCustomField($fields)

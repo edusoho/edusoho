@@ -3,6 +3,7 @@ import TaskUi from './widget/task-ui';
 import TaskPipe from './widget/task-pipe';
 import Emitter from 'common/es-event-emitter';
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
+import 'store';
 
 export default class TaskShow extends Emitter {
   constructor({ element, mode }) {
@@ -25,6 +26,32 @@ export default class TaskShow extends Emitter {
       this.initLearnBtn();
     }
     this.initLearnContent();
+    this.initPlaySequence();
+
+  }
+
+  initPlaySequence() {
+    if (!$('.play-continue-switch')) {
+      return ;
+    }
+    let playMediaSequence = (undefined === store.get('PLAY_MEDIA_SEQUENCE')) ? 1 : store.get('PLAY_MEDIA_SEQUENCE');
+    store.set('PLAY_MEDIA_SEQUENCE', playMediaSequence);
+    if (playMediaSequence === 0) {
+      $('.js-play-sequence').removeClass('checked');
+    }
+    $('.play-continue-switch').removeClass('hidden');
+
+
+    $('.js-play-sequence').on('click', (event) => {
+      const $target = $(event.target);
+      if ($target.hasClass('checked')) {
+        $target.removeClass('checked');
+        store.set('PLAY_MEDIA_SEQUENCE', 0);
+      } else {
+        $target.addClass('checked');
+        store.set('PLAY_MEDIA_SEQUENCE', 1);
+      }
+    });
   }
 
   initPlugin() {
@@ -65,7 +92,6 @@ export default class TaskShow extends Emitter {
   }
 
   _receiveFinish(response) {
-    const nextTaskUrl = this.element.find('#task-content-iframe').data('nextTaskUrl');
 
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($('.js-learned-prompt').data('url'), html => {
@@ -78,17 +104,37 @@ export default class TaskShow extends Emitter {
           $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
         }
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-      });
-    }
+        this._dealSequence(response, 'prompt');
 
-    if (nextTaskUrl && response.playerMsg && response.playerMsg.mode == 'sequence') {
-      let playerCurrentTime = response.playerMsg.currentTime||0;
-      let playerDuration = response.playerMsg.duration||0;
-      //player.ended 事件不一定是播放到最后一秒，所以必须判断是否播放轴到了最后
-      if (playerCurrentTime !== 0 && playerDuration !== 0 && (playerDuration - playerCurrentTime < 2)) {
-        window.location.href = nextTaskUrl;
+      });
+    } else {
+      this._dealSequence(response);
+    }
+  }
+
+  _dealSequence(response, trigger = 'player') {
+    //自动下一课时
+    console.log(response);
+    let sequence = store.get('PLAY_MEDIA_SEQUENCE', undefined);
+    if (sequence === 1) {
+      const nextTaskUrl = this.element.find('#task-content-iframe').data('nextTaskUrl');
+      const nextTask = this.element.find('#task-content-iframe').data('nextTask');
+
+      if (nextTaskUrl && nextTask.type && ['audio', 'video'].includes(nextTask.type)) {
+        if (trigger === 'prompt' && response.playerEnd === true) {
+          window.location.href = nextTaskUrl;
+          return;
+        }
+        let finishEvent = response.waitingEventData && response.waitingEventData['finish'] ? response.waitingEventData['finish']['data']['playerMsg'] : {};
+        let playerCurrentTime = finishEvent.currentTime||0;
+        let playerDuration = finishEvent.duration||0;
+        //player.ended 事件不一定是播放到最后一秒，所以必须判断是否播放轴到了最后
+        if (playerCurrentTime !== 0 && playerDuration !== 0 && (playerDuration - playerCurrentTime < 2)) {
+          window.location.href = nextTaskUrl;
+        }
       }
     }
+
   }
 
   _receiveDoing(response) {

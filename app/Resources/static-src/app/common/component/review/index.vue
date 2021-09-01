@@ -6,7 +6,7 @@
             <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
                            :current-user-id="currentUserId"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
-                <a :href="`/user/${review.user.id}`"  target="_blank">
+                <a  target="_blank" :class="'card-'+review.user.id">
                     <img class="js-user-card reviews-item__img"
                          :src="review.user.avatar.large"
                          :data-user-id="review.user.id"
@@ -16,7 +16,7 @@
                 </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
-                        <a class="link-dark" :href="`/user/${review.user.id}`" target="_blank">{{ review.user.nickname }}</a>
+                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.id" :data-userid ="review.user.id" target="_blank">{{ review.user.nickname }}</a>
                         <!--                    <span>{{ review.target.title }}</span>-->
                         {{ review.createdTime | createdTime }}
                     </div>
@@ -48,7 +48,7 @@
                             <li class="thread-post media" :class="'thread-subpost-'+post.id"
                                 v-for="post in review.posts" :key="post.id">
                                 <div class="media-left">
-                                    <a :href="`/user/${post.user.id}`" target="_blank">
+                                    <a  target="_blank" :class="'card-'+post.user.id">
                                         <img class="avatar-sm js-user-card"
                                              :src="post.user.avatar.large"
                                              :data-user-id="post.user.id"
@@ -81,7 +81,7 @@
                                             </ul>
                                         </div>
 
-                                        <a class="link-dark" :href="`/user/${post.user.id}`" target="_blank">
+                                        <a class="link-dark js-user-url" :class="'user-url-'+post.user.id" :data-userid ="post.user.id"target="_blank">
                                             {{ post.user.nickname }}
                                         </a>
                                         <span class="bullet">•</span>
@@ -390,6 +390,24 @@
                     });
                 });
             },
+          onUserUrl() {
+            $('.reviews').on('mouseover', '.js-user-url', function (event) {
+              event.stopPropagation();
+              let userid = $(event.currentTarget).data('userid')
+              let userUrl = $(".user-url-" + userid);
+              let attr = userUrl.attr('href');
+              if (typeof attr === typeof undefined) {
+                axios({
+                  url: "/api/student_open_info/" + userid,
+                  method: "GET",
+                }).then(res => {
+                  if (res.data.enable === 1) {
+                    userUrl.attr('href',"/user/" + userid);
+                  }
+                });
+              }
+            });
+          },
         },
         filters: {
             createdTime(date) {
@@ -467,6 +485,7 @@
         },
         mounted() {
             this.onDelete();
+            this.onUserUrl();
         }
     }
 </script>

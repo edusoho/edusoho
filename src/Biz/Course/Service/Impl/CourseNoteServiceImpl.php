@@ -238,6 +238,11 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->createNewException(CourseNoteException::NOTFOUND_NOTE());
         }
 
+        $noteLike = $this->getNoteLikeByNoteIdAndUserId($noteId, $user['id']);
+        if (empty($noteLike)) {
+            $this->createNewException(CourseNoteException::NOTFOUND_NOTE_LIKE());
+        }
+
         $this->getNoteLikeDao()->deleteByNoteIdAndUserId($noteId, $user['id']);
 
         $this->dispatchEvent('course.note.cancelLike', $note);

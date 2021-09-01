@@ -2,19 +2,19 @@
 
 namespace ApiBundle\Api\Resource\SmsCenter;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\System\SettingException;
 
 class SmsCenter extends AbstractResource
 {
-    private $smsType = array(
+    private $smsType = [
         'register' => BizSms::SMS_BIND_TYPE,
         'smsBind' => BizSms::SMS_BIND_TYPE,
-    );
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -34,8 +34,8 @@ class SmsCenter extends AbstractResource
 
     protected function register(ApiRequest $request, $type, $mobile)
     {
-        $auth = $this->getSettingService()->get('auth', array());
-        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+        $auth = $this->getSettingService()->get('auth', []);
+        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], ['mobile', 'email_or_mobile']))) {
             throw SettingException::FORBIDDEN_MOBILE_REGISTER();
         }
 

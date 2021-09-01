@@ -161,6 +161,9 @@
                             {{ 'course.video.convert.audio.detail'|trans }}
                         </a>
                     </div>
+                    <div class="course-mangae-info__tip">
+                        3.{{ 'course.enable.video.convert.audio.un_supported'|trans }}
+                    </div>
                 </el-col>
             </el-form-item>
         </el-form>

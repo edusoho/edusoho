@@ -12,7 +12,7 @@ class AssistantFilter extends Filter
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile',
         'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip', 'token', 'havePayPassword', 'fingerPrintSetting', 'weChatQrCode',
-        'loginIp',
+        'loginIp', 'isScrmBind', 'liveMultiClassNum', 'liveMultiClassStudentNum', 'endMultiClassNum', 'endMultiClassStudentNum', 'promoted', 'scrmStaffId'
     ];
 
     protected $mode = self::SIMPLE_MODE;
@@ -26,6 +26,7 @@ class AssistantFilter extends Filter
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['email'] = '*****';
+        $data['isScrmBind'] = empty($data['scrmStaffId']) ? 0 : 1;
 
         if (!empty($data['verifiedMobile'])) {
             $data['verifiedMobile'] = substr_replace($data['verifiedMobile'], '****', 3, 4);

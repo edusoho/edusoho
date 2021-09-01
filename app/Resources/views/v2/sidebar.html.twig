@@ -58,5 +58,10 @@
         <a href="{{ path('settings_binds') }}">{{'user.settings.oauth_menu'|trans}}</a>
       </li>
     {% endif %}
+    {% if count(app.user.roles) > 1 and is_scrm_bind() %}
+      <li class="cd-sidebar__item {% if side_nav == 'scrm' %}active{% endif %}">
+        <a href="{{ path('settings_scrm') }}">{{'user.settings.scrm'|trans}}</a>
+      </li>
+    {% endif %}
   </ul>
 </div>

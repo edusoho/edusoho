@@ -234,6 +234,10 @@ abstract class BaseRegister
             $profile['textField'.$i] = empty($registration['textField'.$i]) ? '' : $registration['textField'.$i];
         }
 
+        if ($user['verifiedMobile']) {
+            $profile['mobile'] = $user['verifiedMobile'];
+        }
+
         $this->getProfileDao()->create($profile);
     }
 
