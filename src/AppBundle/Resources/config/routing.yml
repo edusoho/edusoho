@@ -2682,6 +2682,10 @@ classroom_manage_student_batch_remove:
   path: /classroom/{id}/manage/student/remove
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeStudents }
 
+classroom_manage_student_batch_remove_all:
+  path: /classroom/{id}/manage/student/remove/all
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeAllStudents }
+
 classroom_manage_student_create:
     path:  /classroom/{id}/manage/student/create
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:create }
@@ -3248,6 +3252,14 @@ try_export:
 member_operation_record:
     path: /member/{operatType}/record/{targetType}/{targetId}
     defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
+
+member_operation_exit_record_export_data:
+    path: /{targetType}/{targetId}/member_exit_record/export_data
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportData }
+
+member_operation_exit_record_export_csv:
+    path: /{targetType}/{targetId}/member_exit_record/export
+    defaults: { _controller: AppBundle:MemberOperationRecord:exitRecordExportCsv }
 
 order_calculate_price:
     path: /order/price/calculate

@@ -152,7 +152,7 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
                 'user_id' => $assistantStudent['studentId'],
                 'assistant_id' => $assistantId,
                 'multi_class_id' => $multiClassId,
-                'data' => json_encode(['title' => '加入班课', 'content' => $content]),
+                'data' => ['title' => '加入班课', 'content' => $content],
                 'sign' => $this->getMultiClassRecordService()->makeSign(),
                 'is_push' => 0,
             ];

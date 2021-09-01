@@ -21,7 +21,6 @@ class UserServiceTest extends BaseTestCase
             'password' => 'test_password',
             'email' => 'test_email@email.com',
             'verifiedMobile' => '13967340620',
-            'mobile' => '13967340621',
         ];
         $registeredUser1 = $this->getUserService()->register($userInfo);
 
@@ -46,8 +45,9 @@ class UserServiceTest extends BaseTestCase
         $user = $this->getUserService()->getUserIdsByKeyword('13967340622');
         $this->assertTrue(in_array($registeredUser2['id'], $user));
 
+        //注册时verifiedMobile 需要和mobile一致，其他参数会被覆盖
         $user = $this->getUserService()->getUserIdsByKeyword('13967340623');
-        $this->assertTrue(in_array($registeredUser2['id'], $user));
+        $this->assertFalse(in_array($registeredUser2['id'], $user));
     }
 
     /**

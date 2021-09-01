@@ -58,19 +58,19 @@ export default {
 
 <style lang='less' scoped>
 .back-to-top {
-  cursor: pointer;
   position: fixed;
   bottom: 50px;
   right: 20px;
+  z-index: 1;
   width: 50px;
   height: 50px;
+  color: #46c37b;
+  text-align: center;
   box-shadow: 0 0 4px 0 #46c37b;
   background-color: #fff;
-  color: #46c37b;
-  z-index: 1;
-  text-align: center;
   transition: all 0.3s ease;
   border-radius: 8px;
+  cursor: pointer;
 
   svg {
     position: absolute;

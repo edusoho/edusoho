@@ -11,6 +11,9 @@ use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @OA\Info(title="EduSoho接口", version="default", description="EduSoho接口，随版本动态变化")
+ */
 abstract class AbstractResource
 {
     /**

@@ -2432,11 +2432,15 @@ classroom.username: Username
 classroom.student_name: Student
 classroom.student_study_status: 'Learning progress'
 classroom.student_study_expiry_date: Available
+classroom.student_study_expiry_date.not: Out of date
+classroom.student_study_expiry_date.in: In the date
+classroom.delete_condition_student: Remove search results
 classroom.student_opertion: Action
 classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
+classroom.student_export.exit_record: Export Record
 classroom.add_student_btn: 'Add'
 classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
@@ -6400,6 +6404,7 @@ admin.user_fields.Require_personal: 'Fill in personal information required while
 admin.user_fields.Personal_info_configiration.open: 'Turn on'
 admin.user_fields.Personal_info_configiration.closed: Close
 admin.user_fields.Personal_info_configiration.help_block: 'If turned on,student must fill in personal information when purchase course'
+admin.user_fields.open_student_info_diable_tips: 'After closing, the personal home page information cannot be viewed between students on PC, app and new micro online school'
 admin.user_fields.Formart_verifcation: 'Format checkout'
 admin.user_fields.Formart_mobile_verifcation: 'Format and sms code checkout,open cloud SMS first'
 admin.user_fields.Formart_verifcation.help_block: 'Drag ato djustment order. Check the field that needs to collect. And if you need a new field, add in the [custom fields] .'
@@ -6410,6 +6415,7 @@ admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
 admin.user_fields.other_setting.edit_user_name: 'Users to update username'
 admin.user_fields.verified_mobile_tip: With SMS code validate
+admin.user_fields.other_setting.open_student_info: 'Publicly display personal information of trainees'
 
 admin.user_fields.modal.delete_field: 'Delete field'
 admin.user_fields.modal.delete_field_tips: 'Determined to delete <b style="color:red;" >%title%</b> field? <br><b style="color:red;" > All the history field  data will be deleted! </b><br> If you want to retain history data, hide the field.'
@@ -9445,6 +9451,7 @@ exception.blacklist.not_found: Blacklist does not exist
 exception.course.note.not_found: Note does not exist
 exception.course.note.no_permission: Permission denied
 exception.course.note.duplicate_like: Can't repeat a note on a note！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: Course comment does not exist
 exception.message.not_found_sender_or_receiver: The sender or receiver does not exist
 exception.message.send_to_self: Can't send messages to yourself
@@ -10773,9 +10780,7 @@ scrm.assistant.bind_title: Please use Enterprise WeChat to scan the code
 admin_v2.course_purchase_agreement.title: Title
 admin_v2.course_purchase_agreement.content: Content
 admin_v2.course_purchase_agreement.default_title: User Purchase Agreement
-
 exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'
 homepage.teacher_qualification.more: 'More'
-

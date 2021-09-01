@@ -79,6 +79,9 @@ module.exports = {
         'types/**'
       ],
     },
+    {
+      name: "swagger-ui/dist/swagger-ui.css",
+    },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {
       name: 'item-bank/lib/itemBank.umd.min.js',

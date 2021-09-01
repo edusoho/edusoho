@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\AdminV2\Operating;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
@@ -9,8 +11,6 @@ use Biz\Content\Type\ContentTypeFactory;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 
 class ContentController extends BaseController
 {
@@ -26,7 +26,7 @@ class ContentController extends BaseController
 
         $contents = $this->getContentService()->searchContents(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -37,12 +37,12 @@ class ContentController extends BaseController
         $categoryIds = ArrayToolkit::column($contents, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('admin-v2/operating/content/index.html.twig', array(
+        return $this->render('admin-v2/operating/content/index.html.twig', [
                'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
                'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $type)
@@ -62,23 +62,23 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
 
-            return $this->render('admin-v2/operating/content/content-tr.html.twig', array(
+            return $this->render('admin-v2/operating/content/content-tr.html.twig', [
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getUser(),
-            ));
+            ]);
         }
 
-        return $this->render('admin-v2/operating/content/content-modal.html.twig', array(
+        return $this->render('admin-v2/operating/content/content-modal.html.twig', [
             'type' => $type,
-        ));
+        ]);
     }
 
     public function editAction(Request $request, $id)
     {
         $content = $this->getContentService()->getContent($id);
         $type = ContentTypeFactory::create($content['type']);
-        $record = array();
+        $record = [];
         if ('POST' == $request->getMethod()) {
             $file = $request->files->get('picture');
             if (!empty($file)) {
@@ -93,17 +93,17 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
-            return $this->render('admin-v2/operating/content/content-tr.html.twig', array(
+            return $this->render('admin-v2/operating/content/content-tr.html.twig', [
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getUser(),
-            ));
+            ]);
         }
 
-        return $this->render('admin-v2/operating/content/content-modal.html.twig', array(
+        return $this->render('admin-v2/operating/content/content-modal.html.twig', [
             'type' => $type,
             'content' => $content,
-        ));
+        ]);
     }
 
     public function trashAction(Request $request, $id)
@@ -133,19 +133,19 @@ class ContentController extends BaseController
         $thatValue = $request->query->get('that');
 
         if (empty($value)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
+            return $this->createJsonResponse(['success' => true, 'message' => '']);
         }
 
         if ($value == $thatValue) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
+            return $this->createJsonResponse(['success' => true, 'message' => '']);
         }
 
         $avaliable = $this->getContentService()->isAliasAvaliable($value);
         if ($avaliable) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
+            return $this->createJsonResponse(['success' => true, 'message' => '']);
         }
 
-        return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
+        return $this->createJsonResponse(['success' => false, 'message' => '该URL路径已存在']);
     }
 
     protected function filterEditorField($content)
@@ -169,9 +169,10 @@ class ContentController extends BaseController
             $tags = $this->getTagService()->findTagsByNames($tagNames);
             $content['tagIds'] = ArrayToolkit::column($tags, 'id');
         } else {
-            $content['tagIds'] = array();
+            $content['tagIds'] = [];
         }
 
+        $content['body'] = preg_replace("/<script[\s\S]*?<\/script>/i", '', $content['body']);
         $content['publishedTime'] = empty($content['publishedTime']) ? 0 : strtotime($content['publishedTime']);
 
         $content['promoted'] = empty($content['promoted']) ? 0 : 1;

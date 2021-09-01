@@ -1,7 +1,7 @@
 {% set side_navs = {'tasks':'course.plan_task'|trans,'info': 'course.plan_base_info'|trans,'announcements': 'course.announcement_manage',
   'marketing':'course.marketing_setup'|trans,'teachers':'course.teacher_setup'|trans,'students':'course.members_manage'|trans,'testpaper-check':'course.testpaper_check'|trans
   ,'homework-check':'course.homework_check'|trans,'dashboard':'course.dashboard'|trans,'orders':'course.order'|trans, 'overview' :'course.plan_overview'|trans
-  ,'live-statistics':'course.live_statistics'|trans, 'replay':'course.replay_manage.content_title'|trans, 'wrong-questions': '学员错题'|trans} %}
+  ,'live-statistics':'course.live_statistics'|trans, 'replay':'course.replay_manage.content_title'|trans, 'wrong-questions': '学员错题'|trans, 'exit': 'course.members_manage'|trans} %}
 {% set menuType = 'course' %}
 {% if course_side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files','plan'] %}
   {% set menuType = 'courseSet' %}
@@ -14,6 +14,6 @@
 </div>
 {% if btnGroup|default() %}
   <div class="course-main-header__operation">
-    {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
+    {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: code} %}
   </div>
 {% endif %}

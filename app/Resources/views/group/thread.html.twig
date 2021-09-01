@@ -113,8 +113,9 @@
       <ul class="media-list">
         {% for post in post %}
           {% set subPosts = postReply[post.id]|default(null) %}
+          {% set isOpenInfo = data('StudentOpenInfo', {'userId': post.userId}) %}
           <li id="post-{{post.id}}" class="media main_hover_item">
-            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-sm"></a>
+            <a {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:post.userId}) }}"{% endif %} class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-sm"></a>
             <div class="media-body">
               <div class="metas">
                 <span class="floor">
@@ -232,12 +233,13 @@
 {% endblock %}
 
 {% block group_side %}
+  {% set isOpenInfo = data('StudentOpenInfo', {'userId': owner.id}) %}
   <div class="panel panel-default">
     <div class="panel-heading">{{'group.thread.owner'|trans}}</div>
     <div class="panel-body">
       <div class="media">
         <div class="media-left prm">
-          <a class="" href="{{ path('user_show', {id:owner.id}) }}">
+          <a class=""  {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:owner.id}) }}"{% endif %}>
             <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="avatar-md">
           </a>
         </div>

@@ -304,13 +304,14 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
     public function batchDeleteWrongQuestionByItemIds($itemIds)
     {
+        $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemIds($itemIds);
+
+        if (empty($wrongQuestionCollects)) {
+            return;
+        }
+
         try {
             $this->beginTransaction();
-            $wrongQuestionCollects = $this->getWrongQuestionCollectDao()->findCollectByItemIds($itemIds);
-
-            if (empty($wrongQuestionCollects)) {
-                return;
-            }
 
             $this->getWrongQuestionDao()->batchDelete(['item_ids' => $itemIds]);
             $this->getWrongQuestionCollectDao()->batchDelete(['item_ids' => $itemIds]);

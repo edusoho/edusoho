@@ -48,7 +48,7 @@ class Teacher extends AbstractResource
 
         $courseIds = empty($members) ? [-1] : ArrayToolkit::column($members, 'courseId');
         $liveMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeGT' => $currentTime]);
-        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLE' => $currentTime]);;
+        $endMultiClasses = $this->findMultiClassesByConditions(['courseIds' => $courseIds, 'endTimeLE' => $currentTime]);
 
         $liveMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($liveMultiClasses, 'courseId'));
         $endMultiClassStudentCount = $this->findCourseStudentCount(ArrayToolkit::column($endMultiClasses, 'courseId'));

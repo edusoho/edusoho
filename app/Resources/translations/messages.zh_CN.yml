@@ -1162,7 +1162,7 @@ course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，
 course.members_manage.quit_records: 退出记录
 course.members_manage.quit_type: 退出类型
 course.members_manage.is_refunded: 是否退款
-course.members_manage.records.name: 学员名称
+course.members_manage.records.name: 学员
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
 course.members_manage.quit_records.date: 退出日期
@@ -2797,11 +2797,15 @@ classroom.username: 用户名
 classroom.student_name: 学员
 classroom.student_study_status: 学习进度
 classroom.student_study_expiry_date: 学习有效期
+classroom.student_study_expiry_date.not: 有效期外
+classroom.student_study_expiry_date.in: 有效期内
+classroom.delete_condition_student: 移除搜索结果
 classroom.student_opertion: 操作
 classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
-classroom.student_export: 导出学生
+classroom.student_export: 导出学员
+classroom.student_export.exit_record: 导出
 classroom.add_student_btn: 添加学员
 classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
@@ -2816,7 +2820,7 @@ classroom.exit_record: 退出记录
 classroom.auditor_manage: 旁听生管理
 classroom.auditor_buy_tips: >
   旁听生是%name%的潜在购买者,只能参加该%classroomName%下的话题互动。
-classroom.student_username: 学员名称
+classroom.student_username: 学员
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
@@ -7651,6 +7655,8 @@ admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
 admin.user_fields.Personal_info_configiration.open: 开启
 admin.user_fields.Personal_info_configiration.closed: 关闭
 admin.user_fields.Personal_info_configiration.help_block: 开启后，学员购买课程时，需填写个人资料
+admin.user_fields.open_student_info_diable_tips: 关闭后，PC端、APP端和新微网校端学员与学员之间不能查看个人主页信息
+
 admin.user_fields.Formart_verifcation: 带格式校检
 admin.user_fields.Formart_mobile_verifcation: 带格式和短信校检，需要开启云短信
 admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
@@ -7660,6 +7666,8 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.other_setting.open_student_info: 公开展示学员个人信息
+
 admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
@@ -10728,6 +10736,7 @@ exception.blacklist.not_found: 黑名单不存在
 exception.course.note.not_found: 笔记不存在
 exception.course.note.no_permission: 没有权限
 exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.course.note.like_not_found: 不存在点赞记录！
 exception.review.not_found: 课程评价不存在
 exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
 exception.message.send_to_self: 不能给自己发消息

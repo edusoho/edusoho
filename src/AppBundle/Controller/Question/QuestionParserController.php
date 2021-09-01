@@ -20,7 +20,7 @@ class QuestionParserController extends BaseController
         $templateInfo = $this->getTemplateInfo($type);
         if ($request->isMethod('POST')) {
             $file = $request->files->get('importFile');
-
+            $categoryId = $request->request->get('category_Id');
             $filename = $file->getClientOriginalName();
             $filename = substr($filename, 0, strripos($filename, '.'));
             if (mb_strlen($filename) > 50) {
@@ -52,6 +52,7 @@ class QuestionParserController extends BaseController
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl($templateInfo['reEditRoute'], [
                         'token' => $token['token'],
+                        'categoryId' => $categoryId,
                     ]),
                     'success' => true,
                 ]);
@@ -79,8 +80,13 @@ class QuestionParserController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         $itemsJson = file_get_contents($data['cacheFilePath']);
+        $categoryId = $request->query->get('categoryId');
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = json_decode($itemsJson, true);
-
+        foreach ($items as &$item) {
+            $item['category_id'] = $categoryId;
+            $item['category_name'] = $category['name'];
+        }
         $templateInfo = $this->getTemplateInfo($type);
 
         return $this->render($templateInfo['reEditTemplate'], [
@@ -89,6 +95,7 @@ class QuestionParserController extends BaseController
             'questionBankId' => $questionBank['itemBankId'],
             'categoryTree' => $categoryTree,
             'type' => $type,
+            'categoryId' => $categoryId,
         ]);
     }
 

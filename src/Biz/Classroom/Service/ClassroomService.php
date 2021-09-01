@@ -19,6 +19,10 @@ interface ClassroomService
      */
     public function searchMembers($conditions, $orderBy, $start, $limit, array $columns = []);
 
+    public function searchMembersByClassroomId($classroomId, $conditions, $start, $limit);
+
+    public function countMembersByClassroomId($classroomId, $conditions);
+
     public function findClassroomsByIds(array $ids);
 
     public function findActiveCoursesByClassroomId($classroomId);
@@ -169,6 +173,8 @@ interface ClassroomService
     public function isClassroomAssistant($classroomId, $userId);
 
     public function isClassroomHeadTeacher($classroomId, $userId);
+
+    public function findTeacherCanManagerClassRoomCourseSet($classroomId);
 
     public function updateMember($id, $member);
 

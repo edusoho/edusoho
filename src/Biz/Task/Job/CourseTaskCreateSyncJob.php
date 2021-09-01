@@ -14,8 +14,10 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
+        $task = $this->getTaskService()->getTask($this->args['taskId']);
         try {
-            $task = $this->getTaskService()->getTask($this->args['taskId']);
+            $this->getLock()->get("sync_course_{$task['courseId']}", 10);
+
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
 
             $activity = $this->getActivityDao()->get($task['activityId']);
@@ -28,7 +30,7 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
                 }
                 $newActivity = $this->createActivity($activity, $cc);
 
-                $newTask = array(
+                $newTask = [
                     'courseId' => $cc['id'],
                     'fromCourseSetId' => $cc['courseSetId'],
                     'createdUserId' => $task['createdUserId'],
@@ -49,7 +51,7 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
                     'maxOnlineNum' => $task['maxOnlineNum'],
                     'status' => $task['status'],
                     'length' => $task['length'],
-                );
+                ];
 
                 //if (!empty($task['mode'])) {
                 $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
@@ -63,15 +65,17 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
 
             $this->dispatchEvent('course.task.create.sync', new Event($task));
 
-            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.success_tips', ['taskId' => $task['id']]);
+            $this->getLock()->get("sync_course_{$task['courseId']}", 10);
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', array('error' => $e->getMessage()));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', ['error' => $e->getMessage()]);
+            $this->getLock()->get("sync_course_{$task['courseId']}", 10);
         }
     }
 
     private function createActivity($activity, $copiedCourse)
     {
-        $newActivity = array(
+        $newActivity = [
             'title' => $activity['title'],
             'remark' => $activity['remark'],
             'mediaType' => $activity['mediaType'],
@@ -85,11 +89,11 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
             'copyId' => $activity['id'],
             'finishType' => $activity['finishType'],
             'finishData' => $activity['finishData'],
-        );
+        ];
 
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
+        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, [
             'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
-        ));
+        ]);
 
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
@@ -105,13 +109,13 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
 
     private function createMaterials($activity, $sourceActivity, $copiedCourse)
     {
-        $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
+        $materials = $this->getMaterialDao()->search(['lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']], [], 0, PHP_INT_MAX);
 
         if (empty($materials)) {
             return;
         }
         foreach ($materials as $material) {
-            $newMaterial = $this->copyFields($material, array(), array(
+            $newMaterial = $this->copyFields($material, [], [
                 'title',
                 'description',
                 'link',
@@ -122,7 +126,7 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
                 'source',
                 'userId',
                 'type',
-            ));
+            ]);
             $newMaterial['copyId'] = $material['id'];
             $newMaterial['courseSetId'] = $copiedCourse['courseSetId'];
             $newMaterial['courseId'] = $copiedCourse['id'];

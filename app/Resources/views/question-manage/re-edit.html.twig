@@ -38,7 +38,7 @@
   <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
   <input type="hidden" name="saveUrl" value="
     {% if type == 'item' %}
-      {{ path('questions_import_save', {token: app.request.get('token')}) }}
+      {{ path('questions_import_save', {token: app.request.get('token'),categoryId: categoryId}) }}
     {% else %}
       {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
     {% endif %}

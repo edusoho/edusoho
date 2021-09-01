@@ -10,7 +10,7 @@
         <span class="teacher">
           {{ inspection.teacherInfo.nickname }}
           <template v-if="inspection.liveInfo.length !== 0">
-            <svg-icon v-if="teacherAttend(inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-if="isAttend('teacher', inspection.teacherInfo.id)" class="icon-check-circle" icon="icon-check-circle" />
             <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
           </template>
         </span>
@@ -19,17 +19,17 @@
         <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
           {{ assistant.nickname }}
           <template v-if="inspection.liveInfo.length !== 0">
-            <svg-icon v-if="assistantAttend(assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
+            <svg-icon v-if="isAttend('assistant', assistant.id)" class="icon-check-circle" icon="icon-check-circle" />
             <svg-icon v-else class="icon-a-closecircle" icon="icon-a-closecircle" />
           </template>
         </span>
       </div>
-      <a-popover class="inspection-card__popover">
+      <a-popover v-if="ellipsis" class="inspection-card__popover">
         <template slot="content">
           <span class="teacher" v-for="assistant in inspection.assistantInfo" :key="assistant.id">
             {{ assistant.nickname }}
             <template v-if="inspection.liveInfo.length !== 0">
-              <svg-icon v-if="assistantAttend(assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
+              <svg-icon v-if="isAttend('assistant', assistant.id)" style="width: 14px;height: 14px;color: #46c37b;" icon="icon-check-circle" />
               <svg-icon v-else icon="icon-a-closecircle" style="width: 14px;height: 14px;color: #ff6464;" />
             </template>
           </span>
@@ -54,10 +54,8 @@
         </a>
       </div>
       <div v-if="inspection.liveInfo.status === 'finished' && inspection.activityInfo.ext.replayStatus === 'ungenerated'" class="inspection-card__button live-start">
-        <a class="live-start url-block" :href="inspection.liveInfo.viewUrl">
-          <svg-icon class="icon-live" icon="icon-live-playback" />
-          直播已结束，回放生成中
-        </a>
+        <svg-icon class="icon-live" icon="icon-live-playback" />
+        直播已结束，回放生成中
       </div>
       <div v-if="inspection.liveInfo.status === 'unstart'" class="inspection-card__button no-start-live">
         <svg-icon class="icon-live" icon="icon-no-start-live" style="width:24px;height:24px;top:4px" />
@@ -77,10 +75,13 @@ export default {
     inspection: {
       type: Object,
       require: true,
+      default: () => ({}),
     },
   },
   data() {
-    return {};
+    return {
+      ellipsis: false,
+    };
   },
   computed: {
     realTimeStudent() {
@@ -89,18 +90,17 @@ export default {
         : 0;
     },
   },
+  mounted() {
+    const assistantRef = this.$refs.assistant;
+    this.ellipsis = assistantRef.scrollWidth > assistantRef.clientWidth;
+  },
   methods: {
-    teacherAttend(id) {
-      return _.find(this.inspection.liveInfo.speakers, ["userId", Number(id)]);
-    },
-    assistantAttend(id) {
-      console.log(
-        _.find(this.inspection.liveInfo.assistants, ["userId", Number(id)])
-      );
-      return _.find(this.inspection.liveInfo.assistants, [
-        "userId",
-        Number(id),
-      ]);
+    isAttend(type, id) {
+      const identity = {
+        teacher: this.inspection.liveInfo.speakers,
+        assistant: this.inspection.liveInfo.assistants,
+      };
+      return _.find(identity[type], ["userId", Number(id)]);
     },
   },
 };

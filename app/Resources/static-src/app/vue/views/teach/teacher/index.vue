@@ -210,20 +210,24 @@ export default {
     };
   },
 
-  async created() {
-    const status = await Setting.get('qualification');
-    this.showEditorSualification = Boolean(status.qualification);
-    if (this.showEditorSualification) {
-      _.forEach(this.columns, item => {
-        item.width = '20%';
-      });
-      this.columns.splice(1, 0, teahcerQualificationColumns);
-    }
-    this.fetchTeacher();
+  created() {
+    this.getSetting();
   },
 
   methods: {
-     handleTableChange(pagination) {
+    async getSetting(){
+      const status = await Setting.get('qualification');
+      this.showEditorSualification = Boolean(status.qualification);
+      if (this.showEditorSualification) {
+        _.forEach(this.columns, item => {
+          item.width = '20%';
+        });
+        this.columns.splice(1, 0, teahcerQualificationColumns);
+      }
+      this.fetchTeacher();
+    },
+
+    handleTableChange(pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
