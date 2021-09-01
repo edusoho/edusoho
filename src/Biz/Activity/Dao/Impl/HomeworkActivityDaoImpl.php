@@ -42,6 +42,9 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
                 'syncId > :syncIdGT',
                 /*END*/
             ],
+            'serializes' => [
+                'finish_condition' => 'json',
+            ],
         ];
     }
 }
