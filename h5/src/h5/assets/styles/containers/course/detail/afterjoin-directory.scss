@@ -1,5 +1,6 @@
 .afterjoin-directory {
-	// margin-top: vw(10);
+	padding-bottom: vw(16);
+
 	p {
 		margin: 0;
 		padding: 0;
@@ -26,7 +27,7 @@
 	}
 
 	.swiper-directory {
-		padding: 0 0 vw(10) 0;
+		padding: vw(16) 0 vw(10) 0;
 		background: #fff;
 
 		.swiper-directory-active {
@@ -94,7 +95,7 @@
 
 	.swiper-directory-fix {
 		position: sticky;
-		top: 104px;
+		top: vw(56);
 		width: 100%;
 	}
 

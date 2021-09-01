@@ -207,7 +207,7 @@ const routes = [
     name: 'course',
     meta: {
       i18n: true,
-      title: 'courseLearning.title',
+      title: 'courseLearning.title'
     },
     component: () =>
       import(/* webpackChunkName: "course" */ '@/containers/course/index.vue'),
@@ -1011,7 +1011,7 @@ const mobileBindCheck = (to, from, next) => {
         next({ name: 'binding', query: to.query || from.query });
         return;
       }
-      
+
       resolve()
     }).catch(() => {
       resolve()
@@ -1070,6 +1070,11 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.name !== 'binding' && store.state.mobile_bind.mobile_bind_mode !== 'closed') {
     await mobileBindCheck(to, from, next);
+  }
+
+  if (store.state.settingUgc) {
+    const result = await Api.getSettings({ query: { type: 'ugc' }});
+    store.commit('SET_SETTING_UGC', result);
   }
 
   // 站点后台设置、会员后台配置

@@ -10,10 +10,9 @@
 		justify-content: center;
 		width: 94px;
 		height: 30px;
-		color: $primary-color;
+		color: #fff;
 		font-size: vw(14);
-		background: #fff;
-		border: 1px solid  $primary-color;
+		border: 1px solid #fff;
 		border-radius: vw(30);
 	}
 
@@ -24,5 +23,6 @@
 	&--activebtn {
 		color: #fff;
 		background: $primary-color;
+		border-color: $primary-color;
 	}
 }

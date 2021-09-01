@@ -1,0 +1,143 @@
+<template>
+  <div class="discussion-list">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      :loading-text="$t('toast.loading')"
+      @load="onLoad"
+    >
+      <discussion-item
+        v-for="item in list"
+        :key="item.id"
+        :item="item"
+        @click.native="handleClickViewDetail(item)"
+      />
+    </van-list>
+
+    <empty
+      v-if="!list.length && finished"
+      :text="emptyText"
+    />
+
+    <div class="create-btn">
+      <van-button
+        type="primary"
+        block
+        @click="handleClickCreateDiscussion"
+      >
+        {{ createText }}
+      </van-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import _ from 'lodash';
+import Api from '@/api';
+import DiscussionItem from './components/DiscussionItem.vue';
+import Empty from '&/components/e-empty/e-empty.vue';
+
+export default {
+  name: 'DiscussionList',
+
+  components: {
+    DiscussionItem,
+    Empty
+  },
+
+  props: {
+    type: {
+      type: String,
+      required: true
+    }
+  },
+
+  data() {
+    return {
+      list: [],
+      loading: false,
+      finished: false,
+      paging: {
+        offset: 0,
+        limit: 10
+      },
+      courseId: this.$route.params.id
+    }
+  },
+
+  computed: {
+    emptyText() {
+      return this.type === 'question' ? this.$t('courseLearning.noQA') : this.$t('courseLearning.noTopics');
+    },
+
+    createText() {
+      return this.type === 'question' ? this.$t('courseLearning.initiateQA') : this.$t('courseLearning.initiateTopics') ;
+    }
+  },
+
+  methods: {
+    onLoad() {
+      const { offset, limit } = this.paging;
+      Api.getCoursesThreads({
+        query: {
+          courseId: this.courseId
+        },
+        params: {
+          type: this.type,
+          limit: limit,
+          offset: offset * limit
+        }
+      }).then(res => {
+        const { data, paging: { total } } = res;
+
+        _.assign(this, {
+          list: _.concat(this.list, data),
+          loading: false
+        });
+
+        this.paging.offset++;
+
+        if (_.size(this.list) >= total) {
+          this.finished = true;
+        }
+      });
+    },
+
+    handleClickViewDetail(data) {
+      this.$emit('change-current-component', { component: 'Detail', data });
+    },
+
+    handleClickCreateDiscussion() {
+      this.$emit('change-current-component', { component: 'Create' });
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.discussion-list {
+  padding-bottom: vw(80);
+
+  .create-btn {
+    position: fixed;
+    bottom: vw(16);
+    left: 50%;
+    transform: translateX(-50%);
+    width: vw(340);
+
+    .van-button {
+      box-shadow: 0px 2px 6px 0px rgba(64, 143, 251, 0.5);
+      border-radius: 8px;
+      font-size: vw(16);
+    }
+  }
+
+  .van-list {
+    margin-top: 0;
+  }
+
+  .e-empty {
+    margin-top: vw(50);
+  }
+}
+</style>

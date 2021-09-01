@@ -107,6 +107,7 @@ export default [
     name: 'createReview',
     url: '/review',
     method: 'POST',
+    disableLoading: true
   },
   {
     // 数据上报
@@ -122,4 +123,60 @@ export default [
     url: '/lessons/{taskId}',
     method: 'GET',
   },
+  {
+    // 搜索课程话题信息
+    name: 'getCoursesThreads',
+    url: '/courses/{courseId}/threads',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 搜索课程话题回复
+    name: 'getCoursesThreadPost',
+    url: '/courses/{courseId}/threads/{threadId}/posts',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 添加课程话题回复信息
+    name: 'createCoursesThreadPost',
+    url: '/courses/{courseId}/thread/{threadId}/posts',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
+    // 添加课程话题
+    name: 'createCoursesThread',
+    url: '/courses/{courseId}/threads',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
+    // 课程多个笔记获取
+    name: 'getCoursesNotes',
+    url: '/courses/{courseId}/notes',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 获取评价
+    name: 'getReview',
+    url: '/review',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    // 笔记点赞
+    name: 'noteLike',
+    url: '/course/{courseId}/notes/{noteId}/like',
+    method: 'POST',
+    disableLoading: true
+  },
+  {
+    // 取消笔记点赞
+    name: 'cancelNoteLike',
+    url: '/course/{courseId}/notes/{noteId}/like',
+    method: 'DELETE',
+    disableLoading: true
+  }
 ];

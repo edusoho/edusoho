@@ -16,7 +16,8 @@
     "lint:fix": "eslint  --fix  --ext .js --ext .jsx --ext .vue src/",
     "style-lint": "stylelint  src/**/*.scss",
     "style-lint:fix": "stylelint src/**/*.scss --fix",
-    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
+    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\"",
+    "try6": "php vendor/bin/dep deploy dev"
   },
   "husky": {
     "hooks": {
@@ -125,6 +126,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^5.2.3",
+    "style-resources-loader": "^1.4.1",
     "stylelint": "^13.6.1",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^20.0.0",
