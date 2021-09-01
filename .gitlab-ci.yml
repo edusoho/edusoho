@@ -285,6 +285,6 @@ Api Test With 7.1:
   interruptible: true
   only:
     refs:
-      - develop
+      - test
     variables:
       - $REPOSITORY == "main"
