@@ -5,43 +5,43 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
+use Biz\System\Service\H5SettingService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\System\Service\H5SettingService;
 
 class SettingController extends BaseController
 {
     public function postNumRulesAction(Request $request)
     {
         if ('POST' === $request->getMethod()) {
-            $setting = $request->request->get('setting', array());
+            $setting = $request->request->get('setting', []);
             $this->getSettingService()->set('post_num_rules', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = $this->getSettingService()->get('post_num_rules', []);
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('admin/system/post-num-rules.html.twig', array(
+        return $this->render('admin/system/post-num-rules.html.twig', [
             'setting' => $setting,
-        ));
+        ]);
     }
 
     public function mobileAction(Request $request)
     {
-        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
+        $operationMobile = $this->getSettingService()->get('operation_mobile', []);
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', []);
+        $settingMobile = $this->getSettingService()->get('mobile', []);
 
-        $default = array(
+        $default = [
             'enabled' => 1, // 网校状态
             'ver' => 1, //是否是新版
             'about' => '', // 网校简介
@@ -57,13 +57,13 @@ class SettingController extends BaseController
             'splash3' => '', // 启动图3
             'splash4' => '', // 启动图4
             'splash5' => '', // 启动图5
-            'studyCenter' => array(
+            'studyCenter' => [
                 'liveScheduleEnabled' => 0,
                 'historyLearningEnabled' => 1,
                 'myCacheEnabled' => 1,
                 'myQAEnabled' => 1,
-            ),
-        );
+            ],
+        ];
 
         $mobile = array_merge($default, $settingMobile);
 
@@ -79,12 +79,12 @@ class SettingController extends BaseController
             }
 
             if (isset($mobile['liveScheduleEnabled'])) {
-                $mobile['studyCenter'] = array(
+                $mobile['studyCenter'] = [
                     'liveScheduleEnabled' => $mobile['liveScheduleEnabled'],
                     'historyLearningEnabled' => 1,
                     'myCacheEnabled' => 1,
                     'myQAEnabled' => 1,
-                );
+                ];
                 unset($mobile['liveScheduleEnabled']);
             }
 
@@ -103,12 +103,12 @@ class SettingController extends BaseController
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
 
-        return $this->render('admin/system/mobile.setting.html.twig', array(
+        return $this->render('admin/system/mobile.setting.html.twig', [
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile' => $hasMobile,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
-        ));
+        ]);
     }
 
     public function mobileDiscoveriesAction(Request $request)
@@ -119,12 +119,12 @@ class SettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_mobile'));
         }
 
-        return $this->render('admin/system/mobile.setting.discoveries.html.twig', array());
+        return $this->render('admin/system/mobile.setting.discoveries.html.twig', []);
     }
 
     public function mobileIapProductAction(Request $request)
     {
-        $products = $this->getSettingService()->get('mobile_iap_product', array());
+        $products = $this->getSettingService()->get('mobile_iap_product', []);
         if ('POST' === $request->getMethod()) {
             $fileds = $request->request->all();
 
@@ -136,11 +136,11 @@ class SettingController extends BaseController
             }
 
             //新增
-            $products[$fileds['productId']] = array(
+            $products[$fileds['productId']] = [
                 'productId' => $fileds['productId'],
                 'title' => $fileds['title'],
                 'price' => $fileds['price'],
-            );
+            ];
             $this->getSettingService()->set('mobile_iap_product', $products);
 
             $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
@@ -149,14 +149,14 @@ class SettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
         }
 
-        return $this->render('admin/system/mobile-iap-product.html.twig', array(
+        return $this->render('admin/system/mobile-iap-product.html.twig', [
             'products' => $products,
-        ));
+        ]);
     }
 
     public function mobileIapProductDeleteAction(Request $request, $productId)
     {
-        $products = $this->getSettingService()->get('mobile_iap_product', array());
+        $products = $this->getSettingService()->get('mobile_iap_product', []);
 
         if (array_key_exists($productId, $products)) {
             unset($products[$productId]);
@@ -180,16 +180,16 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-        $mobile = $this->getSettingService()->get('mobile', array());
+        $mobile = $this->getSettingService()->get('mobile', []);
         $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
         $mobile[$type] = ltrim($mobile[$type], '/');
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $response = array(
+        $response = [
             'path' => $mobile[$type],
-            'url' => $this->container->get('assets.packages')->getUrl($mobile[$type]),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($mobile[$type]),
+        ];
 
         return new Response(json_encode($response));
     }
@@ -216,7 +216,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', []);
 
         $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
         $site['logo_file_id'] = $fileId;
@@ -229,10 +229,10 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $response = array(
+        $response = [
             'path' => $site['logo'],
-            'url' => $this->container->get('assets.packages')->getUrl($site['logo']),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($site['logo']),
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -266,7 +266,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('live-course', array());
+        $site = $this->getSettingService()->get('live-course', []);
 
         $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
         $site['logo_file_id'] = $fileId;
@@ -279,12 +279,12 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', '更新直播LOGO', array('live_logo' => $site['logo_path']));
+        $this->getLogService()->info('system', 'update_settings', '更新直播LOGO', ['live_logo' => $site['logo_path']]);
 
-        $response = array(
+        $response = [
             'path' => $site['logo_path'],
-            'url' => $this->container->get('assets.packages')->getUrl($site['logo_path']),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($site['logo_path']),
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -301,7 +301,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', []);
 
         $oldFileId = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
         $site['favicon_file_id'] = $fileId;
@@ -317,12 +317,12 @@ class SettingController extends BaseController
         //浏览器图标覆盖默认图标
         copy($this->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
-        $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', array('favicon' => $site['favicon']));
+        $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', ['favicon' => $site['favicon']]);
 
-        $response = array(
+        $response = [
             'path' => $site['favicon'],
-            'url' => $this->container->get('assets.packages')->getUrl($site['favicon']),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($site['favicon']),
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -346,7 +346,7 @@ class SettingController extends BaseController
 
     protected function setCloudSmsKey($key, $val)
     {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting = $this->getSettingService()->get('cloud_sms', []);
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
     }
@@ -354,11 +354,11 @@ class SettingController extends BaseController
     public function mailerAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin/system/mailer.html.twig', array());
+            return $this->render('admin/system/mailer.html.twig', []);
         }
 
-        $mailer = $this->getSettingService()->get('mailer', array());
-        $default = array(
+        $mailer = $this->getSettingService()->get('mailer', []);
+        $default = [
             'enabled' => 0,
             'host' => '',
             'port' => '',
@@ -366,7 +366,7 @@ class SettingController extends BaseController
             'password' => '',
             'from' => '',
             'name' => '',
-        );
+        ];
         $mailer = array_merge($default, $mailer);
         if ($request->isMethod('POST')) {
             $mailer = $request->request->all();
@@ -380,11 +380,11 @@ class SettingController extends BaseController
 
         $cloudMailName = '';
 
-        return $this->render('admin/system/mailer.html.twig', array(
+        return $this->render('admin/system/mailer.html.twig', [
             'mailer' => $mailer,
             'status' => $status,
             'cloudMailName' => $cloudMailName,
-        ));
+        ]);
     }
 
     /*
@@ -392,8 +392,8 @@ class SettingController extends BaseController
      */
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
-        $mailer = $this->getSettingService()->get('mailer', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
 
         if (!empty($cloudEmail) && 'enable' === $cloudEmail['status']) {
             return 'cloud_email_crm';
@@ -409,30 +409,30 @@ class SettingController extends BaseController
     public function mailerTestAction(Request $request)
     {
         $user = $this->getUser();
-        $mailOptions = array(
+        $mailOptions = [
             'to' => $user['email'],
             'template' => 'email_system_self_test',
-        );
+        ];
         $mailFactory = $this->getBiz()->offsetGet('mail_factory');
         $mail = $mailFactory($mailOptions);
 
         try {
             $mail->send();
 
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'status' => true,
-            ));
+            ]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'status' => false,
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
     public function defaultAction(Request $request)
     {
-        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting = $this->getSettingService()->get('default', []);
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $default = $this->getDefaultSet();
@@ -454,7 +454,7 @@ class SettingController extends BaseController
                 $defaultSetting['part_name'] = '节';
             }
 
-            $default = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
@@ -462,15 +462,15 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/default.html.twig', array(
+        return $this->render('admin/system/default.html.twig', [
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
-        ));
+        ]);
     }
 
     protected function getDefaultSet()
     {
-        $default = array(
+        $default = [
             'defaultAvatar' => 0,
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
@@ -482,7 +482,7 @@ class SettingController extends BaseController
             'user_name' => '学员',
             'chapter_name' => '章',
             'part_name' => '节',
-        );
+        ];
 
         return $default;
     }
@@ -494,16 +494,16 @@ class SettingController extends BaseController
         if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
-            $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $data['blackListIps']));
+            $purifiedBlackIps = trim(str_replace(["\r\n", "\n", "\r"], ' ', $data['blackListIps']));
             $purifiedWhiteIps = isset($data['whiteListIps']) ? $data['whiteListIps'] : null;
-            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $purifiedWhiteIps));
+            $purifiedWhiteIps = trim(str_replace(["\r\n", "\n", "\r"], ' ', $purifiedWhiteIps));
 
             $logService = $this->getLogService();
 
             if (empty($purifiedBlackIps)) {
                 $settingService->delete('blacklist_ip');
 
-                $blackListIps['ips'] = array();
+                $blackListIps['ips'] = [];
             } else {
                 $blackListIps['ips'] = array_filter(explode(' ', $purifiedBlackIps));
                 $settingService->set('blacklist_ip', $blackListIps);
@@ -512,7 +512,7 @@ class SettingController extends BaseController
             if (empty($purifiedWhiteIps)) {
                 $settingService->delete('whitelist_ip');
 
-                $whiteListIps['ips'] = array();
+                $whiteListIps['ips'] = [];
             } else {
                 $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
                 $settingService->set('whitelist_ip', $whiteListIps);
@@ -521,39 +521,39 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $blackListIps = $settingService->get('blacklist_ip', array());
-        $whiteListIps = $settingService->get('whitelist_ip', array());
+        $blackListIps = $settingService->get('blacklist_ip', []);
+        $whiteListIps = $settingService->get('whitelist_ip', []);
 
         if (!empty($blackListIps)) {
             $default['ips'] = join("\n", $blackListIps['ips']);
             $blackListIps = array_merge($blackListIps, $default);
         } else {
-            $blackListIps = array();
+            $blackListIps = [];
         }
 
         if (!empty($whiteListIps)) {
             $default['ips'] = join("\n", $whiteListIps['ips']);
             $whiteListIps = array_merge($whiteListIps, $default);
         } else {
-            $whiteListIps = array();
+            $whiteListIps = [];
         }
 
-        return $this->render('admin/system/ip-blacklist.html.twig', array(
+        return $this->render('admin/system/ip-blacklist.html.twig', [
             'blackListIps' => $blackListIps,
             'whiteListIps' => $whiteListIps,
-        ));
+        ]);
     }
 
     public function customerServiceAction(Request $request)
     {
-        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+        $customerServiceSetting = $this->getSettingService()->get('customerService', []);
 
-        $default = array(
+        $default = [
             'customer_service_mode' => 'closed',
             'customer_of_qq' => '',
             'customer_of_mail' => '',
             'customer_of_phone' => '',
-        );
+        ];
 
         $customerServiceSetting = array_merge($default, $customerServiceSetting);
 
@@ -564,19 +564,19 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/customer-service.html.twig', array(
+        return $this->render('admin/system/customer-service.html.twig', [
             'customerServiceSetting' => $customerServiceSetting,
-        ));
+        ]);
     }
 
     public function courseSettingAction(Request $request)
     {
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $courseSetting = $this->getSettingService()->get('course', []);
 
         $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
-        $default = array(
+        $default = [
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
@@ -589,10 +589,10 @@ class SettingController extends BaseController
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
-            'userinfoFields' => array(),
-            'userinfoFieldNameArray' => array(),
+            'userinfoFields' => [],
+            'userinfoFieldNameArray' => [],
             'copy_enabled' => '0',
-        );
+        ];
 
         $this->getSettingService()->set('course', $courseSetting);
         $courseSetting = array_merge($default, $courseSetting);
@@ -601,11 +601,11 @@ class SettingController extends BaseController
             $courseSetting = $request->request->all();
 
             if (!isset($courseSetting['userinfoFields'])) {
-                $courseSetting['userinfoFields'] = array();
+                $courseSetting['userinfoFields'] = [];
             }
 
             if (!isset($courseSetting['userinfoFieldNameArray'])) {
-                $courseSetting['userinfoFieldNameArray'] = array();
+                $courseSetting['userinfoFieldNameArray'] = [];
             }
 
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -627,21 +627,21 @@ class SettingController extends BaseController
             }
         }
 
-        return $this->render('admin/system/course-setting.html.twig', array(
+        return $this->render('admin/system/course-setting.html.twig', [
             'courseSetting' => $courseSetting,
             'capacity' => $capacity,
             'userFields' => $userFields,
-        ));
+        ]);
     }
 
     public function questionsSettingAction(Request $request)
     {
-        $questionsSetting = $this->getSettingService()->get('questions', array());
+        $questionsSetting = $this->getSettingService()->get('questions', []);
 
         if (empty($questionsSetting)) {
-            $default = array(
+            $default = [
                 'testpaper_answers_show_mode' => 'submitted',
-            );
+            ];
             $questionsSetting = $default;
         }
 
@@ -658,9 +658,9 @@ class SettingController extends BaseController
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $setting = $this->getSettingService()->get('user_partner', array());
+        $setting = $this->getSettingService()->get('user_partner', []);
 
-        if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+        if (empty($setting['mode']) || !in_array($setting['mode'], ['phpwind', 'discuz'])) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
@@ -694,10 +694,10 @@ class SettingController extends BaseController
         }
 
         response:
-        return $this->render('admin/system/admin-sync.html.twig', array(
+        return $this->render('admin/system/admin-sync.html.twig', [
             'mode' => $setting['mode'],
             'bind' => $bind,
-        ));
+        ]);
     }
 
     public function performanceAction(Request $request)
