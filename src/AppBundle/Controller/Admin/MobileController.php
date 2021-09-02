@@ -6,12 +6,12 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use Biz\Content\Service\FileService;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
-use Biz\Taxonomy\Service\CategoryService;
 use Biz\System\Service\H5SettingService;
+use Biz\Taxonomy\Service\CategoryService;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MobileController extends BaseController
 {
@@ -20,14 +20,14 @@ class MobileController extends BaseController
         $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
 
         if (1 == $appDiscoveryVersion) {
-            return $this->render('admin/system/mobile-discovery-setting-upgraded.html.twig', array());
+            return $this->render('admin/system/mobile-discovery-setting-upgraded.html.twig', []);
         }
 
-        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
+        $operationMobile = $this->getSettingService()->get('operation_mobile', []);
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', []);
+        $settingMobile = $this->getSettingService()->get('mobile', []);
 
-        $default = array(
+        $default = [
             'banner1' => '', // 轮播图1
             'banner2' => '', // 轮播图2
             'banner3' => '', // 轮播图3
@@ -48,7 +48,7 @@ class MobileController extends BaseController
             'bannerJumpToCourseId3' => ' ',
             'bannerJumpToCourseId4' => ' ',
             'bannerJumpToCourseId5' => ' ',
-        );
+        ];
 
         $mobile = array_merge($default, $operationMobile);
 
@@ -61,16 +61,16 @@ class MobileController extends BaseController
             $this->getSettingService()->set('mobile', $mobile);
             $this->setFlashMessage('success', 'site.save.success');
         }
-        $bannerCourses = array();
+        $bannerCourses = [];
         for ($i = 1; $i <= 5; ++$i) {
             $bannerCourses[$i] = (' ' != $mobile['bannerJumpToCourseId'.$i]) ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId'.$i]) : null;
         }
 
-        return $this->render('admin/system/mobile.html.twig', array(
+        return $this->render('admin/system/mobile.html.twig', [
             'mobile' => $mobile,
             'bannerCourses' => $bannerCourses,
             'appDiscoveryVersion' => $appDiscoveryVersion,
-        ));
+        ]);
     }
 
     public function mobileUpgradeAction(Request $request)
@@ -80,23 +80,23 @@ class MobileController extends BaseController
 
             if (0 == $appDiscoveryVersion) {
                 try {
-                    $appSettings = array();
+                    $appSettings = [];
                     $bannersSetting = $this->getAppBannersSetting();
                     $channelSettings = $this->getAppChannelSettings();
                     $appSettings = array_merge($bannersSetting, $channelSettings);
 
-                    $this->getSettingService()->set('app_discovery', array('version' => 1));
+                    $this->getSettingService()->set('app_discovery', ['version' => 1]);
                     $this->getSettingService()->set('apps_published_discovery', $appSettings);
 
-                    return $this->createJsonResponse(array('status' => 'successed'));
+                    return $this->createJsonResponse(['status' => 'successed']);
                 } catch (\Exception $e) {
                     $this->getSettingService()->delete('app_discovery');
 
-                    return $this->createJsonResponse(array('status' => 'failed', 'msg' => $e->getMessage()));
+                    return $this->createJsonResponse(['status' => 'failed', 'msg' => $e->getMessage()]);
                 }
             }
 
-            return $this->createJsonResponse(array('status' => 'upgraded'));
+            return $this->createJsonResponse(['status' => 'upgraded']);
         }
     }
 
@@ -104,30 +104,30 @@ class MobileController extends BaseController
     {
         $index = 1;
 
-        $settings = array();
+        $settings = [];
 
         $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
 
-        $sortTypes = array(
+        $sortTypes = [
             'hot' => '-studentNum',
             'new' => '-createdTime',
             'recommend' => 'recommendedSeq',
-        );
+        ];
 
         foreach ($discoveryColumns as $discoveryColumn) {
-            $setting = array(
+            $setting = [
                 'type' => '',
                 'moduleType' => '',
-                'data' => array(
+                'data' => [
                     'title' => '',
                     'sourceType' => 'condition',
                     'categoryId' => '',
                     'sort' => '',
                     'lastDays' => 0,
                     'limit' => '',
-                    'items' => array(),
-                ),
-            );
+                    'items' => [],
+                ],
+            ];
 
             if (0 < intval($discoveryColumn['categoryId'])) {
                 $setting['data']['categoryIdArray'] = ArrayToolkit::column(
@@ -155,13 +155,13 @@ class MobileController extends BaseController
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
                     $setting['data']['title'] = $discoveryColumn['title'];
 
-                    $conditions = array(
+                    $conditions = [
                         'status' => 'published',
                         'parentId' => 0,
                         'type' => 'live',
-                        'excludeTypes' => array('reservation'),
+                        'excludeTypes' => ['reservation'],
                         'courseSetStatus' => 'published',
-                    );
+                    ];
                     if (isset($setting['data']['categoryIdArray'])) {
                         $conditions['categoryIds'] = $setting['data']['categoryIdArray'];
                     }
@@ -176,11 +176,11 @@ class MobileController extends BaseController
                     $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
                     $setting['data']['title'] = $discoveryColumn['title'];
-                    $setting['data']['source'] = array(
+                    $setting['data']['source'] = [
                         'courseType' => 'all',
                         'category' => $discoveryColumn['categoryId'],
                         'sort' => empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']],
-                    );
+                    ];
                     break;
 
                 default:
@@ -202,67 +202,67 @@ class MobileController extends BaseController
             true
         );
 
-        $setting = array();
+        $setting = [];
         if (!empty($banners)) {
-            $setting['slide-1'] = array(
+            $setting['slide-1'] = [
                 'type' => 'slide_show',
                 'moduleType' => 'slide-1',
-                'data' => array(),
-            );
+                'data' => [],
+            ];
 
             foreach ($banners as $banner) {
                 switch ($banner['action']) {
                     case 'webview':
-                        $link = array(
+                        $link = [
                             'type' => 'url',
                             'target' => null,
                             'url' => $banner['params'],
-                        );
+                        ];
                         break;
                     case 'none':
-                        $link = array(
+                        $link = [
                             'type' => 'none',
                             'target' => null,
                             'url' => '',
-                        );
+                        ];
                         break;
                     case 'course':
                         $course = $this->getCourseService()->getCourse($banner['params']);
                         if (!empty($course)) {
-                            $target = array(
+                            $target = [
                                 'id' => $course['id'],
                                 'courseSetId' => $course['courseSetId'],
                                 'title' => $course['title'],
                                 'displayedTitle' => CourseTitleUtils::getDisplayedTitle($course),
-                            );
+                            ];
                         } else {
                             $target = null;
                         }
-                        $link = array(
+                        $link = [
                             'type' => 'course',
                             'target' => $target,
                             'url' => '',
-                        );
+                        ];
                         break;
                     default:
-                        $link = array(
+                        $link = [
                             'type' => '',
                             'target' => null,
                             'url' => '',
-                        );
+                        ];
                         break;
                 }
 
-                $setting['slide-1']['data'][] = array(
+                $setting['slide-1']['data'][] = [
                     'title' => '',
-                    'image' => array(
+                    'image' => [
                         'id' => 0,
                         'size' => 0,
                         'createdTime' => date('c'),
                         'uri' => $banner['url'],
-                    ),
+                    ],
                     'link' => $link,
-                );
+                ];
             }
         }
 
@@ -271,13 +271,13 @@ class MobileController extends BaseController
 
     public function mobileSelectAction(Request $request)
     {
-        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
+        $operationMobile = $this->getSettingService()->get('operation_mobile', []);
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', []);
+        $settingMobile = $this->getSettingService()->get('mobile', []);
 
-        $default = array(
+        $default = [
             'courseIds' => '', //每周精品课
-        );
+        ];
 
         $mobile = array_merge($default, $courseGrids);
 
@@ -295,17 +295,17 @@ class MobileController extends BaseController
         $courseIds = explode(',', $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
-        $sortedCourses = array();
+        $sortedCourses = [];
         foreach ($courseIds as $value) {
             if (!empty($value) && !empty($courses[$value])) {
                 $sortedCourses[] = $courses[$value];
             }
         }
 
-        return $this->render('admin/system/course-select.html.twig', array(
+        return $this->render('admin/system/course-select.html.twig', [
             'mobile' => $mobile,
             'courses' => $sortedCourses,
-        ));
+        ]);
     }
 
     public function mobilePictureUploadAction(Request $request, $type)
@@ -320,16 +320,16 @@ class MobileController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-        $mobile = $this->getSettingService()->get('mobile', array());
+        $mobile = $this->getSettingService()->get('mobile', []);
         $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
         $mobile[$type] = ltrim($mobile[$type], '/');
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $response = array(
+        $response = [
             'path' => $mobile[$type],
-            'url' => $this->container->get('assets.packages')->getUrl($mobile[$type]),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($mobile[$type]),
+        ];
 
         return new Response(json_encode($response));
     }
