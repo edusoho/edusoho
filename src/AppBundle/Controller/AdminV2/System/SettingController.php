@@ -154,7 +154,7 @@ class SettingController extends BaseController
 
         $response = [
             'path' => $site['logo'],
-            'url' => $this->container->get('assets.packages')->getUrl($site['logo']),
+            'url' => $this->container->get('assets.default_package_util')->getUrl($site['logo']),
         ];
 
         return $this->createJsonResponse($response);
@@ -168,7 +168,7 @@ class SettingController extends BaseController
 
         $response = [
             'path' => $license['license_picture'],
-            'url' => $this->container->get('assets.packages')->getUrl($license['license_picture']),
+            'url' => $this->container->get('assets.default_package_util')->getUrl($license['license_picture']),
         ];
 
         return $this->createJsonResponse($response);
@@ -182,7 +182,7 @@ class SettingController extends BaseController
 
         $response = [
             'path' => $license['permit_picture'],
-            'url' => $this->container->get('assets.packages')->getUrl($license['permit_picture']),
+            'url' => $this->container->get('assets.default_package_util')->getUrl($license['permit_picture']),
         ];
 
         return $this->createJsonResponse($response);
@@ -220,7 +220,7 @@ class SettingController extends BaseController
 
         $response = [
             'path' => $site['favicon'],
-            'url' => $this->container->get('assets.packages')->getUrl($site['favicon']),
+            'url' => $this->container->get('assets.default_package_util')->getUrl($site['favicon']),
         ];
 
         return $this->createJsonResponse($response);
@@ -253,7 +253,7 @@ class SettingController extends BaseController
 
         $response = [
             'path' => $path,
-            'url' => $this->container->get('assets.packages')->getUrl($path),
+            'url' => $this->container->get('assets.default_package_util')->getUrl($path),
         ];
 
         return $this->createJsonResponse($response);
