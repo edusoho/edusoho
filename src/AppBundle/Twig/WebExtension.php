@@ -1387,7 +1387,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFilePath($uri, $default = '', $absolute = false)
     {
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
         $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
@@ -1423,7 +1423,7 @@ class WebExtension extends \Twig_Extension
 
     public function getDefaultPath($category, $uri = '', $size = '', $absolute = false)
     {
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
         $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
@@ -1472,7 +1472,7 @@ class WebExtension extends \Twig_Extension
             return $uri;
         }
 
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
         $request = $this->requestStack->getMasterRequest();
 
         if (strpos($uri, '://')) {
@@ -1492,7 +1492,7 @@ class WebExtension extends \Twig_Extension
 
     public function getSystemDefaultPath($defaultKey, $absolute = false)
     {
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
         $defaultSetting = $this->getSetting('default', []);
 
         if (
@@ -1511,7 +1511,7 @@ class WebExtension extends \Twig_Extension
 
     public function makeLazyImg($src, $class = '', $alt = '', $img = 'lazyload_course.png')
     {
-        $imgpath = $path = $this->container->get('assets.packages')->getUrl('assets/img/default/'.$img);
+        $imgpath = $path = $this->container->get('assets.default_package_util')->getUrl('assets/img/default/'.$img);
 
         return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
@@ -1538,7 +1538,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
         $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
@@ -1574,7 +1574,7 @@ class WebExtension extends \Twig_Extension
 
     private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'content')
     {
-        $assets = $this->container->get('assets.packages');
+        $assets = $this->container->get('assets.default_package_util');
 
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', []);
