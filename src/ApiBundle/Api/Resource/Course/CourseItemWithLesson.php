@@ -99,7 +99,7 @@ class CourseItemWithLesson extends AbstractResource
         $client = new EdusohoLiveClient();
         $replayInfos = $client->batchGetReplayInfosForSelfLive($liveIds);
 
-        return ArrayToolkit::index($replayInfos, 'roomId');
+        return ArrayToolkit::index($replayInfos, 'liveRoomId');
     }
 
     protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
