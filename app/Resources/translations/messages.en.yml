@@ -1363,7 +1363,7 @@ course.plan_info: >
   <p>3. Support the same course content, but provide courses with different service levels(Exp: Video class, Live class, Answering class).</p>
   <p>4. Support to set up multiple classes according to the students' learning ability(Exp: Fast class, Slow class).</p>
   <p class="cd-mt24">Welcome
-
+course.testpaper_export.btn: Exporting transcript
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.discussions: 'Discussions'
@@ -7490,6 +7490,9 @@ course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
 course.homework_check.review.submit_time: 'Submit time'
+course.homework_check.review.submit_num: Submit Num
+course.testpaper_check.review.submit_num: Submit Num
+course.homework_check.review.submit_num_detail: num %num%
 course.homework_check.review.status: Status
 course.homework_check.review.reviewer: Reviewer
 course.homework_check.review.operation: Action

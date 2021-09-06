@@ -20,6 +20,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -673,6 +674,31 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
 
         return $thirdLiveFinished || $esLiveFinished;
+    }
+
+    public function orderAssessmentSubmitNumber($userIds, $answerSceneId)
+    {
+        $records = $this->getAnswerRecordService()->search(['user_ids' => $userIds,'answer_scene_id' => $answerSceneId], ['end_time' => 'ASC'], 0, PHP_INT_MAX);
+        $records = ArrayToolkit::group($records, 'user_id');
+        $orderedRecords = [];
+        foreach ($records as $record) {
+            $index = 1;
+            foreach ($record as $userRecord) {
+                $orderedRecords[$userRecord['id']]['answer_record_id'] = $userRecord['id'];
+                $orderedRecords[$userRecord['id']]['submit_num'] = $index;
+                $index++;
+            }
+        }
+
+        return $orderedRecords;
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 
     /**
