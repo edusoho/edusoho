@@ -200,7 +200,7 @@ class EdusohoLiveClient
      */
     public function batchGetReplayInfosForSelfLive($ids)
     {
-        return $this->createCloudApi('leaf')->get('/v1/liveCloud/room/replay/infos', ['ids' => $ids]);
+        return $this->createCloudApi('leaf')->get('/liveCloud/room/replay/infos', ['ids' => $ids]);
     }
 
     /**
@@ -212,7 +212,7 @@ class EdusohoLiveClient
      */
     public function downloadReplayForSelfLive($liveId, $userId)
     {
-        return $this->createCloudApi('root')->get("/v1/lives/{$liveId}/replay/download", ['userId' => $userId]);
+        return $this->createCloudApi('root')->get("/lives/{$liveId}/replay/download", ['userId' => $userId]);
     }
 
     protected function createCloudApi($server)
