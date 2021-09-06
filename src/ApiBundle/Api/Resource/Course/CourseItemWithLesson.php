@@ -86,11 +86,6 @@ class CourseItemWithLesson extends AbstractResource
 
     protected function getLiveReplays($courseItems)
     {
-        return [
-            824751 => [
-                'status' => 'finished',
-            ],
-        ];
         $liveIds = [];
         foreach ($courseItems as $courseItem) {
             if (!empty($courseItem['tasks'])) {
