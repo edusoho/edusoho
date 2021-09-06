@@ -15,7 +15,11 @@ class CourseItemWithLessonFilter extends Filter
         if (!empty($data['tasks'])) {
             $taskFilter = new CourseTaskFilter();
             foreach ($data['tasks'] as &$task) {
+                $replayStatus = empty($task['replayDownloadStatus']) ? '' : $task['replayDownloadStatus'];
                 $taskFilter->filter($task);
+                if ($replayStatus) {
+                    $task['replayDownloadStatus'] = $replayStatus;
+                }
             }
         } else {
             $taskFilter = new CourseItemFilter();

@@ -17,6 +17,16 @@ class EdusohoLiveClient
     const LIVE_ROOM_LARGE = 'large';
     const LIVE_ROOM_SMALL = 'small';
 
+    const LIVE_REPLAY_STATUS_UNSTART = 'unstart';
+
+    const LIVE_REPLAY_STATUS_GENERATING = 'generating';
+
+    const LIVE_REPLAY_STATUS_FINISHED = 'finished';
+
+    const LIVE_REPLAY_STATUS_NONE = 'finished';
+
+    const LIVE_REPLAY_STATUS_ERROR = 'error';
+
     private $cloudApi;
 
     /**
@@ -180,6 +190,29 @@ class EdusohoLiveClient
     public function uploadCallbackUrl($url)
     {
         return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
+    }
+
+    /**
+     * @param $ids
+     *
+     * @return mixed|string[]
+     *                        仅自研直播，不可扩充
+     */
+    public function batchGetReplayInfosForSelfLive($ids)
+    {
+        return $this->createCloudApi('root')->get('/v1/liveCloud/room/replay/infos', ['ids' => $ids]);
+    }
+
+    /**
+     * @param $liveId
+     * @param $userId
+     *
+     * @return mixed|string[]
+     *                        仅自研直播，不可扩充
+     */
+    public function downloadReplayForSelfLive($liveId, $userId)
+    {
+        return $this->createCloudApi('root')->get("/v1/lives/{$liveId}/replay/download", ['userId' => $userId]);
     }
 
     protected function createCloudApi($server)
