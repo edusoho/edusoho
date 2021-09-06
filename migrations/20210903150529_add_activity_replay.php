@@ -16,6 +16,8 @@ class AddActivityReplay extends Migration
                   `finishType` varchar(32) NOT NULL DEFAULT 'end' COMMENT '完成类型',
                   `finishDetail` varchar(32) NOT NULL DEFAULT '' COMMENT '完成条件',
                   `originLessonId` int(10) NOT NULL DEFAULT 0 COMMENT '引用课时ID',
+                  `createdTime` int(10) NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) NOT NULL COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)
                   )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '直播回放活动';
 
