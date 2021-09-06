@@ -24,11 +24,11 @@ class AlterCourseLessonReplay extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `course_lesson_replay` drop COLUMN `liveTime`;
             ALTER TABLE `course_lesson_replay` drop COLUMN `liveSeconds`;
             ALTER TABLE `course_lesson_replay` drop COLUMN `tagId`;
             ALTER TABLE `course_lesson_replay` drop COLUMN `isPublic`;
-        ");
+        ');
     }
 }
