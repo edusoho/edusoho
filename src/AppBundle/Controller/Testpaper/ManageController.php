@@ -298,8 +298,6 @@ class ManageController extends BaseController
                 $member = '';
                 $member .= is_numeric($users[$answerRecord['user_id']]['nickname']) ? $users[$answerRecord['user_id']]['nickname']."\t".',' : $users[$answerRecord['user_id']]['nickname'].',';
                 $member .= $profiles[$answerRecord['user_id']]['truename'] ? $profiles[$answerRecord['user_id']]['truename'].',' : '-'.',';
-                $member .= $profiles[$answerRecord['user_id']]['mobile'] ? $profiles[$answerRecord['user_id']]['mobile'].',' : '-'.',';
-                $member .= $users[$answerRecord['user_id']]['email'].',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
                 $member .= $this->getUsedTime($answerRecord['used_time']).',';
                 $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
