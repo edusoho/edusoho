@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\OperationStatistic\Dao\Impl;
-
 
 use Biz\OperationStatistic\Dao\OperationCountStatisticDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;

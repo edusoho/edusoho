@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\OperationStatistic\Service\Impl;
-
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;

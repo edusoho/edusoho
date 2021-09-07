@@ -14,7 +14,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
 use Biz\OperationStatistic\Service\OperationCountStatisticService;
 use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
@@ -303,7 +302,7 @@ class ManageController extends BaseController
                 $member .= $users[$answerRecord['user_id']]['email'].',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
                 $member .= $this->getUsedTime($answerRecord['used_time']).',';
-                $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]) .',';
+                $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
                 $member .= $this->getReviewStatus($answerRecord['status']).',';
                 $member .= $answerReport['score'].',';
                 $member .= $answerScene['pass_score'].',';
@@ -331,25 +330,26 @@ class ManageController extends BaseController
 
     protected function getUsedTime($usedTime)
     {
-        if ($usedTime < 86400){
+        if ($usedTime < 86400) {
             $time = gmstrftime('%H时:%M分:%S秒', $usedTime);
         } else {
             $time = explode('-', gmstrftime('%j-%H-%M-%S', $usedTime));
             $hours = ($time[0] - 1) * 24 + $time[1];
             $time = sprintf('%s时:%s分:%s秒', $hours, $time[2], $time[3]);
         }
+
         return $time;
     }
 
     protected function getReviewStatus($status)
     {
-         if ($status == 'doing') {
-             return $this->trans('site.default.doing');
-         }elseif ($status == 'reviewing') {
-             return $this->trans('site.default.unreviewing');
-         }else {
-             return $this->trans('site.default.reviewing');
-         }
+        if ('doing' == $status) {
+            return $this->trans('site.default.doing');
+        } elseif ('reviewing' == $status) {
+            return $this->trans('site.default.unreviewing');
+        } else {
+            return $this->trans('site.default.reviewing');
+        }
     }
 
     protected function getPassStatus($status)
@@ -378,7 +378,7 @@ class ManageController extends BaseController
     protected function getReviewer($user, $answerRecord)
     {
         $reviewer = '-';
-        if ($answerRecord['status'] == 'finished') {
+        if ('finished' == $answerRecord['status']) {
             $reviewer = $user ? $user['nickname'] : $this->trans('course.homework_check.review.system_review');
         }
 
@@ -387,13 +387,13 @@ class ManageController extends BaseController
 
     public function transcriptExportAction(Request $request, $courseId, $testpaperId, $activityId)
     {
-        $activity = $this->getActivityService()->getActivity($activityId );
+        $activity = $this->getActivityService()->getActivity($activityId);
         if (!$activity) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $this->recordOperation($activity['mediaType']);
-        $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], $activity['mediaType'] == 'testpaper' ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
+        $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], 'testpaper' == $activity['mediaType'] ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
     }
@@ -404,7 +404,7 @@ class ManageController extends BaseController
         $operationRecord = $this->getOperationCountStatisticService()->getRecordByTargetTypeAndOperatorId($type.'_export', $currentUserId);
         if ($operationRecord) {
             $this->getOperationCountStatisticService()->waveOperationNum($operationRecord['id']);
-        }else{
+        } else {
             $this->getOperationCountStatisticService()->createOperationRecord(['target_type' => $type.'_export', 'operator_id' => $currentUserId]);
         }
     }
