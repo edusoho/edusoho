@@ -15,7 +15,7 @@ class AddActivityReplay extends Migration
                   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
                   `finish_type` varchar(32) NOT NULL DEFAULT 'end' COMMENT '完成类型',
                   `finish_detail` varchar(32) NOT NULL DEFAULT '' COMMENT '完成条件',
-                  `origin_lessonId` int(10) NOT NULL DEFAULT 0 COMMENT '引用课时ID',
+                  `origin_lesson_id` int(10) NOT NULL DEFAULT 0 COMMENT '引用课时ID',
                   `created_time` int(10) NOT NULL COMMENT '创建时间',
                   `updated_time` int(10) NOT NULL COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)
