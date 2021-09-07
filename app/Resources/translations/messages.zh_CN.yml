@@ -3416,7 +3416,7 @@ message.btn.back: 返回我的私信
 message.btn.send: 写私信
 
 # 个人主页模块
-user.homepage: %nickname%的个人主页
+user.homepage: "%nickname%的个人主页"
 user.homepage.teaching: 教学中
 user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
