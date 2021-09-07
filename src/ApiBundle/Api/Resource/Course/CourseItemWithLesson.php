@@ -50,6 +50,7 @@ class CourseItemWithLesson extends AbstractResource
                 foreach ($item['tasks'] as &$task) {
                     if ($needReplayStatus && 'live' === $task['type'] && !empty($task['activity']['ext'])) {
                         $replayInfo = empty($liveReplays[$task['activity']['ext']['liveId']]) ? [] : $liveReplays[$task['activity']['ext']['liveId']];
+                        $task['liveId'] = $task['activity']['ext']['liveId'];
                         if (!empty($replayInfo)) {
                             $task['replayDownloadStatus'] = 'finished' === $replayInfo['status'] ? 'finished' : 'un_finished';
                         } else {
