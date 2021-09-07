@@ -11,6 +11,11 @@ class OperationCountStatisticDaoImpl extends AdvancedDaoImpl implements Operatio
 {
     protected $table = 'operation_count_statistic';
 
+    public function getByTargetTypeAndOperatorId($targetType, $operatorId)
+    {
+        return $this->getByFields(['target_type' => $targetType, 'operator_id' => $operatorId]);
+    }
+
     public function declares()
     {
         return [
@@ -20,8 +25,9 @@ class OperationCountStatisticDaoImpl extends AdvancedDaoImpl implements Operatio
                 'id = :id',
                 'id IN (:ids)',
                 'version = :version',
-                'operator_id = :operatorId',
-                'target_type = :targetId',
+                'operator_id = :operator_id',
+                'operator_num = :operation_num',
+                'target_type = :target_type',
             ],
         ];
     }

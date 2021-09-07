@@ -29,7 +29,7 @@ class AddOperationRelatedTable extends Migration
                 `target_type` varchar(64) NOT NULL COMMENT '操作类型',
                 `operation_num` int(10) unsigned NOT NULL COMMENT '操作次数',
                 `created_time` int(10) unsigned NOT NULL COMMENT '操作时间',
-                `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
+                `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='操作次数统计';   
         ");

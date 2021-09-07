@@ -15,6 +15,7 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\OperationStatistic\Service\OperationCountStatisticService;
 use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
@@ -391,9 +392,21 @@ class ManageController extends BaseController
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
+        $this->recordOperation($activity['mediaType']);
         $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], $activity['mediaType'] == 'testpaper' ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    protected function recordOperation($type)
+    {
+        $currentUserId = $this->getCurrentUser()->getId();
+        $operationRecord = $this->getOperationCountStatisticService()->getRecordByTargetTypeAndOperatorId($type.'_export', $currentUserId);
+        if ($operationRecord) {
+            $this->getOperationCountStatisticService()->waveOperationNum($operationRecord['id']);
+        }else{
+            $this->getOperationCountStatisticService()->createOperationRecord(['target_type' => $type.'_export', 'operator_id' => $currentUserId]);
+        }
     }
 
     public function buildCheckAction(Request $request, $courseSetId, $type)
@@ -1007,10 +1020,10 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return MemberService
+     * @return OperationCountStatisticService
      */
-    protected function getCourseMemberService()
+    protected function getOperationCountStatisticService()
     {
-        return $this->createService('Course:MemberService');
+        return $this->createService('OperationStatistic:OperationCountStatisticService');
     }
 }
