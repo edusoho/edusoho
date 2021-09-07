@@ -12,8 +12,14 @@
 use Symfony\Component\Intl\Globals\IntlGlobals;
 
 if (!function_exists('intl_is_failure')) {
-    function intl_is_failure($errorCode) { return IntlGlobals::isFailure($errorCode); }
+    function intl_is_failure($error_code) { return IntlGlobals::isFailure($error_code); }
+}
+if (!function_exists('intl_get_error_code')) {
     function intl_get_error_code() { return IntlGlobals::getErrorCode(); }
+}
+if (!function_exists('intl_get_error_message')) {
     function intl_get_error_message() { return IntlGlobals::getErrorMessage(); }
-    function intl_error_name($errorCode) { return IntlGlobals::getErrorName($errorCode); }
+}
+if (!function_exists('intl_error_name')) {
+    function intl_error_name($error_code) { return IntlGlobals::getErrorName($error_code); }
 }

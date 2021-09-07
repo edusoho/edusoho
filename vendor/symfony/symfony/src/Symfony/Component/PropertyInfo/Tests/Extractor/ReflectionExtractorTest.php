@@ -61,6 +61,7 @@ class ReflectionExtractorTest extends TestCase
                 'realParent',
                 'xTotals',
                 'YT',
+                'date',
                 'c',
                 'd',
                 'e',
@@ -96,6 +97,7 @@ class ReflectionExtractorTest extends TestCase
                 'foo4',
                 'foo5',
                 'files',
+                'date',
                 'c',
                 'd',
                 'e',
@@ -156,6 +158,8 @@ class ReflectionExtractorTest extends TestCase
             ['staticSetter', null],
             ['self', [new Type(Type::BUILTIN_TYPE_OBJECT, false, 'Symfony\Component\PropertyInfo\Tests\Fixtures\Dummy')]],
             ['realParent', [new Type(Type::BUILTIN_TYPE_OBJECT, false, 'Symfony\Component\PropertyInfo\Tests\Fixtures\ParentDummy')]],
+            ['date', [new Type(Type::BUILTIN_TYPE_OBJECT, false, \DateTime::class)]],
+            ['dates', [new Type(Type::BUILTIN_TYPE_ARRAY, false, null, true, new Type(Type::BUILTIN_TYPE_INT), new Type(Type::BUILTIN_TYPE_OBJECT, false, \DateTime::class))]],
         ];
     }
 
@@ -197,6 +201,28 @@ class ReflectionExtractorTest extends TestCase
             ['bar', [new Type(Type::BUILTIN_TYPE_INT, true)]],
             ['baz', [new Type(Type::BUILTIN_TYPE_ARRAY, false, null, true, new Type(Type::BUILTIN_TYPE_INT), new Type(Type::BUILTIN_TYPE_STRING))]],
             ['donotexist', null],
+        ];
+    }
+
+    /**
+     * @dataProvider php80TypesProvider
+     * @requires PHP 8
+     */
+    public function testExtractPhp80Type($property, array $type = null)
+    {
+        $this->assertEquals($type, $this->extractor->getTypes('Symfony\Component\PropertyInfo\Tests\Fixtures\Php80Dummy', $property, []));
+    }
+
+    public function php80TypesProvider()
+    {
+        return [
+            ['foo', [new Type(Type::BUILTIN_TYPE_ARRAY, true, null, true)]],
+            ['bar', [new Type(Type::BUILTIN_TYPE_INT, true)]],
+            ['timeout', [new Type(Type::BUILTIN_TYPE_INT), new Type(Type::BUILTIN_TYPE_FLOAT)]],
+            ['optional', [new Type(Type::BUILTIN_TYPE_INT, true), new Type(Type::BUILTIN_TYPE_FLOAT, true)]],
+            ['string', [new Type(Type::BUILTIN_TYPE_OBJECT, false, 'Stringable'), new Type(Type::BUILTIN_TYPE_STRING)]],
+            ['payload', null],
+            ['data', null],
         ];
     }
 

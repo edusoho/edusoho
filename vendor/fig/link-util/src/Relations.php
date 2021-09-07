@@ -36,9 +36,16 @@ interface Relations
     /**
      * Refers to a substitute for this context
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-alternate
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-alternate
      */
     const REL_ALTERNATE = 'alternate';
+
+    /**
+     * Used to reference alternative content that uses the AMP profile of the HTML format.
+     *
+     * @see https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/
+     */
+    const REL_AMPHTML = 'amphtml';
 
     /**
      * Refers to an appendix.
@@ -71,7 +78,7 @@ interface Relations
     /**
      * Refers to the context's author.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-author
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-author
      */
     const REL_AUTHOR = 'author';
 
@@ -85,7 +92,7 @@ interface Relations
     /**
      * Gives a permanent link to use for bookmarking purposes.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-bookmark
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-bookmark
      */
     const REL_BOOKMARK = 'bookmark';
 
@@ -256,7 +263,7 @@ interface Relations
     /**
      * Refers to context-sensitive help.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-help
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-help
      */
     const REL_HELP = 'help';
 
@@ -282,7 +289,7 @@ interface Relations
     /**
      * Refers to an icon representing the link's context.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-icon
+     * @see https://html.spec.whatwg.org/multipage/links.html#rel-icon
      */
     const REL_ICON = 'icon';
 
@@ -462,7 +469,7 @@ interface Relations
     /**
      * Links to a manifest file for the context.
      *
-     * @see https://www.w3.org/TR/appmanifest/#using-a-link-element-to-link-to-a-manifest
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-manifest
      */
     const REL_MANIFEST = 'manifest';
 
@@ -472,6 +479,13 @@ interface Relations
      * @see https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/pinnedTabs/pinnedTabs.html#//apple_ref/doc/uid/TP40002051-CH18-SW1
      */
     const REL_MASK_ICON = 'mask-icon';
+
+    /**
+     * Refers to a feed of personalised media recommendations relevant to the link context.
+     *
+     * @see https://wicg.github.io/media-feeds/#discovery-of-media-feeds
+     */
+    const REL_MEDIA_FEED = 'media-feed';
 
     /**
      * The Target IRI points to a Memento, a fixed resource that will not change state anymore.
@@ -513,7 +527,7 @@ interface Relations
     /**
      * Indicates that the link's context is a part of a series, and that the next in the series is the link target. 
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-next
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-next
      */
     const REL_NEXT = 'next';
 
@@ -527,7 +541,7 @@ interface Relations
     /**
      * Indicates that the context’s original author or publisher does not endorse the link target.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-nofollow
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-nofollow
      */
     const REL_NOFOLLOW = 'nofollow';
 
@@ -542,7 +556,7 @@ interface Relations
     /**
      * Indicates that no referrer information is to be leaked when following the link.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-noreferrer
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
      */
     const REL_NOREFERRER = 'noreferrer';
 
@@ -655,7 +669,7 @@ interface Relations
     /**
      * Indicates that the link's context is a part of a series, and that the previous in the series is the link target. 
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-prev
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-prev
      */
     const REL_PREV = 'prev';
 
@@ -701,6 +715,14 @@ interface Relations
     const REL_PROFILE = 'profile';
 
     /**
+     * Links to a publication manifest. A manifest represents structured information about a publication, such as informative
+     * metadata, a list of resources, and a default reading order.
+     *
+     * @see https://www.w3.org/TR/pub-manifest/#link-relation-type-registration
+     */
+    const REL_PUBLICATION = 'publication';
+
+    /**
      * Identifies a related resource.
      *
      * @see https://tools.ietf.org/html/rfc4287
@@ -722,6 +744,14 @@ interface Relations
      * @see https://tools.ietf.org/html/rfc4685
      */
     const REL_REPLIES = 'replies';
+
+    /**
+     * The resource identified by the link target provides an input value to an instance of a rule, where the resource which
+     * represents the rule instance is identified by the link context. 
+     *
+     * @see https://openconnectivity.org/specs/OCF_Core_Optional_Specification_v2.2.0.pdf
+     */
+    const REL_RULEINPUT = 'ruleinput';
 
     /**
      * Refers to a resource that can be used to search through the link's context and related resources.
@@ -799,7 +829,7 @@ interface Relations
     /**
      * Refers to a stylesheet.
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-stylesheet
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-stylesheet
      */
     const REL_STYLESHEET = 'stylesheet';
 
@@ -827,7 +857,7 @@ interface Relations
     /**
      * Gives a tag (identified by the given address) that applies to the current document. 
      *
-     * @see http://www.w3.org/TR/html5/links.html#link-type-tag
+     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-tag
      */
     const REL_TAG = 'tag';
 
@@ -896,7 +926,7 @@ interface Relations
     const REL_VIA = 'via';
 
     /**
-     * Identifies a target URI that supports the Webmention protcol. This allows clients that mention a resource in some form
+     * Identifies a target URI that supports the Webmention protocol. This allows clients that mention a resource in some form
      * of publishing process to contact that endpoint and inform it that this resource has been mentioned.
      *
      * This is a similar "Linkback" mechanism to the ones of Refback, Trackback, and Pingback. It uses a different protocol,

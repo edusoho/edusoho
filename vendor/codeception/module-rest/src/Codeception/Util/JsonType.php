@@ -228,11 +228,19 @@ class JsonType
         if (preg_match('~^regex\((.*?)\)$~', $filter, $matches)) {
             return preg_match($matches[1], $value);
         }
-        if (preg_match('~^>([\d\.]+)$~', $filter, $matches)) {
+        if (preg_match('~^>=(-?[\d\.]+)$~', $filter, $matches)) {
+            return (float)$value >= (float)$matches[1];
+        }
+        if (preg_match('~^<=(-?[\d\.]+)$~', $filter, $matches)) {
+            return (float)$value <= (float)$matches[1];
+        }
+        if (preg_match('~^>(-?[\d\.]+)$~', $filter, $matches)) {
             return (float)$value > (float)$matches[1];
         }
-        if (preg_match('~^<([\d\.]+)$~', $filter, $matches)) {
+        if (preg_match('~^<(-?[\d\.]+)$~', $filter, $matches)) {
             return (float)$value < (float)$matches[1];
         }
+
+        return false;
     }
 }

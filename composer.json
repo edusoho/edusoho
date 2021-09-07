@@ -21,8 +21,8 @@
     "php": ">=7.0.0",
     "ext-json": "*",
     "twig/twig": "1.42.5",
-    "symfony/symfony": "3.4.38",
-    "symfony/twig-bundle": "3.4.38",
+    "symfony/symfony": "3.4.49",
+    "symfony/twig-bundle": "3.4.49",
     "symfony/assetic-bundle": "2.8.2",
     "symfony/monolog-bundle": "3.2.0",
     "symfony/security-acl": "3.0.4",
@@ -87,12 +87,7 @@
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
     ],
     "post-update-cmd": [
-      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+
     ]
   },
   "config": {

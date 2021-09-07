@@ -13,6 +13,7 @@
 namespace PhpCsFixer\Test;
 
 use PhpCsFixer\Tests\Test\AbstractFixerTestCase as BaseAbstractFixerTestCase;
+use PhpCsFixer\Utils;
 
 /**
  * @TODO 3.0 While removing, remove loading `tests/Test` from `autoload` section of `composer.json`.
@@ -23,13 +24,12 @@ abstract class AbstractFixerTestCase extends BaseAbstractFixerTestCase
 {
     public function __construct($name = null, array $data = [], $dataName = '')
     {
-        @trigger_error(
+        Utils::triggerDeprecation(new \RuntimeException(
             sprintf(
                 'The "%s" class is deprecated. You should stop using it, as it will be removed in 3.0 version.',
                 __CLASS__
-            ),
-            E_USER_DEPRECATED
-        );
+            )
+        ));
 
         parent::__construct($name, $data, $dataName);
     }

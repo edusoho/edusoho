@@ -44,7 +44,7 @@ class DigestAuthenticationListener implements ListenerInterface
 
     public function __construct(TokenStorageInterface $tokenStorage, UserProviderInterface $provider, $providerKey, DigestAuthenticationEntryPoint $authenticationEntryPoint, LoggerInterface $logger = null)
     {
-        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), \E_USER_DEPRECATED);
 
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
@@ -94,7 +94,7 @@ class DigestAuthenticationListener implements ListenerInterface
             $user = $this->provider->loadUserByUsername($digestAuth->getUsername());
 
             if (null === $user) {
-                throw new AuthenticationServiceException('Digest User provider returned null, which is an interface contract violation');
+                throw new AuthenticationServiceException('Digest User provider returned null, which is an interface contract violation.');
             }
 
             $serverDigestMd5 = $digestAuth->calculateServerDigest($user->getPassword(), $request->getMethod());
@@ -175,10 +175,10 @@ class DigestData
 
     public function __construct($header)
     {
-        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), \E_USER_DEPRECATED);
 
         $this->header = $header;
-        preg_match_all('/(\w+)=("((?:[^"\\\\]|\\\\.)+)"|([^\s,$]+))/', $header, $matches, PREG_SET_ORDER);
+        preg_match_all('/(\w+)=("((?:[^"\\\\]|\\\\.)+)"|([^\s,$]+))/', $header, $matches, \PREG_SET_ORDER);
         foreach ($matches as $match) {
             if (isset($match[1]) && isset($match[3])) {
                 $this->elements[$match[1]] = isset($match[4]) ? $match[4] : $match[3];
@@ -199,11 +199,11 @@ class DigestData
     public function validateAndDecode($entryPointKey, $expectedRealm)
     {
         if ($keys = array_diff(['username', 'realm', 'nonce', 'uri', 'response'], array_keys($this->elements))) {
-            throw new BadCredentialsException(sprintf('Missing mandatory digest value; received header "%s" (%s)', $this->header, implode(', ', $keys)));
+            throw new BadCredentialsException(sprintf('Missing mandatory digest value; received header "%s" (%s).', $this->header, implode(', ', $keys)));
         }
 
         if ('auth' === $this->elements['qop'] && !isset($this->elements['nc'], $this->elements['cnonce'])) {
-            throw new BadCredentialsException(sprintf('Missing mandatory digest value; received header "%s"', $this->header));
+            throw new BadCredentialsException(sprintf('Missing mandatory digest value; received header "%s".', $this->header));
         }
 
         if ($expectedRealm !== $this->elements['realm']) {

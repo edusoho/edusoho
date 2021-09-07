@@ -110,18 +110,23 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 $associationMapping = $metadata->getAssociationMapping($property);
 
                 if (isset($associationMapping['indexBy'])) {
-                    $indexProperty = $associationMapping['indexBy'];
                     /** @var ClassMetadataInfo $subMetadata */
                     $subMetadata = $this->classMetadataFactory->getMetadataFor($associationMapping['targetEntity']);
-                    $typeOfField = $subMetadata->getTypeOfField($indexProperty);
 
-                    if (null === $typeOfField) {
-                        $associationMapping = $subMetadata->getAssociationMapping($indexProperty);
+                    // Check if indexBy value is a property
+                    $fieldName = $associationMapping['indexBy'];
+                    if (null === ($typeOfField = $subMetadata->getTypeOfField($fieldName))) {
+                        $fieldName = $subMetadata->getFieldForColumn($associationMapping['indexBy']);
+                        //Not a property, maybe a column name?
+                        if (null === ($typeOfField = $subMetadata->getTypeOfField($fieldName))) {
+                            //Maybe the column name is the association join column?
+                            $associationMapping = $subMetadata->getAssociationMapping($fieldName);
 
-                        /** @var ClassMetadataInfo $subMetadata */
-                        $indexProperty = $subMetadata->getSingleAssociationReferencedJoinColumnName($indexProperty);
-                        $subMetadata = $this->classMetadataFactory->getMetadataFor($associationMapping['targetEntity']);
-                        $typeOfField = $subMetadata->getTypeOfField($indexProperty);
+                            /** @var ClassMetadataInfo $subMetadata */
+                            $indexProperty = $subMetadata->getSingleAssociationReferencedJoinColumnName($fieldName);
+                            $subMetadata = $this->classMetadataFactory->getMetadataFor($associationMapping['targetEntity']);
+                            $typeOfField = $subMetadata->getTypeOfField($indexProperty);
+                        }
                     }
 
                     if (!$collectionKeyType = $this->getPhpType($typeOfField)) {
@@ -157,8 +162,11 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 case Type::BUILTIN_TYPE_OBJECT:
                     switch ($typeOfField) {
                         case self::$useDeprecatedConstants ? DBALType::DATE : Types::DATE_MUTABLE:
+                        // no break
                         case self::$useDeprecatedConstants ? DBALType::DATETIME : Types::DATETIME_MUTABLE:
+                        // no break
                         case self::$useDeprecatedConstants ? DBALType::DATETIMETZ : Types::DATETIMETZ_MUTABLE:
+                        // no break
                         case 'vardatetime':
                         case self::$useDeprecatedConstants ? DBALType::TIME : Types::TIME_MUTABLE:
                             return [new Type(Type::BUILTIN_TYPE_OBJECT, $nullable, 'DateTime')];
@@ -177,8 +185,8 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 case Type::BUILTIN_TYPE_ARRAY:
                     switch ($typeOfField) {
                         case self::$useDeprecatedConstants ? DBALType::TARRAY : 'array':
+                        // no break
                         case 'json_array':
-                        case self::$useDeprecatedConstants ? false : Types::JSON:
                             return [new Type(Type::BUILTIN_TYPE_ARRAY, $nullable, null, true)];
 
                         case self::$useDeprecatedConstants ? DBALType::SIMPLE_ARRAY : Types::SIMPLE_ARRAY:
@@ -230,6 +238,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
     {
         switch ($doctrineType) {
             case self::$useDeprecatedConstants ? DBALType::SMALLINT : Types::SMALLINT:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::INTEGER : Types::INTEGER:
                 return Type::BUILTIN_TYPE_INT;
 
@@ -237,9 +246,13 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 return Type::BUILTIN_TYPE_FLOAT;
 
             case self::$useDeprecatedConstants ? DBALType::BIGINT : Types::BIGINT:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::STRING : Types::STRING:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::TEXT : Types::TEXT:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::GUID : Types::GUID:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::DECIMAL : Types::DECIMAL:
                 return Type::BUILTIN_TYPE_STRING;
 
@@ -247,15 +260,21 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 return Type::BUILTIN_TYPE_BOOL;
 
             case self::$useDeprecatedConstants ? DBALType::BLOB : Types::BLOB:
+            // no break
             case 'binary':
                 return Type::BUILTIN_TYPE_RESOURCE;
 
             case self::$useDeprecatedConstants ? DBALType::OBJECT : Types::OBJECT:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::DATE : Types::DATE_MUTABLE:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::DATETIME : Types::DATETIME_MUTABLE:
+            // no break
             case self::$useDeprecatedConstants ? DBALType::DATETIMETZ : Types::DATETIMETZ_MUTABLE:
+            // no break
             case 'vardatetime':
             case self::$useDeprecatedConstants ? DBALType::TIME : Types::TIME_MUTABLE:
+            // no break
             case 'date_immutable':
             case 'datetime_immutable':
             case 'datetimetz_immutable':
@@ -264,9 +283,10 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 return Type::BUILTIN_TYPE_OBJECT;
 
             case self::$useDeprecatedConstants ? DBALType::TARRAY : 'array':
+            // no break
             case self::$useDeprecatedConstants ? DBALType::SIMPLE_ARRAY : Types::SIMPLE_ARRAY:
+            // no break
             case 'json_array':
-            case self::$useDeprecatedConstants ? false : Types::JSON:
                 return Type::BUILTIN_TYPE_ARRAY;
         }
 
