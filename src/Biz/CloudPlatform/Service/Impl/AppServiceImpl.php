@@ -238,7 +238,7 @@ class AppServiceImpl extends BaseService implements AppService
         $downloadDirectory = $this->getDownloadDirectory();
 
         if ($filesystem->exists($downloadDirectory)) {
-            if (!is_writeable($downloadDirectory)) {
+            if (!is_writable($downloadDirectory)) {
                 $errors[] = sprintf('下载目录(%s)无写权限', $downloadDirectory);
             }
         } else {
@@ -252,7 +252,7 @@ class AppServiceImpl extends BaseService implements AppService
         $backupdDirectory = $this->getBackUpDirectory();
 
         if ($filesystem->exists($backupdDirectory)) {
-            if (!is_writeable($backupdDirectory)) {
+            if (!is_writable($backupdDirectory)) {
                 $errors[] = sprintf('备份(%s)无写权限', $backupdDirectory);
             }
         } else {
@@ -265,39 +265,39 @@ class AppServiceImpl extends BaseService implements AppService
 
         $rootDirectory = $this->getSystemRootDirectory();
 
-        if (!is_writeable("{$rootDirectory}/app")) {
+        if (!is_writable("{$rootDirectory}/app")) {
             $errors[] = 'app目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/src")) {
+        if (!is_writable("{$rootDirectory}/src")) {
             $errors[] = 'src目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/vendor")) {
+        if (!is_writable("{$rootDirectory}/vendor")) {
             $errors[] = 'vendor目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/plugins")) {
+        if (!is_writable("{$rootDirectory}/plugins")) {
             $errors[] = 'plugins目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/web")) {
+        if (!is_writable("{$rootDirectory}/web")) {
             $errors[] = 'web目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/app/cache")) {
+        if (!is_writable("{$rootDirectory}/app/cache")) {
             $errors[] = 'app/cache目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/app/data")) {
+        if (!is_writable("{$rootDirectory}/app/data")) {
             $errors[] = 'app/data目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/app/config")) {
+        if (!is_writable("{$rootDirectory}/app/config")) {
             $errors[] = 'app/config目录无写权限';
         }
 
-        if (!is_writeable("{$rootDirectory}/app/config/config.yml")) {
+        if (!is_writable("{$rootDirectory}/app/config/config.yml")) {
             $errors[] = 'app/config/config.yml文件无写权限';
         }
 
