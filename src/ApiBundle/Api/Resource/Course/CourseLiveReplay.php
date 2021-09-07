@@ -11,9 +11,9 @@ class CourseLiveReplay extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $liveId)
     {
-        $userId = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $client = new EdusohoLiveClient();
-        $replays = $client->downloadReplayForSelfLive($liveId, $userId);
+        $replays = $client->downloadReplayForSelfLive($liveId, $user['id']);
         if (!empty($replays['error'])) {
             throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
