@@ -1,12 +1,23 @@
 import FileChooser from 'app/js/file-chooser/replay-choose';
 
-export default class Video {
+export default class Replay {
   constructor() {
     this.showChooseContent();
     this.initStep2form();
     this.autoValidatorLength();
     this.initFileChooser();
     this.categorySelect();
+    this.initEvent();
+  }
+
+  initEvent() {
+    window.ltc.on('getValidate', (msg) => {
+      window.ltc.emit('returnValidate', { valid: this.validate.form() });
+    });
+
+    window.ltc.on('getActivity', (msg) => {
+      window.ltc.emit('returnActivity', {valid:this.validate.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
+    });
   }
 
   categorySelect(){
@@ -36,7 +47,7 @@ export default class Video {
         },
         minute: 'required unsigned_integer',
         second: 'required second_range',
-        media: 'required',
+        origin_lesson_id: 'required',
       },
       messages: {
         minute: {
@@ -46,7 +57,7 @@ export default class Video {
           required: Translator.trans('activity.video_manage.length_required_error_hint'),
           second_range: Translator.trans('activity.video_manage.length_required_error_hint'),
         },
-        media: Translator.trans('activity.video_manage.media_error_hint'),
+        origin_lesson_id: Translator.trans('activity.replay_manage.replay_error_hint'),
       }
     });
   }
@@ -81,11 +92,9 @@ export default class Video {
           file.second = second;
         }
 
-        $('[name="media"]').val(JSON.stringify(file));
+        $('[name="origin_lesson_id"]').val(file.id);
       };
       placeMediaAttr(file);
-
-      $('[name="ext[mediaSource]"]').val(file.source);
       $('#step2-form').valid();
     };
 

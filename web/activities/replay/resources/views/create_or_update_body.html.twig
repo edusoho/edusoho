@@ -1,5 +1,5 @@
 {% extends 'activity/activity-layout.html.twig' %}
-{% do script(['replayactivity/js/create/index.js']) %}
+{% do script(['libs/ltc-sdk-client.js', 'replayactivity/js/create/index.js']) %}
 {% set length = activity.length|default(0)|convert_minute_and_second %}
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
@@ -18,7 +18,7 @@
           <label for="media" class="style control-label-required">{{ 'course.plan_task.activity_manage.replay'|trans }}</label>
         </div>
         <div class="col-sm-10">
-          {% include 'live-replay/replay-choose.html.twig' with {mediaType: 'video','courseId': activity.fromCourseId, fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null), selectedFile: selectedFile|default(null) } %}
+          {% include 'live-replay/replay-choose.html.twig' with {mediaType: 'replay','courseId': activity.fromCourseId, originLessonId: activity.ext.origin_lesson_id|default(null), replayName: activity.title } %}
         </div>
       </div>
       <div class="form-group for-video-type" id="lesson-length-form-group">

@@ -1,22 +1,15 @@
-{% if file is not empty %}
-  {% set selectedFile = {'id': file.id, 'name': file.filename} %}
-{% endif %}
 {% set courseType = courseType|default('course') %}
-
-<input type="hidden" name="media" id="media" value="{% if file|default(null) %}{{ selectedFile|default()|json_encode }}{% endif %}">
-<div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
-  <span data-role="placeholder">{{ file.filename|default(null) }}</span>
+<input type="hidden" name="origin_lesson_id" id="origin_lesson_id" value="{{ originLessonId|default('')}}">
+<div class="file-chooser-bar {% if not originLessonId|default(null) %}hidden {% endif %}">
+  <span data-role="placeholder">{{ replayName|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button">
     <i class="glyphicon glyphicon-edit"></i>
     {{ 'course.plan_task.activity_manage.download.edit'|trans }}
   </button>
-  <div class="alert alert-warning" data-role="waiting-tip"
-       style="display:none;">{{'course.plan_task.activity_manage.download.converting_tips'|trans|raw}}
-  </div>
 </div>
-<div class="file-chooser-main {% if file|default(null) %}hidden {% endif %}">
+<div class="file-chooser-main {% if originLessonId|default(null) %}hidden {% endif %}">
   <div>
-    <div class="tab-pane " id="chooser-material-panel">
+    <div class="tab-pane" id="chooser-material-panel">
       {% include 'live-replay/parts/replay-choose.html.twig' %}
     </div>
   </div>
