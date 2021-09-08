@@ -1,7 +1,7 @@
 import MaterialLibChoose from './base/materiallib-choose';
 import Emitter from 'component-emitter';
 
-class FileChooser extends Emitter{
+class ReplayChooser extends Emitter{
   constructor(options) {
     super();
     this.init();
@@ -13,18 +13,18 @@ class FileChooser extends Emitter{
 
   initFileChooser() {
     const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
-    materialLibChoose.on('select', file => this.fileSelect(file));
+    materialLibChoose.on('select', replay => this.fileSelect(replay));
   }
 
-  fileSelect(file) {
-    this.fillTitle(file);
-    this.emit('select', file);
+  fileSelect(replay) {
+    this.fillTitle(replay);
+    this.emit('select', replay);
   }
 
-  fillTitle(file){
+  fillTitle(replay){
     let $title = $('#title');
     if ($title.length > 0 && $title.val()=='') {
-      let title = file.name.substring(0,file.name.lastIndexOf('.') !== -1 ? file.name.lastIndexOf('.') : file.name.length);
+      let title = replay.name.substring(0,replay.name.lastIndexOf('.') !== -1 ? replay.name.lastIndexOf('.') : replay.name.length);
       $title.val(title);
     }
   }
@@ -39,4 +39,4 @@ class FileChooser extends Emitter{
   }
 }
 
-export default FileChooser;
+export default ReplayChooser;
