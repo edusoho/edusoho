@@ -198,6 +198,18 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     return true;
                 },
             ),
+            'replay' => array(
+                'meta' => array(
+                    'name' => 'course.activity.replay',
+                    'icon' => 'es-icon es-icon-video',
+                ),
+                'typeClass' => '\Biz\Activity\Type\Replay',
+                'controller' => 'AppBundle:Activity/Replay',
+                'canFree' => true,
+                'visible' => function ($courseSet, $course) {
+                    return true;
+                },
+            ),
         );
     }
 }

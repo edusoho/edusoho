@@ -43,4 +43,8 @@ interface LiveActivityService
     public function findLiveActivitiesByLiveIds($liveIds);
 
     public function getBySyncIdGTAndLiveId($liveId);
+
+    public function findLiveActivitiesByIsPublic();
+
+    public function findLiveActivitiesByReplayTagId($tagId);
 }

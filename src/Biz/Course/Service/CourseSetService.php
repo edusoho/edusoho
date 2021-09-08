@@ -288,6 +288,10 @@ interface CourseSetService
 
     public function findCourseSetsLikeTitle($title);
 
+    public function findCourseSetsByCategoryIdAndCreator($categoryId, $creator);
+
+    public function findCourseSetsByCreator($creator);
+
     /**
      * @param $courseId
      * 课程从班级移除后，重置课程及教学计划的parentId
