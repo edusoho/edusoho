@@ -60,7 +60,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
             $user = $users[$taskResult['userId']];
             $testpaperResult = empty($testpaperResults[$taskResult['userId']]) ? [] : $testpaperResults[$taskResult['userId']];
             $data = [];
-            $data[] = $user['nickname'];
+            $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $data[] = empty($taskResult['createdTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
             $data[] = empty($testpaperResult['usedTime']) ? '-' : $testpaperResult['usedTime'];
