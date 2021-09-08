@@ -212,7 +212,7 @@ class EdusohoLiveClient
      */
     public function downloadReplayForSelfLive($liveId, $userId)
     {
-        return $this->createCloudApi('root')->get("/lives/{$liveId}/replay/download", ['userId' => $userId]);
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$liveId}/replay/download", ['userId' => $userId]);
     }
 
     protected function createCloudApi($server)
