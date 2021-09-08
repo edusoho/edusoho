@@ -10,6 +10,8 @@ interface LiveActivityService
 
     public function findLiveActivitiesByIds($ids);
 
+    public function findLiveActivitiesByReplayStatus($replayStatus = 'generated');
+
     public function createLiveActivity($activity, $ignoreValidation = false);
 
     /**

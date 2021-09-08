@@ -33,6 +33,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->findByIds($ids);
     }
 
+    public function findLiveActivitiesByReplayStatus($replayStatus = 'generated')
+    {
+        return $this->getLiveActivityDao()->findLiveActivitiesByReplayStatus($replayStatus);
+    }
+
     public function findLiveActivitiesByIsPublic()
     {
         return $this->getLiveActivityDao()->findLiveActivitiesByIsPublic();

@@ -41,7 +41,8 @@
 <div class="js-material-lib-search-form">
 	<input type="hidden" name="categoryId" id="categorySelect">
 	<input type="hidden" name="tagId" value="">
-	<input type="hidden" name="page" value="1">
+  <input type="hidden" name="courseSetId" value="{{ courseSetId|default('') }}">
+  <input type="hidden" name="page" value="1">
 	<input type="hidden" name="keyword">
 </div>
 <div class="js-material-list chooser-list-parent">

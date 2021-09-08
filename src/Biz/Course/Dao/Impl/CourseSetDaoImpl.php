@@ -49,11 +49,6 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $this->findByFields(['parentId' => $categoryId, 'creator' => $creator]);
     }
 
-    public function findCourseSetsByCreator($creator)
-    {
-        return $this->findByFields(['creator' => $creator]);
-    }
-
     public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit)
     {
         $courseSetAlias = 'course_set_v8'; //course_set_v8

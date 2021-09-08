@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\Replay;
-
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -25,39 +23,41 @@ class ReplayController extends BaseController
             20
         );
         $activities = $this->getActivityService()->search(
-            $conditions,['createdTime' => 'DESC'],
+            $conditions, ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $liveActivities= $this->getActivityService()->findActivities(ArrayToolkit::column($activities,'id'),true);
+        $liveActivities = $this->getActivityService()->findActivities(ArrayToolkit::column($activities, 'id'), true);
         $liveActivities = $this->handleActivityReplay($liveActivities);
+
         return $this->render(
             'live-replay/widget/choose-table.html.twig',
-            array(
+            [
                 'activities' => $liveActivities,
                 'paginator' => $paginator,
-            )
+            ]
         );
     }
 
     protected function handleActivityReplay($liveActivities)
     {
         $activitiesList = [];
-        foreach ($liveActivities as $activity){
+        foreach ($liveActivities as $activity) {
             if (isset($activity['ext'])) {
                 $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
                 $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
                 $activitiesList[] = [
                     'id' => $activity['id'],
                     'title' => $activity['title'],
-                    'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s',$activity['ext']['liveStartTime']),
+                    'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                     'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
                     'liveSecond' => $liveTime,
-                    'anchor' => empty($user['nickname']) ? '-' : $user['nickname']
+                    'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
                 ];
             }
         }
+
         return $activitiesList;
     }
 
@@ -65,40 +65,44 @@ class ReplayController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
+        if ($currentUser->isAdmin()) {
+            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByReplayStatus();
+        } else {
+            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
+        }
+
         $activityPublic = [];
-        $liveActivitiesIds = ArrayToolkit::column($liveActivity,'id');
+        $liveActivitiesIds = ArrayToolkit::column($liveActivity, 'id');
         if (!empty($liveActivitiesIds)) {
-            $activityPublic = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType(ArrayToolkit::column($liveActivity,'id'),'live');
+            $activityPublic = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType(ArrayToolkit::column($liveActivity, 'id'), 'live');
         }
 
-        $courseSet = $this->getCourseSetService()->findCourseSetsByCreator($currentUser->getId());
-        $activityCreator = $this->getActivityService()->findActivitiesByCourseSetIdAndType(ArrayToolkit::column($courseSet,'id'),'live');
-        $activityIds = ArrayToolkit::column(array_merge($activityPublic,$activityCreator),'id');
+        $activityCreator = $this->getActivityService()->findActivitiesByCourseSetIdAndType($conditions['courseSetId'], 'live');
+        $activityIds = ArrayToolkit::column(array_merge($activityPublic, $activityCreator), 'id');
 
-        if (isset($conditions['categoryId']) && empty($conditions['categoryId'])) {
-            $courseSet = $this->getCourseSetService()->findCourseSetsByCategoryIdAndCreator($conditions['categoryId'],$currentUser->getId());
-            $activityCategory = $this->getActivityService()->findActivitiesByCourseSetIdAndType(ArrayToolkit::column($courseSet,'id'),'live');
-            $activityCategoryIds = ArrayToolkit::column($activityCategory,'id');
-            $activityIds = array_intersect($activityIds,$activityCategoryIds);
+        if (isset($conditions['categoryId']) && !empty($conditions['categoryId'])) {
+            $courseSet = $this->getCourseSetService()->findCourseSetsByCategoryIdAndCreator($conditions['categoryId'], $currentUser->getId());
+            $activityCategory = $this->getActivityService()->findActivitiesByCourseSetIdsAndType(ArrayToolkit::column($courseSet, 'id'), 'live');
+            $activityCategoryIds = ArrayToolkit::column($activityCategory, 'id');
+            $activityIds = array_intersect($activityIds, $activityCategoryIds);
         }
 
-        if (isset($conditions['tagId']) && empty($conditions['tagId'])) {
+        if (isset($conditions['tagId']) && !empty($conditions['tagId'])) {
             $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByReplayTagId($conditions['tagId']);
-            $activityTagIds = ArrayToolkit::column($liveActivity,'id');
-            $activityIds = array_intersect($activityIds,$activityTagIds);
+            $activityTagIds = ArrayToolkit::column($liveActivity, 'id');
+            $activityIds = array_intersect($activityIds, $activityTagIds);
         }
 
-        if (!empty($conditions['keyword'])) {
+        if (isset($conditions['keyword']) && !empty($conditions['keyword'])) {
             $activityLikeTitle = $this->getActivityService()->findActivitiesLiveByLikeTitle($conditions['keyword']);
-            $activityLikeTitleIds = ArrayToolkit::column($activityLikeTitle,'id');
-            $activityIds = array_intersect($activityIds,$activityLikeTitleIds);
+            $activityLikeTitleIds = ArrayToolkit::column($activityLikeTitle, 'id');
+            $activityIds = array_intersect($activityIds, $activityLikeTitleIds);
         }
 
         unset($conditions['tagId']);
         unset($conditions['keyword']);
         unset($conditions['categoryId']);
-        $conditions['ids'] = $activityIds;
+        $conditions['ids'] = empty($activityIds) ? [-1] : $activityIds;
         $conditions['mediaType'] = 'live';
 
         return $conditions;

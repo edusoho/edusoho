@@ -14,8 +14,6 @@ interface CourseSetDao extends GeneralDaoInterface
 
     public function findCourseSetsByCategoryIdAndCreator($categoryId, $creator);
 
-    public function findCourseSetsByCreator($creator);
-
     public function findProductIdAndGoodsIdsByIds($ids);
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked);
