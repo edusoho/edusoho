@@ -66,8 +66,9 @@ class ExportController extends BaseController
     public function exportAction(Request $request, $name, $type)
     {
         $fileNames = $request->query->get('fileNames');
+        $customFileName = $request->query->get('customFileName');
 
-        list($path, $name) = $this->container->get('batch_exporter')->exportFile($name, $fileNames);
+        list($path, $name) = $this->container->get('batch_exporter')->exportFile($name, $fileNames, $customFileName);
 
         if (!file_exists($path)) {
             return $this->createJsonResponse(['success' => 0, 'message' => 'empty file']);

@@ -79,7 +79,7 @@ class Export {
 
   download(urls, fileNames) {
     if (urls.url && fileNames) {
-      let url = urls.url + '?';
+      let url = urls.url.indexOf('?') >= 0 ? urls.url + '&' : urls.url + '?';
       $.each(fileNames, function (index, value) {
         url += `fileNames[]=${value}&`;
       });
