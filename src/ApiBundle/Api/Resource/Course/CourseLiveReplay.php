@@ -13,13 +13,14 @@ class CourseLiveReplay extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $client = new EdusohoLiveClient();
-        $replays = $client->downloadReplayForSelfLive($liveId, $user['id']);
-        if (!empty($replays['error'])) {
+        $replay = $client->downloadReplayForSelfLive($liveId, $user['id']);
+        if (!empty($replay['error'])) {
             throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
 
         return [
-            'replays' => $replays,
+            'url' => $replay['url'],
+            'type' => 'selfLive', //目前只有自研直播，多供应商直播支持后，可以扩展类型
         ];
     }
 }
