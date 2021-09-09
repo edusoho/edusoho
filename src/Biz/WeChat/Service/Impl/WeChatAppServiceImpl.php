@@ -30,11 +30,14 @@ class WeChatAppServiceImpl extends BaseService implements WeChatAppService
             }
         }
 
-        return array(
+        $wechatApp = $this->getSettingService()->get('wechat_app', []);
+
+        return [
             'latestPackageId' => $wechatApp['latestPackageId'],
             'purchased' => $wechatApp['purchased'],
             'installed' => !empty($installedWechatApp),
-        );
+            'configured' => !empty($wechatApp['appid']) && !empty($wechatApp['secret']),
+        ];
     }
 
     /**
@@ -43,5 +46,10 @@ class WeChatAppServiceImpl extends BaseService implements WeChatAppService
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
