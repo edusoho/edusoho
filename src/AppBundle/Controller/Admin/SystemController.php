@@ -12,10 +12,10 @@ class SystemController extends BaseController
 {
     public function reportAction()
     {
-        return $this->render('admin/system/report/status.html.twig', array(
+        return $this->render('admin/system/report/status.html.twig', [
             'env' => $this->getSystemStatus(),
             'systemDiskUsage' => $this->getSystemDiskUsage(),
-        ));
+        ]);
     }
 
     public function phpAction()
@@ -27,66 +27,66 @@ class SystemController extends BaseController
 
     public function ucenterAction()
     {
-        $setting = $this->getSettingService()->get('user_partner', array());
+        $setting = $this->getSettingService()->get('user_partner', []);
 
-        if (!empty($setting['mode']) && $setting['mode'] === 'discuz') {
+        if (!empty($setting['mode']) && 'discuz' === $setting['mode']) {
             $discuzProvider = new DiscuzAuthProvider($this->getBiz());
 
             if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
+                return $this->createJsonResponse(['status' => true, 'message' => '通信成功']);
             }
 
-            return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
+            return $this->createJsonResponse(['status' => false, 'message' => '通信失败']);
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '未开通Ucenter'));
+            return $this->createJsonResponse(['status' => true, 'message' => '未开通Ucenter']);
         }
     }
 
     public function emailSendCheckAction()
     {
         $user = $this->getUser();
-        $site = $this->getSettingService()->get('site', array());
-        $mailer = $this->getSettingService()->get('mailer', array());
-        $cloudMail = $this->getSettingService()->get('cloud_mail_crm', array());
+        $site = $this->getSettingService()->get('site', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+        $cloudMail = $this->getSettingService()->get('cloud_mail_crm', []);
 
         try {
-            if (isset($cloudMail['status']) && $cloudMail['status'] === 'enable') {
-                return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
+            if (isset($cloudMail['status']) && 'enable' === $cloudMail['status']) {
+                return $this->createJsonResponse(['status' => true, 'message' => '已经使用云邮件']);
             }
-            $mailOptions = array(
+            $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_system_self_test',
-                'params' => array(
+                'params' => [
                     'sitename' => $site['name'],
-                ),
-            );
+                ],
+            ];
 
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
 
-            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
+            return $this->createJsonResponse(['status' => true, 'message' => '邮件发送正常']);
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$e->getMessage());
 
-            return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
+            return $this->createJsonResponse(['status' => false, 'message' => '邮件发送异常']);
         }
     }
 
     public function checkDirAction()
     {
-        $paths = array(
-            '/' => array('depth' => '<1', 'dir' => true),
-            'app' => array('depth' => '<1', 'dir' => true),
-            'src' => array(),
-            'plugins' => array(),
-            'api' => array(),
-            'vendor' => array('depth' => '<1', 'dir' => true),
-            'vendor_user' => array('depth' => '<1', 'dir' => true),
-            'web' => array('depth' => '<1', 'dir' => true),
-        );
+        $paths = [
+            '/' => ['depth' => '<1', 'dir' => true],
+            'app' => ['depth' => '<1', 'dir' => true],
+            'src' => [],
+            'plugins' => [],
+            'api' => [],
+            'vendor' => ['depth' => '<1', 'dir' => true],
+            'vendor_user' => ['depth' => '<1', 'dir' => true],
+            'web' => ['depth' => '<1', 'dir' => true],
+        ];
 
-        $errorPaths = array();
+        $errorPaths = [];
 
         if (PHP_OS !== 'WINNT') {
             foreach ($paths as $folder => $opts) {
@@ -116,17 +116,17 @@ class SystemController extends BaseController
             }
         }
 
-        return $this->render('admin/system/report/dir-permission.html.twig', array(
+        return $this->render('admin/system/report/dir-permission.html.twig', [
             'errorPaths' => $errorPaths,
-        ));
+        ]);
     }
 
     protected function getSystemStatus()
     {
-        $env = array();
+        $env = [];
         $env['os'] = PHP_OS;
         $env['phpVersion'] = PHP_VERSION;
-        $env['phpVersionOk'] = version_compare(PHP_VERSION, '5.5.9') >= 0;
+        $env['phpVersionOk'] = version_compare(PHP_VERSION, '7.0.0') >= 0;
         $env['user'] = getenv('USER');
         $env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
         $env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
@@ -146,25 +146,25 @@ class SystemController extends BaseController
     private function getSystemDiskUsage()
     {
         $rootDir = $this->get('kernel')->getRootDir();
-        $logs = array(
+        $logs = [
             'name' => '/app/logs',
             'dir' => $rootDir.'/logs',
             'title' => '用户在站点进行操作的日志存放目录',
-        );
+        ];
 
         $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
-        $webFiles = array(
+        $webFiles = [
             'name' => substr($webFileDir, strrpos($webFileDir, '/')),
             'dir' => $webFileDir,
             'title' => '用户在站点上传图片的存放目录',
-        );
+        ];
 
         $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $material = array(
+        $material = [
             'name' => substr($materialDir, strrpos($materialDir, '/')),
             'dir' => $materialDir,
             'title' => '用户教学资料库中资源的所在目录(云文件除外)',
-        );
+        ];
 
         return array_map(function ($array) {
             $name = $array['name'];
@@ -173,14 +173,14 @@ class SystemController extends BaseController
             $free = disk_free_space($dir);
             $rate = (string) number_format($free / $total, 2) * 100 .'%';
 
-            return array(
+            return [
                 'name' => $name,
                 'rate' => $rate,
                 'free' => StringToolkit::printMem($free),
                 'total' => StringToolkit::printMem($total),
                 'title' => $array['title'],
-            );
-        }, array($logs, $webFiles, $material));
+            ];
+        }, [$logs, $webFiles, $material]);
     }
 
     /**
