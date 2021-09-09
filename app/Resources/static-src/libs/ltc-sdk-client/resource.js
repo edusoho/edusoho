@@ -140,7 +140,7 @@ let editor = () => {
 
     return CKEDITOR.replace(value, Object.assign({
       toolbar: 'Task',
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      fileSingleSizeLimit: window.ltc.getEditorConfig()['fileSingleSizeLimit'],
       allowedContent: true,
       height: 300,
     }, window.ltc.getEditorConfig()));
