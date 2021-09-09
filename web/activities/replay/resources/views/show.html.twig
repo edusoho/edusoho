@@ -1,5 +1,4 @@
 {% extends 'activity/content-layout.html.twig' %}
-{% do script(['replayactivity/js/show/index.js']) %}
 {% set replays = get_live_replays(activity.ext.origin_lesson_id)|default() %}
 
 {% block body %}
