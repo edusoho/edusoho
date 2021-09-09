@@ -30,13 +30,13 @@ class WeChatAppServiceImpl extends BaseService implements WeChatAppService
             }
         }
 
-        $wechatApp = $this->getSettingService()->get('wechat_app', []);
+        $wechatSetting = $this->getSettingService()->get('wechat_app', []);
 
         return [
             'latestPackageId' => $wechatApp['latestPackageId'],
             'purchased' => $wechatApp['purchased'],
             'installed' => !empty($installedWechatApp),
-            'configured' => !empty($wechatApp['appid']) && !empty($wechatApp['secret']),
+            'configured' => !empty($wechatSetting['appid']) && !empty($wechatSetting['secret']),
         ];
     }
 
