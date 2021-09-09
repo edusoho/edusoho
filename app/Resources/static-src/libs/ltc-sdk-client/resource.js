@@ -60,7 +60,7 @@ let validate = function() {
   $.validator.addMethod('trim', function(value, element, params) {
     return this.optional(element) || $.trim(value).length > 0;
   }, '请输入%display%');
-  
+
   $.validator.addMethod('course_title', function(value, element, params) {
     return this.optional(element) || /^[^<>]*$/.test(value);
   }, '不支持输入<、>字符');
@@ -70,11 +70,11 @@ let validate = function() {
       if (typeof rule === 'string') {
         rule = { method: rule };
       }
-  
+
       var message = this.findDefined(
           this.customMessage(element.name, rule.method),
           this.customDataMessage(element, rule.method),
-  
+
           // 'title' is never undefined, so handle empty string as undefined
           !this.settings.ignoreTitle && element.title || undefined,
           $.validator.messages[rule.method],
@@ -87,7 +87,7 @@ let validate = function() {
       } else if (theregex.test(message)) {
         message = $.validator.format(message.replace(theregex, '{$1}'), rule.parameters);
       }
-  
+
       if (displayregex.test(message)) {
         var labeltext, name;
         var id = $(element).attr('id') || $(element).attr('name');
@@ -97,15 +97,15 @@ let validate = function() {
             labeltext = labeltext.replace(/^[\*\s\:\：]*/, '').replace(/[\*\s\:\：]*$/, '');
           }
         }
-  
+
         name = $(element).data('display') || $(element).attr('name');
         message = message.replace(displayregex, labeltext || name);
       }
-  
+
       return message;
     }
-  
-  });  
+
+  });
 }
 
 
@@ -137,10 +137,10 @@ let jquery = () => {
 let editor = () => {
   window.ltc.editor = (value) => {
     $(`#${value}`).data('imageDownloadUrl', window.ltc.getEditorConfig()['imageDownloadUrl'])
-    
+
     return CKEDITOR.replace(value, Object.assign({
       toolbar: 'Task',
-      fileSingleSizeLimit: 2,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       allowedContent: true,
       height: 300,
     }, window.ltc.getEditorConfig()));
