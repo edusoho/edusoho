@@ -183,6 +183,28 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $update;
     }
 
+    public function startLive($id, $startTime)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            return;
+        }
+        if ('close' !== $liveActivity['progressStatus']) {
+            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'start', 'liveStartTime' => $startTime]);
+            $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+        }
+    }
+
+    public function closeLive($id, $closeTime)
+    {
+        $liveActivity = $this->getLiveActivityDao()->get($id);
+        if (empty($liveActivity)) {
+            return;
+        }
+        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'close', 'liveEndTime' => $closeTime]);
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+    }
+
     public function deleteLiveActivity($id)
     {
         //删除直播室
