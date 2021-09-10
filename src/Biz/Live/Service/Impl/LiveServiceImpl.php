@@ -2,16 +2,68 @@
 
 namespace Biz\Live\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Live\Service\LiveService;
-use Biz\BaseService;
-use Biz\User\UserException;
 use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
-use AppBundle\Common\ArrayToolkit;
 
 class LiveServiceImpl extends BaseService implements LiveService
 {
+    public function confirmLiveStatus($liveIds)
+    {
+        try {
+            $liveStatus = $this->getLiveClient()->checkLiveStatus($liveIds);
+
+            foreach ($liveStatus as $liveId => &$status) {
+                $live = $this->getLiveClient()->getByLiveId($liveId);
+                $status = $this->handleLiveStatus($live['progressStatus'], $status);
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $liveStatus;
+    }
+
+    public function canExecuteLiveStatusJob($liveStatus, $jobType)
+    {
+        $can = false;
+        switch ($jobType) {
+            case 'startJob':
+                $can = 'created' === $liveStatus;
+                break;
+            case 'closeJob':
+            case 'closeAgainJob':
+            case 'closeSecondJob':
+            $can = 'start' === $liveStatus;
+                break;
+            default:
+                break;
+        }
+
+        return $can;
+    }
+
+    protected function handleLiveStatus($liveStatus, $confirmStatus)
+    {
+        switch ($liveStatus) {
+            case 'created':
+                $status = 'start' === $confirmStatus ? 'start' : 'created';
+                break;
+            case 'start':
+                $status = 'close' === $confirmStatus ? 'close' : 'start';
+                break;
+            default:
+                $status = $liveStatus;
+                break;
+        }
+
+        return $status;
+    }
+
     public function createLiveRoom($params)
     {
         $liveParams = $this->filterCreateParams($params);
@@ -58,11 +110,11 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     protected function filterCreateParams($params)
     {
-        if (!ArrayToolkit::requireds($params, array('startTime', 'endTime', 'speakerId', 'type'))) {
+        if (!ArrayToolkit::requireds($params, ['startTime', 'endTime', 'speakerId', 'type'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $liveParams = array(
+        $liveParams = [
             'summary' => empty($params['summary']) ? '' : $params['summary'],
             'title' => empty($params['title']) ? '' : $params['title'],
             'type' => $params['type'],
@@ -72,7 +124,7 @@ class LiveServiceImpl extends BaseService implements LiveService
             'liveLogoUrl' => $this->getLiveLogo(),
             'startTime' => $params['startTime'],
             'endTime' => $params['endTime'],
-        );
+        ];
 
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
             $liveParams['roomType'] = $params['roomType'];
@@ -83,11 +135,11 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     protected function filterUpdateParams($params)
     {
-        $liveParams = ArrayToolkit::parts($params, array(
+        $liveParams = ArrayToolkit::parts($params, [
             'liveId',
             'summary',
             'title',
-        ));
+        ]);
 
         if (!empty($params['startTime']) && $params['startTime'] > time()) {
             $liveParams['startTime'] = $params['startTime'];
@@ -128,7 +180,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     protected function isRoomType($liveRoomType)
     {
-        return in_array($liveRoomType, array(EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL));
+        return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL]);
     }
 
     protected function getSpeakerName($speakerId)
