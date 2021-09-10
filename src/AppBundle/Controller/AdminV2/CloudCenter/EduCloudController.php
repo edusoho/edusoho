@@ -1351,6 +1351,7 @@ class EduCloudController extends BaseController
             'sms_classroom_buy_notify' => 'off',
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
+            'sms_comment_modify' => 'off',
         ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
