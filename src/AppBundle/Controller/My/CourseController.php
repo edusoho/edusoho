@@ -17,6 +17,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends CourseBaseController
 {
@@ -151,6 +152,14 @@ class CourseController extends CourseBaseController
             $isUserFavorite = !empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']));
         }
 
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
+            $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
+            if (!empty($vipMember)) {
+                $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
+            }
+        }
+
         return $this->render(
             'course/header/header-for-member.html.twig',
             [
@@ -168,6 +177,7 @@ class CourseController extends CourseBaseController
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
                 'breadcrumbs' => $breadcrumbs,
+                'vipMember' => empty($vipMember) ? [] : $vipMember,
             ]
         );
     }
@@ -253,7 +263,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }
@@ -454,5 +465,18 @@ class CourseController extends CourseBaseController
     protected function getFavoriteService()
     {
         return $this->createService('Favorite:FavoriteService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 }
