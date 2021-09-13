@@ -184,26 +184,28 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $update;
     }
 
-    public function startLive($id, $startTime)
+    public function startLive($liveId, $startTime)
     {
-        $liveActivity = $this->getLiveActivityDao()->get($id);
+        $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
         if (empty($liveActivity)) {
             return;
         }
-        if ('close' !== $liveActivity['progressStatus']) {
+        if ('created' === $liveActivity['progressStatus']) {
             $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'start', 'liveStartTime' => $startTime]);
             $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+            $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
         }
     }
 
-    public function closeLive($id, $closeTime)
+    public function closeLive($liveId, $closeTime)
     {
-        $liveActivity = $this->getLiveActivityDao()->get($id);
+        $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
         if (empty($liveActivity)) {
             return;
         }
         $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'close', 'liveEndTime' => $closeTime]);
         $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+        $this->dispatchEvent('live.status.close', new Event($liveActivity['liveId']));
     }
 
     public function deleteLiveActivity($id)

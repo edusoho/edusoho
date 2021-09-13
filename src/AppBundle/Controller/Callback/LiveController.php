@@ -24,7 +24,7 @@ class LiveController extends BaseController
     public function handleEvent(Request $request)
     {
         $event = $request->request->get('event');
-        $liveId = $request->request->get('liveId');
+        $liveId = $request->request->get('id');
 
         $method = '';
         switch ($event) {
@@ -34,7 +34,7 @@ class LiveController extends BaseController
             case 'room.finished':
                 $method = 'closeEvent';
                 break;
-            case 'replay.generated':
+            case 'replay.finished':
                 $method = 'replayEvent';
                 break;
             default:
@@ -56,12 +56,13 @@ class LiveController extends BaseController
     {
         try {
             $confirmStatus = (new EdusohoLiveClient())->checkLiveStatus([$liveId]);
-
             if (isset($confirmStatus[$liveId]['status']) && 'closed' === $confirmStatus[$liveId]['status']) {
                 $closeTime = $request->query->get('closeTime', time());
-                $this->getLiveActivityService()->startLive($liveId, $closeTime);
+                $this->getLiveActivityService()->closeLive($liveId, $closeTime);
             }
         } catch (\Exception $e) {
+            throw $e;
+
             return;
         }
     }

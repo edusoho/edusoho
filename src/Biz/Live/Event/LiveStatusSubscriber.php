@@ -12,10 +12,25 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return [
+            'live.status.start' => 'liveStatusStart',
+            'live.status.close' => 'liveStatusClose',
             'live.activity.create' => 'liveActivityCreateStatus',
             'live.activity.update' => 'liveActivityUpdateStatus',
             'live.activity.delete' => 'liveActivityDeleteStatus',
         ];
+    }
+
+    public function liveStatusClose(Event $event)
+    {
+        $liveId = $event->getSubject();
+        $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeJob'));
+        $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeAgainJob'));
+        $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeSecondJob'));
+    }
+
+    public function liveStatusStart(Event $event)
+    {
+        $this->deleteLiveStatusJob($this->makeLiveStatusJobName($event->getSubject(), 'startJob'));
     }
 
     public function liveActivityCreateStatus(Event $event)
