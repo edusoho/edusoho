@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Callback;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\LiveReplayService;
-use Biz\Util\EdusohoLiveClient;
+use Biz\Live\Service\LiveService;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,16 +54,10 @@ class LiveController extends BaseController
 
     protected function closeEvent(Request $request, $liveId)
     {
-        try {
-            $confirmStatus = (new EdusohoLiveClient())->checkLiveStatus([$liveId]);
-            if (isset($confirmStatus[$liveId]['status']) && 'closed' === $confirmStatus[$liveId]['status']) {
-                $closeTime = $request->query->get('closeTime', time());
-                $this->getLiveActivityService()->closeLive($liveId, $closeTime);
-            }
-        } catch (\Exception $e) {
-            throw $e;
-
-            return;
+        $confirmStatus = $this->getLiveService()->confirmLiveStatus($liveId);
+        if (isset($confirmStatus[$liveId]['status']) && 'finished' === $confirmStatus['status']) {
+            $closeTime = $request->query->get('liveEndTime', time());
+            $this->getLiveActivityService()->closeLive($liveId, $closeTime);
         }
     }
 
@@ -88,6 +82,14 @@ class LiveController extends BaseController
         $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
 
         return $secretKey;
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
     }
 
     /**

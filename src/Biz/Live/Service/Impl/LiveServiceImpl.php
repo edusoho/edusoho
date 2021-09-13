@@ -12,15 +12,10 @@ use Biz\Util\EdusohoLiveClient;
 
 class LiveServiceImpl extends BaseService implements LiveService
 {
-    public function confirmLiveStatus($liveIds)
+    public function confirmLiveStatus($liveId)
     {
         try {
-            $liveStatus = $this->getLiveClient()->checkLiveStatus($liveIds);
-
-            foreach ($liveStatus as $liveId => &$status) {
-                $live = $this->getLiveClient()->getByLiveId($liveId);
-                $status = $this->handleLiveStatus($live['progressStatus'], $status);
-            }
+            $liveStatus = $this->getLiveClient()->getLiveRoomsInfo($liveId);
         } catch (\Exception $e) {
             throw $e;
         }

@@ -4,7 +4,7 @@ namespace Biz\Live\Service;
 
 interface LiveService
 {
-    public function confirmLiveStatus($liveIds);
+    public function confirmLiveStatus($liveId);
 
     public function canExecuteLiveStatusJob($liveStatus, $jobType);
 

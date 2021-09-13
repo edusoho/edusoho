@@ -79,6 +79,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->delete('/lives/'.$liveId, $args);
     }
 
+    public function getLiveRoomsInfo($liveId)
+    {
+        return $this->createCloudApi('root')->get('/liverooms/'.$liveId.'/info');
+    }
+
     public function getMaxOnline($liveId)
     {
         $args = [
