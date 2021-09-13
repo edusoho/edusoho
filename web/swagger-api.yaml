@@ -166,6 +166,18 @@ paths:
             application/vnd.edusoho.v2+json:
               schema:
                 $ref: '#/components/schemas/setting.task_learning_config'
+  /api/settings/user:
+    get:
+      tags:
+        - setting
+      summary: 用户设置
+      responses:
+        '200':
+          description: 用户设置信息
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                $ref: '#/components/schemas/setting.user'
 components:
   schemas:
     course.note:
@@ -505,6 +517,47 @@ components:
               enum:
                 - kick_previous
                 - reject_current
+          type: object
+      type: object
+    setting.user:
+      title: setting.user
+      description: 用户设置
+      properties:
+        auth:
+          description: 用户账户相关
+          properties:
+            register_mode:
+              description: 注册模式
+              type: string
+              default: email
+            user_terms_enabled:
+              description: 服务协议开关
+              type: boolean
+            privacy_policy_enabled:
+              description: 隐私协议开关
+              type: boolean
+            nickname_enabled:
+              description: 是否允许修改昵称
+              type: boolean
+          type: object
+        login_bind:
+          description: 第三方绑定信息
+          properties:
+            oauth_enabled:
+              description: 是否开启OAuth
+              type: boolean
+            weibo_enabled:
+              description: 微博开关
+              type: boolean
+            qq_enabled:
+              description: QQ开关
+              type: boolean
+            weixinweb_enabled:
+              description: 微信网页登录
+              type: boolean
+            weixinmob_enabled:
+              description: 微信公众号登录
+              type: boolean
           type: object
       type: object
     user.simple:
