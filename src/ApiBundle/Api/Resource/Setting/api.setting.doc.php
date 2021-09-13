@@ -241,7 +241,7 @@
  *         @OA\Property(property="register_mode",description="注册模式",type="string",default="email"),
  *         @OA\Property(property="user_terms_enabled",description="服务协议开关",type="boolean"),
  *         @OA\Property(property="privacy_policy_enabled",description="隐私协议开关",type="boolean"),
- *         @OA\Property(property="nickname_enabled",description="是否允许修改昵称",type="boolean"),
+ *         @OA\Property(property="nickname_enabled",description="是否允许修改昵称,VERSION >= 21.3.6",type="boolean"),
  *     ),
  *     @OA\Property(
  *         property="login_bind",
