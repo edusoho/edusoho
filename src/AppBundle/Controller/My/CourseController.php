@@ -176,29 +176,25 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
+        }
+
         $member = $this->getCourseMember($request, $course);
 
         $classroom = [];
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        }
-
-        // 访问班级课程时确保将用户添加到课程member中
-        if (!empty($classroom) && empty($member)) {
-            $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+            // 访问班级课程时确保将用户添加到课程member中
+            if (!empty($classroom) && empty($member)) {
+                $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+            }
         }
 
         // 非班级课程，点击介绍跳转到概览商品页
-        if (empty($member) || (0 == $course['parentId'] && 'summary' === $tab)) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_show',
-                    [
-                        'id' => $id,
-                        'tab' => $tab,
-                    ]
-                )
-            );
+        if (empty($member) || (0 === (int) $course['parentId'] && 'summary' === $tab)) {
+            return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
