@@ -80,7 +80,7 @@ class QuestionParserController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         $itemsJson = file_get_contents($data['cacheFilePath']);
-        $categoryId = $request->query->get('categoryId');
+        $categoryId = $request->query->get('categoryId', 0);
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = json_decode($itemsJson, true);
         foreach ($items as &$item) {
