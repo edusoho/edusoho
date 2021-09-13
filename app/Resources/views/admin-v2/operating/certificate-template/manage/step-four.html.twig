@@ -32,7 +32,9 @@
       </div>
       <div class="controls col-md-5">
         <textarea id="certificateContent" name="certificateContent" class="form-control" rows="4">{{ template.certificateContent|default(('admin.operation_certificate.template.certificate.content.default.'~template.targetType)|trans) }}</textarea>
-        <p class="help-block">{{ 'admin.operation_certificate.template.certificate.content_hint'|trans|raw }} {{ ('admin.operation_certificate.template.certificate.content_hint.'~template.targetType)|trans|raw }}</p>
+        <p class="help-block">{{ 'admin.operation_certificate.template.certificate.content_hint'|trans|raw }}
+          <br> {{ ('admin.operation_certificate.template.certificate.content_hint.'~template.targetType)|trans|raw }}
+        </p>
       </div>
     </div>
     <div class="form-group ct-mtl">
