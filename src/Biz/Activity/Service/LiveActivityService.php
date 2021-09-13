@@ -24,6 +24,10 @@ interface LiveActivityService
 
     public function updateLiveStatus($liveId, $status);
 
+    public function startLive($id, $startTime);
+
+    public function closeLive($id, $closeTime);
+
     /**
      * @param $id
      *

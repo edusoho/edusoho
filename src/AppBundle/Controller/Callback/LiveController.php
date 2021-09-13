@@ -3,7 +3,9 @@
 namespace AppBundle\Controller\Callback;
 
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Util\EdusohoLiveClient;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,18 +21,54 @@ class LiveController extends BaseController
         return new JsonResponse(['success' => true]);
     }
 
-    public function handleEvent($request)
+    public function handleEvent(Request $request)
     {
         $event = $request->request->get('event');
+        $liveId = $request->request->get('liveId');
+
+        $method = '';
         switch ($event) {
             case 'room.started':
+                $method = 'startEvent';
+                break;
             case 'room.finished':
+                $method = 'closeEvent';
+                break;
             case 'replay.generated':
-                $this->getLiveReplayService()->handleReplayGenerateEvent($request->request->get('replayDatas'));
+                $method = 'replayEvent';
                 break;
             default:
                 break;
         }
+
+        if ($method) {
+            $this->$method($request, $liveId);
+        }
+    }
+
+    protected function startEvent(Request $request, $liveId)
+    {
+        $startTime = $request->query->get('startTime', time());
+        $this->getLiveActivityService()->startLive($liveId, $startTime);
+    }
+
+    protected function closeEvent(Request $request, $liveId)
+    {
+        try {
+            $confirmStatus = (new EdusohoLiveClient())->checkLiveStatus([$liveId]);
+
+            if (isset($confirmStatus[$liveId]['status']) && 'closed' === $confirmStatus[$liveId]['status']) {
+                $closeTime = $request->query->get('closeTime', time());
+                $this->getLiveActivityService()->startLive($liveId, $closeTime);
+            }
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+
+    protected function replayEvent(Request $request, $liveId)
+    {
+        $this->getLiveReplayService()->handleReplayGenerateEvent($request->request->get('replayDatas'));
     }
 
     protected function validToken($request)
@@ -49,6 +87,14 @@ class LiveController extends BaseController
         $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
 
         return $secretKey;
+    }
+
+    /**
+     * @return LiveActivityService
+     */
+    private function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
     }
 
     /**
