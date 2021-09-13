@@ -4,6 +4,37 @@ info:
   description: EduSoho接口，随版本动态变化
   version: default
 paths:
+  '/api/courses/{courseId}/live_replay/{liveId}':
+    get:
+      tags:
+        - course
+      summary: 课程自研直播任务回放下载接口
+      description: 'VERSION >= 21.3.6'
+      parameters:
+        -
+          name: courseId
+          in: path
+          required: true
+          schema:
+            type: number
+        -
+          name: liveId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 回放下载接口
+          content:
+            application/vnd.edusoho.v2+json:
+              schema:
+                properties:
+                  url: { description: 下载地址, type: string }
+                  token: { description: token, type: string }
+                  roomId: { description: roomId, type: number }
+                  type: { description: 直播供应商类型, type: string, enum: [selfLive] }
+                type: object
   '/api/courses/{courseId}/notes/{noteId}':
     get:
       tags:
@@ -537,7 +568,7 @@ components:
               description: 隐私协议开关
               type: boolean
             nickname_enabled:
-              description: 是否允许修改昵称
+              description: '是否允许修改昵称,VERSION >= 21.3.6'
               type: boolean
           type: object
         login_bind:
