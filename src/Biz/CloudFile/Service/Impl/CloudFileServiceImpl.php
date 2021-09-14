@@ -9,6 +9,7 @@ use Biz\CloudFile\Service\CloudFileService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 
@@ -191,6 +192,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function download($globalId, $ssl = false)
     {
+        $this->getLogService()->info('upload_file', 'download', "下载文件 globalId #{$globalId}");
+
         return $this->getCloudFileImplementor()->download($globalId, $ssl);
     }
 
@@ -308,5 +311,13 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
