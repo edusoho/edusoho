@@ -91,10 +91,13 @@ class BankEdit {
         return item.name;
       },
       multiple: true,
-      maximumSelectionSize: 100,
+      maximumSelectionSize: 2,
       width: 'off',
       createSearchChoice: function() {
         return null;
+      },
+      formatSelectionTooBig: function (limit) {
+        return Translator.trans('validate.teacher_number_exceeds_limit', { limit });
       }
     });
 

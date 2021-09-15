@@ -5526,7 +5526,7 @@ admin.operation_certificate.template.certificate.title_hint: optional fill in
 admin.operation_certificate.template.certificate.title.default: Certificate of course certification
 admin.operation_certificate.template.certificate.recipient: Information on the grantee
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
-admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
+admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$ Idcard： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: TIP:If the online school does not set [Name] as a required field, the grantee information will be empty if the student does not fill in the name.
 admin.operation_certificate.template.certificate.content: Text of certificate
 admin.operation_certificate.template.certificate.content.default.course: Due to your excellent learning performance in the [$courseName$] course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!

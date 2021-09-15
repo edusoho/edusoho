@@ -135,7 +135,7 @@ class ClassroomController extends BaseController
         if ($member) {
             $vipSetting = $this->getSettingService()->get('vip', []);
             $vipDeadline = false;
-            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'vip_join' == $member['joinedChannel']) {
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'vip_join' == $member['joinedChannel'] && in_array('student', $member['role'])) {
                 $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
                 $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
                 if (!empty($vipMember) && !empty($vipRight)) {
