@@ -134,10 +134,12 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $vipSetting = $this->getSettingService()->get('vip', []);
-            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && in_array('student', $member['role'])) {
+            $vipDeadline = false;
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'vip_join' == $member['joinedChannel']) {
                 $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
                 $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
                 if (!empty($vipMember) && !empty($vipRight)) {
+                    $vipDeadline = true;
                     $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
                 }
             }
@@ -154,6 +156,7 @@ class ClassroomController extends BaseController
                 'coursesNum' => $coursesNum,
                 'canFreeJoin' => $canFreeJoin,
                 'breadcrumbs' => $breadcrumbs,
+                'vipDeadline' => $vipDeadline,
             ]);
         }
 

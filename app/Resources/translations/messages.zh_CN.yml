@@ -1392,6 +1392,7 @@ course.cover_image.upload_tips: >
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
+vip.course.expiry_date: 会员学习有效期
 course.expiry_date.days_mode: >
   %expiryDays% 天（随到随学）
 course.expiry_date.days_mode.total_days: 共%expiryDays%天
@@ -2414,6 +2415,7 @@ classroom.price: 价格
 classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
+vip.classroom.expiryDays: 会员学习有效期
 classroom.vip_checked_fail_tips: >
   该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
