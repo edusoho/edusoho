@@ -154,10 +154,12 @@ class CourseController extends CourseBaseController
         }
 
         $vipSetting = $this->getSettingService()->get('vip', []);
-        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
+        $vipDeadline = false;
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && in_array('student', $member['role']) && 'vip_join' == $member['joinedChannel']) {
             $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
             $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
             if (!empty($vipMember) && !empty($vipRight)) {
+                $vipDeadline = true;
                 $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
             }
         }
@@ -179,7 +181,7 @@ class CourseController extends CourseBaseController
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
                 'breadcrumbs' => $breadcrumbs,
-                'vipMember' => empty($vipMember) ? [] : $vipMember,
+                'vipDeadline' => $vipDeadline,
             ]
         );
     }

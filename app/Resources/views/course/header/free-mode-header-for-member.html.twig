@@ -19,7 +19,12 @@
         </li>
         <li>
           <p class="mb15 color-gray">
-            <i class="es-icon es-icon-today mrm"></i>{{ 'course.expiry_date'|trans }}
+            <i class="es-icon es-icon-today mrm"></i>
+            {% if vipDeadline|default(false) %}
+              {{ 'vip.course.expiry_date'|trans }}
+            {% else %}
+              {{ 'course.expiry_date'|trans }}
+            {% endif %}
           </p>
           <span class="text-16">
             {% include 'course/header/parts/member-deadline-info.html.twig' %}

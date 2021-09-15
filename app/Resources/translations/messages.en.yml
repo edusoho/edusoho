@@ -1173,6 +1173,7 @@ course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
+vip.course.expiry_date: 'Vip Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
 course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
@@ -2119,6 +2120,7 @@ classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
 classroom.expiryDays: 'Effective date'
+vip.classroom.expiryDays: 'Vip Effective date'
 classroom.vip_checked_fail_tips: 'The course ~ %classroomName% ~ is no longer free for VIP.'
 classroom.not_vip_member_tips: 'You can not learn the course ~ %classroomName% ~, since your membership has expired.'
 classroom.exit: Exit
