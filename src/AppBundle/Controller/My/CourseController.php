@@ -157,8 +157,13 @@ class CourseController extends CourseBaseController
         $vipDeadline = false;
         if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'student' == $member['role'] && 'vip_join' == $member['joinedChannel']) {
             $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
-            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
-            if (!empty($vipMember) && !empty($vipRight)) {
+            $courseVipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            if (!empty($classroom)) {
+                $classroomVipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
+            }
+
+            if (!empty($vipMember) && (!empty($courseVipRight) || !empty($classroomVipRight))) {
                 $vipDeadline = true;
                 $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
             }
