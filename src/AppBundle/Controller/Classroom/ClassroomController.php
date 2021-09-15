@@ -133,8 +133,13 @@ class ClassroomController extends BaseController
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         if ($member) {
-            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $classroomMemberLevel && 'vip_join' == $member['joinedChannel'] ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
+            $vipSetting = $this->getSettingService()->get('vip', []);
+            if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && in_array('student', $member['role'])) {
+                $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
+                if (!empty($vipMember)) {
+                    $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
+                }
+            }
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
@@ -148,8 +153,6 @@ class ClassroomController extends BaseController
                 'coursesNum' => $coursesNum,
                 'canFreeJoin' => $canFreeJoin,
                 'breadcrumbs' => $breadcrumbs,
-                'isclassroomteacher' => $isclassroomteacher,
-                'vipChecked' => $vipChecked,
             ]);
         }
 
