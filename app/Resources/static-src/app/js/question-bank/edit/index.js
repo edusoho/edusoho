@@ -91,7 +91,7 @@ class BankEdit {
         return item.name;
       },
       multiple: true,
-      maximumSelectionSize: 2,
+      maximumSelectionSize: 100,
       width: 'off',
       createSearchChoice: function() {
         return null;
