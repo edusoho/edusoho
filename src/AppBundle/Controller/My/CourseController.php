@@ -155,7 +155,7 @@ class CourseController extends CourseBaseController
 
         $vipSetting = $this->getSettingService()->get('vip', []);
         $vipDeadline = false;
-        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && in_array('student', $member['role']) && 'vip_join' == $member['joinedChannel']) {
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'student' == $member['role'] && 'vip_join' == $member['joinedChannel']) {
             $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
             $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
             if (!empty($vipMember) && !empty($vipRight)) {

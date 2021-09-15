@@ -6514,7 +6514,7 @@ admin.operation_certificate.template.certificate.title_hint: 可选填
 admin.operation_certificate.template.certificate.title.default: 课程认证证书
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
-admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$ 身份证： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
