@@ -17,6 +17,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends CourseBaseController
@@ -155,7 +156,8 @@ class CourseController extends CourseBaseController
         $vipSetting = $this->getSettingService()->get('vip', []);
         if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled'])) {
             $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
-            if (!empty($vipMember)) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+            if (!empty($vipMember) && !empty($vipRight)) {
                 $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
             }
         }
@@ -466,6 +468,14 @@ class CourseController extends CourseBaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**
