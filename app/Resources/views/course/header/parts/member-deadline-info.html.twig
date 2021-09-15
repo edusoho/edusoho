@@ -11,6 +11,11 @@
 {% else %}
 	{% if course.expiryMode == 'forever' and member.deadline == 0 %}
 		{% if vipMember %}
+      {% if app.request.locale == 'en' %}
+        {{ member.deadline|date('M d, Y') }}
+      {% else %}
+        {{ member.deadline|date('Y-m-d') }}
+      {% endif %}
 			<span class="color-warning text-12">{{ 'course.expiry_date.days_remaining'|trans({'%lastDays%':lastDays}) }}</span>
 		{% else %}
 			{{ 'course.expiry_date.forever_mode'|trans }}
