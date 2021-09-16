@@ -553,6 +553,7 @@ export default {
     empty: '暂无课程',
     viewDetails: '去商品页',
     validity: '学习有效期',
+    vipValidity: '会员学习有效期',
     studyWithinDay: '{number} 天内可学习',
     canLearnBefore: '之前可学习',
     permanent: '长期有效',
