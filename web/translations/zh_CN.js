@@ -641,6 +641,7 @@ t.add("validate.choose_item.message", "\u8bf7\u9009\u62e9%display%", "js", "zh_C
 t.add("validate.tag_required_hint", "\u8bf7\u8f93\u5165\u6807\u7b7e", "js", "zh_CN");
 t.add("validate.tag_required_not_found_hint", "\u672a\u641c\u7d22\u5230\u6807\u7b7e\uff0c\u8bf7\u7f51\u6821\u7ba1\u7406\u5458\u901a\u8fc7\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u6559\u5b66\u3011-\u3010\u5206\u7c7b\u6807\u7b7e\u3011-\u3010\u6807\u7b7e\u7ba1\u7406\u3011\u8fdb\u884c\u8bbe\u7f6e\u3002", "js", "zh_CN");
 t.add("validate.tag_number_exceeds_limit", "\u4f60\u53ea\u80fd\u6dfb\u52a0%limit%\u4e2a\u9879\u76ee", "js", "zh_CN");
+t.add("validate.teacher_number_exceeds_limit", "\u4f60\u53ea\u80fd\u6dfb\u52a0%limit%\u4e2a\u6559\u5e08", "js", "zh_CN");
 t.add("validate.title_required_hint", "\u8bf7\u8f93\u5165\u6807\u9898\uff0c\u4e0d\u80fd\u4e3a\u7a7a\u3002", "js", "zh_CN");
 t.add("validate.email_or_mobile_check.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.phone_and_email_input.message", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");

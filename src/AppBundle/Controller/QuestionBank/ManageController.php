@@ -104,7 +104,7 @@ class ManageController extends BaseController
             ['nickname' => $queryField, 'roles' => '|ROLE_TEACHER|'],
             ['createdTime' => 'DESC'],
             0,
-            10,
+            100,
             ['id', 'nickname']
         );
 

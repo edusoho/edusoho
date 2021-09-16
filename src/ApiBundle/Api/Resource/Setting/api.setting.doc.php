@@ -107,6 +107,20 @@
  *         )
  *     )
  * )
+ *
+ * @OA\Get(
+ *     path="/api/settings/user",
+ *     tags={"setting"},
+ *     summary="用户设置",
+ *     @OA\Response(
+ *         response=200,
+ *         description="用户设置信息",
+ *         @OA\MediaType(
+ *             mediaType="application/vnd.edusoho.v2+json",
+ *             @OA\Schema(ref="#/components/schemas/setting.user")
+ *         )
+ *     )
+ * )
  */
 
 /**
@@ -214,5 +228,30 @@
  *         @OA\Property(property="multiple_learn_enable",description="是否多开学习",type="string",default="off",enum={"on","off"}),
  *         @OA\Property(property="multiple_learn_kick_mode",description="多开学习模式，kick_previous：踢掉上一个播放、reject_current：拒绝本次播放",type="string",default="kick_previous",enum={"kick_previous","reject_current"}),
  *     ),
+ * )
+ *
+ * @OA\Schema(
+ *     schema="setting.user",
+ *     title="setting.user",
+ *     description="用户设置",
+ *     @OA\Property(
+ *         property="auth",
+ *         description="用户账户相关",
+ *         type="object",
+ *         @OA\Property(property="register_mode",description="注册模式",type="string",default="email"),
+ *         @OA\Property(property="user_terms_enabled",description="服务协议开关",type="boolean"),
+ *         @OA\Property(property="privacy_policy_enabled",description="隐私协议开关",type="boolean"),
+ *         @OA\Property(property="nickname_enabled",description="是否允许修改昵称,VERSION >= 21.3.6",type="boolean"),
+ *     ),
+ *     @OA\Property(
+ *         property="login_bind",
+ *         description="第三方绑定信息",
+ *         type="object",
+ *         @OA\Property(property="oauth_enabled",description="是否开启OAuth",type="boolean"),
+ *         @OA\Property(property="weibo_enabled",description="微博开关",type="boolean"),
+ *         @OA\Property(property="qq_enabled",description="QQ开关",type="boolean"),
+ *         @OA\Property(property="weixinweb_enabled",description="微信网页登录",type="boolean"),
+ *         @OA\Property(property="weixinmob_enabled",description="微信公众号登录",type="boolean"),
+ *     )
  * )
  */

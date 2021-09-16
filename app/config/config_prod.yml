@@ -1,24 +1,14 @@
 imports:
-    - { resource: config.yml }
-
-#framework:
-#    validation:
-#        cache: apc
-
-#doctrine:
-#    orm:
-#        metadata_cache_driver: apc
-#        result_cache_driver: apc
-#        query_cache_driver: apc
-
+    -
+        resource: config.yml
 monolog:
     handlers:
         main:
-            type:         fingers_crossed
+            type: fingers_crossed
             action_level: error
-            handler:      nested
+            handler: nested
         nested:
-            type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
-            formatter:    json_formatter
+            formatter: json_formatter
