@@ -52,29 +52,6 @@ check env:
     variables:
       - $REPOSITORY == "custom"
 
-5.6 For main With php-cs-fixer:
-  variables:
-    USER_NAME: $GITLAB_USER_NAME
-  stage: test
-  image: dockerhub.codeages.work/zhong-proxy/zhongyunchang/php56-ci
-  services:
-    - name: dockerhub.codeages.work/library-proxy/library/mysql:5.5
-      alias: mysql
-    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
-      alias: redis
-  script:
-    - git config diff.nodiff.command /usr/bin/true
-    - git config --unset diff.nodiff.command
-    - bin/phpunit-diff
-  interruptible: true
-  only:
-    refs:
-      - master
-      - develop
-      - /^release/.*$/
-      - trigger
-    variables:
-      - $REPOSITORY == "main"
 
 7.1 For main:
   stage: test
