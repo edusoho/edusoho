@@ -369,7 +369,7 @@ class AppServiceImpl extends BaseService implements AppService
             return 'up' != $app['edusohoMaxVersion'] && version_compare($app['edusohoMaxVersion'], $systemVersion, '<=');
         });
 
-        $errors = array_map(function ($app) use ($systemVersion) {
+        $errors = array_map(function ($app) {
             return "{$app['name']}支持的最大版本为{$app['edusohoMaxVersion']},您需要升级该插件";
         }, $unsupportApps);
 
