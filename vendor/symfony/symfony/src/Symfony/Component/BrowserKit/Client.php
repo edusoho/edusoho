@@ -286,15 +286,15 @@ abstract class Client
 
         $server = array_merge($this->server, $server);
 
-        if (!empty($server['HTTP_HOST']) && null === parse_url($originalUri, PHP_URL_HOST)) {
+        if (!empty($server['HTTP_HOST']) && null === parse_url($originalUri, \PHP_URL_HOST)) {
             $uri = preg_replace('{^(https?\://)'.preg_quote($this->extractHost($uri)).'}', '${1}'.$server['HTTP_HOST'], $uri);
         }
 
-        if (isset($server['HTTPS']) && null === parse_url($originalUri, PHP_URL_SCHEME)) {
-            $uri = preg_replace('{^'.parse_url($uri, PHP_URL_SCHEME).'}', $server['HTTPS'] ? 'https' : 'http', $uri);
+        if (isset($server['HTTPS']) && null === parse_url($originalUri, \PHP_URL_SCHEME)) {
+            $uri = preg_replace('{^'.parse_url($uri, \PHP_URL_SCHEME).'}', $server['HTTPS'] ? 'https' : 'http', $uri);
         }
 
-        if (!$this->history->isEmpty()) {
+        if (!isset($server['HTTP_REFERER']) && !$this->history->isEmpty()) {
             $server['HTTP_REFERER'] = $this->history->current()->getUri();
         }
 
@@ -302,7 +302,7 @@ abstract class Client
             $server['HTTP_HOST'] = $this->extractHost($uri);
         }
 
-        $server['HTTPS'] = 'https' == parse_url($uri, PHP_URL_SCHEME);
+        $server['HTTPS'] = 'https' == parse_url($uri, \PHP_URL_SCHEME);
 
         $this->internalRequest = new Request($uri, $method, $parameters, $files, $this->cookieJar->allValues($uri), $server, $content);
 
@@ -362,15 +362,15 @@ abstract class Client
             foreach ($deprecations ? unserialize($deprecations) : [] as $deprecation) {
                 if ($deprecation[0]) {
                     // unsilenced on purpose
-                    trigger_error($deprecation[1], E_USER_DEPRECATED);
+                    trigger_error($deprecation[1], \E_USER_DEPRECATED);
                 } else {
-                    @trigger_error($deprecation[1], E_USER_DEPRECATED);
+                    @trigger_error($deprecation[1], \E_USER_DEPRECATED);
                 }
             }
         }
 
         if (!$process->isSuccessful() || !preg_match('/^O\:\d+\:/', $process->getOutput())) {
-            throw new \RuntimeException(sprintf('OUTPUT: %s ERROR OUTPUT: %s', $process->getOutput(), $process->getErrorOutput()));
+            throw new \RuntimeException(sprintf('OUTPUT: %s ERROR OUTPUT: %s.', $process->getOutput(), $process->getErrorOutput()));
         }
 
         return unserialize($process->getOutput());
@@ -569,7 +569,7 @@ abstract class Client
 
         // protocol relative URL
         if (0 === strpos($uri, '//')) {
-            return parse_url($currentUri, PHP_URL_SCHEME).':'.$uri;
+            return parse_url($currentUri, \PHP_URL_SCHEME).':'.$uri;
         }
 
         // anchor or query string parameters?
@@ -578,7 +578,7 @@ abstract class Client
         }
 
         if ('/' !== $uri[0]) {
-            $path = parse_url($currentUri, PHP_URL_PATH);
+            $path = parse_url($currentUri, \PHP_URL_PATH);
 
             if ('/' !== substr($path, -1)) {
                 $path = substr($path, 0, strrpos($path, '/') + 1);
@@ -606,7 +606,7 @@ abstract class Client
     private function updateServerFromUri($server, $uri)
     {
         $server['HTTP_HOST'] = $this->extractHost($uri);
-        $scheme = parse_url($uri, PHP_URL_SCHEME);
+        $scheme = parse_url($uri, \PHP_URL_SCHEME);
         $server['HTTPS'] = null === $scheme ? $server['HTTPS'] : 'https' == $scheme;
         unset($server['HTTP_IF_NONE_MATCH'], $server['HTTP_IF_MODIFIED_SINCE']);
 
@@ -615,9 +615,9 @@ abstract class Client
 
     private function extractHost($uri)
     {
-        $host = parse_url($uri, PHP_URL_HOST);
+        $host = parse_url($uri, \PHP_URL_HOST);
 
-        if ($port = parse_url($uri, PHP_URL_PORT)) {
+        if ($port = parse_url($uri, \PHP_URL_PORT)) {
             return $host.':'.$port;
         }
 

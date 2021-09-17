@@ -610,7 +610,7 @@ class FrameworkExtension extends Extension
         foreach ($config['workflows'] as $name => $workflow) {
             if (!\array_key_exists('type', $workflow)) {
                 $workflow['type'] = 'workflow';
-                @trigger_error(sprintf('The "type" option of the "framework.workflows.%s" configuration entry must be defined since Symfony 3.3. The default value will be "state_machine" in Symfony 4.0.', $name), E_USER_DEPRECATED);
+                @trigger_error(sprintf('The "type" option of the "framework.workflows.%s" configuration entry must be defined since Symfony 3.3. The default value will be "state_machine" in Symfony 4.0.', $name), \E_USER_DEPRECATED);
             }
             $type = $workflow['type'];
             $workflowId = sprintf('%s.%s', $type, $name);
@@ -880,6 +880,7 @@ class FrameworkExtension extends Extension
             // Set the handler class to be null
             $container->getDefinition('session.storage.native')->replaceArgument(1, null);
             $container->getDefinition('session.storage.php_bridge')->replaceArgument(0, null);
+            $container->setAlias('session.handler', 'session.handler.native_file')->setPrivate(true);
         } else {
             $container->setAlias('session.handler', $config['handler_id'])->setPrivate(true);
         }
@@ -1201,7 +1202,7 @@ class FrameworkExtension extends Extension
             if ($container->fileExists($dir)) {
                 $dirs[] = $dir;
             } else {
-                throw new \UnexpectedValueException(sprintf('%s defined in translator.paths does not exist or is not a directory', $dir));
+                throw new \UnexpectedValueException(sprintf('"%s" defined in translator.paths does not exist or is not a directory.', $dir));
             }
         }
 
@@ -1629,7 +1630,7 @@ class FrameworkExtension extends Extension
                         $storeDefinition = new Reference($storeDefinitionId);
                         break;
                     default:
-                        throw new InvalidArgumentException(sprintf('Lock store DSN "%s" is not valid in resource "%s"', $storeDsn, $resourceName));
+                        throw new InvalidArgumentException(sprintf('Lock store DSN "%s" is not valid in resource "%s".', $storeDsn, $resourceName));
                 }
 
                 $storeDefinitions[] = $storeDefinition;

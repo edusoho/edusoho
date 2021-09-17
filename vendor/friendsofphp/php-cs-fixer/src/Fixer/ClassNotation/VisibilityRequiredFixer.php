@@ -17,7 +17,6 @@ use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
@@ -26,7 +25,6 @@ use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
-use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Fixer for rules defined in PSR2 ¶4.3, ¶4.5.
@@ -88,14 +86,7 @@ class Sample
             (new FixerOptionBuilder('elements', 'The structural elements to fix (PHP >= 7.1 required for `const`).'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(['property', 'method', 'const'])])
-                ->setNormalizer(static function (Options $options, $value) {
-                    if (\PHP_VERSION_ID < 70100 && \in_array('const', $value, true)) {
-                        throw new InvalidOptionsForEnvException('"const" option can only be enabled with PHP 7.1+.');
-                    }
-
-                    return $value;
-                })
-                ->setDefault(['property', 'method'])
+                ->setDefault(['property', 'method'])  // @TODO v3 / PHP 7.1 add `const`
                 ->getOption(),
         ], $this->getName());
     }
@@ -106,12 +97,14 @@ class Sample
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
-        $elements = $tokensAnalyzer->getClassyElements();
+        $propertyTypeDeclarationKinds = [T_STRING, T_NS_SEPARATOR, CT::T_NULLABLE_TYPE, CT::T_ARRAY_TYPEHINT, CT::T_TYPE_ALTERNATION];
 
-        $propertyTypeDeclarationKinds = [T_STRING, T_NS_SEPARATOR, CT::T_NULLABLE_TYPE, CT::T_ARRAY_TYPEHINT];
-
-        foreach (array_reverse($elements, true) as $index => $element) {
+        foreach (array_reverse($tokensAnalyzer->getClassyElements(), true) as $index => $element) {
             if (!\in_array($element['type'], $this->configuration['elements'], true)) {
+                continue;
+            }
+
+            if (\PHP_VERSION_ID < 70100 && 'const' === $element['type']) {
                 continue;
             }
 
@@ -120,8 +113,8 @@ class Sample
             $staticIndex = null;
             $typeIndex = null;
             $prevIndex = $tokens->getPrevMeaningfulToken($index);
-
             $expectedKinds = [T_ABSTRACT, T_FINAL, T_PRIVATE, T_PROTECTED, T_PUBLIC, T_STATIC, T_VAR];
+
             if ('property' === $element['type']) {
                 $expectedKinds = array_merge($expectedKinds, $propertyTypeDeclarationKinds);
             }
@@ -136,6 +129,7 @@ class Sample
                 } else {
                     $visibilityIndex = $prevIndex;
                 }
+
                 $prevIndex = $tokens->getPrevMeaningfulToken($prevIndex);
             }
 

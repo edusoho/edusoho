@@ -30,7 +30,7 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
      */
     public function isCandidate(Tokens $tokens)
     {
-        // minimal candidate to fix is seven tokens: pow(x,x);
+        // minimal candidate to fix is seven tokens: pow(x,y);
         return $tokens->count() > 7 && $tokens->isTokenKindFound(T_STRING);
     }
 
@@ -58,7 +58,7 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
      */
     public function getPriority()
     {
-        return 3;
+        return 32;
     }
 
     /**
@@ -68,9 +68,9 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     {
         $candidates = $this->findPowCalls($tokens);
         $argumentsAnalyzer = new ArgumentsAnalyzer();
-
         $numberOfTokensAdded = 0;
         $previousCloseParenthesisIndex = \count($tokens);
+
         foreach (array_reverse($candidates) as $candidate) {
             // if in the previous iteration(s) tokens were added to the collection and this is done within the tokens
             // indexes of the current candidate than the index of the close ')' of the candidate has moved and so
@@ -84,8 +84,15 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
             }
 
             $arguments = $argumentsAnalyzer->getArguments($tokens, $candidate[1], $candidate[2]);
+
             if (2 !== \count($arguments)) {
                 continue;
+            }
+
+            for ($i = $candidate[1]; $i < $candidate[2]; ++$i) {
+                if ($tokens[$i]->isGivenKind(T_ELLIPSIS)) {
+                    continue 2;
+                }
             }
 
             $numberOfTokensAdded += $this->fixPowToExponentiation(
@@ -105,12 +112,13 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     {
         $candidates = [];
 
-        // Minimal candidate to fix is seven tokens: pow(x,x);
+        // Minimal candidate to fix is seven tokens: pow(x,y);
         $end = \count($tokens) - 6;
 
         // First possible location is after the open token: 1
         for ($i = 1; $i < $end; ++$i) {
             $candidate = $this->find('pow', $tokens, $i, $end);
+
             if (null === $candidate) {
                 break;
             }
@@ -123,10 +131,10 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     }
 
     /**
-     * @param int            $functionNameIndex
-     * @param int            $openParenthesisIndex
-     * @param int            $closeParenthesisIndex
-     * @param array<int,int> $arguments
+     * @param int             $functionNameIndex
+     * @param int             $openParenthesisIndex
+     * @param int             $closeParenthesisIndex
+     * @param array<int, int> $arguments
      *
      * @return int number of tokens added to the collection
      */
@@ -139,11 +147,13 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         // clean up the function call tokens prt. I
         $tokens->clearAt($closeParenthesisIndex);
         $previousIndex = $tokens->getPrevMeaningfulToken($closeParenthesisIndex);
+
         if ($tokens[$previousIndex]->equals(',')) {
             $tokens->clearAt($previousIndex); // trailing ',' in function call (PHP 7.3)
         }
 
         $added = 0;
+
         // check if the arguments need to be wrapped in parenthesis
         foreach (array_reverse($arguments, true) as $argumentStartIndex => $argumentEndIndex) {
             if ($this->isParenthesisNeeded($tokens, $argumentStartIndex, $argumentEndIndex)) {
@@ -157,9 +167,10 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         $tokens->clearAt($openParenthesisIndex);
         $tokens->clearAt($functionNameIndex);
 
-        $prev = $tokens->getPrevMeaningfulToken($functionNameIndex);
-        if ($tokens[$prev]->isGivenKind(T_NS_SEPARATOR)) {
-            $tokens->clearAt($prev);
+        $prevMeaningfulTokenIndex = $tokens->getPrevMeaningfulToken($functionNameIndex);
+
+        if ($tokens[$prevMeaningfulTokenIndex]->isGivenKind(T_NS_SEPARATOR)) {
+            $tokens->clearAt($prevMeaningfulTokenIndex);
         }
 
         return $added;
@@ -173,18 +184,20 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
      */
     private function isParenthesisNeeded(Tokens $tokens, $argumentStartIndex, $argumentEndIndex)
     {
-        static $allowedKinds = [
-            T_DNUMBER, T_LNUMBER, T_VARIABLE, T_STRING, T_OBJECT_OPERATOR, T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_CAST,
-            T_INT_CAST, T_INC, T_DEC, T_NS_SEPARATOR, T_WHITESPACE, T_DOUBLE_COLON, T_LINE, T_COMMENT, T_DOC_COMMENT,
-            CT::T_NAMESPACE_OPERATOR,
-        ];
+        static $allowedKinds = null;
+
+        if (null === $allowedKinds) {
+            $allowedKinds = $this->getAllowedKinds();
+        }
 
         for ($i = $argumentStartIndex; $i <= $argumentEndIndex; ++$i) {
             if ($tokens[$i]->isGivenKind($allowedKinds) || $tokens->isEmptyAt($i)) {
                 continue;
             }
 
-            if (null !== $blockType = Tokens::detectBlockType($tokens[$i])) {
+            $blockType = Tokens::detectBlockType($tokens[$i]);
+
+            if (null !== $blockType) {
                 $i = $tokens->findBlockEnd($blockType['type'], $i);
 
                 continue;
@@ -207,5 +220,20 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         }
 
         return false;
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getAllowedKinds()
+    {
+        return array_merge(
+            [
+                T_DNUMBER, T_LNUMBER, T_VARIABLE, T_STRING, T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_CAST,
+                T_INT_CAST, T_INC, T_DEC, T_NS_SEPARATOR, T_WHITESPACE, T_DOUBLE_COLON, T_LINE, T_COMMENT, T_DOC_COMMENT,
+                CT::T_NAMESPACE_OPERATOR,
+            ],
+            Token::getObjectOperatorKinds()
+        );
     }
 }

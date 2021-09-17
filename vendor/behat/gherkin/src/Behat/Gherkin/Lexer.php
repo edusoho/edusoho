@@ -121,7 +121,7 @@ class Lexer
     }
 
     /**
-     * Predicts for number of tokens.
+     * Predicts the upcoming token without passing over it.
      *
      * @return array
      */
@@ -132,6 +132,16 @@ class Lexer
         }
 
         return $this->stashedToken;
+    }
+
+    /**
+     * Skips over the currently-predicted token, if any.
+     *
+     * @return void
+     */
+    public function skipPredictedToken()
+    {
+        $this->stashedToken = null;
     }
 
     /**
@@ -399,7 +409,7 @@ class Lexer
         }
 
         $keywords = $this->getKeywords('Step');
-        if (!preg_match('/^\s*(' . $keywords . ')([^\s].+)/u', $this->line, $matches)) {
+        if (!preg_match('/^\s*(' . $keywords . ')([^\s].*)/u', $this->line, $matches)) {
             return null;
         }
 

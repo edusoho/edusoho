@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserAuthenticationProviderTest extends TestCase
 {
@@ -62,6 +63,24 @@ class UserAuthenticationProviderTest extends TestCase
         $provider->authenticate($this->getSupportedToken());
     }
 
+    public function testAuthenticateWhenCredentialsAreInvalidAndHideIsTrue()
+    {
+        $provider = $this->getProvider();
+        $provider->expects($this->once())
+            ->method('retrieveUser')
+            ->willReturn($this->createMock(UserInterface::class))
+        ;
+        $provider->expects($this->once())
+            ->method('checkAuthentication')
+            ->willThrowException(new BadCredentialsException())
+        ;
+
+        $this->expectException(BadCredentialsException::class);
+        $this->expectExceptionMessage('Bad credentials.');
+
+        $provider->authenticate($this->getSupportedToken());
+    }
+
     /**
      * @group legacy
      */
@@ -79,7 +98,7 @@ class UserAuthenticationProviderTest extends TestCase
 
     public function testAuthenticateWhenPreChecksFails()
     {
-        $this->expectException('Symfony\Component\Security\Core\Exception\CredentialsExpiredException');
+        $this->expectException(BadCredentialsException::class);
         $userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
         $userChecker->expects($this->once())
                     ->method('checkPreAuth')
@@ -97,7 +116,7 @@ class UserAuthenticationProviderTest extends TestCase
 
     public function testAuthenticateWhenPostChecksFails()
     {
-        $this->expectException('Symfony\Component\Security\Core\Exception\AccountExpiredException');
+        $this->expectException(BadCredentialsException::class);
         $userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
         $userChecker->expects($this->once())
                     ->method('checkPostAuth')
@@ -116,7 +135,7 @@ class UserAuthenticationProviderTest extends TestCase
     public function testAuthenticateWhenPostCheckAuthenticationFails()
     {
         $this->expectException('Symfony\Component\Security\Core\Exception\BadCredentialsException');
-        $this->expectExceptionMessage('Bad credentials');
+        $this->expectExceptionMessage('Bad credentials.');
         $provider = $this->getProvider();
         $provider->expects($this->once())
                  ->method('retrieveUser')
@@ -124,7 +143,7 @@ class UserAuthenticationProviderTest extends TestCase
         ;
         $provider->expects($this->once())
                  ->method('checkAuthentication')
-                 ->willThrowException(new BadCredentialsException())
+                 ->willThrowException(new CredentialsExpiredException())
         ;
 
         $provider->authenticate($this->getSupportedToken());

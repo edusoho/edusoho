@@ -7,7 +7,7 @@ return array(
     'accepted'      => "必须接受",
     'numeric'       => "只能是数字",
     'integer'       => "只能是整数",
-    'length'        => "长度必须大于 %d",
+    'length'        => "长度必须等于 %d",
     'min'           => "必须大于 %s",
     'max'           => "必须小于 %s",
     'listContains'  => "无效的值",

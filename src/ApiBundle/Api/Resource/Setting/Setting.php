@@ -293,6 +293,7 @@ class Setting extends AbstractResource
     {
         $authSetting = $this->getSettingService()->get('auth');
         $loginSetting = $this->getSettingService()->get('login_bind');
+        $partnerSetting = $this->getSettingService()->get('user_partner', []);
 
         if (empty($loginSetting)) {
             SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
@@ -303,6 +304,7 @@ class Setting extends AbstractResource
                 'register_mode' => 'closed' === $authSetting['register_enabled'] ? 'closed' : $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
+                'nickname_enabled' => 0 == $partnerSetting['nickname_enabled'] ? false : true,
             ],
             'login_bind' => [
                 'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,

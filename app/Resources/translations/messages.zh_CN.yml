@@ -1392,6 +1392,7 @@ course.cover_image.upload_tips: >
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
+vip.course.expiry_date: 会员学习有效期
 course.expiry_date.days_mode: >
   %expiryDays% 天（随到随学）
 course.expiry_date.days_mode.total_days: 共%expiryDays%天
@@ -2414,6 +2415,7 @@ classroom.price: 价格
 classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
+vip.classroom.expiryDays: 会员学习有效期
 classroom.vip_checked_fail_tips: >
   该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
@@ -3416,7 +3418,7 @@ message.btn.back: 返回我的私信
 message.btn.send: 写私信
 
 # 个人主页模块
-user.homepage: %nickname%的个人主页
+user.homepage: "%nickname%的个人主页"
 user.homepage.teaching: 教学中
 user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
@@ -6512,12 +6514,12 @@ admin.operation_certificate.template.certificate.title_hint: 可选填
 admin.operation_certificate.template.certificate.title.default: 课程认证证书
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
-admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$ 身份证： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
-admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
+admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$ 用户名：$username$ 身份证：$idcard$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
 admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码

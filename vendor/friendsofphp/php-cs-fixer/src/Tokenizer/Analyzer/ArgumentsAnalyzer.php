@@ -14,6 +14,7 @@ namespace PhpCsFixer\Tokenizer\Analyzer;
 
 use PhpCsFixer\Tokenizer\Analyzer\Analysis\ArgumentAnalysis;
 use PhpCsFixer\Tokenizer\Analyzer\Analysis\TypeAnalysis;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -54,12 +55,14 @@ final class ArgumentsAnalyzer
     {
         $arguments = [];
         $firstSensibleToken = $tokens->getNextMeaningfulToken($openParenthesis);
+
         if ($tokens[$firstSensibleToken]->equals(')')) {
             return $arguments;
         }
 
         $paramContentIndex = $openParenthesis + 1;
         $argumentsStart = $paramContentIndex;
+
         for (; $paramContentIndex < $closeParenthesis; ++$paramContentIndex) {
             $token = $tokens[$paramContentIndex];
 
@@ -106,11 +109,19 @@ final class ArgumentsAnalyzer
         ];
 
         $sawName = false;
+
         for ($index = $argumentStart; $index <= $argumentEnd; ++$index) {
             $token = $tokens[$index];
-            if ($token->isComment() || $token->isWhitespace() || $token->isGivenKind(T_ELLIPSIS) || $token->equals('&')) {
+
+            if (
+                $token->isComment()
+                || $token->isWhitespace()
+                || $token->isGivenKind([T_ELLIPSIS, CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC, CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED, CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE])
+                || $token->equals('&')
+            ) {
                 continue;
             }
+
             if ($token->isGivenKind(T_VARIABLE)) {
                 $sawName = true;
                 $info['name_index'] = $index;
@@ -118,9 +129,17 @@ final class ArgumentsAnalyzer
 
                 continue;
             }
+
             if ($token->equals('=')) {
                 continue;
             }
+
+            if (\defined('T_ATTRIBUTE') && $token->isGivenKind(T_ATTRIBUTE)) {
+                $index = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ATTRIBUTE, $index);
+
+                continue;
+            }
+
             if ($sawName) {
                 $info['default'] .= $token->getContent();
             } else {

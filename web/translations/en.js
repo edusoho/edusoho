@@ -700,6 +700,7 @@ t.add("validate.visible_character.message", "Not allowed to enter invisible char
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
 t.add("validate.tag_required_not_found_hint", "The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].", "js", "en");
 t.add("validate.tag_number_exceeds_limit", "You can only add %limit% items", "js", "en");
+t.add("validate.teacher_number_exceeds_limit", "You can only add %limit% tachers", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.modify_date", "Please enter the date of modification", "js", "en");
 t.add("validate.modify_days", "Please enter the number of days modified", "js", "en");

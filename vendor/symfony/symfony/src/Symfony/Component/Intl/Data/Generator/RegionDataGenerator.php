@@ -27,7 +27,7 @@ use Symfony\Component\Intl\Data\Util\LocaleScanner;
  */
 class RegionDataGenerator extends AbstractDataGenerator
 {
-    private static $blacklist = [
+    private static $denylist = [
         // Look like countries, but are sub-continents
         'QO' => true, // Outlying Oceania
         'EU' => true, // European Union
@@ -50,7 +50,7 @@ class RegionDataGenerator extends AbstractDataGenerator
 
     public static function isValidCountryCode($region)
     {
-        if (isset(self::$blacklist[$region])) {
+        if (isset(self::$denylist[$region])) {
             return false;
         }
 
@@ -96,7 +96,6 @@ class RegionDataGenerator extends AbstractDataGenerator
         // isset() on \ResourceBundle returns true even if the value is null
         if (isset($localeBundle['Countries']) && null !== $localeBundle['Countries']) {
             $data = [
-                'Version' => $localeBundle['Version'],
                 'Names' => $this->generateRegionNames($localeBundle),
             ];
 
@@ -120,14 +119,11 @@ class RegionDataGenerator extends AbstractDataGenerator
      */
     protected function generateDataForMeta(BundleEntryReaderInterface $reader, $tempDir)
     {
-        $rootBundle = $reader->read($tempDir, 'root');
-
         $this->regionCodes = array_unique($this->regionCodes);
 
         sort($this->regionCodes);
 
         return [
-            'Version' => $rootBundle['Version'],
             'Regions' => $this->regionCodes,
         ];
     }

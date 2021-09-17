@@ -29,7 +29,7 @@ interface TransformerInterface
     /**
      * Get tokens created by Transformer.
      *
-     * @return array
+     * @return int[]
      */
     public function getCustomTokens();
 

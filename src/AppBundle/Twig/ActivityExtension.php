@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use Biz\Activity\Service\ActivityService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\Service\PlayerService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -111,6 +112,7 @@ class ActivityExtension extends \Twig_Extension
                 'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', ['token' => $this->getWebExtension()->makeUploadToken('course')]),
                 'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload', ['token' => $this->getWebExtension()->makeUploadToken('course', 'flash')]),
                 'imageDownloadUrl' => $this->generateUrl('editor_download', ['token' => $this->getWebExtension()->makeUploadToken('course')]),
+                'fileSingleSizeLimit' => $this->getSettingService()->node('magic.file_single_size_limit', 10),
             ],
         ]);
     }

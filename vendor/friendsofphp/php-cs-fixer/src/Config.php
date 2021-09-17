@@ -21,17 +21,64 @@ use PhpCsFixer\Fixer\FixerInterface;
  */
 class Config implements ConfigInterface
 {
+    /**
+     * @var string
+     */
     private $cacheFile = '.php_cs.cache';
+
+    /**
+     * @var FixerInterface[]
+     */
     private $customFixers = [];
+
+    /**
+     * @var null|iterable
+     */
     private $finder;
+
+    /**
+     * @var string
+     */
     private $format = 'txt';
+
+    /**
+     * @var bool
+     */
     private $hideProgress = false;
+
+    /**
+     * @var string
+     */
     private $indent = '    ';
+
+    /**
+     * @var bool
+     */
     private $isRiskyAllowed = false;
+
+    /**
+     * @var string
+     */
     private $lineEnding = "\n";
+
+    /**
+     * @var string
+     */
     private $name;
+
+    /**
+     * @var null|string
+     */
     private $phpExecutable;
+
+    /**
+     * @var array
+     */
     private $rules = ['@PSR2' => true];
+
+    /**
+     * @var bool
+     */
     private $usingCache = true;
 
     public function __construct($name = 'default')
@@ -41,9 +88,13 @@ class Config implements ConfigInterface
 
     /**
      * @return static
+     *
+     * @deprecated since 2.17
      */
     public static function create()
     {
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated since 2.17 and will be removed in 3.0, use the constructor instead.'));
+
         return new static();
     }
 
@@ -153,7 +204,10 @@ class Config implements ConfigInterface
     public function registerCustomFixers($fixers)
     {
         if (false === \is_array($fixers) && false === $fixers instanceof \Traversable) {
-            throw new \InvalidArgumentException(sprintf('Argument must be an array or a Traversable, got "%s".', \is_object($fixers) ? \get_class($fixers) : \gettype($fixers)));
+            throw new \InvalidArgumentException(sprintf(
+                'Argument must be an array or a Traversable, got "%s".',
+                \is_object($fixers) ? \get_class($fixers) : \gettype($fixers)
+            ));
         }
 
         foreach ($fixers as $fixer) {
@@ -179,7 +233,10 @@ class Config implements ConfigInterface
     public function setFinder($finder)
     {
         if (false === \is_array($finder) && false === $finder instanceof \Traversable) {
-            throw new \InvalidArgumentException(sprintf('Argument must be an array or a Traversable, got "%s".', \is_object($finder) ? \get_class($finder) : \gettype($finder)));
+            throw new \InvalidArgumentException(sprintf(
+                'Argument must be an array or a Traversable, got "%s".',
+                \is_object($finder) ? \get_class($finder) : \gettype($finder)
+            ));
         }
 
         $this->finder = $finder;

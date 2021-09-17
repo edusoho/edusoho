@@ -128,6 +128,7 @@ final class Runner
             ? new FileCachingLintingIterator($fileFilteredFileIterator, $this->linter)
             : new FileLintingIterator($fileFilteredFileIterator, $this->linter);
 
+        /** @var \SplFileInfo $file */
         foreach ($collection as $file) {
             $fixInfo = $this->fixFile($file, $collection->currentLintingResult());
 
@@ -135,7 +136,7 @@ final class Runner
             Tokens::clearCache();
 
             if ($fixInfo) {
-                $name = $this->directory->getRelativePathTo($file);
+                $name = $this->directory->getRelativePathTo($file->__toString());
                 $changed[$name] = $fixInfo;
 
                 if ($this->stopOnViolation) {
@@ -181,8 +182,8 @@ final class Runner
                 // for custom fixers we don't know is it safe to run `->fix()` without checking `->supports()` and `->isCandidate()`,
                 // thus we need to check it and conditionally skip fixing
                 if (
-                    !$fixer instanceof AbstractFixer &&
-                    (!$fixer->supports($file) || !$fixer->isCandidate($tokens))
+                    !$fixer instanceof AbstractFixer
+                    && (!$fixer->supports($file) || !$fixer->isCandidate($tokens))
                 ) {
                     continue;
                 }
@@ -245,14 +246,43 @@ final class Runner
             }
 
             if (!$this->isDryRun) {
-                if (false === @file_put_contents($file->getRealPath(), $new)) {
+                $fileName = $file->getRealPath();
+
+                if (!file_exists($fileName)) {
+                    throw new IOException(
+                        sprintf('Failed to write file "%s" (no longer) exists.', $file->getPathname()),
+                        0,
+                        null,
+                        $file->getPathname()
+                    );
+                }
+
+                if (is_dir($fileName)) {
+                    throw new IOException(
+                        sprintf('Cannot write file "%s" as the location exists as directory.', $fileName),
+                        0,
+                        null,
+                        $fileName
+                    );
+                }
+
+                if (!is_writable($fileName)) {
+                    throw new IOException(
+                        sprintf('Cannot write to file "%s" as it is not writable.', $fileName),
+                        0,
+                        null,
+                        $fileName
+                    );
+                }
+
+                if (false === @file_put_contents($fileName, $new)) {
                     $error = error_get_last();
 
                     throw new IOException(
-                        sprintf('Failed to write file "%s", "%s".', $file->getPathname(), $error ? $error['message'] : 'no reason available'),
+                        sprintf('Failed to write file "%s", "%s".', $fileName, $error ? $error['message'] : 'no reason available'),
                         0,
                         null,
-                        $file->getRealPath()
+                        $fileName
                     );
                 }
             }
