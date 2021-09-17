@@ -63,7 +63,7 @@ class LiveStatisticsVisitorListExporter extends Exporter
 
         foreach ($statistics as $user) {
             $data[] = [
-                $user['nickname'],
+                is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'],
                 $profiles[$user['userId']]['mobile'] ?: '',
                 $users[$user['userId']]['email'] ?: '',
                 date('Y-m-d H:i:s', $user['firstJoin']),

@@ -17,6 +17,8 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends CourseBaseController
 {
@@ -151,6 +153,22 @@ class CourseController extends CourseBaseController
             $isUserFavorite = !empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']));
         }
 
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        $vipDeadline = false;
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'student' == $member['role'] && 'vip_join' == $member['joinedChannel']) {
+            $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
+            $courseVipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            if (!empty($classroom)) {
+                $classroomVipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
+            }
+
+            if (!empty($vipMember) && (!empty($courseVipRight) || !empty($classroomVipRight))) {
+                $vipDeadline = true;
+                $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
+            }
+        }
+
         return $this->render(
             'course/header/header-for-member.html.twig',
             [
@@ -168,6 +186,7 @@ class CourseController extends CourseBaseController
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
                 'breadcrumbs' => $breadcrumbs,
+                'vipDeadline' => $vipDeadline,
             ]
         );
     }
@@ -176,29 +195,25 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
+        }
+
         $member = $this->getCourseMember($request, $course);
 
         $classroom = [];
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        }
-
-        // 访问班级课程时确保将用户添加到课程member中
-        if (!empty($classroom) && empty($member)) {
-            $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+            // 访问班级课程时确保将用户添加到课程member中
+            if (!empty($classroom) && empty($member)) {
+                $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+            }
         }
 
         // 非班级课程，点击介绍跳转到概览商品页
-        if (empty($member) || (0 == $course['parentId'] && 'summary' === $tab)) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_show',
-                    [
-                        'id' => $id,
-                        'tab' => $tab,
-                    ]
-                )
-            );
+        if (empty($member) || (0 === (int) $course['parentId'] && 'summary' === $tab)) {
+            return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
@@ -253,7 +268,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }
@@ -454,5 +470,26 @@ class CourseController extends CourseBaseController
     protected function getFavoriteService()
     {
         return $this->createService('Favorite:FavoriteService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 }
