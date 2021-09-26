@@ -29,7 +29,7 @@
       </div>
       <service v-if="details.service.length" :services="details.service" />
       <div>
-        <span>{{ $t('classLearning.validity') }}：</span>
+        <span>{{ validityText }}：</span>
         <span v-html="learnExpiryHtml" />
       </div>
     </div>
@@ -88,6 +88,12 @@ export default {
       const memberInfo = this.joinStatus;
       const learnExpiryData = this.details.expiryValue;
       const expiryMode = this.details.expiryMode;
+      const { vipDeadline } = this.details;
+
+      if (vipDeadline) {
+        const time = new Date(learnExpiryData * 1000);
+        return formatFullTime(time).slice(0, 10) + this.$t('classLearning.canLearnBefore');
+      }
 
       if (!memberInfo) {
         switch (expiryMode) {
@@ -115,6 +121,14 @@ export default {
           : '永久有效';
       }
     },
+
+    validityText() {
+      const { vipDeadline } = this.details;
+      if (vipDeadline) {
+        return this.$t('classLearning.vipValidity');
+      }
+      return this.$t('classLearning.validity');
+    }
   },
   methods: {
     toCertificate() {

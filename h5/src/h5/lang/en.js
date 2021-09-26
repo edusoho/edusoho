@@ -553,6 +553,7 @@ export default {
     empty: 'Empty',
     viewDetails: 'View details',
     validity: 'Validity',
+    vipValidity: 'Member learning validity',
     studyWithinDay: 'Study within {number} day',
     canLearnBefore: 'can learn before',
     permanent: 'Permanent',

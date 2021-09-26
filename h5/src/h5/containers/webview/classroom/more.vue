@@ -106,6 +106,8 @@ export default {
       await this.getVipLevels();
     }
 
+    this.initI18n();
+
     // 初始化下拉筛选数据
     this.initDropdownData();
 
