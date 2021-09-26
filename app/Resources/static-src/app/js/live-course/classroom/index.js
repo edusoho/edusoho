@@ -27,7 +27,7 @@ function getRoomUrl() {
         if (data.param) {
           url = url+'?param='+data.param;
         }
-        let html = '<iframe name="classroom" src="'+url+'" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" allowfullscreen="true" allow="screen-wake-lock"></iframe>';
+        let html = '<iframe name="classroom" src="'+url+'" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" allowfullscreen="true" allow="screen-wake-lock; display-capture"></iframe>';
 
         $('body').html(html);
 
