@@ -25,7 +25,7 @@
         "doctrine/annotations": "~1.7",
         "symfony/stopwatch": "~2.8|~3.0|~4.0",
         "symfony/dependency-injection": "~3.4|~4.0",
-        "symfony/form": "^3.3.10|~4.0",
+        "symfony/form": "^3.4.43|~4.4.11",
         "symfony/http-kernel": "~2.8|~3.0|~4.0",
         "symfony/property-access": "~2.8|~3.0|~4.0",
         "symfony/property-info": "~2.8|3.0|~4.0",
@@ -34,7 +34,7 @@
         "symfony/expression-language": "~2.8|~3.0|~4.0",
         "symfony/validator": "^3.2.5|~4.0",
         "symfony/translation": "~2.8|~3.0|~4.0",
-        "doctrine/data-fixtures": "1.0.*",
+        "doctrine/data-fixtures": "^1.1",
         "doctrine/dbal": "~2.4",
         "doctrine/orm": "^2.4.5"
     },
@@ -56,10 +56,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.4-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

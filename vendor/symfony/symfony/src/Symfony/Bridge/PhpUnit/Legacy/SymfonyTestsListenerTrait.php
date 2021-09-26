@@ -46,9 +46,14 @@ class SymfonyTestsListenerTrait
     public function __construct(array $mockedNamespaces = array())
     {
         if (class_exists('PHPUnit_Util_Blacklist')) {
-            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 2;
+            \PHPUnit_Util_Blacklist::$blacklistedClassNames[__CLASS__] = 2;
+        } elseif (method_exists('PHPUnit\Util\Blacklist', 'addDirectory')) {
+            eval(" // PHP 5.3 compat
+            (new \PHPUnit\Util\Blacklist())->getBlacklistedDirectories();
+            \PHPUnit\Util\Blacklist::addDirectory(\dirname(__FILE__, 2));
+            ");
         } else {
-            Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 2;
+            Blacklist::$blacklistedClassNames[__CLASS__] = 2;
         }
 
         $warn = false;
@@ -347,7 +352,7 @@ class SymfonyTestsListenerTrait
         if (\is_array($parsedMsg)) {
             $msg = $parsedMsg['deprecation'];
         }
-        if (error_reporting()) {
+        if (error_reporting() & $type) {
             $msg = 'Unsilenced deprecation: '.$msg;
         }
         $this->gatheredDeprecations[] = $msg;

@@ -38,6 +38,7 @@ class Tokens extends \SplFixedArray
     const BLOCK_TYPE_GROUP_IMPORT_BRACE = 8;
     const BLOCK_TYPE_DESTRUCTURING_SQUARE_BRACE = 9;
     const BLOCK_TYPE_BRACE_CLASS_INSTANTIATION = 10;
+    const BLOCK_TYPE_ATTRIBUTE = 11;
 
     /**
      * Static class cache.
@@ -47,7 +48,14 @@ class Tokens extends \SplFixedArray
     private static $cache = [];
 
     /**
-     * Cache of block edges. Any change in collection will invalidate it.
+     * Cache of block starts. Any change in collection will invalidate it.
+     *
+     * @var array<int, int>
+     */
+    private $blockStartCache = [];
+
+    /**
+     * Cache of block ends. Any change in collection will invalidate it.
      *
      * @var array<int, int>
      */
@@ -190,6 +198,7 @@ class Tokens extends \SplFixedArray
         }
 
         $tokens->generateCode(); // regenerate code to calculate code hash
+        $tokens->clearChanged();
 
         return $tokens;
     }
@@ -231,7 +240,7 @@ class Tokens extends \SplFixedArray
      */
     public static function getBlockEdgeDefinitions()
     {
-        return [
+        $definitions = [
             self::BLOCK_TYPE_CURLY_BRACE => [
                 'start' => '{',
                 'end' => '}',
@@ -273,19 +282,34 @@ class Tokens extends \SplFixedArray
                 'end' => [CT::T_BRACE_CLASS_INSTANTIATION_CLOSE, ')'],
             ],
         ];
+
+        // @TODO: drop condition when PHP 8.0+ is required
+        if (\defined('T_ATTRIBUTE')) {
+            $definitions[self::BLOCK_TYPE_ATTRIBUTE] = [
+                'start' => [T_ATTRIBUTE, '#['],
+                'end' => [CT::T_ATTRIBUTE_CLOSE, ']'],
+            ];
+        }
+
+        return $definitions;
     }
 
     /**
      * Set new size of collection.
      *
      * @param int $size
+     *
+     * @return bool
      */
     public function setSize($size)
     {
         if ($this->getSize() !== $size) {
             $this->changed = true;
-            parent::setSize($size);
+
+            return parent::setSize($size);
         }
+
+        return true;
     }
 
     /**
@@ -310,6 +334,7 @@ class Tokens extends \SplFixedArray
      */
     public function offsetSet($index, $newval)
     {
+        $this->blockStartCache = [];
         $this->blockEndCache = [];
 
         if (!isset($this[$index]) || !$this[$index]->equals($newval)) {
@@ -362,9 +387,7 @@ class Tokens extends \SplFixedArray
 
         for ($count = $index; $index < $limit; ++$index) {
             if (!$this->isEmptyAt($index)) {
-                /** @var Token $token */
-                $token = $this[$index];
-                $this[$count++] = $token;
+                $this[$count++] = $this[$index]; // @phpstan-ignore-line as we know that index exists
             }
         }
 
@@ -422,15 +445,14 @@ class Tokens extends \SplFixedArray
         }
 
         $whitespace = $removeLastCommentLine($this, $index, $indexOffset, $whitespace);
+
         if ('' === $whitespace) {
             return false;
         }
 
         $this->insertAt(
             $index + $indexOffset,
-            [
-                new Token([T_WHITESPACE, $whitespace]),
-            ]
+            [new Token([T_WHITESPACE, $whitespace])]
         );
 
         return true;
@@ -447,9 +469,9 @@ class Tokens extends \SplFixedArray
     {
         if (3 === \func_num_args()) {
             if ($findEnd) {
-                @trigger_error('Argument #3 of Tokens::findBlockEnd is deprecated and will be removed in 3.0, you can safely drop the argument.', E_USER_DEPRECATED);
+                Utils::triggerDeprecation(new \RuntimeException('Argument #3 of Tokens::findBlockEnd is deprecated and will be removed in 3.0, you can safely drop the argument.'));
             } else {
-                @trigger_error('Argument #3 of Tokens::findBlockEnd is deprecated and will be removed in 3.0, use Tokens::findBlockStart instead.', E_USER_DEPRECATED);
+                Utils::triggerDeprecation(new \RuntimeException('Argument #3 of Tokens::findBlockEnd is deprecated and will be removed in 3.0, use Tokens::findBlockStart instead.'));
             }
         }
 
@@ -476,7 +498,6 @@ class Tokens extends \SplFixedArray
      */
     public function findGivenKind($possibleKind, $start = 0, $end = null)
     {
-        $this->rewind();
         if (null === $end) {
             $end = $this->count();
         }
@@ -595,9 +616,7 @@ class Tokens extends \SplFixedArray
                 return null;
             }
 
-            $token = $this[$index];
-
-            if (!$token->isWhitespace($whitespaces)) {
+            if (!$this[$index]->isWhitespace($whitespaces)) {
                 return $index;
             }
         }
@@ -662,9 +681,7 @@ class Tokens extends \SplFixedArray
                 return null;
             }
 
-            $token = $this[$index];
-
-            if ($token->equalsAny($tokens, $caseSensitive)) {
+            if ($this[$index]->equalsAny($tokens, $caseSensitive)) {
                 return $index;
             }
         }
@@ -681,27 +698,37 @@ class Tokens extends \SplFixedArray
      */
     public function getTokenNotOfKindSibling($index, $direction, array $tokens = [])
     {
-        while (true) {
-            $index += $direction;
-
-            if (!$this->offsetExists($index)) {
-                return null;
+        return $this->getTokenNotOfKind(
+            $index,
+            $direction,
+            function ($a) use ($tokens) {
+                return $this[$a]->equalsAny($tokens);
             }
-
-            if ($this->isEmptyAt($index)) {
-                continue;
-            }
-
-            if ($this[$index]->equalsAny($tokens)) {
-                continue;
-            }
-
-            return $index;
-        }
+        );
     }
 
     /**
-     * Get index for closest sibling token that is not a whitespace or comment.
+     * Get index for closest sibling token not of given kind.
+     *
+     * @param int   $index     token index
+     * @param int   $direction direction for looking, +1 or -1
+     * @param array $kinds     possible tokens kinds
+     *
+     * @return null|int
+     */
+    public function getTokenNotOfKindsSibling($index, $direction, array $kinds = [])
+    {
+        return $this->getTokenNotOfKind(
+            $index,
+            $direction,
+            function ($index) use ($kinds) {
+                return $this[$index]->isGivenKind($kinds);
+            }
+        );
+    }
+
+    /**
+     * Get index for closest sibling token that is not a whitespace, comment or attribute.
      *
      * @param int $index     token index
      * @param int $direction direction for looking, +1 or -1
@@ -710,10 +737,10 @@ class Tokens extends \SplFixedArray
      */
     public function getMeaningfulTokenSibling($index, $direction)
     {
-        return $this->getTokenNotOfKindSibling(
+        return $this->getTokenNotOfKindsSibling(
             $index,
             $direction,
-            [[T_WHITESPACE], [T_COMMENT], [T_DOC_COMMENT]]
+            [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT]
         );
     }
 
@@ -790,6 +817,8 @@ class Tokens extends \SplFixedArray
             return null;
         }
 
+        $nonMeaningFullKind = [T_COMMENT, T_DOC_COMMENT, T_WHITESPACE];
+
         // make sure the sequence content is "meaningful"
         foreach ($sequence as $key => $token) {
             // if not a Token instance already, we convert it to verify the meaningfulness
@@ -799,11 +828,16 @@ class Tokens extends \SplFixedArray
                     // although optional for search purposes
                     $token[1] = 'DUMMY';
                 }
+
                 $token = new Token($token);
             }
 
-            if ($token->isWhitespace() || $token->isComment() || '' === $token->getContent()) {
+            if ($token->isGivenKind($nonMeaningFullKind)) {
                 throw new \InvalidArgumentException(sprintf('Non-meaningful token at position: "%s".', $key));
+            }
+
+            if ('' === $token->getContent()) {
+                throw new \InvalidArgumentException(sprintf('Non-meaningful (empty) token at position: "%s".', $key));
             }
         }
 
@@ -875,31 +909,74 @@ class Tokens extends \SplFixedArray
     public function insertAt($index, $items)
     {
         $items = \is_array($items) || $items instanceof self ? $items : [$items];
-        $itemsCnt = \count($items);
 
-        if (0 === $itemsCnt) {
+        $this->insertSlices([$index => $items]);
+    }
+
+    /**
+     * Insert a slices or individual Tokens into multiple places in a single run.
+     *
+     * This approach is kind-of an experiment - it's proven to improve performance a lot for big files that needs plenty of new tickets to be inserted,
+     * like edge case example of 3.7h vs 4s (https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3996#issuecomment-455617637),
+     * yet at same time changing a logic of fixers in not-always easy way.
+     *
+     * To be discuss:
+     * - should we always aim to use this method?
+     * - should we deprecate `insertAt` method ?
+     *
+     * The `$slices` parameter is an assoc array, in which:
+     * - index: starting point for inserting of individual slice, with indexes being relatives to original array collection before any Token inserted
+     * - value under index: a slice of Tokens to be inserted
+     *
+     * @internal
+     *
+     * @param array<int, array<Token>|Token|Tokens> $slices
+     */
+    public function insertSlices(array $slices)
+    {
+        $itemsCount = 0;
+        foreach ($slices as $slice) {
+            $slice = \is_array($slice) || $slice instanceof self ? $slice : [$slice];
+            $itemsCount += \count($slice);
+        }
+
+        if (0 === $itemsCount) {
             return;
         }
 
         $oldSize = \count($this);
         $this->changed = true;
+        $this->blockStartCache = [];
         $this->blockEndCache = [];
-        $this->setSize($oldSize + $itemsCnt);
+        $this->setSize($oldSize + $itemsCount);
+
+        krsort($slices);
+
+        $insertBound = $oldSize - 1;
 
         // since we only move already existing items around, we directly call into SplFixedArray::offset* methods.
         // that way we get around additional overhead this class adds with overridden offset* methods.
-        for ($i = $oldSize + $itemsCnt - 1; $i >= $index; --$i) {
-            $oldItem = parent::offsetExists($i - $itemsCnt) ? parent::offsetGet($i - $itemsCnt) : new Token('');
-            parent::offsetSet($i, $oldItem);
-        }
+        foreach ($slices as $index => $slice) {
+            $slice = \is_array($slice) || $slice instanceof self ? $slice : [$slice];
+            $sliceCount = \count($slice);
 
-        for ($i = 0; $i < $itemsCnt; ++$i) {
-            if ('' === $items[$i]->getContent()) {
-                throw new \InvalidArgumentException('Must not add empty token to collection.');
+            for ($i = $insertBound; $i >= $index; --$i) {
+                $oldItem = parent::offsetExists($i) ? parent::offsetGet($i) : new Token('');
+                parent::offsetSet($i + $itemsCount, $oldItem);
             }
 
-            $this->registerFoundToken($items[$i]);
-            parent::offsetSet($i + $index, $items[$i]);
+            $insertBound = $index - $sliceCount;
+            $itemsCount -= $sliceCount;
+
+            foreach ($slice as $indexItem => $item) {
+                if ('' === $item->getContent()) {
+                    throw new \InvalidArgumentException('Must not add empty token to collection.');
+                }
+
+                $this->registerFoundToken($item);
+                $newOffset = $index + $itemsCount + $indexItem;
+                parent::offsetSet($newOffset, $item);
+            }
         }
     }
 
@@ -952,7 +1029,7 @@ class Tokens extends \SplFixedArray
      */
     public function overrideAt($index, $token)
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0, use offsetSet instead.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0, use offsetSet instead.'));
         self::$isLegacyMode = true;
 
         $this[$index]->override($token);
@@ -968,18 +1045,6 @@ class Tokens extends \SplFixedArray
      */
     public function overrideRange($indexStart, $indexEnd, $items)
     {
-        $oldCode = $this->generatePartialCode($indexStart, $indexEnd);
-
-        $newCode = '';
-        foreach ($items as $item) {
-            $newCode .= $item->getContent();
-        }
-
-        // no changes, return
-        if ($oldCode === $newCode) {
-            return;
-        }
-
         $indexToChange = $indexEnd - $indexStart + 1;
         $itemsCount = \count($items);
 
@@ -987,10 +1052,12 @@ class Tokens extends \SplFixedArray
         // add placeholders for overhead items.
         if ($itemsCount > $indexToChange) {
             $placeholders = [];
+
             while ($itemsCount > $indexToChange) {
                 $placeholders[] = new Token('__PLACEHOLDER__');
                 ++$indexToChange;
             }
+
             $this->insertAt($indexEnd + 1, $placeholders);
         }
 
@@ -1040,7 +1107,7 @@ class Tokens extends \SplFixedArray
         // clear memory
         $this->setSize(0);
 
-        $tokens = \defined('TOKEN_PARSE')
+        $tokens = \defined('TOKEN_PARSE') // @TODO: drop condition when PHP 7.0+ is required
             ? token_get_all($code, TOKEN_PARSE)
             : token_get_all($code);
 
@@ -1050,36 +1117,35 @@ class Tokens extends \SplFixedArray
             $this[$index] = new Token($token);
         }
 
-        $transformers = Transformers::create();
-        $transformers->transform($this);
+        $this->applyTransformers();
 
         $this->foundTokenKinds = [];
+
         foreach ($this as $token) {
             $this->registerFoundToken($token);
         }
 
-        $this->rewind();
+        if (\PHP_VERSION_ID < 80000) {
+            $this->rewind();
+        }
+
         $this->changeCodeHash(self::calculateCodeHash($code));
         $this->changed = true;
     }
 
     public function toJson()
     {
-        static $options = null;
-
-        if (null === $options) {
-            $options = Utils::calculateBitmask(['JSON_PRETTY_PRINT', 'JSON_NUMERIC_CHECK']);
-        }
-
         $output = new \SplFixedArray(\count($this));
 
         foreach ($this as $index => $token) {
             $output[$index] = $token->toArray();
         }
 
-        $this->rewind();
+        if (\PHP_VERSION_ID < 80000) {
+            $this->rewind();
+        }
 
-        return json_encode($output, $options);
+        return json_encode($output, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
     }
 
     /**
@@ -1209,6 +1275,21 @@ class Tokens extends \SplFixedArray
     }
 
     /**
+     * @return bool
+     */
+    public function hasAlternativeSyntax()
+    {
+        return $this->isAnyTokenKindsFound([
+            T_ENDDECLARE,
+            T_ENDFOR,
+            T_ENDFOREACH,
+            T_ENDIF,
+            T_ENDSWITCH,
+            T_ENDWHILE,
+        ]);
+    }
+
+    /**
      * @param int $index
      */
     public function clearTokenAndMergeSurroundingWhitespace($index)
@@ -1237,6 +1318,82 @@ class Tokens extends \SplFixedArray
         $this->clearAt($nextIndex);
     }
 
+    /**
+     * @internal
+     *
+     * @deprecated Do not call directly, not available on PHP8 and will be removed in the future
+     */
+    public function current()
+    {
+        $this->warnPhp8SplFixerArrayChange(__METHOD__);
+
+        return parent::current();
+    }
+
+    /**
+     * @internal
+     *
+     * @deprecated Do not call directly, not available on PHP8 and will be removed in the future
+     */
+    public function key()
+    {
+        $this->warnPhp8SplFixerArrayChange(__METHOD__);
+
+        return parent::key();
+    }
+
+    /**
+     * @internal
+     *
+     * @deprecated Do not call directly, not available on PHP8 and will be removed in the future
+     */
+    public function next()
+    {
+        $this->warnPhp8SplFixerArrayChange(__METHOD__);
+
+        parent::next();
+    }
+
+    /**
+     * @internal
+     *
+     * @deprecated Do not call directly, not available on PHP8 and will be removed in the future
+     */
+    public function rewind()
+    {
+        $this->warnPhp8SplFixerArrayChange(__METHOD__);
+
+        parent::rewind();
+    }
+
+    /**
+     * @internal
+     *
+     * @deprecated Do not call directly, not available on PHP8 and will be removed in the future
+     */
+    public function valid()
+    {
+        $this->warnPhp8SplFixerArrayChange(__METHOD__);
+
+        return parent::valid();
+    }
+
+    /**
+     * @internal
+     */
+    protected function applyTransformers()
+    {
+        $transformers = Transformers::createSingleton();
+        $transformers->transform($this);
+    }
+
+    private function warnPhp8SplFixerArrayChange($method)
+    {
+        if (80000 <= \PHP_VERSION_ID) {
+            throw new \BadMethodCallException(sprintf('"%s" has been removed on PHP8, use ::getIterator() in place.', $method));
+        }
+    }
+
     private function removeWhitespaceSafely($index, $direction, $whitespaces = null)
     {
         $whitespaceIndex = $this->getNonEmptySibling($index, $direction);
@@ -1247,9 +1404,11 @@ class Tokens extends \SplFixedArray
             // if the token candidate to remove is preceded by single line comment we do not consider the new line after this comment as part of T_WHITESPACE
             if (isset($this[$whitespaceIndex - 1]) && $this[$whitespaceIndex - 1]->isComment() && '/*' !== substr($this[$whitespaceIndex - 1]->getContent(), 0, 2)) {
                 list($emptyString, $newContent, $whitespacesToCheck) = Preg::split('/^(\R)/', $this[$whitespaceIndex]->getContent(), -1, PREG_SPLIT_DELIM_CAPTURE);
+
                 if ('' === $whitespacesToCheck) {
                     return;
                 }
+
                 $tokenToCheck = new Token([T_WHITESPACE, $whitespacesToCheck]);
             }
 
@@ -1280,8 +1439,13 @@ class Tokens extends \SplFixedArray
             throw new \InvalidArgumentException(sprintf('Invalid param type: "%s".', $type));
         }
 
-        if (!self::isLegacyMode() && isset($this->blockEndCache[$searchIndex])) {
-            return $this->blockEndCache[$searchIndex];
+        if (!self::isLegacyMode()) {
+            if ($findEnd && isset($this->blockStartCache[$searchIndex])) {
+                return $this->blockStartCache[$searchIndex];
+            }
+            if (!$findEnd && isset($this->blockEndCache[$searchIndex])) {
+                return $this->blockEndCache[$searchIndex];
+            }
         }
 
         $startEdge = $blockEdgeDefinitions[$type]['start'];
@@ -1326,8 +1490,13 @@ class Tokens extends \SplFixedArray
             throw new \UnexpectedValueException(sprintf('Missing block "%s".', $findEnd ? 'end' : 'start'));
         }
 
-        $this->blockEndCache[$startIndex] = $index;
-        $this->blockEndCache[$index] = $startIndex;
+        if ($startIndex < $index) {
+            $this->blockStartCache[$startIndex] = $index;
+            $this->blockEndCache[$index] = $startIndex;
+        } else {
+            $this->blockStartCache[$index] = $startIndex;
+            $this->blockEndCache[$startIndex] = $index;
+        }
 
         return $index;
     }
@@ -1449,5 +1618,29 @@ class Tokens extends \SplFixedArray
             ? ($token->isArray() ? $token->getId() : $token->getContent())
             : (\is_array($token) ? $token[0] : $token)
         ;
+    }
+
+    /**
+     * @param int      $index     token index
+     * @param int      $direction direction for looking, +1 or -1
+     * @param callable $filter
+     *
+     * @return null|int
+     */
+    private function getTokenNotOfKind($index, $direction, $filter)
+    {
+        while (true) {
+            $index += $direction;
+
+            if (!$this->offsetExists($index)) {
+                return null;
+            }
+
+            if ($this->isEmptyAt($index) || $filter($index)) {
+                continue;
+            }
+
+            return $index;
+        }
     }
 }

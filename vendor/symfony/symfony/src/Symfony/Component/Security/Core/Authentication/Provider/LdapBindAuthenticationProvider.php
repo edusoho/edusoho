@@ -68,7 +68,7 @@ class LdapBindAuthenticationProvider extends UserAuthenticationProvider
     protected function retrieveUser($username, UsernamePasswordToken $token)
     {
         if (AuthenticationProviderInterface::USERNAME_NONE_PROVIDED === $username) {
-            throw new UsernameNotFoundException('Username can not be null');
+            throw new UsernameNotFoundException('Username can not be null.');
         }
 
         return $this->userProvider->loadUserByUsername($username);
@@ -87,9 +87,8 @@ class LdapBindAuthenticationProvider extends UserAuthenticationProvider
         }
 
         try {
-            $username = $this->ldap->escape($username, '', LdapInterface::ESCAPE_DN);
-
             if ($this->queryString) {
+                $username = $this->ldap->escape($username, '', LdapInterface::ESCAPE_FILTER);
                 $query = str_replace('{username}', $username, $this->queryString);
                 $result = $this->ldap->query($this->dnString, $query)->execute();
                 if (1 !== $result->count()) {
@@ -98,6 +97,7 @@ class LdapBindAuthenticationProvider extends UserAuthenticationProvider
 
                 $dn = $result[0]->getDn();
             } else {
+                $username = $this->ldap->escape($username, '', LdapInterface::ESCAPE_DN);
                 $dn = str_replace('{username}', $username, $this->dnString);
             }
 

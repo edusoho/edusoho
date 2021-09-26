@@ -13,6 +13,8 @@
 namespace PhpCsFixer\DocBlock;
 
 use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Analyzer\Analysis\NamespaceAnalysis;
+use PhpCsFixer\Tokenizer\Analyzer\Analysis\NamespaceUseAnalysis;
 
 /**
  * This class represents a docblock.
@@ -20,6 +22,8 @@ use PhpCsFixer\Preg;
  * It internally splits it up into "lines" that we can manipulate.
  *
  * @author Graham Campbell <graham@alt-three.com>
+ *
+ * @final
  */
 class DocBlock
 {
@@ -33,20 +37,35 @@ class DocBlock
     /**
      * The array of annotations.
      *
-     * @var Annotation[]|null
+     * @var null|Annotation[]
      */
     private $annotations;
 
     /**
+     * @var null|NamespaceAnalysis
+     */
+    private $namespace;
+
+    /**
+     * @var NamespaceUseAnalysis[]
+     */
+    private $namespaceUses;
+
+    /**
      * Create a new docblock instance.
      *
-     * @param string $content
+     * @param string                 $content
+     * @param null|NamespaceAnalysis $namespace
+     * @param NamespaceUseAnalysis[] $namespaceUses
      */
-    public function __construct($content)
+    public function __construct($content, $namespace = null, array $namespaceUses = [])
     {
         foreach (Preg::split('/([^\n\r]+\R*)/', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $line) {
             $this->lines[] = new Line($line);
         }
+
+        $this->namespace = $namespace;
+        $this->namespaceUses = $namespaceUses;
     }
 
     /**
@@ -74,7 +93,7 @@ class DocBlock
      *
      * @param int $pos
      *
-     * @return Line|null
+     * @return null|Line
      */
     public function getLine($pos)
     {
@@ -99,7 +118,7 @@ class DocBlock
             if ($this->lines[$index]->containsATag()) {
                 // get all the lines that make up the annotation
                 $lines = \array_slice($this->lines, $index, $this->findAnnotationLength($index), true);
-                $annotation = new Annotation($lines);
+                $annotation = new Annotation($lines, $this->namespace, $this->namespaceUses);
                 // move the index to the end of the annotation to avoid
                 // checking it again because we know the lines inside the
                 // current annotation cannot be part of another annotation
@@ -176,7 +195,7 @@ class DocBlock
     /**
      * @param int $pos
      *
-     * @return Annotation|null
+     * @return null|Annotation
      */
     public function getAnnotation($pos)
     {

@@ -30,16 +30,18 @@ final class NativeFunctionTypeDeclarationCasingFixer extends AbstractFixer
     /**
      * https://secure.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration.
      *
-     * self     PHP 5.0.0
-     * array    PHP 5.1.0
-     * callable PHP 5.4.0
-     * bool     PHP 7.0.0
-     * float    PHP 7.0.0
-     * int      PHP 7.0.0
-     * string   PHP 7.0.0
-     * iterable PHP 7.1.0
-     * void     PHP 7.1.0
-     * object   PHP 7.2.0
+     * self     PHP 5.0
+     * array    PHP 5.1
+     * callable PHP 5.4
+     * bool     PHP 7.0
+     * float    PHP 7.0
+     * int      PHP 7.0
+     * string   PHP 7.0
+     * iterable PHP 7.1
+     * void     PHP 7.1
+     * object   PHP 7.2
+     * static   PHP 8.0 (return type only)
+     * mixed    PHP 8.0
      *
      * @var array<string, true>
      */
@@ -84,6 +86,11 @@ final class NativeFunctionTypeDeclarationCasingFixer extends AbstractFixer
 
         if (\PHP_VERSION_ID >= 70200) {
             $this->hints = array_merge($this->hints, ['object' => true]);
+        }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            $this->hints = array_merge($this->hints, ['static' => true]);
+            $this->hints = array_merge($this->hints, ['mixed' => true]);
         }
 
         $this->functionsAnalyzer = new FunctionsAnalyzer();
@@ -162,16 +169,18 @@ final class NativeFunctionTypeDeclarationCasingFixer extends AbstractFixer
             return;
         }
 
-        $argumentIndex = $type->getStartIndex();
-        if ($argumentIndex !== $type->getEndIndex()) {
-            return; // the type to fix are always unqualified and so are always composed as one token
-        }
+        for ($index = $type->getStartIndex(); $index <= $type->getEndIndex(); ++$index) {
+            if ($tokens[$tokens->getNextMeaningfulToken($index)]->isGivenKind(T_NS_SEPARATOR)) {
+                continue;
+            }
 
-        $lowerCasedName = strtolower($type->getName());
-        if (!isset($this->hints[$lowerCasedName])) {
-            return; // check of type is of interest based on name (slower check than previous index based)
-        }
+            $lowerCasedName = strtolower($tokens[$index]->getContent());
 
-        $tokens[$argumentIndex] = new Token([$tokens[$argumentIndex]->getId(), $lowerCasedName]);
+            if (!isset($this->hints[$lowerCasedName])) {
+                continue;
+            }
+
+            $tokens[$index] = new Token([$tokens[$index]->getId(), $lowerCasedName]);
+        }
     }
 }

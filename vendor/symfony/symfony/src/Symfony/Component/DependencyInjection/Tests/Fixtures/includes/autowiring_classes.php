@@ -2,6 +2,10 @@
 
 namespace Symfony\Component\DependencyInjection\Tests\Compiler;
 
+if (PHP_VERSION_ID >= 80000) {
+    require __DIR__.'/uniontype_classes.php';
+}
+
 class Foo
 {
 }
@@ -181,12 +185,6 @@ class MultipleArgumentsOptionalScalar
 class MultipleArgumentsOptionalScalarLast
 {
     public function __construct(A $a, Lille $lille, $foo = 'some_val')
-    {
-    }
-}
-class MultipleArgumentsOptionalScalarNotReallyOptional
-{
-    public function __construct(A $a, $foo = 'default_val', Lille $lille)
     {
     }
 }

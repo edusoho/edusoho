@@ -34,10 +34,5 @@
         "symfony/monolog-bridge": "For using the log server.",
         "symfony/expression-language": "For using the filter option of the log server."
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.4-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

@@ -18,7 +18,7 @@
     "require": {
         "php": "^5.5.9|>=7.0.8",
         "symfony/event-dispatcher": "~2.8|~3.0|~4.0",
-        "symfony/http-foundation": "^2.8.31|~3.3.13|~3.4|~4.0",
+        "symfony/http-foundation": "~3.4.40|^4.4.7",
         "symfony/http-kernel": "~3.3|~4.0",
         "symfony/polyfill-php56": "~1.0",
         "symfony/polyfill-php70": "~1.0",
@@ -58,10 +58,5 @@
             "/Http/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.4-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

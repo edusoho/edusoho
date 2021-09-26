@@ -1,7 +1,7 @@
 <?php
 
 if (3 > $_SERVER['argc']) {
-    echo "Usage: branch dir1 dir2 ... dirN\n";
+    echo "Usage: branch version dir1 dir2 ... dirN\n";
     exit(1);
 }
 chdir(dirname(__DIR__));
@@ -14,6 +14,7 @@ if ($json !== $package = preg_replace('/\n    "repositories": \[\n.*?\n    \],/s
 $dirs = $_SERVER['argv'];
 array_shift($dirs);
 $mergeBase = trim(shell_exec(sprintf('git merge-base "%s" HEAD', array_shift($dirs))));
+$version = array_shift($dirs);
 
 $packages = array();
 $flags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
@@ -50,22 +51,14 @@ foreach ($dirs as $k => $dir) {
         passthru("cd $dir && git init && git add . && git commit -q -m - && git archive -o package.tar HEAD && rm .git/ -Rf");
     }
 
-    if (!isset($package->extra->{'branch-alias'}->{'dev-master'})) {
-        echo "Missing \"dev-master\" branch-alias in composer.json extra.\n";
-        exit(1);
-    }
-    $package->version = str_replace('-dev', '.x-dev', $package->extra->{'branch-alias'}->{'dev-master'});
+    $package->version = (isset($package->extra->{'branch-version'}) ? $package->extra->{'branch-version'} : $version).'.x-dev';
     $package->dist['type'] = 'tar';
     $package->dist['url'] = 'file://'.str_replace(DIRECTORY_SEPARATOR, '/', dirname(__DIR__))."/$dir/package.tar";
 
     $packages[$package->name][$package->version] = $package;
 
-    $versions = @file_get_contents('https://repo.packagist.org/p/'.$package->name.'.json') ?: sprintf('{"packages":{"%s":{"dev-master":%s}}}', $package->name, file_get_contents($dir.'/composer.json'));
+    $versions = @file_get_contents('https://repo.packagist.org/p/'.$package->name.'.json') ?: sprintf('{"packages":{"%s":{"%s":%s}}}', $package->name, $package->version, file_get_contents($dir.'/composer.json'));
     $versions = json_decode($versions)->packages->{$package->name};
-
-    if (isset($versions->{'dev-master'}) && $package->version === str_replace('-dev', '.x-dev', $versions->{'dev-master'}->extra->{'branch-alias'}->{'dev-master'})) {
-        unset($versions->{'dev-master'});
-    }
 
     foreach ($versions as $v => $package) {
         $packages[$package->name] += array($v => $package);

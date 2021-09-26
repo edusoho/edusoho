@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### [3.2.5] 2021-05-24
+
+  * Fixed: issue comparing disjunctive MultiConstraints to conjunctive ones (#127)
+  * Fixed: added complete type information using phpstan annotations
+
+### [3.2.4] 2020-11-13
+
+  * Fixed: code clean-up
+
+### [3.2.3] 2020-11-12
+
+  * Fixed: constraints in the form of `X || Y, >=Y.1` and other such complex constructs were in some cases being optimized into a more restrictive constraint
+
+### [3.2.2] 2020-10-14
+
+  * Fixed: internal code cleanups
+
+### [3.2.1] 2020-09-27
+
+  * Fixed: accidental validation of broken constraints combining ^/~ and wildcards, and -dev suffix allowing weird cases
+  * Fixed: normalization of beta0 and such which was dropping the 0
+
+### [3.2.0] 2020-09-09
+
+  * Added: support for `x || @dev`, not very useful but seen in the wild and failed to validate with 1.5.2/1.6.0
+  * Added: support for `foobar-dev` being equal to `dev-foobar`, dev-foobar is the official way to write it but we need to support the other for BC and convenience
+
+### [3.1.0] 2020-09-08
+
+  * Added: support for constraints like `^2.x-dev` and `~2.x-dev`, not very useful but seen in the wild and failed to validate with 3.0.1
+  * Fixed: invalid aliases will no longer throw, unless explicitly validated by Composer in the root package
+
+### [3.0.1] 2020-09-08
+
+  * Fixed: handling of some invalid -dev versions which were seen as valid
+
+### [3.0.0] 2020-05-26
+
+  * Break: Renamed `EmptyConstraint`, replace it with `MatchAllConstraint`
+  * Break: Unlikely to affect anyone but strictly speaking a breaking change, `*.*` and such variants will not match all `dev-*` versions anymore, only `*` does
+  * Break: ConstraintInterface is now considered internal/private and not meant to be implemented by third parties anymore
+  * Added `Intervals` class to check if a constraint is a subsets of another one, and allow compacting complex MultiConstraints into simpler ones
+  * Added `CompilingMatcher` class to speed up constraint matching against simple Constraint instances
+  * Added `MatchAllConstraint` and `MatchNoneConstraint` which match everything and nothing
+  * Added more advanced optimization of contiguous constraints inside MultiConstraint
+  * Added tentative support for PHP 8
+  * Fixed ConstraintInterface::matches to be commutative in all cases
+
+### [2.0.0] 2020-04-21
+
+  * Break: `dev-master`, `dev-trunk` and `dev-default` now normalize to `dev-master`, `dev-trunk` and `dev-default` instead of `9999999-dev` in 1.x
+  * Break: Removed the deprecated `AbstractConstraint`
+  * Added `getUpperBound` and `getLowerBound` to ConstraintInterface. They return `Composer\Semver\Constraint\Bound` instances
+  * Added `MultiConstraint::create` to create the most-optimal form of ConstraintInterface from an array of constraint strings
+
+### [1.7.2] 2020-12-03
+
+  * Fixed: Allow installing on php 8
+
+### [1.7.1] 2020-09-27
+
+  * Fixed: accidental validation of broken constraints combining ^/~ and wildcards, and -dev suffix allowing weird cases
+  * Fixed: normalization of beta0 and such which was dropping the 0
+
+### [1.7.0] 2020-09-09
+
+  * Added: support for `x || @dev`, not very useful but seen in the wild and failed to validate with 1.5.2/1.6.0
+  * Added: support for `foobar-dev` being equal to `dev-foobar`, dev-foobar is the official way to write it but we need to support the other for BC and convenience
+
+### [1.6.0] 2020-09-08
+
+  * Added: support for constraints like `^2.x-dev` and `~2.x-dev`, not very useful but seen in the wild and failed to validate with 1.5.2
+  * Fixed: invalid aliases will no longer throw, unless explicitly validated by Composer in the root package
+
+### [1.5.2] 2020-09-08
+
+  * Fixed: handling of some invalid -dev versions which were seen as valid
+  * Fixed: some doctypes
+
 ### [1.5.1] 2020-01-13
 
   * Fixed: Parsing of aliased version was not validating the alias to be a valid version
@@ -66,6 +145,21 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - Namespace: `Composer\Test\Package\LinkConstraint` -> `Composer\Test\Semver\Constraint`
   * Changed: code style using php-cs-fixer.
 
+[3.2.5]: https://github.com/composer/semver/compare/3.2.4...3.2.5
+[3.2.4]: https://github.com/composer/semver/compare/3.2.3...3.2.4
+[3.2.3]: https://github.com/composer/semver/compare/3.2.2...3.2.3
+[3.2.2]: https://github.com/composer/semver/compare/3.2.1...3.2.2
+[3.2.1]: https://github.com/composer/semver/compare/3.2.0...3.2.1
+[3.2.0]: https://github.com/composer/semver/compare/3.1.0...3.2.0
+[3.1.0]: https://github.com/composer/semver/compare/3.0.1...3.1.0
+[3.0.1]: https://github.com/composer/semver/compare/3.0.0...3.0.1
+[3.0.0]: https://github.com/composer/semver/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/composer/semver/compare/1.5.1...2.0.0
+[1.7.2]: https://github.com/composer/semver/compare/1.7.1...1.7.2
+[1.7.1]: https://github.com/composer/semver/compare/1.7.0...1.7.1
+[1.7.0]: https://github.com/composer/semver/compare/1.6.0...1.7.0
+[1.6.0]: https://github.com/composer/semver/compare/1.5.2...1.6.0
+[1.5.2]: https://github.com/composer/semver/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/composer/semver/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/composer/semver/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/composer/semver/compare/1.4.1...1.4.2

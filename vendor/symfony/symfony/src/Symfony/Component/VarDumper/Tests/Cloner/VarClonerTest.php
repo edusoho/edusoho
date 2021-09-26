@@ -22,7 +22,7 @@ class VarClonerTest extends TestCase
 {
     public function testMaxIntBoundary()
     {
-        $data = [PHP_INT_MAX => 123];
+        $data = [\PHP_INT_MAX => 123];
 
         $cloner = new VarCloner();
         $clone = $cloner->cloneVar($data);
@@ -56,7 +56,7 @@ Symfony\Component\VarDumper\Cloner\Data Object
 )
 
 EOTXT;
-        $this->assertSame(sprintf($expected, PHP_INT_MAX), print_r($clone, true));
+        $this->assertSame(sprintf($expected, \PHP_INT_MAX), print_r($clone, true));
     }
 
     public function testClone()
@@ -162,7 +162,7 @@ EOTXT;
                     'Level 3 Item 3',
                 ],
                 [
-                    'Level 3 Item 4',
+                    999 => 'Level 3 Item 4',
                     'Level 3 Item 5',
                     'Level 3 Item 6',
                 ],
@@ -242,7 +242,7 @@ Symfony\Component\VarDumper\Cloner\Data Object
                     [1] => Array
                         (
                             [0] => 2
-                            [2] => 7
+                            [1] => 7
                         )
 
                     [2] => Array
@@ -299,7 +299,7 @@ Symfony\Component\VarDumper\Cloner\Data Object
 
             [7] => Array
                 (
-                    [0] => Level 3 Item 4
+                    [999] => Level 3 Item 4
                 )
 
         )
