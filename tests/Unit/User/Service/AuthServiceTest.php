@@ -529,7 +529,7 @@ class AuthServiceTest extends BaseTestCase
 
     public function testIsRegisterEnabledWithOtherTypeByTrue()
     {
-        $value = array('register_mode' => 'email_or_mobile');
+        $value = array('register_mode' => 'email_or_mobile', 'register_enabled' => 'open');
         $this->getSettingService()->set('auth', $value);
         $result = $this->getAuthService()->isRegisterEnabled();
         $this->assertTrue($result);
