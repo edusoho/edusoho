@@ -99,7 +99,9 @@ class Setting extends AbstractResource
         $userSetting = $this->getSettingService()->get('user_partner', []);
         $enable = isset($userSetting['open_student_info']) ? $userSetting['open_student_info'] : 1;
 
-        return $enable;
+        return [
+            'enable' => $enable,
+        ];
     }
 
     public function getUgc()
