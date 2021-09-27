@@ -21,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo',
     ];
 
     public static function convertUnderline($str)
@@ -92,6 +92,14 @@ class Setting extends AbstractResource
         return [
             'locale' => $locale,
         ];
+    }
+
+    public function getOpenStudentInfo()
+    {
+        $userSetting = $this->getSettingService()->get('user_partner', []);
+        $enable = isset($userSetting['open_student_info']) ? $userSetting['open_student_info'] : 1;
+
+        return $enable;
     }
 
     public function getUgc()
