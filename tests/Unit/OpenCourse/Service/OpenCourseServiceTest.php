@@ -125,6 +125,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'recommendedTime' => '0',
             'orgId' => '1',
             'orgCode' => '1.',
+            'replayEnable' => 1
         ];
 
         $created = $this->getOpenCourseService()->createCourse($course);
