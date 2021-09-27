@@ -3719,6 +3719,8 @@ my.teaching.open_course.student_setting.join_time: 'Enroll At'
 my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
 my.teaching.open_course.liveTimeSet.title: 'Time Settings'
+my.teaching.open_course.live_replay.set: 'Live Playback Settings'
+my.teaching.open_course.live_replay.is_permission: 'Whether to allow viewing of live replay'
 my.teaching.open_course.liveTimeSet.start_time: 'Start At'
 my.teaching.open_course.liveTimeSet.start_time.help_block: 'Teacher could enter the live 1 hour earlier to prepare the teaching material'
 my.teaching.open_course.liveTimeSet.live_length: Duration
@@ -3749,6 +3751,7 @@ my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 'The live replay is set to be unavailable for viewing'
 my.teaching.open_course.lesson.header.lesson_finished: 'Lesson finished'
 my.teaching.open_course.lesson.header.lesson_share: 'Share it to your friends if you like it.'
 my.teaching.open_course.lesson.header.lesson_share_btn: Share
