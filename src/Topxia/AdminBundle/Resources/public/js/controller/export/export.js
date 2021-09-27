@@ -110,7 +110,7 @@ define(function(require, exports, module) {
 
         function download(urls, fileNames) {
             if (urls.url && fileNames) {
-                var url = urls.url + '?';
+                var url = urls.url + '&';
                 $.each(fileNames, function (index, value) {
                   url += 'fileNames[]=' + value + '&';
                 });
