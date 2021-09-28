@@ -9450,6 +9450,7 @@ exception.opencourse.forbidden_manage_course: You are not a teacher or administr
 exception.opencourse.itemids_invalid: Lesson number error
 exception.opencourse.is_not_member: You are not member of course
 exception.opencourse.check_password_required: Did not enter the correct verification password
+exception.opencourse.replay_not_permitted: Live replay is set to not allowed to watch
 exception.blacklist.forbidden_take: Permission denied
 exception.blacklist.duplicate_add: Already in the blacklist, don't add it repeatedly
 exception.blacklist.not_found: Blacklist does not exist

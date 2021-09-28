@@ -30,6 +30,8 @@ class OpenCourseException extends AbstractException
 
     const CHECK_PASSWORD_REQUIRED = 5004011;
 
+    const REPLAY_NOT_PERMITTED = 4034009;
+
     public $messages = [
         4044001 => 'exception.opencourse.not_found',
         4044002 => 'exception.opencourse.not_found_lesson',
@@ -42,5 +44,6 @@ class OpenCourseException extends AbstractException
         5004009 => 'exception.opencourse.itemids_invalid',
         5004010 => 'exception.opencourse.is_not_member',
         5004011 => 'exception.opencourse.check_password_required',
+        4034009 => 'exception.opencourse.replay_not_permitted',
     ];
 }
