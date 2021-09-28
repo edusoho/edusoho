@@ -60,6 +60,17 @@ class WrongBookQuestionShow extends AbstractResource
             foreach ($item['questions'] as &$question) {
                 $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
                 $question['sources'] = $source;
+                $this->handleImgTag($question['stem']);
+                $this->handleImgTag($question['analysis']);
+                foreach ($question['response_points'] as &$points) {
+                    if (!empty($points['radio'])) {
+                        $this->handleImgTag($points['radio']['text']);
+                    }
+
+                    if (!empty($points['checkbox'])) {
+                        $this->handleImgTag($points['checkbox']['text']);
+                    }
+                }
             }
             $wrongQuestionInfo[] = $item;
         }
