@@ -22,8 +22,13 @@ class OpenCourseReplay extends AbstractResource
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
-        if ($lesson['replayStatus'] == 'videoGenerated') {
+        if ('videoGenerated' == $lesson['replayStatus']) {
             throw OpenCourseException::LESSON_TYPE_INVALID();
+        }
+
+        $openCourse = $this->getOpenCourseService()->getCourse($courseId);
+        if (empty($openCourse['replayEnable'])) {
+            throw OpenCourseException::REPLAY_NOT_PERMITTED();
         }
 
         $device = $request->query->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
@@ -45,19 +50,19 @@ class OpenCourseReplay extends AbstractResource
         $user['nickname'] = $user->isLogin() ? $user['nickname'] : '游客'.$this->getRandomString(8);
 
         $protocol = $request->getHttpRequest()->getScheme();
-        $replays = array();
+        $replays = [];
 
         foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array(
+            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", [
                 'replayId' => $visibleReplays[$index]['replayId'],
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
                 'device' => $device,
-                'protocol' => $protocol, ));
+                'protocol' => $protocol, ]);
             $replays[$index]['title'] = $visibleReplay['title'];
         }
 
-        return array('replays' => $replays);
+        return ['replays' => $replays];
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
