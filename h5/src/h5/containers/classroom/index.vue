@@ -106,6 +106,7 @@ export default {
         goodsId,
         specsId,
         hitNum,
+        vipDeadline
       } = res;
       const cover = res.cover.large;
       const classId = res.id;
@@ -118,6 +119,7 @@ export default {
         expiryValue,
         vipLevel,
         hitNum,
+        vipDeadline
       };
 
       this.planDetails = planDetails;
