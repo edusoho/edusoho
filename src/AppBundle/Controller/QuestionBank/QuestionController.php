@@ -143,6 +143,7 @@ class QuestionController extends BaseController
 
             return $this->createJsonResponse(['goto' => $goto]);
         }
+        $categoryId = $request->query->get('categoryId', 0);
 
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
@@ -151,6 +152,7 @@ class QuestionController extends BaseController
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
+            'categoryId' => $categoryId,
         ]);
     }
 
@@ -370,7 +372,7 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        return  rawurlencode("{$questionBank['name']}-题目.docx");
+        return rawurlencode("{$questionBank['name']}-题目.docx");
     }
 
     protected function convertCategoryTreeToArray($categoryTree)

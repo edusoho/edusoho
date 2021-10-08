@@ -97,26 +97,26 @@ check env:
     variables:
       - $REPOSITORY == "main"
 
-7.4 For main with MySQL80:
-  stage: test
-  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
-  services:
-    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
-      alias: mysql
-      command: ["--default-authentication-plugin=mysql_native_password"]
-    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
-      alias: redis
-  script:
-    - bin/phpunit-diff
-  interruptible: true
-  only:
-    refs:
-      - /^release/.*$/
-      - /^project/.*$/
-      - develop
-      - master
-    variables:
-      - $REPOSITORY == "main"
+#7.4 For main with MySQL80:
+#  stage: test
+#  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
+#  services:
+#    - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
+#      alias: mysql
+#      command: ["--default-authentication-plugin=mysql_native_password"]
+#    - name: dockerhub.codeages.work/library-proxy/library/redis:latest
+#      alias: redis
+#  script:
+#    - bin/phpunit-diff
+#  interruptible: true
+#  only:
+#    refs:
+#      - /^release/.*$/
+#      - /^project/.*$/
+#      - develop
+#      - master
+#    variables:
+#      - $REPOSITORY == "main"
 
 7.1 Coverage For Main:
   stage: test
