@@ -4352,6 +4352,8 @@ my.teaching.open_course.student_setting.join_time: 加入时间：
 my.teaching.open_course.student_setting.send_message_btn: 发私信
 my.teaching.open_course.student_setting.view_detail_btn: 查看资料
 my.teaching.open_course.liveTimeSet.title: 直播时间设置
+my.teaching.open_course.live_replay.set: 直播回放设置
+my.teaching.open_course.live_replay.is_permission: 是否允许观看回放
 my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
 my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
 my.teaching.open_course.liveTimeSet.live_length: 直播时长
@@ -4384,6 +4386,7 @@ my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
 my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 直播回放被设置为不允许观看
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -10732,6 +10735,7 @@ exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理�
 exception.opencourse.itemids_invalid: 课时数错误
 exception.opencourse.is_not_member: 您不是课程成员
 exception.opencourse.check_password_required: 未输入正确的校验密码
+exception.opencourse.replay_not_permitted: 直播回放被设置为不允许观看
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不存在
