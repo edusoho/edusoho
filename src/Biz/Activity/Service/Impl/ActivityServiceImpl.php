@@ -631,6 +631,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
     }
 
+    public function findActivitiesLiveByLikeTitle($title)
+    {
+        return $this->getActivityDao()->findActivitiesLiveByLikeTitle($title);
+    }
+
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];

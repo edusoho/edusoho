@@ -28,6 +28,8 @@ interface ActivityService
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
 
+    public function findActivitiesLiveByLikeTitle($title);
+
     /**
      * 创建之前检查完整性
      *

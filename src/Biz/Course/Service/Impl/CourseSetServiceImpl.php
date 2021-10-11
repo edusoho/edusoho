@@ -338,6 +338,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findLikeTitle($title);
     }
 
+    public function findCourseSetsByCategoryIdAndCreator($categoryId, $creator)
+    {
+        return $this->getCourseSetDao()->findCourseSetsByCategoryIdAndCreator($categoryId, $creator);
+    }
+
     public function getCourseSet($id)
     {
         return $this->getCourseSetDao()->get($id);

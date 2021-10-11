@@ -1604,6 +1604,7 @@ course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
 course.tab.certificate: '课程证书'
+course.activity.replay: '直播回放'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -2185,6 +2186,10 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+
+course.plan_task.activity_manage.replay: 直播回放
+course.plan_task.activity_manage.replay.time: 直播回放时长
+
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
@@ -12042,3 +12047,10 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
+
+#回放管理
+course.live_replay_manage.lesson_title_th: 直播课时名
+course.live_replay_manage.live_length_th: 直播时长
+course.live_replay_manage.live_anchor_th: 主讲人
+course.live_replay_manage.live_time_th: 直播时间
+course.live_replay_manage.live_chooser_empty: 没有回放
