@@ -49,7 +49,7 @@ class CourseChapter extends AbstractSychronizer
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
 
         try {
-            $this->getLock()->get("sync_lesson_{$sourceId}", 10);
+            $this->getLock()->get("sync_course_{$sourceChapter['courseId']}", 10);
 
             $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
 

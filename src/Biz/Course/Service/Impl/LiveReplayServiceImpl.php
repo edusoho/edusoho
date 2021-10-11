@@ -7,6 +7,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\Dao\CourseLessonReplayDao;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
@@ -214,14 +215,17 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $activity = $activities[$liveActivity['id']];
             $task = $tasks[$activity['id']];
 
-            $replays[] = $this->addReplay([
-                'courseId' => $activity['fromCourseId'],
-                'lessonId' => $activity['id'],
-                'title' => $data['subject'],
-                'replayId' => $data['id'],
-                'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
-                'type' => 'live',
-            ]);
+            $isReplayExisted = $this->getLessonReplayDao()->getByReplayId($data['id']);
+            if (!$isReplayExisted) {
+                $replays[] = $this->addReplay([
+                    'courseId' => $activity['fromCourseId'],
+                    'lessonId' => $activity['id'],
+                    'title' => $data['subject'],
+                    'replayId' => $data['id'],
+                    'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
+                    'type' => 'live',
+                ]);
+            }
 
             $client = new EdusohoLiveClient();
             $result = $client->getMaxOnline($data['id']);
@@ -252,6 +256,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->liveClient;
     }
 
+    /**
+     * @return CourseLessonReplayDao
+     */
     protected function getLessonReplayDao()
     {
         return $this->createDao('Course:CourseLessonReplayDao');
