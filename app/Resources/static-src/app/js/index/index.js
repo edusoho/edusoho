@@ -15,6 +15,10 @@ if ($('.es-poster .swiper-slide').length > 1) {
       $('.swiper-slide').removeClass('swiper-hidden');
     }
   });
+
+  window.onresize = function(){
+    swiper.reInit();
+  }
 }
 
 $('body').on('click', '.js-course-filter', function () {
