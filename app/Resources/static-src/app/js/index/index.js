@@ -16,7 +16,7 @@ if ($('.es-poster .swiper-slide').length > 1) {
     }
   });
 
-  window.onresize = function(){
+  window.onresize = function() {
     swiper.reInit();
   }
 }
