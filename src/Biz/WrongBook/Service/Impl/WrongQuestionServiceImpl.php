@@ -114,7 +114,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
         $wrongQuestionRequireFields = ArrayToolkit::parts($fields, $wrongQuestionRequireFields);
 
-        return  $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => time()]));
+        return $this->getWrongQuestionDao()->create(array_merge($wrongQuestionRequireFields, ['submit_time' => time()]));
     }
 
     public function searchWrongQuestion($conditions, $orderBys, $start, $limit, $columns = [])

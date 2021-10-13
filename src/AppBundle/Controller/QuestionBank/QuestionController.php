@@ -88,7 +88,7 @@ class QuestionController extends BaseController
         if ($request->isMethod('POST')) {
             $fields = json_decode($request->getContent(), true);
             $fields['bank_id'] = $questionBank['itemBankId'];
-            $fields['category_id'] = $categoryId;
+            $fields['category_id'] = empty($fields['category_id']) ? $categoryId : $fields['category_id'];
             $item = $this->getItemService()->createItem($fields);
 
             $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
