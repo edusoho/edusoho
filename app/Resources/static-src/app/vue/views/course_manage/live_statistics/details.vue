@@ -6,6 +6,18 @@
         <div class="pull-right tips">数据来源于直播间，自动在直播结束一天同步</div>
       </div>
     </template>
+
+    <a-row>
+      <a-col :span="6">
+        col-6
+      </a-col>
+      <a-col :span="12">
+        col-12
+      </a-col>
+      <a-col :span="6">
+        col-6
+      </a-col>
+    </a-row>
   </layout>
 </template>
 
