@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\LiveReplay;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\CourseSetService;
@@ -12,13 +13,45 @@ use Biz\User\Service\UserService;
 
 class LiveReplay extends AbstractResource
 {
+    public function get(ApiRequest $request, $id)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        if (empty($activity)) {
+            ActivityException::NOTFOUND_ACTIVITY();
+        }
+
+        $liveActivity = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
+
+        return [
+            'tag' => '',
+            'remark' => $activity['remark'],
+            'replayPublic' => $liveActivity['replayPublic'],
+        ];
+    }
+
     public function update(ApiRequest $request, $id)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+
         $fields = $this->filterBaseFields($request->request->all());
+
+        if (!empty($fields['remark'])) {
+            $this->getActivityService()->updateActivity($id, ['remark' => $fields['remark']]);
+        }
+
+        if (!empty($fields['replayPublic'])) {
+            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['remark']], $activity);
+        }
+
+        return ['success' => true];
     }
 
     protected function filterBaseFields($fields)
     {
+        $fields = ArrayToolkit::parts($fields, ['tagIds', 'remark', 'replayPublic']);
+
+        return $fields;
     }
 
     public function search(ApiRequest $request)
