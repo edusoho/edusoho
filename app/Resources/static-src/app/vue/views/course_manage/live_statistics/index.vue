@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <layout>
+    <template #title>{{ 'course.live_statistics' | trans }}</template>
+
     <div class="clearfix">
       <a-input-search
         class="pull-left"
@@ -36,10 +38,12 @@
         <a-button type="link" @click="handleClickViewDetail()">{{ 'site.btn.detail' | trans }}</a-button>
       </span>
     </a-table>
-  </div>
+  </layout>
 </template>
 
 <script>
+import Layout from '../layout.vue';
+
 const columns = [
   {
     dataIndex: 'name',
@@ -103,6 +107,10 @@ const data = [
 
 export default {
   name: 'CourseManageLiveStatistics',
+
+  components: {
+    Layout
+  },
 
   data() {
     return {

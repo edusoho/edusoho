@@ -1853,6 +1853,7 @@ form.btn.export: Export
 site.btn.detail: More
 course.task: Task
 
+course.live_statistics: Live statistics
 course.live_statistics.task_name_placeholder: Task name
 course.live_statistics.live_start_time: Start time
 course.live_statistics.live_time_long: Duration(min)
