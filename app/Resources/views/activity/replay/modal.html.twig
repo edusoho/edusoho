@@ -1,0 +1,46 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{#{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/download/index.js']) %} #}
+{% set optionalDefault = 1 %}
+
+{% block activity_content %}
+  {% set mediaType = activity.mediaType|default('download') %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="materials" class="style control-label-required">{{ 'course.plan_task.activity_manage.download.choose_file'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <ul class="download-list" id="material-list">
+        {% for media in activity.ext.materials|default(null) %}
+          <li class="download-item" data-id="{{ media.link|default(media.id) }}">
+            {% if media.link|default(null) %}
+              <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
+              <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
+            {% else %}
+              <a class="gray-primary" href="{{ path('material_download',{fileId:media.id}) }}" target="_blank">{{ media.name }}</a>
+            {% endif %}
+            <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+          </li>
+        {% endfor %}
+      </ul>
+      {% include 'file-chooser/file-choose.html.twig' with {mediaType: mediaType, fileType:'all',file: null } %}
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
+      <input id="materials" class="form-control" type="hidden" name="materials"
+      {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
+    </div>
+    <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.download.file_tips'|trans}}</p>
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+    <div class="col-sm-4 form-control-static">
+      {{'course.plan_task.activity_manage.download.downloaded_tips'|trans}}
+      <select class="form-control hidden" id="finish-condition" name="condition" >
+        <option value="downloaded">{{'course.plan_task.activity_manage.download.downloaded_tips'|trans}}</option>
+      </select>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+<li class="list-group-item clearfix">
+  <button class="close delete-btn" type="button" title="{{'course.plan_task.activity_manage.download.delete_btn'|trans}}" data-url="{{ deleteUrl }}">&times;</button>
+  {% if material.link %}
+    <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+    <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{'course.plan_task.activity_manage.download.link_file'|trans}}"></span>
+  {% else %}
+    <a href="{{ downloadUrl }}">{{ material.title }}</a>
+  {% endif %}
+</li>
