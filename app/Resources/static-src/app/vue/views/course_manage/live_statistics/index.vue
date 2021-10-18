@@ -1,5 +1,5 @@
 <template>
-  <div class="course-manage">
+  <div>
     <div class="clearfix">
       <a-input-search
         class="pull-left"
@@ -125,7 +125,9 @@ export default {
     },
 
     handleClickViewDetail() {
-
+      this.$router.push({
+        name: 'CourseManageLiveStatisticsDetails'
+      });
     }
   }
 }
