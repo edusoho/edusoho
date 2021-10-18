@@ -262,7 +262,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
         $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
 
-        if (!empty($cloudData['onlineNumber']) && time() - $activity['endTime'] > 2 * 3600) {
+        if ((!empty($cloudData['onlineNumber']) && time() - $activity['endTime'] > 2 * 3600) || time() - $activity['endTime'] > 24 * 3600) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
         }
     }
