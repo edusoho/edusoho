@@ -100,6 +100,7 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   background: #fff;
+  transition: background 0.3s ease;
 
   &::before {
     content: "";
@@ -126,6 +127,10 @@ export default {
     font-size: 14px;
     color: #999;
     font-weight: 400;
+  }
+
+  &:hover {
+    background: #f9f9f9;
   }
 }
 </style>
