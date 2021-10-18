@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/details',
     name: 'CourseManageLiveStatisticsDetails',
-    component: () => import(/* webpackChunkName: "app/vue/dist/CourseManageLiveStatistics" */ 'app/vue/views/course_manage/live_statistics/details.vue')
+    component: () => import(/* webpackChunkName: "app/vue/dist/CourseManageLiveStatistics" */ 'app/vue/views/course_manage/live_statistics/details/index.vue')
   }
 ];
 
