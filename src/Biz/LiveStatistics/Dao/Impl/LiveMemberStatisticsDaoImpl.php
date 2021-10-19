@@ -21,6 +21,13 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
         return $builder->execute()->fetchAll();
     }
 
+    public function sumWatchDurationByLiveId($liveId)
+    {
+        $sql = 'SELECT sum(`watchDuration`) FROM `live_statistics_member_data` WHERE  `liveId` = ? ';
+
+        return $this->db()->fetchColumn($sql, [$liveId]);
+    }
+
     protected function createUserQueryBuilder($conditions)
     {
         $conditions = array_filter(
