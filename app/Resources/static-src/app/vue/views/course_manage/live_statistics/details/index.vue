@@ -10,21 +10,21 @@
     <a-row :gutter="16">
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">禄博辰</div>
+          <div class="live-data__value text-overflow">{{ liveData.teacher }}</div>
           <div class="live-data__label">主讲人</div>
         </div>
       </a-col>
 
       <a-col :span="12">
         <div class="live-data">
-          <div class="live-data__value">2021-09-23 22:30:00 至 2021-09-24 23:00:00</div>
+          <div class="live-data__value">{{ $dateFormat(liveData.startTime, 'YYYY-MM-DD HH:mm:ss') }} 至 {{ $dateFormat(liveData.endTime, 'YYYY-MM-DD HH:mm:ss') }}</div>
           <div class="live-data__label">直播时间</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">66分钟</div>
+          <div class="live-data__value">{{ liveData.length }}分钟</div>
           <div class="live-data__label">实际直播时长</div>
         </div>
       </a-col>
@@ -33,28 +33,28 @@
     <a-row :gutter="16" class="mt16">
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">23423人</div>
+          <div class="live-data__value">{{ liveData.maxOnlineNumber }}人</div>
           <div class="live-data__label">同时在线人数</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">23423人</div>
+          <div class="live-data__value">{{ liveData.memberNumber }}人</div>
           <div class="live-data__label">观看人数</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">23423条</div>
+          <div class="live-data__value">{{ liveData.chatNumber }}条</div>
           <div class="live-data__label">所有用户聊天数</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">43分钟</div>
+          <div class="live-data__value">{{ liveData.checkinNum }}分钟</div>
           <div class="live-data__label">人均观看时长</div>
         </div>
       </a-col>
@@ -76,6 +76,8 @@ import Layout from '../../layout.vue';
 import LearningDuration from './components/LearningDuration.vue';
 import RollCall from './components/RollCall.vue';
 
+import { LiveStatistic } from 'common/vue/service';
+
 export default {
   name: 'CourseManageLiveStatisticsDetails',
 
@@ -83,6 +85,24 @@ export default {
     Layout,
     LearningDuration,
     RollCall
+  },
+
+  data() {
+    return {
+      courseId: this.$route.query.courseId,
+      taskId: this.$route.query.taskId,
+      liveData: {}
+    }
+  },
+
+  mounted() {
+    this.fetchLiveDetails();
+  },
+
+  methods: {
+    async fetchLiveDetails() {
+      this.liveData = await LiveStatistic.getLiveDetails({ query: { taskId: this.taskId } });
+    }
   }
 }
 </script>
