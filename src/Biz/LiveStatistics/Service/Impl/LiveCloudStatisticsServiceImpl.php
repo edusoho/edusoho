@@ -90,20 +90,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-        $startJob = [
-            'name' => 'SyncLiveMemberDataJob'.$activity['id'].'_'.time(),
-            'expression' => time() - 100,
-            'class' => 'Biz\LiveStatistics\Job\SyncLiveMemberDataJob',
-            'misfire_threshold' => 10 * 60,
-            'args' => [
-                'activityId' => $activity['id'],
-                'start' => self::LIMIT,
-            ],
-        ];
-        $this->getSchedulerService()->register($startJob);
-
-        return;
-
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         //频次控制， 直播未结束 允许最多3分钟请求云平台
         if (!empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 180) {
@@ -175,7 +161,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'watchDuration' => $member['onlineDuration'],
                 'checkinNum' => $member['checkinNumber'],
                 'chatNum' => $member['chatNumber'],
-                'answerNum' => '--',
+                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
+                'requestTime' => time(),
             ];
             if (!empty($members[$member['userId']])) {
                 $updateData[$members[$member['userId']]['id']] = $data;

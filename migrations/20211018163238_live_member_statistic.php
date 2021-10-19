@@ -21,7 +21,8 @@ class LiveMemberStatistic extends Migration
                               `requestTime` int(11) DEFAULT 0,
                               `userId` int(11) DEFAULT 0,
                               `courseId` int(11) DEFAULT 0,
-                              `chatNumber` int(11) DEFAULT 0,
+                              `chatNum` int(11) DEFAULT 0,
+                              `answerNum` int(11) DEFAULT 0,
                               PRIMARY KEY (`id`)
                             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
         );

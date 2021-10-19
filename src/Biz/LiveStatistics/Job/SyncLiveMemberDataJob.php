@@ -96,6 +96,8 @@ class SyncLiveMemberDataJob extends AbstractJob
                 'watchDuration' => $member['onlineDuration'],
                 'checkinNum' => $member['checkinNumber'],
                 'chatNumber' => $member['chatNumber'],
+                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
+                'requestTime' => time(),
             ];
             if (!empty($members[$member['userId']])) {
                 $updateData[$members[$member['userId']]['id']] = $data;
@@ -141,6 +143,7 @@ class SyncLiveMemberDataJob extends AbstractJob
                 'watchDuration' => $member['watchDuration'],
                 'checkinNum' => $member['checkinNum'],
                 'chatNumber' => empty($member['chatNumber']) ? 0 : $member['chatNumber'],
+                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
                 'requestTime' => time(),
             ];
             if (!empty($members[$member['userId']])) {
