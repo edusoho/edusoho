@@ -9,5 +9,6 @@
 {% do script(['app/vue/views/course_manage/live_statistics/index.js']) %}
 
 {% block main %}
+  <input type="hidden" class="js-course-id" value="{{ course.id }}" />
   <div id="app"></div>
 {% endblock %}

@@ -29,7 +29,7 @@
       <template slot="actionTitle">{{ 'course.live_statistics.operation' | trans }}</template>
 
       <template slot="customTitle" slot-scope="text, record">
-        <a :href="`/${record.id}`">{{ text }}</a>
+        <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
       </template>
 
       <template slot="startTime" slot-scope="text">
@@ -48,6 +48,7 @@
 
 <script>
 import Layout from '../layout.vue';
+import _ from 'lodash';
 
 import { LiveStatistic } from 'common/vue/service';
 
@@ -78,13 +79,13 @@ const columns = [
     dataIndex: 'status',
     key: 'status',
     slots: { title: 'statusTitle' },
-    scopedSlots: { customRender: 'status' },
+    scopedSlots: { customRender: 'status' }
   },
   {
     key: 'action',
     slots: { title: 'actionTitle' },
-    scopedSlots: { customRender: 'action' },
-  },
+    scopedSlots: { customRender: 'action' }
+  }
 ];
 
 export default {
@@ -96,12 +97,17 @@ export default {
 
   data() {
     return {
+      courseId: $('.js-course-id').val(),
       data: [],
       columns,
       pagination: {
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
+        current: 1,
+        pageSize: 10,
+        total: 0
       },
       loading: false,
+      keyword: ''
     }
   },
 
@@ -111,21 +117,47 @@ export default {
 
   methods: {
     onSearch(value) {
-      console.log(value);
+      value = _.trim(value);
+      if (_.size(value) && value !== this.keyword) {
+        this.keyword = value;
+        this.pagination.current = 1;
+        this.fetchLiveStatistics();
+      }
     },
 
-    handleTableChange() {
-
+    handleTableChange(pagination) {
+      this.pagination.current = pagination.current;
+      this.fetchLiveStatistics();
     },
 
     async fetchLiveStatistics() {
-      const { data, paging } = await LiveStatistic.get({ params: { courseId: 54 }});
+      this.loading = true;
+      const { current, pageSize } = this.pagination;
+      const params = {
+        params: {
+          courseId: this.courseId,
+          title: this.keyword,
+          offset: (current - 1) * pageSize,
+          limit: pageSize
+        }
+      }
+      const { data, paging } = await LiveStatistic.get(params);
+      this.loading = false;
+      this.pagination.total = paging.total;
       this.data = data;
     },
 
-    handleClickViewDetail() {
+    handleClickViewTask(id) {
+      window.open(`/course/${this.courseId}/task/${id}/show`);
+    },
+
+    handleClickViewDetail(id) {
       this.$router.push({
-        name: 'CourseManageLiveStatisticsDetails'
+        name: 'CourseManageLiveStatisticsDetails',
+        query: {
+          courseId: this.courseId,
+          taskId: id
+        }
       });
     }
   }
