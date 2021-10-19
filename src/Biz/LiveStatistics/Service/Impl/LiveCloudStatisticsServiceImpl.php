@@ -34,6 +34,16 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return $this->getLiveMemberStatisticsDao()->searchLiveMembersJoinCourseMember($conditions, $start, $limit);
     }
 
+    public function countLiveMembersByLiveId($liveId)
+    {
+        return $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
+    }
+
+    public function sumWatchDurationByLiveId($liveId)
+    {
+        return $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
+    }
+
     public function getLiveData($task)
     {
         $course = $this->getCourseService()->tryManageCourse($task['courseId']);
@@ -68,6 +78,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         ];
         $this->getGeneralLiveStatistics($activity, $task, $data);
         $this->getESLiveStatistics($activity, $task, $data);
+        $sum = $this->sumWatchDurationByLiveId($activity['ext']['liveId']);
+        $memberCount = $this->countLiveMembersByLiveId($activity['ext']['liveId']);
+        $data['avgWatchTime'] = empty($memberCount) ? 0 : round($sum / ($memberCount * 60), 1);
         $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($cloudStatisticData, $data)]);
 
         return $data;

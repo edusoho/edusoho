@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\LiveStatistic;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -17,7 +18,10 @@ class LiveStatisticDetail extends AbstractResource
             TaskException::NOTFOUND_TASK();
         }
 
-        return $this->getLiveStatisticsService()->getLiveData($task);
+        $result = $this->getLiveStatisticsService()->getLiveData($task);
+        $result['task'] = ArrayToolkit::parts($this->getTaskService()->getTask($taskId), ['id', 'startTime', 'endTime', 'title', 'length']);
+
+        return $result;
     }
 
     /**

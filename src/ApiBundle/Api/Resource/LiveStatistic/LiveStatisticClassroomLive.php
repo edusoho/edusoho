@@ -36,7 +36,7 @@ class LiveStatisticClassroomLive extends AbstractResource
             $courseSet = $courseSets[$liveTask['fromCourseSetId']];
             $liveTask['courseTitle'] = empty($course['title']) ? $courseSet['title'] : $course['title'];
             $liveTask['maxStudentNum'] = $course['maxStudentNum'];
-            $liveTask['status'] = $liveTask['startTime'] > time() ? $this->trans('course.live_statistics.live_coming') : ($liveTask['endTime'] < time() ? $this->trans('course.live_statistics.live_finished') : $this->trans('course.live_statistics.live_playing'));
+            $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
         }
 
         return $tasks;
