@@ -16,26 +16,31 @@
       class="mt24"
       :columns="columns"
       :data-source="data"
-      :row-key="record => record.key"
+      :row-key="record => record.id"
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nameTitle">{{ 'course.task' | trans }}</template>
-      <template slot="timeTitle">{{ 'course.live_statistics.live_start_time' | trans }}</template>
-      <template slot="durationTitle">{{ 'course.live_statistics.live_time_long' | trans }}</template>
-      <template slot="numberOfPeopleTitle">{{ 'course.live_statistics.max_participate_count' | trans }}</template>
+      <template slot="customTitle">{{ 'course.task' | trans }}</template>
+      <template slot="startTimeTitle">{{ 'course.live_statistics.live_start_time' | trans }}</template>
+      <template slot="lengthTitle">{{ 'course.live_statistics.live_time_long' | trans }}</template>
+      <template slot="maxStudentNumTitle">{{ 'course.live_statistics.max_participate_count' | trans }}</template>
       <template slot="statusTitle">{{ 'course.live_statistics.live_status' | trans }}</template>
       <template slot="actionTitle">{{ 'course.live_statistics.operation' | trans }}</template>
 
+      <template slot="customTitle" slot-scope="text, record">
+        <a :href="`/${record.id}`">{{ text }}</a>
+      </template>
 
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="time">2021-10-14 15:40</span>
-      <span slot="status" slot-scope="status">
-        10
-      </span>
-      <span slot="action" slot-scope="text, record">
-        <a-button type="link" @click="handleClickViewDetail()">{{ 'site.btn.detail' | trans }}</a-button>
+      <template slot="startTime" slot-scope="text">
+        {{ $dateFormat(text, 'YYYY-MM-DD HH:mm:ss') }}
+      </template>
+      <template slot="status" slot-scope="text">
+        {{ text }}
+      </template>
+
+      <span slot="action" slot-scope="record">
+        <a-button type="link" @click="handleClickViewDetail(record.id)">{{ 'site.btn.detail' | trans }}</a-button>
       </span>
     </a-table>
   </layout>
@@ -44,65 +49,42 @@
 <script>
 import Layout from '../layout.vue';
 
+import { LiveStatistic } from 'common/vue/service';
+
 const columns = [
   {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'nameTitle' },
-    scopedSlots: { customRender: 'name' }
+    dataIndex: 'title',
+    key: 'title',
+    slots: { title: 'customTitle' },
+    scopedSlots: { customRender: 'customTitle' }
   },
   {
-    dataIndex: 'time',
-    key: 'time',
-    slots: { title: 'timeTitle' }
+    dataIndex: 'startTime',
+    key: 'startTime',
+    slots: { title: 'startTimeTitle' },
+    scopedSlots: { customRender: 'startTime' }
   },
   {
-    dataIndex: 'duration',
-    key: 'duration',
-    slots: { title: 'durationTitle' }
+    dataIndex: 'length',
+    key: 'length',
+    slots: { title: 'lengthTitle' }
   },
   {
-    key: 'numberOfPeople',
-    dataIndex: 'numberOfPeople',
-    slots: { title: 'numberOfPeopleTitle' }
+    key: 'maxStudentNum',
+    dataIndex: 'maxStudentNum',
+    slots: { title: 'maxStudentNumTitle' }
   },
   {
+    dataIndex: 'status',
     key: 'status',
     slots: { title: 'statusTitle' },
-    scopedSlots: { customRender: 'status' }
+    scopedSlots: { customRender: 'status' },
   },
   {
     key: 'action',
     slots: { title: 'actionTitle' },
     scopedSlots: { customRender: 'action' },
   },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    time: '2021-10-14 15:40',
-    duration: 20,
-    numberOfPeople: 10,
-    status: 'end'
-  },
-  {
-    key: '2',
-    name: 'John Brown',
-    time: '2021-10-14 15:40',
-    duration: 20,
-    numberOfPeople: 10,
-    status: 'end'
-  },
-  {
-    key: '3',
-    name: 'John Brown',
-    time: '2021-10-14 15:40',
-    duration: 20,
-    numberOfPeople: 10,
-    status: 'end'
-  }
 ];
 
 export default {
@@ -114,13 +96,17 @@ export default {
 
   data() {
     return {
-      data,
+      data: [],
       columns,
       pagination: {
         hideOnSinglePage: true
       },
-      loading: false
+      loading: false,
     }
+  },
+
+  mounted() {
+    this.fetchLiveStatistics();
   },
 
   methods: {
@@ -130,6 +116,11 @@ export default {
 
     handleTableChange() {
 
+    },
+
+    async fetchLiveStatistics() {
+      const { data, paging } = await LiveStatistic.get({ params: { courseId: 54 }});
+      this.data = data;
     },
 
     handleClickViewDetail() {
