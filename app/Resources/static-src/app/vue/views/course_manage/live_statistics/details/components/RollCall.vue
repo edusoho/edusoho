@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
   {
@@ -57,20 +58,17 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    phoneNumber: '15978507331',
-    mail: '5201314@qq.com',
-    rollCall: 1
-  }
-];
-
 export default {
+  props: {
+    taskId: {
+      type: String,
+      required: true
+    }
+  },
+
   data() {
     return {
-      data,
+      data: [],
       columns,
       pagination: {
         hideOnSinglePage: true,
@@ -78,21 +76,49 @@ export default {
         pageSize: 10,
         total: 0
       },
-      loading: false
+      loading: false,
+      keyword: '',
+      status: ''
     }
   },
 
   mounted() {
-    console.log('RollCall');
+    this.fetchLiveRollCall();
   },
 
   methods: {
     onSearch(value) {
-      console.log(value);
+      value = _.trim(value);
+      if (value !== this.keyword) {
+        this.keyword = value;
+        this.pagination.current = 1;
+        this.fetchLiveRollCall();
+      }
     },
 
-    handleTableChange() {
+    handleTableChange(pagination) {
+      this.pagination.current = pagination.current;
+      this.fetchLiveRollCall();
+    },
 
+    async fetchLiveRollCall() {
+      this.loading = true;
+      const { current, pageSize } = this.pagination;
+      const params = {
+        query: {
+          taskId: this.taskId
+        },
+        params: {
+          nameOrMobile: this.keyword,
+          status: this.status,
+          offset: (current - 1) * pageSize,
+          limit: pageSize
+        }
+      }
+      const { data, paging } = await LiveStatistic.getLiveRollCall(params);
+      this.loading = false;
+      this.pagination.total = paging.total;
+      this.data = data;
     }
   }
 }

@@ -58,7 +58,7 @@
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.checkinNum }}{{ 'site.date.minute' | trans }}</div>
+          <div class="live-data__value">{{ liveData.avgWatchTime }}{{ 'site.date.minute' | trans }}</div>
           <div class="live-data__label">{{ 'live_statistics.per_capita_viewing_time' | trans }}</div>
         </div>
       </a-col>

@@ -79,8 +79,6 @@ const columns = [
 ];
 
 export default {
-  name: 'CourseManageLiveStatistics',
-
   props: {
     taskId: {
       type: String,
