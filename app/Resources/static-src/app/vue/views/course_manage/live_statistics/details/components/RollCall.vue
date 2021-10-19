@@ -73,10 +73,17 @@ export default {
       data,
       columns,
       pagination: {
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
+        current: 1,
+        pageSize: 10,
+        total: 0
       },
       loading: false
     }
+  },
+
+  mounted() {
+    console.log('RollCall');
   },
 
   methods: {

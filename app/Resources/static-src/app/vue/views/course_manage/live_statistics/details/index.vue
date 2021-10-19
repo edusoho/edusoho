@@ -62,10 +62,10 @@
 
     <a-tabs class="mt16" default-active-key="1">
       <a-tab-pane key="1" tab="学习时长统计">
-        <learning-duration />
+        <learning-duration :task-id="taskId" />
       </a-tab-pane>
       <a-tab-pane key="2" tab="点名统计">
-        <roll-call />
+        <roll-call :task-id="taskId" />
       </a-tab-pane>
     </a-tabs>
   </layout>

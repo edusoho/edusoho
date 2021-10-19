@@ -19,12 +19,12 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nameTitle">用户名</template>
+      <template slot="nicknameTitle">用户名</template>
       <template slot="phoneNumberTitle">手机号</template>
-      <template slot="mailTitle">邮箱</template>
-      <template slot="timeTitle">进入直播间时间</template>
-      <template slot="durationTitle">观看时长（分钟）</template>
-      <template slot="checkInNumberTitle">签到数</template>
+      <template slot="emailTitle">邮箱</template>
+      <template slot="firstEnterTimeTitle">进入直播间时间</template>
+      <template slot="watchDurationTitle">观看时长（分钟）</template>
+      <template slot="checkinNumTitle">签到数</template>
       <template slot="chatNumberTitle">聊天数</template>
       <template slot="numberOfAnswersTitle">答题数</template>
     </a-table>
@@ -32,12 +32,14 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'nameTitle' }
+    dataIndex: 'nickname',
+    key: 'nickname',
+    slots: { title: 'nicknameTitle' }
   },
   {
     dataIndex: 'phoneNumber',
@@ -45,24 +47,24 @@ const columns = [
     slots: { title: 'phoneNumberTitle' }
   },
   {
-    dataIndex: 'mail',
-    key: 'mail',
-    slots: { title: 'mailTitle' }
+    dataIndex: 'email',
+    key: 'email',
+    slots: { title: 'emailTitle' }
   },
   {
-    dataIndex: 'time',
-    key: 'time',
-    slots: { title: 'timeTitle' }
+    dataIndex: 'firstEnterTime',
+    key: 'firstEnterTime',
+    slots: { title: 'firstEnterTimeTitle' }
   },
   {
-    dataIndex: 'duration',
-    key: 'duration',
-    slots: { title: 'durationTitle' }
+    dataIndex: 'watchDuration',
+    key: 'watchDuration',
+    slots: { title: 'watchDurationTitle' }
   },
   {
-    dataIndex: 'checkInNumber',
-    key: 'checkInNumber',
-    slots: { title: 'checkInNumberTitle' }
+    dataIndex: 'checkinNum',
+    key: 'checkinNum',
+    slots: { title: 'checkinNumTitle' }
   },
   {
     dataIndex: 'chatNumber',
@@ -76,52 +78,67 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    phoneNumber: '15978507331',
-    mail: '5201314@qq.com',
-    time: '2021-10-14 15:40',
-    duration: 20,
-    checkInNumber: 10,
-    chatNumber: 20,
-    numberOfAnswers: 41234324
-  },
-  {
-    key: '2',
-    name: 'John Brown',
-    phoneNumber: '15978507331',
-    mail: '5201314@qq.com',
-    time: '2021-10-14 15:40',
-    duration: 20,
-    checkInNumber: 10,
-    chatNumber: 20,
-    numberOfAnswers: 41234324
-  }
-];
-
 export default {
   name: 'CourseManageLiveStatistics',
 
+  props: {
+    taskId: {
+      type: String,
+      required: true
+    }
+  },
+
   data() {
     return {
-      data,
+      data: [],
       columns,
       pagination: {
-        hideOnSinglePage: true
+        hideOnSinglePage: true,
+        current: 1,
+        pageSize: 10,
+        total: 0
       },
-      loading: false
+      loading: false,
+      keyword: ''
     }
+  },
+
+  mounted() {
+    this.fetchLiveMembers();
   },
 
   methods: {
     onSearch(value) {
-      console.log(value);
+      value = _.trim(value);
+      if (_.size(value) && value !== this.keyword) {
+        this.keyword = value;
+        this.pagination.current = 1;
+        this.fetchLiveMembers();
+      }
     },
 
-    handleTableChange() {
+    handleTableChange(pagination) {
+      this.pagination.current = pagination.current;
+      this.fetchLiveMembers();
+    },
 
+    async fetchLiveMembers() {
+      this.loading = true;
+      const { current, pageSize } = this.pagination;
+      const params = {
+        query: {
+          taskId: this.taskId
+        },
+        params: {
+          title: this.keyword,
+          offset: (current - 1) * pageSize,
+          limit: pageSize
+        }
+      }
+      const { data, paging } = await LiveStatistic.getLiveMembers(params);
+      this.loading = false;
+      this.pagination.total = paging.total;
+      this.data = data;
     }
   }
 }
