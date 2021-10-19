@@ -8,6 +8,12 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
 {
     protected $table = 'biz_answer_question_report';
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
+
     public function findByAnswerRecordId($answerRecordId)
     {
         return $this->findByFields(['answer_record_id' => $answerRecordId]);
@@ -28,6 +34,7 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
                 'answer_record_id = :answer_record_id',
                 'answer_record_id IN (:answer_record_ids)',
                 'status = :status',
+                'status IN (:statues)',
                 'id IN (:ids)',
             ],
         ];

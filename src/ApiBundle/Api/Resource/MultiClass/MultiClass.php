@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\MultiClass;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Assistant\AssistantFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
@@ -39,7 +40,9 @@ class MultiClass extends AbstractResource
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filters($multiClass['teachers']);
-        $userFilter->filters($multiClass['assistants']);
+
+        $assistantFilter = new AssistantFilter();
+        $assistantFilter->filters($multiClass['assistants']);
 
         $product = $this->getMultiClassProductService()->getProduct($multiClass['productId']);
         $multiClass['product'] = empty($product) ? [] : $product;

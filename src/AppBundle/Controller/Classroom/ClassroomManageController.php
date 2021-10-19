@@ -18,6 +18,7 @@ use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Review\Service\ReviewService;
 use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
@@ -106,19 +107,19 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
-        $condition = array_merge($condition, ['classroomId' => $id, 'role' => 'student']);
+        $condition = array_merge($condition, ['role' => '|student|']);
 
         $this->filterDeadlineConditions($condition, $request->query->get('expired'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount($condition),
+            $this->getClassroomService()->countMembersByClassroomId($id, $condition),
             20
         );
 
-        $students = $this->getClassroomService()->searchMembers(
+        $students = $this->getClassroomService()->searchMembersByClassroomId(
+            $id,
             $condition,
-            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -141,9 +142,11 @@ class ClassroomManageController extends BaseController
     {
         if (!empty($expired)) {
             if ('out' == $expired) {
-                $condition['deadline_LE'] = time();
+                $condition['out_validity']['deadline_LE'] = time();
+                $condition['out_validity']['deadline_GT'] = 0;
             } else {
-                $condition['deadline_GT'] = time();
+                $condition['in_validity']['deadline_GT'] = time();
+                $condition['in_validity']['deadline_EQ'] = 0;
             }
         }
     }
@@ -447,7 +450,7 @@ class ClassroomManageController extends BaseController
 
         foreach ($classroomMembers as $classroomMember) {
             $member = '';
-            $member .= $users[$classroomMember['userId']]['nickname']."\t".',';
+            $member .= is_numeric($users[$classroomMember['userId']]['nickname']) ? $users[$classroomMember['userId']]['nickname']."\t".',' : $users[$classroomMember['userId']]['nickname'].',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
             $member .= $classroomMember['learningProgressPercent'].',';
@@ -1497,6 +1500,9 @@ class ClassroomManageController extends BaseController
         return $this->createService('Classroom:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');

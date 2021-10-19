@@ -24,6 +24,10 @@
         </div>
       </template>
 
+      <template slot="isScrmBind" slot-scope="text">
+        <span>{{ text === 0? '':'已绑定' }}</span>
+      </template>
+
       <div slot="loginInfo" slot-scope="item">
         <div>{{ $dateFormat(item.loginTime, 'YYYY-MM-DD HH:mm') }}</div>
         <div class="color-gray text-sm">{{ item.loginIp }}</div>

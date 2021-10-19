@@ -1,14 +1,14 @@
 course:
     create:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_set_show
                 param:
                     id: id
     update:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_set_show
                 param:
@@ -16,157 +16,170 @@ course:
         modalField: all
     update_picture:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_set_show
                 param:
                     id: id
     create_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: id
     update_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: id
         modalField:
-            ["title", "subtitle", "originPrice", "buyExpiryTime", "expiryMode", "expiryDays", "expiryStartDate", "expiryEndDate", "enableFinish", "enableAudio", "buyable", "tryLookable", "tryLookLength", "serializeMode"]
+            - title
+            - subtitle
+            - originPrice
+            - buyExpiryTime
+            - expiryMode
+            - expiryDays
+            - expiryStartDate
+            - expiryEndDate
+            - enableFinish
+            - enableAudio
+            - buyable
+            - tryLookable
+            - tryLookLength
+            - serializeMode
     publish_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: id
     close_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: id
     lesson_set_optional:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
     lesson_unset_optional:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
     publish_lesson:
         templateParam:
-            %url%:
-                 type: url
-                 path: course_show
-                 param:
-                     id: courseId
+            '%url%':
+                type: url
+                path: course_show
+                param:
+                    id: courseId
     unpublish_lesson:
         templateParam:
-            %url%:
-                 type: url
-                 path: course_show
-                 param:
-                     id: courseId
+            '%url%':
+                type: url
+                path: course_show
+                param:
+                    id: courseId
     update_thread:
         modalField: all
     add_student:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
-            %nickname%: nickname
-            %remark%: remark
+            '%nickname%': nickname
+            '%remark%': remark
     remove_student:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
-            %nickname%: nickname
+            '%nickname%': nickname
     join_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
     publish:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_set_show
                 param:
                     id: id
     close:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_set_show
                 param:
                     id: id
     create_lesson:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: 0.courseId
-            %title%: 0.title
+            '%title%': 0.title
     add_task:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
     update_task_optional:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
                     id: courseId
     update_teacher:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
-                  id: id
+                    id: id
     exit_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: course_show
                 param:
-                  id: courseId
-            %nickname%: nickname
+                    id: courseId
+            '%nickname%': nickname
 classroom:
     create:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: id
     update:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
@@ -174,76 +187,76 @@ classroom:
         modalField: all
     add_student:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
-            %nickname%: nickname
-            %remark%: remark
+            '%nickname%': nickname
+            '%remark%': remark
     remove_student:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
-            %nickname%: nickname
+            '%nickname%': nickname
     exit_classroom:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
-            %nickname%: nickname
+            '%nickname%': nickname
     join_classroom:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
     add_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
-            %courseSetTitle%: courseSetTitle
+            '%courseSetTitle%': courseSetTitle
     delete_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: classroomId
-            %courseSetTitle%: courseSetTitle
+            '%courseSetTitle%': courseSetTitle
     recommend:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: id
     cancel_recommend:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: id
     publish:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
                     id: id
     close:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: classroom_show
                 param:
@@ -251,28 +264,28 @@ classroom:
 article:
     create:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: article_detail
                 param:
                     id: id
     update:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: article_detail
                 param:
                     id: id
     update_property:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: article_detail
                 param:
                     id: id
     cancel_property:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: article_detail
                 param:
@@ -280,14 +293,14 @@ article:
 open_course:
     create_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: open_course_show
                 param:
                     courseId: id
     update_course:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: open_course_show
                 param:
@@ -295,7 +308,7 @@ open_course:
         modalField: all
     add_lesson:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: open_course_show
                 param:
@@ -303,7 +316,7 @@ open_course:
 group:
     create_thread:
         templateParam:
-            %url%:
+            '%url%':
                 type: url
                 path: group_thread_show
                 param:
@@ -319,17 +332,17 @@ user:
         modalField: all
     update:
         modalField:
-            0: title
-            1: truename
-            2: gender
-            3: qq
-            4: signature
-            5: about
-            6: company
-            7: job
-            8: weibo
-            9: weixin
-            10: site
+            - title
+            - truename
+            - gender
+            - qq
+            - signature
+            - about
+            - company
+            - job
+            - weibo
+            - weixin
+            - site
     nickname_change:
         modalField: all
     change_role:
@@ -343,7 +356,15 @@ system:
         modalField: all
     update_settings.mailer:
         modalField:
-            ["use_cloud_email_crm", "enabled", "send_email", "host", "port", "username", "password", "from", "name"]
+            - use_cloud_email_crm
+            - enabled
+            - send_email
+            - host
+            - port
+            - username
+            - password
+            - from
+            - name
     update_settings.esBar:
         modalField: all
     update_settings.default:
@@ -384,10 +405,23 @@ system:
         modalField: all
     update_settings.cloud_consult:
         modalField:
-            ["cloud_consult_setting_enabled", "cloud_consult_expired_time"]
+            - cloud_consult_setting_enabled
+            - cloud_consult_expired_time
     update_settings.storage:
         modalField:
-            ["upload_mode","support_mobile","video_quality","video_audio_quality","video_audio_quality","enable_playback_rates","video_auto_play","video_header","video_watermark","video_embed_watermark_image","video_fingerprint","video_fingerprint_time","enable_hls_encryption_plus",]
+            - upload_mode
+            - support_mobile
+            - video_quality
+            - video_audio_quality
+            - video_audio_quality
+            - enable_playback_rates
+            - video_auto_play
+            - video_header
+            - video_watermark
+            - video_embed_watermark_image
+            - video_fingerprint
+            - video_fingerprint_time
+            - enable_hls_encryption_plus
     update_settings.live-course:
         modalField: all
     update_settings.cloud_sms:
@@ -406,7 +440,9 @@ system:
         modalField: all
     update_settings.mobile:
         modalField:
-            ["enabled", "about", "logo"]
+            - enabled
+            - about
+            - logo
     update_settings.meCount:
         notDisplay: 1
     update_settings.magic:
@@ -414,33 +450,37 @@ system:
 order:
     adjust_price:
         modalField:
-            ["pay_amount"]
+            - pay_amount
 live:
     generate_live_replay:
         templateParam:
-            %title%: 0.subject
+            '%title%': 0.subject
 mobile:
     regist_device:
         notDisplay: 1
-
 push:
     course_thread_create:
         modalField: all
     course_thread_post_create:
         modalField: all
-
-
 destroy_account_record:
     create:
         modalField:
-          ["nickname", "reason"]
+            - nickname
+            - reason
     pass:
         templateParam:
-          %nickname%: nickname
+            '%nickname%': nickname
         modalField:
-          ["destroyedAccountId", "nickname", "reason", "auditUserNickname"]
+            - destroyedAccountId
+            - nickname
+            - reason
+            - auditUserNickname
     reject:
         templateParam:
-          %nickname%: nickname
+            '%nickname%': nickname
         modalField:
-          ["nickname", "reason", "auditUserNickname", "rejectedReason"]
+            - nickname
+            - reason
+            - auditUserNickname
+            - rejectedReason

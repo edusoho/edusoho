@@ -15,6 +15,7 @@ use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsScenes;
 use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -191,6 +192,7 @@ class Login extends AbstractResource
             'mobiles' => $mobile,
             'templateId' => SmsType::IMPORT_USER,
             'templateParams' => $templateParams,
+            'tag' => SmsScenes::USER_REGISTER_SUCCESS,
         ];
 
         try {

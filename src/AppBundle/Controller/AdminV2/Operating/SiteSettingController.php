@@ -17,24 +17,24 @@ class SiteSettingController extends BaseController
 {
     public function consultSettingAction(Request $request)
     {
-        $consult = $this->getSettingService()->get('consult', array());
-        $default = array(
+        $consult = $this->getSettingService()->get('consult', []);
+        $default = [
             'enabled' => 0,
             'worktime' => '9:00 - 17:00',
-            'qq' => array(
-                array('name' => '', 'number' => ''),
-            ),
-            'qqgroup' => array(
-                array('name' => '', 'number' => '', 'url' => ''),
-            ),
-            'phone' => array(
-                array('name' => '', 'number' => ''),
-            ),
+            'qq' => [
+                ['name' => '', 'number' => ''],
+            ],
+            'qqgroup' => [
+                ['name' => '', 'number' => '', 'url' => ''],
+            ],
+            'phone' => [
+                ['name' => '', 'number' => ''],
+            ],
             'supplier' => '',
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
-        );
+        ];
 
         $consult = array_merge($default, $consult);
         if ('POST' == $request->getMethod()) {
@@ -59,18 +59,18 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/operating/site-setting/consult-setting.html.twig', array(
+        return $this->render('admin-v2/operating/site-setting/consult-setting.html.twig', [
             'consult' => $consult,
-        ));
+        ]);
     }
 
     public function esBarSettingAction(Request $request)
     {
-        $esBar = $this->getSettingService()->get('esBar', array());
+        $esBar = $this->getSettingService()->get('esBar', []);
 
-        $default = array(
+        $default = [
             'enabled' => 1,
-        );
+        ];
 
         $esBar = array_merge($default, $esBar);
 
@@ -80,19 +80,19 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/operating/site-setting/esbar-setting.html.twig', array(
+        return $this->render('admin-v2/operating/site-setting/esbar-setting.html.twig', [
             'esBar' => $esBar,
-        ));
+        ]);
     }
 
     public function homepageLiveNotifySettingAction(Request $request)
     {
-        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
-        $default = array(
+        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', []);
+        $default = [
             'enabled' => 0,
             'preTime' => 15, //minutes
             'position' => 'leftBottom', //leftBottom|rightBottom|rightTop
-        );
+        ];
         $liveNotifySetting = array_merge($default, $liveNotifySetting);
         if ('POST' == $request->getMethod()) {
             $liveNotifySetting = $request->request->all();
@@ -100,30 +100,30 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/operating/site-setting/homepage-live-notify.html.twig', array(
+        return $this->render('admin-v2/operating/site-setting/homepage-live-notify.html.twig', [
             'liveNotifySetting' => $liveNotifySetting,
-        ));
+        ]);
     }
 
     public function shareAction(Request $request)
     {
-        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting = $this->getSettingService()->get('default', []);
         $default = $this->getDefaultSet();
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
-            $default = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/operating/site-setting/share.html.twig', array(
+        return $this->render('admin-v2/operating/site-setting/share.html.twig', [
             'defaultSetting' => $defaultSetting,
-        ));
+        ]);
     }
 
     public function consultUploadAction(Request $request)
@@ -137,24 +137,24 @@ class SiteSettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $consult = $this->getSettingService()->get('consult', array());
+        $consult = $this->getSettingService()->get('consult', []);
 
         $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
         $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
         $this->getSettingService()->set('consult', $consult);
 
-        $response = array(
+        $response = [
             'path' => $consult['webchatURI'],
-            'url' => $this->container->get('assets.packages')->getUrl($consult['webchatURI']),
-        );
+            'url' => $this->container->get('assets.default_package_util')->getUrl($consult['webchatURI']),
+        ];
 
         return $this->createJsonResponse($response);
     }
 
     public function deleteWebchatAction(Request $request)
     {
-        $consult = $this->getSettingService()->get('consult', array());
+        $consult = $this->getSettingService()->get('consult', []);
         if (isset($consult['webchatURI'])) {
             $consult['webchatURI'] = '';
             $this->getSettingService()->set('consult', $consult);
@@ -165,7 +165,7 @@ class SiteSettingController extends BaseController
 
     protected function getDefaultSet()
     {
-        $default = array(
+        $default = [
             'defaultAvatar' => 0,
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
@@ -178,7 +178,7 @@ class SiteSettingController extends BaseController
             'user_name' => '学员',
             'chapter_name' => '章',
             'part_name' => '节',
-        );
+        ];
 
         return $default;
     }

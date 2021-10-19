@@ -129,7 +129,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $rightCount = empty($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]) ? 0 : count($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]);
 
-        return round($rightCount / $totalCount * 100, 1);
+        return empty($totalCount) ? 0 : round($rightCount / $totalCount * 100, 1);
     }
 
     protected function sumScore(array $answerQuestionReports)
@@ -252,7 +252,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $reviewQuestionReports = ArrayToolkit::index($reviewReport['question_reports'], 'id');
         $questionReportIds = ArrayToolkit::column($reviewReport['question_reports'], 'id');
         if (empty($questionReportIds)) {
-            return $answerReport;
+            goto changeReportStatus;
         }
         $conditions = [
             'ids' => $questionReportIds,
@@ -273,10 +273,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $questionReport['total_score'] = empty($assessmentQuestions['score']) ? 0 : $assessmentQuestions['score'];
         }
 
+        changeReportStatus:
         try {
             $this->beginTransaction();
 
-            if ($questionReports) {
+            if (!empty($questionReports)) {
                 $this->getAnswerQuestionReportService()->batchUpdate($questionReports);
             }
 

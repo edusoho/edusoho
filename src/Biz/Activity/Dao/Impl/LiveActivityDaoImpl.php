@@ -12,7 +12,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function declares()
     {
         return [
-            'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json'],
+            'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json', 'cloudStatisticData' => 'json'],
             'conditions' => [
                 'id IN (:ids)',
                 'liveId = :liveId',
@@ -37,6 +37,21 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function findByLiveIdAndReplayStatus($liveId)
     {
         return $this->findByFields(['liveId' => $liveId, 'replayStatus' => 'ungenerated']);
+    }
+
+    public function findLiveActivitiesByReplayStatus($replayStatus = 'generated')
+    {
+        return $this->findByFields(['replayStatus' => $replayStatus]);
+    }
+
+    public function findLiveActivitiesByIsPublic()
+    {
+        return $this->findByFields(['replayPublic' => 1, 'replayStatus' => 'generated']);
+    }
+
+    public function findLiveActivitiesByReplayTagId($tagId)
+    {
+        return $this->findByFields(['replayTagId' => $tagId, 'replayStatus' => 'generated']);
     }
 
     public function getByLiveId($liveId)

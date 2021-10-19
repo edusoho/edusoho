@@ -3,6 +3,7 @@
 namespace Biz\Task\Job;
 
 use Biz\Course\Dao\CourseDao;
+use Biz\Lock;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
@@ -11,11 +12,13 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class AbstractSyncJob extends AbstractJob
 {
+    private $lock;
+
     public function execute()
     {
     }
 
-    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    protected function dispatchEvent($eventName, $subject, $arguments = [])
     {
         if ($subject instanceof Event) {
             $event = $subject;
@@ -24,6 +27,15 @@ class AbstractSyncJob extends AbstractJob
         }
 
         return $this->biz['dispatcher']->dispatch($eventName, $event);
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 
     /**

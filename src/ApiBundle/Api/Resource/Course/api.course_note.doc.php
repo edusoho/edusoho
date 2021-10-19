@@ -30,12 +30,7 @@
  *                     type="array",
  *                     @OA\Items(ref="#/components/schemas/course.note")
  *                 ),
- *                 @OA\Property(
- *                     property="paging",
- *                     @OA\Property(property="total", type="integer",default=0),
- *                     @OA\Property(property="offset", type="integer", default=0),
- *                     @OA\Property(property="limit", type="integer", default=10)
- *                 ),
+ *                 @OA\Property(property="paging",type="object",ref="#/components/schemas/common.paging")
  *             ),
  *         )
  *     ),
@@ -55,6 +50,18 @@
  *      @OA\Property(property="likeNum",title="likeNum",description="likeNum",type="number"),
  *      @OA\Property(property="createdTime",title="createdTime",description="创建时间",type="string", format="datetime"),
  *      @OA\Property(property="updatedTime",title="updatedTime",description="更新时间",type="string", format="datetime"),
- *      @OA\Property(property="user",title="id",ref="#/components/schemas/user.simple")
+ *      @OA\Property(property="user",title="id",ref="#/components/schemas/user.simple"),
+ *      @OA\Property(property="like",title="like",ref="#components/schemas/course.note.like"),
+ *      @OA\Property(property="task",title="task",ref="#/components/schemas/course.task.public"),
+ * )
+ *
+ * @OA\Schema(
+ *     schema="course.note.like",
+ *     title="course.note.like",
+ *     description="笔记点赞数据",
+ *     @OA\Property(property="id",title="id",description="ID",type="number"),
+ *     @OA\Property(property="noteId",title="noteId",description="笔记ID",type="number"),
+ *     @OA\Property(property="userId",title="userId",description="点赞人ID",type="number"),
+ *     @OA\Property(property="createdTime",title="createdTime",description="创建时间",type="string",format="datetime"),
  * )
  */

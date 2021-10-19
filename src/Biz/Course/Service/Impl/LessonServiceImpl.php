@@ -86,20 +86,30 @@ class LessonServiceImpl extends BaseService implements LessonService
 
     public function publishLesson($courseId, $lessonId, $updateLessonNum = true)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $chapter = $this->getCourseChapterDao()->get($lessonId);
-        if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
+        try {
+            $this->beginTransaction();
 
-        $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
-        $this->publishTasks([$lesson['id']]);
+            $this->getCourseService()->tryManageCourse($courseId);
+            $chapter = $this->getCourseChapterDao()->get($lessonId);
+            if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
+                $this->createNewException(CommonException::ERROR_PARAMETER());
+            }
 
-        $this->dispatchEvent('course.lesson.publish', new Event($lesson));
-        $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
+            $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
+            $this->publishTasks([$lesson['id']]);
 
-        if ($updateLessonNum) {
-            $this->updateLessonNumbers($courseId);
+            $this->dispatchEvent('course.lesson.publish', new Event($lesson));
+            $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
+
+            if ($updateLessonNum) {
+                $this->updateLessonNumbers($courseId);
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+//            return false;
         }
 
         return $lesson;
@@ -146,20 +156,29 @@ class LessonServiceImpl extends BaseService implements LessonService
 
     public function unpublishLesson($courseId, $lessonId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $chapter = $this->getCourseChapterDao()->get($lessonId);
+        try {
+            $this->beginTransaction();
 
-        if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
+            $this->getCourseService()->tryManageCourse($courseId);
+            $chapter = $this->getCourseChapterDao()->get($lessonId);
+
+            if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
+                $this->createNewException(CommonException::ERROR_PARAMETER());
+            }
+
+            $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'unpublished']);
+            $this->unpublishTasks([$lesson['id']]);
+
+            $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
+            $this->getLogService()->info('course', 'unpublish_lesson', '关闭课时', $lesson);
+
+            $this->updateLessonNumbers($courseId);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-
-        $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'unpublished']);
-        $this->unpublishTasks([$lesson['id']]);
-
-        $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
-        $this->getLogService()->info('course', 'unpublish_lesson', '关闭课时', $lesson);
-
-        $this->updateLessonNumbers($courseId);
 
         return $lesson;
     }

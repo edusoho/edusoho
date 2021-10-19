@@ -101,7 +101,6 @@ let $exportBtn = $('#export-students-btn');
 
 $exportBtn.on('click', function () {
   $exportBtn.button('loading');
-
   exportStudents();
 });
 
@@ -114,7 +113,12 @@ function exportStudents(start, fileName) {
       exportStudents(response.start, response.fileName);
     } else {
       $exportBtn.button('reset');
-      location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
+      console.log('role', $exportBtn.data('role'));
+      if ($exportBtn.data('role') == 'exit') {
+        location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
+      }else{
+        location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
+      }
     }
   });
 }

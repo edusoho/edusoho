@@ -1373,6 +1373,7 @@ course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.tab.certificate: 'Certificate'
+course.activity.replay: 'Replay'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -1886,6 +1887,10 @@ course.plan_task.activity_manage.video.last: 'Learning to the end'
 course.plan_task.activity_manage.video.learn_time: 'Learning time'
 course.plan_task.activity_manage.video.buy_tips: 'Buy this course immediately to get full of your learning.'
 course.plan_task.activity_manage.video.try_watch_tips: 'You can try it for free before %tryLookLength% minutes after purchase and can be viewed intact.'
+
+course.plan_task.activity_manage.replay: Live replay
+course.plan_task.activity_manage.replay.time: 'Duration'
+
 course.plan_task.activity_manage.create_btn: 'Go to the course forum'
 course.recommend_course.content_title: 'Recommended course'
 course.recommend_course.empty_tips: 'No recommended course'
@@ -2440,6 +2445,7 @@ classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
+classroom.student_export.exit_record: Export Record
 classroom.add_student_btn: 'Add'
 classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
@@ -10783,3 +10789,8 @@ exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'
 homepage.teacher_qualification.more: 'More'
+
+course.live_replay_manage.lesson_title_th: Live lesson title
+course.live_replay_manage.live_length_th: Live length
+course.live_replay_manage.live_anchor_th: Live anchor
+course.live_replay_manage.live_time_th: Live time

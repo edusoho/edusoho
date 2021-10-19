@@ -23,8 +23,14 @@ class CourseNoteFilter extends Filter
             $userFilter->filter($data['task']);
         }
 
+        if (!empty($data['content'])) {
+            $data['content'] = $this->convertAbsoluteUrl($data['content']);
+        }
+
         if (empty($data['like'])) {
             $data['like'] = (object) [];
+        } else {
+            $data['like']['createdTime'] = date('c', $data['like']['createdTime']);
         }
     }
 }

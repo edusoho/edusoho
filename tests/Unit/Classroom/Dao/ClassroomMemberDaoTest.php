@@ -7,11 +7,40 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class ClassroomMemberDaoTest extends BaseDaoTestCase
 {
+    public function testSearchMembersByClassroomId()
+    {
+        $expected = [];
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['teacher'], 'deadline' => 0]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => 0]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => strtotime('+5day')]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => strtotime('-2day')]);
+
+        $result1 = $this->getDao()->searchMembersByClassroomId(1, ['role' => '%|teacher|%'], 0, 5);
+        $result2 = $this->getDao()->searchMembersByClassroomId(1, ['role' => '%|student|%', 'in_validity' => ['deadline_GT' => time(), 'deadline_EQ' => 0]], 0, 5);
+        $this->assertArrayEquals($expected[0], $result1[0]);
+        $this->assertArrayEquals($expected[1], $result2[0]);
+        $this->assertArrayEquals($expected[2], $result2[1]);
+    }
+
+    public function testCountMembersByClassroomId()
+    {
+        $expected = [];
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['teacher'], 'deadline' => 0]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => 0]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => strtotime('+5day')]);
+        $expected[] = $this->mockDataObject(['classroomId' => 1, 'role' => ['student'], 'deadline' => strtotime('-2day')]);
+
+        $result1 = $this->getDao()->countMembersByClassroomId(1, ['role' => '%|teacher|%']);
+        $result2 = $this->getDao()->countMembersByClassroomId(1, ['role' => '%|student|%', 'in_validity' => ['deadline_GT' => time(), 'deadline_EQ' => 0]]);
+        $this->assertEquals(1, $result1);
+        $this->assertEquals(2, $result2);
+    }
+
     public function testCountMobileFilledMembersByClassroomId()
     {
         $member = $this->mockDataObject();
         $res1 = $this->getDao()->countMobileFilledMembersByClassroomId($member['classroomId']);
-        $this->assertEquals(0, $res);
+        $this->assertEquals(0, $res1);
 
         $user = $this->getUserSerivice()->register([
             'nickname' => 'test',
