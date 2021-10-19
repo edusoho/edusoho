@@ -4,10 +4,10 @@
       <a-input-search
         class="pull-left"
         placeholder="用户名或手机号"
-        style="width: 200px"
+        style="width: 200px;"
         @search="onSearch"
       />
-      <a-select class="pull-left ml16" default-value="all" style="width: 120px">
+      <a-select class="pull-left ml16" default-value="all" style="width: 120px;">
         <a-select-option value="all">全部</a-select-option>
         <a-select-option value="1">已点名</a-select-option>
         <a-select-option value="2">未点名</a-select-option>

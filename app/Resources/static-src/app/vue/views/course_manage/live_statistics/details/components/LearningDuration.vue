@@ -4,7 +4,7 @@
       <a-input-search
         class="pull-left"
         placeholder="用户名或手机号"
-        style="width: 200px"
+        style="width: 200px;"
         @search="onSearch"
       />
       <a-button type="primary" class="pull-right">导出数据</a-button>

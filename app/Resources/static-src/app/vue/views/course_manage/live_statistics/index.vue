@@ -6,7 +6,7 @@
       <a-input-search
         class="pull-left"
         :placeholder="'course.live_statistics.task_name_placeholder' | trans"
-        style="width: 200px"
+        style="width: 200px;"
         @search="onSearch"
       />
       <a-button type="primary" class="pull-right">{{ 'form.btn.export' | trans }}</a-button>
