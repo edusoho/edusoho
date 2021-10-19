@@ -20,7 +20,7 @@
       @change="handleTableChange"
     >
       <template slot="nicknameTitle">用户名</template>
-      <template slot="phoneNumberTitle">手机号</template>
+      <template slot="mobileTitle">手机号</template>
       <template slot="emailTitle">邮箱</template>
       <template slot="firstEnterTimeTitle">进入直播间时间</template>
       <template slot="watchDurationTitle">观看时长（分钟）</template>
@@ -42,9 +42,9 @@ const columns = [
     slots: { title: 'nicknameTitle' }
   },
   {
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-    slots: { title: 'phoneNumberTitle' }
+    dataIndex: 'mobile',
+    key: 'mobile',
+    slots: { title: 'mobileTitle' }
   },
   {
     dataIndex: 'email',
@@ -110,7 +110,7 @@ export default {
   methods: {
     onSearch(value) {
       value = _.trim(value);
-      if (_.size(value) && value !== this.keyword) {
+      if (value !== this.keyword) {
         this.keyword = value;
         this.pagination.current = 1;
         this.fetchLiveMembers();
@@ -130,7 +130,7 @@ export default {
           taskId: this.taskId
         },
         params: {
-          title: this.keyword,
+          nameOrMobile: this.keyword,
           offset: (current - 1) * pageSize,
           limit: pageSize
         }

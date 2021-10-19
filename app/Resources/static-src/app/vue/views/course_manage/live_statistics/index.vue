@@ -33,7 +33,7 @@
       </template>
 
       <template slot="startTime" slot-scope="text">
-        {{ $dateFormat(text, 'YYYY-MM-DD HH:mm:ss') }}
+        {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
       </template>
       <template slot="status" slot-scope="text">
         {{ text }}
@@ -118,7 +118,7 @@ export default {
   methods: {
     onSearch(value) {
       value = _.trim(value);
-      if (_.size(value) && value !== this.keyword) {
+      if (value !== this.keyword) {
         this.keyword = value;
         this.pagination.current = 1;
         this.fetchLiveStatistics();

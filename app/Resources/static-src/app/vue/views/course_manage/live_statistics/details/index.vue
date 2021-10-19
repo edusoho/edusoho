@@ -17,7 +17,7 @@
 
       <a-col :span="12">
         <div class="live-data">
-          <div class="live-data__value">{{ $dateFormat(liveData.startTime, 'YYYY-MM-DD HH:mm:ss') }} 至 {{ $dateFormat(liveData.endTime, 'YYYY-MM-DD HH:mm:ss') }}</div>
+          <div class="live-data__value">{{ $dateFormat(liveData.startTime, 'YYYY-MM-DD HH:mm') }} 至 {{ $dateFormat(liveData.endTime, 'YYYY-MM-DD HH:mm') }}</div>
           <div class="live-data__label">直播时间</div>
         </div>
       </a-col>
