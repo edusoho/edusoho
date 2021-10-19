@@ -9,7 +9,7 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right">{{ 'form.btn.export' | trans }}</a-button>
+      <a-button type="primary" class="pull-right">{{ 'btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -40,7 +40,7 @@
       </template>
 
       <span slot="action" slot-scope="record">
-        <a-button type="link" @click="handleClickViewDetail(record.id)">{{ 'site.btn.detail' | trans }}</a-button>
+        <a-button type="link" @click="handleClickViewDetail(record.id)">{{ 'btn.detail' | trans }}</a-button>
       </span>
     </a-table>
   </layout>
