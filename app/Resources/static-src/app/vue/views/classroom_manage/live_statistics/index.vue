@@ -1,6 +1,6 @@
 <template>
   <layout>
-    <template #title>{{ 'course.live_statistics' | trans }}</template>
+    <template #title>{{ 'live_statistics' | trans }}</template>
 
     classroom
   </layout>

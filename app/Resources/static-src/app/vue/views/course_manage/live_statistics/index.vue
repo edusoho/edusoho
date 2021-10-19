@@ -1,11 +1,11 @@
 <template>
   <layout>
-    <template #title>{{ 'course.live_statistics' | trans }}</template>
+    <template #title>{{ 'live_statistics' | trans }}</template>
 
     <div class="clearfix">
       <a-input-search
         class="pull-left"
-        :placeholder="'course.live_statistics.task_name_placeholder' | trans"
+        :placeholder="'live_statistics.task_name_placeholder' | trans"
         style="width: 200px;"
         @search="onSearch"
       />
@@ -22,11 +22,11 @@
       @change="handleTableChange"
     >
       <template slot="customTitle">{{ 'course.task' | trans }}</template>
-      <template slot="startTimeTitle">{{ 'course.live_statistics.live_start_time' | trans }}</template>
-      <template slot="lengthTitle">{{ 'course.live_statistics.live_time_long' | trans }}</template>
-      <template slot="maxStudentNumTitle">{{ 'course.live_statistics.max_participate_count' | trans }}</template>
-      <template slot="statusTitle">{{ 'course.live_statistics.live_status' | trans }}</template>
-      <template slot="actionTitle">{{ 'course.live_statistics.operation' | trans }}</template>
+      <template slot="startTimeTitle">{{ 'live_statistics.live_start_time' | trans }}</template>
+      <template slot="lengthTitle">{{ 'live_statistics.live_time_long' | trans }}</template>
+      <template slot="maxStudentNumTitle">{{ 'live_statistics.max_participate_count' | trans }}</template>
+      <template slot="statusTitle">{{ 'live_statistics.live_status' | trans }}</template>
+      <template slot="actionTitle">{{ 'live_statistics.operation' | trans }}</template>
 
       <template slot="customTitle" slot-scope="text, record">
         <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
