@@ -3,16 +3,16 @@
     <div class="clearfix">
       <a-input-search
         class="pull-left"
-        placeholder="用户名或手机号"
+        :placeholder="'live_statistics.user_name_or_mobile_number' | trans"
         style="width: 200px;"
         @search="onSearch"
       />
       <a-select class="pull-left ml16" default-value="all" style="width: 120px;">
-        <a-select-option value="all">全部</a-select-option>
-        <a-select-option value="1">已点名</a-select-option>
-        <a-select-option value="2">未点名</a-select-option>
+        <a-select-option value="all">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
+        <a-select-option value="1">{{ 'live_statistics.checkin_status.checked' | trans }}</a-select-option>
+        <a-select-option value="2">{{ 'live_statistics.checkin_status.not_checked' | trans }}</a-select-option>
       </a-select>
-      <a-button type="primary" class="pull-right">导出数据</a-button>
+      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -24,10 +24,10 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nameTitle">用户名</template>
-      <template slot="phoneNumberTitle">手机号</template>
-      <template slot="mailTitle">邮箱</template>
-      <template slot="rollCallTitle">是否点名</template>
+      <template slot="nameTitle">{{ 'live_statistics.user_name' | trans }}</template>
+      <template slot="phoneNumberTitle">{{ 'live_statistics.mobile' | trans }}</template>
+      <template slot="mailTitle">{{ 'live_statistics.email' | trans }}</template>
+      <template slot="rollCallTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
     </a-table>
   </div>
 </template>

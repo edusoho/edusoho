@@ -3,7 +3,7 @@
     <template #title>
       <div class="clearfix">
         <div class="pull-left">xxx / {{ liveData.task.title }}</div>
-        <div class="pull-right tips">数据来源于直播间，自动在直播结束一天同步</div>
+        <div class="pull-right tips">{{ 'live_statistics.detail_notice' | trans }}</div>
       </div>
     </template>
 
@@ -11,21 +11,25 @@
       <a-col :span="6">
         <div class="live-data">
           <div class="live-data__value text-overflow">{{ liveData.teacher }}</div>
-          <div class="live-data__label">主讲人</div>
+          <div class="live-data__label">{{ 'live_statistics.presenter' | trans }}</div>
         </div>
       </a-col>
 
       <a-col :span="12">
         <div class="live-data">
-          <div class="live-data__value">{{ $dateFormat(liveData.startTime, 'YYYY-MM-DD HH:mm') }} 至 {{ $dateFormat(liveData.endTime, 'YYYY-MM-DD HH:mm') }}</div>
-          <div class="live-data__label">直播时间</div>
+          <div class="live-data__value">
+            {{ $dateFormat(liveData.startTime, 'YYYY-MM-DD HH:mm') }}
+            {{ 'live_statistics.to' | trans }}
+            {{ $dateFormat(liveData.endTime, 'YYYY-MM-DD HH:mm') }}
+          </div>
+          <div class="live-data__label">{{ 'live_statistics.live_time' | trans }}</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.length }}分钟</div>
-          <div class="live-data__label">实际直播时长</div>
+          <div class="live-data__value">{{ liveData.length }}{{ 'site.date.minute' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.actual_live_time' | trans }}</div>
         </div>
       </a-col>
     </a-row>
@@ -33,38 +37,38 @@
     <a-row :gutter="16" class="mt16">
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.maxOnlineNumber }}人</div>
-          <div class="live-data__label">同时在线人数</div>
+          <div class="live-data__value">{{ liveData.maxOnlineNumber }}{{ 'live_statistics.people' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.online_number' | trans }}</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.memberNumber }}人</div>
-          <div class="live-data__label">观看人数</div>
+          <div class="live-data__value">{{ liveData.memberNumber }}{{ 'live_statistics.people' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.number_of_visitors' | trans }}</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.chatNumber }}条</div>
-          <div class="live-data__label">所有用户聊天数</div>
+          <div class="live-data__value">{{ liveData.chatNumber }}{{ 'live_statistics.strip' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.chat_number' | trans }}</div>
         </div>
       </a-col>
 
       <a-col :span="6">
         <div class="live-data">
-          <div class="live-data__value">{{ liveData.checkinNum }}分钟</div>
-          <div class="live-data__label">人均观看时长</div>
+          <div class="live-data__value">{{ liveData.checkinNum }}{{ 'site.date.minute' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.per_capita_viewing_time' | trans }}</div>
         </div>
       </a-col>
     </a-row>
 
     <a-tabs class="mt16" default-active-key="1">
-      <a-tab-pane key="1" tab="学习时长统计">
+      <a-tab-pane key="1" :tab="'live_statistics.detail.total_learn_time' | trans">
         <learning-duration :task-id="taskId" />
       </a-tab-pane>
-      <a-tab-pane key="2" tab="点名统计">
+      <a-tab-pane key="2" :tab="'live_statistics.detail.checkin' | trans">
         <roll-call :task-id="taskId" />
       </a-tab-pane>
     </a-tabs>
@@ -75,7 +79,6 @@
 import Layout from '../../layout.vue';
 import LearningDuration from './components/LearningDuration.vue';
 import RollCall from './components/RollCall.vue';
-
 import { LiveStatistic } from 'common/vue/service';
 
 export default {

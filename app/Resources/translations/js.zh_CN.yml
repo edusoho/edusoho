@@ -1807,14 +1807,11 @@ admin_v2.teacher_qualification.setting_required: 教师资质公示功能关闭�
 activity.replay_manage.replay_error_hint: 请选择直播回放
 
 # vue
+site.btn.export: 导出
+site.btn.detail: 详情
 
 course.task: 任务
 
-## btn
-btn.export: 导出
-btn.detail: 详情
-
-## live statistics
 live_statistics: 直播统计
 live_statistics.task_name_placeholder: 任务名
 live_statistics.live_start_time: 直播开始时间
@@ -1822,3 +1819,32 @@ live_statistics.live_time_long: 直播时长（分）
 live_statistics.max_participate_count: 最大参与人数
 live_statistics.live_status: 进行状态
 live_statistics.operation: 操作
+live_statistics.live_coming: 即将开始
+live_statistics.live_playing: 正在进行
+live_statistics.live_finished: 已结束
+live_statistics.detail_notice: 数据来源于直播间，自动在直播结束一天同步
+live_statistics.detail.total_learn_time: 学习时长统计
+live_statistics.detail.checkin: 点名统计
+live_statistics.checkin_status: 是否点名
+live_statistics.checkin_status.checked: 已点名
+live_statistics.checkin_status.not_checked: 未点名
+live_statistics.checkin_status.all: 全部
+live_statistics.mobile: 手机号
+live_statistics.email: 邮箱
+live_statistics.user_name: 用户名
+live_statistics.user_name_or_mobile_number: 用户名或手机号
+live_statistics.presenter: 主讲人
+live_statistics.live_time: 直播时间
+live_statistics.actual_live_time: 实际直播时长
+live_statistics.chat_number: 所有用户聊天数
+live_statistics.online_number: 同时在线人数
+live_statistics.number_of_visitors: 观看人数
+live_statistics.per_capita_viewing_time: 人均观看时长
+live_statistics.enter_theLlive_room_time: 进入直播间时间
+live_statistics.watching_time: 观看时长（分钟）
+live_statistics.check_in_number: 签到数
+live_statistics.chat_number: 聊天数
+live_statistics.answers_number: 答题数
+live_statistics.to: 至
+live_statistics.people: 人
+live_statistics.strip: 条

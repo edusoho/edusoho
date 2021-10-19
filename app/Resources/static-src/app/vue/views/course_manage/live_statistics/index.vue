@@ -9,7 +9,7 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right">{{ 'btn.export' | trans }}</a-button>
+      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -35,21 +35,21 @@
       <template slot="startTime" slot-scope="text">
         {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
       </template>
+
       <template slot="status" slot-scope="text">
-        {{ text }}
+        <span :class="`task-status task-status--${text}`">{{ getTaskStatus(text) | trans }}</span>
       </template>
 
       <span slot="action" slot-scope="record">
-        <a-button type="link" @click="handleClickViewDetail(record.id)">{{ 'btn.detail' | trans }}</a-button>
+        <a-button type="link" @click="handleClickViewDetail(record.id)">{{ 'site.btn.detail' | trans }}</a-button>
       </span>
     </a-table>
   </layout>
 </template>
 
 <script>
-import Layout from '../layout.vue';
 import _ from 'lodash';
-
+import Layout from '../layout.vue';
 import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
@@ -159,7 +159,47 @@ export default {
           taskId: id
         }
       });
+    },
+
+    getTaskStatus(status) {
+      const taskStatus = {
+        coming: 'live_statistics.live_coming',
+        playing: 'live_statistics.live_playing',
+        finished: 'live_statistics.live_finished'
+      };
+
+      return taskStatus[status];
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.task-status {
+  position: relative;
+  padding-left: 8px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  &--coming::before {
+    background-color: #999;
+  }
+
+  &--finished::before {
+    background-color: #fe4040;
+  }
+
+  &--playing::before {
+    background-color: #46c37B;
+  }
+}
+</style>

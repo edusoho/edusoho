@@ -1852,14 +1852,11 @@ admin_v2.teacher_qualification.setting_required: After the Teacher Qualification
 activity.replay_manage.replay_error_hint: Please select live replay
 
 # vue
+site.btn.export: Export
+site.btn.detail: More
 
 course.task: Task
 
-## btn
-btn.export: Export
-btn.detail: More
-
-## live statistics
 live_statistics: Live statistics
 live_statistics.task_name_placeholder: Task name
 live_statistics.live_start_time: Start time
@@ -1867,3 +1864,32 @@ live_statistics.live_time_long: Duration(min)
 live_statistics.max_participate_count: Max oarticipate count
 live_statistics.live_status: Status
 live_statistics.operation: Operation
+live_statistics.live_coming: Comming soon
+live_statistics.live_playing: Playing
+live_statistics.live_finished: Finished
+live_statistics.detail_notice: The data comes from the live room, which is automatically synchronized one day after the live
+live_statistics.detail.checkin: Checkin Statistics
+live_statistics.detail.total_learn_time: Learning Duration Statistics
+live_statistics.checkin_status: Checkin status
+live_statistics.checkin_status.checked: Checked
+live_statistics.checkin_status.not_checked: Not checked
+live_statistics.checkin_status.all: All
+live_statistics.mobile: Mobile
+live_statistics.email: Email
+live_statistics.user_name: User name
+live_statistics.user_name_or_mobile_number: User name or mobile number
+live_statistics.presenter: Presenter
+live_statistics.live_time: Live time
+live_statistics.actual_live_time: Actual live time
+live_statistics.chat_number: Chat number
+live_statistics.online_number: Online number
+live_statistics.number_of_visitors: Number of visitors
+live_statistics.per_capita_viewing_time: Per capita viewing time
+live_statistics.enter_theLlive_room_time: Enter the live room time
+live_statistics.watching_time: Watching time (minutes)
+live_statistics.check_in_number: Check in number
+live_statistics.chat_number: Number of chat
+live_statistics.answers_number: Number of answers
+live_statistics.to: to
+live_statistics.people: people
+live_statistics.strip: strip

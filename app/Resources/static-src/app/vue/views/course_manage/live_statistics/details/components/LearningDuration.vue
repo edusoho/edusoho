@@ -3,11 +3,11 @@
     <div class="clearfix">
       <a-input-search
         class="pull-left"
-        placeholder="用户名或手机号"
+        :placeholder="'live_statistics.user_name_or_mobile_number' | trans"
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right">导出数据</a-button>
+      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -19,14 +19,14 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nicknameTitle">用户名</template>
-      <template slot="mobileTitle">手机号</template>
-      <template slot="emailTitle">邮箱</template>
-      <template slot="firstEnterTimeTitle">进入直播间时间</template>
-      <template slot="watchDurationTitle">观看时长（分钟）</template>
-      <template slot="checkinNumTitle">签到数</template>
-      <template slot="chatNumberTitle">聊天数</template>
-      <template slot="numberOfAnswersTitle">答题数</template>
+      <template slot="nicknameTitle">{{ 'live_statistics.user_name' | trans }}</template>
+      <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
+      <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
+      <template slot="firstEnterTimeTitle">{{ 'live_statistics.actual_live_time' | trans }}</template>
+      <template slot="watchDurationTitle">{{ 'live_statistics.watching_time' | trans }}</template>
+      <template slot="checkinNumTitle">{{ 'live_statistics.check_in_number' | trans }}</template>
+      <template slot="chatNumberTitle">{{ 'live_statistics.chat_number' | trans }}</template>
+      <template slot="numberOfAnswersTitle">{{ 'live_statistics.answers_number' | trans }}</template>
     </a-table>
   </div>
 </template>
