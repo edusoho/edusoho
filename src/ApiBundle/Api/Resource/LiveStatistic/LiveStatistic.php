@@ -33,7 +33,7 @@ class LiveStatistic extends AbstractResource
         );
         foreach ($liveTasks as &$liveTask) {
             $liveTask['maxStudentNum'] = $course['maxStudentNum'];
-            $liveTask['status'] = $liveTask['startTime'] > time() ? $this->trans('course.live_statistics.live_coming') : ($liveTask['endTime'] < time() ? $this->trans('course.live_statistics.live_finished') : $this->trans('course.live_statistics.live_playing'));
+            $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
         }
 
         return $this->makePagingObject($liveTasks, $this->getTaskService()->countTasks($taskConditions), $offset, $limit);

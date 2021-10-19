@@ -44,7 +44,7 @@ class SyncLiveMemberDataJob extends AbstractJob
 
     protected function createdSyncJob()
     {
-        if (self::FINISH == $this->requestTimes) {
+        if (self::FINISH != $this->requestTimes) {
             $startJob = [
                 'name' => 'SyncLiveMemberDataJob'.$this->activityId.'_'.time(),
                 'expression' => time() - 100,
