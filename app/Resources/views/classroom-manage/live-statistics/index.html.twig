@@ -1,0 +1,9 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{ '直播统计'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'live-statistics' %}
+{% do script(['app/vue/views/classroom_manage/live_statistics/index.js']) %}
+
+{% block main %}
+  <div id="app"></div>
+{% endblock %}

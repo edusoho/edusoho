@@ -846,6 +846,15 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function liveStatisticsAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->render('classroom-manage/live-statistics/index.html.twig', [
+            'classroom' => $classroom
+        ]);
+    }
+
     public function studentDetailListAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
