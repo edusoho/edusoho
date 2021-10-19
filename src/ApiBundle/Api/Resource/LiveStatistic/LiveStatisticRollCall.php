@@ -38,9 +38,9 @@ class LiveStatisticRollCall extends AbstractResource
 
         $statistics = empty($statistics['data']['detail']) ? [] : $statistics['data']['detail'];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $statistics = array_slice($statistics, $offset, $limit);
+        $data = array_slice($statistics, $offset, $limit);
 
-        return $this->makePagingObject($this->processStatisticData($request), count($statistics), $offset, $limit);
+        return $this->makePagingObject($this->processStatisticData($data), count($statistics), $offset, $limit);
     }
 
     protected function processStatisticData($statistics)
@@ -53,7 +53,7 @@ class LiveStatisticRollCall extends AbstractResource
             $member['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
             $member['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
             $member['checkin'] = empty($users[$statistic['userId']]) ? 0 : $users[$statistic['userId']]['checkin'];
-            $member['mobile'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
+            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
         }
 
         return $statistics;
