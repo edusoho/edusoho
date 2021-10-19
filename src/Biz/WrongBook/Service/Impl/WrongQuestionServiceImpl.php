@@ -45,29 +45,30 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
 
     public function batchBuildWrongQuestion($wrongAnswerQuestionReports, $source)
     {
-        try {
-            $this->beginTransaction();
-            $pool = $this->handleQuestionPool($source);
-            $wrongQuestions = $this->processWrongQuestions($wrongAnswerQuestionReports, $source, $pool);
-            $this->updatePoolItemNum($pool['id']);
-            $this->getLogService()->info(
+//        try {
+//            $this->beginTransaction();
+        $pool = $this->handleQuestionPool($source);
+
+        $wrongQuestions = $this->processWrongQuestions($wrongAnswerQuestionReports, $source, $pool);
+        $this->updatePoolItemNum($pool['id']);
+        $this->getLogService()->info(
                 'wrong_question',
                 'create_wrong_question',
                 '批量创建错题',
                 ArrayToolkit::column($wrongQuestions, 'id')
             );
 
-            $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            $this->getLogService()->error(
-                'wrong_question',
-                'create_wrong_question',
-                '批量创建错题失败',
-                ArrayToolkit::column($wrongAnswerQuestionReports, 'id')
-            );
-        }
+        $this->dispatchEvent('wrong_question.batch_create', $wrongQuestions, ['pool_id' => $pool['id']]);
+//            $this->commit();
+//        } catch (\Exception $e) {
+//            $this->rollback();
+//            $this->getLogService()->error(
+//                'wrong_question',
+//                'create_wrong_question',
+//                '批量创建错题失败',
+//                ArrayToolkit::column($wrongAnswerQuestionReports, 'id')
+//            );
+//        }
     }
 
     public function batchBuildCorrectQuestion($correctAnswerQuestionReports, $source)
@@ -326,8 +327,33 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 $collect = $collects[$wrongAnswerQuestionReport['item_id']];
                 $updateCollects[$collect['id']] = ['status' => 'wrong', 'last_submit_time' => time(), 'wrong_times' => $collect['wrong_times'] + 1];
             }
+        }
+        if (!empty($createCollects)) {
+            $this->getWrongQuestionCollectDao()->batchCreate($createCollects);
+        }
+        if (!empty($updateCollects)) {
+            $this->getWrongQuestionCollectDao()->batchUpdate(array_keys($updateCollects), $updateCollects, 'id');
+        }
+        $this->processWrongQuestionsWithSubmit($wrongAnswerQuestionReports, $source, $pool);
+
+        return $wrongQuestions;
+    }
+
+    protected function processWrongQuestionsWithSubmit($wrongAnswerQuestionReports, $source, $pool)
+    {
+        if (empty($wrongAnswerQuestionReports)) {
+            return;
+        }
+        $itemIds = ArrayToolkit::column($wrongAnswerQuestionReports, 'item_id');
+        $collects = $this->getWrongQuestionCollectDao()->search(['item_ids' => empty($itemIds) ? [-1] : $itemIds, 'pool_id' => $pool['id']], [], 0, count($itemIds), ['id', 'item_id', 'wrong_times']);
+
+        $collects = ArrayToolkit::index($collects, 'item_id');
+        foreach ($wrongAnswerQuestionReports as $wrongAnswerQuestionReport) {
+            if (empty($collects[$wrongAnswerQuestionReport['item_id']])) {
+                continue;
+            }
             $wrongQuestions[] = [
-                'collect_id' => $collect['id'],
+                'collect_id' => $collects[$wrongAnswerQuestionReport['item_id']]['id'],
                 'user_id' => $source['user_id'],
                 'item_id' => $wrongAnswerQuestionReport['item_id'],
                 'question_id' => $wrongAnswerQuestionReport['question_id'],
@@ -338,19 +364,10 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'source_type' => $source['source_type'],
                 'source_id' => $source['source_id'],
             ];
-            $collects[] = $collect['id'];
         }
         if (!empty($wrongQuestions)) {
             $this->getWrongQuestionDao()->batchCreate($wrongQuestions);
         }
-        if (!empty($createCollects)) {
-            $this->getWrongQuestionCollectDao()->batchCreate($createCollects);
-        }
-        if (!empty($updateCollects)) {
-            $this->getWrongQuestionCollectDao()->batchUpdate(array_keys($updateCollects), $updateCollects, 'id');
-        }
-
-        return $wrongQuestions;
     }
 
     protected function processCollectQuestionReports($correctAnswerQuestionReports, $pool)
