@@ -161,7 +161,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'firstEnterTime' => $member['joinTime'],
                 'watchDuration' => $member['onlineDuration'],
                 'checkinNum' => $member['checkinNumber'],
-                'chatNumber' => $member['chatNumber'],
+                'chatNum' => $member['chatNumber'],
+                'answerNum' => '--',
             ];
             if (!empty($members[$member['userId']])) {
                 $updateData[$members[$member['userId']]['id']] = $data;
@@ -206,7 +207,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'firstEnterTime' => $member['firstEnterTime'],
                 'watchDuration' => $member['watchDuration'],
                 'checkinNum' => $member['checkinNum'],
-                'chatNumber' => empty($member['chatNumber']) ? 0 : $member['chatNumber'],
+                'chatNum' => empty($member['chatNum']) ? 0 : $member['chatNum'],
+                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
                 'requestTime' => time(),
             ];
             if (!empty($members[$member['userId']])) {

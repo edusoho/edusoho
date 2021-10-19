@@ -73,7 +73,7 @@ interface TaskService
 
     public function findTasksByActivityIds($activityIds);
 
-    public function searchTasks($conditions, $orderBy, $start, $limit);
+    public function searchTasks($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function findTestpapers($tasks, $type);
 

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\LiveStatistic;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -30,9 +31,34 @@ class LiveStatisticMember extends AbstractResource
         $this->getLiveStatisticsService()->getLiveMemberData($task);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $members = $this->getLiveStatisticsService()->searchCourseMemberLiveData(['courseId' => $task['courseId'], 'liveId' => $activity['ext']['liveId']], $offset, $limit);
+        $conditions = ['courseId' => $task['courseId'], 'liveId' => $activity['ext']['liveId']];
+        $this->buildUserConditions($request, $conditions);
+        $members = $this->getLiveStatisticsService()->searchCourseMemberLiveData($conditions, $offset, $limit);
+        unset($conditions['liveId']);
 
-        return $this->makePagingObject($this->processMemberData($activity, $members), $this->getCourseMemberService()->countMembers(['courseId' => $task['courseId']]), $offset, $limit);
+        return $this->makePagingObject($this->processMemberData($activity, $members), $this->getCourseMemberService()->countMembers($conditions), $offset, $limit);
+    }
+
+    protected function buildUserConditions(ApiRequest $request, &$conditions)
+    {
+        $nameOrMobile = $request->query->get('nameOrMobile', '');
+        if (!empty($nameOrMobile)) {
+            $mobile = SimpleValidator::mobile($nameOrMobile);
+            if ($mobile) {
+                $user = $this->getUserService()->getUserByVerifiedMobile($nameOrMobile);
+                $users = empty($user) ? [] : [$user];
+            } else {
+                $users = $this->getUserService()->searchUsers(
+                    ['nickname' => $nameOrMobile],
+                    [],
+                    0,
+                    PHP_INT_MAX,
+                    ['id']
+                );
+            }
+            $userIds = ArrayToolkit::column($users, 'id');
+            $conditions['userIds'] = empty($userIds) ? [-1] : $userIds;
+        }
     }
 
     public function processMemberData($activity, $members)
@@ -46,6 +72,7 @@ class LiveStatisticMember extends AbstractResource
             $member['nickname'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
             $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
+            $member['mobile'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['verifiedMobile'];
         }
 
         return $members;
