@@ -10545,6 +10545,7 @@ exception.task.forbidden_preview_task: 无权预览任务
 exception.task.type_invalid: 任务类型错误
 exception.task.live_replay_not_found: 课时回放不存在
 exception.task.live_replay_invalid: 课时回放获取失败
+exception.task.forbidden_publish_sync_task: 该任务仍在同步中，请稍后再发布（最多60秒）
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误

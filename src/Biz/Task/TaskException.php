@@ -32,6 +32,8 @@ class TaskException extends AbstractException
 
     const FORBIDDEN_DELETE_TASK = 4031212;
 
+    const FORBIDDEN_PUBLISH_SYNC_TASK = 4031213;
+
     const LESSONID_INVALID = 5001213;
 
     const ACCESS_DENIED = 4031214;
@@ -59,6 +61,7 @@ class TaskException extends AbstractException
         4031210 => 'exception.task.forbidden_publish_task',
         4031211 => 'exception.task.forbidden_unpublish_task',
         4031212 => 'exception.task.forbidden_delete_task',
+        4031213 => 'exception.task.forbidden_publish_sync_task',
         5001213 => 'exception.task.lessonid_invalid',
         4031214 => 'exception.task.access_denied',
         5001215 => 'exception.task.categoryid_invalid',
