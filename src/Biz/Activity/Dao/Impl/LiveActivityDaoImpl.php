@@ -12,7 +12,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function declares()
     {
         return [
-            'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json'],
+            'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json', 'cloudStatisticData' => 'json'],
             'conditions' => [
                 'id IN (:ids)',
                 'liveId = :liveId',
