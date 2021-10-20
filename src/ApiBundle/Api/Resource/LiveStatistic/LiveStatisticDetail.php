@@ -13,11 +13,13 @@ class LiveStatisticDetail extends AbstractResource
 {
     public function search(ApiRequest $request, $taskId)
     {
+        var_dump();
+        exit();
         $task = $this->getTaskService()->getTask($taskId);
         if (empty($task)) {
             TaskException::NOTFOUND_TASK();
         }
-
+        $this->getLiveStatisticsService()->getLiveMemberData($task);
         $result = $this->getLiveStatisticsService()->getLiveData($task);
         $result['task'] = ArrayToolkit::parts($this->getTaskService()->getTask($taskId), ['id', 'startTime', 'endTime', 'title', 'length']);
 

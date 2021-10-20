@@ -15,7 +15,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class SyncLiveMemberDataJob extends AbstractJob
 {
-    const LIMIT = 300;
+    const LIMIT = 500;
 
     const FINISH = 111;
 

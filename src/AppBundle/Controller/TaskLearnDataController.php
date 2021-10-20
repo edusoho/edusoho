@@ -7,8 +7,11 @@ use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
+use Biz\Exporter\CourseLiveStatisticExporter;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TaskLearnDataController extends BaseController
 {
@@ -125,6 +128,40 @@ class TaskLearnDataController extends BaseController
             'paginator' => $paginator,
             'tasks' => $tasks,
         ]);
+    }
+
+    public function taskLiveStatisticExportAction(Request $request, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $exporter = (new CourseLiveStatisticExporter($this->getBiz()));
+        $objWriter = $exporter->exporter([
+            'courseId' => $task['courseId'],
+            'taskId' => $task['id'],
+            'courseSetId' => $task['fromCourseSetId'],
+        ], 0);
+        $response = $this->createStreamedResponse($objWriter);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $exporter->getExportFileName(),
+            '-'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+    }
+
+    protected function createStreamedResponse(\PHPExcel_Writer_IWriter $writer, $status = 200, $headers = [])
+    {
+        return new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            $status,
+            $headers
+        );
     }
 
     /**
