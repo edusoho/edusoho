@@ -135,9 +135,8 @@ class TaskLearnDataController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $exporter = (new CourseLiveStatisticExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
-            'courseId' => $task['courseId'],
             'taskId' => $task['id'],
-            'courseSetId' => $task['fromCourseSetId'],
+            'nameOrMobile' => $request->query->get('nameOrMobile', ''),
         ], 0);
         $response = $this->createStreamedResponse($objWriter);
         $dispositionHeader = $response->headers->makeDisposition(
