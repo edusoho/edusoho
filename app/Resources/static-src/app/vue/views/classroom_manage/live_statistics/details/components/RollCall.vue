@@ -1,16 +1,15 @@
 <template>
   <div>
     <div class="clearfix">
-      <a-input-search
+      <a-select
         class="pull-left"
-        :placeholder="'live_statistics.user_name_or_mobile_number' | trans"
-        style="width: 200px;"
-        @search="onSearch"
-      />
-      <a-select class="pull-left ml16" default-value="all" style="width: 120px;">
-        <a-select-option value="all">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
-        <a-select-option value="1">{{ 'live_statistics.checkin_status.checked' | trans }}</a-select-option>
-        <a-select-option value="2">{{ 'live_statistics.checkin_status.not_checked' | trans }}</a-select-option>
+        default-value=""
+        style="width: 120px;"
+        @change="handleSelectChange"
+      >
+        <a-select-option value="">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
+        <a-select-option value="checked">{{ 'live_statistics.checkin_status.checked' | trans }}</a-select-option>
+        <a-select-option value="unchecked">{{ 'live_statistics.checkin_status.not_checked' | trans }}</a-select-option>
       </a-select>
       <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
     </div>
@@ -28,6 +27,10 @@
       <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
       <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
       <template slot="checkinTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
+
+      <span slot="checkin" slot-scope="text">
+        {{ text == '1' ? '是' : '否' }}
+      </span>
     </a-table>
   </div>
 </template>
@@ -54,7 +57,8 @@ const columns = [
   {
     dataIndex: 'checkin',
     key: 'checkin',
-    slots: { title: 'checkinTitle' }
+    slots: { title: 'checkinTitle' },
+    scopedSlots: { customRender: 'checkin' }
   }
 ];
 
@@ -77,7 +81,6 @@ export default {
         total: 0
       },
       loading: false,
-      keyword: '',
       status: ''
     }
   },
@@ -87,13 +90,10 @@ export default {
   },
 
   methods: {
-    onSearch(value) {
-      value = _.trim(value);
-      if (value !== this.keyword) {
-        this.keyword = value;
-        this.pagination.current = 1;
-        this.fetchLiveRollCall();
-      }
+    handleSelectChange(value) {
+      this.status = value;
+      this.pagination.current = 1;
+      this.fetchLiveRollCall();
     },
 
     handleTableChange(pagination) {
@@ -109,7 +109,6 @@ export default {
           taskId: this.taskId
         },
         params: {
-          nameOrMobile: this.keyword,
           status: this.status,
           offset: (current - 1) * pageSize,
           limit: pageSize
