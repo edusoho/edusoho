@@ -20,5 +20,10 @@ export const LiveStatistic = {
   // 课程直播统计页 - 直播列表 - 点名统计
   async getLiveRollCall({ query, params }) {
     return apiClient.get(`${baseUrl}/${query.taskId}/roll_call`, { params });
+  },
+
+  // 班级直播统计 - 列表页
+  async getClassroom({ query, params }) {
+    return apiClient.get(`${baseUrl}/${query.classroomId}/classroom_live`, { params });
   }
 };

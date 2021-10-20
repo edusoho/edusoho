@@ -155,7 +155,6 @@ export default {
       this.$router.push({
         name: 'CourseManageLiveStatisticsDetails',
         query: {
-          courseId: this.courseId,
           taskId: id
         }
       });

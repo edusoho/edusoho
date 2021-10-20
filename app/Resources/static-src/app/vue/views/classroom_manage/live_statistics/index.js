@@ -8,11 +8,11 @@ const routes = [
     name: 'ClassroomManageLiveStatistics',
     component: () => import(/* webpackChunkName: "app/vue/dist/ClassroomManageLiveStatistics" */ 'app/vue/views/classroom_manage/live_statistics/index.vue')
   },
-  // {
-  //   path: '/details',
-  //   name: 'ClassroomManageLiveStatisticsDetails',
-  //   component: () => import(/* webpackChunkName: "app/vue/dist/ClassroomManageLiveStatistics" */ 'app/vue/views/Classroom_manage/live_statistics/details/index.vue')
-  // }
+  {
+    path: '/details',
+    name: 'ClassroomManageLiveStatisticsDetails',
+    component: () => import(/* webpackChunkName: "app/vue/dist/ClassroomManageLiveStatistics" */ 'app/vue/views/classroom_manage/live_statistics/details/index.vue')
+  }
 ];
 
 const router = new Router({
