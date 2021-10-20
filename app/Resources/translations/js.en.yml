@@ -1855,7 +1855,8 @@ activity.replay_manage.replay_error_hint: Please select live replay
 site.btn.export: Export
 site.btn.detail: More
 
-course.task: Task
+course.name: Course title
+course.task: Task title
 
 live_statistics: Live statistics
 live_statistics.task_name_placeholder: Task name

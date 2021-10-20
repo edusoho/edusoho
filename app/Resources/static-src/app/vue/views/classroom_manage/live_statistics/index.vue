@@ -3,10 +3,14 @@
     <template #title>{{ 'live_statistics' | trans }}</template>
 
     <div class="clearfix">
-      <a-select class="pull-left" default-value="all" style="width: 120px;">
-        <a-select-option value="all">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
-        <a-select-option value="1">{{ 'live_statistics.checkin_status.checked' | trans }}</a-select-option>
-        <a-select-option value="2">{{ 'live_statistics.checkin_status.not_checked' | trans }}</a-select-option>
+      <a-select
+        class="pull-left"
+        default-value=""
+        style="width: 200px;"
+        @change="handleSelectChange"
+      >
+        <a-select-option value="">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
+        <a-select-option v-for="item in courseList" :key="item.id" :value="item.id">{{ item.title || item.courseSetTitle }}</a-select-option>
       </a-select>
 
       <a-input-search
@@ -27,7 +31,7 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="courseTitle">{{ 'course.task' | trans }}</template>
+      <template slot="courseTitle">{{ 'course.name' | trans }}</template>
       <template slot="customTitle">{{ 'course.task' | trans }}</template>
       <template slot="startTimeTitle">{{ 'live_statistics.live_start_time' | trans }}</template>
       <template slot="lengthTitle">{{ 'live_statistics.live_time_long' | trans }}</template>
@@ -57,7 +61,7 @@
 <script>
 import _ from 'lodash';
 import Layout from '../layout.vue';
-import { LiveStatistic } from 'common/vue/service';
+import { LiveStatistic, Classroom } from 'common/vue/service';
 
 const columns = [
   {
@@ -119,12 +123,15 @@ export default {
         total: 0
       },
       loading: false,
-      keyword: ''
+      keyword: '',
+      courseId: '',
+      courseList: []
     }
   },
 
   mounted() {
     this.fetchLiveStatistics();
+    this.fetchClassroomCourses();
   },
 
   methods: {
@@ -135,6 +142,12 @@ export default {
         this.pagination.current = 1;
         this.fetchLiveStatistics();
       }
+    },
+
+    handleSelectChange(value) {
+      this.courseId = value;
+      this.pagination.current = 1;
+      this.fetchLiveStatistics();
     },
 
     handleTableChange(pagination) {
@@ -151,6 +164,7 @@ export default {
         },
         params: {
           title: this.keyword,
+          courseId: this.courseId,
           offset: (current - 1) * pageSize,
           limit: pageSize
         }
@@ -159,6 +173,10 @@ export default {
       this.loading = false;
       this.pagination.total = paging.total;
       this.data = data;
+    },
+
+    async fetchClassroomCourses() {
+      this.courseList = await Classroom.getCourses({ query: { classroomId: this.classroomId } });
     },
 
     handleClickViewTask(id) {

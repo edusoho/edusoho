@@ -1810,7 +1810,8 @@ activity.replay_manage.replay_error_hint: 请选择直播回放
 site.btn.export: 导出
 site.btn.detail: 详情
 
-course.task: 任务
+course.task: 任务名称
+course.name: 课程名称
 
 live_statistics: 直播统计
 live_statistics.task_name_placeholder: 任务名
