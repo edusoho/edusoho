@@ -42,6 +42,8 @@
   </div>
 </template>
 <script>
+import { LiveReplay } from 'common/vue/service';
+
 const columns = [
   {
     dataIndex: 'title',
@@ -94,7 +96,16 @@ export default {
     }
   },
 
+  mounted() {
+    this.fetchLiveReplay();
+  },
+
   methods: {
+    async fetchLiveReplay() {
+      const result = await LiveReplay.get();
+      console.log(result);
+    },
+
     handleClickRemove() {
       this.loading = true;
       setTimeout(() => {
