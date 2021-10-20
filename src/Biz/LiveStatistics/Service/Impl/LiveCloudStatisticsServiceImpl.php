@@ -21,7 +21,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 {
     const ES_CLOUD_LIVE_PROVIDER = 13;
 
-    const LIMIT = 150;
+    const LIMIT = 500;
 
     protected $EdusohoLiveClient = null;
 
@@ -42,6 +42,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     public function sumWatchDurationByLiveId($liveId)
     {
         return $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
+    }
+
+    public function sumChatNumByLiveId($liveId)
+    {
+        return $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
     }
 
     public function getLiveData($task)
@@ -283,16 +288,13 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         try {
             $cloudData = $this->EdusohoLiveClient->getEsLiveInfo($activity['ext']['liveId']);
             $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => 1]);
-            if ($task['endTime'] > time() && date('Y-m-d', time()) != date('Y-m-d', $task['endTime'])) {
-                $chatData = $this->EdusohoLiveClient->getLiveStatistics($activity['ext']['liveId']);
-            }
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
         $data['startTime'] = empty($cloudData['actualStartTime']) ? $data['startTime'] : $cloudData['actualStartTime'];
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($cloudData['checkinNum']) ? 0 : $cloudData['checkinNum'];
-        $data['chatNumber'] = empty($chatData['chatNumber']) ? 0 : $chatData['chatNumber'];
+        $data['chatNumber'] = $this->sumChatNumByLiveId($activity['ext']['liveId']);
         $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'];
 
         if (time() - $activity['endTime'] > 2 * 3600) {
