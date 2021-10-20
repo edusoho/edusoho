@@ -27,15 +27,15 @@
   {{ web_macro.flash_messages() }}
   <div role="courseset-manage-file">
     <div class="courseset-manage-body__title">
-      {{'course.course_files.content_title'|trans}}
+      {{ 'course.course_resource'|trans }}
     </div>
 
     <div class="btn-group btn-group-sm mv16">
       <a href="{{ path('course_set_manage_files', { id: courseSet.id }) }}" class="btn btn-default active">
-        文件管理
+        {{ 'course.course_files'|trans }}
       </a>
       <a href="{{ path('course_set_manage_files_live_playback', { id: courseSet.id }) }}" class="btn btn-default">
-        直播回放
+        {{ 'course.activity.replay'|trans }}
       </a>
     </div>
 

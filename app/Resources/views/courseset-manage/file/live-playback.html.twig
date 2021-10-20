@@ -14,19 +14,23 @@
   material-table-padding
 {% endblock %}
 
+{% do script(['app/vue/views/courseset_manage/resource/index.js']) %}
+
 {% block main %}
   <div role="courseset-manage-file">
     <div class="courseset-manage-body__title">
-      资源管理
+      {{ 'course.course_resource'|trans }}
     </div>
 
     <div class="btn-group btn-group-sm mv16">
       <a href="{{ path('course_set_manage_files', { id: courseSet.id }) }}" class="btn btn-default">
-        文件管理
+        {{ 'course.course_files'|trans }}
       </a>
       <a href="{{ path('course_set_manage_files_live_playback', { id: courseSet.id }) }}" class="btn btn-default active">
-        直播回放
+        {{ 'course.activity.replay'|trans }}
       </a>
     </div>
+
+    <div id="app"></div>
   </div>
 {% endblock %}
