@@ -24,10 +24,10 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nameTitle">{{ 'live_statistics.user_name' | trans }}</template>
-      <template slot="phoneNumberTitle">{{ 'live_statistics.mobile' | trans }}</template>
-      <template slot="mailTitle">{{ 'live_statistics.email' | trans }}</template>
-      <template slot="rollCallTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
+      <template slot="nicknameTitle">{{ 'live_statistics.user_name' | trans }}</template>
+      <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
+      <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
+      <template slot="checkinTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
     </a-table>
   </div>
 </template>
@@ -37,24 +37,24 @@ import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'nameTitle' }
+    dataIndex: 'nickname',
+    key: 'nickname',
+    slots: { title: 'nicknameTitle' }
   },
   {
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-    slots: { title: 'phoneNumberTitle' }
+    dataIndex: 'mobile',
+    key: 'mobile',
+    slots: { title: 'mobileTitle' }
   },
   {
-    dataIndex: 'mail',
-    key: 'mail',
-    slots: { title: 'mailTitle' }
+    dataIndex: 'email',
+    key: 'email',
+    slots: { title: 'emailTitle' }
   },
   {
-    dataIndex: 'rollCall',
-    key: 'rollCall',
-    slots: { title: 'rollCallTitle' }
+    dataIndex: 'checkin',
+    key: 'checkin',
+    slots: { title: 'checkinTitle' }
   }
 ];
 
