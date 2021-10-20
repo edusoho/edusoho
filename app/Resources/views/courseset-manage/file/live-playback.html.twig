@@ -1,0 +1,32 @@
+{% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
+  {% set layout = 'open-course-manage/layout.html.twig' %}
+{% else %}
+  {% set layout = 'courseset-manage/courseset-layout.html.twig' %}
+{% endif %}
+{% extends layout %}
+
+{% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'files' %}
+{% set tab = 'courseLesson' %}
+
+{% block paddingClass %}
+  material-table-padding
+{% endblock %}
+
+{% block main %}
+  <div role="courseset-manage-file">
+    <div class="courseset-manage-body__title">
+      资源管理
+    </div>
+
+    <div class="btn-group btn-group-sm mv16">
+      <a href="{{ path('course_set_manage_files', { id: courseSet.id }) }}" class="btn btn-default">
+        文件管理
+      </a>
+      <a href="{{ path('course_set_manage_files_live_playback', { id: courseSet.id }) }}" class="btn btn-default active">
+        直播回放
+      </a>
+    </div>
+  </div>
+{% endblock %}

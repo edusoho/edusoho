@@ -77,6 +77,14 @@ class CourseSetFileManageController extends BaseController
         ]);
     }
 
+    public function livePlaybackAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        return $this->render('courseset-manage/file/live-playback.html.twig', [
+            'courseSet' => $courseSet
+        ]);
+    }
+
     public function detailAction(Request $request, $courseSetId, $fileId)
     {
         $this->getCourseSetService()->tryManageCourseSet($courseSetId);
