@@ -32,7 +32,7 @@ class LiveStatistic extends AbstractResource
             $limit
         );
         foreach ($liveTasks as &$liveTask) {
-            $liveTask['maxStudentNum'] = $course['studentNum'];
+            $liveTask['maxStudentNum'] = $course['maxStudentNum'];
             $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
         }
 
