@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use PHPExcel_Exception;
 use PHPExcel_Writer_Exception;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseSheetAddStyleExporter
 {
@@ -207,6 +208,11 @@ abstract class BaseSheetAddStyleExporter
                 ],
             ], ];
         $this->PHPExcel->getActiveSheet()->getStyle($pCellCoordinate)->applyFromArray($style_array);
+    }
+
+    protected function trans($name)
+    {
+        return ServiceKernel::instance()->trans($name);
     }
 
     /**
