@@ -83,6 +83,7 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
     protected function buildData($params)
     {
         $activity = $this->getActivityService()->getActivity($this->task['activityId'], true);
+        $params['courseId'] = $activity['fromCourseId'];
         $params['liveId'] = $activity['ext']['liveId'];
         $conditions = ArrayToolkit::parts($this->buildUserConditions($params), ['courseId', 'liveId', 'userIds']);
         $members = $this->getLiveStatisticsService()->searchCourseMemberLiveData($conditions, 0, PHP_INT_MAX, ['firstEnterTime', 'watchDuration', 'checkinNum', 'chatNum', 'answerNum', 'userId']);
@@ -91,7 +92,7 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
         $users = $this->getUserService()->searchUsers(['userIds' => empty($userIds) ? [-1] : $userIds], [], 0, count($userIds), ['id', 'nickname', 'verifiedMobile', 'email', 'emailVerified']);
         $users = ArrayToolkit::index($users, 'id');
         foreach ($members as &$member) {
-            $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', $member['firstEnterTime']);
+            $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', (int)$member['firstEnterTime']);
             $member['nickname'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
             $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];

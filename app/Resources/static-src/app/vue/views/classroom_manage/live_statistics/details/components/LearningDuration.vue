@@ -7,7 +7,7 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
+      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -137,6 +137,10 @@ export default {
       this.loading = false;
       this.pagination.total = paging.total;
       this.data = data;
+    },
+
+    handleClickExport() {
+      window.open(`/task/${this.taskId}/live_statistic/export?nameOrMobile=${this.keyword}`);
     }
   }
 }
