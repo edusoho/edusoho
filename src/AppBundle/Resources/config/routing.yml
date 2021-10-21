@@ -4027,3 +4027,7 @@ disclaimers:
     path: /disclaimers
     defaults:
         _controller: 'AppBundle:Agreement:disclaimers'
+course_live_member_statistic_export:
+    path: /task/{taskId}/live_statistic/export
+    defaults:
+      _controller: 'AppBundle:TaskLearnData:taskLiveStatisticExport'
