@@ -2,7 +2,7 @@
   <layout>
     <template #title>
       <div class="clearfix">
-        <div class="pull-left">{{ liveData.course.title || liveData.course.courseSetTitle }} / {{ liveData.task.title }}</div>
+        <div class="pull-left">{{ liveData.course.title }} / {{ liveData.task.title }}</div>
         <div class="pull-right tips">{{ 'live_statistics.detail_notice' | trans }}</div>
       </div>
     </template>

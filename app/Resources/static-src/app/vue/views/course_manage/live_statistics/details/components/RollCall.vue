@@ -11,7 +11,7 @@
         <a-select-option value="checked">{{ 'live_statistics.checkin_status.checked' | trans }}</a-select-option>
         <a-select-option value="unchecked">{{ 'live_statistics.checkin_status.not_checked' | trans }}</a-select-option>
       </a-select>
-      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
+      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -118,6 +118,10 @@ export default {
       this.loading = false;
       this.pagination.total = paging.total;
       this.data = data;
+    },
+
+    handleClickExport() {
+
     }
   }
 }
