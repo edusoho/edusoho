@@ -14,20 +14,21 @@ class MarkerDaoImpl extends GeneralDaoImpl implements MarkerDao
         return $this->findInField('id', $ids);
     }
 
-    public function findByMediaId($mediaId)
+    public function findByActivityId($activityId)
     {
-        return $this->findByFields(array('mediaId' => $mediaId));
+        return $this->findByFields(['activityId' => $activityId]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['createdTime'],
+            'conditions' => [
                 'mediaId = :mediaId',
+                'activityId = :activityId',
                 'second = :second',
-            ),
-        );
+            ],
+        ];
     }
 }
