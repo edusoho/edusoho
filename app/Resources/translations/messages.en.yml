@@ -10584,6 +10584,7 @@ admin.classroom_manage.statistics.course.title_tips: >
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
 
 classroom.manage.data_statictics: Data Statistics
+classroom.manage.live_statictics: Live Statistics
 classroom.manage.data_statistics.overview.student_num: Student Number
 classroom.manage.data_statistics.overview.auditor_num: Auditor
 classroom.manage.data_statistics.overview.finished_num: Finished Num
