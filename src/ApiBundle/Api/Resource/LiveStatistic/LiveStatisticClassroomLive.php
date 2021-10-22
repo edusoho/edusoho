@@ -38,12 +38,13 @@ class LiveStatisticClassroomLive extends AbstractResource
         return $tasks;
     }
 
-    protected function buildClassLiveTasks($request, $classroomId)
+    protected function buildClassLiveTasks(ApiRequest $request, $classroomId)
     {
         $courses = $this->getClassroomService()->findByClassroomId($classroomId);
         $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'courseId');
+        $courseId = $request->query->get('courseId', 0);
         $taskConditions = [
-            'courseIds' => $courseIds,
+            'courseIds' => empty($courseId) ? $courseIds : array_intersect($courseIds, [$courseId]),
             'type' => 'live',
             'titleLike' => $request->query->get('title'),
             'status' => 'published',
