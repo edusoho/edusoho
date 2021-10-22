@@ -19,7 +19,7 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right">{{ 'site.btn.export' | trans }}</a-button>
+      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
     </div>
 
     <a-table
@@ -200,6 +200,10 @@ export default {
       };
 
       return taskStatus[status];
+    },
+
+    handleClickExport() {
+      window.open(`/classroom/${this.classroomId}/live_statistic/export?courseId=${this.courseId}&title=${this.keyword}`);
     }
   }
 }

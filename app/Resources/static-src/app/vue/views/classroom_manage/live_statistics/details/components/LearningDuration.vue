@@ -20,13 +20,14 @@
       @change="handleTableChange"
     >
       <template slot="nicknameTitle">{{ 'live_statistics.user_name' | trans }}</template>
+      <template slot="truenameTitle">{{ 'live_statistics.true_name' | trans }}</template>
       <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
       <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
-      <template slot="firstEnterTimeTitle">{{ 'live_statistics.actual_live_time' | trans }}</template>
+      <template slot="firstEnterTimeTitle">{{ 'live_statistics.enter_theLlive_room_time' | trans }}</template>
       <template slot="watchDurationTitle">{{ 'live_statistics.watching_time' | trans }}</template>
       <template slot="checkinNumTitle">{{ 'live_statistics.check_in_number' | trans }}</template>
       <template slot="chatNumberTitle">{{ 'live_statistics.chat_number' | trans }}</template>
-      <template slot="numberOfAnswersTitle">{{ 'live_statistics.answers_number' | trans }}</template>
+      <template slot="answerNumTitle">{{ 'live_statistics.answers_number' | trans }}</template>
     </a-table>
   </div>
 </template>
@@ -40,6 +41,11 @@ const columns = [
     dataIndex: 'nickname',
     key: 'nickname',
     slots: { title: 'nicknameTitle' }
+  },
+  {
+    dataIndex: 'truename',
+    key: 'truename',
+    slots: { title: 'truenameTitle' }
   },
   {
     dataIndex: 'mobile',
@@ -72,9 +78,9 @@ const columns = [
     slots: { title: 'chatNumberTitle' }
   },
   {
-    dataIndex: 'numberOfAnswers',
-    key: 'numberOfAnswers',
-    slots: { title: 'numberOfAnswersTitle' }
+    dataIndex: 'answerNum',
+    key: 'answerNum',
+    slots: { title: 'answerNumTitle' }
   }
 ];
 
