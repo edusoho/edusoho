@@ -4,6 +4,7 @@ namespace Biz\Marker\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Marker\Dao\MarkerDao;
 use Biz\Marker\MarkerException;
 use Biz\Marker\Service\MarkerService;
 use Biz\System\SettingException;
@@ -24,14 +25,14 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return ArrayToolkit::index($markers, 'id');
     }
 
-    public function findMarkersByMediaId($mediaId)
+    public function findMarkersByActivityId($activityId)
     {
-        return $this->getMarkerDao()->findByMediaId($mediaId);
+        return $this->getMarkerDao()->findByActivityId($activityId);
     }
 
-    public function findMarkersMetaByMediaId($mediaId)
+    public function findMarkersMetaByActivityId($activityId)
     {
-        $markers = $this->findMarkersByMediaId($mediaId);
+        $markers = $this->findMarkersByActivityId($activityId);
 
         if (empty($markers)) {
             return [];
@@ -88,10 +89,10 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $this->getMarkerDao()->update($id, $fields);
     }
 
-    public function addMarker($mediaId, $fields)
+    public function addMarker($activityId, $fields)
     {
-        $media = $this->getUploadFileService()->getFile($mediaId);
-
+        $video = $this->getActivityService()->getActivity($activityId, true);
+        $media = $this->getUploadFileService()->getFile($video['ext']['mediaId']);
         if (empty($media)) {
             $media['id'] = 0;
             $this->getLogService()->error('marker', 'mediaId_notExist', '视频文件不存在！');
@@ -102,6 +103,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $marker = [
+            'activityId' => $activityId,
             'mediaId' => $media['id'],
             'second' => $fields['second'],
         ];
@@ -171,6 +173,9 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return true;
     }
 
+    /**
+     * @return MarkerDao
+     */
     protected function getMarkerDao()
     {
         return $this->createDao('Marker:MarkerDao');
@@ -207,5 +212,13 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }
