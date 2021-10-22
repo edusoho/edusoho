@@ -1094,6 +1094,7 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
 course.members_manage.official_student: 正式学员
@@ -11844,6 +11845,7 @@ admin.classroom_manage.statistics.course.title_tips: >
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
 
 classroom.manage.data_statictics: 数据概览
+classroom.manage.live_statictics: 直播统计
 classroom.manage.data_statistics.overview.student_num: 正式学员总数
 classroom.manage.data_statistics.overview.auditor_num: 旁听生
 classroom.manage.data_statistics.overview.finished_num: 完成人数

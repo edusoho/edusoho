@@ -47,13 +47,11 @@ class LiveStatisticRollCall extends AbstractResource
     {
         $userIds = ArrayToolkit::column($statistics, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
         foreach ($statistics as &$statistic) {
-            $member['truename'] = empty($userProfiles[$statistic['userId']]) ? '--' : $userProfiles[$statistic['userId']]['truename'];
-            $member['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
-            $member['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
-            $member['checkin'] = empty($users[$statistic['userId']]) ? 0 : $users[$statistic['userId']]['checkin'];
-            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
+            $statistic['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
+            $statistic['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
+            $statistic['checkin'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['checkin']) ? 0 : 1;
+            $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
         }
 
         return $statistics;

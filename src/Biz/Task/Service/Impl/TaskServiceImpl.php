@@ -545,9 +545,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function searchTasks($conditions, $orderBy, $start, $limit, $columns = [])
+    public function searchTasks($conditions, $orderBy, $start, $limit)
     {
-        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit, $columns);
+        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function findTestpapers($tasks, $type)

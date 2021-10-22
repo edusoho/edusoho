@@ -18,3 +18,5 @@ export * from './MultiClassInspection/index.js';
 export * from './WrongBook';
 export * from './TeacherQualification';
 export * from './LiveReplay';
+export * from './LiveStatistic';
+export * from './Classroom';

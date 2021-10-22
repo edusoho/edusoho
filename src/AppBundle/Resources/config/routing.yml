@@ -2929,6 +2929,10 @@ classroom_data_statistics_course_detail_modal:
     path: '/classroom/{id}/manage/statistics/course/{courseId}/detail/modal'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:courseDetailModal'
+classroom_live_statistics:
+    path: '/classroom/{id}/manage/live/statistics'
+    defaults:
+        _controller: 'AppBundle:Classroom/ClassroomManage:liveStatistics'
 classroom_manage_students_defined_show:
     path: '/classroom/{classroomId}/manage/students/{userId}/defined_show'
     defaults:
@@ -4027,3 +4031,15 @@ disclaimers:
     path: /disclaimers
     defaults:
         _controller: 'AppBundle:Agreement:disclaimers'
+course_live_member_statistic_export:
+    path: /task/{taskId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:taskLiveStatisticExport'
+course_live_task_statistic_export:
+    path: /course/{courseId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:courseLiveStatisticExport'
+classroom_live_task_statistic_export:
+    path: /classroom/{classroomId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'

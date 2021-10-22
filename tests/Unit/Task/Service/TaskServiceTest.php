@@ -944,6 +944,7 @@ class TaskServiceTest extends BaseTestCase
                         [],
                         0,
                         PHP_INT_MAX,
+                        [],
                     ],
                 ],
             ]
