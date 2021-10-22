@@ -26,6 +26,7 @@ class LiveStatisticDetail extends AbstractResource
         $course = $this->getCourseSetService()->getCourseSet($task['courseId']);
         $course['title'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
         $result['course'] = ArrayToolkit::parts($course, ['id', 'title', 'price', 'studentNum']);
+        $result['course']['title'] = empty($result['course']['title']) ? $result['course']['courseSetTitle'] : $result['course']['title'];
 
         return $result;
     }
