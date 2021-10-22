@@ -2,7 +2,9 @@
 
 namespace Biz\Exporter;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
@@ -10,24 +12,25 @@ use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use PHPExcel_Exception;
 
-class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
+class ClassroomLiveStatisticExporter extends BaseSheetAddStyleExporter
 {
     public function getExportFileName()
     {
         $time = date('Y_m_d_H_i', time());
 
-        return  "课程直播统计_{$time}.xls";
+        return  "班级直播统计_{$time}.xls";
     }
 
     public function getSortedHeadingRow()
     {
         return [
-                '任务' => 'title',
-                '直播开始时间' => 'startTime',
-                '直播时长（分）' => 'length',
-                '最大参与人数' => 'maxStudentNum',
-                '进行状态' => 'status',
-             ];
+            '课程名称' => 'courseTitle',
+            '任务' => 'title',
+            '直播开始时间' => 'startTime',
+            '直播时长（分）' => 'length',
+            '最大参与人数' => 'maxStudentNum',
+            '进行状态' => 'status',
+        ];
     }
 
     public function buildExportSheetData($params)
@@ -52,9 +55,10 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
 
     protected function buildData($params)
     {
-        $course = $this->getCourseService()->getCourse($params['courseId']);
+        $courses = $this->getClassroomService()->findByClassroomId($params['classroomId']);
+        $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'courseId');
         $taskConditions = [
-            'courseId' => $params['courseId'],
+            'courseIds' => empty($params['courseId']) ? $courseIds : array_intersect($courseIds, [$params['courseId']]),
             'type' => 'live',
             'titleLike' => $params['title'],
             'status' => 'published',
@@ -65,15 +69,29 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
             ['seq' => 'ASC'],
             0,
             PHP_INT_MAX,
-            ['title', 'startTime', 'endTime', 'length']
+            ['title', 'startTime', 'endTime', 'length', 'courseId']
         );
+        $courseIds = ArrayToolkit::column($liveTasks, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+
         foreach ($liveTasks as &$liveTask) {
-            $liveTask['startTime'] = date('Y-m-d H:i', $course['startTime']);
+            $course = $courses[$liveTask['courseId']];
+            $liveTask['courseTitle'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+            $liveTask['startTime'] = date('Y-m-d H:i', $liveTask['startTime']);
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
             $liveTask['status'] = $liveTask['startTime'] > time() ? $this->trans('course.live_statistics.live_coming') : ($liveTask['endTime'] < time() ? $this->trans('course.live_statistics.live_finished') : $this->trans('course.live_statistics.live_playing'));
         }
 
         return $liveTasks;
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**

@@ -7,7 +7,7 @@ use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
-use Biz\Exporter\CourseLiveStatisticExporter;
+use Biz\Exporter\TaskLiveStatisticMemberExporter;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -133,7 +133,7 @@ class TaskLearnDataController extends BaseController
     public function taskLiveStatisticExportAction(Request $request, $taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
-        $exporter = (new CourseLiveStatisticExporter($this->getBiz()));
+        $exporter = (new TaskLiveStatisticMemberExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
             'taskId' => $task['id'],
             'nameOrMobile' => $request->query->get('nameOrMobile', ''),

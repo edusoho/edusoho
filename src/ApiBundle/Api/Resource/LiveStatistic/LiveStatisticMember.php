@@ -73,7 +73,11 @@ class LiveStatisticMember extends AbstractResource
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
             $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
             $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$member['userId']]['verifiedMobile'];
-            $member['watchDuration'] = round($member['watchDuration'] / 60, 1);
+            $member['watchDuration'] = empty($member['watchDuration']) ? 0 : round($member['watchDuration'] / 60, 1);
+            $member['answerNum'] = empty($member['answerNum']) ? 0 : $member['answerNum'];
+            $member['chatNum'] = empty($member['chatNum']) ? 0 : $member['chatNum'];
+            $member['chatNumber'] = empty($member['chatNumber']) ? 0 : $member['chatNumber'];
+            $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', $member['firstEnterTime']);
         }
 
         return $members;

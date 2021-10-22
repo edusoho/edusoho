@@ -4030,4 +4030,12 @@ disclaimers:
 course_live_member_statistic_export:
     path: /task/{taskId}/live_statistic/export
     defaults:
-      _controller: 'AppBundle:TaskLearnData:taskLiveStatisticExport'
+        _controller: 'AppBundle:LiveStatisticExport:taskLiveStatisticExport'
+course_live_task_statistic_export:
+    path: /course/{courseId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:courseLiveStatisticExport'
+classroom_live_task_statistic_export:
+    path: /classroom/{classroomId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'
