@@ -9,6 +9,7 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\User\Service\UserService;
 
 class LiveReplay extends AbstractResource
@@ -63,13 +64,24 @@ class LiveReplay extends AbstractResource
         $liveActivities = $this->getActivityService()->findActivities(ArrayToolkit::column($activities, 'id'), true);
         $liveActivities = $this->handleActivityReplay($liveActivities);
 
-        return $liveActivities;
+        return $this->makePagingObject($liveActivities, $this->getActivityService()->count($conditions), $offset, $limit);
     }
 
     protected function handleActivityReplay($liveActivities)
     {
-        $activitiesList = [];
+        $lessonIds = $activitiesList = [];
         foreach ($liveActivities as $activity) {
+            $lessonIds[] = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+        }
+        $replays = $this->getLiveReplayService()->findReplaysByLessonIds($lessonIds);
+        $replays = array_filter($replays, function ($replay) {
+            // 过滤掉被隐藏的录播回放
+            return !empty($replay) && !(bool) $replay['hidden'];
+        });
+        $replays = ArrayToolkit::index($replays, 'lessonId');
+
+        foreach ($liveActivities as $activity) {
+            $replay = $replays[$activity['id']];
             if (isset($activity['ext'])) {
                 $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
                 $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
@@ -80,6 +92,11 @@ class LiveReplay extends AbstractResource
                     'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
                     'liveSecond' => $liveTime,
                     'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
+                    'url' => $this->generateUrl('custom_live_activity_replay_entry', [
+                        'courseId' => $activity['fromCourseId'],
+                        'activityId' => $activity['id'],
+                        'replayId' => $replay['id'],
+                    ]),
                 ];
             }
         }
@@ -156,6 +173,14 @@ class LiveReplay extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->service('Course:LiveReplayService');
     }
 
     /**

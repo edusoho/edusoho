@@ -36,6 +36,15 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
         return $this->db()->fetchAll($sql, [$lessonId, $lessonType]);
     }
 
+    public function findByLessonIds($lessonIds, $lessonType = 'live')
+    {
+        $marks = str_repeat('?,', count($lessonIds) - 1).'?';
+
+        $sql = "SELECT * FROM {$this->table()} WHERE lessonId IN ({$marks}) AND type = ? ORDER BY replayId ASC";
+
+        return $this->db()->fetchAll($sql, array_merge($lessonIds, [$lessonType]));
+    }
+
     public function deleteByCourseId($courseId, $lessonType = 'live')
     {
         return $this->db()->delete($this->table, ['courseId' => $courseId, 'type' => $lessonType]);
