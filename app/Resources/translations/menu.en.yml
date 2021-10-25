@@ -574,6 +574,7 @@ admin_v2.cloud_resource.basic_group: Resources
 # 教学模块-资源管理-云资源
 admin_v2.cloud_resource.basic_tab: Cloud Resources
 admin_v2.cloud.file.basic_tab: Cloud Resources
+admin_v2.live_playback.basic_tab: Live playback
 admin_v2.cloud.attachment.basic_tab: Cloud Attachement
 admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
 admin_v2.cloud.file_setting.basic_tab: Cloud File Setting

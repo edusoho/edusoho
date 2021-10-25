@@ -613,6 +613,10 @@ admin_v2_cloud_file:
     path: /cloud_files
     defaults:
         _controller: 'AppBundle:AdminV2/Teach/CloudFile:index'
+admin_v2_live_playback:
+    path: /live_playback
+    defaults:
+        _controller: 'AppBundle:AdminV2/Teach/CloudFile:livePlayback'
 admin_v2_cloud_file_manage:
     path: /cloud_files/manage
     defaults:
