@@ -22,6 +22,8 @@ interface CourseLessonReplayDao extends GeneralDaoInterface
      */
     public function findByLessonId($lessonId, $lessonType);
 
+    public function findByLessonIds($lessonIds, $lessonType);
+
     public function deleteByCourseId($courseId, $lessonType);
 
     public function getByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
