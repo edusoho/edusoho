@@ -31,7 +31,7 @@ class LiveStatisticClassroomLive extends AbstractResource
         foreach ($tasks as &$liveTask) {
             $course = $courses[$liveTask['courseId']];
             $liveTask['courseTitle'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
-            $liveTask['maxStudentNum'] = $course['maxStudentNum'];
+            $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' ： $course['maxStudentNum'];
             $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
         }
 
