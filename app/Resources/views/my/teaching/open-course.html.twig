@@ -9,7 +9,13 @@
 
 {% block main %}
   {% include 'my/teaching/open-course-type-select.html.twig' %}
-
+  <div class="my-teaching-status">
+    <ul>
+      <li {% if tab == 'publish' %}class="active" {% endif %}><a href="{{path('my_teaching_open_courses',{'tab': 'publish'})}}">{{'course.status.published'|trans}}</a></li>
+      <li {% if tab == 'unPublish' %}class="active" {% endif %}><a href="{{path('my_teaching_open_courses',{'tab': 'unPublish'})}}">{{'course.status.unpublished'|trans}}</a></li>
+      <li {% if tab == 'closed' %}class="active" {% endif %}><a href="{{path('my_teaching_open_courses',{'tab': 'closed'})}}">{{'course.status.closed'|trans}}</a></li>
+    </ul>
+  </div>
   {% for course in courses %}
     <div class="open-course-item">
       {% include 'my/teaching/open-course-list.html.twig' %}
