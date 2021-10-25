@@ -640,9 +640,10 @@ my_teaching_threads:
     defaults:
         _controller: 'AppBundle:My/Thread:teaching'
 my_teaching_classrooms:
-    path: /my/teaching/classrooms
+    path: '/my/teaching/classrooms/{tab}'
     defaults:
         _controller: 'AppBundle:My/Classroom:teaching'
+        tab: publish
 my_teaching_multi_class:
     path: /my/teaching/multi_class
     defaults:
