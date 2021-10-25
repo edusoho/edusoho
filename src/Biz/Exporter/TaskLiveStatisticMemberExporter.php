@@ -84,6 +84,7 @@ class TaskLiveStatisticMemberExporter extends BaseSheetAddStyleExporter
     {
         $activity = $this->getActivityService()->getActivity($this->task['activityId'], true);
         $params['liveId'] = $activity['ext']['liveId'];
+        $params['courseId'] = $activity['fromCourseId'];
         $conditions = ArrayToolkit::parts($this->buildUserConditions($params), ['courseId', 'liveId', 'userIds']);
         $members = $this->getLiveStatisticsService()->searchCourseMemberLiveData($conditions, 0, PHP_INT_MAX, ['firstEnterTime', 'watchDuration', 'checkinNum', 'chatNum', 'answerNum', 'userId']);
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];

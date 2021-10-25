@@ -3315,7 +3315,7 @@ course_task_marker_show:
     defaults:
         _controller: 'AppBundle:Marker:showMarkers'
 course_task_marker_metas:
-    path: '/course/task/{mediaId}/marker/metas'
+    path: '/course/task/{activityId}/marker/metas'
     defaults:
         _controller: 'AppBundle:Marker:markerMetas'
 course_task_marker_merge:
@@ -3335,7 +3335,7 @@ course_question_marker_preview:
     defaults:
         _controller: 'AppBundle:QuestionMarker:questionMakerPreview'
 course_task_question_markers_show:
-    path: '/course/task/media/{mediaId}/question_markers/show'
+    path: '/course/task/media/{activityId}/question_markers/show'
     defaults:
         _controller: 'AppBundle:QuestionMarker:showQuestionMakers'
 course_task_question_marker_finish:

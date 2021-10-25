@@ -14,7 +14,7 @@ interface QuestionMarkerService
 
     public function findQuestionMarkersByMarkerIds($markerIds);
 
-    public function findQuestionMarkersMetaByMediaId($mediaId);
+    public function findQuestionMarkersMetaByActivityId($activityId);
 
     public function findQuestionMarkersByQuestionId($questionId);
 

@@ -8,7 +8,7 @@
 	<div  class="marker-preview-content " id="task-dashboard"  data-course-id="{{ course.id }}"
     data-task-id="{{ task.id }}"
     data-task-mediaid="{{ file.id }}"
-		data-media-player="{{ path('media_play', {mediaId:file.id}) }}"
+		data-media-player="{{ path('media_play', {mediaId:file.id,context: {'activityId':activity.id}}) }}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
   	<p class="title">{{ 'question.marker_preview.video_preview'|trans }}</p>
   	<div class="marker-preview-player" id="task-video-content"></div>
