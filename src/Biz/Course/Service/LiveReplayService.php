@@ -35,6 +35,8 @@ interface LiveReplayService
      */
     public function findReplayByLessonId($lessonId, $lessonType = 'live');
 
+    public function findReplaysByLessonIds($lessonIds, $lessonType = 'live');
+
     /**
      * @before addCourseLessonReplay
      *
