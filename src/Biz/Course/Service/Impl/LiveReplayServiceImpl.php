@@ -32,6 +32,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->getLessonReplayDao()->findByLessonId($lessonId, $lessonType);
     }
 
+    public function findReplaysByLessonIds($lessonIds, $lessonType = 'live')
+    {
+        return $this->getLessonReplayDao()->findByLessonIds($lessonIds, $lessonType);
+    }
+
     public function addReplay($replay)
     {
         $user = $this->getCurrentUser();
