@@ -26,13 +26,7 @@
 
       <template slot="actions" slot-scope="record">
         <a-button-group>
-          <a-button
-            type="primary"
-            style="padding: 0 8px;"
-            data-target="#modal"
-            data-toggle="modal"
-            :data-url="`/admin/v2/cloud_file/${record.id}/preview`"
-          >
+          <a-button type="primary" style="padding: 0 8px;" @click="handleClickViewLivePlayback(record.url)">
             查看回放
           </a-button>
           <a-dropdown placement="bottomRight">
@@ -129,11 +123,23 @@ export default {
 
   methods: {
     async fetchLiveReplay() {
-      this.data = await LiveReplay.get();
+      this.loading = true;
+      const { current, pageSize } = this.pagination;
+      const params = {
+        params: {
+          offset: (current - 1) * pageSize,
+          limit: pageSize
+        }
+      }
+      const { data, paging } = await LiveReplay.get(params);
+      this.loading = false;
+      this.pagination.total = paging.total;
+      this.data = data;
     },
 
-    handleTableChange() {
-
+    handleTableChange(pagination) {
+      this.pagination.current = pagination.current;
+      this.fetchLiveReplay();
     },
 
     handleClickRemove() {
@@ -170,6 +176,10 @@ export default {
 
     handleChange(e) {
       this.checked = e.target.checked;
+    },
+
+    handleClickViewLivePlayback(url) {
+      window.open(url);
     }
   }
 };
