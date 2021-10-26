@@ -38,6 +38,10 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
 
     public function findByLessonIds($lessonIds, $lessonType = 'live')
     {
+        if (empty($lessonIds)) {
+            return [];
+        }
+
         $marks = str_repeat('?,', count($lessonIds) - 1).'?';
 
         $sql = "SELECT * FROM {$this->table()} WHERE lessonId IN ({$marks}) AND type = ? ORDER BY replayId ASC";
