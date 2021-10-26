@@ -557,7 +557,7 @@ class OpenCourseController extends BaseOpenCourseController
             return ['status' => false, 'message' => '课程已关闭，请联系管理员再试。'];
         }
 
-        return ['status' => true, 'message' => '课程已关闭，请联系管理员再试。'];
+        return ['status' => true, 'message' => ''];
     }
 
     private function _checkPublishedLessonExists($courseId)
