@@ -41,8 +41,6 @@ class ClassroomLiveStatisticExporter extends BaseSheetAddStyleExporter
             $sheet = $this->PHPExcel->setActiveSheetIndex($sheetIndex);
             $this->setDefaultRowHeight();
             $data = $this->buildData($params);
-            $this->setBorders('A1:E1');
-            $this->setSize(['A1'], 14);
             $this->setBold(['A1:E1']);
             $this->setVerticalCenter(['A1']);
             $sheet->setTitle('直播统计');
