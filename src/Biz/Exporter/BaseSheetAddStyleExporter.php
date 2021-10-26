@@ -71,7 +71,7 @@ abstract class BaseSheetAddStyleExporter
     // 自定义导出格式  行高 合并单元格 样式 数据 等
     abstract public function buildExportSheetData($params);
 
-    protected function setSheetCellValue(\PHPExcel_Worksheet $sheet, $data, $start = 2)
+    protected function setSheetCellValue(\PHPExcel_Worksheet $sheet, $data, $start = 1)
     {
         $i = 0;
         foreach ($this->getSortedHeadingRow() as $key => $useCol) {

@@ -782,6 +782,7 @@ validate.trim.message: Please input %display%
 validate.idcard_number_input.message: Please enter your ID number correctly
 validate.visible_character_input.message: Please input a visible character
 validate.positive_integer.message: Please enter a positive integer
+validate.unsigned_integer.student_message: Please enter an integer not less than 0
 validate.unsigned_integer.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.second_range.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.course_title.message: Do not support typing <,> characters
@@ -1770,7 +1771,8 @@ course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
-course.plan_setup.member_numbers: Students
+course.plan_setup.member_numbers: Limit the number of participants
+course.plan_setup.member_numbers.tips: There is a limit on the number of people who can join the live course, 0 means no limit on the number of people
 site.data.people: Person
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.marketing_setup.preview.set_task: 'Free %taskName%'

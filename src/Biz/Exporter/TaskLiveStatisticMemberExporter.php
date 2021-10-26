@@ -59,7 +59,7 @@ class TaskLiveStatisticMemberExporter extends BaseSheetAddStyleExporter
             $sheet->setTitle('直播统计');
             $this->setWidth(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']);
 
-            $this->setSheetCellValue($sheet, $data);
+            $this->setSheetCellValue($sheet, $data, 2);
         } catch (PHPExcel_Exception $e) {
             throw $e;
         }

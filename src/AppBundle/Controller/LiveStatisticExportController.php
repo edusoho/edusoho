@@ -8,6 +8,7 @@ use Biz\Course\Service\ReportService;
 use Biz\Exporter\ClassroomLiveStatisticExporter;
 use Biz\Exporter\CourseLiveStatisticExporter;
 use Biz\Exporter\TaskLiveStatisticMemberExporter;
+use Biz\Exporter\TaskRolCallExporter;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -45,6 +46,18 @@ class LiveStatisticExportController extends BaseController
         $objWriter = $exporter->exporter([
             'taskId' => $task['id'],
             'nameOrMobile' => $request->query->get('nameOrMobile', ''),
+        ], 0);
+
+        return $this->buildExportResponse($exporter, $objWriter);
+    }
+
+    public function rollCallExportAction(Request $request, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $exporter = (new TaskRolCallExporter($this->getBiz()));
+        $objWriter = $exporter->exporter([
+            'taskId' => $task['id'],
+            'status' => $request->query->get('status', ''),
         ], 0);
 
         return $this->buildExportResponse($exporter, $objWriter);
