@@ -48,6 +48,14 @@ class LiveReplay extends AbstractResource
         return ['success' => true];
     }
 
+    public function remove(ApiRequest $request)
+    {
+        $ids = $request->request->get('ids');
+        if (empty($ids)) {
+            ActivityException::NOTFOUND_ACTIVITY();
+        }
+    }
+
     protected function filterBaseFields($fields)
     {
         $fields = ArrayToolkit::parts($fields, ['tagIds', 'remark', 'replayPublic']);
@@ -82,6 +90,9 @@ class LiveReplay extends AbstractResource
 
         foreach ($liveActivities as $activity) {
             $replay = $replays[$activity['id']];
+            if (empty($replay)) {
+                continue;
+            }
             if (isset($activity['ext'])) {
                 $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
                 $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
@@ -140,6 +151,11 @@ class LiveReplay extends AbstractResource
             $activityLikeTitle = $this->getActivityService()->findActivitiesLiveByLikeTitle($conditions['keyword']);
             $activityLikeTitleIds = ArrayToolkit::column($activityLikeTitle, 'id');
             $activityIds = array_intersect($activityIds, $activityLikeTitleIds);
+        }
+
+        if (!empty($conditions['courseId'])) {
+            $conditions['fromCourseId'] = $conditions['courseId'];
+            unset($conditions['courseId']);
         }
 
         unset($conditions['tagId']);
