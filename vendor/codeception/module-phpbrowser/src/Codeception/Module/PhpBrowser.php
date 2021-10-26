@@ -1,11 +1,11 @@
 <?php
 namespace Codeception\Module;
 
+use Closure;
 use Codeception\Lib\Connector\Guzzle;
 use Codeception\Lib\InnerBrowser;
 use Codeception\Lib\Interfaces\MultiSession;
 use Codeception\Lib\Interfaces\Remote;
-use Codeception\Lib\Interfaces\RequiresPackage;
 use Codeception\TestInterface;
 use Codeception\Util\Uri;
 use GuzzleHttp\Client as GuzzleClient;
@@ -74,7 +74,7 @@ use GuzzleHttp\Client as GuzzleClient;
  * * `client` - Symfony BrowserKit instance.
  *
  */
-class PhpBrowser extends InnerBrowser implements Remote, MultiSession, RequiresPackage
+class PhpBrowser extends InnerBrowser implements Remote, MultiSession
 {
 
     protected $requiredFields = ['url'];
@@ -110,7 +110,7 @@ class PhpBrowser extends InnerBrowser implements Remote, MultiSession, RequiresP
     ];
 
     /**
-     * @var \Codeception\Lib\Connector\Guzzle
+     * @var Guzzle
      */
     public $client;
 
@@ -118,11 +118,6 @@ class PhpBrowser extends InnerBrowser implements Remote, MultiSession, RequiresP
      * @var GuzzleClient
      */
     public $guzzle;
-
-    public function _requires()
-    {
-        return ['GuzzleHttp\Client' => '"guzzlehttp/guzzle": ">=6.3.0 <7.0"'];
-    }
 
     public function _initialize()
     {
@@ -175,8 +170,8 @@ class PhpBrowser extends InnerBrowser implements Remote, MultiSession, RequiresP
     public function amOnSubdomain($subdomain)
     {
         $url = $this->config['url'];
-        $url = preg_replace('~(https?:\/\/)(.*\.)(.*\.)~', "$1$3", $url); // removing current subdomain
-        $url = preg_replace('~(https?:\/\/)(.*)~', "$1$subdomain.$2", $url); // inserting new
+        $url = preg_replace('~(https?://)(.*\.)(.*\.)~', "$1$3", $url); // removing current subdomain
+        $url = preg_replace('~(https?://)(.*)~', "$1$subdomain.$2", $url); // inserting new
         $config = $this->config;
         $config['url'] = $url;
         $this->_reconfigure($config);
@@ -204,9 +199,10 @@ class PhpBrowser extends InnerBrowser implements Remote, MultiSession, RequiresP
      * It is not recommended to use this command on a regular basis.
      * If Codeception lacks important Guzzle Client methods, implement them and submit patches.
      *
-     * @param callable $function
+     * @param Closure $function
+     * @return mixed
      */
-    public function executeInGuzzle(\Closure $function)
+    public function executeInGuzzle(Closure $function)
     {
         return $function($this->guzzle);
     }

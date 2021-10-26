@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\WrongBook;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -52,17 +53,44 @@ class WrongBookQuestionShow extends AbstractResource
             }
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
             $source = empty($sources[$wrongQuestion['item_id']]) ? [] : $sources[$wrongQuestion['item_id']];
+            $this->handleImgTag($item['material']);
             $item['submit_time'] = $wrongQuestion['last_submit_time'];
             $item['wrong_times'] = $wrongQuestion['wrong_times'];
             $item['sources'] = $source;
             foreach ($item['questions'] as &$question) {
                 $question['report'] = $questionReports[$wrongQuestion['answer_question_report_id']];
                 $question['sources'] = $source;
+                $this->handleImgTag($question['stem']);
+                $this->handleImgTag($question['analysis']);
+                foreach ($question['response_points'] as &$points) {
+                    if (!empty($points['radio'])) {
+                        $this->handleImgTag($points['radio']['text']);
+                    }
+
+                    if (!empty($points['checkbox'])) {
+                        $this->handleImgTag($points['checkbox']['text']);
+                    }
+                }
             }
             $wrongQuestionInfo[] = $item;
         }
 
         return $wrongQuestionInfo;
+    }
+
+    protected function handleImgTag(&$itemMaterial)
+    {
+        if (!preg_match('/<img (.*?)>/', $itemMaterial)) {
+            return;
+        }
+
+        $reg = '/<img (.*?)+src=[\'"](.*?)[\'"]/i';
+        preg_match_all($reg, $itemMaterial, $imgUrls);
+        $imgs = array_unique($imgUrls[2]);
+        foreach ($imgs as $imgUrl) {
+            $realUrl = AssetHelper::uriForPath($imgUrl);
+            $itemMaterial = str_replace($imgUrl, $realUrl, $itemMaterial);
+        }
     }
 
     protected function getActivityScenes($sceneIds)
@@ -126,7 +154,7 @@ class WrongBookQuestionShow extends AbstractResource
         $prepareConditions = [];
         $prepareConditions['pool_id'] = $poolId;
         $prepareConditions['status'] = 'wrong';
-        $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
+//        $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
 
         if (!in_array($conditions['targetType'], ['course', 'classroom', 'exercise'])) {
             throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
@@ -226,7 +254,7 @@ class WrongBookQuestionShow extends AbstractResource
      */
     protected function getCourseTaskService()
     {
-        return  $this->service('Task:TaskService');
+        return $this->service('Task:TaskService');
     }
 
     /**
@@ -234,6 +262,6 @@ class WrongBookQuestionShow extends AbstractResource
      */
     protected function getItemCategoryService()
     {
-        return  $this->service('ItemBank:Item:ItemCategoryService');
+        return $this->service('ItemBank:Item:ItemCategoryService');
     }
 }

@@ -76,7 +76,7 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements Configuration
     /**
      * {@inheritdoc}
      *
-     * Must run after NoShortEchoTagFixer.
+     * Must run after EchoTagSyntaxFixer, NoShortEchoTagFixer.
      */
     public function getPriority()
     {
@@ -153,7 +153,7 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements Configuration
     {
         $prevToken = $tokens[$tokens->getPrevMeaningfulToken($index)];
 
-        if (!$prevToken->equalsAny([';', '{', '}', [T_OPEN_TAG]])) {
+        if (!$prevToken->equalsAny([';', '{', '}', ')', [T_OPEN_TAG], [T_ELSE]])) {
             return;
         }
 

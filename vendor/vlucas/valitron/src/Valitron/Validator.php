@@ -84,6 +84,11 @@ class Validator
     protected $stop_on_first_fail = false;
 
     /**
+     * @var bool
+     */
+    protected $prepend_labels = true;
+
+    /**
      * Setup validation
      *
      * @param  array $data
@@ -145,6 +150,14 @@ class Validator
     }
 
     /**
+     * @param bool $prepend_labels
+     */
+    public function setPrependLabels($prepend_labels = true)
+    {
+        $this->prepend_labels = $prepend_labels;
+    }
+
+    /**
      * Required field validator
      *
      * @param  string $field
@@ -159,9 +172,7 @@ class Validator
             return $find[1];
         }
 
-        if (is_null($value)) {
-            return false;
-        } elseif (is_string($value) && trim($value) === '') {
+        if (is_null($value) || (is_string($value) && trim($value) === '')) {
             return false;
         }
 
@@ -409,9 +420,13 @@ class Validator
      */
     protected function validateIn($field, $value, $params)
     {
-        $isAssoc = array_values($params[0]) !== $params[0];
-        if ($isAssoc) {
-            $params[0] = array_keys($params[0]);
+        $forceAsAssociative = false;
+        if (isset($params[2])) {
+            $forceAsAssociative = (bool) $params[2];
+        }
+
+        if ($forceAsAssociative || $this->isAssociativeArray($params[0])) {
+           $params[0] = array_keys($params[0]);
         }
 
         $strict = false;
@@ -432,8 +447,12 @@ class Validator
      */
     protected function validateListContains($field, $value, $params)
     {
-        $isAssoc = array_values($value) !== $value;
-        if ($isAssoc) {
+        $forceAsAssociative = false;
+        if (isset($params[2])) {
+            $forceAsAssociative = (bool) $params[2];
+        }
+
+        if ($forceAsAssociative || $this->isAssociativeArray($value)) {
             $value = array_keys($value);
         }
 
@@ -616,7 +635,8 @@ class Validator
             if (function_exists('idn_to_ascii') && defined('INTL_IDNA_VARIANT_UTS46')) {
                 $domain = idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46);
             }
-            return checkdnsrr($domain, 'ANY');
+
+            return checkdnsrr($domain, 'MX');
         }
 
         return false;
@@ -877,11 +897,9 @@ class Validator
                 } elseif (isset($cards)) {
                     // if we have cards, check our users card against only the ones we have
                     foreach ($cards as $card) {
-                        if (in_array($card, array_keys($cardRegex))) {
+                        if (in_array($card, array_keys($cardRegex)) && preg_match($cardRegex[$card], $value) === 1) {
                             // if the card is valid, we want to stop looping
-                            if (preg_match($cardRegex[$card], $value) === 1) {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 } else {
@@ -1089,10 +1107,8 @@ class Validator
                 }
             }
             // Use custom label instead of field name if set
-            if (is_string($params[0])) {
-                if (isset($this->_labels[$param])) {
-                    $param = $this->_labels[$param];
-                }
+            if (is_string($params[0]) && isset($this->_labels[$param])) {
+                $param = $this->_labels[$param];
             }
             $values[] = $param;
         }
@@ -1167,6 +1183,27 @@ class Validator
         }
     }
 
+    private function validationMustBeExcecuted($validation, $field, $values, $multiple){
+        //always excecute requiredWith(out) rules
+        if (in_array($validation['rule'], array('requiredWith', 'requiredWithout'))){
+            return true;
+        }
+
+        //do not execute if the field is optional and not set
+        if($this->hasRule('optional', $field) && ! isset($values)){
+            return false;
+        }
+
+        //ignore empty input, except for required and accepted rule
+        if (! $this->hasRule('required', $field) && ! in_array($validation['rule'], array('required', 'accepted'))){
+            if($multiple){
+                return count($values) != 0;
+            }
+            return (isset($values) && $values !== '');
+        }
+
+        return true;
+    }
     /**
      * Run validations and return boolean result
      *
@@ -1179,15 +1216,7 @@ class Validator
             foreach ($v['fields'] as $field) {
                 list($values, $multiple) = $this->getPart($this->_fields, explode('.', $field), false);
 
-                // Don't validate if the field is not required and the value is empty and we don't have a conditionally required rule present on the field
-                if (($this->hasRule('optional', $field) && isset($values)) 
-                    || ($this->hasRule('requiredWith', $field) || $this->hasRule('requiredWithout', $field))) {
-                    //Continue with execution below if statement
-                } elseif (
-                    $v['rule'] !== 'required' && !$this->hasRule('required', $field) &&
-                    $v['rule'] !== 'accepted' &&
-                    (!isset($values) || $values === '' || ($multiple && count($values) == 0))
-                ) {
+                if (! $this->validationMustBeExcecuted($v, $field, $values, $multiple)){
                     continue;
                 }
 
@@ -1265,10 +1294,8 @@ class Validator
     protected function hasRule($name, $field)
     {
         foreach ($this->_validations as $validation) {
-            if ($validation['rule'] == $name) {
-                if (in_array($field, $validation['fields'])) {
-                    return true;
-                }
+            if ($validation['rule'] == $name && in_array($field, $validation['fields'])) {
+                return true;
             }
         }
 
@@ -1458,7 +1485,9 @@ class Validator
                 }
             }
         } else {
-            $message = str_replace('{field}', ucwords(str_replace('_', ' ', $field)), $message);
+            $message = $this->prepend_labels
+                ? str_replace('{field}', ucwords(str_replace('_', ' ', $field)), $message)
+                : str_replace('{field} ', '', $message);
         }
 
         return $message;
@@ -1544,5 +1573,10 @@ class Validator
         array_map(function ($field) use ($rules, $me) {
             $me->mapFieldRules($field, $rules[$field]);
         }, array_keys($rules));
+    }
+
+    private function isAssociativeArray($input){
+        //array contains at least one key that's not an can not be cast to an integer
+        return count(array_filter(array_keys($input), 'is_string')) > 0;
     }
 }

@@ -52,7 +52,7 @@ class AutowirePass extends AbstractRecursivePass
      */
     public function getAutowiringExceptions()
     {
-        @trigger_error('Calling AutowirePass::getAutowiringExceptions() is deprecated since Symfony 3.4 and will be removed in 4.0. Use Definition::getErrors() instead.', E_USER_DEPRECATED);
+        @trigger_error('Calling AutowirePass::getAutowiringExceptions() is deprecated since Symfony 3.4 and will be removed in 4.0. Use Definition::getErrors() instead.', \E_USER_DEPRECATED);
 
         return $this->autowiringExceptions;
     }
@@ -85,7 +85,7 @@ class AutowirePass extends AbstractRecursivePass
      */
     public static function createResourceForClass(\ReflectionClass $reflectionClass)
     {
-        @trigger_error('The '.__METHOD__.'() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use ContainerBuilder::getReflectionClass() instead.', E_USER_DEPRECATED);
+        @trigger_error('The '.__METHOD__.'() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use ContainerBuilder::getReflectionClass() instead.', \E_USER_DEPRECATED);
 
         $metadata = [];
 
@@ -304,7 +304,7 @@ class AutowirePass extends AbstractRecursivePass
                 $message .= sprintf(' You should %s the "%s" service to "%s" instead.', isset($this->types[$this->types[$type]]) ? 'alias' : 'rename (or alias)', $this->types[$type], $type);
             }
 
-            @trigger_error($message, E_USER_DEPRECATED);
+            @trigger_error($message, \E_USER_DEPRECATED);
 
             return new TypedReference($this->types[$type], $type);
         }
@@ -444,7 +444,7 @@ class AutowirePass extends AbstractRecursivePass
             $this->currentId = $currentId;
         }
 
-        @trigger_error(sprintf('Relying on service auto-registration for type "%s" is deprecated since Symfony 3.4 and won\'t be supported in 4.0. Create a service named "%s" instead.', $type, $type), E_USER_DEPRECATED);
+        @trigger_error(sprintf('Relying on service auto-registration for type "%s" is deprecated since Symfony 3.4 and won\'t be supported in 4.0. Create a service named "%s" instead.', $type, $type), \E_USER_DEPRECATED);
 
         $this->container->log($this, sprintf('Type "%s" has been auto-registered for service "%s".', $type, $this->currentId));
 
@@ -525,7 +525,16 @@ class AutowirePass extends AbstractRecursivePass
         $methodArgumentsMetadata = [];
         foreach ($method->getParameters() as $parameter) {
             try {
-                $class = $parameter->getClass();
+                if (method_exists($parameter, 'getType')) {
+                    $type = $parameter->getType();
+                    if ($type && !$type->isBuiltin()) {
+                        $class = new \ReflectionClass($type instanceof \ReflectionNamedType ? $type->getName() : (string) $type);
+                    } else {
+                        $class = null;
+                    }
+                } else {
+                    $class = $parameter->getClass();
+                }
             } catch (\ReflectionException $e) {
                 // type-hint is against a non-existent class
                 $class = false;

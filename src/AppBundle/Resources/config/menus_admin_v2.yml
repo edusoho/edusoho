@@ -1714,7 +1714,7 @@ admin_v2:
                         admin_v2is_s2b2c_enabled_cloud_data_lab_manage:
                             name: admin_v2.cloud.data_lab
                             class: js-new-corner-mark
-                            visible: (cloudStatus() and not is_s2b2c_enabled())
+                            visible: false
                             children:
                                 admin_v2_cloud_data_lab:
                                     name: admin_v2.cloud.data_lab
@@ -1749,7 +1749,7 @@ admin_v2:
                         #功能实验室
                         admin_v2_cloud_feature_lab:
                             name: admin_v2.cloud.feature_lab
-                            visible: (cloudStatus() and not is_s2b2c_enabled())
+                            visible: false
                             children:
                                 admin_v2_cloud_feature_lab_setting:
                                     name: admin_v2.cloud.feature_lab

@@ -64,9 +64,9 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $_SERVER['SHELL_VERBOSITY'] = 3;
         }
 
-        if ($this->loadClassCache) {
-            $this->doLoadClassCache($this->loadClassCache[0], $this->loadClassCache[1]);
-        }
+//        if ($this->loadClassCache) {
+//            $this->doLoadClassCache($this->loadClassCache[0], $this->loadClassCache[1]);
+//        }
 
         // init bundles
         $this->initializeBundles();

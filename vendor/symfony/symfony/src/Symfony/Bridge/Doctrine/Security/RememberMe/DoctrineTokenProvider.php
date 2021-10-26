@@ -12,6 +12,8 @@
 namespace Symfony\Bridge\Doctrine\Security\RememberMe;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Result as DriverResult;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentToken;
@@ -63,7 +65,7 @@ class DoctrineTokenProvider implements TokenProviderInterface
         $paramValues = ['series' => $series];
         $paramTypes = ['series' => \PDO::PARAM_STR];
         $stmt = $this->conn->executeQuery($sql, $paramValues, $paramTypes);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $row = $stmt instanceof Result || $stmt instanceof DriverResult ? $stmt->fetchAssociative() : $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($row) {
             return new PersistentToken($row['class'], $row['username'], $series, $row['value'], new \DateTime($row['last_used']));
@@ -80,7 +82,11 @@ class DoctrineTokenProvider implements TokenProviderInterface
         $sql = 'DELETE FROM rememberme_token WHERE series=:series';
         $paramValues = ['series' => $series];
         $paramTypes = ['series' => \PDO::PARAM_STR];
-        $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        if (method_exists($this->conn, 'executeStatement')) {
+            $this->conn->executeStatement($sql, $paramValues, $paramTypes);
+        } else {
+            $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        }
     }
 
     /**
@@ -100,7 +106,11 @@ class DoctrineTokenProvider implements TokenProviderInterface
             'lastUsed' => self::$useDeprecatedConstants ? Type::DATETIME : Types::DATETIME_MUTABLE,
             'series' => \PDO::PARAM_STR,
         ];
-        $updated = $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        if (method_exists($this->conn, 'executeStatement')) {
+            $updated = $this->conn->executeStatement($sql, $paramValues, $paramTypes);
+        } else {
+            $updated = $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        }
         if ($updated < 1) {
             throw new TokenNotFoundException('No token found.');
         }
@@ -128,6 +138,10 @@ class DoctrineTokenProvider implements TokenProviderInterface
             'value' => \PDO::PARAM_STR,
             'lastUsed' => self::$useDeprecatedConstants ? Type::DATETIME : Types::DATETIME_MUTABLE,
         ];
-        $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        if (method_exists($this->conn, 'executeStatement')) {
+            $this->conn->executeStatement($sql, $paramValues, $paramTypes);
+        } else {
+            $this->conn->executeUpdate($sql, $paramValues, $paramTypes);
+        }
     }
 }

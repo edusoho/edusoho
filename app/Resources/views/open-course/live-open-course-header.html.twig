@@ -59,22 +59,26 @@
     {% else %}
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
-        {% if lesson.replayStatus == 'videoGenerated' %}
-          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
-        {% elseif lesson.replayStatus == 'generated' %}
-          {% for replay in lesson.replays if replay %}
-            {% if lesson.liveProvider == 5 %}
-              <a class="btn btn-info btn-lg mask-btn js-play-es-live"
-                data-url="{{ path('es_live_room_replay_show',{ targetType: constant("AppBundle\\Controller\\LiveroomController::LIVE_OPEN_COURSE_TYPE"), targetId: lesson.courseId, lessonId: lesson.id, replayId:replay.id}) }}"
-                target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
-            {% else %}
-              <a class="btn btn-info btn-lg mask-btn"
-                href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id, refererUrl:refererUrl}) }}"
-                target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
-            {% endif %}
-          {% endfor %}
+        {% if course.replayEnable|default(0) %}
+          {% if lesson.replayStatus == 'videoGenerated' %}
+            <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+          {% elseif lesson.replayStatus == 'generated' %}
+            {% for replay in lesson.replays if replay %}
+              {% if lesson.liveProvider == 5 %}
+                <a class="btn btn-info btn-lg mask-btn js-play-es-live"
+                   data-url="{{ path('es_live_room_replay_show',{ targetType: constant("AppBundle\\Controller\\LiveroomController::LIVE_OPEN_COURSE_TYPE"), targetId: lesson.courseId, lessonId: lesson.id, replayId:replay.id}) }}"
+                   target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
+              {% else %}
+                <a class="btn btn-info btn-lg mask-btn"
+                   href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id, refererUrl:refererUrl}) }}"
+                   target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <p class="mask-content__tip">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
+          {% endif %}
         {% else %}
-          <p class="mask-content__tip">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
+          <p class="mask-content__tip">{{'my.teaching.open_course.lesson.header.view_replay_not_permitted.tips'|trans}}</p>
         {% endif %}
       </div>
     {% endif %}

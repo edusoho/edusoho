@@ -12,7 +12,7 @@
 
 namespace PhpCsFixer\Tests\Test;
 
-use PhpCsFixer\RuleSet;
+use PhpCsFixer\RuleSet\RuleSet;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -77,7 +77,7 @@ abstract class AbstractIntegrationCaseFactory implements IntegrationCaseFactoryI
     /**
      * Parses the '--CONFIG--' block of a '.test' file.
      *
-     * @param string $config
+     * @param ?string $config
      *
      * @return array
      */
@@ -108,7 +108,7 @@ abstract class AbstractIntegrationCaseFactory implements IntegrationCaseFactoryI
     /**
      * Parses the '--REQUIREMENTS--' block of a '.test' file and determines requirements.
      *
-     * @param string $config
+     * @param ?string $config
      *
      * @return array
      */
@@ -155,7 +155,7 @@ abstract class AbstractIntegrationCaseFactory implements IntegrationCaseFactoryI
     /**
      * Parses the '--SETTINGS--' block of a '.test' file and determines settings.
      *
-     * @param string $config
+     * @param ?string $config
      *
      * @return array
      */
@@ -240,13 +240,11 @@ abstract class AbstractIntegrationCaseFactory implements IntegrationCaseFactoryI
         }
 
         if (null !== $template) {
-            $decoded = array_merge(
-                $template,
-                array_intersect_key(
-                    $decoded,
-                    array_flip(array_keys($template))
-                )
-            );
+            foreach ($template as $index => $value) {
+                if (!\array_key_exists($index, $decoded)) {
+                    $decoded[$index] = $value;
+                }
+            }
         }
 
         return $decoded;

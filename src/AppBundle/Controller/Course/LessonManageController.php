@@ -166,7 +166,7 @@ class LessonManageController extends BaseController
         try {
             $this->getCourseLessonService()->publishLesson($courseId, $lessonId);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(['success' => false, 'message' => $this->trans('course.manage.lesson_copy_ing')]);
+            return $this->createJsonResponse(['success' => false, 'message' => $this->trans('exception.task.forbidden_publish_sync_task')]);
         }
 
         return $this->createJsonResponse(['success' => true]);

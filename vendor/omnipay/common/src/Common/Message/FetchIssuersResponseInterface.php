@@ -15,8 +15,6 @@ namespace Omnipay\Common\Message;
  * This happens when the gateway needs the customer to choose a
  * card issuer.
  *
- * @see ResponseInterface
- * @see Omnipay\Common\Issuer
  */
 interface FetchIssuersResponseInterface extends ResponseInterface
 {

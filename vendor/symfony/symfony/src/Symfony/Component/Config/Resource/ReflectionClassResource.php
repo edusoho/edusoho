@@ -139,7 +139,11 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
             $defaults = $class->getDefaultProperties();
 
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
-                yield $p->getDocComment().$p;
+                yield $p->getDocComment();
+                yield $p->isDefault() ? '<default>' : '';
+                yield $p->isPublic() ? 'public' : 'protected';
+                yield $p->isStatic() ? 'static' : '';
+                yield '$'.$p->name;
                 yield print_r(isset($defaults[$p->name]) && !\is_object($defaults[$p->name]) ? $defaults[$p->name] : null, true);
             }
         }
@@ -173,6 +177,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
                 if (!$parametersWithUndefinedConstants) {
                     yield preg_replace('/^  @@.*/m', '', $m);
                 } else {
+                    $t = \PHP_VERSION_ID >= 70000 ? $m->getReturnType() : '';
                     $stack = [
                         $m->getDocComment(),
                         $m->getName(),
@@ -183,15 +188,16 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
                         $m->isPrivate(),
                         $m->isProtected(),
                         $m->returnsReference(),
-                        \PHP_VERSION_ID >= 70000 && $m->hasReturnType() ? (\PHP_VERSION_ID >= 70100 ? $m->getReturnType()->getName() : (string) $m->getReturnType()) : '',
+                        $t instanceof \ReflectionNamedType ? ((string) $t->allowsNull()).$t->getName() : (string) $t,
                     ];
 
                     foreach ($m->getParameters() as $p) {
                         if (!isset($parametersWithUndefinedConstants[$p->name])) {
                             $stack[] = (string) $p;
                         } else {
+                            $t = \PHP_VERSION_ID >= 70000 ? $p->getType() : '';
                             $stack[] = $p->isOptional();
-                            $stack[] = \PHP_VERSION_ID >= 70000 && $p->hasType() ? (\PHP_VERSION_ID >= 70100 ? $p->getType()->getName() : (string) $p->getType()) : '';
+                            $stack[] = $t instanceof \ReflectionNamedType ? ((string) $t->allowsNull()).$t->getName() : (string) $t;
                             $stack[] = $p->isPassedByReference();
                             $stack[] = \PHP_VERSION_ID >= 50600 ? $p->isVariadic() : '';
                             $stack[] = $p->getName();

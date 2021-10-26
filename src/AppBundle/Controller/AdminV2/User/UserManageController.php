@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\User;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Common\SimpleValidator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
@@ -204,6 +205,12 @@ class UserManageController extends BaseController
 
         if (isset($formData['emailOrMobile'])) {
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
+            if (SimpleValidator::email($formData['emailOrMobile'])) {
+                $userData['email'] = $formData['emailOrMobile'];
+            } elseif (SimpleValidator::mobile($formData['emailOrMobile'])) {
+                $userData['mobile'] = $formData['emailOrMobile'];
+                $userData['verifiedMobile'] = $formData['emailOrMobile'];
+            }
         }
 
         if (isset($formData['mobile'])) {

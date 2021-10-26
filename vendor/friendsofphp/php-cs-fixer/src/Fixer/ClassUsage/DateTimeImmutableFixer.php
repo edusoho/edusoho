@@ -88,6 +88,11 @@ final class DateTimeImmutableFixer extends AbstractFixer
                 continue;
             }
 
+            $prevIndex = $tokens->getPrevMeaningfulToken($index);
+            if ($tokens[$prevIndex]->isGivenKind(T_FUNCTION)) {
+                continue;
+            }
+
             $lowercaseContent = strtolower($token->getContent());
 
             if ('datetime' === $lowercaseContent) {
@@ -128,7 +133,7 @@ final class DateTimeImmutableFixer extends AbstractFixer
             if (!$tokens[$prevPrevIndex]->isGivenKind(T_STRING)) {
                 $isUsedWithLeadingBackslash = true;
             }
-        } elseif (!$tokens[$prevIndex]->isGivenKind([T_DOUBLE_COLON, T_OBJECT_OPERATOR])) {
+        } elseif (!$tokens[$prevIndex]->isGivenKind(T_DOUBLE_COLON) && !$tokens[$prevIndex]->isObjectOperator()) {
             $isUsedAlone = true;
         }
 
@@ -147,7 +152,7 @@ final class DateTimeImmutableFixer extends AbstractFixer
     private function fixFunctionUsage(Tokens $tokens, $index, $replacement)
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($index);
-        if ($tokens[$prevIndex]->isGivenKind([T_DOUBLE_COLON, T_NEW, T_OBJECT_OPERATOR])) {
+        if ($tokens[$prevIndex]->isGivenKind([T_DOUBLE_COLON, T_NEW]) || $tokens[$prevIndex]->isObjectOperator()) {
             return;
         }
         if ($tokens[$prevIndex]->isGivenKind(T_NS_SEPARATOR)) {

@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+if (PHP_VERSION_ID < 70400) {
+    echo "Updater requires PHP 7.4";
+    exit(1);
+}
+
+$composerFile = __DIR__ . '/../composer.json';
+$composerConfig = file_get_contents($composerFile);
+foreach (json_decode($composerConfig, true, 512, JSON_THROW_ON_ERROR)['repositories'] as $repository)
+{
+    if ($repository['type'] !== 'package') {
+        continue;
+    }
+
+    if ($repository['package']['name'] == 'cucumber/cucumber') {
+        $oldTag = preg_replace('/^dev-gherkin-/', '', $repository['package']['version']);
+        $oldHash = $repository['package']['source']['reference'];
+        break;
+    }
+}
+
+if (!isset($oldHash)) {
+    echo "ERROR: Could not parse the composer configuration\n";
+    exit(1);
+}
+
+echo "Latest local hash is {$oldHash} (tagged {$oldTag})\n";
+
+if(!preg_match(
+    '/^(?<hash>[0-9a-z]+)\s+\S+\\/v(?<tag>[0-9.]+)/',
+    shell_exec('git ls-remote --tags https://github.com/cucumber/cucumber.git | grep cucumber-gherkin | sort --version-sort -k2 | tail -n 1'),
+    $matches
+)) {
+    echo "ERROR: Could not parse the repository tags\n";
+    exit(1);
+}
+['hash' => $newHash, 'tag' => $newTag] = $matches;
+
+echo "Latest remote hash is {$newHash} (tagged {$newTag})\n";
+
+if ($matches['hash'] == $oldHash) {
+    echo "Hashes match, nothing to do\n";
+    exit(0);
+}
+
+$newJson = str_replace(
+    [$oldHash, 'dev-gherkin-'.$oldTag],
+    [$newHash, 'dev-gherkin-'.$newTag],
+    $composerConfig
+);
+
+file_put_contents($composerFile, $newJson);
+
+echo "Updated composer config:\n$newJson";
+echo "::set-output name=cucumber_version::$newTag\n";

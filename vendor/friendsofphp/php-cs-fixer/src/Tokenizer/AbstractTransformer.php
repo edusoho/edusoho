@@ -39,4 +39,9 @@ abstract class AbstractTransformer implements TransformerInterface
     {
         return 0;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function getCustomTokens();
 }
