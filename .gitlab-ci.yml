@@ -281,6 +281,7 @@ Build upgrade package:
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
     - n 12.8.1
+    - node -v
     - yarn config set registry https://registry.npm.taobao.org
     - cd edusoho-h5
     - git checkout ${H5VERSION}
