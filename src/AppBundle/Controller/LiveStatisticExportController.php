@@ -57,7 +57,7 @@ class LiveStatisticExportController extends BaseController
         $exporter = (new TaskRolCallExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
             'taskId' => $task['id'],
-            'nameOrMobile' => $request->query->get('nameOrMobile', ''),
+            'status' => $request->query->get('status', ''),
         ], 0);
 
         return $this->buildExportResponse($exporter, $objWriter);
