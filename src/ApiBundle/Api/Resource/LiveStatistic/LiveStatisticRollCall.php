@@ -50,7 +50,7 @@ class LiveStatisticRollCall extends AbstractResource
         foreach ($statistics as &$statistic) {
             $statistic['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
             $statistic['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
-            $statistic['checkin'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['checkin']) ? 0 : 1;
+            $statistic['checkin'] = empty($statistic['checkin']) ? 0 : 1;
             $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
         }
 

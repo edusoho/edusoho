@@ -4036,6 +4036,10 @@ course_live_task_statistic_export:
     path: /course/{courseId}/live_statistic/export
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:courseLiveStatisticExport'
+course_live_task_roll_call_export:
+    path: /task/{taskId}/live_statistic/roll_call/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:rollCallExport'
 classroom_live_task_statistic_export:
     path: /classroom/{classroomId}/live_statistic/export
     defaults:
