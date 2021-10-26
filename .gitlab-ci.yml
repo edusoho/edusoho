@@ -302,6 +302,8 @@ Build upgrade package:
 
     # 生成js语言包
     - app/console trans:dump-js
+    - git config --global user.email "gitlab@example.com"
+    - git config --global user.name "gitlab"
     - git add web/static-dist
     - git add web/h5
     - git add web/bundles
