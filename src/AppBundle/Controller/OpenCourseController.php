@@ -63,9 +63,9 @@ class OpenCourseController extends BaseOpenCourseController
                 'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id']),
             ]);
         }
-
-        if (!$this->_checkCourseStatus($courseId)) {
-            return $this->createMessageResponse('error', '课程暂时无法查看，请稍后再试。');
+        $result = $this->_checkCourseStatus($courseId);
+        if (!$result['status']) {
+            return $this->createMessageResponse('error', $result['message']);
         }
 
         $member = $this->_memberOperate($request, $courseId);
@@ -193,7 +193,8 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function likeAction(Request $request, $id)
     {
-        if (!$this->_checkCourseStatus($id)) {
+        $result = $this->_checkCourseStatus($id);
+        if (!$result['status']) {
             return $this->createJsonResponse(['result' => false]);
         }
 
@@ -204,7 +205,8 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function unlikeAction(Request $request, $id)
     {
-        if (!$this->_checkCourseStatus($id)) {
+        $result = $this->_checkCourseStatus($id);
+        if (!$result['status']) {
             return $this->createJsonResponse(['result' => false]);
         }
 
@@ -285,8 +287,9 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function postAction(Request $request, $id)
     {
-        if (!$this->_checkCourseStatus($id)) {
-            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        $result = $this->_checkCourseStatus($id);
+        if (!$result['status']) {
+            return $this->createMessageResponse('error', $result['message']);
         }
 
         return $this->forward('AppBundle:Thread:postSave', [
@@ -298,8 +301,9 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function postReplyAction(Request $request, $id, $postId)
     {
-        if (!$this->_checkCourseStatus($id)) {
-            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        $result = $this->_checkCourseStatus($id);
+        if (!$result['status']) {
+            return $this->createMessageResponse('error', $result['message']);
         }
 
         $fields = $request->request->all();
@@ -545,11 +549,15 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
-        if (!$course || ($course && 'published' != $course['status'])) {
-            return false;
+        if (empty($course)) {
+            return ['status' => false, 'message' => '课程已删除，请联系管理员再试。'];
         }
 
-        return true;
+        if ('published' != $course['status']) {
+            return ['status' => false, 'message' => '课程已关闭，请联系管理员再试。'];
+        }
+
+        return ['status' => true, 'message' => '课程已关闭，请联系管理员再试。'];
     }
 
     private function _checkPublishedLessonExists($courseId)
