@@ -7,7 +7,6 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  COMMIT: "feat: #100000 compile"
   FROM_VERSION: 21.4.2
   VERSION: 21.4.3
   H5VERSION: master
@@ -307,7 +306,8 @@ Build upgrade package:
     - git add web/h5
     - git add web/bundles
     - git add web/translations
-    - git  commit -am ${COMMIT}
+    - git diff .
+    - "git commit -m 'feat: #10000 compile'"
     - app/console   build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
     paths:
