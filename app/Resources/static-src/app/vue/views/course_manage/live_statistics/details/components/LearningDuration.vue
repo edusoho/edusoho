@@ -14,7 +14,7 @@
       class="mt24"
       :columns="columns"
       :data-source="data"
-      :row-key="record => record.key"
+      :row-key="record => record.id"
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"

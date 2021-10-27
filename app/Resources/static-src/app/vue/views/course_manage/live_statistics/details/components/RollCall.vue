@@ -18,7 +18,7 @@
       class="mt24"
       :columns="columns"
       :data-source="data"
-      :row-key="record => record.key"
+      :row-key="record => record.id"
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
@@ -121,7 +121,7 @@ export default {
     },
 
     handleClickExport() {
-
+      window.open(`/task/${this.taskId}/live_statistic/roll_call/export?status=${this.status}`);
     }
   }
 }
