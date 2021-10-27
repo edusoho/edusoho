@@ -4,10 +4,9 @@
       <a-button
         type="danger"
         :disabled="!hasSelected"
-        :loading="loading"
         @click="handleClickRemove"
       >
-        移除回放
+        {{ 'site.btn.remove_playback' | trans }}
       </a-button>
     </div>
     <a-table
@@ -18,21 +17,21 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="customTitle">直播名称</template>
-      <template slot="anchorTitle">主讲人</template>
-      <template slot="liveTimeTitle">回放时长</template>
-      <template slot="liveStartTimeTitle">直播时间</template>
-      <template slot="actionsTitle">操作</template>
+      <template slot="customTitle">{{ 'live_name' | trans }}</template>
+      <template slot="anchorTitle">{{ 'live_statistics.presenter' | trans }}</template>
+      <template slot="liveTimeTitle">{{ 'live_playback_duration' | trans }}</template>
+      <template slot="liveStartTimeTitle">{{ 'live_statistics.live_time' | trans }}</template>
+      <template slot="actionsTitle">{{ 'live_statistics.operation' | trans }}</template>
 
       <template slot="actions" slot-scope="record">
         <a-button-group>
           <a-button type="primary" style="padding: 0 8px;" @click="handleClickViewLivePlayback(record.url)">
-            查看回放
+            {{ 'site.btn.view_playback' | trans }}
           </a-button>
           <a-dropdown placement="bottomRight">
             <a-menu slot="overlay">
               <a-menu-item @click="showModal(record.id)">
-                移除回放
+                {{ 'site.btn.remove_playback' | trans }}
               </a-menu-item>
             </a-menu>
             <a-button type="primary" style="padding: 0 8px;">
@@ -44,19 +43,19 @@
     </a-table>
 
     <a-modal
-      title="移除回放"
+      :title="'site.btn.remove_playback' | trans"
       :visible="visible"
       @cancel="hiddenModal"
     >
-      直播回放将从该课程中移除关联
+      {{ 'live.playback.tip.remove_association' | trans }}
       <a-checkbox class="mt8" :checked="checked" @change="handleChange">
-        同时在我的教学资料中删除相关直播回放
+        {{ 'live.playback.tip.delete_related_live_playback' | trans }}
       </a-checkbox>
       <template slot="footer">
         <div class="clearfix">
-          <span class="pull-left" style="color: #fe4040; margin-top: 7px;">直播回放若被引用，移除会引起引用任务无法正常使用</span>
+          <span class="pull-left" style="color: #fe4040; margin-top: 7px;">{{ 'live.playback.tip.cannot_be_used_normally' | trans }}</span>
           <a-button type="danger" :loading="btnLoading" @click="handleClickRemoveLivePlayback">
-            确认
+            {{ 'site.btn.confirm' | trans }}
           </a-button>
         </div>
       </template>
@@ -143,11 +142,7 @@ export default {
     },
 
     handleClickRemove() {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.selectedRowKeys = [];
-      }, 1000);
+
     },
 
     onSelectChange(selectedRowKeys) {
@@ -164,14 +159,12 @@ export default {
     },
 
     handleClickRemoveLivePlayback() {
-      console.log(this.currentId);
       this.btnLoading = true;
-
 
       setInterval( () => {
         this.visible = false;
         this.btnLoading = false;
-      }, 3000)
+      }, 3000);
     },
 
     handleChange(e) {
