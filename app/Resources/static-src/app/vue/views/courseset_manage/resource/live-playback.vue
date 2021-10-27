@@ -141,10 +141,6 @@ export default {
       this.fetchLiveReplay();
     },
 
-    handleClickRemove() {
-
-    },
-
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
     },
@@ -156,6 +152,10 @@ export default {
 
     hiddenModal() {
       this.visible = false;
+    },
+
+    handleClickRemove() {
+
     },
 
     handleClickRemoveLivePlayback() {
