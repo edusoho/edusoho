@@ -18,7 +18,7 @@
       class="mt24"
       :columns="columns"
       :data-source="data"
-      :row-key="record => record.key"
+      :row-key="record => record.id"
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
@@ -29,7 +29,7 @@
       <template slot="checkinTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
 
       <span slot="checkin" slot-scope="text">
-        {{ text == '1' ? '是' : '否' }}
+        {{ (text == '1' ? 'site.yes' : 'site.no') | trans  }}
       </span>
     </a-table>
   </div>
@@ -121,7 +121,7 @@ export default {
     },
 
     handleClickExport() {
-      // window.open(``);
+      window.open(`/task/${this.taskId}/live_statistic/roll_call/export?status=${this.status}`);
     }
   }
 }
