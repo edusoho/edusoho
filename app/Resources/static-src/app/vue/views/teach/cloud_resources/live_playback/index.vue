@@ -55,15 +55,15 @@
 
       <template slot="actions" slot-scope="record">
         <a-button-group>
-          <a-button type="primary" style="padding: 0 8px;">
+          <a-button type="primary" style="padding: 0 8px;" @click="handleClickEdit(record.id)">
             编辑
           </a-button>
           <a-dropdown placement="bottomRight">
             <a-menu slot="overlay">
-              <a-menu-item>
+              <a-menu-item @click="handleClickView(record.url)">
                 查看回放
               </a-menu-item>
-               <a-menu-item @click="showModal(record.id)">
+               <a-menu-item @click="handleClickRemove(record.id)">
                 移除回放
               </a-menu-item>
             </a-menu>
@@ -74,12 +74,18 @@
         </a-button-group>
       </template>
     </a-table>
+
+    <remove-modal ref="removeModal" @confirm="removeLivePlayback" />
+
+    <edit-modal ref="editModal" @confirm="editLivePlayback" />
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
 import { LiveReplay } from 'common/vue/service';
+import EditModal from './components/EditModal.vue';
+import RemoveModal from './components/RemoveModal.vue';
 
 const columns = [
   {
@@ -106,6 +112,11 @@ const columns = [
 
 export default {
   name: 'LivePlayback',
+
+  components: {
+    EditModal,
+    RemoveModal
+  },
 
   data() {
     return {
@@ -165,6 +176,26 @@ export default {
       this.loading = false;
       this.pagination.total = paging.total;
       this.data = data;
+    },
+
+    handleClickView(url) {
+      window.open(url);
+    },
+
+    handleClickEdit() {
+      this.$refs.editModal.showModal();
+    },
+
+    editLivePlayback() {
+
+    },
+
+    handleClickRemove() {
+      this.$refs.removeModal.showModal();
+    },
+
+    removeLivePlayback() {
+
     }
   }
 }
