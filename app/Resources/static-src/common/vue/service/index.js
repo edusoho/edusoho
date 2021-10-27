@@ -17,5 +17,6 @@ export * from './MultiClassInspection/index.js';
 // 接口规范
 export * from './WrongBook';
 export * from './TeacherQualification';
+export * from './LiveReplay';
 export * from './LiveStatistic';
 export * from './Classroom';
