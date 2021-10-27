@@ -29,7 +29,7 @@
       <template slot="checkinTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
 
       <span slot="checkin" slot-scope="text">
-        {{ text == '1' ? '是' : '否' }}
+        {{ (text == '1' ? 'site.yes' : 'site.no') | trans  }}
       </span>
     </a-table>
   </div>
