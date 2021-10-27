@@ -1856,10 +1856,19 @@ activity.replay_manage.replay_error_hint: Please select live replay
 # vue
 site.btn.export: Export
 site.btn.detail: More
+site.btn.remove_playback: Remove playback
+site.btn.view_playback: View playback
+site.btn.confirm: Confirm
+
+live.playback.tip.remove_association: Live playback will remove the association from the course
+live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
+live.playback.tip.delete_related_live_playback: At the same time, delete relevant live playback in my teaching materials
 
 course.name: Course title
 course.task: Task title
 
+live_name: Name
+live_playback_duration: Playback duration
 live_statistics: Live statistics
 live_statistics.task_name_placeholder: Task name
 live_statistics.live_start_time: Start time

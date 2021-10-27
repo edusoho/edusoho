@@ -1874,6 +1874,7 @@ course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 文件管理
+course.course_resource: 资源管理
 course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名

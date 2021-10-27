@@ -91,10 +91,10 @@
           data-intro-group="odd">
         {% if courseSet.locked %}
           <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
-            <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
+            <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_resource'|trans }}
           </a>
         {% else %}
-          <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">{{ 'course.course_files'|trans }}</a>
+          <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">{{ 'course.course_resource'|trans }}</a>
         {% endif %}
       </li>
     </div>
