@@ -118,6 +118,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
                 'discountId = :discountId',
+                'serializeMode = :serializeMode',
                 'minCoursePrice = :minCoursePrice',
                 'maxCoursePrice > :maxCoursePrice_GT',
                 'updatedTime >= :updatedTime_GE',
