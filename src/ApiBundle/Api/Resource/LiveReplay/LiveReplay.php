@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\User\Service\UserService;
@@ -53,6 +54,10 @@ class LiveReplay extends AbstractResource
         $ids = $request->request->get('ids');
         if (empty($ids)) {
             ActivityException::NOTFOUND_ACTIVITY();
+        }
+
+        if (!is_array($ids)) {
+            CommonException::FIELDS_FORMAT_ERROR();
         }
     }
 
