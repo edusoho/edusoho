@@ -166,8 +166,8 @@ class LiveReplay extends AbstractResource
         }
 
         if (isset($conditions['replayPublic']) && !empty($conditions['replayPublic'])) {
-            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
-            $activityPublicIds = ArrayToolkit::column($liveActivity, 'id');
+            $liveActivityPublic = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
+            $activityPublicIds = ArrayToolkit::column($liveActivityPublic, 'id');
             $activityIds = array_intersect($activityIds, $activityPublicIds);
         }
 
