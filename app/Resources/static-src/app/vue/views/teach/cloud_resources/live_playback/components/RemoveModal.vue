@@ -19,18 +19,22 @@
 </template>
 
 <script>
+import { LiveReplay } from 'common/vue/service';
+
 export default {
   name: 'RemoveModal',
 
   data() {
     return {
       visible: false,
-      confirmLoading: false
+      confirmLoading: false,
+      currentId: undefined
     }
   },
 
   methods: {
-    showModal() {
+    showModal(id) {
+      this.currentId = id;
       this.visible = true;
     },
 
@@ -38,8 +42,23 @@ export default {
       this.visible = false;
     },
 
-    handleOk() {
-      console.log('ok');
+    async handleOk() {
+      this.confirmLoading = true;
+      const params = {
+        params: {
+          ids: [this.currentId],
+          realDelete: false
+        }
+      };
+
+      const { success } = await LiveReplay.delete(params);
+
+      if (success) {
+        this.$message.success('移除成功');
+        this.confirmLoading = false;
+        this.visible = false;
+        this.$emit('success', this.currentId);
+      }
     }
   }
 }

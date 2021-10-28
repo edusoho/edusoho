@@ -69,7 +69,7 @@
       </template>
     </a-table>
 
-    <remove-modal ref="removeModal" />
+    <remove-modal ref="removeModal" @success="removeSuccess" />
 
     <edit-modal ref="editModal" :tags="tagData" />
   </div>
@@ -196,8 +196,17 @@ export default {
       this.$refs.editModal.showModal();
     },
 
-    handleClickRemove() {
-      this.$refs.removeModal.showModal();
+    handleClickRemove(id) {
+      this.$refs.removeModal.showModal(id);
+    },
+
+    removeSuccess(id) {
+      _.forEach(this.data, (item, index) => {
+        if (item.id === id) {
+          this.data.splice(index, 1);
+          return false;
+        }
+      });
     }
   }
 }

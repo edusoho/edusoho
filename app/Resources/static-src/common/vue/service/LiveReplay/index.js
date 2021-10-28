@@ -5,5 +5,9 @@ const baseUrl = '/api/live_replay';
 export const LiveReplay = {
   async get() {
     return apiClient.get(`${baseUrl}`);
+  },
+
+  async delete({ params }) {
+    return apiClient.delete(`${baseUrl}`, params);
   }
 }
