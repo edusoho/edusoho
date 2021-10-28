@@ -58,7 +58,6 @@ class LiveReplay extends AbstractResource
             ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        var_dump($ids);
         if (!is_array($ids)) {
             CommonException::FIELDS_FORMAT_ERROR();
         }
