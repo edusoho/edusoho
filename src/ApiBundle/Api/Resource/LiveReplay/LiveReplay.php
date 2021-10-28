@@ -51,7 +51,7 @@ class LiveReplay extends AbstractResource
 
     public function remove(ApiRequest $request)
     {
-        $ids = $request->request->get('ids');
+        $ids = $request->request->get('ids', []);
         $realDelete = $request->request->get('realDelete');
 
         if (empty($ids)) {
