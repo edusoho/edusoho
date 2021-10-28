@@ -107,7 +107,8 @@ export default {
       visible: false,
       btnLoading: false,
       currentId: undefined,
-      checked: false
+      checked: false,
+      courseId: $('.js-course-id').val()
     }
   },
 
@@ -128,7 +129,9 @@ export default {
       const params = {
         params: {
           offset: (current - 1) * pageSize,
-          limit: pageSize
+          limit: pageSize,
+          courseId: this.courseId
+
         }
       }
       const { data, paging } = await LiveReplay.get(params);
