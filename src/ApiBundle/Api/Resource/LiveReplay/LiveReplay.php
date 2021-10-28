@@ -52,6 +52,8 @@ class LiveReplay extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $ids = $request->request->get('ids');
+        $realDelete = $request->request->get('realDelete');
+
         if (empty($ids)) {
             ActivityException::NOTFOUND_ACTIVITY();
         }
@@ -59,6 +61,16 @@ class LiveReplay extends AbstractResource
         if (!is_array($ids)) {
             CommonException::FIELDS_FORMAT_ERROR();
         }
+
+        foreach ($ids as $id) {
+            if ($realDelete) {
+                $this->getLiveReplayService()->deleteReplayByLessonId($id);
+            } else {
+                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0]);
+            }
+        }
+
+        return ['success' => true];
     }
 
     protected function filterBaseFields($fields)
@@ -107,6 +119,7 @@ class LiveReplay extends AbstractResource
                     'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                     'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
                     'liveSecond' => $liveTime,
+                    'replayPublic' => $activity['ext']['replayPublic'],
                     'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
                     'url' => $this->generateUrl('custom_live_activity_replay_entry', [
                         'courseId' => $activity['fromCourseId'],
@@ -150,6 +163,12 @@ class LiveReplay extends AbstractResource
             $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByReplayTagId($conditions['tagId']);
             $activityTagIds = ArrayToolkit::column($liveActivity, 'id');
             $activityIds = array_intersect($activityIds, $activityTagIds);
+        }
+
+        if (isset($conditions['replayPublic']) && !empty($conditions['replayPublic'])) {
+            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
+            $activityPublicIds = ArrayToolkit::column($liveActivity, 'id');
+            $activityIds = array_intersect($activityIds, $activityPublicIds);
         }
 
         if (isset($conditions['keyword']) && !empty($conditions['keyword'])) {
