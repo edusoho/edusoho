@@ -7,22 +7,16 @@
 
       <a-form-model-item>
         <a-select v-model="searchForm.courseCategoryId" placeholder="课程分类" style="width: 200px;">
-          <a-select-option value="shanghai">
-            Zone one
-          </a-select-option>
-          <a-select-option value="beijing">
-            Zone two
+          <a-select-option v-for="category in categoryData" :key="category.id" :value="category.id">
+            {{ category.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
 
       <a-form-model-item>
         <a-select v-model="searchForm.replayTagId" placeholder="回放标签" style="width: 200px;">
-          <a-select-option value="shanghai">
-            Zone one
-          </a-select-option>
-          <a-select-option value="beijing">
-            Zone two
+          <a-select-option v-for="tag in tagData" :key="tag.id" :value="tag.id">
+            {{ tag.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -77,13 +71,13 @@
 
     <remove-modal ref="removeModal" @confirm="removeLivePlayback" />
 
-    <edit-modal ref="editModal" @confirm="editLivePlayback" />
+    <edit-modal ref="editModal" @confirm="editLivePlayback" :tags="tagData" />
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-import { LiveReplay } from 'common/vue/service';
+import { LiveReplay, CourseCategory, CourseTag } from 'common/vue/service';
 import EditModal from './components/EditModal.vue';
 import RemoveModal from './components/RemoveModal.vue';
 
@@ -134,15 +128,29 @@ export default {
         pageSize: 10,
         total: 0
       },
-      loading: false
+      loading: false,
+      categoryData: [],
+      tagData: []
     }
   },
 
   mounted() {
     this.fetchLiveReplay();
+    this.fetchCourseCategory();
+    this.fetchCourseTag();
   },
 
   methods: {
+    async fetchCourseCategory() {
+      const { data } = await CourseCategory.get();
+      this.categoryData = data;
+    },
+
+    async fetchCourseTag() {
+      const { data } = await CourseTag.get();
+      this.tagData = data;
+    },
+
     handleClickSearch() {
       const query = _.pickBy(this.searchForm, _.identity);
 
@@ -155,7 +163,8 @@ export default {
         delete query.time;
       }
 
-      console.log(query);
+      this.pagination.current = 1;
+      this.fetchLiveReplay(query);
     },
 
     handleTableChange(pagination) {
@@ -163,10 +172,11 @@ export default {
       this.fetchLiveReplay();
     },
 
-    async fetchLiveReplay() {
+    async fetchLiveReplay(query = {}) {
       this.loading = true;
       const { current, pageSize } = this.pagination;
       const params = {
+        query,
         params: {
           offset: (current - 1) * pageSize,
           limit: pageSize
