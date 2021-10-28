@@ -6,7 +6,7 @@
     @ok="handleOk"
     @cancel="handleCancel"
   >
-    <a-form-model :model="form" :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }">
+    <a-form-model ref="form" :model="form" :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }">
       <a-form-model-item label="标签">
         <a-select v-model="form.tag" placeholder="回放标签">
           <a-select-option v-for="tag in tags" :key="tag.id" :value="tag.id">
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { LiveReplay } from 'common/vue/service';
+
 export default {
   name: 'EditModal',
 
@@ -53,7 +55,9 @@ export default {
   },
 
   methods: {
-    showModal() {
+    showModal({ id, replayPublic }) {
+      this.form.id = id;
+      this.form.replayPublic = replayPublic;
       this.visible = true;
     },
 
@@ -61,8 +65,22 @@ export default {
       this.visible = false;
     },
 
-    handleOk() {
-      console.log('ok');
+    async handleOk() {
+      this.confirmLoading = true;
+      const params = {
+        query: {
+          id: this.form.id
+        },
+        params: this.form
+      };
+      const { success } = await LiveReplay.update(params);
+
+      if (success) {
+        this.$message.success('编辑成功');
+        this.confirmLoading = false;
+        this.visible = false;
+        this.$emit('success', this.form);
+      }
     }
   }
 }

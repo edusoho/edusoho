@@ -49,7 +49,7 @@
 
       <template slot="actions" slot-scope="record">
         <a-button-group>
-          <a-button type="primary" style="padding: 0 8px;" @click="handleClickEdit(record.id)">
+          <a-button type="primary" style="padding: 0 8px;" @click="handleClickEdit(record)">
             编辑
           </a-button>
           <a-dropdown placement="bottomRight">
@@ -71,7 +71,7 @@
 
     <remove-modal ref="removeModal" @success="removeSuccess" />
 
-    <edit-modal ref="editModal" :tags="tagData" />
+    <edit-modal ref="editModal" :tags="tagData" @success="editSuccess" />
   </div>
 </template>
 
@@ -192,8 +192,8 @@ export default {
       window.open(url);
     },
 
-    handleClickEdit() {
-      this.$refs.editModal.showModal();
+    handleClickEdit(params) {
+      this.$refs.editModal.showModal(params);
     },
 
     handleClickRemove(id) {
@@ -204,6 +204,16 @@ export default {
       _.forEach(this.data, (item, index) => {
         if (item.id === id) {
           this.data.splice(index, 1);
+          return false;
+        }
+      });
+    },
+
+    editSuccess(params) {
+      const { id, replayPublic } = params;
+      _.forEach(this.data, (item, index) => {
+        if (item.id === id) {
+          item.replayPublic = replayPublic;
           return false;
         }
       });
