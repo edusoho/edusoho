@@ -69,9 +69,9 @@
       </template>
     </a-table>
 
-    <remove-modal ref="removeModal" @confirm="removeLivePlayback" />
+    <remove-modal ref="removeModal" />
 
-    <edit-modal ref="editModal" @confirm="editLivePlayback" :tags="tagData" />
+    <edit-modal ref="editModal" :tags="tagData" />
   </div>
 </template>
 
@@ -196,16 +196,8 @@ export default {
       this.$refs.editModal.showModal();
     },
 
-    editLivePlayback() {
-
-    },
-
     handleClickRemove() {
       this.$refs.removeModal.showModal();
-    },
-
-    removeLivePlayback() {
-
     }
   }
 }
