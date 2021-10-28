@@ -1906,3 +1906,8 @@ live_statistics.answers_number: Number of answers
 live_statistics.to: to
 live_statistics.people: people
 live_statistics.strip: strip
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn: UnShare
+course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
+course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
+course.live_replay.delete_tip:  Please confirm to remove this live playback？

@@ -23,3 +23,38 @@
     }
   }
 }
+
+.material-live-btn-group {
+  height: 30px;
+  background: #fff;
+  margin-bottom: 20px;
+  ul {
+    height: 100%;
+    padding: 0px !important;
+    li{
+      &:first-child {
+        border-radius: 4px 0px 0px 4px
+      }
+      &:last-child {
+        border-radius: 0px 4px 4px 0px
+      }
+      a {
+        color: #333 !important;
+      }
+      list-style-type: none;
+      float: left;
+      padding: 4px 15px;
+      font-size: 14px;
+      border: 1px solid #d7d7d7;
+    }
+    .active{
+      padding: 5px 15px;
+      border: 0px solid #fff;
+      background: @brand-primary;
+      a {
+        color: #fff !important;
+      }
+    }
+
+  }
+}

@@ -13,13 +13,19 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     {
         return [
             'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json', 'cloudStatisticData' => 'json'],
+            'orderbys' => ['liveStartTime', 'liveEndTime', 'id'],
             'conditions' => [
                 'id IN (:ids)',
                 'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
+                'replayPublic = :replayPublic',
+                'replayTagId = :replayTagId',
+                'anchorId = :anchorId',
                 'progressStatus != :progressStatusNotEqual',
                 'progressStatus = :progressStatus',
+                'liveStartTime >= :liveStartTime_GT',
+                'liveEndTime <= :liveEndTime_LT',
                 /*S2B2C 增加syncId*/
                 'syncId = :syncId',
                 'syncId in (:syncIds)',

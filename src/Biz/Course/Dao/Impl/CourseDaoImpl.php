@@ -80,6 +80,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->findInField('id', $ids);
     }
 
+    public function findCoursesByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
+    }
+
     public function findPriceIntervalByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {

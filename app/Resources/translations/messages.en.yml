@@ -10798,3 +10798,11 @@ course.live_replay_manage.lesson_title_th: Live lesson title
 course.live_replay_manage.live_length_th: Live length
 course.live_replay_manage.live_anchor_th: Live anchor
 course.live_replay_manage.live_time_th: Live time
+course.live_replay.tag_select_default: Replay tag
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn:  UnShare
+course.live_replay.remove_btn: Remove
+course.live_replay.title: Live Title
+course.live_replay.teacher: Teacher
+course.live_replay.length: length
+course.live_replay.start_time: Start Time

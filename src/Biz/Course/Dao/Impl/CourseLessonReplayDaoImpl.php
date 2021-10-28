@@ -17,6 +17,8 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
             'conditions' => [
                 'courseId = :courseId',
                 'lessonId = :lessonId',
+                'courseId in (:courseIds)',
+                'lessonId in (:lessonIds)',
                 'hidden = :hidden',
                 'copyId = :copyId',
                 'type = :type',
