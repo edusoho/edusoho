@@ -12,6 +12,7 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
+      :row-key="record => record.id"
       :data-source="data"
       :pagination="pagination"
       :loading="loading"
@@ -105,7 +106,7 @@ export default {
       loading: false,
       visible: false,
       btnLoading: false,
-      currentId: 0,
+      currentId: undefined,
       checked: false
     }
   },
@@ -146,7 +147,7 @@ export default {
     },
 
     showModal(id) {
-      this.currentId = id;
+      this.currentId = [id];
       this.visible = true;
     },
 
@@ -155,16 +156,27 @@ export default {
     },
 
     handleClickRemove() {
-
+      this.currentId = this.selectedRowKeys;
+      this.visible = true;
     },
 
-    handleClickRemoveLivePlayback() {
+    async handleClickRemoveLivePlayback() {
       this.btnLoading = true;
 
-      setInterval( () => {
-        this.visible = false;
+      const params = {
+        ids: this.currentId,
+        realDelete: this.checked
+      }
+
+      const { success } = await LiveReplay.delete(params);
+
+      if (success) {
+        this.$message.success('移除成功');
         this.btnLoading = false;
-      }, 3000);
+        this.visible = false;
+        this.pagination.current = 1;
+        this.fetchLiveReplay();
+      }
     },
 
     handleChange(e) {
