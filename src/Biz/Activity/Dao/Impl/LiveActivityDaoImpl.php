@@ -12,7 +12,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function declares()
     {
         return [
-            'serializes' => ['fileIds' => 'json', 'coursewareIds' => 'json', 'cloudStatisticData' => 'json'],
+            'serializes' => ['replayTagIds' => 'delimiter', 'fileIds' => 'json', 'coursewareIds' => 'json', 'cloudStatisticData' => 'json'],
             'orderbys' => ['liveStartTime', 'liveEndTime', 'id'],
             'conditions' => [
                 'id IN (:ids)',
@@ -20,7 +20,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
                 'replayPublic = :replayPublic',
-                'replayTagId = :replayTagId',
+                'replayTagIds like :replayTagIds',
                 'anchorId = :anchorId',
                 'progressStatus != :progressStatusNotEqual',
                 'progressStatus = :progressStatus',
@@ -57,7 +57,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
 
     public function findLiveActivitiesByReplayTagId($tagId)
     {
-        return $this->findByFields(['replayTagId' => $tagId, 'replayStatus' => 'generated']);
+        return $this->findByFields(['replayTagIds' => '%|'.$tagId.'|%', 'replayStatus' => 'generated']);
     }
 
     public function getByLiveId($liveId)

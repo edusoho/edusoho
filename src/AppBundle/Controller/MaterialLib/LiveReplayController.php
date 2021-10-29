@@ -64,13 +64,38 @@ class LiveReplayController extends BaseController
         return $this->createJsonResponse(['status' => true, 'message' => '操作成功']);
     }
 
+    public function editAction(Request $request, $liveActivityId)
+    {
+        $live = $this->getLiveActivityService()->getLiveActivity($liveActivityId);
+        if ($live['anchorId'] != $this->getCurrentUser()->getId()) {
+            return $this->createJsonResponse(['status' => false, 'message' => '你无权进行设置！']);
+        }
+        if ('POST' == $request->getMethod()) {
+            $tags = $request->request->get('tags', '');
+            $tagIds = empty($tags) ? [] : explode(',', $tags);
+            $this->getLiveActivityService()->updateLiveReplayTags($liveActivityId, $tagIds);
+
+            return $this->createJsonpResponse(true);
+        }
+        $tags = $this->getTagService()->findTagsByIds($live['replayTagIds']);
+        $data = [];
+        foreach ($tags as $tag) {
+            $data[] = ['id' => $tag['id'], 'name' => $tag['name']];
+        }
+
+        return $this->render('material-lib/web/live-replay/update.html.twig', [
+            'tags' => $data,
+            'live' => $live,
+        ]);
+    }
+
     public function removeAction(Request $request, $liveActivityId)
     {
         $live = $this->getLiveActivityService()->getLiveActivity($liveActivityId);
         if ($live['anchorId'] != $this->getCurrentUser()->getId()) {
             return $this->createJsonResponse(['status' => false, 'message' => '你无权进行设置！']);
         }
-//        $this->getLiveActivityService()->removeLiveReplay($liveActivityId);
+        $this->getLiveActivityService()->removeLiveReplay($liveActivityId);
 
         return $this->createJsonResponse(['status' => true, 'message' => '操作成功']);
     }
@@ -117,7 +142,7 @@ class LiveReplayController extends BaseController
         $activities = $this->getActivityService()->search($activityConditions, [], 0, PHP_INT_MAX, ['id', 'mediaId']);
         $activityLiveIds = empty($activities) ? [-1] : ArrayToolkit::column($activities, 'mediaId');
 
-        return array_merge($liveConditions, ['ids' => $activityLiveIds, 'replayTagId' => empty($conditions['tagId']) ? 0 : $conditions['tagId']]);
+        return array_merge($liveConditions, ['ids' => $activityLiveIds, 'replayTagIds' => empty($conditions['tagId']) ? '' : '%|'.$conditions['tagId'].'|%']);
     }
 
     protected function buildTagSelectData()

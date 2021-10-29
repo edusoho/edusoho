@@ -258,6 +258,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->update($id, ['replayPublic' => 0]);
     }
 
+    public function updateLiveReplayTags($id, $tagIds)
+    {
+        return $this->getLiveActivityDao()->update($id, ['replayTagIds' => $tagIds]);
+    }
+
     public function removeLiveReplay($id)
     {
         $liveActivity = $this->getLiveActivityDao()->update($id, ['replayPublic' => 0, 'replayStatus' => 'ungenerated']);

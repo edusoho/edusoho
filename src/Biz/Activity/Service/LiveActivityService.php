@@ -48,6 +48,8 @@ interface LiveActivityService
 
     public function unShareLiveReplay($id);
 
+    public function updateLiveReplayTags($id, $tagIds);
+
     public function removeLiveReplay($id);
 
     public function canUpdateRoomType($liveStartTime);
