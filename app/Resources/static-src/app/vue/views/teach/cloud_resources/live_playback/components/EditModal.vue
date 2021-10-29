@@ -6,10 +6,22 @@
     @ok="handleOk"
     @cancel="handleCancel"
   >
-    <a-form-model ref="form" :model="form" :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }">
+    <a-form-model
+      :model="form"
+      :labelCol="{ span: 4 }"
+      :wrapperCol="{ span: 20 }"
+    >
       <a-form-model-item :label="'form.label.tag' | trans">
-        <a-select v-model="form.tag" :placeholder="'placeholder.playback_label' | trans">
-          <a-select-option v-for="tag in tags" :key="tag.id" :value="tag.id">
+        <a-select
+          mode="multiple"
+          v-model="form.tag"
+          :placeholder="'placeholder.playback_label' | trans"
+        >
+          <a-select-option
+            v-for="tag in tags"
+            :key="tag.id"
+            :value="tag.id"
+          >
             {{ tag.name }}
           </a-select-option>
         </a-select>
