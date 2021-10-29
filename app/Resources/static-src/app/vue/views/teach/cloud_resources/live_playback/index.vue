@@ -61,12 +61,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="customTitle">{{ 'live_name' | trans }}</template>
-      <template slot="anchorTitle">{{ 'live_statistics.presenter' | trans }}</template>
-      <template slot="liveTimeTitle">{{ 'live_playback_duration' | trans }}</template>
-      <template slot="liveStartTimeTitle">{{ 'live_statistics.live_time' | trans }}</template>
-      <template slot="actionsTitle">{{ 'live_statistics.operation' | trans }}</template>
-
       <template slot="actions" slot-scope="record">
         <a-button-group>
           <a-button type="primary" style="padding: 0 8px;" @click="handleClickEdit(record)">
@@ -103,23 +97,23 @@ import RemoveModal from './components/RemoveModal.vue';
 
 const columns = [
   {
-    dataIndex: 'title',
-    slots: { title: 'customTitle' }
+    title: Translator.trans('live_name'),
+    dataIndex: 'title'
   },
   {
-    dataIndex: 'anchor',
-    slots: { title: 'anchorTitle' }
+    title: Translator.trans('live_statistics.presenter'),
+    dataIndex: 'anchor'
   },
   {
-    dataIndex: 'liveTime',
-    slots: { title: 'liveTimeTitle' }
+    title: Translator.trans('live_playback_duration'),
+    dataIndex: 'liveTime'
   },
   {
-    dataIndex: 'liveStartTime',
-    slots: { title: 'liveStartTimeTitle' }
+    title: Translator.trans('live_statistics.live_time'),
+    dataIndex: 'liveStartTime'
   },
   {
-    slots: { title: 'actionsTitle' },
+    title: Translator.trans('live_statistics.operation'),
     scopedSlots: { customRender: 'actions' }
   }
 ];
