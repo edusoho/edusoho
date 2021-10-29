@@ -1,14 +1,14 @@
 <template>
   <a-modal
-    title="编辑"
+    :title="'modal.title.edit' | trans"
     :visible="visible"
     :confirm-loading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
     <a-form-model ref="form" :model="form" :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }">
-      <a-form-model-item label="标签">
-        <a-select v-model="form.tag" placeholder="回放标签">
+      <a-form-model-item :label="'form.label.tag' | trans">
+        <a-select v-model="form.tag" :placeholder="'placeholder.playback_label' | trans">
           <a-select-option v-for="tag in tags" :key="tag.id" :value="tag.id">
             {{ tag.name }}
           </a-select-option>
@@ -18,10 +18,10 @@
       <a-form-model-item label="分享">
         <a-radio-group v-model="form.replayPublic">
           <a-radio value="1" class="mt8">
-            共享到直播回放（其他老师可以查看、预览、引用该回放）
+            {{ 'radio.share_to_live_playback' | trans }}
           </a-radio>
           <a-radio value="0" class="mt8">
-            仅自己可见
+            {{ 'radio.visible_only_to_yourself' | trans }}
           </a-radio>
         </a-radio-group>
       </a-form-model-item>
@@ -76,7 +76,7 @@ export default {
       const { success } = await LiveReplay.update(params);
 
       if (success) {
-        this.$message.success('编辑成功');
+        this.$message.success(Translator.trans('message.edit_succeeded'));
         this.confirmLoading = false;
         this.visible = false;
         this.$emit('success', this.form);

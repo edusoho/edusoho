@@ -174,7 +174,7 @@ export default {
       const { success } = await LiveReplay.delete(params);
 
       if (success) {
-        this.$message.success('移除成功');
+        this.$message.success(Translator.trans('message.removal_succeeded'));
         this.btnLoading = false;
         this.visible = false;
         this.pagination.current = 1;

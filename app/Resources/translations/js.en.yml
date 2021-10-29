@@ -1860,6 +1860,20 @@ site.btn.remove_playback: Remove playback
 site.btn.view_playback: View playback
 site.btn.confirm: Confirm
 
+modal.title.edit: Edit
+modal.content.remove_playback_resources: Are you sure to remove playback resources?
+
+form.label.tag: Tag
+form.label.share : Share
+
+placeholder.playback_label: Playback labe
+
+radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
+radio.visible_only_to_yourself: Visible only to yourself
+
+message.removal_succeeded: Removal succeeded
+message.edit_succeeded: Edit succeeded
+
 live.playback.tip.remove_association: Live playback will remove the association from the course
 live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
 live.playback.tip.delete_related_live_playback: At the same time, delete relevant live playback in my teaching materials

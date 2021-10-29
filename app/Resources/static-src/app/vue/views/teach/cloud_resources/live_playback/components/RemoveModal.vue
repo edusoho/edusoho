@@ -4,7 +4,7 @@
     :visible="visible"
     @cancel="handleCancel"
   >
-    是否确认移除回放资源？
+    {{ 'modal.content.remove_playback_resources' | trans }}
     <template slot="footer">
       <div class="clearfix">
         <span class="pull-left" style="color: #fe4040; margin-top: 7px;">
@@ -54,7 +54,7 @@ export default {
       const { success } = await LiveReplay.delete(params);
 
       if (success) {
-        this.$message.success('移除成功');
+        this.$message.success(Translator.trans('message.removal_succeeded'));
         this.confirmLoading = false;
         this.visible = false;
         this.$emit('success', this.currentId);
