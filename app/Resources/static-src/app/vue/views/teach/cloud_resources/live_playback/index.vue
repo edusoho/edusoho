@@ -1,33 +1,53 @@
 <template>
   <div>
     <a-form-model class="mt16" layout="inline" :model="searchForm">
-      <a-form-model-item label="时间">
+      <a-form-model-item :label="'site.time' | trans" >
         <a-range-picker v-model="searchForm.time" />
       </a-form-model-item>
 
       <a-form-model-item>
-        <a-select v-model="searchForm.courseCategoryId" placeholder="课程分类" style="width: 200px;">
-          <a-select-option v-for="category in categoryData" :key="category.id" :value="category.id">
+        <a-select
+          v-model="searchForm.courseCategoryId"
+          :placeholder="'placeholder.course_category' | trans"
+          style="width: 200px;"
+        >
+          <a-select-option
+            v-for="category in categoryData"
+            :key="category.id"
+            :value="category.id"
+          >
             {{ category.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
 
       <a-form-model-item>
-        <a-select v-model="searchForm.replayTagId" placeholder="回放标签" style="width: 200px;">
-          <a-select-option v-for="tag in tagData" :key="tag.id" :value="tag.id">
+        <a-select
+          v-model="searchForm.replayTagId"
+          :placeholder="'placeholder.playback_label' | trans"
+          style="width: 200px;"
+        >
+          <a-select-option
+            v-for="tag in tagData"
+            :key="tag.id"
+            :value="tag.id"
+          >
             {{ tag.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
 
       <a-form-model-item>
-        <a-input v-model="searchForm.keyword" placeholder="请输入关键字" style="width: 200px;" />
+        <a-input
+          v-model="searchForm.keyword"
+          :placeholder="'placeholder.enter_keyword' | trans"
+          style="width: 200px;"
+        />
       </a-form-model-item>
 
       <a-form-model-item>
         <a-button type="primary" @click="handleClickSearch">
-          搜索
+          {{ 'site.search_hint' | trans }}
         </a-button>
       </a-form-model-item>
     </a-form-model>
@@ -41,24 +61,24 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="customTitle">直播名称</template>
-      <template slot="anchorTitle">主讲人</template>
-      <template slot="liveTimeTitle">回放时长</template>
-      <template slot="liveStartTimeTitle">直播时间</template>
-      <template slot="actionsTitle">操作</template>
+      <template slot="customTitle">{{ 'live_name' | trans }}</template>
+      <template slot="anchorTitle">{{ 'live_statistics.presenter' | trans }}</template>
+      <template slot="liveTimeTitle">{{ 'live_playback_duration' | trans }}</template>
+      <template slot="liveStartTimeTitle">{{ 'live_statistics.live_time' | trans }}</template>
+      <template slot="actionsTitle">{{ 'live_statistics.operation' | trans }}</template>
 
       <template slot="actions" slot-scope="record">
         <a-button-group>
           <a-button type="primary" style="padding: 0 8px;" @click="handleClickEdit(record)">
-            编辑
+            {{ 'modal.title.edit' | trans }}
           </a-button>
           <a-dropdown placement="bottomRight">
             <a-menu slot="overlay">
               <a-menu-item @click="handleClickView(record.url)">
-                查看回放
+                {{ 'site.btn.view_playback' | trans }}
               </a-menu-item>
                <a-menu-item @click="handleClickRemove(record.id)">
-                移除回放
+                {{ 'site.btn.remove_playback' | trans }}
               </a-menu-item>
             </a-menu>
             <a-button type="primary" style="padding: 0 8px;">

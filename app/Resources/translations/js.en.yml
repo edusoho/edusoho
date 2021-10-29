@@ -1867,6 +1867,8 @@ form.label.tag: Tag
 form.label.share : Share
 
 placeholder.playback_label: Playback labe
+placeholder.enter_keyword: Please enter keyword
+placeholder.course_category: Course category
 
 radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
 radio.visible_only_to_yourself: Visible only to yourself
