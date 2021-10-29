@@ -8,10 +8,10 @@ export const LiveReplay = {
   },
 
   async delete({ params }) {
-    return apiClient.delete(`${baseUrl}`, params);
+    return apiClient.delete(`${baseUrl}`, { data: params });
   },
 
   async update({ query, params }) {
-    return apiClient.patch(`${baseUrl}/${query.id}`, {  params });
+    return apiClient.patch(`${baseUrl}/${query.id}`, { params });
   }
 }

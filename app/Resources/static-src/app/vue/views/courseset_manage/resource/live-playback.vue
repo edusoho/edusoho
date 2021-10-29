@@ -161,8 +161,10 @@ export default {
       this.btnLoading = true;
 
       const params = {
-        ids: this.currentId,
-        realDelete: this.checked
+        params: {
+          ids: this.currentId,
+          realDelete: this.checked
+        }
       }
 
       const { success } = await LiveReplay.delete(params);
