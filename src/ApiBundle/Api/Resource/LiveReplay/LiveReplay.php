@@ -44,7 +44,7 @@ class LiveReplay extends AbstractResource
         }
 
         if (!empty($fields['replayPublic'])) {
-            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['remark']], $activity);
+            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['replayPublic']], $activity);
         }
 
         return ['success' => true];
