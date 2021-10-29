@@ -27,7 +27,7 @@ class FactoryReturnTypePass implements CompilerPassInterface
     public function __construct(ResolveClassPass $resolveClassPass = null)
     {
         if (null === $resolveClassPass) {
-            @trigger_error('The '.__CLASS__.' class is deprecated since Symfony 3.3 and will be removed in 4.0.', E_USER_DEPRECATED);
+            @trigger_error('The '.__CLASS__.' class is deprecated since Symfony 3.3 and will be removed in 4.0.', \E_USER_DEPRECATED);
         }
         $this->resolveClassPass = $resolveClassPass;
     }
@@ -93,7 +93,7 @@ class FactoryReturnTypePass implements CompilerPassInterface
 
         $returnType = $m->getReturnType();
         if (null !== $returnType && !$returnType->isBuiltin()) {
-            $returnType = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : $returnType->__toString();
+            $returnType = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
             if (null !== $class) {
                 $declaringClass = $m->getDeclaringClass()->getName();
                 if ('self' === strtolower($returnType)) {
@@ -104,7 +104,7 @@ class FactoryReturnTypePass implements CompilerPassInterface
             }
 
             if (null !== $returnType && (!isset($resolveClassPassChanges[$id]) || $returnType !== $resolveClassPassChanges[$id])) {
-                @trigger_error(sprintf('Relying on its factory\'s return-type to define the class of service "%s" is deprecated since Symfony 3.3 and won\'t work in 4.0. Set the "class" attribute to "%s" on the service definition instead.', $id, $returnType), E_USER_DEPRECATED);
+                @trigger_error(sprintf('Relying on its factory\'s return-type to define the class of service "%s" is deprecated since Symfony 3.3 and won\'t work in 4.0. Set the "class" attribute to "%s" on the service definition instead.', $id, $returnType), \E_USER_DEPRECATED);
             }
             $definition->setClass($returnType);
         }

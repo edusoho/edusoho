@@ -23,11 +23,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="nicknameTitle">{{ 'live_statistics.user_name' | trans }}</template>
-      <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
-      <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
-      <template slot="checkinTitle">{{ 'live_statistics.checkin_status' | trans }}</template>
-
       <span slot="checkin" slot-scope="text">
         {{ (text == '1' ? 'site.yes' : 'site.no') | trans  }}
       </span>
@@ -40,24 +35,20 @@ import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'nickname',
-    key: 'nickname',
-    slots: { title: 'nicknameTitle' }
+    title: Translator.trans('live_statistics.user_name'),
+    dataIndex: 'nickname'
   },
   {
-    dataIndex: 'mobile',
-    key: 'mobile',
-    slots: { title: 'mobileTitle' }
+    title: Translator.trans('live_statistics.mobile'),
+    dataIndex: 'mobile'
   },
   {
-    dataIndex: 'email',
-    key: 'email',
-    slots: { title: 'emailTitle' }
+    title: Translator.trans('live_statistics.email'),
+    dataIndex: 'email'
   },
   {
+    title: Translator.trans('live_statistics.checkin_status'),
     dataIndex: 'checkin',
-    key: 'checkin',
-    slots: { title: 'checkinTitle' },
     scopedSlots: { customRender: 'checkin' }
   }
 ];

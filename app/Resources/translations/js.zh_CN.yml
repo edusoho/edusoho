@@ -767,6 +767,7 @@ validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【教学】-【分类标签】-【标签管理】进行设置。
 validate.tag_number_exceeds_limit: 你只能添加%limit%个项目
+validate.teacher_number_exceeds_limit: 你只能添加%limit%个教师
 validate.title_required_hint: 请输入标题，不能为空。
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -1814,6 +1815,22 @@ site.btn.detail: 详情
 site.btn.remove_playback: 移除回放
 site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
+
+modal.title.edit: 编辑
+modal.content.remove_playback_resources: 是否确认移除回放资源？
+
+form.label.tag: 标签
+form.label.share: 分享
+
+placeholder.playback_label: 回放标签
+placeholder.enter_keyword: 请输入关键字
+placeholder.course_category: 课程分类
+
+radio.share_to_live_playback: 共享到直播回放（其他老师可以查看、预览、引用该回放）
+radio.visible_only_to_yourself: 仅自己可见
+
+message.removal_succeeded: 移除成功
+message.edit_succeeded: 编辑成功
 
 live.playback.tip.remove_association: 直播回放将从该课程中移除关联
 live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用

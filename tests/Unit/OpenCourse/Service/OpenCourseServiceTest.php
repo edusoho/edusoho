@@ -125,6 +125,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'recommendedTime' => '0',
             'orgId' => '1',
             'orgCode' => '1.',
+            'replayEnable' => 1,
         ];
 
         $created = $this->getOpenCourseService()->createCourse($course);
@@ -1485,13 +1486,13 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
-    public function testSearchAndSortLiveCourses_ConditionsEmpty()
+    public function testSearchAndSortLiveCoursesConditionsEmpty()
     {
         $result = $this->getOpenCourseService()->searchAndSortLiveCourses([], 0, 1);
         $this->assertEmpty($result);
     }
 
-    public function testSearchAndSortLiveCourses_CoursesEmpty()
+    public function testSearchAndSortLiveCoursesCoursesEmpty()
     {
         $course = $this->_createLiveOpenCourse();
         $lesson = $this->_createOpenLiveCourseLesson($course);

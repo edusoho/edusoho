@@ -114,6 +114,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'length',
             'authUrl',
             'jumpUrl',
+            'replayEnable',
         ]);
 
         return $fields;
@@ -149,6 +150,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime',
             'orgId',
             'orgCode',
+            'replayEnable',
         ]);
 
         $courseFields = $this->_filterCourseFields($courseFields);
@@ -1092,6 +1094,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime' => time(),
             'orgCode' => '1.',
             'orgId' => '1',
+            'replayEnable' => 0,
         ]);
 
         if (isset($fields['tags'])) {

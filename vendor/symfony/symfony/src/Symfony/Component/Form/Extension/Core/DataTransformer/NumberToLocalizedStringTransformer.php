@@ -143,16 +143,16 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (!\is_string($value)) {
+        if (null !== $value && !\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
         }
 
-        if ('' === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
         if (\in_array($value, ['NaN', 'NAN', 'nan'], true)) {
-            throw new TransformationFailedException('"NaN" is not a valid number');
+            throw new TransformationFailedException('"NaN" is not a valid number.');
         }
 
         $position = 0;
@@ -171,7 +171,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
         if (false !== strpos($value, $decSep)) {
             $type = \NumberFormatter::TYPE_DOUBLE;
         } else {
-            $type = PHP_INT_SIZE === 8
+            $type = \PHP_INT_SIZE === 8
                 ? \NumberFormatter::TYPE_INT64
                 : \NumberFormatter::TYPE_INT32;
         }
@@ -182,8 +182,8 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException($formatter->getErrorMessage());
         }
 
-        if ($result >= PHP_INT_MAX || $result <= -PHP_INT_MAX) {
-            throw new TransformationFailedException('I don\'t have a clear idea what infinity looks like');
+        if ($result >= \PHP_INT_MAX || $result <= -\PHP_INT_MAX) {
+            throw new TransformationFailedException('I don\'t have a clear idea what infinity looks like.');
         }
 
         $result = $this->castParsedValue($result);
@@ -204,7 +204,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
             $remainder = trim($remainder, " \t\n\r\0\x0b\xc2\xa0");
 
             if ('' !== $remainder) {
-                throw new TransformationFailedException(sprintf('The number contains unrecognized characters: "%s"', $remainder));
+                throw new TransformationFailedException(sprintf('The number contains unrecognized characters: "%s".', $remainder));
             }
         }
 
@@ -272,13 +272,13 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
                     $number = $number > 0 ? floor($number) : ceil($number);
                     break;
                 case self::ROUND_HALF_EVEN:
-                    $number = round($number, 0, PHP_ROUND_HALF_EVEN);
+                    $number = round($number, 0, \PHP_ROUND_HALF_EVEN);
                     break;
                 case self::ROUND_HALF_UP:
-                    $number = round($number, 0, PHP_ROUND_HALF_UP);
+                    $number = round($number, 0, \PHP_ROUND_HALF_UP);
                     break;
                 case self::ROUND_HALF_DOWN:
-                    $number = round($number, 0, PHP_ROUND_HALF_DOWN);
+                    $number = round($number, 0, \PHP_ROUND_HALF_DOWN);
                     break;
             }
 

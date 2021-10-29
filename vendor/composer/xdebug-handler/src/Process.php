@@ -12,59 +12,12 @@
 namespace Composer\XdebugHandler;
 
 /**
- * Provides utility functions to prepare a child process command-line and set
- * environment variables in that process.
+ * Process utility functions
  *
  * @author John Stevenson <john-stevenson@blueyonder.co.uk>
- * @internal
  */
 class Process
 {
-    /**
-     * Returns an array of parameters, including a color option if required
-     *
-     * A color option is needed because child process output is piped.
-     *
-     * @param array $args The script parameters
-     * @param string $colorOption The long option to force color output
-     *
-     * @return array
-     */
-    public static function addColorOption(array $args, $colorOption)
-    {
-        if (!$colorOption
-            || in_array($colorOption, $args)
-            || !preg_match('/^--([a-z]+$)|(^--[a-z]+=)/', $colorOption, $matches)) {
-            return $args;
-        }
-
-        if (isset($matches[2])) {
-            // Handle --color(s)= options
-            if (false !== ($index = array_search($matches[2].'auto', $args))) {
-                $args[$index] = $colorOption;
-                return $args;
-            } elseif (preg_grep('/^'.$matches[2].'/', $args)) {
-                return $args;
-            }
-        } elseif (in_array('--no-'.$matches[1], $args)) {
-            return $args;
-        }
-
-        // Check for NO_COLOR variable (https://no-color.org/)
-        if (false !== getenv('NO_COLOR')) {
-            return $args;
-        }
-
-        if (false !== ($index = array_search('--', $args))) {
-            // Position option before double-dash delimiter
-            array_splice($args, $index, 0, $colorOption);
-        } else {
-            $args[] = $colorOption;
-        }
-
-        return $args;
-    }
-
     /**
      * Escapes a string to be used as a shell argument.
      *
@@ -109,53 +62,33 @@ class Process
     }
 
     /**
-     * Returns true if the output stream supports colors
+     * Escapes an array of arguments that make up a shell command
      *
-     * This is tricky on Windows, because Cygwin, Msys2 etc emulate pseudo
-     * terminals via named pipes, so we can only check the environment.
+     * @param array $args Argument list, with the module name first
      *
-     * @param mixed $output A valid CLI output stream
-     *
-     * @return bool
+     * @return string The escaped command line
      */
-    public static function supportsColor($output)
+    public static function escapeShellCommand(array $args)
     {
-        if ('Hyper' === getenv('TERM_PROGRAM')) {
-            return true;
+        $cmd = self::escape(array_shift($args), true, true);
+        foreach ($args as $arg) {
+            $cmd .= ' '.self::escape($arg);
         }
 
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
-            return (function_exists('sapi_windows_vt100_support')
-                && sapi_windows_vt100_support($output))
-                || false !== getenv('ANSICON')
-                || 'ON' === getenv('ConEmuANSI')
-                || 'xterm' === getenv('TERM');
-        }
-
-        if (function_exists('stream_isatty')) {
-            return stream_isatty($output);
-        }
-
-        if (function_exists('posix_isatty')) {
-            return posix_isatty($output);
-        }
-
-        $stat = fstat($output);
-        // Check if formatted mode is S_IFCHR
-        return $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
+        return $cmd;
     }
 
     /**
      * Makes putenv environment changes available in $_SERVER and $_ENV
      *
      * @param string $name
-     * @param string|false $value A false value unsets the variable
+     * @param string|null $value A null value unsets the variable
      *
      * @return bool Whether the environment variable was set
      */
-    public static function setEnv($name, $value = false)
+    public static function setEnv($name, $value = null)
     {
-        $unset = false === $value;
+        $unset = null === $value;
 
         if (!putenv($unset ? $name : $name.'='.$value)) {
             return false;

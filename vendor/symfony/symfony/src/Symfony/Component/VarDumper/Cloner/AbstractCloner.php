@@ -102,7 +102,6 @@ abstract class AbstractCloner implements ClonerInterface
         'SplDoublyLinkedList' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castDoublyLinkedList'],
         'SplFileInfo' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castFileInfo'],
         'SplFileObject' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castFileObject'],
-        'SplFixedArray' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castFixedArray'],
         'SplHeap' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castHeap'],
         'SplObjectStorage' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castObjectStorage'],
         'SplPriorityQueue' => ['Symfony\Component\VarDumper\Caster\SplCaster', 'castHeap'],
@@ -118,7 +117,9 @@ abstract class AbstractCloner implements ClonerInterface
         'DateTimeZone' => ['Symfony\Component\VarDumper\Caster\DateCaster', 'castTimeZone'],
         'DatePeriod' => ['Symfony\Component\VarDumper\Caster\DateCaster', 'castPeriod'],
 
+        'CurlHandle' => ['Symfony\Component\VarDumper\Caster\ResourceCaster', 'castCurl'],
         ':curl' => ['Symfony\Component\VarDumper\Caster\ResourceCaster', 'castCurl'],
+
         ':dba' => ['Symfony\Component\VarDumper\Caster\ResourceCaster', 'castDba'],
         ':dba persistent' => ['Symfony\Component\VarDumper\Caster\ResourceCaster', 'castDba'],
         ':gd' => ['Symfony\Component\VarDumper\Caster\ResourceCaster', 'castGd'],
@@ -217,7 +218,7 @@ abstract class AbstractCloner implements ClonerInterface
     public function cloneVar($var, $filter = 0)
     {
         $this->prevErrorHandler = set_error_handler(function ($type, $msg, $file, $line, $context = []) {
-            if (E_RECOVERABLE_ERROR === $type || E_USER_ERROR === $type) {
+            if (\E_RECOVERABLE_ERROR === $type || \E_USER_ERROR === $type) {
                 // Cloner never dies
                 throw new \ErrorException($msg, 0, $type, $file, $line);
             }
@@ -266,8 +267,8 @@ abstract class AbstractCloner implements ClonerInterface
         $obj = $stub->value;
         $class = $stub->class;
 
-        if (isset($class[15]) && "\0" === $class[15] && 0 === strpos($class, "class@anonymous\x00")) {
-            $stub->class = get_parent_class($class).'@anonymous';
+        if ((\PHP_VERSION_ID >= 80000 || (isset($class[15]) && "\0" === $class[15])) && false !== strpos($class, "@anonymous\0")) {
+            $stub->class = \PHP_VERSION_ID < 80000 ? (get_parent_class($class) ?: key(class_implements($class)) ?: 'class').'@anonymous' : get_debug_type($obj);
         }
         if (isset($this->classInfo[$class])) {
             list($i, $parents, $hasDebugInfo) = $this->classInfo[$class];
@@ -289,7 +290,7 @@ abstract class AbstractCloner implements ClonerInterface
             $this->classInfo[$class] = [$i, $parents, $hasDebugInfo];
         }
 
-        $a = Caster::castObject($obj, $class, $hasDebugInfo);
+        $a = Caster::castObject($obj, $class, $hasDebugInfo, $stub->class);
 
         try {
             while ($i--) {

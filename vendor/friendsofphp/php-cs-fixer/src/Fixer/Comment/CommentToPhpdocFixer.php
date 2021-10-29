@@ -54,7 +54,8 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurationD
     /**
      * {@inheritdoc}
      *
-     * Must run before GeneralPhpdocAnnotationRemoveFixer, NoBlankLinesAfterPhpdocFixer, NoEmptyPhpdocFixer, NoSuperfluousPhpdocTagsFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocAlignFixer, PhpdocAlignFixer, PhpdocAnnotationWithoutDotFixer, PhpdocInlineTagFixer, PhpdocLineSpanFixer, PhpdocNoAccessFixer, PhpdocNoAliasTagFixer, PhpdocNoEmptyReturnFixer, PhpdocNoPackageFixer, PhpdocNoUselessInheritdocFixer, PhpdocOrderFixer, PhpdocReturnSelfReferenceFixer, PhpdocSeparationFixer, PhpdocSingleLineVarSpacingFixer, PhpdocSummaryFixer, PhpdocToCommentFixer, PhpdocToParamTypeFixer, PhpdocToReturnTypeFixer, PhpdocTrimConsecutiveBlankLineSeparationFixer, PhpdocTrimFixer, PhpdocTypesOrderFixer, PhpdocVarAnnotationCorrectOrderFixer, PhpdocVarWithoutNameFixer.
+     * Must run before GeneralPhpdocAnnotationRemoveFixer, GeneralPhpdocTagRenameFixer, NoBlankLinesAfterPhpdocFixer, NoEmptyPhpdocFixer, NoSuperfluousPhpdocTagsFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocAlignFixer, PhpdocAlignFixer, PhpdocAnnotationWithoutDotFixer, PhpdocInlineTagFixer, PhpdocInlineTagNormalizerFixer, PhpdocLineSpanFixer, PhpdocNoAccessFixer, PhpdocNoAliasTagFixer, PhpdocNoEmptyReturnFixer, PhpdocNoPackageFixer, PhpdocNoUselessInheritdocFixer, PhpdocOrderByValueFixer, PhpdocOrderFixer, PhpdocReturnSelfReferenceFixer, PhpdocSeparationFixer, PhpdocSingleLineVarSpacingFixer, PhpdocSummaryFixer, PhpdocTagCasingFixer, PhpdocTagTypeFixer, PhpdocToCommentFixer, PhpdocToParamTypeFixer, PhpdocToPropertyTypeFixer, PhpdocToReturnTypeFixer, PhpdocTrimConsecutiveBlankLineSeparationFixer, PhpdocTrimFixer, PhpdocTypesOrderFixer, PhpdocVarAnnotationCorrectOrderFixer, PhpdocVarWithoutNameFixer.
+     * Must run after AlignMultilineCommentFixer.
      */
     public function getPriority()
     {
@@ -69,7 +70,10 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurationD
     {
         return new FixerDefinition(
             'Comments with annotation should be docblock when used on structural elements.',
-            [new CodeSample("<?php /* header */ \$x = true; /* @var bool \$isFoo */ \$isFoo = true;\n")],
+            [
+                new CodeSample("<?php /* header */ \$x = true; /* @var bool \$isFoo */ \$isFoo = true;\n"),
+                new CodeSample("<?php\n// @todo do something later\n\$foo = 1;\n\n// @var int \$a\n\$a = foo();\n", ['ignored_tags' => ['todo']]),
+            ],
             null,
             'Risky as new docblocks might mean more, e.g. a Doctrine entity might have a new column in database.'
         );
@@ -96,7 +100,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurationD
     protected function createConfigurationDefinition()
     {
         return new FixerConfigurationResolver([
-            (new FixerOptionBuilder('ignored_tags', sprintf('List of ignored tags')))
+            (new FixerOptionBuilder('ignored_tags', 'List of ignored tags'))
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
                 ->getOption(),
@@ -206,7 +210,11 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurationD
             if (false !== strpos($tokens[$index]->getContent(), '*/')) {
                 return;
             }
-            $newContent .= $indent.' *'.$this->getMessage($tokens[$index]->getContent()).$this->whitespacesConfig->getLineEnding();
+            $message = $this->getMessage($tokens[$index]->getContent());
+            if ('' !== trim(substr($message, 0, 1))) {
+                $message = ' '.$message;
+            }
+            $newContent .= $indent.' *'.$message.$this->whitespacesConfig->getLineEnding();
         }
 
         for ($index = $startIndex; $index <= $count; ++$index) {

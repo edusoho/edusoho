@@ -12,13 +12,12 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
 use PhpCsFixer\Tokenizer\Analyzer\FunctionsAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -28,7 +27,7 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 /**
  * @author Filippo Tessarotto <zoeslam@gmail.com>
  */
-final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
+final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer implements ConfigurationDefinitionFixerInterface
 {
     /**
      * @internal
@@ -87,12 +86,16 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertContainsOnly' => true,
         'assertContainsOnlyInstancesOf' => true,
         'assertCount' => true,
+        'assertDirectoryDoesNotExist' => true,
         'assertDirectoryExists' => true,
+        'assertDirectoryIsNotReadable' => true,
+        'assertDirectoryIsNotWritable' => true,
         'assertDirectoryIsReadable' => true,
         'assertDirectoryIsWritable' => true,
         'assertDirectoryNotExists' => true,
         'assertDirectoryNotIsReadable' => true,
         'assertDirectoryNotIsWritable' => true,
+        'assertDoesNotMatchRegularExpression' => true,
         'assertEmpty' => true,
         'assertEqualXMLStructure' => true,
         'assertEquals' => true,
@@ -100,11 +103,18 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertEqualsIgnoringCase' => true,
         'assertEqualsWithDelta' => true,
         'assertFalse' => true,
+        'assertFileDoesNotExist' => true,
         'assertFileEquals' => true,
+        'assertFileEqualsCanonicalizing' => true,
+        'assertFileEqualsIgnoringCase' => true,
         'assertFileExists' => true,
+        'assertFileIsNotReadable' => true,
+        'assertFileIsNotWritable' => true,
         'assertFileIsReadable' => true,
         'assertFileIsWritable' => true,
         'assertFileNotEquals' => true,
+        'assertFileNotEqualsCanonicalizing' => true,
+        'assertFileNotEqualsIgnoringCase' => true,
         'assertFileNotExists' => true,
         'assertFileNotIsReadable' => true,
         'assertFileNotIsWritable' => true,
@@ -117,20 +127,24 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertIsArray' => true,
         'assertIsBool' => true,
         'assertIsCallable' => true,
+        'assertIsClosedResource' => true,
         'assertIsFloat' => true,
         'assertIsInt' => true,
         'assertIsIterable' => true,
         'assertIsNotArray' => true,
         'assertIsNotBool' => true,
         'assertIsNotCallable' => true,
+        'assertIsNotClosedResource' => true,
         'assertIsNotFloat' => true,
         'assertIsNotInt' => true,
         'assertIsNotIterable' => true,
         'assertIsNotNumeric' => true,
         'assertIsNotObject' => true,
+        'assertIsNotReadable' => true,
         'assertIsNotResource' => true,
         'assertIsNotScalar' => true,
         'assertIsNotString' => true,
+        'assertIsNotWritable' => true,
         'assertIsNumeric' => true,
         'assertIsObject' => true,
         'assertIsReadable' => true,
@@ -147,6 +161,7 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertJsonStringNotEqualsJsonString' => true,
         'assertLessThan' => true,
         'assertLessThanOrEqual' => true,
+        'assertMatchesRegularExpression' => true,
         'assertNan' => true,
         'assertNotContains' => true,
         'assertNotContainsEquals' => true,
@@ -168,6 +183,7 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertNotSameSize' => true,
         'assertNotTrue' => true,
         'assertNull' => true,
+        'assertObjectEquals' => true,
         'assertObjectHasAttribute' => true,
         'assertObjectNotHasAttribute' => true,
         'assertRegExp' => true,
@@ -178,11 +194,15 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'assertStringEndsNotWith' => true,
         'assertStringEndsWith' => true,
         'assertStringEqualsFile' => true,
+        'assertStringEqualsFileCanonicalizing' => true,
+        'assertStringEqualsFileIgnoringCase' => true,
         'assertStringMatchesFormat' => true,
         'assertStringMatchesFormatFile' => true,
         'assertStringNotContainsString' => true,
         'assertStringNotContainsStringIgnoringCase' => true,
         'assertStringNotEqualsFile' => true,
+        'assertStringNotEqualsFileCanonicalizing' => true,
+        'assertStringNotEqualsFileIgnoringCase' => true,
         'assertStringNotMatchesFormat' => true,
         'assertStringNotMatchesFormatFile' => true,
         'assertStringStartsNotWith' => true,
@@ -201,11 +221,16 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'classHasAttribute' => true,
         'classHasStaticAttribute' => true,
         'contains' => true,
+        'containsEqual' => true,
+        'containsIdentical' => true,
         'containsOnly' => true,
         'containsOnlyInstancesOf' => true,
         'countOf' => true,
         'directoryExists' => true,
         'equalTo' => true,
+        'equalToCanonicalizing' => true,
+        'equalToIgnoringCase' => true,
+        'equalToWithDelta' => true,
         'fail' => true,
         'fileExists' => true,
         'getCount' => true,
@@ -236,6 +261,7 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'markTestSkipped' => true,
         'matches' => true,
         'matchesRegularExpression' => true,
+        'objectEquals' => true,
         'objectHasAttribute' => true,
         'readAttribute' => true,
         'resetCount' => true,
@@ -251,8 +277,8 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
         'atMost' => true,
         'exactly' => true,
         'never' => true,
-        'onConsecutiveCalls' => true,
         'once' => true,
+        'onConsecutiveCalls' => true,
         'returnArgument' => true,
         'returnCallback' => true,
         'returnSelf' => true,
@@ -274,11 +300,7 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractFixer implemen
      */
     public function getDefinition()
     {
-        return new FixerDefinition(
-            'Calls to `PHPUnit\Framework\TestCase` static methods must all be of the same type, either `$this->`, `self::` or `static::`.',
-            [
-                new CodeSample(
-                    '<?php
+        $codeSample = '<?php
 final class MyTest extends \PHPUnit_Framework_TestCase
 {
     public function testMe()
@@ -288,8 +310,13 @@ final class MyTest extends \PHPUnit_Framework_TestCase
         static::assertSame(1, 2);
     }
 }
-'
-                ),
+';
+
+        return new FixerDefinition(
+            'Calls to `PHPUnit\Framework\TestCase` static methods must all be of the same type, either `$this->`, `self::` or `static::`.',
+            [
+                new CodeSample($codeSample),
+                new CodeSample($codeSample, ['call_type' => self::CALL_TYPE_THIS]),
             ],
             null,
             'Risky when PHPUnit methods are overridden or not accessible, or when project has PHPUnit incompatibilities.'
@@ -309,28 +336,9 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAllTokenKindsFound([T_CLASS, T_STRING]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isRisky()
     {
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
-    {
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
-        foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indexes) {
-            $this->fixPhpUnitClass($tokens, $indexes[0], $indexes[1]);
-        }
     }
 
     /**
@@ -380,10 +388,9 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $startIndex
-     * @param int $endIndex
+     * {@inheritdoc}
      */
-    private function fixPhpUnitClass(Tokens $tokens, $startIndex, $endIndex)
+    protected function applyPhpUnitClassFix(Tokens $tokens, $startIndex, $endIndex)
     {
         $analyzer = new TokensAnalyzer($tokens);
 
@@ -466,8 +473,10 @@ final class MyTest extends \PHPUnit_Framework_TestCase
      */
     private function findEndOfNextBlock(Tokens $tokens, $index)
     {
-        $index = $tokens->getNextTokenOfKind($index, ['{']);
+        $nextIndex = $tokens->getNextTokenOfKind($index, [';', '{']);
 
-        return $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index);
+        return $tokens[$nextIndex]->equals('{')
+            ? $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $nextIndex)
+            : $nextIndex;
     }
 }

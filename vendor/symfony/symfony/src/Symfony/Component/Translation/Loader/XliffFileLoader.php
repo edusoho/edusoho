@@ -53,7 +53,7 @@ class XliffFileLoader implements LoaderInterface
         try {
             $dom = XmlUtils::loadFile($resource);
         } catch (\InvalidArgumentException $e) {
-            throw new InvalidResourceException(sprintf('Unable to load "%s": %s', $resource, $e->getMessage()), $e->getCode(), $e);
+            throw new InvalidResourceException(sprintf('Unable to load "%s": ', $resource).$e->getMessage(), $e->getCode(), $e);
         }
 
         $xliffVersion = $this->getVersionNumber($dom);
@@ -189,15 +189,17 @@ class XliffFileLoader implements LoaderInterface
     {
         $internalErrors = libxml_use_internal_errors(true);
 
-        $disableEntities = libxml_disable_entity_loader(false);
-
-        if (!@$dom->schemaValidateSource($schema)) {
+        if (\LIBXML_VERSION < 20900) {
+            $disableEntities = libxml_disable_entity_loader(false);
+            $isValid = @$dom->schemaValidateSource($schema);
             libxml_disable_entity_loader($disableEntities);
-
-            throw new InvalidResourceException(sprintf('Invalid resource provided: "%s"; Errors: %s', $file, implode("\n", $this->getXmlErrors($internalErrors))));
+        } else {
+            $isValid = @$dom->schemaValidateSource($schema);
         }
 
-        libxml_disable_entity_loader($disableEntities);
+        if (!$isValid) {
+            throw new InvalidResourceException(sprintf('Invalid resource provided: "%s"; Errors: ', $file).implode("\n", $this->getXmlErrors($internalErrors)));
+        }
 
         $dom->normalizeDocument();
 
@@ -262,7 +264,7 @@ class XliffFileLoader implements LoaderInterface
         $errors = [];
         foreach (libxml_get_errors() as $error) {
             $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
-                LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
+                \LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
                 $error->code,
                 trim($error->message),
                 $error->file ?: 'n/a',
@@ -297,7 +299,7 @@ class XliffFileLoader implements LoaderInterface
             $namespace = $xliff->attributes->getNamedItem('xmlns');
             if ($namespace) {
                 if (0 !== substr_compare('urn:oasis:names:tc:xliff:document:', $namespace->nodeValue, 0, 34)) {
-                    throw new InvalidArgumentException(sprintf('Not a valid XLIFF namespace "%s"', $namespace));
+                    throw new InvalidArgumentException(sprintf('Not a valid XLIFF namespace "%s".', $namespace));
                 }
 
                 return substr($namespace, 34);

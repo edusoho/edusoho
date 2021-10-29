@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.0 (2020-10-02)
+
+*   Feature: Improve performance by using global imports.
+    (#38 by @clue)
+
+*   Improve API documentation and add support / sponsorship info.
+    (#30 by @clue and #35 by @SimonFrings)
+
+*   Improve test suite and add `.gitattributes` to exclude dev files from exports.
+    Prepare PHP 8 support, update to PHPUnit 9 and simplify test matrix.
+    (#32 and #37 by @clue and #34 and #36 by @SimonFrings)
+
 ## 1.4.1 (2019-04-09)
 
 *   Fix: Check if the function is declared before declaring it.

@@ -10,7 +10,13 @@
         @change="handleSelectChange"
       >
         <a-select-option value="">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
-        <a-select-option v-for="item in courseList" :key="item.id" :value="item.id">{{ item.title || item.courseSetTitle }}</a-select-option>
+        <a-select-option
+          v-for="item in courseList"
+          :key="item.id"
+          :value="item.id"
+        >
+          {{ item.title || item.courseSetTitle }}
+        </a-select-option>
       </a-select>
 
       <a-input-search
@@ -19,7 +25,14 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
+
+      <a-button
+        type="primary"
+        class="pull-right"
+        @click="handleClickExport"
+      >
+        {{ 'site.btn.export' | trans }}
+      </a-button>
     </div>
 
     <a-table
@@ -31,14 +44,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="courseTitle">{{ 'course.name' | trans }}</template>
-      <template slot="customTitle">{{ 'course.task' | trans }}</template>
-      <template slot="startTimeTitle">{{ 'live_statistics.live_start_time' | trans }}</template>
-      <template slot="lengthTitle">{{ 'live_statistics.live_time_long' | trans }}</template>
-      <template slot="maxStudentNumTitle">{{ 'live_statistics.max_participate_count' | trans }}</template>
-      <template slot="statusTitle">{{ 'live_statistics.live_status' | trans }}</template>
-      <template slot="actionTitle">{{ 'live_statistics.operation' | trans }}</template>
-
       <template slot="customTitle" slot-scope="text, record">
         <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
       </template>
@@ -65,41 +70,34 @@ import { LiveStatistic, Classroom } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'courseTitle',
-    key: 'courseTitle',
-    slots: { title: 'courseTitle' }
+    title: Translator.trans('course.name'),
+    dataIndex: 'courseTitle'
   },
   {
+    title: Translator.trans('course.task'),
     dataIndex: 'title',
-    key: 'title',
-    slots: { title: 'customTitle' },
     scopedSlots: { customRender: 'customTitle' }
   },
   {
+    title: Translator.trans('live_statistics.live_start_time'),
     dataIndex: 'startTime',
-    key: 'startTime',
-    slots: { title: 'startTimeTitle' },
     scopedSlots: { customRender: 'startTime' }
   },
   {
-    dataIndex: 'length',
-    key: 'length',
-    slots: { title: 'lengthTitle' }
+    title: Translator.trans('live_statistics.live_time_long'),
+    dataIndex: 'length'
   },
   {
-    key: 'maxStudentNum',
-    dataIndex: 'maxStudentNum',
-    slots: { title: 'maxStudentNumTitle' }
+    title: Translator.trans('live_statistics.max_participate_count'),
+    dataIndex: 'maxStudentNum'
   },
   {
+    title: Translator.trans('live_statistics.live_status'),
     dataIndex: 'status',
-    key: 'status',
-    slots: { title: 'statusTitle' },
     scopedSlots: { customRender: 'status' }
   },
   {
-    key: 'action',
-    slots: { title: 'actionTitle' },
+    title: Translator.trans('live_statistics.operation'),
     scopedSlots: { customRender: 'action' }
   }
 ];

@@ -164,7 +164,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
         }
 
-        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds']);
+        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds', 'replayPublic']);
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];

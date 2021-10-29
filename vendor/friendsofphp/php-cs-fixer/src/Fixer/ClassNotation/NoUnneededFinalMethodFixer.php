@@ -13,6 +13,9 @@
 namespace PhpCsFixer\Fixer\ClassNotation;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -20,7 +23,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 /**
  * @author Filippo Tessarotto <zoeslam@gmail.com>
  */
-final class NoUnneededFinalMethodFixer extends AbstractFixer
+final class NoUnneededFinalMethodFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
     /**
      * {@inheritdoc}
@@ -44,6 +47,20 @@ class Bar
     final private function bar1() {}
 }
 '
+                ),
+                new CodeSample(
+                    '<?php
+final class Foo
+{
+    final private function baz() {}
+}
+
+class Bar
+{
+    final private function bar1() {}
+}
+',
+                    ['private_methods' => false]
                 ),
             ],
             null,
@@ -84,12 +101,26 @@ class Bar
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function createConfigurationDefinition()
+    {
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('private_methods', 'Private methods of non-`final` classes must not be declared `final`.'))
+                ->setAllowedTypes(['bool'])
+                ->setDefault(true)
+                ->getOption(),
+        ]);
+    }
+
+    /**
      * @param int  $classOpenIndex
      * @param bool $classIsFinal
      */
     private function fixClass(Tokens $tokens, $classOpenIndex, $classIsFinal)
     {
         $tokensCount = \count($tokens);
+
         for ($index = $classOpenIndex + 1; $index < $tokensCount; ++$index) {
             // Class end
             if ($tokens[$index]->equals('}')) {
@@ -107,15 +138,16 @@ class Bar
                 continue;
             }
 
-            if (!$classIsFinal && !$this->isPrivateMethod($tokens, $index, $classOpenIndex)) {
+            if (!$classIsFinal && (!$this->isPrivateMethodOtherThanConstructor($tokens, $index, $classOpenIndex) || !$this->configuration['private_methods'])) {
                 continue;
             }
 
             $tokens->clearAt($index);
 
-            $nextTokenIndex = $index + 1;
-            if ($tokens[$nextTokenIndex]->isWhitespace()) {
-                $tokens->clearAt($nextTokenIndex);
+            ++$index;
+
+            if ($tokens[$index]->isWhitespace()) {
+                $tokens->clearAt($index);
             }
         }
     }
@@ -126,18 +158,19 @@ class Bar
      *
      * @return bool
      */
-    private function isPrivateMethod(Tokens $tokens, $index, $classOpenIndex)
+    private function isPrivateMethodOtherThanConstructor(Tokens $tokens, $index, $classOpenIndex)
     {
         $index = max($classOpenIndex + 1, $tokens->getPrevTokenOfKind($index, [';', '{', '}']));
+        $private = false;
 
         while (!$tokens[$index]->isGivenKind(T_FUNCTION)) {
             if ($tokens[$index]->isGivenKind(T_PRIVATE)) {
-                return true;
+                $private = true;
             }
 
-            ++$index;
+            $index = $tokens->getNextMeaningfulToken($index);
         }
 
-        return false;
+        return $private && '__construct' !== strtolower($tokens[$tokens->getNextMeaningfulToken($index)]->getContent());
     }
 }

@@ -1174,6 +1174,7 @@ course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
+vip.course.expiry_date: 'Vip Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
 course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
@@ -2126,6 +2127,7 @@ classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
 classroom.expiryDays: 'Effective date'
+vip.classroom.expiryDays: 'Vip Effective date'
 classroom.vip_checked_fail_tips: 'The course ~ %classroomName% ~ is no longer free for VIP.'
 classroom.not_vip_member_tips: 'You can not learn the course ~ %classroomName% ~, since your membership has expired.'
 classroom.exit: Exit
@@ -3724,6 +3726,8 @@ my.teaching.open_course.student_setting.join_time: 'Enroll At'
 my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
 my.teaching.open_course.liveTimeSet.title: 'Time Settings'
+my.teaching.open_course.live_replay.set: 'Live Playback Settings'
+my.teaching.open_course.live_replay.is_permission: 'Whether to allow viewing of live replay'
 my.teaching.open_course.liveTimeSet.start_time: 'Start At'
 my.teaching.open_course.liveTimeSet.start_time.help_block: 'Teacher could enter the live 1 hour earlier to prepare the teaching material'
 my.teaching.open_course.liveTimeSet.live_length: Duration
@@ -3754,6 +3758,7 @@ my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 'The live replay is set to be unavailable for viewing'
 my.teaching.open_course.lesson.header.lesson_finished: 'Lesson finished'
 my.teaching.open_course.lesson.header.lesson_share: 'Share it to your friends if you like it.'
 my.teaching.open_course.lesson.header.lesson_share_btn: Share
@@ -5531,12 +5536,12 @@ admin.operation_certificate.template.certificate.title_hint: optional fill in
 admin.operation_certificate.template.certificate.title.default: Certificate of course certification
 admin.operation_certificate.template.certificate.recipient: Information on the grantee
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
-admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
+admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$ Idcard： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: TIP:If the online school does not set [Name] as a required field, the grantee information will be empty if the student does not fill in the name.
 admin.operation_certificate.template.certificate.content: Text of certificate
 admin.operation_certificate.template.certificate.content.default.course: Due to your excellent learning performance in the [$courseName$] course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
 admin.operation_certificate.template.certificate.content.default.classroom: Due to your excellent learning performance in the [$classroomName$] classroom, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
-admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$'
+admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$  idcard: $idcard$'
 admin.operation_certificate.template.certificate.content_hint.course: 'Course name: $courseName$'
 admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
 admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
@@ -9274,6 +9279,7 @@ exception.task.forbidden_preview_task: You can not preview task
 exception.task.type_invalid: Task type invalid
 exception.task.live_replay_not_found: Task replay not found
 exception.task.live_replay_invalid: Task replay invalid
+exception.task.forbidden_publish_sync_task: This task is still being synchronized. Please publish it later (60 seconds at most)
 exception.course.not_found: The course plan doesn't exist
 exception.course.forbidden_take_course: Can't access the teaching plan
 exception.course.learnmode_invalid: Learning mode error
@@ -9452,6 +9458,7 @@ exception.opencourse.forbidden_manage_course: You are not a teacher or administr
 exception.opencourse.itemids_invalid: Lesson number error
 exception.opencourse.is_not_member: You are not member of course
 exception.opencourse.check_password_required: Did not enter the correct verification password
+exception.opencourse.replay_not_permitted: Live replay is set to not allowed to watch
 exception.blacklist.forbidden_take: Permission denied
 exception.blacklist.duplicate_add: Already in the blacklist, don't add it repeatedly
 exception.blacklist.not_found: Blacklist does not exist

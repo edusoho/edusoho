@@ -25,7 +25,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
     public function getPriority()
     {
         // should be run before NoWhitespaceInBlankLineFixer, NoExtraBlankLinesFixer, BracesFixer and after NoEmptyStatementFixer.
-        return 25;
+        return 39;
     }
 
     /**
@@ -36,6 +36,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
     protected function isSuperfluousElse(Tokens $tokens, $index)
     {
         $previousBlockStart = $index;
+
         do {
             // Check if all 'if', 'else if ' and 'elseif' blocks above this 'else' always end,
             // if so this 'else' is overcomplete.
@@ -48,8 +49,8 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
             }
 
             if (
-                !$tokens[$previous]->equals(';') ||                              // 'if' block doesn't end with semicolon, keep 'else'
-                $tokens[$tokens->getPrevMeaningfulToken($previous)]->equals('{') // empty 'if' block, keep 'else'
+                !$tokens[$previous]->equals(';')                                    // 'if' block doesn't end with semicolon, keep 'else'
+                || $tokens[$tokens->getPrevMeaningfulToken($previous)]->equals('{') // empty 'if' block, keep 'else'
             ) {
                 return false;
             }
@@ -69,10 +70,19 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
                 ]
             );
 
-            if (
-                null === $candidateIndex
-                || $tokens[$candidateIndex]->equalsAny([';', [T_CLOSE_TAG], [T_IF]])
-                || $this->isInConditional($tokens, $candidateIndex, $previousBlockStart)
+            if (null === $candidateIndex || $tokens[$candidateIndex]->equalsAny([';', [T_CLOSE_TAG], [T_IF]])) {
+                return false;
+            }
+
+            if ($tokens[$candidateIndex]->equals([T_THROW])) {
+                $previousIndex = $tokens->getPrevMeaningfulToken($candidateIndex);
+
+                if (!$tokens[$previousIndex]->equalsAny([';', '{'])) {
+                    return false;
+                }
+            }
+
+            if ($this->isInConditional($tokens, $candidateIndex, $previousBlockStart)
                 || $this->isInConditionWithoutBraces($tokens, $candidateIndex, $previousBlockStart)
             ) {
                 return false;
@@ -165,6 +175,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
             if ($token->equals(';')) {
                 return false;
             }
+
             if ($token->equals('{')) {
                 $index = $tokens->getPrevMeaningfulToken($index);
 

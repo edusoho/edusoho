@@ -7,7 +7,13 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
+      <a-button
+        type="primary"
+        class="pull-right"
+        @click="handleClickExport"
+      >
+        {{ 'site.btn.export' | trans }}
+      </a-button>
     </div>
 
     <a-table
@@ -18,17 +24,7 @@
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
-    >
-      <template slot="nicknameTitle">{{ 'live_statistics.user_name' | trans }}</template>
-      <template slot="truenameTitle">{{ 'live_statistics.true_name' | trans }}</template>
-      <template slot="mobileTitle">{{ 'live_statistics.mobile' | trans }}</template>
-      <template slot="emailTitle">{{ 'live_statistics.email' | trans }}</template>
-      <template slot="firstEnterTimeTitle">{{ 'live_statistics.enter_theLlive_room_time' | trans }}</template>
-      <template slot="watchDurationTitle">{{ 'live_statistics.watching_time' | trans }}</template>
-      <template slot="checkinNumTitle">{{ 'live_statistics.check_in_number' | trans }}</template>
-      <template slot="chatNumberTitle">{{ 'live_statistics.chat_number' | trans }}</template>
-      <template slot="answerNumTitle">{{ 'live_statistics.answers_number' | trans }}</template>
-    </a-table>
+    />
   </div>
 </template>
 
@@ -38,49 +34,40 @@ import { LiveStatistic } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'nickname',
-    key: 'nickname',
-    slots: { title: 'nicknameTitle' }
+    title: Translator.trans('live_statistics.user_name'),
+    dataIndex: 'nickname'
   },
   {
-    dataIndex: 'truename',
-    key: 'truename',
-    slots: { title: 'truenameTitle' }
+    title: Translator.trans('live_statistics.true_name'),
+    dataIndex: 'truename'
   },
   {
-    dataIndex: 'mobile',
-    key: 'mobile',
-    slots: { title: 'mobileTitle' }
+    title: Translator.trans('live_statistics.mobile'),
+    dataIndex: 'mobile'
   },
   {
-    dataIndex: 'email',
-    key: 'email',
-    slots: { title: 'emailTitle' }
+    title: Translator.trans('live_statistics.email'),
+    dataIndex: 'email'
   },
   {
-    dataIndex: 'firstEnterTime',
-    key: 'firstEnterTime',
-    slots: { title: 'firstEnterTimeTitle' }
+    title: Translator.trans('live_statistics.enter_theLlive_room_time'),
+    dataIndex: 'firstEnterTime'
   },
   {
-    dataIndex: 'watchDuration',
-    key: 'watchDuration',
-    slots: { title: 'watchDurationTitle' }
+    title: Translator.trans('live_statistics.watching_time'),
+    dataIndex: 'watchDuration'
   },
   {
-    dataIndex: 'checkinNum',
-    key: 'checkinNum',
-    slots: { title: 'checkinNumTitle' }
+    title: Translator.trans('live_statistics.check_in_number'),
+    dataIndex: 'checkinNum'
   },
   {
-    dataIndex: 'chatNumber',
-    key: 'chatNumber',
-    slots: { title: 'chatNumberTitle' }
+    title: Translator.trans('live_statistics.chat_number'),
+    dataIndex: 'chatNumber'
   },
   {
-    dataIndex: 'answerNum',
-    key: 'answerNum',
-    slots: { title: 'answerNumTitle' }
+    title: Translator.trans('live_statistics.answers_number'),
+    dataIndex: 'answerNum'
   }
 ];
 

@@ -9,6 +9,7 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\User\Service\UserService;
@@ -20,7 +21,7 @@ class LiveReplay extends AbstractResource
         $activity = $this->getActivityService()->getActivity($id);
 
         if (empty($activity)) {
-            ActivityException::NOTFOUND_ACTIVITY();
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
         $liveActivity = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
@@ -43,7 +44,7 @@ class LiveReplay extends AbstractResource
         }
 
         if (!empty($fields['replayPublic'])) {
-            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['remark']], $activity);
+            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['replayPublic']], $activity);
         }
 
         return ['success' => true];
@@ -52,21 +53,21 @@ class LiveReplay extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $ids = $request->request->get('ids', []);
-        $realDelete = $request->request->get('realDelete');
+        $realDelete = $request->request->get('realDelete', false);
 
         if (empty($ids)) {
-            ActivityException::NOTFOUND_ACTIVITY();
+            throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
 
         if (!is_array($ids)) {
-            CommonException::FIELDS_FORMAT_ERROR();
+            throw CommonException::FIELDS_FORMAT_ERROR();
         }
 
         foreach ($ids as $id) {
             if ($realDelete) {
                 $this->getLiveReplayService()->deleteReplayByLessonId($id);
             } else {
-                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0]);
+                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0, 'lessonId' => 0]);
             }
         }
 

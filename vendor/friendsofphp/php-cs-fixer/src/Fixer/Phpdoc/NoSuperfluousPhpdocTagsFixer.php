@@ -92,8 +92,8 @@ class Foo {
     /**
      * {@inheritdoc}
      *
-     * Must run before NoEmptyPhpdocFixer, PhpdocAlignFixer.
-     * Must run after CommentToPhpdocFixer, FullyQualifiedStrictTypesFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocIndentFixer, PhpdocReturnSelfReferenceFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocToParamTypeFixer, PhpdocToReturnTypeFixer, PhpdocTypesFixer.
+     * Must run before NoEmptyPhpdocFixer, PhpdocAlignFixer, VoidReturnFixer.
+     * Must run after AlignMultilineCommentFixer, CommentToPhpdocFixer, FullyQualifiedStrictTypesFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocIndentFixer, PhpdocReturnSelfReferenceFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocToParamTypeFixer, PhpdocToPropertyTypeFixer, PhpdocToReturnTypeFixer, PhpdocTypesFixer.
      */
     public function getPriority()
     {
@@ -135,14 +135,18 @@ class Foo {
 
             $token = $tokens[$documentedElementIndex];
 
+            if ($this->configuration['remove_inheritdoc']) {
+                $content = $this->removeSuperfluousInheritDoc($content);
+            }
+
             if ($token->isGivenKind(T_FUNCTION)) {
                 $content = $this->fixFunctionDocComment($content, $tokens, $index, $shortNames);
             } elseif ($token->isGivenKind(T_VARIABLE)) {
                 $content = $this->fixPropertyDocComment($content, $tokens, $index, $shortNames);
             }
 
-            if ($this->configuration['remove_inheritdoc']) {
-                $content = $this->removeSuperfluousInheritDoc($content);
+            if ('' === $content) {
+                $content = '/**  */';
             }
 
             if ($content !== $initialContent) {
@@ -228,11 +232,11 @@ class Foo {
         );
 
         foreach ($docBlock->getAnnotationsOfType('param') as $annotation) {
-            if (0 === Preg::match('/@param(?:\s+[^\$]\S+)?\s+(\$\S+)/', $annotation->getContent(), $matches)) {
+            $argumentName = $annotation->getVariableName();
+
+            if (null === $argumentName) {
                 continue;
             }
-
-            $argumentName = $matches[1];
 
             if (!isset($argumentsInfo[$argumentName]) && $this->configuration['allow_unused_params']) {
                 continue;
@@ -368,7 +372,7 @@ class Foo {
         }
 
         $type = '';
-        while ($tokens[$index]->isGivenKind([T_NS_SEPARATOR, T_STRING, CT::T_ARRAY_TYPEHINT, T_CALLABLE])) {
+        while ($tokens[$index]->isGivenKind([T_NS_SEPARATOR, T_STATIC, T_STRING, CT::T_ARRAY_TYPEHINT, T_CALLABLE])) {
             $type .= $tokens[$index]->getContent();
 
             $index = $tokens->getNextMeaningfulToken($index);
@@ -390,7 +394,7 @@ class Foo {
         if ('param' === $annotation->getTag()->getName()) {
             $regex = '/@param\s+(?:\S|\s(?!\$))++\s\$\S+\s+\S/';
         } elseif ('var' === $annotation->getTag()->getName()) {
-            $regex = '/@var\s+\S+(\s+\$\S+)?(\s+)([^$\s]+)/';
+            $regex = '/@var\s+\S+(\s+\$\S+)?(\s+)(?!\*+\/)([^$\s]+)/';
         } else {
             $regex = '/@return\s+\S+\s+\S/';
         }

@@ -24,12 +24,7 @@ namespace PhpCsFixer;
 final class FileReader
 {
     /**
-     * @var self|null
-     */
-    private static $instance;
-
-    /**
-     * @var string|null
+     * @var null|string
      */
     private $stdinContent;
 
@@ -38,11 +33,13 @@ final class FileReader
      */
     public static function createSingleton()
     {
-        if (null === self::$instance) {
-            self::$instance = new self();
+        static $instance = null;
+
+        if (!$instance) {
+            $instance = new self();
         }
 
-        return self::$instance;
+        return $instance;
     }
 
     /**
@@ -75,7 +72,11 @@ final class FileReader
         if (false === $content) {
             $error = error_get_last();
 
-            throw new \RuntimeException(sprintf('Failed to read content from "%s".%s', $realPath, $error ? ' '.$error['message'] : ''));
+            throw new \RuntimeException(sprintf(
+                'Failed to read content from "%s".%s',
+                $realPath,
+                $error ? ' '.$error['message'] : ''
+            ));
         }
 
         return $content;

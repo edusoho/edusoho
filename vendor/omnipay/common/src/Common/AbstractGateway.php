@@ -40,14 +40,13 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *
  * For further code examples see the *omnipay-example* repository on github.
  *
- * @see GatewayInterface
  */
 abstract class AbstractGateway implements GatewayInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
-     */
-    protected $parameters;
+    use ParametersTrait {
+        setParameter as traitSetParameter;
+        getParameter as traitGetParameter;
+    }
 
     /**
      * @var ClientInterface
@@ -115,20 +114,12 @@ abstract class AbstractGateway implements GatewayInterface
     }
 
     /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters->all();
-    }
-
-    /**
      * @param  string $key
      * @return mixed
      */
     public function getParameter($key)
     {
-        return $this->parameters->get($key);
+        return $this->traitGetParameter($key);
     }
 
     /**
@@ -138,9 +129,7 @@ abstract class AbstractGateway implements GatewayInterface
      */
     public function setParameter($key, $value)
     {
-        $this->parameters->set($key, $value);
-
-        return $this;
+        return $this->traitSetParameter($key, $value);
     }
 
     /**
@@ -228,6 +217,16 @@ abstract class AbstractGateway implements GatewayInterface
     }
 
     /**
+     * Supports Fetch Transaction
+     *
+     * @return boolean True if this gateway supports the fetchTransaction() method
+     */
+    public function supportsFetchTransaction()
+    {
+        return method_exists($this, 'fetchTransaction');
+    }
+
+    /**
      * Supports Refund
      *
      * @return boolean True if this gateway supports the refund() method
@@ -312,7 +311,6 @@ abstract class AbstractGateway implements GatewayInterface
      *   $myRequest = $gw->myRequest($someParameters);
      * </code>
      *
-     * @see \Omnipay\Common\Message\AbstractRequest
      * @param string $class The request class name
      * @param array $parameters
      * @return \Omnipay\Common\Message\AbstractRequest

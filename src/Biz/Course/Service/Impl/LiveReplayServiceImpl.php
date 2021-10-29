@@ -86,7 +86,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
     public function updateReplayByLessonId($lessonId, $fields, $lessonType = 'live')
     {
-        $fields = ArrayToolkit::parts($fields, ['hidden']);
+        $fields = ArrayToolkit::parts($fields, ['hidden', 'courseId', 'lessonId']);
 
         return $this->getLessonReplayDao()->updateByLessonId($lessonId, $lessonType, $fields);
     }

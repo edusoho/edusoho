@@ -12,17 +12,12 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
+      :row-key="record => record.id"
       :data-source="data"
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="customTitle">{{ 'live_name' | trans }}</template>
-      <template slot="anchorTitle">{{ 'live_statistics.presenter' | trans }}</template>
-      <template slot="liveTimeTitle">{{ 'live_playback_duration' | trans }}</template>
-      <template slot="liveStartTimeTitle">{{ 'live_statistics.live_time' | trans }}</template>
-      <template slot="actionsTitle">{{ 'live_statistics.operation' | trans }}</template>
-
       <template slot="actions" slot-scope="record">
         <a-button-group>
           <a-button type="primary" style="padding: 0 8px;" @click="handleClickViewLivePlayback(record.url)">
@@ -67,23 +62,23 @@ import { LiveReplay } from 'common/vue/service';
 
 const columns = [
   {
-    dataIndex: 'title',
-    slots: { title: 'customTitle' }
+    title: Translator.trans('live_name'),
+    dataIndex: 'title'
   },
   {
-    dataIndex: 'anchor',
-    slots: { title: 'anchorTitle' }
+    title: Translator.trans('live_statistics.presenter'),
+    dataIndex: 'anchor'
   },
   {
-    dataIndex: 'liveTime',
-    slots: { title: 'liveTimeTitle' }
+    title: Translator.trans('live_playback_duration'),
+    dataIndex: 'liveTime'
   },
   {
-    dataIndex: 'liveStartTime',
-    slots: { title: 'liveStartTimeTitle' }
+    title: Translator.trans('live_statistics.live_time'),
+    dataIndex: 'liveStartTime'
   },
   {
-    slots: { title: 'actionsTitle' },
+    title: Translator.trans('live_statistics.operation'),
     scopedSlots: { customRender: 'actions' }
   }
 ];
@@ -105,8 +100,9 @@ export default {
       loading: false,
       visible: false,
       btnLoading: false,
-      currentId: 0,
-      checked: false
+      currentId: undefined,
+      checked: false,
+      courseId: $('.js-course-id').val()
     }
   },
 
@@ -127,7 +123,9 @@ export default {
       const params = {
         params: {
           offset: (current - 1) * pageSize,
-          limit: pageSize
+          limit: pageSize,
+          courseId: this.courseId
+
         }
       }
       const { data, paging } = await LiveReplay.get(params);
@@ -146,7 +144,7 @@ export default {
     },
 
     showModal(id) {
-      this.currentId = id;
+      this.currentId = [id];
       this.visible = true;
     },
 
@@ -155,16 +153,29 @@ export default {
     },
 
     handleClickRemove() {
-
+      this.currentId = this.selectedRowKeys;
+      this.visible = true;
     },
 
-    handleClickRemoveLivePlayback() {
+    async handleClickRemoveLivePlayback() {
       this.btnLoading = true;
 
-      setInterval( () => {
-        this.visible = false;
+      const params = {
+        data: {
+          ids: this.currentId,
+          realDelete: this.checked
+        }
+      }
+
+      const { success } = await LiveReplay.delete(params);
+
+      if (success) {
+        this.$message.success(Translator.trans('message.removal_succeeded'));
         this.btnLoading = false;
-      }, 3000);
+        this.visible = false;
+        this.pagination.current = 1;
+        this.fetchLiveReplay();
+      }
     },
 
     handleChange(e) {

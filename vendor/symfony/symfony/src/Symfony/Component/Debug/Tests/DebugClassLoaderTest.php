@@ -97,6 +97,9 @@ class DebugClassLoaderTest extends TestCase
         $this->assertStringMatchesFormat('%aParse error%a', $output);
     }
 
+    /**
+     * @requires PHP < 8.0
+     */
     public function testStacking()
     {
         // the ContextErrorException must not be loaded to test the workaround
@@ -125,10 +128,10 @@ class DebugClassLoaderTest extends TestCase
             // if an exception is thrown, the test passed
             $this->assertStringStartsWith(__FILE__, $exception->getFile());
             if (\PHP_VERSION_ID < 70000) {
-                $this->assertRegExp('/^Runtime Notice: Declaration/', $exception->getMessage());
+                $this->assertMatchesRegularExpression('/^Runtime Notice: Declaration/', $exception->getMessage());
                 $this->assertEquals(E_STRICT, $exception->getSeverity());
             } else {
-                $this->assertRegExp('/^Warning: Declaration/', $exception->getMessage());
+                $this->assertMatchesRegularExpression('/^Warning: Declaration/', $exception->getMessage());
                 $this->assertEquals(E_WARNING, $exception->getSeverity());
             }
         } finally {

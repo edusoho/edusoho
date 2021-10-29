@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-    || !(in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')) || php_sapi_name() === 'cli-server')
+    || !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) || 'cli-server' === php_sapi_name())
 ) {
     if (!file_exists(__DIR__.'/../app/data/dev.lock')) {
         header('HTTP/1.0 403 Forbidden');
-         exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+        exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
     }
 }
 
@@ -26,14 +26,13 @@ if (isOldApiCall()) {
     exit();
 }
 
-
 fix_gpc_magic();
 
 $loader = require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
 
 $kernel = new AppKernel('dev', true);
-$kernel->loadClassCache();
+//$kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
 $response = $kernel->handle($request);
@@ -62,7 +61,7 @@ function _fix_gpc_magic(&$item)
 
 function _fix_gpc_magic_files(&$item, $key)
 {
-    if ($key != 'tmp_name') {
+    if ('tmp_name' != $key) {
         if (is_array($item)) {
             array_walk($item, '_fix_gpc_magic_files');
         } else {
@@ -73,6 +72,6 @@ function _fix_gpc_magic_files(&$item, $key)
 
 function isOldApiCall()
 {
-    return (!(isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/vnd.edusoho.v2+json'))
-    && ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api') === 0));
+    return (!(isset($_SERVER['HTTP_ACCEPT']) && 'application/vnd.edusoho.v2+json' == $_SERVER['HTTP_ACCEPT']))
+    && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api')));
 }

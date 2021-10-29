@@ -9,6 +9,7 @@ use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class PageClassroom extends AbstractResource
 {
@@ -68,6 +69,17 @@ class PageClassroom extends AbstractResource
             }
         }
 
+        $vipSetting = $this->getSettingService()->get('vip', []);
+        $classroom['vipDeadline'] = false;
+        if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'vip_join' == $member['joinedChannel'] && in_array('student', $member['role'])) {
+            $vipMember = $this->getVipService()->getMemberByUserId($member['userId']);
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
+            if (!empty($vipMember) && !empty($vipRight)) {
+                $classroom['vipDeadline'] = true;
+                $classroom['expiryValue'] = ($vipMember['deadline'] < $classroom['expiryValue']) || empty($classroom['expiryValue']) ? $vipMember['deadline'] : $classroom['expiryValue'];
+            }
+        }
+
         return $classroom;
     }
 
@@ -116,6 +128,19 @@ class PageClassroom extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->service('VipPlugin:Vip:VipService');
     }
 
     /**

@@ -77,7 +77,7 @@ class TranslationWriter implements TranslationWriterInterface
         $dumper = $this->dumpers[$format];
 
         if (isset($options['path']) && !is_dir($options['path']) && !@mkdir($options['path'], 0777, true) && !is_dir($options['path'])) {
-            throw new RuntimeException(sprintf('Translation Writer was not able to create directory "%s"', $options['path']));
+            throw new RuntimeException(sprintf('Translation Writer was not able to create directory "%s".', $options['path']));
         }
 
         // save
@@ -97,7 +97,7 @@ class TranslationWriter implements TranslationWriterInterface
      */
     public function writeTranslations(MessageCatalogue $catalogue, $format, $options = [])
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 3.4 and will be removed in 4.0. Use write() instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 3.4 and will be removed in 4.0. Use write() instead.', __METHOD__), \E_USER_DEPRECATED);
         $this->write($catalogue, $format, $options);
     }
 }

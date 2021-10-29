@@ -11,15 +11,13 @@
         }
     ],
     "minimum-stability": "RC",
-
     "require": {
-        "php": ">=5.6.0 <8.0",
-        "flow/jsonpath": "^0.5",
+        "php": ">=5.6.0 <9.0",
+        "softcreatr/jsonpath": "^0.5 || ^0.7",
         "codeception/codeception": "^4.0",
-        "justinrainbow/json-schema": "^5.2.9"
+        "justinrainbow/json-schema": "~5.2.9"
     },
     "require-dev": {
-        "codeception/util-robohelpers": "dev-master",
         "codeception/util-universalframework": "^1.0",
         "codeception/lib-innerbrowser": "^1.0"
     },
