@@ -12065,3 +12065,11 @@ course.live_replay_manage.live_length_th: 直播时长
 course.live_replay_manage.live_anchor_th: 主讲人
 course.live_replay_manage.live_time_th: 直播时间
 course.live_replay_manage.live_chooser_empty: 没有回放
+course.live_replay.tag_select_default: 回放标签
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn:  取消共享
+course.live_replay.remove_btn: 移除回放
+course.live_replay.title: 直播名称
+course.live_replay.teacher: 主讲人
+course.live_replay.length: 回放时长
+course.live_replay.start_time: 直播时间

@@ -125,6 +125,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
+            'title like :title',
             'fromCourseId NOT IN (:excludeCourseIds)',
             'mediaType IN (:mediaTypes)',
             'mediaId = :mediaId',
@@ -132,7 +133,6 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'fromCourseSetId IN (:courseSetIds)',
             'startTime >= :startTime_GT',
             'endTime <= :endTime_LT',
-            'endTime >= :endTime_GE',
             'copyId = :copyId',
         ];
 

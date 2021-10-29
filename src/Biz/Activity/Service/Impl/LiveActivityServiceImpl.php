@@ -243,6 +243,38 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->search($conditions, $orderbys, $start, $limit);
     }
 
+    public function count($conditions)
+    {
+        return $this->getLiveActivityDao()->count($conditions);
+    }
+
+    public function shareLiveReplay($id)
+    {
+        return $this->getLiveActivityDao()->update($id, ['replayPublic' => 1]);
+    }
+
+    public function unShareLiveReplay($id)
+    {
+        return $this->getLiveActivityDao()->update($id, ['replayPublic' => 0]);
+    }
+
+    public function updateLiveReplayTags($id, $tagIds)
+    {
+        return $this->getLiveActivityDao()->update($id, ['replayTagIds' => $tagIds]);
+    }
+
+    public function removeLiveReplay($id)
+    {
+        $liveActivity = $this->getLiveActivityDao()->update($id, ['replayPublic' => 0, 'replayStatus' => 'ungenerated']);
+        $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
+        if (empty($activity)) {
+            return true;
+        }
+        $this->getLiveReplayService()->deleteReplayByLessonId($activity['id']);
+
+        return true;
+    }
+
     public function getByLiveId($liveId)
     {
         return $this->getLiveActivityDao()->getByLiveId($liveId);
@@ -499,5 +531,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
     }
 }

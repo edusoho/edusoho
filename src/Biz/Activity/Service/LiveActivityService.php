@@ -42,6 +42,16 @@ interface LiveActivityService
 
     public function search($conditions, $orderbys, $start, $limit);
 
+    public function count($conditions);
+
+    public function shareLiveReplay($id);
+
+    public function unShareLiveReplay($id);
+
+    public function updateLiveReplayTags($id, $tagIds);
+
+    public function removeLiveReplay($id);
+
     public function canUpdateRoomType($liveStartTime);
 
     public function getByLiveId($liveId);

@@ -3165,6 +3165,30 @@ material_reconvert:
     path: '/material/lib/{globalId}/reconvert'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:reconvert'
+material_lib_live_replay:
+    path: '/material/lib/live_replay'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:index'
+material_lib_live_replay_share_list:
+    path: '/material/lib/live_replay/share'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:shareList'
+material_lib_live_replay_share:
+    path: '/material/lib/live_replay/{liveActivityId}/share'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:share'
+    methods:
+      - POST
+material_lib_live_replay_remove:
+    path: '/material/lib/live_replay/{liveActivityId}/remove'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:remove'
+    methods:
+      - POST
+material_lib_live_replay_edit:
+    path: '/material/lib/live_replay/{liveActivityId}/edit'
+    defaults:
+      _controller: 'AppBundle:MaterialLib/LiveReplay:edit'
 app_download:
     path: /app/download
     defaults:

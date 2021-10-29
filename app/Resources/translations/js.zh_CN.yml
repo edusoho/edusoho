@@ -1878,3 +1878,8 @@ live_statistics.answers_number: 答题数
 live_statistics.to: 至
 live_statistics.people: 人
 live_statistics.strip: 条
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn:  取消共享
+course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
+course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
+course.live_replay.delete_tip:  请确认将此直播回放移除？
