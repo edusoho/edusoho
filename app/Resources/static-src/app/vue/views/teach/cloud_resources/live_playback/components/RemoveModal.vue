@@ -45,7 +45,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const params = {
-        params: {
+        data: {
           ids: [this.currentId],
           realDelete: false
         }

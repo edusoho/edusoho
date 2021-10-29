@@ -7,8 +7,8 @@ export const LiveReplay = {
     return apiClient.get(`${baseUrl}`, { params, query });
   },
 
-  async delete({ params }) {
-    return apiClient.delete(`${baseUrl}`, { data: params });
+  async delete({ data }) {
+    return apiClient.delete(`${baseUrl}`, { data });
   },
 
   async update({ query, params }) {
