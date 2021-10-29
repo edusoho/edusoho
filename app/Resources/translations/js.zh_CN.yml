@@ -1819,7 +1819,7 @@ modal.title.edit: 编辑
 modal.content.remove_playback_resources: 是否确认移除回放资源？
 
 form.label.tag: 标签
-form.label.share : 分享
+form.label.share: 分享
 
 placeholder.playback_label: 回放标签
 placeholder.enter_keyword: 请输入关键字

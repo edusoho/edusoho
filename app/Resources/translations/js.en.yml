@@ -1864,7 +1864,7 @@ modal.title.edit: Edit
 modal.content.remove_playback_resources: Are you sure to remove playback resources?
 
 form.label.tag: Tag
-form.label.share : Share
+form.label.share: Share
 
 placeholder.playback_label: Playback labe
 placeholder.enter_keyword: Please enter keyword

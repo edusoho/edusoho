@@ -15,7 +15,7 @@
         </a-select>
       </a-form-model-item>
 
-      <a-form-model-item label="分享">
+      <a-form-model-item :label="'form.label.share' | trans">
         <a-radio-group v-model="form.replayPublic">
           <a-radio value="1" class="mt8">
             {{ 'radio.share_to_live_playback' | trans }}
