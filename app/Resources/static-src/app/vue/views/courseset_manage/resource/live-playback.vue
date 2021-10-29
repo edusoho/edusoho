@@ -161,7 +161,7 @@ export default {
       this.btnLoading = true;
 
       const params = {
-        params: {
+        data: {
           ids: this.currentId,
           realDelete: this.checked
         }

@@ -10,7 +10,13 @@
         @change="handleSelectChange"
       >
         <a-select-option value="">{{ 'live_statistics.checkin_status.all' | trans }}</a-select-option>
-        <a-select-option v-for="item in courseList" :key="item.id" :value="item.id">{{ item.title || item.courseSetTitle }}</a-select-option>
+        <a-select-option
+          v-for="item in courseList"
+          :key="item.id"
+          :value="item.id"
+        >
+          {{ item.title || item.courseSetTitle }}
+        </a-select-option>
       </a-select>
 
       <a-input-search
@@ -19,7 +25,14 @@
         style="width: 200px;"
         @search="onSearch"
       />
-      <a-button type="primary" class="pull-right" @click="handleClickExport">{{ 'site.btn.export' | trans }}</a-button>
+
+      <a-button
+        type="primary"
+        class="pull-right"
+        @click="handleClickExport"
+      >
+        {{ 'site.btn.export' | trans }}
+      </a-button>
     </div>
 
     <a-table
