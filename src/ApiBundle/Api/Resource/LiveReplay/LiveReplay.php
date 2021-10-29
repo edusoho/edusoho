@@ -24,7 +24,7 @@ class LiveReplay extends AbstractResource
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        $liveActivity = $this->getLivmueActivityService()->getLiveActivity($activity['mediaId']);
+        $liveActivity = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
 
         return [
             'tag' => '',
@@ -53,7 +53,7 @@ class LiveReplay extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $ids = $request->request->get('ids', []);
-        $realDelete = $request->request->get('realDelete');
+        $realDelete = $request->request->get('realDelete', false);
 
         if (empty($ids)) {
             throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
