@@ -9,6 +9,7 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\User\Service\UserService;
@@ -20,10 +21,10 @@ class LiveReplay extends AbstractResource
         $activity = $this->getActivityService()->getActivity($id);
 
         if (empty($activity)) {
-            ActivityException::NOTFOUND_ACTIVITY();
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        $liveActivity = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
+        $liveActivity = $this->getLivmueActivityService()->getLiveActivity($activity['mediaId']);
 
         return [
             'tag' => '',
@@ -55,18 +56,18 @@ class LiveReplay extends AbstractResource
         $realDelete = $request->request->get('realDelete');
 
         if (empty($ids)) {
-            ActivityException::NOTFOUND_ACTIVITY();
+            throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
 
         if (!is_array($ids)) {
-            CommonException::FIELDS_FORMAT_ERROR();
+            throw CommonException::FIELDS_FORMAT_ERROR();
         }
 
         foreach ($ids as $id) {
             if ($realDelete) {
                 $this->getLiveReplayService()->deleteReplayByLessonId($id);
             } else {
-                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0]);
+                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0, 'lessonId' => 0]);
             }
         }
 
