@@ -87,6 +87,10 @@ abstract class BaseStrategy
             $recipientContent = str_replace('$username$', $user['nickname'], $recipientContent);
         }
 
+        if (strstr($recipientContent, '$idcard$')) {
+            $recipientContent = str_replace('$idcard$', $user['idcard'], $recipientContent);
+        }
+
         return $recipientContent;
     }
 

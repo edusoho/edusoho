@@ -440,8 +440,10 @@ export default class Manage {
         setProperty = self.checkShouldSetProperty($target, $parentLi);
       }
 
-      $dom.toggleClass('hidden');
-      $oppositeDom.toggleClass('hidden');
+      if (data.success) {
+        $dom.toggleClass('hidden');
+        $oppositeDom.toggleClass('hidden');
+      }
 
       if (isHideUnPublish && setProperty || !isHideUnPublish && info.flag) {
         const $displayTextDom = $parentLi.find('.display-text');
@@ -449,8 +451,9 @@ export default class Manage {
         self.setShowNum($parentLi);
         self.sortList();
       }
-      this._flushPublishLessonNum();
+      
       if (data.success) {
+        this._flushPublishLessonNum();
         cd.message({ type: 'success', message: info.success });
       } else {
         cd.message({ type: 'danger', message: info.danger + data.message});

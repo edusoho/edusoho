@@ -96,7 +96,7 @@ class ExpressionLanguageTest extends TestCase
     public function testWrongCacheImplementation()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Cache argument has to implement Psr\Cache\CacheItemPoolInterface.');
+        $this->expectExceptionMessage('Cache argument has to implement "Psr\Cache\CacheItemPoolInterface".');
         $cacheMock = $this->getMockBuilder('Psr\Cache\CacheItemSpoolInterface')->getMock();
         new ExpressionLanguage($cacheMock);
     }
@@ -104,7 +104,7 @@ class ExpressionLanguageTest extends TestCase
     public function testConstantFunction()
     {
         $expressionLanguage = new ExpressionLanguage();
-        $this->assertEquals(PHP_VERSION, $expressionLanguage->evaluate('constant("PHP_VERSION")'));
+        $this->assertEquals(\PHP_VERSION, $expressionLanguage->evaluate('constant("PHP_VERSION")'));
 
         $expressionLanguage = new ExpressionLanguage();
         $this->assertEquals('\constant("PHP_VERSION")', $expressionLanguage->compile('constant("PHP_VERSION")'));
@@ -269,7 +269,7 @@ class ExpressionLanguageTest extends TestCase
     public function testCallBadCallable()
     {
         $this->expectException('RuntimeException');
-        $this->expectExceptionMessageRegExp('/Unable to call method "\w+" of object "\w+"./');
+        $this->expectExceptionMessageMatches('/Unable to call method "\w+" of object "\w+"./');
         $el = new ExpressionLanguage();
         $el->evaluate('foo.myfunction()', ['foo' => new \stdClass()]);
     }

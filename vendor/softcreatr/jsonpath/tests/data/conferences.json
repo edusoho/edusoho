@@ -1,0 +1,50 @@
+{
+  "name": "Major League Baseball",
+  "abbr": "MLB",
+  "conferences": [
+    {
+      "name": "Western Conference",
+      "abbr": "West",
+      "teams": [
+        {
+          "name": "Dodger",
+          "city": "Los Angeles",
+          "whatever": "else",
+          "players": [
+            {
+              "name": "Bob Smith",
+              "number": 22
+            },
+            {
+              "name": "Joe Face",
+              "number": 23,
+              "active": "yes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Eastern Conference",
+      "abbr": "East",
+      "teams": [
+        {
+          "name": "Mets",
+          "city": "New York",
+          "whatever": "else",
+          "players": [
+            {
+              "name": "something",
+              "number": 14,
+              "active": "yes"
+            },
+            {
+              "name": "something",
+              "number": 15
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

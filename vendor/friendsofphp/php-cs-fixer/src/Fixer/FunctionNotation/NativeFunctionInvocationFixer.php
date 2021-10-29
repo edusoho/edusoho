@@ -164,10 +164,11 @@ $c = get_class($d);
      * {@inheritdoc}
      *
      * Must run before GlobalNamespaceImportFixer.
+     * Must run after BacktickToShellExecFixer, StrictParamFixer.
      */
     public function getPriority()
     {
-        return 10;
+        return 1;
     }
 
     /**
@@ -274,7 +275,7 @@ $c = get_class($d);
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
 
-        $insertAtIndexes = [];
+        $tokensToInsert = [];
         for ($index = $start; $index < $end; ++$index) {
             if (!$functionsAnalyzer->isGlobalFunctionCall($tokens, $index)) {
                 continue;
@@ -297,12 +298,10 @@ $c = get_class($d);
                 continue; // do not bother if previous token is already namespace separator
             }
 
-            $insertAtIndexes[] = $index;
+            $tokensToInsert[$index] = new Token([T_NS_SEPARATOR, '\\']);
         }
 
-        foreach (array_reverse($insertAtIndexes) as $index) {
-            $tokens->insertAt($index, new Token([T_NS_SEPARATOR, '\\']));
-        }
+        $tokens->insertSlices($tokensToInsert);
     }
 
     /**

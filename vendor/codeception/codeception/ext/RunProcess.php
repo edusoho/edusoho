@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * Extension to start and stop processes per suite.
- * Can be used to start/stop selenium server, chromedriver, phantomjs, mailcatcher, etc.
+ * Can be used to start/stop selenium server, chromedriver, mailcatcher, etc.
  *
  * Can be configured in suite config:
  *
@@ -106,5 +106,27 @@ class RunProcess extends Extension
             $process->stop();
         }
         $this->processes = [];
+    }
+
+    /**
+     * Disable the deserialization of the class to prevent attacker executing
+     * code by leveraging the __destruct method.
+     *
+     * @see https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+     */
+    public function __sleep()
+    {
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
+    }
+
+    /**
+     * Disable the deserialization of the class to prevent attacker executing
+     * code by leveraging the __destruct method.
+     *
+     * @see https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+     */
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 }

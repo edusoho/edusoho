@@ -72,6 +72,9 @@ security:
             path: ^/crontab
             role: IS_AUTHENTICATED_ANONYMOUSLY
         -
+            path: ^/my/course/
+            role: IS_AUTHENTICATED_ANONYMOUSLY
+        -
             path: ^/task
             role: ROLE_USER
         -

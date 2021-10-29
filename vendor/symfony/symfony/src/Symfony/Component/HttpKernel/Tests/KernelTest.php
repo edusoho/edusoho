@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,7 +79,7 @@ class KernelTest extends TestCase
         $containerDir = __DIR__.'/Fixtures/cache/custom/'.substr(\get_class($kernel->getContainer()), 0, 16);
         $this->assertTrue(unlink(__DIR__.'/Fixtures/cache/custom/FixturesCustomDebugProjectContainer.php.meta'));
         $this->assertFileExists($containerDir);
-        $this->assertFileNotExists($containerDir.'.legacy');
+        $this->assertFileDoesNotExist($containerDir.'.legacy');
 
         $kernel = new CustomProjectDirKernel(function ($container) { $container->register('foo', 'stdClass')->setPublic(true); });
         $kernel->boot();
@@ -86,8 +87,8 @@ class KernelTest extends TestCase
         $this->assertFileExists($containerDir);
         $this->assertFileExists($containerDir.'.legacy');
 
-        $this->assertFileNotExists($legacyContainerDir);
-        $this->assertFileNotExists($legacyContainerDir.'.legacy');
+        $this->assertFileDoesNotExist($legacyContainerDir);
+        $this->assertFileDoesNotExist($legacyContainerDir.'.legacy');
     }
 
     public function testBootInitializesBundlesAndContainer()
@@ -219,9 +220,12 @@ class KernelTest extends TestCase
     public function testShutdownGivesNullContainerToAllBundles()
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\Bundle')->getMock();
-        $bundle->expects($this->at(3))
+        $bundle->expects($this->exactly(2))
             ->method('setContainer')
-            ->with(null);
+            ->withConsecutive(
+                [$this->isInstanceOf(ContainerInterface::class)],
+                [null]
+            );
 
         $kernel = $this->getKernel(['getBundles']);
         $kernel->expects($this->any())

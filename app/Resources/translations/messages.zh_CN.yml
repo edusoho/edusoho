@@ -1393,6 +1393,7 @@ course.cover_image.upload_tips: >
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
+vip.course.expiry_date: 会员学习有效期
 course.expiry_date.days_mode: >
   %expiryDays% 天（随到随学）
 course.expiry_date.days_mode.total_days: 共%expiryDays%天
@@ -2421,6 +2422,7 @@ classroom.price: 价格
 classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
+vip.classroom.expiryDays: 会员学习有效期
 classroom.vip_checked_fail_tips: >
   该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
@@ -3423,7 +3425,7 @@ message.btn.back: 返回我的私信
 message.btn.send: 写私信
 
 # 个人主页模块
-user.homepage: %nickname%的个人主页
+user.homepage: "%nickname%的个人主页"
 user.homepage.teaching: 教学中
 user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
@@ -4357,6 +4359,8 @@ my.teaching.open_course.student_setting.join_time: 加入时间：
 my.teaching.open_course.student_setting.send_message_btn: 发私信
 my.teaching.open_course.student_setting.view_detail_btn: 查看资料
 my.teaching.open_course.liveTimeSet.title: 直播时间设置
+my.teaching.open_course.live_replay.set: 直播回放设置
+my.teaching.open_course.live_replay.is_permission: 是否允许观看回放
 my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
 my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
 my.teaching.open_course.liveTimeSet.live_length: 直播时长
@@ -4389,6 +4393,7 @@ my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
 my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 直播回放被设置为不允许观看
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -6519,12 +6524,12 @@ admin.operation_certificate.template.certificate.title_hint: 可选填
 admin.operation_certificate.template.certificate.title.default: 课程认证证书
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
-admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$ 身份证： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
-admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
+admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$ 用户名：$username$ 身份证：$idcard$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
 admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
@@ -10547,6 +10552,7 @@ exception.task.forbidden_preview_task: 无权预览任务
 exception.task.type_invalid: 任务类型错误
 exception.task.live_replay_not_found: 课时回放不存在
 exception.task.live_replay_invalid: 课时回放获取失败
+exception.task.forbidden_publish_sync_task: 该任务仍在同步中，请稍后再发布（最多60秒）
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误
@@ -10737,6 +10743,7 @@ exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理�
 exception.opencourse.itemids_invalid: 课时数错误
 exception.opencourse.is_not_member: 您不是课程成员
 exception.opencourse.check_password_required: 未输入正确的校验密码
+exception.opencourse.replay_not_permitted: 直播回放被设置为不允许观看
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不存在

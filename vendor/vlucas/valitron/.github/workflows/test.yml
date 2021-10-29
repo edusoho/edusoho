@@ -1,0 +1,73 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions:
+        - '5.4'
+        - '5.5'
+        - '5.6'
+        - '7.0'
+        - '7.1'
+        - '7.2'
+        - '7.3'
+        - '7.4'
+        - '8.0'
+ #      - '8.1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - name: Cache composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php-versions }}-
+      - name: Validate composer configuration
+        run: |
+          composer validate
+      - name: Install dependencies
+        run: |
+          composer install --no-progress
+      - name: Run tests
+        run: |
+          composer run-script test
+
+#  test-hhvm:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup HHVM
+#        uses: azjezz/setup-hhvm@v1
+#        with:
+#          version: latest
+#          debug: false
+#      - name: Cache composer packages
+#        id: composer-cache
+#        uses: actions/cache@v2
+#        with:
+#          path: vendor
+#          key: ${{ runner.os }}-hhvm-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-hhvm-
+#      - name: Validate composer configuration
+#        run: |
+#          composer validate
+#      - name: Install dependencies
+#        run: |
+#          composer install --no-progress
+#      - name: Run tests
+#        run: |
+#          composer run-script test

@@ -197,7 +197,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if (!$this->canPublish($task['id'])) {
-            return false;
+            $this->createNewException(TaskException::FORBIDDEN_PUBLISH_SYNC_TASK());
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);

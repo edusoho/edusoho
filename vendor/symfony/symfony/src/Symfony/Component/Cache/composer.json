@@ -28,9 +28,9 @@
     },
     "require-dev": {
         "cache/integration-tests": "dev-master",
-        "doctrine/cache": "~1.6",
-        "doctrine/dbal": "~2.4",
-        "predis/predis": "~1.0"
+        "doctrine/cache": "^1.6",
+        "doctrine/dbal": "^2.4|^3.0",
+        "predis/predis": "^1.0"
     },
     "conflict": {
         "symfony/var-dumper": "<3.3"
@@ -41,10 +41,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.4-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

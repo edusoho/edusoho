@@ -1,0 +1,49 @@
+---
+name: Test
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'composer.json'
+    branches:
+      - 'oldphp'
+  pull_request:
+    paths:
+      - '**.php'
+      - 'composer.json'
+    branches:
+      - 'oldphp'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '5.4', '5.5', '5.6', '7.0' ]
+    name: PHP ${{ matrix.php }} Test
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction
+
+      - name: Run phpcs
+        run: composer cs-check -- -v
+
+      - name: Execute tests
+        run: composer test -- -v --coverage-clover=coverage.xml

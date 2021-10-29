@@ -18,6 +18,8 @@ use PhpCsFixer\Preg;
  * This represents a tag, as defined by the proposed PSR PHPDoc standard.
  *
  * @author Graham Campbell <graham@alt-three.com>
+ *
+ * @final
  */
 class Tag
 {
@@ -43,7 +45,7 @@ class Tag
     /**
      * The cached tag name.
      *
-     * @var string|null
+     * @var null|string
      */
     private $name;
 

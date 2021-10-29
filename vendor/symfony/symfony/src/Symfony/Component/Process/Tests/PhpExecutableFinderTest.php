@@ -30,7 +30,7 @@ class PhpExecutableFinderTest extends TestCase
 
         $f = new PhpExecutableFinder();
 
-        $current = PHP_BINARY;
+        $current = \PHP_BINARY;
         $args = 'phpdbg' === \PHP_SAPI ? ' -qrr' : '';
 
         $this->assertEquals($current.$args, $f->find(), '::find() returns the executable PHP');
@@ -48,7 +48,7 @@ class PhpExecutableFinderTest extends TestCase
 
         $f = new PhpExecutableFinder();
 
-        $current = getenv('PHP_BINARY') ?: PHP_BINARY;
+        $current = getenv('PHP_BINARY') ?: \PHP_BINARY;
 
         $this->assertEquals($current.' --php', $f->find(), '::find() returns the executable PHP');
         $this->assertEquals($current, $f->find(false), '::find() returns the executable PHP');
@@ -62,11 +62,11 @@ class PhpExecutableFinderTest extends TestCase
         $f = new PhpExecutableFinder();
 
         if (\defined('HHVM_VERSION')) {
-            $this->assertEquals($f->findArguments(), ['--php'], '::findArguments() returns HHVM arguments');
+            $this->assertEquals(['--php'], $f->findArguments(), '::findArguments() returns HHVM arguments');
         } elseif ('phpdbg' === \PHP_SAPI) {
-            $this->assertEquals($f->findArguments(), ['-qrr'], '::findArguments() returns phpdbg arguments');
+            $this->assertEquals(['-qrr'], $f->findArguments(), '::findArguments() returns phpdbg arguments');
         } else {
-            $this->assertEquals($f->findArguments(), [], '::findArguments() returns no arguments');
+            $this->assertEquals([], $f->findArguments(), '::findArguments() returns no arguments');
         }
     }
 }

@@ -18,7 +18,8 @@ use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
- * Transform `|` operator into CT::T_TYPE_ALTERNATION in `} catch (ExceptionType1 | ExceptionType2 $e) {`.
+ * Transform `|` operator into CT::T_TYPE_ALTERNATION in `function foo(Type1 | Type2 $x) {`
+ *                                                    or `} catch (ExceptionType1 | ExceptionType2 $e) {`.
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
@@ -29,9 +30,10 @@ final class TypeAlternationTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function getCustomTokens()
+    public function getPriority()
     {
-        return [CT::T_TYPE_ALTERNATION];
+        // needs to run after ArrayTypehintTransformer and TypeColonTransformer
+        return -15;
     }
 
     /**
@@ -51,36 +53,65 @@ final class TypeAlternationTransformer extends AbstractTransformer
             return;
         }
 
-        $prevIndex = $tokens->getPrevMeaningfulToken($index);
+        $prevIndex = $tokens->getTokenNotOfKindsSibling($index, -1, [T_NS_SEPARATOR, T_STRING, CT::T_ARRAY_TYPEHINT, T_WHITESPACE, T_COMMENT, T_DOC_COMMENT]);
+
+        /** @var Token $prevToken */
         $prevToken = $tokens[$prevIndex];
 
-        if (!$prevToken->isGivenKind(T_STRING)) {
+        if ($prevToken->isGivenKind([
+            CT::T_TYPE_COLON, // `:` is part of a function return type `foo(): X|Y`
+            CT::T_TYPE_ALTERNATION, // `|` is part of a union (chain) `X|Y`
+            T_STATIC, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, // `var X|Y $a;`, `private X|Y $a` or `public static X|Y $a`
+        ])) {
+            $this->replaceToken($tokens, $index);
+
             return;
         }
 
-        do {
-            $prevIndex = $tokens->getPrevMeaningfulToken($prevIndex);
-            if (null === $prevIndex) {
-                break;
-            }
+        if (!$prevToken->equalsAny(['(', ','])) {
+            return;
+        }
 
-            $prevToken = $tokens[$prevIndex];
+        $prevPrevTokenIndex = $tokens->getPrevMeaningfulToken($prevIndex);
 
-            if ($prevToken->isGivenKind([T_NS_SEPARATOR, T_STRING])) {
-                continue;
-            }
+        if ($tokens[$prevPrevTokenIndex]->isGivenKind([T_CATCH])) {
+            $this->replaceToken($tokens, $index);
 
-            if (
-                $prevToken->isGivenKind(CT::T_TYPE_ALTERNATION)
-                || (
-                    $prevToken->equals('(')
-                    && $tokens[$tokens->getPrevMeaningfulToken($prevIndex)]->isGivenKind(T_CATCH)
-                )
-            ) {
-                $tokens[$index] = new Token([CT::T_TYPE_ALTERNATION, '|']);
-            }
+            return;
+        }
 
-            break;
-        } while (true);
+        $functionKinds = [[T_FUNCTION]];
+
+        if (\defined('T_FN')) {
+            $functionKinds[] = [T_FN];
+        }
+
+        $functionIndex = $tokens->getPrevTokenOfKind($prevIndex, $functionKinds);
+
+        if (null === $functionIndex) {
+            return;
+        }
+
+        $braceOpenIndex = $tokens->getNextTokenOfKind($functionIndex, ['(']);
+        $braceCloseIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $braceOpenIndex);
+
+        if ($braceCloseIndex < $index) {
+            return;
+        }
+
+        $this->replaceToken($tokens, $index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomTokens()
+    {
+        return [CT::T_TYPE_ALTERNATION];
+    }
+
+    private function replaceToken(Tokens $tokens, $index)
+    {
+        $tokens[$index] = new Token([CT::T_TYPE_ALTERNATION, '|']);
     }
 }

@@ -47,7 +47,7 @@ final class Error
     private $filePath;
 
     /**
-     * @var \Throwable|null
+     * @var null|\Throwable
      */
     private $source;
 
@@ -57,15 +57,15 @@ final class Error
     private $appliedFixers;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $diff;
 
     /**
      * @param int             $type
      * @param string          $filePath
-     * @param \Throwable|null $source
-     * @param string|null     $diff
+     * @param null|\Throwable $source
+     * @param null|string     $diff
      */
     public function __construct($type, $filePath, $source = null, array $appliedFixers = [], $diff = null)
     {
@@ -85,7 +85,7 @@ final class Error
     }
 
     /**
-     * @return \Throwable|null
+     * @return null|\Throwable
      */
     public function getSource()
     {
@@ -109,7 +109,7 @@ final class Error
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getDiff()
     {

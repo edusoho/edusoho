@@ -1,7 +1,7 @@
 <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} cd-btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
    href="javascript:;"
    data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
-   data-url="{{ path('export',{'name':exportFileName}) }}"
+   data-url="{{ path('export',{'name':exportFileName, 'customFileName': customFileName|default('')}) }}"
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"

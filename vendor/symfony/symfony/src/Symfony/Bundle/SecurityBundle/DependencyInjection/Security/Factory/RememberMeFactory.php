@@ -25,6 +25,7 @@ class RememberMeFactory implements SecurityFactoryInterface
         'domain' => null,
         'secure' => false,
         'httponly' => true,
+        'samesite' => null,
         'always_remember_me' => false,
         'remember_me_parameter' => '_remember_me',
     ];
@@ -139,7 +140,7 @@ class RememberMeFactory implements SecurityFactoryInterface
                 ->end()
                 ->prototype('scalar')->end()
             ->end()
-            ->scalarNode('catch_exceptions')->defaultTrue()->end()
+            ->booleanNode('catch_exceptions')->defaultTrue()->end()
         ;
 
         foreach ($this->options as $name => $value) {

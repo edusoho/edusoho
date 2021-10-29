@@ -51,6 +51,9 @@ class EmailValidator extends ConstraintValidator
         }
 
         $value = (string) $value;
+        if ('' === $value) {
+            return;
+        }
 
         if (null === $constraint->strict) {
             $constraint->strict = $this->isStrict;
@@ -58,7 +61,7 @@ class EmailValidator extends ConstraintValidator
 
         if ($constraint->strict) {
             if (!class_exists('\Egulias\EmailValidator\EmailValidator')) {
-                throw new RuntimeException('Strict email validation requires egulias/email-validator ~1.2|~2.0');
+                throw new RuntimeException('Strict email validation requires egulias/email-validator ~1.2|~2.0.');
             }
 
             $strictValidator = new \Egulias\EmailValidator\EmailValidator();

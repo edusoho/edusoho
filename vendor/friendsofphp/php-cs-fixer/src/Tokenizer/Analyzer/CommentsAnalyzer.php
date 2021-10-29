@@ -84,6 +84,14 @@ final class CommentsAnalyzer
         $nextIndex = $index;
         do {
             $nextIndex = $tokens->getNextMeaningfulToken($nextIndex);
+
+            // @TODO: drop condition when PHP 8.0+ is required
+            if (\defined('T_ATTRIBUTE')) {
+                while (null !== $nextIndex && $tokens[$nextIndex]->isGivenKind(T_ATTRIBUTE)) {
+                    $nextIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ATTRIBUTE, $nextIndex);
+                    $nextIndex = $tokens->getNextMeaningfulToken($nextIndex);
+                }
+            }
         } while (null !== $nextIndex && $tokens[$nextIndex]->equals('('));
 
         if (null === $nextIndex || $tokens[$nextIndex]->equals('}')) {
@@ -210,8 +218,8 @@ final class CommentsAnalyzer
             $token = $tokens[$index];
 
             if (
-                $token->isGivenKind(T_VARIABLE) &&
-                false !== strpos($docsContent, $token->getContent())
+                $token->isGivenKind(T_VARIABLE)
+                && false !== strpos($docsContent, $token->getContent())
             ) {
                 return true;
             }

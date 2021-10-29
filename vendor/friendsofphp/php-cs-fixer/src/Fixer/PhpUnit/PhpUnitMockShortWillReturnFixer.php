@@ -12,10 +12,10 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
+use PhpCsFixer\Tokenizer\Analyzer\FunctionsAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -23,7 +23,7 @@ use PhpCsFixer\Tokenizer\Tokens;
  * @author Michał Adamski <michal.adamski@gmail.com>
  * @author Kuba Werłos <werlos@gmail.com>
  */
-final class PhpUnitMockShortWillReturnFixer extends AbstractFixer
+final class PhpUnitMockShortWillReturnFixer extends AbstractPhpUnitFixer
 {
     /**
      * @internal
@@ -67,14 +67,6 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAllTokenKindsFound([T_CLASS, T_OBJECT_OPERATOR, T_STRING]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isRisky()
     {
         return true;
@@ -83,22 +75,12 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyPhpUnitClassFix(Tokens $tokens, $startIndex, $endIndex)
     {
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
-        foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indexes) {
-            $this->fixWillReturn($tokens, $indexes[0], $indexes[1]);
-        }
-    }
+        $functionsAnalyzer = new FunctionsAnalyzer();
 
-    /**
-     * @param int $startIndex
-     * @param int $endIndex
-     */
-    private function fixWillReturn(Tokens $tokens, $startIndex, $endIndex)
-    {
         for ($index = $startIndex; $index < $endIndex; ++$index) {
-            if (!$tokens[$index]->isGivenKind(T_OBJECT_OPERATOR)) {
+            if (!$tokens[$index]->isObjectOperator()) {
                 continue;
             }
 
@@ -114,16 +96,13 @@ final class MyTest extends \PHPUnit_Framework_TestCase
 
             $classReferenceIndex = $tokens->getNextMeaningfulToken($functionToReplaceOpeningBraceIndex);
             $objectOperatorIndex = $tokens->getNextMeaningfulToken($classReferenceIndex);
-            if (
-                !($tokens[$classReferenceIndex]->equals([T_VARIABLE, '$this'], false) && $tokens[$objectOperatorIndex]->equals([T_OBJECT_OPERATOR, '->']))
-                && !($tokens[$classReferenceIndex]->equals([T_STRING, 'self'], false) && $tokens[$objectOperatorIndex]->equals([T_DOUBLE_COLON, '::']))
-                && !($tokens[$classReferenceIndex]->equals([T_STATIC, 'static'], false) && $tokens[$objectOperatorIndex]->equals([T_DOUBLE_COLON, '::']))
-            ) {
+            $functionToRemoveIndex = $tokens->getNextMeaningfulToken($objectOperatorIndex);
+
+            if (!$functionsAnalyzer->isTheSameClassCall($tokens, $functionToRemoveIndex)) {
                 continue;
             }
 
-            $functionToRemoveIndex = $tokens->getNextMeaningfulToken($objectOperatorIndex);
-            if (!$tokens[$functionToRemoveIndex]->isGivenKind(T_STRING) || !\array_key_exists(strtolower($tokens[$functionToRemoveIndex]->getContent()), self::RETURN_METHODS_MAP)) {
+            if (!\array_key_exists(strtolower($tokens[$functionToRemoveIndex]->getContent()), self::RETURN_METHODS_MAP)) {
                 continue;
             }
 
