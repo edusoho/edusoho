@@ -20,3 +20,5 @@ export * from './TeacherQualification';
 export * from './LiveReplay';
 export * from './LiveStatistic';
 export * from './Classroom';
+export * from './CourseCategory';
+export * from './CourseTag';
