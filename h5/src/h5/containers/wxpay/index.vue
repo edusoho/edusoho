@@ -71,6 +71,7 @@ export default {
         },
       })
         .then(data => {
+          console.log(data);
           // 微信支付优化：使用优惠卷抵扣后 0 元，不再调用微信支付。
           const { isFree, payUrl } = data;
           if (isFree) {
