@@ -53,6 +53,12 @@ class Trade extends AbstractResource
                     $product = $this->getProduct($order['id']);
                     $product->validate();
                 } catch (\Exception $e) {
+                    if (0 == $order['pay_amount']) {
+                        $urlArr = $product->backUrl;
+                        $params['payUrl'] = $this->generateUrl($urlArr['routing'], $urlArr['params']);
+                        $params['isFree'] = true;
+                        return $params;
+                    }
                     throw OrderPayCheckException::UNABLE_PAY();
                 }
 
