@@ -71,6 +71,12 @@ export default {
         },
       })
         .then(data => {
+          // 微信支付优化：使用优惠卷抵扣后 0 元，不再调用微信支付。
+          const { isFree, payUrl } = data;
+          if (isFree) {
+            window.location.href = payUrl;
+          }
+
           // eslint-disable-next-line no-undef
           WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
