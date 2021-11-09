@@ -71,9 +71,12 @@ export default {
         },
       })
         .then(data => {
-          alert('test')
+
           // 微信支付优化：使用优惠卷抵扣后 0 元，不再调用微信支付。
           const { isPaid, payUrl } = data;
+
+          alert('test', isPaid, payUrl)
+
           if (isPaid) {
             window.location.href = payUrl;
           }
