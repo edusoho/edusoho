@@ -76,6 +76,7 @@ export default {
 
           if (isPaid) {
             window.location.href = payUrl;
+            return;
           }
 
           // eslint-disable-next-line no-undef
