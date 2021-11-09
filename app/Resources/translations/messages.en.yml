@@ -6463,7 +6463,7 @@ admin.role_manage.nickname: Creator
 admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
-admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
+admin.role_manage.help_block: '<p>1 The 6 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
 admin.role_manage.modal.show_modal: 'Role details'
 admin.role_manage.modal.edit_modal: 'Edit Role'
 admin.role_manage.modal.create_modal: 'Add roles'
