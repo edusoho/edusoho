@@ -73,13 +73,13 @@ export default {
         .then(data => {
 
           // 微信支付优化：使用优惠卷抵扣后 0 元，不再调用微信支付。
-          const { isPaid, payUrl } = data;
+          // const { isPaid, payUrl } = data;
 
-          alert('test', isPaid, payUrl)
+          alert('test')
 
-          if (isPaid) {
-            window.location.href = payUrl;
-          }
+          // if (isPaid) {
+          //   window.location.href = payUrl;
+          // }
 
           // eslint-disable-next-line no-undef
           WeixinJSBridge.invoke(
