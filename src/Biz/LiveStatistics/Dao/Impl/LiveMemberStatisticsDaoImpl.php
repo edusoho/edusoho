@@ -12,11 +12,19 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
 
     public function searchLiveMembersJoinCourseMember($conditions, $start, $limit)
     {
-        $builder = $this->createUserQueryBuilder($conditions)
-                   ->orderBy('live.requestTime', 'DESC')
-                   ->addOrderBy('member.id', 'ASC')
-                   ->setFirstResult((int) $start)
-                   ->setMaxResults((int) $limit);
+        $join = isset($conditions['liveId']) ? 'member.userId=live.userId and live.liveId = '.$conditions['liveId'] : 'member.userId=live.userId';
+        $this->conditionFilter($conditions);
+        $builder = new DynamicQueryBuilder($this->db(), $conditions);
+        $builder->select('live.*,member.userId,member.id,member.courseId')
+            ->from('course_member', 'member')
+            ->leftJoin('member', 'live_statistics_member_data', 'live', $join)
+            ->andWhere('member.userId IN ( :userIds )')
+            ->andWhere('member.userId = :userId')
+            ->andWhere('member.courseId = :courseId')
+            ->orderBy('live.requestTime', 'DESC')
+            ->addOrderBy('member.id', 'ASC')
+            ->setFirstResult((int) $start)
+            ->setMaxResults((int) $limit);
 
         return $builder->execute()->fetchAll();
     }
@@ -35,7 +43,7 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
         return $this->db()->fetchColumn($sql, [$liveId]);
     }
 
-    protected function createUserQueryBuilder($conditions)
+    protected function conditionFilter(&$conditions)
     {
         $conditions = array_filter(
             $conditions,
@@ -51,16 +59,6 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
                 return true;
             }
         );
-
-        $builder = new DynamicQueryBuilder($this->db(), $conditions);
-        $builder->select('live.*,member.userId,member.id,member.courseId')
-            ->from('course_member', 'member')
-            ->leftJoin('member', 'live_statistics_member_data', 'live', 'member.userId=live.userId')
-            ->andWhere('member.userId IN ( :userIds )')
-            ->andWhere('member.userId = :userId')
-            ->andWhere('member.courseId = :courseId');
-
-        return $builder;
     }
 
     public function declares()
