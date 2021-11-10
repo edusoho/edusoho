@@ -1194,7 +1194,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterIds = [];
         $chapterType = '';
         $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+        array_walk($ids, function ($k) use (&$chapterIds, &$chapterType) {
             list($type, $chapterId) = explode('-', $k);
             $chapterIds[] = $chapterId;
             $chapterType = $type;
