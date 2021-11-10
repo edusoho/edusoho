@@ -59,15 +59,15 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         //频次控制， 直播未结束 允许最多3分钟请求云平台
         if (!empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 180) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
         //频次控制， 直播已结束且未超过24小时 允许最多15分钟请求云平台
         if (time() > $activity['endTime'] && time() - $activity['endTime'] < 24 * 3600 && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 900) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
         //频次控制， 直播已结束且数据以获取结束(获取时间超过结束时间且数据收集结束) 直接返回数据
         if (!empty($cloudStatisticData['detailFinished'])) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
 
         $user = $this->getUserService()->getUser($course['teacherIds'][0]);
@@ -98,15 +98,15 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         //频次控制， 直播未结束 允许最多3分钟请求云平台
         if (!empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 180) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
         //频次控制， 直播已结束且未超过24小时 允许最多15分钟请求云平台
         if (time() > $activity['endTime'] && time() - $activity['endTime'] < 24 * 3600 && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 900) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
         //频次控制， 直播已结束且数据已获取结束(获取时间超过结束时间且数据收集结束) 直接返回数据
         if (!empty($cloudStatisticData['memberFinished'])) {
-            return  $cloudStatisticData;
+            return $cloudStatisticData;
         }
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
@@ -160,7 +160,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         foreach ($memberData['list'] as $member) {
             $data = [
                 'courseId' => $activity['fromCourseId'],
-                'userId' => $member['userId'],
+                'userId' => $member['studentId'],
                 'liveId' => $activity['ext']['liveId'],
                 'firstEnterTime' => $member['joinTime'],
                 'watchDuration' => $member['onlineDuration'],
