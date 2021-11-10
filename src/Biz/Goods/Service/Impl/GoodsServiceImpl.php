@@ -191,6 +191,17 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->update($goods['id'], ['hitNum' => $hitNum]);
     }
 
+    public function hitGoodsSpecs($id)
+    {
+        $goodsSpecs = $this->getGoodsSpecs($id);
+        $goods = $this->getGoods($goodsSpecs['goodsId']);
+        if (empty($goods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+        $goodsEntity = $this->getGoodsEntityFactory()->create($goods['type']);
+        $goodsEntity->hitSpecs($goodsSpecs);
+    }
+
     public function createGoodsSpecs($goodsSpecs)
     {
         if (!ArrayToolkit::requireds($goodsSpecs, [
