@@ -198,13 +198,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $replayList;
     }
 
-    public function handleReplayGenerateEvent($replayDatas)
+    public function handleReplayGenerateEvent($liveId, $replayDatas)
     {
-        $liveIds = ArrayToolkit::column($replayDatas, 'id');
-        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByLiveIds($liveIds);
-        $liveActivities = ArrayToolkit::index($liveActivities, 'liveId');
-
+        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByLiveIds([$liveId]);
         $liveActivityIds = ArrayToolkit::column($liveActivities, 'id');
+        $liveActivities = ArrayToolkit::index($liveActivities, 'liveId');
         $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType($liveActivityIds, 'live');
         $activities = ArrayToolkit::index($activities, 'mediaId');
 
