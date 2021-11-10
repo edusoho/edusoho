@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
@@ -200,41 +201,22 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
     public function handleReplayGenerateEvent($liveId, $replayDatas)
     {
-        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByLiveIds([$liveId]);
-        $liveActivityIds = ArrayToolkit::column($liveActivities, 'id');
-        $liveActivities = ArrayToolkit::index($liveActivities, 'liveId');
-        $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType($liveActivityIds, 'live');
-        $activities = ArrayToolkit::index($activities, 'mediaId');
-
-        $tasks = $this->getTaskService()->findTasksByActivityIds(ArrayToolkit::column($activities, 'id'));
-        $tasks = ArrayToolkit::index($tasks, 'activityId');
+        $liveActivity = $this->getLiveActivityService()->getByLiveId([$liveId]);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
 
         $replays = [];
         foreach ($replayDatas as $data) {
-            if (empty($liveActivities[$data['id']])) {
-                continue;
-            }
-            $liveActivity = $liveActivities[$data['id']];
-            $activity = $activities[$liveActivity['id']];
-            $task = $tasks[$activity['id']];
-
-            $isReplayExisted = $this->getLessonReplayDao()->getByReplayId($data['id']);
-            if (!$isReplayExisted) {
-                $replays[] = $this->addReplay([
-                    'courseId' => $activity['fromCourseId'],
-                    'lessonId' => $activity['id'],
-                    'title' => $data['subject'],
-                    'replayId' => $data['id'],
-                    'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
-                    'type' => 'live',
-                ]);
-            }
-
-            $client = new EdusohoLiveClient();
-            $result = $client->getMaxOnline($data['id']);
-            $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
+            $replays[] = $this->addReplay([
+                'courseId' => $activity['fromCourseId'],
+                'lessonId' => $activity['id'],
+                'title' => $data['subject'],
+                'replayId' => $data['id'],
+                'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
+                'type' => 'live',
+            ]);
         }
 
+        $this->getLiveActivityDao()->update($activity['id'], ['replayStatus'=>'generated']);
         $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayDatas;
@@ -321,5 +303,13 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return LiveActivityDao
+     */
+    protected function getLiveActivityDao()
+    {
+        return $this->createDao('Activity:LiveActivityDao');
     }
 }
