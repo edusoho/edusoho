@@ -34,7 +34,6 @@ class LiveStatisticMember extends AbstractResource
         $conditions = ['courseId' => $task['courseId'], 'liveId' => $activity['ext']['liveId']];
         $this->buildUserConditions($request, $conditions);
         $members = $this->getLiveStatisticsService()->searchCourseMemberLiveData($conditions, $offset, $limit);
-        unset($conditions['liveId']);
 
         return $this->makePagingObject($this->processMemberData($activity, $members), $this->getCourseMemberService()->countMembers($conditions), $offset, $limit);
     }
