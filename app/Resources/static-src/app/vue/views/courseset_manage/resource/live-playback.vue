@@ -59,6 +59,7 @@
 </template>
 <script>
 import { LiveReplay } from 'common/vue/service';
+import Loading from 'app/vue/mixins/loading.js';
 
 const columns = [
   {
@@ -85,6 +86,8 @@ const columns = [
 
 export default {
   name: 'CoursesetManageLivePlayback',
+
+  mixins: [Loading],
 
   data() {
     return {
