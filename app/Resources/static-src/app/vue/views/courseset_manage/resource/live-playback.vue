@@ -125,7 +125,6 @@ export default {
           offset: (current - 1) * pageSize,
           limit: pageSize,
           courseId: this.courseId
-
         }
       }
       const { data, paging } = await LiveReplay.get(params);
