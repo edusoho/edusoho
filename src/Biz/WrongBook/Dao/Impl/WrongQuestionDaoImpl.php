@@ -13,7 +13,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     const WRONG_QUESTION_ORDER_BY = ['submit_time'];
 
-    const  WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times', 'last_submit_time'];
+    const WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times', 'last_submit_time'];
 
     public function findWrongQuestionBySceneIds($sceneIds)
     {
