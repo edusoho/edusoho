@@ -1,6 +1,7 @@
 <template>
   <layout>
     <template #title>{{ 'live_statistics' | trans }}</template>
+
     <div class="clearfix">
       <a-input-search
         class="pull-left"
