@@ -31,7 +31,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -56,10 +56,11 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         return $prepareConditions;
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
+        $sceneIds = ArrayToolkit::column($wrongQuestions, 'answer_scene_id');
         $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionBySceneIds($sceneIds);
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);
