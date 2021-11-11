@@ -201,7 +201,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
     public function handleReplayGenerateEvent($liveId, $replayDatas)
     {
-        $liveActivity = $this->getLiveActivityService()->getByLiveId([$liveId]);
+        $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
 
         $replays = [];
@@ -216,7 +216,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             ]);
         }
 
-        $this->getLiveActivityDao()->update($activity['id'], ['replayStatus'=>'generated']);
+        $this->getLiveActivityDao()->update($activity['id'], ['replayStatus' => 'generated']);
         $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayDatas;
