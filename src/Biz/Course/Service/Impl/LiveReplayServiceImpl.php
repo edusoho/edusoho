@@ -211,12 +211,13 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
                 'lessonId' => $activity['id'],
                 'title' => $data['subject'],
                 'replayId' => $data['id'],
+                'userId' => $liveActivity['anchorId'],
                 'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
                 'type' => 'live',
             ]);
         }
 
-        $this->getLiveActivityDao()->update($activity['id'], ['replayStatus' => 'generated']);
+        $this->getLiveActivityDao()->update($liveActivity['id'], ['replayStatus' => 'generated']);
         $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayDatas;
