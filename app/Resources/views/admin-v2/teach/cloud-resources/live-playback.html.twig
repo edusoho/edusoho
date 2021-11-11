@@ -5,7 +5,7 @@
 {% do script(['app/vue/views/teach/cloud_resources/live_playback/index.js']) %}
 
 {% block main %}
-  <div id="app"></div>
-
-  {% include "vue-components/loading.html.twig" %}
+  <div id="app">
+    {% include "vue-components/loading.html.twig" %}
+  </div>
 {% endblock %}

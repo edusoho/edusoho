@@ -94,7 +94,6 @@ import _ from 'lodash';
 import { LiveReplay, CourseCategory, CourseTag } from 'common/vue/service';
 import EditModal from './components/EditModal.vue';
 import RemoveModal from './components/RemoveModal.vue';
-import Loading from 'app/vue/mixins/loading.js';
 
 const columns = [
   {
@@ -121,8 +120,6 @@ const columns = [
 
 export default {
   name: 'LivePlayback',
-
-  mixins: [Loading],
 
   components: {
     EditModal,
