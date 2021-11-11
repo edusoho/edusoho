@@ -40,10 +40,7 @@ class LiveController extends BaseController
                     $this->getLiveActivityService()->startLive($eventData['id'], $eventData['startTime']);
                     break;
                 case 'room.finished':
-                    $confirmStatus = $this->getLiveService()->confirmLiveStatus($eventData['id']);
-                    if (isset($confirmStatus[$eventData['id']]['status']) && 'finished' === $confirmStatus['status']) {
-                        $this->getLiveActivityService()->closeLive($eventData['id'], $eventData['endTime']);
-                    }
+                    $this->getLiveActivityService()->closeLive($eventData['id'], $eventData['endTime']);
                     break;
                 case 'replay.finished':
                     $this->getLiveReplayService()->handleReplayGenerateEvent($eventData['id'], $eventData['replayDatas']);
