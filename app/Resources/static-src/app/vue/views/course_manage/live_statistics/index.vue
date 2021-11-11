@@ -1,7 +1,6 @@
 <template>
   <layout>
     <template #title>{{ 'live_statistics' | trans }}</template>
-
     <div class="clearfix">
       <a-input-search
         class="pull-left"
@@ -50,6 +49,7 @@
 import _ from 'lodash';
 import Layout from '../layout.vue';
 import { LiveStatistic } from 'common/vue/service';
+import Loading from 'app/vue/mixins/loading.js';
 
 const columns = [
   {
@@ -83,6 +83,8 @@ const columns = [
 
 export default {
   name: 'CourseManageLiveStatistics',
+
+  mixins: [Loading],
 
   components: {
     Layout
