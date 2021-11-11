@@ -211,6 +211,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
                 'lessonId' => $activity['id'],
                 'title' => $data['subject'],
                 'replayId' => $data['id'],
+                'userId' => $liveActivity['anchorId'],
                 'globalId' => empty($data['resourceNo']) ? '' : $data['resourceNo'],
                 'type' => 'live',
             ]);
