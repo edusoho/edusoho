@@ -140,7 +140,7 @@ site.twig.extension.smarttime.previous_day: %diff% day ago
 site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili, Iqiyi is now suported
 site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
@@ -9236,6 +9236,10 @@ exception.parsed.failed.netease: Failed to get video information of Netease Open
 exception.parsed.failed.letv: Failed to get video information of Letv
 exception.parsed.failed.qq: Failed to get video information of QQ video
 exception.parsed.failed.youku: Failed to get video information of Youku
+exception.parsed.failed.bilibili: Failed to get video information of bilibili
+exception.parsed.failed.bilibili_video_id: Failed to get video id of bilibili
+exception.parsed.failed.iqiyi: Failed to get video information of iqiyi
+exception.parsed.failed.iqiyi_video_id: Failed to get video id of iqiyi
 exception.parser.not.support: This video type is not supported
 
 exception.announcement.notfound: Announcement not found

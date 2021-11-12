@@ -6,58 +6,54 @@ use AppBundle\Component\MediaParser\ParserException;
 
 class YoukuVideoItemParser extends AbstractItemParser
 {
-    private $patterns = array(
+    private $patterns = [
         'p1' => '/^http[s]{0,1}\:\/\/v\.youku\.com\/v_show\/id_(.+?).html/s',
         'p2' => '/http[s]{0,1}:\/\/player\.youku\.com\/player\.php.*?\/sid\/(.+?)\/v.swf/s',
-    );
+        'p3' => '/http[s]{0,1}:\/\/player\.youku\.com\/embed\/(.*)/s',
+    ];
 
     protected function parseForWebUrl($item, $url)
     {
-        $matched = preg_match($this->patterns['p2'], $url, $matches);
+        $matched = preg_match($this->patterns['p1'], $url, $matches) || preg_match($this->patterns['p3'], $url, $matches);
         if ($matched) {
             $url = "http://v.youku.com/v_show/id_{$matches[1]}.html";
         }
-
         $matched = preg_match('/\/id_(.+?).html/s', $url, $matches);
         if (empty($matched)) {
             throw ParserException::PARSED_FAILED_YOUKU();
         }
-
         $videoId = $matches[1];
-
         $response = $this->fetchUrl($url);
         if (200 != $response['code']) {
             throw ParserException::PARSED_FAILED_YOUKU();
         }
-
         $response['content'] = htmlspecialchars_decode(urldecode($response['content']));
-        $matched = preg_match('/id=[\\\\]{0,1}"s_baidu1[\\\\]{0,1}"\s+href=[\\\\]{0,1}"(.*?)[\\\\]{0,1}"/s', $response['content'], $matches);
-        if (empty($matched)) {
-            throw ParserException::PARSED_FAILED_YOUKU();
-        }
-        $queryString = substr($matches[1], strpos($matches[1], '?') + 1);
-        $queryString = substr($queryString, 0, strpos($queryString, '#') ?: strlen($queryString));
-        parse_str($queryString, $query);
+        //匹配标题
+        $titlePattern = '|<meta property="og:title" content="(.*?)"/>|s';
+        preg_match($titlePattern, $response['content'], $title);
+        //匹配描述
+        $summaryPattern = '|"desc":"(.*?)"|s';
+        preg_match($summaryPattern, $response['content'], $summary);
+        //匹配封面
+        $picturesPattern = '|<meta property="og:image" content="(.*?)"/>|s';
+        preg_match($picturesPattern, $response['content'], $pictures);
 
-        if (empty($query) || empty($query['title'])) {
-            throw ParserException::PARSED_FAILED_YOUKU();
-        }
-
+        $item['name'] = $title[1] ?? 'YouKu'.$videoId;
+        $item['summary'] = $summary[1] ?? '';
+        $item['pictures'] = $pictures[1] ?? '';
         $item['uuid'] = 'youku:'.$videoId;
-        $item['name'] = $query['title'];
-        $item['summary'] = empty($query['desc']) ? '' : $query['desc'];
         $item['page'] = "http://v.youku.com/v_show/id_{$videoId}.html";
-        $item['pictures'] = empty($query['pic']) ? array() : array('url' => $query['pic']);
-        $item['files'] = array(
-            array('url' => "//player.youku.com/player.php/sid/{$videoId}/v.swf", 'type' => 'swf'),
-        );
+        $item['files'] = [
+            ['url' => "https://player.youku.com/embed/{$videoId}", 'type' => 'mp4'],
+        ];
+        $item['content'] = $response['content'];
 
         return $item;
     }
 
     protected function getUrlPrefixes()
     {
-        return array('v.youku.com', 'player.youku.com');
+        return ['v.youku.com', 'player.youku.com'];
     }
 
     protected function convertMediaUri($video)
@@ -72,9 +68,9 @@ class YoukuVideoItemParser extends AbstractItemParser
 
     protected function getDefaultParsedInfo()
     {
-        return array(
+        return [
             'source' => 'youku',
             'name' => '优酷视频',
-        );
+        ];
     }
 }

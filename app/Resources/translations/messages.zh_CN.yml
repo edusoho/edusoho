@@ -146,7 +146,7 @@ site.twig.extension.smarttime.previous_day: %diff%天前
 site.twig.extension.time_interval.minute: %diff%分
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
-site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
 site.setting.unfinished: 未设置
@@ -10516,6 +10516,10 @@ exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parsed.failed.bilibili: 获取哔哩哔哩视频信息失败
+exception.parsed.failed.bilibili_video_id: 解析哔哩哔哩视频ID失败
+exception.parsed.failed.iqiyi: 获取爱奇艺视频信息失败
+exception.parsed.failed.iqiyi_video_id: 解析爱奇艺视频ID失败
 exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在
