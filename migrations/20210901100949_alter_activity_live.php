@@ -16,7 +16,7 @@ class AlterActivityLive extends Migration
             ALTER TABLE `activity_live` ADD COLUMN `liveEndTime` int(10) NOT NULL DEFAULT 0 COMMENT '直播开始时间' AFTER `liveStartTime`;
             ALTER TABLE `activity_live` ADD COLUMN `replayTagIds` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '回放标签ID' AFTER `liveEndTime`;
             ALTER TABLE `activity_live` ADD COLUMN `replayPublic` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回放是否共享' AFTER `replayTagId`;
-            ALTER TABLE `activity_live` ADD COLUMN `anchorId` int(10) NOT NULL DEFAULT 0 COMMENT '主讲人Id' AFTER `replayPublic`;
+            ALTER TABLE `activity_live` ADD COLUMN `anchorId` int(10) NOT NULL DEFAULT 0 COMMENT '主讲人Id';
         ");
     }
 
