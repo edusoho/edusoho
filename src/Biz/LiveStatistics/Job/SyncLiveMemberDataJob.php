@@ -2,12 +2,12 @@
 
 namespace Biz\LiveStatistics\Job;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
+use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -17,34 +17,39 @@ class SyncLiveMemberDataJob extends AbstractJob
 {
     const LIMIT = 500;
 
-    const FINISH = 111;
+    const FINISH = 99999999999999;
 
     const ES_CLOUD_LIVE_PROVIDER = 13;
 
     protected $EdusohoLiveClient = null;
 
-    protected $requestTimes = 0;
+    protected $requestTime = 0;
 
     protected $start = 0;
 
     protected $activityId = 0;
 
+    protected $syncLive = 0;
+
     public function execute()
     {
+        $this->requestTime = time();
         $this->activityId = $this->args['activityId'];
         $this->start = empty($this->args['start']) ? 0 : $this->args['start'];
+        $this->syncLive = empty($this->args['syncLiveDetail']) ? 0 : $this->args['syncLiveDetail'];
         $activity = $this->getActivityService()->getActivity($this->activityId, true);
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
-        while ($this->requestTimes < 5) {
+        while (time() - $this->requestTime < 90) {
             $this->getLiveStatistic($activity);
             $this->start += self::LIMIT;
         }
+        $this->createdSyncJob();
     }
 
     protected function createdSyncJob()
     {
-        if (self::FINISH != $this->requestTimes) {
+        if (self::FINISH != $this->requestTime) {
             $startJob = [
                 'name' => 'SyncLiveMemberDataJob'.$this->activityId.'_'.time(),
                 'expression' => time() - 100,
@@ -61,8 +66,11 @@ class SyncLiveMemberDataJob extends AbstractJob
 
     protected function getLiveStatistic($activity)
     {
-        $this->getGeneralLiveMemberStatistics($activity);
-        $this->getESLiveMemberStatistics($activity);
+        try {
+            $this->getGeneralLiveMemberStatistics($activity);
+            $this->getESLiveMemberStatistics($activity);
+        } catch (\RuntimeException $e) {
+        }
     }
 
     /**
@@ -70,47 +78,23 @@ class SyncLiveMemberDataJob extends AbstractJob
      */
     protected function getGeneralLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || ($activity['endTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime']))) {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || ($activity['endTime'] > time() && date('Y-m-d', time()) == date('Y-m-d', $activity['endTime']))) {
             return;
         }
-
         try {
             $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
 
-        if (empty($memberData['list'])) {
-            return;
-        }
-        $createData = [];
-        $updateData = [];
-        $userIds = ArrayToolkit::column($memberData['list'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
-        $members = ArrayToolkit::index($members, 'userId');
-        foreach ($memberData['list'] as $member) {
-            $data = [
-                'courseId' => $activity['fromCourseId'],
-                'userId' => $member['userId'],
-                'liveId' => $activity['ext']['liveId'],
-                'firstEnterTime' => $member['joinTime'],
-                'watchDuration' => $member['onlineDuration'],
-                'checkinNum' => $member['checkinNumber'],
-                'chatNumber' => $member['chatNumber'],
-                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
-                'requestTime' => time(),
-            ];
-            if (!empty($members[$member['userId']])) {
-                $updateData[$members[$member['userId']]['id']] = $data;
-                continue;
-            }
-            $createData[] = $data;
-        }
+        $this->processGeneralLiveMemberData($activity, $memberData);
         if (count($memberData['list']) < self::LIMIT) {
-            $this->requestTimes = self::FINISH;
+            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
+            $this->requestTime = self::FINISH;
+            if ($this->syncLive) {
+                $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+                $this->getLiveCloudStatisticsService()->getLiveData($task);
+            }
         }
-        $this->getLiveCloudStatisticsService()->batchCreateLiveMemberData($createData);
-        $this->getLiveCloudStatisticsService()->batchUpdateLiveMemberData($updateData);
-        ++$this->requestTimes;
     }
 
     /**
@@ -126,38 +110,18 @@ class SyncLiveMemberDataJob extends AbstractJob
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
 
-        if (empty($memberData['data'])) {
-            return;
-        }
-        $createData = [];
-        $updateData = [];
-        $userIds = ArrayToolkit::column($memberData['data'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
-        $members = ArrayToolkit::index($members, 'userId');
-        foreach ($memberData['data'] as $member) {
-            $data = [
-                'courseId' => $activity['fromCourseId'],
-                'userId' => $member['userId'],
-                'liveId' => $activity['ext']['liveId'],
-                'firstEnterTime' => $member['firstEnterTime'],
-                'watchDuration' => $member['watchDuration'],
-                'checkinNum' => $member['checkinNum'],
-                'chatNumber' => empty($member['chatNumber']) ? 0 : $member['chatNumber'],
-                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
-                'requestTime' => time(),
-            ];
-            if (!empty($members[$member['userId']])) {
-                $updateData[$members[$member['userId']]['id']] = $data;
-                continue;
-            }
-            $createData[] = $data;
-        }
+        $this->getLiveCloudStatisticsService()->processEsLiveMemberData($activity, $memberData);
         if (count($memberData['data']) < self::LIMIT) {
-            $this->requestTimes = self::FINISH;
+            $this->requestTime = self::FINISH;
         }
-        $this->getLiveCloudStatisticsService()->batchCreateLiveMemberData($createData);
-        $this->getLiveCloudStatisticsService()->batchUpdateLiveMemberData($updateData);
-        ++$this->requestTimes;
+    }
+
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
+    {
+        return ServiceKernel::instance()->createService('Task:TaskService');
     }
 
     /**

@@ -132,6 +132,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'fromCourseSetId = :fromCourseSetId',
             'fromCourseSetId IN (:courseSetIds)',
             'startTime >= :startTime_GT',
+            'startTime <= :startTime_LT',
             'endTime <= :endTime_LT',
             'copyId = :copyId',
         ];

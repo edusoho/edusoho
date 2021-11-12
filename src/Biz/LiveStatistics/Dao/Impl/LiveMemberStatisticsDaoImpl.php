@@ -36,13 +36,6 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
         return $this->db()->fetchColumn($sql, [$liveId]);
     }
 
-    public function sumChatNumByLiveId($liveId)
-    {
-        $sql = 'SELECT sum(`chatNum`) FROM `live_statistics_member_data` WHERE  `liveId` = ? ';
-
-        return $this->db()->fetchColumn($sql, [$liveId]);
-    }
-
     protected function conditionFilter(&$conditions)
     {
         $conditions = array_filter(

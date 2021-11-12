@@ -21,10 +21,20 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 {
     const ES_CLOUD_LIVE_PROVIDER = 13;
 
-    const LIMIT = 500;
+    const LIMIT = 300;
 
+    /**
+     * @var EdusohoLiveClient
+     */
     protected $EdusohoLiveClient = null;
 
+    /**
+     * @param $conditions
+     * @param $start
+     * @param $limit
+     *
+     * @return string[]
+     */
     public function searchCourseMemberLiveData($conditions, $start, $limit)
     {
         if (!ArrayToolkit::requireds($conditions, ['courseId', 'liveId'])) {
@@ -44,11 +54,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
     }
 
-    public function sumChatNumByLiveId($liveId)
-    {
-        return $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
-    }
-
     public function getLiveData($task)
     {
         $course = $this->getCourseService()->tryManageCourse($task['courseId']);
@@ -62,11 +67,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             return $cloudStatisticData;
         }
         //频次控制， 直播已结束且未超过24小时 允许最多15分钟请求云平台
-        if (time() > $activity['endTime'] && time() - $activity['endTime'] < 24 * 3600 && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 900) {
-            return $cloudStatisticData;
-        }
-        //频次控制， 直播已结束且数据以获取结束(获取时间超过结束时间且数据收集结束) 直接返回数据
-        if (!empty($cloudStatisticData['detailFinished'])) {
+        if (!empty($cloudStatisticData['detailFinished']) || ('closed' == $activity['ext']['progressStatus'] && empty($cloudStatisticData['detailFinished']) && time() - $cloudStatisticData['requestTime'] < 900)) {
             return $cloudStatisticData;
         }
 
@@ -83,9 +84,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         ];
         $this->getGeneralLiveStatistics($activity, $task, $data);
         $this->getESLiveStatistics($activity, $task, $data);
-        $sum = $this->sumWatchDurationByLiveId($activity['ext']['liveId']);
-        $memberCount = $this->countLiveMembersByLiveId($activity['ext']['liveId']);
-        $data['avgWatchTime'] = empty($memberCount) ? 0 : round($sum / ($memberCount * 60), 1);
         $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($cloudStatisticData, $data)]);
 
         return $data;
@@ -138,64 +136,12 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     }
 
     /**
-     * @param $activity //其他直播数据 ，隔天
+     * @param $activity
+     * @param $memberData //云接口数据
+     * //处理自研直播
      */
-    protected function getGeneralLiveMemberStatistics($activity)
+    public function processEsLiveMemberData($activity, $memberData)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || ($activity['endTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime']))) {
-            return;
-        }
-        try {
-            $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
-        } catch (CloudAPIIOException $cloudAPIIOException) {
-        }
-        if (empty($memberData['list'])) {
-            return;
-        }
-        $createData = [];
-        $updateData = [];
-        $userIds = ArrayToolkit::column($memberData['list'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
-        $members = ArrayToolkit::index($members, 'userId');
-        foreach ($memberData['list'] as $member) {
-            $data = [
-                'courseId' => $activity['fromCourseId'],
-                'userId' => $member['studentId'],
-                'liveId' => $activity['ext']['liveId'],
-                'firstEnterTime' => $member['joinTime'],
-                'watchDuration' => $member['onlineDuration'],
-                'checkinNum' => $member['checkinNumber'],
-                'chatNum' => $member['chatNumber'],
-                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
-                'requestTime' => time(),
-            ];
-            if (!empty($members[$member['userId']])) {
-                $updateData[$members[$member['userId']]['id']] = $data;
-                continue;
-            }
-            $createData[] = $data;
-        }
-        if (!empty($memberData['list']) && time() - $activity['endTime'] > 2 * 3600) {
-            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
-        }
-        $this->batchCreateLiveMemberData($createData);
-        $this->batchUpdateLiveMemberData($updateData);
-        $this->createdSyncMemberDataJob($activity, $memberData);
-    }
-
-    /**
-     * @param $activity //自研直播数据单独处理，实时
-     */
-    protected function getESLiveMemberStatistics($activity)
-    {
-        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
-            return;
-        }
-        try {
-            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
-        } catch (CloudAPIIOException $cloudAPIIOException) {
-        }
-
         if (empty($memberData['data'])) {
             return;
         }
@@ -222,12 +168,80 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             }
             $createData[] = $data;
         }
-        if (time() - $activity['endTime'] > 2 * 3600) {
-            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
+        $this->batchCreateLiveMemberData($createData);
+        $this->batchUpdateLiveMemberData($updateData);
+    }
+
+    /**
+     * @param $activity
+     * @param $memberData //云接口数据
+     * //处理非自研直播
+     */
+    public function processGeneralLiveMemberData($activity, $memberData)
+    {
+        if (empty($memberData['list'])) {
+            return;
+        }
+        $createData = [];
+        $updateData = [];
+        $userIds = ArrayToolkit::column($memberData['list'], 'userId');
+        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
+        $members = ArrayToolkit::index($members, 'userId');
+        foreach ($memberData['list'] as $member) {
+            $data = [
+                'courseId' => $activity['fromCourseId'],
+                'userId' => $member['studentId'],
+                'liveId' => $activity['ext']['liveId'],
+                'firstEnterTime' => $member['joinTime'],
+                'watchDuration' => $member['onlineDuration'],
+                'checkinNum' => $member['checkinNumber'],
+                'chatNum' => $member['chatNumber'],
+                'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
+                'requestTime' => time(),
+            ];
+            if (!empty($members[$member['userId']])) {
+                $updateData[$members[$member['userId']]['id']] = $data;
+                continue;
+            }
+            $createData[] = $data;
         }
         $this->batchCreateLiveMemberData($createData);
         $this->batchUpdateLiveMemberData($updateData);
+    }
+
+    /**
+     * @param $activity //其他直播数据 ，隔天；用于定时任务
+     */
+    protected function getGeneralLiveMemberStatistics($activity)
+    {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || ($activity['endTime'] > time() && date('Y-m-d', time()) == date('Y-m-d', $activity['endTime']))) {
+            return;
+        }
+        try {
+            $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+        } catch (CloudAPIIOException $cloudAPIIOException) {
+        }
+        $this->processGeneralLiveMemberData($activity, $memberData);
         $this->createdSyncMemberDataJob($activity, $memberData);
+    }
+
+    /**
+     * @param $activity //自研直播数据单独处理，实时
+     */
+    protected function getESLiveMemberStatistics($activity)
+    {
+        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
+            return;
+        }
+        try {
+            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+        } catch (CloudAPIIOException $cloudAPIIOException) {
+        }
+        $this->processEsLiveMemberData($activity, $memberData);
+        $this->createdSyncMemberDataJob($activity, $memberData);
+        if (time() - $activity['endTime'] > 2 * 3600) {
+            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
+        }
     }
 
     protected function createdSyncMemberDataJob($activity, $memberData)
@@ -268,8 +282,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
         $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
-
-        if ((!empty($cloudData['onlineNumber']) && time() - $activity['endTime'] > 2 * 3600) || time() - $activity['endTime'] > 24 * 3600) {
+        $sum = $this->sumWatchDurationByLiveId($activity['ext']['liveId']);
+        $data['avgWatchTime'] = empty($data['memberNumber']) ? 0 : round($sum / ($data['memberNumber'] * 60), 1);
+        if (!empty($activity['ext']['cloudStatisticData']['memberFinished'])) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
         }
     }
@@ -288,16 +303,18 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         try {
             $cloudData = $this->EdusohoLiveClient->getEsLiveInfo($activity['ext']['liveId']);
             $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => 1]);
+            $liveBatch = $this->EdusohoLiveClient->getLiveCheckBatchData($activity['ext']['liveId'], []);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
         $data['startTime'] = empty($cloudData['actualStartTime']) ? $data['startTime'] : $cloudData['actualStartTime'];
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
-        $data['checkinNum'] = empty($cloudData['checkinNum']) ? 0 : $cloudData['checkinNum'];
-        $data['chatNumber'] = $this->sumChatNumByLiveId($activity['ext']['liveId']);
+        $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
+        $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'];
-
-        if (time() - $activity['endTime'] > 2 * 3600) {
+        $sum = empty($memberData['viewerTotalTime']) ? 0 : $memberData['viewerTotalTime'];
+        $data['avgWatchTime'] = empty($memberData['total']) ? 0 : round($sum / ($memberData['total'] * 60), 1);
+        if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
         }
     }
