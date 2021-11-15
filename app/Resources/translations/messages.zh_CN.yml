@@ -1364,11 +1364,12 @@ course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
 course.replay_manage.tips: >
-  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  提示：对于“回放生成失败”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来重新生成直播回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
   <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.ungenerated: 生成回放中
+course.replay_manage.generated_fail: 回放生成失败，点击录像重新生成
 course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除

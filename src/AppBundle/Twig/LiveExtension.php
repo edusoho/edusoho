@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
@@ -202,6 +203,9 @@ class LiveExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');

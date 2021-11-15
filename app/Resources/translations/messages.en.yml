@@ -1152,7 +1152,8 @@ course.replay_manage.tips: >
   <div><b>Attention please, you can not generate an online video after uploading a video file!</b></div>
 course.replay_manage.unpublished: Unpublished
 course.replay_manage.live_not_stop: 'Live not finished'
-course.replay_manage.ungenerated: 'Ungenerated playback'
+course.replay_manage.ungenerated: 'Generating playback'
+course.replay_manage.generated_fail: 'Playback generation failed, click on the record to regenerate'
 course.replay_manage.generated: 'Generated playback'
 course.replay_manage.video_generated.file_exsist: 'The video has been uploaded'
 course.replay_manage.video_generated.file_not_exsist: 'The video has been deleted'

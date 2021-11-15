@@ -31,7 +31,11 @@
 
 		{% if task.status == 'published' and task.isEnd %}
 			{% if activity.ext.replayStatus == 'ungenerated' %}
-				<span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
+        {% if "now"|date("U") >= activity.ext.liveEndTime+6*3600 %}
+				  <span class="cd-text-danger">({{'course.replay_manage.generated_fail'|trans}})</span>
+        {% else %}
+          <span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
+        {% endif %}
 			{% elseif activity.ext.replayStatus == 'generated' %}
 				<span class="text-warning">({{'course.replay_manage.generated'|trans}})</span>
 			{% elseif activity.ext.replayStatus == 'videoGenerated' %}
