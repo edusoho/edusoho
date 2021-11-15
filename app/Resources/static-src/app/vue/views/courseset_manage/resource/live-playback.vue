@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb16">
+    <div class="mb16" style="padding: 12px 20px; background: #f4f4f4;">
       <a-button
         type="danger"
         :disabled="!hasSelected"
@@ -125,7 +125,6 @@ export default {
           offset: (current - 1) * pageSize,
           limit: pageSize,
           courseId: this.courseId
-
         }
       }
       const { data, paging } = await LiveReplay.get(params);

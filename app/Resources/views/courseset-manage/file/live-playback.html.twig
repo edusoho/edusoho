@@ -32,6 +32,8 @@
     </div>
 
     <input type="hidden" class="js-course-id" value="{{ course.id }}" />
-    <div id="app"></div>
+    <div id="app">
+      {% include "vue-components/loading.html.twig" %}
+    </div>
   </div>
 {% endblock %}

@@ -190,12 +190,13 @@ export default {
       this.loading = true;
       const { current, pageSize } = this.pagination;
       const params = {
-        query,
         params: {
           offset: (current - 1) * pageSize,
-          limit: pageSize
+          limit: pageSize,
+          ...query
         }
       }
+
       const { data, paging } = await LiveReplay.get(params);
       this.loading = false;
       this.pagination.total = paging.total;
