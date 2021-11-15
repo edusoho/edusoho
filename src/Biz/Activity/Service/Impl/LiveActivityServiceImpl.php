@@ -248,9 +248,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->count($conditions);
     }
 
-    public function updateLiveActivityWithoutEvent($id, $fields)
+    public function updateLiveActivityWithoutEvent($liveActivityId, $fields)
     {
-        return $this->getLiveActivityDao()->update($id, $fields);
+        return $this->getLiveActivityDao()->update($liveActivityId, $fields);
     }
 
     public function shareLiveReplay($liveActivityId)
