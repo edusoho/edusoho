@@ -60,7 +60,7 @@ export default {
       confirmLoading: false,
       form: {
         id: undefined,
-        tag: undefined,
+        tagIds: undefined,
         replayPublic: '0'
       }
     }

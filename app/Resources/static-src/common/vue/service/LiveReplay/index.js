@@ -12,6 +12,6 @@ export const LiveReplay = {
   },
 
   async update({ query, params }) {
-    return apiClient.patch(`${baseUrl}/${query.id}`, { params });
+    return apiClient.patch(`${baseUrl}/${query.id}`, params);
   }
 }
