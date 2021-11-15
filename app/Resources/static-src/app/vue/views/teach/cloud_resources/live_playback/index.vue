@@ -172,8 +172,8 @@ export default {
 
       const { time } = query;
       if (time) {
-        query.startTime = moment(time[0]).valueOf();
-        query.endTime = moment(time[1]).valueOf();
+        query.startTime = moment(time[0]).unix();
+        query.endTime = moment(time[1]).unix();
         delete query.time;
       }
 
@@ -190,13 +190,12 @@ export default {
       this.loading = true;
       const { current, pageSize } = this.pagination;
       const params = {
+        query,
         params: {
           offset: (current - 1) * pageSize,
-          limit: pageSize,
-          ...query
+          limit: pageSize
         }
       }
-
       const { data, paging } = await LiveReplay.get(params);
       this.loading = false;
       this.pagination.total = paging.total;
