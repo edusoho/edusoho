@@ -106,6 +106,7 @@ class Good extends AbstractResource
                 $spec['canVipJoin'] = 'ok' == $this->getVipService()->checkUserVipRight($user['id'], $goods['type'], $spec['targetId']);
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
+            $spec['services'] = $spec['services'] ?: [];
         }
         $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
     }
