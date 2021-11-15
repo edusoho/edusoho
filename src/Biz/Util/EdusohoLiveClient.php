@@ -216,7 +216,7 @@ class EdusohoLiveClient
      */
     public function getEsLiveInfo($cloudLiveId)
     {
-        return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/info");
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/info");
     }
 
     /**
@@ -241,6 +241,19 @@ class EdusohoLiveClient
     public function getEsLiveMembers($cloudLiveId, $args)
     {
         return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/members", $args);
+    }
+
+    /**
+     * 自研直播接口
+     *
+     * @param $liveId
+     * @param $args // start limit
+     *
+     * @return mixed
+     */
+    public function getLiveCheckBatchData($liveId, $args)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$liveId}/checkinBatches", $args);
     }
 
     /**

@@ -19,7 +19,6 @@ class LiveStatisticDetail extends AbstractResource
         if (empty($task)) {
             TaskException::NOTFOUND_TASK();
         }
-        $this->getLiveStatisticsService()->getLiveMemberData($task);
         $result = $this->getLiveStatisticsService()->getLiveData($task);
         $task = $this->getTaskService()->getTask($taskId);
         $result['task'] = ArrayToolkit::parts($task, ['id', 'startTime', 'endTime', 'title', 'length']);

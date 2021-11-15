@@ -10,7 +10,9 @@ interface LiveCloudStatisticsService
 
     public function sumWatchDurationByLiveId($liveId);
 
-    public function sumChatNumByLiveId($liveId);
-
     public function getLiveData($task);
+
+    public function processEsLiveMemberData($activity, $memberData);
+
+    public function processGeneralLiveMemberData($activity, $memberData);
 }
