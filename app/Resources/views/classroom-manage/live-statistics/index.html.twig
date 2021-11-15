@@ -6,5 +6,11 @@
 
 {% block main %}
   <input type="hidden" class="js-classroom-id" value="{{ classroom.id }}" />
-  <div id="app"></div>
+  <div id="app">
+    <div class="panel panel-default panel-col">
+      <div class="panel-body">
+        {% include "vue-components/loading.html.twig" %}
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -10,5 +10,11 @@
 
 {% block main %}
   <input type="hidden" class="js-course-id" value="{{ course.id }}" />
-  <div id="app"></div>
+  <div id="app">
+    <div class="cd-main">
+      <div class="cd-main__body">
+        {% include "vue-components/loading.html.twig" %}
+      </div>
+    </div>
+  </div>
 {% endblock %}
