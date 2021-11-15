@@ -280,7 +280,8 @@ Build upgrade package:
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
-    - n 12.8.1
+    - n 10.17.0
+    - node -v
     - yarn config set registry https://registry.npm.taobao.org
     - cd edusoho-h5
     - git checkout ${H5VERSION}
@@ -293,16 +294,22 @@ Build upgrade package:
     - rm -rf ./../web/h5/*
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
+    - rm -rf app/caches node_modules
     - yarn
-    - yarn compile
+    - npm run compile
     # copy seajs静态文件到web目录下
     - app/console assets:install
 
     # 生成js语言包
     - app/console trans:dump-js
-
-    - if [[ `git status --porcelain` ]]; then git config user.email "builder@edusoho.com"; git config user.name "builder"; git add .; git commit -m 'compile'; fi;
-
+    - git config --global user.email "gitlab@example.com"
+    - git config --global user.name "gitlab"
+    - git add web/static-dist
+    - git add web/h5
+    - git add web/bundles
+    - git add web/translations
+    - git diff .
+    - "git commit -m 'feat: #10000 compile'"
     - app/console   build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
     paths:
