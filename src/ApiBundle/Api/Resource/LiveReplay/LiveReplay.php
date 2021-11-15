@@ -37,8 +37,6 @@ class LiveReplay extends AbstractResource
     {
         $activity = $this->getActivityService()->getActivity($id, true);
 
-        $fields = $this->filterBaseFields($request->request->all());
-
         if (!empty($fields['remark'])) {
             $this->getActivityService()->updateActivity($id, ['remark' => $fields['remark']]);
         }
