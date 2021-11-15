@@ -14,7 +14,7 @@
       <a-form-model-item :label="'form.label.tag' | trans">
         <a-select
           mode="multiple"
-          v-model="form.tag"
+          v-model="form.tagIds"
           :placeholder="'placeholder.playback_label' | trans"
         >
           <a-select-option
