@@ -2,9 +2,9 @@
 
 namespace Biz\Activity\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface LiveActivityDao extends GeneralDaoInterface
+interface LiveActivityDao extends AdvancedDaoInterface
 {
     public function findByIds($Ids);
 

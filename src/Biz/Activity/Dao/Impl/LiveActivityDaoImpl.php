@@ -3,9 +3,9 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\LiveActivityDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
+class LiveActivityDaoImpl extends AdvancedDaoImpl implements LiveActivityDao
 {
     protected $table = 'activity_live';
 
@@ -16,6 +16,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
             'orderbys' => ['liveStartTime', 'liveEndTime', 'id'],
             'conditions' => [
                 'id IN (:ids)',
+                'liveId IN (:liveIds)',
                 'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
