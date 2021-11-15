@@ -24,7 +24,8 @@ $('#note-save-btn').click(function (event) {
 setInterval(saveNote,30000);
 
 function saveNote($btn = null) {
-  if(!$.trim($content.val())) {
+  $content.val(editor.getData());
+  if(!$.trim(editor.getData())) {
     $btn ? notify('danger', Translator.trans('course.notebook.empty_note_content_notice')) : '';
     return;
   }
