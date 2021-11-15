@@ -463,7 +463,6 @@ class CourseManageController extends BaseController
             $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_CLOSE_TASK]);
         }
 
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
         return $this->render(

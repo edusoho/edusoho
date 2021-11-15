@@ -568,18 +568,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
 
-        $endLeftSeconds = time() - $activity['endTime'];
-        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
-
-        if ($this->checkLiveFinished($activity)) {
-            return true;
-        }
-
-        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus']) {
-            return true;
-        }
-
-        return false;
+        return EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus'];
     }
 
     public function checkLiveStatus($courseId, $activityId)
@@ -604,7 +593,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return ['result' => false, 'message' => 'message_response.live_not_start.message'];
         }
 
-        if ($this->checkLiveFinished($activity)) {
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus']) {
             return ['result' => false, 'message' => 'message_response.live_over.message'];
         }
 
@@ -629,7 +618,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType)
     {
         if (empty($mediaIds)) {
-            return  [];
+            return [];
         }
 
         return $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
