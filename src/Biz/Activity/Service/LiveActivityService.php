@@ -44,13 +44,15 @@ interface LiveActivityService
 
     public function count($conditions);
 
-    public function shareLiveReplay($id);
+    public function updateLiveActivityWithoutEvent($liveActivityId, $fields);
 
-    public function unShareLiveReplay($id);
+    public function shareLiveReplay($liveActivityId);
 
-    public function updateLiveReplayTags($id, $tagIds);
+    public function unShareLiveReplay($liveActivityId);
 
-    public function removeLiveReplay($id);
+    public function updateLiveReplayTags($liveActivityId, $tagIds);
+
+    public function removeLiveReplay($liveActivityId);
 
     public function canUpdateRoomType($liveStartTime);
 

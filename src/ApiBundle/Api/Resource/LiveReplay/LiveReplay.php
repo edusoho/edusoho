@@ -35,7 +35,7 @@ class LiveReplay extends AbstractResource
 
     public function update(ApiRequest $request, $id)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id, true);
 
         $fields = $this->filterBaseFields($request->request->all());
 
@@ -43,8 +43,8 @@ class LiveReplay extends AbstractResource
             $this->getActivityService()->updateActivity($id, ['remark' => $fields['remark']]);
         }
 
-        if (!empty($fields['replayPublic'])) {
-            $this->getLiveActivityService()->updateLiveActivity($id, ['replayPublic' => $fields['replayPublic']], $activity);
+        if (!empty($fields['replayPublic']) || !empty($fields['tagIds'])) {
+            $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['ext']['id'], ['replayTagIds' => empty($fields['tagIds']) ? [] : $fields['tagIds'], 'replayPublic' => $fields['replayPublic']]);
         }
 
         return ['success' => true];
@@ -120,6 +120,7 @@ class LiveReplay extends AbstractResource
                     'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                     'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
                     'liveSecond' => $liveTime,
+                    'tag' => $activity['ext']['replayTagIds'],
                     'replayPublic' => $activity['ext']['replayPublic'],
                     'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
                     'url' => $this->generateUrl('custom_live_activity_replay_entry', [

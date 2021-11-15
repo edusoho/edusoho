@@ -121,6 +121,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         try {
             $this->getLiveMemberStatisticsDao()->batchCreate($data);
         } catch (\RuntimeException $e) {
+            return;
         }
     }
 
@@ -132,6 +133,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         try {
             $this->getLiveMemberStatisticsDao()->batchUpdate(array_keys($data), $data, 'id');
         } catch (\RuntimeException $e) {
+            return;
         }
     }
 

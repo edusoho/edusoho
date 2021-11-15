@@ -248,24 +248,29 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->count($conditions);
     }
 
-    public function shareLiveReplay($id)
+    public function updateLiveActivityWithoutEvent($id, $fields)
     {
-        return $this->getLiveActivityDao()->update($id, ['replayPublic' => 1]);
+        return $this->getLiveActivityDao()->update($id, $fields);
     }
 
-    public function unShareLiveReplay($id)
+    public function shareLiveReplay($liveActivityId)
     {
-        return $this->getLiveActivityDao()->update($id, ['replayPublic' => 0]);
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 1]);
     }
 
-    public function updateLiveReplayTags($id, $tagIds)
+    public function unShareLiveReplay($liveActivityId)
     {
-        return $this->getLiveActivityDao()->update($id, ['replayTagIds' => $tagIds]);
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 0]);
     }
 
-    public function removeLiveReplay($id)
+    public function updateLiveReplayTags($liveActivityId, $tagIds)
     {
-        $liveActivity = $this->getLiveActivityDao()->update($id, ['replayPublic' => 0, 'replayStatus' => 'ungenerated']);
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayTagIds' => $tagIds]);
+    }
+
+    public function removeLiveReplay($liveActivityId)
+    {
+        $liveActivity = $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 0, 'replayStatus' => 'ungenerated']);
         $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
         if (empty($activity)) {
             return true;
