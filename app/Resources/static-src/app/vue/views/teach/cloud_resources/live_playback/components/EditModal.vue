@@ -67,8 +67,9 @@ export default {
   },
 
   methods: {
-    showModal({ id, replayPublic }) {
+    showModal({ id, tag, replayPublic }) {
       this.form.id = id;
+      this.tagIds = tag;
       this.form.replayPublic = replayPublic;
       this.visible = true;
     },
