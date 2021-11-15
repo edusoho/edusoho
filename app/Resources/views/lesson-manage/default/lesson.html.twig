@@ -54,7 +54,7 @@
       {% if task.activity.mediaType is same as('live') %}
         {% if task.activity.ext.progressStatus == 'closed' %}
         {% if task.activity.ext.replayStatus == 'ungenerated' %}
-          {% if "now"|date("U") >= task.activity.ext.liveEndTime+6*3600 %}
+          {% if "now"|date("U") >= task.activity.ext.liveEndTime+3*3600 %}
             <span class="cd-text-danger cd-ml8">({{'course.replay_manage.generated_fail'|trans}})</span>
           {% else %}
             <span class="text-warning cd-ml8">({{'course.replay_manage.ungenerated'|trans}})</span>

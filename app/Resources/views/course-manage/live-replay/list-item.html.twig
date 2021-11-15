@@ -31,7 +31,7 @@
 
 		{% if task.status == 'published' and task.isEnd %}
 			{% if activity.ext.replayStatus == 'ungenerated' %}
-        {% if "now"|date("U") >= activity.ext.liveEndTime+6*3600 %}
+        {% if "now"|date("U") >= activity.ext.liveEndTime+3*3600 %}
 				  <span class="cd-text-danger">({{'course.replay_manage.generated_fail'|trans}})</span>
         {% else %}
           <span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
