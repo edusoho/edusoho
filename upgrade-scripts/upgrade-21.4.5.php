@@ -331,7 +331,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     'maxOnlineNumber' => 0,
                     'checkinNum' => 0,
                     'chatNumber' => 0,
-                    'memberNumber' => 0,
+                    'memberNumber' => $count,
                     'avgWatchTime' => empty($count) || empty($time) ? 0 :round($time / ($count * 60), 1),
                     'detailFinished' => 1,
                     'memberFinished' => 1,
