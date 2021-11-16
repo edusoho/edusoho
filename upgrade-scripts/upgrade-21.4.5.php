@@ -67,7 +67,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'processActivityLiveAnchorId',
             'processLiveStatisticsMemberData',
             'processLiveCloudStatisticData',
-            'processActivityLiveProgressStatus'
+            'processActivityLiveProgressStatus',
+            'registerJob'
         );
 
         $funcNames = array();
@@ -363,6 +364,24 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $this->logger('info', '修改progressStatus数据');
         return $page+1;
+    }
+
+    public function registerJob(){
+        $count = $this->getSchedulerService()->countJobs(array('name' => 'DaySyncLiveDataJob'));
+        if($count >0){
+            return 1;
+        }
+        $xapiRandNum1 = rand(1, 59);
+        $startJob = [
+            'name' => 'DaySyncLiveDataJob',
+            'expression' => "{$xapiRandNum1} 3 * * *",
+            'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
+            'misfire_threshold' => 10 * 60,
+            'args' => [],
+        ];
+
+        $this->getSchedulerService()->register($startJob);
+        return 1;
     }
 
     /**
