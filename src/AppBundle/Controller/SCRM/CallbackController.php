@@ -35,16 +35,18 @@ class CallbackController extends BaseController
             $adminUser = $this->getUserService()->getUserByType('system');
             $this->authenticateUser($adminUser);
             $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-            $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
-            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+            if (!empty($orderInfo['orderStatus']) && $orderInfo['orderStatus'] === "paid") {
+                $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
+                $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
 
-            $goodsEntityFactory = $this->getGoodsEntitiyFactory();
-            $goodsEntity = $goodsEntityFactory->create($goods['type']);
-            
-            if (!$goodsEntity->isSpecsMember($goods, $specs, $existUser['id'])) {
-                $goodsMediatorFactory = $this->getGoodsMediatorFactory();
-                $mediator = $goodsMediatorFactory->create($goods['type']);
-                $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                $goodsEntityFactory = $this->getGoodsEntitiyFactory();
+                $goodsEntity = $goodsEntityFactory->create($goods['type']);
+
+                if (!$goodsEntity->isSpecsMember($goods, $specs, $existUser['id'])) {
+                    $goodsMediatorFactory = $this->getGoodsMediatorFactory();
+                    $mediator = $goodsMediatorFactory->create($goods['type']);
+                    $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                }
             }
         } catch (\Exception $e) {
             $this->authenticateUser([
