@@ -326,7 +326,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     'teacher' => empty($liveActivity['anchorId']) ? '--':$users[$liveActivity['anchorId']]['nickname'],
                     'startTime' => $liveActivity['liveStartTime'],
                     'endTime' => $liveActivity['liveEndTime'],
-                    'length' => $liveActivity['liveEndTime']-$liveActivity['liveStartTime'],
+                    'length' => ($liveActivity['liveEndTime']-$liveActivity['liveStartTime'])/60,
                     'requestTime' => $liveActivity['liveEndTime'],
                     'maxOnlineNumber' => 0,
                     'checkinNum' => 0,
