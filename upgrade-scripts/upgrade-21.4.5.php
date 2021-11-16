@@ -305,43 +305,37 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processLiveCloudStatisticData($page)
     {
-        $lives = $this->getLiveStatisticsDao()->search(['type'=>'visitor'],['createdTime'=>'ASC'],($page-1) * 50, 50);
-        if(empty($lives)){
+        $liveActivities = $this->getLiveActivityDao()->search([],['id'=>'ASC'],($page-1) * 50, 50);
+        if(empty($liveActivities)){
             return 1;
         }
-        $liveIds = \AppBundle\Common\ArrayToolkit::column($lives, 'liveId');
-        $liveActivities = $this->getLiveActivityDao()->search(['liveIds' => $liveIds], [], 0, count($liveIds));
         $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'liveId');
         $anchorIds = \AppBundle\Common\ArrayToolkit::column($liveActivities, 'anchorId');
         $users = $this->getUserDao()->findByIds($anchorIds);
         $users = \AppBundle\Common\ArrayToolkit::index($users, 'id');
         $update=[];
-        foreach ($lives as $live){
-            if(empty($liveActivities[$live['liveId']])){
-                continue;
-            }
-            $time = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($live['liveId']);
-            $count = $this->getLiveMemberStatisticsDao()->count(['liveId'=>$live['liveId']]);
-            $liveActivity = $liveActivities[$live['liveId']];
+        foreach ($liveActivities as $liveActivity){
+            $time = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveActivity['liveId']);
+            $count = $this->getLiveMemberStatisticsDao()->count(['liveId'=>$liveActivity['liveId']]);
             if(date("Y-m-d", strtotime("-1 day")) == date('Y-m-d', $liveActivity['liveStartTime'])){
                 continue;
             }
             $update[$liveActivity['id']] = [
                 'cloudStatisticData'=>[
-                'memberRequestTime' => $liveActivity['liveEndTime'],
-                'teacher' => empty($liveActivity['anchorId']) ? '--':$users[$liveActivity['anchorId']]['nickname'],
-                'startTime' => $liveActivity['liveStartTime'],
-                'endTime' => $liveActivity['liveEndTime'],
-                'length' => $liveActivity['liveEndTime']-$liveActivity['liveStartTime'],
-                'requestTime' => $liveActivity['liveEndTime'],
-                'maxOnlineNumber' => 0,
-                'checkinNum' => 0,
-                'chatNumber' => 0,
-                'memberNumber' => 0,
-                'avgWatchTime' => empty($count) || empty($time) ? 0 :round($time / ($count * 60), 1),
-                'detailFinished' => 1,
-                'memberFinished' => 1,
-            ]
+                    'memberRequestTime' => $liveActivity['liveEndTime'],
+                    'teacher' => empty($liveActivity['anchorId']) ? '--':$users[$liveActivity['anchorId']]['nickname'],
+                    'startTime' => $liveActivity['liveStartTime'],
+                    'endTime' => $liveActivity['liveEndTime'],
+                    'length' => $liveActivity['liveEndTime']-$liveActivity['liveStartTime'],
+                    'requestTime' => $liveActivity['liveEndTime'],
+                    'maxOnlineNumber' => 0,
+                    'checkinNum' => 0,
+                    'chatNumber' => 0,
+                    'memberNumber' => 0,
+                    'avgWatchTime' => empty($count) || empty($time) ? 0 :round($time / ($count * 60), 1),
+                    'detailFinished' => 1,
+                    'memberFinished' => 1,
+                ]
             ];
         }
         if(!empty($update)){
