@@ -93,7 +93,10 @@ export default {
   data() {
     return {
       taskId: this.$route.query.taskId,
-      liveData: {}
+      liveData: {
+        course: {},
+        task: {}
+      }
     }
   },
 
