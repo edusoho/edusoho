@@ -206,7 +206,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             return;
         }
         if ('created' === $liveActivity['progressStatus']) {
-            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'start', 'liveStartTime' => $startTime]);
+            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime]);
             $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
             $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
         }
@@ -218,7 +218,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => 'close', 'liveEndTime' => $closeTime]);
+        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_CLOSED, 'liveEndTime' => $closeTime]);
         $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
         $this->dispatchEvent('live.status.close', new Event($liveActivity['liveId']));
     }

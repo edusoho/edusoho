@@ -2,11 +2,11 @@
 
 namespace Biz\Marker\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MarkerDao extends GeneralDaoInterface
+interface MarkerDao extends AdvancedDaoInterface
 {
-    public function findByIds($ids);
+    public function getByMediaIdAndSecond($mediaId, $second);
 
-    public function findByActivityId($activityId);
+    public function findByIds($ids);
 }

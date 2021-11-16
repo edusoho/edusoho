@@ -10,7 +10,7 @@ class MarkerAddActivityId extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `marker` ADD COLUMN `activityId` int(10) NOT NULL DEFAULT 0 COMMENT 'activityId';");
+        $biz['db']->exec("ALTER TABLE `marker` ADD COLUMN `activityIds` text COMMENT 'activityIds';");
     }
 
     /**
@@ -19,6 +19,6 @@ class MarkerAddActivityId extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec('ALTER TABLE `marker` DROP COLUMN `activityId`;');
+        $biz['db']->exec('ALTER TABLE `marker` DROP COLUMN `activityIds`;');
     }
 }

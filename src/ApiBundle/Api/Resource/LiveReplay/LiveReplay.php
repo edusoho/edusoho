@@ -86,7 +86,7 @@ class LiveReplay extends AbstractResource
         $conditions = $request->query->all();
         $conditions = $this->filterReplayCondition($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $activities = $this->getActivityService()->search($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $activities = $this->getActivityService()->search($conditions, ['startTime' => 'DESC'], $offset, $limit);
         $liveActivities = $this->getActivityService()->findActivities(ArrayToolkit::column($activities, 'id'), true);
         $liveActivities = $this->handleActivityReplay($liveActivities);
 

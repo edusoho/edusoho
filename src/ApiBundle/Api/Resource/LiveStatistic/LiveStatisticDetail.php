@@ -22,10 +22,9 @@ class LiveStatisticDetail extends AbstractResource
         $result = $this->getLiveStatisticsService()->getLiveData($task);
         $task = $this->getTaskService()->getTask($taskId);
         $result['task'] = ArrayToolkit::parts($task, ['id', 'startTime', 'endTime', 'title', 'length']);
-        $course = $this->getCourseSetService()->getCourseSet($task['courseId']);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
         $course['title'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
         $result['course'] = ArrayToolkit::parts($course, ['id', 'title', 'price', 'studentNum']);
-        $result['course']['title'] = empty($result['course']['title']) ? $result['course']['courseSetTitle'] : $result['course']['title'];
 
         return $result;
     }

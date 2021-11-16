@@ -11,6 +11,9 @@ use Biz\System\SettingException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
+/**
+ * Class MarkerServiceImpl
+ */
 class MarkerServiceImpl extends BaseService implements MarkerService
 {
     public function getMarker($id)
@@ -27,7 +30,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function findMarkersByActivityId($activityId)
     {
-        return $this->getMarkerDao()->findByActivityId($activityId);
+        return $this->getMarkerDao()->search(['activityIds' => "%|$activityId|%"], [], 0, PHP_INT_MAX);
     }
 
     public function findMarkersMetaByActivityId($activityId)
@@ -89,6 +92,15 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $this->getMarkerDao()->update($id, $fields);
     }
 
+    /**
+     * @param $activityId
+     * @param $fields
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     *                    //因老数据太多问题，如果设计成activityId，那么关联的表的老数据都要复制出来n份，数量太多不可控。只能妥协改成activityIds
+     */
     public function addMarker($activityId, $fields)
     {
         $video = $this->getActivityService()->getActivity($activityId, true);
@@ -103,7 +115,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $marker = [
-            'activityId' => $activityId,
+            'activityIds' => [$activityId],
             'mediaId' => $media['id'],
             'second' => $fields['second'],
         ];

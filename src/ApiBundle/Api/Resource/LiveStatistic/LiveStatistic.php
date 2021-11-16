@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\LiveStatistic;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -31,9 +32,13 @@ class LiveStatistic extends AbstractResource
             $offset,
             $limit
         );
+        $activityIds = ArrayToolkit::column($liveTasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
         foreach ($liveTasks as &$liveTask) {
+            $activity = $activities[$liveTask['activityId']];
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
-            $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
+            $liveTask['status'] = 'closed' == $activity['ext']['progressStatus'] ? 'finished' : ($liveTask['startTime'] > time() ? 'coming' : 'playing');
         }
 
         return $this->makePagingObject($liveTasks, $this->getTaskService()->countTasks($taskConditions), $offset, $limit);
