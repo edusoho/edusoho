@@ -139,7 +139,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('open_course', 'replayEnable')) {
             $this->getConnection()->exec("ALTER TABLE `open_course` ADD COLUMN `replayEnable` tinyint(3) DEFAULT 1 COMMENT '是否允许观看回放';");
         }
-
+        $this->logger('info', '添加字段');
         return 1;
     }
 
@@ -186,6 +186,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
              ");
+        $this->logger('info', '新建表');
         return 1;
     }
 
@@ -214,6 +215,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($update)){
             $this->getMarkerDao()->batchUpdate(array_keys($update), $update, 'id');
         }
+        $this->logger('info', '处理弹题');
         return $page +1;
     }
 
@@ -221,7 +223,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->exec("update activity_live a  join activity b on a.id = b.mediaId set a.liveEndTime = b.endTime,a.liveStartTime=b.startTime where b.mediaType = 'live';");
         $this->getConnection()->exec("delete from live_statistics_member_data");
-
+        $this->logger('info', '修改直播时间/删除live_statistics_member_data数据');
         return 1;
     }
 
@@ -249,6 +251,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($update)){
             $this->getLiveActivityDao()->batchUpdate(array_keys($update), $update, 'id');
         }
+        $this->logger('info', '修改liveActivity讲师');
         return $page+1;
     }
 
@@ -296,7 +299,7 @@ class EduSohoUpgrade extends AbstractUpdater
               $this->getLiveMemberStatisticsDao()->batchCreate(array_values($create));
             }
         }
-
+        $this->logger('info', '修改LiveMemberStatistics数据');
         return $page+1;
     }
 
@@ -344,6 +347,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($update)){
             $this->getLiveActivityDao()->batchUpdate(array_keys($update), $update, 'id');
         }
+        $this->logger('info', '修改cloudStatisticData数据');
         return $page+1;
     }
 
@@ -363,6 +367,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($update)){
             $this->getLiveActivityDao()->batchUpdate(array_keys($update), $update, 'id');
         }
+        $this->logger('info', '修改progressStatus数据');
         return $page+1;
     }
 
