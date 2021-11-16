@@ -257,7 +257,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processLiveStatisticsMemberData($page)
     {
-        $lives = $this->getLiveStatisticsDao()->search(['type'=>'visitor'],['createdTime'=>'ASC'],($page-1) * 20, 20);
+        $lives = $this->getLiveStatisticsDao()->search(['type'=>'visitor'],['createdTime'=>'ASC'],($page-1) * 50, 50);
         if(empty($lives)){
             return 1;
         }
