@@ -1866,7 +1866,7 @@ live_statistics.user_name_or_mobile_number: 用户名或手机号
 live_statistics.presenter: 主讲人
 live_statistics.live_time: 直播时间
 live_statistics.actual_live_time: 实际直播时长
-live_statistics.chat_number: 所有用户聊天数
+live_statistics.all_chat_number: 所有用户聊天数
 live_statistics.online_number: 同时在线人数
 live_statistics.number_of_visitors: 观看人数
 live_statistics.per_capita_viewing_time: 人均观看时长

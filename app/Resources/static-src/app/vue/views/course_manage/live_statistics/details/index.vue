@@ -52,7 +52,7 @@
       <a-col :span="6">
         <div class="live-data">
           <div class="live-data__value">{{ liveData.chatNumber }}{{ 'live_statistics.strip' | trans }}</div>
-          <div class="live-data__label">{{ 'live_statistics.chat_number' | trans }}</div>
+          <div class="live-data__label">{{ 'live_statistics.all_chat_number' | trans }}</div>
         </div>
       </a-col>
 
