@@ -35,7 +35,7 @@ class CallbackController extends BaseController
             $adminUser = $this->getUserService()->getUserByType('system');
             $this->authenticateUser($adminUser);
             $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-            if (!empty($orderInfo['orderStatus']) && $orderInfo['orderStatus'] === "paid") {
+            if (!empty($orderInfo['orderStatus']) && 'paid' === $orderInfo['orderStatus']) {
                 $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
                 $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
 
@@ -181,7 +181,7 @@ class CallbackController extends BaseController
     /*
         * @return GoodsEntityFactory
         */
-    protected function getGoodsEntitiyFactory() 
+    protected function getGoodsEntitiyFactory()
     {
         $biz = $this->getBiz();
 
