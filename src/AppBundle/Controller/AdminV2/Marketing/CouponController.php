@@ -9,7 +9,6 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
 use Biz\System\Service\SettingService;
@@ -65,7 +64,7 @@ class CouponController extends BaseController
 
         $coupons = $this->getCouponService()->searchCoupons(
             $conditions,
-            ['orderTime' => 'DESC'],
+            ['orderTime' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -80,6 +79,47 @@ class CouponController extends BaseController
             'users' => $users,
             'orders' => ArrayToolkit::index($orders, 'id'),
         ]);
+    }
+
+    public function exportIndexAction(Request $request)
+    {
+        $coupons = $this->getCouponService()->searchCoupons(
+            $request->query->all(),
+            ['orderTime' => 'DESC', 'id' => 'ASC'],
+            0,
+            PHP_INT_MAX
+        );
+        $users = $this->getUserService()->searchUsers(['userIds' => array_column($coupons, 'userId') ?: [-1]], [], 0, count($coupons), ['id', 'nickname']);
+        $users = ArrayToolkit::index($users, 'id');
+        $orders = $this->getOrderService()->searchOrders([], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
+        $orders = ArrayToolkit::index($orders, 'id');
+        $couponBatch = $this->getCouponBatchService()->findBatchsByIds(array_column($coupons, 'batchId'));
+
+        $coupons = array_map(function ($coupon) use ($users, $orders, $couponBatch) {
+            $order = $orders[$coupon['orderId']] ?? [];
+            $coupon['rate'] = 'minus' == $coupon['type'] ? $coupon['rate'] : number_format($coupon['rate'], 1);
+            $exportCoupon = [
+                $coupon['id'],
+                $couponBatch[$coupon['batchId']]['codeEnable'] ? $coupon['code'] : '-',
+                $this->trans('coupon.target_type.'.$coupon['targetType']),
+                $this->convertCouponStatus($coupon['status']),
+                $users[$coupon['userId']]['nickname'] ?? '-',
+                $order['title'] ?? '-',
+                'used' == $coupon['status'] ? $this->trans('coupon.type.'.$coupon['type']).$coupon['rate'].$this->trans("coupon.type.{$coupon['type']}_rate_unit") : '-',
+                $order ? $this->get('web.twig.order_extension')->toCash($order['price_amount']) : '-',
+                $order ? $this->get('web.twig.order_extension')->toCash($order['pay_amount']) : '-',
+                $couponBatch[$coupon['batchId']]['name'] ?? '-',
+                $coupon['receiveTime'] ? date('Y-m-d H:i:s', $coupon['receiveTime']) : '-',
+                'used' == $coupon['status'] ? date('Y-m-d H:i:s', $coupon['orderTime']) : '-',
+            ];
+
+            return implode(',', $exportCoupon);
+        }, $coupons);
+
+        $exportFilename = 'coupons'.'-'.date('YmdHi').'.csv';
+        $titles = ['编号', '优惠码', '类型', '状态', '使用者', '订单信息', '优惠内容', '原价', '实付', '批次名称', '领取时间', '使用时间'];
+
+        return $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
     }
 
     public function settingAction(Request $request)
@@ -199,54 +239,45 @@ class CouponController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function exportCsvAction(Request $request, $batchId)
+    public function exportCsvAction($batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
 
-        $coupons = $this->getCouponService()->findCouponsByBatchId(
-            $batchId,
+        $coupons = $this->getCouponService()->searchCoupons(
+            ['batchId' => $batchId],
+            ['orderTime' => 'DESC', 'id' => 'ASC'],
             0,
             $batch['generatedNum']
         );
+        $users = $this->getUserService()->searchUsers(['userIds' => array_column($coupons, 'userId') ?: [-1]], [], 0, count($coupons), ['id', 'nickname']);
+        $users = ArrayToolkit::index($users, 'id');
+        $orders = $this->getOrderService()->searchOrders([], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
+        $orders = ArrayToolkit::index($orders, 'id');
 
-        $coupons = array_map(function ($coupon) {
-            $export_coupon['batchId'] = $coupon['batchId'];
-            $export_coupon['deadline'] = empty($coupon['deadline']) ? '--' : date('Y-m-d', $coupon['deadline']);
-            $export_coupon['code'] = $coupon['code'];
+        $coupons = array_map(function ($coupon) use ($users, $orders, $batch) {
+            $order = $orders[$coupon['orderId']] ?? [];
+            $exportCoupon = [
+                $coupon['batchId'],
+                $coupon['id'],
+                $batch['codeEnable'] ? $coupon['code'] : '-',
+                $this->convertCouponStatus($coupon['status']),
+                empty($coupon['deadline']) ? '--' : date('Y-m-d', $coupon['deadline']),
+                $users[$coupon['userId']]['nickname'] ?? '-',
+                $order['title'] ?? '-',
+                $order ? $this->get('web.twig.order_extension')->toCash($order['price_amount']) : '-',
+                $order ? $this->get('web.twig.order_extension')->toCash($order['pay_amount']) : '-',
+                $coupon['receiveTime'] ? date('Y-m-d H:i:s', $coupon['receiveTime']) : '-',
+                'used' == $coupon['status'] ? date('Y-m-d H:i:s', $coupon['orderTime']) : '-',
+            ];
 
-            if ('unused' == $coupon['status']) {
-                $export_coupon['status'] = '未使用';
-            } elseif ('receive' == $coupon['status']) {
-                $export_coupon['status'] = '已领取';
-            } else {
-                $export_coupon['status'] = '已使用';
-            }
-
-            return implode(',', $export_coupon);
+            return implode(',', $exportCoupon);
         }, $coupons);
 
         $exportFilename = 'couponBatch-'.$batchId.'-'.date('YmdHi').'.csv';
 
-        $titles = ['批次', '有效期至', '优惠码', '状态'];
+        $titles = ['批次', '编号', '优惠码', '状态', '有效期至', '使用者', '订单信息', '原价', '实付', '领取时间', '使用时间'];
 
-        $exportFile = $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
-
-        return $exportFile;
-    }
-
-    private function createExporteCSVResponse(array $header, array $data, $outputFilename)
-    {
-        $header = implode(',', $header);
-        $str = $header."\r\n";
-        $str .= implode("\r\n", $data);
-        $str = chr(239).chr(187).chr(191).$str;
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
     }
 
     public function detailAction(Request $request, $batchId)
@@ -359,6 +390,31 @@ class CouponController extends BaseController
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
     }
 
+    private function createExporteCSVResponse(array $header, array $data, $outputFilename)
+    {
+        $content = implode(',', $header)."\r\n";
+        $content .= implode("\r\n", $data);
+        $content = chr(239).chr(187).chr(191).$content;
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
+        $response->headers->set('Content-length', strlen($content));
+        $response->setContent($content);
+
+        return $response;
+    }
+
+    protected function convertCouponStatus($status)
+    {
+        $statusMap = [
+            'unused' => '未使用',
+            'receive' => '已领取',
+            'used' => '已使用',
+        ];
+
+        return $statusMap[$status];
+    }
+
     /**
      * @return OrderService
      */
@@ -381,14 +437,6 @@ class CouponController extends BaseController
     private function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**
