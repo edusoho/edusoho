@@ -83,6 +83,27 @@
     </a-form-model-item>
 
     <a-form-model-item>
+      <a-select
+        style="width: 120px;"
+        v-model="form.itemType"
+      >
+        <a-select-option value="">题型分类</a-select-option>
+
+        <a-select-option
+          v-for="itemType in itemTypes"
+          :value="itemType.value"
+        >
+          {{ itemType.name }}
+        </a-select-option>
+      </a-select>
+    </a-form-model-item>
+
+    <a-form-model-item>
+      <a-input v-model="form.itemTitle" placeholder="请输入题目关键字" allowClear>
+      </a-input>
+    </a-form-model-item>
+
+    <a-form-model-item>
       <a-button type="primary" @click="onSearch">搜索</a-button>
     </a-form-model-item>
   </a-form-model>
@@ -104,8 +125,32 @@ export default {
         classroomMediaType: 'default',
         classroomTaskId: 'default',
         wrongTimesSort: 'default',
+        itemType: '',
+        itemTitle: '',
       },
       conditions: {},
+      itemTypes: [
+        {
+          name: '单选题',
+          value: 'single_choice',
+        },
+        {
+          name: '多选题',
+          value: 'choice',
+        },
+        {
+          name: '不定项选择题',
+          value: 'uncertain_choice',
+        },
+        {
+          name: '判断题',
+          value: 'determine',
+        },
+        {
+          name: '填空题',
+          value: 'fill',
+        }
+      ],
     }
   },
   props: {
