@@ -1,5 +1,5 @@
 <template>
-  <div>
-    app  装修
+  <div class="app-decoration">
+
   </div>
 </template>
