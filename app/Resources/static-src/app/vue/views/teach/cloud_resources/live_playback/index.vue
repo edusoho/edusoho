@@ -10,7 +10,7 @@
           v-model="searchForm.courseCategoryId"
           :allowClear="true"
           :placeholder="'placeholder.course_category' | trans"
-          style="width: 200px;"
+          style="width: 160px;"
         >
           <a-select-option
             v-for="category in categoryData"
@@ -27,7 +27,7 @@
           v-model="searchForm.replayTagId"
           :allowClear="true"
           :placeholder="'placeholder.playback_label' | trans"
-          style="width: 200px;"
+          style="width: 160px;"
         >
           <a-select-option
             v-for="tag in tagData"
@@ -206,10 +206,10 @@ export default {
       this.loading = true;
       const { current, pageSize } = this.pagination;
       const params = {
-        query,
         params: {
           offset: (current - 1) * pageSize,
-          limit: pageSize
+          limit: pageSize,
+          ...query
         }
       }
       const { data, paging } = await LiveReplay.get(params);
