@@ -91,7 +91,7 @@ class CouponController extends BaseController
         );
         $users = $this->getUserService()->searchUsers(['userIds' => array_column($coupons, 'userId') ?: [-1]], [], 0, count($coupons), ['id', 'nickname']);
         $users = ArrayToolkit::index($users, 'id');
-        $orders = $this->getOrderService()->searchOrders([], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
+        $orders = $this->getOrderService()->searchOrders(['ids' => array_column($coupons, 'orderId') ?: [-1]], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
         $orders = ArrayToolkit::index($orders, 'id');
         $couponBatch = $this->getCouponBatchService()->findBatchsByIds(array_column($coupons, 'batchId'));
 
@@ -251,7 +251,7 @@ class CouponController extends BaseController
         );
         $users = $this->getUserService()->searchUsers(['userIds' => array_column($coupons, 'userId') ?: [-1]], [], 0, count($coupons), ['id', 'nickname']);
         $users = ArrayToolkit::index($users, 'id');
-        $orders = $this->getOrderService()->searchOrders([], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
+        $orders = $this->getOrderService()->searchOrders(['ids' => array_column($coupons, 'orderId') ?: [-1]], [], 0, count($coupons), ['id', 'title', 'price_amount', 'pay_amount']);
         $orders = ArrayToolkit::index($orders, 'id');
 
         $coupons = array_map(function ($coupon) use ($users, $orders, $batch) {
