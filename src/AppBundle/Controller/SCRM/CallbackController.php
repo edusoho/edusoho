@@ -35,12 +35,19 @@ class CallbackController extends BaseController
             $adminUser = $this->getUserService()->getUserByType('system');
             $this->authenticateUser($adminUser);
             $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
-            $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
-            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+            if (!empty($orderInfo['orderStatus']) && 'paid' === $orderInfo['orderStatus']) {
+                $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
+                $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
 
-            $goodsMediatorFactory = $this->getGoodsMediatorFactory();
-            $mediator = $goodsMediatorFactory->create($goods['type']);
-            $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                $goodsEntityFactory = $this->getGoodsEntitiyFactory();
+                $goodsEntity = $goodsEntityFactory->create($goods['type']);
+
+                if (!$goodsEntity->isSpecsMember($goods, $specs, $existUser['id'])) {
+                    $goodsMediatorFactory = $this->getGoodsMediatorFactory();
+                    $mediator = $goodsMediatorFactory->create($goods['type']);
+                    $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                }
+            }
         } catch (\Exception $e) {
             $this->authenticateUser([
                 'id' => 0,
@@ -169,5 +176,15 @@ class CallbackController extends BaseController
         $biz = $this->getBiz();
 
         return $biz['scrm_goods_mediator_factory'];
+    }
+
+    /*
+        * @return GoodsEntityFactory
+        */
+    protected function getGoodsEntitiyFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
     }
 }
