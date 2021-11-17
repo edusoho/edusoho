@@ -8,6 +8,7 @@
       <a-form-model-item>
         <a-select
           v-model="searchForm.courseCategoryId"
+          :allowClear="true"
           :placeholder="'placeholder.course_category' | trans"
           style="width: 200px;"
         >
@@ -24,6 +25,7 @@
       <a-form-model-item>
         <a-select
           v-model="searchForm.replayTagId"
+          :allowClear="true"
           :placeholder="'placeholder.playback_label' | trans"
           style="width: 200px;"
         >
