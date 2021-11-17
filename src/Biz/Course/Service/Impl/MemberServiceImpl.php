@@ -1471,7 +1471,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
-        if ($this->checkDeadlineForUpdateDeadline($courseId, $userIds, $date)) {
+        if ($this->checkDeadlineForUpdateDeadline($date)) {
             foreach ($userIds as $userId) {
                 $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
                 $this->getMemberDao()->update(
@@ -1484,7 +1484,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function checkDeadlineForUpdateDeadline($courseId, $userIds, $date)
+    public function checkDeadlineForUpdateDeadline($date)
     {
         return $date > time();
     }
