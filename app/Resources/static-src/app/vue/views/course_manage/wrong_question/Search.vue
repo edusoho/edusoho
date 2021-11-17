@@ -137,6 +137,10 @@ export default {
         {
           name: '填空题',
           value: 'fill',
+        },
+        {
+          name: '材料题',
+          value: 'material',
         }
       ],
     }
