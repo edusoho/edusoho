@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-form-model class="mt16" layout="inline" :model="searchForm">
-      <a-form-model-item :label="'site.time' | trans" >
+      <a-form-model-item>
         <a-range-picker v-model="searchForm.time" />
       </a-form-model-item>
 
@@ -40,11 +40,24 @@
       </a-form-model-item>
 
       <a-form-model-item>
-        <a-input
-          v-model="searchForm.keyword"
-          :placeholder="'placeholder.enter_keyword' | trans"
-          style="width: 200px;"
-        />
+        <a-input-group compact>
+          <a-select style="width: 100px;" v-model="searchForm.keywordType" default-value="activityTitle">
+            <a-select-option value="activityTitle">
+              {{ 'live_name' | trans }}
+            </a-select-option>
+            <a-select-option value="anchor">
+              {{ 'live_statistics.presenter' | trans }}
+            </a-select-option>
+            <a-select-option value="courseTitle">
+              {{ 'course.name' | trans }}
+            </a-select-option>
+          </a-select>
+          <a-input
+            v-model="searchForm.keyword"
+            :placeholder="'placeholder.enter_keyword' | trans"
+            style="width: 200px;"
+          />
+        </a-input-group>
       </a-form-model-item>
 
       <a-form-model-item>
@@ -134,7 +147,8 @@ export default {
         time: undefined,
         replayTagId: undefined,
         courseCategoryId: undefined,
-        keyword: ''
+        keyword: '',
+        keywordType: 'activityTitle'
       },
       data: [],
       columns,
