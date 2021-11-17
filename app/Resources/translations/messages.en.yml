@@ -1526,7 +1526,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, close the test paper may prevent students from participating in the test, please do not close the test paper.'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -6463,7 +6463,7 @@ admin.role_manage.nickname: Creator
 admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
-admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
+admin.role_manage.help_block: '<p>1 The 6 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
 admin.role_manage.modal.show_modal: 'Role details'
 admin.role_manage.modal.edit_modal: 'Edit Role'
 admin.role_manage.modal.create_modal: 'Add roles'

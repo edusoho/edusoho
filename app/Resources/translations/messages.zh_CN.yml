@@ -1773,7 +1773,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -7721,7 +7721,7 @@ admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
-  <p>1、初始化的4个角色，无法编辑和删除</p>
+  <p>1、初始化的6个角色，无法编辑和删除</p>
   <p>2、角色创建成功后编码不可修改</p>
 admin.role_manage.modal.show_modal: 角色详情
 admin.role_manage.modal.edit_modal: 编辑角色
