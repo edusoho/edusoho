@@ -44,6 +44,11 @@ class Good extends AbstractResource
 
         $this->getGoodsService()->hitGoods($goods['id']);
 
+        if ($request->query->get('targetId')) {
+            $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $request->query->get('targetId'));
+            $this->getGoodsService()->hitGoodsSpecs($goodsSpecs['id']);
+        }
+
         return $goods;
     }
 
