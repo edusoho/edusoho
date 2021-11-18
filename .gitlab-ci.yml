@@ -7,9 +7,9 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 21.4.2
-  VERSION: 21.4.3
-  H5VERSION: master
+  FROM_VERSION: 21.4.4
+  VERSION: 21.4.5
+  H5VERSION: 21.4.5
 
 
 before_script:
