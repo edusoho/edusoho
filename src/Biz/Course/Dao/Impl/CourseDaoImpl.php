@@ -265,6 +265,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.originCoinPrice > :originCoinPrice_GT',
                 'course_v8.originCoinPrice = :originCoinPrice',
                 'course_v8.title LIKE :titleLike',
+                'course_v8.teacherIds LIKE :teacherIds',
                 'course_v8.courseSetTitle LIKE :courseSetTitleLike',
                 'course_v8.creator = :userId',
                 'course_v8.recommended = :recommended',

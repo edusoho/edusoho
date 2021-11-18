@@ -9,6 +9,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\LiveActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -18,6 +19,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -313,6 +315,102 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getByMediaIdAndMediaType($mediaId, $mediaType)
     {
         return $this->getActivityDao()->getByMediaIdAndMediaType($mediaId, $mediaType);
+    }
+
+    /**
+     * @param $conditions
+     *
+     * @return array
+     *               处理 直播回放的activityId 管理员和讲师
+     */
+    public function findManageReplayActivityIds($conditions)
+    {
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->isAdmin()) {
+            $activities = $this->search(['mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+        } else {
+            $activityIds = $this->findLiveActivityIdsWithoutAdmin();
+        }
+
+        $activityIds = $this->processFindManageReplayConditions_withCourseTab($activityIds, $conditions);
+        $activityIds = $this->processFindManageReplayConditions_withLiveActivityTab($activityIds, $conditions);
+
+        if (!empty($conditions['keyword']) && 'activityTitle' == $conditions['keywordType']) {
+            $activityConditions['title'] = $conditions['keyword'];
+        }
+        if (empty($activityConditions)) {
+            $ids = array_values(array_unique($activityIds));
+
+            return empty($ids) ? [-1] : $ids;
+        }
+        $activityConditions['mediaType'] = 'live';
+        $activities = $this->search($activityConditions, [], 0, PHP_INT_MAX, ['id']);
+        $searchActivityIds = ArrayToolkit::column($activities, 'id');
+        $ids = array_values(array_unique(array_intersect($activityIds, $searchActivityIds)));
+
+        return empty($ids) ? [-1] : $ids;
+    }
+
+    protected function processFindManageReplayConditions_withLiveActivityTab($activityIds, $conditions)
+    {
+        if (empty($conditions['replayTagId']) && empty($conditions['replayPublic']) && (empty($conditions['keyword']) || 'anchor' != $conditions['keywordType'])) {
+            return $activityIds;
+        }
+        if (!empty($conditions['replayTagId'])) {
+            $liveConditions['replayTagIds'] = "%|{$conditions['replayTagId']}|%";
+        }
+        if (!empty($conditions['replayPublic'])) {
+            $liveConditions['replayPublic'] = $conditions['replayPublic'];
+        }
+        if (!empty($conditions['keyword']) && 'anchor' == $conditions['keywordType']) {
+            $users = $this->getUserService()->findUserLikeNickname($conditions['keyword']);
+            $liveConditions['anchorIds'] = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
+        }
+
+        $liveActivities = $this->getLiveActivityService()->search($liveConditions, [], 0, PHP_INT_MAX, ['id']);
+        $liveActivityIds = empty($liveActivities) ? [-1] : ArrayToolkit::column($liveActivities, 'id');
+        $anchorActivities = $this->search(['mediaIds' => $liveActivityIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+        $activityTagIds = ArrayToolkit::column($anchorActivities, 'id');
+
+        return array_intersect($activityIds, $activityTagIds);
+    }
+
+    protected function processFindManageReplayConditions_withCourseTab($activityIds, $conditions)
+    {
+        if (empty($conditions['courseId']) && empty($conditions['categoryId']) && (empty($conditions['keyword']) || 'courseTitle' != $conditions['keywordType'])) {
+            return $activityIds;
+        }
+        $courseIds = [];
+        if (!empty($conditions['categoryId'])) {
+            $courses = $this->getCourseService()->searchCourses(['categoryId' => $conditions['categoryId']], [], 0, PHP_INT_MAX, ['id']);
+            $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
+        }
+        if (!empty($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
+            $courses = $this->getCourseService()->searchCourses(['titleLike' => $conditions['keyword'], 'ids' => $courseIds], [], 0, PHP_INT_MAX, ['id']);
+            $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
+        }
+        if (!empty($conditions['courseId'])) {
+            $courseIds = empty($courseIds) ? [$conditions['courseId']] : array_intersect($courseIds, [$conditions['courseId']]);
+        }
+        $activityCategory = $this->search(['ids' => $activityIds, 'courseIds' => $courseIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+        $activityCategoryIds = ArrayToolkit::column($activityCategory, 'id');
+
+        return array_intersect($activityIds, $activityCategoryIds);
+    }
+
+    protected function findManageReplayActivityIdsfindLiveActivityIdsWithoutAdmin()
+    {
+        $courses = $this->getCourseService()->searchCourses(['teacherIds' => "%|{$this->getCurrentUser()->getId()}|%"], [], 0, PHP_INT_MAX, ['id']);
+        $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
+        $teacherActivities = $this->search(['courseIds' => $courseIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+        $liveActivities = $this->getLiveActivityService()->search(['anchorId' => $this->getCurrentUser()->getId(), 'replayStatusNotEqual' => 'ungenerated'], [], 0, PHP_INT_MAX, ['id']);
+        $liveActivityIds = empty($liveActivities) ? [-1] : ArrayToolkit::column($liveActivities, 'id');
+        $anchorActivities = $this->search(['mediaIds' => $liveActivityIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+        $activities = array_merge($teacherActivities, $anchorActivities);
+        $activityIds = ArrayToolkit::column($activities, 'id');
+
+        return array_values(array_unique($activityIds));
     }
 
     protected function syncActivityMaterials($activity, $materials, $mode = 'create')
@@ -624,11 +722,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
     }
 
-    public function findActivitiesLiveByLikeTitle($title)
-    {
-        return $this->getActivityDao()->findActivitiesLiveByLikeTitle($title);
-    }
-
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
@@ -827,5 +920,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return LiveActivityService
+     */
+    protected function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

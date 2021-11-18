@@ -9,6 +9,10 @@ class ReplayChooser extends Emitter{
 
   init() {
     this.initFileChooser();
+    $('#keywordType').on('change',function(){
+      let val = $(this).val();
+      $('input[name=keywordType]').val(val);
+    });
   }
 
   initFileChooser() {

@@ -2527,9 +2527,9 @@ course_material_delete:
     methods:
         - POST
 replay_choose:
-  path: /replay/choose
-  defaults:
-    _controller: 'AppBundle:Replay/Replay:list'
+    path: /replay/choose
+    defaults:
+        _controller: 'AppBundle:Replay/Replay:list'
 media_materiallib_choose:
     path: /media/materiallib/choose
     defaults:

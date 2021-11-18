@@ -74,62 +74,45 @@ class LiveReplay extends AbstractResource
         return ['success' => true];
     }
 
-    protected function filterBaseFields($fields)
-    {
-        $fields = ArrayToolkit::parts($fields, ['tagIds', 'remark', 'replayPublic']);
-
-        return $fields;
-    }
-
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $conditions = $this->filterReplayCondition($conditions);
+        $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $activities = $this->getActivityService()->search($conditions, ['startTime' => 'DESC'], $offset, $limit);
-        $liveActivities = $this->getActivityService()->findActivities(ArrayToolkit::column($activities, 'id'), true);
-        $liveActivities = $this->handleActivityReplay($liveActivities);
+        $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0], ['createdTime' => 'desc'], $offset, $limit);
+        $replays = $this->handleActivityReplay($replays);
 
-        return $this->makePagingObject($liveActivities, $this->getActivityService()->count($conditions), $offset, $limit);
+        return $this->makePagingObject($replays, $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0]), $offset, $limit);
     }
 
-    protected function handleActivityReplay($liveActivities)
+    protected function handleActivityReplay($replays)
     {
-        $lessonIds = $activitiesList = [];
-        foreach ($liveActivities as $activity) {
-            $lessonIds[] = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+        if (empty($replays)) {
+            return [];
         }
-        $replays = $this->getLiveReplayService()->findReplaysByLessonIds($lessonIds);
-        $replays = array_filter($replays, function ($replay) {
-            // 过滤掉被隐藏的录播回放
-            return !empty($replay) && !(bool) $replay['hidden'];
-        });
-        $replays = ArrayToolkit::index($replays, 'lessonId');
+        $activityIds = ArrayToolkit::column($replays, 'lessonId');
+        $liveActivities = $this->getActivityService()->findActivities($activityIds, true);
+        $liveActivities = ArrayToolkit::index($liveActivities, 'id');
 
-        foreach ($liveActivities as $activity) {
-            $replay = $replays[$activity['id']];
-            if (empty($replay)) {
-                continue;
-            }
-            if (isset($activity['ext'])) {
-                $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
-                $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
-                $activitiesList[] = [
-                    'id' => $activity['id'],
-                    'title' => $activity['title'],
-                    'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
-                    'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
-                    'liveSecond' => $liveTime,
-                    'tag' => $activity['ext']['replayTagIds'],
-                    'replayPublic' => $activity['ext']['replayPublic'],
-                    'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
-                    'url' => $this->generateUrl('custom_live_activity_replay_entry', [
-                        'courseId' => $activity['fromCourseId'],
-                        'activityId' => $activity['id'],
-                        'replayId' => $replay['id'],
-                    ]),
-                ];
-            }
+        foreach ($replays as $replay) {
+            $activity = $liveActivities[$replay['lessonId']];
+            $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
+            $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
+            $activitiesList[] = [
+                'id' => $activity['id'],
+                'title' => $activity['title'],
+                'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
+                'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
+                'liveSecond' => $liveTime,
+                'tag' => $activity['ext']['replayTagIds'],
+                'replayPublic' => $activity['ext']['replayPublic'],
+                'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
+                'url' => $this->generateUrl('custom_live_activity_replay_entry', [
+                    'courseId' => $activity['fromCourseId'],
+                    'activityId' => $activity['id'],
+                    'replayId' => $replay['id'],
+                ]),
+            ];
         }
 
         return $activitiesList;
@@ -180,17 +163,13 @@ class LiveReplay extends AbstractResource
         }
 
         if (!empty($conditions['courseId'])) {
-            $conditions['fromCourseId'] = $conditions['courseId'];
-            unset($conditions['courseId']);
+            $searchConditions['fromCourseId'] = $conditions['courseId'];
         }
 
-        unset($conditions['tagId']);
-        unset($conditions['keyword']);
-        unset($conditions['categoryId']);
-        $conditions['ids'] = empty($activityIds) ? [-1] : $activityIds;
-        $conditions['mediaType'] = 'live';
+        $searchConditions['ids'] = empty($activityIds) ? [-1] : $activityIds;
+        $searchConditions['mediaType'] = 'live';
 
-        return $conditions;
+        return $searchConditions;
     }
 
     /**

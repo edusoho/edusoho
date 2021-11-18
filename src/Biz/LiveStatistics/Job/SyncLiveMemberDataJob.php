@@ -17,9 +17,9 @@ class SyncLiveMemberDataJob extends AbstractJob
 {
     const LIMIT = 500;
 
-    const FINISH = 99999999999999;
-
     const ES_CLOUD_LIVE_PROVIDER = 13;
+
+    protected $finish = 0;
 
     protected $EdusohoLiveClient = null;
 
@@ -40,7 +40,8 @@ class SyncLiveMemberDataJob extends AbstractJob
         $activity = $this->getActivityService()->getActivity($this->activityId, true);
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
-        while (time() - $this->requestTime < 90) {
+        //单job执行时间限制90秒
+        while (time() - $this->requestTime < 90 && 0 == $this->finish) {
             $this->getLiveStatistic($activity);
             $this->start += self::LIMIT;
         }
@@ -49,7 +50,7 @@ class SyncLiveMemberDataJob extends AbstractJob
 
     protected function createdSyncJob()
     {
-        if (self::FINISH != $this->requestTime) {
+        if (0 == $this->finish) {
             $startJob = [
                 'name' => 'SyncLiveMemberDataJob'.$this->activityId.'_'.time(),
                 'expression' => time() - 100,
@@ -82,14 +83,19 @@ class SyncLiveMemberDataJob extends AbstractJob
             return;
         }
         try {
-            $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+            $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => $this->start, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
+            $this->finish = 1;
+
+            return;
         }
 
-        $this->processGeneralLiveMemberData($activity, $memberData);
+        $this->getLiveCloudStatisticsService()->processGeneralLiveMemberData($activity, $memberData);
+
         if (count($memberData['list']) < self::LIMIT) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
-            $this->requestTime = self::FINISH;
+            $this->finish = 1;
+            //更新直播数据
             if ($this->syncLive) {
                 $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
                 $this->getLiveCloudStatisticsService()->getLiveData($task);

@@ -28,8 +28,6 @@ interface ActivityService
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
 
-    public function findActivitiesLiveByLikeTitle($title);
-
     /**
      * 创建之前检查完整性
      *
@@ -84,6 +82,8 @@ interface ActivityService
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
 
     public function getByMediaIdAndMediaType($mediaId, $mediaType);
+
+    public function findManageReplayActivityIds($conditions);
 
     public function getActivityByAnswerSceneId($answerSceneId);
 }

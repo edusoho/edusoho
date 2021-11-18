@@ -20,9 +20,11 @@ class LiveActivityDaoImpl extends AdvancedDaoImpl implements LiveActivityDao
                 'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
+                'replayStatus != :replayStatusNotEqual',
                 'replayPublic = :replayPublic',
                 'replayTagIds like :replayTagIds',
                 'anchorId = :anchorId',
+                'anchorId IN (:anchorIds)',
                 'progressStatus != :progressStatusNotEqual',
                 'progressStatus = :progressStatus',
                 'liveStartTime >= :liveStartTime_GT',
@@ -44,16 +46,6 @@ class LiveActivityDaoImpl extends AdvancedDaoImpl implements LiveActivityDao
     public function findByLiveIdAndReplayStatus($liveId)
     {
         return $this->findByFields(['liveId' => $liveId, 'replayStatus' => 'ungenerated']);
-    }
-
-    public function findLiveActivitiesByReplayStatus($replayStatus = 'generated')
-    {
-        return $this->findByFields(['replayStatus' => $replayStatus]);
-    }
-
-    public function findLiveActivitiesByIsPublic()
-    {
-        return $this->findByFields(['replayPublic' => 1, 'replayStatus' => 'generated']);
     }
 
     public function findLiveActivitiesByReplayTagId($tagId)

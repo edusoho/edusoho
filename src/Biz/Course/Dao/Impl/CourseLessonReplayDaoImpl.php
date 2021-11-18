@@ -3,9 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseLessonReplayDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonReplayDao
+class CourseLessonReplayDaoImpl extends AdvancedDaoImpl implements CourseLessonReplayDao
 {
     protected $table = 'course_lesson_replay';
 

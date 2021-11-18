@@ -2,13 +2,13 @@
 
 namespace Biz\Course\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 /**
  * 直播回放, lessonId 在type为openLive情况下是直播公开课的课时ID, type为live情况下是activity的ID
  * Interface CourseLessonReplayDao.
  */
-interface CourseLessonReplayDao extends GeneralDaoInterface
+interface CourseLessonReplayDao extends AdvancedDaoInterface
 {
     public function deleteByLessonId($lessonId, $lessonType);
 

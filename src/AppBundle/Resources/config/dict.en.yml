@@ -597,6 +597,11 @@ reportAuditStatus:
     illegal: Illegal
 
 multiClassStatus:
-  not_start: Not Start
-  live: live
-  end: End
+    not_start: Not Start
+    live: live
+    end: End
+
+replayKeyWordType:
+    activityTitle: live Title
+    anchor: teacher
+    courseTitle: course Title

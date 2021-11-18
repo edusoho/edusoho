@@ -31,17 +31,6 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->findByFields(['fromCourseSetId' => $courseSetId]);
     }
 
-    public function findActivitiesLiveByLikeTitle($title)
-    {
-        if (empty($title)) {
-            $title = '';
-        }
-        $title = '%'.$title.'%';
-        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
-
-        return $this->db()->fetchAll($sql, [$title]);
-    }
-
     public function findSelfVideoActivityByCourseIds($courseIds)
     {
         if (empty($courseIds)) {
