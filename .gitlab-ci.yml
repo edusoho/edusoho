@@ -9,7 +9,7 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
   FROM_VERSION: 21.4.4
   VERSION: 21.4.5
-  H5VERSION: 21.4.5
+  H5VERSION: release/21.4.5
 
 
 before_script:
