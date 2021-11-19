@@ -16,7 +16,7 @@
             <div class="component-title">{{ component.title }}</div>
           </div>
         </div>
-        <div class="arrow-content" :style="{ top: (64 * index + 44) + 'px' }"></div>
+        <div class="arrow-content" :style="{ top: (88 * index + 44) + 'px' }"></div>
       </div>
     </template>
   </div>
