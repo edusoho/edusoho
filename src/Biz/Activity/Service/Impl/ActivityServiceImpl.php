@@ -386,8 +386,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $courses = $this->getCourseService()->searchCourses(['categoryId' => $conditions['categoryId']], [], 0, PHP_INT_MAX, ['id']);
             $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
         }
-        if (!empty($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
+        if (!empty($conditions['keyword']) && 'courseTitle' == $conditions['keywordType']) {
             $courses = $this->getCourseService()->searchCourses(['titleLike' => $conditions['keyword'], 'ids' => $courseIds], [], 0, PHP_INT_MAX, ['id']);
+            $likeCourses = $this->getCourseService()->searchCourses(['courseSetTitleLike' => $conditions['keyword'], 'ids' => $courseIds], [], 0, PHP_INT_MAX, ['id']);
+            $courses = array_merge($courses, $likeCourses);
             $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
         }
         if (!empty($conditions['courseId'])) {
