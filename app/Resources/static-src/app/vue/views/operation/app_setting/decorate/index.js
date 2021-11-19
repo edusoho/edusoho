@@ -6,7 +6,7 @@ const routes = [
   {
     path: '/',
     name: 'AppDecorate',
-    component: () => import(/* webpackChunkName: "app/vue/dist/AppDecorate" */ 'app/vue/views/operation/app_decorate/index.vue')
+    component: () => import(/* webpackChunkName: "app/vue/dist/AppSetting" */ 'app/vue/views/operation/app_setting/decorate/index.vue')
   }
 ];
 
