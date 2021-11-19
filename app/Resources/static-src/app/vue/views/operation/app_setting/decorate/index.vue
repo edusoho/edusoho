@@ -16,7 +16,11 @@
         </div>
       </aside>
 
-      <section class="center-preview-container pull-left"></section>
+      <section class="center-preview-container pull-left">
+        <div class="main-preview-container">
+          <find-head />
+        </div>
+      </section>
 
       <aside class="right-edit-container pull-left"></aside>
     </div>
@@ -52,11 +56,13 @@ const Classifys = [
 
 import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
+import FindHead from '../components/FindHead.vue';
 
 export default {
   components: {
     TheHeader,
-    ComponentClassify
+    ComponentClassify,
+    FindHead
   },
 
   data() {
@@ -102,6 +108,15 @@ export default {
       overflow-y: auto;
       padding: 40px 0 20px 190px;
       width: calc(100% - 384px - 80px);
+      pointer-events: none;
+      background-color: #f5f7fa;
+
+      .main-preview-container {
+        margin: 0 auto;
+        width: 375px;
+        height: 700px;
+        background-color: red;
+      }
     }
 
     .right-edit-container {
