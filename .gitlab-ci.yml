@@ -275,8 +275,6 @@ Build upgrade package:
   stage: build
   image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   script:
-    - git checkout develop
-    - git branch -D release/${VERSION}
     - git checkout release/${VERSION}
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
