@@ -92,7 +92,13 @@ class SyncLiveMemberDataJob extends AbstractJob
 
         $this->getLiveCloudStatisticsService()->processGeneralLiveMemberData($activity, $memberData);
 
-        if (count($memberData['list']) < self::LIMIT) {
+        if (!isset($memberData['list'])) {
+            $this->finish = 1;
+
+            return;
+        }
+
+        if (isset($memberData['list']) && count($memberData['list']) < self::LIMIT) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
             $this->finish = 1;
             //更新直播数据
@@ -114,11 +120,18 @@ class SyncLiveMemberDataJob extends AbstractJob
         try {
             $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
-        }
+            $this->finish = 1;
 
+            return;
+        }
+        if (!isset($memberData['data'])) {
+            $this->finish = 1;
+
+            return;
+        }
         $this->getLiveCloudStatisticsService()->processEsLiveMemberData($activity, $memberData);
         if (count($memberData['data']) < self::LIMIT) {
-            $this->requestTime = self::FINISH;
+            $this->finish = 1;
         }
     }
 
