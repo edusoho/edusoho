@@ -288,10 +288,11 @@ Build upgrade package:
     - git pull
     - cp build/env.js.example  build/env.js
     - rm -rf node_modules
+    - rm -rf dist
+    - rm -rf ./../web/h5/*
     - yarn install
     - npm run build
     - rm -rf node_modules
-    - ll
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
     - rm -rf app/caches node_modules
