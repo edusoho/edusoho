@@ -8,7 +8,7 @@
     </div>
     <div class="app-find__right pull-left">
       <h4>注：使用发现页配置功能，app版本需要升级到4.5.39及以上</h4>
-      <a-button class="mt16" type="primary">编辑</a-button>
+      <a-button class="mt16" type="primary" @click="handleClick">编辑</a-button>
     </div>
   </div>
 </template>
@@ -22,6 +22,12 @@ export default {
 
     getScale() {
       return this.getMaxHeight / 867;
+    }
+  },
+
+  methods: {
+    handleClick() {
+      window.open('/admin/v2/setting/app_decorate');
     }
   }
 }
