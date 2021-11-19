@@ -23,10 +23,6 @@ export default {
     getScale() {
       return this.getMaxHeight / 867;
     }
-  },
-
-  mounted() {
-    console.log(this.getScale);
   }
 }
 </script>
