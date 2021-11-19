@@ -4,8 +4,22 @@
 
 {% do script(['app/vue/views/operation/app_setting/decorate/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    html {
+      min-width: 1200px;
+    }
+
+    body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  </style>
+{% endblock %}
+
 {% block body %}
-  <body style="padding-top: 0; padding-bottom: 0;">
+  <body>
     <div id="app"></div>
      {% block scriptBoot %}
       {% include 'old-script_boot.html.twig' with { script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js') } %}
