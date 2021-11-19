@@ -283,6 +283,7 @@ Build upgrade package:
     - n 10.17.0
     - node -v
     - yarn config set registry https://registry.npm.taobao.org
+    - rm -rf app/caches
     - cd edusoho-h5
     - git checkout ${H5VERSION}
     - git pull
@@ -305,10 +306,8 @@ Build upgrade package:
     - app/console trans:dump-js
     - git config --global user.email "gitlab@example.com"
     - git config --global user.name "gitlab"
-    - git add web/static-dist
-    - git add web/h5
-    - git add web/bundles
-    - git add web/translations
+    - git add web
+    - ls web/h5/static
     - git diff .
     - "git commit -m 'feat: #10000 compile'"
     - app/console   build:upgrade-package ${FROM_VERSION} ${VERSION}
