@@ -291,7 +291,7 @@ Build upgrade package:
     - yarn install
     - npm run build
     - rm -rf node_modules
-    - rm -rf ./../web/h5/*
+    - ll
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
     - rm -rf app/caches node_modules
