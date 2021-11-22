@@ -355,7 +355,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activityIds = $this->findLiveActivityIdsWithoutAdmin();
         }
         $publishActivities = $this->getLiveActivityService()->search(['replayPublic' => 1], [], 0, $this->getLiveActivityService()->count(['replayPublic' => 1]), ['id']);
-        $liveActivityIds = empty($publishActivities) ? [-1] : ArrayToolkit::column($publishActivities, ['id']);
+        $liveActivityIds = empty($publishActivities) ? [-1] : ArrayToolkit::column($publishActivities, 'id');
         $activities = $this->search(['mediaIds' => empty($liveActivityIds), 'live'], [], 0, count($liveActivityIds), ['id']);
         $ids = ArrayToolkit::column($activities, 'id');
 
