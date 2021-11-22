@@ -325,14 +325,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      */
     public function findManageReplayActivityIds($conditions)
     {
-        $currentUser = $this->getCurrentUser();
-        if ($currentUser->isAdmin()) {
-            $activities = $this->search(['mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
-            $activityIds = ArrayToolkit::column($activities, 'id');
-        } else {
-            $activityIds = $this->findLiveActivityIdsWithoutAdmin();
-        }
-
+        $activityIds = $this->processManageReplayConditionsActivityIds();
         $activityIds = $this->processFindManageReplayConditions_withCourseTab($activityIds, $conditions);
         $activityIds = $this->processFindManageReplayConditions_withLiveActivityTab($activityIds, $conditions);
 
@@ -350,6 +343,23 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $ids = array_values(array_unique(array_intersect($activityIds, $searchActivityIds)));
 
         return empty($ids) ? [-1] : $ids;
+    }
+
+    protected function processManageReplayConditionsActivityIds()
+    {
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->isAdmin()) {
+            $activities = $this->search(['mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+        } else {
+            $activityIds = $this->findLiveActivityIdsWithoutAdmin();
+        }
+        $publishActivities = $this->getLiveActivityService()->search(['replayPublic' => 1], [], 0, $this->getLiveActivityService()->count(['replayPublic' => 1]), ['id']);
+        $liveActivityIds = empty($publishActivities) ? [-1] : ArrayToolkit::column($publishActivities, ['id']);
+        $activities = $this->search(['mediaIds' => empty($liveActivityIds), 'live'], [], 0, count($liveActivityIds), ['id']);
+        $ids = ArrayToolkit::column($activities, 'id');
+
+        return array_values(array_unique(array_merge($activityIds, $ids)));
     }
 
     protected function processFindManageReplayConditions_withLiveActivityTab($activityIds, $conditions)
@@ -401,7 +411,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return array_intersect($activityIds, $activityCategoryIds);
     }
 
-    protected function findManageReplayActivityIdsfindLiveActivityIdsWithoutAdmin()
+    protected function findLiveActivityIdsWithoutAdmin()
     {
         $courses = $this->getCourseService()->searchCourses(['teacherIds' => "%|{$this->getCurrentUser()->getId()}|%"], [], 0, PHP_INT_MAX, ['id']);
         $courseIds = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
