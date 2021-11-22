@@ -787,7 +787,7 @@ class ActivityServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'withParams' => [1],
-                'returnValue' => ['id' => 1, 'liveId' => '1001', 'liveProvider' => 1, 'progressStatus' => 'created'],
+                'returnValue' => ['id' => 1, 'liveId' => '1001', 'liveProvider' => 1, 'progressStatus' => 'closed'],
             ],
         ]);
 
@@ -825,12 +825,12 @@ class ActivityServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'withParams' => [1],
-                'returnValue' => ['id' => 1, 'liveId' => '1001', 'liveProvider' => 9, 'progressStatus' => 'created'],
+                'returnValue' => ['id' => 1, 'liveId' => '1001', 'liveProvider' => 9, 'progressStatus' => 'closed'],
             ],
             [
                 'functionName' => 'get',
                 'withParams' => [2],
-                'returnValue' => ['id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'created'],
+                'returnValue' => ['id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'closed'],
             ],
             [
                 'functionName' => 'get',
@@ -843,7 +843,7 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertTrue($result);
 
         $result = $this->getActivityService()->isLiveFinished(2);
-        $this->assertFalse($result);
+        $this->assertTrue($result);
 
         $result = $this->getActivityService()->isLiveFinished(3);
         $this->assertTrue($result);
@@ -943,8 +943,8 @@ class ActivityServiceTest extends BaseTestCase
         ]);
 
         $result = $this->getActivityService()->checkLiveStatus(2, 1);
-        $this->assertFalse($result['result']);
-        $this->assertEquals('message_response.live_over.message', $result['message']);
+        $this->assertTrue($result['result']);
+        $this->assertEmpty($result['message']);
 
         $result = $this->getActivityService()->checkLiveStatus(2, 2);
         $this->assertFalse($result['result']);
