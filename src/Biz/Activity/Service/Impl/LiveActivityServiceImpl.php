@@ -10,6 +10,7 @@ use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
@@ -196,7 +197,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             return;
         }
         if ('created' === $liveActivity['progressStatus']) {
-            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime]);
+            $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+            $update = ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime];
+            if (!empty($course['teacherIds'])) {
+                $update['anchorId'] = $course['teacherIds'][0];
+            }
+            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], $update);
             $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
             $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
         }
@@ -534,5 +541,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }
