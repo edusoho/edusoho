@@ -183,9 +183,9 @@ abstract class AbstractResource
         return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
     }
 
-    protected function trans($name)
+    protected function trans($message, $arguments = [], $domain = null, $locale = null)
     {
-        return ServiceKernel::instance()->trans($name);
+        return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
     }
 
     protected function makePagingObject($objects, $total, $offset, $limit)

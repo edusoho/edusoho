@@ -102,7 +102,7 @@ class LiveReplay extends AbstractResource
                 'id' => $activity['id'],
                 'title' => $activity['title'],
                 'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
-                'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
+                'liveTime' => empty($liveTime) ? '-' : $this->timeFormatterFilter($liveTime),
                 'liveSecond' => $liveTime,
                 'tag' => $activity['ext']['replayTagIds'],
                 'replayPublic' => $activity['ext']['replayPublic'],
@@ -116,6 +116,19 @@ class LiveReplay extends AbstractResource
         }
 
         return $activitiesList;
+    }
+
+    public function timeFormatterFilter($time)
+    {
+        if ($time <= 60) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => 0]);
+        }
+
+        if ($time <= 3600) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
+        }
+
+        return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
     }
 
     protected function filterReplayCondition($conditions)

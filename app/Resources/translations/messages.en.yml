@@ -137,7 +137,7 @@ site.twig.extension.smarttime.previous_second: %diff% second ago
 site.twig.extension.smarttime.previous_minute: %diff% minute ago
 site.twig.extension.smarttime.previous_hour: %diff% hour ago
 site.twig.extension.smarttime.previous_day: %diff% day ago
-site.twig.extension.time_interval.minute: %diff% minute
+site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
