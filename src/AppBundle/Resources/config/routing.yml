@@ -2614,6 +2614,14 @@ course_manage_testpaper_result_list:
     path: '/course/{id}/manage/testpaper/{testpaperId}/{activityId}/result'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultList'
+course_testpaper_transcript_export_data:
+    path: 'course/{courseId}/testpaper/{testpaperId}/{activityId}/transcript_export_data'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:transcriptData'
+course_testpaper_transcript_export:
+    path: 'course/{courseId}/testpaper/{testpaperId}/{activityId}/transcript_export'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:transcriptExport'
 course_manage_exam_result_anlysis:
     path: '/course/{id}/manage/exam/activity/{activityId}/analysis'
     defaults:

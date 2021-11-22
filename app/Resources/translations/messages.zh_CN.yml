@@ -143,6 +143,7 @@ site.twig.extension.smarttime.previous_second: %diff%秒前
 site.twig.extension.smarttime.previous_minute: %diff%分钟前
 site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
+site.twig.extension.time_interval.second: '%diff% 秒'
 site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
@@ -1260,6 +1261,9 @@ course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
 course.homework_check.review.submit_time: 提交时间
+course.homework_check.review.submit_num: 作业次数
+course.homework_check.review.submit_num_detail: 第%num%次
+course.testpaper_check.review.submit_num: 考试次数
 course.homework_check.review.status: 状态
 course.homework_check.review.reviewer: 批阅人
 course.homework_check.review.operation: 操作
@@ -1595,6 +1599,7 @@ course.plan_info: >
   <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
   <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
   <p class="cd-mt24">欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
+course.testpaper_export.btn: 导出成绩单
 
 
 # 课程扩展
