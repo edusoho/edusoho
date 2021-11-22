@@ -110,14 +110,20 @@ export default {
 
     .center-preview-container {
       overflow-y: auto;
-      padding: 40px 0 20px 190px;
+      padding: 40px 0 40px 190px;
       width: calc(100% - 384px - 80px);
+      height: 100%;
       background-color: #f5f7fa;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .main-preview-container {
         margin: 0 auto;
         width: 375px;
-        height: 700px;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
         background-color: #fafafa;
       }
