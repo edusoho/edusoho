@@ -14,13 +14,9 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\OperationStatistic\Service\OperationCountStatisticService;
-use Biz\Question\Service\CategoryService;
-use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -298,8 +294,10 @@ class ManageController extends BaseController
                 $member = '';
                 $member .= is_numeric($users[$answerRecord['user_id']]['nickname']) ? $users[$answerRecord['user_id']]['nickname']."\t".',' : $users[$answerRecord['user_id']]['nickname'].',';
                 $member .= $profiles[$answerRecord['user_id']]['truename'] ? $profiles[$answerRecord['user_id']]['truename'].',' : '-'.',';
+                $member .= $users[$answerRecord['user_id']]['verifiedMobile'] ? $users[$answerRecord['user_id']]['verifiedMobile'].',' : '-'.',';
+                $member .= $users[$answerRecord['user_id']]['emailVerified'] ? $users[$answerRecord['user_id']]['email'].',' : '-'.',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
-                $member .= $this->getUsedTime($answerRecord['used_time']).',';
+                $member .= $this->timeFormatterFilter($answerRecord['used_time']).',';
                 $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
                 $member .= $this->getReviewStatus($answerRecord['status']).',';
                 $member .= $answerReport['score'].',';
@@ -326,17 +324,17 @@ class ManageController extends BaseController
         return $str[$type];
     }
 
-    protected function getUsedTime($usedTime)
+    public function timeFormatterFilter($time)
     {
-        if ($usedTime < 86400) {
-            $time = gmstrftime('%H时:%M分:%S秒', $usedTime);
-        } else {
-            $time = explode('-', gmstrftime('%j-%H-%M-%S', $usedTime));
-            $hours = ($time[0] - 1) * 24 + $time[1];
-            $time = sprintf('%s时:%s分:%s秒', $hours, $time[2], $time[3]);
+        if ($time <= 60) {
+            return $this->trans('site.twig.extension.time_interval.second', ['%diff%' => $time]);
         }
 
-        return $time;
+        if ($time <= 3600) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
+        }
+
+        return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
     }
 
     protected function getReviewStatus($status)
@@ -389,22 +387,9 @@ class ManageController extends BaseController
         if (!$activity) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
-
-        $this->recordOperation($activity['mediaType']);
         $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], 'testpaper' == $activity['mediaType'] ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
-    }
-
-    protected function recordOperation($type)
-    {
-        $currentUserId = $this->getCurrentUser()->getId();
-        $operationRecord = $this->getOperationCountStatisticService()->getRecordByTargetTypeAndOperatorId($type.'_export', $currentUserId);
-        if ($operationRecord) {
-            $this->getOperationCountStatisticService()->waveOperationNum($operationRecord['id']);
-        } else {
-            $this->getOperationCountStatisticService()->createOperationRecord(['target_type' => $type.'_export', 'operator_id' => $currentUserId]);
-        }
     }
 
     public function buildCheckAction(Request $request, $courseSetId, $type)
@@ -1015,13 +1000,5 @@ class ManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
-    }
-
-    /**
-     * @return OperationCountStatisticService
-     */
-    protected function getOperationCountStatisticService()
-    {
-        return $this->createService('OperationStatistic:OperationCountStatisticService');
     }
 }
