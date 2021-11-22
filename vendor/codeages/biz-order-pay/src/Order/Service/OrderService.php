@@ -16,7 +16,7 @@ interface OrderService
 
     public function getOrderBySn($sn, $lock = false);
 
-    public function searchOrders($conditions, $orderBy, $start, $limit);
+    public function searchOrders($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function countOrders($conditions);
 

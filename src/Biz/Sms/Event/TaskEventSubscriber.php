@@ -30,6 +30,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
+            'course.task.copy' => 'onCopyTaskCreate',
         ];
     }
 
@@ -101,9 +102,18 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
+    public function onCopyTaskCreate(Event $event)
+    {
+        $copyTasks = $event->getSubject();
+        $this->sendTasksPublishSms($copyTasks);
+    }
+
     protected function sendTasksPublishSms($tasks)
     {
         foreach ($tasks as $task) {
+            if ('published' != $task['status']) {
+                continue;
+            }
             if ('live' == $task['type']) {
                 $this->registerJob($task);
                 $smsType = 'sms_live_lesson_publish';
@@ -172,9 +182,8 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
 
-        return $tasks;
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
     }
 
     private function isTaskCreateSyncFinished($task)

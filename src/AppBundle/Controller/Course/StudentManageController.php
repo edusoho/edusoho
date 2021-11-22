@@ -231,9 +231,7 @@ class StudentManageController extends BaseController
     {
         $deadline = $request->query->get('deadline');
         $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
-        $ids = $request->query->get('ids');
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($this->getCourseMemberService()->checkDeadlineForUpdateDeadline($courseId, $ids, $deadline)) {
+        if ($this->getCourseMemberService()->checkDeadlineForUpdateDeadline($deadline)) {
             return $this->createJsonResponse(true);
         }
 

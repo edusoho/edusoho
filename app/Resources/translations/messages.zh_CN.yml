@@ -146,7 +146,7 @@ site.twig.extension.smarttime.previous_day: %diff%天前
 site.twig.extension.time_interval.minute: %diff%分
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
-site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
 site.setting.unfinished: 未设置
@@ -1773,7 +1773,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -7721,7 +7721,7 @@ admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
-  <p>1、初始化的4个角色，无法编辑和删除</p>
+  <p>1、初始化的6个角色，无法编辑和删除</p>
   <p>2、角色创建成功后编码不可修改</p>
 admin.role_manage.modal.show_modal: 角色详情
 admin.role_manage.modal.edit_modal: 编辑角色
@@ -10516,6 +10516,10 @@ exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parsed.failed.bilibili: 获取哔哩哔哩视频信息失败
+exception.parsed.failed.bilibili_video_id: 解析哔哩哔哩视频ID失败
+exception.parsed.failed.iqiyi: 获取爱奇艺视频信息失败
+exception.parsed.failed.iqiyi_video_id: 解析爱奇艺视频ID失败
 exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在

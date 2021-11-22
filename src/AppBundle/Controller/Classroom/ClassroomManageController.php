@@ -134,6 +134,7 @@ class ClassroomManageController extends BaseController
                 'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
+                'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),
             ]
         );
     }
@@ -440,7 +441,7 @@ class ClassroomManageController extends BaseController
 
         $this->appendLearningProgress($classroomMembers);
 
-        $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
+        $str = '用户名,Email,加入学习时间,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
 
         foreach ($fields as $key => $value) {
             $str .= ','.$value;
@@ -454,6 +455,7 @@ class ClassroomManageController extends BaseController
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
             $member .= $classroomMember['learningProgressPercent'].',';
+            $member .= (empty($classroomMember['deadline']) ? $this->trans('course.expiry_date.forever_mode') : date('Y-n-d H:i', $classroomMember['deadline'])).',';
             $member .= $profiles[$classroomMember['userId']]['truename'] ? $profiles[$classroomMember['userId']]['truename'].',' : '-'.',';
             $member .= $gender[$profiles[$classroomMember['userId']]['gender']].',';
             $member .= $profiles[$classroomMember['userId']]['qq'] ? $profiles[$classroomMember['userId']]['qq'].',' : '-'.',';

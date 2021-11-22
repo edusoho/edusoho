@@ -13,7 +13,11 @@
         {{ select_options(options, app.request.get('expired'), 'classroom.student_study_expiry_date'|trans) }}
       </select>
       <a class="btn btn-primary js-search-btn">{{'form.btn.search'|trans}}</a>
-      <a class="btn btn-primary js-delete-all {% if students|length <= 0 %}hidden{% endif %}" data-url="{{ path('classroom_manage_student_batch_remove_all', {id: classroom.id}) }}">{{'classroom.delete_condition_student'|trans}}</a>
+      {% if disableDeleteSearchResult %}
+        <button class="btn btn-primary {% if students|length <= 0 %}hidden{% endif %}" disabled="disabled">{{ 'classroom.delete_condition_student'|trans }}</button>
+      {% else %}
+        <a class="btn btn-primary js-delete-all {% if students|length <= 0 %}hidden{% endif %}" data-url="{{ path('classroom_manage_student_batch_remove_all', {id: classroom.id}) }}">{{ 'classroom.delete_condition_student'|trans }}</a>
+      {% endif %}
     </div>
     <div class="clearfix"></div>
   </form>

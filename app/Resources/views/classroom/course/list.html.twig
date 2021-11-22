@@ -29,6 +29,17 @@
                 {% endif %}
               </a>
             </div>
+            <div class="my-course-item__progress cd-clearfix">
+              <div class="cd-progress cd-progress-sm" style="position: relative;margin-bottom: 0;">
+                <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+                <div class="progress-bar" style="width: 70%;float: none;margin-left: 8px;">
+                  <div class="progress-outer">
+                    <div class="progress-inner" style="width: {{ percent(courseMembers[course.id].learnedCompulsoryTaskNum, course.compulsoryTaskNum) }};height:10px"></div>
+                  </div>
+                </div>
+                <div class="progress-text" style="width: 40px;margin-bottom: 4px;">{{ percent(courseMembers[course.id].learnedCompulsoryTaskNum, course.compulsoryTaskNum) }}</div>
+              </div>
+            </div>
             <div class="hidden-xs class-course-price">
                 {{ 'classroom.origin_price'|trans }}：
                 {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}

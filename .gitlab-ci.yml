@@ -7,9 +7,9 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 21.4.2
-  VERSION: 21.4.3
-  H5VERSION: master
+  FROM_VERSION: 21.4.4
+  VERSION: 21.4.5
+  H5VERSION: release/21.4.5
 
 
 before_script:
@@ -275,35 +275,42 @@ Build upgrade package:
   stage: build
   image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   script:
+    - git checkout v${FROM_VERSION}
     - git checkout release/${VERSION}
-    - git pull
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
-    - n 12.8.1
+    - n 12.18.1
+    - node -v
     - yarn config set registry https://registry.npm.taobao.org
+    - rm -rf app/caches
     - cd edusoho-h5
     - git checkout ${H5VERSION}
     - git pull
     - cp build/env.js.example  build/env.js
     - rm -rf node_modules
-    - yarn
+    - rm -rf dist
+    - rm -rf ./../web/h5/*
+    - yarn install
     - npm run build
     - rm -rf node_modules
-    - rm -rf ./../web/h5/*
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
+    - rm -rf app/caches node_modules
     - yarn
-    - yarn compile
+    - npm run compile
     # copy seajs静态文件到web目录下
     - app/console assets:install
 
     # 生成js语言包
     - app/console trans:dump-js
-
-    - if [[ `git status --porcelain` ]]; then git config user.email "builder@edusoho.com"; git config user.name "builder"; git add .; git commit -m 'compile'; fi;
-
-    - app/console   build:upgrade-package ${FROM_VERSION} ${VERSION}
+    - git config --global user.email "gitlab@example.com"
+    - git config --global user.name "gitlab"
+    - git add web
+    - ls web/h5/static/css
+    - "git commit -m 'feat: #10000 compile'"
+    - git diff .
+    - app/console  build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
     paths:
       - build/
