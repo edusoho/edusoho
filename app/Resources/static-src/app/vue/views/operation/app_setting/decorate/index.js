@@ -5,8 +5,8 @@ import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
 const routes = [
   {
     path: '/',
-    name: 'AppDecoration',
-    component: () => import(/* webpackChunkName: "app/vue/dist/AppDecoration" */ 'app/vue/views/operating/app_decoration/index.vue')
+    name: 'AppDecorate',
+    component: () => import(/* webpackChunkName: "app/vue/dist/AppSetting" */ 'app/vue/views/operation/app_setting/decorate/index.vue')
   }
 ];
 
