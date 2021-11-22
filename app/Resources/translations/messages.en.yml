@@ -140,7 +140,7 @@ site.twig.extension.smarttime.previous_day: %diff% day ago
 site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili, Iqiyi is now suported
 site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
@@ -1529,7 +1529,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, close the test paper may prevent students from participating in the test, please do not close the test paper.'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -6471,7 +6471,7 @@ admin.role_manage.nickname: Creator
 admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
-admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
+admin.role_manage.help_block: '<p>1 The 6 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
 admin.role_manage.modal.show_modal: 'Role details'
 admin.role_manage.modal.edit_modal: 'Edit Role'
 admin.role_manage.modal.create_modal: 'Add roles'
@@ -9244,6 +9244,10 @@ exception.parsed.failed.netease: Failed to get video information of Netease Open
 exception.parsed.failed.letv: Failed to get video information of Letv
 exception.parsed.failed.qq: Failed to get video information of QQ video
 exception.parsed.failed.youku: Failed to get video information of Youku
+exception.parsed.failed.bilibili: Failed to get video information of bilibili
+exception.parsed.failed.bilibili_video_id: Failed to get video id of bilibili
+exception.parsed.failed.iqiyi: Failed to get video information of iqiyi
+exception.parsed.failed.iqiyi_video_id: Failed to get video id of iqiyi
 exception.parser.not.support: This video type is not supported
 
 exception.announcement.notfound: Announcement not found

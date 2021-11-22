@@ -19,6 +19,8 @@ export default class detail {
     self.editor = CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
+      height: 400,
+      resize_enabled: true,
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: this.uploadUrl
     });

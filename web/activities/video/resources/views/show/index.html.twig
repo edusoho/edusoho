@@ -38,7 +38,7 @@
         </div>
 
       {% else %}
-        <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+        <iframe src="{{ activity.ext.mediaUri }}" style="height:100%; width:100%; border:0; overflow: hidden" scrolling="no"></iframe>
       {% endif %}
     </div>
   </div>

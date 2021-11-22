@@ -821,6 +821,10 @@ admin_v2_coupon_query:
     path: /coupon/index
     defaults:
         _controller: 'AppBundle:AdminV2/Marketing/Coupon:queryIndex'
+admin_v2_coupon_export:
+    path: /coupon/index/export
+    defaults:
+        _controller: 'AppBundle:AdminV2/Marketing/Coupon:exportIndex'
 admin_v2_coupon_setting:
     path: /setting/coupon
     defaults:
