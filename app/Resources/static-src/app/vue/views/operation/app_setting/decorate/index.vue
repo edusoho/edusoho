@@ -11,6 +11,7 @@
             :classify="classify"
             :index="index"
             :current-classify="currentClassify"
+            @add-component="handleClickAdd"
             @click.native="handleChangeClassify(classify.key)"
           />
         </div>
@@ -19,6 +20,8 @@
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
           <find-head />
+
+          <component :is="item" v-for="(item, index) in components" :key="index" />
 
           <find-footer />
         </div>
@@ -60,25 +63,32 @@ import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
+import Swiper from '../components/Swiper.vue';
 
 export default {
   components: {
     TheHeader,
     ComponentClassify,
     FindHead,
-    FindFooter
+    FindFooter,
+    Swiper
   },
 
   data() {
     return {
       Classifys,
-      currentClassify: 'basic'
+      currentClassify: 'basic',
+      components: []
     }
   },
 
   methods: {
     handleChangeClassify(val) {
       this.currentClassify = val;
+    },
+
+    handleClickAdd(val) {
+      this.components.push(val);
     }
   }
 }
@@ -122,8 +132,10 @@ export default {
       }
 
       .main-preview-container {
+        position: relative;
         margin: 0 auto;
         width: 375px;
+        min-height: 90%;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
         background-color: #fafafa;
       }

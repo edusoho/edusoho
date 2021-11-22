@@ -11,6 +11,7 @@
             v-for="component in classify.lists"
             :key="component.name"
             class="add-list-item pull-left"
+            @click="handleClickAdd(component.name)"
           >
             <svg-icon :icon="component.icon" />
             <div class="component-title">{{ component.title }}</div>
@@ -44,6 +45,12 @@ export default {
   computed: {
     isActive() {
       return this.classify.key === this.currentClassify;
+    }
+  },
+
+  methods: {
+    handleClickAdd(val) {
+      this.$emit('add-component', val);
     }
   }
 }

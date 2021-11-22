@@ -21,6 +21,9 @@
 
 <style lang="less" scoped>
 .app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   padding: 5px 0;
   height: 50px;
   width: 100%;
