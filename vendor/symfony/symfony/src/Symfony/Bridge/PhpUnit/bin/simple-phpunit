@@ -65,11 +65,13 @@ foreach ($defaultEnvs as $envName => $envValue) {
     }
 }
 
-$COMPOSER = file_exists($COMPOSER = $oldPwd.'/composer.phar')
-    || ($COMPOSER = rtrim('\\' === DIRECTORY_SEPARATOR ? preg_replace('/[\r\n].*/', '', `where.exe composer.phar`) : `which composer.phar 2> /dev/null`))
-    || ($COMPOSER = rtrim('\\' === DIRECTORY_SEPARATOR ? preg_replace('/[\r\n].*/', '', `where.exe composer`) : `which composer 2> /dev/null`))
-    ? (file_get_contents($COMPOSER, false, null, 0, 18) === '#!/usr/bin/env php' ? $PHP : '').' '.escapeshellarg($COMPOSER) // detect shell wrappers by looking at the shebang
-    : 'composer';
+if (false === $COMPOSER = \getenv('COMPOSER_BINARY')) {
+    $COMPOSER = file_exists($COMPOSER = $oldPwd.'/composer.phar')
+        || ($COMPOSER = rtrim('\\' === DIRECTORY_SEPARATOR ? preg_replace('/[\r\n].*/', '', `where.exe composer.phar`) : `which composer.phar 2> /dev/null`))
+        || ($COMPOSER = rtrim('\\' === DIRECTORY_SEPARATOR ? preg_replace('/[\r\n].*/', '', `where.exe composer`) : `which composer 2> /dev/null`))
+        ? (file_get_contents($COMPOSER, false, null, 0, 18) === '#!/usr/bin/env php' ? $PHP : '').' '.escapeshellarg($COMPOSER) // detect shell wrappers by looking at the shebang
+        : 'composer';
+}
 
 if (false === $SYMFONY_PHPUNIT_REMOVE = getenv('SYMFONY_PHPUNIT_REMOVE')) {
     $SYMFONY_PHPUNIT_REMOVE = 'phpspec/prophecy symfony/yaml';
@@ -85,7 +87,46 @@ if (!file_exists("$PHPUNIT_DIR/phpunit-$PHPUNIT_VERSION/phpunit") || md5_file(__
         rename("phpunit-$PHPUNIT_VERSION", "phpunit-$PHPUNIT_VERSION.old");
         passthru(sprintf('\\' === DIRECTORY_SEPARATOR ? 'rmdir /S /Q %s': 'rm -rf %s', "phpunit-$PHPUNIT_VERSION.old"));
     }
-    $passthruOrFail("$COMPOSER create-project --no-install --prefer-dist --no-scripts --no-plugins --no-progress --ansi phpunit/phpunit phpunit-$PHPUNIT_VERSION \"$PHPUNIT_VERSION.*\"");
+
+    $info = array();
+    foreach (explode("\n", `$COMPOSER info --no-ansi -a -n phpunit/phpunit "$PHPUNIT_VERSION.*"`) as $line) {
+        $line = rtrim($line);
+
+        if (!$info && preg_match('/^versions +: /', $line)) {
+            $info['versions'] = explode(', ', ltrim(substr($line, 9), ': '));
+        } elseif (isset($info['requires'])) {
+            if ('' === $line) {
+                break;
+            }
+
+            $line = explode(' ', $line, 2);
+            $info['requires'][$line[0]] = $line[1];
+        } elseif ($info && 'requires' === $line) {
+            $info['requires'] = array();
+        }
+    }
+
+    if (in_array('--colors=never', $argv, true) || (isset($argv[$i = array_search('never', $argv, true) - 1]) && '--colors' === $argv[$i])) {
+        $COMPOSER .= ' --no-ansi';
+    } else {
+        $COMPOSER .= ' --ansi';
+    }
+
+    $info += array(
+        'versions' => array(),
+        'requires' => array('php' => '*'),
+    );
+
+    $stableVersions = array_filter($info['versions'], function($v) {
+        return !preg_match('/-dev$|^dev-/', $v);
+    });
+
+    if (!$stableVersions) {
+        $passthruOrFail("$COMPOSER create-project --ignore-platform-reqs --no-install --prefer-dist --no-scripts --no-plugins --no-progress -s dev phpunit/phpunit phpunit-$PHPUNIT_VERSION \"$PHPUNIT_VERSION.*\"");
+    } else {
+        $passthruOrFail("$COMPOSER create-project --ignore-platform-reqs --no-install --prefer-dist --no-scripts --no-plugins --no-progress phpunit/phpunit phpunit-$PHPUNIT_VERSION \"$PHPUNIT_VERSION.*\"");
+    }
+
     @copy("phpunit-$PHPUNIT_VERSION/phpunit.xsd", 'phpunit.xsd');
     chdir("phpunit-$PHPUNIT_VERSION");
     if ($SYMFONY_PHPUNIT_REMOVE) {
@@ -95,7 +136,11 @@ if (!file_exists("$PHPUNIT_DIR/phpunit-$PHPUNIT_VERSION/phpunit") || md5_file(__
         $passthruOrFail("$COMPOSER require --no-update phpunit/phpunit-mock-objects \"~3.1.0\"");
     }
 
-    $passthruOrFail("$COMPOSER config --unset platform.php");
+    if (preg_match('{\^((\d++\.)\d++)[\d\.]*$}', $info['requires']['php'], $phpVersion) && version_compare($phpVersion[2].'99', PHP_VERSION, '<')) {
+        $passthruOrFail("$COMPOSER config platform.php \"$phpVersion[1].99\"");
+    } else {
+        $passthruOrFail("$COMPOSER config --unset platform.php");
+    }
     if (file_exists($path = $root.'/vendor/symfony/phpunit-bridge')) {
         $passthruOrFail("$COMPOSER require --no-update symfony/phpunit-bridge \"*@dev\"");
         $passthruOrFail("$COMPOSER config repositories.phpunit-bridge path ".escapeshellarg(str_replace('/', DIRECTORY_SEPARATOR, $path)));
@@ -109,7 +154,7 @@ if (!file_exists("$PHPUNIT_DIR/phpunit-$PHPUNIT_VERSION/phpunit") || md5_file(__
     putenv("COMPOSER_ROOT_VERSION=$PHPUNIT_VERSION.99");
     $q = '\\' === DIRECTORY_SEPARATOR ? '"' : '';
     // --no-suggest is not in the list to keep compat with composer 1.0, which is shipped with Ubuntu 16.04LTS
-    $exit = proc_close(proc_open("$q$COMPOSER install --no-dev --prefer-dist --no-progress --ansi$q", array(), $p, getcwd()));
+    $exit = proc_close(proc_open("$q$COMPOSER install --no-dev --prefer-dist --no-progress$q", array(), $p, getcwd()));
     putenv('COMPOSER_ROOT_VERSION'.(false !== $prevRoot ? '='.$prevRoot : ''));
     if ($exit) {
         exit($exit);
@@ -126,6 +171,12 @@ if (!class_exists('SymfonyBlacklistPhpunit', false)) {
 if (class_exists('PHPUnit_Util_Blacklist')) {
     PHPUnit_Util_Blacklist::$blacklistedClassNames['SymfonyBlacklistPhpunit'] = 1;
     PHPUnit_Util_Blacklist::$blacklistedClassNames['SymfonyBlacklistSimplePhpunit'] = 1;
+} elseif (method_exists('PHPUnit\Util\Blacklist', 'addDirectory')) {
+    eval(" // PHP 5.3 compat
+    (new PHPUnit\Util\BlackList())->getBlacklistedDirectories();
+    PHPUnit\Util\Blacklist::addDirectory(dirname((new ReflectionClass('SymfonyBlacklistPhpunit'))->getFileName()));
+    class_exists('SymfonyBlacklistSimplePhpunit', false) && PHPUnit\Util\Blacklist::addDirectory(dirname((new ReflectionClass('SymfonyBlacklistSimplePhpunit'))->getFileName()));
+    ");
 } else {
     PHPUnit\Util\Blacklist::$blacklistedClassNames['SymfonyBlacklistPhpunit'] = 1;
     PHPUnit\Util\Blacklist::$blacklistedClassNames['SymfonyBlacklistSimplePhpunit'] = 1;

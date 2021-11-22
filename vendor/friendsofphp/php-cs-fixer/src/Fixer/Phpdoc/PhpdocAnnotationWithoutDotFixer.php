@@ -25,6 +25,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
 {
+    /**
+     * @var string[]
+     */
     private $tags = ['throws', 'return', 'param', 'internal', 'deprecated', 'var', 'type'];
 
     /**
@@ -47,7 +50,7 @@ function foo ($bar) {}
      * {@inheritdoc}
      *
      * Must run before PhpdocAlignFixer, PhpdocTypesFixer, PhpdocTypesOrderFixer.
-     * Must run after CommentToPhpdocFixer, PhpdocIndentFixer, PhpdocToCommentFixer.
+     * Must run after AlignMultilineCommentFixer, CommentToPhpdocFixer, PhpdocIndentFixer, PhpdocToCommentFixer.
      */
     public function getPriority()
     {
@@ -114,6 +117,10 @@ function foo ($bar) {}
                 $content = Preg::replaceCallback(
                     '/^(\s*\*\s*@\w+\s+'.$optionalTypeRegEx.')(\p{Lu}?(?=\p{Ll}|\p{Zs}))(.*)$/',
                     static function (array $matches) {
+                        if (\function_exists('mb_strtolower')) {
+                            return $matches[1].mb_strtolower($matches[2]).$matches[3];
+                        }
+
                         return $matches[1].strtolower($matches[2]).$matches[3];
                     },
                     $startLine->getContent(),

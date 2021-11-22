@@ -725,6 +725,7 @@ validate.trim.message: 请输入%display%
 validate.idcard_number_input.message: 请正确输入您的身份证号码
 validate.visible_character_input.message: 请输入可见性字符
 validate.positive_integer.message: 请输入正整数
+validate.unsigned_integer.student_message: 请输入不小于0的整数
 validate.unsigned_integer.message: 请输入非负整数，其中秒数只能在0-59之间
 validate.second_range.message: 请输入非负整数，其中秒数只能在0-59之间
 validate.course_title.message: 不支持输入<、>字符
@@ -766,6 +767,7 @@ validate.choose_item.message: 请选择%display%
 validate.tag_required_hint: 请输入标签
 validate.tag_required_not_found_hint: 未搜索到标签，请网校管理员通过【管理后台】-【教学】-【分类标签】-【标签管理】进行设置。
 validate.tag_number_exceeds_limit: 你只能添加%limit%个项目
+validate.teacher_number_exceeds_limit: 你只能添加%limit%个教师
 validate.title_required_hint: 请输入标题，不能为空。
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -1723,7 +1725,8 @@ course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
-course.plan_setup.member_numbers: 课程人数
+course.plan_setup.member_numbers: 限制加入人数
+course.plan_setup.member_numbers.tips: 加入直播课程人数限制，0为不限制人数
 site.data.people: 人
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.marketing_setup.preview.set_task: 设置免费学习%taskName%
@@ -1803,3 +1806,80 @@ admin_v2.operation.audit_center.batch_operate_success_tips: 操作成功
 homepage: 首页
 
 admin_v2.teacher_qualification.setting_required: 教师资质公示功能关闭后，首页将隐藏[教师资质公示]页面，用户无法看到教师资质公示模块。
+
+activity.replay_manage.replay_error_hint: 请选择直播回放
+
+# vue
+site.btn.export: 导出
+site.btn.detail: 详情
+site.btn.remove_playback: 移除回放
+site.btn.view_playback: 查看回放
+site.btn.confirm: 确认
+
+modal.title.edit: 编辑
+modal.content.remove_playback_resources: 是否确认移除回放资源？
+
+form.label.tag: 标签
+form.label.share: 分享
+
+placeholder.playback_label: 回放标签
+placeholder.enter_keyword: 请输入关键字
+placeholder.course_category: 课程分类
+
+radio.share_to_live_playback: 共享到直播回放（其他老师可以查看、预览、引用该回放）
+radio.visible_only_to_yourself: 仅自己可见
+
+message.removal_succeeded: 移除成功
+message.edit_succeeded: 编辑成功
+
+live.playback.tip.remove_association: 直播回放将从该课程中移除关联
+live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用
+live.playback.tip.delete_related_live_playback: 同时在我的教学资料中删除相关直播回放
+
+course.task: 任务名称
+course.name: 课程名称
+
+live_name: 直播名称
+live_playback_duration: 回放时长
+live_statistics: 直播统计
+live_statistics.task_name_placeholder: 任务名
+live_statistics.live_start_time: 直播开始时间
+live_statistics.live_time_long: 直播时长（分）
+live_statistics.max_participate_count: 最大参与人数
+live_statistics.live_status: 进行状态
+live_statistics.operation: 操作
+live_statistics.live_coming: 即将开始
+live_statistics.live_playing: 正在进行
+live_statistics.live_finished: 已结束
+live_statistics.detail_notice: 数据来源于直播间，自动在直播结束一天同步
+live_statistics.detail.total_learn_time: 学习时长统计
+live_statistics.detail.checkin: 点名统计
+live_statistics.checkin_status: 是否点名
+live_statistics.checkin_status.checked: 已点名
+live_statistics.checkin_status.not_checked: 未点名
+live_statistics.checkin_status.all: 全部
+live_statistics.mobile: 手机号
+live_statistics.email: 邮箱
+live_statistics.user_name: 用户名
+live_statistics.true_name: 姓名
+live_statistics.user_name_or_mobile_number: 用户名或手机号
+live_statistics.presenter: 主讲人
+live_statistics.live_time: 直播时间
+live_statistics.actual_live_time: 实际直播时长
+live_statistics.all_chat_number: 所有用户聊天数
+live_statistics.online_number: 同时在线人数
+live_statistics.number_of_visitors: 观看人数
+live_statistics.per_capita_viewing_time: 人均观看时长
+live_statistics.enter_theLlive_room_time: 进入直播间时间
+live_statistics.watching_time: 观看时长（分钟）
+live_statistics.check_in_number: 签到数
+live_statistics.chat_number: 聊天数
+live_statistics.answers_number: 答题数
+live_statistics.to: 至
+live_statistics.people: 人
+live_statistics.strip: 条
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn:  取消共享
+course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
+course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
+course.live_replay.delete_tip:  请确认将此直播回放移除？

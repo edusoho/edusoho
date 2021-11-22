@@ -12,16 +12,17 @@
 
 namespace PhpCsFixer\Fixer\ClassNotation;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\AbstractProxyFixer;
+use PhpCsFixer\Fixer\DeprecatedFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Tokenizer\Token;
-use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * @author ntzm
+ *
+ * @deprecated in 2.17
  */
-final class FinalStaticAccessFixer extends AbstractFixer
+final class FinalStaticAccessFixer extends AbstractProxyFixer implements DeprecatedFixerInterface
 {
     /**
      * {@inheritdoc}
@@ -53,102 +54,22 @@ final class Sample
      */
     public function getPriority()
     {
-        return -1;
+        return parent::getPriority();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
+    public function getSuccessorsNames()
     {
-        return $tokens->isAllTokenKindsFound([T_FINAL, T_CLASS, T_STATIC]);
+        return array_keys($this->proxyFixers);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function createProxyFixers()
     {
-        for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
-            if (!$tokens[$index]->isGivenKind(T_FINAL)) {
-                continue;
-            }
-
-            $classTokenIndex = $tokens->getNextMeaningfulToken($index);
-
-            if (!$tokens[$classTokenIndex]->isGivenKind(T_CLASS)) {
-                continue;
-            }
-
-            $startClassIndex = $tokens->getNextTokenOfKind(
-                $classTokenIndex,
-                ['{']
-            );
-
-            $endClassIndex = $tokens->findBlockEnd(
-                Tokens::BLOCK_TYPE_CURLY_BRACE,
-                $startClassIndex
-            );
-
-            $this->replaceStaticAccessWithSelfAccessBetween(
-                $tokens,
-                $startClassIndex,
-                $endClassIndex
-            );
-        }
-    }
-
-    /**
-     * @param int $startIndex
-     * @param int $endIndex
-     */
-    private function replaceStaticAccessWithSelfAccessBetween(
-        Tokens $tokens,
-        $startIndex,
-        $endIndex
-    ) {
-        for ($index = $startIndex; $index <= $endIndex; ++$index) {
-            if ($tokens[$index]->isGivenKind(T_CLASS)) {
-                $index = $this->getEndOfAnonymousClass($tokens, $index);
-
-                continue;
-            }
-
-            if (!$tokens[$index]->isGivenKind(T_STATIC)) {
-                continue;
-            }
-
-            $doubleColonIndex = $tokens->getNextMeaningfulToken($index);
-
-            if (!$tokens[$doubleColonIndex]->isGivenKind(T_DOUBLE_COLON)) {
-                continue;
-            }
-
-            $tokens[$index] = new Token([T_STRING, 'self']);
-        }
-    }
-
-    /**
-     * @param int $index
-     *
-     * @return int
-     */
-    private function getEndOfAnonymousClass(Tokens $tokens, $index)
-    {
-        $instantiationBraceStart = $tokens->getNextMeaningfulToken($index);
-
-        if ($tokens[$instantiationBraceStart]->equals('(')) {
-            $index = $tokens->findBlockEnd(
-                Tokens::BLOCK_TYPE_PARENTHESIS_BRACE,
-                $instantiationBraceStart
-            );
-        }
-
-        $bodyBraceStart = $tokens->getNextTokenOfKind($index, ['{']);
-
-        return $tokens->findBlockEnd(
-            Tokens::BLOCK_TYPE_CURLY_BRACE,
-            $bodyBraceStart
-        );
+        return [new SelfStaticAccessorFixer()];
     }
 }

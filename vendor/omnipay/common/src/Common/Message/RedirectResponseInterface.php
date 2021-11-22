@@ -13,7 +13,6 @@ namespace Omnipay\Common\Message;
  * interface class with some extra functions relating to the
  * specifics of a redirect response from the gateway.
  *
- * @see ResponseInterface
  */
 interface RedirectResponseInterface extends ResponseInterface
 {

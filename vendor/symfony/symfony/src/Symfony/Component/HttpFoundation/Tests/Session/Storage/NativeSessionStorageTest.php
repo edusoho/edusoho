@@ -47,7 +47,7 @@ class NativeSessionStorageTest extends TestCase
         session_write_close();
         array_map('unlink', glob($this->savePath.'/*'));
         if (is_dir($this->savePath)) {
-            rmdir($this->savePath);
+            @rmdir($this->savePath);
         }
 
         $this->savePath = null;
@@ -121,6 +121,19 @@ class NativeSessionStorageTest extends TestCase
         $storage->regenerate(true);
         $this->assertNotEquals($id, $storage->getId());
         $this->assertEquals(11, $storage->getBag('attributes')->get('legs'));
+    }
+
+    public function testRegenerateWithCustomLifetime()
+    {
+        $storage = $this->getStorage();
+        $storage->start();
+        $id = $storage->getId();
+        $lifetime = 999999;
+        $storage->getBag('attributes')->set('legs', 11);
+        $storage->regenerate(false, $lifetime);
+        $this->assertNotEquals($id, $storage->getId());
+        $this->assertEquals(11, $storage->getBag('attributes')->get('legs'));
+        $this->assertEquals($lifetime, ini_get('session.cookie_lifetime'));
     }
 
     public function testSessionGlobalIsUpToDateAfterIdRegeneration()

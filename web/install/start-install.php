@@ -63,7 +63,7 @@ function install_step1($init_data = 0)
     $env = [];
     $env['os'] = PHP_OS;
     $env['phpVersion'] = PHP_VERSION;
-    $env['phpVersionOk'] = version_compare(PHP_VERSION, '5.5.0') >= 0;
+    $env['phpVersionOk'] = version_compare(PHP_VERSION, '7.0.0') >= 0;
     $env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
     $env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
     $env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;

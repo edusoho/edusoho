@@ -185,7 +185,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
             return \call_user_func($this->circularReferenceHandler, $object);
         }
 
-        throw new CircularReferenceException(sprintf('A circular reference has been detected when serializing the object of class "%s" (configured limit: %d)', \get_class($object), $this->circularReferenceLimit));
+        throw new CircularReferenceException(sprintf('A circular reference has been detected when serializing the object of class "%s" (configured limit: %d).', \get_class($object), $this->circularReferenceLimit));
     }
 
     /**
@@ -307,7 +307,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
             if (__CLASS__ !== static::class) {
                 $r = new \ReflectionMethod($this, __FUNCTION__);
                 if (__CLASS__ !== $r->getDeclaringClass()->getName()) {
-                    @trigger_error(sprintf('Method %s::%s() will have a 6th `string $format = null` argument in version 4.0. Not defining it is deprecated since Symfony 3.2.', static::class, __FUNCTION__), E_USER_DEPRECATED);
+                    @trigger_error(sprintf('Method %s::%s() will have a 6th `string $format = null` argument in version 4.0. Not defining it is deprecated since Symfony 3.2.', static::class, __FUNCTION__), \E_USER_DEPRECATED);
                 }
             }
 
@@ -340,7 +340,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
                 if (method_exists($constructorParameter, 'isVariadic') && $constructorParameter->isVariadic()) {
                     if ($allowed && !$ignored && (isset($data[$key]) || \array_key_exists($key, $data))) {
                         if (!\is_array($data[$paramName])) {
-                            throw new RuntimeException(sprintf('Cannot create an instance of %s from serialized data because the variadic parameter %s can only accept an array.', $class, $constructorParameter->name));
+                            throw new RuntimeException(sprintf('Cannot create an instance of "%s" from serialized data because the variadic parameter "%s" can only accept an array.', $class, $constructorParameter->name));
                         }
 
                         $variadicParameters = [];
@@ -366,7 +366,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
                 } elseif ($constructorParameter->isDefaultValueAvailable()) {
                     $params[] = $constructorParameter->getDefaultValue();
                 } else {
-                    throw new RuntimeException(sprintf('Cannot create an instance of %s from serialized data because its constructor requires parameter "%s" to be present.', $class, $constructorParameter->name));
+                    throw new RuntimeException(sprintf('Cannot create an instance of "%s" from serialized data because its constructor requires parameter "%s" to be present.', $class, $constructorParameter->name));
                 }
             }
 
@@ -386,11 +386,19 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
     protected function denormalizeParameter(\ReflectionClass $class, \ReflectionParameter $parameter, $parameterName, $parameterData, array $context, $format = null)
     {
         try {
-            if (null !== $parameter->getClass()) {
+            if (\PHP_VERSION_ID < 70100 && null !== $parameterClass = $parameter->getClass()) {
+                $parameterClass = $parameterClass->name;
+            } elseif (\PHP_VERSION_ID >= 70100 && ($parameterType = $parameter->getType()) instanceof \ReflectionNamedType && !$parameterType->isBuiltin()) {
+                $parameterClass = $parameterType->getName();
+                new \ReflectionClass($parameterClass); // throws a \ReflectionException if the class doesn't exist
+            } else {
+                $parameterClass = null;
+            }
+
+            if (null !== $parameterClass) {
                 if (!$this->serializer instanceof DenormalizerInterface) {
-                    throw new LogicException(sprintf('Cannot create an instance of %s from serialized data because the serializer inject in "%s" is not a denormalizer', $parameter->getClass(), static::class));
+                    throw new LogicException(sprintf('Cannot create an instance of "%s" from serialized data because the serializer inject in "%s" is not a denormalizer.', $parameterClass, static::class));
                 }
-                $parameterClass = $parameter->getClass()->getName();
 
                 return $this->serializer->denormalize($parameterData, $parameterClass, $format, $this->createChildContext($context, $parameterName, $format));
             }

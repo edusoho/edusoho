@@ -660,7 +660,12 @@ reportAuditStatus:
     illegal: 违规
 
 multiClassStatus:
-  not_start: 未开始
-  live: 开课中
-  end: 已结束
+    not_start: 未开始
+    live: 开课中
+    end: 已结束
+
+replayKeyWordType:
+    activityTitle: 直播名称
+    anchor: 主讲人
+    courseTitle: 课程名称
 

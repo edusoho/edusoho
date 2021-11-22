@@ -86,6 +86,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
 
+    public function findCoursesByCategoryIds($categoryIds)
+    {
+        return $this->getCourseDao()->findCoursesByCategoryIds($categoryIds);
+    }
+
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
@@ -1194,7 +1199,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterIds = [];
         $chapterType = '';
         $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+        array_walk($ids, function ($k) use (&$chapterIds, &$chapterType) {
             list($type, $chapterId) = explode('-', $k);
             $chapterIds[] = $chapterId;
             $chapterType = $type;
@@ -2321,7 +2326,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
-        return $this->getCourseSetDao()->wave([$course['courseSetId']], ['hitNum' => 1]);
+        return $this->getCourseDao()->wave([$courseId], ['hitNum' => 1]);
     }
 
     public function recountLearningData($courseId, $userId)

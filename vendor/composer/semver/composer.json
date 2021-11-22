@@ -31,10 +31,11 @@
         "issues": "https://github.com/composer/semver/issues"
     },
     "require": {
-        "php": "^5.3.2 || ^7.0"
+        "php": "^5.3.2 || ^7.0 || ^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.5 || ^5.0.5"
+        "symfony/phpunit-bridge": "^4.2 || ^5",
+        "phpstan/phpstan": "^0.12.54"
     },
     "autoload": {
         "psr-4": {
@@ -48,10 +49,11 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-main": "3.x-dev"
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor/bin/simple-phpunit",
+        "phpstan": "phpstan analyse"
     }
 }

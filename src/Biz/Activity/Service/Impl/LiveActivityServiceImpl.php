@@ -10,6 +10,7 @@ use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
@@ -31,6 +32,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function findLiveActivitiesByIds($ids)
     {
         return $this->getLiveActivityDao()->findByIds($ids);
+    }
+
+    public function findLiveActivitiesByReplayTagId($tagId)
+    {
+        return $this->getLiveActivityDao()->findLiveActivitiesByReplayTagId($tagId);
     }
 
     public function findActivityByLiveActivityId($id)
@@ -98,6 +104,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
+            'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
 
@@ -148,7 +155,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
         }
 
-        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds']);
+        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds', 'replayPublic']);
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -161,7 +168,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
-        $this->dispatchEvent('live.activity.update', new Event($liveActivity, ['fields' => $live, 'liveId' => $liveActivity['liveId'], 'activity' => $activity]));
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, ['fields' => $live, 'liveId' => $liveActivity['liveId'], 'activity' => $activity, 'updateActivity' => $fields]));
 
         return [$liveActivity, $fields];
     }
@@ -183,6 +190,36 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $update;
     }
 
+    public function startLive($liveId, $startTime)
+    {
+        $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
+        if (empty($liveActivity)) {
+            return;
+        }
+        if ('created' === $liveActivity['progressStatus']) {
+            $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+            $update = ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime];
+            if (!empty($course['teacherIds'])) {
+                $update['anchorId'] = $course['teacherIds'][0];
+            }
+            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], $update);
+            $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+            $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
+        }
+    }
+
+    public function closeLive($liveId, $closeTime)
+    {
+        $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
+        if (empty($liveActivity)) {
+            return;
+        }
+        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_CLOSED, 'liveEndTime' => $closeTime]);
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+        $this->dispatchEvent('live.status.close', new Event($liveActivity['liveId']));
+    }
+
     public function deleteLiveActivity($id)
     {
         //删除直播室
@@ -201,6 +238,43 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function search($conditions, $orderbys, $start, $limit)
     {
         return $this->getLiveActivityDao()->search($conditions, $orderbys, $start, $limit);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getLiveActivityDao()->count($conditions);
+    }
+
+    public function updateLiveActivityWithoutEvent($liveActivityId, $fields)
+    {
+        return $this->getLiveActivityDao()->update($liveActivityId, $fields);
+    }
+
+    public function shareLiveReplay($liveActivityId)
+    {
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 1]);
+    }
+
+    public function unShareLiveReplay($liveActivityId)
+    {
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 0]);
+    }
+
+    public function updateLiveReplayTags($liveActivityId, $tagIds)
+    {
+        return $this->getLiveActivityDao()->update($liveActivityId, ['replayTagIds' => $tagIds]);
+    }
+
+    public function removeLiveReplay($liveActivityId)
+    {
+        $liveActivity = $this->getLiveActivityDao()->update($liveActivityId, ['replayPublic' => 0, 'replayStatus' => 'ungenerated']);
+        $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
+        if (empty($activity)) {
+            return true;
+        }
+        $this->getLiveReplayService()->deleteReplayByLessonId($activity['id']);
+
+        return true;
     }
 
     public function getByLiveId($liveId)
@@ -459,5 +533,21 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

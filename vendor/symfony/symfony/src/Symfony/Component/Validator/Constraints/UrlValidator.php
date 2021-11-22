@@ -23,7 +23,7 @@ class UrlValidator extends ConstraintValidator
 {
     const PATTERN = '~^
             (%s)://                                 # protocol
-            (([\_\.\pL\pN-]+:)?([\_\.\pL\pN-]+)@)?  # basic auth
+            (((?:[\_\.\pL\pN-]|%%[0-9A-Fa-f]{2})+:)?((?:[\_\.\pL\pN-]|%%[0-9A-Fa-f]{2})+)@)?  # basic auth
             (
                 ([\pL\pN\pS\-\_\.])+(\.?([\pL\pN]|xn\-\-[\pL\pN-]+)+\.?) # a domain name
                     |                                                 # or
@@ -76,7 +76,7 @@ class UrlValidator extends ConstraintValidator
             // backwards compatibility
             if (true === $constraint->checkDNS) {
                 $constraint->checkDNS = Url::CHECK_DNS_TYPE_ANY;
-                @trigger_error(sprintf('Use of the boolean TRUE for the "checkDNS" option in %s is deprecated.  Use Url::CHECK_DNS_TYPE_ANY instead.', Url::class), E_USER_DEPRECATED);
+                @trigger_error(sprintf('Use of the boolean TRUE for the "checkDNS" option in %s is deprecated.  Use Url::CHECK_DNS_TYPE_ANY instead.', Url::class), \E_USER_DEPRECATED);
             }
 
             if (!\in_array($constraint->checkDNS, [
@@ -93,10 +93,10 @@ class UrlValidator extends ConstraintValidator
                 Url::CHECK_DNS_TYPE_SRV,
                 Url::CHECK_DNS_TYPE_TXT,
             ], true)) {
-                throw new InvalidOptionsException(sprintf('Invalid value for option "checkDNS" in constraint %s', \get_class($constraint)), ['checkDNS']);
+                throw new InvalidOptionsException(sprintf('Invalid value for option "checkDNS" in constraint "%s".', \get_class($constraint)), ['checkDNS']);
             }
 
-            $host = parse_url($value, PHP_URL_HOST);
+            $host = parse_url($value, \PHP_URL_HOST);
 
             if (!\is_string($host) || !checkdnsrr($host, $constraint->checkDNS)) {
                 $this->context->buildViolation($constraint->dnsMessage)

@@ -126,18 +126,37 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
     private function fixFunctionParameters(Tokens $tokens, array $arguments)
     {
         foreach (array_reverse($arguments) as $argumentInfo) {
-            // If the parameter doesn't have a type declaration or a default value null we can continue
             if (
+                // Skip, if the parameter
+                // - doesn't have a type declaration
                 !$argumentInfo->hasTypeAnalysis()
-                || !$argumentInfo->hasDefault()
-                || 'null' !== strtolower($argumentInfo->getDefault())
+                // type is a union
+                || false !== strpos($argumentInfo->getTypeAnalysis()->getName(), '|')
+                // - a default value is not null we can continue
+                || !$argumentInfo->hasDefault() || 'null' !== strtolower($argumentInfo->getDefault())
             ) {
                 continue;
             }
 
             $argumentTypeInfo = $argumentInfo->getTypeAnalysis();
+
+            if (
+                \PHP_VERSION_ID >= 80000
+                && false === $this->configuration['use_nullable_type_declaration']
+            ) {
+                $visibility = $tokens[$tokens->getPrevMeaningfulToken($argumentTypeInfo->getStartIndex())];
+
+                if ($visibility->isGivenKind([
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
+                ])) {
+                    continue;
+                }
+            }
+
             if (true === $this->configuration['use_nullable_type_declaration']) {
-                if (!$argumentTypeInfo->isNullable()) {
+                if (!$argumentTypeInfo->isNullable() && 'mixed' !== $argumentTypeInfo->getName()) {
                     $tokens->insertAt($argumentTypeInfo->getStartIndex(), new Token([CT::T_NULLABLE_TYPE, '?']));
                 }
             } else {

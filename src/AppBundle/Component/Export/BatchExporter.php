@@ -103,7 +103,7 @@ class BatchExporter
         ];
     }
 
-    public function exportFile($name, $fileNames)
+    public function exportFile($name, $fileNames, $customFileName = '')
     {
         if (empty($fileNames)) {
             return new JsonResponse(['success' => 0, 'message' => 'empty file']);
@@ -114,20 +114,20 @@ class BatchExporter
         }
 
         if (1 == count($fileNames)) {
-            return $this->exportCsv($name, $fileNames[0]);
+            return $this->exportCsv($name, $fileNames[0], $customFileName);
         } else {
-            return $this->exportZip($name, $fileNames);
+            return $this->exportZip($name, $fileNames, $customFileName);
         }
     }
 
-    protected function exportCsv($name, $fileName)
+    protected function exportCsv($name, $fileName, $customFileName)
     {
         $exportPath = $this->exportFileRootPath().$fileName;
 
-        return [$exportPath, $this->transTitle($fileName)];
+        return [$exportPath, $this->transTitle($fileName, $customFileName)];
     }
 
-    protected function exportZip($name, $fileNames)
+    protected function exportZip($name, $fileNames, $customFileName)
     {
         $zip = new ZipArchive();
 
@@ -137,7 +137,7 @@ class BatchExporter
             foreach ($fileNames as $value) {
                 $path = $this->exportFileRootPath().$value;
                 if (file_exists($path)) {
-                    $zip->addFile($path, $this->transTitle($value));
+                    $zip->addFile($path, $this->transTitle($value, $customFileName));
                 }
             }
         } else {
@@ -153,16 +153,17 @@ class BatchExporter
             }
         }
 
+        $name = !empty($customFileName) ? urlencode($customFileName) : $name;
         $fileName = sprintf($name.'-(%s).zip', date('Y-n-d'));
 
         return [$zipPath, $fileName];
     }
 
-    protected function transTitle($name)
+    protected function transTitle($name, $customFileName = '')
     {
         $name = explode('_', $name);
         $translator = $this->container->get('translator');
-        $title = $translator->trans(ExportUtil::getExportCsvTitle($name[0]));
+        $title = !empty($customFileName) ? iconv('UTF-8', 'gb2312', $customFileName) : $translator->trans(ExportUtil::getExportCsvTitle($name[0]));
 
         return sprintf($title.'-(%s).csv', date('Y-n-d'));
     }

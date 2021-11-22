@@ -17,6 +17,12 @@ abstract class Snapshot
 
     protected $refresh;
 
+    protected $showDiff = false;
+
+    protected $saveAsJson = true;
+
+    protected $extension = 'json';
+
     /**
      * Should return data from current test run
      *
@@ -43,7 +49,11 @@ abstract class Snapshot
         if (!file_exists($this->getFileName())) {
             return;
         }
-        $this->dataSet = json_decode(file_get_contents($this->getFileName()));
+        $fileContents = file_get_contents($this->getFileName());
+        if ($this->saveAsJson) {
+            $fileContents = json_decode($fileContents);
+        }
+        $this->dataSet = $fileContents;
         if (!$this->dataSet) {
             throw new ContentNotFound("Loaded snapshot is empty");
         }
@@ -54,7 +64,11 @@ abstract class Snapshot
      */
     protected function save()
     {
-        file_put_contents($this->getFileName(), json_encode($this->dataSet));
+        $fileContents = $this->dataSet;
+        if ($this->saveAsJson) {
+            $fileContents = json_encode($fileContents);
+        }
+        file_put_contents($this->getFileName(), $fileContents);
     }
 
     /**
@@ -65,7 +79,7 @@ abstract class Snapshot
     protected function getFileName()
     {
         if (!$this->fileName) {
-            $this->fileName = preg_replace('/\W/', '.', get_class($this)) . '.json';
+            $this->fileName = preg_replace('/\W/', '.', get_class($this)) . '.' . $this->extension;
         }
         return codecept_data_dir() . $this->fileName;
     }
@@ -109,6 +123,10 @@ abstract class Snapshot
                 return;
             }
 
+            if ($this->showDiff) {
+                throw $exception;
+            }
+
             $this->fail($exception->getMessage());
         }
     }
@@ -121,6 +139,41 @@ abstract class Snapshot
     public function shouldRefreshSnapshot($refresh = true)
     {
         $this->refresh = $refresh;
+    }
+
+    /**
+     * Show detailed diff if snapshot test fails
+     *
+     * @param bool $showDiff
+     */
+    public function shouldShowDiffOnFail($showDiff = true)
+    {
+        $this->showDiff = $showDiff;
+    }
+
+    /**
+     * json_encode/json_decode the snapshot data on storing/reading.
+     *
+     * @param bool $saveAsJson
+     */
+    public function shouldSaveAsJson($saveAsJson = true)
+    {
+        $this->saveAsJson = $saveAsJson;
+    }
+
+    /**
+     * Set the snapshot file extension.
+     * By default it will be stored as `.json`.
+     *
+     * The file extension will not perform any formatting in the data,
+     * it is only used as the snapshot file extension.
+     *
+     * @param string $fileExtension
+     * @return void
+     */
+    public function setSnapshotFileExtension($fileExtension = 'json')
+    {
+        $this->extension = $fileExtension;
     }
 
     private function printDebug($message)

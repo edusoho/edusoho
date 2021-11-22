@@ -31,7 +31,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -52,14 +52,26 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         if ('exercise' === $targetType && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
             $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
         }
+        if (!empty($conditions['itemType']) || !empty($conditions['itemTitle'])) {
+            $wrongBookPools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => $targetType, 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+            $wrongCollections = $this->getWrongQuestionService()->searchWrongQuestionCollect(['pool_ids' => array_column($wrongBookPools, 'id') ?: [-1]], [], 0, PHP_INT_MAX, ['item_id']);
+            $itemConditions = [
+                'type' => $conditions['itemType'] ?? '',
+                'keyword' => $conditions['itemTitle'] ?? '',
+                'ids' => array_values(array_unique(array_column($wrongCollections, 'item_id'))) ?: [-1],
+            ];
+            $items = $this->getItemService()->searchItems($itemConditions, [], 0, PHP_INT_MAX, ['id']);
+            $prepareConditions['item_ids'] = array_column($items, 'id') ?: [-1];
+        }
 
         return $prepareConditions;
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
+        $sceneIds = ArrayToolkit::column($wrongQuestions, 'answer_scene_id');
         $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionBySceneIds($sceneIds);
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);

@@ -96,7 +96,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             }
 
             $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
-            $this->publishTasks([$lesson['id']]);
+            $this->publishTasks([$lessonId]);
 
             $this->dispatchEvent('course.lesson.publish', new Event($lesson));
             $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
@@ -369,7 +369,8 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         foreach ($tasks as $task) {
-            $this->getTaskService()->publishTask($task['id']);
+            $task = $this->getTaskService()->publishTask($task['id']);
+            $this->getLogService()->info('course', 'publish_task', '发布任务', $task);
         }
     }
 

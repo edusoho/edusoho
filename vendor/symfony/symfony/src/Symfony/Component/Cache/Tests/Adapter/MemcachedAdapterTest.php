@@ -66,8 +66,14 @@ class MemcachedAdapterTest extends AdapterTestCase
      */
     public function testBadOptions($name, $value)
     {
-        $this->expectException('ErrorException');
-        $this->expectExceptionMessage('constant(): Couldn\'t find constant Memcached::');
+        if (\PHP_VERSION_ID < 80000) {
+            $this->expectException('ErrorException');
+            $this->expectExceptionMessage('constant(): Couldn\'t find constant Memcached::');
+        } else {
+            $this->expectException('Error');
+            $this->expectExceptionMessage('Undefined constant Memcached::');
+        }
+
         MemcachedAdapter::createConnection([], [$name => $value]);
     }
 
@@ -135,7 +141,7 @@ class MemcachedAdapterTest extends AdapterTestCase
             'localhost',
             11222,
         ];
-        if (filter_var(ini_get('memcached.use_sasl'), FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var(ini_get('memcached.use_sasl'), \FILTER_VALIDATE_BOOLEAN)) {
             yield [
                 'memcached://user:password@127.0.0.1?weight=50',
                 '127.0.0.1',
@@ -152,7 +158,7 @@ class MemcachedAdapterTest extends AdapterTestCase
             '/var/local/run/memcached.socket',
             0,
         ];
-        if (filter_var(ini_get('memcached.use_sasl'), FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var(ini_get('memcached.use_sasl'), \FILTER_VALIDATE_BOOLEAN)) {
             yield [
                 'memcached://user:password@/var/local/run/memcached.socket?weight=25',
                 '/var/local/run/memcached.socket',

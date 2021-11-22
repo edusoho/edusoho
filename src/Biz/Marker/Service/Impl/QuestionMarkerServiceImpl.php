@@ -38,9 +38,9 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->getQuestionMarkerDao()->findByMarkerIds($markerIds);
     }
 
-    public function findQuestionMarkersMetaByMediaId($mediaId)
+    public function findQuestionMarkersMetaByActivityId($activityId)
     {
-        $markers = $this->getMarkerService()->findMarkersByMediaId($mediaId);
+        $markers = $this->getMarkerService()->findMarkersByActivityId($activityId);
 
         if (empty($markers)) {
             return [];

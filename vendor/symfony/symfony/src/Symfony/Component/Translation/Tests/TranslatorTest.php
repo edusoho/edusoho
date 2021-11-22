@@ -12,6 +12,7 @@
 namespace Symfony\Component\Translation\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\Exception\RuntimeException;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Translator;
@@ -318,12 +319,12 @@ class TranslatorTest extends TestCase
 
         $resources = $translator->getCatalogue('en')->getResources();
         $this->assertCount(1, $resources);
-        $this->assertContains(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'resources.yml', $resources);
+        $this->assertContainsEquals(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'resources.yml', $resources);
 
         $resources = $translator->getCatalogue('en_GB')->getResources();
         $this->assertCount(2, $resources);
-        $this->assertContains(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'empty.yml', $resources);
-        $this->assertContains(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'resources.yml', $resources);
+        $this->assertContainsEquals(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'empty.yml', $resources);
+        $this->assertContainsEquals(__DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.'resources.yml', $resources);
     }
 
     /**
@@ -551,6 +552,16 @@ class TranslatorTest extends TestCase
         // consistent behavior with Translator::trans(), which returns the string
         // unchanged if it can't be found
         $this->assertEquals('some_message2', $translator->transChoice('some_message2', 10, ['%count%' => 10]));
+    }
+
+    public function testMissingLoaderForResourceError()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No loader is registered for the "twig" format when loading the "messages.en.twig" resource.');
+
+        $translator = new Translator('en');
+        $translator->addResource('twig', 'messages.en.twig', 'en');
+        $translator->getCatalogue('en');
     }
 }
 

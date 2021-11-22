@@ -197,7 +197,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if (!$this->canPublish($task['id'])) {
-            return false;
+            $this->createNewException(TaskException::FORBIDDEN_PUBLISH_SYNC_TASK());
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
@@ -545,9 +545,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function searchTasks($conditions, $orderBy, $start, $limit)
+    public function searchTasks($conditions, $orderBy, $start, $limit, $columns = [])
     {
-        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function findTestpapers($tasks, $type)

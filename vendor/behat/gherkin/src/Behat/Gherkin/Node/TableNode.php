@@ -43,10 +43,14 @@ class TableNode implements ArgumentInterface, IteratorAggregate
         $this->table = $table;
         $columnCount = null;
 
-        foreach ($this->getRows() as $row) {
+        foreach ($this->getRows() as $ridx => $row) {
 
             if (!is_array($row)) {
-                throw new NodeException('Table is not two-dimensional.');
+                throw new NodeException(sprintf(
+                    "Table row '%s' is expected to be array, got %s",
+                    $ridx,
+                    gettype($row)
+                ));
             }
 
             if ($columnCount === null) {
@@ -54,11 +58,12 @@ class TableNode implements ArgumentInterface, IteratorAggregate
             }
 
             if (count($row) !== $columnCount) {
-                throw new NodeException('Table does not have same number of columns in every row.');
-            }
-
-            if (!is_array($row)) {
-                throw new NodeException('Table is not two-dimensional.');
+                throw new NodeException(sprintf(
+                    "Table row '%s' is expected to have %s columns, got %s",
+                    $ridx,
+                    $columnCount,
+                    count($row)
+                ));
             }
 
             foreach ($row as $column => $string) {
@@ -67,7 +72,12 @@ class TableNode implements ArgumentInterface, IteratorAggregate
                 }
 
                 if (!is_scalar($string)) {
-                    throw new NodeException('Table is not two-dimensional.');
+                    throw new NodeException(sprintf(
+                        "Table cell at row '%s', col '%s' is expected to be scalar, got %s",
+                        $ridx,
+                        $column,
+                        gettype($string)
+                    ));
                 }
 
                 $this->maxLineLength[$column] = max($this->maxLineLength[$column], mb_strlen($string, 'utf8'));
@@ -326,6 +336,30 @@ class TableNode implements ArgumentInterface, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->getHash());
+    }
+
+    /**
+     * Obtains and adds rows from another table to the current table.
+     * The second table should have the same structure as the current one.
+     * @param TableNode $node
+     *
+     * @deprecated remove together with OutlineNode::getExampleTable
+     */
+    public function mergeRowsFromTable(TableNode $node)
+    {
+        // check structure
+        if ($this->getRow(0) !== $node->getRow(0)) {
+            throw new NodeException("Tables have different structure. Cannot merge one into another");
+        }
+
+        $firstLine = $node->getLine();
+        foreach ($node->getTable() as $line => $value) {
+            if ($line === $firstLine) {
+                continue;
+            }
+
+            $this->table[$line] = $value;
+        }
     }
 
     /**

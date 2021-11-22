@@ -32,7 +32,14 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
+    /**
+     * @var null|int
+     */
     private $candidateTokenKind;
+
+    /**
+     * @var null|string
+     */
     private $fixCallback;
 
     /**
@@ -105,7 +112,7 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('syntax', 'Whether to use the `long` or `short` array syntax.'))
                 ->setAllowedValues(['long', 'short'])
-                ->setDefault('long')
+                ->setDefault('long') // TODO @3.0 change to short
                 ->getOption(),
         ]);
     }

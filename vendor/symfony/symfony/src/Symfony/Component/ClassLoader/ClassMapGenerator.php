@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\ClassLoader;
 
-@trigger_error('The '.__NAMESPACE__.'\ClassMapGenerator class is deprecated since Symfony 3.3 and will be removed in 4.0. Use Composer instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\ClassMapGenerator class is deprecated since Symfony 3.3 and will be removed in 4.0. Use Composer instead.', \E_USER_DEPRECATED);
 
 /**
  * ClassMapGenerator.
@@ -62,7 +62,7 @@ class ClassMapGenerator
 
             $path = $file->getRealPath() ?: $file->getPathname();
 
-            if ('php' !== pathinfo($path, PATHINFO_EXTENSION)) {
+            if ('php' !== pathinfo($path, \PATHINFO_EXTENSION)) {
                 continue;
             }
 
@@ -93,6 +93,11 @@ class ClassMapGenerator
         $contents = file_get_contents($path);
         $tokens = token_get_all($contents);
 
+        $nsTokens = [\T_STRING => true, \T_NS_SEPARATOR => true];
+        if (\defined('T_NAME_QUALIFIED')) {
+            $nsTokens[T_NAME_QUALIFIED] = true;
+        }
+
         $classes = [];
 
         $namespace = '';
@@ -106,19 +111,19 @@ class ClassMapGenerator
             $class = '';
 
             switch ($token[0]) {
-                case T_NAMESPACE:
+                case \T_NAMESPACE:
                     $namespace = '';
                     // If there is a namespace, extract it
                     while (isset($tokens[++$i][1])) {
-                        if (\in_array($tokens[$i][0], [T_STRING, T_NS_SEPARATOR])) {
+                        if (isset($nsTokens[$tokens[$i][0]])) {
                             $namespace .= $tokens[$i][1];
                         }
                     }
                     $namespace .= '\\';
                     break;
-                case T_CLASS:
-                case T_INTERFACE:
-                case T_TRAIT:
+                case \T_CLASS:
+                case \T_INTERFACE:
+                case \T_TRAIT:
                     // Skip usage of ::class constant
                     $isClassConstant = false;
                     for ($j = $i - 1; $j > 0; --$j) {
@@ -126,10 +131,10 @@ class ClassMapGenerator
                             break;
                         }
 
-                        if (T_DOUBLE_COLON === $tokens[$j][0]) {
+                        if (\T_DOUBLE_COLON === $tokens[$j][0]) {
                             $isClassConstant = true;
                             break;
-                        } elseif (!\in_array($tokens[$j][0], [T_WHITESPACE, T_DOC_COMMENT, T_COMMENT])) {
+                        } elseif (!\in_array($tokens[$j][0], [\T_WHITESPACE, \T_DOC_COMMENT, \T_COMMENT])) {
                             break;
                         }
                     }
@@ -141,9 +146,9 @@ class ClassMapGenerator
                     // Find the classname
                     while (isset($tokens[++$i][1])) {
                         $t = $tokens[$i];
-                        if (T_STRING === $t[0]) {
+                        if (\T_STRING === $t[0]) {
                             $class .= $t[1];
-                        } elseif ('' !== $class && T_WHITESPACE === $t[0]) {
+                        } elseif ('' !== $class && \T_WHITESPACE === $t[0]) {
                             break;
                         }
                     }

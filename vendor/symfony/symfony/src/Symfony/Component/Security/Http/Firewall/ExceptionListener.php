@@ -102,7 +102,7 @@ class ExceptionListener
             }
 
             if ($exception instanceof LogoutException) {
-                $this->handleLogoutException($exception);
+                $this->handleLogoutException($event, $exception);
 
                 return;
             }
@@ -172,10 +172,12 @@ class ExceptionListener
         }
     }
 
-    private function handleLogoutException(LogoutException $exception)
+    private function handleLogoutException(GetResponseForExceptionEvent $event, LogoutException $exception)
     {
+        $event->setException(new AccessDeniedHttpException($exception->getMessage(), $exception));
+
         if (null !== $this->logger) {
-            $this->logger->info('A LogoutException was thrown.', ['exception' => $exception]);
+            $this->logger->info('A LogoutException was thrown; wrapping with AccessDeniedHttpException', ['exception' => $exception]);
         }
     }
 
@@ -212,7 +214,7 @@ class ExceptionListener
         if (!$response instanceof Response) {
             $given = \is_object($response) ? \get_class($response) : \gettype($response);
 
-            throw new \LogicException(sprintf('The %s::start() method must return a Response object (%s returned)', \get_class($this->authenticationEntryPoint), $given));
+            throw new \LogicException(sprintf('The "%s::start()" method must return a Response object ("%s" returned).', \get_class($this->authenticationEntryPoint), $given));
         }
 
         return $response;

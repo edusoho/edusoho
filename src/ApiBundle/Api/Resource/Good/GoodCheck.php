@@ -102,13 +102,14 @@ class GoodCheck extends AbstractResource
 
         $course = $this->getCourseService()->getCourse($id);
 
-        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
+        return $course['maxStudentNum'] > 0 && $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
     }
 
     protected function isMultiClassStudentNumLimit($id)
     {
         $course = $this->getCourseService()->getCourse($id);
         $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
+
         if (!empty($multiClass['maxStudentNum'])) {
             return $multiClass['maxStudentNum'] - $course['studentNum'] <= 0;
         }

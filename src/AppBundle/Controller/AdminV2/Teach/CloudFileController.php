@@ -71,6 +71,11 @@ class CloudFileController extends BaseController
         return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', []);
     }
 
+    public function livePlaybackAction(Request $request)
+    {
+        return $this->render('admin-v2/teach/cloud-resources/live-playback.html.twig');
+    }
+
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();

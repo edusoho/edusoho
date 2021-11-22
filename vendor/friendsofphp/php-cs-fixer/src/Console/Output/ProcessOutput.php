@@ -49,7 +49,7 @@ final class ProcessOutput implements ProcessOutputInterface
     private $output;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     private $files;
 
@@ -59,15 +59,15 @@ final class ProcessOutput implements ProcessOutputInterface
     private $processedFiles = 0;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     private $symbolsPerLine;
 
     /**
      * @TODO 3.0 make all parameters mandatory (`null` not allowed)
      *
-     * @param int|null $width
-     * @param int|null $nbFiles
+     * @param null|int $width
+     * @param null|int $nbFiles
      */
     public function __construct(OutputInterface $output, EventDispatcherInterface $dispatcher, $width, $nbFiles)
     {
@@ -89,6 +89,28 @@ final class ProcessOutput implements ProcessOutputInterface
     public function __destruct()
     {
         $this->eventDispatcher->removeListener(FixerFileProcessedEvent::NAME, [$this, 'onFixerFileProcessed']);
+    }
+
+    /**
+     * This class is not intended to be serialized,
+     * and cannot be deserialized (see __wakeup method).
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    /**
+     * Disable the deserialization of the class to prevent attacker executing
+     * code by leveraging the __destruct method.
+     *
+     * @see https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+     */
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
 
     public function onFixerFileProcessed(FixerFileProcessedEvent $event)

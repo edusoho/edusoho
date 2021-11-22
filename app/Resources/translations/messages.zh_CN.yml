@@ -143,10 +143,10 @@ site.twig.extension.smarttime.previous_second: %diff%秒前
 site.twig.extension.smarttime.previous_minute: %diff%分钟前
 site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
-site.twig.extension.time_interval.minute: %diff%分
+site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
-site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
 site.setting.unfinished: 未设置
@@ -1094,6 +1094,7 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
 course.members_manage.official_student: 正式学员
@@ -1366,11 +1367,12 @@ course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
 course.replay_manage.tips: >
-  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  提示：对于“回放生成失败”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来重新生成直播回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
   <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.ungenerated: 生成回放中
+course.replay_manage.generated_fail: 回放生成失败，点击录像重新生成
 course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
@@ -1395,6 +1397,7 @@ course.cover_image.upload_tips: >
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
+vip.course.expiry_date: 会员学习有效期
 course.expiry_date.days_mode: >
   %expiryDays% 天（随到随学）
 course.expiry_date.days_mode.total_days: 共%expiryDays%天
@@ -1608,6 +1611,7 @@ course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
 course.tab.certificate: '课程证书'
+course.activity.replay: '直播回放'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1776,7 +1780,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -1876,6 +1880,7 @@ course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 文件管理
+course.course_resource: 资源管理
 course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名
@@ -2189,6 +2194,10 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+
+course.plan_task.activity_manage.replay: 直播回放
+course.plan_task.activity_manage.replay.time: 直播回放时长
+
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
@@ -2418,6 +2427,7 @@ classroom.price: 价格
 classroom.buy_classroom.vip_free: 会员免费
 classroom.block_content_title: 所属%name%
 classroom.expiryDays: 班级有效期
+vip.classroom.expiryDays: 会员学习有效期
 classroom.vip_checked_fail_tips: >
   该%classroomName%已不支持会员免费学，
 classroom.not_vip_member_tips: >
@@ -3420,7 +3430,7 @@ message.btn.back: 返回我的私信
 message.btn.send: 写私信
 
 # 个人主页模块
-user.homepage: %nickname%的个人主页
+user.homepage: "%nickname%的个人主页"
 user.homepage.teaching: 教学中
 user.homepage.learning: 学习中
 user.homepage.introductions: 个人介绍
@@ -4354,6 +4364,8 @@ my.teaching.open_course.student_setting.join_time: 加入时间：
 my.teaching.open_course.student_setting.send_message_btn: 发私信
 my.teaching.open_course.student_setting.view_detail_btn: 查看资料
 my.teaching.open_course.liveTimeSet.title: 直播时间设置
+my.teaching.open_course.live_replay.set: 直播回放设置
+my.teaching.open_course.live_replay.is_permission: 是否允许观看回放
 my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
 my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
 my.teaching.open_course.liveTimeSet.live_length: 直播时长
@@ -4386,6 +4398,7 @@ my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
 my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 直播回放被设置为不允许观看
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -6516,12 +6529,12 @@ admin.operation_certificate.template.certificate.title_hint: 可选填
 admin.operation_certificate.template.certificate.title.default: 课程认证证书
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
-admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$ 身份证： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
-admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
+admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$ 用户名：$username$ 身份证：$idcard$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
 admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
@@ -7720,7 +7733,7 @@ admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
-  <p>1、初始化的4个角色，无法编辑和删除</p>
+  <p>1、初始化的6个角色，无法编辑和删除</p>
   <p>2、角色创建成功后编码不可修改</p>
 admin.role_manage.modal.show_modal: 角色详情
 admin.role_manage.modal.edit_modal: 编辑角色
@@ -10515,6 +10528,10 @@ exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parsed.failed.bilibili: 获取哔哩哔哩视频信息失败
+exception.parsed.failed.bilibili_video_id: 解析哔哩哔哩视频ID失败
+exception.parsed.failed.iqiyi: 获取爱奇艺视频信息失败
+exception.parsed.failed.iqiyi_video_id: 解析爱奇艺视频ID失败
 exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在
@@ -10544,6 +10561,7 @@ exception.task.forbidden_preview_task: 无权预览任务
 exception.task.type_invalid: 任务类型错误
 exception.task.live_replay_not_found: 课时回放不存在
 exception.task.live_replay_invalid: 课时回放获取失败
+exception.task.forbidden_publish_sync_task: 该任务仍在同步中，请稍后再发布（最多60秒）
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误
@@ -10734,6 +10752,7 @@ exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理�
 exception.opencourse.itemids_invalid: 课时数错误
 exception.opencourse.is_not_member: 您不是课程成员
 exception.opencourse.check_password_required: 未输入正确的校验密码
+exception.opencourse.replay_not_permitted: 直播回放被设置为不允许观看
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不存在
@@ -11305,6 +11324,7 @@ admin_v2.switch_old_version.title: 切换后台
 exception.common_upgrade_v2_error: 已经升级到新版
 exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 exception.switch_old_version.error: 已经切回到旧版后台
+exception.fields_format_error: 参数格式错误
 admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
@@ -11842,6 +11862,7 @@ admin.classroom_manage.statistics.course.title_tips: >
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
 
 classroom.manage.data_statictics: 数据概览
+classroom.manage.live_statictics: 直播统计
 classroom.manage.data_statistics.overview.student_num: 正式学员总数
 classroom.manage.data_statistics.overview.auditor_num: 旁听生
 classroom.manage.data_statistics.overview.finished_num: 完成人数
@@ -12046,3 +12067,18 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
+
+#回放管理
+course.live_replay_manage.lesson_title_th: 直播课时名
+course.live_replay_manage.live_length_th: 直播时长
+course.live_replay_manage.live_anchor_th: 主讲人
+course.live_replay_manage.live_time_th: 直播时间
+course.live_replay_manage.live_chooser_empty: 没有回放
+course.live_replay.tag_select_default: 回放标签
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn:  取消共享
+course.live_replay.remove_btn: 移除回放
+course.live_replay.title: 直播名称
+course.live_replay.teacher: 主讲人
+course.live_replay.length: 回放时长
+course.live_replay.start_time: 直播时间

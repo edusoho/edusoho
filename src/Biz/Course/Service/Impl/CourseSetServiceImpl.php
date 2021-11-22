@@ -338,6 +338,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findLikeTitle($title);
     }
 
+    public function findCourseSetsByCategoryIdAndCreator($categoryId, $creator)
+    {
+        return $this->getCourseSetDao()->findCourseSetsByCategoryIdAndCreator($categoryId, $creator);
+    }
+
     public function getCourseSet($id)
     {
         return $this->getCourseSetDao()->get($id);
@@ -641,7 +646,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (empty($publishedCourses) && 'live' === $courseSet['type']) {
                 //对于直播课程，有且仅有一个教学计划
                 $course = $courses[0];
-                if (empty($course['maxStudentNum'])) {
+                if ($course['maxStudentNum'] < 0) {
                     $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
                 }
                 $this->getCourseService()->publishCourse($course['id']);

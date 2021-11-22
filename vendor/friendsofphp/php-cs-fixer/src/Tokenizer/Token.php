@@ -77,16 +77,13 @@ class Token
             $this->isArray = true;
             $this->id = $token[0];
             $this->content = $token[1];
-
-            if ($token[0] && '' === $token[1]) {
-                throw new \InvalidArgumentException('Cannot set empty content for id-based Token.');
-            }
         } elseif (\is_string($token)) {
             $this->isArray = false;
             $this->content = $token;
         } else {
             throw new \InvalidArgumentException(sprintf(
                 'Cannot recognize input value as valid Token prototype, got "%s".',
+                // @phpstan-ignore-next-line due to lack of strong typing of method parameter
                 \is_object($token) ? \get_class($token) : \gettype($token)
             ));
         }
@@ -115,6 +112,25 @@ class Token
     }
 
     /**
+     * Get object operator tokens kinds: T_OBJECT_OPERATOR and (if available) T_NULLSAFE_OBJECT_OPERATOR.
+     *
+     * @return int[]
+     */
+    public static function getObjectOperatorKinds()
+    {
+        static $objectOperators = null;
+
+        if (null === $objectOperators) {
+            $objectOperators = [T_OBJECT_OPERATOR];
+            if (\defined('T_NULLSAFE_OBJECT_OPERATOR')) {
+                $objectOperators[] = T_NULLSAFE_OBJECT_OPERATOR;
+            }
+        }
+
+        return $objectOperators;
+    }
+
+    /**
      * Clear token at given index.
      *
      * Clearing means override token by empty string.
@@ -123,7 +139,7 @@ class Token
      */
     public function clear()
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
         Tokens::setLegacyMode(true);
 
         $this->content = '';
@@ -138,7 +154,7 @@ class Token
      */
     public function clearChanged()
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
         Tokens::setLegacyMode(true);
 
         $this->changed = false;
@@ -330,17 +346,20 @@ class Token
                 'T_FINALLY', 'T_FN', 'T_FOR', 'T_FOREACH', 'T_FUNCTION', 'T_GLOBAL', 'T_GOTO', 'T_HALT_COMPILER',
                 'T_IF', 'T_IMPLEMENTS', 'T_INCLUDE', 'T_INCLUDE_ONCE', 'T_INSTANCEOF', 'T_INSTEADOF',
                 'T_INTERFACE', 'T_ISSET', 'T_LIST', 'T_LOGICAL_AND', 'T_LOGICAL_OR', 'T_LOGICAL_XOR',
-                'T_NAMESPACE', 'T_NEW', 'T_PRINT', 'T_PRIVATE', 'T_PROTECTED', 'T_PUBLIC', 'T_REQUIRE',
+                'T_NAMESPACE', 'T_MATCH', 'T_NEW', 'T_PRINT', 'T_PRIVATE', 'T_PROTECTED', 'T_PUBLIC', 'T_REQUIRE',
                 'T_REQUIRE_ONCE', 'T_RETURN', 'T_STATIC', 'T_SWITCH', 'T_THROW', 'T_TRAIT', 'T_TRY',
                 'T_UNSET', 'T_USE', 'T_VAR', 'T_WHILE', 'T_YIELD', 'T_YIELD_FROM',
             ]) + [
                 CT::T_ARRAY_TYPEHINT => CT::T_ARRAY_TYPEHINT,
                 CT::T_CLASS_CONSTANT => CT::T_CLASS_CONSTANT,
                 CT::T_CONST_IMPORT => CT::T_CONST_IMPORT,
+                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE => CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
+                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED => CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
+                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC => CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
                 CT::T_FUNCTION_IMPORT => CT::T_FUNCTION_IMPORT,
                 CT::T_NAMESPACE_OPERATOR => CT::T_NAMESPACE_OPERATOR,
-                CT::T_USE_TRAIT => CT::T_USE_TRAIT,
                 CT::T_USE_LAMBDA => CT::T_USE_LAMBDA,
+                CT::T_USE_TRAIT => CT::T_USE_TRAIT,
             ];
         }
 
@@ -394,7 +413,7 @@ class Token
      */
     public function isChanged()
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
 
         return $this->changed;
     }
@@ -422,6 +441,16 @@ class Token
     }
 
     /**
+     * Check if token is one of object operator tokens: T_OBJECT_OPERATOR or T_NULLSAFE_OBJECT_OPERATOR.
+     *
+     * @return bool
+     */
+    public function isObjectOperator()
+    {
+        return $this->isGivenKind(self::getObjectOperatorKinds());
+    }
+
+    /**
      * Check if token is empty, e.g. because of clearing.
      *
      * @return bool
@@ -430,7 +459,7 @@ class Token
      */
     public function isEmpty()
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
 
         return null === $this->id && ('' === $this->content || null === $this->content);
     }
@@ -516,7 +545,7 @@ class Token
      */
     public function override($other)
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
         Tokens::setLegacyMode(true);
 
         $prototype = $other instanceof self ? $other->getPrototype() : $other;
@@ -547,7 +576,7 @@ class Token
      */
     public function setContent($content)
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
+        Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' is deprecated and will be removed in 3.0.'));
         Tokens::setLegacyMode(true);
 
         if ($this->content === $content) {
@@ -559,7 +588,7 @@ class Token
 
         // setting empty content is clearing the token
         if ('' === $content) {
-            @trigger_error(__METHOD__.' shall not be used to clear token, use Tokens::clearAt instead.', E_USER_DEPRECATED);
+            Utils::triggerDeprecation(new \RuntimeException(__METHOD__.' shall not be used to clear token, use Tokens::clearAt instead.'));
             $this->id = null;
             $this->isArray = false;
         }
@@ -583,19 +612,27 @@ class Token
      */
     public function toJson(array $options = null)
     {
-        static $defaultOptions = null;
-
-        if (null === $options) {
-            if (null === $defaultOptions) {
-                $defaultOptions = Utils::calculateBitmask(['JSON_PRETTY_PRINT', 'JSON_NUMERIC_CHECK']);
-            }
-
-            $options = $defaultOptions;
-        } else {
-            $options = Utils::calculateBitmask($options);
+        if (null !== $options) {
+            Utils::triggerDeprecation(new \RuntimeException(sprintf(
+                'Arguments of "%s()" is deprecated since 2.19 and will be removed in 3.0.',
+                __METHOD__
+            )));
         }
 
-        return json_encode($this->toArray(), $options);
+        $options = $options ? Utils::calculateBitmask($options) : (JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+        $jsonResult = json_encode($this->toArray(), $options);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            $jsonResult = json_encode(
+                [
+                    'errorDescription' => 'Can not encode Tokens to JSON.',
+                    'rawErrorMessage' => json_last_error_msg(),
+                ],
+                $options
+            );
+        }
+
+        return $jsonResult;
     }
 
     /**

@@ -83,6 +83,8 @@ interface ActivityService
 
     public function getByMediaIdAndMediaType($mediaId, $mediaType);
 
+    public function findManageReplayActivityIds($conditions);
+
     public function getActivityByAnswerSceneId($answerSceneId);
 
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId);

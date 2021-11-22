@@ -62,7 +62,7 @@ class LiveStatisticsCheckinListExporter extends Exporter
 
         foreach ($statistics as $user) {
             $data[] = [
-                $user['nickname'],
+                is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'],
                 $profiles[$user['userId']]['mobile'] ?: '',
                 $users[$user['userId']]['email'] ?: '',
                 $user['checkin'] ? $translator->trans('course.live_statistics.checkin_status.checked') : $translator->trans('course.live_statistics.checkin_status.not_checked'),
