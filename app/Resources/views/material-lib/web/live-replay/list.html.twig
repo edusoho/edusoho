@@ -93,6 +93,11 @@
                <li class="share-li">
                 <a href="javascript:;" class="js-live-delete-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_remove', {'liveActivityId':replay.id}) }}">{{ 'course.live_replay.remove_btn'|trans }}</a>
                </li>
+              {% if activities[replay.id]['replayArr']%}
+                <li class="share-li">
+                  <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.id]['fromCourseId'], activityId:activities[replay.id]['id'] ,replayId:activities[replay.id]['replayArr']['id'] }) }}" target="_blank">{{ 'course_set.live.view_replay_btn'|trans }}</a>
+                </li>
+              {% endif %}
             </ul>
           {% endif %}
         </div>

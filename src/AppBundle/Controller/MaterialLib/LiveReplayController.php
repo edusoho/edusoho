@@ -115,6 +115,11 @@ class LiveReplayController extends BaseController
         );
         $replayIds = ArrayToolkit::column($replays, 'id');
         $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType($replayIds, 'live');
+        foreach ($activities as &$activity) {
+            $courseReplays = $this->getLiveReplayService()->findReplaysByCourseIdAndLessonId($activity['fromCourseId'], $activity['id']);
+            $activity['replayArr'] = empty($courseReplays) ? [] : $courseReplays[0];
+        }
+
         $activities = ArrayToolkit::index($activities, 'mediaId');
         $anchorIds = ArrayToolkit::column($replays, 'anchorId');
         $users = $this->getUserService()->findUsersByIds($anchorIds);
