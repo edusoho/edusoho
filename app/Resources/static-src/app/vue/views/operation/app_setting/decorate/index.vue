@@ -19,6 +19,8 @@
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
           <find-head />
+
+          <find-footer />
         </div>
       </section>
 
@@ -57,12 +59,14 @@ const Classifys = [
 import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
 import FindHead from '../components/FindHead.vue';
+import FindFooter from '../components/FindFooter.vue';
 
 export default {
   components: {
     TheHeader,
     ComponentClassify,
-    FindHead
+    FindHead,
+    FindFooter
   },
 
   data() {
@@ -108,14 +112,14 @@ export default {
       overflow-y: auto;
       padding: 40px 0 20px 190px;
       width: calc(100% - 384px - 80px);
-      pointer-events: none;
       background-color: #f5f7fa;
 
       .main-preview-container {
         margin: 0 auto;
         width: 375px;
         height: 700px;
-        background-color: red;
+        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
+        background-color: #fafafa;
       }
     }
 
