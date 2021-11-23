@@ -7,12 +7,12 @@
         <div class="component-add-container">
           <component-classify
             v-for="(classify, index) in Classifys"
-            :key="classify.key"
+            :key="index"
             :classify="classify"
             :index="index"
-            :current-classify="currentClassify"
+            :current-classify-index="currentClassifyIndex"
             @add-component="handleClickAdd"
-            @click.native="handleChangeClassify(classify.key)"
+            @click.native="handleChangeClassify(index)"
           />
         </div>
       </aside>
@@ -21,7 +21,7 @@
         <div class="main-preview-container">
           <find-head />
 
-          <component :is="item" v-for="(item, index) in components" :key="index" />
+          <component :is="item.type" v-for="(item, index) in components" :key="index" />
 
           <find-footer />
         </div>
@@ -33,37 +33,13 @@
 </template>
 
 <script>
-const Classifys = [
-  {
-    title: '基础组件',
-    key: 'basic',
-    icon: 'icon-check-circle',
-    lists: [
-      { title: '轮播图', icon: 'icon-check-circle', name: 'Swiper' },
-      { title: '课程列表', icon: 'icon-check-circle', name: 'CouseList' },
-      { title: '班级列表', icon: 'icon-check-circle', name: 'ClassroomList' },
-      { title: '图片公告', icon: 'icon-check-circle', name: 'Ad' },
-      { title: '图文导航', icon: 'icon-check-circle', name: 'Nav' },
-      { title: '公开课列表', icon: 'icon-check-circle', name: 'OpenCourseList' },
-      { title: '题库列表', icon: 'icon-check-circle', name: 'QuestionBankList' }
-    ]
-  },
-  {
-    title: '营销组件',
-    key: 'marketing',
-    icon: 'icon-check-circle',
-    lists: [
-      { title: '优惠卷', icon: 'icon-check-circle', name: 'Coupon' },
-      { title: '会员专区', icon: 'icon-check-circle', name: 'Vip' }
-    ]
-  }
-];
+import { Classifys } from './default-config';
 
 import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
-import Swiper from '../components/Swiper.vue';
+import slide_show from '../components/Swiper.vue';
 
 export default {
   components: {
@@ -71,20 +47,20 @@ export default {
     ComponentClassify,
     FindHead,
     FindFooter,
-    Swiper
+    slide_show
   },
 
   data() {
     return {
       Classifys,
-      currentClassify: 'basic',
+      currentClassifyIndex: 0,
       components: []
     }
   },
 
   methods: {
     handleChangeClassify(val) {
-      this.currentClassify = val;
+      this.currentClassifyIndex = val;
     },
 
     handleClickAdd(val) {

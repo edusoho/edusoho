@@ -4,14 +4,14 @@
       <svg-icon :icon="classify.icon" />
       <div class="classify-title">{{ classify.title }}</div>
     </div>
-    <template v-if="classify.lists">
+    <template v-if="classify.components">
       <div v-show="isActive" class="add-component-lists">
         <div class="clearfix">
           <div
-            v-for="component in classify.lists"
-            :key="component.name"
+            v-for="(component, i) in classify.components"
+            :key="i"
             class="add-list-item pull-left"
-            @click="handleClickAdd(component.name)"
+            @click="handleClickAdd(component.info)"
           >
             <svg-icon :icon="component.icon" />
             <div class="component-title">{{ component.title }}</div>
@@ -36,15 +36,15 @@ export default {
       required: true
     },
 
-    currentClassify: {
-      type: String,
+    currentClassifyIndex: {
+      type: Number,
       required: true
     }
   },
 
   computed: {
     isActive() {
-      return this.classify.key === this.currentClassify;
+      return this.index === this.currentClassifyIndex;
     }
   },
 
