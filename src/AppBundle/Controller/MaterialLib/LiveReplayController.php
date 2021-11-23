@@ -132,12 +132,10 @@ class LiveReplayController extends BaseController
         $activityConditions = ['mediaType' => 'live'];
         $liveConditions = ['replayStatus' => 'generated'];
         if (!empty($conditions['startTime'])) {
-            $startTime = strtotime(date('Y-m-d', $conditions['startTime']));
-            $liveConditions['liveStartTime_GT'] = $startTime;
+            $liveConditions['liveStartTime_GT'] = strtotime($conditions['startTime']);
         }
         if (!empty($conditions['endTime'])) {
-            $endTime = strtotime(date('Y-m-d', $conditions['endTime']).' 23:59:59');
-            $liveConditions['liveEndTime_LT'] = $endTime;
+            $liveConditions['liveEndTime_LT'] = strtotime($conditions['endTime']);
         }
 
         if (!empty($conditions['categoryId'])) {
