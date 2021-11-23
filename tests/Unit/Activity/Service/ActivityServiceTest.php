@@ -933,7 +933,7 @@ class ActivityServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'withParams' => [2],
-                'returnValue' => ['id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'created'],
+                'returnValue' => ['id' => 2, 'liveId' => '1002', 'liveProvider' => 9, 'progressStatus' => 'closed'],
             ],
             [
                 'functionName' => 'get',
@@ -951,8 +951,8 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertEquals('message_response.live_over.message', $result['message']);
 
         $result = $this->getActivityService()->checkLiveStatus(2, 3);
-        $this->assertTrue($result['result']);
-        $this->assertEmpty($result['message']);
+        $this->assertFalse($result['result']);
+        $this->assertEquals('message_response.live_over.message', $result['message']);
     }
 
     public function testGetMaterialsFromActivity()
