@@ -246,9 +246,10 @@ export default {
     },
 
     editSuccess(params) {
-      const { id, replayPublic } = params;
+      const { id, replayPublic, tagIds } = params;
       _.forEach(this.data, (item, index) => {
         if (item.id === id) {
+          item.tag = tagIds;
           item.replayPublic = replayPublic;
           return false;
         }
