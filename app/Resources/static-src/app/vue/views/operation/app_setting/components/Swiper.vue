@@ -1,6 +1,6 @@
 <template>
   <layout>
-    <div class="swiper-container">
+    <div :class="['swiper-container', moduleType]">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
           <div class="swiper-slide-container">
@@ -31,6 +31,13 @@ import Layout from './Layout.vue';
 export default {
   name: 'Swiper',
 
+  props: {
+    moduleType: {
+      type: String,
+      required: true
+    }
+  },
+
   components: {
     Layout
   },
@@ -41,8 +48,8 @@ export default {
 
   methods: {
     initSwiepr() {
-      new Swiper('.swiper-container', {
-        pagination : '.pagination',
+      new Swiper(`.${this.moduleType}`, {
+        pagination : `.${this.moduleType} .pagination`,
         autoplay: 5000,
         loop: true,
         slidesPerView: 1.1,
@@ -74,6 +81,7 @@ export default {
       text-align: center;
       line-height: 140px;
       transform: scale(0.96);
+      transition: all 0.3s ease;
     }
 
     &-active {

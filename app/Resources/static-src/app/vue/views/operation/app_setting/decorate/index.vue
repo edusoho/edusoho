@@ -21,7 +21,12 @@
         <div class="main-preview-container">
           <find-head />
 
-          <component :is="item.type" v-for="(item, index) in components" :key="index" />
+          <component
+            :is="component.type"
+            v-for="(component, index) in components"
+            :key="index"
+            :module-type="`${component.type}-${index}`"
+          />
 
           <find-footer />
         </div>
@@ -33,7 +38,11 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 import { Classifys } from './default-config';
+
+import ModuleCounter from 'app/vue/utils/module-counter';
 
 import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
@@ -54,18 +63,33 @@ export default {
     return {
       Classifys,
       currentClassifyIndex: 0,
-      components: []
+      components: [],
+      typeCount: {}
     }
   },
 
+  mounted() {
+    this.initTypeCount();
+  },
+
   methods: {
+    // 模块类型计数初始化
+    initTypeCount() {
+      const typeCount = new ModuleCounter();
+      _.forEach(this.components, (component) => {
+        typeCount.addByType(component.type);
+      });
+      this.typeCount = typeCount;
+    },
+
     handleChangeClassify(val) {
       this.currentClassifyIndex = val;
     },
 
-    handleClickAdd(val) {
-      this.components.push(val);
-    }
+    handleClickAdd(info) {
+      this.typeCount.addByType(info.type);
+      this.components.push(info);
+    },
   }
 }
 </script>
@@ -109,11 +133,12 @@ export default {
 
       .main-preview-container {
         position: relative;
+        padding-bottom: 50px;
         margin: 0 auto;
         width: 375px;
         min-height: 90%;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
-        background-color: #fafafa;
+        background-color: #fff;
       }
     }
 

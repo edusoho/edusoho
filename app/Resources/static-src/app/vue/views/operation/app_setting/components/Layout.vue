@@ -6,14 +6,28 @@
       <div class="operate-down">下</div>
       <div class="operate-move">删</div>
     </div>
+
+    <div class="active" />
   </div>
 </template>
 
 <style lang="less" scoped>
 .component-layout {
-  width: 100%;
   position: relative;
+  padding: 12px 0;
+  width: 100%;
   background-color: transparent;
+
+  .active {
+    position: absolute;
+    z-index: 11;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid #31a1ff;
+    pointer-events: none;
+  }
 
   .edit-operate {
     position: absolute;
