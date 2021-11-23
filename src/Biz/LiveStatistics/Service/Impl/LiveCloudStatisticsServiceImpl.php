@@ -79,7 +79,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             'teacher' => empty($profile['truename']) ? $user['nickname'] : $profile['truename'],
             'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
             'endTime' => empty($activity['ext']['liveEndTime']) ? $activity['endTime'] : $activity['ext']['liveEndTime'],
-            'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'],
+            'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
             'requestTime' => time(),
         ];
         $this->getGeneralLiveStatistics($activity, $task, $data);
