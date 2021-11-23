@@ -14,7 +14,6 @@ if ($selectFinish.length) {
     } else {
       $('#watchTime').rules('remove');
     }
-    
     switch(val)
     {
     case 'time':
@@ -38,6 +37,11 @@ if ($selectFinish.length) {
 
       $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
       $('#timeLabel').hasClass('hidden') ? null :$('#timeLabel').addClass('hidden');
+      break;
+    case 'score':
+      if($('.js-homework-score').length >0){
+        $('.js-homework-score').show();
+      }
       break;
     case 'end':
       break;
