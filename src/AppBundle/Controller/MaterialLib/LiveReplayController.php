@@ -132,14 +132,17 @@ class LiveReplayController extends BaseController
         $activityConditions = ['mediaType' => 'live'];
         $liveConditions = ['replayStatus' => 'generated'];
         if (!empty($conditions['startTime'])) {
-            $liveConditions['liveStartTime_GT'] = strtotime($conditions['startTime']);
+            $startTime = strtotime(date('Y-m-d', $conditions['startTime']));
+            $liveConditions['liveStartTime_GT'] = $startTime;
         }
         if (!empty($conditions['endTime'])) {
-            $liveConditions['liveEndTime_LT'] = strtotime($conditions['endTime']);
+            $endTime = strtotime(date('Y-m-d', $conditions['endTime']).' 23:59:59');
+            $liveConditions['liveEndTime_LT'] = $endTime;
         }
+
         if (!empty($conditions['categoryId'])) {
-            $courses = $this->getCourseService()->findCoursesByCategoryIds([$conditions['categoryId']]);
-            $activityConditions['courseIds'] = empty($courses) ? [-1] : ArrayToolkit::index($courses, 'id');
+            $courses = $this->getCourseService()->searchCourses(['categoryId' => $conditions['categoryId']], [], 0, PHP_INT_MAX, ['id']);
+            $activityConditions['courseIds'] = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
         }
         if (!empty($conditions['title'])) {
             $activityConditions['title'] = $conditions['title'];

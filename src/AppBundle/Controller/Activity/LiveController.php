@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\LiveroomController;
+use Biz\Activity\Dao\ReplayActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
@@ -227,18 +228,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
-        $user = $this->getUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         $isTeacher = false;
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
-        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $role = 'student';
-        } elseif ($this->getUser()->isAdmin()) {
-            $role = 'student';
         } else {
-            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+            $role = 'student';
         }
 
         return $this->render('live-course/entry.html.twig', [
@@ -473,5 +469,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getMultiClassGroupService()
     {
         return $this->createService('MultiClass:MultiClassGroupService');
+    }
+
+    /**
+     * @return ReplayActivityDao
+     */
+    protected function getReplayActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ReplayActivityDao');
     }
 }
