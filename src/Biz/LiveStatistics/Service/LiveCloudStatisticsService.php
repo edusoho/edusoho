@@ -8,7 +8,7 @@ interface LiveCloudStatisticsService
 
     public function countLiveMembersByLiveId($liveId);
 
-    public function sumWatchDurationByLiveId($liveId);
+    public function getAvgWatchDurationByLiveId($liveId);
 
     public function getLiveData($task);
 

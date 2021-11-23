@@ -49,9 +49,12 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
     }
 
-    public function sumWatchDurationByLiveId($liveId)
+    public function getAvgWatchDurationByLiveId($liveId)
     {
-        return $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
+        $sum = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
+        $count = $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
+
+        return empty($count) ? 0 : round($sum / ($count * 60), 1);
     }
 
     public function getLiveData($task)
@@ -284,8 +287,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
         $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
-        $sum = $this->sumWatchDurationByLiveId($activity['ext']['liveId']);
-        $data['avgWatchTime'] = empty($data['memberNumber']) ? 0 : round($sum / ($data['memberNumber'] * 60), 1);
+        $data['avgWatchTime'] = $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
         if (!empty($activity['ext']['cloudStatisticData']['memberFinished'])) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
         }
@@ -314,8 +316,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'];
-        $sum = empty($memberData['viewerTotalTime']) ? 0 : $memberData['viewerTotalTime'];
-        $data['avgWatchTime'] = empty($memberData['total']) ? 0 : round($sum / ($memberData['total'] * 60), 1);
+        $data['avgWatchTime'] = 'closed' == $activity['ext']['progressStatus'] ? $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']) : '--';
         if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
         }
