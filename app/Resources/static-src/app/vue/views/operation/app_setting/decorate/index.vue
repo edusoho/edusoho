@@ -22,17 +22,21 @@
           <find-head />
 
           <component
-            :is="component.type"
+            :is="getComponentName(component.type)"
             v-for="(component, index) in components"
             :key="index"
             :module-type="`${component.type}-${index}`"
+            :current-edit="currentEdit"
+            @click.native="changeCurrentEdit(component.type, index)"
           />
 
           <find-footer />
         </div>
       </section>
 
-      <aside class="right-edit-container pull-left"></aside>
+      <aside class="right-edit-container pull-left">
+        <component :is="currentEditComponent" />
+      </aside>
     </div>
   </div>
 </template>
@@ -48,7 +52,16 @@ import TheHeader from './components/TheHeader.vue';
 import ComponentClassify from './components/ComponentClassify.vue';
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
-import slide_show from '../components/Swiper.vue';
+import Swiper from '../components/Swiper.vue';
+import SwiperEdit from '../components/SwiperEdit.vue';
+
+const components = {
+  slide_show: 'Swiper'
+}
+
+const editComponents = {
+  slide_show: 'SwiperEdit'
+}
 
 export default {
   components: {
@@ -56,7 +69,8 @@ export default {
     ComponentClassify,
     FindHead,
     FindFooter,
-    slide_show
+    Swiper,
+    SwiperEdit
   },
 
   data() {
@@ -64,7 +78,9 @@ export default {
       Classifys,
       currentClassifyIndex: 0,
       components: [],
-      typeCount: {}
+      typeCount: {},
+      currentEdit: '',
+      currentEditComponent: ''
     }
   },
 
@@ -87,9 +103,20 @@ export default {
     },
 
     handleClickAdd(info) {
-      this.typeCount.addByType(info.type);
+      const { type } = info;
+      this.typeCount.addByType(type);
       this.components.push(info);
+      this.changeCurrentEdit(type, _.size(this.components) - 1);
     },
+
+    changeCurrentEdit(type, index) {
+      this.currentEdit = `${type}-${index}`;
+      this.currentEditComponent = editComponents[type];
+    },
+
+    getComponentName(type) {
+      return components[type];
+    }
   }
 }
 </script>

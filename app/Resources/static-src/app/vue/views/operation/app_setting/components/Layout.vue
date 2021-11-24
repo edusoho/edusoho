@@ -1,15 +1,28 @@
 <template>
   <div class="component-layout">
     <slot />
-    <div class="edit-operate">
+    <div class="edit-operate" v-show="active">
       <div class="operate-up">上</div>
       <div class="operate-down">下</div>
       <div class="operate-move">删</div>
     </div>
 
-    <div class="active" />
+    <div class="active" v-show="active" />
   </div>
 </template>
+
+<script>
+export default {
+  name: 'ComponentLayout',
+
+  props: {
+    active: {
+      type: Boolean,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .component-layout {
