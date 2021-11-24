@@ -86,6 +86,7 @@ export default {
 
   mounted() {
     this.initTypeCount();
+    this.initCurrentEdit();
   },
 
   methods: {
@@ -96,6 +97,14 @@ export default {
         typeCount.addByType(component.type);
       });
       this.typeCount = typeCount;
+    },
+
+    // 初始化当前编辑组件
+    initCurrentEdit() {
+      const length = _.size(this.components);
+      if (length) {
+        this.changeCurrentEdit(this.components[0].type, 0);
+      }
     },
 
     handleChangeClassify(val) {
