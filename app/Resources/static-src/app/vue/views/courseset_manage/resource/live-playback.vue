@@ -42,13 +42,12 @@
       :visible="visible"
       @cancel="hiddenModal"
     >
-      {{ 'live.playback.tip.remove_association' | trans }}
-      <a-checkbox class="mt8" :checked="checked" @change="handleChange">
-        {{ 'live.playback.tip.delete_related_live_playback' | trans }}
-      </a-checkbox>
+      {{ 'modal.content.remove_playback_resources' | trans }}
       <template slot="footer">
         <div class="clearfix">
-          <span class="pull-left" style="color: #fe4040; margin-top: 7px;">{{ 'live.playback.tip.cannot_be_used_normally' | trans }}</span>
+          <span class="pull-left" style="color: #fe4040; margin-top: 7px;">
+            {{ 'live.playback.tip.cannot_be_used_normally' | trans }}
+          </span>
           <a-button type="danger" :loading="btnLoading" @click="handleClickRemoveLivePlayback">
             {{ 'site.btn.confirm' | trans }}
           </a-button>
@@ -101,7 +100,6 @@ export default {
       visible: false,
       btnLoading: false,
       currentId: undefined,
-      checked: false,
       courseId: $('.js-course-id').val()
     }
   },
@@ -161,8 +159,7 @@ export default {
 
       const params = {
         data: {
-          ids: this.currentId,
-          realDelete: this.checked
+          ids: this.currentId
         }
       }
 
@@ -175,10 +172,6 @@ export default {
         this.pagination.current = 1;
         this.fetchLiveReplay();
       }
-    },
-
-    handleChange(e) {
-      this.checked = e.target.checked;
     },
 
     handleClickViewLivePlayback(url) {
