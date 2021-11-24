@@ -372,7 +372,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($conditions['endTime'])) {
             $endTime = strtotime(date('Y-m-d', $conditions['endTime']).' 23:59:59');
-            $liveConditions['liveEndTime_LT'] = $endTime;
+            $liveConditions['liveStartTime_LT'] = $endTime;
         }
 
         if (!empty($conditions['replayTagId'])) {

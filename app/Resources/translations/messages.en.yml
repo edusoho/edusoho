@@ -10818,3 +10818,4 @@ course.live_replay.title: Live Title
 course.live_replay.teacher: Teacher
 course.live_replay.length: length
 course.live_replay.start_time: Start Time
+course.live_replay_manage.live_replay_empty: replay deleted

@@ -53,8 +53,6 @@ class LiveReplay extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $ids = $request->request->get('ids', []);
-        $realDelete = $request->request->get('realDelete', false);
-
         if (empty($ids)) {
             throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
@@ -64,11 +62,7 @@ class LiveReplay extends AbstractResource
         }
 
         foreach ($ids as $id) {
-            if ($realDelete) {
-                $this->getLiveReplayService()->deleteReplayByLessonId($id);
-            } else {
-                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0, 'lessonId' => 0]);
-            }
+            $this->getLiveReplayService()->deleteReplayByLessonId($id);
         }
 
         return ['success' => true];

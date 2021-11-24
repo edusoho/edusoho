@@ -95,7 +95,11 @@ class LiveReplayController extends BaseController
         if ($live['anchorId'] != $this->getCurrentUser()->getId()) {
             return $this->createJsonResponse(['status' => false, 'message' => '你无权进行设置！']);
         }
-        $this->getLiveActivityService()->removeLiveReplay($liveActivityId);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivityId, 'live');
+        if (empty($activity)) {
+            return $this->createJsonResponse(['status' => false, 'message' => '课时不存在！']);
+        }
+        $this->getLiveReplayService()->deleteReplayByLessonId($activity['id']);
 
         return $this->createJsonResponse(['status' => true, 'message' => '操作成功']);
     }
@@ -135,7 +139,7 @@ class LiveReplayController extends BaseController
             $liveConditions['liveStartTime_GT'] = strtotime($conditions['startTime']);
         }
         if (!empty($conditions['endTime'])) {
-            $liveConditions['liveEndTime_LT'] = strtotime($conditions['endTime']);
+            $liveConditions['liveStartTime_LT'] = strtotime($conditions['endTime']);
         }
 
         if (!empty($conditions['categoryId'])) {

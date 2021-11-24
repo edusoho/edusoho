@@ -28,6 +28,7 @@ class LiveActivityDaoImpl extends AdvancedDaoImpl implements LiveActivityDao
                 'progressStatus != :progressStatusNotEqual',
                 'progressStatus = :progressStatus',
                 'liveStartTime >= :liveStartTime_GT',
+                'liveStartTime <= :liveStartTime_LT',
                 'liveEndTime <= :liveEndTime_LT',
                 /*S2B2C 增加syncId*/
                 'syncId = :syncId',
