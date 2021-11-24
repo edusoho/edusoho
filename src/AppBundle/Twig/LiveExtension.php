@@ -40,6 +40,7 @@ class LiveExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_live_room_type', [$this, 'getLiveRoomType']),
             new \Twig_SimpleFunction('get_live_account', [$this, 'getLiveAccount']),
             new \Twig_SimpleFunction('get_live_replays', [$this, 'getLiveReplays']),
+            new \Twig_SimpleFunction('get_live_activity_replays', [$this, 'getLiveActivityReplays']),
             new \Twig_SimpleFunction('fresh_task_learn_stat', [$this, 'freshTaskLearnStat']),
         ];
     }
@@ -66,6 +67,47 @@ class LiveExtension extends \Twig_Extension
         } else {
             return $this->_getLiveReplays($activity);
         }
+    }
+
+    public function getLiveActivityReplays($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $liveActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+        if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $liveActivity['ext']['replayStatus']) {
+            return [$this->_getLiveVideoReplay($liveActivity)];
+        } else {
+            return $this->_getLiveActivityReplays($activity, $liveActivity);
+        }
+    }
+
+    protected function _getLiveActivityReplays($activity, $liveActivity)
+    {
+        if (LiveReplayService::REPLAY_GENERATE_STATUS === $liveActivity['ext']['replayStatus']) {
+            $originActivity = $this->getOriginActivity($liveActivity);
+            $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $replays = array_filter($replays, function ($replay) {
+                // 过滤掉被隐藏的录播回放
+                return !empty($replay) && !(bool) $replay['hidden'];
+            });
+
+            $self = $this;
+            $replays = array_map(function ($replay) use ($activity, $self) {
+                $replay['url'] = $self->generateUrl('course_live_activity_replay_entry', [
+                    'courseId' => $activity['fromCourseId'],
+                    'activityId' => $activity['id'],
+                    'replayId' => $replay['id'],
+                ]);
+
+                return $replay;
+            }, $replays);
+        } else {
+            $replays = [];
+        }
+
+        return $replays;
     }
 
     protected function _getLiveVideoReplay($activity, $ssl = false)
