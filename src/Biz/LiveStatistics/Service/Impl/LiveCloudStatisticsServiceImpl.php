@@ -156,6 +156,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         foreach ($memberData['data'] as $member) {
+            if ($member['userId'] == $activity['ext']['anchorId']) {
+                continue;
+            }
             $data = [
                 'courseId' => $activity['fromCourseId'],
                 'userId' => $member['userId'],
@@ -193,6 +196,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         foreach ($memberData['list'] as $member) {
+            if ($member['userId'] == $activity['ext']['anchorId']) {
+                continue;
+            }
             $data = [
                 'courseId' => $activity['fromCourseId'],
                 'userId' => $member['studentId'],
@@ -315,7 +321,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
-        $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'];
+        $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'] - 1;
         $data['avgWatchTime'] = 'closed' == $activity['ext']['progressStatus'] ? $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']) : '--';
         if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);

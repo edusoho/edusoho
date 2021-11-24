@@ -142,17 +142,14 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     public function liveReplayAction($courseId, $activityId)
     {
         $user = $this->getUser();
-        $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $role = 'teacher';
-        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $role = 'student';
         } else {
-            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+            $role = 'student';
         }
 
         return $this->render('activity/live/replay-player.html.twig', [
@@ -228,13 +225,18 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
+        $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         $isTeacher = false;
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
-        } else {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $role = 'student';
+        } elseif ($this->getUser()->isAdmin()) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
 
         return $this->render('live-course/entry.html.twig', [
@@ -250,7 +252,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        if ('replay' == $activity['mediaType']) {
+            $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id']);
+            $courseId = $activity['fromCourseId'];
+            $activityId = $activity['id'];
+        }
 
         return $this->render('live-course/classroom.html.twig', [
             'lesson' => $activity,
@@ -264,22 +272,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
     public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
-        if (empty($task)) {
-            $this->createNewException(TaskException::NOTFOUND_TASK());
-        }
-
-        if (false === $this->getTaskService()->canLearnTask($task['id'])) {
-            $this->createNewException(TaskException::CAN_NOT_DO());
-        }
-
         $activity = $this->getActivityService()->getActivity($activityId);
 
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
         $replay = $this->getLiveReplayService()->getReplay($replayId);
+
         if (empty($replay) || $replay['lessonId'] != $sourceActivityId || (bool) $replay['hidden']) {
             $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
         }

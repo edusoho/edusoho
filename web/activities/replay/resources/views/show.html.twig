@@ -1,5 +1,5 @@
 {% extends 'activity/content-layout.html.twig' %}
-{% set replays = get_live_replays(activity.ext.origin_lesson_id)|default() %}
+{% set replays = get_live_activity_replays(activity.id)|default() %}
 
 {% block body %}
   <div class="iframe-parent-content ph20 pv20">
