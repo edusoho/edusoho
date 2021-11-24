@@ -20,9 +20,9 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
             ->leftJoin('member', 'live_statistics_member_data', 'live', $join)
             ->andWhere('member.userId IN ( :userIds )')
             ->andWhere('member.userId = :userId')
+            ->andWhere('member.userId NOT IN (:excludeUserIds)')
             ->andWhere('member.courseId = :courseId')
-            ->orderBy('live.requestTime', 'DESC')
-            ->addOrderBy('member.id', 'ASC')
+            ->orderBy('live.watchDuration', 'DESC')
             ->setFirstResult((int) $start)
             ->setMaxResults((int) $limit);
 
