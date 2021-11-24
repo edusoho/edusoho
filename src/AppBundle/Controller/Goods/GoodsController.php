@@ -22,6 +22,7 @@ class GoodsController extends BaseController
         }
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
+        $goods['showPlan'] = count($goods['specs']) > 1 || !empty($goods['specs'][0]['title']) ? 1 : 0;
 
         return $this->render(
             'goods/show.html.twig',
