@@ -8,7 +8,7 @@
 
         <div class="image-item clearfix">
           <div class="image-item__img pull-left">
-            <img :src="img" alt="">
+            <img src="" alt="">
             <a-upload
               accept="image/*"
               :file-list="[]"
@@ -92,9 +92,7 @@ export default {
     },
 
     cropperSuccess(data) {
-      console.log(data);
       const { url } = data;
-      this.img = url;
     }
   }
 }

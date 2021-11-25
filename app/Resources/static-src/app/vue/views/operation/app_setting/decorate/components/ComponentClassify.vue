@@ -1,6 +1,6 @@
 <template>
   <div class="component-classify-item">
-    <div :class="{ active: isActive }">
+    <div :class="{ active: isActive }" @click="handleChangeClassify">
       <svg-icon :icon="classify.icon" />
       <div class="classify-title">{{ classify.title }}</div>
     </div>
@@ -8,10 +8,10 @@
       <div v-show="isActive" class="add-component-lists">
         <div class="clearfix">
           <div
-            v-for="(component, i) in classify.components"
-            :key="i"
+            v-for="component in classify.components"
+            :key="component.info.type"
             class="add-list-item pull-left"
-            @click="handleClickAdd(component.info)"
+            @click="handleAddComponent(component.info)"
           >
             <svg-icon :icon="component.icon" />
             <div class="component-title">{{ component.title }}</div>
@@ -36,7 +36,7 @@ export default {
       required: true
     },
 
-    currentClassifyIndex: {
+    currentClassify: {
       type: Number,
       required: true
     }
@@ -44,13 +44,17 @@ export default {
 
   computed: {
     isActive() {
-      return this.index === this.currentClassifyIndex;
+      return this.index === this.currentClassify;
     }
   },
 
   methods: {
-    handleClickAdd(val) {
-      this.$emit('add-component', val);
+    handleAddComponent(info) {
+      this.$emit('add-component', info);
+    },
+
+    handleChangeClassify() {
+      this.$emit('change-classify', this.index);
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <layout :active="moduleType === currentEdit">
+  <layout :active="moduleType === currentModuleType">
     <div :class="['swiper-container', moduleType]">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -37,7 +37,7 @@ export default {
       required: true
     },
 
-    currentEdit: {
+    currentModuleType: {
       type: String,
       required: true
     }

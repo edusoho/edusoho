@@ -3,31 +3,19 @@
     <the-header />
 
     <div class="decorate-main clearfix">
-      <aside class="left-choose-container pull-left">
-        <div class="component-add-container">
-          <component-classify
-            v-for="(classify, index) in Classifys"
-            :key="index"
-            :classify="classify"
-            :index="index"
-            :current-classify-index="currentClassifyIndex"
-            @add-component="handleClickAdd"
-            @click.native="handleChangeClassify(index)"
-          />
-        </div>
-      </aside>
+      <left-choose-container @add-component="handleAddComponent" />
 
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
           <find-head />
 
           <component
-            :is="getComponentName(component.type)"
-            v-for="(component, index) in components"
+            v-for="(module, index) in modules"
             :key="index"
-            :module-type="`${component.type}-${index}`"
-            :current-edit="currentEdit"
-            @click.native="changeCurrentEdit(component.type, index)"
+            :is="module.type"
+            :module-type="`${module.type}-${index}`"
+            :current-module-type="currentModule.type"
+            @click.native="changeCurrentModule(module.type, index)"
           />
 
           <find-footer />
@@ -35,7 +23,7 @@
       </section>
 
       <aside class="right-edit-container pull-left">
-        <component :is="currentEditComponent" />
+        <component :is="currentModule.editComponent" />
       </aside>
     </div>
   </div>
@@ -44,87 +32,43 @@
 <script>
 import _ from 'lodash';
 
-import { Classifys } from './default-config';
-
-import ModuleCounter from 'app/vue/utils/module-counter';
-
 import TheHeader from './components/TheHeader.vue';
-import ComponentClassify from './components/ComponentClassify.vue';
+import LeftChooseContainer from './components/LeftChooseContainer.vue';
+
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
-import Swiper from '../components/Swiper.vue';
-import SwiperEdit from '../components/SwiperEdit.vue';
-
-const components = {
-  slide_show: 'Swiper'
-}
-
-const editComponents = {
-  slide_show: 'SwiperEdit'
-}
+import slide_show from '../components/Swiper.vue';
+import slide_show_edit from '../components/SwiperEdit.vue';
 
 export default {
   components: {
     TheHeader,
-    ComponentClassify,
+    LeftChooseContainer,
     FindHead,
     FindFooter,
-    Swiper,
-    SwiperEdit
+    slide_show,
+    slide_show_edit
   },
 
   data() {
     return {
-      Classifys,
-      currentClassifyIndex: 0,
-      components: [],
-      typeCount: {},
-      currentEdit: '',
-      currentEditComponent: ''
+      modules: [],
+      currentModule: {},
     }
   },
 
-  mounted() {
-    this.initTypeCount();
-    this.initCurrentEdit();
-  },
-
   methods: {
-    // 模块类型计数初始化
-    initTypeCount() {
-      const typeCount = new ModuleCounter();
-      _.forEach(this.components, (component) => {
-        typeCount.addByType(component.type);
+    handleAddComponent(info) {
+      this.modules.push(info);
+      this.changeCurrentModule(info.type, _.size(this.modules) - 1);
+    },
+
+    changeCurrentModule(type, index) {
+      _.assign(this.currentModule, {
+        index, // 编辑时用来确定位置
+        type: `${type}-${index}`, // 提交时的 module-type
+        editComponent: `${type}_edit` // 对应的编辑组件
       });
-      this.typeCount = typeCount;
-    },
-
-    // 初始化当前编辑组件
-    initCurrentEdit() {
-      const length = _.size(this.components);
-      if (length) {
-        this.changeCurrentEdit(this.components[0].type, 0);
-      }
-    },
-
-    handleChangeClassify(val) {
-      this.currentClassifyIndex = val;
-    },
-
-    handleClickAdd(info) {
-      const { type } = info;
-      this.typeCount.addByType(type);
-      this.components.push(info);
-      this.changeCurrentEdit(type, _.size(this.components) - 1);
-    },
-
-    changeCurrentEdit(type, index) {
-      this.currentEdit = `${type}-${index}`;
-      this.currentEditComponent = editComponents[type];
-    },
-
-    getComponentName(type) {
-      return components[type];
     }
   }
 }
@@ -140,19 +84,6 @@ export default {
     position: relative;
     width: 100%;
     height: calc(100% - 52px);
-
-    .left-choose-container {
-      width: 80px;
-      height: 100%;
-      background: #243042;
-
-      .component-add-container {
-        position: relative;
-        padding-top: 20px;
-        height: 100%;
-        user-select: none;
-      }
-    }
 
     .center-preview-container {
       overflow-y: auto;
