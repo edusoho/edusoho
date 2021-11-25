@@ -13,9 +13,10 @@
             v-for="(module, index) in modules"
             :key="index"
             :is="module.type"
+            :module-data="module.data"
             :module-type="`${module.type}-${index}`"
             :current-module-type="currentModule.type"
-            @click.native="changeCurrentModule(module.type, index)"
+            @click.native="changeCurrentModule(module, index)"
           />
 
           <find-footer />
@@ -23,7 +24,10 @@
       </section>
 
       <aside class="right-edit-container pull-left">
-        <component :is="currentModule.editComponent" />
+        <component
+          :is="currentModule.editComponent"
+          :module-data="currentModule.data"
+        />
       </aside>
     </div>
   </div>
@@ -60,12 +64,14 @@ export default {
   methods: {
     handleAddComponent(info) {
       this.modules.push(info);
-      this.changeCurrentModule(info.type, _.size(this.modules) - 1);
+      this.changeCurrentModule(info, _.size(this.modules) - 1);
     },
 
-    changeCurrentModule(type, index) {
+    changeCurrentModule(info, index) {
+      const { type, data } = info;
       _.assign(this.currentModule, {
         index, // 编辑时用来确定位置
+        data, // 对应编辑组件数据
         type: `${type}-${index}`, // 提交时的 module-type
         editComponent: `${type}_edit` // 对应的编辑组件
       });

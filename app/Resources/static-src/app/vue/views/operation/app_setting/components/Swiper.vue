@@ -40,6 +40,11 @@ export default {
     currentModuleType: {
       type: String,
       required: true
+    },
+
+    moduleData: {
+      type: Object,
+      required: true
     }
   },
 

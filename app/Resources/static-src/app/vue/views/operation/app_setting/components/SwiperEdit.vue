@@ -74,6 +74,13 @@ import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 export default {
   name: 'SwiperEdit',
 
+  props: {
+    moduleData: {
+      type: Object,
+      required: true
+    }
+  },
+
   components: {
     EditLayout,
     PictureCropperModal
