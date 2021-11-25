@@ -122,6 +122,7 @@ class LiveReplayController extends BaseController
         foreach ($activities as &$activity) {
             $courseReplays = $this->getLiveReplayService()->findReplaysByCourseIdAndLessonId($activity['fromCourseId'], $activity['id']);
             $activity['replayArr'] = empty($courseReplays) ? [] : $courseReplays[0];
+            $activity['length'] = $this->timeFormatterFilter($activity['endTime'] - $activity['startTime']);
         }
 
         $activities = ArrayToolkit::index($activities, 'mediaId');
@@ -129,6 +130,19 @@ class LiveReplayController extends BaseController
         $users = $this->getUserService()->findUsersByIds($anchorIds);
 
         return [$replays, $paginator, $activities, $users];
+    }
+
+    public function timeFormatterFilter($time)
+    {
+        if ($time <= 60) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => 0]);
+        }
+
+        if ($time <= 3600) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60, 1)]);
+        }
+
+        return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
     }
 
     protected function buildLiveSearchConditions($conditions)

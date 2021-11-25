@@ -71,6 +71,9 @@ class LiveReplay extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        if (!empty($conditions['courseCategoryId'])) {
+            $conditions['categoryId'] = $conditions['courseCategoryId'];
+        }
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0], ['createdTime' => 'desc'], $offset, $limit);
