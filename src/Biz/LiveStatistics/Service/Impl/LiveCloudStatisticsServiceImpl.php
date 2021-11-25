@@ -289,10 +289,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             $onlineData = $this->EdusohoLiveClient->getMaxOnline($activity['ext']['liveId']);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
-        $data['memberNumber'] = empty($cloudData['onlineNumber']) ? 0 : $cloudData['onlineNumber'];
+        $data['memberNumber'] = empty($cloudData['onlineNumber']) ? 0 : $cloudData['onlineNumber']-1;
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
-        $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
+        $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum']-1;
         $data['avgWatchTime'] = $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
         if (!empty($activity['ext']['cloudStatisticData']['memberFinished'])) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
