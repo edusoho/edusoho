@@ -60,13 +60,11 @@ class LiveStatisticRollCall extends AbstractResource
 
     public function processJsonData($liveId)
     {
-//        try {
-        $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
-        $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
-
-//        } catch (LiveStatisticsException $e) {
-//            $checkin['errorCode'] = $e->getCode();
-//        }
+        try {
+            $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
+            $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
+        } catch (LiveStatisticsException $e) {
+        }
     }
 
     /**
