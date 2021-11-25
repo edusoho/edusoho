@@ -211,8 +211,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
                 'requestTime' => time(),
             ];
-            if (!empty($members[$member['userId']])) {
-                $updateData[$members[$member['userId']]['id']] = $data;
+            if (!empty($members[$member['studentId']])) {
+                $updateData[$members[$member['studentId']]['id']] = $data;
                 continue;
             }
             $createData[] = $data;
