@@ -101,11 +101,6 @@ class SyncLiveMemberDataJob extends AbstractJob
         if (isset($memberData['list']) && count($memberData['list']) < self::LIMIT) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
             $this->finish = 1;
-            //更新直播数据
-            if ($this->syncLive) {
-                $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-                $this->getLiveCloudStatisticsService()->getLiveData($task);
-            }
         }
     }
 

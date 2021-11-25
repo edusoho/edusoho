@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\LiveStatistic;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
@@ -20,13 +21,23 @@ class LiveStatisticDetail extends AbstractResource
             TaskException::NOTFOUND_TASK();
         }
         $result = $this->getLiveStatisticsService()->getLiveData($task);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task = $this->getTaskService()->getTask($taskId);
         $result['task'] = ArrayToolkit::parts($task, ['id', 'startTime', 'endTime', 'title', 'length']);
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $course['title'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
         $result['course'] = ArrayToolkit::parts($course, ['id', 'title', 'price', 'studentNum']);
+        $result['avgWatchTime'] = $this->getLiveStatisticsService()->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
 
         return $result;
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
     }
 
     /**
