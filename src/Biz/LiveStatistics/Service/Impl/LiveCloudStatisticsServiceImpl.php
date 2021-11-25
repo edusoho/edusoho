@@ -195,6 +195,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $userIds = ArrayToolkit::column($memberData['list'], 'userId');
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
+
         foreach ($memberData['list'] as $member) {
             if ($member['studentId'] == $activity['ext']['anchorId']) {
                 continue;
@@ -289,10 +290,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             $onlineData = $this->EdusohoLiveClient->getMaxOnline($activity['ext']['liveId']);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
-        $data['memberNumber'] = empty($cloudData['onlineNumber']) ? 0 : $cloudData['onlineNumber']-1;
+        $data['memberNumber'] = empty($cloudData['onlineNumber']) ? 0 : (7 != $activity['ext']['liveProvider'] ? $cloudData['onlineNumber'] - 1 : $cloudData['onlineNumber']);
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
-        $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum']-1;
+        $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
         $data['avgWatchTime'] = $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
         if (!empty($activity['ext']['cloudStatisticData']['memberFinished'])) {
             $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
