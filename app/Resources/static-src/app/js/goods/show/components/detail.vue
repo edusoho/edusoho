@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- 教学计划 -->
-                <div class="detail-right__plan plan clearfix" >
+                <div class="detail-right__plan plan clearfix" v-if="goods.showPlan">
                     <div class="plan-title pull-left">{{ 'site.course_plan'|trans }}</div>
                     <div class="plan-btns pull-right">
                         <span class="plan-btns__item" v-for="plan in goods.specs" :key="plan.id"

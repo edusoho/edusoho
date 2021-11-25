@@ -39,6 +39,9 @@ class LiveStatistic extends AbstractResource
             $activity = $activities[$liveTask['activityId']];
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
             $liveTask['status'] = 'closed' == $activity['ext']['progressStatus'] ? 'finished' : ($liveTask['startTime'] > time() ? 'coming' : 'playing');
+            if ('closed' == $activity['ext']['progressStatus']) {
+                $liveTask['length'] = round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1);
+            }
         }
 
         return $this->makePagingObject($liveTasks, $this->getTaskService()->countTasks($taskConditions), $offset, $limit);

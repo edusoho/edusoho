@@ -46,8 +46,7 @@ export default {
       this.confirmLoading = true;
       const params = {
         data: {
-          ids: [this.currentId],
-          realDelete: false
+          ids: [this.currentId]
         }
       };
 

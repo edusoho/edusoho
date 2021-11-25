@@ -20,7 +20,7 @@ class ClassroomController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user->isTeacher()) {
-            return   $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
         $conditions = $this->buildTeachingClassroomConditions($tab);
@@ -30,6 +30,7 @@ class ClassroomController extends BaseController
                 'classrooms' => [],
                 'members' => [],
                 'paginator' => [],
+                'tab' => $tab,
             ]);
         }
         $paginator = new Paginator(
