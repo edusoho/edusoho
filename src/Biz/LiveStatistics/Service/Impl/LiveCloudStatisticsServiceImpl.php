@@ -196,7 +196,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         foreach ($memberData['list'] as $member) {
-            if ($member['userId'] == $activity['ext']['anchorId']) {
+            if ($member['studentId'] == $activity['ext']['anchorId']) {
                 continue;
             }
             $data = [
