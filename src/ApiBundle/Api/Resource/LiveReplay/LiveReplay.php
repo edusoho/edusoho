@@ -122,7 +122,7 @@ class LiveReplay extends AbstractResource
         }
 
         if ($time <= 3600) {
-            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60, 1)]);
         }
 
         return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);

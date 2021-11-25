@@ -57,6 +57,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return empty($count) ? 0 : round($sum / ($count * 60), 1);
     }
 
+    public function sumChatNumByLiveId($liveId)
+    {
+        return $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
+    }
+
     public function getLiveData($task)
     {
         $course = $this->getCourseService()->tryManageCourse($task['courseId']);
@@ -322,7 +327,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
-        $data['chatNumber'] = empty($cloudData['chatNum']) ? 0 : $cloudData['chatNum'];
+        $data['chatNumber'] = empty($cloudData['chatNum']) ? $this->sumChatNumByLiveId($activity['ext']['liveId']) : $cloudData['chatNum'];
         $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'] - 1;
         $data['avgWatchTime'] = 'closed' == $activity['ext']['progressStatus'] ? $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']) : '--';
         if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
