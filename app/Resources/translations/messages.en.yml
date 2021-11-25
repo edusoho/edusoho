@@ -10819,3 +10819,4 @@ course.live_replay.teacher: Teacher
 course.live_replay.length: length
 course.live_replay.start_time: Start Time
 course.live_replay_manage.live_replay_empty: replay deleted
+course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side
