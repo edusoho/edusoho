@@ -20,7 +20,7 @@ class TaskLiveStatisticMemberExporter extends BaseSheetAddStyleExporter
     {
         $time = date('Y_m_d_H_i', time());
 
-        return  "直播统计_{$time}.xls";
+        return "直播统计_{$time}.xls";
     }
 
     public function getSortedHeadingRow()
@@ -95,7 +95,7 @@ class TaskLiveStatisticMemberExporter extends BaseSheetAddStyleExporter
             $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', $member['firstEnterTime']);
             $member['nickname'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
-            $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
+            $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) || empty($member['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
             $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$member['userId']]['verifiedMobile'];
             $member['watchDuration'] = round($member['watchDuration'] / 60, 1);
         }

@@ -313,6 +313,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         try {
             $cloudData = $this->EdusohoLiveClient->getEsLiveInfo($activity['ext']['liveId']);
+
             $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => 1]);
             $liveBatch = $this->EdusohoLiveClient->getLiveCheckBatchData($activity['ext']['liveId'], []);
         } catch (CloudAPIIOException $cloudAPIIOException) {
@@ -321,7 +322,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
-        $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
+        $data['chatNumber'] = empty($cloudData['chatNum']) ? 0 : $cloudData['chatNum'];
         $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'] - 1;
         $data['avgWatchTime'] = 'closed' == $activity['ext']['progressStatus'] ? $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']) : '--';
         if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
