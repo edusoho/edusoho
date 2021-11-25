@@ -53,7 +53,7 @@
       </td>
       <td>
         {% if  replay.liveEndTime > replay.liveStartTime %}
-          {{ 'course.testpaper_manage.limited_time'|trans({'%limitedTime%':((replay.liveEndTime -replay.liveStartTime)/60)|round(0, 'ceil')}) }}
+          {{ activities[replay.id]['length'] }}
         {% else %}
           --
         {% endif %}
@@ -67,7 +67,6 @@
       </td>
       <td>
         <div class="btn-group">
-
           {% if tab == 'my' %}
             <a class="cd-btn btn cd-btn-primary {% if tab == 'my' %}btn-group--left{% endif %} js-detail-btn" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_live_replay_edit', {'liveActivityId':replay.id}) }}">
                 {{'material_lib.btn.edit'|trans}}
@@ -97,7 +96,9 @@
               {% endif %}
             </ul>
           {% else %}
-            <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.id]['fromCourseId'], activityId:activities[replay.id]['id'] ,replayId:activities[replay.id]['replayArr']['id'] }) }}" target="_blank" class="cd-btn btn cd-btn-primary">{{'material_lib.btn.view'|trans}}</a>
+            {% if activities[replay.id]['replayArr'] %}
+                <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.id]['fromCourseId'], activityId:activities[replay.id]['id'] ,replayId:activities[replay.id]['replayArr']['id'] }) }}" target="_blank" class="cd-btn btn cd-btn-primary">{{'material_lib.btn.view'|trans}}</a>
+            {% endif %}
           {% endif %}
         </div>
       </td>
