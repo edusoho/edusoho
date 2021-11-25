@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\Marker\Dao\MarkerDao;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\Filesystem\Filesystem;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Topxia\Service\Common\ServiceKernel;
@@ -68,7 +69,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'processLiveStatisticsMemberData',
             'processLiveCloudStatisticData',
             'processActivityLiveProgressStatus',
-            'registerJob'
+            'registerJob',
+            'registerCallbackUrl'
         );
 
         $funcNames = array();
@@ -381,6 +383,22 @@ class EduSohoUpgrade extends AbstractUpdater
         ];
 
         $this->getSchedulerService()->register($startJob);
+        return 1;
+    }
+
+    public function registerCallbackUrl()
+    {
+        try {
+            $site = $this->getSettingService()->get('site', []);
+            if (empty($site['url'])) {
+                return 1;
+            }
+            $client = new EdusohoLiveClient();
+            $client->uploadCallbackUrl(rtrim($site['url'], '/').'/callback/live/handle');
+            $this->logger('info', '修改直播回调');
+        } catch (\RuntimeException $e) {
+        }
+
         return 1;
     }
 
