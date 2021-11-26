@@ -59,7 +59,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 
     public function sumChatNumByLiveId($liveId)
     {
-        return $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
+        $result = $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
+
+        return empty($result) ? 0 : $result;
     }
 
     public function getLiveData($task)
