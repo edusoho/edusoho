@@ -44,10 +44,6 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <template slot="customTitle" slot-scope="text, record">
-        <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
-      </template>
-
       <template slot="startTime" slot-scope="text">
         {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
       </template>
@@ -75,8 +71,7 @@ const columns = [
   },
   {
     title: Translator.trans('course.task'),
-    dataIndex: 'title',
-    scopedSlots: { customRender: 'customTitle' }
+    dataIndex: 'title'
   },
   {
     title: Translator.trans('live_statistics.live_start_time'),
@@ -175,10 +170,6 @@ export default {
 
     async fetchClassroomCourses() {
       this.courseList = await Classroom.getCourses({ query: { classroomId: this.classroomId } });
-    },
-
-    handleClickViewTask(id) {
-      window.open(`/course/${this.courseId}/task/${id}/show`);
     },
 
     handleClickViewDetail(id) {
