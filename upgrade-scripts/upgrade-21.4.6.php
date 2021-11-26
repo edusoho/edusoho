@@ -296,7 +296,6 @@ class EduSohoUpgrade extends AbstractUpdater
                     'watchDuration'=> $user['learnTime'],
                     'checkinNum' => 0,
                     'requestTime' => time(),
-                    'courseId' => $activity['fromCourseId'],
                     'chatNum' => 0,
                     'answerNum' => 0,
                 ];
