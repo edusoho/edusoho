@@ -185,7 +185,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `courseId` int(11) DEFAULT 0,
                   `chatNum` int(11) DEFAULT 0,
                   `answerNum` int(11) DEFAULT 0,
-                  UNIQUE KEY `liveId_userId` (`liveId`,`userId`),
+                  UNIQUE KEY `courseId_userId` (`courseId`,`userId`),
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
              ");
