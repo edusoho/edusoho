@@ -315,9 +315,6 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
         $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'liveId');
-        $anchorIds = \AppBundle\Common\ArrayToolkit::column($liveActivities, 'anchorId');
-        $users = $this->getUserDao()->findByIds($anchorIds);
-        $users = \AppBundle\Common\ArrayToolkit::index($users, 'id');
         $update=[];
         foreach ($liveActivities as $liveActivity){
             $time = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveActivity['liveId']);
@@ -328,7 +325,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $update[$liveActivity['id']] = [
                 'cloudStatisticData'=>[
                     'memberRequestTime' => $liveActivity['liveEndTime'],
-                    'teacher' => empty($liveActivity['anchorId']) ? '--':$users[$liveActivity['anchorId']]['nickname'],
+                    'teacherId' => empty($liveActivity['anchorId']) ? 0 : $liveActivity['anchorId'],
                     'startTime' => $liveActivity['liveStartTime'],
                     'endTime' => $liveActivity['liveEndTime'],
                     'length' => round(($liveActivity['liveEndTime']-$liveActivity['liveStartTime']) / 60, 1),
