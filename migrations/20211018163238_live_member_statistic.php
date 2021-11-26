@@ -23,7 +23,7 @@ class LiveMemberStatistic extends Migration
                               `courseId` int(11) DEFAULT 0,
                               `chatNum` int(11) DEFAULT 0,
                               `answerNum` int(11) DEFAULT 0,
-                              UNIQUE KEY `courseId_userId` (`courseId`,`userId`),
+                              UNIQUE KEY `courseId_userId_liveId` (`courseId`,`userId`,`liveId`),
                               PRIMARY KEY (`id`)
                             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
         );
