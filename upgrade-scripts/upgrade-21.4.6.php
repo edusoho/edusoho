@@ -148,6 +148,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function addNewTable()
     {
+        if($this->isTableExist('live_statistics_member_data'))
+        {
+            $this->getConnection()->exec('DROP TABLE `live_statistics_member_data`;');
+        }
         $this->getConnection()->exec("
              CREATE TABLE IF NOT EXISTS `activity_replay`  (
                   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -182,10 +186,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updatedTime` int(11) DEFAULT NULL,
                   `requestTime` int(11) DEFAULT 0,
                   `userId` int(11) DEFAULT 0,
-                  `courseId` int(11) DEFAULT 0,
                   `chatNum` int(11) DEFAULT 0,
                   `answerNum` int(11) DEFAULT 0,
-                  UNIQUE KEY `courseId_userId_liveId` (`courseId`,`userId`,`liveId`),
+                  UNIQUE KEY `userId_liveId` (`userId`,`liveId`),
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
              ");
