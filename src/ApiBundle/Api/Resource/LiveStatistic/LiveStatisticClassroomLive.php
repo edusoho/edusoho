@@ -28,11 +28,14 @@ class LiveStatisticClassroomLive extends AbstractResource
         $courseIds = ArrayToolkit::column($tasks, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
         foreach ($tasks as &$liveTask) {
             $course = $courses[$liveTask['courseId']];
-            $liveTask['courseTitle'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+            $liveTask['courseTitle'] = empty(trim($course['title'])) ? $course['courseSetTitle'] : $course['title'];
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
-            $liveTask['status'] = $liveTask['startTime'] > time() ? 'coming' : ($liveTask['endTime'] < time() ? 'finished' : 'playing');
+            $liveTask['status'] = empty($activities[$liveTask['activityId']]) ? 'finished' : ('closed' == $activities[$liveTask['activityId']]['ext']['progressStatus'] ? 'finished' : ($liveTask['startTime'] > time() ? 'coming' : 'playing'));
         }
 
         return $tasks;
