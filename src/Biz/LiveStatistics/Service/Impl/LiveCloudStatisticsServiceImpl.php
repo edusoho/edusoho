@@ -160,14 +160,13 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $createData = [];
         $updateData = [];
         $userIds = ArrayToolkit::column($memberData['data'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
+        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         foreach ($memberData['data'] as $member) {
             if ($member['userId'] == $activity['ext']['anchorId']) {
                 continue;
             }
             $data = [
-                'courseId' => $activity['fromCourseId'],
                 'userId' => $member['userId'],
                 'liveId' => $activity['ext']['liveId'],
                 'firstEnterTime' => $member['firstEnterTime'],
@@ -200,7 +199,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $createData = [];
         $updateData = [];
         $userIds = ArrayToolkit::column($memberData['list'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId'], 'courseId' => $activity['fromCourseId']], [], 0, count($userIds), ['id', 'userId']);
+        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
 
         foreach ($memberData['list'] as $member) {
@@ -208,7 +207,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 continue;
             }
             $data = [
-                'courseId' => $activity['fromCourseId'],
                 'userId' => $member['studentId'],
                 'liveId' => $activity['ext']['liveId'],
                 'firstEnterTime' => $member['joinTime'],

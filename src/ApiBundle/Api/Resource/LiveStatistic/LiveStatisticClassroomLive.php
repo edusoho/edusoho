@@ -36,6 +36,7 @@ class LiveStatisticClassroomLive extends AbstractResource
             $liveTask['courseTitle'] = empty(trim($course['title'])) ? $course['courseSetTitle'] : $course['title'];
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
             $liveTask['status'] = empty($activities[$liveTask['activityId']]) ? 'finished' : ('closed' == $activities[$liveTask['activityId']]['ext']['progressStatus'] ? 'finished' : ($liveTask['startTime'] > time() ? 'coming' : 'playing'));
+            $liveTask['length'] = round(($liveTask['endTime'] - $liveTask['startTime']) / 60, 1);
         }
 
         return $tasks;
