@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Biz\User\Service\UserService;
 
 class LiveStatisticDetail extends AbstractResource
 {
@@ -27,7 +28,10 @@ class LiveStatisticDetail extends AbstractResource
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $course['title'] = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
         $result['course'] = ArrayToolkit::parts($course, ['id', 'title', 'price', 'studentNum']);
+        $user = empty($result['teacherId']) ? ['nickname' => '--'] : $this->getUserService()->getUser($result['teacherId']);
+        $result['teacher'] = $user['nickname'];
         $result['avgWatchTime'] = $this->getLiveStatisticsService()->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
+        $result['chatNumber'] = $this->getLiveStatisticsService()->sumChatNumByLiveId($activity['ext']['liveId']);
 
         return $result;
     }
@@ -70,5 +74,13 @@ class LiveStatisticDetail extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

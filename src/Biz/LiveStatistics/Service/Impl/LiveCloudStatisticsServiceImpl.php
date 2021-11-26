@@ -81,12 +81,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             return $cloudStatisticData;
         }
 
-        $user = $this->getUserService()->getUser($course['teacherIds'][0]);
-        $profile = $this->getUserService()->getUserProfile($course['teacherIds'][0]);
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
         $data = [
-            'teacher' => empty($profile['truename']) ? $user['nickname'] : $profile['truename'],
+            'teacherId' => empty($course['teacherIds']) ? 0 : $course['teacherIds'][0],
             'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
             'endTime' => empty($activity['ext']['liveEndTime']) ? $activity['endTime'] : $activity['ext']['liveEndTime'],
             'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
