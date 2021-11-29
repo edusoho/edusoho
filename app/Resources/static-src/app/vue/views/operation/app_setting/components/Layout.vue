@@ -2,9 +2,9 @@
   <div class="component-layout">
     <slot />
     <div class="edit-operate" v-show="active">
-      <div class="operate-up">上</div>
-      <div class="operate-down">下</div>
-      <div class="operate-move">删</div>
+      <div class="operate-active"><a-icon type="arrow-up" /></div>
+      <div class="operate-active"><a-icon type="arrow-down" /></div>
+      <div class="operate-active"><a-icon type="close" /></div>
     </div>
 
     <div class="active" v-show="active" />
@@ -52,6 +52,25 @@ export default {
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
     margin-left: 14px;
     background-color: #fff;
+
+    .operate-active {
+      box-sizing: content-box;
+      width: 100%;
+      height: 34px;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: center;
+      line-height: 34px;
+      border-top: 1px solid #f5f5f5;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      i {
+        font-size: 16px;
+      }
+    }
   }
 }
 </style>
