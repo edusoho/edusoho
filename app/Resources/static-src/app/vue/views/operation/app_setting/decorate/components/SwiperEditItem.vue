@@ -14,15 +14,19 @@
     <div class="image-item__content pull-left">
       <a-dropdown>
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-          选择跳转到的页面<a-icon type="down" />
+          站内链接<a-icon type="down" />
         </a>
         <a-menu slot="overlay" @click="selectLink">
           <a-menu-item key="course">选择课程</a-menu-item>
           <a-menu-item key="classroon">选择班级</a-menu-item>
           <a-menu-item key="vip">选择会员</a-menu-item>
-          <a-menu-item key="custom">自定义链接</a-menu-item>
         </a-menu>
       </a-dropdown>
+      <div style="margin-top: 18px;" @click="selectLink({ key: 'custom' })">
+        <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+          自定义链接
+        </a>
+      </div>
     </div>
   </div>
 </template>

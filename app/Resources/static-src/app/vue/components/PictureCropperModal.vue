@@ -14,7 +14,7 @@
       :src="imgUrl"
     />
     <template slot="footer">
-      <a-button @click="handleReselect">重新选择</a-button>
+      <!-- <a-button @click="handleReselect">重新选择</a-button> -->
       <a-button type="primary" @click="handleSaveCropper" :loading="uploadLoading">保存图片</a-button>
     </template>
   </a-modal>
