@@ -1,7 +1,7 @@
 <template>
   <layout :active="moduleType === currentModuleType">
-    <div :class="['swiper-container', moduleType]">
-      <div class="swiper-wrapper" :key="swiperKey">
+    <div :key="swiperKey" :class="['swiper-container', moduleType]">
+      <div class="swiper-wrapper">
         <template v-if="moduleData.length">
           <div
             v-for="(item, index) in moduleData"
@@ -43,7 +43,7 @@ export default {
     },
 
     moduleData: {
-      type:  [Array, Object],
+      type:  Array,
       required: true
     }
   },
@@ -54,16 +54,14 @@ export default {
 
   data() {
     return {
-      swiper: null,
       swiperKey: 0
     }
   },
 
   watch: {
     moduleData: function() {
-      console.log('111');
       this.swiperKey++;
-      this.swiper.reInit();
+      this.reInitSwiper();
     }
   },
 
@@ -73,12 +71,18 @@ export default {
 
   methods: {
     initSwiepr() {
-      this.swiper = new Swiper(`.${this.moduleType}`, {
+      new Swiper(`.${this.moduleType}`, {
         pagination : `.${this.moduleType} .pagination`,
         autoplay: 5000,
         loop: true,
         slidesPerView: 1.1,
         centeredSlides: true
+      });
+    },
+
+    reInitSwiper() {
+      this.$nextTick(() => {
+        this.initSwiepr();
       });
     }
   }

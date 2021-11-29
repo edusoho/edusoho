@@ -25,8 +25,9 @@
 
       <aside class="right-edit-container pull-left">
         <component
+          v-if="currentModule.editComponent"
           :is="currentModule.editComponent"
-          :module-info="modules[currentModule.index]"
+          :module-info="modules[currentModule.index].data"
           @update:edit="updateEdit"
         />
       </aside>
@@ -69,7 +70,7 @@ export default {
     },
 
     changeCurrentModule(info, index) {
-      const { type, data } = info;
+      const { type } = info;
       _.assign(this.currentModule, {
         index, // 编辑时用来确定位置
         type: `${type}-${index}`, // 提交时的 module-type
@@ -80,7 +81,7 @@ export default {
     updateEdit(params) {
       const { type, data } = params;
       if (type === 'swiper') {
-        this.modules[this.currentModule.index].data.push(data);
+        this.modules[this.currentModule.index].data = data;
       }
     }
   }

@@ -6,51 +6,20 @@
       <div class="design-editor__title">添加内容</div>
       <div class="design-editor__image">
 
-        <div
-          v-for="(item, index) in moduleInfo.data"
+        <swiper-edit-item
+          v-for="(item, index) in moduleData"
           :key="index"
-          class="image-item clearfix"
-        >
-          <div class="image-item__img pull-left">
-            <img :src="item.image">
-            <a-upload
-              accept="image/*"
-              :file-list="[]"
-              :customRequest="() => {}"
-              @change="uploadPictureEdit"
-            >
-              <div class="re-upload">修改</div>
-            </a-upload>
-          </div>
-          <div class="image-item__content pull-left">
-            <a-dropdown>
-              <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                选择跳转到的页面<a-icon type="down" />
-              </a>
-              <a-menu slot="overlay" @click="onClick">
-                <a-menu-item key="1">
-                  选择课程
-                </a-menu-item>
-                <a-menu-item key="2">
-                  选择班级
-                </a-menu-item>
-                <a-menu-item key="3">
-                  选择会员
-                </a-menu-item>
-                <a-menu-item key="4">
-                  自定义链接
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-          </div>
-        </div>
+          :index="index"
+          :item="item"
+          @update:image="showCropperModal"
+        />
 
         <div class="add-btn-input">
           <a-upload
             accept="image/*"
             :file-list="[]"
             :customRequest="() => {}"
-            @change="handleChangeAdd"
+            @change="handleAddSwiper"
           >
             <div class="add-btn-input">
               +添加图片
@@ -72,7 +41,9 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import EditLayout from './EditLayout.vue';
+import SwiperEditItem from './SwiperEditItem.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 
 export default {
@@ -80,33 +51,62 @@ export default {
 
   props: {
     moduleInfo: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
 
   components: {
     EditLayout,
-    PictureCropperModal
+    PictureCropperModal,
+    SwiperEditItem
+  },
+
+  data() {
+    return {
+      moduleData: [],
+      currentCropperIndex: 0,
+      currentCropperType: ''
+    }
+  },
+
+  watch: {
+    moduleInfo: function() {
+      this.moduleData = this.moduleInfo;
+    }
+  },
+
+  mounted() {
+    this.moduleData = this.moduleInfo;
   },
 
   methods: {
-    handleChangeAdd(info) {
+    handleAddSwiper(info) {
       const reader = new FileReader();
 
       reader.onload = (event) => {
-        const imgUrl = event.target.result;
-        const imgName = info.file.originFileObj.name;
-        this.$refs.pictureCropperModal.showModal({ imgUrl, imgName });
+        const params = {
+          type: 'add',
+          imgUrl: event.target.result,
+          imgName: info.file.originFileObj.name
+        };
+        this.showCropperModal(params);
       };
       reader.readAsDataURL(info.file.originFileObj);
     },
 
+    showCropperModal(params) {
+      const { index, type, imgUrl, imgName } = params;
+      this.currentCropperIndex = index;
+      this.currentCropperType = type;
+      this.$refs.pictureCropperModal.showModal({ imgUrl, imgName });
+    },
+
     cropperSuccess(data) {
       const { url } = data;
-      this.$emit('update:edit', {
-        type: 'swiper',
-        data: {
+
+      if (this.currentCropperType === 'add') {
+        this.moduleData.push({
           image: url,
           link: {
             type: '',
@@ -114,7 +114,21 @@ export default {
             url: ''
           },
           responsive: '1'
-        }
+        });
+        this.upateEdit();
+        return;
+      }
+
+      if (this.currentCropperType === 'edit') {
+        this.moduleData[this.currentCropperIndex].image = url;
+        this.upateEdit();
+      }
+    },
+
+    upateEdit() {
+      this.$emit('update:edit', {
+        type: 'swiper',
+        data: this.moduleData
       });
     }
   }
@@ -132,44 +146,6 @@ export default {
     width: 100%;
     padding: 8px;
     background: rgba(237, 237, 237, 0.53);
-
-    .image-item {
-      padding: 10px 6px;
-      margin-bottom: 10px;
-      width: 100%;
-      border-radius: 2px;
-      border: 1px solid #eee;
-      background-color: #fff;
-      font-size: 12px;
-      cursor: move;
-
-      &__img {
-        position: relative;
-        margin-right: 10px;
-        width: 150px;
-        height: 60px;
-        border-radius: 2px;
-
-        img {
-          width: 100%;
-        }
-
-        .re-upload {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 20px;
-          line-height: 20px;
-          cursor: pointer;
-          opacity: 0.5;
-          font-size: 12px;
-          text-align: center;
-          color: #fff;
-          background: black;
-        }
-      }
-    }
 
     .add-btn-input {
       width: 100%;
