@@ -386,6 +386,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $liveConditions['anchorIds'] = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
         }
 
+        if (!empty($conditions['anchorId'])) {
+            $liveConditions['anchorIds'] = empty($liveConditions['anchorIds']) ? [$conditions['anchorId']] : array_merge($liveConditions['anchorIds'], [$conditions['anchorId']]);
+        }
+
         if (empty($liveConditions)) {
             return $activityIds;
         }

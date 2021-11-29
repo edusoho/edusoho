@@ -46,21 +46,21 @@
   {% for replay in replays %}
     <tr>
       <td>
-       {{ activities[replay.id]['title'] }}
+       {{ activities[replay.lessonId]['title'] }}
       </td>
       <td>
-        {{ users[replay.anchorId]['nickname']|default('--') }}
+        {{ users[activities[replay.lessonId]['ext']['anchorId']]['nickname']|default('--') }}
       </td>
       <td>
-        {% if  replay.liveEndTime > replay.liveStartTime %}
-          {{ activities[replay.id]['length'] }}
+        {% if  activities[replay.lessonId]['endTime'] > activities[replay.lessonId]['startTime'] %}
+          {{ activities[replay.lessonId]['length'] }}
         {% else %}
           --
         {% endif %}
       </td>
       <td>
-        {% if replay.liveStartTime %}
-          {{ replay.liveStartTime|date('Y-m-d H:i') }}
+        {% if activities[replay.lessonId]['startTime'] %}
+          {{ activities[replay.lessonId]['startTime']|date('Y-m-d H:i') }}
         {% else %}
           --
         {% endif %}
@@ -77,28 +77,24 @@
             </button>
             <ul class="dropdown-menu btn-group__menu text-center">
                 <li class="share-li">
-                  <a href="javascript:;" class="js-live-share-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_share', {'liveActivityId':replay.id}) }}">
-                    {% if replay.replayPublic == 0 %}
+                  <a href="javascript:;" class="js-live-share-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_share', {'liveActivityId':activities[replay.lessonId]['mediaId']}) }}">
+                    {% if activities[replay.lessonId]['ext']['replayPublic'] == 0 %}
                       {{'course.live_replay.share_btn'|trans}}
                     {% else %}
                       {{'course.live_replay.un_share_btn'|trans}}
                     {% endif %}
                   </a>
-                  <input class="js-share-{{ replay.id }} hidden" value="{{ replay.replayPublic }}">
+                  <input class="js-share-{{ replay.id }} hidden" value="{{ activities[replay.lessonId]['ext']['replayPublic'] }}">
                 </li>
                <li class="share-li">
-                <a href="javascript:;" class="js-live-delete-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_remove', {'liveActivityId':replay.id}) }}">{{ 'course.live_replay.remove_btn'|trans }}</a>
+                <a href="javascript:;" class="js-live-delete-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_remove', {'liveActivityId':activities[replay.lessonId]['mediaId']}) }}">{{ 'course.live_replay.remove_btn'|trans }}</a>
                </li>
-              {% if activities[replay.id]['replayArr']%}
-                <li class="share-li">
-                  <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.id]['fromCourseId'], activityId:activities[replay.id]['id'] ,replayId:activities[replay.id]['replayArr']['id'] }) }}" target="_blank">{{ 'course_set.live.view_replay_btn'|trans }}</a>
-                </li>
-              {% endif %}
+              <li class="share-li">
+                <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.lessonId]['fromCourseId'], activityId:activities[replay.lessonId]['id'] ,replayId:replay.id }) }}" target="_blank">{{ 'course_set.live.view_replay_btn'|trans }}</a>
+              </li>
             </ul>
           {% else %}
-            {% if activities[replay.id]['replayArr'] %}
-                <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.id]['fromCourseId'], activityId:activities[replay.id]['id'] ,replayId:activities[replay.id]['replayArr']['id'] }) }}" target="_blank" class="cd-btn btn cd-btn-primary">{{'material_lib.btn.view'|trans}}</a>
-            {% endif %}
+            <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.lessonId]['fromCourseId'], activityId:activities[replay.lessonId]['id'] ,replayId:replay.id }) }}" target="_blank" class="cd-btn btn cd-btn-primary">{{'material_lib.btn.view'|trans}}</a>
           {% endif %}
         </div>
       </td>

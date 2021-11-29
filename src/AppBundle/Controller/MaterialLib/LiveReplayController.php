@@ -18,8 +18,8 @@ class LiveReplayController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions = $this->buildLiveSearchConditions($conditions);
         $conditions['anchorId'] = $this->getCurrentUser()->getId();
+        $conditions = $this->buildLiveSearchConditions($conditions);
         list($replays, $paginator, $activities, $users) = $this->buildLiveSearchData($request, $conditions);
 
         return $this->render('material-lib/web/live-replay/list.html.twig', [
@@ -35,8 +35,9 @@ class LiveReplayController extends BaseController
     public function shareListAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions = $this->buildLiveSearchConditions($conditions);
         $conditions['replayPublic'] = 1;
+
+        $conditions = $this->buildLiveSearchConditions($conditions);
         list($replays, $paginator, $activities, $users) = $this->buildLiveSearchData($request, $conditions);
 
         return $this->render('material-lib/web/live-replay/list.html.twig', [
@@ -108,25 +109,23 @@ class LiveReplayController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getLiveActivityService()->count($conditions),
+            $this->getLiveReplayService()->searchCount($conditions),
             20
         );
-        $replays = $this->getLiveActivityService()->search(
+        $replays = $this->getLiveReplayService()->searchReplays(
             $conditions,
-            ['liveStartTime' => 'DESC'],
+            ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $replayIds = ArrayToolkit::column($replays, 'id');
-        $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType($replayIds, 'live');
+        $activityIds = ArrayToolkit::column($replays, 'lessonId');
+        $liveActivities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($liveActivities, 'id');
+        $anchorIds = [];
         foreach ($activities as &$activity) {
-            $courseReplays = $this->getLiveReplayService()->findReplaysByCourseIdAndLessonId($activity['fromCourseId'], $activity['id']);
-            $activity['replayArr'] = empty($courseReplays) ? [] : $courseReplays[0];
             $activity['length'] = $this->timeFormatterFilter($activity['endTime'] - $activity['startTime']);
+            $anchorIds[] = $activity['ext']['anchorId'];
         }
-
-        $activities = ArrayToolkit::index($activities, 'mediaId');
-        $anchorIds = ArrayToolkit::column($replays, 'anchorId');
         $users = $this->getUserService()->findUsersByIds($anchorIds);
 
         return [$replays, $paginator, $activities, $users];
@@ -134,10 +133,6 @@ class LiveReplayController extends BaseController
 
     public function timeFormatterFilter($time)
     {
-        if ($time <= 60) {
-            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => 0]);
-        }
-
         if ($time <= 3600) {
             return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60, 1)]);
         }
@@ -147,26 +142,23 @@ class LiveReplayController extends BaseController
 
     protected function buildLiveSearchConditions($conditions)
     {
-        $activityConditions = ['mediaType' => 'live'];
-        $liveConditions = ['replayStatus' => 'generated'];
         if (!empty($conditions['startTime'])) {
-            $liveConditions['liveStartTime_GT'] = strtotime($conditions['startTime']);
+            $conditions['startTime'] = strtotime($conditions['startTime']);
         }
         if (!empty($conditions['endTime'])) {
-            $liveConditions['liveStartTime_LT'] = strtotime($conditions['endTime']);
+            $conditions['endTime'] = strtotime($conditions['endTime']);
         }
-
-        if (!empty($conditions['categoryId'])) {
-            $courses = $this->getCourseService()->searchCourses(['categoryId' => $conditions['categoryId']], [], 0, PHP_INT_MAX, ['id']);
-            $activityConditions['courseIds'] = empty($courses) ? [-1] : ArrayToolkit::column($courses, 'id');
+        if (!empty($conditions['tagId'])) {
+            $conditions['replayTagId'] = $conditions['tagId'];
         }
         if (!empty($conditions['title'])) {
-            $activityConditions['title'] = $conditions['title'];
+            $conditions['keywordType'] = 'activityTitle';
+            $conditions['keyword'] = $conditions['title'];
         }
-        $activities = $this->getActivityService()->search($activityConditions, [], 0, PHP_INT_MAX, ['id', 'mediaId']);
-        $activityLiveIds = empty($activities) ? [-1] : ArrayToolkit::column($activities, 'mediaId');
+        $conditions = ArrayToolkit::parts($conditions, ['startTime', 'endTime', 'replayTagId', 'keywordType', 'keyword', 'categoryId', 'anchorId', 'replayPublic']);
+        $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
 
-        return array_merge($liveConditions, ['ids' => $activityLiveIds, 'replayTagIds' => empty($conditions['tagId']) ? '' : '%|'.$conditions['tagId'].'|%']);
+        return ['lessonIds' => $activityIds, 'hidden' => 0];
     }
 
     protected function buildTagSelectData()
