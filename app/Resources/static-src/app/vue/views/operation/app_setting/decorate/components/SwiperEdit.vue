@@ -184,8 +184,8 @@ export default {
 
     .add-btn-input {
       width: 100%;
-      height: 74px;
-      line-height: 74px;
+      height: 54px;
+      line-height: 54px;
       cursor: pointer;
       text-align: center;
       background-color: #fff;
