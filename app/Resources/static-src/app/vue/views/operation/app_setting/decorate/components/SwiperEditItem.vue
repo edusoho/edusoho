@@ -1,7 +1,7 @@
 <template>
   <div class="image-item clearfix">
     <div class="image-item__img pull-left">
-      <img :src="item.image" />
+      <img :src="item.image.url" />
       <a-upload
         accept="image/*"
         :file-list="[]"

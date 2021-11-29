@@ -108,11 +108,9 @@ export default {
     },
 
     cropperSuccess(data) {
-      const { url } = data;
-
       if (this.currentType === 'add') {
         this.moduleData.push({
-          image: url,
+          image: data,
           link: {
             type: '',
             target: '_self',
@@ -124,7 +122,7 @@ export default {
       }
 
       if (this.currentType === 'edit') {
-        this.moduleData[this.currentIndex].image = url;
+        this.moduleData[this.currentIndex].image = data;
         this.upateEdit();
       }
     },
@@ -132,8 +130,18 @@ export default {
     handleSelectLink(params) {
       const { type, index } = params;
       this.currentIndex = index;
+      if (type === 'vip') {
+        const params = {
+          target: null,
+          type: 'vip',
+          url: ''
+        };
+        this.handleUpdateLink(params);
+        return;
+      }
       if (type === 'custom') {
         this.$refs.customLink.showModal();
+        return;
       }
     },
 

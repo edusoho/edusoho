@@ -9,7 +9,7 @@
             class="swiper-slide"
           >
             <div class="swiper-slide-container">
-              <img :src="item.image">
+              <img :src="item.image.url">
             </div>
           </div>
         </template>
@@ -59,9 +59,12 @@ export default {
   },
 
   watch: {
-    moduleData: function() {
-      this.swiperKey++;
-      this.reInitSwiper();
+    moduleData: {
+      handler: function() {
+        this.swiperKey++;
+        this.reInitSwiper();
+      },
+      deep: true
     }
   },
 
