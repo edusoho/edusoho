@@ -40,6 +40,8 @@
     />
 
     <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
+
+    <course-link-modal ref="courseLink" />
   </edit-layout>
 </template>
 
@@ -49,6 +51,7 @@ import EditLayout from './EditLayout.vue';
 import SwiperEditItem from './SwiperEditItem.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 import CustomLinkModal from './CustomLinkModal.vue';
+import CourseLinkModal from './CourseLinkModal.vue';
 
 export default {
   name: 'SwiperEdit',
@@ -64,7 +67,8 @@ export default {
     EditLayout,
     SwiperEditItem,
     PictureCropperModal,
-    CustomLinkModal
+    CustomLinkModal,
+    CourseLinkModal
   },
 
   data() {
@@ -139,8 +143,14 @@ export default {
         this.handleUpdateLink(params);
         return;
       }
+
       if (type === 'custom') {
         this.$refs.customLink.showModal();
+        return;
+      }
+
+      if (type === 'course') {
+        this.$refs.courseLink.showModal();
         return;
       }
     },
