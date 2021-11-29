@@ -959,7 +959,7 @@ const isWeixinBrowser = /micromessenger/.test(
 
 // 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
 const setVipSwitch = () => {
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (!Object.keys(store.state.vipSettings).length) {
       return store
         .dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
