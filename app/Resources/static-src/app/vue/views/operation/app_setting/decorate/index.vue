@@ -26,7 +26,8 @@
       <aside class="right-edit-container pull-left">
         <component
           :is="currentModule.editComponent"
-          :module-data="currentModule.data"
+          :module-info="modules[currentModule.index]"
+          @update:edit="updateEdit"
         />
       </aside>
     </div>
@@ -42,7 +43,7 @@ import LeftChooseContainer from './components/LeftChooseContainer.vue';
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
 import slide_show from '../components/Swiper.vue';
-import slide_show_edit from '../components/SwiperEdit.vue';
+import slide_show_edit from './components/SwiperEdit.vue';
 
 export default {
   components: {
@@ -71,10 +72,16 @@ export default {
       const { type, data } = info;
       _.assign(this.currentModule, {
         index, // 编辑时用来确定位置
-        data, // 对应编辑组件数据
         type: `${type}-${index}`, // 提交时的 module-type
         editComponent: `${type}_edit` // 对应的编辑组件
       });
+    },
+
+    updateEdit(params) {
+      const { type, data } = params;
+      if (type === 'swiper') {
+        this.modules[this.currentModule.index].data.push(data);
+      }
     }
   }
 }

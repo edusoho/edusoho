@@ -6,9 +6,13 @@
       <div class="design-editor__title">添加内容</div>
       <div class="design-editor__image">
 
-        <div class="image-item clearfix">
+        <div
+          v-for="(item, index) in moduleInfo.data"
+          :key="index"
+          class="image-item clearfix"
+        >
           <div class="image-item__img pull-left">
-            <img src="" alt="">
+            <img :src="item.image">
             <a-upload
               accept="image/*"
               :file-list="[]"
@@ -75,7 +79,7 @@ export default {
   name: 'SwiperEdit',
 
   props: {
-    moduleData: {
+    moduleInfo: {
       type: Object,
       required: true
     }
@@ -100,6 +104,18 @@ export default {
 
     cropperSuccess(data) {
       const { url } = data;
+      this.$emit('update:edit', {
+        type: 'swiper',
+        data: {
+          image: url,
+          link: {
+            type: '',
+            target: 'javascript:;',
+            url: ''
+          },
+          responsive: '1'
+        }
+      });
     }
   }
 }

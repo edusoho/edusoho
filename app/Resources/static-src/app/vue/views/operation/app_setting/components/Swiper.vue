@@ -1,24 +1,24 @@
 <template>
   <layout :active="moduleType === currentModuleType">
     <div :class="['swiper-container', moduleType]">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <div class="swiper-slide-container">
-            轮播图
+      <div class="swiper-wrapper" :key="swiperKey">
+        <template v-if="moduleData.length">
+          <div
+            v-for="(item, index) in moduleData"
+            :key="index"
+            class="swiper-slide"
+          >
+            <div class="swiper-slide-container">
+              <img :src="item.image">
+            </div>
           </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="swiper-slide-container">
-            轮播图
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="swiper-slide-container">
-            轮播图
-          </div>
+        </template>
+
+        <div v-else class="swiper-slide">
+          <div class="swiper-slide-container">轮播图</div>
         </div>
       </div>
-      <div class="pagination"></div>
+      <div class="pagination" />
     </div>
   </layout>
 </template>
@@ -43,7 +43,7 @@ export default {
     },
 
     moduleData: {
-      type: Object,
+      type:  [Array, Object],
       required: true
     }
   },
@@ -52,13 +52,28 @@ export default {
     Layout
   },
 
+  data() {
+    return {
+      swiper: null,
+      swiperKey: 0
+    }
+  },
+
+  watch: {
+    moduleData: function() {
+      console.log('111');
+      this.swiperKey++;
+      this.swiper.reInit();
+    }
+  },
+
   mounted() {
     this.initSwiepr();
   },
 
   methods: {
     initSwiepr() {
-      new Swiper(`.${this.moduleType}`, {
+      this.swiper = new Swiper(`.${this.moduleType}`, {
         pagination : `.${this.moduleType} .pagination`,
         autoplay: 5000,
         loop: true,
@@ -92,6 +107,11 @@ export default {
       line-height: 140px;
       transform: scale(0.96);
       transition: all 0.3s ease;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
 
     &-active {

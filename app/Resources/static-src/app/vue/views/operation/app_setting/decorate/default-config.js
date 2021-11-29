@@ -9,15 +9,7 @@ const Classifys = [
         info: {
           type: 'slide_show',
           moduleType: '',
-          data: {
-            image: {},
-            link: {
-              type: 'course',
-              target: {},
-              url: ''
-            },
-            responsive: '1'
-          }
+          data: []
         }
       },
       {
