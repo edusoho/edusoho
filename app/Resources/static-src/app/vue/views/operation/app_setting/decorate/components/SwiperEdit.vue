@@ -11,7 +11,8 @@
           :key="index"
           :index="index"
           :item="item"
-          @update:image="showCropperModal"
+          @update-image="showCropperModal"
+          @select-link="handleSelectLink"
         />
 
         <div class="add-btn-input">
@@ -37,6 +38,8 @@
       :aspect-ratio="5 / 2"
       @success="cropperSuccess"
     />
+
+    <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
   </edit-layout>
 </template>
 
@@ -45,6 +48,7 @@ import _ from 'lodash';
 import EditLayout from './EditLayout.vue';
 import SwiperEditItem from './SwiperEditItem.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
+import CustomLinkModal from './CustomLinkModal.vue';
 
 export default {
   name: 'SwiperEdit',
@@ -58,15 +62,16 @@ export default {
 
   components: {
     EditLayout,
+    SwiperEditItem,
     PictureCropperModal,
-    SwiperEditItem
+    CustomLinkModal
   },
 
   data() {
     return {
       moduleData: [],
-      currentCropperIndex: 0,
-      currentCropperType: ''
+      currentIndex: 0,
+      currentType: ''
     }
   },
 
@@ -97,32 +102,44 @@ export default {
 
     showCropperModal(params) {
       const { index, type, imgUrl, imgName } = params;
-      this.currentCropperIndex = index;
-      this.currentCropperType = type;
+      this.currentIndex = index;
+      this.currentType = type;
       this.$refs.pictureCropperModal.showModal({ imgUrl, imgName });
     },
 
     cropperSuccess(data) {
       const { url } = data;
 
-      if (this.currentCropperType === 'add') {
+      if (this.currentType === 'add') {
         this.moduleData.push({
           image: url,
           link: {
             type: '',
-            target: 'javascript:;',
-            url: ''
-          },
-          responsive: '1'
+            target: '_self',
+            url: 'javascript:;'
+          }
         });
         this.upateEdit();
         return;
       }
 
-      if (this.currentCropperType === 'edit') {
-        this.moduleData[this.currentCropperIndex].image = url;
+      if (this.currentType === 'edit') {
+        this.moduleData[this.currentIndex].image = url;
         this.upateEdit();
       }
+    },
+
+    handleSelectLink(params) {
+      const { type, index } = params;
+      this.currentIndex = index;
+      if (type === 'custom') {
+        this.$refs.customLink.showModal();
+      }
+    },
+
+    handleUpdateLink(params) {
+      this.moduleData[this.currentIndex].link = params;
+      this.upateEdit();
     },
 
     upateEdit() {

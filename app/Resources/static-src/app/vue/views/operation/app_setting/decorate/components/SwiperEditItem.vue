@@ -16,11 +16,11 @@
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
           选择跳转到的页面<a-icon type="down" />
         </a>
-        <a-menu slot="overlay" @click="onClick">
-          <a-menu-item key="1">选择课程</a-menu-item>
-          <a-menu-item key="2">选择班级</a-menu-item>
-          <a-menu-item key="3">选择会员</a-menu-item>
-          <a-menu-item key="4">自定义链接</a-menu-item>
+        <a-menu slot="overlay" @click="selectLink">
+          <a-menu-item key="course">选择课程</a-menu-item>
+          <a-menu-item key="classroon">选择班级</a-menu-item>
+          <a-menu-item key="vip">选择会员</a-menu-item>
+          <a-menu-item key="custom">自定义链接</a-menu-item>
         </a-menu>
       </a-dropdown>
     </div>
@@ -54,13 +54,17 @@ export default {
           imgUrl: event.target.result,
           imgName: info.file.originFileObj.name
         };
-        this.$emit('update:image', params);
+        this.$emit('update-image', params);
       };
       reader.readAsDataURL(info.file.originFileObj);
     },
 
-    onClick() {
-
+    selectLink({ key }) {
+      const params = {
+        type: key,
+        index: this.index
+      };
+      this.$emit('select-link', params);
     }
   }
 }
