@@ -59,13 +59,11 @@
         clearable
       />
     </div>
-    <div v-if="pathName !== 'appSetting'" class="add-choose">
+    <!-- <div v-if="pathName !== 'appSetting'" class="add-choose">
       {{ $t('carousel.links') }}：<el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
-    </div>
-    <div v-else class="add-choose">
-      <el-radio v-model="radio" class="mt16" label="insideLink"
-        >{{ $t('carousel.siteLink') }}</el-radio
-      >
+    </div> -->
+    <div class="add-choose">
+      <el-radio v-model="radio" class="mt16" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
       <el-radio v-model="radio" class="mt16" label="url">{{ $t('carousel.customLink') }}</el-radio>
     </div>
     <div v-if="radio === 'insideLink'" class="add-inner">
