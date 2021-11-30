@@ -241,7 +241,7 @@ class CourseSetManageController extends BaseController
         if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-            if (empty($course['maxStudentNum'])) {
+            if ($course['maxStudentNum'] < 0) {
                 $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
             }
 

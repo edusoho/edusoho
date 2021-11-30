@@ -7,10 +7,9 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 21.4.4
-  VERSION: 21.4.5
+  FROM_VERSION: 21.4.5
+  VERSION: 21.4.6
   H5VERSION: release/21.4.5
-
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
@@ -301,7 +300,6 @@ Build upgrade package:
     - npm run compile
     # copy seajs静态文件到web目录下
     - app/console assets:install
-
     # 生成js语言包
     - app/console trans:dump-js
     - git config --global user.email "gitlab@example.com"

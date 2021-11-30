@@ -1,0 +1,107 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="material-live-btn-group">
+  <ul>
+    <li data-url="{{ path('material_lib_live_replay') }}" class="js-live-my {% if tab|default('my') == 'my' %}active{% endif %}"><a href="javascript:;">我的直播回放</a></li>
+    <li data-url="{{ path('material_lib_live_replay_share_list') }}" class="js-live-share {% if tab|default('my') == 'share' %}active{% endif %}"><a href="javascript:;">共享直播回放</a></li>
+  </ul>
+</div>
+{% set actions = {'my':'material_lib_live_replay', 'share': 'material_lib_live_replay_share_list' } %}
+<form id="live-replay-form" class="form-inline" action="{{ path(actions[tab]) }}" method="get" novalidate>
+  时间：
+  <div class="form-group">
+    <input class="form-control" type="text" id="startTime" name="startTime"
+           value="{{ app.request.query.get('startTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
+    -
+    <input class="form-control" type="text" id="endTime" name="endTime"
+           value="{{ app.request.query.get('endTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="categoryId" style="width: 172px">
+      {{ select_options(category_choices('course'), app.request.get('categoryId'), 'admin.course_manage.chooser.course_category'|trans) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="tagId" style="width: 172px">
+      {{ select_options(tags, app.request.get('tagId'), 'course.live_replay.tag_select_default'|trans) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <input type="text" id="title" name="title" class="form-control" style="width: 172px" value="{{ app.request.query.get('title') }}"
+           placeholder="{{ 'admin.cloud_file.keyword_placeholder'|trans }}">
+  </div>
+  <button class="btn btn-primary js-live-replay-search-btn" type="button">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
+</form>
+
+<table class="table table-striped">
+  <thead>
+  <tr class="cd-dark-major cd-text-medium">
+    <th>{{ 'course.live_replay.title'|trans }}</th>
+    <th>{{ 'course.live_replay.teacher'|trans }}</th>
+    <th>{{ 'course.live_replay.length'|trans }}</th>
+    <th>{{ 'course.live_replay.start_time'|trans }}</th>
+    <th width="25%"></th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for replay in replays %}
+    <tr>
+      <td>
+       {{ activities[replay.lessonId]['title'] }}
+      </td>
+      <td>
+        {{ users[activities[replay.lessonId]['ext']['anchorId']]['nickname']|default('--') }}
+      </td>
+      <td>
+        {% if  activities[replay.lessonId]['endTime'] > activities[replay.lessonId]['startTime'] %}
+          {{ activities[replay.lessonId]['length'] }}
+        {% else %}
+          --
+        {% endif %}
+      </td>
+      <td>
+        {% if activities[replay.lessonId]['startTime'] %}
+          {{ activities[replay.lessonId]['startTime']|date('Y-m-d H:i') }}
+        {% else %}
+          --
+        {% endif %}
+      </td>
+      <td>
+        <div class="btn-group">
+          {% if tab == 'my' %}
+            <a class="cd-btn btn cd-btn-primary {% if tab == 'my' %}btn-group--left{% endif %} js-detail-btn" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_live_replay_edit', {'liveActivityId':replay.id}) }}">
+                {{'material_lib.btn.edit'|trans}}
+            </a>
+            <button type="button" class="cd-btn cd-btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >
+              <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu btn-group__menu text-center">
+                <li class="share-li">
+                  <a href="javascript:;" class="js-live-share-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_share', {'liveActivityId':activities[replay.lessonId]['mediaId']}) }}">
+                    {% if activities[replay.lessonId]['ext']['replayPublic'] == 0 %}
+                      {{'course.live_replay.share_btn'|trans}}
+                    {% else %}
+                      {{'course.live_replay.un_share_btn'|trans}}
+                    {% endif %}
+                  </a>
+                  <input class="js-share-{{ replay.id }} hidden" value="{{ activities[replay.lessonId]['ext']['replayPublic'] }}">
+                </li>
+               <li class="share-li">
+                <a href="javascript:;" class="js-live-delete-btn" data-id="{{ replay.id  }}" data-url="{{ path('material_lib_live_replay_remove', {'liveActivityId':activities[replay.lessonId]['mediaId']}) }}">{{ 'course.live_replay.remove_btn'|trans }}</a>
+               </li>
+              <li class="share-li">
+                <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.lessonId]['fromCourseId'], activityId:activities[replay.lessonId]['id'] ,replayId:replay.id }) }}" target="_blank">{{ 'course_set.live.view_replay_btn'|trans }}</a>
+              </li>
+            </ul>
+          {% else %}
+            <a href="{{ path('custom_live_activity_replay_entry', {courseId:activities[replay.lessonId]['fromCourseId'], activityId:activities[replay.lessonId]['id'] ,replayId:replay.id }) }}" target="_blank" class="cd-btn btn cd-btn-primary">{{'material_lib.btn.view'|trans}}</a>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="20"><div class="empty">{{'material_lib.upload_file.empty'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{{ web_macro.ajax_paginator(paginator) }}

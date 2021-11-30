@@ -143,7 +143,7 @@ site.twig.extension.smarttime.previous_second: %diff%秒前
 site.twig.extension.smarttime.previous_minute: %diff%分钟前
 site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
-site.twig.extension.time_interval.minute: %diff%分
+site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
@@ -1094,6 +1094,7 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
 course.members_manage.official_student: 正式学员
@@ -1363,11 +1364,12 @@ course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
 course.replay_manage.tips: >
-  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  提示：对于“回放生成失败”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来重新生成直播回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
   <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.ungenerated: 生成回放中
+course.replay_manage.generated_fail: 回放生成失败，点击录像重新生成
 course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
@@ -1605,6 +1607,7 @@ course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
 course.tab.certificate: '课程证书'
+course.activity.replay: '直播回放'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1873,6 +1876,7 @@ course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 文件管理
+course.course_resource: 资源管理
 course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名
@@ -2186,6 +2190,10 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+
+course.plan_task.activity_manage.replay: 直播回放
+course.plan_task.activity_manage.replay.time: 直播回放时长
+
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
@@ -11312,6 +11320,7 @@ admin_v2.switch_old_version.title: 切换后台
 exception.common_upgrade_v2_error: 已经升级到新版
 exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 exception.switch_old_version.error: 已经切回到旧版后台
+exception.fields_format_error: 参数格式错误
 admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
@@ -11849,6 +11858,7 @@ admin.classroom_manage.statistics.course.title_tips: >
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
 
 classroom.manage.data_statictics: 数据概览
+classroom.manage.live_statictics: 直播统计
 classroom.manage.data_statistics.overview.student_num: 正式学员总数
 classroom.manage.data_statistics.overview.auditor_num: 旁听生
 classroom.manage.data_statistics.overview.finished_num: 完成人数
@@ -12053,3 +12063,20 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
+
+#回放管理
+course.live_replay_manage.lesson_title_th: 直播课时名
+course.live_replay_manage.live_length_th: 直播时长
+course.live_replay_manage.live_anchor_th: 主讲人
+course.live_replay_manage.live_time_th: 直播时间
+course.live_replay_manage.live_chooser_empty: 没有回放
+course.live_replay.tag_select_default: 回放标签
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn:  取消共享
+course.live_replay.remove_btn: 移除回放
+course.live_replay.title: 直播名称
+course.live_replay.teacher: 主讲人
+course.live_replay.length: 回放时长
+course.live_replay.start_time: 直播时间
+course.live_replay_manage.live_replay_empty: 直播回放已被删除
+course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端

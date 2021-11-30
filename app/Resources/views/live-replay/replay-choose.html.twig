@@ -1,0 +1,16 @@
+{% set courseType = courseType|default('course') %}
+<input type="hidden" name="origin_lesson_id" id="origin_lesson_id" value="{{ originLessonId|default('')}}">
+<div class="file-chooser-bar {% if not originLessonId|default(null) %}hidden {% endif %}">
+  <span data-role="placeholder">{{ replayName|default(null) }}</span>
+  <button class="btn btn-link btn-sm js-choose-trigger" type="button">
+    <i class="glyphicon glyphicon-edit"></i>
+    {{ 'course.plan_task.activity_manage.download.edit'|trans }}
+  </button>
+</div>
+<div class="file-chooser-main {% if originLessonId|default(null) %}hidden {% endif %}">
+  <div>
+    <div class="tab-pane" id="chooser-material-panel">
+      {% include 'live-replay/parts/replay-choose.html.twig' %}
+    </div>
+  </div>
+</div>
