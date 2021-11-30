@@ -1,7 +1,7 @@
 {% set file = video.ext.file|default(null) %}
 {% set questionBankTree = data('QuestionBankTree', {}) %}
 <div class="pane-question-content js-pane-question-content show-introhelp"
-  data-marker-metas-url="{{ path('course_task_marker_metas', {'mediaId': file.id}) }}"
+  data-marker-metas-url="{{ path('course_task_marker_metas', {'activityId': video.id}) }}"
   data-queston-marker-add-url="{{path('course_task_question_marker_add',{'courseId':course.id,'taskId':task.id})}}"
   data-queston-marker-delete-url="{{path('course_task_question_marker_delete',{'courseId':course.id,'taskId':task.id})}}"
   data-marker-merge-url="{{path('course_task_marker_merge',{'courseId':course.id,'taskId':task.id})}}"

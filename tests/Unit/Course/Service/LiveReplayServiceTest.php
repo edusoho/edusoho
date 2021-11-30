@@ -357,6 +357,10 @@ class LiveReplayServiceTest extends BaseTestCase
                     'functionName' => 'getBySyncIdGTAndLiveId',
                     'returnValue' => ['id' => 1],
                 ],
+                [
+                    'functionName' => 'updateLiveActivityWithoutEvent',
+                    'returnValue' => [],
+                ],
             ]
         );
 

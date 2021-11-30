@@ -56,16 +56,20 @@ class Trade extends AbstractResource
                     if (0 == $order['pay_amount']) {
                         $urlArr = $product->backUrl;
                         $params['payUrl'] = $this->generateUrl($urlArr['routing'], $urlArr['params']);
-                        $params['isFree'] = true;
+                        $params['isPaid'] = true;
+
                         return $params;
                     }
                     throw OrderPayCheckException::UNABLE_PAY();
                 }
 
                 if ($this->isOrderPaid($order)) {
+                    $urlArr = $product->backUrl;
+
                     return [
                         'tradeSn' => $order['trade_sn'],
                         'isPaid' => true,
+                        'payUrl' => $this->generateUrl($urlArr['routing'], $urlArr['params']),
                         'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', ['trade_sn' => $order['trade_sn']]),
                         'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', ['trade_sn' => $order['trade_sn']]),
                     ];

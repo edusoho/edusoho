@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form v-if="hasMulCourses" :model="baseInfoForm" id="base-info-form" :rules="formRule" ref="baseInfoForm"
+        <el-form :model="baseInfoForm" id="base-info-form" :rules="formRule" ref="baseInfoForm"
                  label-position="right"
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
@@ -34,7 +34,7 @@
                     <el-input ref="subtitle" v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
                 </el-col>
             </el-form-item>
-            
+
             <el-form-item :label="'course.base.tag'|trans">
                 <el-col :span="18">
                     <tags v-bind:tag-data="baseInfoForm.tags || []" v-on:update:tags="baseInfoForm.tags = $event"></tags>

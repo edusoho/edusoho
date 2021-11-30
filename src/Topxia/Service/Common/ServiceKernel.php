@@ -215,13 +215,6 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $this->pool[$name] = $this->biz->service($name);
-
-            // $class = $this->getClassName('service', $name);
-            // if (class_exists($class)) {
-            //     $this->pool[$name] = new $class();
-            // } else {
-            //     $this->pool[$name] = $this->biz->service($name);
-            // }
         }
 
         return $this->pool[$name];
@@ -230,10 +223,7 @@ class ServiceKernel
     public function createDao($name)
     {
         if (empty($this->pool[$name])) {
-            $class = $this->getClassName('dao', $name);
-            $dao = new $class();
-            $dao->setConnection($this->getConnection());
-            $this->pool[$name] = $dao;
+            $this->pool[$name] = $this->biz->dao($name);
         }
 
         return $this->pool[$name];

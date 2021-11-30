@@ -782,6 +782,7 @@ validate.trim.message: Please input %display%
 validate.idcard_number_input.message: Please enter your ID number correctly
 validate.visible_character_input.message: Please input a visible character
 validate.positive_integer.message: Please enter a positive integer
+validate.unsigned_integer.student_message: Please enter an integer not less than 0
 validate.unsigned_integer.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.second_range.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.course_title.message: Do not support typing <,> characters
@@ -1771,7 +1772,8 @@ course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
-course.plan_setup.member_numbers: Students
+course.plan_setup.member_numbers: Limit the number of participants
+course.plan_setup.member_numbers.tips: There is a limit on the number of people who can join the live course, 0 means no limit on the number of people
 site.data.people: Person
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.marketing_setup.preview.set_task: 'Free %taskName%'
@@ -1849,3 +1851,80 @@ admin_v2.operation.audit_center.batch_operate_success_tips: Success
 homepage: Home
 
 admin_v2.teacher_qualification.setting_required: After the Teacher Qualification Announcement function is closed, the [Teacher Qualification Announcement] page will be hidden on the home page,users will not be able to see the Teacher Qualification Announcement module.
+
+activity.replay_manage.replay_error_hint: Please select live replay
+
+# vue
+site.btn.export: Export
+site.btn.detail: More
+site.btn.remove_playback: Remove playback
+site.btn.view_playback: View playback
+site.btn.confirm: Confirm
+
+modal.title.edit: Edit
+modal.content.remove_playback_resources: Are you sure to remove playback resources?
+
+form.label.tag: Tag
+form.label.share: Share
+
+placeholder.playback_label: Playback labe
+placeholder.enter_keyword: Please enter keyword
+placeholder.course_category: Course category
+
+radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
+radio.visible_only_to_yourself: Visible only to yourself
+
+message.removal_succeeded: Removal succeeded
+message.edit_succeeded: Edit succeeded
+
+live.playback.tip.remove_association: Live playback will remove the association from the course
+live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
+live.playback.tip.delete_related_live_playback: At the same time, delete relevant live playback in my teaching materials
+
+course.name: Course title
+course.task: Task title
+
+live_name: Name
+live_playback_duration: Playback duration
+live_statistics: Live statistics
+live_statistics.task_name_placeholder: Task name
+live_statistics.live_start_time: Start time
+live_statistics.live_time_long: Duration(min)
+live_statistics.max_participate_count: Max oarticipate count
+live_statistics.live_status: Status
+live_statistics.operation: Operation
+live_statistics.live_coming: Comming soon
+live_statistics.live_playing: Playing
+live_statistics.live_finished: Finished
+live_statistics.detail_notice: The data comes from the live room, which is automatically synchronized one day after the live
+live_statistics.detail.checkin: Checkin Statistics
+live_statistics.detail.total_learn_time: Learning Duration Statistics
+live_statistics.checkin_status: Checkin status
+live_statistics.checkin_status.checked: Checked
+live_statistics.checkin_status.not_checked: Not checked
+live_statistics.checkin_status.all: All
+live_statistics.mobile: Mobile
+live_statistics.email: Email
+live_statistics.user_name: User name
+live_statistics.true_name: Name
+live_statistics.user_name_or_mobile_number: User name or mobile number
+live_statistics.presenter: Presenter
+live_statistics.live_time: Live time
+live_statistics.actual_live_time: Actual live time
+live_statistics.all_chat_number: Chat number
+live_statistics.online_number: Online number
+live_statistics.number_of_visitors: Number of visitors
+live_statistics.per_capita_viewing_time: Per capita viewing time
+live_statistics.enter_theLlive_room_time: Enter the live room time
+live_statistics.watching_time: Watching time (minutes)
+live_statistics.check_in_number: Check in number
+live_statistics.chat_number: Number of chat
+live_statistics.answers_number: Number of answers
+live_statistics.to: to
+live_statistics.people: people
+live_statistics.strip: strip
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn: UnShare
+course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
+course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
+course.live_replay.delete_tip:  Please confirm to remove this live playback？
