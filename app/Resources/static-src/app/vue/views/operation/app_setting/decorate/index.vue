@@ -3,82 +3,86 @@
     <the-header />
 
     <div class="decorate-main clearfix">
-      <aside class="left-choose-container pull-left">
-        <div class="component-add-container">
-          <component-classify
-            v-for="(classify, index) in Classifys"
-            :key="classify.key"
-            :classify="classify"
-            :index="index"
-            :current-classify="currentClassify"
-            @click.native="handleChangeClassify(classify.key)"
-          />
-        </div>
-      </aside>
+      <left-choose-container @add-component="handleAddComponent" />
 
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
           <find-head />
 
+          <component
+            v-for="(module, index) in modules"
+            :key="index"
+            :is="module.type"
+            :module-data="module.data"
+            :module-type="`${module.type}-${index}`"
+            :current-module-type="currentModule.type"
+            @click.native="changeCurrentModule(module, index)"
+          />
+
           <find-footer />
         </div>
       </section>
 
-      <aside class="right-edit-container pull-left"></aside>
+      <aside class="right-edit-container pull-left">
+        <component
+          v-if="currentModule.editComponent"
+          :is="currentModule.editComponent"
+          :module-info="modules[currentModule.index].data"
+          @update:edit="updateEdit"
+        />
+      </aside>
     </div>
   </div>
 </template>
 
 <script>
-const Classifys = [
-  {
-    title: '基础组件',
-    key: 'basic',
-    icon: 'icon-check-circle',
-    lists: [
-      { title: '轮播图', icon: 'icon-check-circle', name: 'Swiper' },
-      { title: '课程列表', icon: 'icon-check-circle', name: 'CouseList' },
-      { title: '班级列表', icon: 'icon-check-circle', name: 'ClassroomList' },
-      { title: '图片公告', icon: 'icon-check-circle', name: 'Ad' },
-      { title: '图文导航', icon: 'icon-check-circle', name: 'Nav' },
-      { title: '公开课列表', icon: 'icon-check-circle', name: 'OpenCourseList' },
-      { title: '题库列表', icon: 'icon-check-circle', name: 'QuestionBankList' }
-    ]
-  },
-  {
-    title: '营销组件',
-    key: 'marketing',
-    icon: 'icon-check-circle',
-    lists: [
-      { title: '优惠卷', icon: 'icon-check-circle', name: 'Coupon' },
-      { title: '会员专区', icon: 'icon-check-circle', name: 'Vip' }
-    ]
-  }
-];
+import _ from 'lodash';
 
 import TheHeader from './components/TheHeader.vue';
-import ComponentClassify from './components/ComponentClassify.vue';
+import LeftChooseContainer from './components/LeftChooseContainer.vue';
+
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
+import slide_show from '../components/Swiper.vue';
+import slide_show_edit from './components/SwiperEdit.vue';
 
 export default {
   components: {
     TheHeader,
-    ComponentClassify,
+    LeftChooseContainer,
     FindHead,
-    FindFooter
+    FindFooter,
+    slide_show,
+    slide_show_edit
   },
 
   data() {
     return {
-      Classifys,
-      currentClassify: 'basic'
+      modules: [],
+      currentModule: {},
     }
   },
 
   methods: {
-    handleChangeClassify(val) {
-      this.currentClassify = val;
+    handleAddComponent(info) {
+      this.modules.push(info);
+      this.changeCurrentModule(info, _.size(this.modules) - 1);
+    },
+
+    changeCurrentModule(info, index) {
+      const { type } = info;
+      _.assign(this.currentModule, {
+        index, // 编辑时用来确定位置
+        type: `${type}-${index}`, // 提交时的 module-type
+        editComponent: `${type}_edit` // 对应的编辑组件
+      });
+    },
+
+    updateEdit(params) {
+      const { type, data } = params;
+      if (type === 'swiper') {
+        this.modules[this.currentModule.index].data = data;
+      }
     }
   }
 }
@@ -95,31 +99,27 @@ export default {
     width: 100%;
     height: calc(100% - 52px);
 
-    .left-choose-container {
-      width: 80px;
-      height: 100%;
-      background: #243042;
-
-      .component-add-container {
-        position: relative;
-        padding-top: 20px;
-        height: 100%;
-        user-select: none;
-      }
-    }
-
     .center-preview-container {
       overflow-y: auto;
-      padding: 40px 0 20px 190px;
+      padding: 40px 0 40px 190px;
       width: calc(100% - 384px - 80px);
+      height: 100%;
       background-color: #f5f7fa;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .main-preview-container {
+        position: relative;
+        padding-bottom: 50px;
         margin: 0 auto;
         width: 375px;
-        height: 700px;
+        min-height: 90%;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
-        background-color: #fafafa;
+        background-color: #fff;
       }
     }
 
