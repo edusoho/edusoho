@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Util;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -214,10 +215,26 @@ class ItemHelper
         return $fetchSubtitlesUrls ? $this->afterDeal($result, $isSsl) : $result;
     }
 
-    public function convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
+    public function convertToLeadingItemsV2($items, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
     {
         $result = [];
         $lessonInfos = [];
+        $originItems = [];
+        foreach ($items as $key => $item) {
+            $tasks = $item['tasks'];
+            if (!empty($tasks)) {
+                foreach ($tasks as &$courseItemTask) {
+                    if ('replay' === $courseItemTask['type']) {
+                        $courseItemTask['type'] = 'live';
+                        $courseItemTask['isReplay'] = 1;
+                        $courseItemTask['activity'] = $this->getActivityService()->getActivity($courseItemTask['activity']['ext']['origin_lesson_id'], true);
+                    }
+                }
+            }
+            $item['tasks'] = $tasks;
+            $originItems[$key] = $item;
+        }
+
         foreach ($originItems as $item) {
             if ('lesson' == $item['type']) {
                 unset($item['tasks']);
@@ -331,5 +348,13 @@ class ItemHelper
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 }
