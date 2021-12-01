@@ -207,11 +207,6 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
     }
 
-    public function uploadLiveCallbackUrl($url)
-    {
-        return $this->createCloudApi('root')->post('/liveaccount/callbackUrl/update', ['callbackUrl' => $url]);
-    }
-
     /**
      * 获取直播间实时信息（仅自研直播）
      *
