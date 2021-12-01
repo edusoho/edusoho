@@ -11,7 +11,7 @@
           @start="drag = true"
           @end="draggableEnd"
         >
-          <transition-group type="transition">
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <swiper-edit-item
               v-for="(item, index) in moduleData"
               :key="item.oldKey"
