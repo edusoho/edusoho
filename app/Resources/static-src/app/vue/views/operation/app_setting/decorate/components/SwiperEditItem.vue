@@ -1,8 +1,11 @@
 <template>
   <div class="image-item clearfix">
-    <div class="remove-btn" @click="handleClickRemove">
-      <a-icon style="color: #408ffb; font-size: 18px;" type="close-circle" />
-    </div>
+    <a-icon
+      class="remove-btn"
+      type="close-circle"
+      theme="filled"
+      @click="handleClickRemove"
+    />
     <div class="image-item__img pull-left">
       <img :src="item.image.url" />
       <a-upload
@@ -101,10 +104,15 @@ export default {
     top: -6px;
     right: -6px;
     display: none;
-    width: 20px;
-    height: 20px;
+    font-size: 18px;
+    color: #bbb;
     text-align: center;
     cursor: pointer;
+    transform: all .3s ease;
+
+    &:hover {
+      color: #aaa;
+    }
   }
 
   &__img {
