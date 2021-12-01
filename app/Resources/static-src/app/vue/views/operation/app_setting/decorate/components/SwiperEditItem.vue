@@ -1,5 +1,11 @@
 <template>
   <div class="image-item clearfix">
+    <a-icon
+      class="remove-btn"
+      type="close-circle"
+      theme="filled"
+      @click="handleClickRemove"
+    />
     <div class="image-item__img pull-left">
       <img :src="item.image.url" />
       <a-upload
@@ -18,7 +24,7 @@
         </a>
         <a-menu slot="overlay" @click="selectLink">
           <a-menu-item key="course">选择课程</a-menu-item>
-          <a-menu-item key="classroon">选择班级</a-menu-item>
+          <a-menu-item key="classroom">选择班级</a-menu-item>
           <a-menu-item key="vip">选择会员</a-menu-item>
         </a-menu>
       </a-dropdown>
@@ -69,6 +75,13 @@ export default {
         index: this.index
       };
       this.$emit('select-link', params);
+    },
+
+    handleClickRemove() {
+      const params = {
+        index: this.index
+      };
+      this.$emit('remove', params);
     }
   }
 }
@@ -76,6 +89,7 @@ export default {
 
 <style lang="less" scoped>
 .image-item {
+  position: relative;
   padding: 10px 6px;
   margin-bottom: 10px;
   width: 100%;
@@ -84,6 +98,22 @@ export default {
   background-color: #fff;
   font-size: 12px;
   cursor: move;
+
+  .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: none;
+    font-size: 18px;
+    color: #bbb;
+    text-align: center;
+    cursor: pointer;
+    transform: all .3s ease;
+
+    &:hover {
+      color: #aaa;
+    }
+  }
 
   &__img {
     position: relative;
@@ -109,6 +139,12 @@ export default {
       text-align: center;
       color: #fff;
       background: black;
+    }
+  }
+
+  &:hover {
+    .remove-btn {
+      display: block;
     }
   }
 }

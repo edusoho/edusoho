@@ -61,7 +61,7 @@ export default {
         if (valid) {
           const params = {
             type: '',
-            target: '_blank',
+            target: null,
             url: this.form.link
           };
           this.$emit('update-link', params);

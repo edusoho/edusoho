@@ -13,6 +13,7 @@
           :item="item"
           @update-image="showCropperModal"
           @select-link="handleSelectLink"
+          @remove="handleClickRemove"
         />
 
         <div class="add-btn-input">
@@ -40,8 +41,8 @@
     />
 
     <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
-
-    <course-link-modal ref="courseLink" />
+    <course-link-modal ref="courseLink" @update-link="handleUpdateLink" />
+    <classroom-link-modal ref="classroomLink" @update-link="handleUpdateLink" />
   </edit-layout>
 </template>
 
@@ -52,6 +53,7 @@ import SwiperEditItem from './SwiperEditItem.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 import CustomLinkModal from './CustomLinkModal.vue';
 import CourseLinkModal from './CourseLinkModal.vue';
+import ClassroomLinkModal from './ClassroomLinkModal.vue';
 
 export default {
   name: 'SwiperEdit',
@@ -68,7 +70,8 @@ export default {
     SwiperEditItem,
     PictureCropperModal,
     CustomLinkModal,
-    CourseLinkModal
+    CourseLinkModal,
+    ClassroomLinkModal
   },
 
   data() {
@@ -117,7 +120,7 @@ export default {
           image: data,
           link: {
             type: '',
-            target: '_self',
+            target: null,
             url: 'javascript:;'
           }
         });
@@ -129,6 +132,12 @@ export default {
         this.moduleData[this.currentIndex].image = data;
         this.upateEdit();
       }
+    },
+
+    handleClickRemove(params) {
+      const { index } = params;
+      this.moduleData.splice(index, 1);
+      this.upateEdit();
     },
 
     handleSelectLink(params) {
@@ -151,6 +160,11 @@ export default {
 
       if (type === 'course') {
         this.$refs.courseLink.showModal();
+        return;
+      }
+
+      if (type === 'classroom') {
+        this.$refs.classroomLink.showModal();
         return;
       }
     },
