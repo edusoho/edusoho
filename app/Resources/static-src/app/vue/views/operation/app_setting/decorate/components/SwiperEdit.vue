@@ -13,6 +13,7 @@
           :item="item"
           @update-image="showCropperModal"
           @select-link="handleSelectLink"
+          @remove="handleClickRemove"
         />
 
         <div class="add-btn-input">
@@ -131,6 +132,12 @@ export default {
         this.moduleData[this.currentIndex].image = data;
         this.upateEdit();
       }
+    },
+
+    handleClickRemove(params) {
+      const { index } = params;
+      this.moduleData.splice(index, 1);
+      this.upateEdit();
     },
 
     handleSelectLink(params) {

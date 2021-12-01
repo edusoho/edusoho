@@ -1,5 +1,8 @@
 <template>
   <div class="image-item clearfix">
+    <div class="remove-btn" @click="handleClickRemove">
+      <a-icon style="color: #408ffb; font-size: 18px;" type="close-circle" />
+    </div>
     <div class="image-item__img pull-left">
       <img :src="item.image.url" />
       <a-upload
@@ -69,6 +72,13 @@ export default {
         index: this.index
       };
       this.$emit('select-link', params);
+    },
+
+    handleClickRemove() {
+      const params = {
+        index: this.index
+      };
+      this.$emit('remove', params);
     }
   }
 }
@@ -76,6 +86,7 @@ export default {
 
 <style lang="less" scoped>
 .image-item {
+  position: relative;
   padding: 10px 6px;
   margin-bottom: 10px;
   width: 100%;
@@ -84,6 +95,17 @@ export default {
   background-color: #fff;
   font-size: 12px;
   cursor: move;
+
+  .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: none;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
 
   &__img {
     position: relative;
@@ -109,6 +131,12 @@ export default {
       text-align: center;
       color: #fff;
       background: black;
+    }
+  }
+
+  &:hover {
+    .remove-btn {
+      display: block;
     }
   }
 }
