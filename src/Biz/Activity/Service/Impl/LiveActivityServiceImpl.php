@@ -107,7 +107,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
             'liveStartTime' => $activity['startTime'],
-            'liveEndTime' => $activity['startTime'] + $activity['length'],
+            'liveEndTime' => $activity['startTime'] + $activity['length'] * 60,
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
