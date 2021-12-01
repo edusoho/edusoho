@@ -18,7 +18,7 @@
         </a>
         <a-menu slot="overlay" @click="selectLink">
           <a-menu-item key="course">选择课程</a-menu-item>
-          <a-menu-item key="classroon">选择班级</a-menu-item>
+          <a-menu-item key="classroom">选择班级</a-menu-item>
           <a-menu-item key="vip">选择会员</a-menu-item>
         </a-menu>
       </a-dropdown>

@@ -5,8 +5,8 @@
     @cancel="handleCancel"
   >
     <template #title>
-      选择课程
-      <span class="modal-title-tips">仅显示已发布课程</span>
+      选择班级
+      <span class="modal-title-tips">仅显示已发布班级</span>
     </template>
 
     <template #footer>
@@ -18,7 +18,7 @@
     <div>
       <a-input-search
         v-model="keyword"
-        placeholder="搜索课程"
+        placeholder="搜索班级"
         style="width: 240px;"
         allow-clear
         @search="onSearch"
@@ -42,11 +42,11 @@
 </template>
 <script>
 import _ from 'lodash';
-import { Course } from 'common/vue/service/index.js';
+import { Classroom } from 'common/vue/service/index.js';
 
 const columns = [
   {
-    title: '课程名称',
+    title: '班级名称',
     dataIndex: 'title',
     width: '40%',
     customRender: function(text, record) {
@@ -62,22 +62,27 @@ const columns = [
     }
   },
   {
+    title: '商品数量',
+    dataIndex: 'courseNum',
+    width: '15%'
+  },
+  {
     title: '创建时间',
     dataIndex: 'createdTime',
-    width: '30%',
+    width: '20%',
     customRender: function(text) {
       return moment(text).format('YYYY-MM-DD HH:mm');
     }
   },
   {
     title: '操作',
-    width: '15%',
+    width: '10%',
     scopedSlots: { customRender: 'action' }
   }
 ];
 
 export default {
-  name: 'CourseLinkModal',
+  name: 'ClassroomLinkModal',
 
   data() {
     return {
@@ -107,12 +112,11 @@ export default {
     },
 
     handleSelect(record) {
-      const { displayedTitle, courseSetId, id, title  } = record;
+      const { displayedTitle, id, title  } = record;
       const params = {
-        type: 'course',
+        type: 'classroom',
         target: {
           displayedTitle,
-          courseSetId,
           id,
           title
         },
@@ -146,7 +150,7 @@ export default {
         title: this.keyword
       };
 
-      const { data, paging: { total } } = await Course.searchCourses(params);
+      const { data, paging: { total } } = await Classroom.search(params);
       const pagination = { ...this.pagination };
       pagination.total = total;
 
