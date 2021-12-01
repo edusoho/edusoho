@@ -41,7 +41,7 @@
 
     <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
 
-    <course-link-modal ref="courseLink" />
+    <course-link-modal ref="courseLink" @update-link="handleUpdateLink" />
   </edit-layout>
 </template>
 
@@ -117,7 +117,7 @@ export default {
           image: data,
           link: {
             type: '',
-            target: '_self',
+            target: null,
             url: 'javascript:;'
           }
         });

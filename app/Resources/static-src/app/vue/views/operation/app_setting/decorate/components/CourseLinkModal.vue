@@ -16,23 +16,24 @@
     </template>
 
     <div>
-      <a-input placeholder="搜索课程" style="width: 240px;" allow-clear>
-        <a-icon slot="suffix" type="search" />
-      </a-input>
+      <a-input-search
+        v-model="keyword"
+        placeholder="搜索课程"
+        style="width: 240px;"
+        allow-clear
+        @search="onSearch"
+      />
     </div>
 
-    <a-table class="mt16" :columns="columns" :data-source="data">
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
-      <span slot="tags" slot-scope="tags">
-        <a-tag
-          v-for="tag in tags"
-          :key="tag"
-          :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-        >
-          {{ tag.toUpperCase() }}
-        </a-tag>
-      </span>
+    <a-table
+      class="mt16"
+      :columns="columns"
+      :row-key="record => record.id"
+      :data-source="data"
+      :pagination="pagination"
+      :loading="loading"
+      @change="handleTableChange"
+    >
       <span slot="action" slot-scope="text, record">
         <a class="ant-dropdown-link" @click="handleSelect(record)">选择</a>
       </span>
@@ -40,58 +41,39 @@
   </a-modal>
 </template>
 <script>
+import _ from 'lodash';
+import { Course } from 'common/vue/service/index.js';
+
 const columns = [
   {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'customTitle' },
-    scopedSlots: { customRender: 'name' },
+    title: '课程名称',
+    dataIndex: 'title',
+    width: '40%',
+    customRender: function(text, record) {
+      return text ? text : record.courseSetTitle;
+    }
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: '商品价格',
+    dataIndex: 'price',
+    width: '15%',
+    customRender: function(text) {
+      return `${text} 元`;
+    }
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    title: '创建时间',
+    dataIndex: 'createdTime',
+    width: '30%',
+    customRender: function(text) {
+      return moment(text).format('YYYY-MM-DD HH:mm');
+    }
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    scopedSlots: { customRender: 'tags' },
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    scopedSlots: { customRender: 'action' },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
+    title: '操作',
+    width: '15%',
+    scopedSlots: { customRender: 'action' }
+  }
 ];
 
 export default {
@@ -100,9 +82,13 @@ export default {
   data() {
     return {
       visible: false,
-      data,
+      data: [],
+      keyword: '',
+      loading: false,
       columns,
       pagination: {
+        pageSize: 10,
+        current: 1,
         hideOnSinglePage: true
       }
     }
@@ -111,6 +97,9 @@ export default {
   methods: {
     showModal() {
       this.visible = true;
+      this.keyword = '';
+      this.pagination.current = 1;
+      this.fetchCourseList();
     },
 
     handleCancel() {
@@ -118,7 +107,54 @@ export default {
     },
 
     handleSelect(record) {
+      const { displayedTitle, courseSetId, id, title  } = record;
+      const params = {
+        type: 'course',
+        target: {
+          displayedTitle,
+          courseSetId,
+          id,
+          title
+        },
+        url: ''
+      };
+      this.$emit('update-link', params);
+      this.handleCancel();
+    },
 
+    onSearch() {
+      this.pagination.current = 1;
+      this.fetchCourseList();
+    },
+
+    handleTableChange(pagination) {
+      const { current } = pagination;
+      _.assign(this.pagination, {
+        current
+      });
+      this.fetchCourseList();
+    },
+
+    async fetchCourseList() {
+      this.loading = true;
+
+      const { pageSize, current } = this.pagination;
+      const params = {
+        limit: pageSize,
+        offset: pageSize * (current - 1),
+        sort: '-createdTime',
+        title: this.keyword
+      };
+
+      const { data, paging: { total } } = await Course.searchCourses(params);
+      const pagination = { ...this.pagination };
+      pagination.total = total;
+
+      _.assign(this, {
+        loading: false,
+        data,
+        pagination
+      });
     }
   },
 };
