@@ -60,16 +60,10 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'markerAddColumn',
-            'activityLiveAddColumn',
-            'addNewTable',
-            'processMarkerData',
             'processActivityLiveTime',
-            'processActivityLiveAnchorId',
+            'processActivityLiveProgressStatus',
             'processLiveStatisticsMemberData',
             'processLiveCloudStatisticData',
-            'processActivityLiveProgressStatus',
-            'registerJob',
             'registerCallbackUrl'
         );
 
@@ -105,159 +99,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function markerAddColumn()
-    {
-        if (!$this->isFieldExist('marker', 'activityIds')) {
-            $this->getConnection()->exec("ALTER TABLE `marker` ADD COLUMN `activityIds` text COMMENT 'activityIds';");
-            $this->logger('info', '弹题新增字段');
-        }
-        return 1;
-    }
-
-    public function activityLiveAddColumn(){
-        if (!$this->isFieldExist('activity_live', 'replayStatus')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` MODIFY COLUMN `replayStatus` enum('ungenerated','generating','generated','videoGenerated','failure') NOT NULL DEFAULT 'ungenerated' COMMENT '回放状态';");
-        }
-        if (!$this->isFieldExist('activity_live', 'liveStartTime')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `liveStartTime` int(10) NOT NULL DEFAULT 0 COMMENT '直播开始时间';");
-        }
-        if (!$this->isFieldExist('activity_live', 'liveEndTime')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `liveEndTime` int(10) NOT NULL DEFAULT 0 COMMENT '直播开始时间';");
-        }
-        if (!$this->isFieldExist('activity_live', 'replayTagIds')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `replayTagIds` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '回放标签ID';");
-        }
-        if (!$this->isFieldExist('activity_live', 'replayPublic')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `replayPublic` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回放是否共享';");
-        }
-        if (!$this->isFieldExist('activity_live', 'anchorId')) {
-         $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `anchorId` int(10) NOT NULL DEFAULT 0 COMMENT '主讲人Id';");
-        }
-        if (!$this->isFieldExist('activity_live', 'cloudStatisticData')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `cloudStatisticData` text COMMENT '直播数据';");
-        }
-        if (!$this->isFieldExist('live_statistics', 'classroomGroupId')) {
-            $this->getConnection()->exec("ALTER TABLE `live_statistics` ADD COLUMN `classroomGroupId` int(10) NOT NULL DEFAULT 0 COMMENT '班级分组id';");
-        }
-        if (!$this->isFieldExist('open_course', 'replayEnable')) {
-            $this->getConnection()->exec("ALTER TABLE `open_course` ADD COLUMN `replayEnable` tinyint(3) DEFAULT 1 COMMENT '是否允许观看回放';");
-        }
-        $this->logger('info', '添加字段');
-        return 1;
-    }
-
-    public function addNewTable()
-    {
-        if($this->isTableExist('live_statistics_member_data'))
-        {
-            $this->getConnection()->exec('DROP TABLE `live_statistics_member_data`;');
-        }
-        $this->getConnection()->exec("
-             CREATE TABLE IF NOT EXISTS `activity_replay`  (
-                  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-                  `finish_type` varchar(32) NOT NULL DEFAULT 'end' COMMENT '完成类型',
-                  `finish_detail` varchar(32) NOT NULL DEFAULT '' COMMENT '完成条件',
-                  `origin_lesson_id` int(10) NOT NULL DEFAULT 0 COMMENT '引用课时ID',
-                  `created_time` int(10) NOT NULL COMMENT '创建时间',
-                  `updated_time` int(10) NOT NULL COMMENT '最后更新时间',
-                  PRIMARY KEY (`id`)
-                  )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '直播回放活动';
-             ");
-
-        $this->getConnection()->exec("
-             CREATE TABLE IF NOT EXISTS `classroom_live_group`  (
-                  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-                  `classroom_id` int(10) NOT NULL COMMENT '班级ID',
-                  `live_code` varchar(64) NOT NULL DEFAULT '' COMMENT '直播分组ID',
-                  `live_id` int(10) NOT NULL DEFAULT 0 COMMENT '直播ID',
-                  `created_time` int(10) NOT NULL COMMENT '创建时间',
-                  PRIMARY KEY (`id`)
-                  )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '班级直播分组';  
-             ");
-
-        $this->getConnection()->exec("
-             CREATE TABLE IF NOT EXISTS `live_statistics_member_data` (
-                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `liveId` int(11) DEFAULT NULL,
-                  `firstEnterTime` int(11) DEFAULT NULL,
-                  `watchDuration` int(11) DEFAULT 0,
-                  `checkinNum` int(11) DEFAULT 0,
-                  `createdTime` int(11) DEFAULT NULL,
-                  `updatedTime` int(11) DEFAULT NULL,
-                  `requestTime` int(11) DEFAULT 0,
-                  `userId` int(11) DEFAULT 0,
-                  `chatNum` int(11) DEFAULT 0,
-                  `answerNum` int(11) DEFAULT 0,
-                  UNIQUE KEY `userId_liveId` (`userId`,`liveId`),
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-             ");
-        $this->logger('info', '新建表');
-        return 1;
-    }
-
-    public function processMarkerData($page)
-    {
-        $limit = 50;
-        $markers = $this->getMarkerDao()->search([], [], ($page-1) * $limit, $limit);
-        if(empty($markers)){
-          return  1;
-        }
-        $mediaIds = \AppBundle\Common\ArrayToolkit::column($markers, 'mediaId');
-        $mediaIds = implode(',',$mediaIds);
-        $sql = "select m.mediaId,c.activityId from marker m join (SELECT a.id as activityId,b.mediaId as fileId from activity a join activity_video b  on a.mediaId = b.id and a.mediaType = 'video') c  on m.`mediaId` =c.fileId  where m.mediaId in ({$mediaIds})";
-        $result  = $this->getConnection()->fetchAll($sql, array());
-        $result = \AppBundle\Common\ArrayToolkit::group($result, 'mediaId');
-        $update = [];
-        foreach ($markers as $marker){
-            if(empty($result[$marker['mediaId']])){
-                continue;
-            }
-            $activityIds = \AppBundle\Common\ArrayToolkit::column($result[$marker['mediaId']], 'activityId');
-            $update[$marker['id']] = [
-                'activityIds' => array_unique($activityIds)
-            ];
-        }
-        if(!empty($update)){
-            $this->getMarkerDao()->batchUpdate(array_keys($update), $update, 'id');
-        }
-        $this->logger('info', '处理弹题');
-        return $page +1;
-    }
-
     public function processActivityLiveTime()
     {
         $this->getConnection()->exec("update activity_live a  join activity b on a.id = b.mediaId set a.liveEndTime = b.endTime,a.liveStartTime=b.startTime where b.mediaType = 'live';");
-        $this->logger('info', '修改直播时间/删除live_statistics_member_data数据');
+        $this->logger('info', '修改直播时间数据');
         return 1;
-    }
-
-    public function processActivityLiveAnchorId($page)
-    {
-        $liveActivities = $this->getLiveActivityDao()->search(['anchorId'=>0],['id'=>'ASC'],($page-1) * 500, 500, ['id']);
-        if(empty($liveActivities)){
-            return 1;
-        }
-        $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'id');
-        $ids = \AppBundle\Common\ArrayToolkit::column($liveActivities, 'id');
-        $activities = $this->getActivityDao()->search(['mediaIds'=>$ids, 'mediaType' => 'live'], ['createdTime'=>'ASC'], 0, count($ids), ['id','mediaId', 'fromCourseId', 'fromUserId']);
-        $courseIds = \AppBundle\Common\ArrayToolkit::column($activities, 'fromCourseId');
-        $courses = $this->getCourseDao()->search(['ids' => $courseIds], [], 0, count($courseIds), ['id', 'teacherIds']);
-        $courses = \AppBundle\Common\ArrayToolkit::index($courses, 'id');
-        $update = [];
-        foreach ($activities as $activity){
-            if(empty($liveActivities[$activity['mediaId']]) || empty($courses[$activity['fromCourseId']])){
-                continue;
-            }
-            $update[$liveActivities[$activity['mediaId']]['id']] = [
-                'anchorId' => empty($courses[$activity['fromCourseId']]['teacherIds']) ? $activity['fromUserId'] : $courses[$activity['fromCourseId']]['teacherIds'][0],
-            ];
-        }
-        if(!empty($update)){
-            $this->getLiveActivityDao()->batchUpdate(array_keys($update), $update, 'id');
-        }
-        $this->logger('info', '修改liveActivity讲师');
-        return $page+1;
     }
 
     public function processLiveStatisticsMemberData($page)
@@ -273,6 +119,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $activities = $this->getActivityDao()->search(['mediaIds' => $activityIds, 'mediaType'=> 'live', 'copyId'=>0], [], 0, count($activityIds));
         $activities = \AppBundle\Common\ArrayToolkit::index($activities, 'mediaId');
         $count = $this->getUserDao()->count([]);
+
         foreach ($lives as $live){
             $liveCount = $this->getLiveStatisticsDao()->count(['liveId'=>$live['liveId']]);
             if($liveCount == 0 ||empty($liveActivities[$live['liveId']]) || empty($activities[$liveActivities[$live['liveId']]['id']])){
@@ -322,13 +169,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'liveId');
         $update=[];
         foreach ($liveActivities as $liveActivity){
-            if(date("Y-m-d", time()) == date('Y-m-d', $liveActivity['liveStartTime'])){
+            if($liveActivity['progressStatus'] != 'closed' ){
                 continue;
             }
-            if($liveActivity['liveStartTime'] > time()){
-                continue;
-            }
-
             $time = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveActivity['liveId']);
             $count = $this->getLiveMemberStatisticsDao()->count(['liveId'=>$liveActivity['liveId']]);
             $update[$liveActivity['id']] = [
@@ -364,10 +207,19 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $update = [];
         foreach ($liveActivities as $liveActivity){
+            $status = 'created';
+            if($liveActivity['liveStartTime'] > time()){
+                $status = 'created';
+            }
+            if($liveActivity['liveStartTime'] < time() && $liveActivity['liveEndTime'] > time()){
+                $status = 'live';
+            }
+            if($liveActivity['liveEndTime'] < time()){
+                $status = 'closed';
+            }
             $update[$liveActivity['id']] = [
-                'progressStatus' => !empty($liveActivity['liveEndTime']) && $liveActivity['liveEndTime'] < time() ? 'closed' : $liveActivity['progressStatus']
+                'progressStatus' => $status
             ];
-
         }
 
         if(!empty($update)){
@@ -375,24 +227,6 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $this->logger('info', '修改progressStatus数据');
         return $page+1;
-    }
-
-    public function registerJob(){
-        $count = $this->getSchedulerService()->countJobs(array('name' => 'DaySyncLiveDataJob'));
-        if($count >0){
-            return 1;
-        }
-        $xapiRandNum1 = rand(1, 59);
-        $startJob = [
-            'name' => 'DaySyncLiveDataJob',
-            'expression' => "{$xapiRandNum1} 3 * * *",
-            'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
-            'misfire_threshold' => 10 * 60,
-            'args' => [],
-        ];
-
-        $this->getSchedulerService()->register($startJob);
-        return 1;
     }
 
     public function registerCallbackUrl()
