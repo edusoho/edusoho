@@ -59,7 +59,7 @@ class LiveStatisticClassroomLive extends AbstractResource
             ['startTime' => 'DESC'],
             0,
             PHP_INT_MAX,
-            ['id', 'startTime', 'endTime', 'length', 'title', 'courseId', 'fromCourseSetId']
+            ['id', 'startTime', 'endTime', 'length', 'title', 'courseId', 'fromCourseSetId', 'activityId']
         );
         $doingArr = [];
         $endArr = [];
