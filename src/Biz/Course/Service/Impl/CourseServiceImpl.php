@@ -1784,7 +1784,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
-            if ($this->isUselessTask($task, $course['type'])) {
+            if ('replay' != $task['type'] && $this->isUselessTask($task, $course['type'])) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
