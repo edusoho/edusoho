@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 export default {
   props: {
     classify: {
@@ -50,7 +51,8 @@ export default {
 
   methods: {
     handleAddComponent(info) {
-      this.$emit('add-component', info);
+      const newInfo = _.assign({}, info);
+      this.$emit('add-component', newInfo);
     },
 
     handleChangeClassify() {

@@ -106,7 +106,7 @@ export default {
 
   watch: {
     moduleInfo: function() {
-      this.moduleData = this.moduleInfo;
+      this.moduleData = [...this.moduleInfo];
     }
   },
 
@@ -116,7 +116,7 @@ export default {
 
   methods: {
     initModuleData() {
-      const moduleData = this.moduleInfo;
+      const moduleData = [...this.moduleInfo];
 
       // oldKey: 防止拖拽后重新渲染 dom
       _.forEach(moduleData, (item, index) => {
