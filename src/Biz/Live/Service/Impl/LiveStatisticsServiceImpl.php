@@ -70,6 +70,9 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
             $userId = $user['userId'];
             if ($userId > $count) {
                 $baseUser = $this->getUserDao()->getByNickname($user['nickname']);
+                if (empty($baseUser)) {
+                    continue;
+                }
                 $userId = $baseUser['id'];
             }
             if (!empty($create[$live['liveId'].'-'.$userId]) || empty($user['firstJoin']) || in_array($userId, $userIds)) {

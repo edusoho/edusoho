@@ -162,12 +162,22 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $userIds = ArrayToolkit::column($memberData['data'], 'userId');
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
+        $count = $this->getUserDao()->count([]);
         foreach ($memberData['data'] as $member) {
-            if ($member['userId'] == $activity['ext']['anchorId']) {
+            $userId = $member['userId'];
+            if ($userId == $activity['ext']['anchorId']) {
                 continue;
             }
+            if ($userId > $count && !empty($member['userName'])) {
+                $baseUser = $this->getUserDao()->getByNickname($member['userName']);
+                if (empty($baseUser)) {
+                    continue;
+                }
+                $userId = $baseUser['id'];
+            }
+
             $data = [
-                'userId' => $member['userId'],
+                'userId' => $userId,
                 'liveId' => $activity['ext']['liveId'],
                 'firstEnterTime' => $member['firstEnterTime'],
                 'watchDuration' => $member['watchDuration'],
@@ -176,8 +186,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'answerNum' => empty($member['answerNum']) ? 0 : $member['answerNum'],
                 'requestTime' => time(),
             ];
-            if (!empty($members[$member['userId']])) {
-                $updateData[$members[$member['userId']]['id']] = $data;
+            if (!empty($members[$userId])) {
+                $updateData[$members[$userId]['id']] = $data;
                 continue;
             }
             $createData[] = $data;
@@ -201,9 +211,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $userIds = ArrayToolkit::column($memberData['list'], 'studentId');
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
-
+        $count = $this->getUserDao()->count([]);
         foreach ($memberData['list'] as $member) {
-            if ($member['studentId'] == $activity['ext']['anchorId']) {
+            if ($member['studentId'] == $activity['ext']['anchorId'] || $member['studentId'] > $count) {
                 continue;
             }
             $data = [
@@ -247,7 +257,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getESLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
+        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider'] || $activity['startTime'] > time()) {
             return;
         }
         try {
@@ -284,7 +294,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getGeneralLiveStatistics($activity, $task, &$data)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider']) {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['startTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime'])) {
             return;
         }
         try {
@@ -305,7 +315,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getESLiveStatistics($activity, $task, &$data)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider']) {
+        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider'] || $activity['startTime'] > time()) {
             return;
         }
         try {
@@ -391,5 +401,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
     }
 }
