@@ -25,7 +25,6 @@ class LiveStatisticRollCall extends AbstractResource
         if (empty($activity['ext']['liveId'])) {
             LiveActivityException::NOTFOUND_LIVE();
         }
-        $this->processJsonData($activity['ext']['liveId']);
         $status = $request->query->get('status');
         $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($activity['ext']['liveId']);
         if ($status && !empty($statistics['data']['detail'])) {

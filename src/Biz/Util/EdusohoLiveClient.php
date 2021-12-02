@@ -172,9 +172,9 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/statistics");
     }
 
-    public function getLiveStudentStatistics($cloudLiveId)
+    public function getLiveStudentStatistics($cloudLiveId, $args)
     {
-        return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/student/statistics");
+        return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/student/statistics", $args);
     }
 
     public function getLiveOverview()

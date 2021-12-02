@@ -9,6 +9,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
 use Biz\System\Service\CacheService;
@@ -49,17 +50,22 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
     }
 
-    public function getAvgWatchDurationByLiveId($liveId)
+    public function countLiveMembers($conditions)
     {
-        $sum = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId);
-        $count = $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
+        return $this->getLiveMemberStatisticsDao()->count($conditions);
+    }
+
+    public function getAvgWatchDurationByLiveId($liveId, $userIds)
+    {
+        $sum = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveId, $userIds);
+        $count = $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId, 'userIds' => $userIds]);
 
         return empty($count) ? 0 : round($sum / ($count * 60), 1);
     }
 
-    public function sumChatNumByLiveId($liveId)
+    public function sumChatNumByLiveId($liveId, $userIds)
     {
-        $result = $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId);
+        $result = $this->getLiveMemberStatisticsDao()->sumChatNumByLiveId($liveId, $userIds);
 
         return empty($result) ? 0 : $result;
     }
@@ -76,15 +82,15 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         if (!empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 180) {
             return $cloudStatisticData;
         }
-        //频次控制， 直播已结束且未超过24小时 允许最多15分钟请求云平台
-        if (!empty($cloudStatisticData['detailFinished']) || ('closed' == $activity['ext']['progressStatus'] && empty($cloudStatisticData['detailFinished']) && time() - $cloudStatisticData['requestTime'] < 900)) {
+        //频次控制， 直播已结束允许最多30分钟请求云平台
+        if (($activity['ext']['liveEndTime'] < time() || 'closed' == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 1800) {
             return $cloudStatisticData;
         }
 
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
         $data = [
-            'teacherId' => empty($course['teacherIds']) ? 0 : $course['teacherIds'][0],
+            'teacherId' => empty($activity['ext']['anchorId']) ? (empty($course['teacherIds']) ? 0 : $course['teacherIds'][0]) : $activity['ext']['anchorId'],
             'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
             'endTime' => empty($activity['ext']['liveEndTime']) ? $activity['endTime'] : $activity['ext']['liveEndTime'],
             'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
@@ -104,15 +110,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         //频次控制， 直播未结束 允许最多3分钟请求云平台
         if (!empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 180) {
-            return $cloudStatisticData;
+            return;
         }
-        //频次控制， 直播已结束且未超过24小时 允许最多15分钟请求云平台
-        if (time() > $activity['endTime'] && time() - $activity['endTime'] < 24 * 3600 && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 900) {
-            return $cloudStatisticData;
-        }
-        //频次控制， 直播已结束且数据已获取结束(获取时间超过结束时间且数据收集结束) 直接返回数据
-        if (!empty($cloudStatisticData['memberFinished'])) {
-            return $cloudStatisticData;
+        //频次控制， 直播已结束且未超过24小时 允许最多30分钟请求云平台
+        if (($activity['ext']['liveEndTime'] < time() || 'closed' == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 1800) {
+            return;
         }
         $client = new EdusohoLiveClient();
         $this->EdusohoLiveClient = $client;
@@ -196,7 +198,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         $createData = [];
         $updateData = [];
-        $userIds = ArrayToolkit::column($memberData['list'], 'userId');
+        $userIds = ArrayToolkit::column($memberData['list'], 'studentId');
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
 
@@ -229,7 +231,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getGeneralLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || ($activity['endTime'] > time() && date('Y-m-d', time()) == date('Y-m-d', $activity['endTime']))) {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['endTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime'])) {
             return;
         }
         try {
@@ -254,9 +256,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         $this->processEsLiveMemberData($activity, $memberData);
         $this->createdSyncMemberDataJob($activity, $memberData);
-        if (time() - $activity['endTime'] > 2 * 3600) {
-            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberFinished' => 1])]);
-        }
     }
 
     protected function createdSyncMemberDataJob($activity, $memberData)
@@ -293,14 +292,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             $onlineData = $this->EdusohoLiveClient->getMaxOnline($activity['ext']['liveId']);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
-        $data['memberNumber'] = empty($cloudData['onlineNumber']) ? 0 : (7 != $activity['ext']['liveProvider'] ? $cloudData['onlineNumber'] - 1 : $cloudData['onlineNumber']);
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
         $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
-        $data['avgWatchTime'] = $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']);
-        if (!empty($activity['ext']['cloudStatisticData']['memberFinished'])) {
-            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
-        }
     }
 
     /**
@@ -325,12 +319,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
-        $data['chatNumber'] = empty($cloudData['chatNum']) ? $this->sumChatNumByLiveId($activity['ext']['liveId']) : $cloudData['chatNum'];
-        $data['memberNumber'] = empty($memberData['total']) ? 0 : $memberData['total'] - 1;
-        $data['avgWatchTime'] = 'closed' == $activity['ext']['progressStatus'] ? $this->getAvgWatchDurationByLiveId($activity['ext']['liveId']) : '--';
-        if ('closed' == $activity['ext']['progressStatus'] || $activity['endTime'] > 4 * 3600) {
-            $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['detailFinished' => 1])]);
-        }
     }
 
     /**
@@ -395,5 +383,13 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
