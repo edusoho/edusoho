@@ -71,10 +71,15 @@ export default {
 
     changeCurrentModule(info, index) {
       const { type } = info;
-      _.assign(this.currentModule, {
+
+      const currentModule = {
         index, // 编辑时用来确定位置
         type: `${type}-${index}`, // 提交时的 module-type
         editComponent: `${type}_edit` // 对应的编辑组件
+      };
+
+      _.assign(this, {
+        currentModule
       });
     },
 

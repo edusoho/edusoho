@@ -1,6 +1,8 @@
 <template>
   <div class="component-layout">
-    <slot />
+    <div class="component-contaienr">
+      <slot />
+    </div>
     <div class="edit-operate" v-show="active">
       <div class="operate-active"><a-icon type="arrow-up" /></div>
       <div class="operate-active"><a-icon type="arrow-down" /></div>
@@ -30,6 +32,10 @@ export default {
   padding: 12px 0;
   width: 100%;
   background-color: transparent;
+
+  .component-contaienr {
+    pointer-events: none;
+  }
 
   .active {
     position: absolute;
