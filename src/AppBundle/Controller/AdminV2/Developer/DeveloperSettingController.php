@@ -2,13 +2,17 @@
 
 namespace AppBundle\Controller\AdminV2\Developer;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\JsonToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\AppException;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -126,6 +130,36 @@ class DeveloperSettingController extends BaseController
         ]);
     }
 
+    public function liveManageAction(Request $request)
+    {
+        $conditions = [
+            'titleLike' => $request->query->get('titleLike', ''),
+            'type' => 'live',
+            'status' => 'published',
+            'copyId' => 0,
+        ];
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getTaskService()->countTasks($conditions),
+            20
+        );
+
+        $tasks = $this->getTaskService()->searchTasks(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+
+        return $this->render('admin-v2/developer/live/live.html.twig', [
+          'tasks' => $tasks,
+          'activities' => ArrayToolkit::index($activities, 'id'),
+            'paginator' => $paginator,
+        ]);
+    }
+
     private function openDevModeIfDebugEnable($developerSetting)
     {
         try {
@@ -143,6 +177,22 @@ class DeveloperSettingController extends BaseController
             //可能线上环境的dev.lock被人加过，导致权限问题无法删除
             //所以，捕获异常，对于这种情况，不处理
         }
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
