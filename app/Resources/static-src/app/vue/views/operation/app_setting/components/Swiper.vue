@@ -1,5 +1,10 @@
 <template>
-  <layout :active="moduleType === currentModuleType">
+  <layout
+    :active="moduleType === currentModuleType"
+    :is-first="isFirst"
+    :is-last="isLast"
+    @event-actions="handleClickAction"
+  >
     <div :key="swiperKey" :class="['swiper-container', moduleType]">
       <div class="swiper-wrapper">
         <template v-if="moduleData.length">
@@ -45,6 +50,16 @@ export default {
     moduleData: {
       type:  Array,
       required: true
+    },
+
+    isFirst: {
+      type: Boolean,
+      required: true
+    },
+
+    isLast: {
+      type: Boolean,
+      required: true
     }
   },
 
@@ -87,6 +102,10 @@ export default {
       this.$nextTick(() => {
         this.initSwiepr();
       });
+    },
+
+    handleClickAction(type) {
+      this.$emit('event-actions', type);
     }
   }
 }

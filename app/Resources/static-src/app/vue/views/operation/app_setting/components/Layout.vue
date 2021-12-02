@@ -4,9 +4,15 @@
       <slot />
     </div>
     <div class="edit-operate" v-show="active">
-      <div class="operate-active"><a-icon type="arrow-up" /></div>
-      <div class="operate-active"><a-icon type="arrow-down" /></div>
-      <div class="operate-active"><a-icon type="close" /></div>
+      <div class="operate-active" v-if="!isFirst" @click="handleClickActions('up')">
+        <a-icon type="arrow-up" />
+      </div>
+      <div class="operate-active" v-if="!isLast"  @click="handleClickActions('down')">
+        <a-icon type="arrow-down" />
+      </div>
+      <div class="operate-active" @click="handleClickActions('remove')">
+        <a-icon type="close" />
+      </div>
     </div>
 
     <div class="active" v-show="active" />
@@ -21,6 +27,22 @@ export default {
     active: {
       type: Boolean,
       required: true
+    },
+
+    isFirst: {
+      type: Boolean,
+      required: true
+    },
+
+    isLast: {
+      type: Boolean,
+      required: true
+    }
+  },
+
+  methods: {
+    handleClickActions(type) {
+      this.$emit('event-actions', type);
     }
   }
 }

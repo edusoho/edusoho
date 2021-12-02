@@ -16,7 +16,10 @@
             :module-data="module.data"
             :module-type="`${module.type}-${index}`"
             :current-module-type="currentModule.type"
+            :is-first="index === 0"
+            :is-last="index === lastModuleIndex"
             @click.native="changeCurrentModule(module, index)"
+            @event-actions="handleClickActions"
           />
 
           <find-footer />
@@ -63,6 +66,12 @@ export default {
     }
   },
 
+  computed: {
+    lastModuleIndex() {
+      return _.size(this.modules) - 1;
+    }
+  },
+
   methods: {
     handleAddComponent(info) {
       this.modules.push(info);
@@ -77,6 +86,52 @@ export default {
         type: `${type}-${index}`, // 提交时的 module-type
         editComponent: `${type}_edit` // 对应的编辑组件
       };
+
+      _.assign(this, {
+        currentModule
+      });
+    },
+
+    handleClickActions(type) {
+      if (type === 'up') {
+        this.upModulel();
+        return;
+      }
+
+      if (type === 'down') {
+        this.downModule();
+        return;
+      }
+
+      if (type === 'remove') {
+        this.removeModule();
+      }
+    },
+
+    upModulel() {
+
+    },
+
+    downModule() {
+
+    },
+
+    removeModule() {
+      const { index } = this.currentModule;
+      this.currentModule = {};
+      this.modules.splice(index, 1);
+
+      const newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : undefined);
+      let currentModule = {};
+      if (newIndex || newIndex === 0) {
+        const module = this.modules[newIndex];
+        const { type } = module;
+        currentModule = {
+          index: newIndex,
+          type: `${type}-${newIndex}`,
+          editComponent: `${type}_edit`
+        };
+      }
 
       _.assign(this, {
         currentModule
