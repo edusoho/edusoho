@@ -130,36 +130,6 @@ class DeveloperSettingController extends BaseController
         ]);
     }
 
-    public function liveManageAction(Request $request)
-    {
-        $conditions = [
-            'titleLike' => $request->query->get('titleLike', ''),
-            'type' => 'live',
-            'status' => 'published',
-            'copyId' => 0,
-        ];
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTaskService()->countTasks($conditions),
-            20
-        );
-
-        $tasks = $this->getTaskService()->searchTasks(
-            $conditions,
-            ['createdTime' => 'DESC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
-
-        return $this->render('admin-v2/developer/live/live.html.twig', [
-          'tasks' => $tasks,
-          'activities' => ArrayToolkit::index($activities, 'id'),
-            'paginator' => $paginator,
-        ]);
-    }
-
     private function openDevModeIfDebugEnable($developerSetting)
     {
         try {

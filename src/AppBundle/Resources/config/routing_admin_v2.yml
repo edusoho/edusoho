@@ -3376,7 +3376,3 @@ admin_v2_api_swagger_ui_api:
     path: /setting/developer/swagger-ui/api
     defaults:
         _controller: 'AppBundle:AdminV2/Developer/DeveloperSetting:swaggerApi'
-admin_v2_live_activity_data_manage:
-    path: /live_activity/developer/manage
-    defaults:
-        _controller: 'AppBundle:AdminV2/Developer/DeveloperSetting:liveManage'
