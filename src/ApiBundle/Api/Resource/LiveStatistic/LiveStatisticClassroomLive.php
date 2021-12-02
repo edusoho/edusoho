@@ -50,7 +50,7 @@ class LiveStatisticClassroomLive extends AbstractResource
         $taskConditions = [
             'courseIds' => empty($courseId) ? $courseIds : array_intersect($courseIds, [$courseId]),
             'type' => 'live',
-            'titleLike' => $request->query->get('title'),
+            'titleLike' => $request->query->get('title', ''),
             'status' => 'published',
         ];
 
