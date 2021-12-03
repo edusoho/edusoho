@@ -1,6 +1,6 @@
 <template>
   <div class="decorate-container">
-    <the-header />
+    <the-header @save="handleClickSave" />
 
     <div class="decorate-main clearfix">
       <left-choose-container @add-component="handleAddComponent" />
@@ -185,6 +185,13 @@ export default {
       if (type === 'swiper') {
         this.modules[this.currentModule.index].data = data;
       }
+    },
+
+    handleClickSave() {
+      _.forEach(this.modules, (module, index) => {
+        module.moduleType = `${module.type}-${index}`;
+      });
+      console.log(this.modules);
     }
   }
 }

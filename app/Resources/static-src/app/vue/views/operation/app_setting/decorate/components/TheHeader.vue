@@ -6,11 +6,23 @@
     <div class="pull-right mt8">
       <a-space size="large">
         <a-button>保存并预览</a-button>
-        <a-button type="primary">保存</a-button>
+        <a-button type="primary" @click="handleClickSave">保存</a-button>
       </a-space>
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  name: 'TheHeader',
+
+  methods: {
+    handleClickSave() {
+      this.$emit('save');
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .decorate-header {
