@@ -5,16 +5,24 @@
     <div class="design-editor">
       <div class="design-editor__title">添加内容</div>
       <div class="design-editor__image">
-
-        <swiper-edit-item
-          v-for="(item, index) in moduleData"
-          :key="index"
-          :index="index"
-          :item="item"
-          @update-image="showCropperModal"
-          @select-link="handleSelectLink"
-          @remove="handleClickRemove"
-        />
+        <draggable
+          v-model="moduleData"
+          v-bind="dragOptions"
+          @start="drag = true"
+          @end="draggableEnd"
+        >
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+            <swiper-edit-item
+              v-for="(item, index) in moduleData"
+              :key="item.oldKey"
+              :index="index"
+              :item="item"
+              @update-image="showCropperModal"
+              @select-link="handleSelectLink"
+              @remove="handleClickRemove"
+            />
+          </transition-group>
+        </draggable>
 
         <div class="add-btn-input">
           <a-upload
@@ -48,6 +56,7 @@
 
 <script>
 import _ from 'lodash';
+import Draggable from 'vuedraggable';
 import EditLayout from './EditLayout.vue';
 import SwiperEditItem from './SwiperEditItem.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
@@ -66,6 +75,7 @@ export default {
   },
 
   components: {
+    Draggable,
     EditLayout,
     SwiperEditItem,
     PictureCropperModal,
@@ -78,21 +88,44 @@ export default {
     return {
       moduleData: [],
       currentIndex: 0,
-      currentType: ''
+      currentType: '',
+      drag: false
+    }
+  },
+
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      }
     }
   },
 
   watch: {
     moduleInfo: function() {
-      this.moduleData = this.moduleInfo;
+      this.moduleData = [...this.moduleInfo];
     }
   },
 
   mounted() {
-    this.moduleData = this.moduleInfo;
+    this.initModuleData();
   },
 
   methods: {
+    initModuleData() {
+      const moduleData = [...this.moduleInfo];
+
+      // oldKey: 防止拖拽后重新渲染 dom
+      _.forEach(moduleData, (item, index) => {
+        item.oldKey = index;
+      });
+
+      this.moduleData = moduleData;
+    },
+
     handleAddSwiper(info) {
       const reader = new FileReader();
 
@@ -116,13 +149,15 @@ export default {
 
     cropperSuccess(data) {
       if (this.currentType === 'add') {
+        const oldKey = this.moduleData.length;
         this.moduleData.push({
           image: data,
           link: {
             type: '',
             target: null,
             url: 'javascript:;'
-          }
+          },
+          oldKey
         });
         this.upateEdit();
         return;
@@ -167,6 +202,11 @@ export default {
         this.$refs.classroomLink.showModal();
         return;
       }
+    },
+
+    draggableEnd() {
+      this.drag = false;
+      this.upateEdit();
     },
 
     handleUpdateLink(params) {
