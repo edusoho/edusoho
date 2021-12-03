@@ -4,13 +4,13 @@
       <slot />
     </div>
     <div class="edit-operate" v-show="active">
-      <div class="operate-active" v-if="!isFirst" @click="handleClickActions('up')">
+      <div class="operate-active" v-if="!isFirst" @click.stop="handleClickActions('up')">
         <a-icon type="arrow-up" />
       </div>
-      <div class="operate-active" v-if="!isLast"  @click="handleClickActions('down')">
+      <div class="operate-active" v-if="!isLast"  @click.stop="handleClickActions('down')">
         <a-icon type="arrow-down" />
       </div>
-      <div class="operate-active" @click="handleClickActions('remove')">
+      <div class="operate-active" @click.stop="handleClickActions('remove')">
         <a-icon type="close" />
       </div>
     </div>

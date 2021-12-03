@@ -9,18 +9,27 @@
         <div class="main-preview-container">
           <find-head />
 
-          <component
-            v-for="(module, index) in modules"
-            :key="index"
-            :is="module.type"
-            :module-data="module.data"
-            :module-type="`${module.type}-${index}`"
-            :current-module-type="currentModule.type"
-            :is-first="index === 0"
-            :is-last="index === lastModuleIndex"
-            @click.native="changeCurrentModule(module, index)"
-            @event-actions="handleClickActions"
-          />
+          <draggable
+            v-model="modules"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="draggableEnd"
+          >
+            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+              <component
+                v-for="(module, index) in modules"
+                :key="index"
+                :is="module.type"
+                :module-data="module.data"
+                :module-type="`${module.type}-${index}`"
+                :current-module-type="currentModule.type"
+                :is-first="index === 0"
+                :is-last="index === lastModuleIndex"
+                @click.native="changeCurrentModule(module, index)"
+                @event-actions="handleClickActions"
+              />
+            </transition-group>
+          </draggable>
 
           <find-footer />
         </div>
@@ -40,7 +49,7 @@
 
 <script>
 import _ from 'lodash';
-
+import Draggable from 'vuedraggable';
 import TheHeader from './components/TheHeader.vue';
 import LeftChooseContainer from './components/LeftChooseContainer.vue';
 
@@ -51,6 +60,7 @@ import slide_show_edit from './components/SwiperEdit.vue';
 
 export default {
   components: {
+    Draggable,
     TheHeader,
     LeftChooseContainer,
     FindHead,
@@ -62,13 +72,23 @@ export default {
   data() {
     return {
       modules: [],
-      currentModule: {}
+      currentModule: {},
+      drag: false
     }
   },
 
   computed: {
     lastModuleIndex() {
       return _.size(this.modules) - 1;
+    },
+
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      }
     }
   },
 
@@ -108,12 +128,27 @@ export default {
       }
     },
 
-    upModulel() {
+    draggableEnd({ newIndex }) {
+      this.drag = false;
+      this.changeCurrentModule(this.modules[newIndex], newIndex);
+    },
 
+    upModulel() {
+      const { index } = this.currentModule;
+      const tempModule = this.modules[index - 1];
+      const module = this.modules[index];
+      this.$set(this.modules, index - 1, this.modules[index]);
+      this.$set(this.modules, index, tempModule);
+      this.changeCurrentModule(module, index - 1);
     },
 
     downModule() {
-
+      const { index } = this.currentModule;
+      const tempModule = this.modules[index + 1];
+      const module = this.modules[index];
+      this.$set(this.modules, index + 1, this.modules[index]);
+      this.$set(this.modules, index, tempModule);
+      this.changeCurrentModule(module, index + 1);
     },
 
     removeModule() {
@@ -121,7 +156,14 @@ export default {
       this.currentModule = {};
       this.modules.splice(index, 1);
 
-      const newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : undefined);
+      let newIndex;
+
+      if (index === 0) {
+        newIndex = 0;
+      } else {
+        newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : 0);
+      }
+
       let currentModule = {};
       if (newIndex || newIndex === 0) {
         const module = this.modules[newIndex];
