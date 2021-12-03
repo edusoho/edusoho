@@ -49,6 +49,11 @@
 
 <script>
 import _ from 'lodash';
+
+import { Vip } from 'common/vue/service';
+
+import { DefaultData } from './default-data';
+
 import Draggable from 'vuedraggable';
 import TheHeader from './components/TheHeader.vue';
 import LeftChooseContainer from './components/LeftChooseContainer.vue';
@@ -77,7 +82,8 @@ export default {
     return {
       modules: [],
       currentModule: {},
-      drag: false
+      drag: false,
+      vipLevels: []
     }
   },
 
@@ -97,9 +103,27 @@ export default {
   },
 
   methods: {
-    handleAddComponent(info) {
+    handleAddComponent(type) {
+      const info = _.cloneDeep(DefaultData[type]);
+      if (type === 'vip') {
+        this.getVipLevels();
+        info.items = this.vipLevels;
+      }
+
       this.modules.push(info);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
+    },
+
+    async getVipLevels() {
+      if (_.size(this.vipLevels)) return;
+
+      this.vipLevels = await Vip.getLevels();
+      _.forEach(this.modules, module => {
+        const { type } = module;
+        if (type === 'vip') {
+          module.data.items = this.vipLevels;
+        }
+      });
     },
 
     changeCurrentModule(info, index) {

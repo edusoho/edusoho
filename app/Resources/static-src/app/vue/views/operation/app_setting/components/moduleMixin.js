@@ -13,7 +13,7 @@ export default {
     },
 
     moduleData: {
-      type:  Array,
+      type:  [Array, Object],
       required: true
     },
 

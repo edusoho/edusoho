@@ -72,63 +72,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.swiper-container {
-  position: relative;
-  width: 100%;
-  height: 150px;
-
-  .swiper-slide {
-    box-sizing: border-box;
-    padding-right: 5px;
-    padding-left: 5px;
-
-    &-container {
-      height: 100%;
-      border-radius: 8px;
-      background-color: #e1e1e1;
-      font-size: 26px;
-      color: #919191;
-      font-weight: bold;
-      text-align: center;
-      line-height: 140px;
-      transform: scale(0.96);
-      transition: all 0.3s ease;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &-active {
-      .swiper-slide-container {
-        transform: scale(1);
-      }
-    }
-  }
-
-  .pagination {
-    position: absolute;
-    z-index: 20;
-    margin: 0;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-
-    /deep/ .swiper-pagination-switch {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      margin: 0 4px;
-    }
-
-    /deep/ .swiper-active-switch {
-      width: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 8px;
-    }
-  }
+.vip-title {
+  padding-right: 16px;
+  padding-left: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  line-height: 24px;
 }
 </style>

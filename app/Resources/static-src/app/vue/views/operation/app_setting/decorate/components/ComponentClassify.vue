@@ -9,9 +9,9 @@
         <div class="clearfix">
           <div
             v-for="component in classify.components"
-            :key="component.info.type"
+            :key="component.type"
             class="add-list-item pull-left"
-            @click="handleAddComponent(component.info)"
+            @click="handleAddComponent(component.type)"
           >
             <svg-icon :icon="component.icon" />
             <div class="component-title">{{ component.title }}</div>
@@ -50,9 +50,8 @@ export default {
   },
 
   methods: {
-    handleAddComponent(info) {
-      const newInfo = _.assign({}, info);
-      this.$emit('add-component', newInfo);
+    handleAddComponent(type) {
+      this.$emit('add-component', type);
     },
 
     handleChangeClassify() {
