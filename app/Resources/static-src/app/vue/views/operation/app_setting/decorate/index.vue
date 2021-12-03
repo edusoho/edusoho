@@ -112,6 +112,11 @@ export default {
       });
     },
 
+    draggableEnd({ newIndex }) {
+      this.drag = false;
+      this.changeCurrentModule(this.modules[newIndex], newIndex);
+    },
+
     handleClickActions(type) {
       if (type === 'up') {
         this.upModulel();
@@ -126,11 +131,6 @@ export default {
       if (type === 'remove') {
         this.removeModule();
       }
-    },
-
-    draggableEnd({ newIndex }) {
-      this.drag = false;
-      this.changeCurrentModule(this.modules[newIndex], newIndex);
     },
 
     upModulel() {
@@ -159,9 +159,9 @@ export default {
       let newIndex;
 
       if (index === 0) {
-        newIndex = 0;
+        newIndex = this.lastModuleIndex >= 0 ? 0 : undefined;
       } else {
-        newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : 0);
+        newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : undefined);
       }
 
       let currentModule = {};
@@ -173,11 +173,11 @@ export default {
           type: `${type}-${newIndex}`,
           editComponent: `${type}_edit`
         };
-      }
 
-      _.assign(this, {
-        currentModule
-      });
+        _.assign(this, {
+          currentModule
+        });
+      }
     },
 
     updateEdit(params) {
