@@ -90,6 +90,7 @@ export default {
     padding-left: 5px;
 
     &-container {
+      overflow: hidden;
       height: 100%;
       border-radius: 8px;
       background-color: #e1e1e1;
