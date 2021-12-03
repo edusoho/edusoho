@@ -1,26 +1,35 @@
 <template>
   <div class="decorate-container">
-    <the-header />
+    <the-header @save="handleClickSave" />
 
     <div class="decorate-main clearfix">
-      <left-choose-container @add-component="handleAddComponent" />
+      <left-choose-container @add-module="addModule" />
 
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
           <find-head />
 
-          <component
-            v-for="(module, index) in modules"
-            :key="index"
-            :is="module.type"
-            :module-data="module.data"
-            :module-type="`${module.type}-${index}`"
-            :current-module-type="currentModule.type"
-            :is-first="index === 0"
-            :is-last="index === lastModuleIndex"
-            @click.native="changeCurrentModule(module, index)"
-            @event-actions="handleClickActions"
-          />
+          <draggable
+            v-model="modules"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="draggableEnd"
+          >
+            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+              <component
+                v-for="(module, index) in modules"
+                :key="index"
+                :is="module.type"
+                :module-data="module.data"
+                :module-type="`${module.type}-${index}`"
+                :current-module-type="currentModule.type"
+                :is-first="index === 0"
+                :is-last="index === lastModuleIndex"
+                @click.native="changeCurrentModule(module, index)"
+                @event-actions="handleClickActions"
+              />
+            </transition-group>
+          </draggable>
 
           <find-footer />
         </div>
@@ -41,6 +50,11 @@
 <script>
 import _ from 'lodash';
 
+import { Vip } from 'common/vue/service';
+
+import { DefaultData } from './default-data';
+
+import Draggable from 'vuedraggable';
 import TheHeader from './components/TheHeader.vue';
 import LeftChooseContainer from './components/LeftChooseContainer.vue';
 
@@ -48,34 +62,68 @@ import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
 import slide_show from '../components/Swiper.vue';
 import slide_show_edit from './components/SwiperEdit.vue';
+import vip from '../components/Vip.vue';
+import vip_edit from './components/VipEdit.vue';
 
 export default {
   components: {
+    Draggable,
     TheHeader,
     LeftChooseContainer,
     FindHead,
     FindFooter,
     slide_show,
-    slide_show_edit
+    slide_show_edit,
+    vip,
+    vip_edit
   },
 
   data() {
     return {
       modules: [],
-      currentModule: {}
+      currentModule: {},
+      drag: false,
+      vipLevels: []
     }
   },
 
   computed: {
     lastModuleIndex() {
       return _.size(this.modules) - 1;
+    },
+
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      }
     }
   },
 
   methods: {
-    handleAddComponent(info) {
+    addModule(type) {
+      const info = _.cloneDeep(DefaultData[type]);
+      if (type === 'vip') {
+        this.getVipLevels();
+        info.items = this.vipLevels;
+      }
+
       this.modules.push(info);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
+    },
+
+    async getVipLevels() {
+      if (_.size(this.vipLevels)) return;
+
+      this.vipLevels = await Vip.getLevels();
+      _.forEach(this.modules, module => {
+        const { type } = module;
+        if (type === 'vip') {
+          module.data.items = this.vipLevels;
+        }
+      });
     },
 
     changeCurrentModule(info, index) {
@@ -90,6 +138,11 @@ export default {
       _.assign(this, {
         currentModule
       });
+    },
+
+    draggableEnd({ newIndex }) {
+      this.drag = false;
+      this.changeCurrentModule(this.modules[newIndex], newIndex);
     },
 
     handleClickActions(type) {
@@ -109,11 +162,21 @@ export default {
     },
 
     upModulel() {
-
+      const { index } = this.currentModule;
+      const tempModule = this.modules[index - 1];
+      const module = this.modules[index];
+      this.$set(this.modules, index - 1, this.modules[index]);
+      this.$set(this.modules, index, tempModule);
+      this.changeCurrentModule(module, index - 1);
     },
 
     downModule() {
-
+      const { index } = this.currentModule;
+      const tempModule = this.modules[index + 1];
+      const module = this.modules[index];
+      this.$set(this.modules, index + 1, this.modules[index]);
+      this.$set(this.modules, index, tempModule);
+      this.changeCurrentModule(module, index + 1);
     },
 
     removeModule() {
@@ -121,7 +184,14 @@ export default {
       this.currentModule = {};
       this.modules.splice(index, 1);
 
-      const newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : undefined);
+      let newIndex;
+
+      if (index === 0) {
+        newIndex = this.lastModuleIndex >= 0 ? 0 : undefined;
+      } else {
+        newIndex = index - 1 >= 0 ? index - 1 : (index + 1 <= this.lastModuleIndex ? index + 1 : undefined);
+      }
+
       let currentModule = {};
       if (newIndex || newIndex === 0) {
         const module = this.modules[newIndex];
@@ -131,11 +201,11 @@ export default {
           type: `${type}-${newIndex}`,
           editComponent: `${type}_edit`
         };
-      }
 
-      _.assign(this, {
-        currentModule
-      });
+        _.assign(this, {
+          currentModule
+        });
+      }
     },
 
     updateEdit(params) {
@@ -143,6 +213,13 @@ export default {
       if (type === 'swiper') {
         this.modules[this.currentModule.index].data = data;
       }
+    },
+
+    handleClickSave() {
+      _.forEach(this.modules, (module, index) => {
+        module.moduleType = `${module.type}-${index}`;
+      });
+      console.log(this.modules);
     }
   }
 }

@@ -18,3 +18,4 @@ export * from './MultiClassInspection/index.js';
 export * from './WrongBook';
 export * from './TeacherQualification';
 export * from './Classroom';
+export * from './Plugins';

@@ -31,41 +31,12 @@
 <script>
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import Layout from './Layout.vue';
+import moduleMixin from './moduleMixin';
 
 export default {
   name: 'Swiper',
 
-  props: {
-    moduleType: {
-      type: String,
-      required: true
-    },
-
-    currentModuleType: {
-      type: String,
-      required: true
-    },
-
-    moduleData: {
-      type:  Array,
-      required: true
-    },
-
-    isFirst: {
-      type: Boolean,
-      required: true
-    },
-
-    isLast: {
-      type: Boolean,
-      required: true
-    }
-  },
-
-  components: {
-    Layout
-  },
+  mixins: [moduleMixin],
 
   data() {
     return {
@@ -102,10 +73,6 @@ export default {
       this.$nextTick(() => {
         this.initSwiepr();
       });
-    },
-
-    handleClickAction(type) {
-      this.$emit('event-actions', type);
     }
   }
 }
@@ -123,6 +90,7 @@ export default {
     padding-left: 5px;
 
     &-container {
+      overflow: hidden;
       height: 100%;
       border-radius: 8px;
       background-color: #e1e1e1;
