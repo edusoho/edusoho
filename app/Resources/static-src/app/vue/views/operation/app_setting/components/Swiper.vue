@@ -31,7 +31,6 @@
 <script>
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import Layout from './Layout.vue';
 import moduleMixin from './moduleMixin';
 
 export default {

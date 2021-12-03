@@ -3,7 +3,7 @@
     <the-header @save="handleClickSave" />
 
     <div class="decorate-main clearfix">
-      <left-choose-container @add-component="handleAddComponent" />
+      <left-choose-container @add-module="addModule" />
 
       <section class="center-preview-container pull-left">
         <div class="main-preview-container">
@@ -103,7 +103,7 @@ export default {
   },
 
   methods: {
-    handleAddComponent(type) {
+    addModule(type) {
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();

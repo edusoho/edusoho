@@ -1,6 +1,6 @@
 <template>
   <div class="component-classify-item">
-    <div :class="{ active: isActive }" @click="handleChangeClassify">
+    <div :class="{ active: isActive }" @click="changeClassify">
       <svg-icon :icon="classify.icon" />
       <div class="classify-title">{{ classify.title }}</div>
     </div>
@@ -11,7 +11,7 @@
             v-for="component in classify.components"
             :key="component.type"
             class="add-list-item pull-left"
-            @click="handleAddComponent(component.type)"
+            @click="addModule(component.type)"
           >
             <svg-icon :icon="component.icon" />
             <div class="component-title">{{ component.title }}</div>
@@ -50,11 +50,11 @@ export default {
   },
 
   methods: {
-    handleAddComponent(type) {
-      this.$emit('add-component', type);
+    addModule(type) {
+      this.$emit('add-module', type);
     },
 
-    handleChangeClassify() {
+    changeClassify() {
       this.$emit('change-classify', this.index);
     }
   }

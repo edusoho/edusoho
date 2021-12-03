@@ -7,7 +7,7 @@
         :index="index"
         :classify="classify"
         :current-classify="currentClassify"
-        @add-component="addComponent"
+        @add-module="addModule"
         @change-classify="changeClassify"
       />
     </div>
@@ -56,8 +56,8 @@ export default {
   },
 
   methods: {
-    addComponent(type) {
-      this.$emit('add-component', type);
+    addModule(type) {
+      this.$emit('add-module', type);
     },
 
     changeClassify(value) {
