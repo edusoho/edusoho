@@ -57,6 +57,8 @@ import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
 import slide_show from '../components/Swiper.vue';
 import slide_show_edit from './components/SwiperEdit.vue';
+import vip from '../components/Vip.vue';
+import vip_edit from './components/VipEdit.vue';
 
 export default {
   components: {
@@ -66,7 +68,9 @@ export default {
     FindHead,
     FindFooter,
     slide_show,
-    slide_show_edit
+    slide_show_edit,
+    vip,
+    vip_edit
   },
 
   data() {

@@ -5,37 +5,30 @@
     :is-last="isLast"
     @event-actions="handleClickAction"
   >
-    <div :key="swiperKey" :class="['swiper-container', moduleType]">
+    <div class="vip-title">会员专区</div>
+    <!-- <div :class="['vip-container', moduleType]">
       <div class="swiper-wrapper">
-        <template v-if="moduleData.length">
-          <div
-            v-for="(item, index) in moduleData"
-            :key="index"
-            class="swiper-slide"
-          >
-            <div class="swiper-slide-container">
-              <img :src="item.image.url">
-            </div>
+        <div
+          v-for="(item, index) in moduleData"
+          :key="index"
+          class="swiper-slide"
+        >
+          <div class="swiper-slide-container">
+            <img :src="item.image.url">
           </div>
-        </template>
-
-        <div v-else class="swiper-slide">
-          <div class="swiper-slide-container">轮播图</div>
         </div>
       </div>
-      <div class="pagination" />
-    </div>
+    </div> -->
   </layout>
 </template>
 
 <script>
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import Layout from './Layout.vue';
 import moduleMixin from './moduleMixin';
 
 export default {
-  name: 'Swiper',
+  name: 'Vip',
 
   mixins: [moduleMixin],
 
@@ -56,13 +49,12 @@ export default {
   },
 
   mounted() {
-    this.initSwiepr();
+    // this.initSwiepr();
   },
 
   methods: {
     initSwiepr() {
       new Swiper(`.${this.moduleType}`, {
-        pagination : `.${this.moduleType} .pagination`,
         autoplay: 5000,
         loop: true,
         slidesPerView: 1.1,
