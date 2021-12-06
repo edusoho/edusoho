@@ -227,7 +227,11 @@ class ItemHelper
                     if ('replay' === $courseItemTask['type']) {
                         $courseItemTask['type'] = 'live';
                         $courseItemTask['isReplay'] = 1;
-                        $courseItemTask['activity'] = $this->getActivityService()->getActivity($courseItemTask['activity']['ext']['origin_lesson_id'], true);
+                        $activity = $courseItemTask['activity'];
+                        $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+                        $replayActivity['finishType'] = $activity['finishType'];
+                        $replayActivity['finishData'] = $activity['finishData'];
+                        $courseItemTask['activity'] = $replayActivity;
                     }
                 }
             }
