@@ -153,11 +153,9 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $existed['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $existed['type']);
-        $this->assertEmpty($existed['data']);
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEmpty($result['data']);
     }
 
     public function testFindCheckinStatisticsByLiveIds()
