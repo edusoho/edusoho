@@ -15,6 +15,8 @@ use Biz\Course\Service\LiveReplayService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
@@ -104,6 +106,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
+            'liveStartTime' => $activity['startTime'],
+            'liveEndTime' => $activity['startTime'] + $activity['length'] * 60,
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
@@ -196,17 +200,22 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        if ('created' === $liveActivity['progressStatus']) {
-            $activity = $this->getActivityDao()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
-            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-            $update = ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime];
-            if (!empty($course['teacherIds'])) {
-                $update['anchorId'] = $course['teacherIds'][0];
+        $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
+        $update = ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime];
+        foreach ($activities as $activity) {
+            if (0 == $activity['copyId']) {
+                $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+                if (!empty($course['teacherIds'])) {
+                    $update['anchorId'] = $course['teacherIds'][0];
+                }
             }
-            $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], $update);
-            $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
-            $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+            $this->getTaskDao()->update($task['id'], ['startTime' => $startTime]);
+            $this->getActivityDao()->update($activity['id'], ['startTime' => $startTime]);
         }
+        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], $update);
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播开始', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+        $this->dispatchEvent('live.status.start', new Event($liveActivity['liveId']));
     }
 
     public function closeLive($liveId, $closeTime)
@@ -215,8 +224,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        $newLiveActivity = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_CLOSED, 'liveEndTime' => $closeTime]);
-        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $newLiveActivity]);
+        $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
+        $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_CLOSED, 'liveEndTime' => $closeTime]);
+        foreach ($activities as $activity) {
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+            $this->getTaskDao()->update($task['id'], ['endTime' => $closeTime]);
+            $this->getActivityDao()->update($activity['id'], ['endTime' => $closeTime]);
+        }
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', '直播结束', []);
         $this->dispatchEvent('live.status.close', new Event($liveActivity['liveId']));
     }
 
@@ -549,5 +564,21 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    private function getTaskDao()
+    {
+        return $this->createDao('Task:TaskDao');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

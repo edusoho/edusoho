@@ -164,6 +164,23 @@ export default {
     }
   },
 
+  computed: {
+    searchQuery() {
+      const query = _.pickBy(this.searchForm, _.identity);
+
+      if (!_.size(query)) return {};
+
+      const { time } = query;
+      if (time) {
+        query.startTime = moment(time[0]).unix();
+        query.endTime = moment(time[1]).unix();
+        delete query.time;
+      }
+
+      return query;
+    }
+  },
+
   mounted() {
     this.fetchLiveReplay();
     this.fetchCourseCategory();
@@ -182,19 +199,8 @@ export default {
     },
 
     handleClickSearch() {
-      const query = _.pickBy(this.searchForm, _.identity);
-
-      if (!_.size(query)) return;
-
-      const { time } = query;
-      if (time) {
-        query.startTime = moment(time[0]).unix();
-        query.endTime = moment(time[1]).unix();
-        delete query.time;
-      }
-
       this.pagination.current = 1;
-      this.fetchLiveReplay(query);
+      this.fetchLiveReplay();
     },
 
     handleTableChange(pagination) {
@@ -202,14 +208,14 @@ export default {
       this.fetchLiveReplay();
     },
 
-    async fetchLiveReplay(query = {}) {
+    async fetchLiveReplay() {
       this.loading = true;
       const { current, pageSize } = this.pagination;
       const params = {
         params: {
           offset: (current - 1) * pageSize,
           limit: pageSize,
-          ...query
+          ...this.searchQuery
         }
       }
       const { data, paging } = await LiveReplay.get(params);
@@ -240,9 +246,10 @@ export default {
     },
 
     editSuccess(params) {
-      const { id, replayPublic } = params;
+      const { id, replayPublic, tagIds } = params;
       _.forEach(this.data, (item, index) => {
         if (item.id === id) {
+          item.tag = tagIds;
           item.replayPublic = replayPublic;
           return false;
         }

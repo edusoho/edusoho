@@ -11,6 +11,10 @@ export default class Replay {
   }
 
   initEvent() {
+    if($('#origin_lesson_id').val() >0){
+      $('#minute').attr('disabled',true);
+      $('#second').attr('disabled',true);
+    }
     window.ltc.on('getValidate', (msg) => {
       window.ltc.emit('returnValidate', { valid: this.validate.form() });
     });
@@ -30,6 +34,8 @@ export default class Replay {
   showChooseContent() {
     $('#iframe-content').on('click', '.js-choose-trigger', (event) => {
       FileChooser.openUI();
+      $('#minute').attr('disabled',false);
+      $('#second').attr('disabled',false);
     });
   }
 

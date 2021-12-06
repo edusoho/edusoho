@@ -20,20 +20,39 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
             ->leftJoin('member', 'live_statistics_member_data', 'live', $join)
             ->andWhere('member.userId IN ( :userIds )')
             ->andWhere('member.userId = :userId')
+            ->andWhere('member.userId NOT IN (:excludeUserIds)')
             ->andWhere('member.courseId = :courseId')
-            ->orderBy('live.requestTime', 'DESC')
-            ->addOrderBy('member.id', 'ASC')
+            ->orderBy('live.watchDuration', 'DESC')
             ->setFirstResult((int) $start)
             ->setMaxResults((int) $limit);
 
         return $builder->execute()->fetchAll();
     }
 
-    public function sumWatchDurationByLiveId($liveId)
+    public function sumWatchDurationByLiveId($liveId, $userIds = [])
     {
         $sql = 'SELECT sum(`watchDuration`) FROM `live_statistics_member_data` WHERE  `liveId` = ? ';
+        if (!empty($userIds)) {
+            $marks = str_repeat('?,', count($userIds) - 1).'?';
+            $sql = $sql." and userId IN ({$marks})";
 
-        return $this->db()->fetchColumn($sql, [$liveId]);
+            return $this->db()->fetchColumn($sql, array_merge([$liveId], $userIds));
+        } else {
+            return $this->db()->fetchColumn($sql, [$liveId]);
+        }
+    }
+
+    public function sumChatNumByLiveId($liveId, $userIds = [])
+    {
+        $sql = 'SELECT sum(`chatNum`) FROM `live_statistics_member_data` WHERE  `liveId` = ? ';
+        if (!empty($userIds)) {
+            $marks = str_repeat('?,', count($userIds) - 1).'?';
+            $sql = $sql." and userId IN ({$marks})";
+
+            return $this->db()->fetchColumn($sql, array_merge([$liveId], $userIds));
+        } else {
+            return $this->db()->fetchColumn($sql, [$liveId]);
+        }
     }
 
     protected function conditionFilter(&$conditions)

@@ -12083,3 +12083,5 @@ course.live_replay.title: 直播名称
 course.live_replay.teacher: 主讲人
 course.live_replay.length: 回放时长
 course.live_replay.start_time: 直播时间
+course.live_replay_manage.live_replay_empty: 直播回放已被删除
+course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端

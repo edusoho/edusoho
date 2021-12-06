@@ -53,8 +53,6 @@ class LiveReplay extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $ids = $request->request->get('ids', []);
-        $realDelete = $request->request->get('realDelete', false);
-
         if (empty($ids)) {
             throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
         }
@@ -64,11 +62,7 @@ class LiveReplay extends AbstractResource
         }
 
         foreach ($ids as $id) {
-            if ($realDelete) {
-                $this->getLiveReplayService()->deleteReplayByLessonId($id);
-            } else {
-                $this->getLiveReplayService()->updateReplayByLessonId($id, ['courseId' => 0, 'lessonId' => 0]);
-            }
+            $this->getLiveReplayService()->deleteReplayByLessonId($id);
         }
 
         return ['success' => true];
@@ -77,6 +71,9 @@ class LiveReplay extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        if (!empty($conditions['courseCategoryId'])) {
+            $conditions['categoryId'] = $conditions['courseCategoryId'];
+        }
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0], ['createdTime' => 'desc'], $offset, $limit);
@@ -125,7 +122,7 @@ class LiveReplay extends AbstractResource
         }
 
         if ($time <= 3600) {
-            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60, 1)]);
         }
 
         return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);

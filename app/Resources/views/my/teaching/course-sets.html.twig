@@ -10,11 +10,11 @@
     {% include 'my/teaching/course-type-select.html.twig' %}
     <div class="my-teaching-status">
       <ul>
-        <li {% if tab == 'publish' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'publish'})}}">{{ 'course.status.published'|trans }}</a></li>
-        <li {% if tab == 'unPublish' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'unPublish'})}}">{{ 'course.status.unpublished'|trans }}</a></li>
-        <li {% if tab == 'updating' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'updating'})}}">{{ 'course.status.serialized'|trans }}</a></li>
-        <li {% if tab == 'closed' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'closed'})}}">{{ 'course.status.closed'|trans }}</a></li>
-        <li {% if tab == 'finished' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'finished'})}}">{{ 'course.status.finished'|trans }}</a></li>
+        <li {% if tab == 'publish' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'publish',filter:filter})}}">{{ 'course.status.published'|trans }}</a></li>
+        <li {% if tab == 'unPublish' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'unPublish',filter:filter})}}">{{ 'course.status.unpublished'|trans }}</a></li>
+        <li {% if tab == 'updating' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'updating',filter:filter})}}">{{ 'course.status.serialized'|trans }}</a></li>
+        <li {% if tab == 'closed' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'closed',filter:filter})}}">{{ 'course.status.closed'|trans }}</a></li>
+        <li {% if tab == 'finished' %}class="active" {% endif %}><a href="{{path('my_teaching_course_sets',{'tab': 'finished',filter:filter})}}">{{ 'course.status.finished'|trans }}</a></li>
       </ul>
     </div>
     {% for courseSet in courseSets %}

@@ -26,7 +26,6 @@ class DaySyncLiveDataJob extends AbstractJob
                 'args' => [
                     'activityId' => $activity['id'],
                     'start' => 0,
-                    'syncLiveDetail' => 1,
                 ],
             ];
             $this->getSchedulerService()->register($startJob);

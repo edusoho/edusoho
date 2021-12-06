@@ -588,6 +588,7 @@ class CourseManageController extends BaseController
             $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
             $course['vipLevelId'] = empty($vipRight) || !in_array($vipRight['vipLevelId'], $vipLevelIds) ? '0' : $vipRight['vipLevelId'];
         }
+        $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
 
         return $this->render(
             'course-manage/info.html.twig',

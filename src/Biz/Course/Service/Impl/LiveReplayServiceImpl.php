@@ -55,6 +55,8 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplayByLessonId($lessonId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByLessonId($lessonId, $lessonType);
+
+        $this->getLogService()->info('replay', 'delete_replay', '删除回放lessonId'.$lessonId);
         $this->dispatchEvent('live.replay.delete', ['lessonId' => $lessonId]);
 
         return $result;
@@ -63,6 +65,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplaysByCourseId($courseId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByCourseId($courseId, $lessonType);
+        $this->getLogService()->info('replay', 'delete_replay', '删除回放courseId'.$courseId);
         $this->dispatchEvent('live.replay.delete', ['courseId' => $courseId]);
 
         return $result;

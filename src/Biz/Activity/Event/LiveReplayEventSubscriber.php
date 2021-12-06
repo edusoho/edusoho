@@ -3,6 +3,7 @@
 namespace Biz\Activity\Event;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -14,9 +15,26 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'live.replay.generate' => 'onLiveReplayGenerate',
-        );
+            'live.replay.delete' => 'onLiveReplayDelete',
+        ];
+    }
+
+    public function onLiveReplayDelete(Event $event)
+    {
+        $data = $event->getSubject();
+        if (isset($data['lessonId'])) {
+            $activity = $this->getActivityService()->getActivity($data['lessonId']);
+            $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['id'], ['replayStatus' => 'ungenerated']);
+        }
+
+        if (isset($data['courseId'])) {
+            $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($data['courseId'], 'live');
+            foreach ($activities as $activity) {
+                $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['id'], ['replayStatus' => 'ungenerated']);
+            }
+        }
     }
 
     public function onLiveReplayGenerate(Event $event)
@@ -29,18 +47,26 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
 
         $replay = current($replays);
 
-        if ($replay['type'] != 'live') {
+        if ('live' != $replay['type']) {
             return;
         }
 
         $activityId = $replay['lessonId'];
 
-        $liveActivityFields = array(
+        $liveActivityFields = [
             'replayStatus' => LiveReplayService::REPLAY_GENERATE_STATUS,
-        );
+        ];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $this->getActivityService()->updateActivity($activity['id'], $liveActivityFields);
+    }
+
+    /**
+     * @return LiveActivityService
+     */
+    private function getLiveActivityService()
+    {
+        return $this->getBiz()->service('Activity:LiveActivityService');
     }
 
     /**

@@ -1943,6 +1943,11 @@ custom_live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry'
     defaults:
         _controller: 'AppBundle:Activity/Live:customReplayEntry'
+#课程回放课程id和activityId改动
+course_live_activity_replay_entry:
+    path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/course_entry'
+    defaults:
+        _controller: 'AppBundle:Activity/Live:customReplayEntry'
 live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/entry'
     defaults:

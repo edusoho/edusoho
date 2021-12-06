@@ -23,6 +23,8 @@ class ReplayChooser extends Emitter{
   fileSelect(replay) {
     this.fillTitle(replay);
     this.emit('select', replay);
+    $('#minute').attr('disabled',true);
+    $('#second').attr('disabled',true);
   }
 
   fillTitle(replay){

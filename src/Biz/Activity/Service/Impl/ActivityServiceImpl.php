@@ -366,9 +366,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function processFindManageReplayConditions_withLiveActivityTab($activityIds, $conditions)
     {
-        if (empty($conditions['replayTagId']) && empty($conditions['replayPublic']) && (empty($conditions['keyword']) || 'anchor' != $conditions['keywordType'])) {
-            return $activityIds;
+        if (!empty($conditions['startTime'])) {
+            $startTime = strtotime(date('Y-m-d', $conditions['startTime']));
+            $liveConditions['liveStartTime_GT'] = $startTime;
         }
+
+        if (!empty($conditions['endTime'])) {
+            $endTime = strtotime(date('Y-m-d', $conditions['endTime']).' 23:59:59');
+            $liveConditions['liveStartTime_LT'] = $endTime;
+        }
+
         if (!empty($conditions['replayTagId'])) {
             $liveConditions['replayTagIds'] = "%|{$conditions['replayTagId']}|%";
         }
@@ -380,6 +387,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $liveConditions['anchorIds'] = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
         }
 
+        if (!empty($conditions['anchorId'])) {
+            $liveConditions['anchorIds'] = empty($liveConditions['anchorIds']) ? [$conditions['anchorId']] : array_merge($liveConditions['anchorIds'], [$conditions['anchorId']]);
+        }
+
+        if (empty($liveConditions)) {
+            return $activityIds;
+        }
         $liveActivities = $this->getLiveActivityService()->search($liveConditions, [], 0, PHP_INT_MAX, ['id']);
         $liveActivityIds = empty($liveActivities) ? [-1] : ArrayToolkit::column($liveActivities, 'id');
         $anchorActivities = $this->search(['mediaIds' => $liveActivityIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
@@ -390,9 +404,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function processFindManageReplayConditions_withCourseTab($activityIds, $conditions)
     {
-        if (empty($conditions['courseId']) && empty($conditions['categoryId']) && (empty($conditions['keyword']) || 'courseTitle' != $conditions['keywordType'])) {
-            return $activityIds;
-        }
         $courseIds = [];
         if (!empty($conditions['categoryId'])) {
             $courses = $this->getCourseService()->searchCourses(['categoryId' => $conditions['categoryId']], [], 0, PHP_INT_MAX, ['id']);
@@ -406,6 +417,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
         if (!empty($conditions['courseId'])) {
             $courseIds = empty($courseIds) ? [$conditions['courseId']] : array_intersect($courseIds, [$conditions['courseId']]);
+        }
+        if (empty($courseIds)) {
+            return $activityIds;
         }
         $activityCategory = $this->search(['ids' => $activityIds, 'courseIds' => $courseIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
         $activityCategoryIds = ArrayToolkit::column($activityCategory, 'id');
@@ -680,7 +694,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
 
-        return EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus'];
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus']) {
+            return true;
+        }
+
+        return $activity['endTime'] < time();
     }
 
     public function checkLiveStatus($courseId, $activityId)
