@@ -267,6 +267,10 @@ export default {
     },
     // 直播双行显示判断
     doubleLine(task) {
+      if (task.isReplay) {
+        return;
+      }
+
       if (!task.type) {
         return;
       }
