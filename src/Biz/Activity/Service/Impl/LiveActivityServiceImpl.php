@@ -106,6 +106,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
+            'liveStartTime' => $activity['startTime'],
+            'liveEndTime' => $activity['startTime'] + $activity['length'] * 60,
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];

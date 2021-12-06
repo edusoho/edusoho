@@ -8,7 +8,7 @@ interface LiveMemberStatisticsDao extends AdvancedDaoInterface
 {
     public function searchLiveMembersJoinCourseMember($conditions, $start, $limit);
 
-    public function sumWatchDurationByLiveId($liveId);
+    public function sumWatchDurationByLiveId($liveId, $userIds = []);
 
-    public function sumChatNumByLiveId($liveId);
+    public function sumChatNumByLiveId($liveId, $userIds = []);
 }
