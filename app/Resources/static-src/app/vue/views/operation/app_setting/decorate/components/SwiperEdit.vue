@@ -69,7 +69,7 @@ export default {
 
   props: {
     moduleInfo: {
-      type: [Array, Object],
+      type: Array,
       required: true
     }
   },

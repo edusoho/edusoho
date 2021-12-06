@@ -107,7 +107,7 @@ export default {
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();
-        info.items = this.vipLevels;
+        info.data.items = this.vipLevels;
       }
 
       this.modules.push(info);

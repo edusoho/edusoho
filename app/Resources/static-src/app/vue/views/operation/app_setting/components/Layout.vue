@@ -67,7 +67,6 @@ export default {
     right: -2px;
     bottom: -2px;
     border: 2px solid #31a1ff;
-    pointer-events: none;
   }
 
   .edit-operate {
