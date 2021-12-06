@@ -16,11 +16,11 @@ class LiveStatisticClassroomLive extends AbstractResource
     public function search(ApiRequest $request, $classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $tasks = $this->buildClassLiveTasks($request, $classroomId);
+        $totalTasks = $this->buildClassLiveTasks($request, $classroomId);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $tasks = array_slice($tasks, $offset, $limit);
+        $tasks = array_slice($totalTasks, $offset, $limit);
 
-        return $this->makePagingObject($this->processTasksData($tasks), count($tasks), $offset, $limit);
+        return $this->makePagingObject($this->processTasksData($tasks), count($totalTasks), $offset, $limit);
     }
 
     protected function processTasksData($tasks)
@@ -50,7 +50,7 @@ class LiveStatisticClassroomLive extends AbstractResource
         $taskConditions = [
             'courseIds' => empty($courseId) ? $courseIds : array_intersect($courseIds, [$courseId]),
             'type' => 'live',
-            'titleLike' => $request->query->get('title'),
+            'titleLike' => $request->query->get('title', ''),
             'status' => 'published',
         ];
 
@@ -59,7 +59,7 @@ class LiveStatisticClassroomLive extends AbstractResource
             ['startTime' => 'DESC'],
             0,
             PHP_INT_MAX,
-            ['id', 'startTime', 'endTime', 'length', 'title', 'courseId', 'fromCourseSetId']
+            ['id', 'startTime', 'endTime', 'length', 'title', 'courseId', 'fromCourseSetId', 'activityId']
         );
         $doingArr = [];
         $endArr = [];

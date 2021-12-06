@@ -693,7 +693,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
 
-        return EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus'];
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $activity['ext']['progressStatus']) {
+            return true;
+        }
+
+        return $activity['endTime'] < time();
     }
 
     public function checkLiveStatus($courseId, $activityId)
