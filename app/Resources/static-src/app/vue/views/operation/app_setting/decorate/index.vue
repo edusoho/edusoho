@@ -38,9 +38,11 @@
       <aside class="right-edit-container pull-left">
         <component
           v-if="currentModule.editComponent"
+          :key="currentModule.index"
           :is="currentModule.editComponent"
           :module-info="modules[currentModule.index].data"
-          @update:edit="updateEdit"
+          :module-data="modules[currentModule.index].data"
+          @update-edit="updateEdit"
         />
       </aside>
     </div>
@@ -107,7 +109,8 @@ export default {
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();
-        info.items = this.vipLevels;
+        const tempLevels = [...this.vipLevels];
+        info.data.items = tempLevels;
       }
 
       this.modules.push(info);
@@ -121,7 +124,8 @@ export default {
       _.forEach(this.modules, module => {
         const { type } = module;
         if (type === 'vip') {
-          module.data.items = this.vipLevels;
+          const tempLevels = [...this.vipLevels];
+          module.data.items = tempLevels;
         }
       });
     },
@@ -209,9 +213,19 @@ export default {
     },
 
     updateEdit(params) {
-      const { type, data } = params;
+      const { type, data, key, value } = params;
+      const { index } = this.currentModule;
       if (type === 'swiper') {
-        this.modules[this.currentModule.index].data = data;
+        this.modules[index].data = data;
+        return;
+      }
+
+      if (type === 'vip') {
+        if (key === 'sort') {
+          this.modules[index].data.items.reverse();
+        }
+        this.modules[index].data[key] = value;
+        return;
       }
     },
 
