@@ -5,7 +5,7 @@
     :is-last="isLast"
     @event-actions="handleClickAction"
   >
-    <div class="vip-title">会员专区</div>
+    <div class="vip-title" v-if="moduleData.titleShow === 'show'">会员专区</div>
     <div :class="['vip-container', moduleType]">
       <div class="swiper-wrapper clearfix">
         <div
@@ -76,6 +76,7 @@ export default {
 .vip-title {
   padding-right: 16px;
   padding-left: 16px;
+  margin-bottom: 12px;
   font-size: 16px;
   font-weight: 500;
   color: #333;
@@ -86,7 +87,6 @@ export default {
   overflow: hidden;
   padding-right: 16px;
   padding-left: 16px;
-  margin-top: 12px;
   width: 100%;
   height: 104px;
 

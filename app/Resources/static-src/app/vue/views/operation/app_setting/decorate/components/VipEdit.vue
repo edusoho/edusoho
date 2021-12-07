@@ -5,7 +5,7 @@
     <div class="design-editor">
       <a-form-model :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-model-item label="标题栏">
-          <a-radio-group v-model="titleShow" @change="changeShowTitle">
+          <a-radio-group :default-value="moduleData.titleShow"   @change="changeShowTitle">
             <a-radio value="show">
               显示
             </a-radio>
@@ -15,7 +15,7 @@
           </a-radio-group>
         </a-form-model-item>
         <a-form-model-item label="排列顺序：">
-          <a-radio-group v-model="sort" @change="changeSort">
+          <a-radio-group :default-value="moduleData.sort" @change="changeSort">
             <a-radio value="asc">
               从低到高
             </a-radio>
@@ -27,7 +27,7 @@
         <div class="vip-list">
           <div
             class="vip-list__item text-overflow"
-            v-for="(item, index) in vipItems"
+            v-for="(item, index) in moduleData.items"
             :key="index"
           >
             {{ item.name }}
@@ -59,10 +59,7 @@ export default {
   data() {
     return {
       labelCol: { span: 5 },
-      wrapperCol: { span: 18 },
-      titleShow: 'show',
-      sort: 'asc',
-      vipItems: []
+      wrapperCol: { span: 18 }
     }
   },
 
@@ -73,8 +70,6 @@ export default {
       titleShow: titleShow,
       sort
     });
-
-    this.getVipitems();
   },
 
   methods: {
@@ -93,18 +88,6 @@ export default {
         key: 'sort',
         value
       });
-    },
-
-    getVipitems() {
-      const { sort, items } = this.moduleData;
-
-      if (sort === 'ast') {
-        this.vipItems = items;
-        return;
-      }
-
-      const tempItems = _.cloneDeep(items);
-      this.vipItems = tempItems.reverse();
     }
   }
 }
