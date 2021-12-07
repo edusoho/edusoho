@@ -14,9 +14,29 @@ export default {
 
 <style lang="less" scoped>
 .coupon-item {
+  position: relative;
   width: 100%;
   height: 100%;
   color: #fff;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 70px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  &::before {
+    left: -6px;
+  }
+
+  &::after {
+    right: -6px;
+  }
 
   &__top {
     height: 70%;
