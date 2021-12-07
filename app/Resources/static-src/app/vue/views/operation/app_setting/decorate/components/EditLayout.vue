@@ -2,6 +2,9 @@
   <div class="edit-layout">
     <div class="edit-layout__title">
       <slot name="title" />
+      <span class="edit-layout__subtitle">
+        <slot name="subtitle" />
+      </span>
     </div>
     <div class="edit-layout__container">
       <slot />
@@ -20,6 +23,11 @@
     font-weight: 600;
     color: #333;
     border-bottom: 1px solid #f5f5f5;
+  }
+
+  &__subtitle {
+    font-size: 12px;
+    color: #666;
   }
 
   &__container {
