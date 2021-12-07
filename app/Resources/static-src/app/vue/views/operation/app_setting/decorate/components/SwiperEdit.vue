@@ -215,7 +215,7 @@ export default {
     },
 
     upateEdit() {
-      this.$emit('update:edit', {
+      this.$emit('update-edit', {
         type: 'swiper',
         data: this.moduleData
       });

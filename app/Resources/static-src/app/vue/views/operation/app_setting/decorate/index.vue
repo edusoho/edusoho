@@ -40,7 +40,8 @@
           v-if="currentModule.editComponent"
           :is="currentModule.editComponent"
           :module-info="modules[currentModule.index].data"
-          @update:edit="updateEdit"
+          :module-data="modules[currentModule.index].data"
+          @update-edit="updateEdit"
         />
       </aside>
     </div>
@@ -209,9 +210,15 @@ export default {
     },
 
     updateEdit(params) {
-      const { type, data } = params;
+      const { type, data, key, value } = params;
       if (type === 'swiper') {
         this.modules[this.currentModule.index].data = data;
+        return;
+      }
+
+      if (type === 'vip') {
+        this.modules[this.currentModule.index].data[key] = value;
+        return;
       }
     },
 
