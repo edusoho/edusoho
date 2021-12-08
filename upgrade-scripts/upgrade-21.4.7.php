@@ -62,8 +62,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'processActivityLiveTime',
             'processActivityLiveProgressStatus',
-            'processLiveStatisticsMemberData',
-            'processLiveCloudStatisticData',
+            'processActivityLiveAnchorId',
             'registerCallbackUrl'
         );
 
@@ -99,104 +98,41 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function processActivityLiveTime()
+    public function processActivityLiveAnchorId($page)
     {
-        $this->getConnection()->exec("update activity_live a  join activity b on a.id = b.mediaId set a.liveEndTime = b.endTime,a.liveStartTime=b.startTime where b.mediaType = 'live';");
-        $this->logger('info', '修改直播时间数据');
-        return 1;
-    }
-
-    public function processLiveStatisticsMemberData($page)
-    {
-        $lives = $this->getLiveStatisticsDao()->search(['type'=>'visitor'],['createdTime'=>'ASC'],($page-1) * 50, 50);
-        if(empty($lives)){
-            return 1;
-        }
-        $liveIds = \AppBundle\Common\ArrayToolkit::column($lives, 'liveId');
-        $liveActivities = $this->getLiveActivityDao()->search(['liveIds' => $liveIds], [], 0, count($liveIds));
-        $activityIds = \AppBundle\Common\ArrayToolkit::column($liveActivities, 'id');
-        $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'liveId');
-        $activities = $this->getActivityDao()->search(['mediaIds' => $activityIds, 'mediaType'=> 'live', 'copyId'=>0], [], 0, count($activityIds));
-        $activities = \AppBundle\Common\ArrayToolkit::index($activities, 'mediaId');
-        $count = $this->getUserDao()->count([]);
-
-        foreach ($lives as $live){
-            $liveCount = $this->getLiveStatisticsDao()->count(['liveId'=>$live['liveId']]);
-            if($liveCount == 0 ||empty($liveActivities[$live['liveId']]) || empty($activities[$liveActivities[$live['liveId']]['id']])){
-                continue;
-            }
-            $liveMembers = $this->getLiveMemberStatisticsDao()->search(['liveId'=>$live['liveId']],[],0,PHP_INT_MAX,['userId']);
-            $userIds = \AppBundle\Common\ArrayToolkit::column($liveMembers, 'userId');
-            $activity = $activities[$liveActivities[$live['liveId']]['id']];
-            $create = [];
-            if(empty($live['data']['detail'])){
-                continue;
-            }
-            foreach ($live['data']['detail'] as $user){
-                $userId = $user['userId'];
-                if( $userId > $count){
-                    $baseUser = $this->getUserDao()->getByNickname($user['nickname']);
-                    $userId = $baseUser['id'];
-                }
-                if(!empty($create[$live['liveId'].'-'.$userId]) || empty($user['firstJoin']) || in_array($userId, $userIds)){
-                    continue;
-                }
-                $create[$live['liveId'].'-'.$userId] = [
-                    'liveId' => $live['liveId'],
-                    'userId' => $userId,
-                    'firstEnterTime' => $user['firstJoin'],
-                    'watchDuration'=> empty($user['learnTime']) || $user['learnTime']<0 ? 0:$user['learnTime'],
-                    'checkinNum' => 0,
-                    'requestTime' => time(),
-                    'chatNum' => 0,
-                    'answerNum' => 0,
-                ];
-            }
-            if(!empty($create)){
-                $this->getLiveMemberStatisticsDao()->batchCreate(array_values($create));
-            }
-        }
-        $this->logger('info', '修改LiveMemberStatistics数据');
-        return $page+1;
-    }
-
-    public function processLiveCloudStatisticData($page)
-    {
-        $liveActivities = $this->getLiveActivityDao()->search([],['id'=>'ASC'],($page-1) * 50, 50);
+        $liveActivities = $this->getLiveActivityDao()->search([],['id'=>'ASC'],($page-1) * 500, 500, ['id']);
         if(empty($liveActivities)){
             return 1;
         }
-        $liveActivities = \AppBundle\Common\ArrayToolkit::index($liveActivities, 'liveId');
-        $update=[];
-        foreach ($liveActivities as $liveActivity){
-            if($liveActivity['progressStatus'] != 'closed' ){
+        $liveActivityIds = \AppBundle\Common\ArrayToolkit::column($liveActivities, 'id');
+        $activities = $this->getActivityDao()->search(['mediaIds'=>$liveActivityIds, 'mediaType' => 'live', 'copyId' =>0], ['createdTime'=>'ASC'], 0, PHP_INT_MAX, ['id','mediaId', 'fromCourseId', 'fromUserId']);
+        $courseIds = \AppBundle\Common\ArrayToolkit::column($activities, 'fromCourseId');
+        if(empty($courseIds)){
+            return $page+1;
+        }
+        $courses = $this->getCourseDao()->search(['ids' => $courseIds], [], 0, count($courseIds), ['id', 'teacherIds']);
+        $courses = \AppBundle\Common\ArrayToolkit::index($courses, 'id');
+        $update = [];
+        foreach ($activities as $activity){
+            if(empty($courses[$activity['fromCourseId']])){
                 continue;
             }
-            $time = $this->getLiveMemberStatisticsDao()->sumWatchDurationByLiveId($liveActivity['liveId']);
-            $count = $this->getLiveMemberStatisticsDao()->count(['liveId'=>$liveActivity['liveId']]);
-            $update[$liveActivity['id']] = [
-                'cloudStatisticData'=>[
-                    'memberRequestTime' => $liveActivity['liveEndTime'],
-                    'teacherId' => empty($liveActivity['anchorId']) ? 0 : $liveActivity['anchorId'],
-                    'startTime' => $liveActivity['liveStartTime'],
-                    'endTime' => $liveActivity['liveEndTime'],
-                    'length' => round(($liveActivity['liveEndTime']-$liveActivity['liveStartTime']) / 60, 1),
-                    'requestTime' => $liveActivity['liveEndTime'],
-                    'maxOnlineNumber' => 0,
-                    'checkinNum' => 0,
-                    'chatNumber' => 0,
-                    'memberNumber' => $count,
-                    'avgWatchTime' => empty($count) || empty($time) ? 0 :round($time / ($count * 60), 1),
-                    'detailFinished' => 1,
-                    'memberFinished' => 1,
-                ]
+            $update[$activity['mediaId']] = [
+                'anchorId' => empty($courses[$activity['fromCourseId']]['teacherIds']) ? 0 : $courses[$activity['fromCourseId']]['teacherIds'][0],
             ];
         }
         if(!empty($update)){
             $this->getLiveActivityDao()->batchUpdate(array_keys($update), $update, 'id');
         }
-        $this->logger('info', '修改cloudStatisticData数据');
+        $this->logger('info', '修改liveActivity讲师');
         return $page+1;
+    }
+
+    public function processActivityLiveTime()
+    {
+        $this->getConnection()->exec("update activity_live a  join activity b on a.id = b.mediaId set a.liveEndTime = b.endTime,a.liveStartTime=b.startTime where b.mediaType = 'live';");
+        $this->logger('info', '修改直播时间数据');
+        return 1;
     }
 
     public function processActivityLiveProgressStatus($page)
@@ -210,9 +146,6 @@ class EduSohoUpgrade extends AbstractUpdater
             $status = 'created';
             if($liveActivity['liveStartTime'] > time()){
                 $status = 'created';
-            }
-            if($liveActivity['liveStartTime'] < time() && $liveActivity['liveEndTime'] > time()){
-                $status = 'live';
             }
             if($liveActivity['liveEndTime'] < time()){
                 $status = 'closed';
