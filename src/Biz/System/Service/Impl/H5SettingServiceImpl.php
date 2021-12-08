@@ -78,8 +78,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
             foreach ($courses as $key => $course) {
-                $liveTaskStatus = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
-                $course['liveStatus'] = $liveTaskStatus;
+                $course['liveStatus'] = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
             }
 
             $discoverySetting['data']['items'] = $courses;
