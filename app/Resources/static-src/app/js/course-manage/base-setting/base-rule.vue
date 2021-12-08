@@ -59,21 +59,7 @@
                 </el-col>
             </el-form-item>
 
-            <el-form-item v-if="courseSet.type === 'live'"
-                          :label="'course.plan_setup.member_numbers'|trans"
-                          prop="maxStudentNum">
-                <el-col :span="8">
-                    <el-input v-model="baseRuleForm.maxStudentNum" ref="maxStudentNum"></el-input>
-                </el-col>
-                <el-col :span="6" class="mlm">
-                    {{'site.data.people'|trans}}
-                    <a class="cd-text-sm cd-link-primary" :href="contentCourseRuleUrl" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
-                </el-col>
-                <div v-if="liveCapacity !== null && parseInt(baseRuleForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
-                    {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
-                </div>
-            </el-form-item>
-            <div v-else>
+            <div v-if="courseSet.type != 'live'">
                 <el-form-item :label="'course.marketing_setup.preview.set_task'|trans({'taskName': taskName})">
                     <el-col :span="16">
                         <ul v-if="canFreeTasks.length" class="list-group mb0 pb0 js-task-price-setting-scroll"
@@ -253,10 +239,6 @@
             }
 
             let liveCapacity = null;
-            this.$axios.get(this.liveCapacityUrl).then((response) => {
-                this.liveCapacity = response.data.capacity;
-            });
-
             return {
                 liveCapacity: liveCapacity,
                 learnModeRadio: {
@@ -279,7 +261,6 @@
                     learnMode: this.course.learnMode,
                     watchLimit: this.course.watchLimit,
                     enableFinish: this.course.enableFinish,
-                    maxStudentNum: this.course.maxStudentNum,
                     tryLookLength: parseInt(this.course.tryLookLength),
                     enableAudio: this.course.enableAudio,
                     freeTaskIds: Object.keys(this.freeTasks)
@@ -290,24 +271,7 @@
                         message: Translator.trans('validate.unsigned_integer.message'),
                         trigger: 'blur'
                     },
-                    maxStudentNum: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.max_student_num_error_hint'),
-                            trigger: 'blur'
-                        },
-                        {
-                            validator: validation.digits,
-                            message: Translator.trans('validate.positive_integer.message'),
-                            trigger: 'blur'
-                        },
-                        // {
-                        //     validator(rule, value, callback) {
-                        //         parseInt(value) <= parseInt(liveCapacity) ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
-                        //     },
-                        //     trigger: 'blur',
-                        // }
-                    ],
+
                 },
                 tryLookLengthOptions: tryLookLengthOptions,
                 watchLimitTip: Translator.trans('course.marketing_setup.rule.watch_time_limit.watch_limit_tips'),

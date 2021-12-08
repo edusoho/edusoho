@@ -3,11 +3,11 @@
 namespace Biz\Sms\Job;
 
 use Biz\AppLoggerConstant;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 
 class SmsSendOneDayJob extends AbstractJob
 {
@@ -26,9 +26,9 @@ class SmsSendOneDayJob extends AbstractJob
                 $count = ceil($return['count'] / 1000);
 
                 $api = CloudAPIFactory::create('leaf');
-                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                $api->post('/sms/sendBatch', ['total' => $count, 'callbackUrls' => $callbackUrls]);
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", ['error' => $e->getMessage()]);
             }
         }
     }

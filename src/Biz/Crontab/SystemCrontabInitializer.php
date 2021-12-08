@@ -203,6 +203,10 @@ class SystemCrontabInitializer
                 'expression' => "{$weChatSubscribeRecordRandNum}/30 * * * *",
                 'class' => 'Biz\WeChat\Job\WechatSubscribeRecordSynJob',
             ],
+            'DaySyncLiveDataJob' => [
+                'expression' => "{$xapiRandNum1} 5 * * *",
+                'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
+            ],
 //            'StatisticsPageStayDailyDataJob' => [
 //                'expression' => '30 0 * * *',
 //                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',

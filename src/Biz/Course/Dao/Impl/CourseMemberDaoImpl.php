@@ -605,6 +605,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'role = :role',
                 'isVisible = :isVisible',
                 'classroomId = :classroomId',
+                'userId NOT IN (:excludeUserIds)',
                 'noteNum > :noteNumGreaterThan',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',

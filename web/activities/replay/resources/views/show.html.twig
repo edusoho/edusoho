@@ -1,0 +1,30 @@
+{% extends 'activity/content-layout.html.twig' %}
+{% set replays = get_live_activity_replays(activity.id)|default() %}
+
+{% block body %}
+  <div class="iframe-parent-content ph20 pv20">
+    <div class="lesson-content lesson-content-text" data-role="lesson-content"
+         {% if not app.request.get('preview') %}data-fresh-live-stat="{{ fresh_task_learn_stat(app.request,activity.id) }}"{% endif %}>
+      <div class="lesson-content-text-body">
+        {% if replays %}
+          <div class='live-show-item replay-list'>
+            {% for btn in replays %}
+              <a class="btn btn-primary btn-replays js-replay" data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ btn.url }}"  target='_blank'>
+                {{ btn.title }}
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="lesson-content lesson-content-text" id="lesson-live-content"  data-role="lesson-content">
+            <div class="lesson-content-text-body">
+              <div class='live-show-item'>
+                <p class='title'>{{ 'site.message.error'|trans}}</p>
+                <p>{{'course.live_replay_manage.live_replay_empty'|trans}}</p>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

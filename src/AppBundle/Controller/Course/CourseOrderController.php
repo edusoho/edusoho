@@ -58,7 +58,7 @@ class CourseOrderController extends BaseController
         }
 
         $remainingStudentNum = $this->getRemainStudentNum($course);
-        if ($remainingStudentNum <= 0 && 'live' == $course['type']) {
+        if ($course['maxStudentNum'] > 0 && $remainingStudentNum <= 0 && 'live' == $course['type']) {
             return $this->render(
                 'course/order/remainless-modal.html.twig',
                 [
@@ -68,7 +68,7 @@ class CourseOrderController extends BaseController
         }
 
         $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
-        if (!empty($multiClass['maxStudentNum'])) {
+        if ($multiClass['maxStudentNum'] > 0) {
             $remainingStudentNum = $this->getMultiClassRemainStudentNum($multiClass, $course);
             if ($remainingStudentNum <= 0) {
                 return $this->render(

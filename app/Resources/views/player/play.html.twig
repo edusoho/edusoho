@@ -45,8 +45,10 @@
             data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
           {% endif %}
           class="ballon-video-player"
-          {% if context.hideQuestion|default(0) == 0 %}
-            data-markerurl="{{ path('course_task_question_markers_show', {mediaId: file.id}) }}"
+             data-context="{{ context|json_encode()}}"
+          {% if context.hideQuestion|default(0) == 0 and context.activityId|default(0) > 0 %}
+            data-activity-id="{{ context.activityId|default(0) }}"
+            data-markerurl="{{ path('course_task_question_markers_show', {activityId: context.activityId}) }}"
             data-finish-question-marker-url="{{ path('course_task_question_marker_finish') }}"
           {% endif %}
           {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
