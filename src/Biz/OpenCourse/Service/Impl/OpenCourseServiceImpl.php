@@ -1007,10 +1007,27 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
 
             $course['lesson'] = $lesson;
+
+            $course['liveStatus'] = $this->filterLessonStatus($lesson['startTime'], $lesson['endTime']);
             $results[] = $course;
         }
 
         return $results;
+    }
+
+    protected function filterLessonStatus($startTime, $endTime)
+    {
+        if ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        }
+
+        if (time() > $endTime) {
+            return 'end';
+        }
+
+        if ($startTime > time()) {
+            return 'ahead';
+        }
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)

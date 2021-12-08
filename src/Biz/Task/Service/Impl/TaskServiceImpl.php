@@ -102,6 +102,55 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
+    public function getRecentLiveTaskStatus($courseId)
+    {
+        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live'], ['startTime' => 'ASC'], 0, PHP_INT_MAX);
+
+        if (0 == count($tasks)) {
+            return 'null';
+        }
+
+        if (1 == count($tasks)) {
+            $task = array_values($tasks);
+
+            return $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+        }
+
+        foreach ($tasks as $task) {
+            $status = $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+            if ('living' == $status) {
+                $hasLivingTask = true;
+
+                return $status;
+            }
+
+            if ('ahead' == $status && !$hasLivingTask) {
+                $hasAheadTask = true;
+
+                return $status;
+            }
+
+            if ('end' == $status && !$hasAheadTask) {
+                return $status;
+            }
+        }
+    }
+
+    protected function filterLiveTaskStatus($startTime, $endTime)
+    {
+        if ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        }
+
+        if (time() > $endTime) {
+            return 'end';
+        }
+
+        if ($startTime > time()) {
+            return 'ahead';
+        }
+    }
+
     protected function createActivity($fields)
     {
         $activity = $this->getActivityService()->createActivity($fields);

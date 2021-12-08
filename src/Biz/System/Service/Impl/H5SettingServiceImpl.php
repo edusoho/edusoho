@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\H5SettingService;
+use Biz\Task\Service\TaskService;
 use Doctrine\Common\Inflector\Inflector;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
@@ -16,9 +17,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function getDiscovery($portal, $mode = 'published', $usage = 'show')
     {
         $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", []);
+
         if (empty($discoverySettings)) {
             $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", []);
         }
+
         //草稿和发布的设置都为空时获取第一版的默认设置
         if (empty($discoverySettings)) {
             $discoverySettings = $this->getDefaultDiscovery($portal);
@@ -74,6 +77,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
+            foreach ($courses as $key => $course) {
+                $liveTaskStatus = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
+                $course['liveStatus'] = $liveTaskStatus;
+            }
+
             $discoverySetting['data']['items'] = $courses;
         }
 
@@ -637,5 +645,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getItemBankExerciseService()
     {
         return $this->biz->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getCourseTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }
