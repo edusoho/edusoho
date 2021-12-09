@@ -221,22 +221,7 @@ class ItemHelper
         $lessonInfos = [];
         $originItems = [];
         foreach ($items as $key => $item) {
-            $tasks = $item['tasks'];
-            if (!empty($tasks)) {
-                foreach ($tasks as &$courseItemTask) {
-                    if ('replay' === $courseItemTask['type']) {
-                        $courseItemTask['type'] = 'live';
-                        $courseItemTask['isReplay'] = 1;
-                        $activity = $courseItemTask['activity'];
-                        $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
-                        $replayActivity['finishType'] = $activity['finishType'];
-                        $replayActivity['finishData'] = $activity['finishData'];
-                        $courseItemTask['activity'] = $replayActivity;
-                    }
-                }
-            }
-            $item['tasks'] = $tasks;
-            $originItems[$key] = $item;
+            $originItems[$key] = $this->processTasks($item);
         }
 
         foreach ($originItems as $item) {
@@ -275,6 +260,39 @@ class ItemHelper
         }
 
         return $result;
+    }
+
+    protected function processTasks($item)
+    {
+        if (isset($item['tasks'])) {
+            $tasks = $item['tasks'];
+            if (!empty($tasks)) {
+                foreach ($tasks as &$courseItemTask) {
+                    if ('replay' === $courseItemTask['type']) {
+                        $courseItemTask['type'] = 'live';
+                        $courseItemTask['isReplay'] = 1;
+                        $activity = $courseItemTask['activity'];
+                        $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+                        $replayActivity['finishType'] = $activity['finishType'];
+                        $replayActivity['finishData'] = $activity['finishData'];
+                        $courseItemTask['activity'] = $replayActivity;
+                    }
+                }
+            }
+            $item['tasks'] = $tasks;
+        }
+
+        if (!isset($item['tasks']) && !empty($item['type'] && 'replay' == $item['type'])) {
+            $item['type'] = 'live';
+            $activity = $item['activity'];
+            $item['isReplay'] = 1;
+            $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+            $replayActivity['finishType'] = $activity['finishType'];
+            $replayActivity['finishData'] = $activity['finishData'];
+            $item['activity'] = $replayActivity;
+        }
+
+        return $item;
     }
 
     protected function filterUnPublishLessonV2($lessonInfos)
