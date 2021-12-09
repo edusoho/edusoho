@@ -231,6 +231,10 @@ export default {
         this.modules[index].data[key] = value;
         return;
       }
+
+      if (type === 'coupon') {
+        this.modules[index].data[key] = value;
+      }
     },
 
     handleClickSave() {

@@ -5,7 +5,7 @@
     :is-last="isLast"
     @event-actions="handleClickAction"
   >
-    <div class="coupon-title">优惠券</div>
+    <div class="coupon-title" v-if="moduleData.titleShow === 'show'">优惠券</div>
 
     <div class="coupon-container">
       <div v-if="moduleData.items.length > 1">

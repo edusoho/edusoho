@@ -19,3 +19,4 @@ export * from './WrongBook';
 export * from './TeacherQualification';
 export * from './Classroom';
 export * from './Plugins';
+export * from './Coupon';
