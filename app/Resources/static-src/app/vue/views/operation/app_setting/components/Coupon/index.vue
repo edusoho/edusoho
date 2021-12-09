@@ -7,13 +7,21 @@
   >
     <div class="coupon-title" v-if="moduleData.titleShow === 'show'">优惠券</div>
 
-    <div class="coupon-container">
-      <div v-if="moduleData.items.length > 1">
-        轮播图
+    <div :class="['coupon-container', moduleType]">
+      <div v-if="moduleData.items.length > 1" class="swiper-wrapper clearfix">
+        <div
+          v-for="item in moduleData.items"
+          :key="item.id"
+          class="swiper-slide"
+        >
+          <div class="swiper-slide-container">
+            <coupon-item :is-more="true" :coupon="item" />
+          </div>
+        </div>
       </div>
 
       <template v-else-if="moduleData.items.length > 0">
-        <coupon-item />
+        <coupon-item v-for="item in moduleData.items" :key="item.id" :coupon="item" />
       </template>
 
       <div v-else class="empty">暂未添加优惠卷</div>
@@ -22,6 +30,9 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import Swiper from 'swiper/dist/idangerous.swiper.min.js';
+import 'swiper/dist/idangerous.swiper.css';
 import moduleMixin from '../moduleMixin';
 import CouponItem from './Item.vue';
 
@@ -32,6 +43,42 @@ export default {
 
   components: {
     CouponItem
+  },
+
+  data() {
+    return {
+      swiperKey: 0
+    }
+  },
+
+  watch: {
+    moduleData: {
+      handler: function() {
+        this.swiperKey++;
+        this.reInitSwiper();
+      },
+      deep: true
+    }
+  },
+
+  mounted() {
+    this.initSwiepr();
+  },
+
+  methods: {
+    initSwiepr() {
+      if (_.size(this.moduleData.items) <= 1) return;
+
+      new Swiper(`.${this.moduleType}`, {
+        slidesPerView: 1.5
+      });
+    },
+
+    reInitSwiper() {
+      this.$nextTick(() => {
+        this.initSwiepr();
+      });
+    }
   }
 }
 </script>
@@ -52,12 +99,18 @@ export default {
   padding-right: 16px;
   padding-left: 16px;
   width: 100%;
-  height: 104px;
+  height: 112px;
 
   .empty {
     width: 100%;
     height: 100%;
     background-color: #eee;
+  }
+
+  .swiper-slide-container {
+    position: relative;
+    margin-right: 24px;
+    height: 100%;
   }
 }
 </style>

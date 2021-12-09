@@ -102,12 +102,12 @@ const columns = [
         }
       }
 
-       if (type === 'minus') {
+      if (type === 'minus') {
         discountType = '抵价';
         text = '元';
       }
 
-      return `${discountType} ${rate} ${text} / ${targetType}`;;
+      return `${discountType} ${rate} ${text} / ${targetType}`;
     }
   },
   {
@@ -125,7 +125,7 @@ const columns = [
       const { deadlineMode, deadline, fixedDay } = record;
 
       if (deadlineMode === 'day') {
-        return `领取${fixedDay}天后有效`;
+        return `领取${fixedDay}天内有效`;
       }
 
       if (deadlineMode === 'time') {
