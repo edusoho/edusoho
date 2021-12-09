@@ -22,9 +22,19 @@
       </div>
 
       <div class="design-editor__item">
-        <div v-for="item in moduleData.items" :key="item.id">
-          {{ item.name }}
-        </div>
+        <draggable
+          class="coupon-list"
+          v-model="moduleData.items"
+          v-bind="dragOptions"
+          @start="drag = true"
+          @end="drag = false"
+        >
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+            <div class="coupon-list__item" v-for="item in moduleData.items" :key="item.id">
+              {{ item.name }}
+            </div>
+          </transition-group>
+        </draggable>
       </div>
     </div>
 
@@ -35,6 +45,7 @@
 <script>
 import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
+import Draggable from 'vuedraggable';
 import SelectCouponModal from './SelectCouponModal.vue';
 
 export default {
@@ -49,7 +60,25 @@ export default {
 
   components: {
     EditLayout,
-    SelectCouponModal
+    SelectCouponModal,
+    Draggable
+  },
+
+  data() {
+    return {
+      drag: false
+    }
+  },
+
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      }
+    }
   },
 
   methods: {
@@ -75,3 +104,20 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.coupon-list {
+  padding-right: 8px;
+  padding-left: 8px;
+  background: rgba(237, 237, 237, 0.53);
+
+  &__item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+</style>
