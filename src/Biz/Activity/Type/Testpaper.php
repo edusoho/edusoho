@@ -69,6 +69,7 @@ class Testpaper extends Activity
                 'answerSceneId' => $answerScene['id'],
                 'finishCondition' => $fields['finishCondition'],
                 'answerMode' => $fields['answerMode'],
+                'customComments' => $fields['customComments'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -158,6 +159,7 @@ class Testpaper extends Activity
                 'requireCredit' => empty($filterFields['requireCredit']) ? 0 : $filterFields['requireCredit'],
                 'finishCondition' => $filterFields['finishCondition'],
                 'answerMode' => $filterFields['answerMode'],
+                'customComments' => $filterFields['customComments'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -211,7 +213,10 @@ class Testpaper extends Activity
     protected function filterFields($fields)
     {
         $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
-        $fields['passScore'] = empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData'], 0);
+        $fields['passScore'] = empty($fields['finishData']) ? 0 : round(
+            $testPaper['total_score'] * $fields['finishData'],
+            0
+        );
 
         if (!empty($fields['finishType'])) {
             if ('score' == $fields['finishType']) {
@@ -223,6 +228,17 @@ class Testpaper extends Activity
                 $fields['finishCondition'] = [];
             }
         }
+        $customComments = [];
+        if (!empty($fields['start'])) {
+            foreach ($fields['start'] as $key => $val) {
+                $customComments[] = [
+                    'start' => $val,
+                    'end' => $fields['end'][$key],
+                    'comment' => $fields['comment'][$key],
+                ];
+            }
+        }
+        $fields['customComments'] = json_encode($customComments, JSON_UNESCAPED_UNICODE);
 
         $filterFields = ArrayToolkit::parts(
             $fields,
@@ -241,6 +257,7 @@ class Testpaper extends Activity
                 'passScore',
                 'enable_facein',
                 'answerMode',
+                'customComments',
             ]
         );
 

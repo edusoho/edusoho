@@ -77,12 +77,14 @@ class ActivityController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId, true);
+            $activity['customComments'] = json_decode($activity['ext']['customComments'], true);
         } else {
             $activity = array(
                 'id' => $activityId,
                 'mediaType' => $type,
                 'fromCourseId' => $courseId,
                 'fromCourseSetId' => $course['courseSetId'],
+                'customComments' => [],
             );
         }
         $container = $this->get('activity_runtime_container');
