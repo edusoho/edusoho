@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26095827",
+      "name": "replay",
+      "font_class": "replay",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "23720457",
       "name": "review",
       "font_class": "review",

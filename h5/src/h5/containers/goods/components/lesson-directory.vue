@@ -267,6 +267,10 @@ export default {
     },
     // 直播双行显示判断
     doubleLine(task) {
+      if (task.isReplay) {
+        return;
+      }
+
       if (!task.type) {
         return;
       }
@@ -455,7 +459,10 @@ export default {
     },
     // 任务图标(缺少下载)
     iconfont(task) {
-      const type = task.type;
+      const { type, isReplay } = task;
+
+      if (isReplay) return 'icon-replay';
+
       switch (type) {
         case 'audio':
           return 'icon-yinpin';
