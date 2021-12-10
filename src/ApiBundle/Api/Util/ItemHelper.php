@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Util;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -214,10 +215,15 @@ class ItemHelper
         return $fetchSubtitlesUrls ? $this->afterDeal($result, $isSsl) : $result;
     }
 
-    public function convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
+    public function convertToLeadingItemsV2($items, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
     {
         $result = [];
         $lessonInfos = [];
+        $originItems = [];
+        foreach ($items as $key => $item) {
+            $originItems[$key] = $this->processTasks($item);
+        }
+
         foreach ($originItems as $item) {
             if ('lesson' == $item['type']) {
                 unset($item['tasks']);
@@ -254,6 +260,39 @@ class ItemHelper
         }
 
         return $result;
+    }
+
+    protected function processTasks($item)
+    {
+        if (isset($item['tasks'])) {
+            $tasks = $item['tasks'];
+            if (!empty($tasks)) {
+                foreach ($tasks as &$courseItemTask) {
+                    if ('replay' === $courseItemTask['type']) {
+                        $courseItemTask['type'] = 'live';
+                        $courseItemTask['isReplay'] = 1;
+                        $activity = $courseItemTask['activity'];
+                        $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+                        $replayActivity['finishType'] = $activity['finishType'];
+                        $replayActivity['finishData'] = $activity['finishData'];
+                        $courseItemTask['activity'] = $replayActivity;
+                    }
+                }
+            }
+            $item['tasks'] = $tasks;
+        }
+
+        if (!isset($item['tasks']) && !empty($item['type'] && 'replay' == $item['type'])) {
+            $item['type'] = 'live';
+            $activity = $item['activity'];
+            $item['isReplay'] = 1;
+            $replayActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+            $replayActivity['finishType'] = $activity['finishType'];
+            $replayActivity['finishData'] = $activity['finishData'];
+            $item['activity'] = $replayActivity;
+        }
+
+        return $item;
     }
 
     protected function filterUnPublishLessonV2($lessonInfos)
@@ -331,5 +370,13 @@ class ItemHelper
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 }
