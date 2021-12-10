@@ -648,6 +648,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activityConfig = $this->getActivityConfig($activity['mediaType']);
             $media = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
+            $activity['customComments'] = $media['customComments'] ?? [];
 
             return $activity;
         }
@@ -800,7 +801,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId)
     {
-        $records = $this->getAnswerRecordService()->search(['user_ids' => $userIds,'answer_scene_id' => $answerSceneId], ['end_time' => 'ASC'], 0, PHP_INT_MAX);
+        $records = $this->getAnswerRecordService()->search(['user_ids' => $userIds, 'answer_scene_id' => $answerSceneId], ['end_time' => 'ASC'], 0, PHP_INT_MAX);
         $records = ArrayToolkit::group($records, 'user_id');
         $orderedRecords = [];
         foreach ($records as $record) {
@@ -808,7 +809,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             foreach ($record as $userRecord) {
                 $orderedRecords[$userRecord['id']]['answer_record_id'] = $userRecord['id'];
                 $orderedRecords[$userRecord['id']]['submit_num'] = $index;
-                $index++;
+                ++$index;
             }
         }
 

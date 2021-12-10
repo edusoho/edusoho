@@ -228,17 +228,17 @@ class Testpaper extends Activity
                 $fields['finishCondition'] = [];
             }
         }
-        $customComments = [];
+
+        $fields['customComments'] = [];
         if (!empty($fields['start'])) {
             foreach ($fields['start'] as $key => $val) {
-                $customComments[] = [
+                $fields['customComments'][] = [
                     'start' => $val,
                     'end' => $fields['end'][$key],
                     'comment' => $fields['comment'][$key],
                 ];
             }
         }
-        $fields['customComments'] = json_encode($customComments, JSON_UNESCAPED_UNICODE);
 
         $filterFields = ArrayToolkit::parts(
             $fields,
