@@ -40,8 +40,7 @@
       border-bottom: 1px solid #f5f5f5;
 
       &__item {
-        padding-top: 16px;
-        padding-bottom: 16px;
+        margin-bottom: 24px;
       }
 
       &__required {

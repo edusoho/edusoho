@@ -68,6 +68,8 @@ import vip from '../components/Vip.vue';
 import vip_edit from './components/VipEdit.vue';
 import coupon from '../components/Coupon/index.vue';
 import coupon_edit from './components/CouponEdit/index.vue';
+import poster from '../components/Poster/index.vue';
+import poster_edit from './components/PosterEdit/index.vue';
 
 export default {
   components: {
@@ -81,7 +83,9 @@ export default {
     vip,
     vip_edit,
     coupon,
-    coupon_edit
+    coupon_edit,
+    poster,
+    poster_edit
   },
 
   data() {
@@ -233,6 +237,11 @@ export default {
       }
 
       if (type === 'coupon') {
+        this.modules[index].data[key] = value;
+        return;
+      }
+
+      if (type === 'poster') {
         this.modules[index].data[key] = value;
       }
     },
