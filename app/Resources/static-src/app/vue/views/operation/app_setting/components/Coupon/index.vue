@@ -5,36 +5,45 @@
     :is-last="isLast"
     @event-actions="handleClickAction"
   >
-    <div class="vip-title" v-if="moduleData.titleShow === 'show'">会员专区</div>
-    <div :class="['vip-container', moduleType]">
-      <div class="swiper-wrapper clearfix">
+    <div class="coupon-title" v-if="moduleData.titleShow === 'show'">优惠券</div>
+
+    <div :class="['coupon-container', moduleType]">
+      <div v-if="moduleData.items.length > 1" class="swiper-wrapper clearfix">
         <div
-          v-for="(item, index) in moduleData.items"
-          :key="index"
+          v-for="item in moduleData.items"
+          :key="item.id"
           class="swiper-slide"
         >
           <div class="swiper-slide-container">
-            <div class="vip-info">
-              <div class="vip-info__name text-overflow">{{ item.name }}</div>
-              <div class="vip-info__free">{{ item.freeCourseNum }} 门课程，{{ item.freeClassroomNum }} 门班级</div>
-            </div>
-            <img :src="item.background">
+            <coupon-item :is-more="true" :coupon="item" />
           </div>
         </div>
       </div>
+
+      <template v-else-if="moduleData.items.length > 0">
+        <coupon-item v-for="item in moduleData.items" :key="item.id" :coupon="item" />
+      </template>
+
+      <div v-else class="empty">暂未添加优惠卷</div>
     </div>
   </layout>
 </template>
 
 <script>
+import _ from 'lodash';
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import moduleMixin from './moduleMixin';
+import moduleMixin from '../moduleMixin';
+import CouponItem from './Item.vue';
 
 export default {
-  name: 'Vip',
+  name: 'Coupon',
 
   mixins: [moduleMixin],
+
+  components: {
+    CouponItem
+  },
 
   data() {
     return {
@@ -58,8 +67,10 @@ export default {
 
   methods: {
     initSwiepr() {
+      if (_.size(this.moduleData.items) <= 1) return;
+
       new Swiper(`.${this.moduleType}`, {
-        slidesPerView: 1.8
+        slidesPerView: 1.5
       });
     },
 
@@ -73,7 +84,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.vip-title {
+.coupon-title {
   padding-right: 16px;
   padding-left: 16px;
   margin-bottom: 12px;
@@ -83,38 +94,23 @@ export default {
   line-height: 24px;
 }
 
-.vip-container {
+.coupon-container {
   overflow: hidden;
   padding-right: 16px;
   padding-left: 16px;
   width: 100%;
-  height: 104px;
+  height: 112px;
+
+  .empty {
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+  }
 
   .swiper-slide-container {
     position: relative;
     margin-right: 24px;
     height: 100%;
-
-    .vip-info {
-      position: absolute;
-      top: 50%;
-      left: 16px;
-      transform: translateY(-50%);
-      color: #fff;
-
-      &__name {
-        font-weight: bold;
-      }
-
-      &__free {
-        font-size: 12px;
-      }
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 }
 </style>

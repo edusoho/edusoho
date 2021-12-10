@@ -2,6 +2,9 @@
   <div class="edit-layout">
     <div class="edit-layout__title">
       <slot name="title" />
+      <span class="edit-layout__subtitle">
+        <slot name="subtitle" />
+      </span>
     </div>
     <div class="edit-layout__container">
       <slot />
@@ -22,6 +25,11 @@
     border-bottom: 1px solid #f5f5f5;
   }
 
+  &__subtitle {
+    font-size: 12px;
+    color: #666;
+  }
+
   &__container {
     padding: 26px 0 60px;
     font-size: 14px;
@@ -30,6 +38,24 @@
       padding: 0 26px 20px;
       margin-bottom: 20px;
       border-bottom: 1px solid #f5f5f5;
+
+      &__item {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      &__required {
+        position: relative;
+
+        &::after {
+          content: "*";
+          position: absolute;
+          top: -2px;
+          left: -10px;
+          color: red;
+          font-size: 18px;
+        }
+      }
     }
 
     .design-editor:last-child {

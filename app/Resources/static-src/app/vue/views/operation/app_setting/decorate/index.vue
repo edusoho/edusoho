@@ -66,6 +66,8 @@ import slide_show from '../components/Swiper.vue';
 import slide_show_edit from './components/SwiperEdit.vue';
 import vip from '../components/Vip.vue';
 import vip_edit from './components/VipEdit.vue';
+import coupon from '../components/Coupon/index.vue';
+import coupon_edit from './components/CouponEdit/index.vue';
 
 export default {
   components: {
@@ -77,7 +79,9 @@ export default {
     slide_show,
     slide_show_edit,
     vip,
-    vip_edit
+    vip_edit,
+    coupon,
+    coupon_edit
   },
 
   data() {
@@ -226,6 +230,10 @@ export default {
         }
         this.modules[index].data[key] = value;
         return;
+      }
+
+      if (type === 'coupon') {
+        this.modules[index].data[key] = value;
       }
     },
 

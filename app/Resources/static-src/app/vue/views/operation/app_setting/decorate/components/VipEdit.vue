@@ -5,7 +5,7 @@
     <div class="design-editor">
       <a-form-model :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-model-item label="标题栏">
-          <a-radio-group :default-value="moduleData.titleShow"   @change="changeShowTitle">
+          <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
             <a-radio value="show">
               显示
             </a-radio>
