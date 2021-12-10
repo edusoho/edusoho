@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\ActivityException;
+use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
@@ -33,10 +33,10 @@ class ActivityController extends BaseController
 
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['controller'].':show', array(
+        return $this->forward($actionConfig['controller'].':show', [
             'activity' => $activity,
             'preview' => $preview,
-        ));
+        ]);
     }
 
     public function previewAction($task)
@@ -47,9 +47,9 @@ class ActivityController extends BaseController
         }
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['controller'].':preview', array(
+        return $this->forward($actionConfig['controller'].':preview', [
             'task' => $task,
-        ));
+        ]);
     }
 
     public function updateAction($id, $courseId)
@@ -57,19 +57,19 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($id);
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['controller'].':edit', array(
+        return $this->forward($actionConfig['controller'].':edit', [
             'id' => $activity['id'],
             'courseId' => $courseId,
-        ));
+        ]);
     }
 
     public function createAction($type, $courseId)
     {
         $actionConfig = $this->getActivityConfig($type);
 
-        return $this->forward($actionConfig['controller'].':create', array(
+        return $this->forward($actionConfig['controller'].':create', [
             'courseId' => $courseId,
-        ));
+        ]);
     }
 
     public function contentModalAction($type, $courseId, $activityId = 0)
@@ -79,13 +79,13 @@ class ActivityController extends BaseController
             $activity = $this->getActivityService()->getActivity($activityId, true);
             $activity['customComments'] = json_decode($activity['ext']['customComments'], true);
         } else {
-            $activity = array(
+            $activity = [
                 'id' => $activityId,
                 'mediaType' => $type,
                 'fromCourseId' => $courseId,
                 'fromCourseSetId' => $course['courseSetId'],
                 'customComments' => [],
-            );
+            ];
         }
         $container = $this->get('activity_runtime_container');
 
@@ -98,11 +98,11 @@ class ActivityController extends BaseController
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId);
         } else {
-            $activity = array(
+            $activity = [
                 'id' => $activityId,
                 'mediaType' => $type,
                 'fromCourseId' => $courseId,
-            );
+            ];
         }
 
         $activityConfigManage = $this->get('activity_config_manager');
@@ -110,21 +110,21 @@ class ActivityController extends BaseController
 
         return $this->render(
             'task-manage/create-or-update-finish.html.twig',
-            array(
+            [
                 'activity' => $activity,
-                'conditions' => empty($config['finish_condition']) ? array() : $config['finish_condition'],
-            )
+                'conditions' => empty($config['finish_condition']) ? [] : $config['finish_condition'],
+            ]
         );
     }
 
     public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)
     {
         $course = $this->getCourseService()->tryManageCourse($fromCourseId);
-        $activity = array(
+        $activity = [
             'id' => $id,
             'mediaType' => $mediaType,
             'fromCourseId' => $fromCourseId,
-        );
+        ];
 
         $container = $this->get('activity_runtime_container');
 
@@ -157,14 +157,14 @@ class ActivityController extends BaseController
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $data = $request->request->get('data', array());
+        $data = $request->request->get('data', []);
 
         $this->getActivityService()->trigger($activityId, $eventName, $data);
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'event' => $eventName,
             'data' => $data,
-        ));
+        ]);
     }
 
     protected function getActivityConfig($type)
@@ -183,7 +183,7 @@ class ActivityController extends BaseController
             return $type->getWatchStatus($activity);
         }
 
-        return array('status' => 'ok');
+        return ['status' => 'ok'];
     }
 
     /**
