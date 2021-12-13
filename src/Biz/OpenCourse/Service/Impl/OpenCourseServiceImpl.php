@@ -1028,6 +1028,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ($startTime > time()) {
             return 'ahead';
         }
+
+        return 'hasReplay';
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
