@@ -69,6 +69,7 @@ class MeJoined extends AbstractResource
 
         $courses = $this->appendAttrAndOrder($courses, $members);
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
+        $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
         foreach ($courses as &$course) {
             $course['meJoinedType'] = 'course';
         }
