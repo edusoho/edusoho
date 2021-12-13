@@ -24,7 +24,7 @@
         <coupon-item v-for="item in moduleData.items" :key="item.id" :coupon="item" />
       </template>
 
-      <div v-else class="empty">暂未添加优惠卷</div>
+      <div v-else class="empty">优惠卷</div>
     </div>
   </layout>
 </template>
@@ -104,7 +104,10 @@ export default {
   .empty {
     width: 100%;
     height: 100%;
-    background-color: #eee;
+    background-color: #e1e1e1;
+    font-size: 26px;
+    color: #919191;
+    font-weight: bold;
   }
 
   .swiper-slide-container {
