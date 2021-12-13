@@ -38,7 +38,7 @@ const DefaultData = {
     data: {
       image: {},
       link: {
-        type: 'course',
+        type: '',
         target: {},
         url: ''
       },
