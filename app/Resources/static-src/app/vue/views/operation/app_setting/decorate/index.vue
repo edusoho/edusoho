@@ -70,6 +70,8 @@ import coupon from '../components/Coupon/index.vue';
 import coupon_edit from './components/CouponEdit/index.vue';
 import poster from '../components/Poster/index.vue';
 import poster_edit from './components/PosterEdit/index.vue';
+import graphic_navigation from '../components/GraphicNavigation/index.vue';
+import graphic_navigation_edit from './components/GraphicNavigationEdit/index.vue';
 
 export default {
   components: {
@@ -85,7 +87,9 @@ export default {
     coupon,
     coupon_edit,
     poster,
-    poster_edit
+    poster_edit,
+    graphic_navigation,
+    graphic_navigation_edit
   },
 
   data() {
