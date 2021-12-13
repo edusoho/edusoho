@@ -291,7 +291,7 @@ export default {
         width: 375px;
         min-height: 90%;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
-        background-color: #fff;
+        background-color: #f5f5f5;
       }
     }
 
