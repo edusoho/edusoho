@@ -13,9 +13,6 @@ use Biz\Task\Service\TaskService;
 
 class MeJoined extends AbstractResource
 {
-    /**
-     * @ResponseFilter(class="ApiBundle\Api\Resource\CourseSet\CourseSetFilter", mode="simple")
-     */
     public function search(ApiRequest $request)
     {
         //直播
@@ -73,6 +70,7 @@ class MeJoined extends AbstractResource
         foreach ($courses as &$course) {
             $course['meJoinedType'] = 'course';
         }
+        
         //班级
         $querys = $request->query->all();
 
