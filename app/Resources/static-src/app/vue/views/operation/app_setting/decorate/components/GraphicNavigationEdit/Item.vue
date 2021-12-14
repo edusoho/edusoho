@@ -22,6 +22,7 @@
           size="small"
           :default-value="item.link.type"
           style="width: 132px"
+          placeholder="请选择"
           @change="handleCategory"
         >
           <a-select-option v-for="category in categorys" :key="category.key">
@@ -29,8 +30,18 @@
           </a-select-option>
         </a-select>
       </div>
-      <div class="gn-form__item">
-        <span class="gn-form__label">链接来源：</span>
+      <div class="gn-form__item" v-if="categoryInfo.text">
+        <span class="gn-form__label">{{ categoryInfo.text }}：</span>
+        <a-select
+          size="small"
+          style="width: 118px"
+          placeholder="请选择"
+          @change="handleSecondCategory"
+        >
+          <a-select-option v-for="category in categoryInfo.list" :key="category.id">
+            {{ category.name }}
+          </a-select-option>
+        </a-select>
       </div>
     </div>
   </div>
@@ -42,7 +53,12 @@ const categorys = [
   { text: '公开课分类', key: 'openCourse' },
   { text: '班级分类', key: 'classroom' },
   { text: '课程分类', key: 'course' }
-]
+];
+
+import _ from 'lodash';
+import { Category } from 'common/vue/service/index.js';
+import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
+
 export default {
   name: 'GraphicNavigationEditItem',
 
@@ -61,10 +77,20 @@ export default {
   data() {
     return {
       categorys,
+      categoryInfo: {}
     }
   },
 
+  mounted() {
+    const { type } = this.item.link;
+    this.getSecondCategory(type);
+  },
+
   methods: {
+    setCourseCategory: mutations.setCourseCategory,
+    setClassroomCategory: mutations.setClassroomCategory,
+    setOpenCourseCategory: mutations.setOpenCourseCategory,
+
     handleModityImage() {
       this.$emit('modity', {
         type: 'image',
@@ -80,8 +106,64 @@ export default {
       });
     },
 
-    handleCategory() {
+    handleCategory(value) {
+      this.getSecondCategory(value);
+      this.$emit('modity', {
+        type: 'type',
+        index: this.index,
+        value: value
+      });
+    },
 
+    async getSecondCategory(type) {
+      if (type === 'vip') {
+        this.categoryInfo = {};
+        return;
+      }
+
+      const store = {
+        openCourse: {
+          text: '公开课分类',
+          stateKey: 'openCourseCategory',
+          mutationsKey: 'setOpenCourseCategory',
+          query: { type: 'course' }
+        },
+        course: {
+          text: '课程分类',
+          stateKey: 'courseCategory',
+          mutationsKey: 'setCourseCategory',
+          query: { type: 'course' }
+        },
+        classroom: {
+          text: '班级分类',
+          stateKey: 'classroomCategory',
+          mutationsKey: 'setClassroomCategory',
+          query: { type: 'classroom' }
+        }
+      }
+
+      const { text, stateKey, mutationsKey, query } = store[type];
+
+
+      if (!_.size(state[stateKey])) {
+        const data = await Category.get({ query });
+        this[mutationsKey](data);
+      }
+
+      this.categoryInfo = {
+        text,
+        list: state[stateKey]
+      };
+    },
+
+    handleSecondCategory(value) {
+      this.$emit('modity', {
+        type: 'conditions',
+        index: this.index,
+        value: {
+          categoryId: value
+        }
+      });
     }
   }
 }

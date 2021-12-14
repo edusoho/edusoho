@@ -255,6 +255,17 @@ export default {
           this.modules[currentIndex].data.push(value);
           return;
         }
+
+        if (key === 'type') {
+          this.modules[currentIndex].data[index].link.type = value;
+          return;
+        }
+
+        if (key === 'conditions') {
+          this.modules[currentIndex].data[index].link.conditions = value;
+          return;
+        }
+
         this.modules[currentIndex].data[index][key] = value;
       }
     },

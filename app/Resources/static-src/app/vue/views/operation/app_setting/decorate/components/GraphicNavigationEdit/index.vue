@@ -82,12 +82,10 @@ export default {
         return;
       }
 
-      if (type === 'title') {
-        this.update({
-          key: 'title',
-          value
-        });
-      }
+      this.update({
+        key: type,
+        value
+      });
     },
 
     handleUpdateImage({ url }) {
