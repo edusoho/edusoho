@@ -70,6 +70,8 @@ import coupon from '../components/Coupon/index.vue';
 import coupon_edit from './components/CouponEdit/index.vue';
 import poster from '../components/Poster/index.vue';
 import poster_edit from './components/PosterEdit/index.vue';
+import graphic_navigation from '../components/GraphicNavigation/index.vue';
+import graphic_navigation_edit from './components/GraphicNavigationEdit/index.vue';
 
 export default {
   components: {
@@ -85,7 +87,9 @@ export default {
     coupon,
     coupon_edit,
     poster,
-    poster_edit
+    poster_edit,
+    graphic_navigation,
+    graphic_navigation_edit
   },
 
   data() {
@@ -221,28 +225,48 @@ export default {
     },
 
     updateEdit(params) {
-      const { type, data, key, value } = params;
-      const { index } = this.currentModule;
+      const { type, data, key, value, index } = params;
+      const currentIndex = this.currentModule.index;
       if (type === 'swiper') {
-        this.modules[index].data = data;
+        this.modules[currentIndex].data = data;
         return;
       }
 
       if (type === 'vip') {
         if (key === 'sort') {
-          this.modules[index].data.items.reverse();
+          this.modules[currentIndex].data.items.reverse();
         }
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
         return;
       }
 
       if (type === 'coupon') {
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
         return;
       }
 
       if (type === 'poster') {
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
+        return;
+      }
+
+      if (type === 'graphic_navigation') {
+        if (key === 'add') {
+          this.modules[currentIndex].data.push(value);
+          return;
+        }
+
+        if (key === 'type') {
+          this.modules[currentIndex].data[index].link.type = value;
+          return;
+        }
+
+        if (key === 'conditions') {
+          this.modules[currentIndex].data[index].link.conditions = value;
+          return;
+        }
+
+        this.modules[currentIndex].data[index][key] = value;
       }
     },
 
@@ -287,7 +311,7 @@ export default {
         width: 375px;
         min-height: 90%;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
-        background-color: #fff;
+        background-color: #f5f5f5;
       }
     }
 

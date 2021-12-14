@@ -50,40 +50,19 @@ const DefaultData = {
     moduleType: '',
     data: [
       {
-        title: '公开课',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
-        link: {
-          type: 'openCourse',
-          target: '跳转公开课“全部”列表',
-          url: ''
-        }
+        title: '分类课',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_classification.png' },
+        link: { type: 'openCourse' }
       },
       {
-        title: '热门课',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
-        link: {
-          type: 'course',
-          target: '跳转课程“全部”列表',
-          url: ''
-        }
+        title: '免费课',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_free.png' },
+        link: { type: 'course' }
       },
       {
-        title: '热销班',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
-        link: {
-          type: 'classroom',
-          target: '跳转班级“全部”列表',
-          url: ''
-        }
+        title: '热门班',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_hot.png' },
+        link: { type: 'classroom' }
       }
     ]
   },

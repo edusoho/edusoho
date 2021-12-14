@@ -12,8 +12,9 @@
 
 <style lang="less" scoped>
 .app-header {
-  margin-bottom: 12px;
+  padding-bottom: 12px;
   width: 100%;
+  background-color: #fff;
 
   img {
     width: 100%;
