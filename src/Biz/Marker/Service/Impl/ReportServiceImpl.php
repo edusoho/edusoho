@@ -107,7 +107,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $markers = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['mediaId']);
+        $markers = $this->getMarkerService()->findMarkersByActivityId($activity['id']);
         $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds(ArrayToolkit::column($markers, 'id'));
         $questionMarkers = $this->setQuestionMarkerStem($questionMarkers);
 
