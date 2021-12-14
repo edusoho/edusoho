@@ -6,7 +6,7 @@
     </div>
     <div class="gn-form pull-left">
       <div class="gn-form__item">
-        <span class="gn-form__label">标题：</span>
+        <span class="gn-form__label gn-form__label--required">标题：</span>
         <a-input
           placeholder="请输入标题"
           size="small"
@@ -17,7 +17,17 @@
         />
       </div>
       <div class="gn-form__item">
-        <span class="gn-form__label">链接来源：</span>
+        <span class="gn-form__label gn-form__label--required">链接来源：</span>
+        <a-select
+          size="small"
+          :default-value="item.link.type"
+          style="width: 132px"
+          @change="handleCategory"
+        >
+          <a-select-option v-for="category in categorys" :key="category.key">
+            {{ category.text }}
+          </a-select-option>
+        </a-select>
       </div>
       <div class="gn-form__item">
         <span class="gn-form__label">链接来源：</span>
@@ -27,6 +37,12 @@
 </template>
 
 <script>
+const categorys = [
+  { text: '会员专区', key: 'vip' },
+  { text: '公开课分类', key: 'openCourse' },
+  { text: '班级分类', key: 'classroom' },
+  { text: '课程分类', key: 'course' }
+]
 export default {
   name: 'GraphicNavigationEditItem',
 
@@ -39,6 +55,12 @@ export default {
     index: {
       type: Number,
       required: true
+    }
+  },
+
+  data() {
+    return {
+      categorys,
     }
   },
 
@@ -56,6 +78,10 @@ export default {
         index: this.index,
         value: e.target.value
       });
+    },
+
+    handleCategory() {
+
     }
   }
 }
@@ -71,7 +97,7 @@ export default {
   &__img {
     position: relative;
     overflow: hidden;
-    margin-right: 10px;
+    margin-right: 16px;
     width: 80px;
     height: 80px;
     line-height: 80px;
@@ -110,6 +136,21 @@ export default {
 
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+
+    &__label {
+      &--required {
+        position: relative;
+
+        &::after {
+          content: "*";
+          position: absolute;
+          top: -4px;
+          left: -8px;
+          color: red;
+          font-size: 18px;
+        }
       }
     }
   }
