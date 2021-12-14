@@ -253,9 +253,9 @@ export default {
       if (type === 'graphic_navigation') {
         if (key === 'add') {
           this.modules[currentIndex].data.push(value);
-        } else if (key === 'image') {
-          this.modules[currentIndex].data[index].image = value;
+          return;
         }
+        this.modules[currentIndex].data[index][key] = value;
       }
     },
 

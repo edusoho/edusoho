@@ -4,6 +4,25 @@
       <div class="modity-mask" @click="handleModityImage">更换图片</div>
       <img :src="item.image.url || '/static-dist/app/img/vue/decorate/gn_empty.png'">
     </div>
+    <div class="gn-form pull-left">
+      <div class="gn-form__item">
+        <span class="gn-form__label">标题：</span>
+        <a-input
+          placeholder="请输入标题"
+          size="small"
+          style="width: 160px;"
+          allow-clear
+          :default-value="item.title"
+          @change="onChange"
+        />
+      </div>
+      <div class="gn-form__item">
+        <span class="gn-form__label">链接来源：</span>
+      </div>
+      <div class="gn-form__item">
+        <span class="gn-form__label">链接来源：</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,8 +44,17 @@ export default {
 
   methods: {
     handleModityImage() {
-      this.$emit('modity-image', {
+      this.$emit('modity', {
+        type: 'image',
         index: this.index
+      });
+    },
+
+    onChange(e) {
+      this.$emit('modity', {
+        type: 'title',
+        index: this.index,
+        value: e.target.value
       });
     }
   }
@@ -72,6 +100,16 @@ export default {
         background: rgba(0, 0, 0, .5);
         color: #fff;
         transition: all .2s ease-in-out;
+      }
+    }
+  }
+
+  .gn-form {
+    &__item {
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }

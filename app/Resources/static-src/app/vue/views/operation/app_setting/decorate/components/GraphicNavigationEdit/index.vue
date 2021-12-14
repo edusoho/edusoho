@@ -4,7 +4,11 @@
 
     <div class="design-editor">
       <div class="design-editor__item" v-for="(item, index) in moduleData" :key="index">
-        <item :item="item" :index="index" @modity-image="handleModityImage" />
+        <item
+          :item="item"
+          :index="index"
+          @modity="handleModity"
+        />
       </div>
 
       <div class="design-editor__item" v-if="moduleData.length < 8">
@@ -69,15 +73,26 @@ export default {
       this.update({ key: 'add', value: params });
     },
 
-    handleModityImage({ index }) {
+    handleModity(params) {
+      const { index, type, value } = params;
       this.currentIndex = index;
-      this.$refs.modal.showModal();
+
+      if (type === 'image') {
+        this.$refs.modal.showModal();
+        return;
+      }
+
+      if (type === 'title') {
+        this.update({
+          key: 'title',
+          value
+        });
+      }
     },
 
     handleUpdateImage({ url }) {
       const params = {
         key: 'image',
-        index: this.currentIndex,
         value: { url }
       };
       this.update(params);
@@ -92,7 +107,11 @@ export default {
     },
 
     update(params) {
-      this.$emit('update-edit', { type: 'graphic_navigation', ...params });
+      this.$emit('update-edit', {
+        type: 'graphic_navigation',
+        index: this.currentIndex,
+        ...params
+      });
     }
   }
 }
