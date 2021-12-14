@@ -1,7 +1,7 @@
 <template>
   <div class="gn-item clearfix">
     <div class="gn-item__img pull-left">
-      <div class="modity-mask">更换图片</div>
+      <div class="modity-mask" @click="handleModityImage">更换图片</div>
       <img :src="item.image.url || '/static-dist/app/img/vue/decorate/gn_empty.png'">
     </div>
   </div>
@@ -15,6 +15,19 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+
+    index: {
+      type: Number,
+      required: true
+    }
+  },
+
+  methods: {
+    handleModityImage() {
+      this.$emit('modity-image', {
+        index: this.index
+      });
     }
   }
 }

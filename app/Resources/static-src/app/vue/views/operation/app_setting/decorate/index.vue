@@ -225,34 +225,36 @@ export default {
     },
 
     updateEdit(params) {
-      const { type, data, key, value } = params;
-      const { index } = this.currentModule;
+      const { type, data, key, value, index } = params;
+      const currentIndex = this.currentModule.index;
       if (type === 'swiper') {
-        this.modules[index].data = data;
+        this.modules[currentIndex].data = data;
         return;
       }
 
       if (type === 'vip') {
         if (key === 'sort') {
-          this.modules[index].data.items.reverse();
+          this.modules[currentIndex].data.items.reverse();
         }
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
         return;
       }
 
       if (type === 'coupon') {
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
         return;
       }
 
       if (type === 'poster') {
-        this.modules[index].data[key] = value;
+        this.modules[currentIndex].data[key] = value;
         return;
       }
 
       if (type === 'graphic_navigation') {
         if (key === 'add') {
-          this.modules[index].data.push(value);
+          this.modules[currentIndex].data.push(value);
+        } else if (key === 'image') {
+          this.modules[currentIndex].data[index].image = value;
         }
       }
     },

@@ -4,7 +4,7 @@
 
     <div class="design-editor">
       <div class="design-editor__item" v-for="(item, index) in moduleData" :key="index">
-        <item :item="item" />
+        <item :item="item" :index="index" @modity-image="handleModityImage" />
       </div>
 
       <div class="design-editor__item" v-if="moduleData.length < 8">
@@ -13,6 +13,18 @@
         </a-button>
       </div>
     </div>
+
+    <modity-image-modal
+      ref="modal"
+      @update-image="handleUpdateImage"
+      @upload-image="handleUploadImage"
+    />
+
+    <picture-cropper-modal
+      ref="pictureCropperModal"
+      :aspect-ratio="1 / 1"
+      @success="cropperSuccess"
+    />
   </edit-layout>
 </template>
 
@@ -20,6 +32,8 @@
 import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
 import Item from './Item.vue';
+import ModityImageModal from './ModityImageModal.vue';
+import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 
 export default {
   name: 'GraphicNavigationEdit',
@@ -33,7 +47,15 @@ export default {
 
   components: {
     EditLayout,
-    Item
+    Item,
+    ModityImageModal,
+    PictureCropperModal
+  },
+
+  data() {
+    return {
+      currentIndex: null
+    }
   },
 
   methods: {
@@ -44,11 +66,33 @@ export default {
         link: {}
       };
 
-      this.$emit('update-edit', {
-        type: 'graphic_navigation',
-        key: 'add',
-        value: params
-      });
+      this.update({ key: 'add', value: params });
+    },
+
+    handleModityImage({ index }) {
+      this.currentIndex = index;
+      this.$refs.modal.showModal();
+    },
+
+    handleUpdateImage({ url }) {
+      const params = {
+        key: 'image',
+        index: this.currentIndex,
+        value: { url }
+      };
+      this.update(params);
+    },
+
+    handleUploadImage(params) {
+      this.$refs.pictureCropperModal.showModal(params);
+    },
+
+    cropperSuccess(data) {
+      this.handleUpdateImage({ url: data.url });
+    },
+
+    update(params) {
+      this.$emit('update-edit', { type: 'graphic_navigation', ...params });
     }
   }
 }
