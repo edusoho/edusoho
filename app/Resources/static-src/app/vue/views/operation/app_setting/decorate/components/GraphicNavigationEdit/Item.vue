@@ -214,7 +214,7 @@ export default {
 
   .gn-form {
     &__item {
-      margin-bottom: 8px;
+      margin-bottom: 4px;
 
       &:last-child {
         margin-bottom: 0;
