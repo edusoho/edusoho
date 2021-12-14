@@ -247,6 +247,13 @@ export default {
 
       if (type === 'poster') {
         this.modules[index].data[key] = value;
+        return;
+      }
+
+      if (type === 'graphic_navigation') {
+        if (key === 'add') {
+          this.modules[index].data.push(value);
+        }
       }
     },
 

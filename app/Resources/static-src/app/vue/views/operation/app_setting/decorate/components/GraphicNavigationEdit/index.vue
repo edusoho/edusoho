@@ -7,8 +7,8 @@
         <item :item="item" />
       </div>
 
-      <div class="design-editor__item">
-        <a-button type="primary" block>
+      <div class="design-editor__item" v-if="moduleData.length < 8">
+        <a-button type="primary" block @click="handleClickAdd">
           添加图文导航
         </a-button>
       </div>
@@ -34,6 +34,22 @@ export default {
   components: {
     EditLayout,
     Item
+  },
+
+  methods: {
+    handleClickAdd() {
+      const params = {
+        title: '',
+        image: {},
+        link: {}
+      };
+
+      this.$emit('update-edit', {
+        type: 'graphic_navigation',
+        key: 'add',
+        value: params
+      });
+    }
   }
 }
 </script>

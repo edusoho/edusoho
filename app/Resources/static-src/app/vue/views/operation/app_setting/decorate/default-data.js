@@ -50,11 +50,8 @@ const DefaultData = {
     moduleType: '',
     data: [
       {
-        title: '公开课',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
+        title: '分类课',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_classification.png' },
         link: {
           type: 'openCourse',
           target: '跳转公开课“全部”列表',
@@ -62,11 +59,8 @@ const DefaultData = {
         }
       },
       {
-        title: '热门课',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
+        title: '免费课',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_free.png' },
         link: {
           type: 'course',
           target: '跳转课程“全部”列表',
@@ -74,11 +68,17 @@ const DefaultData = {
         }
       },
       {
-        title: '热销班',
-        image: {
-          url: '',
-          icon: 'icon-check-circle'
-        },
+        title: '收藏',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_collection.png' },
+        link: {
+          type: 'classroom',
+          target: '跳转班级“全部”列表',
+          url: ''
+        }
+      },
+      {
+        title: '热门课',
+        image: { url: '/static-dist/app/img/vue/decorate/gn_hot.png' },
         link: {
           type: 'classroom',
           target: '跳转班级“全部”列表',

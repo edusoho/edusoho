@@ -41,6 +41,7 @@ export default {
 
   &__title {
     margin-top: 8px;
+    height: 16px;
     font-size: 12px;
     color: #464646;
     line-height: 16px;
