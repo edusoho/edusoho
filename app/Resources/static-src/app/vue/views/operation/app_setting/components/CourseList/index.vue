@@ -7,18 +7,12 @@
   >
     <div class="course-list">
       <div class="clearfix">
-        <div class="course-list__title pull-left text-overflow">推荐课程</div>
+        <div class="course-list__title pull-left text-overflow">{{ moduleData.title }}</div>
         <div class="course-list__more pull-right">查看更多<a-icon type="right" /></div>
       </div>
-      <div class="">
-        <!-- <column-item />
-        <column-item />
-        <column-item />
-        <column-item /> -->
-        <row-item />
-        <row-item />
-        <row-item />
-        <row-item />
+
+      <div :class="{ clearfix: moduleData.displayStyle === 'distichous' }">
+        <component :is="currentComponent" v-for="(item, index) in moduleData.limit" :key="index" />
       </div>
     </div>
   </layout>
@@ -35,9 +29,11 @@ export default {
 
   mixins: [moduleMixin],
 
-  components: {
-    ColumnItem,
-    RowItem
+  computed: {
+    currentComponent() {
+      const { displayStyle } = this.moduleData;
+      return displayStyle === 'distichous' ? ColumnItem : RowItem;
+    }
   }
 }
 </script>
@@ -51,6 +47,7 @@ export default {
     position: relative;
     padding-left: 10px;
     max-width: 60%;
+    height: 24px;
     font-size: 16px;
     font-weight: 500;
     color: #333;
