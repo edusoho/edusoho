@@ -256,6 +256,11 @@ export default {
           return;
         }
 
+        if (key === 'remove') {
+          this.modules[currentIndex].data.splice(index, 1);
+          return;
+        }
+
         if (key === 'type') {
           this.modules[currentIndex].data[index].link.type = value;
           return;

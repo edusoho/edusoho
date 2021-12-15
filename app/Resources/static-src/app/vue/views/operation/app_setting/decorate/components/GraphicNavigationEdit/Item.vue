@@ -44,6 +44,12 @@
         </a-select>
       </div>
     </div>
+    <a-icon
+      class="remove-btn"
+      type="close-circle"
+      theme="filled"
+      @click="handleClickRemove"
+    />
   </div>
 </template>
 
@@ -164,6 +170,13 @@ export default {
           categoryId: value
         }
       });
+    },
+
+    handleClickRemove() {
+      this.$emit('modity', {
+        type: 'remove',
+        index: this.index
+      });
     }
   }
 }
@@ -175,6 +188,28 @@ export default {
   padding: 15px 10px;
   border: 1px solid #e1e1e1;
   background-color: #fff;
+
+  .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: none;
+    font-size: 18px;
+    color: #bbb;
+    text-align: center;
+    cursor: pointer;
+    transform: all .3s ease;
+
+    &:hover {
+      color: #aaa;
+    }
+  }
+
+  &:hover {
+    .remove-btn {
+      display: block;
+    }
+  }
 
   &__img {
     position: relative;
