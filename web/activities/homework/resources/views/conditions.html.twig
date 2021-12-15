@@ -1,3 +1,13 @@
-<div class="js-homework-score" {% if activity.finishType == 'submit' %}style="display: none;"{% endif %}>
-  设置合格分数 <input class="form-control" type="text" name="score"  value="">
+<div class="form-group js-homework-score" {% if activity.finishType|default('submit') == 'submit' %}style="display: none;"{% endif %}>
+  <div class="col-sm-2 control-label"></div>
+  <div class="col-sm-6">
+    <div style="">
+      <span style="line-height: 36px;">{{'course.homework.pass_score'|trans}}</span>
+      <span style="float:right;line-height: 36px;">{{ 'site.data.score'|trans }}</span>
+      <span class="js-finish-score" style="float:right;line-height: 36px;">--</span>
+      <span style="float:right;line-height: 36px;">{{'course.homework.pass_score.tip1'|trans}}</span>
+      <input class="form-control" id="homeworkScore" style="margin-right:10px; max-width: 160px;float:right;" type="text" name="homeworkScore"  value="{{ activity.finishData|default(0) }}">
+    </div>
+    <p style="margin-left: 100px; color: #b1b1b1">{{'course.homework.pass_score.tip2'|trans}}</p>
+  </div>
 </div>

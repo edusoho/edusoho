@@ -6,6 +6,7 @@ export default class Homework {
     this.$step2_form = this.$element.find('#step2-form');
     this.$step3_form = this.$element.find('#step3-form');
     this.validator2 = null;
+    this.score = 0;
     this.init();
   }
 
@@ -109,6 +110,12 @@ export default class Homework {
     });
     this.$step2_form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
     this.validator.form();
+    this.init_homework_table();
+  }
+
+  init_homework_table(){
+    this.$score = this.$step2_form.find('.js-homework-table').find('.score-validate');
+    this.$score.on('blur', event => this._processScore(event));
   }
 
   selectQuestion(event, typeQuestions) {
@@ -131,22 +138,100 @@ export default class Homework {
         'questionLength': {
           required: true
         },
+        scores: {
+          scoreValidate: true
+        }
       },
       messages: {
         description: Translator.trans('activity.homework_manage.question_homework_hint'),
         questionLength: Translator.trans('activity.homework_manage.question_required_error_hint'),
+        scores: Translator.trans('请检查分数设置'),
       },
     });
     this.initCkeditor(this.validator);
   }
 
+  _processScore(event) {
+    let $target = $(event.target);
+    this._validateScore($target);
+
+    return false;
+  }
+
+  _validateScore($target){
+    if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test($target.val())) {
+      this._appendError($target, Translator.trans('validate.valid_score_input.message'));
+      return false;
+    }else{
+      this._removeError($target);
+    }
+
+    let $parent = $target.parents('.js-question-item');
+    if($parent.data('questionType') === 'choice' || $parent.data('questionType') === 'uncertain_choice'){
+      let $answer = $parent.data('questionAnswer');
+      let type = $parent.find('.js-score-type').val();
+
+      let value = $parent.find('.js-score').val();
+      let missValue = $parent.find('.js-miss-choice-score').val();
+
+      if(type === 'question' && (missValue > value)){
+        this._appendError($target, Translator.trans('漏选分值不得超过题目分值'));
+        return false;
+      }
+
+      if(type === 'option' && (missValue * $answer.length > value)){
+        this._appendError($target, Translator.trans('选项总分不得超过题目分值'));
+        return false;
+      }
+    }
+
+  }
+
+  _appendError($event, message){
+    if($event.parents('.js-question-item').find('.jq-validate-error').length ==0){
+      $event.parents('.js-question-item').append(`<p class="form-error-message jq-validate-error">${message}</p>`);
+    }
+  }
+  _removeError($event){
+    $event.parents('.js-question-item').find('.jq-validate-error').remove();
+  }
   setValidateRule() {
+    let self = this;
     $.validator.addMethod('arithmeticFloat', function (value, element) {
       return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
     }, $.validator.format(Translator.trans('activity.homework_manage.arithmetic_float_error_hint')));
 
     $.validator.addMethod('positiveInteger', function (value, element) {
       return this.optional(element) || /^[1-9]\d*$/.test(value);
+    }, $.validator.format(Translator.trans('activity.homework_manage.positive_integer_error_hint')));
+
+    $.validator.addMethod('scoreValidate', function (value, element) {
+      self.$step2_form.find('.jq-validate-error').remove();
+
+      (self.$step2_form.find('.js-homework-table').find('.score-validate')).each(function (event) {
+        self._validateScore($(this));
+      });
+      if(self.$step2_form.find('.jq-validate-error').length === 0){
+        self.score = 0;
+        (self.$step2_form.find('.js-homework-table').find('.js-score')).each(function (event) {
+          let $parent = $(this).parents('.js-question-item');
+          let type = $parent.find('.js-score-type').val();
+          let val = Number($(this).val());
+          if(($parent.data('questionType') === 'text' || $parent.data('questionType') === 'fill') && type==='option'){
+            let $answer = $parent.data('questionAnswer');
+            val = val * $answer.length;
+          }
+          self.score += Number(val);
+        });
+        $('.js-homework-scores-input').val(self.score);
+        let $homeworkScore = $('#task-create-finish-iframe', parent.document).contents().find('.js-finish-score');
+        if($homeworkScore.length){
+          $homeworkScore.html(self.score);
+        }
+        console.log(self.score);
+      }
+      return self.$step2_form.find('.jq-validate-error').length === 0;
+
     }, $.validator.format(Translator.trans('activity.homework_manage.positive_integer_error_hint')));
 
     $.validator.addMethod('DateAndTime', function (value, element) {

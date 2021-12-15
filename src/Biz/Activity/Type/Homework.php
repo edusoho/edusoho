@@ -48,8 +48,7 @@ class Homework extends Activity
                 'start_time' => 0,
             ]);
 
-            $assessment = $this->createAssessment($fields['title'], $fields['description'], $fields['questionIds']);
-
+            $assessment = $this->createAssessment($fields['title'], $fields);
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $assessment['id'],
@@ -64,15 +63,15 @@ class Homework extends Activity
         }
     }
 
-    protected function createAssessment($name, $description, $itemIds = [])
+    protected function createAssessment($name, $fields)
     {
-        $items = $this->getItemService()->findItemsByIds($itemIds, true);
+        $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
+        $items = $this->processItemQuestions($items, $fields);
         $bankIds = array_column($items, 'bank_id');
-
         $assessment = [
             'bank_id' => array_shift($bankIds),
             'name' => $name,
-            'description' => $description,
+            'description' => $fields['description'],
             'displayable' => 0,
             'sections' => [
                 [
@@ -85,6 +84,34 @@ class Homework extends Activity
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 
         return $this->getAssessmentService()->openAssessment($assessment['id']);
+    }
+
+    protected function processItemQuestions($items, $fields)
+    {
+        $scoreArr = $fields['score'];
+        $scoreTypeArr = $fields['scoreType'];
+        $choiceScoreArr = $fields['choiceScore'];
+        foreach ($items as &$item) {
+            $questions = $item['questions'];
+            foreach ($questions as &$question) {
+                $score = empty($scoreArr[$question['id']]) ? 0 : $scoreArr[$question['id']];
+                if ('text' == $question['answer_mode']) {
+                    $score = 'question' == $scoreTypeArr[$question['id']] ? $choiceScoreArr[$question['id']] : $choiceScoreArr[$question['id']] * count($question['answer']);
+                }
+                $question['score'] = $score;
+                $question['score_rule'] = [
+                    'score' => $score,
+                    'scoreType' => empty($scoreTypeArr[$question['id']]) ? 'question' : $scoreTypeArr[$question['id']],
+                    'otherScore' => empty($choiceScoreArr[$question['id']]) ? 0 : $choiceScoreArr[$question['id']],
+                ];
+                if (in_array($question['answer_mode'], ['choice', 'uncertain_choice']) && 'question' == $scoreTypeArr[$question['id']]) {
+                    $question['miss_score'] = $choiceScoreArr[$question['id']];
+                }
+            }
+            $item['questions'] = $questions;
+        }
+
+        return $items;
     }
 
     public function copy($activity, $config = [])

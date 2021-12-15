@@ -1883,3 +1883,5 @@ course.live_replay.un_share_btn:  取消共享
 course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
 course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
 course.live_replay.delete_tip:  请确认将此直播回放移除？
+course.homework.score.tip1: 请输入合格分数
+course.homework.score.tip2: 请输入不大于试卷总分的数值

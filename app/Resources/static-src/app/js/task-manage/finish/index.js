@@ -14,6 +14,7 @@ if ($selectFinish.length) {
     } else {
       $('#watchTime').rules('remove');
     }
+    $('#homeworkScore').rules('remove');
     switch(val)
     {
     case 'time':
@@ -40,6 +41,16 @@ if ($selectFinish.length) {
       break;
     case 'score':
       if($('.js-homework-score').length >0){
+        let val = $('#task-create-content-iframe', parent.document).contents().find('.js-homework-scores-input').val();
+        $('.js-finish-score').html(val);
+        $('#homeworkScore').rules('add', {
+          required: true,
+          es_score: true,
+          homework_score: true,
+          messages: {
+            required: Translator.trans('course.homework.score.tip1')
+          }
+        });
         $('.js-homework-score').show();
       }
       break;
@@ -60,6 +71,9 @@ let validate = $('#step3-form').validate({
     watchTime: {
       positive_integer: true,
     },
+    homeworkScore: {
+      es_score: true,
+    }
   }
 });
 if (!$('#conditions-time').is(':hidden')) {
@@ -72,6 +86,10 @@ if (!$('#conditions-time').is(':hidden')) {
   });
 }
 
+$('#homeworkScore').on('change', function() {
+  $('#finish-data').val($(this).val());
+});
+
 $('#watchTime').on('change', function() {
   $('#finish-data').val($(this).val());
 });
@@ -83,3 +101,7 @@ window.ltc.on('getCondition', function(msg){
     window.ltc.emit('returnCondition', {valid: validate.form() ,data: {finishType: $('#finish-type').val(), finishData: $('#finish-data').val()} });
   }
 });
+
+$.validator.addMethod('homework_score', function (value, element) {
+  return this.optional(element) || value <= Number($('.js-finish-score').html());
+}, $.validator.format(Translator.trans('course.homework.score.tip2')));
