@@ -2149,6 +2149,13 @@ course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
 course.plan_task.activity_manage.testpaper.qualified_score: 合格分数
+course.plan_task.activity_manage.testpaper.auto_comment: 自动评语
+course.plan_task.activity_manage.testpaper.score: 得分区间
+course.plan_task.activity_manage.testpaper.comment_content: 评语内容
+course.plan_task.activity_manage.testpaper.comment_operation: 操作
+course.plan_task.activity_manage.testpaper.add_comment: 添加评语
+course.plan_task.activity_manage.testpaper.default_comment: 默认评语
+course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间

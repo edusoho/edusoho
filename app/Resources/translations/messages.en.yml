@@ -1854,6 +1854,13 @@ course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.qualified_score: Qualified Score
+course.plan_task.activity_manage.testpaper.auto_comment: Comments
+course.plan_task.activity_manage.testpaper.score: Scorc
+course.plan_task.activity_manage.testpaper.comment_content: Content
+course.plan_task.activity_manage.testpaper.comment_operation: Operation
+course.plan_task.activity_manage.testpaper.add_comment: Add
+course.plan_task.activity_manage.testpaper.default_comment: Default
+course.plan_task.activity_manage.testpaper.comment_remove: Remove
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.

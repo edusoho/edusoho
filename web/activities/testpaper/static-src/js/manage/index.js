@@ -1,4 +1,4 @@
-import { dateFormat, htmlEscape } from 'app/common/unit.js';
+import {dateFormat, htmlEscape} from 'app/common/unit.js';
 
 class Testpaper {
   constructor($element) {
@@ -19,21 +19,27 @@ class Testpaper {
     this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
     this.initStepForm2();
+    this.initAddComment();
     window.ltc.on('getActivity', (msg) => {
-      window.ltc.emit('returnActivity', { valid: this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
+      window.ltc.emit('returnActivity', {
+        valid: this.validator.form(),
+        data: window.ltc.getFormSerializeObject($('#step2-form'))
+      });
     });
 
     window.ltc.on('getValidate', (msg) => {
-      window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
-        score: this.$testpaperSelector.select2('data').score,
-      }});
-      window.ltc.emit('returnValidate', { valid: this.validator.form() });
+      window.ltc.emit('returnValidate', {
+        valid: this.validator.form(), context: {
+          score: this.$testpaperSelector.select2('data').score,
+        }
+      });
+      window.ltc.emit('returnValidate', {valid: this.validator.form()});
     });
   }
 
   setValidateRule() {
-    $.validator.addMethod('arithmeticFloat',function(value,element){  
-      return this.optional( element ) || /^[0-9]+(\.[0-9]?)?$/.test(value);
+    $.validator.addMethod('arithmeticFloat', function (value, element) {
+      return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
     }, $.validator.format(Translator.trans('activity.testpaper_manage.arithmetic_float_error_hint')));
   }
 
@@ -44,39 +50,71 @@ class Testpaper {
     this.$element.find('input[name="testMode"]').on('change', event => this.startTimeCheck(event));
   }
 
+  initAddComment() {
+    let $customCommentTable = $('#customCommentTable');
+    let ii = $customCommentTable.find('tr').length;
+    $('#addComment').on('click', function () {
+      let tr = '<tr>\n' +
+        '              <td class="form-inline">\n' +
+        '                <input type="text" class="form-control" name="start['+ii+']" style="width: 47px;"> -\n' +
+        '                <input type="text" class="form-control" name="end['+ii+']" style="width: 47px;">\n' +
+        '              </td>\n' +
+        '              <td class="form-inline">\n' +
+        '                <textarea name="comment['+ii+']" rows="1" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
+        '                <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
+        '              </td>\n' +
+        '              <td class="form-inline vertical-middle">\n' +
+        '                <a href="javascript:;" class="js-comment-remove">' + Translator.trans('activity.testpaper_manage.comment_remove') + '</a>\n' +
+        '              </td>\n' +
+        '            </tr>';
+      $customCommentTable.append(tr);
+      $customCommentTable.removeClass('hidden');
+      ii++;
+    });
+    $customCommentTable.on('focus', '.js-comment-content', function () {
+      $(this).attr('rows', 13);
+    });
+    $customCommentTable.on('blur', '.js-comment-content', function () {
+      $(this).attr('rows', 1);
+    });
+    $customCommentTable.on('click', '.js-comment-remove', function () {
+      $(this).parent().parent().remove();
+    });
+  }
+
   initStepForm2() {
     this.validator = this.$form.validate({
       onkeyup: false,
       rules: {
         title: {
-          required:true,
+          required: true,
           trim: true,
           maxlength: 50,
           course_title: true,
         },
         testpaperId: {
           required: true,
-          digits:true,
+          digits: true,
           min: 1,
         },
         length: {
-          required:true,
-          digits:true
+          required: true,
+          digits: true
         },
         startTime: {
-          required:function(){
+          required: function () {
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           },
-          DateAndTime:function(){
+          DateAndTime: function () {
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           }
         },
         redoInterval: {
-          required:function(){
+          required: function () {
             return $('[name="doTimes"]:checked').val() == 0;
           },
-          arithmeticFloat:true,
-          max:1000000000
+          arithmeticFloat: true,
+          max: 1000000000
         }
       },
       messages: {
@@ -101,7 +139,7 @@ class Testpaper {
       this.initScoreSlider();
     } else {
       $('#questionItemShowDiv').hide();
-      $('#score-condition').hide();
+      $('#js-test-and-comment').hide();
     }
   }
 
@@ -124,16 +162,16 @@ class Testpaper {
         url: self.$testpaperSelector.data('url'),
         dataType: 'json',
         quietMillis: 250,
-        data: function(term, page) {
+        data: function (term, page) {
           return {
             keyword: term,
             page: page,
           };
         },
-        results: function(data, page) {
+        results: function (data, page) {
           let results = [];
 
-          $.each(data.testPapers, function(index, testPaper) {
+          $.each(data.testPapers, function (index, testPaper) {
             results.push({
               id: testPaper.id,
               text: testPaper.name,
@@ -147,7 +185,7 @@ class Testpaper {
           };
         },
       },
-      initSelection: function(element, callback) {
+      initSelection: function (element, callback) {
         let testPaperName = $('#testPaperName').val();
         let testPaperId = element.val();
         let testPaperScore = $('#score-condition').data('score');
@@ -162,7 +200,7 @@ class Testpaper {
 
         callback(data);
       },
-      formatSelection: function(data) {
+      formatSelection: function (data) {
         return data.text;
       },
       dropdownAutoWidth: true,
@@ -176,7 +214,7 @@ class Testpaper {
       dropdownAutoWidth: true,
       treeviewInitState: 'collapsed',
       placeholderOption: 'first',
-      formatResult: function(item) {
+      formatResult: function (item) {
         let text = htmlEscape(item.text);
         if (!item.id) {
           return text;
@@ -214,7 +252,7 @@ class Testpaper {
     let url = this.$questionBankSelector.data('url');
     url = url.replace(/[0-9]/, bankId);
     let self = this;
-    $.post(url, function(resp) {
+    $.post(url, function (resp) {
       if (resp.totalCount === 0) {
         $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips')).show();
         self.initEmptyTestPaperSelector();
@@ -227,7 +265,7 @@ class Testpaper {
       }
       self.$testpaperSelector.data('url', url);
       self.initAjaxTestPaperSelector();
-    }).error(function(e) {
+    }).error(function (e) {
       cd.message({type: 'danger', message: e.responseJson.error.message});
     });
   }
@@ -241,7 +279,7 @@ class Testpaper {
     let $this = $(event.currentTarget);
     if ($('input[name="showAnswerMode"]:checked').length) {
       $('input[name="showAnswerMode"]:checked').prop('checked', false);
-    } 
+    }
     if ($this.val() == 1) {
       $('#lesson-redo-interval-field').closest('.form-group').hide();
       $('.starttime-check-div').show();
@@ -267,11 +305,11 @@ class Testpaper {
   changeCondition(event) {
     let $this = $(event.currentTarget);
     let value = $this.find('option:selected').val();
-    value!='score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
+    value != 'score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
   }
 
   getItemsTable(url, testpaperId) {
-    $.post(url, {testpaperId:testpaperId}, function(html){
+    $.post(url, {testpaperId: testpaperId}, function (html) {
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
     });
@@ -288,7 +326,7 @@ class Testpaper {
       format: 'yyyy-mm-dd hh:ii',
       language: document.documentElement.lang,
       minView: 'hour',
-      endDate: new Date(Date.now() + 86400 * 365 * 10 *1000)
+      endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('show', event => {
       this.$form.height(this.$form.height() + 270);
     })
@@ -296,7 +334,7 @@ class Testpaper {
         this.validator.form();
         this.$form.height(this.$form.height() - 270);
       })
-      .on('changeDate',event =>{
+      .on('changeDate', event => {
       });
     $starttime.datetimepicker('setStartDate', data);
   }
@@ -324,21 +362,21 @@ class Testpaper {
       }
     };
 
-    if(this.scoreSlider) {
+    if (this.scoreSlider) {
       this.scoreSlider.destroy();
     }
 
     this.scoreSlider = noUiSlider.create(scoreSlider, option);
-    scoreSlider.noUiSlider.on('update', function(values, handle ){
-      let rate = values[handle]/score;
-      let percentage = (rate*100).toFixed(0);
+    scoreSlider.noUiSlider.on('update', function (values, handle) {
+      let rate = values[handle] / score;
+      let percentage = (rate * 100).toFixed(0);
       $('.noUi-tooltip').text(`${percentage}%`);
-      $('.js-score-tooltip').css('left',`${percentage}%`);
-      $('.js-passScore').text(Math.round(percentage / 100 * score ));
-      $('#finishData').val(percentage/100);
+      $('.js-score-tooltip').css('left', `${percentage}%`);
+      $('.js-passScore').text(Math.round(percentage / 100 * score));
+      $('#finishData').val(percentage / 100);
     });
 
-    let tooltipInnerText = Translator.trans('activity.testpaper_manage.qualified_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'});
+    let tooltipInnerText = Translator.trans('activity.testpaper_manage.qualified_score_hint', {'passScore': '<span class="js-passScore">' + passScore + '</span>'});
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
@@ -346,9 +384,9 @@ class Testpaper {
       </div>
       </div></div>`;
     $('.noUi-handle').append(html);
-    $('.noUi-tooltip').text(`${(passScore/score*100).toFixed(0)}%`);
-    $('.js-score-tooltip').css('left',`${(passScore/score*100).toFixed(0)}%`);
-    $('#score-condition').show();
+    $('.noUi-tooltip').text(`${(passScore / score * 100).toFixed(0)}%`);
+    $('.js-score-tooltip').css('left', `${(passScore / score * 100).toFixed(0)}%`);
+    $('#js-test-and-comment').show();
   }
 }
 

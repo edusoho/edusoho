@@ -346,6 +346,8 @@ activity.testpaper_manage.difficulty_percentage: Difficulty %difficultyPercentag
 activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
 activity.testpaper_manage.questions_length_hint: The maximum number of questions is 2,000
+activity.testpaper_manage.default_comment: Default Comment
+activity.testpaper_manage.comment_remove: Remove
 
 activity.text_manage.save_draft_hint: (Draft saved at %createdTime%)
 activity.text_manage.finish_detail_required_error_hint: Please enter the minimum watch time
