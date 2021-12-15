@@ -1784,7 +1784,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
-            if ($this->isUselessTask($task, $course['type'])) {
+            if ('replay' != $task['type'] && $this->isUselessTask($task, $course['type'])) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
@@ -1797,6 +1797,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $task[$value] = $task[$key];
             }
             $activity = $activities[$task['activityId']];
+            $task['content'] = $activity['content'];
+            if ('replay' == $task['type']) {
+                $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+                $task['type'] = 'live';
+            }
             $task = $this->filledTaskByActivity($task, $activity);
             $task['learnedNum'] = $this->getTaskResultService()->countTaskResults(
                 [
@@ -1810,7 +1815,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 ]
             );
 
-            $task['content'] = $activity['content'];
             $lessons[] = $this->filterTask($task);
         }
 
@@ -1865,6 +1869,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'ppt',
             'doc',
             'live',
+            'replay',
         ];
 
         if ('live' == $courseType) {
