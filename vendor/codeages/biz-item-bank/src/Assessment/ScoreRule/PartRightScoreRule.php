@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\ScoreRule;
 
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 
 class PartRightScoreRule extends ScoreRule
@@ -27,10 +28,11 @@ class PartRightScoreRule extends ScoreRule
 
     public function processRule($question)
     {
-        if (!empty($question['miss_score'])) {
+        if (in_array($question['answer_mode'], ['choice', 'uncertain_choice', 'text'])) {
             return [
                 'name' => self::RULE,
-                'score' => $question['miss_score'],
+                'score' => empty($question['miss_score']) ? 0 : $question['miss_score'],
+                'rule' => empty($question['score_rule']) ?[]:$question['score_rule'],
             ];
         }
 
@@ -40,7 +42,6 @@ class PartRightScoreRule extends ScoreRule
     public function setQuestionScore($question, $score)
     {
         $question['miss_score'] = $score;
-
         return $question;
     }
 }

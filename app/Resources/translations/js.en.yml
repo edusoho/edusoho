@@ -1928,3 +1928,5 @@ course.live_replay.un_share_btn: UnShare
 course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
 course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
 course.live_replay.delete_tip:  Please confirm to remove this live playback？
+course.homework.score.tip1: Please enter the passing score
+course.homework.score.tip2: Please enter a value not greater than the total score of the test paper

@@ -27,7 +27,7 @@
       "type": "score",
       "describe": "course.plan_task.activity_manage.testpaper.score_pass",
       "html": "conditions.html.twig",
-      "value": "0.6"
+      "value": "0"
     }
   ]
 }

@@ -299,6 +299,14 @@ questionType:
     essay: 问答题
     material: 材料题
 
+itemQuestionType:
+    single_choice: 单选题
+    choice: 多选题
+    uncertain_choice: 不定项选择题
+    text: 填空题
+    true_false: 判断题
+    rich_text: 问答题
+
 difficulty:
     simple: 简单
     normal: 一般

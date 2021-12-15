@@ -1,13 +1,19 @@
 <?php
 
-namespace Biz\UpdateDatabaseStructure\Job;
+use Phpmig\Migration\Migration;
 
-use Biz\System\Service\LogService;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
-
-class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
+class AddTableIndexV2 extends Migration
 {
-    protected $indexArr = [
+    protected $biz = null;
+
+    /**
+     * 需要在HandlingTimeConsumingUpdateStructuresJob.php 中同步
+     * Do the migration
+     */
+    public function up()
+    {
+        $this->biz = $this->getContainer();
+        $indexArr = [
         ['type' => 'add', 'table' => 'xapi_statement', 'key' => 'status_createdTime', 'value' => '`status`,`created_time`'],
         ['type' => 'add', 'table' => 'xapi_statement', 'key' => 'status_pushTime', 'value' => '`status`,`push_time`'],
         ['type' => 'add', 'table' => 'log_v8', 'key' => 'module_action_createdTime', 'value' => '`module`,`action`,`createdTime`'],
@@ -50,17 +56,11 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         ['type' => 'add', 'table' => 'status', 'key' => 'userid_type_object', 'value' => '`userId`,`type`,`objectType`,`objectId`'],
         ['type' => 'add', 'table' => 'activity', 'key' => 'mediaType', 'value' => '`mediaType`'],
         ['type' => 'del', 'table' => 'user_activity_learn_flow', 'key' => 'userId'],
+        ['type' => 'add', 'table' => 'biz_order_log', 'key' => 'order_id', 'value' => '`order_id`'],
+        ['type' => 'add', 'table' => 'status', 'key' => 'courseId', 'value' => '`courseId`'],
     ];
 
-    /*
-     * HandlingTimeConsumingUpdateStructuresJob使用范围：
-     * 1.因为表过大导致执行时间不可控的加索引sql语句
-     * 2.表量级很大，想要添加和业务代码没有强关联的添加字段或者修改字段属性的sql语句，字段的缺失会导致业务报错的语句，严禁在JOB执行
-     * 3.需要在 AddTableIndexV2.php 中同步
-     */
-    public function execute()
-    {
-        foreach ($this->indexArr as $index) {
+        foreach ($indexArr as $index) {
             if ('add' == $index['type']) {
                 $this->createIndex($index['table'], $index['key'], $index['value']);
             } else {
@@ -69,110 +69,40 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         }
     }
 
-    protected function getConnection()
+    /**
+     * Undo the migration
+     */
+    public function down()
     {
-        $biz = $this->getBiz();
-
-        return $biz['db'];
-    }
-
-    protected function isIndexExist($table, $indexName)
-    {
-        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
     }
 
     protected function createIndex($table, $index, $column)
     {
-        try {
-            if (!$this->isIndexExist($table, $index)) {
-                $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
-            }
-        } catch (\Exception $e) {
-            $this->getLogService()->error('job', 'create_index', '索引创建失败:'.$e->getMessage());
+        if (!$this->isIndexExist($table, $index)) {
+            $this->biz['db']->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
         }
     }
 
     protected function dropIndex($table, $index)
     {
-        try {
-            if ($this->isIndexExist($table, $index)) {
-                $this->getConnection()->exec("ALTER TABLE {$table} drop INDEX {$index};");
-            }
-        } catch (\Exception $e) {
-            $this->getLogService()->error('job', 'create_index', '索引删除失败:'.$e->getMessage());
+        if ($this->isIndexExist($table, $index)) {
+            $this->biz['db']->exec("ALTER TABLE {$table} drop INDEX {$index};");
         }
     }
 
-    protected function createField($table, $fieldName, $sql)
+    protected function isIndexExist($table, $indexName)
     {
-        try {
-            if (!$this->isFieldExist($table, $fieldName)) {
-                $this->getConnection()->exec($sql);
-            }
-        } catch (\Exception $e) {
-            $this->getLogService()->error('job', 'create_field', '字段创建失败:'.$e->getMessage());
-        }
-    }
-
-    protected function isFieldExist($table, $fieldName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$fieldName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
+        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
+        $result = $this->biz['db']->fetchAssoc($sql);
 
         return empty($result) ? false : true;
     }
 
-    protected function createUniqueIndex($table, $index, $column)
+    protected function isTableExist($table)
     {
-        try {
-            if (!$this->isIndexExist($table, $index)) {
-                $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
-            }
-        } catch (\Exception $e) {
-            $this->getLogService()->error('job', 'create_unique_index', '索引创建失败:'.$e->getMessage());
-        }
-    }
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->biz['db']->fetchAssoc($sql);
 
-    protected function changeFiledType($table, $fieldName, $fieldType, $length = '')
-    {
-        try {
-            if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
-                $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
-            }
-        } catch (\Exception $e) {
-            $this->getLogService()->error('job', 'change_field_type', '类型修改失败:'.$e->getMessage());
-        }
-    }
-
-    protected function shouldFiledTypeChanged($table, $fieldName, $fieldType)
-    {
-        $sql = "show columns from `{$table}` where Field = '{$fieldName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        $shouldFiledTypeChanged = false;
-
-        if (!empty($result) && array_key_exists('Type', $result)) {
-            if ($result['Type'] != $fieldType) {
-                $shouldFiledTypeChanged = true;
-            }
-        }
-
-        return $shouldFiledTypeChanged;
-    }
-
-    protected function getBiz()
-    {
-        return $this->biz;
-    }
-
-    /**
-     * @return LogService
-     */
-    private function getLogService()
-    {
-        return $this->biz->service('System:LogService');
+        return empty($result) ? false : true;
     }
 }

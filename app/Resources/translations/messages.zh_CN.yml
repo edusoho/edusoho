@@ -12085,3 +12085,12 @@ course.live_replay.length: 回放时长
 course.live_replay.start_time: 直播时间
 course.live_replay_manage.live_replay_empty: 直播回放已被删除
 course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端
+
+course.homework.pass_score: 设置合格分数
+course.homework.pass_score.tip1: '作业满分为：'
+course.homework.pass_score.tip2: 分数达到则合格
+course.homework.score_set.select.question1: 每题
+course.homework.score_set.select.option1: 每空
+course.homework.score_set.select.question2: 漏选得分
+course.homework.score_set.select.option2: 每项正确得分
+
