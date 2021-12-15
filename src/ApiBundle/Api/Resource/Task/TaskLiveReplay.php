@@ -19,17 +19,21 @@ class TaskLiveReplay extends AbstractResource
         }
 
         $task = $this->getTaskService()->getTask($taskId);
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ('live' != $task['type']) {
+        if (!in_array($task['type'], ['live', 'replay'])) {
             throw TaskException::TYPE_INVALID();
         }
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
+        if ('replay' == $task['type']) {
+            $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+        }
         if ('videoGenerated' == $activity['ext']['replayStatus']) {
             throw TaskException::LIVE_REPLAY_INVALID();
         }
 
         $device = $request->request->get('device');
         $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+
         $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
         if (!$replays) {
             throw TaskException::LIVE_REPLAY_NOT_FOUND();
@@ -58,7 +62,7 @@ class TaskLiveReplay extends AbstractResource
             'nickname' => $user['nickname'],
             'device' => $device,
             'protocol' => $protocol,
-            'role' => $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
+            'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
         ];
 
         foreach ($visibleReplays as $index => $visibleReplay) {
