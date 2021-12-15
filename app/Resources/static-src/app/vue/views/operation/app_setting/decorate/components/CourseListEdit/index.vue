@@ -105,6 +105,8 @@
 <script>
 import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
+import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
+import { Categories } from 'common/vue/service/index.js';
 
 export default {
   name: 'CourseListEdit',
@@ -129,7 +131,15 @@ export default {
     isCustom() {
       const { sourceType } = this.moduleData;
       return sourceType === 'custom';
+    },
+
+    courseCategories() {
+      return state.courseCategories;
     }
+  },
+
+  mounted() {
+    this.fetchCategories();
   },
 
   methods: {
@@ -138,6 +148,12 @@ export default {
         type: 'course_list',
         ...params
       });
+    },
+
+    async fetchCategories() {
+      if (_.size(state.courseCategories)) return;
+      const data = await Categories.get({ query: { type: 'course' }});
+      mutations.setCourseCategories(data);
     }
   }
 }

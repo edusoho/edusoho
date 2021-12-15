@@ -21,3 +21,4 @@ export * from './Classroom';
 export * from './Plugins';
 export * from './Coupon';
 export * from './Category';
+export * from './Categories';
