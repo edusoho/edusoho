@@ -288,6 +288,11 @@ export default {
         }
 
         this.modules[currentIndex].data[index][key] = value;
+        return;
+      }
+
+      if (type === 'course_list') {
+        this.modules[currentIndex].data[key] = value;
       }
     },
 
