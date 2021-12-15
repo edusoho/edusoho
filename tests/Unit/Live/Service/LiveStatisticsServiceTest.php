@@ -78,7 +78,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
         $this->assertEquals($existedVisitor['id'], $result['id']);
     }
 
-    public function testUpdateCheckinStatistics_WithoutExistedStatistics()
+    public function testUpdateCheckinStatisticsWithoutExistedStatistics()
     {
         $this->mockLiveClient(LiveStatisticsService::STATISTICS_TYPE_CHECKIN);
         $mockedProcessor = $this->mockProcessor();
@@ -96,7 +96,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
             'detail' => 'test detail', ]], $result['data']);
     }
 
-    public function testUpdateCheckinStatistics_WithExistedStatistics()
+    public function testUpdateCheckinStatisticsWithExistedStatistics()
     {
         $this->mockLiveClient(LiveStatisticsService::STATISTICS_TYPE_CHECKIN);
         $mockedProcessor = $this->mockProcessor();
@@ -119,7 +119,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
         $this->assertEmpty($result['data']);
     }
 
-    public function testUpdateVisitorStatistics_WithoutExistedStatistics()
+    public function testUpdateVisitorStatisticsWithoutExistedStatistics()
     {
         $this->mockLiveClient(LiveStatisticsService::STATISTICS_TYPE_VISITOR);
         $mockedProcessor = $this->mockProcessor();
@@ -137,7 +137,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
             'detail' => 'test detail', ]], $result['data']);
     }
 
-    public function testUpdateVisitorStatistics_WithExistedStatistics()
+    public function testUpdateVisitorStatisticsWithExistedStatistics()
     {
         $this->mockLiveClient(LiveStatisticsService::STATISTICS_TYPE_VISITOR);
         $mockedProcessor = $this->mockProcessor();
@@ -153,11 +153,9 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $existed['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $existed['type']);
-        $this->assertEmpty($existed['data']);
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEmpty($result['data']);
     }
 
     public function testFindCheckinStatisticsByLiveIds()

@@ -168,6 +168,10 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
                 continue;
             }
 
+            if ('replay' == $task['type']) {
+                $task['type'] = 'live';
+                $task['isReplay'] = 1;
+            }
             if ($task['isLesson']) {
                 $task = array_merge($task, ['task' => $task]);
             } else {
