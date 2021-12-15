@@ -7,7 +7,7 @@
         <span class="design-editor__required">列表名称：</span>
         <a-input
           placeholder="请输入列表名称"
-          style="width: 200px;"
+          style="width: 250px;"
           size="small"
           :default-value="moduleData.title"
           allow-clear
@@ -18,7 +18,7 @@
       <div class="design-editor__item">
         <span>排列方式：</span>
         <a-select
-          style="width: 200px;"
+          style="width: 250px;"
           :default-value="moduleData.displayStyle"
           size="small"
           @change="(value) => handleChange({ key: 'displayStyle', value })"
@@ -46,7 +46,7 @@
       <div class="design-editor__item">
         <span>排列顺序：</span>
         <a-select
-          style="width: 200px;"
+          :style="{ width: showLastDays ? '124px' : '250px' }"
           size="small"
           :default-value="moduleData.sort"
           @change="(value) => handleChange({ key: 'sort', value })"
@@ -56,12 +56,24 @@
           <a-select-option key="-rating">评分最高</a-select-option>
           <a-select-option key="recommendedSeq">推荐课程</a-select-option>
         </a-select>
+        <a-select
+          v-if="showLastDays"
+          style="width: 124px;"
+          size="small"
+          :default-value="moduleData.lastDays"
+          @change="(value) => handleChange({ key: 'lastDays', value })"
+        >
+          <a-select-option key="7">最近 7 天</a-select-option>
+          <a-select-option key="30">最近 30 天</a-select-option>
+          <a-select-option key="90">最近 90 天</a-select-option>
+          <a-select-option key="0">历史所有</a-select-option>
+        </a-select>
       </div>
 
       <div class="design-editor__item">
         <span>显示个数：</span>
         <a-select
-          style="width: 200px;"
+          style="width: 250px;"
           size="small"
           :default-value="moduleData.limit"
           @change="(value) => handleChange({ key: 'limit', value })"
@@ -89,6 +101,13 @@ export default {
 
   components: {
     EditLayout
+  },
+
+  computed: {
+    showLastDays() {
+      const { sort } = this.moduleData;
+      return _.includes(['-studentNum', '-rating'], sort);
+    }
   },
 
   methods: {
