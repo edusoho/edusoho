@@ -90,8 +90,9 @@
         <a-select-option value="">题型分类</a-select-option>
 
         <a-select-option
-          v-for="itemType in itemTypes"
+          v-for="(itemType, index) in itemTypes"
           :value="itemType.value"
+          :key="index"
         >
           {{ itemType.name }}
         </a-select-option>
