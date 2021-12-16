@@ -69,8 +69,10 @@ class MeJoined extends AbstractResource
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
         $courses = ArrayToolkit::index($courses, 'id');
         foreach ($members as $member) {
-            $courses[$member['courseId']]['lastLearnTime'] = $member['lastLearnTime'];
-            $courses[$member['courseId']]['meJoinedType'] = 'course';
+            if (isset($courses[$member['courseId']])) {
+                $courses[$member['courseId']]['lastLearnTime'] = $member['lastLearnTime'];
+                $courses[$member['courseId']]['meJoinedType'] = 'course';
+            }
         }
 
         //班级
