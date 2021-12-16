@@ -45,7 +45,7 @@
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
         <span class="design-editor__required">课程分类：</span>
-         <a-button size="small">选择课程</a-button>
+         <a-button size="small" @click="handleSelectCourse">选择课程</a-button>
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
@@ -100,6 +100,8 @@
         </a-select>
       </div>
     </div>
+
+    <selete-course-modal ref="modal" @update-items="handleUpdateItems" />
   </edit-layout>
 </template>
 
@@ -108,6 +110,7 @@ import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
 import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
 import { Categories } from 'common/vue/service/index.js';
+import SeleteCourseModal from './SeleteCourseModal.vue';
 
 export default {
   name: 'CourseListEdit',
@@ -120,7 +123,8 @@ export default {
   },
 
   components: {
-    EditLayout
+    EditLayout,
+    SeleteCourseModal
   },
 
   data() {
@@ -151,6 +155,17 @@ export default {
         type: 'course_list',
         ...params
       });
+    },
+
+    handleUpdateItems(value) {
+      this.handleChange({
+        key: 'items',
+        value
+      });
+    },
+
+    handleSelectCourse() {
+      this.$refs.modal.showModal();
     },
 
     async fetchCategories() {
