@@ -2,9 +2,11 @@
   <div class="column-item pull-left">
     <div class="column-item__img">
       <img :src="item.cover.middle" alt="">
+      <img class="img-bottom" src="/static-dist/app/img/vue/decorate/img_bottom.png" alt="">
     </div>
     <div class="column-item__info">
       <div class="column-item__title text-overflow">{{ item.title }}</div>
+      <div class="column-item__subtitle">共 <span>{{ item.courseNum }}</span> 门课程</div>
       <div class="column-item__price">{{ item.price }} 元</div>
     </div>
   </div>
@@ -12,7 +14,7 @@
 
 <script>
 export default {
-  name: 'CourseListItem',
+  name: 'ClassroomListItem',
 
   props: {
     item: {
@@ -36,13 +38,23 @@ export default {
   }
 
   &__img {
+    position: relative;
+    padding: 8px;
     width: 100%;
-    height: 93px;
-    background-color: #eee;
+    height: 92px;
+    background-color: #fff;
 
     img {
       width: 100%;
       height: 100%;
+    }
+
+    .img-bottom {
+      position: absolute;
+      bottom: -5px;
+      left: 8px;
+      width: calc(100% - 16px);
+      height: auto;
     }
   }
 
@@ -59,6 +71,19 @@ export default {
     font-weight: 500;
     color: #333;
     line-height: 20px;
+  }
+
+  &__subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #999;
+    line-height: 16px;
+
+    span {
+      margin-right: 2px;
+      margin-left: 2px;
+      color: #ff5c3b;
+    }
   }
 
   &__price {
