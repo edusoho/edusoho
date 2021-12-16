@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
-use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -33,8 +32,9 @@ class MeJoined extends AbstractResource
         $uniqueMemberIds = $this->getUniqueCourseSetIds($members);
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($uniqueMemberIds);
 
-        foreach ($courseSets as &$courseSet) {
-            $courseSet['meJoinedType'] = 'live';
+        foreach ($members as $member) {
+            $courseSets[$member['courseSetId']]['lastLearnTime'] = $member['lastLearnTime'];
+            $courseSets[$member['courseSetId']]['meJoinedType'] = 'live';
         }
 
         //课程
@@ -67,10 +67,12 @@ class MeJoined extends AbstractResource
         $courses = $this->appendAttrAndOrder($courses, $members);
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
-        foreach ($courses as &$course) {
-            $course['meJoinedType'] = 'course';
+        $courses = ArrayToolkit::index($courses, 'id');
+        foreach ($members as $member) {
+            $courses[$member['courseId']]['lastLearnTime'] = $member['lastLearnTime'];
+            $courses[$member['courseId']]['meJoinedType'] = 'course';
         }
-        
+
         //班级
         $querys = $request->query->all();
 
@@ -81,18 +83,16 @@ class MeJoined extends AbstractResource
 
         $total = $this->getClassroomService()->searchMemberCount($conditions);
 
-        if (isset($querys['format']) && 'pagelist' == $querys['format']) {
-            list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $members = $this->getClassroomService()->searchMembers($conditions, [], 0, $total);
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
-            $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
-            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-        } else {
-            $classrooms = $this->getClassrooms($conditions, [], 0, $total);
-            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-        }
+        $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
+        $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
 
-        foreach ($classrooms as &$classroom) {
-            $classroom['meJoinedType'] = 'classroom';
+        foreach ($members as $member) {
+            $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
+            $classrooms[$member['classroomId']]['lastLearnTime'] = $member['lastLearnTime'];
         }
 
         //题库
@@ -116,19 +116,13 @@ class MeJoined extends AbstractResource
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
             }
             $member['meJoinedType'] = 'itemBankExercise';
+            $member['lastLearnTime'] = $member['updatedTime'];
         }
 
-        return array_merge(array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds)), $courses, $classrooms, $members);
-    }
+        $data = array_merge(array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds)), $courses, $classrooms, $members);
+        array_multisort(ArrayToolkit::column($data, 'lastLearnTime'), SORT_DESC, $data);
 
-    private function getClassrooms($conditions, $orderBy, $offset, $limit)
-    {
-        $classroomIds = ArrayToolkit::column(
-            $this->getClassroomService()->searchMembers($conditions, [], $offset, $limit),
-            'classroomId'
-        );
-
-        return array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
+        return $data;
     }
 
     /**
