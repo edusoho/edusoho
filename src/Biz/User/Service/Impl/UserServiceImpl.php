@@ -882,6 +882,9 @@ class UserServiceImpl extends BaseService implements UserService
     public function isMobileRegisterMode()
     {
         $authSetting = $this->getSettingService()->get('auth');
+        if (isset($authSetting['register_enabled']) && 'closed' === $authSetting['register_enabled']) {
+            return false;
+        }
 
         return !empty($authSetting['register_mode']) && (('email_or_mobile' == $authSetting['register_mode']) || ('mobile' == $authSetting['register_mode']));
     }
