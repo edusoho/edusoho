@@ -2,40 +2,44 @@
   <a-modal
     :visible="visible"
     :width="900"
+    ok-text="保存"
     @cancel="handleCancel"
+    @ok="handleOk"
   >
     <template #title>
       选择班级
       <span class="modal-title-tips">仅显示已发布班级</span>
     </template>
 
-    <template #footer>
-      <a-button key="back" @click="handleCancel">
-        取消
-      </a-button>
-    </template>
-
     <div>
-      <a-input-search
-        v-model="keyword"
+      选择班级：
+      <a-select
+        show-search
         placeholder="搜索班级"
-        style="width: 240px;"
+        style="width: 300px"
+        :default-active-first-option="false"
+        :show-arrow="false"
+        :filter-option="false"
         allow-clear
+        :not-found-content="null"
         @search="onSearch"
-      />
+        @change="handleChange"
+      >
+        <a-select-option v-for="course in data" :key="course.id">
+          {{ course.title || course.courseSetTitle }}
+        </a-select-option>
+      </a-select>
     </div>
 
     <a-table
       class="mt16"
       :columns="columns"
       :row-key="record => record.id"
-      :data-source="data"
-      :pagination="pagination"
-      :loading="loading"
-      @change="handleTableChange"
+      :pagination="false"
+      :data-source="selectList"
     >
       <span slot="action" slot-scope="text, record">
-        <a class="ant-dropdown-link" @click="handleSelect(record)">选择</a>
+        <a class="ant-dropdown-link" @click="handleRemove(record.key)">移除</a>
       </span>
     </a-table>
   </a-modal>
@@ -79,20 +83,15 @@ const columns = [
 ];
 
 export default {
-  name: 'ClassroomLinkModal',
+  name: 'SeleteClassroomModal',
 
   data() {
     return {
       visible: false,
       data: [],
+      selectList: [],
       keyword: '',
-      loading: false,
-      columns,
-      pagination: {
-        pageSize: 10,
-        current: 1,
-        hideOnSinglePage: true
-      }
+      columns
     }
   },
 
@@ -100,62 +99,44 @@ export default {
     showModal() {
       this.visible = true;
       this.keyword = '';
-      this.pagination.current = 1;
-      this.fetch();
     },
 
     handleCancel() {
       this.visible = false;
     },
 
-    handleSelect(record) {
-      const { displayedTitle, id, title  } = record;
-      const params = {
-        type: 'classroom',
-        target: {
-          displayedTitle,
-          id,
-          title
-        },
-        url: ''
-      };
-      this.$emit('update-link', params);
-      this.handleCancel();
-    },
-
-    onSearch() {
-      this.pagination.current = 1;
+    onSearch: _.debounce(function(value) {
+      this.keyword = value;
       this.fetch();
-    },
-
-    handleTableChange(pagination) {
-      const { current } = pagination;
-      _.assign(this.pagination, {
-        current
-      });
-      this.fetch();
-    },
+    }, 200),
 
     async fetch() {
-      this.loading = true;
-
-      const { pageSize, current } = this.pagination;
       const params = {
-        limit: pageSize,
-        offset: pageSize * (current - 1),
         sort: '-createdTime',
         title: this.keyword
       };
 
-      const { data, paging: { total } } = await Classroom.search(params);
-      const pagination = { ...this.pagination };
-      pagination.total = total;
+      const { data } = await Classroom.search(params);
 
-      _.assign(this, {
-        loading: false,
-        data,
-        pagination
+      this.data = data;
+    },
+
+    handleChange(value) {
+      _.forEach(this.data, item => {
+        if (item.id === value) {
+          this.selectList.push(item);
+          return false;
+        }
       });
+    },
+
+    handleRemove(value) {
+      this.selectList.splice(value, 1);
+    },
+
+    handleOk() {
+      this.$emit('update-items', this.selectList);
+      this.visible = false;
     }
   },
 };

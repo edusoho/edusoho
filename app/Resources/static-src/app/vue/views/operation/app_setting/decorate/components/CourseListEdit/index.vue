@@ -45,7 +45,7 @@
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
         <span class="design-editor__required">课程分类：</span>
-        <a-button size="small" @click="handleSelectCourse">选择课程</a-button>
+        <a-button size="small" @click="handleSelect">选择课程</a-button>
       </div>
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
@@ -192,7 +192,7 @@ export default {
       });
     },
 
-    handleSelectCourse() {
+    handleSelect() {
       this.$refs.modal.showModal();
     },
 

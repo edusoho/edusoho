@@ -39,6 +39,8 @@ export const mutations = {
   },
 
   setClassroomCategories(data) {
-    state.courseCategories = data;
+    deleteEmptyChildren(data);
+    data.unshift({ name: '全部', id: '0' });
+    state.classroomCategories = data;
   }
 };

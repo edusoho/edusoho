@@ -1,11 +1,11 @@
 <template>
-  <div class="row-item clearfix">
-    <div class="row-item__img pull-left">
-      <img :src="item.courseSet.cover.middle" alt="">
+  <div class="column-item pull-left">
+    <div class="column-item__img">
+      <img :src="item.cover.middle" alt="">
     </div>
-    <div class="row-item__info pull-left">
-      <div class="row-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
-      <div class="row-item__price">{{ item.price }} 元</div>
+    <div class="column-item__info">
+      <div class="column-item__title text-overflow">{{ item.title }}</div>
+      <div class="column-item__price">{{ item.price }} 元</div>
     </div>
   </div>
 </template>
@@ -24,20 +24,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.row-item {
+.column-item {
   overflow: hidden;
   margin-top: 16px;
-  width: 100%;
-  height: 90px;
+  width: 164px;
   border-radius: 8px;
-  background: #fff;
   box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.05);
 
+  &:nth-of-type(odd) {
+    margin-right: 15px;
+  }
+
   &__img {
-    overflow: hidden;
-    width: 160px;
-    height: 100%;
-    border-radius: 8px;
+    width: 100%;
+    height: 93px;
     background-color: #eee;
 
     img {
@@ -49,8 +49,9 @@ export default {
   &__info {
     position: relative;
     padding: 8px;
-    width: calc(100% - 160px);
-    height: 100%;
+    width: 100%;
+    height: 80px;
+    background-color: #fff;
   }
 
   &__title {
@@ -62,7 +63,7 @@ export default {
 
   &__price {
     position: absolute;
-    left: 8px;
+    right: 8px;
     bottom: 8px;
     font-size: 12px;
     font-weight: 500;

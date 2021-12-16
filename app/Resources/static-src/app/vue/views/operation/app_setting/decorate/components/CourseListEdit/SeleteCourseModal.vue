@@ -81,7 +81,7 @@ const columns = [
 ];
 
 export default {
-  name: 'CourseLinkModal',
+  name: 'SeleteCourseModal',
 
   data() {
     return {

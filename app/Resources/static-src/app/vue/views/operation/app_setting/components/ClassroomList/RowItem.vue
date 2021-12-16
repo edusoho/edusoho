@@ -1,10 +1,10 @@
 <template>
   <div class="row-item clearfix">
     <div class="row-item__img pull-left">
-      <img :src="item.courseSet.cover.middle" alt="">
+      <img :src="item.cover.middle" alt="">
     </div>
     <div class="row-item__info pull-left">
-      <div class="row-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
+      <div class="row-item__title text-overflow">{{ item.title }}</div>
       <div class="row-item__price">{{ item.price }} 元</div>
     </div>
   </div>
@@ -38,7 +38,7 @@ export default {
     width: 160px;
     height: 100%;
     border-radius: 8px;
-    background-color: #eee;
+    background-color: #3eee;
 
     img {
       width: 100%;

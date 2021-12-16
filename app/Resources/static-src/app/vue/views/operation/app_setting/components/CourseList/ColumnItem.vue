@@ -38,7 +38,7 @@ export default {
   &__img {
     width: 100%;
     height: 93px;
-    background-color: red;
+    background-color: #eee;
 
     img {
       width: 100%;
